@@ -1,10 +1,14 @@
-[/ Symbols and accented letters  from Latin-1]
+[/ Symbols and accented letters from Latin-1]
 [/ File Latin1_symbols.qbk]
 [/ http://www.htmlhelp.com/reference/html40/entities/latin1.html ]
 [/ based on table Copyright </copyright.html> 1998-2006 Liam Quinn.]
 [/ Glyphs <http://www.unicode.org/charts/> of the characters ]
 [/ are available at the Unicode Consortium <http://www.unicode.org/>. ]
+[/ To use these symbols in Quickbook: enclose template name in square brackets.]
+[/ See also Greek and math symbols in html4_symbols.qbk]
 
+[/ These are all 8th bit ANSI symbols. C1 controls and Latin-1 Supplement]
+[/ See http://www.unicode.org/charts/PDF/U0080.pdf]
 [template nbsp[]'''&#xA0;'''] [/ no-break space = non-breaking space]
 [template iexcl[]'''&#xA1;'''] [/ inverted exclamation mark ]
 [template cent[]'''&#xA2;'''] [/  cent sign ]
@@ -99,11 +103,11 @@
 [template ucirc[]'''&#xFB;'''] [/ Latin small letter u with circumflex ]
 [template uuml[]'''&#xFC;'''] [/ Latin small letter u with diaeresis ]
 [template yacute[]'''&#xFD;'''] [/ Latin small letter y with acute ]
-[template thorn[]'''&#xFE;'''] [/ Latin small letter thorn   ]
+[template thorn[]'''&#xFE;'''] [/ Latin small letter thorn ]
 [template yuml[]'''&#xFF;'''] [/ Latin small letter y with diaeresis ]
 
 [/ File Latin1_symbols.qbk
-Copyright 2007 Paul A. Bristow.
+Copyright 2007, 2010 Paul A. Bristow.
 Distributed under the Boost Software License, Version 1.0.
 (See accompanying file LICENSE_1_0.txt or copy at
 http://www.boost.org/LICENSE_1_0.txt).

@@ -1,6 +1,6 @@
 // find_mean_and_sd_normal.cpp
 
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2010.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -36,6 +36,8 @@ the algorithms to find location and scale
   using std::setw; using std::setprecision;
 #include <limits>
   using std::numeric_limits;
+#include <stdexcept>
+  using std::exception;
 //] [/normal_std Quickbook]
 
 int main()
@@ -364,13 +366,13 @@ The scale can be variation in dispensing or uncertainty in measurement.
 //] [/normal_find_location_and_scale_eg Quickbook end]
 
   }
-  catch(const std::exception& e)
+  catch(const exception& e)
   { // Always useful to include try & catch blocks because default policies
     // are to throw exceptions on arguments that cause errors like underflow, overflow.
     // Lacking try & catch blocks, the program will abort without a message below,
     // which may give some helpful clues as to the cause of the exception.
-    std::cout <<
-      "\n""Message from thrown exception was:\n   " << e.what() << std::endl;
+    cout <<
+      "\n""Message from thrown exception was:\n   " << e.what() << endl;
   }
   return 0;
 }  // int main()

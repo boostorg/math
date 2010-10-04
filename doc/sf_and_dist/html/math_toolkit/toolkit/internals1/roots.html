@@ -28,7 +28,7 @@
         With Derivatives</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.roots.synopsis"></a><h5>
-<a name="id1271377"></a>
+<a name="id1331117"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -61,7 +61,7 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.roots.description"></a><h5>
-<a name="id1272243"></a>
+<a name="id1331984"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.description">Description</a>
         </h5>
 <p>
@@ -82,17 +82,17 @@
 <dd>
 <p>
                 Type F must be a callable function object that accepts one parameter
-                and returns a tuple:
+                and returns a <a class="link" href="tuples.html" title="Tuples">boost::math::tuple</a>:
               </p>
 <p>
-                For the second order iterative methods (Newton Raphson) the tuple
+                For the second order iterative methods (Newton Raphson) the <a class="link" href="tuples.html" title="Tuples">boost::math::tuple</a>
                 should have two elements containing the evaluation of the function
                 and it's first derivative.
               </p>
 <p>
-                For the third order methods (Halley and Schroeder) the tuple should
-                have three elements containing the evaluation of the function and
-                its first and second derivatives.
+                For the third order methods (Halley and Schroeder) the <a class="link" href="tuples.html" title="Tuples">boost::math::tuple</a>
+                should have three elements containing the evaluation of the function
+                and its first and second derivatives.
               </p>
 </dd>
 <dt><span class="term">T guess</span></dt>
@@ -176,7 +176,7 @@
 <a name="newton"></a><p>
         </p>
 <a name="math_toolkit.toolkit.internals1.roots.newton_raphson_method"></a><h5>
-<a name="id1273025"></a>
+<a name="id1332233"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.newton_raphson_method">Newton
           Raphson Method</a>
         </h5>
@@ -196,7 +196,7 @@
 <a name="halley"></a><p>
         </p>
 <a name="math_toolkit.toolkit.internals1.roots.halley_s_method"></a><h5>
-<a name="id1273083"></a>
+<a name="id1332291"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.halley_s_method">Halley's
           Method</a>
         </h5>
@@ -220,7 +220,7 @@
 <a name="schroeder"></a><p>
         </p>
 <a name="math_toolkit.toolkit.internals1.roots.schroeder_s_method"></a><h5>
-<a name="id1273144"></a>
+<a name="id1332352"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.schroeder_s_method">Schroeder's
           Method</a>
         </h5>
@@ -244,7 +244,7 @@
           iteration.
         </p>
 <a name="math_toolkit.toolkit.internals1.roots.example"></a><h5>
-<a name="id1273198"></a>
+<a name="id1332406"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.example">Example</a>
         </h5>
 <p>
@@ -263,7 +263,7 @@
 <span class="keyword">struct</span> <span class="identifier">cbrt_functor</span>
 <span class="special">{</span>
    <span class="identifier">cbrt_functor</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">target</span><span class="special">)</span> <span class="special">:</span> <span class="identifier">a</span><span class="special">(</span><span class="identifier">target</span><span class="special">){}</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">tr1</span><span class="special">::</span><span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">)</span>
+   <a class="link" href="tuples.html" title="Tuples">boost::math::tuple</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">)</span>
    <span class="special">{</span>
       <span class="identifier">T</span> <span class="identifier">sqr</span> <span class="special">=</span> <span class="identifier">z</span> <span class="special">*</span> <span class="identifier">z</span><span class="special">;</span>
       <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">tr1</span><span class="special">::</span><span class="identifier">make_tuple</span><span class="special">(</span><span class="identifier">sqr</span> <span class="special">*</span> <span class="identifier">z</span> <span class="special">-</span> <span class="identifier">a</span><span class="special">,</span> <span class="number">3</span> <span class="special">*</span> <span class="identifier">sqr</span><span class="special">);</span>
@@ -316,7 +316,7 @@
 <span class="keyword">struct</span> <span class="identifier">cbrt_functor</span>
 <span class="special">{</span>
    <span class="identifier">cbrt_functor</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">target</span><span class="special">)</span> <span class="special">:</span> <span class="identifier">a</span><span class="special">(</span><span class="identifier">target</span><span class="special">){}</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">tr1</span><span class="special">::</span><span class="identifier">tuple</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">)</span>
+   <a class="link" href="tuples.html" title="Tuples">boost::math::tuple</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">)</span>
    <span class="special">{</span>
       <span class="identifier">T</span> <span class="identifier">sqr</span> <span class="special">=</span> <span class="identifier">z</span> <span class="special">*</span> <span class="identifier">z</span><span class="special">;</span>
       <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">tr1</span><span class="special">::</span><span class="identifier">make_tuple</span><span class="special">(</span><span class="identifier">sqr</span> <span class="special">*</span> <span class="identifier">z</span> <span class="special">-</span> <span class="identifier">a</span><span class="special">,</span> <span class="number">3</span> <span class="special">*</span> <span class="identifier">sqr</span><span class="special">,</span> <span class="number">6</span> <span class="special">*</span> <span class="identifier">z</span><span class="special">);</span>
@@ -369,9 +369,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

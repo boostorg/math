@@ -12,7 +12,6 @@
 #include <fstream>
 
 #include <boost/math/tools/test_data.hpp>
-#include "ntl_rr_lanczos.hpp"
 
 using namespace boost::math::tools;
 
@@ -43,7 +42,7 @@ float truncate_to_float(boost::math::ntl::RR r)
 //
 struct igamma_data_generator
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR a, boost::math::ntl::RR x)
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR a, boost::math::ntl::RR x)
    {
       // very naively calculate spots:
       boost::math::ntl::RR z;
@@ -80,29 +79,29 @@ struct igamma_data_generator
       boost::math::ntl::RR rlg = boost::math::gamma_p(a, z);
       boost::math::ntl::RR rug = boost::math::gamma_q(a, z);
 
-      return std::tr1::make_tuple(z, ug, rug, lg, rlg);
+      return boost::math::make_tuple(z, ug, rug, lg, rlg);
    }
 };
 
 struct gamma_inverse_generator
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(const boost::math::ntl::RR a, const boost::math::ntl::RR p)
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(const boost::math::ntl::RR a, const boost::math::ntl::RR p)
    {
       boost::math::ntl::RR x1 = boost::math::gamma_p_inv(a, p);
       boost::math::ntl::RR x2 = boost::math::gamma_q_inv(a, p);
       std::cout << "Inverse for " << a << " " << p << std::endl;
-      return std::tr1::make_tuple(x1, x2);
+      return boost::math::make_tuple(x1, x2);
    }
 };
 
 struct gamma_inverse_generator_a
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(const boost::math::ntl::RR x, const boost::math::ntl::RR p)
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(const boost::math::ntl::RR x, const boost::math::ntl::RR p)
    {
       boost::math::ntl::RR x1 = boost::math::gamma_p_inva(x, p);
       boost::math::ntl::RR x2 = boost::math::gamma_q_inva(x, p);
       std::cout << "Inverse for " << x << " " << p << std::endl;
-      return std::tr1::make_tuple(x1, x2);
+      return boost::math::make_tuple(x1, x2);
    }
 };
 

@@ -7,7 +7,7 @@
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../pol_ref.html" title="Policy Reference">
 <link rel="prev" href="../pol_ref.html" title="Policy Reference">
-<link rel="next" href="internal_promotion.html" title="Internal Promotion Policies">
+<link rel="next" href="internal_promotion.html" title="Internal Floating-point Promotion Policies">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -39,7 +39,7 @@
             </li>
 </ul></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised"></a><h5>
-<a name="id1327547"></a>
+<a name="id1388094"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised">Available
           Actions When an Error is Raised</a>
         </h5>
@@ -62,7 +62,7 @@
           The various enumerated values have the following meanings:
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error"></a><h6>
-<a name="id1327729"></a>
+<a name="id1388275"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error">throw_on_error</a>
         </h6>
 <p>
@@ -174,13 +174,15 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error"></a><h6>
-<a name="id1327915"></a>
+<a name="id1388461"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error">errno_on_error</a>
         </h6>
 <p>
-          Will set global <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
-          to one of the following values depending upon the error type, and then
-          return the same value as if the error had been ignored:
+          Will set global <a href="http://en.wikipedia.org/wiki/Errno" target="_top"><code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code></a>
+          <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
+          to one of the following values depending upon the error type (often EDOM
+          = 33 and ERANGE = 34), and then return the same value as if the error had
+          been ignored:
         </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -287,7 +289,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.ignore_error"></a><h6>
-<a name="id1328104"></a>
+<a name="id1388664"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.ignore_error">ignore_error</a>
         </h6>
 <p>
@@ -400,7 +402,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.user_error"></a><h6>
-<a name="id1328297"></a>
+<a name="id1388857"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.user_error">user_error</a>
         </h6>
 <p>
@@ -449,7 +451,7 @@
           here</a>.
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised"></a><h5>
-<a name="id1329772"></a>
+<a name="id1389841"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised">Kinds
           of Error Raised</a>
         </h5>
@@ -689,7 +691,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.examples"></a><h5>
-<a name="id1330613"></a>
+<a name="id1390682"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.examples">Examples</a>
         </h5>
 <p>
@@ -703,29 +705,39 @@
             
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
 
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
+<span class="comment">//using namespace boost::math::policies; may also be convenient.
+</span><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">pole_error</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">errno_on_error</span><span class="special">;</span>
 
 <span class="comment">// Define a policy:
 </span><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
-      <span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span> 
-      <span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
-      <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
-      <span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;</span> 
-      <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
-      
-<span class="comment">// call the function:
-</span><span class="keyword">double</span> <span class="identifier">t1</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">some_value</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">());</span>
+  <span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span> 
+  <span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
+  <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
+  <span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;</span> 
+<span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
 
-<span class="comment">// Alternatively we could use make_policy and define everything at the call site:
-</span><span class="keyword">double</span> <span class="identifier">t2</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">some_value</span><span class="special">,</span> <span class="identifier">make_policy</span><span class="special">(</span>
-         <span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span> 
-         <span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span>
-         <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span>
-         <span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;()</span> 
-      <span class="special">));</span>
+<span class="keyword">double</span> <span class="identifier">my_value</span> <span class="special">=</span> <span class="number">0.</span><span class="special">;</span> <span class="comment">// 
+</span>
+<span class="comment">// Call the function applying my_policy:
+</span><span class="keyword">double</span> <span class="identifier">t1</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">my_value</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">());</span>
 
+<span class="comment">// Alternatively (and equivalently) we could use helpful function
+</span><span class="comment">// make_policy and define everything at the call site:
+</span><span class="keyword">double</span> <span class="identifier">t2</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">my_value</span><span class="special">,</span>
+  <span class="identifier">make_policy</span><span class="special">(</span>
+    <span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span> 
+    <span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span>
+    <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span>
+    <span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;()</span> <span class="special">)</span>
+  <span class="special">);</span>
 </pre>
 <p>
           </p>
@@ -741,21 +753,22 @@
             
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">;</span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 
-<span class="comment">// Define a policy:
+<span class="comment">// Define a specific policy:
 </span><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
       <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span>
       <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
       
-<span class="comment">// Define the distribution:
+<span class="comment">// Define the distribution, using my_policy:
 </span><span class="keyword">typedef</span> <span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">my_norm</span><span class="special">;</span>
 
-<span class="comment">// Get a quantile:
-</span><span class="keyword">double</span> <span class="identifier">q</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">my_norm</span><span class="special">(),</span> <span class="number">0.05</span><span class="special">);</span>
-
+<span class="comment">// Construct a my_norm distribution, using default mean and standard deviation,
+</span><span class="comment">// and get a 0.05 or 5% quantile:
+</span><span class="keyword">double</span> <span class="identifier">q</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">my_norm</span><span class="special">(),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// = -1.64485
+</span>
 </pre>
 <p>
           </p>
@@ -764,9 +777,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

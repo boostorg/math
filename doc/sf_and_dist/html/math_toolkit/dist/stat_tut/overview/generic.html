@@ -78,7 +78,7 @@
 </table></div>
 <p>
             For example, the binomial distribution has two parameters: n (the number
-            of trials) and p (the probability of success on one trial).
+            of trials) and p (the probability of success on any one trial).
           </p>
 <p>
             The <code class="computeroutput"><span class="identifier">binomial_distribution</span></code>
@@ -90,9 +90,10 @@
             <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span></code>
           </p>
 <p>
-            For this distribution the random variate is k: the number of successes
-            observed. The probability density/mass function (pdf) is therefore written
-            as <span class="emphasis"><em>f(k; n, p)</em></span>.
+            For this distribution the <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">random
+            variate</a> is k: the number of successes observed. The probability
+            density/mass function (pdf) is therefore written as <span class="emphasis"><em>f(k; n,
+            p)</em></span>.
           </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -106,15 +107,37 @@
               <span class="bold"><strong>Random Variates and Distribution Parameters</strong></span>
             </p>
 <p>
-              <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">Random variates</a>
-              and <a href="http://en.wikipedia.org/wiki/Parameter" target="_top">distribution
+              The concept of a <a href="http://en.wikipedia.org/wiki/Random_variable" target="_top">random
+              variable</a> is closely linked to the term <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">random
+              variate</a>: a random variate is a particular value (outcome) of
+              a random variable. and <a href="http://en.wikipedia.org/wiki/Parameter" target="_top">distribution
               parameters</a> are conventionally distinguished (for example in
-              Wikipedia and Wolfram MathWorld by placing a semi-colon (or sometimes
-              vertical bar) after the random variate (whose value you 'choose'),
-              to separate the variate from the parameter(s) that defines the shape
-              of the distribution.
+              Wikipedia and Wolfram MathWorld) by placing a semi-colon or vertical
+              bar) <span class="emphasis"><em>after</em></span> the <a href="http://en.wikipedia.org/wiki/Random_variable" target="_top">random
+              variable</a> (whose value you 'choose'), to separate the variate
+              from the parameter(s) that defines the shape of the distribution.<br>
+              For example, the binomial distribution probability distribution function
+              (PDF) is written as <span class="emphasis"><em>f(k| n, p)</em></span> = Pr(K = k|n, p)
+              = probability of observing k successes out of n trials. K is the <a href="http://en.wikipedia.org/wiki/Random_variable" target="_top">random variable</a>,
+              k is the <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">random
+              variate</a>, the parameters are n (trials) and p (probability).
             </p>
 </td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../../doc/src/images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+              By convention, <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">random
+              variate</a> are lower case, usually k is integral, x if real, and
+              <a href="http://en.wikipedia.org/wiki/Random_variable" target="_top">random variable</a>
+              are upper case, K if integral, X if real. But this implementation treats
+              all as floating point values <code class="computeroutput"><span class="identifier">RealType</span></code>,
+              so if you really want an integral result, you must round: see note
+              on Discrete Probability Distributions below for details.
+            </p></td></tr>
 </table></div>
 <p>
             As noted above the non-member function <code class="computeroutput"><span class="identifier">pdf</span></code>
@@ -125,13 +148,14 @@
             <code class="computeroutput"><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">binomial_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">);</span></code>
           </p>
 <p>
-            The ranges of random variate values that are permitted and are supported
-            can be tested by using two functions <code class="computeroutput"><span class="identifier">range</span></code>
+            The ranges of <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">random
+            variate</a> values that are permitted and are supported can be tested
+            by using two functions <code class="computeroutput"><span class="identifier">range</span></code>
             and <code class="computeroutput"><span class="identifier">support</span></code>.
           </p>
 <p>
-            The distribution (effectively the random variate) is said to be 'supported'
-            over a range that is <a href="http://en.wikipedia.org/wiki/Probability_distribution" target="_top">"the
+            The distribution (effectively the <a href="http://en.wikipedia.org/wiki/Random_variate" target="_top">random
+            variate</a>) is said to be 'supported' over a range that is <a href="http://en.wikipedia.org/wiki/Probability_distribution" target="_top">"the
             smallest closed set whose complement has probability zero"</a>.
             MathWorld uses the word 'defined' for this range. Non-mathematicians
             might say it means the 'interesting' smallest range of random variate
@@ -141,16 +165,16 @@
 <p>
             For most distributions, with probability distribution functions one might
             describe as 'well-behaved', we have decided that it is most useful for
-            the supported range to exclude random variate values like exact zero
-            <span class="bold"><strong>if the end point is discontinuous</strong></span>. For
-            example, the Weibull (scale 1, shape 1) distribution smoothly heads for
-            unity as the random variate x declines towards zero. But at x = zero,
-            the value of the pdf is suddenly exactly zero, by definition. If you
-            are plotting the PDF, or otherwise calculating, zero is not the most
-            useful value for the lower limit of supported, as we discovered. So for
-            this, and similar distributions, we have decided it is most numerically
-            useful to use the closest value to zero, min_value, for the limit of
-            the supported range. (The <code class="computeroutput"><span class="identifier">range</span></code>
+            the supported range to <span class="bold"><strong>exclude</strong></span> random
+            variate values like exact zero <span class="bold"><strong>if the end point
+            is discontinuous</strong></span>. For example, the Weibull (scale 1, shape
+            1) distribution smoothly heads for unity as the random variate x declines
+            towards zero. But at x = zero, the value of the pdf is suddenly exactly
+            zero, by definition. If you are plotting the PDF, or otherwise calculating,
+            zero is not the most useful value for the lower limit of supported, as
+            we discovered. So for this, and similar distributions, we have decided
+            it is most numerically useful to use the closest value to zero, min_value,
+            for the limit of the supported range. (The <code class="computeroutput"><span class="identifier">range</span></code>
             remains from zero, so you will still get <code class="computeroutput"><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">weibull</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span>
             <span class="special">==</span> <span class="number">0</span></code>).
             (Exponential and gamma distributions have similarly discontinuous functions).
@@ -223,9 +247,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

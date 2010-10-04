@@ -12,7 +12,6 @@
 #include <fstream>
 
 #include <boost/math/tools/test_data.hpp>
-#include "ntl_rr_lanczos.hpp"
 
 using namespace boost::math::tools;
 
@@ -43,7 +42,7 @@ std::tr1::variate_generator<std::tr1::mt19937, std::tr1::uniform_real<float> > g
 
 struct ibeta_inv_data_generator
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()
       (boost::math::ntl::RR bp, boost::math::ntl::RR x_, boost::math::ntl::RR p_)
    {
       float b = truncate_to_float(real_cast<float>(gen() * pow(boost::math::ntl::RR(10), bp))); 
@@ -58,7 +57,7 @@ struct ibeta_inv_data_generator
       std::cout << " " << invb << std::flush;
       boost::math::ntl::RR invbc = boost::math::ibetac_invb(boost::math::ntl::RR(b), boost::math::ntl::RR(x), boost::math::ntl::RR(p));
       std::cout << " " << invbc << std::endl;
-      return std::tr1::make_tuple(b, x, p, inv, invc, invb, invbc);
+      return boost::math::make_tuple(b, x, p, inv, invc, invb, invbc);
    }
 };
 

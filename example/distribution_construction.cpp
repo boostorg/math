@@ -1,6 +1,6 @@
 // distribution_construction.cpp
 
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2010.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -39,27 +39,25 @@ Several examples of constructing distributions follow:
 */
 //] [/distribution_construction1 end of Quickbook in C++ markup]
 
-
-
-
 int main()
 {
 //[distribution_construction2
-/*` 
+/*`
 First, a negative binomial distribution with 8 successes
 and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
 */
   boost::math::negative_binomial_distribution<double> mydist0(8., 0.25);
   /*`
-  But this is inconveniently long, so by writing
+  But this is inconveniently long, so we might be tempted to write
   */
   using namespace boost::math;
   /*`
-  or
+  but this might risk ambiguity with names in std random so
+  *much better is explicit `using boost::math:: ` * ... statements like
   */
   using boost::math::negative_binomial_distribution;
   /*`
-  we can reduce typing.
+  and we can still reduce typing.
 
   Since the vast majority of applications use will be using double precision,
   the template argument to the distribution (RealType) defaults
@@ -75,7 +73,7 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
      typedef negative_binomial_distribution<double> negative_binomial; // Reserved name of type double.
 
   [caution
-  This convenience typedef is /not/ provided if a clash would occur 
+  This convenience typedef is /not/ provided if a clash would occur
   with the name of a function: currently only "beta" and "gamma"
   fall into this category.
   ]
@@ -84,7 +82,7 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
   */
 
   using boost::math::negative_binomial;
-  
+
   /*`
   we have a convenient typedef to `negative_binomial_distribution<double>`:
   */
@@ -113,7 +111,7 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
   /*`
   For cases when the typdef distribution name would clash with a math special function
   (currently only beta and gamma)
-  the typedef is deliberately not provided, and the longer version of the name 
+  the typedef is deliberately not provided, and the longer version of the name
   must be used.  For example do not use:
 
      using boost::math::beta;
@@ -121,12 +119,12 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
 
   Which produces the error messages:
 
-  [pre 
+  [pre
   error C2146: syntax error : missing ';' before identifier 'mybetad0'
   warning C4551: function call missing argument list
   error C3861: 'mybetad0': identifier not found
   ]
-  
+
   Instead you should use:
   */
   using boost::math::beta_distribution;
@@ -139,41 +137,41 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
   /*`
   We can, of course, still provide the type explicitly thus:
   */
-  
+
   // Explicit double precision:
-  negative_binomial_distribution<double>        mydist1(8., 0.25); 
+  negative_binomial_distribution<double>        mydist1(8., 0.25);
 
   // Explicit float precision, double arguments are truncated to float:
   negative_binomial_distribution<float>         mydist2(8., 0.25);
 
   // Explicit float precision, integer & double arguments converted to float.
-  negative_binomial_distribution<float>         mydist3(8, 0.25); 
+  negative_binomial_distribution<float>         mydist3(8, 0.25);
 
   // Explicit float precision, float arguments, so no conversion:
-  negative_binomial_distribution<float>         mydist4(8.F, 0.25F); 
+  negative_binomial_distribution<float>         mydist4(8.F, 0.25F);
 
   // Explicit float precision, integer arguments promoted to float.
-  negative_binomial_distribution<float>         mydist5(8, 1); 
+  negative_binomial_distribution<float>         mydist5(8, 1);
 
   // Explicit double precision:
-  negative_binomial_distribution<double>        mydist6(8., 0.25); 
+  negative_binomial_distribution<double>        mydist6(8., 0.25);
 
   // Explicit long double precision:
-  negative_binomial_distribution<long double>   mydist7(8., 0.25); 
+  negative_binomial_distribution<long double>   mydist7(8., 0.25);
 
   /*`
   And if you have your own RealType called MyFPType,
   for example NTL RR (an arbitrary precision type), then we can write:
-  
+
      negative_binomial_distribution<MyFPType>  mydist6(8, 1); // Integer arguments -> MyFPType.
 
   [heading Default arguments to distribution constructors.]
 
   Note that default constructor arguments are only provided for some distributions.
   So if you wrongly assume a default argument you will get an error message, for example:
-  
+
      negative_binomial_distribution<> mydist8;
-  
+
   [pre error C2512 no appropriate default constructor available.]
 
   No default constructors are provided for the negative binomial,
@@ -181,13 +179,13 @@ and a success fraction 0.25, 25% or 1 in 4, is constructed like this:
   For other distributions, like the normal distribution,
   it is obviously very useful to provide 'standard'
   defaults for the mean and standard deviation thus:
-  
+
       normal_distribution(RealType mean = 0, RealType sd = 1);
 
   So in this case we can write:
   */
   using boost::math::normal;
-  
+
   normal norm1;       // Standard normal distribution.
   normal norm2(2);    // Mean = 2, std deviation = 1.
   normal norm3(2, 3); // Mean = 2, std deviation = 3.

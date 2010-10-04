@@ -31,7 +31,8 @@
           There are two equivalent policies that effect the <span class="emphasis"><em>working precision</em></span>
           used to calculate results, these policies both default to 0 - meaning calculate
           to the maximum precision available in the type being used - but can be
-          set to other values to cause lower levels of precision to be used.
+          set to other values to cause lower levels of precision to be used. One
+          might want to trade precision for evaluation speed.
         </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">policies</span><span class="special">{</span>
 
@@ -64,21 +65,19 @@
             
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">digits10</span><span class="special">;</span>
 
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
-
-<span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">digits10</span><span class="special">&lt;</span><span class="number">5</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">pol</span><span class="special">;</span>
-
-<span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="number">12</span><span class="special">,</span> <span class="identifier">pol</span><span class="special">());</span>
-
-</pre>
+<span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">digits10</span><span class="special">&lt;</span><span class="number">5</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">my_pol_5</span><span class="special">;</span> <span class="comment">// Define a new, non-default, policy
+</span><span class="comment">// to calculate tgamma to accuracy of approximately 5 decimal digits.
+</span></pre>
 <p>
           </p>
 <p>
         </p>
 <p>
-          Or again using <span class="emphasis"><em>make_policy</em></span>:
+          Or again using helper function <code class="computeroutput"><span class="identifier">make_policy</span></code>:
         </p>
 <p>
           </p>
@@ -86,12 +85,12 @@
             
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
 
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 
-<span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="number">12</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">digits10</span><span class="special">&lt;</span><span class="number">5</span><span class="special">&gt;</span> <span class="special">&gt;());</span>
-
+<span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="number">12</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">digits10</span><span class="special">&lt;</span><span class="number">5</span><span class="special">&gt;</span> <span class="special">&gt;());</span>  <span class="comment">// Concise make_policy.
+</span>
 </pre>
 <p>
           </p>
@@ -106,14 +105,16 @@
             
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">;</span>
 
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 
+<span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">bits</span> <span class="special">=</span> <span class="number">25</span><span class="special">;</span> <span class="comment">// approximate precision.
+</span>
 <span class="keyword">double</span> <span class="identifier">q</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span>
-      <span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">digits2</span><span class="special">&lt;</span><span class="number">25</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;(),</span> 
-      <span class="number">0.05</span><span class="special">);</span>
-
+      <span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">digits2</span><span class="special">&lt;</span><span class="identifier">bits</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;(),</span> 
+      <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 5% quantile.
+</span>
 </pre>
 <p>
           </p>
@@ -122,9 +123,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

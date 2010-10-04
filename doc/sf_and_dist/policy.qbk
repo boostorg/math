@@ -2,7 +2,7 @@
 
 [section:pol_overview Policy Overview]
 [policy_overview]
-[endsect][/section:pol_overview Policy Overview]
+[endsect] [/section:pol_overview Policy Overview]
 
 [include policy_tutorial.qbk]
 
@@ -50,8 +50,9 @@ Will throw one of the following exceptions, depending upon the
 
 [h5 errno_on_error]
 
-Will set global `::errno` to one of the following values depending 
-upon the error type, and then return the same value as if the error
+Will set global __errno `::errno` to one of the following values depending 
+upon the error type (often EDOM = 33 and ERANGE = 34),
+and then return the same value as if the error
 had been ignored:
  [table
     [[Error Type][errno value]]
@@ -226,12 +227,12 @@ rather than throw exceptions, then we can use:
 
 [endsect] [/section:error_handling_policies Error Handling Policies]
 
-[section:internal_promotion Internal Promotion Policies]
+[section:internal_promotion Internal Floating-point Promotion Policies]
 
 Normally when evaluating a function at say `float` precision, maximal
 accuracy is assured by conducting the calculation at `double` precision
 internally, and then rounding the result.  There are two policies that
-effect whether internal promotion takes place or not:
+control whether internal promotion to a higher precision floating-point type takes place, or not:
 
 [table
 [[Policy][Meaning]]
@@ -265,7 +266,8 @@ There are some functions that are generic
 (they are present for all the statistical distributions supported)
 but which may be mathematically undefined for certain distributions, but defined for others.
 
-For example, the Cauchy distribution does not have a mean, so what should
+For example, the Cauchy distribution does not have a meaningful mean,
+so what should
 
    mean(cauchy<>());
    
@@ -421,7 +423,7 @@ There are two equivalent policies that effect the ['working precision]
 used to calculate results, these policies both default to 0 - meaning
 calculate to the maximum precision available in the type being used
  - but can be set to other values to cause lower levels of precision 
-to be used.
+to be used. One might want to trade precision for evaluation speed.
 
    namespace boost{ namespace math{ namespace policies{
    
@@ -447,7 +449,7 @@ For example we could calculate `tgamma` to approximately 5 decimal digits using:
 
 [policy_ref_snip9]
    
-Or again using ['make_policy]:
+Or again using helper function `make_policy`:
 
 [import ../../example/policy_ref_snip10.cpp]
 
@@ -878,8 +880,8 @@ actually use.
 [endsect][/section:pol_ref Policy Reference]
 [endsect][/section:policy Policies]
 
-[/ math.qbk
-  Copyright 2007 John Maddock and Paul A. Bristow.
+[/ policy.qbk
+  Copyright 2007, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

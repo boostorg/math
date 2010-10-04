@@ -15,9 +15,6 @@
 
 #include <boost/math/tools/test_data.hpp>
 
-// speed up beta function computation with a 90-decimal digit approximation:
-#include "ntl_rr_lanczos.hpp" 
-
 using namespace boost::math::tools;
 using namespace boost::math;
 using namespace std;
@@ -68,7 +65,7 @@ T get_beta(T a, T b)
       std::swap(a, b);
 
    std::pair<T, T> p(a, b);
-   std::map<std::pair<T, T>, T>::const_iterator i = m.find(p);
+   typename std::map<std::pair<T, T>, T>::const_iterator i = m.find(p);
    if(i != m.end())
       return i->second;
 
@@ -180,7 +177,7 @@ std::tr1::variate_generator<std::tr1::mt19937, std::tr1::uniform_real<float> > g
 
 struct beta_data_generator
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR ap, boost::math::ntl::RR bp, boost::math::ntl::RR x_)
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR ap, boost::math::ntl::RR bp, boost::math::ntl::RR x_)
    {
       float a = truncate_to_float(real_cast<float>(gen() * pow(boost::math::ntl::RR(10), ap)));      
       float b = truncate_to_float(real_cast<float>(gen() * pow(boost::math::ntl::RR(10), bp))); 
@@ -188,14 +185,14 @@ struct beta_data_generator
       std::cout << a << " " << b << " " << x << std::endl;
       std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_full = ibeta_fraction1(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
       std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_reg = ibeta_fraction1_regular(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
-      return std::tr1::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
+      return boost::math::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
    }
 };
 
 // medium sized values:
 struct beta_data_generator_medium
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR x_)
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR x_)
    {
       boost::math::ntl::RR a = gen2();      
       boost::math::ntl::RR b = gen2(); 
@@ -212,13 +209,13 @@ struct beta_data_generator_medium
          std::cout << exp_beta << std::endl;
       }*/
       std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_reg = ibeta_fraction1_regular(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
-      return std::tr1::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
+      return boost::math::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
    }
 };
 
 struct beta_data_generator_small
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR x_)
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR x_)
    {
       float a = truncate_to_float(gen2()/10);      
       float b = truncate_to_float(gen2()/10); 
@@ -226,19 +223,19 @@ struct beta_data_generator_small
       std::cout << a << " " << b << " " << x << std::endl;
       std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_full = ibeta_fraction1(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
       std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_reg = ibeta_fraction1_regular(boost::math::ntl::RR(a), boost::math::ntl::RR(b), boost::math::ntl::RR(x));
-      return std::tr1::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
+      return boost::math::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
    }
 };
 
 struct beta_data_generator_int
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR a, boost::math::ntl::RR b, boost::math::ntl::RR x_)
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR a, boost::math::ntl::RR b, boost::math::ntl::RR x_)
    {
       float x = truncate_to_float(real_cast<float>(x_));
       std::cout << a << " " << b << " " << x << std::endl;
       std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_full = ibeta_fraction1(a, b, boost::math::ntl::RR(x));
       std::pair<boost::math::ntl::RR, boost::math::ntl::RR> ib_reg = ibeta_fraction1_regular(a, b, boost::math::ntl::RR(x));
-      return std::tr1::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
+      return boost::math::make_tuple(a, b, x, ib_full.first, ib_full.second, ib_reg.first, ib_reg.second);
    }
 };
 

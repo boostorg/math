@@ -28,7 +28,7 @@
         of the Third Kind - Legendre Form</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.ellint.ellint_3.synopsis"></a><h6>
-<a name="id1211009"></a>
+<a name="id1270082"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.synopsis">Synopsis</a>
         </h6>
 <p>
@@ -55,7 +55,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.ellint.ellint_3.description"></a><h6>
-<a name="id1211519"></a>
+<a name="id1270592"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.description">Description</a>
         </h6>
 <p>
@@ -129,7 +129,7 @@
 <p>
         </p>
 <a name="math_toolkit.special.ellint.ellint_3.accuracy"></a><h6>
-<a name="id1212120"></a>
+<a name="id1271194"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.accuracy">Accuracy</a>
         </h6>
 <p>
@@ -140,7 +140,7 @@
           All values are relative errors in units of epsilon.
         </p>
 <div class="table">
-<a name="id1212138"></a><p class="title"><b>Table&#160;43.&#160;Errors Rates in the Elliptic Integrals of the Third Kind</b></p>
+<a name="math_toolkit.special.ellint.ellint_3.errors_rates_in_the_elliptic_integrals_of_the_third_kind"></a><p class="title"><b>Table&#160;43.&#160;Errors Rates in the Elliptic Integrals of the Third Kind</b></p>
 <div class="table-contents"><table class="table" summary="Errors Rates in the Elliptic Integrals of the Third Kind">
 <colgroup>
 <col>
@@ -241,7 +241,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.special.ellint.ellint_3.testing"></a><h6>
-<a name="id1212305"></a>
+<a name="id1271380"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.testing">Testing</a>
         </h6>
 <p>
@@ -251,7 +251,7 @@
           this implementation.
         </p>
 <a name="math_toolkit.special.ellint.ellint_3.implementation"></a><h6>
-<a name="id1212327"></a>
+<a name="id1271401"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.implementation">Implementation</a>
         </h6>
 <p>
@@ -288,10 +288,10 @@
           <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) + 2m&#928;(n, k) ; n &lt;= 1</em></span>
         </p>
 <p>
-          <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) ; n &gt; 1</em></span> <sup>[<a name="id1212441" href="#ftn.id1212441" class="footnote">1</a>]</sup>
+          <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) ; n &gt; 1</em></span> <sup>[<a name="id1271515" href="#ftn.id1271515" class="footnote">1</a>]</sup>
         </p>
 <p>
-          are used to move &#966; to the range [0, &#960;/2].
+          are used to move &#966; &#8203; to the range [0, &#960;/2].
         </p>
 <p>
           The functions are then implemented in terms of Carlson's integrals using
@@ -308,7 +308,7 @@
         </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id1212441" href="#id1212441" class="para">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1271515" href="#id1271515" class="para">1</a>] </sup>
             I haven't been able to find a literature reference for this relation,
             but it appears to be the convention used by Mathematica. Intuitively
             the first <span class="emphasis"><em>2 * m * &#928;(n, k)</em></span> terms cancel out as the
@@ -318,9 +318,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

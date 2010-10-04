@@ -23,14 +23,14 @@ float truncate_to_float(float const * pf)
    return *pf;
 }
 
-std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> generate_data(boost::math::ntl::RR n, boost::math::ntl::RR phi)
+boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR> generate_data(boost::math::ntl::RR n, boost::math::ntl::RR phi)
 {
    static std::tr1::mt19937 r;
    std::tr1::uniform_real<float> ui(0, 1);
    float k = ui(r);
    boost::math::ntl::RR kr(truncate_to_float(&k));
    boost::math::ntl::RR result = boost::math::ellint_3(kr, n, phi);
-   return std::tr1::make_tuple(kr, result);
+   return boost::math::make_tuple(kr, result);
 }
 
 int test_main(int argc, char*argv [])

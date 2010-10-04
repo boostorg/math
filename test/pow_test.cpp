@@ -198,3 +198,29 @@ int test_main(int, char* [])
 
     return 0;
 }
+
+/*
+
+  Running 1 test case...
+  Testing with integral bases and positive small exponents
+  Testing with integral bases and negative small exponents
+  Testing with float precision bases and positive small exponents
+  Testing with float precision bases and negative small exponents
+  Testing with float precision bases and positive big exponents
+  Testing with float precision bases and negative big exponents
+  Testing with double precision bases and positive small exponents
+  Testing with double precision bases and negative small exponents
+  Testing with double precision bases and positive big exponents
+  Testing with double precision bases and negative big exponents
+  Testing with long double precision bases and positive small exponents
+  Testing with long double precision bases and negative small exponents
+  Testing with long double precision bases and positive big exponents
+  Testing with long double precision bases and negative big exponents
+  Testing with concepts::real_concept precision bases and positive small exponents
+  Testing with concepts::real_concept precision bases and negative small exponents
+  Testing with concepts::real_concept precision bases and positive big exponents
+  Testing with concepts::real_concept precision bases and negative big exponents
+  
+  *** No errors detected
+
+  */

@@ -4,7 +4,6 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/bindings/rr.hpp>
-#include "ntl_rr_digamma.hpp"
 #include <boost/math/special_functions/expint.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <fstream>

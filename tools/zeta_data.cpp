@@ -28,12 +28,12 @@ struct zeta_data_generator
 
 struct zeta_data_generator2
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR z)
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR z)
    {
       std::cout << -z << " ";
       boost::math::ntl::RR result = boost::math::zeta(-z);
       std::cout << result << std::endl;
-      return std::tr1::make_tuple(-z, result);
+      return boost::math::make_tuple(-z, result);
    }
 };
 

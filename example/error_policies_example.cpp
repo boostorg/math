@@ -1,6 +1,6 @@
 // error_policies_example.cpp
 
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2010.
 // Copyright John Maddock 2007.
 
 // Use, modification and distribution are subject to the
@@ -15,12 +15,13 @@
    using boost::math::students_t;  // Probability of students_t(df, t).
    using boost::math::students_t_distribution;
 
-//  using namespace boost::math;
+//  using namespace boost::math; causes:
 //.\error_policy_normal.cpp(30) : error C2872: 'policy' : ambiguous symbol
-//        could be 'I:\Boost-sandbox\math_toolkit\boost/math/policies/policy.hpp(392) : boost::math::policies::policy'
+//        could be '\boost/math/policies/policy.hpp(392) : boost::math::policies::policy'
 //        or 'boost::math::policies'
 
-  // So can't use this using namespace command.
+// So should not use this 'using namespace boost::math;' command.
+
 // Suppose we want a statistical distribution to return infinities,
 // rather than throw exceptions (the default policy), then we can use:
 
@@ -28,6 +29,8 @@
 #include <iostream>
    using std::cout;
    using std::endl;
+
+// using namespace boost::math::policies; or
 
 using boost::math::policies::policy;
 // Possible errors
@@ -37,7 +40,6 @@ using boost::math::policies::domain_error;
 using boost::math::policies::pole_error;
 using boost::math::policies::denorm_error;
 using boost::math::policies::evaluation_error;
-
 using boost::math::policies::ignore_error;
 
 // Define a custom policy to ignore just overflow:
@@ -89,11 +91,15 @@ int main()
 
 Output:
 
-quantile(my_normal(), 0.05); = -1.64485
-quantile(my_normal(), 0.); = -1.#INF
-quantile(my_normal(), 0.); = -1.#INF
-quantile(my_students_t(), 0.); = 1.#QNAN
-quantile(my_normal2(), 0.); = -2.32635
-quantile(my_normal2(), 0.); = -1.#INF
+error_policies_example.cpp
+  Generating code
+  Finished generating code
+  error_policy_normal_example.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\error_policies_example.exe
+  quantile(my_normal(), 0.05); = -1.64485
+  quantile(my_normal(), 0.); = -1.#INF
+  quantile(my_normal(), 0.); = -1.#INF
+  quantile(my_students_t(), 0.); = 1.#QNAN
+  quantile(my_normal2(), 0.); = -2.32635
+  quantile(my_normal2(), 0.); = -1.#INF
 
 */

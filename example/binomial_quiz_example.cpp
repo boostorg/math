@@ -1,4 +1,4 @@
-// Copyright Paul A. Bristow 2007, 2009
+// Copyright Paul A. Bristow 2007, 2009, 2010
 // Copyright John Maddock 2006
 
 // Use, modification and distribution are subject to the
@@ -38,6 +38,10 @@ First, we need to be able to use the binomial distribution constructor
   using std::ios; using std::flush; using std::left; using std::right; using std::fixed;
 #include <iomanip>
   using std::setw; using std::setprecision;
+#include <exception>
+  using std::exception;
+
+
 //][/binomial_quiz_example1]
 
 int main()
@@ -406,7 +410,7 @@ If guessing then percentiles 1 to 99% will get 0 to 7.788 right.
 
 //] [/discrete_quantile_real]
   }
-  catch(const std::exception& e)
+  catch(const exception& e)
   { // Always useful to include try & catch blocks because
     // default policies are to throw exceptions on arguments that cause
     // errors like underflow, overflow.

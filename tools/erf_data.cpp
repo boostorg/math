@@ -13,8 +13,6 @@
 
 #include <boost/math/tools/test_data.hpp>
 
-#include "ntl_rr_lanczos.hpp"
-
 using namespace boost::math::tools;
 using namespace std;
 
@@ -33,7 +31,7 @@ float truncate_to_float(boost::math::ntl::RR r)
 
 struct erf_data_generator
 {
-   std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR z)
+   boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR> operator()(boost::math::ntl::RR z)
    {
       // very naively calculate spots using the gamma function at high precision:
       int sign = 1;
@@ -58,7 +56,7 @@ struct erf_data_generator
       }
       if(sign < 1)
          g2 = 2 - g2;
-      return std::tr1::make_tuple(g1, g2);
+      return boost::math::make_tuple(g1, g2);
    }
 };
 
@@ -119,14 +117,14 @@ void asymptotic_limit(int Bits)
       << terms << " terms." << std::endl;
 }
 
-std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> erfc_inv(boost::math::ntl::RR r)
+boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR> erfc_inv(boost::math::ntl::RR r)
 {
    boost::math::ntl::RR x = exp(-r * r);
    x = NTL::RoundToPrecision(x.value(), 64);
    std::cout << x << "   ";
    boost::math::ntl::RR result = boost::math::erfc_inv(x);
    std::cout << result << std::endl;
-   return std::tr1::make_tuple(x, result);
+   return boost::math::make_tuple(x, result);
 }
 
 
@@ -165,7 +163,7 @@ int test_main(int argc, char*argv [])
       }
       else if(strcmp(argv[1], "--erfc_inv") == 0)
       {
-         std::tr1::tuple<boost::math::ntl::RR, boost::math::ntl::RR> (*f)(boost::math::ntl::RR);
+         boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR> (*f)(boost::math::ntl::RR);
          f = erfc_inv;
          std::cout << "Welcome.\n"
             "This program will generate spot tests for the inverse erfc function:\n";

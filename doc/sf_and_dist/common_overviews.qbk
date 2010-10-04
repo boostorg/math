@@ -7,7 +7,7 @@ behaviour of this library according to your needs.  There is more information
 available in the [link math_toolkit.policy.pol_tutorial policy tutorial] 
 and the [link math_toolkit.policy.pol_ref policy reference].
 
-Generally speaking unless you find that the 
+Generally speaking, unless you find that the 
 [link math_toolkit.policy.pol_tutorial.policy_tut_defaults
  default policy behaviour]
 when encountering 'bad' argument values does not meet your needs,
@@ -53,7 +53,7 @@ statistical distribution].
 [template performance_overview[]
 
 By and large the performance of this library should be acceptable
-for most needs.  However, you should note that the library's primary
+for most needs.  However, you should note that this library's primary
 emphasis is on accuracy and numerical stability, and /not/ speed.
 
 In terms of the algorithms used, this library aims to use the same "best
@@ -73,7 +73,7 @@ from this library are:
 and "debug" builds can easily be a [link math_toolkit.perf.getting_best factor of 20].
 # Pick your compiler carefully: [link math_toolkit.perf.comp_compilers
 performance differences of up to 
-8 fold] have been found between some windows compilers for example.
+8 fold] have been found between some Windows compilers for example.
 
 The [link math_toolkit.perf performance section] contains more 
 information on the performance

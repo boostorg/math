@@ -28,8 +28,8 @@
 </h4></div></div></div>
 <p>
           Properties that are common to all distributions are accessed via non-member
-          getter functions. This allows more of these functions to be added over
-          time as the need arises. Unfortunately the literature uses many different
+          getter functions: non-membership allows more of these functions to be added
+          over time, as the need arises. Unfortunately the literature uses many different
           and confusing names to refer to a rather small number of actual concepts;
           refer to the <a class="link" href="nmp.html#concept_index">concept index</a> to find
           the property you want by the name you are most familiar with. Or use the
@@ -37,7 +37,7 @@
           the function you want if you already know its name.
         </p>
 <a name="function_index"></a><a name="math_toolkit.dist.dist_ref.nmp.function_index"></a><h5>
-<a name="id1074762"></a>
+<a name="id1132552"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.function_index">Function
           Index</a>
         </h5>
@@ -95,7 +95,7 @@
             </li>
 </ul></div>
 <a name="concept_index"></a><a name="math_toolkit.dist.dist_ref.nmp.conceptual_index"></a><h5>
-<a name="id1074987"></a>
+<a name="id1132776"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.conceptual_index">Conceptual
           Index</a>
         </h5>
@@ -182,7 +182,7 @@
             </li>
 </ul></div>
 <a name="math.dist.cdf"></a><a name="math_toolkit.dist.dist_ref.nmp.cumulative_distribution_function"></a><h5>
-<a name="id1075323"></a>
+<a name="id1133112"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.cumulative_distribution_function">Cumulative
           Distribution Function</a>
         </h5>
@@ -200,13 +200,13 @@
           if the random variable is outside the defined range for the distribution.
         </p>
 <p>
-          For example the following graph shows the cdf for the normal distribution:
+          For example, the following graph shows the cdf for the normal distribution:
         </p>
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/cdf.png" alt="cdf"></span>
         </p>
 <a name="math.dist.ccdf"></a><a name="math_toolkit.dist.dist_ref.nmp.complement_of_the_cumulative_distribution_function"></a><h5>
-<a name="id1077929"></a>
+<a name="id1133283"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.complement_of_the_cumulative_distribution_function">Complement
           of the Cumulative Distribution Function</a>
         </h5>
@@ -236,8 +236,8 @@
 </span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">norm</span><span class="special">,</span> <span class="number">2.0</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 <p>
-          For example the following graph shows the __complement of the cdf for the
-          normal distribution:
+          For example, the following graph shows the __complement of the cdf for
+          the normal distribution:
         </p>
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/survival.png" alt="survival"></span>
@@ -247,7 +247,7 @@
           complement is useful and when it should be used.
         </p>
 <a name="math.dist.hazard"></a><a name="math_toolkit.dist.dist_ref.nmp.hazard_function"></a><h5>
-<a name="id1078218"></a>
+<a name="id1133572"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.hazard_function">Hazard Function</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -275,7 +275,7 @@
           </p></td></tr>
 </table></div>
 <a name="math.dist.chf"></a><a name="math_toolkit.dist.dist_ref.nmp.cumulative_hazard_function"></a><h5>
-<a name="id1078400"></a>
+<a name="id1133754"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.cumulative_hazard_function">Cumulative
           Hazard Function</a>
         </h5>
@@ -303,7 +303,7 @@
           </p></td></tr>
 </table></div>
 <a name="math.dist.mean"></a><a name="math_toolkit.dist.dist_ref.nmp.mean"></a><h5>
-<a name="id1078583"></a>
+<a name="id1133937"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.mean">mean</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -318,7 +318,7 @@
           distribution).
         </p>
 <a name="math.dist.median"></a><a name="math_toolkit.dist.dist_ref.nmp.median"></a><h5>
-<a name="id1078700"></a>
+<a name="id1134054"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.median">median</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -328,7 +328,7 @@
           Returns the median of the distribution <span class="emphasis"><em>dist</em></span>.
         </p>
 <a name="math.dist.mode"></a><a name="math_toolkit.dist.dist_ref.nmp.mode"></a><h5>
-<a name="id1078809"></a>
+<a name="id1134164"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.mode">mode</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -342,7 +342,7 @@
           if the distribution does not have a defined mode.
         </p>
 <a name="math.dist.pdf"></a><a name="math_toolkit.dist.dist_ref.nmp.probability_density_function"></a><h5>
-<a name="id1078925"></a>
+<a name="id1134306"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.probability_density_function">Probability
           Density Function</a>
         </h5>
@@ -365,14 +365,14 @@
           if the random variable is outside the defined range for the distribution.
         </p>
 <p>
-          For example for a standard normal distribution the pdf looks like this:
+          For example, for a standard normal distribution the pdf looks like this:
         </p>
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/pdf.png" alt="pdf"></span>
         </p>
 <a name="math.dist.range"></a><a name="math_toolkit.dist.dist_ref.nmp.range"></a><h5>
-<a name="id1079094"></a>
-          <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.range">range</a>
+<a name="id1134475"></a>
+          <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.range">Range</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <span class="identifier">RealType</span><span class="special">&gt;</span> <span class="identifier">range</span><span class="special">(</span><span class="keyword">const</span> <span class="emphasis"><em>Distribution-Type</em></span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">,</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;&amp;</span> <span class="identifier">dist</span><span class="special">);</span>
@@ -381,7 +381,7 @@
           Returns the valid range of the random variable over distribution <span class="emphasis"><em>dist</em></span>.
         </p>
 <a name="math.dist.quantile"></a><a name="math_toolkit.dist.dist_ref.nmp.quantile"></a><h5>
-<a name="id1079229"></a>
+<a name="id1134611"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.quantile">Quantile</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -410,7 +410,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/quantile.png" alt="quantile"></span>
         </p>
 <a name="math.dist.quantile_c"></a><a name="math_toolkit.dist.dist_ref.nmp.quantile_from_the_complement_of_the_probability_"></a><h5>
-<a name="id1079453"></a>
+<a name="id1134834"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.quantile_from_the_complement_of_the_probability_">Quantile
           from the complement of the probability.</a>
         </h5>
@@ -456,7 +456,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/survival_inv.png" alt="survival_inv"></span>
         </p>
 <a name="math.dist.sd"></a><a name="math_toolkit.dist.dist_ref.nmp.standard_deviation"></a><h5>
-<a name="id1079793"></a>
+<a name="id1135175"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.standard_deviation">Standard
           Deviation</a>
         </h5>
@@ -471,7 +471,7 @@
           if the distribution does not have a defined standard deviation.
         </p>
 <a name="math.dist.support"></a><a name="math_toolkit.dist.dist_ref.nmp.support"></a><h5>
-<a name="id1079913"></a>
+<a name="id1135295"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.support">support</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -488,7 +488,7 @@
           where the pdf is zero, and the cdf zero or unity.
         </p>
 <a name="math.dist.variance"></a><a name="math_toolkit.dist.dist_ref.nmp.variance"></a><h5>
-<a name="id1080610"></a>
+<a name="id1135439"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.variance">Variance</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -502,7 +502,7 @@
           if the distribution does not have a defined variance.
         </p>
 <a name="math.dist.skewness"></a><a name="math_toolkit.dist.dist_ref.nmp.skewness"></a><h5>
-<a name="id1080729"></a>
+<a name="id1135557"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.skewness">Skewness</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -516,7 +516,7 @@
           if the distribution does not have a defined skewness.
         </p>
 <a name="math.dist.kurtosis"></a><a name="math_toolkit.dist.dist_ref.nmp.kurtosis"></a><h5>
-<a name="id1080848"></a>
+<a name="id1135676"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.kurtosis">Kurtosis</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -527,11 +527,11 @@
           <span class="emphasis"><em>dist</em></span>.
         </p>
 <p>
-          kertosis = &#946;<sub>2</sub>= &#956;<sub>4</sub> / &#956;<sub>2</sub><sup>2</sup>
+          kertosis = &#946;<sub>2</sub> &#8203;= &#956;<sub>4</sub> &#8203; / &#956;<sub>2</sub><sup>2</sup>
         </p>
 <p>
-          Where &#956;<sub>i</sub> is the i'th central moment of the distribution, and in particular
-          &#956;<sub>2</sub> is the variance of the distribution.
+          Where &#956;<sub>i</sub> &#8203; is the i'th central moment of the distribution, and in particular
+          &#956;<sub>2</sub> &#8203; is the variance of the distribution.
         </p>
 <p>
           The kurtosis is a measure of the "peakedness" of a distribution.
@@ -558,7 +558,7 @@
           'Proper' kurtosis can have a value from zero to + infinity.
         </p>
 <a name="math.dist.kurtosis_excess"></a><a name="math_toolkit.dist.dist_ref.nmp.kurtosis_excess"></a><h5>
-<a name="id1081055"></a>
+<a name="id1135884"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.kurtosis_excess">Kurtosis
           excess</a>
         </h5>
@@ -569,11 +569,11 @@
           Returns the kurtosis excess of the distribution <span class="emphasis"><em>dist</em></span>.
         </p>
 <p>
-          kurtosis excess = &#947;<sub>2</sub>= &#956;<sub>4</sub> / &#956;<sub>2</sub><sup>2</sup>- 3 = kurtosis - 3
+          kurtosis excess = &#947;<sub>2</sub> &#8203;= &#956;<sub>4</sub> &#8203; / &#956;<sub>2</sub><sup>2</sup> &#8203;- 3 = kurtosis - 3
         </p>
 <p>
-          Where &#956;<sub>i</sub> is the i'th central moment of the distribution, and in particular
-          &#956;<sub>2</sub> is the variance of the distribution.
+          Where &#956;<sub>i</sub> &#8203; is the i'th central moment of the distribution, and in particular
+          &#956;<sub>2</sub> &#8203; is the variance of the distribution.
         </p>
 <p>
           The kurtosis excess is a measure of the "peakedness" of a distribution,
@@ -593,7 +593,7 @@
           The kurtosis excess of a normal distribution is zero.
         </p>
 <a name="cdfPQ"></a><a name="math_toolkit.dist.dist_ref.nmp.p_and_q"></a><h5>
-<a name="id1081240"></a>
+<a name="id1136070"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.p_and_q">P and Q</a>
         </h5>
 <p>
@@ -603,7 +603,7 @@
           returned by these functions.
         </p>
 <a name="percent"></a><a name="math_toolkit.dist.dist_ref.nmp.percent_point_function"></a><h5>
-<a name="id1081270"></a>
+<a name="id1136100"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.percent_point_function">Percent
           Point Function</a>
         </h5>
@@ -612,7 +612,7 @@
           the <a class="link" href="nmp.html#math.dist.quantile">Quantile</a>.
         </p>
 <a name="cdf_inv"></a><a name="math_toolkit.dist.dist_ref.nmp.inverse_cdf_function_"></a><h5>
-<a name="id1081295"></a>
+<a name="id1136125"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.inverse_cdf_function_">Inverse
           CDF Function.</a>
         </h5>
@@ -621,7 +621,7 @@
           <a class="link" href="nmp.html#math.dist.quantile">Quantile</a>.
         </p>
 <a name="survival_inv"></a><a name="math_toolkit.dist.dist_ref.nmp.inverse_survival_function_"></a><h5>
-<a name="id1081323"></a>
+<a name="id1136153"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.inverse_survival_function_">Inverse
           Survival Function.</a>
         </h5>
@@ -629,7 +629,7 @@
           The inverse of the survival function, is the same as computing the <a class="link" href="nmp.html#math.dist.quantile_c">quantile from the complement of the probability</a>.
         </p>
 <a name="pmf"></a><a name="math_toolkit.dist.dist_ref.nmp.probability_mass_function"></a><h5>
-<a name="id1081353"></a>
+<a name="id1136183"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.probability_mass_function">Probability
           Mass Function</a>
         </h5>
@@ -643,7 +643,7 @@
           applies to continuous distributions.
         </p>
 <a name="lower_critical"></a><a name="math_toolkit.dist.dist_ref.nmp.lower_critical_value_"></a><h5>
-<a name="id1081391"></a>
+<a name="id1136221"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.lower_critical_value_">Lower
           Critical Value.</a>
         </h5>
@@ -653,7 +653,7 @@
           the <a class="link" href="nmp.html#math.dist.quantile">Quantile</a>.
         </p>
 <a name="upper_critical"></a><a name="math_toolkit.dist.dist_ref.nmp.upper_critical_value_"></a><h5>
-<a name="id1081417"></a>
+<a name="id1136246"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.upper_critical_value_">Upper
           Critical Value.</a>
         </h5>
@@ -664,7 +664,7 @@
           complement of the probability</a>.
         </p>
 <a name="survival"></a><a name="math_toolkit.dist.dist_ref.nmp.survival_function"></a><h5>
-<a name="id1081443"></a>
+<a name="id1136273"></a>
           <a class="link" href="nmp.html#math_toolkit.dist.dist_ref.nmp.survival_function">Survival
           Function</a>
         </h5>
@@ -675,9 +675,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

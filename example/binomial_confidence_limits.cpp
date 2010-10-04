@@ -1,4 +1,6 @@
 // Copyright John Maddock 2006
+// Copyright Paul A. Bristow 2010
+
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -11,7 +13,11 @@
 #endif
 
 #include <iostream>
+using std::cout; using std::endl;
 #include <iomanip>
+using std::fixed; using std::left; using std::right; using std::right; using std::setw;
+using std::setprecision;
+
 #include <boost/math/distributions/binomial.hpp>
 
 void confidence_limits_on_frequency(unsigned trials, unsigned successes)
@@ -21,11 +27,11 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
    // successes = Total number of observed successes.
    //
    // Calculate confidence limits for an observed
-   // frequency of occurrence that follows a binomial
-   // distribution.
+   // frequency of occurrence that follows a binomial distribution.
    //
-   using namespace std;
-   using namespace boost::math;
+   //using namespace std; // Avoid
+   // using namespace boost::math; // potential name ambiguity with std <random>
+   using boost::math::binomial_distribution;
 
    // Print out general info:
    cout <<

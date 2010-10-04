@@ -84,7 +84,7 @@
 <p>
             </p>
 <p>
-              But this is inconveniently long, so by writing
+              But this is inconveniently long, so we might be tempted to write
             </p>
 <p>
             </p>
@@ -97,7 +97,8 @@
 <p>
             </p>
 <p>
-              or
+              but this might risk ambiguity with names in std random so *much better
+              is explicit <code class="computeroutput"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span> </code> * ... statements like
             </p>
 <p>
             </p>
@@ -110,7 +111,7 @@
 <p>
             </p>
 <p>
-              we can reduce typing.
+              and we can still reduce typing.
             </p>
 <p>
             </p>
@@ -296,22 +297,22 @@ error C3861: 'mybetad0': identifier not found
               
 </p>
 <pre class="programlisting"><span class="comment">// Explicit double precision:
-</span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span>        <span class="identifier">mydist1</span><span class="special">(</span><span class="number">8.</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span> 
+</span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span>        <span class="identifier">mydist1</span><span class="special">(</span><span class="number">8.</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
 
 <span class="comment">// Explicit float precision, double arguments are truncated to float:
 </span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span>         <span class="identifier">mydist2</span><span class="special">(</span><span class="number">8.</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
 
 <span class="comment">// Explicit float precision, integer &amp; double arguments converted to float.
-</span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span>         <span class="identifier">mydist3</span><span class="special">(</span><span class="number">8</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span> 
+</span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span>         <span class="identifier">mydist3</span><span class="special">(</span><span class="number">8</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
 
 <span class="comment">// Explicit float precision, float arguments, so no conversion:
-</span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span>         <span class="identifier">mydist4</span><span class="special">(</span><span class="number">8.F</span><span class="special">,</span> <span class="number">0.25F</span><span class="special">);</span> 
+</span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span>         <span class="identifier">mydist4</span><span class="special">(</span><span class="number">8.F</span><span class="special">,</span> <span class="number">0.25F</span><span class="special">);</span>
 
 <span class="comment">// Explicit float precision, integer arguments promoted to float.
-</span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span>         <span class="identifier">mydist5</span><span class="special">(</span><span class="number">8</span><span class="special">,</span> <span class="number">1</span><span class="special">);</span> 
+</span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span>         <span class="identifier">mydist5</span><span class="special">(</span><span class="number">8</span><span class="special">,</span> <span class="number">1</span><span class="special">);</span>
 
 <span class="comment">// Explicit double precision:
-</span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span>        <span class="identifier">mydist6</span><span class="special">(</span><span class="number">8.</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span> 
+</span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span>        <span class="identifier">mydist6</span><span class="special">(</span><span class="number">8.</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
 
 <span class="comment">// Explicit long double precision:
 </span><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;</span>   <span class="identifier">mydist7</span><span class="special">(</span><span class="number">8.</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span></pre>
@@ -332,7 +333,7 @@ error C3861: 'mybetad0': identifier not found
             <a name="math_toolkit.dist.stat_tut.weg.dist_construct_eg.default_arguments_to_distribution_constructors_"></a>
             </p>
 <h6>
-<a name="id1002600"></a>
+<a name="id1057053"></a>
               <a class="link" href="dist_construct_eg.html#math_toolkit.dist.stat_tut.weg.dist_construct_eg.default_arguments_to_distribution_constructors_">Default
               arguments to distribution constructors.</a>
             </h6>
@@ -377,7 +378,7 @@ error C3861: 'mybetad0': identifier not found
               
 </p>
 <pre class="programlisting">  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span>
-  
+
   <span class="identifier">normal</span> <span class="identifier">norm1</span><span class="special">;</span>       <span class="comment">// Standard normal distribution.
 </span>  <span class="identifier">normal</span> <span class="identifier">norm2</span><span class="special">(</span><span class="number">2</span><span class="special">);</span>    <span class="comment">// Mean = 2, std deviation = 1.
 </span>  <span class="identifier">normal</span> <span class="identifier">norm3</span><span class="special">(</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">);</span> <span class="comment">// Mean = 2, std deviation = 3.
@@ -396,9 +397,9 @@ error C3861: 'mybetad0': identifier not found
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

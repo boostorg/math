@@ -1,6 +1,6 @@
 // find_location.cpp
 
-// Copyright Paul A. Bristow 2008.
+// Copyright Paul A. Bristow 2008, 2010.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -13,9 +13,9 @@
 // Note that this file contains Quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!
 
-#ifdef _MSC_VER
-#  pragma warning(disable: 4180) // qualifier has no effect (in fusion).
-#endif
+//#ifdef _MSC_VER
+//#  pragma warning(disable: 4180) // qualifier has no effect (in Fusion).
+//#endif
 
 //[find_location1
 /*`
@@ -40,11 +40,12 @@ the algorithms to find location (and some std output of course).
   using std::setw; using std::setprecision;
 #include <limits>
   using std::numeric_limits;
+
 //] [/find_location1]
 
 int main()
 {
-  cout << "Example: Find location (mean)." << endl;
+  cout << "Example: Find location (or mean)." << endl;
   try
   {
 //[find_location2

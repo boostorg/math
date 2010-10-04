@@ -18,23 +18,23 @@ using namespace std;
 
 
 template<class T>
-std::tr1::tuple<T, T, T, T> legendre_p_data(T n, T x)
+boost::math::tuple<T, T, T, T> legendre_p_data(T n, T x)
 {
    n = floor(n);
    T r1 = legendre_p(boost::math::tools::real_cast<int>(n), x);
    T r2 = legendre_q(boost::math::tools::real_cast<int>(n), x);
-   return std::tr1::make_tuple(n, x, r1, r2);
+   return boost::math::make_tuple(n, x, r1, r2);
 }
    
 template<class T>
-std::tr1::tuple<T, T, T, T> assoc_legendre_p_data(T n, T x)
+boost::math::tuple<T, T, T, T> assoc_legendre_p_data(T n, T x)
 {
    static tr1::mt19937 r;
    int l = real_cast<int>(floor(n));
    tr1::uniform_int<> ui((std::max)(-l, -40), (std::min)(l, 40));
    int m = ui(r);
    T r1 = legendre_p(l, m, x);
-   return std::tr1::make_tuple(n, m, x, r1);
+   return boost::math::make_tuple(n, m, x, r1);
 }
 
 int test_main(int argc, char*argv [])

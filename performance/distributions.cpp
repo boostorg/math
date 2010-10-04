@@ -293,12 +293,6 @@ BOOST_MATH_DISTRIBUTION2_TEST(non_central_t, int_values, small_int_values, real_
 
 extern "C" {
 #include "Rmath.h"
-/*
-double qnchisq(double, double, double, int, int)
-{
-   return 0;
-}
-*/
 }
 
 #define BOOST_MATH_R_DISTRIBUTION3_TEST(name, param1_table, param2_table, param3_table, random_variable_table, probability_table) \

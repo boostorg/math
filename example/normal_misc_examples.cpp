@@ -1,6 +1,6 @@
 // normal_misc_examples.cpp
 
-// Copyright Paul A. Bristow 2007.
+// Copyright Paul A. Bristow 2007, 2010.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -504,6 +504,3 @@ Fraction too long [ P(X > 4.10) ] is 0.0668
 95% of bolts are shorter than 4.11
 
 */
-
-
-

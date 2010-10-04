@@ -1,5 +1,5 @@
 //  Copyright John Maddock 2007.
-//  Copyright Paul a. Bristow 2007
+//  Copyright Paul a. Bristow 2010
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,19 +8,18 @@
 // and comments, don't change any of the special comment mark-ups!
 
 #ifdef _MSC_VER
-# pragma warning (disable : 4100) // 'unreferenced formal parameter
+# pragma warning (disable : 4100) // unreferenced formal parameters
 #endif
 
-
 #include <iostream>
+using std::cout;  using std::endl; using std::cerr;
 
 //[policy_eg_8
 
 /*`
-
 Suppose we want our own user-defined error handlers rather than the
-any of the default ones supplied by the library to be used.  If
-we set the policy for a specific type of error to `user_error`
+any of the default ones supplied by the library to be used.
+If we set the policy for a specific type of error to `user_error`
 then the library will call a user-supplied error handler.
 These are forward declared, but not defined in
 boost/math/policies/error_handling.hpp like this:
@@ -45,38 +44,37 @@ boost/math/policies/error_handling.hpp like this:
    }}} // namespaces
 
 So out first job is to include the header we want to use, and then
-provide definitions for the user-defined error handlers we want to use:
-
+provide definitions for our user-defined error handlers that we want to use.
+We only provide our special domain and pole error handlers;
+other errors like overflow and underflow use the default.
 */
 
-#include <iostream>
 #include <boost/math/special_functions.hpp>
 
-namespace boost{ namespace math{ namespace policies{
-
-template <class T>
-T user_domain_error(const char* function, const char* message, const T& val)
+namespace boost{ namespace math
 {
-   std::cerr << "Domain Error." << std::endl;
-   return std::numeric_limits<T>::quiet_NaN();
-}
+  namespace policies
+  {
+    template <class T>
+    T user_domain_error(const char* function, const char* message, const T& val)
+    { // Ignoring function, message and val for this example, perhaps unhelpfully.
+       cerr << "Domain Error!" << endl;
+       return std::numeric_limits<T>::quiet_NaN();
+    }
 
-template <class T>
-T user_pole_error(const char* function, const char* message, const T& val)
-{
-   std::cerr << "Pole Error." << std::endl;
-   return std::numeric_limits<T>::quiet_NaN();
-}
-
-
-}}} // namespaces
+    template <class T>
+    T user_pole_error(const char* function, const char* message, const T& val)
+    { // Ignoring function, message and val for this example, perhaps unhelpfully.
+       cerr << "Pole Error!" << endl;
+       return std::numeric_limits<T>::quiet_NaN();
+    }
+  } // namespace policies
+}} // namespace boost{ namespace math
 
 
 /*`
-
 Now we'll need to define a suitable policy that will call these handlers,
 and define some forwarding functions that make use of the policy:
-
 */
 
 namespace{
@@ -93,7 +91,6 @@ BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(user_error_policy)
 } // close unnamed namespace
 
 /*`
-
 We now have a set of forwarding functions defined in an unnamed namespace
 that all look something like this:
 
@@ -108,17 +105,15 @@ inline typename boost::math::tools::promote_args<RT>::type
 
 So that when we call `tgamma(z)` we really end up calling
 `boost::math::tgamma(z, user_error_policy())`, and any
-errors will get directed to our own error handlers:
-
+errors will get directed to our own error handlers.
 */
-
 
 int main()
 {
-   std::cout << "Result of erf_inv(-10) is: "
-      << erf_inv(-10) << std::endl;
-   std::cout << "Result of tgamma(-10) is: "
-      << tgamma(-10) << std::endl;
+   cout << "Result of erf_inv(-10) is: "
+      << erf_inv(-10) << endl;
+   cout << "Result of tgamma(-10) is: "
+      << tgamma(-10) << endl;
 }
 
 /*`
@@ -126,12 +121,11 @@ int main()
 Which outputs:
 
 [pre
-Domain Error.
-Result of erf_inv(-10) is: 1.#QNAN
-Pole Error.
-Result of tgamma(-10) is: 1.#QNAN
+  Domain Error!
+  Pole Error!
+  Result of erf_inv(-10) is: 1.#QNAN
+  Result of tgamma(-10) is: 1.#QNAN
 ]
 */
 
-//]
-
+//] // //[/policy_eg_8]

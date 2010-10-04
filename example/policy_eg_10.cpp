@@ -1,4 +1,5 @@
 //  Copyright John Maddock 2007.
+//  Copyright Paul A. Bristow 2010
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -16,22 +17,42 @@ use the 50-sample binomial distribution with a
 success fraction of 0.5 once again, and calculate
 all the possible quantiles at 0.05 and 0.95.
 
-Begin by including the needed headers:
+Begin by including the needed headers (and some using statements for conciseness):
 
 */
-
 #include <iostream>
-#include <boost/math/distributions/binomial.hpp>
+using std::cout; using std::endl;
+using std::left; using std::fixed; using std::right; using std::scientific;
+#include <iomanip>
+using std::setw;
+using std::setprecision;
 
+#include <boost/math/distributions/binomial.hpp>
 /*`
 
 Next we'll bring the needed declarations into scope, and
 define distribution types for all the available rounding policies:
 
 */
+// Avoid 
+// using namespace std; // and 
+// using namespace boost::math;
+// to avoid potential ambiguity of names, like binomial.
+// using namespace boost::math::policies; is small risk, but
+// the necessary items are brought into scope thus:
 
-using namespace boost::math::policies;
-using namespace boost::math;
+using boost::math::binomial_distribution;
+using boost::math::policies::policy;
+using boost::math::policies::discrete_quantile;
+
+using boost::math::policies::integer_round_outwards;
+using boost::math::policies::integer_round_down;
+using boost::math::policies::integer_round_up;
+using boost::math::policies::integer_round_nearest;
+using boost::math::policies::integer_round_inwards;
+using boost::math::policies::real;
+
+using boost::math::binomial_distribution; // Not std::binomial_distribution.
 
 typedef binomial_distribution<
             double, 
@@ -64,108 +85,99 @@ typedef binomial_distribution<
         binom_real_quantile;
 
 /*`
-
 Now let's set to work calling those quantiles:
-
 */
 
 int main()
 {
-   std::cout << 
+   cout << 
       "Testing rounding policies for a 50 sample binomial distribution,\n"
       "with a success fraction of 0.5.\n\n"
       "Lower quantiles are calculated at p = 0.05\n\n"
       "Upper quantiles at p = 0.95.\n\n";
 
-   std::cout << std::setw(25) << std::right
-      << "Policy"<< std::setw(18) << std::right 
-      << "Lower Quantile" << std::setw(18) << std::right 
-      << "Upper Quantile" << std::endl;
+   cout << setw(25) << right
+      << "Policy"<< setw(18) << right 
+      << "Lower Quantile" << setw(18) << right 
+      << "Upper Quantile" << endl;
    
    // Test integer_round_outwards:
-   std::cout << std::setw(25) << std::right
+   cout << setw(25) << right
       << "integer_round_outwards"
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_round_outwards(50, 0.5), 0.05)
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_round_outwards(50, 0.5), 0.95) 
-      << std::endl;
+      << endl;
    
    // Test integer_round_inwards:
-   std::cout << std::setw(25) << std::right
+   cout << setw(25) << right
       << "integer_round_inwards"
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_round_inwards(50, 0.5), 0.05)
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_round_inwards(50, 0.5), 0.95) 
-      << std::endl;
+      << endl;
    
    // Test integer_round_down:
-   std::cout << std::setw(25) << std::right
+   cout << setw(25) << right
       << "integer_round_down"
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_round_down(50, 0.5), 0.05)
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_round_down(50, 0.5), 0.95) 
-      << std::endl;
+      << endl;
    
    // Test integer_round_up:
-   std::cout << std::setw(25) << std::right
+   cout << setw(25) << right
       << "integer_round_up"
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_round_up(50, 0.5), 0.05)
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_round_up(50, 0.5), 0.95) 
-      << std::endl;
+      << endl;
    
    // Test integer_round_nearest:
-   std::cout << std::setw(25) << std::right
+   cout << setw(25) << right
       << "integer_round_nearest"
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_round_nearest(50, 0.5), 0.05)
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_round_nearest(50, 0.5), 0.95) 
-      << std::endl;
+      << endl;
    
    // Test real:
-   std::cout << std::setw(25) << std::right
+   cout << setw(25) << right
       << "real"
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_real_quantile(50, 0.5), 0.05)
-      << std::setw(18) << std::right
+      << setw(18) << right
       << quantile(binom_real_quantile(50, 0.5), 0.95) 
-      << std::endl;
-}
+      << endl;
+} // int main()
 
 /*`
 
 Which produces the program output:
 
 [pre
-Testing rounding policies for a 50 sample binomial distribution,
-with a success fraction of 0.5.
-
-Lower quantiles are calculated at p = 0.05
-
-Upper quantiles at p = 0.95.
-
-Testing rounding policies for a 50 sample binomial distribution,
-with a success fraction of 0.5.
-
-Lower quantiles are calculated at p = 0.05
-
-Upper quantiles at p = 0.95.
-
-                   Policy    Lower Quantile    Upper Quantile
-   integer_round_outwards                18                31
-    integer_round_inwards                19                30
-       integer_round_down                18                30
-         integer_round_up                19                31
-    integer_round_nearest                19                30
-                     real            18.701            30.299
+  policy_eg_10.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\policy_eg_10.exe
+  Testing rounding policies for a 50 sample binomial distribution,
+  with a success fraction of 0.5.
+  
+  Lower quantiles are calculated at p = 0.05
+  
+  Upper quantiles at p = 0.95.
+  
+                     Policy    Lower Quantile    Upper Quantile
+     integer_round_outwards                18                31
+      integer_round_inwards                19                30
+         integer_round_down                18                30
+           integer_round_up                19                31
+      integer_round_nearest                19                30
+                       real            18.701            30.299
 ]
 
 */
 
-//] ends quickbook import
-
+//] //[policy_eg_10] ends quickbook import.

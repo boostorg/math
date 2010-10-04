@@ -7,6 +7,7 @@
 // #includes all the files that it needs to.
 //
 #include <boost/math/tools/roots.hpp>
+#include <boost/math/tools/tuple.hpp>
 //
 // Note this header includes no other headers, this is
 // important if this test is to be meaningful:
@@ -21,7 +22,7 @@ void compile_and_link_test()
 {
    typedef double (*F)(double);
    typedef std::pair<double, double> (*F2)(double);
-   typedef std::tr1::tuple<double, double, double> (*F3)(double);
+   typedef boost::math::tuple<double, double, double> (*F3)(double);
    typedef boost::math::tools::eps_tolerance<double> Tol;
    Tol tol(u);
    boost::uintmax_t max_iter = 0;

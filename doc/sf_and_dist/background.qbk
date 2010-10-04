@@ -3,12 +3,12 @@
 [@http://en.wikipedia.org/wiki/Random_variate Random variates]
 and [@http://en.wikipedia.org/wiki/Parameter distribution parameters]
 are conventionally distinguished (for example in Wikipedia and Wolfram MathWorld
-by placing a semi-colon after the random variate (whose value you 'choose'),
+by placing a semi-colon after the __random_variate (whose value you 'choose'),
 to separate the variate from the parameter(s) that defines the shape of the distribution.
 
 For example, the binomial distribution has two parameters:
 n (the number of trials) and p (the probability of success on one trial).  
-It also has the random variate /k/: the number of successes observed.
+It also has the __random_variate /k/: the number of successes observed.
 This means the probability density\/mass function (pdf) is written as ['f(k; n, p)].
 
 Translating this into code the `binomial_distribution` constructor 
@@ -18,7 +18,7 @@ therefore has two parameters:
 
 While the function `pdf` has one argument specifying the distribution type
 (which includes it's parameters, if any),
-and a second argument for the random variate.  So taking our binomial distribution 
+and a second argument for the __random_variate.  So taking our binomial distribution 
 example, we would write:
 
 	pdf(binomial_distribution<RealType>(n, p), k);
@@ -30,16 +30,15 @@ example, we would write:
 Note that the [@http://en.wikipedia.org/wiki/Discrete_probability_distribution 
 discrete distributions], including the binomial, negative binomial, Poisson & Bernoulli,
 are all mathematically defined as discrete functions:
-only integral values of the random variate are envisaged
+only integral values of the __random_variate are envisaged
 and the functions are only defined at these integral values.
 However because the method of calculation often uses continuous functions,
 it is convenient to treat them as if they were continuous functions,
 and permit non-integral values of their parameters.
 
 To enforce a strict mathematical model,
-users may use floor or ceil functions on the random variate,
-prior to calling the distribution function,
-to enforce integral values.
+users may use floor or ceil functions on the __random_variate,
+prior to calling the distribution function, to enforce integral values.
 
 For similar reasons, in continuous distributions, parameters like degrees of freedom
 that might appear to be integral, are treated as real values

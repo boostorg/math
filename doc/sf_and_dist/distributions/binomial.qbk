@@ -323,7 +323,7 @@ the context of this distribution:
    is a real-number, and not an integer.  Depending on the use case you may
    want to take either the floor or ceiling of the result. For example:
 
-`quantile(complement(binomial(n, p), P))``]]
+`quantile(complement(binomial(n, p), P))`]]
 ]
 
 [h4 Examples]

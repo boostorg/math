@@ -56,7 +56,7 @@ struct ibeta_roots_2   // for second order algorithms
    ibeta_roots_2(T _a, T _b, T t, bool inv = false)
       : a(_a), b(_b), target(t), invert(inv) {}
 
-   std::tr1::tuple<T, T> operator()(const T& x)
+   boost::math::tuple<T, T> operator()(const T& x)
    {
       typedef typename boost::math::lanczos::lanczos<T, Policy>::type L;
       T f = boost::math::detail::ibeta_imp(a, b, x, Policy(), invert, true) - target;
@@ -72,7 +72,7 @@ struct ibeta_roots_2   // for second order algorithms
       if(f1 == 0)
          f1 = (invert ? -1 : 1) * boost::math::tools::min_value<T>() * 64;
 
-      return std::tr1::make_tuple(f, f1);
+      return boost::math::make_tuple(f, f1);
    }
 private:
    T a, b, target;
@@ -85,7 +85,7 @@ struct ibeta_roots_3   // for third order algorithms
    ibeta_roots_3(T _a, T _b, T t, bool inv = false)
       : a(_a), b(_b), target(t), invert(inv) {}
 
-   std::tr1::tuple<T, T, T> operator()(const T& x)
+   boost::math::tuple<T, T, T> operator()(const T& x)
    {
       typedef typename boost::math::lanczos::lanczos<T, Policy>::type L;
       T f = boost::math::detail::ibeta_imp(a, b, x, Policy(), invert, true) - target;
@@ -104,7 +104,7 @@ struct ibeta_roots_3   // for third order algorithms
       if(f1 == 0)
          f1 = (invert ? -1 : 1) * boost::math::tools::min_value<T>() * 64;
 
-      return std::tr1::make_tuple(f, f1, f2);
+      return boost::math::make_tuple(f, f1, f2);
    }
 private:
    T a, b, target;

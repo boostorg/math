@@ -27,7 +27,7 @@
 <a name="math_toolkit.main_overview.error_handling"></a><a class="link" href="error_handling.html" title="Error Handling"> Error Handling</a>
 </h3></div></div></div>
 <a name="math_toolkit.main_overview.error_handling.quick_reference"></a><h5>
-<a name="id980014"></a>
+<a name="id1033568"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.quick_reference">Quick
         Reference</a>
       </h5>
@@ -131,10 +131,10 @@
 </div>
 <p>
         The following tables show all the permutations of errors and actions, with
-        the default action for each error shown in bold:
+        the <span class="bold"><strong>default action for each error shown in bold</strong></span>:
       </p>
 <div class="table">
-<a name="id980278"></a><p class="title"><b>Table&#160;1.&#160;Possible Actions for Domain Errors</b></p>
+<a name="math_toolkit.main_overview.error_handling.possible_actions_for_domain_errors"></a><p class="title"><b>Table&#160;1.&#160;Possible Actions for Domain Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Domain Errors">
 <colgroup>
 <col>
@@ -209,7 +209,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id980524"></a><p class="title"><b>Table&#160;2.&#160;Possible Actions for Pole Errors</b></p>
+<a name="math_toolkit.main_overview.error_handling.possible_actions_for_pole_errors"></a><p class="title"><b>Table&#160;2.&#160;Possible Actions for Pole Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Pole Errors">
 <colgroup>
 <col>
@@ -284,7 +284,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id980770"></a><p class="title"><b>Table&#160;3.&#160;Possible Actions for Overflow Errors</b></p>
+<a name="math_toolkit.main_overview.error_handling.possible_actions_for_overflow_errors"></a><p class="title"><b>Table&#160;3.&#160;Possible Actions for Overflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Overflow Errors">
 <colgroup>
 <col>
@@ -359,7 +359,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id981016"></a><p class="title"><b>Table&#160;4.&#160;Possible Actions for Underflow Errors</b></p>
+<a name="math_toolkit.main_overview.error_handling.possible_actions_for_underflow_errors"></a><p class="title"><b>Table&#160;4.&#160;Possible Actions for Underflow Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Underflow Errors">
 <colgroup>
 <col>
@@ -434,7 +434,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id981199"></a><p class="title"><b>Table&#160;5.&#160;Possible Actions for Denorm Errors</b></p>
+<a name="math_toolkit.main_overview.error_handling.possible_actions_for_denorm_errors"></a><p class="title"><b>Table&#160;5.&#160;Possible Actions for Denorm Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Denorm Errors">
 <colgroup>
 <col>
@@ -509,7 +509,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id981381"></a><p class="title"><b>Table&#160;6.&#160;Possible Actions for Rounding Errors</b></p>
+<a name="math_toolkit.main_overview.error_handling.possible_actions_for_rounding_errors"></a><p class="title"><b>Table&#160;6.&#160;Possible Actions for Rounding Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Rounding Errors">
 <colgroup>
 <col>
@@ -584,7 +584,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id981571"></a><p class="title"><b>Table&#160;7.&#160;Possible Actions for Internal Evaluation Errors</b></p>
+<a name="math_toolkit.main_overview.error_handling.possible_actions_for_internal_evaluation_errors"></a><p class="title"><b>Table&#160;7.&#160;Possible Actions for Internal Evaluation Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Internal Evaluation Errors">
 <colgroup>
 <col>
@@ -659,7 +659,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="id981759"></a><p class="title"><b>Table&#160;8.&#160;Possible Actions for Indeterminate Result Errors</b></p>
+<a name="math_toolkit.main_overview.error_handling.possible_actions_for_indeterminate_result_errors"></a><p class="title"><b>Table&#160;8.&#160;Possible Actions for Indeterminate Result Errors</b></p>
 <div class="table-contents"><table class="table" summary="Possible Actions for Indeterminate Result Errors">
 <colgroup>
 <col>
@@ -734,19 +734,26 @@
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="math_toolkit.main_overview.error_handling.rationale"></a><h5>
-<a name="id981952"></a>
+<br class="table-break"><p>
+        All these error conditions are in namespace boost::math::policies, made available,
+        for example, a by namespace declaration using <code class="computeroutput"><span class="keyword">namespace</span>
+        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span></code>
+        or individual using declarations <code class="computeroutput"><span class="keyword">using</span>
+        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">;</span></code>.
+      </p>
+<a name="math_toolkit.main_overview.error_handling.rationale"></a><h5>
+<a name="id1035592"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.rationale">Rationale</a>
       </h5>
 <p>
-        The flexibility of the current implementation should be reasonably obvious,
+        The flexibility of the current implementation should be reasonably obvious:
         the default behaviours were chosen based on feedback during the formal review
         of this library. It was felt that:
       </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
             Genuine errors should be flagged with exceptions rather than following
-            C-compatible behaviour and setting ::errno.
+            C-compatible behaviour and setting <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>.
           </li>
 <li>
             Numeric underflow and denormalised results were not considered to be
@@ -754,7 +761,7 @@
           </li>
 </ul></div>
 <a name="math_toolkit.main_overview.error_handling.finding_more_information"></a><h5>
-<a name="id981987"></a>
+<a name="id1035638"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.finding_more_information">Finding
         More Information</a>
       </h5>
@@ -776,7 +783,7 @@
         The various kind of errors are described in more detail below.
       </p>
 <a name="domain_error"></a><a name="math_toolkit.main_overview.error_handling.domain_errors"></a><h5>
-<a name="id982040"></a>
+<a name="id1035690"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.domain_errors">Domain
         Errors</a>
       </h5>
@@ -798,7 +805,7 @@
 <p>
         The default policy behaviour of this function is to throw a std::domain_error
         C++ exception. But if the <a class="link" href="../policy.html" title="Policies">Policy</a>
-        is to ignore the error, or set global ::errno, then a NaN will be returned.
+        is to ignore the error, or set global <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>, then a NaN will be returned.
       </p>
 <p>
         This behaviour is chosen to assist compatibility with the behaviour of <span class="emphasis"><em>ISO/IEC
@@ -848,7 +855,7 @@
         for more details.
       </p>
 <a name="pole_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_at_a_pole"></a><h5>
-<a name="id982288"></a>
+<a name="id1035950"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_at_a_pole">Evaluation
         at a pole</a>
       </h5>
@@ -887,7 +894,7 @@
         for more details.
       </p>
 <a name="overflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_overflow"></a><h5>
-<a name="id982496"></a>
+<a name="id1036157"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_overflow">Numeric
         Overflow</a>
       </h5>
@@ -912,7 +919,7 @@
         doesn't support infinities, the maximum value for the type is returned.
       </p>
 <a name="underflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_underflow"></a><h5>
-<a name="id982684"></a>
+<a name="id1036346"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_underflow">Numeric
         Underflow</a>
       </h5>
@@ -935,7 +942,7 @@
         an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="denorm_error"></a><a name="math_toolkit.main_overview.error_handling.denormalisation_errors"></a><h5>
-<a name="id982829"></a>
+<a name="id1036491"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.denormalisation_errors">Denormalisation
         Errors</a>
       </h5>
@@ -958,7 +965,7 @@
         throws an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="evaluation_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_errors"></a><h5>
-<a name="id982991"></a>
+<a name="id1036653"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_errors">Evaluation
         Errors</a>
       </h5>
@@ -995,7 +1002,7 @@
         for more details.
       </p>
 <a name="indeterminate_result_error"></a><a name="math_toolkit.main_overview.error_handling.indeterminate_result_errors"></a><h5>
-<a name="id983206"></a>
+<a name="id1036868"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.indeterminate_result_errors">Indeterminate
         Result Errors</a>
       </h5>
@@ -1011,8 +1018,10 @@
         is the name of the function, <code class="computeroutput"><span class="identifier">Message</span></code>
         is an error message describing the problem, Val is the value for which the
         result is indeterminate, Default is an alternative default result that must
-        be returned for ignore_error and errno_on_error policies, and <a class="link" href="../policy.html" title="Policies">Policy</a>
-        is the current policy in use for the function that was called.
+        be returned for <code class="computeroutput"><span class="identifier">ignore_error</span></code>
+        and <code class="computeroutput"><span class="identifier">errno_on_erro</span></code> policies,
+        and <a class="link" href="../policy.html" title="Policies">Policy</a> is the current policy
+        in use for the function that was called.
       </p>
 <p>
         The default policy for this function is <code class="computeroutput"><span class="identifier">ignore_error</span></code>:
@@ -1022,7 +1031,7 @@
         the result of 0<sup>0</sup> is 1, even though the result is actually mathematically indeterminate.
       </p>
 <a name="rounding_error"></a><a name="math_toolkit.main_overview.error_handling.rounding_errors"></a><h5>
-<a name="id983356"></a>
+<a name="id1038125"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.rounding_errors">Rounding
         Errors</a>
       </h5>
@@ -1062,7 +1071,7 @@
         for more details.
       </p>
 <a name="checked_narrowing_cast"></a><a name="math_toolkit.main_overview.error_handling.errors_from_typecasts"></a><h5>
-<a name="id984681"></a>
+<a name="id1038356"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.errors_from_typecasts">Errors
         from typecasts</a>
       </h5>
@@ -1085,9 +1094,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani
-      and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

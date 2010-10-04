@@ -17,11 +17,11 @@ using namespace std;
 
 
 template<class T>
-std::tr1::tuple<T, T, T> hermite_data(T n, T x)
+boost::math::tuple<T, T, T> hermite_data(T n, T x)
 {
    n = floor(n);
    T r1 = hermite(boost::math::tools::real_cast<unsigned>(n), x);
-   return std::tr1::make_tuple(n, x, r1);
+   return boost::math::make_tuple(n, x, r1);
 }
    
 int test_main(int argc, char*argv [])

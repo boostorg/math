@@ -39,13 +39,13 @@ The functions all take the same parameters:
 
 [variablelist Parameters of the root finding functions
 [[F f] [Type F must be a callable function object that accepts one parameter and 
-        returns a tuple:
+        returns a __tuple:
         
 For the second order iterative methods (Newton Raphson)
-        the tuple should have two elements containing the evaluation
+        the __tuple should have two elements containing the evaluation
         of the function and it's first derivative.
         
-For the third order methods (Halley and Schroeder) the tuple
+For the third order methods (Halley and Schroeder) the __tuple
         should have three elements containing the evaluation of
         the function and its first and second derivatives.]]
 [[T guess] [The initial starting value.]]
@@ -146,7 +146,7 @@ to solve, along with its first derivative:
    struct cbrt_functor
    {
       cbrt_functor(T const& target) : a(target){}
-      std::tr1::tuple<T, T> operator()(T const& z)
+      ``__tuple``<T, T> operator()(T const& z)
       {
          T sqr = z * z;
          return std::tr1::make_tuple(sqr * z - a, 3 * sqr);
@@ -191,7 +191,7 @@ Now lets adapt the functor slightly to return the second derivative as well:
    struct cbrt_functor
    {
       cbrt_functor(T const& target) : a(target){}
-      std::tr1::tuple<T, T, T> operator()(T const& z)
+      ``__tuple``<T, T, T> operator()(T const& z)
       {
          T sqr = z * z;
          return std::tr1::make_tuple(sqr * z - a, 3 * sqr, 6 * z);

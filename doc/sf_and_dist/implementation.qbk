@@ -146,7 +146,7 @@ However, for simplicity, this is not done for most examples.]
 
 Functions that are not mathematically defined,
 like the Cauchy mean, fail to compile by default.
-[link math_toolkit.policy.pol_ref.assert_undefined A policy]
+A [link math_toolkit.policy.pol_ref.assert_undefined policy]
 allows control of this.
 
 If the policy is to permit undefined functions, then calling them
@@ -167,12 +167,14 @@ Catching exceptions is therefore strongly recommended.]
 [h4 Median of distributions]
 
 There are many distributions for which we have been unable to find an analytic formula,
-and this has deterred us from implementing
+and this has deterred us from implementing 
 [@http://en.wikipedia.org/wiki/Median median functions], the mid-point in a list of values.
 
-However a useful median approximation for distribution `dist` may be available from
+However a useful numerical approximation for distribution `dist`
+is available as usual as an accessor non-member function median using `median(dist)`,
+that may be evaluated (in the absence of an analytic formula) by calling
 
-`quantile(dist, 0.5)`.
+`quantile(dist, 0.5)` (this is the /mathematical/ definition of course).
 
 [@http://www.amstat.org/publications/jse/v13n2/vonhippel.html Mean, Median, and Skew, Paul T von Hippel]
 
@@ -368,6 +370,9 @@ Only [@http://functions.wolfram.com/ Wolfram Mathematica functions]
 provided a higher accuracy than
 C++ double (64-bit floating-point) and was regarded as
 the most-trusted source by far.
+The __R provided the widest range of distributions, 
+but the usual Intel X86 distribution uses 64-but doubles,
+so our use was limited to the 15 to 17 decimal digit accuracy.
 
 A useful index of sources is:
 [@http://www.sal.hut.fi/Teaching/Resources/ProbStat/table.html
@@ -391,6 +396,13 @@ the underlying special function is known to be difficult to implement.
 
 [h4 Creating and Managing the Equations]
 
+Equations that fit on a single line can most easily be produced by inline Quickbook code
+using templates for Unicode Greek and Unicode Math symbols.
+All Greek letter and small set of Math symbols is available at
+/boost-path/libs/math/doc/sf_and_dist/html4_symbols.qbk
+
+Where equations need to use more than one line, real Math editors were used.
+
 The primary source for the equations is now
 [@http://www.w3.org/Math/ MathML]: see the
 *.mml files in libs\/math\/doc\/sf_and_dist\/equations\/.
@@ -400,7 +412,7 @@ These are most easily edited by a GUI editor such as
 please note that the equation editor supplied with Open Office
 currently mangles these files and should not currently be used.
 
-Convertion to SVG was achieved using
+Conversion to SVG was achieved using
 [@http://www.grigoriev.ru/svgmath/ SVGMath] and a command line
 such as:
 
@@ -410,6 +422,9 @@ $for file in *.mml; do
 >>$file > $(basename $file .mml).svg
 >done
 ]
+
+See also the section on "Using Python to run Inkscape" and
+"Using inkscape to convert scalable vector SVG files to Portable Network graphic PNG".
 
 Note that SVGMath requires that the mml files are *not* wrapped in an XHTML
 XML wrapper - this is added by Mathcast by default - one workaround is to
@@ -560,16 +575,18 @@ Graphs were produced in SVG format and then converted to PNG's using the same
 process as the equations.  
 
 The programs 
-/libs/math/doc/sf_and_dist/graphs/dist_graphs.cpp
-and /libs/math/doc/sf_and_dist/graphs/sf_graphs.cpp
+`/libs/math/doc/sf_and_dist/graphs/dist_graphs.cpp`
+and `/libs/math/doc/sf_and_dist/graphs/sf_graphs.cpp`
 generate the SVG's directly using the 
 [@http://code.google.com/soc/2007/boost/about.html Google Summer of Code 2007]
-project of Jacob Voytko (whose work so far is at .\boost-sandbox\SOC\2007\visualization).
+project of Jacob Voytko (whose work so far,
+considerably enhanced and now reasonably mature and usable, by Paul A. Bristow,
+is at .\boost-sandbox\SOC\2007\visualization).
 
 [endsect] [/section:implementation Implementation Notes]
 
 [/
-  Copyright 2006, 2007 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2007, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

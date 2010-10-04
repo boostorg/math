@@ -1,10 +1,15 @@
-[section:building If and How to Build the Library and its Examples and Tests]
+[section:building If and How to Build a Boost.Math Library, and its Examples and Tests]
 
-[h4 Building the Library]
+[h4 Building a Library (shared, dynamic .dll or static .lib)]
 
 The first thing you need to ask yourself is "Do I need to build anything at all?"
 as the bulk of this library is header only: meaning you can use it just by
-#including the necessary header(s). Refer to
+#including the necessary header(s).
+
+For most simple uses,
+including a header (or few) is best for compile time and program size.
+
+Refer to
 [link math_toolkit.extern_c C99 and C++ TR1 C-style Functions]
 for pros and cons of using
 the TR1 components as opposed to the header only ones.
@@ -15,7 +20,7 @@ using Boost.Build, from a commandline boost-root directory issue a command like:
 
    bjam toolset=gcc --with-math install
 
-will do the job on Linux, while:
+that will do the job on Linux, while:
 
    bjam toolset=msvc --with-math --build-type=complete stage
 
@@ -94,7 +99,7 @@ will do this automatically when appropriate.
 [endsect]
 
 [/ building.qbk
-  Copyright 2006, 2007, 2008 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2007, 2008, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

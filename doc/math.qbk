@@ -1,12 +1,11 @@
 [article Boost.Math
-    [quickbook 1.4]
-    [copyright 2006, 2007, 2008, 2009 John Maddock, Paul A. Bristow, Hubert Holin, Daryle Walker, Xiaogang Zhang, Bruno Lalande, Johan R&#xE5;de, Gautam Sewani and Thijs van den Berg]
+    [quickbook 1.5]
+    [copyright 2006, 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow, Hubert Holin, Daryle Walker, Xiaogang Zhang, Bruno Lalande, Johan R&#xE5;de, Gautam Sewani and Thijs van den Berg]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [category math]
     [authors [Maddock, John], [Bristow, Paul A.], [Holin, Hubert], [Walker, Daryle], [Zhang, Xiaogang], [Lalande, Bruno], [R&#xE5;de, Johan], [Sewani, Gautam], [van den Berg, Thijs]]
     [last-revision $Date$]
 ]

@@ -13,6 +13,8 @@
 [include distributions/extreme_value.qbk]
 [include distributions/fisher.qbk]
 [include distributions/gamma.qbk]
+[include distributions/inverse_chi_squared.qbk]
+[include distributions/inverse_gamma.qbk]
 [include distributions/hypergeometric.qbk]
 [include distributions/laplace.qbk]
 [include distributions/logistic.qbk]
@@ -121,7 +123,7 @@ opportunity to integrate the statistical tests with this framework at some later
 [endsect][/section:future Extras Future Directions]
 
 [/ dist_reference.qbk
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
