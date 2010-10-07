@@ -27,7 +27,7 @@
 <a name="math_toolkit.special.factorials.sf_factorial"></a><a class="link" href="sf_factorial.html" title="Factorial"> Factorial</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.factorials.sf_factorial.synopsis"></a><h5>
-<a name="id1214116"></a>
+<a name="id1185173"></a>
           <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -54,9 +54,39 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.factorials.sf_factorial.description"></a><h5>
-<a name="id1214424"></a>
+<a name="id1185481"></a>
           <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.description">Description</a>
         </h5>
+<div class="important"><table border="0" summary="Important">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../../../../../../../doc/src/images/important.png"></td>
+<th align="left">Important</th>
+</tr>
+<tr><td align="left" valign="top">
+<p>
+            The functions described below are templates where the template argument
+            T can not be deduced from the arguments passed to the function. Therefore
+            if you write something like:
+          </p>
+<p>
+            <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">factorial</span><span class="special">(</span><span class="number">2</span><span class="special">);</span></code>
+          </p>
+<p>
+            You will get a compiler error, ususally indicating that there is no such
+            function to be found. Instead you need to specifiy the return type explicity
+            and write:
+          </p>
+<p>
+            <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">factorial</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;(</span><span class="number">2</span><span class="special">);</span></code>
+          </p>
+<p>
+            So that the return type is known. Further, the template argument must
+            be a real-valued type such as <code class="computeroutput"><span class="keyword">float</span></code>
+            or <code class="computeroutput"><span class="keyword">double</span></code> and not an integer
+            type - that would overflow far too easily!
+          </p>
+</td></tr>
+</table></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">factorial</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span><span class="special">);</span>
 
@@ -112,7 +142,7 @@
           the size of further tables that depend on the factorials.
         </p>
 <a name="math_toolkit.special.factorials.sf_factorial.accuracy"></a><h5>
-<a name="id1214784"></a>
+<a name="id1185949"></a>
           <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -121,7 +151,7 @@
           will be the same as for <a class="link" href="../sf_gamma/tgamma.html" title="Gamma">tgamma</a>.
         </p>
 <a name="math_toolkit.special.factorials.sf_factorial.testing"></a><h5>
-<a name="id1214827"></a>
+<a name="id1185992"></a>
           <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.testing">Testing</a>
         </h5>
 <p>
@@ -130,7 +160,7 @@
           function handle those cases already.
         </p>
 <a name="math_toolkit.special.factorials.sf_factorial.implementation"></a><h5>
-<a name="id1214852"></a>
+<a name="id1186017"></a>
           <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.implementation">Implementation</a>
         </h5>
 <p>

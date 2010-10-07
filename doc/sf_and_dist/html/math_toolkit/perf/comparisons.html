@@ -46,7 +46,7 @@
         </p></td></tr>
 </table></div>
 <a name="math_toolkit.perf.comparisons.comparison_to_gsl_1_13_and_cephes"></a><h5>
-<a name="id1406491"></a>
+<a name="id1379825"></a>
         <a class="link" href="comparisons.html#math_toolkit.perf.comparisons.comparison_to_gsl_1_13_and_cephes">Comparison
         to GSL-1.13 and Cephes</a>
       </h5>
@@ -344,7 +344,7 @@
               </td>
 <td>
                 <p>
-                  +INF <sup>[<a name="id1407048" href="#ftn.id1407048" class="footnote">1</a>]</sup>
+                  +INF <sup>[<a name="id1380382" href="#ftn.id1380382" class="footnote">1</a>]</sup>
                 </p>
               </td>
 </tr>
@@ -423,7 +423,7 @@
 <td>
                 <p>
                   </p>
-<p>17.89<sup>[<a name="id1407205" href="#ftn.id1407205" class="footnote">2</a>]</sup></p>
+<p>17.89<sup>[<a name="id1380539" href="#ftn.id1380539" class="footnote">2</a>]</sup></p>
 <p> </p>
 <p>(4.248e-005s)</p>
 <p>
@@ -548,11 +548,11 @@
 </tr>
 </tbody>
 <tbody class="footnotes"><tr><td colspan="4">
-<div class="footnote"><p><sup>[<a name="ftn.id1407048" href="#id1407048" class="para">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1380382" href="#id1380382" class="para">1</a>] </sup>
                     Cephes gets stuck in an infinite loop while trying to execute
                     our test cases.
                   </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1407205" href="#id1407205" class="para">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1380539" href="#id1380539" class="para">2</a>] </sup>
                     The performance here is dominated by a few cases where the parameters
                     grow very large: faster asymptotic expansions are available,
                     but are of limited (or even frankly terrible) precision. The
@@ -563,7 +563,7 @@
 </td></tr></tbody>
 </table></div>
 <a name="math_toolkit.perf.comparisons.comparison_to_the_r_and_dcdflib_statistical_libraries_on_windows"></a><h5>
-<a name="id1407448"></a>
+<a name="id1380783"></a>
         <a class="link" href="comparisons.html#math_toolkit.perf.comparisons.comparison_to_the_r_and_dcdflib_statistical_libraries_on_windows">Comparison
         to the R and DCDFLIB Statistical Libraries on Windows</a>
       </h5>
@@ -659,7 +659,7 @@
 <td>
                 <p>
                   </p>
-<p>67.66<sup>[<a name="id1407613" href="#ftn.id1407613" class="footnote">1</a>]</sup></p>
+<p>67.66<sup>[<a name="id1380947" href="#ftn.id1380947" class="footnote">1</a>]</sup></p>
 <p> </p>
 <p>(3.366e-004s)</p>
 <p>
@@ -1089,7 +1089,7 @@
 <td>
                 <p>
                   </p>
-<p>3.60<sup>[<a name="id1409669" href="#ftn.id1409669" class="footnote">2</a>]</sup></p>
+<p>3.60<sup>[<a name="id1381843" href="#ftn.id1381843" class="footnote">2</a>]</sup></p>
 <p> </p>
 <p>(5.987e-007s)</p>
 <p>
@@ -1319,7 +1319,7 @@
 <td>
                 <p>
                   </p>
-<p>43.43<sup>[<a name="id1410080" href="#ftn.id1410080" class="footnote">3</a>]</sup></p>
+<p>43.43<sup>[<a name="id1382254" href="#ftn.id1382254" class="footnote">3</a>]</sup></p>
 <p> </p>
 <p>(3.732e-004s)</p>
 <p>
@@ -1389,7 +1389,7 @@
 <td>
                 <p>
                   </p>
-<p>393.90<sup>[<a name="id1410206" href="#ftn.id1410206" class="footnote">4</a>]</sup></p>
+<p>393.90<sup>[<a name="id1382380" href="#ftn.id1382380" class="footnote">4</a>]</sup></p>
 <p> </p>
 <p>(2.673e-002s)</p>
 <p>
@@ -1525,7 +1525,7 @@
 <td>
                 <p>
                   </p>
-<p><span class="bold"><strong>1.00</strong></span><sup>[<a name="id1410457" href="#ftn.id1410457" class="footnote">5</a>]</sup></p>
+<p><span class="bold"><strong>1.00</strong></span><sup>[<a name="id1382631" href="#ftn.id1382631" class="footnote">5</a>]</sup></p>
 <p> </p>
 <p>(4.411e-004s)</p>
 <p>
@@ -1811,28 +1811,28 @@
 </tr>
 </tbody>
 <tbody class="footnotes"><tr><td colspan="4">
-<div class="footnote"><p><sup>[<a name="ftn.id1407613" href="#id1407613" class="para">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1380947" href="#id1380947" class="para">1</a>] </sup>
                     There are a small number of our test cases where the R library
                     fails to converge on a result: these tend to dominate the performance
                     result.
                   </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1409669" href="#id1409669" class="para">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1381843" href="#id1381843" class="para">2</a>] </sup>
                     This result is somewhat misleading: for small values of the parameters
                     there is virtually no difference between the two libraries, but
                     for large values the Boost implementation is <span class="emphasis"><em>much</em></span>
                     slower, albeit with much improved precision.
                   </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1410080" href="#id1410080" class="para">3</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1382254" href="#id1382254" class="para">3</a>] </sup>
                     The R library appears to use a linear-search strategy, that can
                     perform very badly in a small number of pathological cases, but
                     may or may not be more efficient in "typical" cases
                   </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1410206" href="#id1410206" class="para">4</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1382380" href="#id1382380" class="para">4</a>] </sup>
                     There are a small number of our test cases where the R library
                     fails to converge on a result: these tend to dominate the performance
                     result.
                   </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1410457" href="#id1410457" class="para">5</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1382631" href="#id1382631" class="para">5</a>] </sup>
                     There are a small number of our test cases where the R library
                     fails to converge on a result: these tend to dominate the performance
                     result.
@@ -1841,7 +1841,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.perf.comparisons.comparison_to_the_r_statistical_library_on_linux"></a><h5>
-<a name="id1410961"></a>
+<a name="id1383135"></a>
         <a class="link" href="comparisons.html#math_toolkit.perf.comparisons.comparison_to_the_r_statistical_library_on_linux">Comparison
         to the R Statistical Library on Linux</a>
       </h5>
@@ -1936,7 +1936,7 @@
 <td>
                 <p>
                   </p>
-<p>30.51<sup>[<a name="id1411127" href="#ftn.id1411127" class="footnote">1</a>]</sup></p>
+<p>30.51<sup>[<a name="id1383301" href="#ftn.id1383301" class="footnote">1</a>]</sup></p>
 <p> </p>
 <p>(3.616e-004s)</p>
 <p>
@@ -2366,7 +2366,7 @@
 <td>
                 <p>
                   </p>
-<p>2.20<sup>[<a name="id1413249" href="#ftn.id1413249" class="footnote">2</a>]</sup></p>
+<p>2.20<sup>[<a name="id1384467" href="#ftn.id1384467" class="footnote">2</a>]</sup></p>
 <p> </p>
 <p>(3.522e-007s)</p>
 <p>
@@ -2596,7 +2596,7 @@
 <td>
                 <p>
                   </p>
-<p>25.92<sup>[<a name="id1413663" href="#ftn.id1413663" class="footnote">3</a>]</sup></p>
+<p>25.92<sup>[<a name="id1384881" href="#ftn.id1384881" class="footnote">3</a>]</sup></p>
 <p> </p>
 <p>(4.407e-004s)</p>
 <p>
@@ -2666,7 +2666,7 @@
 <td>
                 <p>
                   </p>
-<p>144.91<sup>[<a name="id1413789" href="#ftn.id1413789" class="footnote">4</a>]</sup></p>
+<p>144.91<sup>[<a name="id1385007" href="#ftn.id1385007" class="footnote">4</a>]</sup></p>
 <p> </p>
 <p>(3.214e-002s)</p>
 <p>
@@ -2802,7 +2802,7 @@
 <td>
                 <p>
                   </p>
-<p><span class="bold"><strong>1.00</strong></span><sup>[<a name="id1414035" href="#ftn.id1414035" class="footnote">5</a>]</sup></p>
+<p><span class="bold"><strong>1.00</strong></span><sup>[<a name="id1385253" href="#ftn.id1385253" class="footnote">5</a>]</sup></p>
 <p> </p>
 <p>(5.916e-004s)</p>
 <p>
@@ -3088,28 +3088,28 @@
 </tr>
 </tbody>
 <tbody class="footnotes"><tr><td colspan="4">
-<div class="footnote"><p><sup>[<a name="ftn.id1411127" href="#id1411127" class="para">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1383301" href="#id1383301" class="para">1</a>] </sup>
                     There are a small number of our test cases where the R library
                     fails to converge on a result: these tend to dominate the performance
                     result.
                   </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1413249" href="#id1413249" class="para">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1384467" href="#id1384467" class="para">2</a>] </sup>
                     This result is somewhat misleading: for small values of the parameters
                     there is virtually no difference between the two libraries, but
                     for large values the Boost implementation is <span class="emphasis"><em>much</em></span>
                     slower, albeit with much improved precision.
                   </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1413663" href="#id1413663" class="para">3</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1384881" href="#id1384881" class="para">3</a>] </sup>
                     The R library appears to use a linear-search strategy, that can
                     perform very badly in a small number of pathological cases, but
                     may or may not be more efficient in "typical" cases
                   </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1413789" href="#id1413789" class="para">4</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1385007" href="#id1385007" class="para">4</a>] </sup>
                     There are a small number of our test cases where the R library
                     fails to converge on a result: these tend to dominate the performance
                     result.
                   </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id1414035" href="#id1414035" class="para">5</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1385253" href="#id1385253" class="para">5</a>] </sup>
                     There are a small number of our test cases where the R library
                     fails to converge on a result: these tend to dominate the performance
                     result.
