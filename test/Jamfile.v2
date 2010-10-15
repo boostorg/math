@@ -650,7 +650,8 @@ run test_tr1.cpp
    test_tr1_long_double
    ;
    
-run test_long_double_support.cpp ../../test/build//boost_test_exec_monitor ;
+run test_long_double_support.cpp ../../test/build//boost_test_exec_monitor 
+: : : [ check-target-builds ../config//has_long_double_support : : <build>no ] ;
 
 run  compile_test/compl_abs_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/compl_acos_incl_test.cpp compile_test/main.cpp ;
@@ -766,6 +767,7 @@ compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class
 compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] ;
 
 build-project ../example ;
+
 
 
 
