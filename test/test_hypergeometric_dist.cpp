@@ -57,6 +57,7 @@ void expected_results()
 #else
    largest_type = "(long\\s+)?double";
 #endif
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if((boost::math::tools::digits<long double>() > boost::math::tools::digits<double>())
       && (boost::math::tools::digits<long double>() < 100))
    {
@@ -78,6 +79,7 @@ void expected_results()
          ".*",                    // test data group
          ".*", 10, 10);      // test function
    }
+#endif
 
    add_expected_result(
       ".*",                          // compiler
