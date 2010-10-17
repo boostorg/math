@@ -608,6 +608,7 @@ test_rational_instances/test_rational_real_concept4.cpp
 test_rational_instances/test_rational_real_concept5.cpp
 ;
 
+run test_real_concept.cpp ../../test/build//boost_test_exec_monitor ;
 run test_remez.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_roots.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_round.cpp pch ../../test/build//boost_test_exec_monitor ;
