@@ -74,6 +74,14 @@ void test_classify(T t, const char* type)
       t = (std::numeric_limits<T>::max)();
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), true);
+      BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), true);
       t = (std::numeric_limits<T>::min)();
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
       BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);

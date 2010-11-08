@@ -77,6 +77,45 @@ void test_spots(RealType /*T*/, const char* /*type_name*/)
       BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(-1));
    }
 #endif
+   //
+   // Try some extreme values:
+   //
+   a = boost::math::tools::min_value<RealType>();
+   b = -a;
+   c = -1;
+   BOOST_CHECK((boost::math::signbit)(a) == 0);
+   BOOST_CHECK_EQUAL((boost::math::sign)(a), 1);
+   BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(1));
+   BOOST_CHECK((boost::math::signbit)(b) != 0);
+   BOOST_CHECK_EQUAL((boost::math::sign)(b), -1);
+   c = 1;
+   BOOST_CHECK_EQUAL((boost::math::copysign)(c, b), RealType(-1));
+   //
+   // try denormalised values:
+   //
+   a /= 4;
+   if(a != 0)
+   {
+      b = -a;
+      c = -1;
+      BOOST_CHECK((boost::math::signbit)(a) == 0);
+      BOOST_CHECK_EQUAL((boost::math::sign)(a), 1);
+      BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(1));
+      BOOST_CHECK((boost::math::signbit)(b) != 0);
+      BOOST_CHECK_EQUAL((boost::math::sign)(b), -1);
+      c = 1;
+      BOOST_CHECK_EQUAL((boost::math::copysign)(c, b), RealType(-1));
+   }
+   a = boost::math::tools::max_value<RealType>() / 2;
+   b = -a;
+   c = -1;
+   BOOST_CHECK((boost::math::signbit)(a) == 0);
+   BOOST_CHECK_EQUAL((boost::math::sign)(a), 1);
+   BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(1));
+   BOOST_CHECK((boost::math::signbit)(b) != 0);
+   BOOST_CHECK_EQUAL((boost::math::sign)(b), -1);
+   c = 1;
+   BOOST_CHECK_EQUAL((boost::math::copysign)(c, b), RealType(-1));
 }
 
 

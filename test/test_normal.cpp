@@ -214,7 +214,9 @@ void test_spots(RealType)
     RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
     normal_distribution<RealType> dist(8, 3);
     RealType x = static_cast<RealType>(0.125);
-    using namespace std; // ADL of std names.
+
+    BOOST_MATH_STD_USING // ADL of std math lib names
+
     // mean:
     BOOST_CHECK_CLOSE(
        mean(dist)
