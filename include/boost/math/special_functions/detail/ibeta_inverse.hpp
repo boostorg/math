@@ -477,7 +477,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
    // Student's T with b = 0.5 gets handled as a special case, swap
    // around if the arguments are in the "wrong" order:
    //
-   if(a == 0.5f)
+   if((a == 0.5f) && (b >= 0.5f))
    {
       std::swap(a, b);
       std::swap(p, q);
@@ -541,7 +541,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
          T r = a + b;
          T theta = asin(sqrt(a / r));
          T lambda = minv / r;
-         if((lambda >= 0.2) && (lambda <= 0.8) && (lambda >= 10))
+         if((lambda >= 0.2) && (lambda <= 0.8) && (r >= 10))
          {
             //
             // The second error function case is the next cheapest
@@ -620,7 +620,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       {
          std::swap(a, b);
          std::swap(p, q);
-         invert = true;
+         invert = !invert;
          xs = 1 - xs;
       }
       T xg = pow(a * p * boost::math::beta(a, b, pol), 1/a);
@@ -652,7 +652,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
          std::swap(a, b);
          std::swap(p, q);
          std::swap(xs, xs2);
-         invert = true;
+         invert = !invert;
       }
       //
       // Estimate x and y, using expm1 to get a good estimate
@@ -716,7 +716,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       {
          std::swap(a, b);
          std::swap(p, q);
-         invert = true;
+         invert = !invert;
       }
       if(pow(p, 1/a) < 0.5)
       {
