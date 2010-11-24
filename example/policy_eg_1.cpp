@@ -14,7 +14,20 @@ using std::cout; using std::endl;
 using boost::math::tgamma;
 
 // Define the policy to use:
-using namespace boost::math::policies;
+using namespace boost::math::policies; // may be convenient, or
+
+using boost::math::policies::policy;
+// Types of error whose action can be altered by policies:.
+using boost::math::policies::evaluation_error;
+using boost::math::policies::domain_error;
+using boost::math::policies::overflow_error;
+using boost::math::policies::domain_error;
+using boost::math::policies::pole_error;
+// Actions on error (in enum error_policy_type):
+using boost::math::policies::errno_on_error;
+using boost::math::policies::ignore_error;
+using boost::math::policies::throw_on_error;
+using boost::math::policies::user_error;
 
 typedef policy<
    domain_error<errno_on_error>,
