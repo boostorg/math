@@ -22,9 +22,11 @@
 #include <boost/math/distributions/extreme_value.hpp>
 #include <boost/math/distributions/fisher_f.hpp>
 #include <boost/math/distributions/gamma.hpp>
+#include <boost/math/distributions/geometric.hpp>
 #include <boost/math/distributions/hypergeometric.hpp>
 #include <boost/math/distributions/inverse_chi_squared.hpp>
 #include <boost/math/distributions/inverse_gamma.hpp>
+#include <boost/math/distributions/inverse_gaussian.hpp>
 #include <boost/math/distributions/laplace.hpp>
 #include <boost/math/distributions/logistic.hpp>
 #include <boost/math/distributions/lognormal.hpp>
@@ -41,6 +43,7 @@
 #include <boost/math/distributions/triangular.hpp>
 #include <boost/math/distributions/uniform.hpp>
 #include <boost/math/distributions/weibull.hpp>
+#include <boost/math/distributions/wald.hpp>
 #include <boost/math/distributions/find_scale.hpp>
 #include <boost/math/distributions/find_location.hpp>
 
