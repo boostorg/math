@@ -33,7 +33,8 @@ project
       <toolset>msvc:<cxxflags>/wd4510 
       <toolset>msvc:<cxxflags>/wd4127 
       <toolset>msvc:<cxxflags>/wd4701 # needed for lexical cast - temporary.
-      <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
+       <toolset>msvc:<cxxflags>/wd4189 # local variable is initialized but not referenced
+	   <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
       <toolset>msvc-7.1:<pch>off
       <toolset>borland:<link>static
       <toolset>borland:<runtime-link>static
@@ -168,6 +169,7 @@ run test_find_scale.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_fisher_f.cpp ../../test/build//boost_test_exec_monitor ;
 run test_gamma.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_gamma_dist.cpp pch ../../test/build//boost_test_exec_monitor ;
+run test_geometric.cpp ../../test/build//boost_test_exec_monitor ;
 run test_hermite.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_hypergeometric_dist.cpp ../../test/build//boost_test_exec_monitor
         : # command line
@@ -420,9 +422,10 @@ run test_igamma_inva.cpp  pch ../../test/build//boost_test_exec_monitor
 	      <toolset>intel:<pch>off
         : test_igamma_inva_real_concept ;
 run test_instantiate1.cpp test_instantiate2.cpp ;
-
-run test_inverse_gamma_distribution.cpp ../../test/build//boost_test_exec_monitor ;
 run test_inverse_chi_squared_distribution.cpp ../../test/build//boost_test_exec_monitor ;
+run test_inverse_gamma_distribution.cpp ../../test/build//boost_test_exec_monitor ;
+
+run test_inverse_gaussian.cpp ../../test/build//boost_test_exec_monitor ;
 
 run test_laplace.cpp ../../test/build//boost_unit_test_framework/<link>static ;
 run test_inv_hyp.cpp pch ../../test/build//boost_test_exec_monitor ;
