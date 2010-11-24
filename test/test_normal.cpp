@@ -15,7 +15,7 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/NormalDistribution.html
 
-#include <pch.hpp> // include directory libs/math/src/tr1/ is needed.
+#include <pch.hpp> // include directory /libs/math/src/tr1/ is needed.
 
 #ifdef _MSC_VER
 #pragma warning (disable: 4127) // conditional expression is constant
