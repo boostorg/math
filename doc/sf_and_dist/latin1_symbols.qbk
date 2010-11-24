@@ -31,7 +31,7 @@
 [template cubed[]'''&#xB3;'''] [/ superscript three = superscript digit three = cubed ]
 [template acute[]'''&#xB4;'''] [/ acute accent = spacing acute ]
 [template micro[]'''&#xB5;'''] [/ micro sign ]
-[template para[]'''&#xB6;'''] [/ pilcrow sign = paragraph sign ]
+[template polcrow[]'''&#xB6;'''] [/ pilcrow sign = paragraph sign  - care ! name para conflicts with para macro!!]
 [template middot[]'''&#xB7;'''] [/ middle dot = Georgian comma = Greek middle dot ]
 [template cedil[]'''&#xB8;'''] [/  cedilla = spacing cedilla  ]
 [template sup1[]'''&#xB9;'''] [/ superscript one = superscript digit one ]

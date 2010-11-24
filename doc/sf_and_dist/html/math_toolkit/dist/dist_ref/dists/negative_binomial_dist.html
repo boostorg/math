@@ -24,8 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist"></a><a class="link" href="negative_binomial_dist.html" title="Negative Binomial Distribution">
-          Negative Binomial Distribution</a>
+<a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist"></a><a class="link" href="negative_binomial_dist.html" title="Negative Binomial Distribution">Negative
+          Binomial Distribution</a>
 </h5></div></div></div>
 <p>
             
@@ -123,7 +123,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/negative_binomial_pdf_2.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.related_distributions"></a><h5>
-<a name="id1135392"></a>
+<a name="id992063"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.related_distributions">Related
             Distributions</a>
           </h5>
@@ -158,10 +158,8 @@
             The Poisson distribution is a special case for large successes
           </p>
 <p>
-            poisson(&#955;) = lim <sub>r &#8594; &#8734;</sub>  &#8203; negative_binomial(r, r / (&#955; + r)))
+            poisson(&#955;) = lim <sub>r &#8594; &#8734;</sub>  &#160; negative_binomial(r, r / (&#955; + r)))
           </p>
-<p>
-            </p>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../../doc/src/images/caution.png"></td>
@@ -169,43 +167,40 @@
 </tr>
 <tr><td align="left" valign="top">
 <p>
-                The Negative Binomial distribution is a discrete distribution: internally
-                functions like the <code class="computeroutput"><span class="identifier">cdf</span></code>
-                and <code class="computeroutput"><span class="identifier">pdf</span></code> are treated
-                "as if" they are continuous functions, but in reality the
-                results returned from these functions only have meaning if an integer
-                value is provided for the random variate argument.
-              </p>
+              The Negative Binomial distribution is a discrete distribution: internally,
+              functions like the <code class="computeroutput"><span class="identifier">cdf</span></code>
+              and <code class="computeroutput"><span class="identifier">pdf</span></code> are treated
+              "as if" they are continuous functions, but in reality the
+              results returned from these functions only have meaning if an integer
+              value is provided for the random variate argument.
+            </p>
 <p>
-                The quantile function will by default return an integer result that
-                has been <span class="emphasis"><em>rounded outwards</em></span>. That is to say lower
-                quantiles (where the probability is less than 0.5) are rounded downward,
-                and upper quantiles (where the probability is greater than 0.5) are
-                rounded upwards. This behaviour ensures that if an X% quantile is
-                requested, then <span class="emphasis"><em>at least</em></span> the requested coverage
-                will be present in the central region, and <span class="emphasis"><em>no more than</em></span>
-                the requested coverage will be present in the tails.
-              </p>
+              The quantile function will by default return an integer result that
+              has been <span class="emphasis"><em>rounded outwards</em></span>. That is to say lower
+              quantiles (where the probability is less than 0.5) are rounded downward,
+              and upper quantiles (where the probability is greater than 0.5) are
+              rounded upwards. This behaviour ensures that if an X% quantile is requested,
+              then <span class="emphasis"><em>at least</em></span> the requested coverage will be present
+              in the central region, and <span class="emphasis"><em>no more than</em></span> the requested
+              coverage will be present in the tails.
+            </p>
 <p>
-                This behaviour can be changed so that the quantile functions are
-                rounded differently, or even return a real-valued result using <a class="link" href="../../../policy/pol_overview.html" title="Policy Overview">Policies</a>. It is
-                strongly recommended that you read the tutorial <a class="link" href="../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
-                Quantiles of Discrete Distributions</a> before using the quantile
-                function on the Negative Binomial distribution. The <a class="link" href="../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
-                docs</a> describe how to change the rounding policy for these
-                distributions.
-              </p>
+              This behaviour can be changed so that the quantile functions are rounded
+              differently, or even return a real-valued result using <a class="link" href="../../../policy/pol_overview.html" title="Policy Overview">Policies</a>.
+              It is strongly recommended that you read the tutorial <a class="link" href="../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
+              Quantiles of Discrete Distributions</a> before using the quantile
+              function on the Negative Binomial distribution. The <a class="link" href="../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
+              docs</a> describe how to change the rounding policy for these distributions.
+            </p>
 </td></tr>
 </table></div>
-<p>
-          </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.member_functions"></a><h5>
-<a name="id1135502"></a>
+<a name="id992171"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.member_functions">Member
             Functions</a>
           </h5>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.construct"></a><h6>
-<a name="id1135515"></a>
+<a name="id992184"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.construct">Construct</a>
           </h6>
 <pre class="programlisting"><span class="identifier">negative_binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">r</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
@@ -221,7 +216,7 @@
             <span class="special">&lt;=</span> <span class="number">1</span></code>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.accessors"></a><h6>
-<a name="id1135625"></a>
+<a name="id992293"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.accessors">Accessors</a>
           </h6>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> <span class="comment">// successes / trials (0 &lt;= p &lt;= 1)
@@ -236,8 +231,13 @@
             Returns the parameter <span class="emphasis"><em>r</em></span> from which this distribution
             was constructed.
           </p>
+<p>
+            The best method of calculation for the following functions is disputed:
+            see <a class="link" href="binomial_dist.html" title="Binomial Distribution">Binomial
+            Distribution</a> for more discussion.
+          </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.lower_bound_on_parameter_p"></a><h6>
-<a name="id1135710"></a>
+<a name="id992387"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.lower_bound_on_parameter_p">Lower
             Bound on Parameter p</a>
           </h6>
@@ -298,7 +298,7 @@
             vol. 48, no3, 605-621</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.upper_bound_on_parameter_p"></a><h6>
-<a name="id1135977"></a>
+<a name="id992654"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.upper_bound_on_parameter_p">Upper
             Bound on Parameter p</a>
           </h6>
@@ -358,7 +358,7 @@
             vol. 48, no3, 605-621</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures"></a><h6>
-<a name="id1136241"></a>
+<a name="id992918"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures">Estimating
             Number of Trials to Ensure at Least a Certain Number of Failures</a>
           </h6>
@@ -409,7 +409,7 @@
             probability of observing k failures or fewer.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less"></a><h6>
-<a name="id1136466"></a>
+<a name="id993143"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less">Estimating
             Number of Trials to Ensure a Maximum Number of Failures or Less</a>
           </h6>
@@ -457,7 +457,7 @@
             probability of observing more than k failures.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.non_member_accessors"></a><h5>
-<a name="id1136697"></a>
+<a name="id993461"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -478,7 +478,7 @@
             in the context of this distribution:
           </p>
 <div class="table">
-<a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.meaning_of_the_non_member_accessors_"></a><p class="title"><b>Table&#160;12.&#160;Meaning of the non-member accessors.</b></p>
+<a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.meaning_of_the_non_member_accessors_"></a><p class="title"><b>Table&#160;15.&#160;Meaning of the non-member accessors.</b></p>
 <div class="table-contents"><table class="table" summary="Meaning of the non-member accessors.">
 <colgroup>
 <col>
@@ -606,7 +606,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.accuracy"></a><h5>
-<a name="id1138049"></a>
+<a name="id993975"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -616,7 +616,7 @@
             please refer to these functions for information on accuracy.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.negative_binomial_dist.implementation"></a><h5>
-<a name="id1138075"></a>
+<a name="id994001"></a>
             <a class="link" href="negative_binomial_dist.html#math_toolkit.dist.dist_ref.dists.negative_binomial_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -827,8 +827,6 @@
                     </p>
                   </td>
 <td>
-                    <p>
-                    </p>
                   </td>
 </tr>
 <tr>

@@ -19,7 +19,6 @@ provides a few worked examples of applying the library to statistical tests.
 
 All the code in this library is inside namespace boost::math.
 
-
 In order to use a distribution /my_distribution/ you will need to include
 either the header <boost/math/distributions/my_distribution.hpp> or
 the "include all the distributions" header: <boost/math/distributions.hpp>.
@@ -305,7 +304,8 @@ by wrapping all of its arguments in a call to `complement(...)`, for example:
 
 [*Critical values are just quantiles]
 
-Some texts talk about quantiles, or percentiles, others about critical values, the basic rule is:
+Some texts talk about quantiles, or percentiles or fractiles,
+others about critical values, the basic rule is:
 
 ['Lower critical values] are the same as the quantile.
 
@@ -433,9 +433,11 @@ Now that you have the basics, the next section looks at some worked examples.
 [include distributions/chi_squared_examples.qbk]
 [include distributions/f_dist_example.qbk]
 [include distributions/binomial_example.qbk]
+[include distributions/geometric_example.qbk]
 [include distributions/negative_binomial_example.qbk]
 [include distributions/normal_example.qbk]
 [/include distributions/inverse_gamma_example.qbk]
+[/include distributions/inverse_gaussian_example.qbk]
 [include distributions/nc_chi_squared_example.qbk]
 [include distributions/error_handling_example.qbk]
 [include distributions/find_location_and_scale.qbk]

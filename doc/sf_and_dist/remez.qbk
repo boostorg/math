@@ -169,7 +169,7 @@ f(x) = R(x) = P(x) / Q(x)
 
 where P(x) and Q(x) are polynomials, then we proceed as before, except that now
 we have N+M+2 unknowns if P(x) is of order N and Q(x) is of order M.  This assumes
-that Q(x) is normalised so that it's leading coefficient is 1, giving
+that Q(x) is normalised so that its leading coefficient is 1, giving
 N+M+1 polynomial coefficients in total, plus the error term E.
 
 The simultaneous equations to be solved are now:

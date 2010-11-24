@@ -8,8 +8,9 @@
 
 [h4 Description]
 
-This header defines the type `boost::math::tuple`, the associated free functions `ignore`, `tie`, `make_tuple`, `get`, and associated types
-`tuple_size` and `tuple_element`.
+This header defines the type `boost::math::tuple`, 
+the associated free functions `ignore`, `tie`, `make_tuple`, `get`, 
+and associated types `tuple_size` and `tuple_element`.
 
 These types and functions are aliases for:
 
@@ -17,6 +18,8 @@ These types and functions are aliases for:
 * std::tr1::tuple etc when available, otherwise:
 * boost::fusion::tuple etc if the compiler supports it, otherwise:
 * boost::tuple.
+
+So this `boost::math::tuple` is strongly recommended for maximum portability.
 
 [endsect][/section:Tuples Tuples]
 [/ 

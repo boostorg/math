@@ -1,12 +1,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Locating Function Minima</title>
+<title>Locating Function Minima: Brent's algorithm</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
-<link rel="up" href="../internals1.html" title="Reused Utilities">
-<link rel="prev" href="roots2.html" title="Root Finding Without Derivatives">
+<link rel="up" href="../internals1.html" title="Utilities - Constants &amp; Tools">
+<link rel="prev" href="roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748">
 <link rel="next" href="tuples.html" title="Tuples">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.toolkit.internals1.minima"></a><a class="link" href="minima.html" title="Locating Function Minima"> Locating Function
-        Minima</a>
+<a name="math_toolkit.toolkit.internals1.minima"></a><a class="link" href="minima.html" title="Locating Function Minima: Brent's algorithm">Locating Function
+        Minima: Brent's algorithm</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.minima.synopsis"></a><h5>
-<a name="id1310349"></a>
+<a name="id1168135"></a>
           <a class="link" href="minima.html#math_toolkit.toolkit.internals1.minima.synopsis">synopsis</a>
         </h5>
 <p>
@@ -45,7 +45,7 @@
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">brent_find_minima</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">bits</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 </pre>
 <a name="math_toolkit.toolkit.internals1.minima.description"></a><h5>
-<a name="id1310695"></a>
+<a name="id1168480"></a>
           <a class="link" href="minima.html#math_toolkit.toolkit.internals1.minima.description">Description</a>
         </h5>
 <p>
@@ -89,7 +89,7 @@
           the abscissa at the minima and the value of f(x) at the minima.
         </p>
 <a name="math_toolkit.toolkit.internals1.minima.implementation"></a><h5>
-<a name="id1310806"></a>
+<a name="id1168729"></a>
           <a class="link" href="minima.html#math_toolkit.toolkit.internals1.minima.implementation">Implementation</a>
         </h5>
 <p>

@@ -1,6 +1,4 @@
-[section:issues Known Issues, and Todo List]
-
-This section lists those issues that are known about.
+[section:issues Known Issues, and TODO List]
 
 Predominantly this is a TODO list, or a list of possible
 future enhancements.  Items labled "High Priority" effect
@@ -78,7 +76,8 @@ for very high precision types (Low Priority).
 
 [h4 Statistical distributions]
 
-* Student's t Perhaps switch to normal distribution as a better approximation for very large degrees of freedom?
+* Student's t Perhaps switch to normal distribution 
+as a better approximation for very large degrees of freedom?
 
 [h4 Feature Requests]
 
@@ -90,7 +89,6 @@ is found, the higher the priority for implementing it:
 [[Distribution][R][Mathematica 6][NIST][Regress+][Matlab]]
 
 [/3 votes:]
-[[Inverse Gausian / Inverse Normal][-][X][-][X][X]]
 [[Geometric][X][X][-][-][X]]
 
 [/2 votes:]
@@ -109,7 +107,6 @@ is found, the higher the priority for implementing it:
 [[Wilcoxon rank sum][X][-][-][-][-]]
 [[Wincoxon signed rank][X][-][-][-][-]]
 [[Non-central Beta][X][-][-][-][-]]
-[[Laplace][-][X][-][-][-]]
 [[Maxwell][-][X][-][-][-]]
 [[Beta-Binomial][-][X][-][-][-]]
 [[Beta-negative Binomial][-][X][-][-][-]]
@@ -133,13 +130,15 @@ Also asked for more than once:
 * Add support for interpolated distributions, possibly combine with numeric 
 integration and differentiation.
 * Add support for bivariate and multivariate distributions: most especially the normal.
-* Add support for the log of the cdf and pdf: this is mainly a performance optimisation since we can avoid
-some special function calls for some distributions by returning the log of the result.
+* Add support for the log of the cdf and pdf:
+this is mainly a performance optimisation since we can avoid
+some special function calls for some distributions
+by returning the log of the result.
 
-[endsect][/section:issues Known Issues, and Todo List]
+[endsect] [/section:issues Known Issues, and Todo List]
 
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

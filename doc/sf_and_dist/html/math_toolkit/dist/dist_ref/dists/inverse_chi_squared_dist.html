@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
-<link rel="prev" href="gamma_dist.html" title="Gamma (and Erlang) Distribution">
+<link rel="prev" href="geometric_dist.html" title="Geometric Distribution">
 <link rel="next" href="inverse_gamma_dist.html" title="Inverse Gamma Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -20,12 +20,12 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="gamma_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="inverse_gamma_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="geometric_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="inverse_gamma_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist"></a><a class="link" href="inverse_chi_squared_dist.html" title="Inverse Chi Squared Distribution">
-          Inverse Chi Squared Distribution</a>
+<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist"></a><a class="link" href="inverse_chi_squared_dist.html" title="Inverse Chi Squared Distribution">Inverse
+          Chi Squared Distribution</a>
 </h5></div></div></div>
 <p>
             
@@ -126,7 +126,7 @@
             distribution with &#957; (degrees_of_freedom) shape (&#945;) and scale (&#946;) where
           </p>
 <p>
-            &#8192; &#945;= &#957; /2 and &#946; = &#189;.
+            &#8192;&#8192; &#945;= &#957; /2 and &#946; = &#189;.
           </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -166,26 +166,26 @@
             function (PDF):
           </p>
 <p>
-            &#8192; f(x;&#957;) = 2<sup>-&#957;/2</sup> x<sup>-&#957;/2-1</sup> e<sup>-1/2x</sup> / &#915;(&#957;/2)
+            &#8192;&#8192; f(x;&#957;) = 2<sup>-&#957;/2</sup> x<sup>-&#957;/2-1</sup> e<sup>-1/2x</sup> / &#915;(&#957;/2)
           </p>
 <p>
             and Cumulative Density Function (CDF)
           </p>
 <p>
-            &#8192;  F(x;&#957;) = &#915;(&#957;/2, 1/2x) / &#915;(&#957;/2)
+            &#8192;&#8192;  F(x;&#957;) = &#915;(&#957;/2, 1/2x) / &#915;(&#957;/2)
           </p>
 <p>
             For degrees of freedom parameter &#957; and scale parameter &#958;, the <span class="bold"><strong>scaled</strong></span> inverse chi_squared distribution is defined
             by the probability density function (PDF):
           </p>
 <p>
-            &#8192; f(x;&#957;, &#958;) = (&#958;&#957;/2)<sup>&#957;/2</sup> e<sup>-&#957;&#958;/2x</sup> x<sup>-1-&#957;/2</sup> / &#915;(&#957;/2)
+            &#8192;&#8192; f(x;&#957;, &#958;) = (&#958;&#957;/2)<sup>&#957;/2</sup> e<sup>-&#957;&#958;/2x</sup> x<sup>-1-&#957;/2</sup> / &#915;(&#957;/2)
           </p>
 <p>
             and Cumulative Density Function (CDF)
           </p>
 <p>
-            &#8192;  F(x;&#957;, &#958;) = &#915;(&#957;/2, &#957;&#958;/2x) / &#915;(&#957;/2)
+            &#8192;&#8192;  F(x;&#957;, &#958;) = &#915;(&#957;/2, &#957;&#958;/2x) / &#915;(&#957;/2)
           </p>
 <p>
             The following graphs illustrate how the PDF and CDF of the inverse chi_squared
@@ -198,7 +198,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/inverse_chi_squared_cdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.member_functions"></a><h5>
-<a name="id1124794"></a>
+<a name="id980304"></a>
             <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -225,7 +225,7 @@
             Returns the scale &#958; parameter of this distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors"></a><h5>
-<a name="id1124966"></a>
+<a name="id980476"></a>
             <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -255,7 +255,7 @@
             </p></td></tr>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.accuracy"></a><h5>
-<a name="id1125070"></a>
+<a name="id980580"></a>
             <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -271,7 +271,7 @@
             iteration is involved, as for the estimation of degrees of freedom.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.implementation"></a><h5>
-<a name="id1125111"></a>
+<a name="id980621"></a>
             <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -346,7 +346,7 @@
                   </td>
 <td>
                     <p>
-                      Using the relation: x = &#946; &#8203;/ <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(&#945;,
+                      Using the relation: x = &#946; &#160;/ <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_q_inv</a>(&#945;,
                       p)
                     </p>
                   </td>
@@ -359,7 +359,7 @@
                   </td>
 <td>
                     <p>
-                      Using the relation: x = &#945; &#8203;/ <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(&#945;,
+                      Using the relation: x = &#945; &#160;/ <a class="link" href="../../../special/sf_gamma/igamma_inv.html" title="Incomplete Gamma Function Inverses">gamma_p_inv</a>(&#945;,
                       q)
                     </p>
                   </td>
@@ -452,7 +452,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.references"></a><h5>
-<a name="id1125440"></a>
+<a name="id980950"></a>
             <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.references">References</a>
           </h5>
 <div class="orderedlist"><ol type="1">
@@ -479,7 +479,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="gamma_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="inverse_gamma_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="geometric_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="inverse_gamma_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

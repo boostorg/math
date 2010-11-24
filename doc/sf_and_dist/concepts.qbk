@@ -31,7 +31,7 @@ The special functions and tools in this library can be used with
 via the bindings in [@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp].
 
 In order to use these binings you will need to have installed [@http://www.mpfr.org MPFR]
-plus it's dependency the [@http://gmplib.org GMP library] and the C++ wrapper for MPFR known as
+plus its dependency the [@http://gmplib.org GMP library] and the C++ wrapper for MPFR known as
 [@http://math.berkeley.edu/~wilken/code/gmpfrxx/ gmpfrxx (or mpfr_class)].
 
 Unfortunately `mpfr_class` doesn't quite satisfy our conceptual requirements,
@@ -225,7 +225,7 @@ In the following table /r/ is an object of type `RealType`,
 Note that the table above lists only those standard library functions known to
 be used (or likely to be used in the near future) by this library.  
 The following functions: `acos`, `atan2`, `fmod`, `cosh`, `sinh`, `tanh`, `log10`,
-`lround`, `llround`, ltrunc`, `lltrunc` and `modf`
+`lround`, `llround`, `ltrunc`, `lltrunc` and `modf`
 are not currently used, but may be if further special functions are added.
 
 Note that the `round`, `trunc` and `modf` functions are not part of the
@@ -280,9 +280,9 @@ object of a type convertible to `RealType`.
 [[cdf(complement(cd, cr))][RealType]
       [Returns the complement of the CDF of the distribution, 
       the same as: `1-cdf(cd, cr)`]]
-[[quantile(cd, cr)][RealType][Returns the quantile of the distribution.]]
+[[quantile(cd, cr)][RealType][Returns the quantile (or percentile) of the distribution.]]
 [[quantile(complement(cd, cr))][RealType]
-      [Returns the quantile of the distribution, starting from
+      [Returns the quantile (or percentile) of the distribution, starting from
       the complement of the probability, the same as: `quantile(cd, 1-cr)`]]
 [[chf(cd, cr)][RealType][Returns the cumulative hazard function of the distribution.]]
 [[hazard(cd, cr)][RealType][Returns the hazard function of the distribution.]]
@@ -297,33 +297,40 @@ object of a type convertible to `RealType`.
 
 [endsect]
 
-[section:archetypes Conceptual Archetypes and Testing]
+[section:archetypes Conceptual Archetypes for Reals and Distributions]
 
-There are several concept archetypes available:
+There are a few concept archetypes available:
+
+* Real concept for floating-point types.
+* distribution Concept for statistical distributions.
+
+[h5 Real concept]
+
+`std_real_concept` is an archetype for theReal types,
+including the built-in float, double, long double.
 
 ``#include <boost/concepts/std_real_concept.hpp>``
 
    namespace boost{
    namespace math{
-   namespace concepts{
-   
-   class std_real_concept;
-   
-   }}} // namespaces
+   namespace concepts
+   {
+     class std_real_concept;
+   }
+   }} // namespaces
 
-`std_real_concept` is an archetype for the built-in Real types.
 
 The main purpose in providing this type is to verify
 that standard library functions are found via a using declaration -
-bringing those functions into the current scope - and not
-just because they happen to be in global scope.
+bringing those functions into the current scope - 
+and not just because they happen to be in global scope.
 
 In order to ensure that a call to say `pow` can be found
 either via argument dependent lookup, or failing that then
 in the std namespace: all calls to standard library functions
-are unqualified, with the std:: versions found via a using declaration
+are unqualified, with the std:: versions found via a `using` declaration
 to make them visible in the current scope.  Unfortunately it's all
-to easy to forget the using declaration, and call the double version of
+to easy to forget the `using` declaration, and call the double version of
 the function that happens to be in the global scope by mistake.
 
 For example if the code calls ::pow rather than std::pow, 
@@ -333,10 +340,12 @@ In contrast a template instantiated with std_real_concept will *only*
 compile if the all the standard library functions used have 
 been brought into the current scope with a using declaration.
 
+[h6 Testing the real concept]
+
 There is a test program 
 [@../../../test/std_real_concept_check.cpp libs/math/test/std_real_concept_check.cpp]
 that instantiates every template in this library with type
-`std_real_concept` to verify it's usage of standard library functions.
+`std_real_concept` to verify its usage of standard library functions.
 
 ``#include <boost/math/concepts/real_concept.hpp>``
 
@@ -348,16 +357,16 @@ that instantiates every template in this library with type
    
    }}} // namespaces
 
-`real_concept` is an archetype for [link math_toolkit.using_udt.concepts 
-user defined real types], it
-declares it's standard library functions in it's own
+`real_concept` is an archetype for
+[link math_toolkit.using_udt.concepts user defined real types],
+it declares its standard library functions in its own
 namespace: these will only be found if they are called unqualified
 allowing argument dependent lookup to locate them.  In addition
 this type is useable at runtime:
 this allows code that would not otherwise be exercised by the built-in
 floating point types to be tested.  There is no std::numeric_limits<>
-support for this type, since this is not a conceptual requirement
-for [link math_toolkit.using_udt.concepts RealType]'s.
+support for this type, since numeric_limits is not a conceptual requirement
+for [link math_toolkit.using_udt.concepts RealType]s.
 
 NTL RR is an example of a type meeting the requirements that this type
 models, but note that use of a thin wrapper class is required: refer to
@@ -367,17 +376,21 @@ There is no specific test case for type `real_concept`, instead, since this
 type is usable at runtime, each individual test case as well as testing
 `float`, `double` and `long double`, also tests `real_concept`.
 
+[h6 Distribution Concept]
+
+Distribution Concept models statistical distributions.
+
 ``#include <boost/math/concepts/distribution.hpp>``
 
    namespace boost{
    namespace math{
-   namespace concepts{
-   
-   template <class RealType>
-   class distribution_archetype;
-   
-   template <class Distribution>
-   struct DistributionConcept;
+   namespace concepts
+   {
+		 template <class RealType>
+		 class distribution_archetype;
+
+		 template <class Distribution>
+		 struct DistributionConcept;
    
    }}} // namespaces
    
@@ -387,6 +400,8 @@ The class template `distribution_archetype` is a model of the
 The class template `DistributionConcept` is a 
 [@../../../../../libs/concept_check/index.html concept checking class] 
 for distribution types.
+
+[h6 Testing the distribution concept]
 
 The test program 
 [@../../../test/compile_test/distribution_concept_check.cpp distribution_concept_check.cpp]
@@ -409,11 +424,9 @@ any code changes.  Likewise boilerplate versions of the
 hazard\/chf\/coefficient_of_variation functions are implemented in 
 there too.)
 
-[endsect][/section:archetypes Conceptual Archetypes and Testing]
-
-
+[endsect] [/section:archetypes Conceptual Archetypes for Reals and Distributions]
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

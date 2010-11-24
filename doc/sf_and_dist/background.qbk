@@ -17,7 +17,7 @@ therefore has two parameters:
 	binomial_distribution(RealType n, RealType p);
 
 While the function `pdf` has one argument specifying the distribution type
-(which includes it's parameters, if any),
+(which includes its parameters, if any),
 and a second argument for the __random_variate.  So taking our binomial distribution 
 example, we would write:
 

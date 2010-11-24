@@ -150,7 +150,7 @@ From this we can easily show that:
 and therefore we have a means to compute either the probability or its
 complement directly without the risk of cancellation error.  The
 crossover criterion for choosing whether to calculate the CDF or
-it's complement is the same as for the 
+its complement is the same as for the 
 __non_central_beta_distrib.
 
 The PDF can be computed by a very similar method using:

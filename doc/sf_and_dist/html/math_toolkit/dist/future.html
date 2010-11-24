@@ -24,10 +24,10 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.dist.future"></a><a class="link" href="future.html" title="Extras/Future Directions"> Extras/Future Directions</a>
+<a name="math_toolkit.dist.future"></a><a class="link" href="future.html" title="Extras/Future Directions">Extras/Future Directions</a>
 </h3></div></div></div>
 <a name="math_toolkit.dist.future.adding_additional_location_and_scale_parameters"></a><h5>
-<a name="id1161847"></a>
+<a name="id1022375"></a>
         <a class="link" href="future.html#math_toolkit.dist.future.adding_additional_location_and_scale_parameters">Adding
         Additional Location and Scale Parameters</a>
       </h5>
@@ -55,14 +55,14 @@
         functions.
       </p>
 <a name="math_toolkit.dist.future.an__quot_any_distribution_quot__class"></a><h5>
-<a name="id1162011"></a>
+<a name="id1022608"></a>
         <a class="link" href="future.html#math_toolkit.dist.future.an__quot_any_distribution_quot__class">An
         "any_distribution" class</a>
       </h5>
 <p>
-        It would be fairly trivial to add a distribution object that virtualises
-        the actual type of the distribution, and can therefore hold "any"
-        object that conforms to the conceptual requirements of a distribution:
+        It is easy to add a distribution object that virtualises the actual type
+        of the distribution, and can therefore hold "any" object that conforms
+        to the conceptual requirements of a distribution:
       </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">any_distribution</span>
@@ -79,12 +79,19 @@
 </span></pre>
 <p>
         Such a class would facilitate the writing of non-template code that can function
-        with any distribution type. It's not clear yet whether there is a compelling
-        use case though. Possibly tests for goodness of fit might provide such a
-        use case: this needs more investigation.
+        with any distribution type.
+      </p>
+<p>
+        The <a href="http://sourceforge.net/projects/distexplorer/" target="_top">Statistical
+        Distribution Explorer</a> utility for Windows is a usage example.
+      </p>
+<p>
+        It's not clear yet whether there is a compelling use case though. Possibly
+        tests for goodness of fit might provide such a use case: this needs more
+        investigation.
       </p>
 <a name="math_toolkit.dist.future.higher_level_hypothesis_tests"></a><h5>
-<a name="id1162220"></a>
+<a name="id1022829"></a>
         <a class="link" href="future.html#math_toolkit.dist.future.higher_level_hypothesis_tests">Higher
         Level Hypothesis Tests</a>
       </h5>
@@ -104,7 +111,7 @@
         <span class="emphasis"><em>expected_mean</em></span>.
       </p>
 <a name="math_toolkit.dist.future.integration_with_statistical_accumulators"></a><h5>
-<a name="id1162382"></a>
+<a name="id1022991"></a>
         <a class="link" href="future.html#math_toolkit.dist.future.integration_with_statistical_accumulators">Integration
         With Statistical Accumulators</a>
       </h5>

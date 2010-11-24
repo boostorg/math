@@ -63,8 +63,6 @@ assumes that success_fraction p is fixed for all (k + r) trials.
 whereas for the binomial,
 the random variable is the number of successes, for a fixed number of trials.]
 
-
-
 It has the PDF:
 
 [equation neg_binomial_ref]
@@ -130,6 +128,9 @@ Returns the parameter /p/ from which this distribution was constructed.
    RealType successes() const; // required successes (r > 0)
    
 Returns the parameter /r/ from which this distribution was constructed.
+
+The best method of calculation for the following functions is disputed:
+see __binomial_distrib for more discussion. 
 
 [h5 Lower Bound on Parameter p]
 

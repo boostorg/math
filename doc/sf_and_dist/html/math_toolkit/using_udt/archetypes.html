@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Conceptual Archetypes and Testing</title>
+<title>Conceptual Archetypes for Reals and Distributions</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
@@ -24,11 +24,27 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.using_udt.archetypes"></a><a class="link" href="archetypes.html" title="Conceptual Archetypes and Testing"> Conceptual Archetypes
-      and Testing</a>
+<a name="math_toolkit.using_udt.archetypes"></a><a class="link" href="archetypes.html" title="Conceptual Archetypes for Reals and Distributions">Conceptual Archetypes
+      for Reals and Distributions</a>
 </h3></div></div></div>
 <p>
-        There are several concept archetypes available:
+        There are a few concept archetypes available:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Real concept for floating-point types.
+          </li>
+<li>
+            distribution Concept for statistical distributions.
+          </li>
+</ul></div>
+<a name="math_toolkit.using_udt.archetypes.real_concept"></a><h6>
+<a name="id1190997"></a>
+        <a class="link" href="archetypes.html#math_toolkit.using_udt.archetypes.real_concept">Real concept</a>
+      </h6>
+<p>
+        <code class="computeroutput"><span class="identifier">std_real_concept</span></code> is an archetype
+        for theReal types, including the built-in float, double, long double.
       </p>
 <p>
         
@@ -38,16 +54,12 @@
       </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span>
 <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
-<span class="keyword">namespace</span> <span class="identifier">concepts</span><span class="special">{</span>
-
-<span class="keyword">class</span> <span class="identifier">std_real_concept</span><span class="special">;</span>
-
-<span class="special">}}}</span> <span class="comment">// namespaces
+<span class="keyword">namespace</span> <span class="identifier">concepts</span>
+<span class="special">{</span>
+  <span class="keyword">class</span> <span class="identifier">std_real_concept</span><span class="special">;</span>
+<span class="special">}</span>
+<span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
-<p>
-        <code class="computeroutput"><span class="identifier">std_real_concept</span></code> is an archetype
-        for the built-in Real types.
-      </p>
 <p>
         The main purpose in providing this type is to verify that standard library
         functions are found via a using declaration - bringing those functions into
@@ -57,8 +69,9 @@
         In order to ensure that a call to say <code class="computeroutput"><span class="identifier">pow</span></code>
         can be found either via argument dependent lookup, or failing that then in
         the std namespace: all calls to standard library functions are unqualified,
-        with the std:: versions found via a using declaration to make them visible
-        in the current scope. Unfortunately it's all to easy to forget the using
+        with the std:: versions found via a <code class="computeroutput"><span class="keyword">using</span></code>
+        declaration to make them visible in the current scope. Unfortunately it's
+        all to easy to forget the <code class="computeroutput"><span class="keyword">using</span></code>
         declaration, and call the double version of the function that happens to
         be in the global scope by mistake.
       </p>
@@ -70,9 +83,14 @@
         library functions used have been brought into the current scope with a using
         declaration.
       </p>
+<a name="math_toolkit.using_udt.archetypes.testing_the_real_concept"></a><h4>
+<a name="id1191176"></a>
+        <a class="link" href="archetypes.html#math_toolkit.using_udt.archetypes.testing_the_real_concept">Testing
+        the real concept</a>
+      </h4>
 <p>
         There is a test program <a href="../../../../../test/std_real_concept_check.cpp" target="_top">libs/math/test/std_real_concept_check.cpp</a>
-        that instantiates every template in this library with type <code class="computeroutput"><span class="identifier">std_real_concept</span></code> to verify it's usage of
+        that instantiates every template in this library with type <code class="computeroutput"><span class="identifier">std_real_concept</span></code> to verify its usage of
         standard library functions.
       </p>
 <p>
@@ -92,12 +110,13 @@
 <p>
         <code class="computeroutput"><span class="identifier">real_concept</span></code> is an archetype
         for <a class="link" href="concepts.html" title="Conceptual Requirements for Real Number Types">user defined real types</a>,
-        it declares it's standard library functions in it's own namespace: these
-        will only be found if they are called unqualified allowing argument dependent
+        it declares its standard library functions in its own namespace: these will
+        only be found if they are called unqualified allowing argument dependent
         lookup to locate them. In addition this type is useable at runtime: this
         allows code that would not otherwise be exercised by the built-in floating
         point types to be tested. There is no std::numeric_limits&lt;&gt; support
-        for this type, since this is not a conceptual requirement for <a class="link" href="concepts.html" title="Conceptual Requirements for Real Number Types">RealType</a>'s.
+        for this type, since numeric_limits is not a conceptual requirement for
+        <a class="link" href="concepts.html" title="Conceptual Requirements for Real Number Types">RealType</a>s.
       </p>
 <p>
         NTL RR is an example of a type meeting the requirements that this type models,
@@ -110,6 +129,14 @@
         as well as testing <code class="computeroutput"><span class="keyword">float</span></code>, <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">long</span>
         <span class="keyword">double</span></code>, also tests <code class="computeroutput"><span class="identifier">real_concept</span></code>.
       </p>
+<a name="math_toolkit.using_udt.archetypes.distribution_concept"></a><h4>
+<a name="id1191397"></a>
+        <a class="link" href="archetypes.html#math_toolkit.using_udt.archetypes.distribution_concept">Distribution
+        Concept</a>
+      </h4>
+<p>
+        Distribution Concept models statistical distributions.
+      </p>
 <p>
         
 </p>
@@ -118,8 +145,8 @@
       </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span>
 <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
-<span class="keyword">namespace</span> <span class="identifier">concepts</span><span class="special">{</span>
-
+<span class="keyword">namespace</span> <span class="identifier">concepts</span>
+<span class="special">{</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">distribution_archetype</span><span class="special">;</span>
 
@@ -138,6 +165,11 @@
         is a <a href="../../../../../../../libs/concept_check/index.html" target="_top">concept checking
         class</a> for distribution types.
       </p>
+<a name="math_toolkit.using_udt.archetypes.testing_the_distribution_concept"></a><h4>
+<a name="id1191619"></a>
+        <a class="link" href="archetypes.html#math_toolkit.using_udt.archetypes.testing_the_distribution_concept">Testing
+        the distribution concept</a>
+      </h4>
 <p>
         The test program <a href="../../../../../test/compile_test/distribution_concept_check.cpp" target="_top">distribution_concept_check.cpp</a>
         is responsible for using <code class="computeroutput"><span class="identifier">DistributionConcept</span></code>
