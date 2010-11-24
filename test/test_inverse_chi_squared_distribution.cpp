@@ -9,9 +9,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifdef _MSC_VER
-#  pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'type' was previously defined as a type
-// in Boost.test and lexical_cast
-#  pragma warning (disable : 4310) // cast truncates constant value
+#  pragma warning (disable : 4310) // cast truncates constant value.
 #endif
 
 // http://www.wolframalpha.com/input/?i=inverse+chisquare+distribution
@@ -91,7 +89,7 @@ void test_spot(
       BOOST_CHECK_CLOSE_FRACTION(
         quantile(dist, P), x, tol); // quantile(cdf) = x
       BOOST_CHECK_CLOSE_FRACTION(
-        quantile(complement(dist, Q)), x, tol); // quantile(1 - cdf) = x
+        quantile(complement(dist, Q)), x, tol); // quantile(complement(1 - cdf)) = x
    }
 } // test_spot
 
@@ -321,8 +319,8 @@ int test_main(int, char* [])
 
   BOOST_CHECK_EQUAL(ichsqdef.degrees_of_freedom(), 1.); // df == 1
   BOOST_CHECK_EQUAL(ichsqdef.scale(), 1); // scale == 1./df
-  BOOST_CHECK_CLOSE_FRACTION(pdf(ichsqdef, 1),0.2419707245191433L, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(pdf(ichsqdef, 9),0.013977156581221969L, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(pdf(ichsqdef, 1), 0.24197072451914330, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(pdf(ichsqdef, 9), 0.013977156581221969, tol4eps);
   
   inverse_chi_squared_distribution<double> ichisq102(10., 2); // Both parameters specified.
   BOOST_CHECK_EQUAL(ichisq102.degrees_of_freedom(), 10.); // Check both parameters stored OK.
@@ -331,10 +329,10 @@ int test_main(int, char* [])
   inverse_chi_squared_distribution<double> ichisq10(10.); // Only df parameter specified (unscaled).
   BOOST_CHECK_EQUAL(ichisq10.degrees_of_freedom(), 10.); // Check  parameter stored.
   BOOST_CHECK_EQUAL(ichisq10.scale(), 0.1); // Check default scale = 1/df = 1/10 = 0.1
-  BOOST_CHECK_CLOSE_FRACTION(pdf(ichisq10, 1),  0.00078975346316749169L, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(pdf(ichisq10, 10), 0.0000000012385799798186384L, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(pdf(ichisq10, 1),  0.00078975346316749169, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(pdf(ichisq10, 10), 0.0000000012385799798186384, tol4eps);
 
-  BOOST_CHECK_CLOSE_FRACTION(mode(ichisq10), 0.0833333333333333333333333333333333333333L, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(mode(ichisq10), 0.0833333333333333333333333333333333333333, tol4eps);
   // nu * xi / nu + 2 = 10 * 0.1 / (10 + 2) = 1/12 =  0.0833333...
   // mode is not defined in Mathematica.
   // See Discussion section http://en.wikipedia.org/wiki/Talk:Scaled-inverse-chi-square_distribution
@@ -343,21 +341,21 @@ int test_main(int, char* [])
   inverse_chi_squared_distribution<double> ichisq5(5.); // // Only df parameter specified.
   BOOST_CHECK_EQUAL(ichisq5.degrees_of_freedom(), 5.); // check  parameter stored.
   BOOST_CHECK_EQUAL(ichisq5.scale(), 1./5.); // check default is 1/df
-  BOOST_CHECK_CLOSE_FRACTION(pdf(ichisq5, 0.2), 3.0510380337346841L, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(ichisq5, 0.5), 0.84914503608460956l, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(ichisq5, 0.5)), 1 - 0.84914503608460956l, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(pdf(ichisq5, 0.2), 3.0510380337346841, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(ichisq5, 0.5), 0.84914503608460956, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(complement(ichisq5, 0.5)), 1 - 0.84914503608460956, tol4eps);
 
-  BOOST_CHECK_CLOSE_FRACTION(quantile(ichisq5, 0.84914503608460956L), 0.5, tol4eps*100);
-  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(ichisq5, 1. - 0.84914503608460956L)), 0.5, tol4eps*100);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(ichisq5, 0.84914503608460956), 0.5, tol4eps*100);
+  BOOST_CHECK_CLOSE_FRACTION(quantile(complement(ichisq5, 1. - 0.84914503608460956)), 0.5, tol4eps*100);
 
   // Check mean, etc spot values.
   inverse_chi_squared_distribution<double> ichisq81(8., 1.); // degrees_of_freedom = 5, scale = 1
-  BOOST_CHECK_CLOSE_FRACTION(mean(ichisq81),1.33333333333333333333333333333333333333333L, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(variance(ichisq81), 0.888888888888888888888888888888888888888888888L, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(mean(ichisq81),1.33333333333333333333333333333333333333333, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(variance(ichisq81), 0.888888888888888888888888888888888888888888888, tol4eps);
   BOOST_CHECK_CLOSE_FRACTION(skewness(ichisq81), 2 * std::sqrt(8.), tol4eps);
   inverse_chi_squared_distribution<double> ichisq21(2., 1.);
   BOOST_CHECK_CLOSE_FRACTION(mode(ichisq21), 0.5, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(median(ichisq21), 1.4426950408889634L, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(median(ichisq21), 1.4426950408889634, tol4eps);
 
   inverse_chi_squared ichsq4(4.); // Using typedef and degrees_of_freedom parameter (and default scale = 1/df).
   BOOST_CHECK_EQUAL(ichsq4.degrees_of_freedom(), 4.); // df == 4.
@@ -368,7 +366,7 @@ int test_main(int, char* [])
   BOOST_CHECK_EQUAL(ichsq32.scale(), 2); // scale  == 2
   
   inverse_chi_squared ichsq11(1, 1); // Using explicit degrees_of_freedom parameter, and default scale = 1).
-  BOOST_CHECK_CLOSE_FRACTION(mode(ichsq11), 0.33333333333333333333333333333333333333333L, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(mode(ichsq11), 0.3333333333333333333333333333333333333333, tol4eps);
   // (1 * 1)/ (1 + 2) = 1/3 using Wikipedia nu * xi /(nu + 2)
   BOOST_CHECK_EQUAL(ichsq11.degrees_of_freedom(), 1.); // df == 1 (default).
   BOOST_CHECK_EQUAL(ichsq11.scale(), 1.); // scale == 1.
@@ -397,13 +395,13 @@ int test_main(int, char* [])
   }
   */
   inverse_chi_squared_distribution<> ichisq14(14, 1); // Using default RealType double.
-  BOOST_CHECK_CLOSE_FRACTION(mean(ichisq14), 1.166666666666666666666666666666666666666666666L, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(variance(ichisq14), 0.272222222222222222222222222222222222222222222L, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(mean(ichisq14), 1.166666666666666666666666666666666666666666666, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(variance(ichisq14), 0.272222222222222222222222222222222222222222222, tol4eps);
 
   inverse_chi_squared_distribution<> ichisq121(12); // Using default RealType double.
-  BOOST_CHECK_CLOSE_FRACTION(mean(ichisq121),  0.1L, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(variance(ichisq121), 0.0025L, tol4eps);
-  BOOST_CHECK_CLOSE_FRACTION(standard_deviation(ichisq121), 0.05L, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(mean(ichisq121),  0.1, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(variance(ichisq121), 0.0025, tol4eps);
+  BOOST_CHECK_CLOSE_FRACTION(standard_deviation(ichisq121), 0.05, tol4eps);
 
   // and "using boost::math::inverse_chi_squared_distribution;".
   inverse_chi_squared_distribution<> ichsq23(2., 3.); // Using default RealType double.
