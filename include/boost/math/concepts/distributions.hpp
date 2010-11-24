@@ -18,6 +18,7 @@
 #pragma warning(disable: 4100)
 #pragma warning(disable: 4510)
 #pragma warning(disable: 4610)
+#pragma warning(disable: 4189) // local variable is initialized but not referenced.
 #endif
 #include <boost/concept_check.hpp>
 #ifdef BOOST_MSVC
