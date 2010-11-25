@@ -32,7 +32,6 @@
 [include distributions/rayleigh.qbk]
 [include distributions/students_t.qbk]
 [include distributions/triangular.qbk]
-[include distributions/wald.qbk]
 [include distributions/weibull.qbk]
 [include distributions/uniform.qbk]
 

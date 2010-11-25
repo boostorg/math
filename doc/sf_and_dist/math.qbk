@@ -244,7 +244,6 @@ and use the function's name as the link text.]
 [def __poisson_distrib [link math_toolkit.dist.dist_ref.dists.poisson_dist Poisson Distribution]]
 [def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
 [def __weibull_distrib [link math_toolkit.dist.dist_ref.dists.weibull_dist Weibull Distribution]]
-[def __wald_distrib [link math_toolkit.dist.dist_ref.dists.wald_dist Wald Distribution]]
 
 [/links to policy]
 [def __Policy [link math_toolkit.policy Policy]] [/ Used in distribution template specifications]

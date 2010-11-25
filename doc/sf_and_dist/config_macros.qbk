@@ -19,13 +19,13 @@ to a function pointer requires explicit template arguments to be provided on the
 [[`BOOST_MATH_USE_C99` ] [Use C99 math functions.]] 
 [[`BOOST_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY`] [define if no native (or buggy) `fpclassify(long double)` 
 even though the other C99 functions are present.]]
-[[`BOOST_MATH_EXPLICIT_TEMPLATE_TYPE`] [Wprkaround helper macro for broken compilers - composed from
+[[`BOOST_MATH_EXPLICIT_TEMPLATE_TYPE`] [Workaround helper macro for broken compilers - composed from
 other Boost.Config macros, do not edit.]] 
-[[`BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE`] [Wprkaround helper macro for broken compilers - composed from
+[[`BOOST_MATH_EXPLICIT_TEMPLATE_NON_TYPE`] [Workaround helper macro for broken compilers - composed from
 other Boost.Config macros, do not edit.]]
-[[`BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC`] [Wprkaround helper macro for broken compilers - composed from
+[[`BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC`] [Workaround helper macro for broken compilers - composed from
 other Boost.Config macros, do not edit.]]
-[[`BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE_SPEC`] [Wprkaround helper macro for broken compilers - composed from
+[[`BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE_SPEC`] [Workaround helper macro for broken compilers - composed from
 other Boost.Config macros, do not edit.]]
 [[`BOOST_MATH_SMALL_CONSTANT(x)`] [Helper macro used in our test cases to set underflowing constants set to zero
 if this would cause compiler issues.]]
@@ -33,7 +33,7 @@ if this would cause compiler issues.]]
 rather than infinity or a suitably large value.]]
 [[`BOOST_MATH_STD_USING`] [Provides `using` statements for many std:: (abs to sqrt) and boost::math (rounds, modf) functions. 
 This allows these functions to be called unqualified so that if
-[@http://en.wikipedia.org/wiki/Argument-dependent_name_lookup]argument-dependent Argument Dependent Lookup]
+[@http://en.wikipedia.org/wiki/Argument-dependent_name_lookup argument-dependent Argument Dependent Lookup]
 fails to find a suitable overload, then the std:: versions will also be considered.]]
 [[`BOOST_FPU_EXCEPTION_GUARD`] [Used at the entrypoint to each special function to reset all FPU exception flags prior
 to internal calculations, and then merge the old and new exception flags on function exit.  Used as a workaround

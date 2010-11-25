@@ -54,7 +54,7 @@ Calculated, from values provided, are:
 
 *probability density (or mass) function (PDF)
 *cumulative distribution function (CDF), and complement
-*Quantiles (percentiles) are calculated for typical risk (alpha) probabilities (0.001, 0.01, 0.5, 0.1, 0.333)
+*Quantiles (percentiles or fractiles) are calculated for typical risk (alpha) probabilities (0.001, 0.01, 0.5, 0.1, 0.333)
 and for additional probabilities provided by the user.
 
 Results can be saved to text files using Save or SaveAs.
