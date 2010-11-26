@@ -198,23 +198,8 @@ inline RealType cdf(const inverse_gaussian_distribution<RealType, Policy>& dist,
    RealType expfactor = exp(2 * scale / mean);
    RealType n3 = - sqrt(scale / x);
    n3 *= (x / mean) + 1;
-   // cout << "((x / mean) +1) = " << n3 << endl;
    RealType n4 = cdf(n01, n3);
-   //cout << "phi1 = " << n1 << ", exp(2 * scale / mean) = " << n2 << ", exp * phi2 = " << n4 * n2 << endl;
-
    result = n1 + expfactor * n4;
-
-   if(false)
-   { // Output some diagnostic values.
-     cout <<"_\n    cdf===========================" << endl;
-     cout << "sqrt(scale / x)*((x / mean) -1) = " << n0 << endl;
-     cout << "cdf(n01, n1) = " << n1 << endl;
-     cout << "exp(2 * scale / mean) = " << expfactor << endl;
-     cout << " - sqrt(scale / x)*((x / mean) +1) = " << n3 << endl;
-     cout << "cdf(n01, - sqrt(scale / x)*((x / mean) +1)) = " << n4 << endl;
-     cout << "exp * cdf_2 = " << n4 * expfactor << endl;
-     cout << "cdf_1 + exp * cdf_2 = " << result << endl;
-   }
    return result;
 } // cdf
 
@@ -231,10 +216,6 @@ struct inverse_gaussian_quantile_functor
     RealType c = cdf(distribution, x);
     RealType fx = c - prob;  // Difference cdf - value - to minimize.
     RealType dx = pdf(distribution, x); // pdf is 1st derivative.
-    if(false)
-    {
-     cout << "cdf(dist, " << x << ") = " << c << ", diff = " << fx << ", dx " << dx << endl;
-    }
     // return both function evaluation difference f(x) and 1st derivative f'(x).
     return std::tr1::make_tuple(fx, dx);
   }
@@ -255,18 +236,6 @@ struct inverse_gaussian_quantile_complement_functor
     RealType c = cdf(complement(distribution, x));
     RealType fx = c - prob;  // Difference cdf - value - to minimize.
     RealType dx = -pdf(distribution, x); // pdf is 1st derivative.
-    if(true)
-    {
-      std::streamsize precision = cout.precision(); // Save
-      if (false)
-      {
-        cout << setprecision(numeric_limits<RealType>::max_digits10) 
-         << "cdf((complement(dist, " << x << ")) = " << c 
-         << setprecision(4)
-         << ", diff = " << fx << ", dx " << dx << endl;
-        cout.precision(precision);  // restore
-      }
-    }
     // return both function evaluation difference f(x) and 1st derivative f'(x).
     return std::tr1::make_tuple(fx, dx);
   }
@@ -299,20 +268,10 @@ namespace detail
       // A normalising logarithmic transformation for inverse Gaussian random variables,
       // Technometrics 20-2, 207-208 (1978), but using expression from
       // V Seshadri, Inverse Gaussian distribution (1998) ISBN 0387 98618 9, page 6.
-      //x = qnorm(p, 0, 1, true, false);
-      //x /= sqrt(phi);
-      //x = x - 1. / (2 * phi);
-      //x = mu * exp(x);
-      // x = mu * exp(qnorm(p, 0, 1, true, false) / sqrt(phi) - 1/(2 * phi));
+ 
       normal_distribution<RealType, no_overthrow_policy> n01;
       x = mu * exp(quantile(n01, p) / sqrt(phi) - 1/(2 * phi));
-      // Might add about 0.006 to this to get closer?
-      //RealType pi = 3.1459;
-      //cout << "1 / sqrt(8 * pi * phi) = " << 1 / sqrt(8 * pi * phi) << endl;
-      // Bagshaw guess is:
-      // RealType U = quantile(n01, p); // U <- qnorm (p)
-      // RealType r1 = 1 + U / sqrt (phi) + U * U / (2 * phi) + U * U * U / (8 * phi * sqrt(phi));
-    }
+     }
     else
     { // phi < 2 so much less symmetrical with long tail,
       // so use gamma distribution as an approximation.
@@ -327,15 +286,12 @@ namespace detail
       // R qgamma(0.2, 0.5, 1)  0.0320923
       RealType qg = quantile(complement(g, p));
       //RealType qg1 = qgamma(1.- p, 0.5, 1.0, true, false);
-      //cout << "quantile(complement(g, p)) = " << qg << ", qgamma(1.- p, 0.5, 1.0, true, false); = " << qg1 << endl; // 49.014664823030209 1.#INF
       x = lambda / (qg * 2);
       // 
       if (x > mu/2) // x > mu /2?
       { // x too large for the gamma approximation to work well.
         //x = qgamma(p, 0.5, 1.0); // qgamma(0.270614, 0.5, 1) = 0.05983807
         RealType q = quantile(g, p);
-        // cout << "quantile((g, p)) = " << q << endl;// 49.014664823030209 
-          //<< ", qgamma(1.- p, 0.5, 1.0); = " << x << endl; // 1.#INF
        // x = mu * exp(q * static_cast<RealType>(0.1));  // Said to improve at high p
        // x = mu * x;  // Improves at high p?
         x = mu * exp(q / sqrt(phi) - 1/(2 * phi));
@@ -382,19 +338,9 @@ inline RealType quantile(const inverse_gaussian_distribution<RealType, Policy>& 
   // To allow user to control accuracy versus speed,
   int get_digits = policies::digits<RealType, Policy>();// get digits from policy, 
   boost::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
-  if(false)
-  {
-  cout << "Probability " << p << ", guess " << guess 
-    << ", min " << min << ", max " << max 
-    //<< ", std::numeric_limits<" << typeid(RealType).name()  << ">::digits = " << digits 
-     << ", accuracy " << get_digits << " bits."
-     << ", max iterations set by policy " << m
-     << endl;
-  }
   using boost::math::tools::newton_raphson_iterate;
   result =
     newton_raphson_iterate(inverse_gaussian_quantile_functor<RealType>(dist, p), guess, min, max, get_digits, m);
-   //cout << m << " iterations." << endl;
    return result;
 } // quantile
 
@@ -443,18 +389,6 @@ inline RealType cdf(const complemented2_type<inverse_gaussian_distribution<RealT
    RealType n6 = cdf(complement(n01, +sqrt(scale/x) * ((x /mean) + 1)));
    RealType n4 = cdf(n01, n3); // = 
    result = cdf_1 - expfactor * n6; 
-   if(false)
-   {
-     cout <<"_\n      cdf(complement ===========================" << endl;
-     cout << "sqrt(scale / x)*((x / mean) -1) = " << n0 << endl;
-     cout << "cdf(complement(n01, n1)) = " << cdf_1 << endl;
-     cout << "-sqrt(scale / x) * ((x / mean) +1) = " << n3 << endl;
-     cout << "exp(2 * scale / mean) = " << expfactor << endl;
-     cout << "cdf(complement(n01, +sqrt(scale/x) * ((x /mean) + 1))) = " << n6 << endl;
-     cout << "cdf((n01, ) exp(2 * scale / mean) * (x / mean) + 1) = " << n4 << endl;
-     cout << "exp * cdf_2 = " << result << endl;
-   }
-   //cout << "cdf(complement) result = " << result << endl;
    return result;
 } // cdf complement
 
@@ -485,19 +419,9 @@ inline RealType quantile(const complemented2_type<inverse_gaussian_distribution<
   // digits used to control how accurate to try to make the result.
   int get_digits = policies::digits<RealType, Policy>();
   boost::uintmax_t m = policies::get_max_root_iterations<Policy>();
-  if(false)
-  {
-    cout << "Probability " << q << ", guess at x = " << guess 
-    //<< ", min " << min << ", max " << max 
-    ////<< ", std::numeric_limits<" << typeid(RealType).name()  << ">::digits = " << digits 
-    // << ", accuracy " << get_digits << " bits."
-    // << ", max iterations set by policy " << m
-     << endl;
-  }
   using boost::math::tools::newton_raphson_iterate;
   result =
     newton_raphson_iterate(inverse_gaussian_quantile_complement_functor<RealType>(c.dist, q), guess, min, max, get_digits, m);
-   //cout << m << " iterations." << endl;
    return result;
 } // quantile
 
