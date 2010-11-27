@@ -237,7 +237,9 @@ struct inverse_gaussian_quantile_complement_functor
     RealType fx = c - prob;  // Difference cdf - value - to minimize.
     RealType dx = -pdf(distribution, x); // pdf is 1st derivative.
     // return both function evaluation difference f(x) and 1st derivative f'(x).
-    return std::tr1::make_tuple(fx, dx);
+   
+    //return std::tr1::make_tuple(fx, dx);
+    return boost::math::make_tuple(fx, dx);
   }
   private:
   const boost::math::inverse_gaussian_distribution<RealType> distribution;
