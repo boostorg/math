@@ -53,7 +53,7 @@
 #include <boost/math/distributions/gamma.hpp> // for gamma function
 // using boost::math::gamma_p;
 
-#include <boost/math/tr1.hpp>
+#include <boost/math/tools/tuple.hpp>
 //using std::tr1::tuple;
 //using std::tr1::make_tuple;
 #include <boost/math/tools/roots.hpp>
