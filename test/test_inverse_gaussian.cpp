@@ -83,7 +83,8 @@ template <class RealType>
 void test_spots(RealType)
 {
   // Basic sanity checks
-  RealType tolerance = 1e-4f; // 
+  RealType tolerance = static_cast<RealType>(1e-4L); // 
+  cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << endl;
 
   // Check some bad parameters to the distribution,
   BOOST_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType> nbad1(0, 0), std::domain_error); // zero scale
@@ -115,10 +116,7 @@ void test_spots(RealType)
     BOOST_CHECK_THROW(quantile(w11, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // p = + infinity
     BOOST_CHECK_THROW(quantile(complement(w11, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // p = + infinity
   }
-
-  // cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << endl;
-
-  // Check complements.
+    // Check complements.
 
     BOOST_CHECK_CLOSE_FRACTION(
      cdf(complement(w11, 1.)), static_cast<RealType>(1) - cdf(w11, 1.), tolerance); // cdf complement
