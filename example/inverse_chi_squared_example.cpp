@@ -80,11 +80,19 @@ int main()
 
   cout << "Example (basic) using Inverse chi squared distribution. " << endl;
 
-  // TODO find a more practial/useful example.  Suggestions welcome?
+  // TODO find a more practical/useful example.  Suggestions welcome?
 
-  int i = std::numeric_limits<double>::max_digits10;
-  cout << "Show all potentially significant decimal digits std::numeric_limits<double>::max_digits10 = " << i << endl; 
-  cout.precision(std::numeric_limits<double>::max_digits10); // 
+#ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
+  int max_digits10 = 2 + (boost::math::policies::digits<double, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
+  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined" << endl; 
+#else 
+  int max_digits10 = std::numeric_limits<double>::max_digits10;
+#endif
+  cout << "Show all potentially significant decimal digits std::numeric_limits<double>::max_digits10 = "
+    << max_digits10 << endl; 
+  cout.precision(max_digits10); // 
+
+  cout << _MSC_VER << ' ' << _MSC_FULL_VER << ' ' << _CPPLIB_VER << endl;
 
   inverse_chi_squared ichsqdef; // All defaults  - not very useful!
   cout << "default df = " << ichsqdef.degrees_of_freedom()
@@ -127,7 +135,7 @@ int main()
     }
   }
 
-  cout.precision(std::numeric_limits<double>::max_digits10);
+  cout.precision(max_digits10);
 
   inverse_chi_squared ichisq(2., 0.5);
   cout << "pdf(ichisq, 1.) = " << pdf(ichisq, 1.) << endl;
