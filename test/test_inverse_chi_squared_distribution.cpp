@@ -227,8 +227,8 @@ void test_spots(RealType)
     cdf(inverse_chi_squared_distribution<RealType>(2), static_cast<RealType>(0))
     , static_cast<RealType>(0.0f));
   BOOST_CHECK_EQUAL(
-    cdf(inverse_chi_squared_distribution<RealType>(3), static_cast<RealType>(0))
-    , static_cast<RealType>(0.0f));
+    cdf(inverse_chi_squared_distribution<RealType>(3L), static_cast<RealType>(0L))
+    , static_cast<RealType>(0));
   BOOST_CHECK_EQUAL(
     cdf(complement(inverse_chi_squared_distribution<RealType>(1), static_cast<RealType>(0)))
     , static_cast<RealType>(1));
