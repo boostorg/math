@@ -92,8 +92,6 @@ int main()
     << max_digits10 << endl; 
   cout.precision(max_digits10); // 
 
-  cout << _MSC_VER << ' ' << _MSC_FULL_VER << ' ' << _CPPLIB_VER << endl;
-
   inverse_chi_squared ichsqdef; // All defaults  - not very useful!
   cout << "default df = " << ichsqdef.degrees_of_freedom()
     << ", default scale = " <<  ichsqdef.scale() << endl; //  default df = 1, default scale = 0.5

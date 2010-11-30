@@ -156,11 +156,17 @@ So in Boost.Math the equivalent is
 */
     geometric g05(0.5);  // Probability of success = 0.5 or 50%
     // Output all potentially significant digits for the type, here double.
-#if (_MSC_VER >= 1600)
-    cout.precision(std::numeric_limits<double>::max_digits10);
-#else
-    cout.precision(2 + (boost::math::policies::digits<double, boost::math::policies::policy<> >() * 30103UL) / 100000UL);
+
+#ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
+  int max_digits10 = 2 + (boost::math::policies::digits<double, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
+  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined" << endl; 
+#else 
+  int max_digits10 = std::numeric_limits<double>::max_digits10;
 #endif
+  cout << "Show all potentially significant decimal digits std::numeric_limits<double>::max_digits10 = "
+    << max_digits10 << endl; 
+  cout.precision(max_digits10); // 
+
     cout << cdf(g05, 0.0001) << endl; // returns 0.5000346561579232, not exact 0.5.
 /*`To get the R discrete behaviour, you simply need to round with,
 for example, the `floor` function.

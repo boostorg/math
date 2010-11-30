@@ -28,8 +28,16 @@ int main()
 {
   cout << "Example 1 using Inverse Gamma function. " << endl;
 
-  cout.precision(std::numeric_limits<double>::max_digits10);
-  
+  #ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
+  int max_digits10 = 2 + (boost::math::policies::digits<double, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
+  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined" << endl; 
+#else 
+  int max_digits10 = std::numeric_limits<double>::max_digits10;
+#endif
+  cout << "Show all potentially significant decimal digits std::numeric_limits<double>::max_digits10 = "
+    << max_digits10 << endl; 
+  cout.precision(max_digits10); // 
+
   double x = 1.;
   double a = 10;
 
