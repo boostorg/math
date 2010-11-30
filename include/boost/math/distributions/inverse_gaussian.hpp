@@ -237,7 +237,7 @@ struct inverse_gaussian_quantile_complement_functor
     RealType fx = c - prob;  // Difference cdf - value - to minimize.
     RealType dx = -pdf(distribution, x); // pdf is 1st derivative.
     // return both function evaluation difference f(x) and 1st derivative f'(x).
-    //return std::tr1::make_tuple(fx, dx);
+    //return std::tr1::make_tuple(fx, dx); if available.
     return boost::math::make_tuple(fx, dx);
   }
   private:
@@ -388,7 +388,7 @@ inline RealType cdf(const complemented2_type<inverse_gaussian_distribution<RealT
 
    //RealType n5 = +sqrt(scale/x) * ((x /mean) + 1); // note now positive sign.
    RealType n6 = cdf(complement(n01, +sqrt(scale/x) * ((x /mean) + 1)));
-   RealType n4 = cdf(n01, n3); // = 
+   // RealType n4 = cdf(n01, n3); // = 
    result = cdf_1 - expfactor * n6; 
    return result;
 } // cdf complement
