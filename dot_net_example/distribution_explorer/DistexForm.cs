@@ -573,8 +573,8 @@ namespace distribution_explorer
       "n" +
       "\nFor more information, including downloads see " +
       "\nhttp://boost-consulting.com/vault/index.php?action=downloadfile&filename=math_toolkit.html&directory=Math%20-%20Numerics&" +
-      "\n(Note that .NET framework 2.0 and VCredist are requirements for this program.)" +
-      "\n\nCopyright John Maddock & Paul A. Bristow 2007, 2009";
+      "\n(Note that .NET framework 4.0 and VCredist are requirements for this program.)" +
+      "\n\nCopyright John Maddock & Paul A. Bristow 2007, 2009, 2010";
 
       MessageBox.Show("Statistical Distribution Explorer\n" + helpText);
     }

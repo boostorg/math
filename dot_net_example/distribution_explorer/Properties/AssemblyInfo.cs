@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("hetp")]
 [assembly: AssemblyProduct("Distribution Explorer")]
-[assembly: AssemblyCopyright("Copyright © John Maddock 2007, Paul A. Bristow 2009")]
+[assembly: AssemblyCopyright("Copyright © John Maddock 2007, Paul A. Bristow 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.6")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.9")]
+[assembly: AssemblyFileVersion("1.0.0.1")]
