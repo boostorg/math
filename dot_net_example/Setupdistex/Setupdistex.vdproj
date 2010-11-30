@@ -1,4 +1,4 @@
-﻿"DeployProject"
+"DeployProject"
 {
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
@@ -21,18 +21,18 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CAB578E889B9DB0C72DF603D9321F8AC"
-        "OwnerKey" = "8:_E013438B00CC4DFFB5C0037F77E7EF5E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_E013438B00CC4DFFB5C0037F77E7EF5E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
+        "MsmKey" = "8:_FB62FDEC0F5B4CE14900FC0F977E3BEA"
+        "OwnerKey" = "8:_E013438B00CC4DFFB5C0037F77E7EF5E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_E013438B00CC4DFFB5C0037F77E7EF5E"
         "MsmSig" = "8:_UNDEFINED"
@@ -40,7 +40,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CAB578E889B9DB0C72DF603D9321F8AC"
+        "OwnerKey" = "8:_FB62FDEC0F5B4CE14900FC0F977E3BEA"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -102,6 +102,21 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.10.0.x86"
+                    {
+                    "Name" = "8:Visual C++ 2010 Runtime Libraries (x86)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.10.0.x86"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.4.5"
+                    {
+                    "Name" = "8:Windows Installer 4.5"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.4.5"
+                    }
                 }
             }
         }
@@ -121,13 +136,13 @@
         {
             "LaunchCondition"
             {
-                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_AEF480F71EBE4AFBBD48CB522592A6B7"
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_87D6521D9A764588ADCCF384CEE6300E"
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "Version" = "8:2.0.50727"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.0,Profile=Client"
                 "AllowLaterVersions" = "11:FALSE"
-                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=9832"
+                "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
             }
         }
@@ -153,14 +168,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CAB578E889B9DB0C72DF603D9321F8AC"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FB62FDEC0F5B4CE14900FC0F977E3BEA"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:boost_math, Version=1.1.3517.21485, Culture=neutral, processorArchitecture=x86"
+            "AssemblyAsmDisplayName" = "8:boost_math, Version=1.1.3986.26717, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_CAB578E889B9DB0C72DF603D9321F8AC"
+                    "_FB62FDEC0F5B4CE14900FC0F977E3BEA"
                     {
                     "Name" = "8:boost_math.dll"
                     "Attributes" = "3:512"
@@ -240,14 +255,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Distex"
-        "ProductCode" = "8:{552F94DB-DB2D-42FA-8D56-9BE2C1D92B8F}"
-        "PackageCode" = "8:{6AABF60D-ABA2-4DF9-81F7-AD8DE5A60E03}"
+        "ProductCode" = "8:{185E41A5-00EC-4487-BFB9-F3170DD17988}"
+        "PackageCode" = "8:{BC62A97F-3C54-431B-9178-38070981A05C}"
         "UpgradeCode" = "8:{DB0FCB69-2AFF-4EFE-B2F9-1ADA0638268C}"
+        "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.1"
+        "ProductVersion" = "8:1.0.9"
         "Manufacturer" = "8:hetp"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
