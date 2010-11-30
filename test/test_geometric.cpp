@@ -190,7 +190,7 @@ void test_spots(RealType)
   RealType tolerance = (std::max)
     (boost::math::tools::epsilon<RealType>(),
     static_cast<RealType>(std::numeric_limits<double>::epsilon()));
-  tolerance *= 10.f; // 10 eps
+  tolerance *= 10; // 10 eps
 
   cout << "Tolerance = " << tolerance << "." << endl;
 
