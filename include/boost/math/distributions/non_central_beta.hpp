@@ -693,7 +693,7 @@ namespace boost
             function);
       }
 
-#if 0
+#if 1 // re-enable for C# app
       //
       // We don't have the necessary information to implement
       // these at present.  These are just disabled for now,
@@ -701,16 +701,16 @@ namespace boost
       // later:
       //
       template <class RealType, class Policy>
-      inline RealType mean(const non_central_beta_distribution<RealType, Policy>& dist)
+      inline RealType mean(const non_central_beta_distribution<RealType, Policy>& /* dist */)
       {
          // TODO
-         return 0;
+         return 0; // NaN?
       } // mean
 
       template <class RealType, class Policy>
-      inline RealType variance(const non_central_beta_distribution<RealType, Policy>& dist)
+      inline RealType variance(const non_central_beta_distribution<RealType, Policy>& /* dist */)
       { // variance.
-         const char* function = "boost::math::non_central_beta_distribution<%1%>::variance()";
+         //const char* function = "boost::math::non_central_beta_distribution<%1%>::variance()";
          // TODO
          return 0;
       }
@@ -719,17 +719,17 @@ namespace boost
       // standard_deviation provided by derived accessors.
 
       template <class RealType, class Policy>
-      inline RealType skewness(const non_central_beta_distribution<RealType, Policy>& dist)
+      inline RealType skewness(const non_central_beta_distribution<RealType, Policy>& /* dist */)
       { // skewness = sqrt(l).
-         const char* function = "boost::math::non_central_beta_distribution<%1%>::skewness()";
+         //const char* function = "boost::math::non_central_beta_distribution<%1%>::skewness()";
          // TODO
          return 0;
       }
 
       template <class RealType, class Policy>
-      inline RealType kurtosis_excess(const non_central_beta_distribution<RealType, Policy>& dist)
+      inline RealType kurtosis_excess(const non_central_beta_distribution<RealType, Policy>& /* dist */)
       {
-         const char* function = "boost::math::non_central_beta_distribution<%1%>::kurtosis_excess()";
+         //const char* function = "boost::math::non_central_beta_distribution<%1%>::kurtosis_excess()";
          // TODO
          return 0;
       } // kurtosis_excess
