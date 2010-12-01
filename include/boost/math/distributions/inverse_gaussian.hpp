@@ -8,6 +8,10 @@
 #ifndef BOOST_STATS_INVERSE_GAUSSIAN_HPP
 #define BOOST_STATS_INVERSE_GAUSSIAN_HPP
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4512) // assignment operator could not be generated
+#endif
+
 // http://en.wikipedia.org/wiki/Normal-inverse_Gaussian_distribution
 // http://mathworld.wolfram.com/InverseGaussianDistribution.html
 
