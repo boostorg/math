@@ -13,7 +13,7 @@
 using boost::math::inverse_gamma_distribution;  //  inverse_gamma_distribution.
 using boost::math::inverse_gamma;
 
-#include <boost\math\special_functions\gamma.hpp>
+#include <boost/math/special_functions/gamma.hpp>
 using boost::math::tgamma; // Used for naive pdf as a comparison.
 
 #include <boost/math/distributions/gamma.hpp>
@@ -21,7 +21,7 @@ using boost::math::inverse_gamma_distribution;
 
 #include <iostream>
 using std::cout;    using std::endl;
-#include <iomanip> 
+#include <iomanip>
 using std::setprecision;
 #include <cmath>
 using std::sqrt;
@@ -34,13 +34,13 @@ int main()
 
 #ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
   int max_digits10 = 2 + (boost::math::policies::digits<double, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
-  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined" << endl; 
-#else 
+  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined" << endl;
+#else
   int max_digits10 = std::numeric_limits<double>::max_digits10;
 #endif
   cout << "Show all potentially significant decimal digits std::numeric_limits<double>::max_digits10 = "
-    << max_digits10 << endl; 
-  cout.precision(max_digits10); // 
+    << max_digits10 << endl;
+  cout.precision(max_digits10); //
 
   double shape = 1.;
   double scale = 1.;
@@ -73,8 +73,8 @@ int main()
     cout << "mean(if051) = " << mean(if051) << endl;
   }
   catch(const std::exception& e)
-  { // Always useful to include try & catch blocks because default policies 
-    // are to throw exceptions on arguments that cause errors like underflow, overflow. 
+  { // Always useful to include try & catch blocks because default policies
+    // are to throw exceptions on arguments that cause errors like underflow, overflow.
     // Lacking try & catch blocks, the program will abort without a message below,
     // which may give some helpful clues as to the cause of the exception.
     std::cout <<
@@ -87,13 +87,13 @@ int main()
 /*
 
 Output is:
-  Example using Inverse Gamma distribution. 
+  Example using Inverse Gamma distribution.
   std::numeric_limits<double>::max_digits10 = 17
   my_inverse_gamma.shape() = 1, scale = 1
   x = 0.5, pdf = 0.54134113294645081, cdf = 0.1353352832366127
   my_inverse_gamma.shape() = 2, scale = 3
   x = 0.5, pdf = 0.17847015671997774, cdf = 0.017351265236664509
-  
+
   Message from thrown exception was:
      Error in function boost::math::mean(const inverse_gamma_distribution<double>&): Shape parameter is 0.5, but for a defined mean it must be > 1
 
