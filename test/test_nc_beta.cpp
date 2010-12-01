@@ -22,7 +22,7 @@
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/non_central_beta.hpp> // for chi_squared_distribution
-#include <boost/math/distributions/poisson.hpp> // for chi_squared_distribution
+#include <boost/math/distributions/poisson.hpp> // for poisson_distribution
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
@@ -414,7 +414,21 @@ int test_main(int, char* [])
 {
    BOOST_MATH_CONTROL_FP;
    // Basic sanity-check spot values.
-   expected_results();
+
+   using namespace boost::math;
+   boost::math::non_central_beta_distribution<double> ncb(1, 2, 3);
+
+   double a = ncb.alpha();
+   double b = ncb.beta();
+   double l = ncb.non_centrality();
+   BOOST_CHECK_EQUAL(ncb.alpha(), 1);
+   BOOST_CHECK_EQUAL(ncb.beta(), 2);
+   BOOST_CHECK_EQUAL(ncb.non_centrality(), 3);
+
+   BOOST_CHECK_EQUAL(mean(ncb), 0); // NaN?
+   BOOST_CHECK_EQUAL(skewness(ncb), 0);
+   
+    expected_results();
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
 #ifdef TEST_FLOAT
    test_spots(0.0F); // Test float.
