@@ -191,7 +191,7 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(variance(dist10), static_cast<RealType>(0.0052083333333333333333333333333333333333333333333333L), tol_2eps);
   BOOST_CHECK_CLOSE_FRACTION(mode(dist10), static_cast<RealType>(0.08333333333333333333333333333333333333333333333L), tol_2eps);
   BOOST_CHECK_CLOSE_FRACTION(median(dist10), static_cast<RealType>(0.10704554778227709530244586234274024205738435512468L), tol_2eps);
-  BOOST_CHECK_CLOSE_FRACTION(cdf(dist10, median(dist10)), 0.5L, tol_2eps);
+  BOOST_CHECK_CLOSE_FRACTION(cdf(dist10, median(dist10)), static_cast<RealType>(0.5L), tol_2eps);
   BOOST_CHECK_CLOSE_FRACTION(skewness(dist10), static_cast<RealType>(3.4641016151377545870548926830117447338856105076208L), tol_2eps);
   BOOST_CHECK_CLOSE_FRACTION(kurtosis(dist10), static_cast<RealType>(45), tol_2eps);
   BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(dist10), static_cast<RealType>(45-3), tol_2eps);
