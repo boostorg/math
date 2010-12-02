@@ -149,7 +149,7 @@ void test_spots(RealType)
 
   // variance:
   BOOST_CHECK_CLOSE_FRACTION(variance(dist),
-    static_cast<RealType>(2.6666666666666666666666666666666666666666666666666666666667L), tolfeweps);
+    static_cast<RealType>(2.6666666666666666666666666666666666666666666666666666666667L), 1000*tolfeweps);
   // std deviation:
   BOOST_CHECK_CLOSE_FRACTION(standard_deviation(dist), 
     static_cast<RealType>(1.632993L), 1000 * tolerance);
@@ -330,8 +330,8 @@ int test_main(int, char* [])
   BOOST_CHECK_CLOSE_FRACTION(
     cdf(w0110, 1.), static_cast<double>(1), tolfeweps ); // cdf
   BOOST_CHECK_CLOSE_FRACTION(
-     cdf(complement(w0110, 1.)), static_cast<double>(3.2787685715328683e-179), 100* tolfeweps ); // cdf complement
-  // Differs because of loss of accuracy
+     cdf(complement(w0110, 1.)), static_cast<double>(3.2787685715328683e-179), 1e6 * tolfeweps ); // cdf complement
+  // Differs because of loss of accuracy.
 
   BOOST_CHECK_CLOSE_FRACTION(
     pdf(w0110, 0.1), static_cast<double>(39.894228040143268), tolfeweps ); // pdf
