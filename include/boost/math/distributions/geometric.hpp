@@ -372,8 +372,8 @@ namespace boost
       //RealType q = 1 - p;  // Bad for small p
       //RealType probability = 1 - std::pow(q, k+1);
 
-      RealType z = log1p(-p) * (k+1);
-      RealType probability = -expm1(z);
+      RealType z = boost::math::log1p(-p) * (k+1);
+      RealType probability = -boost::math::expm1(z);
 
       return probability;
     } // cdf Cumulative Distribution Function geometric.
@@ -381,7 +381,7 @@ namespace boost
       template <class RealType, class Policy>
       inline RealType cdf(const complemented2_type<geometric_distribution<RealType, Policy>, RealType>& c)
       { // Complemented Cumulative Distribution Function geometric.
-
+      BOOST_MATH_STD_USING
       static const char* function = "boost::math::cdf(const geometric_distribution<%1%>&, %1%)";
       // k argument may be integral, signed, or unsigned, or floating point.
       // If necessary, it has already been promoted from an integral type.
@@ -398,7 +398,7 @@ namespace boost
       {
         return result;
       }
-      RealType z = log1p(-p) * (k+1);
+      RealType z = boost::math::log1p(-p) * (k+1);
       RealType probability = exp(z);
       return probability;
     } // cdf Complemented Cumulative Distribution Function geometric.
@@ -448,7 +448,7 @@ namespace boost
       }
    
       // log(1-x) /log(1-success_fraction) -1; but use log1p in case success_fraction is small
-      result = log1p(-x) / log1p(-success_fraction) -1;
+      result = boost::math::log1p(-x) / boost::math::log1p(-success_fraction) -1;
       // Subtract a few epsilons here too?
       // to make sure it doesn't slip over, so ceil would be one too many.
       return result;
@@ -460,7 +460,7 @@ namespace boost
        // Return the number of expected failures k for a given
        // complement of the probability Q = 1 - P.
        static const char* function = "boost::math::quantile(const geometric_distribution<%1%>&, %1%)";
-
+       BOOST_MATH_STD_USING
        // Error checks:
        RealType x = c.param;
        const geometric_distribution<RealType, Policy>& dist = c.dist;
@@ -496,7 +496,7 @@ namespace boost
           // unless #define BOOST_MATH_THROW_ON_OVERFLOW_ERROR
        }
        // log(x) /log(1-success_fraction) -1; but use log1p in case success_fraction is small
-       result = log(x) / log1p(-success_fraction) -1;
+       result = log(x) / boost::math::log1p(-success_fraction) -1;
       return result;
 
     } // quantile complement

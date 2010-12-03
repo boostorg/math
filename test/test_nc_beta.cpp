@@ -216,6 +216,7 @@ void test_spots(RealType)
    RealType tolerance = (std::max)(
       boost::math::tools::epsilon<RealType>() * 100,
       (RealType)1e-6) * 100;
+   RealType abs_tolerance = boost::math::tools::epsilon<RealType>() * 100;
 
    cout << "Tolerance = " << tolerance << "%." << endl;
 
@@ -260,6 +261,11 @@ void test_spots(RealType)
      RealType(8.020935),            // PDF
      RealType(tolerance));
 
+   BOOST_MATH_STD_USING
+   boost::math::non_central_beta_distribution<RealType> dist(100, 3, 63);
+   BOOST_CHECK_CLOSE(mean(dist), 4.82280451915522329944315287538684030781836554279474240490936e13 * exp(-RealType(31.5)) * 100 / 103, tolerance);
+   // Variance only guarentees small absolute error:
+   BOOST_CHECK_SMALL(variance(dist) - static_cast<RealType>(4.85592267707818899235900237275021938334418424134218087127572e13 * exp(RealType(-31.5)) * 100 * 101 / (103 * 104) - 4.82280451915522329944315287538684030781836554279474240490936e13 * 4.82280451915522329944315287538684030781836554279474240490936e13 * exp(RealType(-63)) * 10000 / (103 * 103)), abs_tolerance);
 } // template <class RealType>void test_spots(RealType)
 
 template <class T>
@@ -414,20 +420,6 @@ int test_main(int, char* [])
 {
    BOOST_MATH_CONTROL_FP;
    // Basic sanity-check spot values.
-
-   using namespace boost::math;
-   boost::math::non_central_beta_distribution<double> ncb(1, 2, 3);
-
-   double a = ncb.alpha();
-   double b = ncb.beta();
-   double l = ncb.non_centrality();
-   BOOST_CHECK_EQUAL(ncb.alpha(), 1);
-   BOOST_CHECK_EQUAL(ncb.beta(), 2);
-   BOOST_CHECK_EQUAL(ncb.non_centrality(), 3);
-
-   BOOST_CHECK_EQUAL(mean(ncb), 0); // NaN?
-   BOOST_CHECK_EQUAL(skewness(ncb), 0);
-   
     expected_results();
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
 #ifdef TEST_FLOAT

@@ -140,7 +140,7 @@ namespace boost{ namespace math
   typedef inverse_uniform_distribution<double> inverse_uniform;
 
   template <class RealType, class Policy>
-  inline const std::pair<RealType, RealType> range(const inverse_uniform_distribution<RealType, Policy>& /* dist */)
+  inline const std::pair<RealType, RealType> range(const inverse_uniform_distribution<RealType, Policy>& dist)
   { // Range of permissible values for random variable x.
      using boost::math::tools::max_value;
      return std::pair<RealType, RealType>(dist.lower(), dist.upper()); // 0 to 1.
