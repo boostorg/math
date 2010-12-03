@@ -7,7 +7,10 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <pch.hpp>
+//
+// This must appear *before* any #includes, and precludes pch usage:
+//
+#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 
 #ifdef _MSC_VER
 #pragma warning (disable:4127 4512)
@@ -263,9 +266,16 @@ void test_spots(RealType)
 
    BOOST_MATH_STD_USING
    boost::math::non_central_beta_distribution<RealType> dist(100, 3, 63);
-   BOOST_CHECK_CLOSE(mean(dist), 4.82280451915522329944315287538684030781836554279474240490936e13 * exp(-RealType(31.5)) * 100 / 103, tolerance);
+   BOOST_CHECK_CLOSE(mean(dist), RealType(4.82280451915522329944315287538684030781836554279474240490936e13L) * exp(-RealType(31.5)) * 100 / 103, tolerance);
    // Variance only guarentees small absolute error:
-   BOOST_CHECK_SMALL(variance(dist) - static_cast<RealType>(4.85592267707818899235900237275021938334418424134218087127572e13 * exp(RealType(-31.5)) * 100 * 101 / (103 * 104) - 4.82280451915522329944315287538684030781836554279474240490936e13 * 4.82280451915522329944315287538684030781836554279474240490936e13 * exp(RealType(-63)) * 10000 / (103 * 103)), abs_tolerance);
+   BOOST_CHECK_SMALL(variance(dist) 
+      - static_cast<RealType>(RealType(4.85592267707818899235900237275021938334418424134218087127572e13L)
+      * exp(RealType(-31.5)) * 100 * 101 / (103 * 104) - 
+      RealType(4.82280451915522329944315287538684030781836554279474240490936e13L) * RealType(4.82280451915522329944315287538684030781836554279474240490936e13L) 
+      * exp(RealType(-63)) * 10000 / (103 * 103)), abs_tolerance);
+   BOOST_CHECK_THROW(skewness(dist), boost::math::evaluation_error);
+   BOOST_CHECK_THROW(kurtosis(dist), boost::math::evaluation_error);
+   BOOST_CHECK_THROW(kurtosis_excess(dist), boost::math::evaluation_error);
 } // template <class RealType>void test_spots(RealType)
 
 template <class T>

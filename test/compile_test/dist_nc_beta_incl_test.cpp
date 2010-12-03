@@ -6,36 +6,10 @@
 // Basic sanity check that header <boost/math/distributions/non_central_beta.hpp>
 // #includes all the files that it needs to.
 //
-// In order to pass our conceptual tests, we need to forward declare
-// those functoins that the non-central beta (deliberately) doesn't 
-// implement.  These declarations have to appear *before* the
-// non central beta is defined, otherwise two-phase lookup
-// won't find them :-(
-// 
-#include <boost/math/distributions/fwd.hpp>
-
-namespace boost{ namespace math{
-
-template <class T, class Policy>
-T skewness(const non_central_beta_distribution<T, Policy>&)
-{
-   return 0;
-}
-
-template <class T, class Policy>
-T kurtosis(const non_central_beta_distribution<T, Policy>&)
-{
-   return 0;
-}
-
-template <class T, class Policy>
-T kurtosis_excess(const non_central_beta_distribution<T, Policy>&)
-{
-   return 0;
-}
-
-}}
-
+// This must appear *before* any #includes, and precludes pch usage:
+//
+#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+//
 #include <boost/math/distributions/non_central_beta.hpp>
 //
 // Note this header includes no other headers, this is

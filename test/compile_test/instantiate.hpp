@@ -33,21 +33,6 @@ BOOST_MATH_DECLARE_DISTRIBUTIONS(double, test_policy)
 }
 #endif
 
-namespace boost{ namespace math{
-//
-// The non central beta doesn't define some properties,
-// define some stub methods here so that we can concept
-// check everything else:
-//
-template <class T, class Policy>
-inline T skewness(const non_central_beta_distribution<T, Policy>&){ return 0; }
-template <class T, class Policy>
-inline T kurtosis_excess(const non_central_beta_distribution<T, Policy>&){ return 0; }
-template <class T, class Policy>
-inline T kurtosis(const non_central_beta_distribution<T, Policy>&){ return 0; }
-
-}} // namespaces
-
 template <class RealType>
 void instantiate(RealType)
 {

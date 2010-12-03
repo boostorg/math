@@ -9,7 +9,7 @@
 #  pragma warning (disable : 4224)
 #endif
 
-#include <pch.hpp> // include \libs\math\src\
+#include <pch.hpp> // include /libs/math/src/
 
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/test_exec_monitor.hpp>

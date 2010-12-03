@@ -199,6 +199,7 @@ struct DistributionConcept
    static void test_extra_members(const boost::math::bernoulli_distribution<R, P>& d)
    {
       value_type r = d.success_fraction();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::beta_distribution<R, P>& d)
@@ -209,6 +210,8 @@ struct DistributionConcept
       r1 = boost::math::beta_distribution<R, P>::find_beta(r1, r2);
       r1 = boost::math::beta_distribution<R, P>::find_alpha(r1, r2, r1);
       r1 = boost::math::beta_distribution<R, P>::find_beta(r1, r2, r1);
+      (void)r1; // warning suppression
+      (void)r2; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::binomial_distribution<R, P>& d)
@@ -223,12 +226,14 @@ struct DistributionConcept
       r = Distribution::find_upper_bound_on_p(r, r, r, Distribution::jeffreys_prior_interval);
       r = Distribution::find_minimum_number_of_trials(r, r, r);
       r = Distribution::find_maximum_number_of_trials(r, r, r);
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::cauchy_distribution<R, P>& d)
    {
       value_type r = d.location();
       r = d.scale();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::chi_squared_distribution<R, P>& d)
@@ -236,41 +241,48 @@ struct DistributionConcept
       value_type r = d.degrees_of_freedom();
       r = Distribution::find_degrees_of_freedom(r, r, r, r);
       r = Distribution::find_degrees_of_freedom(r, r, r, r, r);
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::exponential_distribution<R, P>& d)
    {
       value_type r = d.lambda();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::extreme_value_distribution<R, P>& d)
    {
       value_type r = d.scale();
       r = d.location();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::fisher_f_distribution<R, P>& d)
    {
       value_type r = d.degrees_of_freedom1();
       r = d.degrees_of_freedom2();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::gamma_distribution<R, P>& d)
    {
       value_type r = d.scale();
       r = d.shape();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::inverse_chi_squared_distribution<R, P>& d)
    {
       value_type r = d.scale();
       r = d.degrees_of_freedom();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::inverse_gamma_distribution<R, P>& d)
    {
       value_type r = d.scale();
       r = d.shape();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::hypergeometric_distribution<R, P>& d)
@@ -278,24 +290,28 @@ struct DistributionConcept
       unsigned u = d.defective();
       u = d.sample_count();
       u = d.total();
+      (void)u; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::laplace_distribution<R, P>& d)
    {
       value_type r = d.scale();
       r = d.location();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::logistic_distribution<R, P>& d)
    {
       value_type r = d.scale();
       r = d.location();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::lognormal_distribution<R, P>& d)
    {
       value_type r = d.scale();
       r = d.location();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::negative_binomial_distribution<R, P>& d)
@@ -306,6 +322,7 @@ struct DistributionConcept
       r = Distribution::find_upper_bound_on_p(r, r, r);
       r = Distribution::find_minimum_number_of_trials(r, r, r);
       r = Distribution::find_maximum_number_of_trials(r, r, r);
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::non_central_beta_distribution<R, P>& d)
@@ -313,6 +330,8 @@ struct DistributionConcept
       value_type r1 = d.alpha();
       value_type r2 = d.beta();
       r1 = d.non_centrality();
+      (void)r1; // warning suppression
+      (void)r2; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::non_central_chi_squared_distribution<R, P>& d)
@@ -323,6 +342,7 @@ struct DistributionConcept
       r = Distribution::find_degrees_of_freedom(boost::math::complement(r, r, r));
       r = Distribution::find_non_centrality(r, r, r);
       r = Distribution::find_non_centrality(boost::math::complement(r, r, r));
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::non_central_f_distribution<R, P>& d)
@@ -330,12 +350,14 @@ struct DistributionConcept
       value_type r = d.degrees_of_freedom1();
       r = d.degrees_of_freedom2();
       r = d.non_centrality();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::non_central_t_distribution<R, P>& d)
    {
       value_type r = d.degrees_of_freedom();
       r = d.non_centrality();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::normal_distribution<R, P>& d)
@@ -344,22 +366,26 @@ struct DistributionConcept
       r = d.location();
       r = d.mean();
       r = d.standard_deviation();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::pareto_distribution<R, P>& d)
    {
       value_type r = d.scale();
       r = d.shape();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::poisson_distribution<R, P>& d)
    {
       value_type r = d.mean();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::rayleigh_distribution<R, P>& d)
    {
       value_type r = d.sigma();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::students_t_distribution<R, P>& d)
@@ -367,6 +393,7 @@ struct DistributionConcept
       value_type r = d.degrees_of_freedom();
       r = d.find_degrees_of_freedom(r, r, r, r);
       r = d.find_degrees_of_freedom(r, r, r, r, r);
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::triangular_distribution<R, P>& d)
@@ -374,18 +401,21 @@ struct DistributionConcept
       value_type r = d.lower();
       r = d.mode();
       r = d.upper();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::weibull_distribution<R, P>& d)
    {
       value_type r = d.scale();
       r = d.shape();
+      (void)r; // warning suppression
    }
    template <class R, class P>
    static void test_extra_members(const boost::math::uniform_distribution<R, P>& d)
    {
       value_type r = d.lower();
       r = d.upper();
+      (void)r; // warning suppression
    }
 private:
    static Distribution& get_object()

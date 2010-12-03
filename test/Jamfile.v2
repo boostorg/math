@@ -491,28 +491,28 @@ run test_nc_chi_squared.cpp  pch ../../test/build//boost_test_exec_monitor
 	      <define>TEST_REAL_CONCEPT
 	      <toolset>intel:<pch>off
         : test_nc_chi_squared_real_concept ;
-run test_nc_beta.cpp  pch ../../test/build//boost_test_exec_monitor
+run test_nc_beta.cpp  ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_FLOAT
 	      <toolset>intel:<pch>off
         : test_nc_beta_float ;
-run test_nc_beta.cpp  pch ../../test/build//boost_test_exec_monitor
+run test_nc_beta.cpp  ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_DOUBLE
 	      <toolset>intel:<pch>off
         : test_nc_beta_double ;
-run test_nc_beta.cpp  pch ../../test/build//boost_test_exec_monitor
+run test_nc_beta.cpp  ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_LDOUBLE
 	      <toolset>intel:<pch>off
         : test_nc_beta_long_double ;
-run test_nc_beta.cpp  pch ../../test/build//boost_test_exec_monitor
+run test_nc_beta.cpp  ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements

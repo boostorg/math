@@ -769,24 +769,32 @@ namespace boost
          return result;
       }
 
-#if 0
       // RealType standard_deviation(const non_central_beta_distribution<RealType, Policy>& dist)
       // standard_deviation provided by derived accessors.
-
       template <class RealType, class Policy>
-      inline RealType skewness(const non_central_beta_distribution<RealType, Policy>& dist)
+      inline RealType skewness(const non_central_beta_distribution<RealType, Policy>& /*dist*/)
       { // skewness = sqrt(l).
          const char* function = "boost::math::non_central_beta_distribution<%1%>::skewness()";
-         // TODO
-         return 0;
+         typedef typename Policy::assert_undefined_type assert_type;
+         BOOST_STATIC_ASSERT(assert_type::value == 0);
+
+         return policies::raise_evaluation_error<RealType>(
+            function,
+            "This function is not yet implemented, the only sensible result is %1%.",
+            std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
       }
 
       template <class RealType, class Policy>
-      inline RealType kurtosis_excess(const non_central_beta_distribution<RealType, Policy>& dist)
+      inline RealType kurtosis_excess(const non_central_beta_distribution<RealType, Policy>& /*dist*/)
       {
          const char* function = "boost::math::non_central_beta_distribution<%1%>::kurtosis_excess()";
-         // TODO
-         return 0;
+         typedef typename Policy::assert_undefined_type assert_type;
+         BOOST_STATIC_ASSERT(assert_type::value == 0);
+
+         return policies::raise_evaluation_error<RealType>(
+            function,
+            "This function is not yet implemented, the only sensible result is %1%.",
+            std::numeric_limits<RealType>::quiet_NaN(), Policy()); // infinity?
       } // kurtosis_excess
 
       template <class RealType, class Policy>
@@ -794,7 +802,7 @@ namespace boost
       {
          return kurtosis_excess(dist) + 3;
       }
-#endif
+
       template <class RealType, class Policy>
       inline RealType pdf(const non_central_beta_distribution<RealType, Policy>& dist, const RealType& x)
       { // Probability Density/Mass Function.
