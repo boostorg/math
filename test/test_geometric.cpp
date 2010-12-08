@@ -209,6 +209,8 @@ void test_spots(RealType)
   using boost::math::quantile;
   using boost::math::complement;
 
+  BOOST_MATH_STD_USING // for std math functions
+
   // Test geometric using cdf spot values R
   // These test quantiles and complements as well.
 
@@ -493,7 +495,6 @@ if(std::numeric_limits<RealType>::is_specialized)
   // Tests of other functions, mean and other moments ...
 
   geometric_distribution<RealType> dist(static_cast<RealType>(0.25));
-  using namespace std; // ADL of std names.
   // mean:
   BOOST_CHECK_CLOSE_FRACTION(
     mean(dist), static_cast<RealType>((1 - 0.25) /0.25), tol5eps);
@@ -508,23 +509,23 @@ if(std::numeric_limits<RealType>::is_specialized)
 
   BOOST_CHECK_CLOSE_FRACTION(
     standard_deviation(dist), //
-    static_cast<RealType>(sqrt((1 - 0.25) / (0.25 * 0.25))), // using 100 digit calc
-    tol5eps * 10000);
+    static_cast<RealType>(sqrt((1.0L - 0.25L) / (0.25L * 0.25L))), // using 100 digit calc
+    tol5eps);
 
   BOOST_CHECK_CLOSE_FRACTION(
     skewness(dist), //
-    static_cast<RealType>((2-0.25) /sqrt(0.75)),
+    static_cast<RealType>((2-0.25L) /sqrt(0.75L)),
     // using calculator
-    tolerance);
+    tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(
     kurtosis_excess(dist), //
-    static_cast<RealType>(6 + 0.0625/0.75), //
-    tol5eps * 1e6);
+    static_cast<RealType>(6 + 0.0625L/0.75L), //
+    tol5eps);
   // 6.083333333333333  6.166666666666667
   BOOST_CHECK_CLOSE_FRACTION(
     kurtosis(dist), // true
-    static_cast<RealType>(9 + 0.0625/0.75), //
-    tol5eps * 1e6);
+    static_cast<RealType>(9 + 0.0625L/0.75L), //
+    tol5eps);
   // hazard:
   RealType x = static_cast<RealType>(0.125);
   BOOST_CHECK_CLOSE_FRACTION(
