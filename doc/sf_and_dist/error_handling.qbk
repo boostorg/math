@@ -1,4 +1,3 @@
-
 [section:error_handling Error Handling]
 
 [def __format [@../../../../format/index.html Boost.Format]]
@@ -30,7 +29,8 @@ The kinds of errors that can be raised are:
 [[Rounding Error][Occurs when the argument to one of the rounding functions __trunc, 
    __round and __modf can not be represented as an integer type, is
    outside the range of the result type.]]
-[[Evaluation Error][Occurs when an internal error occured that prevented the
+[[Evaluation Error][Occurs if no method of evaluation is known,
+   or when an internal error occurred that prevented the
    result from being evaluated: this should never occur, but if it does, then
    it's likely to be due to an iterative method not converging fast enough.]]
 [[Indeterminate Result Error][Occurs when the result of a function is not
