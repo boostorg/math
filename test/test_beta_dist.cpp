@@ -1,7 +1,7 @@
 // test_beta_dist.cpp
 
 // Copyright John Maddock 2006.
-// Copyright  Paul A. Bristow 2007, 2009.
+// Copyright  Paul A. Bristow 2007, 2009, 2010.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -522,7 +522,7 @@ int test_main(int, char* [])
    BOOST_CHECK_CLOSE_FRACTION(variance(mybeta22), 0.05, tol);
    BOOST_CHECK_CLOSE_FRACTION(mean(mybeta22), 0.5, tol);
    BOOST_CHECK_CLOSE_FRACTION(mode(mybeta22), 0.5, tol);
-   BOOST_CHECK_CLOSE_FRACTION(median(mybeta22), 0.5, tol * 1e6); // theoretical maximum accuracy using Brent is sqrt(epsilon).
+   BOOST_CHECK_CLOSE_FRACTION(median(mybeta22), 0.5, sqrt(epsilon)); // tol * 1e6theoretical maximum accuracy using Brent is sqrt(epsilon).
 
    BOOST_CHECK_CLOSE_FRACTION(skewness(mybeta22), 0.0, tol);
    BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(mybeta22), -144.0 / 168, tol);
