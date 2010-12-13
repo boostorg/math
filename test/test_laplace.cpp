@@ -454,9 +454,16 @@ void test_bad_dist_parameters()
 template <class RealType>
 void test_extreme_function_arguments()
 {
-   boost::math::laplace_distribution<RealType> L1(0, 1);
-   boost::math::laplace_distribution<RealType> L2(1, 2);
+   using boost::math::policies::policy;
+   using boost::math::policies::overflow_error; 
+   using boost::math::policies::ignore_error;
 
+   typedef policy<
+      overflow_error<ignore_error> // if argument value causes overflow.
+      > ignore_overflow_policy;
+
+   boost::math::laplace_distribution<RealType, ignore_overflow_policy> L1(0, 1);
+   boost::math::laplace_distribution<RealType, ignore_overflow_policy> L2(1, 2);
    // check pdf at x = +/- infinity
    BOOST_CHECK_THROW(pdf(L1, +std::numeric_limits<RealType>::infinity()), std::domain_error);
    BOOST_CHECK_THROW(pdf(L1, -std::numeric_limits<RealType>::infinity()), std::domain_error);
@@ -469,11 +476,12 @@ void test_extreme_function_arguments()
    BOOST_CHECK_THROW(cdf(L2, +std::numeric_limits<RealType>::infinity()), std::domain_error);
    BOOST_CHECK_THROW(cdf(L2, -std::numeric_limits<RealType>::infinity()), std::domain_error);
 
-   // check quantile at p = 0,1
-   BOOST_CHECK_EQUAL( quantile(L1, 0), -std::numeric_limits<RealType>::infinity() );
-   BOOST_CHECK_EQUAL( quantile(L1, 1), +std::numeric_limits<RealType>::infinity() );
-   BOOST_CHECK_EQUAL( quantile(L2, 0), -std::numeric_limits<RealType>::infinity() );
-   BOOST_CHECK_EQUAL( quantile(L2, 1), +std::numeric_limits<RealType>::infinity() );
+
+   // check quantile at p = 0, 1 which return infinity.
+   BOOST_CHECK_EQUAL(quantile(L1, 0), -std::numeric_limits<RealType>::infinity() );
+   BOOST_CHECK_EQUAL(quantile(L1, 1), +std::numeric_limits<RealType>::infinity() );
+   BOOST_CHECK_EQUAL(quantile(L2, 0), -std::numeric_limits<RealType>::infinity() );
+   BOOST_CHECK_EQUAL(quantile(L2, 1), +std::numeric_limits<RealType>::infinity() );
 }
 
 BOOST_AUTO_TEST_CASE( vs_GNU_Octave )
