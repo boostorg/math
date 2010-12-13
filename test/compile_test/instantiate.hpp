@@ -1,5 +1,5 @@
 //  Copyright John Maddock 2006.
-//  Copyright Paul A. Bristow 2007.
+//  Copyright Paul A. Bristow 2007, 2010.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -54,7 +54,6 @@ void instantiate(RealType)
    function_requires<DistributionConcept<inverse_chi_squared_distribution<RealType> > >();
    function_requires<DistributionConcept<inverse_gamma_distribution<RealType> > >();
    function_requires<DistributionConcept<inverse_gaussian_distribution<RealType> > >();
-   function_requires<DistributionConcept<inverse_uniform_distribution<RealType> > >();
    function_requires<DistributionConcept<laplace_distribution<RealType> > >();
    function_requires<DistributionConcept<logistic_distribution<RealType> > >();
    function_requires<DistributionConcept<lognormal_distribution<RealType> > >();
@@ -86,7 +85,6 @@ void instantiate(RealType)
    function_requires<DistributionConcept<inverse_chi_squared_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<inverse_gamma_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<inverse_gaussian_distribution<RealType, test_policy> > >();
-   function_requires<DistributionConcept<inverse_uniform_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<laplace_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<logistic_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<lognormal_distribution<RealType, test_policy> > >();
@@ -118,7 +116,6 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::inverse_chi_squared > >();
    function_requires<DistributionConcept<dist_test::inverse_gamma > >();
    function_requires<DistributionConcept<dist_test::inverse_gaussian > >();
-   function_requires<DistributionConcept<dist_test::inverse_uniform > >();
    function_requires<DistributionConcept<dist_test::laplace > >();
    function_requires<DistributionConcept<dist_test::logistic > >();
    function_requires<DistributionConcept<dist_test::lognormal > >();
