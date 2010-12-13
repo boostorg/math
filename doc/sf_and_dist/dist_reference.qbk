@@ -14,10 +14,10 @@
 [include distributions/fisher.qbk]
 [include distributions/gamma.qbk]
 [include distributions/geometric.qbk]
+[include distributions/hypergeometric.qbk]
 [include distributions/inverse_chi_squared.qbk]
 [include distributions/inverse_gamma.qbk]
 [include distributions/inverse_gaussian.qbk]
-[include distributions/hypergeometric.qbk]
 [include distributions/laplace.qbk]
 [include distributions/logistic.qbk]
 [include distributions/lognormal.qbk]
@@ -32,8 +32,8 @@
 [include distributions/rayleigh.qbk]
 [include distributions/students_t.qbk]
 [include distributions/triangular.qbk]
-[include distributions/weibull.qbk]
 [include distributions/uniform.qbk]
+[include distributions/weibull.qbk]
 
 [endsect][/section:dists Distributions]
 
