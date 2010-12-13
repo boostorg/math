@@ -33,7 +33,7 @@ distribution: it is also known as the Gaussian Distribution.
 A normal distribution with mean zero and standard deviation one
 is known as the ['Standard Normal Distribution].
 
-Given mean [mu][space] and standard deviation [sigma][space] it has the PDF:
+Given mean [mu][space]and standard deviation [sigma][space]it has the PDF:
 
 [equation normal_ref1]
 
