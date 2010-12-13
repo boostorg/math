@@ -148,13 +148,13 @@ inline RealType pdf(const inverse_gaussian_distribution<RealType, Policy>& dist,
    }
    if(false == detail::check_positive_x(function, x, &result, Policy()))
    {
-      return std::numeric_limits<RealType>::quiet_NaN();
+      return result;
    }
 
-    if (x == 0)
-    {
-      return 0; // Convenient, even if not defined mathematically.
-    }
+   if (x == 0)
+   {
+     return 0; // Convenient, even if not defined mathematically.
+   }
 
    result =
      sqrt(scale / (constants::two_pi<RealType>() * x * x * x))
@@ -165,7 +165,7 @@ inline RealType pdf(const inverse_gaussian_distribution<RealType, Policy>& dist,
 template <class RealType, class Policy>
 inline RealType cdf(const inverse_gaussian_distribution<RealType, Policy>& dist, const RealType& x)
 { // Cumulative Density Function.
-   BOOST_MATH_STD_USING  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions.
 
    RealType scale = dist.scale();
    RealType mean = dist.mean();
@@ -329,10 +329,11 @@ inline RealType quantile(const inverse_gaussian_distribution<RealType, Policy>& 
      return 0; // Convenient, even if not defined mathematically?
    }
    if (p == 1)
-   { // Might not return infinity?
-     return std::numeric_limits<RealType>::infinity();
+   { // overflow 
+      result = policies::raise_overflow_error<RealType>(function,
+        "probability parameter is 1, but must be < 1!", Policy());
+      return result; // std::numeric_limits<RealType>::infinity();
    }
-  //RealType guess_ig(RealType p, RealType mu = 1, RealType lambda = 1);
 
   RealType guess = detail::guess_ig(p, dist.mean(), dist.scale());
   using boost::math::tools::max_value;
@@ -353,7 +354,7 @@ inline RealType quantile(const inverse_gaussian_distribution<RealType, Policy>& 
 template <class RealType, class Policy>
 inline RealType cdf(const complemented2_type<inverse_gaussian_distribution<RealType, Policy>, RealType>& c)
 {
-   BOOST_MATH_STD_USING  // for ADL of std functions
+   BOOST_MATH_STD_USING  // for ADL of std functions.
 
    RealType scale = c.dist.scale();
    RealType mean = c.dist.mean();
