@@ -6,17 +6,17 @@
       
    template <class RealType = double, 
              class ``__Policy``   = ``__policy_class`` >
-   class wald_distribution
+   class inverse_gaussian_distribution
    {
    public:
       typedef RealType value_type;
       typedef Policy   policy_type;
 
-      wald_distribution(RealType mean = 1, RealType scale = 1);
+      inverse_gaussian_distribution(RealType mean = 1, RealType scale = 1);
 
       RealType mean()const; // mean default 1.
       RealType scale()const; // Optional scale, default 1 (unscaled).
-      RealType scale()const; // Shape = scale/mean.
+      RealType shape()const; // Shape = scale/mean.
    };
    typedef inverse_gaussian_distribution<double> inverse_gaussian;
 
@@ -139,7 +139,7 @@ are used for the inverse gaussian function.
 [[quantile][No closed form known. Estimated using a guess refined by Newton-Raphson iteration.]]
 [[quantile from the complement][No closed form known. Estimated using a guess refined by Newton-Raphson iteration.]]
 [[mode][[mu] {[sqrt](1+9[mu][sup2]/4[lambda][sup2])[sup2] - 3[mu]/2[lambda]} ]]
-[[median][no closed form analytic equation is known, but is evaluated as quantile(0.5)]]
+[[median][No closed form analytic equation is known, but is evaluated as quantile(0.5)]]
 [[mean][[mu]] ]
 [[variance][[mu][cubed]/[lambda]] ]
 [[skewness][3 [sqrt] ([mu]/[lambda])] ]
@@ -150,7 +150,7 @@ are used for the inverse gaussian function.
 [h4 References]
 
 #Wald, A. (1947). Sequential analysis. Wiley, NY.
-#The Tnverse Gaussian distribution : theory, methodology, and applications, Raj S. Chhikara, J. Leroy Folks. ISBN 0824779975 (1989).
+#The Inverse Gaussian distribution : theory, methodology, and applications, Raj S. Chhikara, J. Leroy Folks. ISBN 0824779975 (1989).
 #The Inverse Gaussian distribution : statistical theory and applications, Seshadri, V , ISBN - 0387986189 (pbk) (Dewey 519.2) (1998).
 #[@http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.wald.html Numpy and Scipy Documentation].
 #[@http://bm2.genes.nig.ac.jp/RGM2/R_current/library/statmod/man/invgauss.html  R statmod invgauss functions].
