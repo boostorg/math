@@ -7,7 +7,7 @@
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="inverse_gamma_dist.html" title="Inverse Gamma Distribution">
-<link rel="next" href="hypergeometric_dist.html" title="Hypergeometric Distribution">
+<link rel="next" href="laplace_dist.html" title="Laplace Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="inverse_gamma_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hypergeometric_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="inverse_gamma_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="laplace_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
@@ -37,17 +37,17 @@
    
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
-<span class="keyword">class</span> <span class="identifier">wald_distribution</span>
+<span class="keyword">class</span> <span class="identifier">inverse_gaussian_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
    <span class="keyword">typedef</span> <span class="identifier">RealType</span> <span class="identifier">value_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>   <span class="identifier">policy_type</span><span class="special">;</span>
 
-   <span class="identifier">wald_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
+   <span class="identifier">inverse_gaussian_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 
    <span class="identifier">RealType</span> <span class="identifier">mean</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> <span class="comment">// mean default 1.
 </span>   <span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> <span class="comment">// Optional scale, default 1 (unscaled).
-</span>   <span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> <span class="comment">// Shape = scale/mean.
+</span>   <span class="identifier">RealType</span> <span class="identifier">shape</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> <span class="comment">// Shape = scale/mean.
 </span><span class="special">};</span>
 <span class="keyword">typedef</span> <span class="identifier">inverse_gaussian_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">inverse_gaussian</span><span class="special">;</span>
 
@@ -146,7 +146,7 @@
             the __wald_distrib (where mean &#956; is unity) is also provided.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_gaussian_dist.member_functions"></a><h5>
-<a name="id1013151"></a>
+<a name="id1016826"></a>
             <a class="link" href="inverse_gaussian_dist.html#math_toolkit.dist.dist_ref.dists.inverse_gaussian_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -171,7 +171,7 @@
             Returns the scale &#955; parameter of this distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_gaussian_dist.non_member_accessors"></a><h5>
-<a name="id1013292"></a>
+<a name="id1016966"></a>
             <a class="link" href="inverse_gaussian_dist.html#math_toolkit.dist.dist_ref.dists.inverse_gaussian_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -201,7 +201,7 @@
             </p></td></tr>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_gaussian_dist.accuracy"></a><h5>
-<a name="id1013398"></a>
+<a name="id1017073"></a>
             <a class="link" href="inverse_gaussian_dist.html#math_toolkit.dist.dist_ref.dists.inverse_gaussian_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -212,7 +212,7 @@
             to a few epsilon, &gt;14 decimal digits accuracy for 64-bit double.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_gaussian_dist.implementation"></a><h5>
-<a name="id1013421"></a>
+<a name="id1017096"></a>
             <a class="link" href="inverse_gaussian_dist.html#math_toolkit.dist.dist_ref.dists.inverse_gaussian_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -322,7 +322,7 @@
                   </td>
 <td>
                     <p>
-                      no closed form analytic equation is known, but is evaluated
+                      No closed form analytic equation is known, but is evaluated
                       as quantile(0.5)
                     </p>
                   </td>
@@ -390,7 +390,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.inverse_gaussian_dist.references"></a><h5>
-<a name="id1013716"></a>
+<a name="id1017391"></a>
             <a class="link" href="inverse_gaussian_dist.html#math_toolkit.dist.dist_ref.dists.inverse_gaussian_dist.references">References</a>
           </h5>
 <div class="orderedlist"><ol type="1">
@@ -398,7 +398,7 @@
                 Wald, A. (1947). Sequential analysis. Wiley, NY.
               </li>
 <li>
-                The Tnverse Gaussian distribution : theory, methodology, and applications,
+                The Inverse Gaussian distribution : theory, methodology, and applications,
                 Raj S. Chhikara, J. Leroy Folks. ISBN 0824779975 (1989).
               </li>
 <li>
@@ -448,7 +448,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="inverse_gamma_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hypergeometric_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="inverse_gamma_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="laplace_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

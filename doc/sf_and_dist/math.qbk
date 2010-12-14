@@ -257,6 +257,7 @@ and use the function's name as the link text.]
 [def __user_error_handling [link math_toolkit.policy.pol_tutorial.user_def_err_pol user error handling]]
 [def __promotion_policy [link math_toolkit.policy.pol_ref.internal_promotion internal promotion policy]]
 [def __precision_policy [link math_toolkit.policy.pol_ref.precision_pol precision policy]]
+[def __policy_macros [link math_toolkit.policy.pol_ref.policy_defaults Using Macros to Change the Policy Defaults]]
 
 [def __random_variate [@http://en.wikipedia.org/wiki/Random_variate random variate]]
 [def __random_variable [@http://en.wikipedia.org/wiki/Random_variable random variable]]

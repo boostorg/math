@@ -80,12 +80,14 @@ Returns the parameter /lambda/ from which this object was constructed.
 [h4 Non-member Accessors]
 
 Most of the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
-are supported: __cdf, __pdf, __quantile, 
+are supported: __cdf, __pdf, __quantile, __mean, __variance, __sd,
 __median, __mode, __hazard, __chf, __range and __support.
 
+Mean and variance are implemented using hypergeometric pfq functions and relations given in 
+[@http://reference.wolfram.com/mathematica/ref/NoncentralBetaDistribution.html Wolfram Noncentral Beta Distribution].
+
 However, the following are not currently implemented: 
-__mean, __variance, __sd, __skewness, 
-   __kurtosis and __kurtosis_excess.
+ __skewness, __kurtosis and __kurtosis_excess.
 
 The domain of the random variable is \[0, 1\].
 

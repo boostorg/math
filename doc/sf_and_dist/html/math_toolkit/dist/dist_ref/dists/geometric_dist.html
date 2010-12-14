@@ -7,7 +7,7 @@
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="gamma_dist.html" title="Gamma (and Erlang) Distribution">
-<link rel="next" href="inverse_chi_squared_dist.html" title="Inverse Chi Squared Distribution">
+<link rel="next" href="hypergeometric_dist.html" title="Hypergeometric Distribution">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="gamma_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="inverse_chi_squared_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="gamma_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hypergeometric_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
@@ -146,7 +146,7 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/geometric_cdf_discrete.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.geometric_dist.related_distributions"></a><h5>
-<a name="id1006392"></a>
+<a name="id1006335"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.related_distributions">Related
             Distributions</a>
           </h5>
@@ -206,12 +206,12 @@
 </td></tr>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.geometric_dist.member_functions"></a><h5>
-<a name="id1006677"></a>
+<a name="id1006620"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.member_functions">Member
             Functions</a>
           </h5>
 <a name="math_toolkit.dist.dist_ref.dists.geometric_dist.constructor"></a><h6>
-<a name="id1006693"></a>
+<a name="id1006636"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.constructor">Constructor</a>
           </h6>
 <pre class="programlisting"><span class="identifier">geometric_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
@@ -226,7 +226,7 @@
             <span class="number">1</span></code>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.geometric_dist.accessors"></a><h6>
-<a name="id1006772"></a>
+<a name="id1006715"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.accessors">Accessors</a>
           </h6>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> <span class="comment">// successes / trials (0 &lt;= p &lt;= 1)
@@ -253,7 +253,7 @@
             Binomial Distribution</a> for more discussion.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_parameter__emphasis_p__emphasis_"></a><h6>
-<a name="id1006880"></a>
+<a name="id1006823"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_parameter__emphasis_p__emphasis_">Lower
             Bound on success_fraction Parameter <span class="emphasis"><em>p</em></span></a>
           </h6>
@@ -308,7 +308,7 @@
             vol. 48, no3, 605-621</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_parameter_p"></a><h6>
-<a name="id1007110"></a>
+<a name="id1007054"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_parameter_p">Upper
             Bound on success_fraction Parameter p</a>
           </h6>
@@ -363,7 +363,7 @@
             vol. 48, no3, 605-621</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures"></a><h6>
-<a name="id1007338"></a>
+<a name="id1007282"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures">Estimating
             Number of Trials to Ensure at Least a Certain Number of Failures</a>
           </h6>
@@ -415,7 +415,7 @@
             probability of observing <span class="emphasis"><em>k</em></span> failures or fewer.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less"></a><h6>
-<a name="id1007577"></a>
+<a name="id1007520"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less">Estimating
             Number of Trials to Ensure a Maximum Number of Failures or Less</a>
           </h6>
@@ -463,7 +463,7 @@
             probability of observing more than k failures.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.geometric_dist.non_member_accessors"></a><h5>
-<a name="id1007812"></a>
+<a name="id1007756"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -611,7 +611,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.accuracy"></a><h5>
-<a name="id1008322"></a>
+<a name="id1008266"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -622,7 +622,7 @@
             for example to 10 decimal digits (from 16).
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.geometric_dist.implementation"></a><h5>
-<a name="id1008355"></a>
+<a name="id1009049"></a>
             <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -862,7 +862,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="gamma_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="inverse_chi_squared_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="gamma_dist.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../dists.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hypergeometric_dist.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

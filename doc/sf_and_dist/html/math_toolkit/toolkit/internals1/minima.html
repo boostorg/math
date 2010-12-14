@@ -28,7 +28,7 @@
         Minima: Brent's algorithm</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.minima.synopsis"></a><h5>
-<a name="id1200566"></a>
+<a name="id1199329"></a>
           <a class="link" href="minima.html#math_toolkit.toolkit.internals1.minima.synopsis">synopsis</a>
         </h5>
 <p>
@@ -45,7 +45,7 @@
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">brent_find_minima</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">bits</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 </pre>
 <a name="math_toolkit.toolkit.internals1.minima.description"></a><h5>
-<a name="id1200911"></a>
+<a name="id1199674"></a>
           <a class="link" href="minima.html#math_toolkit.toolkit.internals1.minima.description">Description</a>
         </h5>
 <p>
@@ -72,9 +72,10 @@
 <dd><p>
                 The number of bits precision to which the minima should be found.
                 Note that in principle, the minima can not be located to greater
-                accuracy than the square root of machine epsilon, therefore if <span class="emphasis"><em>bits</em></span>
-                is set to a value greater than one half of the bits in type T, then
-                the value will be ignored.
+                accuracy than the square root of machine epsilon (for 64-bit double,
+                sqrt(1e-16)&#8773;1e-8), therefore if <span class="emphasis"><em>bits</em></span> is set to
+                a value greater than one half of the bits in type T, then the value
+                will be ignored.
               </p></dd>
 <dt><span class="term">max_iter</span></dt>
 <dd><p>
@@ -89,7 +90,7 @@
           the abscissa at the minima and the value of f(x) at the minima.
         </p>
 <a name="math_toolkit.toolkit.internals1.minima.implementation"></a><h5>
-<a name="id1201023"></a>
+<a name="id1199786"></a>
           <a class="link" href="minima.html#math_toolkit.toolkit.internals1.minima.implementation">Implementation</a>
         </h5>
 <p>
