@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.expint.expint_i"></a><a class="link" href="expint_i.html" title="Exponential Integral Ei">Exponential Integral
-        Ei</a>
+<a name="math_toolkit.special.expint.expint_i"></a><a class="link" href="expint_i.html" title="Exponential Integral Ei"> Exponential
+        Integral Ei</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.expint.expint_i.synopsis"></a><h5>
-<a name="id1131116"></a>
+<a name="id1236733"></a>
           <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -53,12 +53,17 @@
           type calculation rules</em></span></a>: the return type is <code class="computeroutput"><span class="keyword">double</span></code> if T is an integer type, and T otherwise.
         </p>
 <p>
-          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
-          optional and can be used to control the behaviour of the function: how
-          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
+          </p>
+<p>
+            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
+            is optional and can be used to control the behaviour of the function:
+            how it handles errors, what level of precision to use etc. Refer to the
+            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
+          </p>
+<p>
         </p>
 <a name="math_toolkit.special.expint.expint_i.description"></a><h5>
-<a name="id1131373"></a>
+<a name="id1236994"></a>
           <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.description">Description</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -78,7 +83,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/expint_i.png" align="middle"></span>
         </p>
 <a name="math_toolkit.special.expint.expint_i.accuracy"></a><h5>
-<a name="id1131571"></a>
+<a name="id1237222"></a>
           <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -202,7 +207,7 @@
           slightly over the range [4,6].
         </p>
 <a name="math_toolkit.special.expint.expint_i.testing"></a><h5>
-<a name="id1131770"></a>
+<a name="id1237421"></a>
           <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.testing">Testing</a>
         </h5>
 <p>
@@ -217,7 +222,7 @@
           check.
         </p>
 <a name="math_toolkit.special.expint.expint_i.implementation"></a><h5>
-<a name="id1131797"></a>
+<a name="id1237447"></a>
           <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.implementation">Implementation</a>
         </h5>
 <p>
@@ -247,7 +252,7 @@
           a minimax rational approximation rescaled so that it is evaluated over
           [-1,1]. Note that while the rational approximation over [0,6] converges
           rapidly to the minimax solution it is rather ill-conditioned in practice.
-          Cody and Thacher <sup>[<a name="id1131884" href="#ftn.id1131884" class="footnote">2</a>]</sup> experienced the same issue and converted the polynomials into
+          Cody and Thacher <sup>[<a name="id1237535" href="#ftn.id1237535" class="footnote">2</a>]</sup> experienced the same issue and converted the polynomials into
           Chebeshev form to ensure stable computation. By experiment we found that
           the polynomials are just as stable in polynomial as Chebyshev form, <span class="emphasis"><em>provided</em></span>
           they are computed over the interval [-1,1].
@@ -277,7 +282,7 @@
         </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id1131884" href="#id1131884" class="para">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1237535" href="#id1237535" class="para">2</a>] </sup>
             W. J. Cody and H. C. Thacher, Jr., Rational Chebyshev approximations
             for the exponential integral E<sub>1</sub>(x), Math. Comp. 22 (1968), 641-649, and
             W. J. Cody and H. C. Thacher, Jr., Chebyshev approximations for the exponential

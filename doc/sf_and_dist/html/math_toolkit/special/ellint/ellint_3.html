@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.ellint.ellint_3"></a><a class="link" href="ellint_3.html" title="Elliptic Integrals of the Third Kind - Legendre Form">Elliptic Integrals
+<a name="math_toolkit.special.ellint.ellint_3"></a><a class="link" href="ellint_3.html" title="Elliptic Integrals of the Third Kind - Legendre Form"> Elliptic Integrals
         of the Third Kind - Legendre Form</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.ellint.ellint_3.synopsis"></a><h6>
-<a name="id1126389"></a>
+<a name="id1233097"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.synopsis">Synopsis</a>
         </h6>
 <p>
@@ -55,7 +55,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.ellint.ellint_3.description"></a><h6>
-<a name="id1126899"></a>
+<a name="id1233607"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.description">Description</a>
         </h6>
 <p>
@@ -91,9 +91,14 @@
           (outside this range the result would be complex).
         </p>
 <p>
-          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
-          optional and can be used to control the behaviour of the function: how
-          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
+          </p>
+<p>
+            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
+            is optional and can be used to control the behaviour of the function:
+            how it handles errors, what level of precision to use etc. Refer to the
+            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
+          </p>
+<p>
         </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_3</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">n</span><span class="special">);</span>
@@ -114,12 +119,17 @@
           (outside this range the result would be complex).
         </p>
 <p>
-          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
-          optional and can be used to control the behaviour of the function: how
-          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
+          </p>
+<p>
+            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
+            is optional and can be used to control the behaviour of the function:
+            how it handles errors, what level of precision to use etc. Refer to the
+            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
+          </p>
+<p>
         </p>
 <a name="math_toolkit.special.ellint.ellint_3.accuracy"></a><h6>
-<a name="id1127493"></a>
+<a name="id1234208"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.accuracy">Accuracy</a>
         </h6>
 <p>
@@ -231,7 +241,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.special.ellint.ellint_3.testing"></a><h6>
-<a name="id1127679"></a>
+<a name="id1234394"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.testing">Testing</a>
         </h6>
 <p>
@@ -241,7 +251,7 @@
           this implementation.
         </p>
 <a name="math_toolkit.special.ellint.ellint_3.implementation"></a><h6>
-<a name="id1127701"></a>
+<a name="id1234416"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.implementation">Implementation</a>
         </h6>
 <p>
@@ -278,7 +288,7 @@
           <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) + 2m&#928;(n, k) ; n &lt;= 1</em></span>
         </p>
 <p>
-          <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) ; n &gt; 1</em></span> <sup>[<a name="id1127815" href="#ftn.id1127815" class="footnote">1</a>]</sup>
+          <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) ; n &gt; 1</em></span> <sup>[<a name="id1234530" href="#ftn.id1234530" class="footnote">1</a>]</sup>
         </p>
 <p>
           are used to move &#966; &#160; to the range [0, &#960;/2].
@@ -298,7 +308,7 @@
         </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id1127815" href="#id1127815" class="para">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1234530" href="#id1234530" class="para">1</a>] </sup>
             I haven't been able to find a literature reference for this relation,
             but it appears to be the convention used by Mathematica. Intuitively
             the first <span class="emphasis"><em>2 * m * &#928;(n, k)</em></span> terms cancel out as the

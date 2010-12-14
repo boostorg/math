@@ -24,8 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist"></a><a class="link" href="binomial_dist.html" title="Binomial Distribution">Binomial
-          Distribution</a>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist"></a><a class="link" href="binomial_dist.html" title="Binomial Distribution">
+          Binomial Distribution</a>
 </h5></div></div></div>
 <p>
             
@@ -127,6 +127,8 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/binomial_pdf_2.png" align="middle"></span>
           </p>
+<p>
+            </p>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../../doc/src/images/caution.png"></td>
@@ -134,39 +136,43 @@
 </tr>
 <tr><td align="left" valign="top">
 <p>
-              The Binomial distribution is a discrete distribution: internally, functions
-              like the <code class="computeroutput"><span class="identifier">cdf</span></code> and <code class="computeroutput"><span class="identifier">pdf</span></code> are treated "as if"
-              they are continuous functions, but in reality the results returned
-              from these functions only have meaning if an integer value is provided
-              for the random variate argument.
-            </p>
+                The Binomial distribution is a discrete distribution: internally,
+                functions like the <code class="computeroutput"><span class="identifier">cdf</span></code>
+                and <code class="computeroutput"><span class="identifier">pdf</span></code> are treated
+                "as if" they are continuous functions, but in reality the
+                results returned from these functions only have meaning if an integer
+                value is provided for the random variate argument.
+              </p>
 <p>
-              The quantile function will by default return an integer result that
-              has been <span class="emphasis"><em>rounded outwards</em></span>. That is to say lower
-              quantiles (where the probability is less than 0.5) are rounded downward,
-              and upper quantiles (where the probability is greater than 0.5) are
-              rounded upwards. This behaviour ensures that if an X% quantile is requested,
-              then <span class="emphasis"><em>at least</em></span> the requested coverage will be present
-              in the central region, and <span class="emphasis"><em>no more than</em></span> the requested
-              coverage will be present in the tails.
-            </p>
+                The quantile function will by default return an integer result that
+                has been <span class="emphasis"><em>rounded outwards</em></span>. That is to say lower
+                quantiles (where the probability is less than 0.5) are rounded downward,
+                and upper quantiles (where the probability is greater than 0.5) are
+                rounded upwards. This behaviour ensures that if an X% quantile is
+                requested, then <span class="emphasis"><em>at least</em></span> the requested coverage
+                will be present in the central region, and <span class="emphasis"><em>no more than</em></span>
+                the requested coverage will be present in the tails.
+              </p>
 <p>
-              This behaviour can be changed so that the quantile functions are rounded
-              differently, or even return a real-valued result using <a class="link" href="../../../policy/pol_overview.html" title="Policy Overview">Policies</a>.
-              It is strongly recommended that you read the tutorial <a class="link" href="../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
-              Quantiles of Discrete Distributions</a> before using the quantile
-              function on the Binomial distribution. The <a class="link" href="../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
-              docs</a> describe how to change the rounding policy for these distributions.
-            </p>
+                This behaviour can be changed so that the quantile functions are
+                rounded differently, or even return a real-valued result using <a class="link" href="../../../policy/pol_overview.html" title="Policy Overview">Policies</a>. It is
+                strongly recommended that you read the tutorial <a class="link" href="../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
+                Quantiles of Discrete Distributions</a> before using the quantile
+                function on the Binomial distribution. The <a class="link" href="../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
+                docs</a> describe how to change the rounding policy for these
+                distributions.
+              </p>
 </td></tr>
 </table></div>
+<p>
+          </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions"></a><h5>
-<a name="id991920"></a>
+<a name="id1099693"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions">Member
             Functions</a>
           </h5>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.construct"></a><h6>
-<a name="id991938"></a>
+<a name="id1099711"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.construct">Construct</a>
           </h6>
 <pre class="programlisting"><span class="identifier">binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
@@ -183,7 +189,7 @@
             otherwise calls <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accessors"></a><h6>
-<a name="id992055"></a>
+<a name="id1099829"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accessors">Accessors</a>
           </h6>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -199,7 +205,7 @@
             was constructed.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction"></a><h6>
-<a name="id992136"></a>
+<a name="id1099909"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction">Lower
             Bound on the Success Fraction</a>
           </h6>
@@ -305,7 +311,7 @@
             limits illustrated in the case of the binomial. Biometrika 26 404-413.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction"></a><h6>
-<a name="id992589"></a>
+<a name="id1100363"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction">Upper
             Bound on the Success Fraction</a>
           </h6>
@@ -383,7 +389,7 @@
 </td></tr>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes"></a><h6>
-<a name="id992905"></a>
+<a name="id1101856"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes">Estimating
             the Number of Trials Required for a Certain Number of Successes</a>
           </h6>
@@ -425,7 +431,7 @@
             of seeing 10 events that occur with frequency one half.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes"></a><h6>
-<a name="id993106"></a>
+<a name="id1102058"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes">Estimating
             the Maximum Number of Trials to Ensure no more than a Certain Number
             of Successes</a>
@@ -473,7 +479,7 @@
             Worked Example.</a>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors"></a><h5>
-<a name="id993316"></a>
+<a name="id1102268"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -622,7 +628,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.examples"></a><h5>
-<a name="id994130"></a>
+<a name="id1102823"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.examples">Examples</a>
           </h5>
 <p>
@@ -630,7 +636,7 @@
             examples</a> are available illustrating the use of the binomial distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy"></a><h5>
-<a name="id994152"></a>
+<a name="id1102845"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -640,7 +646,7 @@
             please refer to these functions for information on accuracy.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.implementation"></a><h5>
-<a name="id994180"></a>
+<a name="id1102874"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -884,7 +890,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.dist.dist_ref.dists.binomial_dist.references"></a><h5>
-<a name="id995230"></a>
+<a name="id1103943"></a>
             <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.references">References</a>
           </h5>
 <div class="itemizedlist"><ul type="disc">

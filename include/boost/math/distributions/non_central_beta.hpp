@@ -43,13 +43,25 @@ namespace boost
             T l2 = lam / 2;
             //
             // k is the starting point for iteration, and is the
-            // maximum of the poisson weighting term:
+            // maximum of the poisson weighting term,
+            // note that unlike other similar code, we do not set
+            // k to zero, when l2 is small, as forward iteration
+            // is unstable:
             //
             int k = itrunc(l2);
             if(k == 0)
                k = 1;
-            // Starting Poisson weight:
-            T pois = gamma_p_derivative(T(k+1), l2, pol);
+            T pois;
+            if(k == 0)
+            {
+               // Starting Poisson weight:
+               pois = exp(-l2);
+            }
+            else
+            {
+               // Starting Poisson weight:
+               pois = gamma_p_derivative(T(k+1), l2, pol);
+            }
             if(pois == 0)
                return init_val;
             // recurance term:
@@ -124,10 +136,27 @@ namespace boost
             // maximum of the poisson weighting term:
             //
             int k = itrunc(l2);
+            T pois;
+            if(k <= 30)
+            {
+               //
+               // Might as well start at 0 since we'll likely have this number of terms anyway:
+               //
+               if(a + b > 1)
+                  k = 0;
+               else if(k == 0)
+                  k = 1;
+            }
             if(k == 0)
-               k = 1;
-            // Starting Poisson weight:
-            T pois = gamma_p_derivative(T(k+1), l2, pol);
+            {
+               // Starting Poisson weight:
+               pois = exp(-l2);
+            }
+            else
+            {
+               // Starting Poisson weight:
+               pois = gamma_p_derivative(T(k+1), l2, pol);
+            }
             if(pois == 0)
                return init_val;
             // recurance term:
@@ -748,7 +777,7 @@ namespace boost
          RealType b = dist.beta();
          RealType d = dist.non_centrality();
          RealType apb = a + b;
-         return exp(-d / 2) * a * detail::hypergeometric_2F2(1 + a, apb, a, 1 + apb, d / 2, Policy()) / apb;
+         return exp(-d / 2) * a * detail::hypergeometric_2F2<RealType, Policy>(1 + a, apb, a, 1 + apb, d / 2, Policy()) / apb;
       } // mean
 
       template <class RealType, class Policy>

@@ -24,10 +24,10 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.main_overview.error_handling"></a><a class="link" href="error_handling.html" title="Error Handling">Error Handling</a>
+<a name="math_toolkit.main_overview.error_handling"></a><a class="link" href="error_handling.html" title="Error Handling"> Error Handling</a>
 </h3></div></div></div>
 <a name="math_toolkit.main_overview.error_handling.quick_reference"></a><h5>
-<a name="id872640"></a>
+<a name="id982709"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.quick_reference">Quick
         Reference</a>
       </h5>
@@ -551,7 +551,9 @@
                 <p>
                   Sets <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>
                   to <code class="computeroutput"><span class="identifier">ERANGE</span></code> and returns
-                  an unspecified value.
+                  the largest representable value of the target integer type (or
+                  the most negative value if the argument to the function was less
+                  than zero).
                 </p>
               </td>
 </tr>
@@ -563,7 +565,9 @@
               </td>
 <td>
                 <p>
-                  <span class="bold"><strong>Returns the an unspecified value.</strong></span>
+                  <span class="bold"><strong>Returns the largest representable value of
+                  the target integer type (or the most negative value if the argument
+                  to the function was less than zero).</strong></span>
                 </p>
               </td>
 </tr>
@@ -743,7 +747,7 @@
         <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">;</span></code>.
       </p>
 <a name="math_toolkit.main_overview.error_handling.rationale"></a><h5>
-<a name="id875220"></a>
+<a name="id985279"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.rationale">Rationale</a>
       </h5>
 <p>
@@ -762,7 +766,7 @@
           </li>
 </ul></div>
 <a name="math_toolkit.main_overview.error_handling.finding_more_information"></a><h5>
-<a name="id875266"></a>
+<a name="id985325"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.finding_more_information">Finding
         More Information</a>
       </h5>
@@ -784,7 +788,7 @@
         The various kind of errors are described in more detail below.
       </p>
 <a name="domain_error"></a><a name="math_toolkit.main_overview.error_handling.domain_errors"></a><h5>
-<a name="id875319"></a>
+<a name="id985378"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.domain_errors">Domain
         Errors</a>
       </h5>
@@ -856,7 +860,7 @@
         for more details.
       </p>
 <a name="pole_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_at_a_pole"></a><h5>
-<a name="id875578"></a>
+<a name="id985637"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_at_a_pole">Evaluation
         at a pole</a>
       </h5>
@@ -895,7 +899,7 @@
         for more details.
       </p>
 <a name="overflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_overflow"></a><h5>
-<a name="id875785"></a>
+<a name="id985844"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_overflow">Numeric
         Overflow</a>
       </h5>
@@ -920,7 +924,7 @@
         doesn't support infinities, the maximum value for the type is returned.
       </p>
 <a name="underflow_error"></a><a name="math_toolkit.main_overview.error_handling.numeric_underflow"></a><h5>
-<a name="id875974"></a>
+<a name="id986033"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.numeric_underflow">Numeric
         Underflow</a>
       </h5>
@@ -943,7 +947,7 @@
         an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="denorm_error"></a><a name="math_toolkit.main_overview.error_handling.denormalisation_errors"></a><h5>
-<a name="id876119"></a>
+<a name="id986178"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.denormalisation_errors">Denormalisation
         Errors</a>
       </h5>
@@ -966,7 +970,7 @@
         throws an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
 <a name="evaluation_error"></a><a name="math_toolkit.main_overview.error_handling.evaluation_errors"></a><h5>
-<a name="id876281"></a>
+<a name="id986340"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.evaluation_errors">Evaluation
         Errors</a>
       </h5>
@@ -1003,7 +1007,7 @@
         for more details.
       </p>
 <a name="indeterminate_result_error"></a><a name="math_toolkit.main_overview.error_handling.indeterminate_result_errors"></a><h5>
-<a name="id876496"></a>
+<a name="id986555"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.indeterminate_result_errors">Indeterminate
         Result Errors</a>
       </h5>
@@ -1032,7 +1036,7 @@
         the result of 0<sup>0</sup> is 1, even though the result is actually mathematically indeterminate.
       </p>
 <a name="rounding_error"></a><a name="math_toolkit.main_overview.error_handling.rounding_errors"></a><h5>
-<a name="id876660"></a>
+<a name="id987812"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.rounding_errors">Rounding
         Errors</a>
       </h5>
@@ -1072,7 +1076,7 @@
         for more details.
       </p>
 <a name="checked_narrowing_cast"></a><a name="math_toolkit.main_overview.error_handling.errors_from_typecasts"></a><h5>
-<a name="id876892"></a>
+<a name="id988044"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.errors_from_typecasts">Errors
         from typecasts</a>
       </h5>

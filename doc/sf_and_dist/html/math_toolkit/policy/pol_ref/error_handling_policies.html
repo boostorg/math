@@ -24,8 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_ref.error_handling_policies"></a><a class="link" href="error_handling_policies.html" title="Error Handling Policies">Error
-        Handling Policies</a>
+<a name="math_toolkit.policy.pol_ref.error_handling_policies"></a><a class="link" href="error_handling_policies.html" title="Error Handling Policies">
+        Error Handling Policies</a>
 </h4></div></div></div>
 <p>
           There are two orthogonal aspects to error handling:
@@ -39,7 +39,7 @@
             </li>
 </ul></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised"></a><h5>
-<a name="id1245938"></a>
+<a name="id1351353"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.available_actions_when_an_error_is_raised">Available
           Actions When an Error is Raised</a>
         </h5>
@@ -62,7 +62,7 @@
           The various enumerated values have the following meanings:
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error"></a><h6>
-<a name="id1249582"></a>
+<a name="id1351535"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.throw_on_error">throw_on_error</a>
         </h6>
 <p>
@@ -174,7 +174,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error"></a><h6>
-<a name="id1249768"></a>
+<a name="id1351721"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.errno_on_error">errno_on_error</a>
         </h6>
 <p>
@@ -289,7 +289,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.ignore_error"></a><h6>
-<a name="id1249971"></a>
+<a name="id1351923"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.ignore_error">ignore_error</a>
         </h6>
 <p>
@@ -402,7 +402,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.user_error"></a><h6>
-<a name="id1250164"></a>
+<a name="id1352688"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.user_error">user_error</a>
         </h6>
 <p>
@@ -451,7 +451,7 @@
           here</a>.
         </p>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised"></a><h5>
-<a name="id1251054"></a>
+<a name="id1353579"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.kinds_of_error_raised">Kinds
           of Error Raised</a>
         </h5>
@@ -691,7 +691,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.error_handling_policies.examples"></a><h5>
-<a name="id1251896"></a>
+<a name="id1354420"></a>
           <a class="link" href="error_handling_policies.html#math_toolkit.policy.pol_ref.error_handling_policies.examples">Examples</a>
         </h5>
 <p>
@@ -700,7 +700,9 @@
           we can achieve this at the call site using:
         </p>
 <p>
-          
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
@@ -738,13 +740,17 @@
   <span class="special">);</span>
 </pre>
 <p>
+          </p>
+<p>
         </p>
 <p>
           Suppose we want a statistical distribution to return infinities, rather
           than throw exceptions, then we can use:
         </p>
 <p>
-          
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">;</span>
@@ -764,6 +770,8 @@
 </span><span class="keyword">double</span> <span class="identifier">q</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">my_norm</span><span class="special">(),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// = -1.64485
 </span>
 </pre>
+<p>
+          </p>
 <p>
         </p>
 </div>

@@ -24,8 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_tutorial.namespace_policies"></a><a class="link" href="namespace_policies.html" title="Setting Policies at Namespace or Translation Unit Scope">Setting
-        Policies at Namespace or Translation Unit Scope</a>
+<a name="math_toolkit.policy.pol_tutorial.namespace_policies"></a><a class="link" href="namespace_policies.html" title="Setting Policies at Namespace or Translation Unit Scope">
+        Setting Policies at Namespace or Translation Unit Scope</a>
 </h4></div></div></div>
 <p>
           Sometimes what you want to do is just change a set of policies within the
@@ -43,30 +43,42 @@
           current file only.
         </p>
 <p>
-          Suppose we want <code class="computeroutput"><span class="identifier">C</span><span class="special">::</span><span class="identifier">foo</span><span class="special">()</span></code>
-          to behave in a C-compatible way and set <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code> on error rather than throwing any
-          exceptions.
-        </p>
+          </p>
 <p>
-          We'll begin by including the needed header for our function:
-        </p>
+            Suppose we want <code class="computeroutput"><span class="identifier">C</span><span class="special">::</span><span class="identifier">foo</span><span class="special">()</span></code>
+            to behave in a C-compatible way and set <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code> on error rather than throwing
+            any exceptions.
+          </p>
 <p>
-          
+          </p>
+<p>
+            We'll begin by including the needed header for our function:
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="comment">//using boost::math::tgamma; // Not needed because using C::tgamma.</span></pre>
 <p>
-        </p>
+          </p>
 <p>
-          Open up the "C" namespace that we'll use for our functions, and
-          define the policy type we want: in this case a C-style one that sets ::errno
-          and returns a standard value, rather than throwing exceptions.
-        </p>
+          </p>
 <p>
-          Any policies we don't specify here will inherit the defaults.
-        </p>
+            Open up the "C" namespace that we'll use for our functions,
+            and define the policy type we want: in this case a C-style one that sets
+            ::errno and returns a standard value, rather than throwing exceptions.
+          </p>
 <p>
-          
+          </p>
+<p>
+            Any policies we don't specify here will inherit the defaults.
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">C</span>
 <span class="special">{</span> <span class="comment">// To hold our C-style policy.
@@ -86,25 +98,33 @@
      <span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;</span>
   <span class="special">&gt;</span> <span class="identifier">c_policy</span><span class="special">;</span></pre>
 <p>
-        </p>
+          </p>
 <p>
-          All we need do now is invoke the BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS macro
-          passing our policy type c_policy as the single argument:
-        </p>
+          </p>
 <p>
-          
+            All we need do now is invoke the BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS
+            macro passing our policy type c_policy as the single argument:
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="identifier">BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS</span><span class="special">(</span><span class="identifier">c_policy</span><span class="special">)</span>
 
 <span class="special">}</span> <span class="comment">// close namespace C</span></pre>
 <p>
-        </p>
+          </p>
 <p>
-          We now have a set of forwarding functions defined in namespace C that all
-          look something like this:
-        </p>
+          </p>
 <p>
-          
+            We now have a set of forwarding functions defined in namespace C that
+            all look something like this:
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">promote_args</span><span class="special">&lt;</span><span class="identifier">RT</span><span class="special">&gt;::</span><span class="identifier">type</span>
@@ -114,14 +134,16 @@
 <span class="special">}</span>
 </pre>
 <p>
-        </p>
+          </p>
 <p>
-          So that when we call <code class="computeroutput"><span class="identifier">C</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code>,
-          we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span>
-          <span class="identifier">C</span><span class="special">::</span><span class="identifier">c_policy</span><span class="special">())</span></code>:
-        </p>
+          </p>
 <p>
-          
+            So that when we call <code class="computeroutput"><span class="identifier">C</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code>, we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">C</span><span class="special">::</span><span class="identifier">c_policy</span><span class="special">())</span></code>:
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
@@ -134,19 +156,28 @@
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// errno = 33, overwriting previous value of 34.
 </span><span class="special">}</span></pre>
 <p>
-        </p>
+          </p>
 <p>
-          Which outputs:
-        </p>
+          </p>
+<p>
+            Which outputs:
+          </p>
+<p>
+          
+</p>
 <pre class="programlisting">Result of C::tgamma(30000) is: 1.#INF
 errno = 34
 Result of C::tgamma(-10) is: 1.#QNAN
 errno = 33
 </pre>
 <p>
-          This mechanism is particularly useful when we want to define a project-wide
-          policy, and don't want to modify the Boost source, or to set project wide
-          build macros (possibly fragile and easy to forget).
+          </p>
+<p>
+            This mechanism is particularly useful when we want to define a project-wide
+            policy, and don't want to modify the Boost source, or to set project
+            wide build macros (possibly fragile and easy to forget).
+          </p>
+<p>
         </p>
 <p>
           The same mechanism works well at file scope as well, by using an unnamed
@@ -154,7 +185,9 @@ errno = 33
           alternate policies present in other translation units:
         </p>
 <p>
-          
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="comment">// using boost::math::tgamma; // Would create an ambiguity between
@@ -175,14 +208,16 @@ errno = 33
 
 <span class="identifier">BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS</span><span class="special">(</span><span class="identifier">c_policy</span><span class="special">)</span></pre>
 <p>
-        </p>
+          </p>
 <p>
-          So that when we call <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code>,
-          we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span>
-          <span class="identifier">anonymous</span><span class="special">-</span><span class="keyword">namespace</span><span class="special">::</span><span class="identifier">c_policy</span><span class="special">())</span></code>.
-        </p>
+          </p>
 <p>
-          
+            So that when we call <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code>, we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">anonymous</span><span class="special">-</span><span class="keyword">namespace</span><span class="special">::</span><span class="identifier">c_policy</span><span class="special">())</span></code>.
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="special">}</span> <span class="comment">// close unnamed namespace
 </span>
@@ -200,6 +235,8 @@ errno = 33
 </span><span class="special">}</span>
 
 </pre>
+<p>
+          </p>
 <p>
         </p>
 <p>
@@ -219,35 +256,48 @@ errno = 33
           template, but without the "_distribution" suffix.
         </p>
 <p>
-          Suppose we want a set of distributions to behave as follows:
-        </p>
+          </p>
+<p>
+            Suppose we want a set of distributions to behave as follows:
+          </p>
+<p>
+          </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-              Return infinity on overflow, rather than throwing an exception.
-            </li>
+                Return infinity on overflow, rather than throwing an exception.
+              </li>
 <li>
-              Don't perform any promotion from double to long double internally.
-            </li>
+                Don't perform any promotion from double to long double internally.
+              </li>
 <li>
-              Return the closest integer result from the quantiles of discrete distributions.
-            </li>
+                Return the closest integer result from the quantiles of discrete
+                distributions.
+              </li>
 </ul></div>
 <p>
-          We'll begin by including the needed header for all the distributions:
-        </p>
+          </p>
 <p>
-          
+            We'll begin by including the needed header for all the distributions:
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
-        </p>
+          </p>
 <p>
-          Open up an appropriate namespace, calling it <code class="computeroutput"><span class="identifier">my_distributions</span></code>,
-          for our distributions, and define the policy type we want. Any policies
-          we don't specify here will inherit the defaults:
-        </p>
+          </p>
 <p>
-          
+            Open up an appropriate namespace, calling it <code class="computeroutput"><span class="identifier">my_distributions</span></code>,
+            for our distributions, and define the policy type we want. Any policies
+            we don't specify here will inherit the defaults:
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">my_distributions</span>
 <span class="special">{</span>
@@ -263,27 +313,35 @@ errno = 33
 </span>     <span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_nearest</span><span class="special">&gt;</span>
   <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span></pre>
 <p>
-        </p>
+          </p>
 <p>
-          All we need do now is invoke the BOOST_MATH_DECLARE_DISTRIBUTIONS macro
-          passing the floating point type <code class="computeroutput"><span class="keyword">double</span></code>
-          and policy types <code class="computeroutput"><span class="identifier">my_policy</span></code>
-          as arguments:
-        </p>
+          </p>
 <p>
-          
+            All we need do now is invoke the BOOST_MATH_DECLARE_DISTRIBUTIONS macro
+            passing the floating point type <code class="computeroutput"><span class="keyword">double</span></code>
+            and policy types <code class="computeroutput"><span class="identifier">my_policy</span></code>
+            as arguments:
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span><span class="special">(</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">)</span>
 
 <span class="special">}</span> <span class="comment">// close namespace my_namespace</span></pre>
 <p>
-        </p>
+          </p>
 <p>
-          We now have a set of typedefs defined in namespace my_distributions that
-          all look something like this:
-        </p>
+          </p>
 <p>
-          
+            We now have a set of typedefs defined in namespace my_distributions that
+            all look something like this:
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">normal</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cauchy_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">cauchy</span><span class="special">;</span>
@@ -291,12 +349,17 @@ errno = 33
 <span class="comment">// etc
 </span></pre>
 <p>
-        </p>
+          </p>
 <p>
-          So that when we use my_distributions::normal we really end up using <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span></code>:
-        </p>
+          </p>
 <p>
-          
+            So that when we use my_distributions::normal we really end up using
+            <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span></code>:
+          </p>
+<p>
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
@@ -321,10 +384,15 @@ errno = 33
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">binom</span><span class="special">,</span> <span class="number">0.05</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="special">}</span></pre>
 <p>
-        </p>
+          </p>
 <p>
-          Which outputs:
-        </p>
+          </p>
+<p>
+            Which outputs:
+          </p>
+<p>
+          
+</p>
 <pre class="programlisting">Result of quantile(norm, 0) is: -1.#INF
 errno = 34
 Result of quantile(norm, 1) is: 1.#INF
@@ -333,9 +401,13 @@ Result of quantile(binom, 0.05) is: 1
 Result of quantile(complement(binom, 0.05)) is: 8
 </pre>
 <p>
-          This mechanism is particularly useful when we want to define a project-wide
-          policy, and don't want to modify the Boost source or set project wide build
-          macros (possibly fragile and easy to forget).
+          </p>
+<p>
+            This mechanism is particularly useful when we want to define a project-wide
+            policy, and don't want to modify the Boost source or set project wide
+            build macros (possibly fragile and easy to forget).
+          </p>
+<p>
         </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -355,7 +427,9 @@ Result of quantile(complement(binom, 0.05)) is: 8
           with any alternate policies present in other translation units:
         </p>
 <p>
-          
+          </p>
+<p>
+            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// All distributions.
 </span><span class="comment">// using boost::math::normal; // Would create an ambguity between
@@ -402,6 +476,8 @@ Result of quantile(complement(binom, 0.05)) is: 8
 <span class="special">}</span>
 
 </pre>
+<p>
+          </p>
 <p>
         </p>
 </div>

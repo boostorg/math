@@ -109,8 +109,10 @@ with the *default action for each error shown in bold*:
 [table Possible Actions for Rounding Errors
 [[Action]   [Behaviour]]
 [[throw_on_error][Throws `boost::math::rounding_error`]]
-[[errno_on_error][Sets `::errno` to `ERANGE` and returns an unspecified value.]]
-[[ignore_error][[*Returns the an unspecified value.]]]
+[[errno_on_error][Sets `::errno` to `ERANGE` and returns the largest representable value of the target integer type 
+(or the most negative value if the argument to the function was less than zero).]]
+[[ignore_error][[*Returns the largest representable value of the target integer type 
+(or the most negative value if the argument to the function was less than zero).]]]
 [[user_error][Returns the result of `boost::math::policies::user_rounding_error`: 
             [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
