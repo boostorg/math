@@ -19,6 +19,7 @@ Global
 		{663C898C-A698-4579-BA69-C7EC5D08D0EE}.Debug|Any CPU.ActiveCfg = Debug
 		{663C898C-A698-4579-BA69-C7EC5D08D0EE}.Debug|Any CPU.Build.0 = Debug
 		{663C898C-A698-4579-BA69-C7EC5D08D0EE}.Release|Any CPU.ActiveCfg = Release
+		{663C898C-A698-4579-BA69-C7EC5D08D0EE}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

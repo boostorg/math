@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Statistical Distribution Explorer")]
-[assembly: AssemblyDescription("Shows distribution properties, PDF, CDF, complement and quantile.")]
+[assembly: AssemblyDescription("Shows distribution properties, PDF, CDF, quantile and complements.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("hetp")]
-[assembly: AssemblyProduct("Distribution Explorer")]
-[assembly: AssemblyCopyright("Copyright © John Maddock 2007, Paul A. Bristow 2010")]
+[assembly: AssemblyProduct("Statistical Distribution Explorer")]
+[assembly: AssemblyCopyright("Copyright © John Maddock & Paul A. Bristow 2007 - 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.9")]
-[assembly: AssemblyFileVersion("1.0.0.1")]
+[assembly: AssemblyVersion("1.0.1.1")]
+[assembly: AssemblyFileVersion("1.0.1.1")]

@@ -23,7 +23,7 @@ namespace distribution_explorer
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
             this.textBoxDescription.Text = AssemblyDescription;
-            // URL http://boost-consulting.com/vault/index.php?action=downloadfile&filename=math_toolkit.html&directory=Math%20-%20Numerics&
+          // URL http://sourceforge.net/projects/distexplorer
         }
 
        #region Assembly Attribute Accessors
