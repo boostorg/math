@@ -404,7 +404,7 @@ inline T raise_rounding_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return std::numeric_limits<T>::is_specialized ? (val > 0 ? std::numeric_limits<T>::max() : -std::numeric_limits<T>::max()): val;
+   return std::numeric_limits<T>::is_specialized ? (val > 0 ? (std::numeric_limits<T>::max)() : -(std::numeric_limits<T>::max)()): val;
 }
 
 template <class T, class TargetType>
@@ -418,7 +418,7 @@ inline T raise_rounding_error(
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   return std::numeric_limits<T>::is_specialized ? (val > 0 ? std::numeric_limits<T>::max() : -std::numeric_limits<T>::max()): val;
+   return std::numeric_limits<T>::is_specialized ? (val > 0 ? (std::numeric_limits<T>::max)() : -(std::numeric_limits<T>::max)()): val;
 }
 
 template <class T, class TargetType>
