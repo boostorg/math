@@ -28,17 +28,23 @@ There is a concept checking test program for NTL support
 
 The special functions and tools in this library can be used with
 [@http://www.mpfr.org MPFR (an arbitrary precision number type based on the GMP library)],
-via the bindings in [@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp].
+either via the bindings in [@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp],
+or via [@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpreal.hpp].
 
 In order to use these binings you will need to have installed [@http://www.mpfr.org MPFR]
-plus its dependency the [@http://gmplib.org GMP library] and the C++ wrapper for MPFR known as
-[@http://math.berkeley.edu/~wilken/code/gmpfrxx/ gmpfrxx (or mpfr_class)].
+plus its dependency the [@http://gmplib.org GMP library].  You will also need one of the
+two supported C++ wrappers for MPFR: [@http://math.berkeley.edu/~wilken/code/gmpfrxx/ gmpfrxx (or mpfr_class)],
+or [@http://www.holoborodko.com/pavel/mpfr/ mpfr-C++ (mpreal)].
 
-Unfortunately `mpfr_class` doesn't quite satisfy our conceptual requirements,
+Unfortunately neither `mpfr_class` nor `mpreal` quite satisfy our conceptual requirements,
 so there is a very thin set of additional interfaces and some helper traits defined in
-[@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp] that you
-should use in place of including 'gmpfrxx.h' directly.  The existing mpfr_class is 
-then usable unchanged once this header is included, so it's performance-enhancing
+[@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp] and
+[@../../../../../boost/math/bindings/mpreal.hpp boost/math/bindings/mpreal.hpp]
+that you
+should use in place of including 'gmpfrxx.h' or 'mpreal.h' directly.  The classes
+`mpfr_class` or `mpreal` are 
+then usable unchanged once this header is included, so for example `mpfr_class`'s 
+performance-enhancing
 expression templates are preserved and fully supported by this library:
 
    #include <boost/math/bindings/mpfr.hpp>
@@ -54,15 +60,27 @@ expression templates are preserved and fully supported by this library:
       mpfr_class v = boost::math::tgamma(sqrt(mpfr_class(2)));
       std::cout << std::setprecision(50) << v << std::endl;
    }
+
+Alternatively use with `mpreal` would look like:
    
+   #include <boost/math/bindings/mpreal.hpp>
+   #include <boost/math/special_functions/gamma.hpp>
+
+   int main()
+   {
+      mpfr::mpreal::set_precision(500); // 500 bit precision
+      mpfr::mpreal v = boost::math::tgamma(sqrt(mpfr::mpreal(2)));
+      std::cout << std::setprecision(50) << v << std::endl;
+   }
 
 For those functions that are based upon the __lanczos, the bindings
 defines a series of approximations with up to 61 terms and accuracy
 up to approximately 3e-113.  This therefore sets the upper limit for accuracy
-to the majority of functions defined this library when used with `mpfr_class`.
+to the majority of functions defined this library when used with either `mpfr_class` or `mpreal`.
 
 There is a concept checking test program for mpfr support 
-[@../../../../../libs/math/test/mpfr_concept_check.cpp here].
+[@../../../../../libs/math/test/mpfr_concept_check.cpp here] and
+[@../../../../../libs/math/test/mpreal_concept_check.cpp here].
 
 [endsect][/section:use_mpfr Using With MPFR / GMP - a High-Precision Floating-Point Library]
 

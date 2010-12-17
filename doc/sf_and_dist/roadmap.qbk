@@ -4,6 +4,7 @@
 
 * Added Wald, Inverse Gaussian and geometric distributions.
 * Added information about configuration macros. 
+* Added support for mpreal as a real-numered type.
 
 [h4 Boost-1.45.0]
 
