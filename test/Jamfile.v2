@@ -52,7 +52,7 @@ project
       <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
       <include>$(ntl-path)/include
-      <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx
+      <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx <include>$(gmp_path)/mpfrc++
     ;
 
 cpp-pch pch : pch.hpp : <use>../../test/build//boost_test_exec_monitor ;
@@ -768,6 +768,7 @@ run complex_test.cpp ../../test/build//boost_test_exec_monitor ;
 
 compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] ;
 compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] ;
+compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] ;
 compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] ;
 
 build-project ../example ;

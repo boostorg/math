@@ -83,7 +83,7 @@ T double_factorial(unsigned i, const Policy& pol)
       //
       T result = boost::math::tgamma(static_cast<T>(i) / 2 + 1, pol) / sqrt(constants::pi<T>());
       if(ldexp(tools::max_value<T>(), -static_cast<int>(i+1) / 2) > result)
-         return ceil(result * ldexp(T(1), (i+1) / 2) - 0.5f);
+         return ceil(result * ldexp(T(1), static_cast<int>(i+1) / 2) - 0.5f);
    }
    else
    {
