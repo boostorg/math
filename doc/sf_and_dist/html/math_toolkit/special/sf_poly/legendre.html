@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.sf_poly.legendre"></a><a class="link" href="legendre.html" title="Legendre (and Associated) Polynomials"> Legendre (and
+<a name="math_toolkit.special.sf_poly.legendre"></a><a class="link" href="legendre.html" title="Legendre (and Associated) Polynomials">Legendre (and
         Associated) Polynomials</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_poly.legendre.synopsis"></a><h5>
-<a name="id1105048"></a>
+<a name="id1223736"></a>
           <a class="link" href="legendre.html#math_toolkit.special.sf_poly.legendre.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -74,17 +74,12 @@
           type.
         </p>
 <p>
-          </p>
-<p>
-            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
-            is optional and can be used to control the behaviour of the function:
-            how it handles errors, what level of precision to use etc. Refer to the
-            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
-          </p>
-<p>
+          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
+          optional and can be used to control the behaviour of the function: how
+          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
 <a name="math_toolkit.special.sf_poly.legendre.description"></a><h5>
-<a name="id1106993"></a>
+<a name="id1224584"></a>
           <a class="link" href="legendre.html#math_toolkit.special.sf_poly.legendre.description">Description</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -213,9 +208,13 @@
         </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>  <span class="comment">// Abscissa value
 </span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
-<span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_p</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="identifier">x</span><span class="special">)).</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_p</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
+<span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_p</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
+<span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_p</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
 <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">l</span> <span class="special">&lt;</span> <span class="number">10</span><span class="special">;</span> <span class="special">++</span><span class="identifier">l</span><span class="special">)</span>
    <span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_next</span><span class="special">(</span><span class="identifier">l</span><span class="special">,</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">],</span> <span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">-</span><span class="number">1</span><span class="special">]));</span>
+<span class="comment">// Double check values:
+</span><span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">l</span> <span class="special">&lt;</span> <span class="number">10</span><span class="special">;</span> <span class="special">++</span><span class="identifier">l</span><span class="special">)</span>
+   <span class="identifier">assert</span><span class="special">(</span><span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">]</span> <span class="special">==</span> <span class="identifier">legendre_p</span><span class="special">(</span><span class="identifier">l</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
 </pre>
 <p>
           Formally the arguments are:
@@ -259,9 +258,13 @@
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>  <span class="comment">// Abscissa value
 </span><span class="keyword">int</span> <span class="identifier">m</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>      <span class="comment">// order
 </span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
-<span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_p</span><span class="special">(</span><span class="identifier">m</span><span class="special">,</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">x</span><span class="special">)).</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_p</span><span class="special">(</span><span class="number">1</span> <span class="special">+</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
-<span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span> <span class="special">=</span> <span class="number">1</span> <span class="special">+</span> <span class="identifier">m</span><span class="special">;</span> <span class="identifier">l</span> <span class="special">&lt;</span> <span class="identifier">m</span> <span class="special">+</span> <span class="number">10</span><span class="special">;</span> <span class="special">++</span><span class="identifier">l</span><span class="special">)</span>
-   <span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_next</span><span class="special">(</span><span class="identifier">l</span><span class="special">,</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">],</span> <span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">-</span><span class="number">1</span><span class="special">]));</span>
+<span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_p</span><span class="special">(</span><span class="identifier">m</span><span class="special">,</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
+<span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_p</span><span class="special">(</span><span class="number">1</span> <span class="special">+</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
+<span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">l</span> <span class="special">&lt;</span> <span class="number">10</span><span class="special">;</span> <span class="special">++</span><span class="identifier">l</span><span class="special">)</span>
+   <span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">legendre_next</span><span class="special">(</span><span class="identifier">l</span> <span class="special">+</span> <span class="number">10</span><span class="special">,</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">],</span> <span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">-</span><span class="number">1</span><span class="special">]));</span>
+<span class="comment">// Double check values:
+</span><span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">l</span> <span class="special">&lt;</span> <span class="number">10</span><span class="special">;</span> <span class="special">++</span><span class="identifier">l</span><span class="special">)</span>
+   <span class="identifier">assert</span><span class="special">(</span><span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">]</span> <span class="special">==</span> <span class="identifier">legendre_p</span><span class="special">(</span><span class="number">10</span> <span class="special">+</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
 </pre>
 <p>
           Formally the arguments are:
@@ -292,7 +295,7 @@
 </dl>
 </div>
 <a name="math_toolkit.special.sf_poly.legendre.accuracy"></a><h5>
-<a name="id1108833"></a>
+<a name="id1227772"></a>
           <a class="link" href="legendre.html#math_toolkit.special.sf_poly.legendre.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -673,7 +676,7 @@
           given here.
         </p>
 <a name="math_toolkit.special.sf_poly.legendre.testing"></a><h5>
-<a name="id1109438"></a>
+<a name="id1228360"></a>
           <a class="link" href="legendre.html#math_toolkit.special.sf_poly.legendre.testing">Testing</a>
         </h5>
 <p>
@@ -683,7 +686,7 @@
           precision.
         </p>
 <a name="math_toolkit.special.sf_poly.legendre.implementation"></a><h5>
-<a name="id1109460"></a>
+<a name="id1229003"></a>
           <a class="link" href="legendre.html#math_toolkit.special.sf_poly.legendre.implementation">Implementation</a>
         </h5>
 <p>

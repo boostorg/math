@@ -24,86 +24,68 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.extern_c.tr1"></a><a class="link" href="tr1.html" title="C99 and TR1 C Functions Overview"> C99 and TR1 C Functions Overview</a>
+<a name="math_toolkit.extern_c.tr1"></a><a class="link" href="tr1.html" title="C99 and TR1 C Functions Overview">C99 and TR1 C Functions Overview</a>
 </h3></div></div></div>
 <p>
-        </p>
+        Many of the special functions included in this library are also a part of
+        the either the <a href="http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf" target="_top">C99
+        Standard ISO/IEC 9899:1999</a> or the <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf" target="_top">Technical
+        Report on C++ Library Extensions</a>. Therefore this library includes
+        a thin wrapper header <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tr1</span><span class="special">.</span><span class="identifier">hpp</span></code>
+        that provides compatibility with these two standards.
+      </p>
 <p>
-          Many of the special functions included in this library are also a part
-          of the either the <a href="http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf" target="_top">C99
-          Standard ISO/IEC 9899:1999</a> or the <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf" target="_top">Technical
-          Report on C++ Library Extensions</a>. Therefore this library includes
-          a thin wrapper header <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tr1</span><span class="special">.</span><span class="identifier">hpp</span></code>
-          that provides compatibility with these two standards.
-        </p>
+        There are various pros and cons to using the library in this way:
+      </p>
 <p>
-        </p>
-<p>
-          There are various pros and cons to using the library in this way:
-        </p>
-<p>
-        </p>
-<p>
-          Pros:
-        </p>
-<p>
-        </p>
+        Pros:
+      </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-              The header to include is lightweight (i.e. fast to compile).
-            </li>
+            The header to include is lightweight (i.e. fast to compile).
+          </li>
 <li>
-              The functions have extern "C" linkage, and so are usable
-              from other languages (not just C and C++).
-            </li>
+            The functions have extern "C" linkage, and so are usable from
+            other languages (not just C and C++).
+          </li>
 <li>
-              C99 and C++ TR1 Standard compatibility.
-            </li>
+            C99 and C++ TR1 Standard compatibility.
+          </li>
 </ul></div>
 <p>
-        </p>
-<p>
-          Cons:
-        </p>
-<p>
-        </p>
+        Cons:
+      </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-              You will need to compile and link to the external Boost.Math libraries.
-            </li>
+            You will need to compile and link to the external Boost.Math libraries.
+          </li>
 <li>
-              Limited to support for the types, <code class="computeroutput"><span class="keyword">float</span></code>,
-              <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>.
-            </li>
+            Limited to support for the types, <code class="computeroutput"><span class="keyword">float</span></code>,
+            <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>.
+          </li>
 <li>
-              Error handling is handled via setting ::errno and returning NaN's and
-              infinities: this may be less flexible than an C++ exception based approach.
-            </li>
+            Error handling is handled via setting ::errno and returning NaN's and
+            infinities: this may be less flexible than an C++ exception based approach.
+          </li>
 </ul></div>
-<p>
-        </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../doc/src/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
 <tr><td align="left" valign="top"><p>
-            The separate libraries are required <span class="bold"><strong>only</strong></span>
-            if you choose to use boost/math/tr1.hpp rather than some other Boost.Math
-            header, the rest of Boost.Math remains header-only.
-          </p></td></tr>
+          The separate libraries are required <span class="bold"><strong>only</strong></span>
+          if you choose to use boost/math/tr1.hpp rather than some other Boost.Math
+          header, the rest of Boost.Math remains header-only.
+        </p></td></tr>
 </table></div>
 <p>
-        </p>
-<p>
-          The separate libraries required in order to use tr1.hpp can be compiled
-          using bjam from within the libs/math/build directory, or from the Boost
-          root directory using the usual Boost-wide install procedure. Alternatively
-          the source files are located in libs/math/src and each have the same name
-          as the function they implement. The various libraries are named as follows:
-        </p>
-<p>
-        </p>
+        The separate libraries required in order to use tr1.hpp can be compiled using
+        bjam from within the libs/math/build directory, or from the Boost root directory
+        using the usual Boost-wide install procedure. Alternatively the source files
+        are located in libs/math/src and each have the same name as the function
+        they implement. The various libraries are named as follows:
+      </p>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -112,140 +94,136 @@
 </colgroup>
 <thead><tr>
 <th>
-                  <p>
-                    Name
-                  </p>
-                </th>
+                <p>
+                  Name
+                </p>
+              </th>
 <th>
-                  <p>
-                    Type
-                  </p>
-                </th>
+                <p>
+                  Type
+                </p>
+              </th>
 <th>
-                  <p>
-                    Functions
-                  </p>
-                </th>
+                <p>
+                  Functions
+                </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
 <td>
-                  <p>
-                    boost_math_c99f-&lt;suffix&gt;
-                  </p>
-                </td>
+                <p>
+                  boost_math_c99f-&lt;suffix&gt;
+                </p>
+              </td>
 <td>
-                  <p>
-                    float
-                  </p>
-                </td>
+                <p>
+                  float
+                </p>
+              </td>
 <td>
-                  <p>
-                    C99 Functions
-                  </p>
-                </td>
+                <p>
+                  C99 Functions
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    boost_math_c99-&lt;suffix&gt;
-                  </p>
-                </td>
+                <p>
+                  boost_math_c99-&lt;suffix&gt;
+                </p>
+              </td>
 <td>
-                  <p>
-                    double
-                  </p>
-                </td>
+                <p>
+                  double
+                </p>
+              </td>
 <td>
-                  <p>
-                    C99 Functions
-                  </p>
-                </td>
+                <p>
+                  C99 Functions
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    boost_math_c99l-&lt;suffix&gt;
-                  </p>
-                </td>
+                <p>
+                  boost_math_c99l-&lt;suffix&gt;
+                </p>
+              </td>
 <td>
-                  <p>
-                    long double
-                  </p>
-                </td>
+                <p>
+                  long double
+                </p>
+              </td>
 <td>
-                  <p>
-                    C99 Functions
-                  </p>
-                </td>
+                <p>
+                  C99 Functions
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    boost_math_tr1f-&lt;suffix&gt;
-                  </p>
-                </td>
+                <p>
+                  boost_math_tr1f-&lt;suffix&gt;
+                </p>
+              </td>
 <td>
-                  <p>
-                    float
-                  </p>
-                </td>
+                <p>
+                  float
+                </p>
+              </td>
 <td>
-                  <p>
-                    TR1 Functions
-                  </p>
-                </td>
+                <p>
+                  TR1 Functions
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    boost_math_tr1-&lt;suffix&gt;
-                  </p>
-                </td>
+                <p>
+                  boost_math_tr1-&lt;suffix&gt;
+                </p>
+              </td>
 <td>
-                  <p>
-                    double
-                  </p>
-                </td>
+                <p>
+                  double
+                </p>
+              </td>
 <td>
-                  <p>
-                    TR1 Functions
-                  </p>
-                </td>
+                <p>
+                  TR1 Functions
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
-                  <p>
-                    boost_math_tr1l-&lt;suffix&gt;
-                  </p>
-                </td>
+                <p>
+                  boost_math_tr1l-&lt;suffix&gt;
+                </p>
+              </td>
 <td>
-                  <p>
-                    long double
-                  </p>
-                </td>
+                <p>
+                  long double
+                </p>
+              </td>
 <td>
-                  <p>
-                    TR1 Functions
-                  </p>
-                </td>
+                <p>
+                  TR1 Functions
+                </p>
+              </td>
 </tr>
 </tbody>
 </table></div>
 <p>
-        </p>
-<p>
-          Where <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">suffix</span><span class="special">&gt;</span></code> encodes the compiler and build options
-          used to build the libraries: for example "libboost_math_tr1-vc80-mt-gd.lib"
-          would be the statically linked TR1 library to use with Visual C++ 8.0,
-          in multithreading debug mode, with the DLL VC++ runtime, where as "boost_math_tr1-vc80-mt.lib"
-          would be import library for the TR1 DLL to be used with Visual C++ 8.0
-          with the release multithreaded DLL VC++ runtime. Refer to the getting started
-          guide for a <a href="http://www.boost.org/doc/libs/1_35_0/more/getting_started/windows.html#library-naming" target="_top">full
-          explanation of the <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">suffix</span><span class="special">&gt;</span></code> meanings</a>.
-        </p>
-<p>
-        </p>
+        Where <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">suffix</span><span class="special">&gt;</span></code> encodes the compiler and build options
+        used to build the libraries: for example "libboost_math_tr1-vc80-mt-gd.lib"
+        would be the statically linked TR1 library to use with Visual C++ 8.0, in
+        multithreading debug mode, with the DLL VC++ runtime, where as "boost_math_tr1-vc80-mt.lib"
+        would be import library for the TR1 DLL to be used with Visual C++ 8.0 with
+        the release multithreaded DLL VC++ runtime. Refer to the getting started
+        guide for a <a href="http://www.boost.org/doc/libs/1_35_0/more/getting_started/windows.html#library-naming" target="_top">full
+        explanation of the <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">suffix</span><span class="special">&gt;</span></code> meanings</a>.
+      </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../doc/src/images/note.png"></td>
@@ -253,102 +231,78 @@
 </tr>
 <tr><td align="left" valign="top">
 <p>
-            Visual C++ users will typically have the correct library variant to link
-            against selected for them by boost/math/tr1.hpp based on your compiler
-            settings.
-          </p>
+          Visual C++ users will typically have the correct library variant to link
+          against selected for them by boost/math/tr1.hpp based on your compiler
+          settings.
+        </p>
 <p>
-            Users will need to define BOOST_MATH_TR1_DYN_LINK when building their
-            code if they want to link against the DLL versions of these libraries
-            rather than the static versions.
-          </p>
+          Users will need to define BOOST_MATH_TR1_DYN_LINK when building their code
+          if they want to link against the DLL versions of these libraries rather
+          than the static versions.
+        </p>
 <p>
-            Users can disable auto-linking by defining BOOST_MATH_TR1_NO_LIB when
-            building: this is typically only used when linking against a customised
-            build of the libraries.
-          </p>
+          Users can disable auto-linking by defining BOOST_MATH_TR1_NO_LIB when building:
+          this is typically only used when linking against a customised build of
+          the libraries.
+        </p>
 </td></tr>
 </table></div>
-<p>
-        </p>
 <div class="note"><table border="0" summary="Note">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../doc/src/images/note.png"></td>
 <th align="left">Note</th>
 </tr>
 <tr><td align="left" valign="top"><p>
-            Linux and Unix users will generally only have one variant of these libraries
-            installed, and can generally just link against -lboost_math_tr1 etc.
-          </p></td></tr>
+          Linux and Unix users will generally only have one variant of these libraries
+          installed, and can generally just link against -lboost_math_tr1 etc.
+        </p></td></tr>
 </table></div>
+<a name="math_toolkit.extern_c.tr1.usage_recomendations"></a><h5>
+<a name="id1278614"></a>
+        <a class="link" href="tr1.html#math_toolkit.extern_c.tr1.usage_recomendations">Usage Recomendations</a>
+      </h5>
 <p>
-        <a name="math_toolkit.extern_c.tr1.usage_recomendations"></a>
-        </p>
-<h5>
-<a name="id1160101"></a>
-          <a class="link" href="tr1.html#math_toolkit.extern_c.tr1.usage_recomendations">Usage Recomendations</a>
-        </h5>
-<p>
-        </p>
-<p>
-          This library now presents the user with a choice:
-        </p>
-<p>
-        </p>
+        This library now presents the user with a choice:
+      </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-              To include the header only versions of the functions and have an easier
-              time linking, but a longer compile time.
-            </li>
+            To include the header only versions of the functions and have an easier
+            time linking, but a longer compile time.
+          </li>
 <li>
-              To include the TR1 headers and link against an external library.
-            </li>
+            To include the TR1 headers and link against an external library.
+          </li>
 </ul></div>
 <p>
-        </p>
+        Which option you choose depends largely on how you prefer to work and how
+        your system is set up.
+      </p>
 <p>
-          Which option you choose depends largely on how you prefer to work and how
-          your system is set up.
-        </p>
+        For example a casual user who just needs the acosh function, would probably
+        be better off including <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">acosh</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        and using <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">acosh</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code> in their
+        code.
+      </p>
 <p>
-        </p>
+        However, for large scale software development where compile times are significant,
+        and where the Boost libraries are already built and installed on the system,
+        then including <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tr1</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code> and using <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tr1</span><span class="special">::</span><span class="identifier">acosh</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code> will
+        speed up compile times, reduce object files sizes (since there are no templates
+        being instantiated any more), and also speed up debugging runtimes - since
+        the externally compiled libraries can be compiler optimised, rather than
+        built using full settings - the difference in performance between <a class="link" href="../perf/getting_best.html" title="Getting the Best Performance from this Library">release
+        and debug builds can be as much as 20 times</a>, so for complex applications
+        this can be a big win.
+      </p>
+<a name="math_toolkit.extern_c.tr1.supported_c99_functions"></a><h5>
+<a name="id1278816"></a>
+        <a class="link" href="tr1.html#math_toolkit.extern_c.tr1.supported_c99_functions">Supported
+        C99 Functions</a>
+      </h5>
 <p>
-          For example a casual user who just needs the acosh function, would probably
-          be better off including <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">acosh</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
-          and using <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">acosh</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code> in
-          their code.
-        </p>
-<p>
-        </p>
-<p>
-          However, for large scale software development where compile times are significant,
-          and where the Boost libraries are already built and installed on the system,
-          then including <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tr1</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code> and using <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tr1</span><span class="special">::</span><span class="identifier">acosh</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code>
-          will speed up compile times, reduce object files sizes (since there are
-          no templates being instantiated any more), and also speed up debugging
-          runtimes - since the externally compiled libraries can be compiler optimised,
-          rather than built using full settings - the difference in performance between
-          <a class="link" href="../perf/getting_best.html" title="Getting the Best Performance from this Library">release and debug builds
-          can be as much as 20 times</a>, so for complex applications this can
-          be a big win.
-        </p>
-<p>
-        <a name="math_toolkit.extern_c.tr1.supported_c99_functions"></a>
-        </p>
-<h5>
-<a name="id1160304"></a>
-          <a class="link" href="tr1.html#math_toolkit.extern_c.tr1.supported_c99_functions">Supported
-          C99 Functions</a>
-        </h5>
-<p>
-        </p>
-<p>
-          See also the <a class="link" href="c99.html" title="C99 C Functions">quick reference
-          guide for these functions</a>.
-        </p>
-<p>
-        
-</p>
+        See also the <a class="link" href="c99.html" title="C99 C Functions">quick reference guide
+        for these functions</a>.
+      </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tr1</span><span class="special">{</span> <span class="keyword">extern</span> <span class="string">"C"</span><span class="special">{</span>
 
 <span class="keyword">typedef</span> <span class="identifier">unspecified</span> <span class="identifier">float_t</span><span class="special">;</span>
@@ -436,23 +390,15 @@
 
 <span class="special">}}}}</span> <span class="comment">// namespaces
 </span></pre>
+<a name="math_toolkit.extern_c.tr1.supported_tr1_functions"></a><h5>
+<a name="id1280933"></a>
+        <a class="link" href="tr1.html#math_toolkit.extern_c.tr1.supported_tr1_functions">Supported
+        TR1 Functions</a>
+      </h5>
 <p>
-        <a name="math_toolkit.extern_c.tr1.supported_tr1_functions"></a>
-        </p>
-<h5>
-<a name="id1162699"></a>
-          <a class="link" href="tr1.html#math_toolkit.extern_c.tr1.supported_tr1_functions">Supported
-          TR1 Functions</a>
-        </h5>
-<p>
-        </p>
-<p>
-          See also the <a class="link" href="tr1.html" title="C99 and TR1 C Functions Overview">quick reference
-          guide for these functions</a>.
-        </p>
-<p>
-        
-</p>
+        See also the <a class="link" href="tr1.html" title="C99 and TR1 C Functions Overview">quick reference guide
+        for these functions</a>.
+      </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">tr1</span><span class="special">{</span> <span class="keyword">extern</span> <span class="string">"C"</span><span class="special">{</span>
    
 <span class="comment">// [5.2.1.1] associated Laguerre polynomials:
@@ -565,27 +511,19 @@
 <span class="special">}}}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-        </p>
-<p>
-          In addition sufficient additional overloads of the <code class="computeroutput"><span class="keyword">double</span></code>
-          versions of the above functions are provided, so that calling the function
-          with any mixture of <code class="computeroutput"><span class="keyword">float</span></code>,
-          <code class="computeroutput"><span class="keyword">double</span></code>, <code class="computeroutput"><span class="keyword">long</span>
-          <span class="keyword">double</span></code>, or <span class="emphasis"><em>integer</em></span>
-          arguments is supported, with the return type determined by the <a class="link" href="../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
-          type calculation rules</em></span></a>.
-        </p>
-<p>
-        <a name="math_toolkit.extern_c.tr1.currently_unsupported_c99_functions"></a>
-        </p>
-<h5>
-<a name="id1166674"></a>
-          <a class="link" href="tr1.html#math_toolkit.extern_c.tr1.currently_unsupported_c99_functions">Currently
-          Unsupported C99 Functions</a>
-        </h5>
-<p>
-        
-</p>
+        In addition sufficient additional overloads of the <code class="computeroutput"><span class="keyword">double</span></code>
+        versions of the above functions are provided, so that calling the function
+        with any mixture of <code class="computeroutput"><span class="keyword">float</span></code>,
+        <code class="computeroutput"><span class="keyword">double</span></code>, <code class="computeroutput"><span class="keyword">long</span>
+        <span class="keyword">double</span></code>, or <span class="emphasis"><em>integer</em></span>
+        arguments is supported, with the return type determined by the <a class="link" href="../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>result
+        type calculation rules</em></span></a>.
+      </p>
+<a name="math_toolkit.extern_c.tr1.currently_unsupported_c99_functions"></a><h5>
+<a name="id1284908"></a>
+        <a class="link" href="tr1.html#math_toolkit.extern_c.tr1.currently_unsupported_c99_functions">Currently
+        Unsupported C99 Functions</a>
+      </h5>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">exp2</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">);</span>
 <span class="keyword">float</span> <span class="identifier">exp2f</span><span class="special">(</span><span class="keyword">float</span> <span class="identifier">x</span><span class="special">);</span>
 <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">exp2l</span><span class="special">(</span><span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">x</span><span class="special">);</span>
@@ -646,17 +584,11 @@
 <span class="keyword">float</span> <span class="identifier">scalbnf</span><span class="special">(</span><span class="keyword">float</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">ex</span><span class="special">);</span>
 <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">scalbnl</span><span class="special">(</span><span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">ex</span><span class="special">);</span>
 </pre>
-<p>
-        <a name="math_toolkit.extern_c.tr1.currently_unsupported_tr1_functions"></a>
-        </p>
-<h5>
-<a name="id1168893"></a>
-          <a class="link" href="tr1.html#math_toolkit.extern_c.tr1.currently_unsupported_tr1_functions">Currently
-          Unsupported TR1 Functions</a>
-        </h5>
-<p>
-        
-</p>
+<a name="math_toolkit.extern_c.tr1.currently_unsupported_tr1_functions"></a><h5>
+<a name="id1287126"></a>
+        <a class="link" href="tr1.html#math_toolkit.extern_c.tr1.currently_unsupported_tr1_functions">Currently
+        Unsupported TR1 Functions</a>
+      </h5>
 <pre class="programlisting"><span class="comment">// [5.2.1.7] confluent hypergeometric functions:
 </span><span class="keyword">double</span> <span class="identifier">conf_hyperg</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">a</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">c</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">x</span><span class="special">);</span>
 <span class="keyword">float</span> <span class="identifier">conf_hypergf</span><span class="special">(</span><span class="keyword">float</span> <span class="identifier">a</span><span class="special">,</span> <span class="keyword">float</span> <span class="identifier">c</span><span class="special">,</span> <span class="keyword">float</span> <span class="identifier">x</span><span class="special">);</span>
@@ -668,8 +600,6 @@
 <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">hypergl</span><span class="special">(</span><span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">a</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">b</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">c</span><span class="special">,</span>
 <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">x</span><span class="special">);</span>
 </pre>
-<p>
-      </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

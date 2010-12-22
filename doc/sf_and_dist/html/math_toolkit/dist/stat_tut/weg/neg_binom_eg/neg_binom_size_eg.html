@@ -24,8 +24,8 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_size_eg"></a><a class="link" href="neg_binom_size_eg.html" title="Estimating Sample Sizes for the Negative Binomial.">
-            Estimating Sample Sizes for the Negative Binomial.</a>
+<a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_size_eg"></a><a class="link" href="neg_binom_size_eg.html" title="Estimating Sample Sizes for the Negative Binomial.">Estimating
+            Sample Sizes for the Negative Binomial.</a>
 </h6></div></div></div>
 <p>
               Imagine you have an event (let's call it a "failure" - though
@@ -43,64 +43,45 @@
               demonstrates its usage.
             </p>
 <p>
-              </p>
-<p>
-                It centres around a routine that prints out a table of minimum sample
-                sizes (number of trials) for various probability thresholds:
-              </p>
-<p>
-              </p>
-<p>
-                
-</p>
-<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">failures</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">);</span></pre>
-<p>
-              </p>
-<p>
-              </p>
-<p>
-                First define a table of significance levels: these are the maximum
-                acceptable probability that <span class="emphasis"><em>failure</em></span> or fewer
-                events will be observed.
-              </p>
-<p>
-              </p>
-<p>
-                
-</p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
-<p>
-              </p>
-<p>
-              </p>
-<p>
-                Confidence value as % is (1 - alpha) * 100, so alpha 0.05 == 95%
-                confidence that the desired number of failures will be observed.
-                The values range from a very low 0.5 or 50% confidence up to an extremely
-                high confidence of 99.999.
-              </p>
-<p>
-              </p>
-<p>
-                Much of the rest of the program is pretty-printing, the important
-                part is in the calculation of minimum number of trials required for
-                each value of alpha using:
-              </p>
+              It centres around a routine that prints out a table of minimum sample
+              sizes (number of trials) for various probability thresholds:
+            </p>
 <p>
               
 </p>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">failures</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">);</span></pre>
+<p>
+            </p>
+<p>
+              First define a table of significance levels: these are the maximum
+              acceptable probability that <span class="emphasis"><em>failure</em></span> or fewer events
+              will be observed.
+            </p>
+<p>
+              
+</p>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
+<p>
+            </p>
+<p>
+              Confidence value as % is (1 - alpha) * 100, so alpha 0.05 == 95% confidence
+              that the desired number of failures will be observed. The values range
+              from a very low 0.5 or 50% confidence up to an extremely high confidence
+              of 99.999.
+            </p>
+<p>
+              Much of the rest of the program is pretty-printing, the important part
+              is in the calculation of minimum number of trials required for each
+              value of alpha using:
+            </p>
 <pre class="programlisting"><span class="special">(</span><span class="keyword">int</span><span class="special">)</span><span class="identifier">ceil</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">::</span><span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span><span class="identifier">failures</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]);</span>
 </pre>
 <p>
-              </p>
+              find_minimum_number_of_trials returns a double, so <code class="computeroutput"><span class="identifier">ceil</span></code>
+              rounds this up to ensure we have an integral minimum number of trials.
+            </p>
 <p>
-                find_minimum_number_of_trials returns a double, so <code class="computeroutput"><span class="identifier">ceil</span></code> rounds this up to ensure we
-                have an integral minimum number of trials.
-              </p>
-<p>
-              </p>
-<p>
-                
+              
 </p>
 <pre class="programlisting">  
 <span class="keyword">void</span> <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">failures</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">)</span>
@@ -131,17 +112,13 @@
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="special">}</span> <span class="comment">// void find_number_of_trials(double failures, double p)</span></pre>
 <p>
-              </p>
+            </p>
 <p>
-              </p>
+              finally we can produce some tables of minimum trials for the chosen
+              confidence levels:
+            </p>
 <p>
-                finally we can produce some tables of minimum trials for the chosen
-                confidence levels:
-              </p>
-<p>
-              </p>
-<p>
-                
+              
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
@@ -156,8 +133,6 @@
 <span class="special">}</span> <span class="comment">// int main()
 </span>
 </pre>
-<p>
-              </p>
 <p>
             </p>
 <div class="note"><table border="0" summary="Note">

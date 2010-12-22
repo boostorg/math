@@ -24,22 +24,17 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_tutorial.user_def_err_pol"></a><a class="link" href="user_def_err_pol.html" title="Calling User Defined Error Handlers">
-        Calling User Defined Error Handlers</a>
+<a name="math_toolkit.policy.pol_tutorial.user_def_err_pol"></a><a class="link" href="user_def_err_pol.html" title="Calling User Defined Error Handlers">Calling
+        User Defined Error Handlers</a>
 </h4></div></div></div>
 <p>
-          </p>
-<p>
-            Suppose we want our own user-defined error handlers rather than the any
-            of the default ones supplied by the library to be used. If we set the
-            policy for a specific type of error to <code class="computeroutput"><span class="identifier">user_error</span></code>
-            then the library will call a user-supplied error handler. These are forward
-            declared, but not defined in boost/math/policies/error_handling.hpp like
-            this:
-          </p>
-<p>
-          
-</p>
+          Suppose we want our own user-defined error handlers rather than the any
+          of the default ones supplied by the library to be used. If we set the policy
+          for a specific type of error to <code class="computeroutput"><span class="identifier">user_error</span></code>
+          then the library will call a user-supplied error handler. These are forward
+          declared, but not defined in boost/math/policies/error_handling.hpp like
+          this:
+        </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">policies</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -62,17 +57,13 @@
 <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <p>
-          </p>
+          So out first job is to include the header we want to use, and then provide
+          definitions for our user-defined error handlers that we want to use. We
+          only provide our special domain and pole error handlers; other errors like
+          overflow and underflow use the default.
+        </p>
 <p>
-            So out first job is to include the header we want to use, and then provide
-            definitions for our user-defined error handlers that we want to use.
-            We only provide our special domain and pole error handlers; other errors
-            like overflow and underflow use the default.
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
@@ -96,17 +87,13 @@
   <span class="special">}</span> <span class="comment">// namespace policies
 </span><span class="special">}}</span> <span class="comment">// namespace boost{ namespace math</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Now we'll need to define a suitable policy that will call these handlers,
+          and define some forwarding functions that make use of the policy:
+        </p>
 <p>
-            Now we'll need to define a suitable policy that will call these handlers,
-            and define some forwarding functions that make use of the policy:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">namespace</span><span class="special">{</span>
 
@@ -121,17 +108,13 @@
 
 <span class="special">}</span> <span class="comment">// close unnamed namespace</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          We now have a set of forwarding functions defined in an unnamed namespace
+          that all look something like this:
+        </p>
 <p>
-            We now have a set of forwarding functions defined in an unnamed namespace
-            that all look something like this:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">promote_args</span><span class="special">&lt;</span><span class="identifier">RT</span><span class="special">&gt;::</span><span class="identifier">type</span>
@@ -141,17 +124,15 @@
 <span class="special">}</span>
 </pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          So that when we call <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code>
+          we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span>
+          <span class="identifier">user_error_policy</span><span class="special">())</span></code>,
+          and any errors will get directed to our own error handlers.
+        </p>
 <p>
-            So that when we call <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code> we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">user_error_policy</span><span class="special">())</span></code>,
-            and any errors will get directed to our own error handlers.
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
@@ -161,38 +142,24 @@
       <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="special">}</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
-<p>
-            Which outputs:
-          </p>
-<p>
-          
-</p>
+          Which outputs:
+        </p>
 <pre class="programlisting">Domain Error!
   Pole Error!
   Result of erf_inv(-10) is: 1.#QNAN
   Result of tgamma(-10) is: 1.#QNAN
 </pre>
 <p>
+          The previous example was all well and good, but the custom error handlers
+          didn't really do much of any use. In this example we'll implement all the
+          custom handlers and show how the information provided to them can be used
+          to generate nice formatted error messages.
         </p>
 <p>
-          </p>
-<p>
-            The previous example was all well and good, but the custom error handlers
-            didn't really do much of any use. In this example we'll implement all
-            the custom handlers and show how the information provided to them can
-            be used to generate nice formatted error messages.
-          </p>
-<p>
-          </p>
-<p>
-            Each error handler has the general form:
-          </p>
-<p>
-          
-</p>
+          Each error handler has the general form:
+        </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">user_</span><span class="emphasis"><em>error_type</em></span><span class="special">(</span>
    <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span>
@@ -200,61 +167,49 @@
    <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">);</span>
 </pre>
 <p>
-          </p>
-<p>
-            and accepts three arguments:
-          </p>
-<p>
-          </p>
+          and accepts three arguments:
+        </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
 <dl>
 <dt><span class="term">const char* function</span></dt>
 <dd><p>
-                  The name of the function that raised the error, this string contains
-                  one or more %1% format specifiers that should be replaced by the
-                  name of real type T, like float or double.
-                </p></dd>
+                The name of the function that raised the error, this string contains
+                one or more %1% format specifiers that should be replaced by the
+                name of real type T, like float or double.
+              </p></dd>
 <dt><span class="term">const char* message</span></dt>
 <dd><p>
-                  A message associated with the error, normally this contains a %1%
-                  format specifier that should be replaced with the value of <span class="emphasis"><em>value</em></span>:
-                  however note that overflow and underflow messages do not contain
-                  this %1% specifier (since the value of <span class="emphasis"><em>value</em></span>
-                  is immaterial in these cases).
-                </p></dd>
+                A message associated with the error, normally this contains a %1%
+                format specifier that should be replaced with the value of <span class="emphasis"><em>value</em></span>:
+                however note that overflow and underflow messages do not contain
+                this %1% specifier (since the value of <span class="emphasis"><em>value</em></span>
+                is immaterial in these cases).
+              </p></dd>
 <dt><span class="term">const T&amp; value</span></dt>
 <dd><p>
-                  The value that caused the error: either an argument to the function
-                  if this is a domain or pole error, the tentative result if this
-                  is a denorm or evaluation error, or zero or infinity for underflow
-                  or overflow errors.
-                </p></dd>
+                The value that caused the error: either an argument to the function
+                if this is a domain or pole error, the tentative result if this is
+                a denorm or evaluation error, or zero or infinity for underflow or
+                overflow errors.
+              </p></dd>
 </dl>
 </div>
 <p>
-          </p>
+          As before we'll include the headers we need first:
+        </p>
 <p>
-            As before we'll include the headers we need first:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Next we'll implement our own error handlers for each type of error, starting
+          with domain errors:
+        </p>
 <p>
-            Next we'll implement our own error handlers for each type of error, starting
-            with domain errors:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 <span class="keyword">namespace</span> <span class="identifier">policies</span>
@@ -264,96 +219,71 @@
 <span class="identifier">T</span> <span class="identifier">user_domain_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
 <span class="special">{</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          We'll begin with a bit of defensive programming in case function or message
+          are empty:
+        </p>
 <p>
-            We'll begin with a bit of defensive programming in case function or message
-            are empty:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">if</span><span class="special">(</span><span class="identifier">function</span> <span class="special">==</span> <span class="number">0</span><span class="special">)</span>
     <span class="identifier">function</span> <span class="special">=</span> <span class="string">"Unknown function with arguments of type %1%"</span><span class="special">;</span>
 <span class="keyword">if</span><span class="special">(</span><span class="identifier">message</span> <span class="special">==</span> <span class="number">0</span><span class="special">)</span>
     <span class="identifier">message</span> <span class="special">=</span> <span class="string">"Cause unknown with bad argument %1%"</span><span class="special">;</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Next we'll format the name of the function with the name of type T, perhaps
+          double:
+        </p>
 <p>
-            Next we'll format the name of the function with the name of type T, perhaps
-            double:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">msg</span><span class="special">(</span><span class="string">"Error in function "</span><span class="special">);</span>
 <span class="identifier">msg</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span><span class="identifier">function</span><span class="special">)</span> <span class="special">%</span> <span class="keyword">typeid</span><span class="special">(</span><span class="identifier">T</span><span class="special">).</span><span class="identifier">name</span><span class="special">()).</span><span class="identifier">str</span><span class="special">();</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Then likewise format the error message with the value of parameter <span class="emphasis"><em>val</em></span>,
+          making sure we output all the potentially significant digits of <span class="emphasis"><em>val</em></span>:
+        </p>
 <p>
-            Then likewise format the error message with the value of parameter <span class="emphasis"><em>val</em></span>,
-            making sure we output all the potentially significant digits of <span class="emphasis"><em>val</em></span>:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="identifier">msg</span> <span class="special">+=</span> <span class="string">": \n"</span><span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">prec</span> <span class="special">=</span> <span class="number">2</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span> <span class="special">*</span> <span class="number">30103UL</span><span class="special">)</span> <span class="special">/</span> <span class="number">100000UL</span><span class="special">;</span>
 <span class="comment">// int prec = std::numeric_limits&lt;T&gt;::max_digits10; //  For C++0X Standard Library
 </span><span class="identifier">msg</span> <span class="special">+=</span> <span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span><span class="identifier">message</span><span class="special">)</span> <span class="special">%</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">io</span><span class="special">::</span><span class="identifier">group</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">setprecision</span><span class="special">(</span><span class="identifier">prec</span><span class="special">),</span> <span class="identifier">val</span><span class="special">)).</span><span class="identifier">str</span><span class="special">();</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Now we just have to do something with the message, we could throw an exception,
+          but for the purposes of this example we'll just dump the message to std::cerr:
+        </p>
 <p>
-            Now we just have to do something with the message, we could throw an
-            exception, but for the purposes of this example we'll just dump the message
-            to std::cerr:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cerr</span> <span class="special">&lt;&lt;</span> <span class="identifier">msg</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Finally the only sensible value we can return from a domain error is a
+          NaN:
+        </p>
 <p>
-            Finally the only sensible value we can return from a domain error is
-            a NaN:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting">   <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">();</span>
 <span class="special">}</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Pole errors are essentially a special case of domain errors, so in this
+          example we'll just return the result of a domain error:
+        </p>
 <p>
-            Pole errors are essentially a special case of domain errors, so in this
-            example we'll just return the result of a domain error:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">user_pole_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
@@ -361,17 +291,13 @@
    <span class="keyword">return</span> <span class="identifier">user_domain_error</span><span class="special">(</span><span class="identifier">function</span><span class="special">,</span> <span class="identifier">message</span><span class="special">,</span> <span class="identifier">val</span><span class="special">);</span>
 <span class="special">}</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Overflow errors are very similar to domain errors, except that there's
+          no %1% format specifier in the <span class="emphasis"><em>message</em></span> parameter:
+        </p>
 <p>
-            Overflow errors are very similar to domain errors, except that there's
-            no %1% format specifier in the <span class="emphasis"><em>message</em></span> parameter:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">user_overflow_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
@@ -393,16 +319,12 @@
 </span>   <span class="keyword">return</span> <span class="identifier">val</span><span class="special">;</span>
 <span class="special">}</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Underflow errors are much the same as overflow:
+        </p>
 <p>
-            Underflow errors are much the same as overflow:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">user_underflow_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
@@ -424,16 +346,12 @@
 </span>   <span class="keyword">return</span> <span class="identifier">val</span><span class="special">;</span>
 <span class="special">}</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Denormalised results are much the same as underflow:
+        </p>
 <p>
-            Denormalised results are much the same as underflow:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">user_denorm_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
@@ -455,19 +373,15 @@
 </span>   <span class="keyword">return</span> <span class="identifier">val</span><span class="special">;</span>
 <span class="special">}</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Which leaves us with evaluation errors: these occur when an internal error
+          occurs that prevents the function being fully evaluated. The parameter
+          <span class="emphasis"><em>val</em></span> contains the closest approximation to the result
+          found so far:
+        </p>
 <p>
-            Which leaves us with evaluation errors: these occur when an internal
-            error occurs that prevents the function being fully evaluated. The parameter
-            <span class="emphasis"><em>val</em></span> contains the closest approximation to the result
-            found so far:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">user_evaluation_error</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">function</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">val</span><span class="special">)</span>
@@ -496,17 +410,13 @@
 <span class="special">}</span> <span class="comment">// policies
 </span><span class="special">}}</span> <span class="comment">// boost::math</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          Now we'll need to define a suitable policy that will call these handlers,
+          and define some forwarding functions that make use of the policy:
+        </p>
 <p>
-            Now we'll need to define a suitable policy that will call these handlers,
-            and define some forwarding functions that make use of the policy:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">namespace</span>
 <span class="special">{</span> <span class="comment">// unnamed.
@@ -526,17 +436,13 @@
 
 <span class="special">}</span> <span class="comment">// unnamed namespace</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          We now have a set of forwarding functions, defined in an unnamed namespace,
+          that all look something like this:
+        </p>
 <p>
-            We now have a set of forwarding functions, defined in an unnamed namespace,
-            that all look something like this:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">::</span><span class="identifier">promote_args</span><span class="special">&lt;</span><span class="identifier">RT</span><span class="special">&gt;::</span><span class="identifier">type</span>
@@ -546,17 +452,15 @@
 <span class="special">}</span>
 </pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
+          So that when we call <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code>
+          we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span>
+          <span class="identifier">user_error_policy</span><span class="special">())</span></code>,
+          and any errors will get directed to our own error handlers:
+        </p>
 <p>
-            So that when we call <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code> we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">user_error_policy</span><span class="special">())</span></code>,
-            and any errors will get directed to our own error handlers:
-          </p>
-<p>
-          </p>
-<p>
-            
+          
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
@@ -577,15 +481,10 @@
 </span>   <span class="comment">// since these should never really occur!
 </span><span class="special">}</span> <span class="comment">// int main()</span></pre>
 <p>
-          </p>
+        </p>
 <p>
-          </p>
-<p>
-            Which outputs:
-          </p>
-<p>
-          
-</p>
+          Which outputs:
+        </p>
 <pre class="programlisting">Error in function boost::math::erf_inv&lt;double&gt;(double, double):
 Argument outside range [-1, 1] in inverse erf function (got p=-10).
 Result of erf_inv(-10) is: 1.#QNAN
@@ -607,18 +506,14 @@ Result of tgamma is too small to represent.
 Result of tgamma(-190.5) is: 0
 </pre>
 <p>
-          </p>
-<p>
-            Notice how some of the calls result in an error handler being called
-            more than once, or for more than one handler to be called: this is an
-            artefact of the fact that many functions are implemented in terms of
-            one or more sub-routines each of which may have it's own error handling.
-            For example <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(-</span><span class="number">190.5</span><span class="special">)</span></code>
-            is implemented in terms of <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="number">190.5</span><span class="special">)</span></code> - which overflows - the reflection formula
-            for <code class="computeroutput"><span class="identifier">tgamma</span></code> then notices
-            that it is dividing by infinity and so underflows.
-          </p>
-<p>
+          Notice how some of the calls result in an error handler being called more
+          than once, or for more than one handler to be called: this is an artefact
+          of the fact that many functions are implemented in terms of one or more
+          sub-routines each of which may have it's own error handling. For example
+          <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(-</span><span class="number">190.5</span><span class="special">)</span></code> is
+          implemented in terms of <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="number">190.5</span><span class="special">)</span></code>
+          - which overflows - the reflection formula for <code class="computeroutput"><span class="identifier">tgamma</span></code>
+          then notices that it is dividing by infinity and so underflows.
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

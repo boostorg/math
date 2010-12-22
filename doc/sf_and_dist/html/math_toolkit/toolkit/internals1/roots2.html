@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.toolkit.internals1.roots2"></a><a class="link" href="roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748"> Root Finding
+<a name="math_toolkit.toolkit.internals1.roots2"></a><a class="link" href="roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748">Root Finding
         Without Derivatives: Bisection, Bracket and TOMS748</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.roots2.synopsis"></a><h5>
-<a name="id1201829"></a>
+<a name="id1319931"></a>
           <a class="link" href="roots2.html#math_toolkit.toolkit.internals1.roots2.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -144,7 +144,7 @@
   <span class="special">}}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.toolkit.internals1.roots2.description"></a><h5>
-<a name="id1204398"></a>
+<a name="id1322473"></a>
           <a class="link" href="roots2.html#math_toolkit.toolkit.internals1.roots2.description">Description</a>
         </h5>
 <p>
@@ -181,7 +181,7 @@
           to be used only rarely, but may be useful in some specific circumstances.
         </p>
 <a name="math_toolkit.toolkit.internals1.roots2.bisection"></a><h5>
-<a name="id1204462"></a>
+<a name="id1322538"></a>
           <a class="link" href="roots2.html#math_toolkit.toolkit.internals1.roots2.bisection">Bisection</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
@@ -248,14 +248,9 @@
 </dl>
 </div>
 <p>
-          </p>
-<p>
-            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
-            is optional and can be used to control the behaviour of the function:
-            how it handles errors, what level of precision to use etc. Refer to the
-            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
-          </p>
-<p>
+          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
+          optional and can be used to control the behaviour of the function: how
+          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
 <p>
           Returns: a pair of values <span class="emphasis"><em>r</em></span> that bracket the root
@@ -285,7 +280,7 @@
           <span class="emphasis"><em>tol</em></span> was satisfied.
         </p>
 <a name="math_toolkit.toolkit.internals1.roots2.bracket_and_solve"></a><h5>
-<a name="id1205264"></a>
+<a name="id1323336"></a>
           <a class="link" href="roots2.html#math_toolkit.toolkit.internals1.roots2.bracket_and_solve">Bracket
           and solve</a>
         </h5>
@@ -361,14 +356,9 @@
 </dl>
 </div>
 <p>
-          </p>
-<p>
-            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
-            is optional and can be used to control the behaviour of the function:
-            how it handles errors, what level of precision to use etc. Refer to the
-            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
-          </p>
-<p>
+          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
+          optional and can be used to control the behaviour of the function: how
+          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
 <p>
           Returns: a pair of values <span class="emphasis"><em>r</em></span> that bracket the root
@@ -398,7 +388,7 @@
           was satisfied.
         </p>
 <a name="math_toolkit.toolkit.internals1.roots2.algorithm_toms_748__alefeld__potra_and_shi__enclosing_zeros_of_continuous_functions"></a><h5>
-<a name="id1207278"></a>
+<a name="id1324117"></a>
           <a class="link" href="roots2.html#math_toolkit.toolkit.internals1.roots2.algorithm_toms_748__alefeld__potra_and_shi__enclosing_zeros_of_continuous_functions">Algorithm
           TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions</a>
         </h5>
@@ -495,14 +485,9 @@
 </dl>
 </div>
 <p>
-          </p>
-<p>
-            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
-            is optional and can be used to control the behaviour of the function:
-            how it handles errors, what level of precision to use etc. Refer to the
-            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
-          </p>
-<p>
+          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
+          optional and can be used to control the behaviour of the function: how
+          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
 <p>
           toms748_solve returns: a pair of values <span class="emphasis"><em>r</em></span> that bracket
@@ -569,7 +554,7 @@
           as soon as both ends of the interval round to the same nearest integer.
         </p>
 <a name="math_toolkit.toolkit.internals1.roots2.implementation"></a><h5>
-<a name="id1208892"></a>
+<a name="id1326820"></a>
           <a class="link" href="roots2.html#math_toolkit.toolkit.internals1.roots2.implementation">Implementation</a>
         </h5>
 <p>
