@@ -455,6 +455,24 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
    BOOST_MATH_STD_USING  // For ADL of math functions.
 
    //
+   // Handle trivial cases first:
+   //
+   if(q == 0)
+   {
+      if(py) *py = 0;
+      return 1;
+   }
+   else if(p == 0)
+   {
+      if(py) *py = 1;
+      return 0;
+   }
+   else if((a == 1) && (b == 1))
+   {
+      if(py) *py = 1 - p;
+      return p;
+   }
+   //
    // The flag invert is set to true if we swap a for b and p for q,
    // in which case the result has to be subtracted from 1:
    //
@@ -484,24 +502,9 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       invert = !invert;
    }
    //
-   // Handle trivial cases first:
+   // Select calculation method for the initial estimate:
    //
-   if(q == 0)
-   {
-      if(py) *py = 0;
-      return 1;
-   }
-   else if(p == 0)
-   {
-      if(py) *py = 1;
-      return 0;
-   }
-   else if((a == 1) && (b == 1))
-   {
-      if(py) *py = 1 - p;
-      return p;
-   }
-   else if((b == 0.5f) && (a >= 0.5f))
+   if((b == 0.5f) && (a >= 0.5f))
    {
       //
       // We have a Student's T distribution:

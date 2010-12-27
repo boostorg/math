@@ -66,7 +66,7 @@ namespace boost
             if(k == 0)
             {
                beta = -boost::math::powm1(y, n / 2, pol);
-               xterm = beta > 0.5f ? pow(y, n / 2) : 1 - beta;
+               xterm = beta > 0.5f ? T(pow(y, n / 2)) : T(1 - beta);
             }
             else
             {
