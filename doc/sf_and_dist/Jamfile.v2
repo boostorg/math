@@ -7,6 +7,24 @@ using quickbook ;
 
 path-constant images_location : html ;
 
+import modules ;
+
+if --enable-index in  [ modules.peek : ARGV ]
+{
+   ECHO "Building the Math docs with automatic index generation enabled." ;
+   using auto-index ;
+   project : requirements
+        <auto-index>on <format>pdf:<auto-index-internal>off
+        <format>html:<auto-index-internal>on
+        <auto-index-script>index.idx
+        <auto-index-prefix>../../../.. 
+        <quickbook-define>enable_index ;
+}
+else
+{
+   ECHO "Building the Math docs with automatic index generation disabled.  Try building with --enable-index." ;
+}
+
 xml math : math.qbk ;
 boostbook standalone
     :

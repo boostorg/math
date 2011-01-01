@@ -21,7 +21,7 @@
 [template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
 
 This manual is also available in 
-[@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/complex-tr1.pdf 
+[@http://sourceforge.net/projects/boost/files/boost-docs/ 
 printer friendly PDF format].
 
 [section:inverse_complex Complex Number Inverse Trigonometric Functions]

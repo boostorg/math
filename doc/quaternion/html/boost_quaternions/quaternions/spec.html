@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Quaternion Specializations</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Boost.Quaternions">
 <link rel="up" href="../quaternions.html" title="Quaternions">
 <link rel="prev" href="quat.html" title="Template Class quaternion">
@@ -22,9 +22,9 @@
 <div class="spirit-nav">
 <a accesskey="p" href="quat.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../quaternions.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="mem_typedef.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_quaternions.quaternions.spec"></a><a class="link" href="spec.html" title="Quaternion Specializations"> Quaternion Specializations</a>
+<a name="boost_quaternions.quaternions.spec"></a><a class="link" href="spec.html" title="Quaternion Specializations">Quaternion Specializations</a>
 </h3></div></div></div>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
@@ -75,13 +75,12 @@
    <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;&amp;</span>     <a class="link" href="mem_fun.html#boost_quaternions.quaternions.mem_fun.division_operators">operator /= </a><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 <span class="special">};</span>
 </pre>
-<a name="boost_quaternions.quaternion_double"></a><p>
-      </p>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
 <span class="keyword">class</span> <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
-   <span class="keyword">typedef</span> <span class="keyword">double</span> <a class="link" href="mem_typedef.html" title="Quaternion Member Typedefs">value_type</a><span class="special">;</span>
+   <span class="keyword">typedef</span> <span class="keyword">double</span> <a name="boost_quaternions.quaternion_double"></a>
+<a class="link" href="mem_typedef.html" title="Quaternion Member Typedefs">value_type</a><span class="special">;</span>
 	
    <span class="keyword">explicit</span> <a class="link" href="mem_fun.html#boost_quaternions.quaternions.mem_fun.constructors">quaternion</a><span class="special">(</span><span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">,</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">,</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">,</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="number">0.0</span><span class="special">);</span>
    <span class="keyword">explicit</span> <a class="link" href="mem_fun.html#boost_quaternions.quaternions.mem_fun.constructors">quaternion</a><span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z0</span><span class="special">,</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z1</span> <span class="special">=</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;());</span>
@@ -124,13 +123,12 @@
    <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;&amp;</span>     <a class="link" href="mem_fun.html#boost_quaternions.quaternions.mem_fun.division_operators">operator /= </a><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 <span class="special">};</span>
 </pre>
-<a name="boost_quaternions.quaternion_long_double"></a><p>
-      </p>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
 <span class="keyword">class</span> <span class="identifier">quaternion</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
-   <span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">double</span> <a class="link" href="mem_typedef.html" title="Quaternion Member Typedefs">value_type</a><span class="special">;</span>
+   <span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">double</span> <a name="boost_quaternions.quaternion_long_double"></a>
+<a class="link" href="mem_typedef.html" title="Quaternion Member Typedefs">value_type</a><span class="special">;</span>
 	
    <span class="keyword">explicit</span> <a class="link" href="mem_fun.html#boost_quaternions.quaternions.mem_fun.constructors">quaternion</a><span class="special">(</span><span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_a</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_b</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_c</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">,</span> <span class="keyword">long</span> <span class="keyword">double</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">requested_d</span> <span class="special">=</span> <span class="number">0.0L</span><span class="special">);</span>
    <span class="keyword">explicit</span> <a class="link" href="mem_fun.html#boost_quaternions.quaternions.mem_fun.constructors">quaternion</a><span class="special">(::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z0</span><span class="special">,</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">z1</span> <span class="special">=</span> <span class="special">::</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span><span class="special">&lt;</span><span class="keyword">long</span> <span class="keyword">double</span><span class="special">&gt;());</span>
