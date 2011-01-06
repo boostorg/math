@@ -16,7 +16,7 @@ project
       #<toolset>gcc:<cxxflags>-fvisibility=hidden
       <toolset>intel-linux:<cxxflags>-fvisibility=hidden
       <toolset>sun:<cxxflags>-xldscope=hidden
-      [ check-target-builds ../config//has_gcc_visibility : <cxxflags>-fvisibility=hidden : ]
+      [ check-target-builds ../config//has_gcc_visibility : <toolset>gcc:<cxxflags>-fvisibility=hidden : ]
     ;
 
 cpp-pch pch : ../src/tr1/pch.hpp : <include>../src/tr1 <link>shared:<define>BOOST_MATH_TR1_DYN_LINK=1 ; 
