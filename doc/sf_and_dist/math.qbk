@@ -281,7 +281,7 @@ and use the function's name as the link text.]
 [def __errno [@http://en.wikipedia.org/wiki/Errno `::errno`]]
 [def __Mathworld [@http://mathworld.wolfram.com Wolfram MathWorld]]
 [def __Mathematica [@http://www.wolfram.com/products/mathematica/index.html Wolfram Mathematica]]
-[def __TOMS748 [@doi:10.1145/210089.210111  TOMS Algorithm 748: enclosing zeros of continuous functions]]
+[def __TOMS748 [@http://portal.acm.org/citation.cfm?id=210111 TOMS Algorithm 748: enclosing zeros of continuous functions]]
 [def __why_complements [link why_complements why complements?]]
 [def __complements [link complements complements]]
 [def __performance [link math_toolkit.perf performance]]
@@ -520,3 +520,4 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+

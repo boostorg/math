@@ -73,7 +73,7 @@ int main()
   try
   {
     unsigned n = 10; unsigned k = 2;
-  //	cout << "Binomial coefficient: " << boost::math::binomial_coefficient<unsigned>(n,k) << endl;
+    // cout << "Binomial coefficient: " << boost::math::binomial_coefficient<unsigned>(n,k) << endl;
   }
   catch(exception& e)
   {
@@ -93,4 +93,5 @@ Output:
   Falling factorial: 56
 
 */
+
 

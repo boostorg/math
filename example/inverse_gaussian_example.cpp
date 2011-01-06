@@ -85,7 +85,7 @@ int main()
       cout << "Probability distribution function (pdf) values" << endl;
       cout << "  z " "      pdf " << endl;
       cout.precision(5);
-      for (double z = numeric_limits<double>::min(); z < range + step; z += step)
+      for (double z = (numeric_limits<double>::min)(); z < range + step; z += step)
       {
         cout << left << setprecision(3) << setw(6) << z << " " 
           << setprecision(precision) << setw(12) << pdf(w11, z) << endl;
@@ -98,7 +98,7 @@ int main()
       // For a (default) inverse gaussian distribution.
       cout << "Integral (area under the curve) from 0 up to z (cdf) " << endl;
       cout << "  z " "      cdf " << endl;
-      for (double z = numeric_limits<double>::min(); z < range + step; z += step)
+      for (double z = (numeric_limits<double>::min)(); z < range + step; z += step)
       {
         cout << left << setprecision(3) << setw(6) << z << " " 
           << setprecision(precision) << setw(12) << cdf(w11, z) << endl;
@@ -227,7 +227,7 @@ for a probability for a few probability from the above table, for z = 0.4, 1.0, 
   /*
   double qs = pinvgaussU(c, 1, 1); // 
     cout << "qinvgaussU(c, 1, 1) = " << qs << endl; // qinvgaussU(c, 1, 1) = 0.86567442459240929
-    // > z=q - exp(c) * p [1] 0.8656744 		qs	0.86567442459240929	double
+    // > z=q - exp(c) * p [1] 0.8656744 qs 0.86567442459240929	double
     // Is this the complement?
     cout << "qgamma(0.2, 0.5, 1) expect 0.0320923 = " << qgamma(0.2, 0.5, 1) << endl;
     // qgamma(0.2, 0.5, 1) expect 0.0320923 = 0.032092377333650807
@@ -508,3 +508,6 @@ $Kurtosis...B2.minus.3
 
 
 */
+
+
+
