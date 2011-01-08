@@ -179,7 +179,9 @@ void test_spots(RealType)
    cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << " %" << endl;
    lognormal_distribution<RealType> dist(8, 3);
    RealType x = static_cast<RealType>(0.125);
-   using namespace std; // ADL of std names.
+
+   BOOST_MATH_STD_USING // ADL of std math lib names.
+
    // mean:
    BOOST_CHECK_CLOSE(
       mean(dist)

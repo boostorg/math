@@ -37,7 +37,6 @@ interval:
   double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
 
 /*`
-
 Confidence value as % is (1 - alpha) * 100, so alpha 0.05 == 95% confidence
 that the true occurence frequency lies *inside* the calculated interval.
 
@@ -81,7 +80,6 @@ we must divide the value of alpha in two.  Had we been calculating a
 single-sided interval, for example: ['"Calculate a lower bound so that we are P%
 sure that the true occurrence frequency is greater than some value"]
 then we would *not* have divided by two.
-
 */
 
    // Now print out the upper and lower limits for the alpha table values.

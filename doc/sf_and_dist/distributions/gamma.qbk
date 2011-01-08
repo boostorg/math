@@ -34,12 +34,12 @@ integer value > 0, the Erlang distribution is not separately implemented.
 To avoid potential confusion with the gamma functions, this
 distribution does not provide the typedef:
 
-``typedef gamma_distibution<double> gamma;`` 
+``typedef gamma_distribution<double> gamma;`` 
 
-Instead if you want 
-a double precision gamma distribution you can use 
+Instead if you want a double precision gamma distribution you can write 
 
-``boost::math::gamma_distribution<>``]
+``boost::math::gamma_distribution<> my_gamma(1, 1);``
+]
 
 For shape parameter /k/ and scale parameter [theta][space] it is defined by the
 probability density function:
@@ -109,7 +109,7 @@ data for those functions for more information.
 [h4 Implementation]
 
 In the following table /k/ is the shape parameter of the distribution, 
-[theta][space] is it's scale parameter, /x/ is the random variate, /p/ is the probability
+[theta][space] is its scale parameter, /x/ is the random variate, /p/ is the probability
 and /q = 1-p/.
 
 [table

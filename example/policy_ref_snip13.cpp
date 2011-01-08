@@ -73,3 +73,4 @@ policy_snip_13.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\policy_snip_
   Error in function boost::math::mean(cauchy<double>&): The Cauchy distribution does not have a mean: the only possible return value is 1.#QNAN.
 
   */
+

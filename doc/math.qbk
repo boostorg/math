@@ -36,7 +36,7 @@ The following libraries are present in Boost.Math:
    
    [@../complex/html/index.html HTML Docs]
    
-   [@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/complex-tr1.pdf 
+   [@http://sourceforge.net/projects/boost/files/boost-docs/ 
    PDF Docs]]
    [
 These complex number algorithms are the inverses of trigonometric functions currently
@@ -48,7 +48,7 @@ are part of the [tr1].
    
    [@../gcd/html/index.html HTML Docs]
    
-   [@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/math-gcd.pdf 
+   [@http://sourceforge.net/projects/boost/files/boost-docs/ 
    PDF Docs]]
    [
 The class and function templates in <boost/math/common_factor.hpp> 
@@ -62,7 +62,7 @@ programming problems.
 
 [@../octonion/html/index.html HTML Docs]
 
-[@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/octonion.pdf 
+[@http://sourceforge.net/projects/boost/files/boost-docs/ 
 PDF Docs]]
    [
 Octonions, like [@../quaternion/html/index.html quaternions], are a relative of complex numbers.
@@ -97,7 +97,7 @@ since quite a long time ago).
 
 [@../sf_and_dist/html/index.html HTML Docs]
 
-[@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf 
+[@http://sourceforge.net/projects/boost/files/boost-docs/ 
 PDF Docs]]
 
    [ Provides a number of high quality special functions, initially 
@@ -122,7 +122,7 @@ PDF Docs]]
 
 [@../sf_and_dist/html/index.html HTML Docs]
 
-[@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/math.pdf 
+[@http://sourceforge.net/projects/boost/files/boost-docs/ 
 PDF Docs]]
 
    [Provides a reasonably comprehensive set of statistical distributions, 
@@ -139,7 +139,7 @@ PDF Docs]]
 
 [@../quaternion/html/index.html HTML Docs]
 
-[@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/quaternion.pdf 
+[@http://sourceforge.net/projects/boost/files/boost-docs/ 
 PDF Docs]]
 
    [

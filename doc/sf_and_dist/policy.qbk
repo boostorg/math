@@ -75,7 +75,7 @@ Will return one of the values below depending on the error type (`::errno` is NO
     [[Overflow Error][std::numeric_limits<T>::infinity()]]
     [[Underflow Error][0]]
     [[Denorm Error][The denormalised value.]]
-    [[Evaluation Error][The best guess as to the result: which
+    [[Evaluation Error][The best guess (perhaps NaN) as to the result: which
           may be significantly in error.]]
     [[Indeterminate Result Error][Depends on the function where the error occurred]]
  ]
@@ -301,6 +301,12 @@ For example:
    
    // This will compile, but raises a domain error!
    double m2 = mean(cauchy_distribution<double, policy<assert_undefined<false> > >());
+
+`policy<assert_undefined<false>` behaviour can also be obtained by defining the macro
+
+  #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
+  
+at the head of the file - see __policy_macros. 
  
 [endsect][/section:assert_undefined Mathematically Undefined Function Policies]
 
@@ -482,9 +488,9 @@ The class `max_root_iterations` determines the maximum number
 of iterations permitted in a root-finding algorithm before the special
 function gives up and returns the result of __evaluation_error.
 
-[endsect][/section:iteration_pol Iteration Limits Policies]
+[endsect] [/section:iteration_pol Iteration Limits Policies]
 
-[section:policy_defaults Using macros to Change the Policy Defaults]
+[section:policy_defaults Using Macros to Change the Policy Defaults]
 
 You can use the various macros below to change any (or all) of the policies.
 

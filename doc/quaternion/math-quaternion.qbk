@@ -34,7 +34,7 @@
 [def __hypot [link boost_quaternions.math_special_functions.hypot hypot]]
 
 This manual is also available in 
-[@http://svn.boost.org/svn/boost/sandbox/pdf/math/release/quaternion.pdf 
+[@http://sourceforge.net/projects/boost/files/boost-docs/ 
 printer friendly PDF format].
 
 

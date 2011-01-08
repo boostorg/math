@@ -26,7 +26,7 @@ The reason is that the expression:
 
 Will produce a value much smaller than the largest of the terms, so you get 
 cancellation error: and then when you pass the result to exp() which 
-converts the absolute error in it's argument to a relative error in the 
+converts the absolute error in its argument to a relative error in the 
 result (explanation available if required), you effectively amplify the 
 error further still.
 

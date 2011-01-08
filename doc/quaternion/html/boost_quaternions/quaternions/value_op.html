@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Quaternion Value Operations</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Boost.Quaternions">
 <link rel="up" href="../quaternions.html" title="Quaternions">
 <link rel="prev" href="non_mem.html" title="Quaternion Non-Member Operators">
@@ -22,13 +22,13 @@
 <div class="spirit-nav">
 <a accesskey="p" href="non_mem.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../quaternions.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="create.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="boost_quaternions.quaternions.value_op"></a><a class="link" href="value_op.html" title="Quaternion Value Operations"> Quaternion Value
+<a name="boost_quaternions.quaternions.value_op"></a><a class="link" href="value_op.html" title="Quaternion Value Operations">Quaternion Value
       Operations</a>
 </h3></div></div></div>
 <a name="boost_quaternions.quaternions.value_op.real_and_unreal"></a><h5>
-<a name="id784593"></a>
+<a name="id1045183"></a>
         <a class="link" href="value_op.html#boost_quaternions.quaternions.value_op.real_and_unreal">real
         and unreal</a>
       </h5>
@@ -41,7 +41,7 @@
         respectively.
       </p>
 <a name="boost_quaternions.quaternions.value_op.conj"></a><h5>
-<a name="id784840"></a>
+<a name="id1045382"></a>
         <a class="link" href="value_op.html#boost_quaternions.quaternions.value_op.conj">conj</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>  <span class="identifier">conj</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">q</span><span class="special">);</span>
@@ -50,7 +50,7 @@
         This returns the conjugate of the quaternion.
       </p>
 <a name="boost_quaternions.quaternions.value_op.sup"></a><h5>
-<a name="id784961"></a>
+<a name="id1045481"></a>
         <a class="link" href="value_op.html#boost_quaternions.quaternions.value_op.sup">sup</a>
       </h5>
 <p>
@@ -60,7 +60,7 @@
         This return the sup norm (the greatest among <code class="computeroutput"><span class="identifier">abs</span><span class="special">(</span><span class="identifier">q</span><span class="special">.</span><span class="identifier">R_component_1</span><span class="special">())...</span><span class="identifier">abs</span><span class="special">(</span><span class="identifier">q</span><span class="special">.</span><span class="identifier">R_component_4</span><span class="special">()))</span></code> of the quaternion.
       </p>
 <a name="boost_quaternions.quaternions.value_op.l1"></a><h5>
-<a name="id785048"></a>
+<a name="id1045548"></a>
         <a class="link" href="value_op.html#boost_quaternions.quaternions.value_op.l1">l1</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">T</span>  <span class="identifier">l1</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">q</span><span class="special">);</span>
@@ -69,7 +69,7 @@
         This return the l1 norm <code class="computeroutput"><span class="special">(</span><span class="identifier">abs</span><span class="special">(</span><span class="identifier">q</span><span class="special">.</span><span class="identifier">R_component_1</span><span class="special">())+...+</span><span class="identifier">abs</span><span class="special">(</span><span class="identifier">q</span><span class="special">.</span><span class="identifier">R_component_4</span><span class="special">()))</span></code> of the quaternion.
       </p>
 <a name="boost_quaternions.quaternions.value_op.abs"></a><h5>
-<a name="id785217"></a>
+<a name="id1045685"></a>
         <a class="link" href="value_op.html#boost_quaternions.quaternions.value_op.abs">abs</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">T</span>  <span class="identifier">abs</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">q</span><span class="special">);</span>
@@ -78,7 +78,7 @@
         This return the magnitude (Euclidian norm) of the quaternion.
       </p>
 <a name="boost_quaternions.quaternions.value_op.norm"></a><h5>
-<a name="id785324"></a>
+<a name="id1045771"></a>
         <a class="link" href="value_op.html#boost_quaternions.quaternions.value_op.norm">norm</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>	<span class="identifier">T</span>  <span class="identifier">norm</span><span class="special">(</span><span class="identifier">quaternion</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span><span class="keyword">const</span>  <span class="special">&amp;</span> <span class="identifier">q</span><span class="special">);</span>

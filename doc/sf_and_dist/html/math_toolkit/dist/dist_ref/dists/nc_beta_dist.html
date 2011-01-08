@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.nc_beta_dist"></a><a class="link" href="nc_beta_dist.html" title="Noncentral Beta Distribution"> Noncentral
+<a name="math_toolkit.dist.dist_ref.dists.nc_beta_dist"></a><a class="link" href="nc_beta_dist.html" title="Noncentral Beta Distribution">Noncentral
           Beta Distribution</a>
 </h5></div></div></div>
 <p>
@@ -96,7 +96,7 @@ is a central &#967;<sup>2</sup> random variable with <span class="emphasis"><em>
             <span class="inlinemediaobject"><img src="../../../../../graphs/nc_beta_pdf.png" align="middle"></span>
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.nc_beta_dist.member_functions"></a><h5>
-<a name="id1042868"></a>
+<a name="id1168799"></a>
             <a class="link" href="nc_beta_dist.html#math_toolkit.dist.dist_ref.dists.nc_beta_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -128,7 +128,7 @@ is a central &#967;<sup>2</sup> random variable with <span class="emphasis"><em>
             was constructed.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.nc_beta_dist.non_member_accessors"></a><h5>
-<a name="id1043054"></a>
+<a name="id1168982"></a>
             <a class="link" href="nc_beta_dist.html#math_toolkit.dist.dist_ref.dists.nc_beta_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -137,22 +137,26 @@ is a central &#967;<sup>2</sup> random variable with <span class="emphasis"><em>
             accessor functions</a> are supported: <a class="link" href="../nmp.html#math.dist.cdf">Cumulative
             Distribution Function</a>, <a class="link" href="../nmp.html#math.dist.pdf">Probability
             Density Function</a>, <a class="link" href="../nmp.html#math.dist.quantile">Quantile</a>,
-            <a class="link" href="../nmp.html#math.dist.median">median</a>, <a class="link" href="../nmp.html#math.dist.mode">mode</a>,
-            <a class="link" href="../nmp.html#math.dist.hazard">Hazard Function</a>, <a class="link" href="../nmp.html#math.dist.chf">Cumulative
-            Hazard Function</a>, <a class="link" href="../nmp.html#math.dist.range">range</a>
-            and <a class="link" href="../nmp.html#math.dist.support">support</a>.
+            <a class="link" href="../nmp.html#math.dist.mean">mean</a>, <a class="link" href="../nmp.html#math.dist.variance">variance</a>,
+            <a class="link" href="../nmp.html#math.dist.sd">standard deviation</a>, <a class="link" href="../nmp.html#math.dist.median">median</a>,
+            <a class="link" href="../nmp.html#math.dist.mode">mode</a>, <a class="link" href="../nmp.html#math.dist.hazard">Hazard
+            Function</a>, <a class="link" href="../nmp.html#math.dist.chf">Cumulative Hazard Function</a>,
+            <a class="link" href="../nmp.html#math.dist.range">range</a> and <a class="link" href="../nmp.html#math.dist.support">support</a>.
           </p>
 <p>
-            However, the following are not currently implemented: <a class="link" href="../nmp.html#math.dist.mean">mean</a>,
-            <a class="link" href="../nmp.html#math.dist.variance">variance</a>, <a class="link" href="../nmp.html#math.dist.sd">standard
-            deviation</a>, <a class="link" href="../nmp.html#math.dist.skewness">skewness</a>,
+            Mean and variance are implemented using hypergeometric pfq functions
+            and relations given in <a href="http://reference.wolfram.com/mathematica/ref/NoncentralBetaDistribution.html" target="_top">Wolfram
+            Noncentral Beta Distribution</a>.
+          </p>
+<p>
+            However, the following are not currently implemented: <a class="link" href="../nmp.html#math.dist.skewness">skewness</a>,
             <a class="link" href="../nmp.html#math.dist.kurtosis">kurtosis</a> and <a class="link" href="../nmp.html#math.dist.kurtosis_excess">kurtosis_excess</a>.
           </p>
 <p>
             The domain of the random variable is [0, 1].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.nc_beta_dist.accuracy"></a><h5>
-<a name="id1043155"></a>
+<a name="id1169091"></a>
             <a class="link" href="nc_beta_dist.html#math_toolkit.dist.dist_ref.dists.nc_beta_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -168,7 +172,7 @@ is a central &#967;<sup>2</sup> random variable with <span class="emphasis"><em>
             zero error</a>.
           </p>
 <div class="table">
-<a name="math_toolkit.dist.dist_ref.dists.nc_beta_dist.errors_in_cdf_of_the_noncentral_beta"></a><p class="title"><b>Table&#160;13.&#160;Errors In CDF of the Noncentral Beta</b></p>
+<a name="math_toolkit.dist.dist_ref.dists.nc_beta_dist.errors_in_cdf_of_the_noncentral_beta"></a><p class="title"><b>Table&#160;16.&#160;Errors In CDF of the Noncentral Beta</b></p>
 <div class="table-contents"><table class="table" summary="Errors In CDF of the Noncentral Beta">
 <colgroup>
 <col>
@@ -295,7 +299,7 @@ is a central &#967;<sup>2</sup> random variable with <span class="emphasis"><em>
             functions are broadly similar.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.nc_beta_dist.tests"></a><h5>
-<a name="id1044572"></a>
+<a name="id1169327"></a>
             <a class="link" href="nc_beta_dist.html#math_toolkit.dist.dist_ref.dists.nc_beta_dist.tests">Tests</a>
           </h5>
 <p>
@@ -307,7 +311,7 @@ is a central &#967;<sup>2</sup> random variable with <span class="emphasis"><em>
             tests.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.nc_beta_dist.implementation"></a><h5>
-<a name="id1044596"></a>
+<a name="id1169351"></a>
             <a class="link" href="nc_beta_dist.html#math_toolkit.dist.dist_ref.dists.nc_beta_dist.implementation">Implementation</a>
           </h5>
 <p>
@@ -388,7 +392,7 @@ is a central &#967;<sup>2</sup> random variable with <span class="emphasis"><em>
             <span class="inlinemediaobject"><img src="../../../../../equations/nc_beta_ref1.png"></span>
           </p>
 <p>
-            Quantiles are computed using a specially modified version of <a class="link" href="../../../toolkit/internals1/roots2.html" title="Root Finding Without Derivatives">bracket_and_solve_root</a>,
+            Quantiles are computed using a specially modified version of <a class="link" href="../../../toolkit/internals1/roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748">bracket_and_solve_root</a>,
             starting the search for the root at the mean of the distribution. (A
             Cornish-Fisher type expansion was also tried, but while this gets quite
             close to the root in many cases, when it is wrong it tends to introduce

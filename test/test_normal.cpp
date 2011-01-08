@@ -15,7 +15,7 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/NormalDistribution.html
 
-#include <pch.hpp> // include directory libs/math/src/tr1/ is needed.
+#include <pch.hpp> // include directory /libs/math/src/tr1/ is needed.
 
 #ifdef _MSC_VER
 #pragma warning (disable: 4127) // conditional expression is constant
@@ -214,7 +214,9 @@ void test_spots(RealType)
     RealType tol2 = boost::math::tools::epsilon<RealType>() * 5;
     normal_distribution<RealType> dist(8, 3);
     RealType x = static_cast<RealType>(0.125);
-    using namespace std; // ADL of std names.
+
+    BOOST_MATH_STD_USING // ADL of std math lib names
+
     // mean:
     BOOST_CHECK_CLOSE(
        mean(dist)

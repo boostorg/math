@@ -197,7 +197,7 @@ difficult to achieve this on all systems.
 [[Windows][MSVC 6 and 7]]
 ]
 
-If you're compiler or platform is not listed above, please try running the
+If your compiler or platform is not listed above, please try running the
 regression tests: cd into boost-root/libs/math/test and do a:
 
    bjam mytoolset
@@ -212,7 +212,6 @@ for some functions).
 You will need to cast an eye over the output from
 the failing tests and make a judgement as to whether 
 the error rates are acceptable or not.
-
 ]
 
 [/ math.qbk

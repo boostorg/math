@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.bessel.bessel"></a><a class="link" href="bessel.html" title="Bessel Functions of the First and Second Kinds"> Bessel Functions
+<a name="math_toolkit.special.bessel.bessel"></a><a class="link" href="bessel.html" title="Bessel Functions of the First and Second Kinds">Bessel Functions
         of the First and Second Kinds</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.bessel.bessel.synopsis"></a><h5>
-<a name="id1123256"></a>
+<a name="id1252048"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
@@ -44,7 +44,7 @@
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_neumann</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <a name="math_toolkit.special.bessel.bessel.description"></a><h5>
-<a name="id1123623"></a>
+<a name="id1252416"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.description">Description</a>
         </h5>
 <p>
@@ -75,14 +75,9 @@
           is an integer.
         </p>
 <p>
-          </p>
-<p>
-            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
-            is optional and can be used to control the behaviour of the function:
-            how it handles errors, what level of precision to use etc. Refer to the
-            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
-          </p>
-<p>
+          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
+          optional and can be used to control the behaviour of the function: how
+          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
 <p>
           The functions return the result of <a class="link" href="../../main_overview/error_handling.html#domain_error">domain_error</a>
@@ -104,13 +99,13 @@
         </p>
 <p>
           The following graph shows the behaviour of Y<sub>v</sub>: this is also cyclic for
-          large <span class="emphasis"><em>x</em></span>, but tends to -&#8734; &#8203; for small <span class="emphasis"><em>x</em></span>:
+          large <span class="emphasis"><em>x</em></span>, but tends to -&#8734; &#160; for small <span class="emphasis"><em>x</em></span>:
         </p>
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/cyl_neumann.png" align="middle"></span>
         </p>
 <a name="math_toolkit.special.bessel.bessel.testing"></a><h5>
-<a name="id1123906"></a>
+<a name="id1253515"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.testing">Testing</a>
         </h5>
 <p>
@@ -119,7 +114,7 @@
           (with all the special case handling removed).
         </p>
 <a name="math_toolkit.special.bessel.bessel.accuracy"></a><h5>
-<a name="id1123928"></a>
+<a name="id1253537"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -135,7 +130,7 @@
           zero error</a>. All values are relative errors in units of epsilon.
         </p>
 <div class="table">
-<a name="math_toolkit.special.bessel.bessel.errors_rates_in_cyl_bessel_j"></a><p class="title"><b>Table&#160;36.&#160;Errors Rates in cyl_bessel_j</b></p>
+<a name="math_toolkit.special.bessel.bessel.errors_rates_in_cyl_bessel_j"></a><p class="title"><b>Table&#160;39.&#160;Errors Rates in cyl_bessel_j</b></p>
 <div class="table-contents"><table class="table" summary="Errors Rates in cyl_bessel_j">
 <colgroup>
 <col>
@@ -157,7 +152,7 @@
                 </th>
 <th>
                   <p>
-                    J<sub>0</sub> &#8203; and J<sub>1</sub>
+                    J<sub>0</sub> &#160; and J<sub>1</sub>
                   </p>
                 </th>
 <th>
@@ -167,7 +162,7 @@
                 </th>
 <th>
                   <p>
-                    J<sub>v</sub> &#8203; (large values of x &gt; 1000)
+                    J<sub>v</sub> &#160; (large values of x &gt; 1000)
                   </p>
                 </th>
 </tr></thead>
@@ -242,7 +237,7 @@
                 </td>
 <td>
                   <p>
-                    Peak=2x10<sup>4</sup> &#8203; Mean=6x10<sup>3</sup>
+                    Peak=2x10<sup>4</sup> &#160; Mean=6x10<sup>3</sup>
                   </p>
                 </td>
 </tr>
@@ -269,7 +264,7 @@
                 </td>
 <td>
                   <p>
-                    Peak=2x10<sup>4</sup> &#8203; Mean=1x10<sup>4</sup>
+                    Peak=2x10<sup>4</sup> &#160; Mean=1x10<sup>4</sup>
                   </p>
                 </td>
 </tr>
@@ -304,7 +299,7 @@
 </table></div>
 </div>
 <br class="table-break"><div class="table">
-<a name="math_toolkit.special.bessel.bessel.errors_rates_in_cyl_neumann"></a><p class="title"><b>Table&#160;37.&#160;Errors Rates in cyl_neumann</b></p>
+<a name="math_toolkit.special.bessel.bessel.errors_rates_in_cyl_neumann"></a><p class="title"><b>Table&#160;40.&#160;Errors Rates in cyl_neumann</b></p>
 <div class="table-contents"><table class="table" summary="Errors Rates in cyl_neumann">
 <colgroup>
 <col>
@@ -326,7 +321,7 @@
                 </th>
 <th>
                   <p>
-                    J<sub>0</sub> &#8203; and J<sub>1</sub>
+                    J<sub>0</sub> &#160; and J<sub>1</sub>
                   </p>
                 </th>
 <th>
@@ -381,7 +376,7 @@
                     Peak=561 Mean=36
                   </p>
                   <p>
-                    GSL Peak=1.4x10<sup>6</sup> &#8203; Mean=7x10<sup>4</sup> &#8203;
+                    GSL Peak=1.4x10<sup>6</sup> &#160; Mean=7x10<sup>4</sup> &#160;
                   </p>
                   <p>
                     <a href="http://www.netlib.org/cephes/" target="_top">Cephes</a> Peak=+INF
@@ -433,12 +428,12 @@
                 </td>
 <td>
                   <p>
-                    Peak=2x10<sup>4</sup> &#8203; Mean=8x10<sup>3</sup>
+                    Peak=2x10<sup>4</sup> &#160; Mean=8x10<sup>3</sup>
                   </p>
                 </td>
 <td>
                   <p>
-                    Peak=1x10<sup>5</sup> &#8203; Mean=6x10<sup>3</sup>
+                    Peak=1x10<sup>5</sup> &#160; Mean=6x10<sup>3</sup>
                   </p>
                 </td>
 </tr>
@@ -465,7 +460,7 @@
                 </td>
 <td>
                   <p>
-                    Peak=2x10<sup>4</sup> &#8203; Mean=1200
+                    Peak=2x10<sup>4</sup> &#160; Mean=1200
                   </p>
                 </td>
 </tr>
@@ -494,7 +489,7 @@
           were found.
         </p>
 <a name="math_toolkit.special.bessel.bessel.implementation"></a><h5>
-<a name="id1126433"></a>
+<a name="id1254231"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.implementation">Implementation</a>
         </h5>
 <p>
@@ -538,9 +533,9 @@
         </p>
 <p>
           When the order <span class="emphasis"><em>v</em></span> is an integer the method first relates
-          the result to J<sub>0</sub>, J<sub>1</sub>, Y<sub>0</sub> &#8203; and Y<sub>1</sub> &#8203; using either forwards or backwards recurrence
+          the result to J<sub>0</sub>, J<sub>1</sub>, Y<sub>0</sub> &#160; and Y<sub>1</sub> &#160; using either forwards or backwards recurrence
           (Miller's algorithm) depending upon which is stable. The values for J<sub>0</sub>,
-          J<sub>1</sub>, Y<sub>0</sub> &#8203; and Y<sub>1</sub> &#8203; are calculated using the rational minimax approximations on
+          J<sub>1</sub>, Y<sub>0</sub> &#160; and Y<sub>1</sub> &#160; are calculated using the rational minimax approximations on
           root-bracketing intervals for small <span class="emphasis"><em>|x|</em></span> and Hankel
           asymptotic expansion for large <span class="emphasis"><em>|x|</em></span>. The coefficients
           are from:
@@ -562,18 +557,18 @@
           these methods are not used when type T has more than 64 binary digits.
         </p>
 <p>
-          When <span class="emphasis"><em>x</em></span> is small, J<sub>x</sub> &#8203; is best computed directly from
+          When <span class="emphasis"><em>x</em></span> is small, J<sub>x</sub> &#160; is best computed directly from
           the series:
         </p>
 <p>
           <span class="inlinemediaobject"><img src="../../../../equations/bessel2.png"></span>
         </p>
 <p>
-          In the general case we compute J<sub>v</sub> &#8203; and Y<sub>v</sub> &#8203; simultaneously.
+          In the general case we compute J<sub>v</sub> &#160; and Y<sub>v</sub> &#160; simultaneously.
         </p>
 <p>
-          To get the initial values, let &#956; &#8203; = &#957; - floor(&#957; + 1/2), then &#956; &#8203; is the fractional
-          part of &#957; &#8203; such that |&#956;| &lt;= 1/2 (we need this for convergence later). The
+          To get the initial values, let &#956; &#160; = &#957; - floor(&#957; + 1/2), then &#956; &#160; is the fractional
+          part of &#957; &#160; such that |&#956;| &lt;= 1/2 (we need this for convergence later). The
           idea is to calculate J<sub>&#956;</sub>(x), J<sub>&#956;+1</sub>(x), Y<sub>&#956;</sub>(x), Y<sub>&#956;+1</sub>(x) and use them to obtain
           J<sub>&#957;</sub>(x), Y<sub>&#957;</sub>(x).
         </p>
@@ -642,7 +637,7 @@
           <span class="inlinemediaobject"><img src="../../../../equations/bessel16.png"></span>
         </p>
 <p>
-          g<sub>k</sub> &#8203; and h<sub>k</sub> &#8203;
+          g<sub>k</sub> &#160; and h<sub>k</sub> &#160;
 are also computed by recursions (involving gamma functions), but
           the formulas are a little complicated, readers are refered to N.M. Temme,
           <span class="emphasis"><em>On the numerical evaluation of the ordinary Bessel function of
@@ -650,7 +645,7 @@ are also computed by recursions (involving gamma functions), but
           (1976). Note Temme's series converge only for |&#956;| &lt;= 1/2.
         </p>
 <p>
-          As the previous case, Y<sub>&#957;</sub> &#8203; is calculated from the forward recurrence, so is
+          As the previous case, Y<sub>&#957;</sub> &#160; is calculated from the forward recurrence, so is
           Y<sub>&#957;+1</sub>. With these two values and f<sub>&#957;</sub>, the Wronskian yields J<sub>&#957;</sub>(x) directly without
           backward recurrence.
         </p>

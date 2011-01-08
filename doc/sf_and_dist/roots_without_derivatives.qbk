@@ -1,13 +1,14 @@
-[section:roots2 Root Finding Without Derivatives]
+[section:roots2 Root Finding Without Derivatives: Bisection, Bracket and TOMS748]
 
 [h4 Synopsis]
 
 ``
 #include <boost/math/tools/roots.hpp>
 ``
-
-   namespace boost{ namespace math{ namespace tools{
-   
+		
+   namespace boost{ namespace math{
+   namespace tools{
+   // Bisection
    template <class F, class T, class Tol>
    std::pair<T, T> 
       bisect(
@@ -35,6 +36,7 @@
          boost::uintmax_t& max_iter,
          const ``__Policy``&);
 
+		// Bracket and Solve Root
    template <class F, class T, class Tol>
    std::pair<T, T> 
       bracket_and_solve_root(
@@ -56,6 +58,7 @@
          boost::uintmax_t& max_iter,
          const ``__Policy``&);
 
+	// TOMS 748 algorithm
    template <class F, class T, class Tol>
    std::pair<T, T> 
       toms748_solve(
@@ -110,10 +113,12 @@
    
 [h4 Description]
 
-These functions solve the root of some function /f(x)/ without the 
-need for the derivatives of /f(x)/.  The functions here that use TOMS
-Algorithm 748 are asymptotically the most efficient known, and have
-been shown to be optimal for a certain classes of smooth functions.
+These functions solve the root of some function /f(x)/ ['without the 
+need for any derivatives of /f(x)/].
+
+The `bracket_and_solve_root` functions use TOMS Algorithm 748 that is asymptotically the most efficient known,
+and have been shown to be optimal for a certain classes of smooth functions.
+Variants with and without __policies are provided.
 
 Alternatively, there is a simple bisection routine which can be useful
 in its own right in some situations, or alternatively for narrowing 
@@ -135,6 +140,8 @@ interval is below a certain threshold, while /equal_floor/ and /equal_ceil/ are
 useful for certain statistical applications where the result is known to be
 an integer.  Other user-defined termination conditions are likely to be used
 only rarely, but may be useful in some specific circumstances.
+
+[h6 Bisection]
 
    template <class F, class T, class Tol>
    std::pair<T, T> 
@@ -163,7 +170,7 @@ only rarely, but may be useful in some specific circumstances.
          boost::uintmax_t& max_iter,
          const ``__Policy``&);
 
-These functions locate the root using bisection, function arguments are:
+These functions locate the root using bisection: function arguments are:
 
 [variablelist
 [[f]  [A unary functor which is the function whose root is to be found.]]
@@ -196,8 +203,10 @@ where /m/ is the initial value of /max_iter/ passed to the function.
 
 In other words, it's up to the caller to verify whether termination occurred
 as a result of exceeding /max_iter/ function invocations (easily done by 
-checking the value of /max_iter/ when the function returns), rather than 
+checking the updated value of /max_iter/ when the function returns), rather than 
 because the termination condition /tol/ was satisfied.
+
+[h6 Bracket and solve]
 
    template <class F, class T, class Tol>
    std::pair<T, T> 
@@ -266,6 +275,8 @@ as a result of exceeding /max_iter/ function invocations (easily done by
 checking the value of /max_iter/ when the function returns), rather than 
 because the termination condition /tol/ was satisfied.
 
+[h6 Algorithm TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions] 
+
    template <class F, class T, class Tol>
    std::pair<T, T> 
       toms748_solve(
@@ -311,7 +322,7 @@ because the termination condition /tol/ was satisfied.
 These two functions implement TOMS Algorithm 748: it uses a mixture of
 cubic, quadratic and linear (secant) interpolation to locate the root of
 /f(x)/.  The two functions differ only by whether values for /f(a)/ and
-/f(b)/ are already available.  The parameters are:
+/f(b)/ are already available.  The toms748_solve parameters are:
 
 [variablelist
 [[f]   [A unary functor that is the function whose root is to be solved.
@@ -325,7 +336,7 @@ cubic, quadratic and linear (secant) interpolation to locate the root of
 [[fb]  [Optional: the value of /f(b)/.]]
 [[tol]   [A binary functor that determines the termination condition for the search
          for the root.  /tol/ is passed the current brackets at each step, 
-         when it returns true then the current brackets are returned as the result.]]
+         when it returns true, then the current brackets are returned as the result.]]
 [[max_iter] [The maximum number of function invocations to perform in the search 
             for the root.  On exit /max_iter/ is set to actual number of function
             invocations used.]]
@@ -333,24 +344,19 @@ cubic, quadratic and linear (secant) interpolation to locate the root of
 
 [optional_policy]
 
-Returns: a pair of values /r/ that bracket the root so that:
-
+toms748_solve returns: a pair of values /r/ that bracket the root so that:
    f(r.first) * f(r.second) <= 0
-   
 and either
-
    tol(r.first, r.second) == true
-
 or
-
    max_iter >= m
-
 where /m/ is the initial value of /max_iter/ passed to the function.
 
 In other words, it's up to the caller to verify whether termination occurred
 as a result of exceeding /max_iter/ function invocations (easily done by 
-checking the value of /max_iter/), rather than because the termination 
-condition /tol/ was satisfied.
+checking the updated value of /max_iter/ 
+against its previous value passed as parameter),
+rather than because the termination condition /tol/ was satisfied.
 
    template <class T>
    struct eps_tolerance
@@ -359,10 +365,10 @@ condition /tol/ was satisfied.
       bool operator()(const T& a, const T& b)const;
    };
    
-This is the usual termination condition used with these root finding functions.
+`eps_tolerance` is the usual termination condition used with these root finding functions.
 Its operator() will return true when the relative distance between /a/ and /b/
 is less than twice the machine epsilon for T, or 2[super 1-bits], whichever is
-the larger.  In other words you set /bits/ to the number of bits of precision you
+the larger.  In other words, you set /bits/ to the number of bits of precision you
 want in the result.  The minimal tolerance of twice the machine epsilon of T is
 required to ensure that we get back a bracketing interval: since this must clearly
 be at least 1 epsilon in size.
@@ -400,7 +406,7 @@ of the interval round to the same nearest integer.
 [h4 Implementation]
 
 The implementation of the bisection algorithm is extremely straightforward
-and not detailed here.  TOMS algorithm 748 is described in detail in:
+and not detailed here.  __TOMS748 is described in detail in:
 
 ['Algorithm 748: Enclosing Zeros of Continuous Functions, 
 G. E. Alefeld, F. A. Potra and Yixun Shi, 
@@ -409,10 +415,10 @@ Pages 327-344.]
 
 The implementation here is a faithful translation of this paper into C++.
 
-[endsect][/section:roots2 Root Finding Without Derivatives]
+[endsect] [/section:roots2 Root Finding Without Derivatives]
 
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

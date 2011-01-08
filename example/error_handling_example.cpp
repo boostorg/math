@@ -63,6 +63,9 @@ We'll begin our sample program with the needed includes:
 #include <stdexcept>
    using std::exception;
 
+#include <cstddef>
+   // using ::errno
+
 /*`
 Next we'll define the program's main() to call the student's t
 distribution with an invalid degrees of freedom parameter,

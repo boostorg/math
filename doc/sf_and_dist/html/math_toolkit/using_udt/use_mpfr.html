@@ -24,26 +24,31 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.using_udt.use_mpfr"></a><a class="link" href="use_mpfr.html" title="Using With MPFR / GMP - a High-Precision Floating-Point Library"> Using With MPFR / GMP
+<a name="math_toolkit.using_udt.use_mpfr"></a><a class="link" href="use_mpfr.html" title="Using With MPFR / GMP - a High-Precision Floating-Point Library">Using With MPFR / GMP
       - a High-Precision Floating-Point Library</a>
 </h3></div></div></div>
 <p>
         The special functions and tools in this library can be used with <a href="http://www.mpfr.org" target="_top">MPFR
-        (an arbitrary precision number type based on the GMP library)</a>, via
-        the bindings in <a href="../../../../../../../boost/math/bindings/mpfr.hpp" target="_top">boost/math/bindings/mpfr.hpp</a>.
+        (an arbitrary precision number type based on the GMP library)</a>, either
+        via the bindings in <a href="../../../../../../../boost/math/bindings/mpfr.hpp" target="_top">boost/math/bindings/mpfr.hpp</a>,
+        or via <a href="../../../../../../../boost/math/bindings/mpfr.hpp" target="_top">boost/math/bindings/mpreal.hpp</a>.
       </p>
 <p>
         In order to use these binings you will need to have installed <a href="http://www.mpfr.org" target="_top">MPFR</a>
-        plus it's dependency the <a href="http://gmplib.org" target="_top">GMP library</a>
-        and the C++ wrapper for MPFR known as <a href="http://math.berkeley.edu/~wilken/code/gmpfrxx/" target="_top">gmpfrxx
-        (or mpfr_class)</a>.
+        plus its dependency the <a href="http://gmplib.org" target="_top">GMP library</a>.
+        You will also need one of the two supported C++ wrappers for MPFR: <a href="http://math.berkeley.edu/~wilken/code/gmpfrxx/" target="_top">gmpfrxx (or mpfr_class)</a>,
+        or <a href="http://www.holoborodko.com/pavel/mpfr/" target="_top">mpfr-C++ (mpreal)</a>.
       </p>
 <p>
-        Unfortunately <code class="computeroutput"><span class="identifier">mpfr_class</span></code>
-        doesn't quite satisfy our conceptual requirements, so there is a very thin
-        set of additional interfaces and some helper traits defined in <a href="../../../../../../../boost/math/bindings/mpfr.hpp" target="_top">boost/math/bindings/mpfr.hpp</a>
-        that you should use in place of including 'gmpfrxx.h' directly. The existing
-        mpfr_class is then usable unchanged once this header is included, so it's
+        Unfortunately neither <code class="computeroutput"><span class="identifier">mpfr_class</span></code>
+        nor <code class="computeroutput"><span class="identifier">mpreal</span></code> quite satisfy
+        our conceptual requirements, so there is a very thin set of additional interfaces
+        and some helper traits defined in <a href="../../../../../../../boost/math/bindings/mpfr.hpp" target="_top">boost/math/bindings/mpfr.hpp</a>
+        and <a href="../../../../../../../boost/math/bindings/mpreal.hpp" target="_top">boost/math/bindings/mpreal.hpp</a>
+        that you should use in place of including 'gmpfrxx.h' or 'mpreal.h' directly.
+        The classes <code class="computeroutput"><span class="identifier">mpfr_class</span></code> or
+        <code class="computeroutput"><span class="identifier">mpreal</span></code> are then usable unchanged
+        once this header is included, so for example <code class="computeroutput"><span class="identifier">mpfr_class</span></code>'s
         performance-enhancing expression templates are preserved and fully supported
         by this library:
       </p>
@@ -62,14 +67,30 @@
 <span class="special">}</span>
 </pre>
 <p>
+        Alternatively use with <code class="computeroutput"><span class="identifier">mpreal</span></code>
+        would look like:
+      </p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">bindings</span><span class="special">/</span><span class="identifier">mpreal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+   <span class="identifier">mpfr</span><span class="special">::</span><span class="identifier">mpreal</span><span class="special">::</span><span class="identifier">set_precision</span><span class="special">(</span><span class="number">500</span><span class="special">);</span> <span class="comment">// 500 bit precision
+</span>   <span class="identifier">mpfr</span><span class="special">::</span><span class="identifier">mpreal</span> <span class="identifier">v</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">mpfr</span><span class="special">::</span><span class="identifier">mpreal</span><span class="special">(</span><span class="number">2</span><span class="special">)));</span>
+   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">setprecision</span><span class="special">(</span><span class="number">50</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">v</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
         For those functions that are based upon the <a class="link" href="../backgrounders/lanczos.html" title="The Lanczos Approximation">Lanczos
         approximation</a>, the bindings defines a series of approximations with
         up to 61 terms and accuracy up to approximately 3e-113. This therefore sets
         the upper limit for accuracy to the majority of functions defined this library
-        when used with <code class="computeroutput"><span class="identifier">mpfr_class</span></code>.
+        when used with either <code class="computeroutput"><span class="identifier">mpfr_class</span></code>
+        or <code class="computeroutput"><span class="identifier">mpreal</span></code>.
       </p>
 <p>
-        There is a concept checking test program for mpfr support <a href="../../../../../../../libs/math/test/mpfr_concept_check.cpp" target="_top">here</a>.
+        There is a concept checking test program for mpfr support <a href="../../../../../../../libs/math/test/mpfr_concept_check.cpp" target="_top">here</a>
+        and <a href="../../../../../../../libs/math/test/mpreal_concept_check.cpp" target="_top">here</a>.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

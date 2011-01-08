@@ -42,3 +42,4 @@ Output:
   25 binary bits is approoximately equivalent to 9 decimal digits 
   quantile(normal_distribution<double, policy<digits2<25> > >(), 0.05  = -1.64485363
   */
+

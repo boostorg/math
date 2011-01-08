@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-// Copyright Paul A. Bristow & John Maddock 2009
+// Copyright Paul A. Bristow & John Maddock 2009, 2010
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -12,17 +12,15 @@ using namespace System::Runtime::CompilerServices;
 using namespace System::Runtime::InteropServices;
 using namespace System::Security::Permissions;
 
-//
-// General Information about an assembly is controlled through the following
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-//
+// General Information about an assembly is controlled through the following set of attributes.
+// Change these attribute values to modify the information associated with an assembly.
+
 [assembly:AssemblyTitleAttribute("boost_math")];
 [assembly:AssemblyDescriptionAttribute("Math Toolkit")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("jmc")];
 [assembly:AssemblyProductAttribute("boost_math")];
-[assembly:AssemblyCopyrightAttribute("Copyright (c) jmc 2007, 2009")];
+[assembly:AssemblyCopyrightAttribute("Copyright (c) jmc 2007 - 2010")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 

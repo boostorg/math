@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.dist_ref.dists.poisson_dist"></a><a class="link" href="poisson_dist.html" title="Poisson Distribution"> Poisson
+<a name="math_toolkit.dist.dist_ref.dists.poisson_dist"></a><a class="link" href="poisson_dist.html" title="Poisson Distribution">Poisson
           Distribution</a>
 </h5></div></div></div>
 <p>
@@ -59,7 +59,7 @@
             distribution</a> is a well-known statistical discrete distribution.
             It expresses the probability of a number of events (or failures, arrivals,
             occurrences ...) occurring in a fixed period of time, provided these
-            events occur with a known mean rate &#955; &#8203;
+            events occur with a known mean rate &#955; &#160;
 (events/time), and are independent
             of the time since the last event.
           </p>
@@ -82,8 +82,6 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/poisson_pdf_1.png" align="middle"></span>
           </p>
-<p>
-            </p>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../../../../../../../../doc/src/images/caution.png"></td>
@@ -91,38 +89,34 @@
 </tr>
 <tr><td align="left" valign="top">
 <p>
-                The Poisson distribution is a discrete distribution: internally functions
-                like the <code class="computeroutput"><span class="identifier">cdf</span></code> and
-                <code class="computeroutput"><span class="identifier">pdf</span></code> are treated "as
-                if" they are continuous functions, but in reality the results
-                returned from these functions only have meaning if an integer value
-                is provided for the random variate argument.
-              </p>
+              The Poisson distribution is a discrete distribution: internally, functions
+              like the <code class="computeroutput"><span class="identifier">cdf</span></code> and <code class="computeroutput"><span class="identifier">pdf</span></code> are treated "as if"
+              they are continuous functions, but in reality the results returned
+              from these functions only have meaning if an integer value is provided
+              for the random variate argument.
+            </p>
 <p>
-                The quantile function will by default return an integer result that
-                has been <span class="emphasis"><em>rounded outwards</em></span>. That is to say lower
-                quantiles (where the probability is less than 0.5) are rounded downward,
-                and upper quantiles (where the probability is greater than 0.5) are
-                rounded upwards. This behaviour ensures that if an X% quantile is
-                requested, then <span class="emphasis"><em>at least</em></span> the requested coverage
-                will be present in the central region, and <span class="emphasis"><em>no more than</em></span>
-                the requested coverage will be present in the tails.
-              </p>
+              The quantile function will by default return an integer result that
+              has been <span class="emphasis"><em>rounded outwards</em></span>. That is to say lower
+              quantiles (where the probability is less than 0.5) are rounded downward,
+              and upper quantiles (where the probability is greater than 0.5) are
+              rounded upwards. This behaviour ensures that if an X% quantile is requested,
+              then <span class="emphasis"><em>at least</em></span> the requested coverage will be present
+              in the central region, and <span class="emphasis"><em>no more than</em></span> the requested
+              coverage will be present in the tails.
+            </p>
 <p>
-                This behaviour can be changed so that the quantile functions are
-                rounded differently, or even return a real-valued result using <a class="link" href="../../../policy/pol_overview.html" title="Policy Overview">Policies</a>. It is
-                strongly recommended that you read the tutorial <a class="link" href="../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
-                Quantiles of Discrete Distributions</a> before using the quantile
-                function on the Poisson distribution. The <a class="link" href="../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
-                docs</a> describe how to change the rounding policy for these
-                distributions.
-              </p>
+              This behaviour can be changed so that the quantile functions are rounded
+              differently, or even return a real-valued result using <a class="link" href="../../../policy/pol_overview.html" title="Policy Overview">Policies</a>.
+              It is strongly recommended that you read the tutorial <a class="link" href="../../../policy/pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
+              Quantiles of Discrete Distributions</a> before using the quantile
+              function on the Poisson distribution. The <a class="link" href="../../../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">reference
+              docs</a> describe how to change the rounding policy for these distributions.
+            </p>
 </td></tr>
 </table></div>
-<p>
-          </p>
 <a name="math_toolkit.dist.dist_ref.dists.poisson_dist.member_functions"></a><h5>
-<a name="id1054709"></a>
+<a name="id1179350"></a>
             <a class="link" href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.member_functions">Member
             Functions</a>
           </h5>
@@ -137,7 +131,7 @@
             Returns the <span class="emphasis"><em>mean</em></span> of this distribution.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.poisson_dist.non_member_accessors"></a><h5>
-<a name="id1054798"></a>
+<a name="id1179440"></a>
             <a class="link" href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
@@ -157,7 +151,7 @@
             The domain of the random variable is [0, &#8734;].
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.poisson_dist.accuracy"></a><h5>
-<a name="id1054895"></a>
+<a name="id1179538"></a>
             <a class="link" href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.accuracy">Accuracy</a>
           </h5>
 <p>
@@ -171,11 +165,11 @@
             using an iterative method with a lower tolerance to avoid excessive computation.
           </p>
 <a name="math_toolkit.dist.dist_ref.dists.poisson_dist.implementation"></a><h5>
-<a name="id1054924"></a>
+<a name="id1179566"></a>
             <a class="link" href="poisson_dist.html#math_toolkit.dist.dist_ref.dists.poisson_dist.implementation">Implementation</a>
           </h5>
 <p>
-            In the following table &#955; &#8203; is the mean of the distribution, <span class="emphasis"><em>k</em></span>
+            In the following table &#955; &#160; is the mean of the distribution, <span class="emphasis"><em>k</em></span>
             is the random variable, <span class="emphasis"><em>p</em></span> is the probability and
             <span class="emphasis"><em>q = 1-p</em></span>.
           </p>

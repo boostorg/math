@@ -1,5 +1,11 @@
 [template history[]
 
+[h4 Boost-1.46.0]
+
+* Added Wald, Inverse Gaussian and geometric distributions.
+* Added information about configuration macros. 
+* Added support for mpreal as a real-numered type.
+
 [h4 Boost-1.45.0]
 
 * Added warnings about potential ambiguity with std random library in distribution and function names.

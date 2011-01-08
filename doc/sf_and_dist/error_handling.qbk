@@ -1,4 +1,3 @@
-
 [section:error_handling Error Handling]
 
 [def __format [@../../../../format/index.html Boost.Format]]
@@ -30,7 +29,8 @@ The kinds of errors that can be raised are:
 [[Rounding Error][Occurs when the argument to one of the rounding functions __trunc, 
    __round and __modf can not be represented as an integer type, is
    outside the range of the result type.]]
-[[Evaluation Error][Occurs when an internal error occured that prevented the
+[[Evaluation Error][Occurs if no method of evaluation is known,
+   or when an internal error occurred that prevented the
    result from being evaluated: this should never occur, but if it does, then
    it's likely to be due to an iterative method not converging fast enough.]]
 [[Indeterminate Result Error][Occurs when the result of a function is not
@@ -109,8 +109,10 @@ with the *default action for each error shown in bold*:
 [table Possible Actions for Rounding Errors
 [[Action]   [Behaviour]]
 [[throw_on_error][Throws `boost::math::rounding_error`]]
-[[errno_on_error][Sets `::errno` to `ERANGE` and returns an unspecified value.]]
-[[ignore_error][[*Returns the an unspecified value.]]]
+[[errno_on_error][Sets `::errno` to `ERANGE` and returns the largest representable value of the target integer type 
+(or the most negative value if the argument to the function was less than zero).]]
+[[ignore_error][[*Returns the largest representable value of the target integer type 
+(or the most negative value if the argument to the function was less than zero).]]]
 [[user_error][Returns the result of `boost::math::policies::user_rounding_error`: 
             [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]

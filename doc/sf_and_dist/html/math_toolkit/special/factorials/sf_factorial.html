@@ -24,10 +24,10 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.factorials.sf_factorial"></a><a class="link" href="sf_factorial.html" title="Factorial"> Factorial</a>
+<a name="math_toolkit.special.factorials.sf_factorial"></a><a class="link" href="sf_factorial.html" title="Factorial">Factorial</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.factorials.sf_factorial.synopsis"></a><h5>
-<a name="id1084145"></a>
+<a name="id1214766"></a>
           <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -54,7 +54,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.factorials.sf_factorial.description"></a><h5>
-<a name="id1084454"></a>
+<a name="id1215074"></a>
           <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.description">Description</a>
         </h5>
 <div class="important"><table border="0" summary="Important">
@@ -65,25 +65,45 @@
 <tr><td align="left" valign="top">
 <p>
             The functions described below are templates where the template argument
-            T can not be deduced from the arguments passed to the function. Therefore
+            T CANNOT be deduced from the arguments passed to the function. Therefore
             if you write something like:
           </p>
 <p>
             <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">factorial</span><span class="special">(</span><span class="number">2</span><span class="special">);</span></code>
           </p>
 <p>
-            You will get a compiler error, ususally indicating that there is no such
-            function to be found. Instead you need to specifiy the return type explicity
-            and write:
+            You will get a (perhaps perplexing) compiler error, ususally indicating
+            that there is no such function to be found. Instead you need to specify
+            the return type explicity and write:
           </p>
 <p>
             <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">factorial</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;(</span><span class="number">2</span><span class="special">);</span></code>
           </p>
 <p>
-            So that the return type is known. Further, the template argument must
-            be a real-valued type such as <code class="computeroutput"><span class="keyword">float</span></code>
-            or <code class="computeroutput"><span class="keyword">double</span></code> and not an integer
-            type - that would overflow far too easily!
+            So that the return type is known.
+          </p>
+<p>
+            Furthermore, the template argument must be a real-valued type such as
+            <code class="computeroutput"><span class="keyword">float</span></code> or <code class="computeroutput"><span class="keyword">double</span></code>
+            and not an integer type - that would overflow far too easily for quite
+            small values of parameter <code class="computeroutput"><span class="identifier">i</span></code>!
+          </p>
+<p>
+            The source code <code class="computeroutput"><span class="identifier">static_assert</span></code>
+            and comment just after the will be:
+          </p>
+<p>
+            
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">(!</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_integral</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">);</span>
+<span class="comment">// factorial&lt;unsigned int&gt;(n) is not implemented
+</span><span class="comment">// because it would overflow integral type T for too small n
+</span><span class="comment">// to be useful. Use instead a floating-point type,
+</span><span class="comment">// and convert to an unsigned type if essential, for example:
+</span><span class="comment">// unsigned int nfac = static_cast&lt;unsigned int&gt;(factorial&lt;double&gt;(n));
+</span><span class="comment">// See factorial documentation for more detail.
+</span></pre>
+<p>
           </p>
 </td></tr>
 </table></div>
@@ -97,14 +117,9 @@
           Returns <code class="literal">i!</code>.
         </p>
 <p>
-          </p>
-<p>
-            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
-            is optional and can be used to control the behaviour of the function:
-            how it handles errors, what level of precision to use etc. Refer to the
-            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
-          </p>
-<p>
+          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
+          optional and can be used to control the behaviour of the function: how
+          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
 <p>
           For <code class="literal">i &lt;= max_factorial&lt;T&gt;::value</code> this is implemented
@@ -142,7 +157,7 @@
           the size of further tables that depend on the factorials.
         </p>
 <a name="math_toolkit.special.factorials.sf_factorial.accuracy"></a><h5>
-<a name="id1084922"></a>
+<a name="id1215626"></a>
           <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -151,7 +166,7 @@
           will be the same as for <a class="link" href="../sf_gamma/tgamma.html" title="Gamma">tgamma</a>.
         </p>
 <a name="math_toolkit.special.factorials.sf_factorial.testing"></a><h5>
-<a name="id1084965"></a>
+<a name="id1215669"></a>
           <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.testing">Testing</a>
         </h5>
 <p>
@@ -160,7 +175,7 @@
           function handle those cases already.
         </p>
 <a name="math_toolkit.special.factorials.sf_factorial.implementation"></a><h5>
-<a name="id1084990"></a>
+<a name="id1215693"></a>
           <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.implementation">Implementation</a>
         </h5>
 <p>

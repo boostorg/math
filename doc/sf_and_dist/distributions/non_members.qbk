@@ -199,8 +199,8 @@ Returns the valid range of the random variable over distribution /dist/.
 The quantile is best viewed as the inverse of the __cdf, it returns
 a value /x/ such that `cdf(dist, x) == p`.
 
-This is also known as the /percent point function/, or a /percentile/, it is
-also the same as calculating the ['lower critical value] of a distribution.
+This is also known as the /percent point function/, or /percentile/, or /fractile/,
+it is also the same as calculating the ['lower critical value] of a distribution.
 
 This function returns a __domain_error if the probability lies outside [0,1].
 The function may return an __overflow_error if there is no finite value
@@ -354,7 +354,7 @@ and its [link math.dist.ccdf complement] respectively.
 Lowercase p and q are sometimes used to refer to the values returned
 by these functions.
 
-[h4 [#percent]Percent Point Function]
+[h4 [#percent]Percent Point Function or Percentile]
 
 The percent point function, also known as the percentile, is the same as
 the __quantile.

@@ -27,18 +27,32 @@
 [h4 Description]
 
 [important
-The functions described below are templates where the template argument T can not be deduced from the
+The functions described below are templates where the template argument T CANNOT be deduced from the
 arguments passed to the function.  Therefore if you write something like:
 
    `boost::math::factorial(2);`
 
-You will get a compiler error, ususally indicating that there is no such function to be found.  Instead you need to specifiy
-the return type explicity and write:
+You will get a (perhaps perplexing) compiler error, ususally indicating that there is no such function to be found.
+Instead you need to specify the return type explicity and write:
 
    `boost::math::factorial<double>(2);`
 
-So that the return type is known.  Further, the template argument must be a real-valued type such as `float` or `double`
-and not an integer type - that would overflow far too easily!
+So that the return type is known.
+
+Furthermore, the template argument must be a real-valued type such as `float` or `double`
+and not an integer type - that would overflow far too easily for quite small values of parameter `i`!
+
+The source code `static_assert` and comment just after the  will be:
+
+``
+   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   // factorial<unsigned int>(n) is not implemented
+   // because it would overflow integral type T for too small n
+   // to be useful. Use instead a floating-point type,
+   // and convert to an unsigned type if essential, for example:
+   // unsigned int nfac = static_cast<unsigned int>(factorial<double>(n));
+   // See factorial documentation for more detail.
+``
 ]
 
    template <class T>
@@ -128,13 +142,25 @@ arguments passed to the function.  Therefore if you write something like:
 
    `boost::math::double_factorial(2);`
 
-You will get a compiler error, ususally indicating that there is no such function to be found.  Instead you need to specifiy
+You will get a (possibly perplexing) compiler error, ususally indicating that there is no such function to be found.  Instead you need to specifiy
 the return type explicity and write:
 
    `boost::math::double_factorial<double>(2);`
 
 So that the return type is known.  Further, the template argument must be a real-valued type such as `float` or `double`
 and not an integer type - that would overflow far too easily!
+
+The source code `static_assert` and comment just after the  will be:
+
+``
+   BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
+   // factorial<unsigned int>(n) is not implemented
+   // because it would overflow integral type T for too small n
+   // to be useful. Use instead a floating-point type,
+   // and convert to an unsigned type if essential, for example:
+   // unsigned int nfac = static_cast<unsigned int>(factorial<double>(n));
+   // See factorial documentation for more detail.
+``
 ]
 
 [h4 Accuracy]
@@ -339,9 +365,8 @@ and
 [endsect][/section:factorials Factorials]
 
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
-

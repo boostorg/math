@@ -40,6 +40,10 @@ int main()
       double step = 1.; // in z 
       double range = 4; // min and max z = -range to +range.
       int precision = 17; // traditional tables are only computed to much lower precision.
+      // but std::numeric_limits<double>::max_digits10; on new Standard Libraries gives
+      // 17, the maximum number of digits that can possibly be significant.
+      // std::numeric_limits<double>::digits10; == 15 is number of guaranteed digits,
+      // the other two digits being 'noisy'.
 
       // Construct a standard normal distribution s
         normal s; // (default mean = zero, and standard deviation = unity)

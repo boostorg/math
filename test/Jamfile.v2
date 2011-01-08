@@ -33,7 +33,8 @@ project
       <toolset>msvc:<cxxflags>/wd4510 
       <toolset>msvc:<cxxflags>/wd4127 
       <toolset>msvc:<cxxflags>/wd4701 # needed for lexical cast - temporary.
-      <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
+       <toolset>msvc:<cxxflags>/wd4189 # local variable is initialized but not referenced
+	   <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
       <toolset>msvc-7.1:<pch>off
       <toolset>borland:<link>static
       <toolset>borland:<runtime-link>static
@@ -51,7 +52,7 @@ project
       <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
       <include>$(ntl-path)/include
-      <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx
+      <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx <include>$(gmp_path)/mpfrc++
     ;
 
 cpp-pch pch : pch.hpp : <use>../../test/build//boost_test_exec_monitor ;
@@ -168,6 +169,7 @@ run test_find_scale.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_fisher_f.cpp ../../test/build//boost_test_exec_monitor ;
 run test_gamma.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_gamma_dist.cpp pch ../../test/build//boost_test_exec_monitor ;
+run test_geometric.cpp ../../test/build//boost_test_exec_monitor ;
 run test_hermite.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_hypergeometric_dist.cpp ../../test/build//boost_test_exec_monitor
         : # command line
@@ -420,9 +422,10 @@ run test_igamma_inva.cpp  pch ../../test/build//boost_test_exec_monitor
 	      <toolset>intel:<pch>off
         : test_igamma_inva_real_concept ;
 run test_instantiate1.cpp test_instantiate2.cpp ;
-
-run test_inverse_gamma_distribution.cpp ../../test/build//boost_test_exec_monitor ;
 run test_inverse_chi_squared_distribution.cpp ../../test/build//boost_test_exec_monitor ;
+run test_inverse_gamma_distribution.cpp ../../test/build//boost_test_exec_monitor ;
+
+run test_inverse_gaussian.cpp ../../test/build//boost_test_exec_monitor ;
 
 run test_laplace.cpp ../../test/build//boost_unit_test_framework/<link>static ;
 run test_inv_hyp.cpp pch ../../test/build//boost_test_exec_monitor ;
@@ -488,28 +491,28 @@ run test_nc_chi_squared.cpp  pch ../../test/build//boost_test_exec_monitor
 	      <define>TEST_REAL_CONCEPT
 	      <toolset>intel:<pch>off
         : test_nc_chi_squared_real_concept ;
-run test_nc_beta.cpp  pch ../../test/build//boost_test_exec_monitor
+run test_nc_beta.cpp  ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_FLOAT
 	      <toolset>intel:<pch>off
         : test_nc_beta_float ;
-run test_nc_beta.cpp  pch ../../test/build//boost_test_exec_monitor
+run test_nc_beta.cpp  ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_DOUBLE
 	      <toolset>intel:<pch>off
         : test_nc_beta_double ;
-run test_nc_beta.cpp  pch ../../test/build//boost_test_exec_monitor
+run test_nc_beta.cpp  ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_LDOUBLE
 	      <toolset>intel:<pch>off
         : test_nc_beta_long_double ;
-run test_nc_beta.cpp  pch ../../test/build//boost_test_exec_monitor
+run test_nc_beta.cpp  ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -765,6 +768,7 @@ run complex_test.cpp ../../test/build//boost_test_exec_monitor ;
 
 compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] ;
 compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] ;
+compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] ;
 compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] ;
 
 build-project ../example ;

@@ -82,7 +82,7 @@ arrow keys to move between "next" and "previous" topics.
    [Performance testing and tuning program.]]
    
 [[\/test\/]
-   [Test files, in various .cpp files, most using Boost.Test 
+   [Test files, in many .cpp files, most using Boost.Test 
    (some with test data as .ipp files, usually generated using NTL RR 
    type with ample precision for the type, often for precisions 
    suitable for up to 256-bit significand real types).]]
@@ -124,7 +124,7 @@ __Policy and configuration information is in namespace `boost::math::policies`.
 [endsect]
 
 [/ structure.qbk
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

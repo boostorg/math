@@ -1,4 +1,4 @@
-[section:weibull Weibull Distribution]
+[section:weibull_dist Weibull Distribution]
 
 
 ``#include <boost/math/distributions/weibull.hpp>``
@@ -99,7 +99,7 @@ and as such should have very low error rates.
 
 
 In the following table [alpha][space] is the shape parameter of the distribution, 
-[beta][space] is it's scale parameter, /x/ is the random variate, /p/ is the probability
+[beta][space] is its scale parameter, /x/ is the random variate, /p/ is the probability
 and /q = 1-p/.
 
 [table

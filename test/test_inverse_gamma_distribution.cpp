@@ -364,7 +364,9 @@ int test_main(int, char* [])
   inverse_gamma_distribution<double> ig102(10., 2.); //
   BOOST_CHECK_EQUAL(ig102.shape(), 10.); //
   BOOST_CHECK_EQUAL(ig102.scale(), 2.); //
+  // formatC(SuppDists::dinvGauss(10, 1, 0.5), digits=17)[1] "0.0011774669940754754"
   BOOST_CHECK_CLOSE_FRACTION(pdf(ig102, 0.5), 0.1058495335284024, tol5eps);
+  // formatC(SuppDists::pinvGauss(10, 1, 0.5), digits=17) [1] "0.99681494462166653"
   BOOST_CHECK_CLOSE_FRACTION(cdf(ig102, 0.5), 0.99186775720306608, tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(ig102, 0.05), 0.12734622346137681, tol5eps);
   BOOST_CHECK_CLOSE_FRACTION(quantile(ig102, 0.5), 0.20685272858879727, tol5eps);

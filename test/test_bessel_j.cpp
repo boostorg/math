@@ -482,7 +482,7 @@ void test_bessel(T, const char* name)
     do_test_cyl_bessel_j_int(j1_tricky, name, "Bessel J1: Mathworld Data (tricky cases) (Integer Version)");
     do_test_cyl_bessel_j_int(jn_data, name, "Bessel JN: Mathworld Data (Integer Version)");
 
-    static const boost::array<boost::array<T, 3>, 17> jv_data = {
+    static const boost::array<boost::array<T, 3>, 18> jv_data = {
         //SC_(-2.4), SC_(0), std::numeric_limits<T>::infinity(),
         SC_(2457)/1024, SC_(1)/1024, SC_(3.80739920118603335646474073457326714709615200130620574875292e-9),
         SC_(5.5), SC_(3217)/1024, SC_(0.0281933076257506091621579544064767140470089107926550720453038),
@@ -501,6 +501,8 @@ void test_bessel(T, const char* name)
         SC_(10486074) / (1024*1024), SC_(1e+02), SC_(-0.0547064914615137807616774867984047583596945624129838091326863),
         SC_(10486074) / (1024*1024), SC_(2e+04), SC_(-0.00556783614400875611650958980796060611309029233226596737701688),
         SC_(-10486074) / (1024*1024), SC_(1e+02), SC_(-0.0547613660316806551338637153942604550779513947674222863858713),
+        // Bug report https://svn.boost.org/trac/boost/ticket/4812:
+        SC_(1.5), SC_(8034)/1024, SC_(0.0339477646369710610146236955872928005087352629422508823945264),
     };
     do_test_cyl_bessel_j(jv_data, name, "Bessel J: Mathworld Data");
 

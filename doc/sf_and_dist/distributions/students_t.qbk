@@ -118,7 +118,7 @@ distribution.
 
 The normal distribution is implemented in terms of the 
 [link math_toolkit.special.sf_beta.ibeta_function incomplete beta function]
-and [link math_toolkit.special.sf_beta.ibeta_inv_function it's inverses],
+and [link math_toolkit.special.sf_beta.ibeta_inv_function its inverses],
 refer to accuracy data on those functions for more information.
 
 [h4 Implementation]

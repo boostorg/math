@@ -19,9 +19,9 @@ typedef negative_binomial_distribution<
       policy<discrete_quantile<integer_round_nearest> > 
    > dist_type;
    
-// Lower quantile rounded up:
+// Lower quantile rounded (down) to nearest:
 double x = quantile(dist_type(20, 0.3), 0.05); // 27
-// Upper quantile rounded down:
+// Upper quantile rounded (down) to nearest:
 double y = quantile(complement(dist_type(20, 0.3), 0.05)); // 68
 
 //] //[/policy_ref_snip8]
@@ -40,8 +40,8 @@ int main()
 
 Output:
 
+   using policy<discrete_quantile<integer_round_nearest> 
   quantile(dist_type(20, 0.3), 0.05) = 27
   quantile(complement(dist_type(20, 0.3), 0.05)) 68
-
 
 */

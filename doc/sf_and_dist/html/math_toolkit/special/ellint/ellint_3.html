@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.special.ellint.ellint_3"></a><a class="link" href="ellint_3.html" title="Elliptic Integrals of the Third Kind - Legendre Form"> Elliptic Integrals
+<a name="math_toolkit.special.ellint.ellint_3"></a><a class="link" href="ellint_3.html" title="Elliptic Integrals of the Third Kind - Legendre Form">Elliptic Integrals
         of the Third Kind - Legendre Form</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.ellint.ellint_3.synopsis"></a><h6>
-<a name="id1139776"></a>
+<a name="id1265768"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.synopsis">Synopsis</a>
         </h6>
 <p>
@@ -55,7 +55,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.special.ellint.ellint_3.description"></a><h6>
-<a name="id1140286"></a>
+<a name="id1266278"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.description">Description</a>
         </h6>
 <p>
@@ -91,14 +91,9 @@
           (outside this range the result would be complex).
         </p>
 <p>
-          </p>
-<p>
-            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
-            is optional and can be used to control the behaviour of the function:
-            how it handles errors, what level of precision to use etc. Refer to the
-            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
-          </p>
-<p>
+          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
+          optional and can be used to control the behaviour of the function: how
+          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">ellint_3</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">n</span><span class="special">);</span>
@@ -119,17 +114,12 @@
           (outside this range the result would be complex).
         </p>
 <p>
-          </p>
-<p>
-            The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument
-            is optional and can be used to control the behaviour of the function:
-            how it handles errors, what level of precision to use etc. Refer to the
-            <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
-          </p>
-<p>
+          The final <a class="link" href="../../policy.html" title="Policies">Policy</a> argument is
+          optional and can be used to control the behaviour of the function: how
+          it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
 <a name="math_toolkit.special.ellint.ellint_3.accuracy"></a><h6>
-<a name="id1140887"></a>
+<a name="id1268647"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.accuracy">Accuracy</a>
         </h6>
 <p>
@@ -140,7 +130,7 @@
           All values are relative errors in units of epsilon.
         </p>
 <div class="table">
-<a name="math_toolkit.special.ellint.ellint_3.errors_rates_in_the_elliptic_integrals_of_the_third_kind"></a><p class="title"><b>Table&#160;43.&#160;Errors Rates in the Elliptic Integrals of the Third Kind</b></p>
+<a name="math_toolkit.special.ellint.ellint_3.errors_rates_in_the_elliptic_integrals_of_the_third_kind"></a><p class="title"><b>Table&#160;46.&#160;Errors Rates in the Elliptic Integrals of the Third Kind</b></p>
 <div class="table-contents"><table class="table" summary="Errors Rates in the Elliptic Integrals of the Third Kind">
 <colgroup>
 <col>
@@ -241,7 +231,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.special.ellint.ellint_3.testing"></a><h6>
-<a name="id1141074"></a>
+<a name="id1268821"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.testing">Testing</a>
         </h6>
 <p>
@@ -251,7 +241,7 @@
           this implementation.
         </p>
 <a name="math_toolkit.special.ellint.ellint_3.implementation"></a><h6>
-<a name="id1141096"></a>
+<a name="id1268843"></a>
           <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.implementation">Implementation</a>
         </h6>
 <p>
@@ -288,10 +278,10 @@
           <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) + 2m&#928;(n, k) ; n &lt;= 1</em></span>
         </p>
 <p>
-          <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) ; n &gt; 1</em></span> <sup>[<a name="id1141210" href="#ftn.id1141210" class="footnote">1</a>]</sup>
+          <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) ; n &gt; 1</em></span> <sup>[<a name="id1268958" href="#ftn.id1268958" class="footnote">1</a>]</sup>
         </p>
 <p>
-          are used to move &#966; &#8203; to the range [0, &#960;/2].
+          are used to move &#966; &#160; to the range [0, &#960;/2].
         </p>
 <p>
           The functions are then implemented in terms of Carlson's integrals using
@@ -308,7 +298,7 @@
         </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id1141210" href="#id1141210" class="para">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1268958" href="#id1268958" class="para">1</a>] </sup>
             I haven't been able to find a literature reference for this relation,
             but it appears to be the convention used by Mathematica. Intuitively
             the first <span class="emphasis"><em>2 * m * &#928;(n, k)</em></span> terms cancel out as the

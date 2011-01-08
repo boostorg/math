@@ -1,6 +1,7 @@
 [section:faq Frequently Asked Questions FAQ]
 
-# ['I'm a FORTRAN/NAG/SPSS/SAS/Cephes/MathCad/R user and I don't see where the functions like dnorm(mean, sd) are in Boost.Math?] [br]
+# ['I'm a FORTRAN/NAG/SPSS/SAS/Cephes/MathCad/R user 
+and I don't see where the functions like dnorm(mean, sd) are in Boost.Math?] [br]
 Nearly all are provided, and many more like mean, skewness, quantiles, complements ...  
 but Boost.Math makes full use of C++, and it looks a bit different. 
 But do not panic! See section on construction and the many examples.
@@ -8,6 +9,11 @@ Briefly, the distribution is constructed with the parameters (like location and 
 (things after the | in representation like P(X=k|n, p) or ; in a common represention of pdf f(x; [mu][sigma][super 2]). 
 Functions like pdf, cdf are called with the name of that distribution and the random variate often called x or k.
 For example, `normal my_norm(0, 1);  pdf(my_norm, 2.0);` [br]
+#I'm a user of [@http://support.sas.com/rnd/app/da/new/probabilityfunctions.html New SAS Functions for Computing Probabilities]. [br]
+You will find the interface more familar, but to be able to select a distribution (perhaps using a string)
+see the Extras/Future Directions section,
+and /boost/libs/math/dot_net_example/boost_math.cpp for an example that is used to create a C# utility
+(that you might also find useful): see [@http://sourceforge.net/projects/distexplorer/ Statistical Distribution Explorer] [br]. 
 # ['I'm allegic to reading manuals and prefer to learn from examples.][br]
 Fear not - you are not alone! Many examples are available for functions and distributions.
 Some are referenced directly from the text.  Others can be found at \boost_latest_release\libs\math\example.
@@ -49,8 +55,8 @@ See __domain_error, __overflow_error __error_policy __user_error_handling etc an
 Yes but you must customise the error handling: see __user_error_handling and __changing_policy_defaults .
 # ['The docs are several hundreds of pages long! Can I read the docs off-line or on paper?] [br]
 Yes - you can download the Boost current release of most documentation
-as a zip of pdfs (including Boost.Math) from Sourceforge,
-for example [@https://sourceforge.net/projects/boost/files/boost-docs/1.45.0/boost_pdf_1_45_0.tar.gz/download].
+as a zip of pdfs (including Boost.Math) from Sourceforge, for example 
+[@https://sourceforge.net/projects/boost/files/boost-docs/1.45.0/boost_pdf_1_45_0.tar.gz/download].
 And you can print any pages you need (or even print all pages - but be warned that there are several hundred!).
 Both html and pdf versions are highly hyperlinked.
 The entire Boost.Math pdf can be searched with Adobe Reader, Edit, Find ...

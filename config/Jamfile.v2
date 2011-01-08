@@ -12,6 +12,8 @@ local gmp_path = [ modules.peek : GMP_PATH ] ;
 obj has_long_double_support : has_long_double_support.cpp ;
 obj has_mpfr_class : has_mpfr_class.cpp :
       <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx ;
+obj has_mpreal : has_mpreal.cpp :
+      <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/mpfrc++ ;
 obj has_ntl_rr : has_ntl_rr.cpp : <include>$(ntl-path)/include ;
 obj has_gmpxx : has_gmpxx.cpp :
       <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx ;
@@ -20,9 +22,8 @@ obj has_gcc_visibility : has_gcc_visibility.cpp :
 
 explicit has_long_double_support ;
 explicit has_mpfr_class ;
+explicit has_mpreal ;
 explicit has_ntl_rr ;
 explicit has_gmpxx ;
 explicit has_gcc_visibility ;
-
-
 

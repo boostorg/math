@@ -26,7 +26,7 @@ using boost::math::policies::denorm_error;
 using boost::math::policies::evaluation_error;
 
 using boost::math::policies::errno_on_error;
-//using boost::math::policies::ignore_error;
+using boost::math::policies::ignore_error;
 
 //using namespace boost::math::policies;
 //using namespace boost::math; // avoid potential ambiuity with std:: <random>
@@ -36,7 +36,9 @@ typedef policy<
       domain_error<errno_on_error>, // 'bad' arguments.
       pole_error<errno_on_error>, // argument is pole value.
       overflow_error<errno_on_error>, // argument value causes overflow.
-      evaluation_error<errno_on_error>  // evaluation does not converge and may be inaccurate, or worse.
+      evaluation_error<errno_on_error>  // evaluation does not converge and may be inaccurate, or worse,
+      // or there is no way  known (yet) to implement this evaluation,
+      // for example, kurtosis of non-central beta distribution.
       > C_error_policy;
 
 // std

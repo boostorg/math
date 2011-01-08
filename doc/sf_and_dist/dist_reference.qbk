@@ -13,9 +13,11 @@
 [include distributions/extreme_value.qbk]
 [include distributions/fisher.qbk]
 [include distributions/gamma.qbk]
+[include distributions/geometric.qbk]
+[include distributions/hypergeometric.qbk]
 [include distributions/inverse_chi_squared.qbk]
 [include distributions/inverse_gamma.qbk]
-[include distributions/hypergeometric.qbk]
+[include distributions/inverse_gaussian.qbk]
 [include distributions/laplace.qbk]
 [include distributions/logistic.qbk]
 [include distributions/lognormal.qbk]
@@ -30,8 +32,8 @@
 [include distributions/rayleigh.qbk]
 [include distributions/students_t.qbk]
 [include distributions/triangular.qbk]
-[include distributions/weibull.qbk]
 [include distributions/uniform.qbk]
+[include distributions/weibull.qbk]
 
 [endsect][/section:dists Distributions]
 
@@ -44,13 +46,13 @@
 
 [h4 Adding Additional Location and Scale Parameters] 
 
-In some modelling applications we require a distribution with a specific 
-location and scale:
+In some modelling applications we require a distribution
+with a specific location and scale:
 often this equates to a specific mean and standard deviation, although for many
 distributions the relationship between these properties and the location and 
-scale parameters are non-trivial.  
-See [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm] for more
-information.
+scale parameters are non-trivial. See
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm]
+for more information.
 
 The obvious way to handle this is via an adapter template:
 
@@ -67,7 +69,7 @@ Which would then have its own set of overloads for the non-member accessor funct
 
 [h4 An "any_distribution" class]
 
-It would be fairly trivial to add a distribution object that virtualises
+It is easy to add a distribution object that virtualises
 the actual type of the distribution, and can therefore hold "any" object
 that conforms to the conceptual requirements of a distribution:
 
@@ -85,8 +87,13 @@ that conforms to the conceptual requirements of a distribution:
    // etc....
    
 Such a class would facilitate the writing of non-template code that can 
-function with any distribution type.  It's not clear yet whether there is a
-compelling use case though.  Possibly tests for goodness of fit might 
+function with any distribution type.
+
+The [@http://sourceforge.net/projects/distexplorer/ Statistical Distribution Explorer]
+utility for Windows is a usage example.
+
+It's not clear yet whether there is a compelling use case though.
+Possibly tests for goodness of fit might 
 provide such a use case: this needs more investigation.
 
 [h4 Higher Level Hypothesis Tests]

@@ -17,7 +17,7 @@
       typedef RealType  value_type;
       typedef Policy    policy_type;
       
-      static const ``['unspecified-type]`` cloppper_pearson_exact_interval;
+      static const ``['unspecified-type]`` clopper_pearson_exact_interval;
       static const ``['unspecified-type]`` jeffreys_prior_interval;
       
       // construct:

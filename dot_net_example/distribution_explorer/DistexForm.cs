@@ -554,7 +554,7 @@ namespace distribution_explorer
     private void contentsToolStripMenuItem_Click(object sender, EventArgs e)
     { // In lieu of proper help.
       string helpText = "\n" + AssemblyDescription +
-      "Version " + Assembly.GetExecutingAssembly().GetName().Version.ToString() +
+      "\nVersion " + Assembly.GetExecutingAssembly().GetName().Version.ToString() +
       "\nA Windows utility to show the properties of distributions" +
       "\n and permits calculation of probability density (or mass) function (PDF)" +
       "\nand cumulative distribution function (CDF) and complement from values provided." +
@@ -570,11 +570,11 @@ namespace distribution_explorer
       "\nalthough not all computed values will be as accurate as this.\n" +
       "\nValues shown as NaN cannot be calculated from the value given," +
       "\nmost commonly because the value is outside the range for the distribution." +
-      "n" +
-      "\nFor more information, including downloads see " +
-      "\nhttp://boost-consulting.com/vault/index.php?action=downloadfile&filename=math_toolkit.html&directory=Math%20-%20Numerics&" +
-      "\n(Note that .NET framework 2.0 and VCredist are requirements for this program.)" +
-      "\n\nCopyright John Maddock & Paul A. Bristow 2007, 2009";
+      "\n" +
+      "\nFor more information, including downloads, see " +
+      "\nhttp://sourceforge.net/projects/distexplorer/" +
+      "\n(Note that .NET framework 4.0 and VC Redistribution X86 are requirements for this program.)" +
+      "\n\nCopyright John Maddock & Paul A. Bristow 2007, 2009, 2010";
 
       MessageBox.Show("Statistical Distribution Explorer\n" + helpText);
     }

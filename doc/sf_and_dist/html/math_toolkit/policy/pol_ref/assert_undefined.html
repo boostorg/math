@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="math_toolkit.policy.pol_ref.assert_undefined"></a><a class="link" href="assert_undefined.html" title="Mathematically Undefined Function Policies"> Mathematically
+<a name="math_toolkit.policy.pol_ref.assert_undefined"></a><a class="link" href="assert_undefined.html" title="Mathematically Undefined Function Policies">Mathematically
         Undefined Function Policies</a>
 </h4></div></div></div>
 <p>
@@ -72,6 +72,16 @@
 <span class="comment">// This will compile, but raises a domain error!
 </span><span class="keyword">double</span> <span class="identifier">m2</span> <span class="special">=</span> <span class="identifier">mean</span><span class="special">(</span><span class="identifier">cauchy_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">assert_undefined</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;());</span>
 </pre>
+<p>
+          <code class="computeroutput"><span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">assert_undefined</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span></code>
+          behaviour can also be obtained by defining the macro
+        </p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_ASSERT_UNDEFINED_POLICY</span> <span class="keyword">false</span>
+</pre>
+<p>
+          at the head of the file - see <a class="link" href="policy_defaults.html" title="Using Macros to Change the Policy Defaults">Using
+          Macros to Change the Policy Defaults</a>.
+        </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

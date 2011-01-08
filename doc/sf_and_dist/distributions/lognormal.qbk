@@ -90,7 +90,7 @@ and as such should have very low error rates.
 [h4 Implementation]
 
 In the following table /m/ is the location parameter of the distribution, 
-/s/ is it's scale parameter, /x/ is the random variate, /p/ is the probability
+/s/ is its scale parameter, /x/ is the random variate, /p/ is the probability
 and /q = 1-p/.
 
 [table

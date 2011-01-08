@@ -1,4 +1,4 @@
-[section:minima Locating Function Minima]
+[section:minima Locating Function Minima: Brent's algorithm]
 
 [h4 synopsis]
 
@@ -26,9 +26,9 @@ algorithm.  Parameters are:
           for the minima.]]
 [[bits] [The number of bits precision to which the minima should be found.
              Note that in principle, the minima can not be located to greater
-             accuracy than the square root of machine epsilon, therefore if /bits/
-             is set to a value greater than one half of the bits in type T, then
-             the value will be ignored.]]
+             accuracy than the square root of machine epsilon (for 64-bit double, sqrt(1e-16)[cong]1e-8),
+             therefore if /bits/ is set to a value greater than one half of the bits in type T,
+             then the value will be ignored.]]
 [[max_iter] [The maximum number of iterations to use
              in the algorithm, if not provided the algorithm will just
              keep on going until the minima is found.]]             

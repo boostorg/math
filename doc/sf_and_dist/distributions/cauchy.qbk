@@ -127,7 +127,7 @@ may need subtracting from 1 depending on whether we want the complement
 or not, and whether /x/ is less than __x0 or not.
 ]]
 [[quantile][The same procedure is used irrespective of whether we're starting
-            from the probability or it's complement.  First the argument /p/ is
+            from the probability or its complement.  First the argument /p/ is
             reduced to the range \[-0.5, 0.5\], then the relation
             
 x = __x0 [plusminus] [gamma][space] / tan([pi] * p)

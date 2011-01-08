@@ -130,7 +130,7 @@ the tan function is defined by:
 
 [equation fraction4]
 
-So it's generator object would look like:
+So its generator object would look like:
 
    template <class T>
    struct tan_fraction
