@@ -439,7 +439,7 @@ run test_laguerre.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_legendre.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_logistic_dist.cpp ../../test/build//boost_test_exec_monitor ;
 run test_lognormal.cpp ../../test/build//boost_test_exec_monitor ;
-#run test_minima.cpp pch ../../test/build//boost_test_exec_monitor ;
+run test_minima.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_negative_binomial.cpp ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
