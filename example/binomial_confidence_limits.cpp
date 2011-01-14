@@ -12,11 +12,12 @@
 #  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
 #endif
 
+#include <ios>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout; using std::endl;
-#include <iomanip>
-using std::fixed; using std::left; using std::right; using std::right; using std::setw;
-using std::setprecision;
+using std::fixed; using std::left; using std::right; using std::right; using boost::detail::setw;
+using boost::detail::setprecision;
 
 #include <boost/math/distributions/binomial.hpp>
 
@@ -38,10 +39,10 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
       "___________________________________________\n"
       "2-Sided Confidence Limits For Success Ratio\n"
       "___________________________________________\n\n";
-   cout << setprecision(7);
-   cout << setw(40) << left << "Number of Observations" << "=  " << trials << "\n";
-   cout << setw(40) << left << "Number of successes" << "=  " << successes << "\n";
-   cout << setw(40) << left << "Sample frequency of occurrence" << "=  " << double(successes) / trials << "\n";
+   cout << boost::detail::setprecision(7);
+   cout << boost::detail::setw(40) << left << "Number of Observations" << "=  " << trials << "\n";
+   cout << boost::detail::setw(40) << left << "Number of successes" << "=  " << successes << "\n";
+   cout << boost::detail::setw(40) << left << "Sample frequency of occurrence" << "=  " << double(successes) / trials << "\n";
    //
    // Define a table of significance levels:
    //
@@ -60,19 +61,19 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
    for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    {
       // Confidence value:
-      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
+      cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(10) << right << 100 * (1-alpha[i]);
       // Calculate Clopper Pearson bounds:
       double l = binomial_distribution<>::find_lower_bound_on_p(trials, successes, alpha[i]/2);
       double u = binomial_distribution<>::find_upper_bound_on_p(trials, successes, alpha[i]/2);
       // Print Clopper Pearson Limits:
-      cout << fixed << setprecision(5) << setw(15) << right << l;
-      cout << fixed << setprecision(5) << setw(15) << right << u;
+      cout << fixed << boost::detail::setprecision(5) << boost::detail::setw(15) << right << l;
+      cout << fixed << boost::detail::setprecision(5) << boost::detail::setw(15) << right << u;
       // Calculate Jeffreys Prior Bounds:
       l = binomial_distribution<>::find_lower_bound_on_p(trials, successes, alpha[i]/2, binomial_distribution<>::jeffreys_prior_interval);
       u = binomial_distribution<>::find_upper_bound_on_p(trials, successes, alpha[i]/2, binomial_distribution<>::jeffreys_prior_interval);
       // Print Jeffreys Prior Limits:
-      cout << fixed << setprecision(5) << setw(15) << right << l;
-      cout << fixed << setprecision(5) << setw(15) << right << u << std::endl;
+      cout << fixed << boost::detail::setprecision(5) << boost::detail::setw(15) << right << l;
+      cout << fixed << boost::detail::setprecision(5) << boost::detail::setw(15) << right << u << std::endl;
    }
    cout << endl;
 } // void confidence_limits_on_frequency()

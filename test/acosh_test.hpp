@@ -7,7 +7,7 @@
 
 
 #include <functional>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 
 
@@ -71,16 +71,16 @@ void    acosh_manual_check()
                 static_cast<long double>(i-50)/static_cast<long double>(5);
         
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-        BOOST_MESSAGE(  ::std::setw(15)
+        BOOST_MESSAGE(  ::boost::detail::setw(15)
                      << acosh_error_evaluator(xf)
-                     << ::std::setw(15)
+                     << ::boost::detail::setw(15)
                      << acosh_error_evaluator(xd)
-                     << ::std::setw(15)
+                     << ::boost::detail::setw(15)
                      << acosh_error_evaluator(xl));
 #else
-        BOOST_MESSAGE(  ::std::setw(15)
+        BOOST_MESSAGE(  ::boost::detail::setw(15)
                      << acosh_error_evaluator(xf)
-                     << ::std::setw(15)
+                     << ::boost::detail::setw(15)
                      << acosh_error_evaluator(xd));
 #endif
     }

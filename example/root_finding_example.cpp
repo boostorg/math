@@ -51,8 +51,8 @@ using boost::math::tools::toms748_solve;
 
 #include <iostream>
 using std::cout; using std::endl;
-#include <iomanip>
-using std::setw; using std::setprecision;
+#include <boost/detail/iomanip.hpp>
+using boost::detail::setw; using boost::detail::setprecision;
 #include <limits>
 using std::numeric_limits;
 

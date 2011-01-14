@@ -15,10 +15,10 @@
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
    using std::cout;
    using std::endl;
-   using std::setprecision;
+   using boost::detail::setprecision;
 
 #include <boost/array.hpp>
 #include "functor.hpp"

@@ -7,7 +7,7 @@
 
 
 #include <functional>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 
 
@@ -70,11 +70,11 @@ void    asinh_manual_check()
         long double  xl =
                 static_cast<long double>(i-50)/static_cast<long double>(5);
         
-        BOOST_MESSAGE(  ::std::setw(15)
+        BOOST_MESSAGE(  ::boost::detail::setw(15)
                      << asinh_error_evaluator(xf)
-                     << ::std::setw(15)
+                     << ::boost::detail::setw(15)
                      << asinh_error_evaluator(xd)
-                     << ::std::setw(15)
+                     << ::boost::detail::setw(15)
                      << asinh_error_evaluator(xl));
     }
     

@@ -46,10 +46,11 @@ First we need some includes and using statements to be able to use the binomial 
 #include <boost/math/distributions/binomial.hpp>
   using boost::math::binomial;
 
+#include <ios>
 #include <iostream>
   using std::cout;  using std::endl;  using std::left;
-#include <iomanip>
-  using std::setw;
+#include <boost/detail/iomanip.hpp>
+  using boost::detail::setw;
 
 int main()
 {
@@ -141,7 +142,7 @@ Finally, print two tables of probability for the /exactly/ and /at least/ a numb
     for (int successes = 0; successes <= flips; successes++)
     { // Say success means getting a head (or equally success means getting a tail).
       double probability = pdf(flip, successes);
-      cout << left << setw(2) << successes << "     " << setw(10)
+      cout << left << boost::detail::setw(2) << successes << "     " << boost::detail::setw(10)
         << probability << " or 1 in " << 1. / probability
         << ", or " << probability * 100. << "%" << endl;
     } // for i
@@ -153,7 +154,7 @@ Finally, print two tables of probability for the /exactly/ and /at least/ a numb
     { // Say success means getting a head
       // (equally success could mean getting a tail).
       double probability = cdf(flip, successes); // P(X <= heads)
-      cout << setw(2) << successes << "        " << setw(10) << left
+      cout << boost::detail::setw(2) << successes << "        " << boost::detail::setw(10) << left
         << probability << " or 1 in " << 1. / probability << ", or "
         << probability * 100. << "%"<< endl;
     } // for i

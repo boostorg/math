@@ -13,12 +13,13 @@
 #  pragma warning(disable: 4180) // qualifier has no effect (in Fusion).
 #endif
 
+#include <ios>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout; using std::endl;
 using std::left; using std::fixed; using std::right; using std::scientific;
-#include <iomanip>
-using std::setw;
-using std::setprecision;
+using boost::detail::setw;
+using boost::detail::setprecision;
 
 #include <boost/math/distributions/fisher_f.hpp>
 
@@ -46,45 +47,45 @@ void f_test(
       "____________________________________\n"
       "F test for equal standard deviations\n"
       "____________________________________\n\n";
-   cout << setprecision(5);
+   cout << boost::detail::setprecision(5);
    cout << "Sample 1:\n";
-   cout << setw(55) << left << "Number of Observations" << "=  " << N1 << "\n";
-   cout << setw(55) << left << "Sample Standard Deviation" << "=  " << sd1 << "\n\n";
+   cout << boost::detail::setw(55) << left << "Number of Observations" << "=  " << N1 << "\n";
+   cout << boost::detail::setw(55) << left << "Sample Standard Deviation" << "=  " << sd1 << "\n\n";
    cout << "Sample 2:\n";
-   cout << setw(55) << left << "Number of Observations" << "=  " << N2 << "\n";
-   cout << setw(55) << left << "Sample Standard Deviation" << "=  " << sd2 << "\n\n";
+   cout << boost::detail::setw(55) << left << "Number of Observations" << "=  " << N2 << "\n";
+   cout << boost::detail::setw(55) << left << "Sample Standard Deviation" << "=  " << sd2 << "\n\n";
    //
    // Now we can calculate and output some stats:
    //
    // F-statistic:
    double F = (sd1 / sd2);
    F *= F;
-   cout << setw(55) << left << "Test Statistic" << "=  " << F << "\n\n";
+   cout << boost::detail::setw(55) << left << "Test Statistic" << "=  " << F << "\n\n";
    //
    // Finally define our distribution, and get the probability:
    //
    fisher_f dist(N1 - 1, N2 - 1);
    double p = cdf(dist, F);
-   cout << setw(55) << left << "CDF of test statistic: " << "=  "
-      << setprecision(3) << scientific << p << "\n";
+   cout << boost::detail::setw(55) << left << "CDF of test statistic: " << "=  "
+      << boost::detail::setprecision(3) << scientific << p << "\n";
    double ucv = quantile(complement(dist, alpha));
    double ucv2 = quantile(complement(dist, alpha / 2));
    double lcv = quantile(dist, alpha);
    double lcv2 = quantile(dist, alpha / 2);
-   cout << setw(55) << left << "Upper Critical Value at alpha: " << "=  "
-      << setprecision(3) << scientific << ucv << "\n";
-   cout << setw(55) << left << "Upper Critical Value at alpha/2: " << "=  "
-      << setprecision(3) << scientific << ucv2 << "\n";
-   cout << setw(55) << left << "Lower Critical Value at alpha: " << "=  "
-      << setprecision(3) << scientific << lcv << "\n";
-   cout << setw(55) << left << "Lower Critical Value at alpha/2: " << "=  "
-      << setprecision(3) << scientific << lcv2 << "\n\n";
+   cout << boost::detail::setw(55) << left << "Upper Critical Value at alpha: " << "=  "
+      << boost::detail::setprecision(3) << scientific << ucv << "\n";
+   cout << boost::detail::setw(55) << left << "Upper Critical Value at alpha/2: " << "=  "
+      << boost::detail::setprecision(3) << scientific << ucv2 << "\n";
+   cout << boost::detail::setw(55) << left << "Lower Critical Value at alpha: " << "=  "
+      << boost::detail::setprecision(3) << scientific << lcv << "\n";
+   cout << boost::detail::setw(55) << left << "Lower Critical Value at alpha/2: " << "=  "
+      << boost::detail::setprecision(3) << scientific << lcv2 << "\n\n";
    //
    // Finally print out results of null and alternative hypothesis:
    //
-   cout << setw(55) << left <<
+   cout << boost::detail::setw(55) << left <<
       "Results for Alternative Hypothesis and alpha" << "=  "
-      << setprecision(4) << fixed << alpha << "\n\n";
+      << boost::detail::setprecision(4) << fixed << alpha << "\n\n";
    cout << "Alternative Hypothesis                                    Conclusion\n";
    cout << "Standard deviations are unequal (two sided test)          ";
    if((ucv2 < F) || (lcv2 > F))

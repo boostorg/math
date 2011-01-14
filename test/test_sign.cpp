@@ -13,10 +13,11 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
    using std::cout;
    using std::endl;
-   using std::setprecision;
+   using boost::detail::setprecision;
 
 template <class RealType>
 void test_spots(RealType /*T*/, const char* /*type_name*/)

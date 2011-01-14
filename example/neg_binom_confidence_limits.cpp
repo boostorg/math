@@ -22,11 +22,12 @@ First we need some includes to access the negative binomial distribution
 #include <boost/math/distributions/negative_binomial.hpp>
 using boost::math::negative_binomial;
 
+#include <ios>
 #include <iostream>
 using std::cout; using std::endl;
-#include <iomanip>
-using std::setprecision;
-using std::setw; using std::left; using std::fixed; using std::right;
+#include <boost/detail/iomanip.hpp>
+using boost::detail::setprecision;
+using boost::detail::setw; using std::left; using std::fixed; using std::right;
 
 /*`
 First define a table of significance levels: these are the 
@@ -57,11 +58,11 @@ void confidence_limits_on_frequency(unsigned trials, unsigned successes)
       "______________________________________________\n"
       "2-Sided Confidence Limits For Success Fraction\n"
       "______________________________________________\n\n";
-   cout << setprecision(7);
-   cout << setw(40) << left << "Number of trials" << " =  " << trials << "\n";
-   cout << setw(40) << left << "Number of successes" << " =  " << successes << "\n";
-   cout << setw(40) << left << "Number of failures" << " =  " << trials - successes << "\n";
-   cout << setw(40) << left << "Observed frequency of occurrence" << " =  " << double(successes) / trials << "\n";
+   cout << boost::detail::setprecision(7);
+   cout << boost::detail::setw(40) << left << "Number of trials" << " =  " << trials << "\n";
+   cout << boost::detail::setw(40) << left << "Number of successes" << " =  " << successes << "\n";
+   cout << boost::detail::setw(40) << left << "Number of failures" << " =  " << trials - successes << "\n";
+   cout << boost::detail::setw(40) << left << "Observed frequency of occurrence" << " =  " << double(successes) / trials << "\n";
 
    // Print table header:
    cout << "\n\n"
@@ -86,13 +87,13 @@ then we would *not* have divided by two.
    for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    {
       // Confidence value:
-      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
+      cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(10) << right << 100 * (1-alpha[i]);
       // Calculate bounds:
       double lower = negative_binomial::find_lower_bound_on_p(trials, successes, alpha[i]/2);
       double upper = negative_binomial::find_upper_bound_on_p(trials, successes, alpha[i]/2);
       // Print limits:
-      cout << fixed << setprecision(5) << setw(15) << right << lower;
-      cout << fixed << setprecision(5) << setw(15) << right << upper << endl;
+      cout << fixed << boost::detail::setprecision(5) << boost::detail::setw(15) << right << lower;
+      cout << fixed << boost::detail::setprecision(5) << boost::detail::setw(15) << right << upper << endl;
    }
    cout << endl;
 } // void confidence_limits_on_frequency(unsigned trials, unsigned successes)

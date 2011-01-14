@@ -16,10 +16,11 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
    using std::cout;
    using std::endl;
-   using std::setprecision;
+   using boost::detail::setprecision;
 
 #include <boost/array.hpp>
 #include "functor.hpp"
@@ -32,7 +33,7 @@
       if(failures != boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed)\
       {\
          std::cerr << "Failure was with data ";\
-         std::cerr << std::setprecision(35); \
+         std::cerr << boost::detail::setprecision(35); \
          std::cerr << "x = " << x << ", r = " << r << ", n = " << n\
          << ", N = " << N << ", p = " << cp << ", q = " << ccp << std::endl;\
       }\

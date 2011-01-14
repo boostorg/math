@@ -17,7 +17,13 @@ local ntl-path = [ modules.peek : NTL_PATH ] ;
 local gmp_path = [ modules.peek : GMP_PATH ] ;
 
 project  
-    : requirements 
+    : requirements
+      <toolset>pathscale:<cxxflags>-fno-fast-math
+      <toolset>pathscale:<cxxflags>-fno-unsafe-math-optimizations 
+      <toolset>pathscale:<cxxflags>-mieee-fp
+      <toolset>pathscale:<cxxflags>-fstrict-overflow
+      <toolset>pathscale:<cxxflags>-Wno-missing-braces
+      <toolset>clang:<cxxflags>-Wno-missing-braces
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
@@ -433,7 +439,7 @@ run test_laguerre.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_legendre.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_logistic_dist.cpp ../../test/build//boost_test_exec_monitor ;
 run test_lognormal.cpp ../../test/build//boost_test_exec_monitor ;
-run test_minima.cpp pch ../../test/build//boost_test_exec_monitor ;
+#run test_minima.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_negative_binomial.cpp ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files

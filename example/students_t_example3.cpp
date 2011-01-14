@@ -34,8 +34,8 @@
 
 #include <iostream>
    using std::cout;    using std::endl;
-#include <iomanip>
-   using std::setprecision;    using std::setw;
+#include <boost/detail/iomanip.hpp>
+   using boost::detail::setprecision;    using boost::detail::setw;
 #include <cmath>
    using std::sqrt;
 
@@ -71,7 +71,7 @@ int main()
    { // Echo data and differences.
       diffs[portion] = data[portion][0] - data[portion][1];
       mean_diff += diffs[portion];
-      cout << setw(4) << portion << ' ' << setw(14) << data[portion][0] << ' ' << setw(18)<< data[portion][1] << ' ' << setw(9) << diffs[portion] << endl;
+      cout << boost::detail::setw(4) << portion << ' ' << boost::detail::setw(14) << data[portion][0] << ' ' << boost::detail::setw(18)<< data[portion][1] << ' ' << boost::detail::setw(9) << diffs[portion] << endl;
    }
    mean_diff /= portions;
    cout << "Mean difference = " << mean_diff << endl; // -1.75

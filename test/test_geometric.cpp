@@ -38,10 +38,12 @@ using boost::math::geometric; // using typedef for geometric_distribution<double
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION
 
+#include <ios>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout;
 using std::endl;
-using std::setprecision;
+using boost::detail::setprecision;
 using std::showpoint;
 #include <limits>
 using std::numeric_limits;

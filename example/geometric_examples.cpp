@@ -48,11 +48,12 @@ and we need some std library iostream, of course.
   // for negative_binomial_distribution
   using boost::math::normal; // typedef provides default type is double.
 
+#include <ios>
 #include <iostream>
   using std::cout; using std::endl;
   using std::noshowpoint; using std::fixed; using std::right; using std::left;
-#include <iomanip>
-  using std::setprecision; using std::setw; 
+#include <boost/detail/iomanip.hpp>
+  using boost::detail::setprecision; using boost::detail::setw; 
 
 #include <limits>
   using std::numeric_limits;

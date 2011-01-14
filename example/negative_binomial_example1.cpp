@@ -59,11 +59,12 @@ and we need some std library iostream, of course.
   using  ::boost::math::cdf; // Cumulative density function.
   using  ::boost::math::quantile;
 
+#include <ios>
 #include <iostream>
   using std::cout; using std::endl;
   using std::noshowpoint; using std::fixed; using std::right; using std::left;
-#include <iomanip>
-  using std::setprecision; using std::setw; 
+#include <boost/detail/iomanip.hpp>
+  using boost::detail::setprecision; using boost::detail::setw; 
 
 #include <limits>
   using std::numeric_limits;
@@ -375,7 +376,7 @@ Finally, we can tabulate the probability for the last sale being exactly on each
    cout.precision(5);
    for (int i = (int)sales_quota; i < all_houses+1; i++)
    {
-     cout << left << setw(3) << i << "                             " << setw(8) << cdf(nb, i - sales_quota)  << endl;
+     cout << left << boost::detail::setw(3) << i << "                             " << boost::detail::setw(8) << cdf(nb, i - sales_quota)  << endl;
    }
    cout << endl;
 /*`

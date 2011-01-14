@@ -24,6 +24,8 @@ using boost::math::triangular_distribution;
 #include <boost/math/tools/test.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
+#include <ios>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -31,8 +33,8 @@ using std::scientific;
 using std::fixed;
 using std::left;
 using std::right;
-using std::setw;
-using std::setprecision;
+using boost::detail::setw;
+using boost::detail::setprecision;
 using std::showpos;
 #include <limits>
 using std::numeric_limits;
@@ -637,10 +639,10 @@ int test_main(int, char* [])
     BOOST_CHECK_EQUAL(quantile(complement(*dists[i], 1.)), quantile(*dists[i], 0.));
     BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], 0.5), quantile(complement(*dist, 0.5)),  tol5eps); // OK
     BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], 0.98), quantile(complement(*dist, 1. - 0.98)),tol5eps);
-    // cout << setprecision(17) <<  median(*dist) << endl;
+    // cout << boost::detail::setprecision(17) <<  median(*dist) << endl;
   }
 
-  cout << showpos << setprecision(2) << endl;
+  cout << showpos << boost::detail::setprecision(2) << endl;
 
   //triangular_distribution<double>& dist = trim12; 
   for (unsigned i = 0; i < sizeof(xs) /sizeof(double); i++)
@@ -648,13 +650,13 @@ int test_main(int, char* [])
     double x = xs[i] * (trim12.upper() - trim12.lower()) + trim12.lower();
     double dx = cdf(trim12, x);
     double cx = cdf(complement(trim12, x));
-    //cout << fixed << showpos << setprecision(3) 
+    //cout << fixed << showpos << boost::detail::setprecision(3) 
     //  << xs[i] << ", " << x << ",  " << pdf(trim12, x) << ",  " << dx << ",  " << cx << ",, " ;
 
     BOOST_CHECK_CLOSE_FRACTION(cx, 1 - dx, tol500eps); // cx == 1 - dx
 
-    // << setprecision(2) << scientific << cr - x << ", " // difference x - quan(cdf)
-    // << setprecision(3) << fixed
+    // << boost::detail::setprecision(2) << scientific << cr - x << ", " // difference x - quan(cdf)
+    // << boost::detail::setprecision(3) << fixed
     // << quantile(trim12, dx) << ", " 
     // << quantile(complement(trim12, 1 - dx)) << ", " 
     // << quantile(complement(trim12, cx)) << ", " 

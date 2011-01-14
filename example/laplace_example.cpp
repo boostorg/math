@@ -23,10 +23,11 @@ First we need some includes to access the laplace & normal distributions
 #include <boost/math/distributions/normal.hpp> // for normal_distribution
   using boost::math::normal; // typedef provides default type is double.
 
+#include <ios>
 #include <iostream>
   using std::cout; using std::endl; using std::left; using std::showpoint; using std::noshowpoint;
-#include <iomanip>
-  using std::setw; using std::setprecision;
+#include <boost/detail/iomanip.hpp>
+  using boost::detail::setw; using boost::detail::setprecision;
 #include <limits>
   using std::numeric_limits;
 
@@ -43,7 +44,7 @@ int main()
       double range = 4; // min and max z = -range to +range.
       //int precision = 17; // traditional tables are only computed to much lower precision.
       int precision = 4; // traditional table at much lower precision.
-      int width = 10; // for use with setw.
+      int width = 10; // for use with boost::detail::setw.
 
       // Construct standard laplace & normal distributions l & s
         normal s; // (default location or mean = zero, and scale or standard deviation = unity)
@@ -60,10 +61,10 @@ int main()
       cout.precision(5);
       for (double z = -range; z < range + step; z += step)
       {
-        cout << left << setprecision(3) << setw(6) << z << " " 
-          << setprecision(precision) << setw(width) << pdf(s, z) << "  "
-          << setprecision(precision) << setw(width) << pdf(l, z)<<  "  ("
-          << setprecision(precision) << setw(width) << pdf(l, z) - pdf(s, z) // difference.
+        cout << left << boost::detail::setprecision(3) << boost::detail::setw(6) << z << " " 
+          << boost::detail::setprecision(precision) << boost::detail::setw(width) << pdf(s, z) << "  "
+          << boost::detail::setprecision(precision) << boost::detail::setw(width) << pdf(l, z)<<  "  ("
+          << boost::detail::setprecision(precision) << boost::detail::setw(width) << pdf(l, z) - pdf(s, z) // difference.
           << ")" << endl;
       }
       cout.precision(6); // default
@@ -79,10 +80,10 @@ int main()
       cout << " z  CDF  normal     laplace    (difference)" << endl;
       for (double z = -range; z < range + step; z += step)
       {
-        cout << left << setprecision(3) << setw(6) << z << " " 
-          << setprecision(precision) << setw(width) << cdf(s, z) << "  "
-          << setprecision(precision) << setw(width) << cdf(l, z) <<  "  ("
-          << setprecision(precision) << setw(width) << cdf(l, z) - cdf(s, z) // difference.
+        cout << left << boost::detail::setprecision(3) << boost::detail::setw(6) << z << " " 
+          << boost::detail::setprecision(precision) << boost::detail::setw(width) << cdf(s, z) << "  "
+          << boost::detail::setprecision(precision) << boost::detail::setw(width) << cdf(l, z) <<  "  ("
+          << boost::detail::setprecision(precision) << boost::detail::setw(width) << cdf(l, z) - cdf(s, z) // difference.
           << ")" << endl;
       }
       cout.precision(6); // default

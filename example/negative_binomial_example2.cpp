@@ -19,12 +19,14 @@
 // negative_binomial is the probability that k or fewer failures
 // preceed the r th trial's success.
 
+#include <ios>
 #include <iostream>
+#include <boost/detail/iomanip.hpp>
 using std::cout;
 using std::endl;
-using std::setprecision;
+using boost::detail::setprecision;
 using std::showpoint;
-using std::setw;
+using boost::detail::setw;
 using std::left;
 using std::right;
 #include <limits>
@@ -63,10 +65,10 @@ int main()
   // Compare with the cdf
   double cdf8 = cdf(mynbdist, static_cast<double>(k));
   double diff = sum - cdf8; // Expect the diference to be very small.
-  cout << setprecision(17) << "Sum pdfs = " << sum << ' ' // sum = 0.40025683281803698
+  cout << boost::detail::setprecision(17) << "Sum pdfs = " << sum << ' ' // sum = 0.40025683281803698
   << ", cdf = " << cdf(mynbdist, static_cast<double>(k)) //  cdf = 0.40025683281803687
   << ", difference = "  // difference = 0.50000000000000000
-  << setprecision(1) << diff/ (std::numeric_limits<double>::epsilon() * sum)
+  << boost::detail::setprecision(1) << diff/ (std::numeric_limits<double>::epsilon() * sum)
   << " in epsilon units." << endl;
 
   // Note: Use boost::math::tools::epsilon rather than std::numeric_limits
@@ -85,10 +87,10 @@ int main()
   cout << "\n"" k            pdf                      cdf""\n" << endl;
   for (int k = 0; k < maxk; k++)
   {
-    cout << right << setprecision(17) << showpoint
-      << right << setw(3) << k  << ", "
-      << left << setw(25) << pdf(mynbdist, static_cast<double>(k))
-      << left << setw(25) << cdf(mynbdist, static_cast<double>(k))
+    cout << right << boost::detail::setprecision(17) << showpoint
+      << right << boost::detail::setw(3) << k  << ", "
+      << left << boost::detail::setw(25) << pdf(mynbdist, static_cast<double>(k))
+      << left << boost::detail::setw(25) << cdf(mynbdist, static_cast<double>(k))
       << endl;
   }
   cout << endl;

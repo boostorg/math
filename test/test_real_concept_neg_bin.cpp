@@ -20,10 +20,12 @@ using boost::math::geometric; // using typedef for geometric_distribution<double
 
 #include <boost/math/distributions/negative_binomial.hpp> // for some comparisons.
 
+#include <ios>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout;
 using std::endl;
-using std::setprecision;
+using boost::detail::setprecision;
 using std::showpoint;
 #include <limits>
 using std::numeric_limits;

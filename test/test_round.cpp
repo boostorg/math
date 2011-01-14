@@ -13,6 +13,7 @@
 #include <boost/math/special_functions/modf.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/random/mersenne_twister.hpp>
+#include <boost/detail/iomanip.hpp>
 
 boost::mt19937 rng;
 
@@ -45,13 +46,13 @@ void check_within_half(T a, U u)
    if(fabs(a-u) > 0.5f)
    {
       BOOST_ERROR("Rounded result differed by more than 0.5 from the original");
-      std::cerr << "Values were: " << std::setprecision(35) << std::setw(40)
+      std::cerr << "Values were: " << boost::detail::setprecision(35) << boost::detail::setw(40)
          << std::left << a << u << std::endl;
    }
    if((fabs(a - u) == 0.5f) && (fabs(static_cast<T>(u)) < fabs(a)))
    {
       BOOST_ERROR("Rounded result was towards zero with boost::round");
-      std::cerr << "Values were: " << std::setprecision(35) << std::setw(40)
+      std::cerr << "Values were: " << boost::detail::setprecision(35) << boost::detail::setw(40)
          << std::left << a << u << std::endl;
    }
 }
@@ -72,19 +73,19 @@ void check_trunc_result(T a, U u)
    if(fabs(a-u) >= 1)
    {
       BOOST_ERROR("Rounded result differed by more than 1 from the original");
-      std::cerr << "Values were: " << std::setprecision(35) << std::setw(40)
+      std::cerr << "Values were: " << boost::detail::setprecision(35) << boost::detail::setw(40)
          << std::left << a << u << std::endl;
    }
    if(abs(a) < safe_abs(u))
    {
       BOOST_ERROR("Truncated result had larger absolute value than the original");
-      std::cerr << "Values were: " << std::setprecision(35) << std::setw(40)
+      std::cerr << "Values were: " << boost::detail::setprecision(35) << boost::detail::setw(40)
          << std::left << a << u << std::endl;
    }
    if(fabs(static_cast<T>(u)) > fabs(a))
    {
       BOOST_ERROR("Rounded result was away from zero with boost::trunc");
-      std::cerr << "Values were: " << std::setprecision(35) << std::setw(40)
+      std::cerr << "Values were: " << boost::detail::setprecision(35) << boost::detail::setw(40)
          << std::left << a << u << std::endl;
    }
 }
@@ -96,25 +97,25 @@ void check_modf_result(T a, T fract, U ipart)
    if(fract + ipart != a)
    {
       BOOST_ERROR("Fractional and integer results do not add up to the original value");
-      std::cerr << "Values were: " << std::setprecision(35) << " "
+      std::cerr << "Values were: " << boost::detail::setprecision(35) << " "
          << std::left << a << ipart << " " << fract << std::endl;
    }
    if((boost::math::sign(a) != boost::math::sign(fract)) && boost::math::sign(fract))
    {
       BOOST_ERROR("Original and fractional parts have differing signs");
-      std::cerr << "Values were: " << std::setprecision(35) << " "
+      std::cerr << "Values were: " << boost::detail::setprecision(35) << " "
          << std::left << a << ipart << " " << fract << std::endl;
    }
    if((boost::math::sign(a) != boost::math::sign(ipart)) && boost::math::sign(ipart))
    {
       BOOST_ERROR("Original and integer parts have differing signs");
-      std::cerr << "Values were: " << std::setprecision(35) << " "
+      std::cerr << "Values were: " << boost::detail::setprecision(35) << " "
          << std::left << a << ipart << " " << ipart << std::endl;
    }
    if(fabs(a-ipart) >= 1)
    {
       BOOST_ERROR("Rounded result differed by more than 1 from the original");
-      std::cerr << "Values were: " << std::setprecision(35) << std::setw(40)
+      std::cerr << "Values were: " << boost::detail::setprecision(35) << boost::detail::setw(40)
          << std::left << a << ipart << std::endl;
    }
 }

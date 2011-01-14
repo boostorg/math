@@ -35,9 +35,9 @@
 #include <iostream>
    using std::cout;
    using std::endl;
-#include <iomanip>
-   using std::setprecision;
-   using std::setw;
+#include <boost/detail/iomanip.hpp>
+   using boost::detail::setprecision;
+   using boost::detail::setw;
 #include <cmath>
    using std::sqrt;
 
@@ -68,7 +68,7 @@ int main()
    for (int value = 0; value < values; value++)
    { // Echo data and calculate mean.
       sum += data[value];
-      cout << setw(4) << value << ' ' << setw(14) << data[value] << endl;
+      cout << boost::detail::setw(4) << value << ' ' << boost::detail::setw(14) << data[value] << endl;
    }
    double mean = sum /static_cast<double>(values);
    cout << "Mean = " << mean << endl; // 25.2283

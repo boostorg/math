@@ -9,7 +9,7 @@
 #define BOOST_MATH_POLICY_ERROR_HANDLING_HPP
 
 #include <stdexcept>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 #include <string>
 #include <cerrno>
 #include <boost/config/no_tr1/cmath.hpp>
@@ -108,7 +108,7 @@ void raise_error(const char* function, const char* message, const T& val)
   msg += message;
 
   int prec = 2 + (boost::math::policies::digits<T, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
-  msg = do_format(boost::format(msg), boost::io::group(std::setprecision(prec), val));
+  msg = do_format(boost::format(msg), boost::io::group(boost::detail::setprecision(prec), val));
 
   E e(msg);
   boost::throw_exception(e);

@@ -263,7 +263,7 @@ enum
 
 int main(int argc, char* argv[])
 {
-   std::cout << std::setprecision(17) << std::scientific;
+   std::cout << boost::detail::setprecision(17) << std::scientific;
    std::cout << sph_bessel_j_bare(0., 0.1185395751953125e4) << std::endl;
    std::cout << sph_bessel_j_bare(22., 0.6540834903717041015625) << std::endl;
 

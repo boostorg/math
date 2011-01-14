@@ -47,8 +47,8 @@ double value[values] = {38.9, 37.4, 37.1};
 
 #include <iostream>
    using std::cout;    using std::endl;
-#include <iomanip>
-   using std::setprecision;
+#include <boost/detail/iomanip.hpp>
+   using boost::detail::setprecision;
 #include <cmath>
    using std::sqrt;
 

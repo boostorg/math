@@ -19,7 +19,7 @@
 #include <boost/math/policies/policy.hpp>
 
 #include <iostream>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 // These two are for LDBL_MAN_DIG:
 #include <limits.h>
 #include <math.h>

@@ -17,9 +17,9 @@ using boost::math::inverse_chi_squared; //typedef for nverse_chi_squared_distrib
 
 #include <iostream>
 using std::cout;    using std::endl;
-#include <iomanip> 
-using std::setprecision;
-using std::setw;
+#include <boost/detail/iomanip.hpp> 
+using boost::detail::setprecision;
+using boost::detail::setw;
 #include <cmath>
 using std::sqrt;
 

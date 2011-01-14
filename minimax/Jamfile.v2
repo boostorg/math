@@ -14,6 +14,8 @@ local ntl-path = [ modules.peek : NTL_PATH ] ;
 
 project  
     : requirements 
+      <toolset>pathscale:<cxxflags>-Wno-missing-braces
+      <toolset>clang:<cxxflags>-Wno-missing-braces
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069

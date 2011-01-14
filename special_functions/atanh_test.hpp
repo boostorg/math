@@ -7,7 +7,7 @@
 
 
 #include <functional>
-#include <iomanip>
+#include <boost/detail/iomanip.hpp>
 //#include <iostream>
 
 
@@ -116,11 +116,11 @@ void    atanh_manual_check()
                 std::numeric_limits<long double>::has_infinity
             )
         {
-            BOOST_MESSAGE( ::std::setw(15)
+            BOOST_MESSAGE( ::boost::detail::setw(15)
                         << atanh_error_evaluator(xf)
-                        << ::std::setw(15)
+                        << ::boost::detail::setw(15)
                         << atanh_error_evaluator(xd)
-                        << ::std::setw(15)
+                        << ::boost::detail::setw(15)
                         << atanh_error_evaluator(xl));
         }
         else
@@ -144,11 +144,11 @@ void    atanh_manual_check()
             }
             else
             {
-                BOOST_MESSAGE( ::std::setw(15)
+                BOOST_MESSAGE( ::boost::detail::setw(15)
                             << atanh_error_evaluator(xf)
-                            << ::std::setw(15)
+                            << ::boost::detail::setw(15)
                             << atanh_error_evaluator(xd)
-                            << ::std::setw(15)
+                            << ::boost::detail::setw(15)
                             << atanh_error_evaluator(xl));
             }
         }

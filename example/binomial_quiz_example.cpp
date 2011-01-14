@@ -33,11 +33,12 @@ First, we need to be able to use the binomial distribution constructor
 #include <boost/math/distributions/binomial.hpp>
   using boost::math::binomial;
 
+#include <ios>
 #include <iostream>
   using std::cout; using std::endl;
   using std::ios; using std::flush; using std::left; using std::right; using std::fixed;
-#include <iomanip>
-  using std::setw; using std::setprecision;
+#include <boost/detail/iomanip.hpp>
+  using boost::detail::setw; using boost::detail::setprecision;
 #include <exception>
   using std::exception;
 
@@ -93,7 +94,7 @@ We can tabulate the 'getting exactly right' ( == ) probabilities thus:
   for (int successes = 0; successes <= questions; successes++)
   {
     double probability = pdf(quiz, successes);
-    cout << setw(2) << successes << "      " << probability << endl;
+    cout << boost::detail::setw(2) << successes << "      " << probability << endl;
   }
   cout << endl;
 /*`
@@ -190,7 +191,7 @@ Finally we can tabulate some probabilities:
   cout << "\n" "At most (<=)""\n""Guessed OK   Probability" << right << endl;
   for (int score = 0; score <= questions; score++)
   {
-    cout << setw(2) << score << "           " << setprecision(10)
+    cout << boost::detail::setw(2) << score << "           " << boost::detail::setprecision(10)
       << cdf(quiz, score) << endl;
   }
   cout << endl;
@@ -220,7 +221,7 @@ Guessed OK   Probability
   cout << "\n" "At least (>)""\n""Guessed OK   Probability" << right << endl;
   for (int score = 0; score <= questions; score++)
   {
-    cout << setw(2) << score << "           "  << setprecision(10)
+    cout << boost::detail::setw(2) << score << "           "  << boost::detail::setprecision(10)
       << cdf(complement(quiz, score)) << endl;
   }
 /*`

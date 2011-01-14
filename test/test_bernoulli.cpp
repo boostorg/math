@@ -28,6 +28,8 @@ using boost::math::bernoulli_distribution;
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION, BOOST_CHECK_EQUAL...
 
+#include <ios>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -36,8 +38,8 @@ using std::right;
 using std::left;
 using std::showpoint;
 using std::showpos;
-using std::setw;
-using std::setprecision;
+using boost::detail::setw;
+using boost::detail::setprecision;
 
 #include <limits>
 using std::numeric_limits;
@@ -57,7 +59,7 @@ void test_spots(RealType)
    tolerance *= 100;
 
   cout << "Tolerance for type " << typeid(RealType).name()  << " is "
-    << setprecision(3) << tolerance  << " (or " << tolerance * 100 << "%)." << endl;
+    << boost::detail::setprecision(3) << tolerance  << " (or " << tolerance * 100 << "%)." << endl;
 
   // Sources of spot test values - calculator,
   // or Steve Moshier's command interpreter V1.3 100 decimal digit calculator,

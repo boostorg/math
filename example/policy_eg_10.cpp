@@ -20,12 +20,13 @@ all the possible quantiles at 0.05 and 0.95.
 Begin by including the needed headers (and some using statements for conciseness):
 
 */
+#include <ios>
 #include <iostream>
 using std::cout; using std::endl;
 using std::left; using std::fixed; using std::right; using std::scientific;
-#include <iomanip>
-using std::setw;
-using std::setprecision;
+#include <boost/detail/iomanip.hpp>
+using boost::detail::setw;
+using boost::detail::setprecision;
 
 #include <boost/math/distributions/binomial.hpp>
 /*`
@@ -96,62 +97,62 @@ int main()
       "Lower quantiles are calculated at p = 0.05\n\n"
       "Upper quantiles at p = 0.95.\n\n";
 
-   cout << setw(25) << right
-      << "Policy"<< setw(18) << right 
-      << "Lower Quantile" << setw(18) << right 
+   cout << boost::detail::setw(25) << right
+      << "Policy"<< boost::detail::setw(18) << right 
+      << "Lower Quantile" << boost::detail::setw(18) << right 
       << "Upper Quantile" << endl;
    
    // Test integer_round_outwards:
-   cout << setw(25) << right
+   cout << boost::detail::setw(25) << right
       << "integer_round_outwards"
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_round_outwards(50, 0.5), 0.05)
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_round_outwards(50, 0.5), 0.95) 
       << endl;
    
    // Test integer_round_inwards:
-   cout << setw(25) << right
+   cout << boost::detail::setw(25) << right
       << "integer_round_inwards"
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_round_inwards(50, 0.5), 0.05)
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_round_inwards(50, 0.5), 0.95) 
       << endl;
    
    // Test integer_round_down:
-   cout << setw(25) << right
+   cout << boost::detail::setw(25) << right
       << "integer_round_down"
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_round_down(50, 0.5), 0.05)
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_round_down(50, 0.5), 0.95) 
       << endl;
    
    // Test integer_round_up:
-   cout << setw(25) << right
+   cout << boost::detail::setw(25) << right
       << "integer_round_up"
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_round_up(50, 0.5), 0.05)
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_round_up(50, 0.5), 0.95) 
       << endl;
    
    // Test integer_round_nearest:
-   cout << setw(25) << right
+   cout << boost::detail::setw(25) << right
       << "integer_round_nearest"
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_round_nearest(50, 0.5), 0.05)
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_round_nearest(50, 0.5), 0.95) 
       << endl;
    
    // Test real:
-   cout << setw(25) << right
+   cout << boost::detail::setw(25) << right
       << "real"
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_real_quantile(50, 0.5), 0.05)
-      << setw(18) << right
+      << boost::detail::setw(18) << right
       << quantile(binom_real_quantile(50, 0.5), 0.95) 
       << endl;
 } // int main()

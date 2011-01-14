@@ -15,9 +15,9 @@ using boost::math::inverse_chi_squared; //typedef for nverse_chi_squared_distrib
 
 #include <iostream>
 using std::cout;    using std::endl;
-#include <iomanip> 
-using std::setprecision;
-using std::setw;
+#include <boost/detail/iomanip.hpp> 
+using boost::detail::setprecision;
+using boost::detail::setw;
 #include <cmath>
 using std::sqrt;
 
@@ -120,15 +120,15 @@ int main()
     for (double x = 0.0; x < 1.; x += 0.1)
     {
       cout 
-        << setw(width) << x 
-        << ' ' << setw(width) << pdf(ichsq, x) // unscaled
-        << ' ' << setw(width) << naive_pdf1(nu,  x) // Wiki def 1 unscaled matches graph 
-        << ' ' << setw(width) << naive_pdf2(nu,  x) // scale = 1 - 2nd definition.
-        << ' ' << setw(width) << naive_pdf3(nu, 1/nu, x) // scaled 
-        << ' ' << setw(width) << naive_pdf4(nu, 1/nu, x) // scaled 
-        << ' ' << setw(width) << pdf(sichsq, x)  // scaled
-        << ' ' << setw(width) << cdf(sichsq, x)  // scaled
-        << ' ' << setw(width) << cdf(ichsq, x)  // unscaled
+        << boost::detail::setw(width) << x 
+        << ' ' << boost::detail::setw(width) << pdf(ichsq, x) // unscaled
+        << ' ' << boost::detail::setw(width) << naive_pdf1(nu,  x) // Wiki def 1 unscaled matches graph 
+        << ' ' << boost::detail::setw(width) << naive_pdf2(nu,  x) // scale = 1 - 2nd definition.
+        << ' ' << boost::detail::setw(width) << naive_pdf3(nu, 1/nu, x) // scaled 
+        << ' ' << boost::detail::setw(width) << naive_pdf4(nu, 1/nu, x) // scaled 
+        << ' ' << boost::detail::setw(width) << pdf(sichsq, x)  // scaled
+        << ' ' << boost::detail::setw(width) << cdf(sichsq, x)  // scaled
+        << ' ' << boost::detail::setw(width) << cdf(ichsq, x)  // unscaled
        << endl;
     }
   }

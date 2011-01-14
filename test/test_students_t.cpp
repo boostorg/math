@@ -22,10 +22,11 @@
     using boost::math::students_t_distribution;
 #include <boost/math/tools/test.hpp> // for real_concept
 
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
    using std::cout;
    using std::endl;
-   using std::setprecision;
+   using boost::detail::setprecision;
 #include <limits>
   using std::numeric_limits;
 

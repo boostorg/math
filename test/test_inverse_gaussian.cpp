@@ -26,10 +26,11 @@ using boost::math::inverse_gaussian;
 
 #include <boost/math/tools/test.hpp>
 
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout;
 using std::endl;
-using std::setprecision;
+using boost::detail::setprecision;
 #include <limits>
 using std::numeric_limits;
 

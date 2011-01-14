@@ -11,6 +11,7 @@
 #include <boost/math/tools/toms748_solve.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/beta.hpp>
+#include <boost/detail/iomanip.hpp>
 
 //
 // Test functor implements the same test cases as used by
@@ -163,7 +164,7 @@ void run_test(T a, T b, int id, T p1, T p2)
 
 int test_main(int, char* [])
 {
-   std::cout << std::setprecision(18);
+   std::cout << boost::detail::setprecision(18);
    run_test(3.14/2, 3.14, 1);
 
    for(int i = 1; i <= 10; i += 1)
@@ -243,7 +244,7 @@ int test_main(int, char* [])
 
    BOOST_CHECK(invocations < 3150);
 
-   std::cout << std::setprecision(18);
+   std::cout << boost::detail::setprecision(18);
 
    for(int n = 5; n <= 100; n += 10)
       run_test(sqrt(double(n)), double(n+1), 16, (double)n, 0.4);
@@ -261,7 +262,7 @@ int test_main(int, char* [])
          true,
          boost::math::tools::eps_tolerance<double>(std::numeric_limits<double>::digits), 
          c);
-      std::cout << std::setprecision(18);
+      std::cout << boost::detail::setprecision(18);
       std::cout << "Function " << 4 << "\n   Result={" << r.first << ", " << r.second << "} total calls=" << toms748tester<double>::total_calls() << "\n\n";
       toms748tester<double>::reset();
       BOOST_CHECK(c < 20);

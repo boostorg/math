@@ -45,16 +45,17 @@ using boost::math::normal; // typedef provides default type is double.
 #include <boost/array.hpp>
 using boost::array;
 
+#include <ios>
 #include <iostream>
   using std::cout; using std::endl; using std::left; using std::showpoint; using std::noshowpoint;
-#include <iomanip>
-  using std::setw; using std::setprecision;
+#include <boost/detail/iomanip.hpp>
+   using boost::detail::setw; using boost::detail::setprecision;
 #include <limits>
   using std::numeric_limits;
 #include <sstream>
-  using std::string;
-#include <string>
   using std::stringstream;
+#include <string>
+  using std::string;
 
 // const double tol = 3 * numeric_limits<double>::epsilon();
 

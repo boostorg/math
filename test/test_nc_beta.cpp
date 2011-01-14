@@ -35,6 +35,7 @@
 #include "handle_test_result.hpp"
 #include "test_ncbeta_hooks.hpp"
 
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -48,7 +49,7 @@ using std::numeric_limits;
       if(failures != boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed)\
       {\
          std::cerr << "Failure was at row " << i << std::endl;\
-         std::cerr << std::setprecision(35); \
+         std::cerr << boost::detail::setprecision(35); \
          std::cerr << "{ " << data[i][0] << " , " << data[i][1] << " , " << data[i][2];\
          std::cerr << " , " << data[i][3] << " , " << data[i][4] << " } " << std::endl;\
       }\
@@ -61,7 +62,7 @@ using std::numeric_limits;
       if(failures != boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed)\
       {\
          std::cerr << "Failure was at row " << i << std::endl;\
-         std::cerr << std::setprecision(35); \
+         std::cerr << boost::detail::setprecision(35); \
          std::cerr << "{ " << data[i][0] << " , " << data[i][1] << " , " << data[i][2];\
          std::cerr << " , " << data[i][3] << " , " << data[i][4] << " } " << std::endl;\
       }\

@@ -30,7 +30,8 @@ using boost::math::non_central_chi_squared;
 
 #include <iostream>
 using std::cout; using std::endl;
-using std::setprecision;
+#include <boost/detail/iomanip.hpp>
+using boost::detail::setprecision;
 
 int main()
 {
@@ -69,7 +70,7 @@ int main()
          /*`
          Then output the cell value:
          */
-         cout << "[" << setprecision(3) << beta << "]";
+         cout << "[" << boost::detail::setprecision(3) << beta << "]";
       }
       cout << "]" << endl;
    }

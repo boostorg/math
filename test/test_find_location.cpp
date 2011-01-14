@@ -32,10 +32,12 @@
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION, BOOST_CHECK_EQUAL...
 
+#include <ios>
+#include <boost/detail/iomanip.hpp>
 #include <iostream>
   using std::cout; using std::endl; using std::fixed;
   using std::right; using std::left; using std::showpoint;
-  using std::showpos; using std::setw; using std::setprecision;
+  using std::showpos; using boost::detail::setw; using boost::detail::setprecision;
 
 #include <limits>
   using std::numeric_limits;
@@ -55,7 +57,7 @@ void test_spots(RealType)
    tolerance *= 100; // 100 eps as a fraction.
 
   cout << "Tolerance for type " << typeid(RealType).name()  << " is "
-    << setprecision(3) << tolerance  << " (or " << tolerance * 100 << "%)." << endl;
+    << boost::detail::setprecision(3) << tolerance  << " (or " << tolerance * 100 << "%)." << endl;
 
   BOOST_CHECK_THROW( // Probability outside 0 to 1.
        find_location<normal_distribution<RealType> >(
