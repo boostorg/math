@@ -18,7 +18,7 @@ using boost::math::ntl::pow;
 #include <boost/spirit/actor.hpp>
 #include <boost/lexical_cast.hpp>
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <string>
 #include <boost/test/included/test_exec_monitor.hpp> // for test_main
 
@@ -88,7 +88,7 @@ void step_some(unsigned count)
             rel_error, 
             skew, 
             working_precision));
-         std::cout << "Max error in interpolated form: " << boost::detail::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(p_remez->max_error()) << std::endl;
+         std::cout << "Max error in interpolated form: " << std::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(p_remez->max_error()) << std::endl;
          //
          // Signal that we've started:
          //
@@ -102,9 +102,9 @@ void step_some(unsigned count)
          boost::math::ntl::RR r = p_remez->iterate();
          NTL::RR::SetOutputPrecision(3);
          std::cout 
-            << "Maximum Deviation Found:                     " << boost::detail::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(p_remez->max_error()) << std::endl
-            << "Expected Error Term:                         " << boost::detail::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(p_remez->error_term()) << std::endl
-            << "Maximum Relative Change in Control Points:   " << boost::detail::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(r) << std::endl;
+            << "Maximum Deviation Found:                     " << std::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(p_remez->max_error()) << std::endl
+            << "Expected Error Term:                         " << std::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(p_remez->error_term()) << std::endl
+            << "Maximum Relative Change in Control Points:   " << std::setprecision(3) << std::scientific << boost::math::tools::real_cast<double>(r) << std::endl;
       }
    }
    catch(const std::exception& e)
@@ -128,7 +128,7 @@ void show(const char*, const char*)
       std::vector<boost::math::ntl::RR> cn = n.chebyshev();
       std::vector<boost::math::ntl::RR> cd = d.chebyshev();
       int prec = 2 + (target_precision * 3010LL)/10000;
-      std::cout << std::scientific << boost::detail::setprecision(prec);
+      std::cout << std::scientific << std::setprecision(prec);
       NTL::RR::SetOutputPrecision(prec);
       boost::numeric::ublas::vector<boost::math::ntl::RR> v = p_remez->zero_points();
       
@@ -196,12 +196,12 @@ void do_graph(unsigned points)
    while(points > 1)
    {
       NTL::RR::SetOutputPrecision(10);
-      std::cout << boost::detail::setprecision(10) << boost::detail::setw(30) << std::left 
+      std::cout << std::setprecision(10) << std::setw(30) << std::left 
          << boost::lexical_cast<std::string>(x) << the_function(x) << std::endl;
       --points;
       x += step;
    }
-   std::cout << boost::detail::setprecision(10) << boost::detail::setw(30) << std::left 
+   std::cout << std::setprecision(10) << std::setw(30) << std::left 
       << boost::lexical_cast<std::string>(b) << the_function(b) << std::endl;
 }
 
@@ -277,8 +277,8 @@ void do_test(T, const char* name)
             max_error = err;
          if(cheb_err > cheb_max_error)
             cheb_max_error = cheb_err;
-         std::cout << boost::detail::setprecision(6) << boost::detail::setw(15) << std::left << absissa
-            << boost::detail::setw(15) << std::left << boost::math::tools::real_cast<T>(err) << boost::math::tools::real_cast<T>(cheb_err) << std::endl;
+         std::cout << std::setprecision(6) << std::setw(15) << std::left << absissa
+            << std::setw(15) << std::left << boost::math::tools::real_cast<T>(err) << boost::math::tools::real_cast<T>(cheb_err) << std::endl;
       }
       //
       // Do the tests at the Chebeshev control points:
@@ -302,15 +302,15 @@ void do_test(T, const char* name)
          }
          if(err > max_error)
             max_error = err;
-         std::cout << boost::detail::setprecision(6) << boost::detail::setw(15) << std::left << absissa
-            << boost::detail::setw(15) << std::left << boost::math::tools::real_cast<T>(err) << 
+         std::cout << std::setprecision(6) << std::setw(15) << std::left << absissa
+            << std::setw(15) << std::left << boost::math::tools::real_cast<T>(err) << 
             boost::math::tools::real_cast<T>(cheb_err) << std::endl;
       }
       std::string msg = "Max Error found at ";
       msg += name;
       msg += " precision = ";
       msg.append(62 - 17 - msg.size(), ' ');
-      std::cout << msg << boost::detail::setprecision(6) << "Poly: " << boost::detail::setw(20) << std::left
+      std::cout << msg << std::setprecision(6) << "Poly: " << std::setw(20) << std::left
          << boost::math::tools::real_cast<T>(max_error) << "Cheb: " << boost::math::tools::real_cast<T>(cheb_max_error) << std::endl;
    }
    else
@@ -401,8 +401,8 @@ void do_test_n(T, const char* name, unsigned count)
             max_error = err;
          if(cheb_err > max_cheb_error)
             max_cheb_error = cheb_err;
-         std::cout << boost::detail::setprecision(6) << boost::detail::setw(15) << std::left << boost::math::tools::real_cast<double>(absissa)
-            << (test_result < true_result ? "-" : "") << boost::detail::setw(20) << std::left 
+         std::cout << std::setprecision(6) << std::setw(15) << std::left << boost::math::tools::real_cast<double>(absissa)
+            << (test_result < true_result ? "-" : "") << std::setw(20) << std::left 
             << boost::math::tools::real_cast<double>(err) 
             << boost::math::tools::real_cast<double>(cheb_err) << std::endl;
       }
@@ -410,8 +410,8 @@ void do_test_n(T, const char* name, unsigned count)
       msg += name;
       msg += " precision = ";
       //msg.append(62 - 17 - msg.size(), ' ');
-      std::cout << msg << "Poly: " << boost::detail::setprecision(6) 
-         //<< boost::detail::setw(15) << std::left 
+      std::cout << msg << "Poly: " << std::setprecision(6) 
+         //<< std::setw(15) << std::left 
          << boost::math::tools::real_cast<T>(max_error) 
          << " Cheb: " << boost::math::tools::real_cast<T>(max_cheb_error) << std::endl;
    }

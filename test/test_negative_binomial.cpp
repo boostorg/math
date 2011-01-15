@@ -38,12 +38,10 @@ using boost::math::negative_binomial_distribution;
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
 
-#include <ios>
-#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout;
 using std::endl;
-using boost::detail::setprecision;
+using std::setprecision;
 using std::showpoint;
 #include <limits>
 using std::numeric_limits;

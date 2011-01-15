@@ -11,7 +11,6 @@
 #include <boost/math/tools/precision.hpp>
 #include <boost/regex.hpp>
 #include <boost/test/test_tools.hpp>
-#include <boost/detail/iomanip.hpp>
 
 #if defined(BOOST_INTEL)
 #  pragma warning(disable:239)
@@ -119,7 +118,7 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
 {
    using namespace std; // To aid selection of the right pow.
    T eps = boost::math::tools::epsilon<T>();
-   std::cout << boost::detail::setprecision(4);
+   std::cout << std::setprecision(4);
 
    T max_error_found = (result.max)()/eps;
    T mean_error_found = result.rms()/eps;
@@ -138,11 +137,11 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
          << row << "\n    { ";
       if(std::numeric_limits<T>::digits10)
       {
-         std::cout << boost::detail::setprecision(std::numeric_limits<T>::digits10 + 2);
+         std::cout << std::setprecision(std::numeric_limits<T>::digits10 + 2);
       }
       else
       {
-         std::cout << boost::detail::setprecision(std::numeric_limits<long double>::digits10 + 2);
+         std::cout << std::setprecision(std::numeric_limits<long double>::digits10 + 2);
       }
       for(unsigned i = 0; i < worst.size(); ++i)
       {
@@ -180,7 +179,7 @@ void print_test_result(const boost::math::tools::test_result<T>& result,
 {
    using namespace std; // To aid selection of the right pow.
    T eps = boost::math::tools::epsilon<T>();
-   std::cout << boost::detail::setprecision(4);
+   std::cout << std::setprecision(4);
 
    T max_error_found = (result.max)()/eps;
    T mean_error_found = result.rms()/eps;

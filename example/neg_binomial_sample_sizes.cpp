@@ -17,15 +17,14 @@ double k,     // number of failures (events), k >= 0.
 double p,     // fraction of trails for which event occurs, 0 <= p <= 1.
 double probability); // probability threshold, 0 <= probability <= 1.
 
-#include <ios>
 #include <iostream>
 using std::cout;
 using std::endl;
 using std::fixed;
 using std::right;
-#include <boost/detail/iomanip.hpp>
-using boost::detail::setprecision;
-using boost::detail::setw; 
+#include <iomanip>
+using std::setprecision;
+using std::setw; 
 
 //[neg_binomial_sample_sizes
 
@@ -65,7 +64,7 @@ void find_number_of_trials(double failures, double p)
    // required number of failures DOES exceed "failures".
 
   cout << "\n""Target number of failures = " << (int)failures;
-  cout << ",   Success fraction = " << fixed << boost::detail::setprecision(1) << 100 * p << "%" << endl;
+  cout << ",   Success fraction = " << fixed << setprecision(1) << 100 * p << "%" << endl;
    // Print table header:
    cout << "____________________________\n"
            "Confidence        Min Number\n"
@@ -74,9 +73,9 @@ void find_number_of_trials(double failures, double p)
    // Now print out the data for the alpha table values.
   for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    { // Confidence values %:
-      cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(10) << right << 100 * (1-alpha[i]) << "      "
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]) << "      "
       // find_minimum_number_of_trials
-      << boost::detail::setw(6) << right
+      << setw(6) << right
       << (int)ceil(negative_binomial::find_minimum_number_of_trials(failures, p, alpha[i]))
       << endl;
    }

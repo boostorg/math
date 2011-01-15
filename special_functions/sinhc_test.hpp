@@ -7,7 +7,7 @@
 
 
 #include <functional>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <iostream>
 #include <complex>
 
@@ -66,13 +66,13 @@ void    sinhc_pi_manual_check()
     
     for    (int i = 0; i <= 100; i++)
     {
-        BOOST_MESSAGE( ::boost::detail::setw(15)
+        BOOST_MESSAGE( ::std::setw(15)
                     << sinhc_pi<float>(static_cast<float>(i-50)/
                                                 static_cast<float>(50))
-                    << ::boost::detail::setw(15)
+                    << ::std::setw(15)
                     << sinhc_pi<double>(static_cast<double>(i-50)/
                                                 static_cast<double>(50))
-                    << ::boost::detail::setw(15)
+                    << ::std::setw(15)
                     << sinhc_pi<long double>(static_cast<long double>(i-50)/
                                                 static_cast<long double>(50)));
     }

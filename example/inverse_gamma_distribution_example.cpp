@@ -21,8 +21,8 @@ using boost::math::inverse_gamma_distribution;
 
 #include <iostream>
 using std::cout;    using std::endl;
-#include <boost/detail/iomanip.hpp>
-using boost::detail::setprecision;
+#include <iomanip>
+using std::setprecision;
 #include <cmath>
 using std::sqrt;
 

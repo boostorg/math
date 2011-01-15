@@ -51,7 +51,7 @@
 
 #ifdef BOOST_MATH_INSTRUMENT
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <typeinfo>
 #endif
 

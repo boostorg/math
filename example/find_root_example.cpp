@@ -23,11 +23,10 @@ First we need some includes to access the normal distribution
 #include <boost/math/distributions/normal.hpp> // for normal_distribution
   using boost::math::normal; // typedef provides default type is double.
 
-#include <ios>
 #include <iostream>
   using std::cout; using std::endl; using std::left; using std::showpoint; using std::noshowpoint;
-#include <boost/detail/iomanip.hpp>
-  using boost::detail::setw; using boost::detail::setprecision;
+#include <iomanip>
+  using std::setw; using std::setprecision;
 #include <limits>
   using std::numeric_limits;
 #include <stdexcept>

@@ -8,7 +8,7 @@
 #include <map>
 #include <set>
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <string>
 #include <cstring>
 #include <boost/math/tools/config.hpp>
@@ -77,24 +77,20 @@ void run_tests()
          name = "msvc-";
 #elif defined(BOOST_MSVC) && defined(_DEBUG) && !defined(__ICL)
          name = "msvc-debug-";
-#elif defined(BOOST_CLANG)
-         name = "clang-"
-#elif defined(__PATHSCALE__)
-         name = "pathscale-"
+#elif defined(__GNUC__)
+         name = "gcc-";
 #elif defined(__ICL)
          name = "intel-";
 #elif defined(__ICC)
          name = "intel-linux-";
-#elif defined(__GNUC__)
-         name = "gcc-";
 #endif
       }
       name += i->name;
       set_call_count(1);
-      std::cout << "Testing " << std::left << boost::detail::setw(50) << name << std::flush;
+      std::cout << "Testing " << std::left << std::setw(50) << name << std::flush;
       double time = performance_measure(i->proc) - reference_time;
       time /= call_count;
-      std::cout << boost::detail::setprecision(3) << std::scientific << time << std::endl;
+      std::cout << std::setprecision(3) << std::scientific << time << std::endl;
    }
 }
 

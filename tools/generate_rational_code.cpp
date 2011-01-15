@@ -4,7 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <fstream>
 #include <string>
 #include <sstream>

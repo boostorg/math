@@ -18,8 +18,8 @@ using boost::math::gamma_p_inv; // Compute x given a
 
 #include <iostream>
    using std::cout;    using std::endl;
-#include <boost/detail/iomanip.hpp>
-   using boost::detail::setprecision;
+#include <iomanip>
+   using std::setprecision;
 #include <cmath>
    using std::sqrt;
 #include <limits>

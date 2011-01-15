@@ -68,7 +68,7 @@ using boost::math::laplace_distribution;
 #include <iostream>
    using std::cout;
    using std::endl;
-   using boost::detail::setprecision;
+   using std::setprecision;
 
 #include <limits>
   using std::numeric_limits;

@@ -7,7 +7,7 @@
 
 
 #include <functional>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 //#include <iostream>
 
 
@@ -117,16 +117,16 @@ void    atanh_manual_check()
             )
         {
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-            BOOST_MESSAGE( ::boost::detail::setw(15)
+            BOOST_MESSAGE( ::std::setw(15)
                         << atanh_error_evaluator(xf)
-                        << ::boost::detail::setw(15)
+                        << ::std::setw(15)
                         << atanh_error_evaluator(xd)
-                        << ::boost::detail::setw(15)
+                        << ::std::setw(15)
                         << atanh_error_evaluator(xl));
 #else
-            BOOST_MESSAGE( ::boost::detail::setw(15)
+            BOOST_MESSAGE( ::std::setw(15)
                         << atanh_error_evaluator(xf)
-                        << ::boost::detail::setw(15)
+                        << ::std::setw(15)
                         << atanh_error_evaluator(xd));
 #endif
         }
@@ -152,16 +152,16 @@ void    atanh_manual_check()
             else
             {
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-                BOOST_MESSAGE( ::boost::detail::setw(15)
+                BOOST_MESSAGE( ::std::setw(15)
                             << atanh_error_evaluator(xf)
-                            << ::boost::detail::setw(15)
+                            << ::std::setw(15)
                             << atanh_error_evaluator(xd)
-                            << ::boost::detail::setw(15)
+                            << ::std::setw(15)
                             << atanh_error_evaluator(xl));
 #else
-                BOOST_MESSAGE( ::boost::detail::setw(15)
+                BOOST_MESSAGE( ::std::setw(15)
                             << atanh_error_evaluator(xf)
-                            << ::boost::detail::setw(15)
+                            << ::std::setw(15)
                             << atanh_error_evaluator(xd));
 #endif
             }

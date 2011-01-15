@@ -27,7 +27,7 @@
 #include <boost/math/special_functions/gamma.hpp>
 
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <vector>
 
 using boost::numeric::ublas::matrix;

@@ -15,11 +15,10 @@
 #include <boost/test/floating_point_comparison.hpp>
 
 
-#include <boost/detail/iomanip.hpp>
 #include <iostream>
    using std::cout;
    using std::endl;
-   using boost::detail::setprecision;
+   using std::setprecision;
 
 
 template <class RealType>

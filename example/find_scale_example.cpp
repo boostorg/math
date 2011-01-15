@@ -27,8 +27,8 @@ the algorithms to find scale (and some std output of course).
 
 #include <iostream>
   using std::cout; using std::endl;
-#include <boost/detail/iomanip.hpp>
-  using boost::detail::setw; using boost::detail::setprecision;
+#include <iomanip>
+  using std::setw; using std::setprecision;
 #include <limits>
   using std::numeric_limits;
 //] [/find_scale1]

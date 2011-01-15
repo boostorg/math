@@ -156,7 +156,7 @@ void set_output_precision(T)
 {
    if(std::numeric_limits<T>::digits10)
    {
-      std::cout << boost::detail::setprecision(std::numeric_limits<T>::digits10 + 2);
+      std::cout << std::setprecision(std::numeric_limits<T>::digits10 + 2);
    }
 }
 

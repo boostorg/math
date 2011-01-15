@@ -6,7 +6,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 
 #include <boost/mpl/list.hpp>
@@ -121,9 +121,9 @@ boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
     
     BOOST_MESSAGE("epsilon");
     
-    BOOST_MESSAGE( ::boost::detail::setw(15) << numeric_limits<float>::epsilon()
-                << ::boost::detail::setw(15) << numeric_limits<double>::epsilon()
-                << ::boost::detail::setw(15) << numeric_limits<long double>::epsilon());
+    BOOST_MESSAGE( ::std::setw(15) << numeric_limits<float>::epsilon()
+                << ::std::setw(15) << numeric_limits<double>::epsilon()
+                << ::std::setw(15) << numeric_limits<long double>::epsilon());
     
     BOOST_MESSAGE(" ");
     

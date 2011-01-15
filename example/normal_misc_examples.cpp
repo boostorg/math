@@ -21,11 +21,10 @@ First we need some includes to access the normal distribution
 #include <boost/math/distributions/normal.hpp> // for normal_distribution
   using boost::math::normal; // typedef provides default type is double.
 
-#include <ios>
 #include <iostream>
   using std::cout; using std::endl; using std::left; using std::showpoint; using std::noshowpoint;
-#include <boost/detail/iomanip.hpp>
-  using boost::detail::setw; using boost::detail::setprecision;
+#include <iomanip>
+  using std::setw; using std::setprecision;
 #include <limits>
   using std::numeric_limits;
 
@@ -58,8 +57,8 @@ int main()
       cout.precision(5);
       for (double z = -range; z < range + step; z += step)
       {
-        cout << left << boost::detail::setprecision(3) << boost::detail::setw(6) << z << " " 
-          << boost::detail::setprecision(precision) << boost::detail::setw(12) << pdf(s, z) << endl;
+        cout << left << setprecision(3) << setw(6) << z << " " 
+          << setprecision(precision) << setw(12) << pdf(s, z) << endl;
       }
       cout.precision(6); // default
       /*`And the area under the normal curve from -[infin] up to z,
@@ -72,8 +71,8 @@ int main()
       cout << "  z " "      cdf " << endl;
       for (double z = -range; z < range + step; z += step)
       {
-        cout << left << boost::detail::setprecision(3) << boost::detail::setw(6) << z << " " 
-          << boost::detail::setprecision(precision) << boost::detail::setw(12) << cdf(s, z) << endl;
+        cout << left << setprecision(3) << setw(6) << z << " " 
+          << setprecision(precision) << setw(12) << cdf(s, z) << endl;
       }
       cout.precision(6); // default
 
@@ -111,7 +110,7 @@ It is convenient to have an alpha level for the probability that z lies outside 
 This will not be some nice neat number like 0.05, but we can easily calculate it,
 */
     double alpha1 = cdf(s, -1) * 2; // 0.3173105078629142
-    cout << boost::detail::setprecision(17) << "Significance level for z == 1 is " << alpha1 << endl;
+    cout << setprecision(17) << "Significance level for z == 1 is " << alpha1 << endl;
 /*`    
     and place in our array of favorite alpha values.
 */
@@ -123,11 +122,11 @@ Confidence value as % is (1 - alpha) * 100 (so alpha 0.05 == 95% confidence)
 that the true occurrence frequency lies *inside* the calculated interval.
 
 */
-    cout << "level of significance (alpha)" << boost::detail::setprecision(4) << endl;
+    cout << "level of significance (alpha)" << setprecision(4) << endl;
     cout << "2-sided       1 -sided          z(alpha) " << endl;
     for (int i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
     {
-      cout << boost::detail::setw(15) << alpha[i] << boost::detail::setw(15) << alpha[i] /2 << boost::detail::setw(10) << quantile(complement(s,  alpha[i]/2)) << endl;
+      cout << setw(15) << alpha[i] << setw(15) << alpha[i] /2 << setw(10) << quantile(complement(s,  alpha[i]/2)) << endl;
       // Use quantile(complement(s, alpha[i]/2)) to avoid potential loss of accuracy from quantile(s,  1 - alpha[i]/2) 
     }
     cout << endl;

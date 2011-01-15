@@ -7,7 +7,6 @@
 // Note that this file contains quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!
 
-#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout; using std::endl; using std::cerr;
 
@@ -84,7 +83,7 @@ T user_domain_error(const char* function, const char* message, const T& val)
    msg += ": \n";
    int prec = 2 + (std::numeric_limits<T>::digits * 30103UL) / 100000UL;
    // int prec = std::numeric_limits<T>::max_digits10; //  For C++0X Standard Library
-   msg += (boost::format(message) % boost::io::group(boost::detail::setprecision(prec), val)).str();
+   msg += (boost::format(message) % boost::io::group(std::setprecision(prec), val)).str();
    /*`
    Now we just have to do something with the message, we could throw an
    exception, but for the purposes of this example we'll just dump the message
@@ -202,7 +201,7 @@ T user_evaluation_error(const char* function, const char* message, const T& val)
    msg += ": \n";
    int prec = 2 + (std::numeric_limits<T>::digits * 30103UL) / 100000UL;
    // int prec = std::numeric_limits<T>::max_digits10; // For C++0X Standard Library
-   msg += (boost::format(message) % boost::io::group(boost::detail::setprecision(prec), val)).str();
+   msg += (boost::format(message) % boost::io::group(std::setprecision(prec), val)).str();
 
    std::cerr << msg << std::endl;
 

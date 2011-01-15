@@ -16,11 +16,10 @@
     using boost::math::lognormal_distribution;
 #include <boost/math/tools/test.hpp>
 
-#include <boost/detail/iomanip.hpp>
 #include <iostream>
    using std::cout;
    using std::endl;
-   using boost::detail::setprecision;
+   using std::setprecision;
 #include <limits>
   using std::numeric_limits;
 #include <cassert>

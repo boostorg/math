@@ -9,7 +9,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <map>
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 using namespace std;
 using namespace NTL;

@@ -17,13 +17,7 @@ local ntl-path = [ modules.peek : NTL_PATH ] ;
 local gmp_path = [ modules.peek : GMP_PATH ] ;
 
 project  
-    : requirements
-      <toolset>pathscale:<cxxflags>-fno-fast-math
-      <toolset>pathscale:<cxxflags>-fno-unsafe-math-optimizations 
-      <toolset>pathscale:<cxxflags>-mieee-fp
-      <toolset>pathscale:<cxxflags>-fstrict-overflow
-      <toolset>pathscale:<cxxflags>-Wno-missing-braces
-      <toolset>clang:<cxxflags>-Wno-missing-braces
+    : requirements 
       <toolset>gcc:<cxxflags>-Wno-missing-braces
       <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069

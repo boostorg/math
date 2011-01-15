@@ -13,7 +13,7 @@
 #include <boost/math/complex.hpp>
 
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 #include <cmath>
 #include <typeinfo>
 
@@ -116,7 +116,7 @@ void test_inverse_trig(T)
 
    T x, y;
 
-   std::cout << boost::detail::setprecision(std::numeric_limits<T>::digits10+2);
+   std::cout << std::setprecision(std::numeric_limits<T>::digits10+2);
 
    for(x = -1; x <= 1; x += interval)
    {

@@ -16,11 +16,10 @@
 
 #include <boost/math/distributions/binomial.hpp>
 
-#include <ios>
 #include <iostream>
   using std::cout; using std::endl; using std::ios; using std::showpoint;
-#include <boost/detail/iomanip.hpp>
-  using std::fixed; using boost::detail::setw;
+#include <iomanip>
+  using std::fixed; using std::setw;
 
 int main()
 {
@@ -56,21 +55,21 @@ int main()
 
   cout << " n        p     k     plek     pgtk     peqk " << endl;
   binomial_distribution<>my_dist(4, 0.5);
-  cout << boost::detail::setw(4) << (int)my_dist.trials() << "  " << my_dist.success_fraction()
+  cout << setw(4) << (int)my_dist.trials() << "  " << my_dist.success_fraction()
   << "   " << 2 << "  " << cdf(my_dist, 2) << "  "
   << cdf(complement(my_dist, 2)) << "  " << pdf(my_dist, 2) << endl;
 
   binomial_distribution<>two(19, 0.440);
-  cout << boost::detail::setw(4) << (int)two.trials() <<  "  "  << two.success_fraction()
+  cout << setw(4) << (int)two.trials() <<  "  "  << two.success_fraction()
     << "  " << 13 << "  " << cdf(two, 13) << "  "
     << cdf(complement(two, 13)) << "  " << pdf(two, 13) << endl;
 
   binomial_distribution<>three(100, 0.750);
-  cout << boost::detail::setw(4) << (int)three.trials() << "  " << three.success_fraction()
+  cout << setw(4) << (int)three.trials() << "  " << three.success_fraction()
     << "  " << 67 << "  " << cdf(three, 67) << "  " << cdf(complement(three, 67))
     << "  " << pdf(three, 67) << endl;
   binomial_distribution<>four(2000, 0.330);
-  cout << boost::detail::setw(4) << (int)four.trials() <<  "  "  << four.success_fraction()
+  cout << setw(4) << (int)four.trials() <<  "  "  << four.success_fraction()
   << " " << 700 << "  "
     << cdf(four, 700) << "  " << cdf(complement(four, 700))
     << "  " << pdf(four, 700) << endl;

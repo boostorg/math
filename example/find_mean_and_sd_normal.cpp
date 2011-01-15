@@ -30,11 +30,10 @@ the algorithms to find location and scale
   using boost::math::complement;
   using boost::math::policies::policy;
 
-#include <ios>
 #include <iostream>
   using std::cout; using std::endl; using std::left; using std::showpoint; using std::noshowpoint;
-#include <boost/detail/iomanip.hpp>
-  using boost::detail::setw; using boost::detail::setprecision;
+#include <iomanip>
+  using std::setw; using std::setprecision;
 #include <limits>
   using std::numeric_limits;
 #include <stdexcept>

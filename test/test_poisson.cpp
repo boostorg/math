@@ -34,12 +34,10 @@
 #include <boost/math/special_functions/gamma.hpp> // for (incomplete) gamma.
 //   using boost::math::qamma_Q;
 
-#include <ios>
-#include <boost/detail/iomanip.hpp>
 #include <iostream>
    using std::cout;
    using std::endl;
-   using boost::detail::setprecision;
+   using std::setprecision;
    using std::showpoint;
    using std::ios;
 #include <limits>
@@ -558,7 +556,7 @@ int test_main(int, char* [])
      {
        cout << boost::math::gamma_q<double>(i+1, mean); // cdf
        double diff = boost::math::gamma_q<double>(i+1, mean) - sum; // cdf -sum
-       cout << boost::detail::setprecision (2) << ' ' << diff; // 0 0 to 4, 1 eps 5 to 9, 10 to 20 2 eps, 21 upwards 3 eps
+       cout << setprecision (2) << ' ' << diff; // 0 0 to 4, 1 eps 5 to 9, 10 to 20 2 eps, 21 upwards 3 eps
       
      }
     BOOST_CHECK_CLOSE(
@@ -566,7 +564,7 @@ int test_main(int, char* [])
       sum, // of pdfs.
       4e-14); // Fails at 2e-14
    // This call puts the precision etc back to default 6 !!!
-   cout << boost::detail::setprecision(17) << showpoint;
+   cout << setprecision(17) << showpoint;
 
 
      cout << endl;

@@ -16,13 +16,12 @@
 
 // avoid "using namespace std;" and "using namespace boost::math;"
 // to avoid potential ambiguity with names in std random.
-#include <ios>
 #include <iostream>
 using std::cout; using std::endl;
 using std::left; using std::fixed; using std::right; using std::scientific;
-#include <boost/detail/iomanip.hpp>
-using boost::detail::setw;
-using boost::detail::setprecision;
+#include <iomanip>
+using std::setw;
+using std::setprecision;
 
 void confidence_limits_on_mean(double Sm, double Sd, unsigned Sn)
 {
@@ -50,10 +49,10 @@ void confidence_limits_on_mean(double Sm, double Sd, unsigned Sn)
       "__________________________________\n"
       "2-Sided Confidence Limits For Mean\n"
       "__________________________________\n\n";
-   cout << boost::detail::setprecision(7);
-   cout << boost::detail::setw(40) << left << "Number of Observations" << "=  " << Sn << "\n";
-   cout << boost::detail::setw(40) << left << "Mean" << "=  " << Sm << "\n";
-   cout << boost::detail::setw(40) << left << "Standard Deviation" << "=  " << Sd << "\n";
+   cout << setprecision(7);
+   cout << setw(40) << left << "Number of Observations" << "=  " << Sn << "\n";
+   cout << setw(40) << left << "Mean" << "=  " << Sm << "\n";
+   cout << setw(40) << left << "Standard Deviation" << "=  " << Sd << "\n";
    //
    // Define a table of significance/risk levels:
    //
@@ -76,21 +75,21 @@ void confidence_limits_on_mean(double Sm, double Sd, unsigned Sn)
    for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    {
       // Confidence value:
-      cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(10) << right << 100 * (1-alpha[i]);
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate T:
       double T = quantile(complement(dist, alpha[i] / 2));
       // Print T:
-      cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(10) << right << T;
+      cout << fixed << setprecision(3) << setw(10) << right << T;
       // Calculate width of interval (one sided):
       double w = T * Sd / sqrt(double(Sn));
       // Print width:
       if(w < 0.01)
-         cout << scientific << boost::detail::setprecision(3) << boost::detail::setw(17) << right << w;
+         cout << scientific << setprecision(3) << setw(17) << right << w;
       else
-         cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(17) << right << w;
+         cout << fixed << setprecision(3) << setw(17) << right << w;
       // Print Limits:
-      cout << fixed << boost::detail::setprecision(5) << boost::detail::setw(15) << right << Sm - w;
-      cout << fixed << boost::detail::setprecision(5) << boost::detail::setw(15) << right << Sm + w << endl;
+      cout << fixed << setprecision(5) << setw(15) << right << Sm - w;
+      cout << fixed << setprecision(5) << setw(15) << right << Sm + w << endl;
    }
    cout << endl;
 } // void confidence_limits_on_mean
@@ -118,48 +117,48 @@ void single_sample_t_test(double M, double Sm, double Sd, unsigned Sn, double al
       "__________________________________\n"
       "Student t test for a single sample\n"
       "__________________________________\n\n";
-   cout << boost::detail::setprecision(5);
-   cout << boost::detail::setw(55) << left << "Number of Observations" << "=  " << Sn << "\n";
-   cout << boost::detail::setw(55) << left << "Sample Mean" << "=  " << Sm << "\n";
-   cout << boost::detail::setw(55) << left << "Sample Standard Deviation" << "=  " << Sd << "\n";
-   cout << boost::detail::setw(55) << left << "Expected True Mean" << "=  " << M << "\n\n";
+   cout << setprecision(5);
+   cout << setw(55) << left << "Number of Observations" << "=  " << Sn << "\n";
+   cout << setw(55) << left << "Sample Mean" << "=  " << Sm << "\n";
+   cout << setw(55) << left << "Sample Standard Deviation" << "=  " << Sd << "\n";
+   cout << setw(55) << left << "Expected True Mean" << "=  " << M << "\n\n";
    //
    // Now we can calculate and output some stats:
    //
    // Difference in means:
    double diff = Sm - M;
-   cout << boost::detail::setw(55) << left << "Sample Mean - Expected Test Mean" << "=  " << diff << "\n";
+   cout << setw(55) << left << "Sample Mean - Expected Test Mean" << "=  " << diff << "\n";
    // Degrees of freedom:
    unsigned v = Sn - 1;
-   cout << boost::detail::setw(55) << left << "Degrees of Freedom" << "=  " << v << "\n";
+   cout << setw(55) << left << "Degrees of Freedom" << "=  " << v << "\n";
    // t-statistic:
    double t_stat = diff * sqrt(double(Sn)) / Sd;
-   cout << boost::detail::setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
+   cout << setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
    //
    // Finally define our distribution, and get the probability:
    //
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));
-   cout << boost::detail::setw(55) << left << "Probability that difference is due to chance" << "=  "
-      << boost::detail::setprecision(3) << scientific << 2 * q << "\n\n";
+   cout << setw(55) << left << "Probability that difference is due to chance" << "=  "
+      << setprecision(3) << scientific << 2 * q << "\n\n";
    //
    // Finally print out results of alternative hypothesis:
    //
-   cout << boost::detail::setw(55) << left <<
+   cout << setw(55) << left <<
       "Results for Alternative Hypothesis and alpha" << "=  "
-      << boost::detail::setprecision(4) << fixed << alpha << "\n\n";
+      << setprecision(4) << fixed << alpha << "\n\n";
    cout << "Alternative Hypothesis     Conclusion\n";
-   cout << "Mean != " << boost::detail::setprecision(3) << fixed << M << "            ";
+   cout << "Mean != " << setprecision(3) << fixed << M << "            ";
    if(q < alpha / 2)
       cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
-   cout << "Mean  < " << boost::detail::setprecision(3) << fixed << M << "            ";
+   cout << "Mean  < " << setprecision(3) << fixed << M << "            ";
    if(cdf(dist, t_stat) < alpha)
       cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
-   cout << "Mean  > " << boost::detail::setprecision(3) << fixed << M << "            ";
+   cout << "Mean  > " << setprecision(3) << fixed << M << "            ";
    if(cdf(complement(dist, t_stat)) < alpha)
       cout << "NOT REJECTED\n";
    else
@@ -182,10 +181,10 @@ void single_sample_find_df(double M, double Sm, double Sd)
       "_____________________________________________________________\n"
       "Estimated sample sizes required for various confidence levels\n"
       "_____________________________________________________________\n\n";
-   cout << boost::detail::setprecision(5);
-   cout << boost::detail::setw(40) << left << "True Mean" << "=  " << M << "\n";
-   cout << boost::detail::setw(40) << left << "Sample Mean" << "=  " << Sm << "\n";
-   cout << boost::detail::setw(40) << left << "Sample Standard Deviation" << "=  " << Sd << "\n";
+   cout << setprecision(5);
+   cout << setw(40) << left << "True Mean" << "=  " << M << "\n";
+   cout << setw(40) << left << "Sample Mean" << "=  " << Sm << "\n";
+   cout << setw(40) << left << "Sample Standard Deviation" << "=  " << Sd << "\n";
    //
    // Define a table of significance intervals:
    //
@@ -205,21 +204,21 @@ void single_sample_find_df(double M, double Sm, double Sd)
    for(unsigned i = 1; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    {
       // Confidence value:
-      cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(10) << right << 100 * (1-alpha[i]);
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate df for single sided test:
       double df = students_t::find_degrees_of_freedom(
          fabs(M - Sm), alpha[i], alpha[i], Sd);
       // convert to sample size, always one more than the degrees of freedom:
       double size = ceil(df) + 1;
       // Print size:
-      cout << fixed << boost::detail::setprecision(0) << boost::detail::setw(16) << right << size;
+      cout << fixed << setprecision(0) << setw(16) << right << size;
       // calculate df for two sided test:
       df = students_t::find_degrees_of_freedom(
          fabs(M - Sm), alpha[i]/2, alpha[i], Sd);
       // convert to sample size:
       size = ceil(df) + 1;
       // Print size:
-      cout << fixed << boost::detail::setprecision(0) << boost::detail::setw(16) << right << size << endl;
+      cout << fixed << setprecision(0) << setw(16) << right << size << endl;
    }
    cout << endl;
 } // void single_sample_find_df

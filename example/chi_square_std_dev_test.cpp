@@ -6,13 +6,12 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <ios>
-#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout; using std::endl;
 using std::left; using std::fixed; using std::right; using std::scientific;
-using boost::detail::setw;
-using boost::detail::setprecision;
+#include <iomanip>
+using std::setw;
+using std::setprecision;
 
 #include <boost/math/distributions/chi_squared.hpp>
 
@@ -42,9 +41,9 @@ void confidence_limits_on_std_deviation(
       "________________________________________________\n"
       "2-Sided Confidence Limits For Standard Deviation\n"
       "________________________________________________\n\n";
-   cout << boost::detail::setprecision(7);
-   cout << boost::detail::setw(40) << left << "Number of Observations" << "=  " << N << "\n";
-   cout << boost::detail::setw(40) << left << "Standard Deviation" << "=  " << Sd << "\n";
+   cout << setprecision(7);
+   cout << setw(40) << left << "Number of Observations" << "=  " << N << "\n";
+   cout << setw(40) << left << "Standard Deviation" << "=  " << Sd << "\n";
    //
    // Define a table of significance/risk levels:
    double alpha[] = { 0.5, 0.25, 0.1, 0.05, 0.01, 0.001, 0.0001, 0.00001 };
@@ -64,13 +63,13 @@ void confidence_limits_on_std_deviation(
    for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    {
       // Confidence value:
-      cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(10) << right << 100 * (1-alpha[i]);
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // Calculate limits:
       double lower_limit = sqrt((N - 1) * Sd * Sd / quantile(complement(dist, alpha[i] / 2)));
       double upper_limit = sqrt((N - 1) * Sd * Sd / quantile(dist, alpha[i] / 2));
       // Print Limits:
-      cout << fixed << boost::detail::setprecision(5) << boost::detail::setw(15) << right << lower_limit;
-      cout << fixed << boost::detail::setprecision(5) << boost::detail::setw(15) << right << upper_limit << endl;
+      cout << fixed << setprecision(5) << setw(15) << right << lower_limit;
+      cout << fixed << setprecision(5) << setw(15) << right << upper_limit << endl;
    }
    cout << endl;
 } // void confidence_limits_on_std_deviation
@@ -98,9 +97,9 @@ void confidence_limits_on_std_deviation_alpha(
       "________________________________________________\n"
       "2-Sided Confidence Limits For Standard Deviation\n"
       "________________________________________________\n\n";
-   cout << boost::detail::setprecision(7);
-   cout << boost::detail::setw(40) << left << "Confidence level (two-sided) " << "=  " << alpha << "\n";
-   cout << boost::detail::setw(40) << left << "Standard Deviation" << "=  " << Sd << "\n";
+   cout << setprecision(7);
+   cout << setw(40) << left << "Confidence level (two-sided) " << "=  " << alpha << "\n";
+   cout << setw(40) << left << "Standard Deviation" << "=  " << Sd << "\n";
 
    cout << "\n\n"      // Print table header:
             "_____________________________________________\n"
@@ -114,13 +113,13 @@ void confidence_limits_on_std_deviation_alpha(
      chi_squared dist(N - 1);
 
      // Now print out the data for the table row.
-      cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(10) << right << N;
+      cout << fixed << setprecision(3) << setw(10) << right << N;
       // Calculate limits: (alpha /2 because it is a two-sided (upper and lower limit) test.
       double lower_limit = sqrt((N - 1) * Sd * Sd / quantile(complement(dist, alpha / 2)));
       double upper_limit = sqrt((N - 1) * Sd * Sd / quantile(dist, alpha / 2));
       // Print Limits:
-      cout << fixed << boost::detail::setprecision(4) << boost::detail::setw(15) << right << lower_limit;
-      cout << fixed << boost::detail::setprecision(4) << boost::detail::setw(15) << right << upper_limit << endl;
+      cout << fixed << setprecision(4) << setw(15) << right << lower_limit;
+      cout << fixed << setprecision(4) << setw(15) << right << upper_limit << endl;
    }
    cout << endl;
 }// void confidence_limits_on_std_deviation_alpha
@@ -150,53 +149,53 @@ void chi_squared_test(
       "______________________________________________\n"
       "Chi Squared test for sample standard deviation\n"
       "______________________________________________\n\n";
-   cout << boost::detail::setprecision(5);
-   cout << boost::detail::setw(55) << left << "Number of Observations" << "=  " << N << "\n";
-   cout << boost::detail::setw(55) << left << "Sample Standard Deviation" << "=  " << Sd << "\n";
-   cout << boost::detail::setw(55) << left << "Expected True Standard Deviation" << "=  " << D << "\n\n";
+   cout << setprecision(5);
+   cout << setw(55) << left << "Number of Observations" << "=  " << N << "\n";
+   cout << setw(55) << left << "Sample Standard Deviation" << "=  " << Sd << "\n";
+   cout << setw(55) << left << "Expected True Standard Deviation" << "=  " << D << "\n\n";
    //
    // Now we can calculate and output some stats:
    //
    // test-statistic:
    double t_stat = (N - 1) * (Sd / D) * (Sd / D);
-   cout << boost::detail::setw(55) << left << "Test Statistic" << "=  " << t_stat << "\n";
+   cout << setw(55) << left << "Test Statistic" << "=  " << t_stat << "\n";
    //
    // Finally define our distribution, and get the probability:
    //
    chi_squared dist(N - 1);
    double p = cdf(dist, t_stat);
-   cout << boost::detail::setw(55) << left << "CDF of test statistic: " << "=  "
-      << boost::detail::setprecision(3) << scientific << p << "\n";
+   cout << setw(55) << left << "CDF of test statistic: " << "=  "
+      << setprecision(3) << scientific << p << "\n";
    double ucv = quantile(complement(dist, alpha));
    double ucv2 = quantile(complement(dist, alpha / 2));
    double lcv = quantile(dist, alpha);
    double lcv2 = quantile(dist, alpha / 2);
-   cout << boost::detail::setw(55) << left << "Upper Critical Value at alpha: " << "=  "
-      << boost::detail::setprecision(3) << scientific << ucv << "\n";
-   cout << boost::detail::setw(55) << left << "Upper Critical Value at alpha/2: " << "=  "
-      << boost::detail::setprecision(3) << scientific << ucv2 << "\n";
-   cout << boost::detail::setw(55) << left << "Lower Critical Value at alpha: " << "=  "
-      << boost::detail::setprecision(3) << scientific << lcv << "\n";
-   cout << boost::detail::setw(55) << left << "Lower Critical Value at alpha/2: " << "=  "
-      << boost::detail::setprecision(3) << scientific << lcv2 << "\n\n";
+   cout << setw(55) << left << "Upper Critical Value at alpha: " << "=  "
+      << setprecision(3) << scientific << ucv << "\n";
+   cout << setw(55) << left << "Upper Critical Value at alpha/2: " << "=  "
+      << setprecision(3) << scientific << ucv2 << "\n";
+   cout << setw(55) << left << "Lower Critical Value at alpha: " << "=  "
+      << setprecision(3) << scientific << lcv << "\n";
+   cout << setw(55) << left << "Lower Critical Value at alpha/2: " << "=  "
+      << setprecision(3) << scientific << lcv2 << "\n\n";
    //
    // Finally print out results of alternative hypothesis:
    //
-   cout << boost::detail::setw(55) << left <<
+   cout << setw(55) << left <<
       "Results for Alternative Hypothesis and alpha" << "=  "
-      << boost::detail::setprecision(4) << fixed << alpha << "\n\n";
+      << setprecision(4) << fixed << alpha << "\n\n";
    cout << "Alternative Hypothesis              Conclusion\n";
-   cout << "Standard Deviation != " << boost::detail::setprecision(3) << fixed << D << "            ";
+   cout << "Standard Deviation != " << setprecision(3) << fixed << D << "            ";
    if((ucv2 < t_stat) || (lcv2 > t_stat))
       cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
-   cout << "Standard Deviation  < " << boost::detail::setprecision(3) << fixed << D << "            ";
+   cout << "Standard Deviation  < " << setprecision(3) << fixed << D << "            ";
    if(lcv > t_stat)
       cout << "NOT REJECTED\n";
    else
       cout << "REJECTED\n";
-   cout << "Standard Deviation  > " << boost::detail::setprecision(3) << fixed << D << "            ";
+   cout << "Standard Deviation  > " << setprecision(3) << fixed << D << "            ";
    if(ucv < t_stat)
       cout << "NOT REJECTED\n";
    else
@@ -221,9 +220,9 @@ void chi_squared_sample_sized(
      "_____________________________________________________________\n"
       "Estimated sample sizes required for various confidence levels\n"
       "_____________________________________________________________\n\n";
-   cout << boost::detail::setprecision(5);
-   cout << boost::detail::setw(40) << left << "True Variance" << "=  " << variance << "\n";
-   cout << boost::detail::setw(40) << left << "Difference to detect" << "=  " << diff << "\n";
+   cout << setprecision(5);
+   cout << setw(40) << left << "True Variance" << "=  " << variance << "\n";
+   cout << setw(40) << left << "Difference to detect" << "=  " << diff << "\n";
    //
    // Define a table of significance levels:
    //
@@ -244,21 +243,21 @@ void chi_squared_sample_sized(
    for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    {
       // Confidence value:
-      cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(10) << right << 100 * (1-alpha[i]);
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // Calculate df for a lower single-sided test:
       double df = chi_squared::find_degrees_of_freedom(
          -diff, alpha[i], alpha[i], variance);
       // Convert to integral sample size (df is a floating point value in this implementation):
       double size = ceil(df) + 1;
       // Print size:
-      cout << fixed << boost::detail::setprecision(0) << boost::detail::setw(16) << right << size;
+      cout << fixed << setprecision(0) << setw(16) << right << size;
       // Calculate df for an upper single-sided test:
       df = chi_squared::find_degrees_of_freedom(
          diff, alpha[i], alpha[i], variance);
       // Convert to integral sample size:
       size = ceil(df) + 1;
       // Print size:
-      cout << fixed << boost::detail::setprecision(0) << boost::detail::setw(16) << right << size << endl;
+      cout << fixed << setprecision(0) << setw(16) << right << size << endl;
    }
    cout << endl;
    }

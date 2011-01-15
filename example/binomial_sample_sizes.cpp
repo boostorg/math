@@ -12,12 +12,11 @@
 #  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
 #endif
 
-#include <ios> 
-#include <boost/detail/iomanip.hpp>
 #include <iostream>
 using std::cout; using std::endl;
-using std::fixed; using std::left; using std::right; using std::right; using boost::detail::setw;
-using boost::detail::setprecision;
+#include <iomanip>
+using std::fixed; using std::left; using std::right; using std::right; using std::setw;
+using std::setprecision;
 
 #include <boost/math/distributions/binomial.hpp>
 
@@ -41,9 +40,9 @@ void find_max_sample_size(double p, unsigned successes)
       "________________________\n"
       "Maximum Number of Trials\n"
       "________________________\n\n";
-   cout << boost::detail::setprecision(7);
-   cout << boost::detail::setw(40) << left << "Success ratio" << "=  " << p << "\n";
-   cout << boost::detail::setw(40) << left << "Maximum Number of \"successes\" permitted" << "=  " << successes << "\n";
+   cout << setprecision(7);
+   cout << setw(40) << left << "Success ratio" << "=  " << p << "\n";
+   cout << setw(40) << left << "Maximum Number of \"successes\" permitted" << "=  " << successes << "\n";
    //
    // Define a table of confidence intervals:
    //
@@ -62,12 +61,12 @@ void find_max_sample_size(double p, unsigned successes)
    for(unsigned i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
    {
       // Confidence value:
-      cout << fixed << boost::detail::setprecision(3) << boost::detail::setw(10) << right << 100 * (1-alpha[i]);
+      cout << fixed << setprecision(3) << setw(10) << right << 100 * (1-alpha[i]);
       // calculate trials:
       double t = binomial_distribution<>::find_maximum_number_of_trials(successes, p, alpha[i]);
       t = floor(t);
       // Print Trials:
-      cout << fixed << boost::detail::setprecision(0) << boost::detail::setw(15) << right << t << endl;
+      cout << fixed << setprecision(0) << setw(15) << right << t << endl;
    }
    cout << endl;
 }

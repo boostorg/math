@@ -9,7 +9,7 @@
 
 #include <NTL/RR.h>
 #include <iostream>
-#include <boost/detail/iomanip.hpp>
+#include <iomanip>
 
 int main()
 {

@@ -12,13 +12,12 @@
 #  pragma warning(disable: 4610) // can never be instantiated - user defined constructor required.
 #endif
 
-#include <ios>
 #include <iostream>
 using std::cout; using std::endl;
 using std::left; using std::fixed; using std::right; using std::scientific;
-#include <boost/detail/iomanip.hpp>
-using boost::detail::setw;
-using boost::detail::setprecision;
+#include <iomanip>
+using std::setw;
+using std::setprecision;
 
 #include <boost/math/distributions/students_t.hpp>
    using boost::math::students_t;
@@ -39,7 +38,7 @@ void two_samples_t_test_equal_sd(
    // if due to chance.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm
    //
-   // using namespace std;
+   using namespace std;
    // using namespace boost::math;
 
    using boost::math::students_t;
@@ -49,38 +48,38 @@ void two_samples_t_test_equal_sd(
       "_______________________________________________\n"
       "Student t test for two samples (equal variances)\n"
       "_______________________________________________\n\n";
-   cout << boost::detail::setprecision(5);
-   cout << boost::detail::setw(55) << left << "Number of Observations (Sample 1)" << "=  " << Sn1 << "\n";
-   cout << boost::detail::setw(55) << left << "Sample 1 Mean" << "=  " << Sm1 << "\n";
-   cout << boost::detail::setw(55) << left << "Sample 1 Standard Deviation" << "=  " << Sd1 << "\n";
-   cout << boost::detail::setw(55) << left << "Number of Observations (Sample 2)" << "=  " << Sn2 << "\n";
-   cout << boost::detail::setw(55) << left << "Sample 2 Mean" << "=  " << Sm2 << "\n";
-   cout << boost::detail::setw(55) << left << "Sample 2 Standard Deviation" << "=  " << Sd2 << "\n";
+   cout << setprecision(5);
+   cout << setw(55) << left << "Number of Observations (Sample 1)" << "=  " << Sn1 << "\n";
+   cout << setw(55) << left << "Sample 1 Mean" << "=  " << Sm1 << "\n";
+   cout << setw(55) << left << "Sample 1 Standard Deviation" << "=  " << Sd1 << "\n";
+   cout << setw(55) << left << "Number of Observations (Sample 2)" << "=  " << Sn2 << "\n";
+   cout << setw(55) << left << "Sample 2 Mean" << "=  " << Sm2 << "\n";
+   cout << setw(55) << left << "Sample 2 Standard Deviation" << "=  " << Sd2 << "\n";
    //
    // Now we can calculate and output some stats:
    //
    // Degrees of freedom:
    double v = Sn1 + Sn2 - 2;
-   cout << boost::detail::setw(55) << left << "Degrees of Freedom" << "=  " << v << "\n";
+   cout << setw(55) << left << "Degrees of Freedom" << "=  " << v << "\n";
    // Pooled variance:
    double sp = sqrt(((Sn1-1) * Sd1 * Sd1 + (Sn2-1) * Sd2 * Sd2) / v);
-   cout << boost::detail::setw(55) << left << "Pooled Standard Deviation" << "=  " << v << "\n";
+   cout << setw(55) << left << "Pooled Standard Deviation" << "=  " << v << "\n";
    // t-statistic:
    double t_stat = (Sm1 - Sm2) / (sp * sqrt(1.0 / Sn1 + 1.0 / Sn2));
-   cout << boost::detail::setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
+   cout << setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
    //
    // Define our distribution, and get the probability:
    //
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));
-   cout << boost::detail::setw(55) << left << "Probability that difference is due to chance" << "=  "
-      << boost::detail::setprecision(3) << scientific << 2 * q << "\n\n";
+   cout << setw(55) << left << "Probability that difference is due to chance" << "=  "
+      << setprecision(3) << scientific << 2 * q << "\n\n";
    //
    // Finally print out results of alternative hypothesis:
    //
-   cout << boost::detail::setw(55) << left <<
+   cout << setw(55) << left <<
       "Results for Alternative Hypothesis and alpha" << "=  "
-      << boost::detail::setprecision(4) << fixed << alpha << "\n\n";
+      << setprecision(4) << fixed << alpha << "\n\n";
    cout << "Alternative Hypothesis              Conclusion\n";
    cout << "Sample 1 Mean != Sample 2 Mean       " ;
    if(q < alpha / 2)
@@ -115,7 +114,7 @@ void two_samples_t_test_unequal_sd(
    // that any difference is due to chance.
    // See http://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm
    //
-   //using namespace std;
+   using namespace std;
    using boost::math::students_t;
 
    // Print header:
@@ -123,13 +122,13 @@ void two_samples_t_test_unequal_sd(
       "_________________________________________________\n"
       "Student t test for two samples (unequal variances)\n"
       "_________________________________________________\n\n";
-   cout << boost::detail::setprecision(5);
-   cout << boost::detail::setw(55) << left << "Number of Observations (Sample 1)" << "=  " << Sn1 << "\n";
-   cout << boost::detail::setw(55) << left << "Sample 1 Mean" << "=  " << Sm1 << "\n";
-   cout << boost::detail::setw(55) << left << "Sample 1 Standard Deviation" << "=  " << Sd1 << "\n";
-   cout << boost::detail::setw(55) << left << "Number of Observations (Sample 2)" << "=  " << Sn2 << "\n";
-   cout << boost::detail::setw(55) << left << "Sample 2 Mean" << "=  " << Sm2 << "\n";
-   cout << boost::detail::setw(55) << left << "Sample 2 Standard Deviation" << "=  " << Sd2 << "\n";
+   cout << setprecision(5);
+   cout << setw(55) << left << "Number of Observations (Sample 1)" << "=  " << Sn1 << "\n";
+   cout << setw(55) << left << "Sample 1 Mean" << "=  " << Sm1 << "\n";
+   cout << setw(55) << left << "Sample 1 Standard Deviation" << "=  " << Sd1 << "\n";
+   cout << setw(55) << left << "Number of Observations (Sample 2)" << "=  " << Sn2 << "\n";
+   cout << setw(55) << left << "Sample 2 Mean" << "=  " << Sm2 << "\n";
+   cout << setw(55) << left << "Sample 2 Standard Deviation" << "=  " << Sd2 << "\n";
    //
    // Now we can calculate and output some stats:
    //
@@ -143,23 +142,23 @@ void two_samples_t_test_unequal_sd(
    t2 *= t2;
    t2 /= (Sn2 - 1);
    v /= (t1 + t2);
-   cout << boost::detail::setw(55) << left << "Degrees of Freedom" << "=  " << v << "\n";
+   cout << setw(55) << left << "Degrees of Freedom" << "=  " << v << "\n";
    // t-statistic:
    double t_stat = (Sm1 - Sm2) / sqrt(Sd1 * Sd1 / Sn1 + Sd2 * Sd2 / Sn2);
-   cout << boost::detail::setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
+   cout << setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
    //
    // Define our distribution, and get the probability:
    //
    students_t dist(v);
    double q = cdf(complement(dist, fabs(t_stat)));
-   cout << boost::detail::setw(55) << left << "Probability that difference is due to chance" << "=  "
-      << boost::detail::setprecision(3) << scientific << 2 * q << "\n\n";
+   cout << setw(55) << left << "Probability that difference is due to chance" << "=  "
+      << setprecision(3) << scientific << 2 * q << "\n\n";
    //
    // Finally print out results of alternative hypothesis:
    //
-   cout << boost::detail::setw(55) << left <<
+   cout << setw(55) << left <<
       "Results for Alternative Hypothesis and alpha" << "=  "
-      << boost::detail::setprecision(4) << fixed << alpha << "\n\n";
+      << setprecision(4) << fixed << alpha << "\n\n";
    cout << "Alternative Hypothesis              Conclusion\n";
    cout << "Sample 1 Mean != Sample 2 Mean       " ;
    if(q < alpha / 2)
