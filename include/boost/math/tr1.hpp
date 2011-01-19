@@ -40,7 +40,8 @@ namespace boost{ namespace math{ namespace tr1{ extern "C"{
 // Set any throw specifications on the C99 extern "C" functions - these have to be
 // the same as used in the std lib if any.
 //
-#if defined(__GLIBC__) && defined(__THROW)
+#if (defined(__GLIBC__) && defined(__THROW)) \
+   || (defined(__IBMCPP__) && defined(__LINUX__) && defined(__THROW))
 #  define BOOST_MATH_C99_THROW_SPEC __THROW
 #else
 #  define BOOST_MATH_C99_THROW_SPEC
