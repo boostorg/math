@@ -85,5 +85,6 @@ boostbook standalone
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/math/doc/sf_and_dist/html
     ;
 
-install pdf-install : standalone : <location>. <install-type>PDF ;
+install pdf-install : standalone : <location>. <install-type>PDF <name>math.pdf ;
+
 
