@@ -55,6 +55,27 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(acosh_test, T)
             (acosh_error_evaluator(x))
             (static_cast<T>(4)));
     }
+    // special cases for bug report: https://svn.boost.org/trac/boost/ticket/5113
+    T x = 1e-2f;
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+       (acosh_error_evaluator(x))
+       (static_cast<T>(4)));
+    x = 1e-3f;
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+       (acosh_error_evaluator(x))
+       (static_cast<T>(4)));
+    x = 1e-4f;
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+       (acosh_error_evaluator(x))
+       (static_cast<T>(4)));
+    x = 1e-5f;
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+       (acosh_error_evaluator(x))
+       (static_cast<T>(4)));
+    x = 1e-6f;
+    BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
+       (acosh_error_evaluator(x))
+       (static_cast<T>(4)));
 }
 
 
