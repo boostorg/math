@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/beta.hpp>
 #include "c_policy.hpp"
 
-extern "C" double BOOST_MATH_TR1_DECL beta BOOST_PREVENT_MACRO_SUBSTITUTION(double x, double y) BOOST_MATH_C99_THROW_SPEC
+extern "C" double BOOST_MATH_TR1_DECL boost_beta BOOST_PREVENT_MACRO_SUBSTITUTION(double x, double y) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::beta BOOST_PREVENT_MACRO_SUBSTITUTION(x, y);
 }

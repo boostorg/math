@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/cbrt.hpp>
 #include "c_policy.hpp"
 
-extern "C" float BOOST_MATH_TR1_DECL cbrtf BOOST_PREVENT_MACRO_SUBSTITUTION(float x) BOOST_MATH_C99_THROW_SPEC
+extern "C" float BOOST_MATH_TR1_DECL boost_cbrtf BOOST_PREVENT_MACRO_SUBSTITUTION(float x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::cbrt BOOST_PREVENT_MACRO_SUBSTITUTION(x);
 }

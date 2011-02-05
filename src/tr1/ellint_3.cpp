@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/ellint_3.hpp>
 #include "c_policy.hpp"
 
-extern "C" double BOOST_MATH_TR1_DECL ellint_3 BOOST_PREVENT_MACRO_SUBSTITUTION(double k, double nu, double phi) BOOST_MATH_C99_THROW_SPEC
+extern "C" double BOOST_MATH_TR1_DECL boost_ellint_3 BOOST_PREVENT_MACRO_SUBSTITUTION(double k, double nu, double phi) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::ellint_3 BOOST_PREVENT_MACRO_SUBSTITUTION(k, nu, phi);
 }

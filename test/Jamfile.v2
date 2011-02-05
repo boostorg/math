@@ -654,6 +654,28 @@ run test_tr1.cpp
    test_tr1_long_double
    ;
    
+run test_tr1.c
+   ../build//boost_math_tr1
+   ../build//boost_math_tr1f
+   ../build//boost_math_c99
+   ../build//boost_math_c99f
+   ../../test/build//boost_test_exec_monitor 
+   : : : #requirements
+   :
+   test_tr1_c
+   ;
+
+run test_tr1.c
+   ../build//boost_math_tr1l 
+   ../build//boost_math_c99l 
+   ../../test/build//boost_test_exec_monitor 
+   : : :
+   <define>TEST_LD=1
+   [ check-target-builds ../config//has_long_double_support : : <build>no ]
+   :
+   test_tr1_c_long_double
+   ;
+
 run test_long_double_support.cpp ../../test/build//boost_test_exec_monitor 
 : : : [ check-target-builds ../config//has_long_double_support : : <build>no ] ;
 

@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/ellint_1.hpp>
 #include "c_policy.hpp"
 
-extern "C" float BOOST_MATH_TR1_DECL comp_ellint_1f BOOST_PREVENT_MACRO_SUBSTITUTION(float x) BOOST_MATH_C99_THROW_SPEC
+extern "C" float BOOST_MATH_TR1_DECL boost_comp_ellint_1f BOOST_PREVENT_MACRO_SUBSTITUTION(float x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::ellint_1 BOOST_PREVENT_MACRO_SUBSTITUTION(x);
 }

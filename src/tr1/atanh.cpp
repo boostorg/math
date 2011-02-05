@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/atanh.hpp>
 #include "c_policy.hpp"
 
-extern "C" double BOOST_MATH_TR1_DECL atanh BOOST_PREVENT_MACRO_SUBSTITUTION(double x) BOOST_MATH_C99_THROW_SPEC
+extern "C" double BOOST_MATH_TR1_DECL boost_atanh BOOST_PREVENT_MACRO_SUBSTITUTION(double x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::atanh BOOST_PREVENT_MACRO_SUBSTITUTION(x);
 }

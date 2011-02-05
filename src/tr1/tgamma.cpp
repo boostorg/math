@@ -13,7 +13,7 @@
 
 namespace boost{ namespace math{ namespace tr1{
 
-extern "C" double BOOST_MATH_TR1_DECL tgamma BOOST_PREVENT_MACRO_SUBSTITUTION(double x) BOOST_MATH_C99_THROW_SPEC
+extern "C" double BOOST_MATH_TR1_DECL boost_tgamma BOOST_PREVENT_MACRO_SUBSTITUTION(double x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::tgamma BOOST_PREVENT_MACRO_SUBSTITUTION(x);
 }

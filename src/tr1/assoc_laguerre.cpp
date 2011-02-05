@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/laguerre.hpp>
 #include "c_policy.hpp"
 
-extern "C" double BOOST_MATH_TR1_DECL assoc_laguerre BOOST_PREVENT_MACRO_SUBSTITUTION(unsigned n, unsigned m, double x) BOOST_MATH_C99_THROW_SPEC
+extern "C" double BOOST_MATH_TR1_DECL boost_assoc_laguerre BOOST_PREVENT_MACRO_SUBSTITUTION(unsigned n, unsigned m, double x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::laguerre BOOST_PREVENT_MACRO_SUBSTITUTION(n, m, x);
 }
