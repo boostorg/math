@@ -6,6 +6,7 @@
 using quickbook ;
 
 path-constant images_location : html ;
+path-constant here : . ;
 
 import modules ;
 
@@ -16,8 +17,8 @@ if --enable-index in  [ modules.peek : ARGV ]
    project : requirements
         <auto-index>on <format>pdf:<auto-index-internal>off
         <format>html:<auto-index-internal>on
-        <auto-index-script>index.idx
-        <auto-index-prefix>../../../.. 
+        <auto-index-script>$(here)/index.idx
+        <auto-index-prefix>$(here)/../../../.. 
         <quickbook-define>enable_index 
         <format>pdf:<xsl:param>index.on.type=1 ;
 }
@@ -87,6 +88,7 @@ boostbook standalone
     ;
 
 install pdf-install : standalone : <location>. <install-type>PDF <name>math.pdf ;
+
 
 
 
