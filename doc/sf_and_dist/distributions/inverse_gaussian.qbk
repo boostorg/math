@@ -1,6 +1,6 @@
 [section:inverse_gaussian_dist Inverse Gaussian (or Inverse Normal) Distribution]
 
-``#include <boost/math/distributions/wald.hpp>``
+``#include <boost/math/distributions/inverse_gaussian.hpp>``
 
    namespace boost{ namespace math{ 
       
