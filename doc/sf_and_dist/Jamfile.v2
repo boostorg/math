@@ -9,6 +9,8 @@ path-constant images_location : html ;
 
 import modules ;
 
+path-constant here : . ;
+
 if --enable-index in  [ modules.peek : ARGV ]
 {
    ECHO "Building the Math docs with automatic index generation enabled." ;
@@ -16,8 +18,8 @@ if --enable-index in  [ modules.peek : ARGV ]
    project : requirements
         <auto-index>on <format>pdf:<auto-index-internal>off
         <format>html:<auto-index-internal>on
-        <auto-index-script>index.idx
-        <auto-index-prefix>../../../.. 
+        <auto-index-script>$(here)/index.idx
+        <auto-index-prefix>$(here)/../../../.. 
         <quickbook-define>enable_index ;
 }
 else
@@ -86,4 +88,6 @@ boostbook standalone
     ;
 
 install pdf-install : standalone : <location>. <install-type>PDF ;
+
+
 
