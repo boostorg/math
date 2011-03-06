@@ -1,5 +1,9 @@
 [template history[]
 
+[h4 Boost-1.46.1]
+
+* Fixed issues [@https://svn.boost.org/trac/boost/ticket/5095 #5095], [@https://svn.boost.org/trac/boost/ticket/5095 #5113].
+
 [h4 Boost-1.46.0]
 
 * Added Wald, Inverse Gaussian and geometric distributions.

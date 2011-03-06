@@ -123,6 +123,9 @@ is found, the higher the priority for implementing it:
 [[Bradford][-][-][-][X][-]]
 [[Birr / Fisk][-][-][-][X][-]]
 [[Reciprocal][-][-][-][X][-]]
+
+[/0 votes but useful anyway?]
+[[Kolmogorov Distribution][-][-][-][-][-]]
 ]
 
 Also asked for more than once:
@@ -143,3 +146,4 @@ by returning the log of the result.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+

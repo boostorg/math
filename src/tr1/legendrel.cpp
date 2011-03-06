@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/legendre.hpp>
 #include "c_policy.hpp"
 
-extern "C" long double BOOST_MATH_TR1_DECL legendrel BOOST_PREVENT_MACRO_SUBSTITUTION(unsigned n, long double x) BOOST_MATH_C99_THROW_SPEC
+extern "C" long double BOOST_MATH_TR1_DECL boost_legendrel BOOST_PREVENT_MACRO_SUBSTITUTION(unsigned n, long double x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::legendre_p BOOST_PREVENT_MACRO_SUBSTITUTION(n, x);
 }

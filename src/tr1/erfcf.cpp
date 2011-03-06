@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/erf.hpp>
 #include "c_policy.hpp"
 
-extern "C" float BOOST_MATH_TR1_DECL erfcf BOOST_PREVENT_MACRO_SUBSTITUTION(float x) BOOST_MATH_C99_THROW_SPEC
+extern "C" float BOOST_MATH_TR1_DECL boost_erfcf BOOST_PREVENT_MACRO_SUBSTITUTION(float x) BOOST_MATH_C99_THROW_SPEC
 {
    return c_policies::erfc BOOST_PREVENT_MACRO_SUBSTITUTION(x);
 }

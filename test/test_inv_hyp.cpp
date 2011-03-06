@@ -52,23 +52,16 @@ void expected_results()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
-      largest_type = "(long\\s+)?double";
+      largest_type = "(long\\s+)?double|real_concept";
    }
    else
    {
-      largest_type = "long double";
+      largest_type = "long double|real_concept";
    }
 #else
    largest_type = "(long\\s+)?double";
 #endif
 
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "real_concept",                // test type(s)
-      "atanh.*",                     // test data group
-      ".*", 6, 2);                   // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -191,12 +184,35 @@ void do_test_atanh(const T& data, const char* type_name, const char* test_name)
 template <class T>
 void test_inv_hyperbolics(T, const char* name)
 {
+    // function values calculated on http://functions.wolfram.com/
+    #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+    static const boost::array<boost::array<T, 2>, 16> data1 = {
+        SC_(1), SC_(0),
+        SC_(18014398509481985.0)/SC_(18014398509481984.0), (SC_(18014398509481985.0)/SC_(18014398509481984.0) == 1 ? 0 : SC_(1.05367121277235078980001569764860129317209081216314559121044e-8)),
+        SC_(140737488355329.0)/SC_(140737488355328.0), (SC_(140737488355329.0)/SC_(140737488355328.0) == 1 ? 0 : SC_(1.19209289550781179413921062141751258430803882725295121500042e-7)),
+        SC_(1073741825.0)/SC_(1073741824.0), (SC_(1073741825.0)/SC_(1073741824.0) == 1 ? 0 : SC_(0.0000431583728718059579720327225039166883356735150941350459126580)),
+        SC_(32769)/32768, (SC_(32769)/32768 == 1 ? 0 : SC_(0.00781248013192149783598227588546120945538554063153555218442060)),
+        SC_(1025)/1024, SC_(0.0441905780831100944299637635287994671116916497867872322058681),
+        SC_(513)/512, SC_(0.0624898319417098609694799246056217361555882834152944713872228),
+        SC_(129)/128, SC_(0.124918762511080617606418193883982155828039646714882611321039),
+        SC_(33)/32, SC_(0.249353493842885487851439075410018843027071727873456825299808),
+        SC_(5)/4, SC_(0.693147180559945309417232121458176568075500134360255254120680),
+        SC_(3)/2, SC_(0.962423650119206894995517826848736846270368668771321039322036),
+        SC_(1.75), SC_(1.15881036042994681173087299087873019318368454205435905403767),
+        SC_(2), SC_(1.31695789692481670862504634730796844402698197146751647976847),
+        SC_(20), SC_(3.68825386736129666761816757203235188783315569765587425882926),
+        SC_(200), SC_(5.99145829704938742305501213819154333467246121857058747847273),
+        SC_(2000), SC_(8.29404957760202181151262480475259799729149903827743516943515),
+   };
+    #undef SC_
+
    //
    // The actual test data is rather verbose, so it's in a separate file
    //
 #include "asinh_data.ipp"
    do_test_asinh(asinh_data, name, "asinh");
 #include "acosh_data.ipp"
+   do_test_acosh(data1, name, "acosh: Mathworld Data");
    do_test_acosh(acosh_data, name, "acosh");
 #include "atanh_data.ipp"
    do_test_atanh(atanh_data, name, "atanh");
