@@ -1,11 +1,11 @@
 [section:geometric_eg Geometric Distribution Examples]
                        
-[import \..\..\..\example\geometric_examples.cpp]
+[import ../../../example/geometric_examples.cpp]
 [geometric_eg1_1]
 [geometric_eg1_2]
 
 See full source C++ of this example at
-[@\..\..\..\example\geometric_examples.cpp geometric_examples.cpp]
+[@../../../example/geometric_examples.cpp geometric_examples.cpp]
                        
 [link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative_binomial confidence interval example.]
 
