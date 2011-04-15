@@ -1,4 +1,4 @@
-[section:fpclass Floating-Point Classification: Infinities and NaN's]
+[section:fpclass Floating-Point Classification: Infinities and NaNs]
 
 [h4 Synopsis]
 
@@ -34,9 +34,10 @@ name in C99, indeed if the C99 macros are available, then these functions
 are implemented in terms of them, otherwise they rely on std::numeric_limits<>
 to function.
 
-Note that the definition of these functions ['does not suppress the definition
-of these names as macros by math.h] on those platforms that already provide
-these as macros.  That mean that the following have differing meanings:
+Note that the definition of these functions
+['does not suppress the definition of these names as macros by math.h]
+on those platforms that already provide
+these as macros. That mean that the following have differing meanings:
 
    using namespace boost::math;
    
@@ -102,10 +103,21 @@ Returns true only if /z/ is a [@http://en.wikipedia.org/wiki/NaN NaN].
 
 Returns true only if /z/ is a normal number (not zero, infinite, NaN, or denormalised).
 
-[endsect] [/section:fpclass Floating Point Classification: Infinities and NaN's]
+[h5 Floating-point format]
+
+If you wish to find details of the floating-point format for any particular processor,
+there is a program
+
+[@../../../example/inspect_fp.cpp inspect_fp.cpp]
+
+by Johan Rade which can be used to print out the processor type,
+endianness, and detailed bit layout of a selection of floating-point values,
+including infinity and NaNs.
+
+[endsect] [/section:fpclass Floating Point Classification: Infinities and NaNs]
 
 [/ 
-  Copyright 2006, 2008 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2008, 2011 John Maddock, Johan Rade and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
