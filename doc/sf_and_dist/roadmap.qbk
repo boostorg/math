@@ -1,5 +1,12 @@
 [template history[]
 
+[h4 Boost-1.47]
+
+* Added changesign function to sign.hpp to facilitate addition of nonfinite facets.
+* Addition of nonfinite facetsfrom Johan Rade, with tests,
+examples of use for C99 format infinity and NaN, and documentation.
+* Added tests and documentation of changesign from Johan Rade.
+
 [h4 Boost-1.46.1]
 
 * Fixed issues [@https://svn.boost.org/trac/boost/ticket/5095 #5095], [@https://svn.boost.org/trac/boost/ticket/5095 #5113].
@@ -8,7 +15,7 @@
 
 * Added Wald, Inverse Gaussian and geometric distributions.
 * Added information about configuration macros. 
-* Added support for mpreal as a real-numered type.
+* Added support for mpreal as a real-numbered type.
 
 [h4 Boost-1.45.0]
 
