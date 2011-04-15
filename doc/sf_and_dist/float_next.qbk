@@ -5,7 +5,9 @@
 is the gap between two different, but as close as possible, floating-point numbers.
 
 Most decimal values, for example 0.1, cannot be exactly represented as floating-point values,
-but will be stored as the closest representable floating-point.
+but will be stored as the
+[@http://en.wikipedia.org/wiki/Floating_point#Representable_numbers.2C_conversion_and_rounding
+closest representable floating-point].
 
 Functions are provided for finding adjacent greater and lesser floating-point values,
 and estimating the number of gaps between any two floating-point values.
