@@ -1,7 +1,7 @@
 # \libs\math\example\jamfile.v2
-# Runs statistics examples
+# Runs statistics and floating-point examples.
 # Copyright 2007 John Maddock
-# Copyright Paul A. Bristow 2007, 2010.
+# Copyright Paul A. Bristow 2007, 2010, 2011.
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -24,6 +24,8 @@ project
       <toolset>msvc:<cxxflags>/wd4701
       <toolset>msvc:<cxxflags>/wd4127
       <toolset>msvc:<cxxflags>/wd4305
+      #-<toolset>msvc:<cxxflags>/Za # nonfinite Serialization examples fail link if disable MS extensions,
+      #  because serialization library is built with MS extensions enabled (default).
       <include>../../..
     ;
 
@@ -54,6 +56,16 @@ run neg_binom_confidence_limits.cpp ;
 run neg_binomial_sample_sizes.cpp ;
 run negative_binomial_example1.cpp ;
 run negative_binomial_example2.cpp ;
+
+run nonfinite_num_facet.cpp ;
+run nonfinite_facet_simple.cpp ;
+run nonfinite_num_facet_serialization.cpp ;
+# run lexical_cast_native.cpp ; # Expected to fail on some (but not all) platforms.
+run lexical_cast_nonfinite_facets.cpp ;
+run nonfinite_loopback_ok.cpp ;
+run nonfinite_serialization_archives.cpp ;
+run nonfinite_facet_sstream.cpp ;
+
 run normal_misc_examples.cpp ;
 run policy_eg_1.cpp ;
 run policy_eg_10.cpp ;
