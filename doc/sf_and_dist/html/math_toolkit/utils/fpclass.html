@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Floating-Point Classification: Infinities and NaN's</title>
+<title>Floating-Point Classification: Infinities and NaNs</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
@@ -24,11 +24,11 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.utils.fpclass"></a><a class="link" href="fpclass.html" title="Floating-Point Classification: Infinities and NaN's">Floating-Point Classification:
-      Infinities and NaN's</a>
+<a name="math_toolkit.utils.fpclass"></a><a class="link" href="fpclass.html" title="Floating-Point Classification: Infinities and NaNs">Floating-Point Classification:
+      Infinities and NaNs</a>
 </h3></div></div></div>
 <a name="math_toolkit.utils.fpclass.synopsis"></a><h5>
-<a name="id1280625"></a>
+<a name="id1120721"></a>
         <a class="link" href="fpclass.html#math_toolkit.utils.fpclass.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">FP_ZERO</span>        <span class="comment">/* implementation specific value */</span>
@@ -58,7 +58,7 @@
         to use these functions.
       </p>
 <a name="math_toolkit.utils.fpclass.description"></a><h5>
-<a name="id1281018"></a>
+<a name="id1121112"></a>
         <a class="link" href="fpclass.html#math_toolkit.utils.fpclass.description">Description</a>
       </h5>
 <p>
@@ -215,6 +215,23 @@
 <p>
         Returns true only if <span class="emphasis"><em>z</em></span> is a normal number (not zero,
         infinite, NaN, or denormalised).
+      </p>
+<a name="math_toolkit.utils.fpclass.floating_point_format"></a><h6>
+<a name="id1121850"></a>
+        <a class="link" href="fpclass.html#math_toolkit.utils.fpclass.floating_point_format">Floating-point
+        format</a>
+      </h6>
+<p>
+        If you wish to find details of the floating-point format for any particular
+        processor, there is a program
+      </p>
+<p>
+        <a href="../../../../../example/inspect_fp.cpp" target="_top">inspect_fp.cpp</a>
+      </p>
+<p>
+        by Johan Rade which can be used to print out the processor type, endianness,
+        and detailed bit layout of a selection of floating-point values, including
+        infinity and NaNs.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

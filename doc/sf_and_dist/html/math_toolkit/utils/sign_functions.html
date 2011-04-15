@@ -6,8 +6,8 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../utils.html" title="Floating Point Utilities">
-<link rel="prev" href="fpclass.html" title="Floating-Point Classification: Infinities and NaN's">
-<link rel="next" href="next_float.html" title="Floating-Point Representation Distance (ULP), and Finding Adjacent Floating-Point Values">
+<link rel="prev" href="fpclass.html" title="Floating-Point Classification: Infinities and NaNs">
+<link rel="next" href="fp_facets.html" title="Facets for Floating-Point Infinities and NaNs">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="fpclass.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="next_float.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="fpclass.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="fp_facets.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
@@ -28,7 +28,7 @@
       Functions</a>
 </h3></div></div></div>
 <a name="math_toolkit.utils.sign_functions.synopsis"></a><h5>
-<a name="id1281765"></a>
+<a name="id1121890"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.synopsis">Synopsis</a>
       </h5>
 <p>
@@ -49,10 +49,13 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">copysign</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">y</span><span class="special">);</span>
 
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">changesign</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">);</span>
+
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.utils.sign_functions.description"></a><h5>
-<a name="id1282059"></a>
+<a name="id1122245"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.description">Description</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> 
@@ -66,12 +69,11 @@
 <span class="keyword">inline</span> <span class="keyword">int</span> <span class="identifier">sign</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">);</span>
 </pre>
 <p>
-        Returns <code class="computeroutput"><span class="number">1</span></code> if <code class="computeroutput"><span class="identifier">x</span>
-        <span class="special">&gt;</span> <span class="number">0</span></code>,
+        Returns <code class="computeroutput"><span class="number">1</span></code> if <span class="emphasis"><em>x</em></span>
+        <code class="computeroutput"><span class="special">&gt;</span> <span class="number">0</span></code>,
         <code class="computeroutput"><span class="special">-</span><span class="number">1</span></code>
-        if <code class="computeroutput"><span class="identifier">x</span> <span class="special">&lt;</span>
-        <span class="number">0</span></code>, and <code class="computeroutput"><span class="number">0</span></code>
-        if x is zero.
+        if <span class="emphasis"><em>x</em></span> <code class="computeroutput"><span class="special">&lt;</span> <span class="number">0</span></code>, and <code class="computeroutput"><span class="number">0</span></code>
+        if <span class="emphasis"><em>x</em></span> is zero.
       </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">copysign</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">y</span><span class="special">);</span>
@@ -79,6 +81,151 @@
 <p>
         Sets the sign of <span class="emphasis"><em>x</em></span> to be the same as the sign of <span class="emphasis"><em>y</em></span>.
       </p>
+<p>
+        See <a href="http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1256.pdf" target="_top">C99
+        7.12.11.1 The copysign functions</a> for more detail.
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">changesign</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">);</span>
+</pre>
+<p>
+        Returns a floating point number with a binary representation where the signbit
+        is the opposite of the sign bit in <span class="emphasis"><em>x</em></span>, and where the
+        other bits are the same as in /x.
+      </p>
+<p>
+        This function is widely available, but not specified in any standards.
+      </p>
+<p>
+        Rationale: Not specified by TR1, but <code class="computeroutput"><span class="identifier">changesign</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code>
+        is both easier to read and more efficient than
+      </p>
+<pre class="programlisting"><span class="identifier">copysign</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">signbit</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">?</span> <span class="number">1.0</span> <span class="special">:</span> <span class="special">-</span><span class="number">1.0</span><span class="special">);</span>
+</pre>
+<p>
+        For finite values, this function has the same effect as simple negation,
+        the assignment z = -z, but for nonfinite values, <a href="http://en.wikipedia.org/wiki/Infinity#Computing" target="_top">infinities</a>
+        and <a href="http://en.wikipedia.org/wiki/NaN" target="_top">NaNs</a>, the <code class="computeroutput"><span class="identifier">changesign</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code> function
+        may be the only portable way to ensure that the sign bit is changed.
+      </p>
+<a name="math_toolkit.utils.sign_functions.sign_bits"></a><h6>
+<a name="id1122757"></a>
+        <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.sign_bits">Sign bits</a>
+      </h6>
+<p>
+        One of the bits in the binary representation of a floating-point number gives
+        the sign, and the remaining bits give the absolute value. That bit is known
+        as the sign bit. The sign bit is set = 1 for negative numbers, and is not
+        set = 0 for positive numbers. (This is true for all binary representations
+        of floating point numbers that are used by modern microprocessors.)
+      </p>
+<p>
+        <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf" target="_top">C++
+        TR1</a> specifies <code class="computeroutput"><span class="identifier">copysign</span></code>
+        functions and function templates for accessing the sign bit.
+      </p>
+<p>
+        For user-defined types (UDT), the sign may be stored in some other way. They
+        may also not provide infinity or NaNs. To use these functions with a UDT,
+        it may be necessary to explicitly specialize then for UDT type T.
+      </p>
+<a name="math_toolkit.utils.sign_functions.examples"></a><h6>
+<a name="id1122793"></a>
+        <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.examples">Examples</a>
+      </h6>
+<pre class="programlisting"><span class="identifier">signbit</span><span class="special">(</span><span class="number">3.5</span><span class="special">)</span> <span class="identifier">is</span> <span class="identifier">zero</span> <span class="special">(</span><span class="keyword">or</span> <span class="keyword">false</span><span class="special">)</span>
+<span class="identifier">signbit</span><span class="special">(-</span><span class="number">7.1</span><span class="special">)</span> <span class="identifier">is</span> <span class="number">1</span> <span class="special">(</span><span class="keyword">or</span> <span class="keyword">true</span><span class="special">)</span>
+<span class="identifier">copysign</span><span class="special">(</span><span class="number">4.2</span><span class="special">,</span> <span class="number">7.9</span><span class="special">)</span> <span class="identifier">is</span> <span class="number">4.2</span>
+<span class="identifier">copysign</span><span class="special">(</span><span class="number">3.5</span> <span class="special">-</span><span class="number">1.4</span><span class="special">)</span> <span class="identifier">is</span> <span class="special">-</span><span class="number">3.5</span>
+<span class="identifier">copysign</span><span class="special">(-</span><span class="number">4.2</span><span class="special">,</span> <span class="number">1.0</span><span class="special">)</span> <span class="identifier">is</span> <span class="number">4.2</span>
+<span class="identifier">copysign</span><span class="special">(-</span><span class="number">8.6</span><span class="special">,</span> <span class="special">-</span><span class="number">3.3</span><span class="special">)</span> <span class="identifier">is</span> <span class="special">-</span><span class="number">8.6</span>
+<span class="identifier">changesign</span><span class="special">(</span><span class="number">6.9</span><span class="special">)</span> <span class="identifier">is</span> <span class="special">-</span><span class="number">6.9</span>
+<span class="identifier">changesign</span><span class="special">(-</span><span class="number">1.8</span><span class="special">)</span> <span class="identifier">is</span> <span class="number">1.8</span>
+</pre>
+<a name="math_toolkit.utils.sign_functions.portability"></a><h6>
+<a name="id1123093"></a>
+        <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.portability">Portability</a>
+      </h6>
+<p>
+        The library supports the following binary floating-point formats:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            IEEE 754 single precision
+          </li>
+<li>
+            IEEE 754 double precision
+          </li>
+<li>
+            IEEE 754 extended double precision with 15 exponent bits
+          </li>
+<li>
+            Intel extended double precision
+          </li>
+<li>
+            PowerPC extended double precision
+          </li>
+<li>
+            Motorola 68K extended double precision
+          </li>
+</ul></div>
+<p>
+        The library does not support the VAX floating-point formats. (These are available
+        on VMS, but the default on VMS is the IEEE 754 floating-point format.)
+      </p>
+<p>
+        The main portability issues are:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Unsupported floating point formats
+          </li>
+<li>
+            The library depends on the header boost/detail/endian.hpp
+          </li>
+<li>
+            Code such as <code class="computeroutput"><span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">__ia64</span><span class="special">)</span> <span class="special">||</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">__ia64__</span><span class="special">)</span>
+            <span class="special">||</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">_M_IA64</span><span class="special">)</span></code> is used to determine the processor type.
+          </li>
+</ul></div>
+<p>
+        The library has passed all tests on the following platforms:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Win32 / MSVC 7.1 / 10.0 / x86
+          </li>
+<li>
+            Win32 / Intel C++ 7.1, 8.1, 9.1 / x86
+          </li>
+<li>
+            Mac OS X / GCC 3.3, 4.0 / ppc
+          </li>
+<li>
+            Linux / Intel C++ 9.1 / x86, ia64
+          </li>
+<li>
+            Linux / GCC 3.3 / x86, x64, ia64, ppc, hppa, mips, m68k
+          </li>
+<li>
+            Linux / GCC 3.4 / x64
+          </li>
+<li>
+            HP-UX / aCC, GCC 4.1 / ia64
+          </li>
+<li>
+            HP-UX / aCC / hppa
+          </li>
+<li>
+            Tru64 / Compaq C++ 7.1 / alpha
+          </li>
+<li>
+            VMS / HP C++ 7.1 / alpha (in IEEE floating point mode)
+          </li>
+<li>
+            VMS / HP C++ 7.2 / ia64 (in IEEE floating point mode)
+          </li>
+</ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
@@ -92,7 +239,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="fpclass.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="next_float.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="fpclass.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="fp_facets.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
