@@ -163,6 +163,7 @@ and use the function's name as the link text.]
 [def __isnan [link math_toolkit.special.fpclass isnan]]
 [def __isinf [link math_toolkit.special.fpclass isinf]]
 [def __isnormal [link math_toolkit.special.fpclass isnormal]]
+[def __fp_facets [link math_toolkit.utils.fp_facets nonfinite fp_facets]]
 
 [/powers etc]
 [def __expm1 [link math_toolkit.special.powers.expm1 expm1]]
@@ -434,6 +435,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include rounding_func.qbk]
 [include fpclassify.qbk]
 [include sign.qbk]
+[include fp_facets.qbk]
 [include float_next.qbk]
 [endsect]
 
