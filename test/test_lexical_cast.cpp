@@ -19,7 +19,7 @@
 #include <boost/test/auto_unit_test.hpp>
 
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
-#include <boost/math/special_functions/signbit.hpp>
+#include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include "almost_equal.ipp"
 #include "S_.ipp"

@@ -1,4 +1,5 @@
 // Copyright (c) 2006 Johan Rade
+// Copyright (c) 2011 Paul A. Bristow To incorporate into Boost.Math
 
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -8,12 +9,14 @@
 #   pragma warning(disable : 4702)
 #endif
 
+#define BOOST_TEST_MAIN
+
 #include <locale>
 #include <sstream>
 #include <boost/test/auto_unit_test.hpp>
-#include "almost_equal.hpp"
-#include "S_.hpp"
-#include "../../../../boost/math/nonfinite_num_facets.hpp"
+#include "almost_equal.ipp"
+#include "S_.ipp"
+#include <boost/math/special_functions/nonfinite_num_facets.hpp>
 
 namespace {
 
@@ -35,7 +38,7 @@ BOOST_AUTO_TEST_CASE(trap_test)
 {
     trap_test_finite();
     trap_test_inf();
-    trap_test_nan(); 
+    trap_test_nan();
 }
 
 //------------------------------------------------------------------------------
@@ -122,13 +125,13 @@ template<class CharType, class ValType> void trap_test_put_inf_impl()
 
     ValType a1 = std::numeric_limits<ValType>::infinity();
     ss << a1;
-    BOOST_CHECK(ss.rdstate() == std::ios_base::failbit 
+    BOOST_CHECK(ss.rdstate() == std::ios_base::failbit
         || ss.rdstate() == std::ios_base::badbit);
     ss.clear();
 
     ValType a2 = -std::numeric_limits<ValType>::infinity();
     ss << a2;
-    BOOST_CHECK(ss.rdstate() == std::ios_base::failbit 
+    BOOST_CHECK(ss.rdstate() == std::ios_base::failbit
         || ss.rdstate() == std::ios_base::badbit);
 }
 
@@ -191,13 +194,13 @@ template<class CharType, class ValType> void trap_test_put_nan_impl()
 
     ValType a1 = std::numeric_limits<ValType>::quiet_NaN();
     ss << a1;
-    BOOST_CHECK(ss.rdstate() == std::ios_base::failbit 
+    BOOST_CHECK(ss.rdstate() == std::ios_base::failbit
         || ss.rdstate() == std::ios_base::badbit);
     ss.clear();
 
     ValType a2 = std::numeric_limits<ValType>::signaling_NaN();
     ss << a2;
-    BOOST_CHECK(ss.rdstate() == std::ios_base::failbit 
+    BOOST_CHECK(ss.rdstate() == std::ios_base::failbit
         || ss.rdstate() == std::ios_base::badbit);
 }
 

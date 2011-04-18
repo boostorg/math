@@ -1,4 +1,5 @@
 // Copyright (c) 2006 Johan Rade
+// Copyright (c) 2011 Paul A. Bristow  To incorporate into Boost.Math
 
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -8,13 +9,15 @@
 #   pragma warning(disable : 4702)
 #endif
 
+#define BOOST_TEST_MAIN
+
 #include <iomanip>
 #include <locale>
 #include <sstream>
 #include <boost/test/auto_unit_test.hpp>
 #include "almost_equal.ipp"
 #include "S_.ipp"
-#include "../../../../boost/math/nonfinite_num_facets.hpp"
+#include <boost/math/special_functions/nonfinite_num_facets.hpp>
 
 namespace {
 
