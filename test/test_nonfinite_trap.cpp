@@ -68,8 +68,8 @@ template<class CharType, class ValType> void trap_test_finite_impl()
 
     ValType a1 = (ValType)1.2;
     ValType a2 = (ValType)-3.5;
-    ValType a3 = std::numeric_limits<ValType>::max();
-    ValType a4 = -std::numeric_limits<ValType>::max();
+    ValType a3 = (std::numeric_limits<ValType>::max)();
+    ValType a4 = -(std::numeric_limits<ValType>::max)();
     ss << a1 << ' ' << a2 << ' ' << a3 << ' ' << a4;
 
     ValType b1, b2, b3, b4;
