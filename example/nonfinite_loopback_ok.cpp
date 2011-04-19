@@ -32,7 +32,7 @@ using std::endl;
 using std::locale;
 
 #include <sstream>
-  using std::stringstream;
+using std::stringstream;
 #include <limits>
 using std::numeric_limits;
 
@@ -50,10 +50,10 @@ int main()
   stringstream ss; // Both input and output.
   ss.imbue(new_locale);
 
-	double inf = numeric_limits<double>::infinity();
-	ss << inf; // Write out.
-	double r;
-	ss >> r; // Read back in.
+  double inf = numeric_limits<double>::infinity();
+  ss << inf; // Write out.
+  double r;
+  ss >> r; // Read back in.
 
   assert(inf == r); // OK MSVC <= 10.0!
 
@@ -63,8 +63,8 @@ int main()
 
 Output:
 
-  nonfinite_loopback_ok.vcxproj -> J:\Cpp\fp_facet\fp_facet\Debug\nonfinite_loopback_ok.exe
- 
+nonfinite_loopback_ok.vcxproj -> J:\Cpp\fp_facet\fp_facet\Debug\nonfinite_loopback_ok.exe
 
 */
+
 

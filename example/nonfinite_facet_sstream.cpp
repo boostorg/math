@@ -30,9 +30,9 @@ using std::endl;
 using std::locale;
 
 #include <sstream>
-  using std::stringstream;
-  using std::istringstream;
-  using std::ostringstream;
+using std::stringstream;
+using std::istringstream;
+using std::ostringstream;
 
 #include <limits>
 using std::numeric_limits;
@@ -41,70 +41,70 @@ using std::numeric_limits;
 
 int main()
 {
-//[nonfinite_facets_sstream_1
+  //[nonfinite_facets_sstream_1
   locale old_locale;
   locale tmp_locale(old_locale, new nonfinite_num_put<char>);
   locale new_locale(tmp_locale, new nonfinite_num_get<char>);
-//] [/nonfinite_facets_sstream_1]
+  //] [/nonfinite_facets_sstream_1]
 
   // Note that to add two facets,  nonfinite_num_put and nonfinite_num_get,
   // you have to add one at a time, using a temporary locale.
 
   {
     ostringstream oss;
-	  oss.imbue(new_locale);
+    oss.imbue(new_locale);
     double inf = numeric_limits<double>::infinity();
-	  oss << inf; // Write out.
+    oss << inf; // Write out.
     cout << "infinity output was " << oss.str() << endl;
-	  assert(oss.str() == "inf"); 
+    assert(oss.str() == "inf");
   }
-   {
+  {
     istringstream iss;
     iss.str("inf");
-	  iss.imbue(new_locale);
+    iss.imbue(new_locale);
     double inf;
-	  iss >> inf; // Read from "inf"
+    iss >> inf; // Read from "inf"
     cout << "Infinity input was " << iss.str() << endl;
-	  assert(inf == numeric_limits<double>::infinity()); 
+    assert(inf == numeric_limits<double>::infinity());
   }
 
   {
-//[nonfinite_facets_sstream_2
+    //[nonfinite_facets_sstream_2
     stringstream ss;
     ss.imbue(new_locale);
     double inf = numeric_limits<double>::infinity();
     ss << inf; // Write out.
     assert(ss.str() == "inf");
-        double r;
+    double r;
     ss >> r; // Read back in.
     assert(inf == r); // Confirms that the double values really are identical.
 
     cout << "infinity output was " << ss.str() << endl;
     cout << "infinity input was " << r << endl;
     // But the string representation of r displayed will be the native type
-    // because, when it was constructed, cout had NOT been imbued 
+    // because, when it was constructed, cout had NOT been imbued
     // with the new locale containing the nonfinite_numput facet.
     // So the cout output will be "1.#INF on MS platforms
     // and may be "inf" or other string representation on other platforms.
-   
-//] [/nonfinite_facets_sstream_2]
+
+    //] [/nonfinite_facets_sstream_2]
   }
 
   {
     stringstream ss;
-	  ss.imbue(new_locale);
+    ss.imbue(new_locale);
 
     double nan = numeric_limits<double>::quiet_NaN();
-	  ss << nan; // Write out.
+    ss << nan; // Write out.
     assert(ss.str() == "nan");
 
-	  double v;
-	  ss >> v; // Read back in.
+    double v;
+    ss >> v; // Read back in.
 
     cout << "NaN output was " << ss.str() << endl;
     cout << "NaN input was " << v << endl;
 
-	  // assert(nan == v); // Always fails because NaN == NaN fails!
+    // assert(nan == v); // Always fails because NaN == NaN fails!
     // assert(nan == numeric_limits<double>::quiet_NaN()); asserts!
 
     // And the string representation will be the native type
@@ -120,12 +120,12 @@ int main()
 /*
 //[nonfinite_facet_sstream_output
 
-  infinity output was inf
-  Infinity input was inf
-  infinity output was inf
-  infinity input was 1.#INF
-  NaN output was nan
-  NaN input was 1.#QNAN
+infinity output was inf
+Infinity input was inf
+infinity output was inf
+infinity input was 1.#INF
+NaN output was nan
+NaN input was 1.#QNAN
 
 //] [nonfinite_facet_sstream_output]
 */

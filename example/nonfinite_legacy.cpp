@@ -32,7 +32,7 @@ using std::endl;
 using std::locale;
 
 #include <sstream>
-  using std::stringstream;
+using std::stringstream;
 #include <limits>
 using std::numeric_limits;
 
@@ -40,39 +40,39 @@ using std::numeric_limits;
 
 int main()
 {
- 
+
   locale old_locale;
-	locale tmp_locale(old_locale, new nonfinite_num_put<char>(legacy));
-	locale new_locale(tmp_locale, new nonfinite_num_get<char>(legacy));
+  locale tmp_locale(old_locale, new nonfinite_num_put<char>(legacy));
+  locale new_locale(tmp_locale, new nonfinite_num_get<char>(legacy));
   // Note that to add two facets,  nonfinite_num_put and nonfinite_num_get,
   // you have to add one at a time, using a temporary locale.
 
   {
     stringstream ss;
-	  ss.imbue(new_locale);
+    ss.imbue(new_locale);
     double inf = numeric_limits<double>::infinity();
-	  ss << inf; // Write out.
-	  double r;
-	  ss >> r; // Read back in.
+    ss << inf; // Write out.
+    double r;
+    ss >> r; // Read back in.
 
     cout << "infinity output was " << inf << endl;
     cout << "infinity input was " << r << endl;
 
-	  assert(inf == r); 
+    assert(inf == r); 
   }
   {
     stringstream ss;
-	  ss.imbue(new_locale);
+    ss.imbue(new_locale);
 
     double nan = numeric_limits<double>::quiet_NaN();
-	  ss << nan; // Write out.
-	  double v;
-	  ss >> v; // Read back in.
+    ss << nan; // Write out.
+    double v;
+    ss >> v; // Read back in.
 
     cout << "NaN output was " << nan << endl;
     cout << "NaN input was " << v << endl;
 
-	  // assert(nan == v); // Always fails because NaN == NaN fails!
+    // assert(nan == v); // Always fails because NaN == NaN fails!
     // assert(nan == numeric_limits<double>::quiet_NaN()); asserts!
   }
 
@@ -82,10 +82,10 @@ int main()
 
 Output:
 
-  infinity output was 1.#INF
-  infinity input was 1.#INF
-  NaN output was 1.#QNAN
-  NaN input was 1.#QNAN
+infinity output was 1.#INF
+infinity input was 1.#INF
+NaN output was 1.#QNAN
+NaN input was 1.#QNAN
 
 */
 

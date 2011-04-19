@@ -64,7 +64,7 @@ using std::locale;
 int main ()
 {
   std::cout << "finite_num_facet with lexical_cast example." << std::endl;
-   
+
   // Example of using non_finite num_put and num_get facets with lexical_cast.
   locale old_locale;
   locale tmp_locale(old_locale, new nonfinite_num_put<char>);
@@ -74,7 +74,7 @@ int main ()
   // Create a new output locale (from the tmp locale), and add the input nonfinite_num_get facet.
 
   // Note that is necessary to do add get and put facets in two steps.
- 
+
   locale::global(new_locale); // Newly constructed streams
   // (including those streams inside lexical_cast)
   // now use new_locale with nonfinite facets.
@@ -118,10 +118,9 @@ int main ()
 Output:
 
   finite_num_facet with lexical_cast example.
-  Using C99_out_locale 
+  Using C99_out_locale
   +std::numeric_limits<double>::infinity() = inf
   -std::numeric_limits<double>::infinity() = -inf
   +std::numeric_limits<double>::quiet_NaN () = nan
-
 
 */

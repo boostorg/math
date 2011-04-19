@@ -38,20 +38,20 @@ int main()
   { // Try infinity.
     stringstream ss; // Both input and output.
     ss.imbue(default_locale); // Redundant, of course.
-    string infs; 
+    string infs;
     if(numeric_limits<double>::has_infinity)
     {  // Make sure infinity is specialised for type double.
       double inf = numeric_limits<double>::infinity();
       ss << inf; // Output infinity.
-      infs = ss.str();  // 
+      infs = ss.str();  //
     }
     else
     { // Need to provide a suitable string for infinity.
      infs =  "1.#INF"; // Might suit MSVC?
       ss << infs;
     }
- 	  double r;
-	  ss >> r; // Read back in.
+    double r;
+    ss >> r; // Read back in.
 
     cout << "infinity output was " << infs << endl; // "1.#INF"
     cout << "infinity input was " << r << endl; // "1"
@@ -60,20 +60,20 @@ int main()
     { // Try Quiet NaN
     stringstream ss; // Both input and output.
     ss.imbue(default_locale); // Redundant, of course.
-    string infs; 
+    string infs;
     if(numeric_limits<double>::has_quiet_NaN)
     {  // Make sure quiet NaN is specialised for type double.
       double qnan = numeric_limits<double>::quiet_NaN();
       ss << qnan; // Output quiet_NaN.
-      infs = ss.str();  // 
+      infs = ss.str();  //
     }
     else
     { // Need to provide a suitable string for quiet_NAN.
-     infs =  "1.#QNAN"; 
+     infs =  "1.#QNAN";
       ss << infs;
     }
- 	  double r;
-	  ss >> r; // Read back in.
+    double r;
+    ss >> r; // Read back in.
 
     cout << "quiet_NaN output was " << infs << endl; // "1.#QNAN"
     cout << "quiet_NaN input was " << r << endl; // "1#"
@@ -92,6 +92,6 @@ Output (MSVC Version 10.0):
   quiet_NaN output was 1.#QNAN
   quiet_NaN input was 1
 
- 
+
 */
 

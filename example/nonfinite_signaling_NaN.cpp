@@ -9,7 +9,7 @@
 \file
 \brief Tests of nonfinite signaling NaN loopback.
 
-\detail  nonfinite signaling NaN 
+\detail  nonfinite signaling NaN
 test outputs using nonfinite facets
 (output and input) and reads back in, and checks if loopback OK.
 
@@ -53,20 +53,20 @@ int main()
   { // Try Quiet NaN
     stringstream ss; // Both input and output.
     ss.imbue(default_locale); // Redundant, of course.
-    string infs; 
+    string infs;
     if(numeric_limits<double>::has_quiet_NaN)
     {  // Make sure quiet NaN is specialised for type double.
       double qnan = numeric_limits<double>::quiet_NaN();
       ss << qnan; // Output quiet_NaN.
-      infs = ss.str();  // 
+      infs = ss.str();  //
     }
     else
     { // Need to provide a suitable string for quiet NaN.
-     infs =  "1.#QNAN"; 
+     infs =  "1.#QNAN";
       ss << infs;
     }
- 	  double r;
-	  ss >> r; // Read back in.
+    double r;
+    ss >> r; // Read back in.
 
     cout << "quiet_NaN output was " << infs << endl; // "1.#QNAN"
     cout << "quiet_NaN input was " << r << endl; // "1"
@@ -75,20 +75,20 @@ int main()
   { // Try Signaling NaN
     stringstream ss; // Both input and output.
     ss.imbue(default_locale); // Redundant, of course.
-    string infs; 
+    string infs;
     if(numeric_limits<double>::has_signaling_NaN)
     {  // Make sure signaling NaN is specialised for type double.
       double qnan = numeric_limits<double>::signaling_NaN();
       ss << qnan; // Output signaling_NaN.
-      infs = ss.str();  // 
+      infs = ss.str();  //
     }
     else
     { // Need to provide a suitable string for signaling NaN.
-     infs =  "1.#SNAN"; 
+     infs =  "1.#SNAN";
       ss << infs;
     }
- 	  double r;
-	  ss >> r; // Read back in.
+    double r;
+    ss >> r; // Read back in.
 
     cout << "signaling_NaN output was " << infs << endl; // "1.#QNAN" (or "1.#SNAN"?)
     cout << "signaling_NaN input was " << r << endl; // "1"
@@ -99,39 +99,39 @@ int main()
   // Note that the legacy flag has no effect on the nonfinite_num_put output facet.
 
   cout << "Use legacy locale." << endl;
-  
+
   { // Try infinity.
     stringstream ss; // Both input and output.
     ss.imbue(legacy_locale);
-    string infs; 
+    string infs;
     if(numeric_limits<double>::has_infinity)
     {  // Make sure infinity is specialised for type double.
       double inf = numeric_limits<double>::infinity();
       ss << inf; // Output infinity.
-      infs = ss.str();  // 
+      infs = ss.str();  //
     }
     else
     { // Need to provide a suitable string for infinity.
-     infs =  "1.#INF"; 
+     infs =  "1.#INF";
       ss << infs;
     }
- 	  double r;
-	  ss >> r; // Read back in.
+    double r;
+    ss >> r; // Read back in.
 
     cout << "infinity output was " << infs << endl; // "1.#INF"
     cout << "infinity input was " << r << endl; // "1.#INF"
   }
 
   { // Try input of "1.#SNAN".
-	  //double inf = numeric_limits<double>::signaling_NaN(); // Assigns "1.#QNAN" on MSVC.
+    //double inf = numeric_limits<double>::signaling_NaN(); // Assigns "1.#QNAN" on MSVC.
     // So must use explicit string "1.#SNAN" instead.
     stringstream ss; // Both input and output.
     ss.imbue(legacy_locale);
     string s = "1.#SNAN";
 
-	  ss << s; // Write out.
-	  double r;
-  
+    ss << s; // Write out.
+    double r;
+
     ss >> r; // Read back in.
 
     cout << "SNAN output was " << s << endl; // "1.#SNAN"
@@ -142,9 +142,9 @@ int main()
     stringstream ss; // Both input and output.
     ss.imbue(legacy_locale);
     string s = "1.#IND";
-	  ss << s; // Write out.
-	  double r;
-	  ss >> r; // Read back in.
+    ss << s; // Write out.
+    double r;
+    ss >> r; // Read back in.
 
     cout << "IND output was " << s << endl; // "1.#IND"
     cout << "IND input was " << r << endl;  // "1.#QNAN"
