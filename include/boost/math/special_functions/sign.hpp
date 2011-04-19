@@ -128,7 +128,7 @@ template<class T> T (changesign)(T x)
    typedef typename traits::method method;
    typedef typename boost::is_floating_point<T>::type fp_tag;
 
-   return detail::changesign_impl(x, method());
+   return boost::math::detail::changesign_impl(x, method());
 }
 
 } // namespace math
