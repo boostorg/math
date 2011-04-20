@@ -159,8 +159,8 @@ int main ()
   // With the nonfinite_num_put and _get facets, the width of the output is constant.
 
   #ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
-  std::streamsize  max_digits10 = 2 + numeric_limits<double>::digits * 30103UL / 100000UL;
-  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined." << endl;
+  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined, so no max_digits10 available." << endl;
+  std::streamsize  max_digits10 = 2 + std::numeric_limits<double>::digits * 30103UL / 100000UL;
 #else
   // Can use new C++0X max_digits10 (the maximum potentially significant digits).
   std::streamsize  max_digits10 = std::numeric_limits<double>::max_digits10;
