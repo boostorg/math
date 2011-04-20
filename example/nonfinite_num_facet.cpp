@@ -9,15 +9,16 @@
  *
  * This simple program illustrates how to use the
  * `boost/math/nonfinite_num_facets.hpp' material from the original
- * Floating Point Utilities  by Johan Rade.
-
+ * Floating Point  Utilities contribution by Johan Rade.
+ * Floating Point Utility library has been accepted into Boost,
+ * but the utilities have been/will be incorporated into Boost.Math library.
  *
 \file
 
 \brief A fairly simple example of using non_finite_num facet for
 C99 standard output of infinity and NaN.
 
-\detail This program illustrates how to use the
+\detail  This program illustrates how to use the
  `boost/math/nonfinite_num_facets.hpp' material from the original
   Floating Point  Utilities contribution by Johan Rade.
   Floating Point Utility library has been accepted into Boost,
@@ -25,7 +26,7 @@ C99 standard output of infinity and NaN.
 
   Based on an example from Francois Mauger.
 
-  double and float variables are assigned ordinary finite values (pi),
+  Double and float variables are assigned ordinary finite values (pi),
   and nonfinite like infinity and NaN.
 
   These values are then output and read back in, and then redisplayed.
@@ -36,15 +37,28 @@ C99 standard output of infinity and NaN.
 using std::cout;
 using std::endl;
 
-//#include <sstream>
 #include <limits> // numeric_limits
+using std::numeric_limits;
 
 #include <boost/cstdint.hpp>
 
-// from Johan Rade Floating Point Utilities :
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
 
-static const char sep = ',';
+static const char sep = ','; // Separator of bracketed float and double values.
+
+// Use max_digits10 (or equivalent) to obtain 
+// all potentially significant decimal digits for the floating-point types.
+    
+#ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
+  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined, so no max_digits10 available." << endl;
+  std::streamsize  max_digits10_float = 2 + std::numeric_limits<float>::digits * 30103UL / 100000UL;
+  std::streamsize  max_digits10_double = 2 + std::numeric_limits<double>::digits * 30103UL / 100000UL;
+#else
+  // Can use new C++0X max_digits10 (the maximum potentially significant digits).
+  std::streamsize  max_digits10_float = std::numeric_limits<float>::max_digits10;
+  std::streamsize  max_digits10_double = std::numeric_limits<double>::max_digits10;
+#endif
+
 
 /* A class with a float and a double */
 struct foo
@@ -80,12 +94,11 @@ struct foo
     else a_out << a_title;
     a_out << " : " << std::endl;
     a_out << "|-- " << "fvalue = ";
-    // Use max_digits10 to obtain 
-    // all potentially significant decimal digits for the floating-point type.
-    a_out.precision (std::numeric_limits<float>::max_digits10);
+    
+    a_out.precision (max_digits10_float);
     a_out << fvalue << std::endl;
     a_out << "`-- " << "dvalue = ";
-    a_out.precision (std::numeric_limits<double>::max_digits10);
+    a_out.precision (max_digits10_double);
     a_out << dvalue << std::endl;
     return;
   }
@@ -101,15 +114,15 @@ struct foo
 
 std::ostream & operator<< (std::ostream & a_out, const foo & a_foo)
 { // Output bracketed FPs, for example "(3.1415927,3.1415926535897931)"
-  a_out.precision (std::numeric_limits<float>::max_digits10);
+  a_out.precision (max_digits10_float);
   a_out << "(" << a_foo.fvalue << sep ;
-  a_out.precision (std::numeric_limits<double>::max_digits10);
+  a_out.precision (max_digits10_double);
   a_out << a_foo.dvalue << ")";
   return a_out;
 }
 
 std::istream & operator>> (std::istream & a_in, foo & a_foo)
-{ // Input bracketed FPs, into a foo structure,
+{ // Input bracketed floating-point values into a foo structure,
   // for example from "(3.1415927,3.1415926535897931)"
   char c = 0;
   a_in.get (c);
@@ -157,7 +170,10 @@ int main ()
 {
   std::cout << "nonfinite_num_facet simple example." << std::endl;
 
-  std::locale the_default_locale (std::locale::classic ());
+  std::cout << "std::numeric_limits<float>::max_digits10 is " << max_digits10_float << endl;
+  std::cout << "std::numeric_limits<double>::max_digits10 is " << max_digits10_double << endl;
+
+   std::locale the_default_locale (std::locale::classic ());
 
   {
     std::cout << "Write to a string buffer (using default locale) :" << std::endl;
@@ -193,11 +209,11 @@ int main ()
     iss >> f0 >> f1 >> f2 >> f3;
     if (! iss)
     {
-       std::cout << "Input Format error !" << std::endl;
+       std::cerr << "Input Format error !" << std::endl;
     }
     else
     {
-      std::cout << "Input OK." << std::endl;
+      std::cerr << "Input OK." << std::endl;
       cout << "Display in default locale format " << endl;
       f0.print (std::cout, "f0");
       f1.print (std::cout, "f1");
@@ -217,8 +233,9 @@ int main ()
 
 Output:
 
- nonfinite_num_facet.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\nonfinite_num_facet.exe
-  nonfinite_num_facet simple example.
+nonfinite_num_facet simple example.
+  std::numeric_limits<float>::max_digits10 is 8
+  std::numeric_limits<double>::max_digits10 is 17
   Write to a string buffer (using default locale) :
   f0 : 
   |-- fvalue = 3.1415927
@@ -250,6 +267,5 @@ Output:
   `-- dvalue = 1.#QNAN
   Input done.
   End nonfinite_num_facet.cpp
-  Input OK.
 
 */
