@@ -47,7 +47,7 @@ for more detail.
 
 Returns a floating point number with a binary representation
 where the signbit is the opposite of the sign bit in /x/,
-and where the other bits are the same as in /x.
+and where the other bits are the same as in /x/.
 
 This function is widely available, but not specified in any standards.
 
