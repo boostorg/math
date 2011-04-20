@@ -38,11 +38,11 @@ To use these facets
   #include <boost\math\special_functions\nonfinite_num_facets.hpp>
 
 
-[h4 Introduction]
+[section:intro Introduction]
 
 [h5 The Problem]
 
-The C++98 standard does not specify how infinity and NaN are represented in text streams.
+The C++98 standard does not specify how ['infinity] and ['NaN] are represented in text streams.
 As a result, different platforms use different string representations.
 This can cause undefined behavior when text files are moved between different platforms.
 Some platforms cannot even input parse their own output!
@@ -189,7 +189,9 @@ corresponding to the integer value n.
 
 [warning This implementation does not (yet) provide output of, or access to, the NaN payload.]
 
-[h4 Reference]
+[endsect] [/section:intro Introduction]
+
+[section:reference Reference]
 
 [h5 The Facet `nonfinite_num_put`]
 
@@ -351,7 +353,10 @@ to parse a string that represents positive or negative infinity.
 
 Same as `trap_infinity`, but positive and negative NaN are trapped instead.
 
-[h3 Examples]
+[endsect] [/section:reference Reference]
+
+
+[section:examples Examples]
 
 [h5 Simple example with std::stringstreams]
 
@@ -481,13 +486,17 @@ A very basic example of using Boost.Archive is at
 A full demonstration of serialization by Francois Mauger is at
 [@../../../example/nonfinite_num_facet_serialization.cpp]
 
-[h4 Portability]
+[endsect] [/section:examples Examples]
+
+[section:portability Portability]
 
 This library uses the floating-point number classification and sign-bit from Boost.Math library,
 and should work on all platforms where that library works.
 See the portability information for that library.
 
-[h4 Design Rationale]
+[endsect] [/section:portability Portability]
+
+[section:rationale Design Rationale]
 
 * The flags are implemented as a const data member of the facet.
 Facets are reference counted, and locales can share facets.
@@ -505,6 +514,8 @@ the `trap_infinity` or `trap_nan` flag is set
 and an attempt is made to format infinity or NaN.
 It would be better if the facet set the fail bit of the stream.
 However, facets derived from `std::num_put` do not have access to the stream state.
+
+[endsect] [/section:rationale Design Rationale]
 
 [endsect] [/section:fp_facets Facets for Floating-Point Infinities and NaNs]
 
