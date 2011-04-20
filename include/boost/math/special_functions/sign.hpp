@@ -21,6 +21,8 @@ namespace boost{ namespace math{
 
 namespace detail {
 
+  // signbit
+
 #ifdef BOOST_MATH_USE_STD_FPCLASSIFY
     template<class T> 
     inline int signbit_impl(T x, native_tag const&)
@@ -62,6 +64,29 @@ namespace detail {
         return a & traits::sign ? 1 : 0;
     }
 
+    // Changesign
+
+#ifdef BOOST_MATH_USE_STD_FPCLASSIFY
+    template<class T> 
+    inline int changesign_impl(T x, native_tag const&)
+    {
+         return -x;
+    }
+#endif
+
+    template<class T>
+    inline T (changesign_impl)(T x, generic_tag<true> const&)
+    {
+        return -x;
+    }
+
+    template<class T>
+    inline T (changesign_impl)(T x, generic_tag<false> const&)
+    {
+        return -x;
+    }
+
+
     template<class T>
     inline T changesign_impl(T x, ieee_copy_all_bits_tag const&)
     {
@@ -84,18 +109,6 @@ namespace detail {
         a ^= traits::sign;
         traits::set_bits(x,a);
         return x;
-    }
-
-    template<class T>
-    inline T (changesign_impl)(T x, generic_tag<true> const&)
-    {
-        return -x;
-    }
-
-    template<class T>
-    inline T (changesign_impl)(T x, generic_tag<false> const&)
-    {
-        return -x;
     }
 
 
@@ -123,12 +136,12 @@ inline T copysign BOOST_NO_MACRO_EXPAND(const T& x, const T& y)
 }
 
 template<class T> T (changesign)(T x)
-{
+{ //!< \brief return unchanged binary pattern of x, except for change of sign bit. 
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
    typedef typename boost::is_floating_point<T>::type fp_tag;
 
-   return boost::math::detail::changesign_impl(x, method());
+   return detail::changesign_impl(x, method());
 }
 
 } // namespace math
