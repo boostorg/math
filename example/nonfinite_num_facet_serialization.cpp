@@ -45,7 +45,6 @@ static const char sep = ','; // Separator of bracketed float and double values.
 // all potentially significant decimal digits for the floating-point types.
     
 #ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
-  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined, so no max_digits10 available." << endl;
   std::streamsize  max_digits10_float = 2 + std::numeric_limits<float>::digits * 30103UL / 100000UL;
   std::streamsize  max_digits10_double = 2 + std::numeric_limits<double>::digits * 30103UL / 100000UL;
 #else
@@ -103,7 +102,7 @@ struct foo
 
   // Boost serialization :
   template <class Archive>
-  void serialize (Archive & ar, int version)
+  void serialize (Archive & ar, int /*version*/)
   {
     ar & BOOST_SERIALIZATION_NVP (fvalue);
     ar & BOOST_SERIALIZATION_NVP (dvalue);
@@ -174,7 +173,10 @@ int main (void)
   std::clog << std::endl
       << "Nonfinite_serialization.cpp' example program." << std::endl;
 
-  
+#ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
+  std::cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined, so no max_digits10 available either,"
+     "using our own version instead." << std::endl;
+#endif  
   std::cout << "std::numeric_limits<float>::max_digits10 is " << max_digits10_float << std::endl;
   std::cout << "std::numeric_limits<double>::max_digits10 is " << max_digits10_double << std::endl;
 
