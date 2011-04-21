@@ -27,7 +27,7 @@
 <a name="math_toolkit.utils.fp_facets.intro"></a><a class="link" href="intro.html" title="Introduction">Introduction</a>
 </h4></div></div></div>
 <a name="math_toolkit.utils.fp_facets.intro.the_problem"></a><h6>
-<a name="id1282879"></a>
+<a name="id1164304"></a>
           <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.the_problem">The Problem</a>
         </h6>
 <p>
@@ -51,7 +51,7 @@
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">inf</span> <span class="special">==</span> <span class="identifier">y</span><span class="special">);</span> <span class="comment">// Fails!
 </span></pre>
 <a name="math_toolkit.utils.fp_facets.intro.the_solution"></a><h6>
-<a name="id1283126"></a>
+<a name="id1164551"></a>
           <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.the_solution">The Solution</a>
         </h6>
 <p>
@@ -78,11 +78,22 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../../../doc/src/images/tip.png"></td>
 <th align="left">Tip</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td align="left" valign="top">
+<p>
             To add two facets, <code class="computeroutput"><span class="identifier">nonfinite_num_put</span></code>
             and <code class="computeroutput"><span class="identifier">nonfinite_num_get</span></code>,
-            you have to add one at a time, using a temporary locale.
-          </p></td></tr>
+            you may have to add one at a time, using a temporary locale.
+          </p>
+<p>
+            Or you can create a new locale in one step
+          </p>
+<p>
+            <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span> <span class="identifier">new_locale</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span><span class="special">(),</span> <span class="keyword">new</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">nonfinite_num_put</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;),</span> <span class="keyword">new</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">nonfinite_num_get</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;));</span></code>
+          </p>
+<p>
+            and, for example, use it to imbue an input and output stringstream.
+          </p>
+</td></tr>
 </table></div>
 <p>
           
@@ -108,7 +119,7 @@
 <p>
         </p>
 <a name="math_toolkit.utils.fp_facets.intro.c__0x_standard_for_output_of_infinity_and_nan"></a><h5>
-<a name="id1283606"></a>
+<a name="id1165183"></a>
           <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.c__0x_standard_for_output_of_infinity_and_nan">C++0X
           standard for output of infinity and NaN</a>
         </h5>
@@ -120,7 +131,7 @@
           portable.
         </p>
 <a name="math_toolkit.utils.fp_facets.intro.c99_standard_for_output_of_infinity_and_nan"></a><h5>
-<a name="id1283628"></a>
+<a name="id1165205"></a>
           <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.c99_standard_for_output_of_infinity_and_nan">C99
           standard for output of infinity and NaN</a>
         </h5>
@@ -210,7 +221,7 @@
           formats.
         </p>
 <a name="math_toolkit.utils.fp_facets.intro.signaling_nans"></a><h6>
-<a name="id1283774"></a>
+<a name="id1166466"></a>
           <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.signaling_nans">Signaling
           NaNs</a>
         </h6>

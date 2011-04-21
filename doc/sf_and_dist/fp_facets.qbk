@@ -71,7 +71,14 @@ The following test succeeds with MSVC.
 [nonfinite_facets_sstream_1]
 
 [tip To add two facets, `nonfinite_num_put` and `nonfinite_num_get`,
-you have to add one at a time, using a temporary locale.]
+you may have to add one at a time, using a temporary locale.
+
+Or you can create a new locale in one step
+
+`std::locale new_locale(std::locale(std::locale(std::locale(), new boost::math::nonfinite_num_put<char>), new boost::math::nonfinite_num_get<char>));`
+
+and, for example, use it to imbue an input and output stringstream.
+]
 
 [nonfinite_facets_sstream_2]
 
@@ -311,11 +318,12 @@ then the facet will recognize all the following string representations of `infin
 [[Negative NaN][-nan, -nan(...), -nanq, -nans, -qnan, -snan, -one#ind, - one#qnan, -one#snan]]
 ]
 
-The numbers can be of type `float`, `double` and `long double`.
-The facet is case-insensitive.
-An optional `+` sign can be used with the positive values.
-The dots in `nan(...)` stand for an arbitrary string.
-`one` stands for any string that `std::num_get` parses as the number `1.`.
+* The numbers can be of type `float`, `double` and `long double`.
+* The facet is case-insensitive.
+* An optional `+` sign can be used with the positive values.
+* The dots in `nan(...)` stand for an arbitrary string.
+* `one` stands for any string that `std::num_get` parses as the number `1`,
+typically "1.#INF", "1.QNAN" but also "000001.#INF"...
 
 The list includes a number of non-standard string representations of infinity and NaN 
 that are used by various existing implementations of the C++ standard library,

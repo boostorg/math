@@ -27,7 +27,7 @@
 <a name="math_toolkit.utils.fp_facets.reference"></a><a class="link" href="reference.html" title="Reference">Reference</a>
 </h4></div></div></div>
 <a name="math_toolkit.utils.fp_facets.reference.the_facet__code__phrase_role__identifier__nonfinite_num_put__phrase___code_"></a><h6>
-<a name="id1285372"></a>
+<a name="id1166792"></a>
           <a class="link" href="reference.html#math_toolkit.utils.fp_facets.reference.the_facet__code__phrase_role__identifier__nonfinite_num_put__phrase___code_">The
           Facet <code class="computeroutput"><span class="identifier">nonfinite_num_put</span></code></a>
         </h6>
@@ -138,7 +138,7 @@
           numbers is simply delegated to the normal <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">num_put</span></code>.
         </p>
 <a name="math_toolkit.utils.fp_facets.reference.facet__code__phrase_role__identifier__nonfinite_num_get__phrase___code_"></a><h6>
-<a name="id1285884"></a>
+<a name="id1167308"></a>
           <a class="link" href="reference.html#math_toolkit.utils.fp_facets.reference.facet__code__phrase_role__identifier__nonfinite_num_get__phrase___code_">Facet
           <code class="computeroutput"><span class="identifier">nonfinite_num_get</span></code></a>
         </h6>
@@ -254,7 +254,7 @@
           on a platform that lacks NaN, then the fail bit of the stream is set.
         </p>
 <a name="math_toolkit.utils.fp_facets.reference.flags"></a><h5>
-<a name="id1286381"></a>
+<a name="id1167807"></a>
           <a class="link" href="reference.html#math_toolkit.utils.fp_facets.reference.flags">Flags</a>
         </h5>
 <p>
@@ -284,7 +284,7 @@
           and live in the <code class="computeroutput"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span></code>.
         </p>
 <a name="math_toolkit.utils.fp_facets.reference.legacy"></a><h6>
-<a name="id1286510"></a>
+<a name="id1167937"></a>
           <a class="link" href="reference.html#math_toolkit.utils.fp_facets.reference.legacy">legacy</a>
         </h6>
 <p>
@@ -364,20 +364,35 @@
 </tr>
 </tbody>
 </table></div>
-<p>
-          The numbers can be of type <code class="computeroutput"><span class="keyword">float</span></code>,
-          <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">long</span>
-          <span class="keyword">double</span></code>. The facet is case-insensitive.
-          An optional <code class="computeroutput"><span class="special">+</span></code> sign can be
-          used with the positive values. The dots in <code class="computeroutput"><span class="identifier">nan</span><span class="special">(...)</span></code> stand for an arbitrary string. <code class="computeroutput"><span class="identifier">one</span></code> stands for any string that <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">num_get</span></code> parses as the number <code class="computeroutput"><span class="number">1.</span></code>.
-        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+              The numbers can be of type <code class="computeroutput"><span class="keyword">float</span></code>,
+              <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>.
+            </li>
+<li>
+              The facet is case-insensitive.
+            </li>
+<li>
+              An optional <code class="computeroutput"><span class="special">+</span></code> sign can
+              be used with the positive values.
+            </li>
+<li>
+              The dots in <code class="computeroutput"><span class="identifier">nan</span><span class="special">(...)</span></code>
+              stand for an arbitrary string.
+            </li>
+<li>
+              <code class="computeroutput"><span class="identifier">one</span></code> stands for any
+              string that <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">num_get</span></code> parses as the number <code class="computeroutput"><span class="number">1</span></code>, typically "1.#INF", "1.QNAN"
+              but also "000001.#INF"...
+            </li>
+</ul></div>
 <p>
           The list includes a number of non-standard string representations of infinity
           and NaN that are used by various existing implementations of the C++ standard
           library, and also string representations used by other programming languages.
         </p>
 <a name="math_toolkit.utils.fp_facets.reference.signed_zero"></a><h6>
-<a name="id1286748"></a>
+<a name="id1168217"></a>
           <a class="link" href="reference.html#math_toolkit.utils.fp_facets.reference.signed_zero">signed_zero</a>
         </h6>
 <p>
@@ -397,7 +412,7 @@
           as negative zero, as do most implementations of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">num_get</span></code>.
         </p>
 <a name="math_toolkit.utils.fp_facets.reference.trap_infinity"></a><h6>
-<a name="id1286840"></a>
+<a name="id1168307"></a>
           <a class="link" href="reference.html#math_toolkit.utils.fp_facets.reference.trap_infinity">trap_infinity</a>
         </h6>
 <p>
@@ -422,7 +437,7 @@
           (See Design Rationale below for a discussion of this inconsistency.)
         </p>
 <a name="math_toolkit.utils.fp_facets.reference.trap_nan"></a><h6>
-<a name="id1286953"></a>
+<a name="id1168419"></a>
           <a class="link" href="reference.html#math_toolkit.utils.fp_facets.reference.trap_nan">trap_nan</a>
         </h6>
 <p>
