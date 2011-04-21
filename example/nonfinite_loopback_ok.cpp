@@ -40,14 +40,20 @@ using std::numeric_limits;
 
 int main()
 {
-  locale old_locale; // Current global locale.
+  //locale old_locale; // Current global locale.
   // Create tmp_locale and store the output nonfinite_num_put facet in it.
-  locale tmp_locale(old_locale, new nonfinite_num_put<char>);
+  //locale tmp_locale(old_locale, new nonfinite_num_put<char>);
   // Create new_locale and store the input nonfinite_num_get facet in it.
-  locale new_locale(tmp_locale, new nonfinite_num_get<char>);
-  // Seems necessary to add one facet at a time, hence need a tmp_locale.
+  //locale new_locale(tmp_locale, new nonfinite_num_get<char>);
+  // Can only add one facet at a time, hence need a tmp_locale.
+  // Unless we write:
 
-  stringstream ss; // Both input and output.
+  std::locale new_locale(std::locale(std::locale(std::locale(),
+    new boost::math::nonfinite_num_put<char>),
+    new boost::math::nonfinite_num_get<char>));
+  
+  stringstream ss; // Both input and output, so need both get and put facets.
+  
   ss.imbue(new_locale);
 
   double inf = numeric_limits<double>::infinity();

@@ -28,6 +28,11 @@ using boost::math::legacy;
 #include <iostream>
 using std::cout;
 using std::endl;
+
+#include <iomanip>
+using std::setfill;
+using std::setw;
+
 #include <locale>
 using std::locale;
 
@@ -40,12 +45,10 @@ using std::numeric_limits;
 
 int main()
 {
-
-  locale old_locale;
-  locale tmp_locale(old_locale, new nonfinite_num_put<char>(legacy));
-  locale new_locale(tmp_locale, new nonfinite_num_get<char>(legacy));
-  // Note that to add two facets,  nonfinite_num_put and nonfinite_num_get,
-  // you have to add one at a time, using a temporary locale.
+  // Create a new locale with both the nonfinite facets.
+  std::locale new_locale(std::locale(std::locale(),
+    new boost::math::nonfinite_num_put<char>),
+    new boost::math::nonfinite_num_get<char>);
 
   {
     stringstream ss;
