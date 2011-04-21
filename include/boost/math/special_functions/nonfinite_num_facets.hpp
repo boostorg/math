@@ -43,12 +43,12 @@ namespace boost {
     const int signed_zero = 0x2; //!< put facet will distinguish between positive and negative zero.
     const int trap_infinity = 0x4; /*!< put facet will throw an exception of type std::ios_base::failure
        when an attempt is made to format positive or negative infinity.
-       get will set the fail bit of the stream when an attempt is made 
+       get will set the fail bit of the stream when an attempt is made
        to parse a string that represents positive or negative sign infinity.
     */
     const int trap_nan = 0x8; /*!< put facet will throw an exception of type std::ios_base::failure
        when an attempt is made to format positive or negative NaN.
-       get will set the fail bit of the stream when an attempt is made 
+       get will set the fail bit of the stream when an attempt is made
        to parse a string that represents positive or negative sign infinity.
        */
 
@@ -195,7 +195,7 @@ namespace boost {
       explicit nonfinite_num_get(int flags = 0) : flags_(flags)
       {}
 
-    protected:
+    protected:  // float, double and long double versions of do_get.
       virtual InputIterator do_get(
         InputIterator it, InputIterator end, std::ios_base& iosb,
         std::ios_base::iostate& state, float& val) const
@@ -276,7 +276,8 @@ namespace boost {
       } // void get_signed
 
       template<class ValType> void get_unsigned
-      ( // get an unsigned value into val
+      ( //! Get an unsigned floating-point value into val,
+        //! but checking for letters indicating non-finites.
         InputIterator& it, InputIterator end, std::ios_base& iosb,
         const std::ctype<CharType>& ct,
         std::ios_base::iostate& state, ValType& val
@@ -297,7 +298,7 @@ namespace boost {
           get_q(it, end, ct, state, val);
           break;
 
-        default:
+        default: // Got a normal floating-point value into val.
           it = std::num_get<CharType, InputIterator>::do_get(
             it, end, iosb, state, val);
           if((flags_ & legacy) && val == static_cast<ValType>(1)
@@ -346,7 +347,7 @@ namespace boost {
       } // void get_i
 
       template<class ValType> void get_n
-      ( // Get expected strings after 'n', "nan", "nanq", "nans", "nan(...)" 
+      ( // Get expected strings after 'n', "nan", "nanq", "nans", "nan(...)"
         InputIterator& it, InputIterator end, const std::ctype<CharType>& ct,
         std::ios_base::iostate& state, ValType& val
       ) const
@@ -384,7 +385,7 @@ namespace boost {
               return;
             }
             ++it;
-            break;  // "nan(...)" 
+            break;  // "nan(...)"
           }
 
         default:
@@ -500,7 +501,7 @@ namespace boost {
       //..........................................................................
 
       char peek_char
-      ( // Return next char (from input buffer).
+      ( //! \return next char in the input buffer, ensuring lowercase (but do not 'consume' char).
         InputIterator& it, InputIterator end,
         const std::ctype<CharType>& ct
       ) const
@@ -510,7 +511,9 @@ namespace boost {
       }
 
       bool match_string
-      ( // Match remaining chars to expected string (case insensitive).
+      ( //! Match remaining chars to expected string (case insensitive),
+        //! consuming chars that match OK.
+        //! \return true if matched expected string, else false.
         InputIterator& it, InputIterator end,
         const std::ctype<CharType>& ct,
         const char* s
@@ -519,14 +522,14 @@ namespace boost {
         while(it != end && *s && *s == ct.narrow(ct.tolower(*it), 0))
         {
           ++s;
-          ++it;
+          ++it; //
         }
         return !*s;
-      } //  char peek_char
+      } // bool match_string
 
     private:
       const int flags_;
-    }; // 
+    }; //
 
     //------------------------------------------------------------------------------
 
