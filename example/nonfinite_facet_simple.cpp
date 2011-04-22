@@ -46,6 +46,10 @@ using std::string;
 using std::istringstream;
 
 #include <limits>
+using std::numeric_limits;
+
+#include <locale>
+using std::locale;
 
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
 // from Johan Rade Floating Point Utilities.
@@ -75,7 +79,10 @@ int main ()
   std::locale C99_out_locale (default_locale, new boost::math::nonfinite_num_put<char>);
   // and imbue the cout stream with the new locale.
   cout.imbue (C99_out_locale);
-  
+
+  // Or for the same effect more concisely:
+  cout.imbue (locale(locale(), new boost::math::nonfinite_num_put<char>));
+
   // Output using the new locale
   cout << "Using C99_out_locale " << endl;
   cout << "+std::numeric_limits<double>::infinity() = " << plus_infinity << endl;
@@ -104,9 +111,10 @@ int main ()
   { // Now retry using C99 facets.
   // Create a new input locale and add the nonfinite_num_get facet.
   std::locale C99_in_locale (default_locale, new boost::math::nonfinite_num_get<char>);
-  // imbue the stream with the C99 input locale.
-      // Create an input stream which will provide "inf"
+
+  // Create an input stream which will provide "inf".
   std::istringstream iss (inf);
+  // Imbue the stream with the C99 input locale.
   iss.imbue (C99_in_locale);
 
   // Create a double ready to take the input,
