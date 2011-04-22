@@ -50,7 +50,7 @@ inline char_literal_helper make_literal_helper(char c, wchar_t wc)
     return char_literal_helper(c, wc);
 }
 
-inline string_literal_helper make_literal_helper(char* s, wchar_t* ws)
+inline string_literal_helper make_literal_helper(const char* s, const wchar_t* ws)
 {
     return string_literal_helper(s, ws);
 }

@@ -55,6 +55,8 @@ template<class CharType, class ValType> void signed_zero_test_impl()
 
     ValType a1 = static_cast<ValType>(0);
     ValType a2 = (changesign)(static_cast<ValType>(0));
+    BOOST_CHECK(!(signbit)(a1));
+    BOOST_CHECK((signbit)(a2));
 
     ss << a1 << ' ' << a2;
 

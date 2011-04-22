@@ -84,7 +84,7 @@ void test_spots(RealType /*T*/, const char* /*type_name*/)
       BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(1));
       BOOST_CHECK_EQUAL((boost::math::copysign)(c, a), RealType(1));
       // BOOST_CHECK_EQUAL((boost::math::changesign)(a), -a); // NaN comparison fails always!
-      BOOST_CHECK_EQUAL((boost::math::signbit)((boost::math::changesign)(a)), 1);
+      BOOST_CHECK((boost::math::signbit)((boost::math::changesign)(a)) != 0);
 
       a = -std::numeric_limits<RealType>::quiet_NaN();
       BOOST_CHECK((boost::math::signbit)(a) != 0);

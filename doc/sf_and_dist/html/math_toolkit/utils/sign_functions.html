@@ -28,7 +28,7 @@
       Functions</a>
 </h3></div></div></div>
 <a name="math_toolkit.utils.sign_functions.synopsis"></a><h5>
-<a name="id1162304"></a>
+<a name="id1257343"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.synopsis">Synopsis</a>
       </h5>
 <p>
@@ -55,7 +55,7 @@
 <span class="special">}}</span> <span class="comment">// namespaces
 </span></pre>
 <a name="math_toolkit.utils.sign_functions.description"></a><h5>
-<a name="id1162659"></a>
+<a name="id1257698"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.description">Description</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> 
@@ -65,6 +65,16 @@
         Returns a non-zero value if the sign bit is set in variable <span class="emphasis"><em>x</em></span>,
         otherwise <code class="computeroutput"><span class="number">0</span></code>.
       </p>
+<div class="important"><table border="0" summary="Important">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../../../../../../doc/src/images/important.png"></td>
+<th align="left">Important</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          The return value from this function is zero or <span class="emphasis"><em>not-zero</em></span>
+          and <span class="bold"><strong>not</strong></span> zero or one.
+        </p></td></tr>
+</table></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="keyword">int</span> <span class="identifier">sign</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">);</span>
 </pre>
@@ -109,7 +119,7 @@
         may be the only portable way to ensure that the sign bit is changed.
       </p>
 <a name="math_toolkit.utils.sign_functions.sign_bits"></a><h6>
-<a name="id1163174"></a>
+<a name="id1261019"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.sign_bits">Sign bits</a>
       </h6>
 <p>
@@ -130,7 +140,7 @@
         it may be necessary to explicitly specialize then for UDT type T.
       </p>
 <a name="math_toolkit.utils.sign_functions.examples"></a><h6>
-<a name="id1163210"></a>
+<a name="id1261055"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.examples">Examples</a>
       </h6>
 <pre class="programlisting"><span class="identifier">signbit</span><span class="special">(</span><span class="number">3.5</span><span class="special">)</span> <span class="identifier">is</span> <span class="identifier">zero</span> <span class="special">(</span><span class="keyword">or</span> <span class="keyword">false</span><span class="special">)</span>
@@ -143,7 +153,7 @@
 <span class="identifier">changesign</span><span class="special">(-</span><span class="number">1.8</span><span class="special">)</span> <span class="identifier">is</span> <span class="number">1.8</span>
 </pre>
 <a name="math_toolkit.utils.sign_functions.portability"></a><h6>
-<a name="id1163510"></a>
+<a name="id1261355"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.portability">Portability</a>
       </h6>
 <p>
