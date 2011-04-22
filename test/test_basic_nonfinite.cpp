@@ -1,4 +1,5 @@
 
+
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -80,6 +81,9 @@ void basic_test_finite()
 
 template<class CharType, class ValType> void basic_test_finite_impl()
 {
+    if((std::numeric_limits<ValType>::has_infinity == 0) || (std::numeric_limits<ValType>::infinity() == 0))
+       return;
+
     std::locale old_locale;
     std::locale tmp_locale(old_locale, new nonfinite_num_put<CharType>);
     std::locale new_locale(tmp_locale, new nonfinite_num_get<CharType>);
@@ -129,6 +133,9 @@ void basic_test_inf()
 
 template<class CharType, class ValType> void basic_test_inf_impl()
 {
+    if((std::numeric_limits<ValType>::has_infinity == 0) || (std::numeric_limits<ValType>::infinity() == 0))
+       return;
+
     std::locale old_locale;
     std::locale tmp_locale(old_locale, new nonfinite_num_put<CharType>);
     std::locale new_locale(tmp_locale, new nonfinite_num_get<CharType>);
@@ -138,6 +145,9 @@ template<class CharType, class ValType> void basic_test_inf_impl()
 
     ValType a1 = std::numeric_limits<ValType>::infinity();
     ValType a2 = -std::numeric_limits<ValType>::infinity();
+
+    BOOST_CHECK((boost::math::isinf)(a1));
+    BOOST_CHECK((boost::math::isinf)(a2));
 
     ss << a1 << ' ' << a2;
 
@@ -173,6 +183,9 @@ void basic_test_nan()
 
 template<class CharType, class ValType> void basic_test_nan_impl()
 {
+    if((std::numeric_limits<ValType>::has_quiet_NaN == 0) || (std::numeric_limits<ValType>::quiet_NaN() == 0))
+       return;
+
     std::locale old_locale;
     std::locale tmp_locale(old_locale, new nonfinite_num_put<CharType>);
     std::locale new_locale(tmp_locale, new nonfinite_num_get<CharType>);
@@ -181,10 +194,12 @@ template<class CharType, class ValType> void basic_test_nan_impl()
     ss.imbue(new_locale);
 
     ValType a1 = std::numeric_limits<ValType>::quiet_NaN();
-    ValType a2 = -std::numeric_limits<ValType>::quiet_NaN();
+    ValType a2 = (boost::math::changesign)(std::numeric_limits<ValType>::quiet_NaN());
     ValType a3 = std::numeric_limits<ValType>::signaling_NaN();
-    ValType a4 = -std::numeric_limits<ValType>::signaling_NaN();
+    ValType a4 = (boost::math::changesign)(std::numeric_limits<ValType>::signaling_NaN());
     ss << a1 << ' ' << a2 << ' ' << a3 << ' ' << a4;
+
+    BOOST_CHECK((boost::math::isnan)(a1) && (boost::math::isnan)(a2) && (boost::math::isnan)(a3) && (boost::math::isnan)(a4));
 
     std::basic_string<CharType> s = S_("nan -nan nan -nan");
     BOOST_CHECK(ss.str() == s);
@@ -226,6 +241,9 @@ void basic_test_format()
 
 template<class CharType, class ValType> void basic_test_format_impl()
 {
+    if((std::numeric_limits<ValType>::has_infinity == 0) || (std::numeric_limits<ValType>::infinity() == 0))
+       return;
+
     std::locale old_locale;
     std::locale tmp_locale(old_locale, new nonfinite_num_put<CharType>);
     std::locale new_locale(tmp_locale, new nonfinite_num_get<CharType>);
@@ -234,6 +252,8 @@ template<class CharType, class ValType> void basic_test_format_impl()
     ss.imbue(new_locale);
 
     ValType a = std::numeric_limits<ValType>::infinity();
+
+    BOOST_CHECK((boost::math::isinf)(a));
 
     ss << std::setw(6) << a; // Expect right justified in field of six, so 3 leading spaces.
     ss << '|';

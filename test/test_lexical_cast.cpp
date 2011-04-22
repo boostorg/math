@@ -1,3 +1,4 @@
+
 // Copyright (c) 2006 Johan Rade
 
 // Copyright (c) 2011 Paul A. Bristow incorporated Boost.Math
@@ -52,6 +53,11 @@ BOOST_AUTO_TEST_CASE(lexical_cast_test)
 
 template<class CharType, class ValType> void lexical_cast_test_impl()
 {
+    if((std::numeric_limits<ValType>::has_infinity == 0) || (std::numeric_limits<ValType>::infinity() == 0))
+       return;
+    if((std::numeric_limits<ValType>::has_quiet_NaN == 0) || (std::numeric_limits<ValType>::quiet_NaN() == 0))
+       return;
+
     std::locale old_locale;
     std::locale tmp_locale(old_locale,
         new nonfinite_num_put<CharType>(signed_zero));
@@ -66,8 +72,8 @@ template<class CharType, class ValType> void lexical_cast_test_impl()
     ValType a6 = (changesign)(static_cast<ValType>(0));
     ValType a7 = static_cast<ValType>(-57);
     ValType a8 = -std::numeric_limits<ValType>::infinity();
-    ValType a9 = -std::numeric_limits<ValType>::quiet_NaN();
-    ValType a10 = -std::numeric_limits<ValType>::signaling_NaN();
+    ValType a9 = (changesign)(std::numeric_limits<ValType>::quiet_NaN());
+    ValType a10 = (changesign)(std::numeric_limits<ValType>::signaling_NaN());
 
     std::basic_string<CharType> s1 = S_("0");
     std::basic_string<CharType> s2 = S_("13");
