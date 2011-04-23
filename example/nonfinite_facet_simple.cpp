@@ -19,7 +19,8 @@
 \brief A very simple example of using non_finite_num facet for
 C99 standard output of infinity and NaN.
 
-\detail This example shows how to create a C99 non-finite locale,
+\detail Provided infinity and nan are supported,
+this example shows how to create a C99 non-finite locale,
 and imbue input and output streams with the non_finite_num put and get facets.
 This allow output and input of infinity and NaN in a Standard portable way,
 This permits 'loop-back' of output back into input (and portably across different system too).
@@ -27,6 +28,10 @@ This is particularly useful when used with Boost.Seralization so that non-finite
 values in text and xml archives can be handled correctly and portably.
 
 */
+
+#ifdef _MSC_VER
+#  pragma warning (disable : 4127)  // conditional expression is constant.
+#endif
 
 #include <iostream>
 using std::cout;
@@ -57,6 +62,18 @@ using std::locale;
 int main ()
 {
   std::cout << "Nonfinite_num_facet very simple example." << std::endl;
+
+  if((std::numeric_limits<double>::has_infinity == 0) || (std::numeric_limits<double>::infinity() == 0))
+  {
+    std::cout << "Infinity not supported on this platform." << std::endl;
+    return 0;
+  }
+
+  if((std::numeric_limits<double>::has_quiet_NaN == 0) || (std::numeric_limits<double>::quiet_NaN() == 0))
+  {
+    std::cout << "NaN not supported on this platform." << std::endl;
+    return 0;
+  }
 
   std::locale default_locale (std::locale::classic ()); // Note the currrent (default C) locale.
 
