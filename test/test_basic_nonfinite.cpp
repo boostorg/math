@@ -1,17 +1,16 @@
-
-
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // Copyright (c) 2006 Johan Rade
 // Copyright (c) 2011 Paul A. Bristow comments
-
+// Copyright (c) 2011 John Maddock
 /*!
 \file
 \brief Basic tests of the nonfinite num facets.
 
-\detail Basic_test outputs using nonfinite_num_put facet
+\detail If has_infinity and has_nan, then
+basic_test outputs using nonfinite_num_put facet
 and reads back in using nonfinite_num_ facet,
 and checks loopback OK.
 
@@ -24,7 +23,7 @@ and checks that can input C99 infinity and NaN too.
 */
 
 #ifdef _MSC_VER
-#   pragma warning(disable : 4702)
+#   pragma warning(disable : 4702) // Unreachable code.
 #endif
 
 #include <iomanip>
@@ -46,7 +45,6 @@ namespace
 
 using namespace boost::math;
 using boost::math::signbit;
-//using boost::spirit::detail::changesign; // Temporary spirit version.
 using boost::math::changesign;
 using boost::math::isnan;
 
