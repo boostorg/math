@@ -6,7 +6,8 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifdef _MSC_VER
-#   pragma warning(disable : 4702)
+#   pragma warning(disable : 4702) // Unreachable code.
+#   pragma warning(disable : 4127) // expression is constant.
 #endif
 
 #define BOOST_TEST_MAIN
@@ -14,10 +15,12 @@
 #include <iomanip>
 #include <locale>
 #include <sstream>
+#include <limits>
+
 #include <boost/test/auto_unit_test.hpp>
+#include <boost/math/special_functions/nonfinite_num_facets.hpp>
 #include "almost_equal.ipp"
 #include "S_.ipp"
-#include <boost/math/special_functions/nonfinite_num_facets.hpp>
 
 namespace {
 
@@ -45,6 +48,14 @@ BOOST_AUTO_TEST_CASE(signed_zero_test)
 
 template<class CharType, class ValType> void signed_zero_test_impl()
 {
+
+  if (static_cast<CharType>(-1e-6f)/std::numeric_limits<CharType>::max() != -0)
+  { 
+    BOOST_MESSAGE("Signed zero is not supported on this platform.");
+    return;
+  }
+
+
     std::locale old_locale;
     std::locale tmp_locale(
         old_locale, new nonfinite_num_put<CharType>(signed_zero));
