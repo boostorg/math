@@ -1,12 +1,15 @@
 // Copyright (c) 2006 Johan Rade
+// Copyright (c) 2011 Paul A. Bristow - filename changes for boost-trunk.
 
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifdef _MSC_VER
-#   pragma warning(disable : 4511 4512 4702)
-#endif
+//#ifdef _MSC_VER
+//#   pragma warning(disable : 4511 4512 4702)
+//#endif
+
+#define BOOST_TEST_MAIN
 
 #include <limits>
 #include <locale>
@@ -17,15 +20,18 @@
 #include <boost/archive/text_woarchive.hpp>
 #include <boost/archive/codecvt_null.hpp>
 #include <boost/test/auto_unit_test.hpp>
-#include "../../../../boost/math/nonfinite_num_facets.hpp"
-#include "../../../../boost/math/signbit.hpp"
-#include "../../../../boost/math/fpclassify.hpp"
-#include "almost_equal.hpp"
+#include <boost/math/special_functions/nonfinite_num_facets.hpp>
+#include <boost/math/special_functions/sign.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
+//#include "../../../../boost/math/nonfinite_num_facets.hpp"
+//#include "../../../../boost/math/signbit.hpp"
+//#include "../../../../boost/math/fpclassify.hpp"
+#include "almost_equal.ipp"
 
 namespace {
 
-// the anonymous namespace resolves ambiguities on platforms
-// with fpclassify etc functions at global scope
+// The anonymous namespace resolves ambiguities on platforms
+// with fpclassify etc functions at global scope.
 
 using namespace boost::archive;
 
@@ -41,10 +47,10 @@ void archive_put_trap_test();
 void archive_get_trap_test();
 
 BOOST_AUTO_TEST_CASE(archive_test)
-{   
-    //archive_basic_test();
+{
+    archive_basic_test();
     archive_put_trap_test();
-    //archive_get_trap_test();
+   archive_get_trap_test();
 }
 
 //------------------------------------------------------------------------------
@@ -155,7 +161,7 @@ void archive_put_trap_test_impl()
         oa & a;
     }
     catch(std::exception&) {
-		ss.clear();
+    ss.clear();
         return;
     }
 

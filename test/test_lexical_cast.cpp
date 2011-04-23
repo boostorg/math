@@ -7,9 +7,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifdef _MSC_VER
-#   pragma warning(disable : 4127 4511 4512 4701 4702)
-#endif
+//#ifdef _MSC_VER
+//#   pragma warning(disable : 4127 4511 4512 4701 4702)
+//#endif
 
 #define BOOST_TEST_MAIN
 
