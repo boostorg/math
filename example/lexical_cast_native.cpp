@@ -60,6 +60,18 @@ using std::locale;
 int main ()
 {
   std::cout << "lexical_cast example (NOT using finite_num_facet)." << std::endl;
+    
+  if((std::numeric_limits<double>::has_infinity == false) || (std::numeric_limits<double>::infinity() == 0))
+  {
+    std::cout << "Infinity not supported on this platform." << std::endl;
+    return 0;
+  }
+
+  if((std::numeric_limits<double>::has_quiet_NaN == false) || (std::numeric_limits<double>::quiet_NaN() == 0))
+  {
+    std::cout << "NaN not supported on this platform." << std::endl;
+    return 0;
+  }
   
   // Some tests that are expected to fail on some platforms.
   // (But these tests are expected to pass using non_finite num_put and num_get facets).
