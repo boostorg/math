@@ -14,6 +14,7 @@
 #include <limits>
 #include <locale>
 #include <sstream>
+
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_wiarchive.hpp>
@@ -23,9 +24,7 @@
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
-//#include "../../../../boost/math/nonfinite_num_facets.hpp"
-//#include "../../../../boost/math/signbit.hpp"
-//#include "../../../../boost/math/fpclassify.hpp"
+
 #include "almost_equal.ipp"
 
 namespace {
@@ -50,7 +49,7 @@ BOOST_AUTO_TEST_CASE(archive_test)
 {
     archive_basic_test();
     archive_put_trap_test();
-   archive_get_trap_test();
+    archive_get_trap_test();
 }
 
 //------------------------------------------------------------------------------
@@ -75,6 +74,8 @@ void archive_basic_test()
 template<class CharType, class OArchiveType, class IArchiveType, class ValType>
 void archive_basic_test_impl()
 {
+    if((std::numeric_limits<ValType>::has_infinity == 0) || (std::numeric_limits<ValType>::infinity() == 0))
+      return;
     std::locale default_locale(std::locale::classic(),
         new boost::archive::codecvt_null<CharType>);
     std::locale tmp_locale(default_locale, new nonfinite_num_put<CharType>);
@@ -86,13 +87,19 @@ void archive_basic_test_impl()
     ValType a1 = static_cast<ValType>(0);
     ValType a2 = static_cast<ValType>(2307.35);
     ValType a3 = std::numeric_limits<ValType>::infinity();
+    BOOST_CHECK((boost::math::isinf)(a3));
     ValType a4 = std::numeric_limits<ValType>::quiet_NaN();
+    BOOST_CHECK((boost::math::isnan)(a4));
     ValType a5 = std::numeric_limits<ValType>::signaling_NaN();
+    BOOST_CHECK((boost::math::isnan)(a5));
     ValType a6 = (changesign)(static_cast<ValType>(0));
     ValType a7 = static_cast<ValType>(-57.13);
     ValType a8 = -std::numeric_limits<ValType>::infinity();
+    BOOST_CHECK((boost::math::isinf)(a8));
     ValType a9 = -std::numeric_limits<ValType>::quiet_NaN();
+    BOOST_CHECK((boost::math::isnan)(a9));
     ValType a10 = -std::numeric_limits<ValType>::signaling_NaN();
+    BOOST_CHECK((boost::math::isnan)(a10));
 
     {
         OArchiveType oa(ss, no_codecvt);
@@ -144,6 +151,9 @@ void archive_put_trap_test()
 template<class CharType, class OArchiveType, class IArchiveType, class ValType>
 void archive_put_trap_test_impl()
 {
+    if((std::numeric_limits<ValType>::has_infinity == 0) || (std::numeric_limits<ValType>::infinity() == 0))
+      return;
+
     std::locale default_locale(std::locale::classic(),
         new boost::archive::codecvt_null<CharType>);
     std::locale new_locale(default_locale,
@@ -190,6 +200,9 @@ void archive_get_trap_test()
 template<class CharType, class OArchiveType, class IArchiveType, class ValType>
 void archive_get_trap_test_impl()
 {
+    if((std::numeric_limits<ValType>::has_infinity == 0) || (std::numeric_limits<ValType>::infinity() == 0))
+     return;
+
     std::locale default_locale(std::locale::classic(),
         new boost::archive::codecvt_null<CharType>);
     std::locale tmp_locale(default_locale, new nonfinite_num_put<CharType>);
