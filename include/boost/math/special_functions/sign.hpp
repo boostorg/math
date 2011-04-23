@@ -120,7 +120,7 @@ inline int sign BOOST_NO_MACRO_EXPAND(const T& z)
    return (z == 0) ? 0 : (boost::math::signbit)(z) ? -1 : 1;
 }
 
-template<class T> T (changesign)(T x)
+template<class T> T (changesign)(const T& x)
 { //!< \brief return unchanged binary pattern of x, except for change of sign bit. 
    typedef typename detail::fp_traits<T>::sign_change_type traits;
    typedef typename traits::method method;
