@@ -28,9 +28,11 @@ values in text and xml archives can be handled correctly and portably.
 */
 
 
-#ifdef MSC_VER
+#ifdef _MSC_VER
 #  pragma warning (disable :4224)
+#   pragma warning(disable : 4127) // conditional expression is constant.
 #endif
+
 
 #include <boost/archive/text_oarchive.hpp>
 using boost::archive::text_oarchive;
@@ -95,6 +97,18 @@ The following code shows how to use `nonfinite_num_put` with a `text_oarchive`:
 int main()
 {
 
+  if((std::numeric_limits<double>::has_infinity == false) || (std::numeric_limits<double>::infinity() == 0))
+  {
+    std::cout << "Infinity not supported on this platform." << std::endl;
+    return 0;
+  }
+
+  if((std::numeric_limits<double>::has_quiet_NaN == false) || (std::numeric_limits<double>::quiet_NaN() == 0))
+  {
+    std::cout << "NaN not supported on this platform." << std::endl;
+    return 0;
+  }
+
   locale default_locale(locale::classic(), new boost::archive::codecvt_null<char>);
   // codecvt_null so the archive constructor will not imbue the stream with a new locale.
 
@@ -118,9 +132,6 @@ int main()
 If you use the trap_infinity and trap_nan flags with a serialization archive,
 then you must set the exception mask of the stream.
 Serialization archives do not check the stream state.
-
-
-u
 
 
 */

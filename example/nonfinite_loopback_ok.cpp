@@ -18,6 +18,7 @@ Expected to work portably on all platforms.
 
 #ifdef _MSC_VER
 #   pragma warning(disable : 4702)
+#   pragma warning(disable : 4127) // conditional expression is constant.
 #endif
 
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
@@ -40,6 +41,18 @@ using std::numeric_limits;
 
 int main()
 {
+
+  if((std::numeric_limits<double>::has_infinity == false) || (std::numeric_limits<double>::infinity() == 0))
+  {
+    std::cout << "Infinity not supported on this platform." << std::endl;
+    return 0;
+  }
+
+  if((std::numeric_limits<double>::has_quiet_NaN == false) || (std::numeric_limits<double>::quiet_NaN() == 0))
+  {
+    std::cout << "NaN not supported on this platform." << std::endl;
+    return 0;
+  }
   //locale old_locale; // Current global locale.
   // Create tmp_locale and store the output nonfinite_num_put facet in it.
   //locale tmp_locale(old_locale, new nonfinite_num_put<char>);

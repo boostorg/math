@@ -33,6 +33,10 @@ C99 standard output of infinity and NaN.
   
 */
 
+#ifdef _MSC_VER
+#   pragma warning(disable : 4127) // conditional expression is constant.
+#endif
+
 #include <iostream>
 #include <iomanip>
 using std::cout;
@@ -169,6 +173,18 @@ std::istream & operator>> (std::istream & a_in, foo & a_foo)
 int main ()
 {
   std::cout << "nonfinite_num_facet simple example." << std::endl;
+
+   if((std::numeric_limits<double>::has_infinity == false) || (std::numeric_limits<double>::infinity() == 0))
+  {
+    std::cout << "Infinity not supported on this platform." << std::endl;
+    return 0;
+  }
+
+  if((std::numeric_limits<double>::has_quiet_NaN == false) || (std::numeric_limits<double>::quiet_NaN() == 0))
+  {
+    std::cout << "NaN not supported on this platform." << std::endl;
+    return 0;
+  }
 
 #ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
   cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined, so no max_digits10 available either:"
