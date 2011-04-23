@@ -84,6 +84,8 @@ int main()
     cout << "quiet_NaN input was " << r << endl; // "1"
   }
 
+#if (!defined __BORLANDC__ && !defined __CODEGEARC__)
+  // These compilers trap when trying to create a signaling_NaN!
   { // Try Signaling NaN
     stringstream ss; // Both input and output.
     ss.imbue(default_locale); // Redundant, of course.
@@ -105,6 +107,7 @@ int main()
     cout << "signaling_NaN output was " << infs << endl; // "1.#QNAN" (or "1.#SNAN"?)
     cout << "signaling_NaN input was " << r << endl; // "1"
   }
+#endif // Not Borland or CodeGear.
 
   // Create legacy_locale and store the nonfinite_num_get facet (with legacy flag) in it.
   locale legacy_locale(default_locale, new nonfinite_num_get<char>(boost::math::legacy));
