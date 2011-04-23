@@ -46,6 +46,18 @@ using std::numeric_limits;
 
 int main()
 {
+    if((std::numeric_limits<double>::has_infinity == false) || (std::numeric_limits<double>::infinity() == 0))
+  {
+    std::cout << "Infinity not supported on this platform." << std::endl;
+    return 0;
+  }
+
+  if((std::numeric_limits<double>::has_quiet_NaN == false) || (std::numeric_limits<double>::quiet_NaN() == 0))
+  {
+    std::cout << "NaN not supported on this platform." << std::endl;
+    return 0;
+  }
+
   locale default_locale; // Current global locale.
   // Try to use the default locale first.
   // On MSVC this doesn't work.
