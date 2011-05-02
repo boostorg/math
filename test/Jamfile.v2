@@ -15,6 +15,7 @@ import pch ;
 
 local ntl-path = [ modules.peek : NTL_PATH ] ;
 local gmp_path = [ modules.peek : GMP_PATH ] ;
+local e_float_path = [ modules.peek : E_FLOAT_PATH ] ;
 
 project  
     : requirements 
@@ -52,6 +53,7 @@ project
       <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
       <include>$(ntl-path)/include
+      <include>$(e_float_path)
       <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx <include>$(gmp_path)/mpfrc++
     ;
 
@@ -798,6 +800,7 @@ run complex_test.cpp ../../test/build//boost_test_exec_monitor ;
 compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] ;
 compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] ;
 compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] ;
+compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] ;
 compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] ;
 
 build-project ../example ;

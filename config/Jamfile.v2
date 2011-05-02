@@ -8,6 +8,7 @@ import path ;
 
 local ntl-path = [ modules.peek : NTL_PATH ] ;
 local gmp_path = [ modules.peek : GMP_PATH ] ;
+local e_float_path = [ modules.peek : E_FLOAT_PATH ] ;
 
 obj has_long_double_support : has_long_double_support.cpp ;
 obj has_mpfr_class : has_mpfr_class.cpp :
@@ -19,6 +20,7 @@ obj has_gmpxx : has_gmpxx.cpp :
       <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx ;
 obj has_gcc_visibility : has_gcc_visibility.cpp :
       <toolset>gcc:<cxxflags>-fvisibility=hidden <toolset>gcc:<cxxflags>-Werror ;
+obj has_e_float : has_e_float.cpp : <include>$(e_float_path) ;
 
 explicit has_long_double_support ;
 explicit has_mpfr_class ;
@@ -26,4 +28,4 @@ explicit has_mpreal ;
 explicit has_ntl_rr ;
 explicit has_gmpxx ;
 explicit has_gcc_visibility ;
-
+explicit has_e_float ;
