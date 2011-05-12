@@ -84,6 +84,21 @@ There is a concept checking test program for mpfr support
 
 [endsect][/section:use_mpfr Using With MPFR / GMP - a High-Precision Floating-Point Library]
 
+[section:e_float e_float Support]
+
+This library can be used with [@http://calgo.acm.org/910.zip e_float (TOMS Algorithm 910)] via the header:
+
+   <boost/math/bindings/e_float.hpp>
+
+And the type `boost::math::ef::e_float`: this type is a thin wrapper class around ::e_float which provides the necessary
+syntactic sugar to make everything "just work".
+
+There is also a concept checking test program for e_float support
+[@../../../../../libs/math/test/e_float_concept_check.cpp here].
+
+
+[endsect]
+
 [section:concepts Conceptual Requirements for Real Number Types]
 
 The functions, and statistical distributions in this library can be used with
