@@ -10,12 +10,21 @@
 !exclude row_type size_type tag traits 
 !exclude a abs acos add asin atan atan2 b begin bracket ceil check clear
 !exclude cos cosh digits end exp fabs floor fmod frexp g if in log log10
-!exclude modf pow real result sin sinh sqrt swap tan tanh
+!exclude modf pow real result sin sinh sqrt swap tan tanh s f z 
+#
+# These next two are spuriously found as function names, take them out 
+# and re-add them as macros:
+#
+!exclude BOOST_MATH_INSTRUMENT_CODE BOOST_MATH_INSTRUMENT_VARIABLE
+BOOST_MATH_INSTRUMENT_VARIABLE "" "" macro_name
+BOOST_MATH_INSTRUMENT_CODE "" "" macro_name
 
 !rewrite-name "(?i)(?:A|The)\s+(.*)" "\1"
 !rewrite-name "Additional Implementation Notes" "Implementation Notes"
 !rewrite-name "(?i)Calculating(?:\s+the)?\s+(.*)" "\1"
 !rewrite-id math_toolkit\.dist\.stat_tut\.weg.* Examples
+
+
 
 
 
