@@ -846,7 +846,7 @@ template <class T>
 inline typename tools::promote_args<T>::type comp_ellint_2(T k)
 { return boost::math::tr1::comp_ellint_2(static_cast<typename tools::promote_args<T>::type> BOOST_PREVENT_MACRO_SUBSTITUTION(k)); }
 
-// [5.2.1.6]  BOOST_PREVENT_MACRO_SUBSTITUTION(complete) elliptic integral of the third kind:
+// [5.2.1.6]  (complete) elliptic integral of the third kind:
 inline float comp_ellint_3f(float k, float nu)
 { return boost::math::tr1::boost_comp_ellint_3f(k, nu); }
 inline double comp_ellint_3(double k, double nu)
