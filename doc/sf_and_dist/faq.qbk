@@ -76,6 +76,8 @@ Probably, thought not always, and not by too much:  our priority is accuracy.
 For most functions, making sure you have the latest compiler version with all optimisations switched on is the key to speed.
 For evaluations that require iteration, you may be able to gain a little more speed at the expense of accuracy.
 See detailed suggestions and results on __performance.
+# ['How do I handle infinity and NaNs portably?] [br]
+See __fp_facets for Facets for Floating-Point Infinities and NaNs.
 # ['Where are the pre-built libraries?] [br]
 Good news - you probably don't need any! - just #include <boost/math/distribution_you_want>.
 But in the unlikely event that you do, see __building.

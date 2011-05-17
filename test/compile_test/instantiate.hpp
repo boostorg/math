@@ -179,6 +179,10 @@ void instantiate(RealType)
    (boost::math::isnormal)(v1);
    (boost::math::isnan)(v1);
    (boost::math::isinf)(v1);
+   (boost::math::signbit)(v1);
+   (boost::math::copysign)(v1, v2);
+   (boost::math::changesign)(v1);
+   (boost::math::sign)(v1);
    boost::math::log1p(v1);
    boost::math::expm1(v1);
    boost::math::cbrt(v1);
@@ -298,11 +302,6 @@ void instantiate(RealType)
    boost::math::ibetac_invb(v1, v2, v3, pol);
    boost::math::gamma_p_derivative(v2, v3, pol);
    boost::math::ibeta_derivative(v1, v2, v3, pol);
-   (boost::math::fpclassify)(v1);
-   (boost::math::isfinite)(v1);
-   (boost::math::isnormal)(v1);
-   (boost::math::isnan)(v1);
-   (boost::math::isinf)(v1);
    boost::math::log1p(v1, pol);
    boost::math::expm1(v1, pol);
    boost::math::cbrt(v1, pol);
@@ -428,6 +427,10 @@ void instantiate(RealType)
    (test::isnormal)(v1);
    (test::isnan)(v1);
    (test::isinf)(v1);
+   (test::signbit)(v1);
+   (test::copysign)(v1, v2);
+   (test::changesign)(v1);
+   (test::sign)(v1);
    test::log1p(v1);
    test::expm1(v1);
    test::cbrt(v1);

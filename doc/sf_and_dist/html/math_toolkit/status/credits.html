@@ -53,7 +53,18 @@
         code.
       </p>
 <p>
-        Johan R&#229;de wrote the optimised floating point classification code.
+        Johan R&#229;de wrote the optimised floating-point classification and manipulation
+        code, and nonfinite facets to permit C99 output of infinities and NaNs. (nonfinite
+        facets were not added until Boost 1.47 but had been in use with Boost.Spirit).
+        This library was based on a suggestion from Robert Ramey, author of Boost.Serialization.
+        Paul A. Bristow expressed the need for better handling of <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2022.pdf" target="_top">Input
+        &amp; Output of NaN and infinity for the C++ Standard Library</a> and
+        suggested following the C99 format.
+      </p>
+<p>
+        H&#229;kan Ard&#246;, Boris Gubenko, John Maddock, Markus Sch&#246;pflin and Olivier Verdier
+        tested the floating-point library and Martin Bonner, Peter Dimov and John
+        Maddock provided valuable advice.
       </p>
 <p>
         Gautam Sewani coded the logistic distribution as part of a Google Summer

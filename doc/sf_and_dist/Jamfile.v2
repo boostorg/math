@@ -19,6 +19,7 @@ if --enable-index in  [ modules.peek : ARGV ]
         <format>html:<auto-index-internal>on
         <auto-index-script>$(here)/index.idx
         <auto-index-prefix>$(here)/../../../.. 
+        <auto-index-verbose>on
         <quickbook-define>enable_index 
         <format>pdf:<xsl:param>index.on.type=1 ;
 }
@@ -88,6 +89,7 @@ boostbook standalone
     ;
 
 install pdf-install : standalone : <location>. <install-type>PDF <name>math.pdf ;
+
 
 
 

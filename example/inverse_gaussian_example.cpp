@@ -8,7 +8,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // Example of using the Inverse Gaussian (or Inverse Normal) distribution.
-// The Wald Distribution is 
+// The Wald Distribution is
 
 
 // Note that this file contains Quickbook mark-up as well as code
@@ -72,22 +72,22 @@ int main()
       cout.precision(17); // std::numeric_limits<double>::max_digits10; for 64-bit doubles.
 
      // Traditional tables and values.
-     double step = 0.2; // in z 
+     double step = 0.2; // in z
       double range = 4; // min and max z = -range to +range.
       // Construct a (standard) inverse gaussian distribution s
-      inverse_gaussian w11(1, 1); 
+      inverse_gaussian w11(1, 1);
       // (default mean = units, and standard deviation = unity)
       cout << "(Standard) Inverse Gaussian distribution, mean = "<< w11.mean()
           << ", scale = " << w11.scale() << endl;
 
 /*` First the probability distribution function (pdf).
- */ 
+ */
       cout << "Probability distribution function (pdf) values" << endl;
       cout << "  z " "      pdf " << endl;
       cout.precision(5);
       for (double z = (numeric_limits<double>::min)(); z < range + step; z += step)
       {
-        cout << left << setprecision(3) << setw(6) << z << " " 
+        cout << left << setprecision(3) << setw(6) << z << " "
           << setprecision(precision) << setw(12) << pdf(w11, z) << endl;
       }
       cout.precision(6); // default
@@ -100,13 +100,13 @@ int main()
       cout << "  z " "      cdf " << endl;
       for (double z = (numeric_limits<double>::min)(); z < range + step; z += step)
       {
-        cout << left << setprecision(3) << setw(6) << z << " " 
+        cout << left << setprecision(3) << setw(6) << z << " "
           << setprecision(precision) << setw(12) << cdf(w11, z) << endl;
       }
       /*`giving the following table:
 [pre
-    z       pdf 
-  2.23e-308 -1.#IND     
+    z       pdf
+  2.23e-308 -1.#IND
   0.2    0.90052111680384117
   0.4    1.0055127039453111
   0.6    0.75123750098955733
@@ -127,9 +127,9 @@ int main()
   3.6    0.022840312999395804
   3.8    0.019196657941016954
   4      0.016189699458236451
-  Integral (area under the curve) from 0 up to z (cdf) 
-    z       cdf 
-  2.23e-308 0           
+  Integral (area under the curve) from 0 up to z (cdf)
+    z       cdf
+  2.23e-308 0
   0.2    0.063753567519976254
   0.4    0.2706136704424541
   0.6    0.44638391340412931
@@ -152,7 +152,7 @@ int main()
   4      0.97907636417888622
 ]
 
-/*`We can get the inverse, the quantile, percentile, percentage point, or critical value 
+/*`We can get the inverse, the quantile, percentile, percentage point, or critical value
 for a probability for a few probability from the above table, for z = 0.4, 1.0, 2.0:
 */
       cout << quantile(w11, 0.27061367044245421 ) << endl; // 0.4
@@ -174,7 +174,7 @@ for a probability for a few probability from the above table, for z = 0.4, 1.0, 
 
     // formatC(SuppDists::qinvGauss(0.3649755481729598, 1, 1), digits=17)  [1] "0.50000000969034875"
 
-           
+
 
   // formatC(SuppDists::dinvGauss(0.01, 1, 1), digits=17) [1] "2.0811768202028392e-19"
   // formatC(SuppDists::pinvGauss(0.01, 1, 1), digits=17) [1] "4.122313403318778e-23"
@@ -193,12 +193,12 @@ for a probability for a few probability from the above table, for z = 0.4, 1.0, 
   //double p = pdf(w11, x);
   //double c = cdf(w11, x); // cdf(1, 1, 1) = 0.66810200122317065
   //cout << "cdf(" << x << ", " << w11.mean() << ", "<< w11.scale() << ") = " << c << endl; // cdf(x, 1, 1) 0.27061367044245421
-  //cout << "pdf(" << x << ", " << w11.mean() << ", "<< w11.scale() << ") = " << p << endl; 
+  //cout << "pdf(" << x << ", " << w11.mean() << ", "<< w11.scale() << ") = " << p << endl;
   //double q = quantile(w11, c);
   //cout << "quantile(w11, " << c <<  ") = " << q << endl;
 
   //cout  << "quantile(w11, 4.122313403318778e-23) = "<< quantile(w11, 4.122313403318778e-23) << endl; // quantile
-  //cout << "quantile(w11, 4.8791443010851493e-219) = " << quantile(w11, 4.8791443010851493e-219) << endl; // quantile 
+  //cout << "quantile(w11, 4.8791443010851493e-219) = " << quantile(w11, 4.8791443010851493e-219) << endl; // quantile
 
   //double c1 = 1 - cdf(w11, x); //  1 - cdf(1, 1, 1) = 0.33189799877682935
   //cout << "1 - cdf(" << x << ", " << w11.mean() << ", " << w11.scale() << ") = " << c1 << endl; // cdf(x, 1, 1) 0.27061367044245421
@@ -210,7 +210,7 @@ for a probability for a few probability from the above table, for z = 0.4, 1.0, 
   //cout << "quantile(w11, " << c << ") = "<< quantile(w11, c) << endl; // quantile = 0.99999999999999978 == x = 1
   //cout << "quantile(w11, " << c << ") = "<< quantile(w11, 1 - c) << endl; // quantile complement. quantile(w11, 0.66810200122317065) = 0.46336593652340152
 //  cout << "quantile(complement(w11, " << c << ")) = " << quantile(complement(w11, c)) << endl; // quantile complement                = 0.46336593652340163
-  
+
   // cdf(1, 1, 1) = 0.66810200122317065
   // 1 - cdf(1, 1, 1) = 0.33189799877682935
   // cdf(complement(1, 1, 1)) = 0.33189799877682929
@@ -219,21 +219,21 @@ for a probability for a few probability from the above table, for z = 0.4, 1.0, 
   // 1 - quantile(w11, 0.66810200122317065) = 2.2204460492503131e-016
   // quantile(complement(w11, 0.33189799877682929)) = 0.99999999999999989
 
- 
+
   // qinvgauss(c, 1, 1) = 0.3999999999999998
   // SuppDists::qinvGauss(0.270613670442454, 1, 1) [1] 0.4
- 
+
 
   /*
-  double qs = pinvgaussU(c, 1, 1); // 
+  double qs = pinvgaussU(c, 1, 1); //
     cout << "qinvgaussU(c, 1, 1) = " << qs << endl; // qinvgaussU(c, 1, 1) = 0.86567442459240929
-    // > z=q - exp(c) * p [1] 0.8656744 qs 0.86567442459240929	double
+    // > z=q - exp(c) * p [1] 0.8656744 qs 0.86567442459240929 double
     // Is this the complement?
     cout << "qgamma(0.2, 0.5, 1) expect 0.0320923 = " << qgamma(0.2, 0.5, 1) << endl;
     // qgamma(0.2, 0.5, 1) expect 0.0320923 = 0.032092377333650807
 
-  
-  cout << "qinvgauss(pinvgauss(x, 1, 1) = " << q 
+
+  cout << "qinvgauss(pinvgauss(x, 1, 1) = " << q
   << ", diff = " << x - q << ", fraction = " << (x - q) /x << endl; // 0.5
 
  */   // > SuppDists::pinvGauss(0.02, 1,1)  [1] 4.139176e-12
@@ -241,15 +241,15 @@ for a probability for a few probability from the above table, for z = 0.4, 1.0, 
 
 
     // pinvGauss(1,1,1) = 0.668102  C++  == 0.66810200122317065
-  // qinvGauss(0.668102,1,1) = 1 
+  // qinvGauss(0.668102,1,1) = 1
 
    //  SuppDists::pinvGauss(0.3,1,1) = 0.1657266
   // cout << "qinvGauss(0.0040761113207110162, 1, 1) = " << qinvgauss(0.0040761113207110162, 1, 1) << endl;
   //cout << "quantile(s, 0.1657266) = " << quantile(s, 0.1657266) << endl; // expect 1.
 
-  //wald s12(2, 1); 
+  //wald s12(2, 1);
   //cout << "qinvGauss(0.3, 2, 1) = " << qinvgauss(0.3, 2, 1) << endl; // SuppDists::qinvGauss(0.3,2,1) == 0.58288065635052944
-  //// but actually get qinvGauss(0.3, 2, 1) = 0.58288064777632187  
+  //// but actually get qinvGauss(0.3, 2, 1) = 0.58288064777632187
   //cout  << "cdf(s12, 0.3) = " << cdf(s12, 0.3) << endl; //  cdf(s12, 0.3) = 0.10895339868447573
 
  // using boost::math::wald;
@@ -295,8 +295,8 @@ for a probability for a few probability from the above table, for z = 0.4, 1.0, 
     cout.precision(6); // Restore to default.
   } // try
   catch(const std::exception& e)
-  { // Always useful to include try & catch blocks because default policies 
-    // are to throw exceptions on arguments that cause errors like underflow, overflow. 
+  { // Always useful to include try & catch blocks because default policies
+    // are to throw exceptions on arguments that cause errors like underflow, overflow.
     // Lacking try & catch blocks, the program will abort without a message below,
     // which may give some helpful clues as to the cause of the exception.
     std::cout <<
@@ -309,14 +309,14 @@ for a probability for a few probability from the above table, for z = 0.4, 1.0, 
 /*
 
 Output is:
- 
+
 inverse_gaussian_example.cpp
   inverse_gaussian_example.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Debug\inverse_gaussian_example.exe
   Example: Inverse Gaussian Distribution.
   (Standard) Inverse Gaussian distribution, mean = 1, scale = 1
   Probability distribution function (pdf) values
-    z       pdf 
-  2.23e-308 -1.#IND     
+    z       pdf
+  2.23e-308 -1.#IND
   0.2    0.90052111680384117
   0.4    1.0055127039453111
   0.6    0.75123750098955733
@@ -337,9 +337,9 @@ inverse_gaussian_example.cpp
   3.6    0.022840312999395804
   3.8    0.019196657941016954
   4      0.016189699458236451
-  Integral (area under the curve) from 0 up to z (cdf) 
-    z       cdf 
-  2.23e-308 0           
+  Integral (area under the curve) from 0 up to z (cdf)
+    z       cdf
+  2.23e-308 0
   0.2    0.063753567519976254
   0.4    0.2706136704424541
   0.6    0.44638391340412931
@@ -377,33 +377,33 @@ inverse_gaussian_example.cpp
 > SuppDists::dinvGauss(0.3, 1, 1) [1] 1.072888
 > SuppDists::dinvGauss(0.1, 1, 1) [1] 0.2197948
 > SuppDists::dinvGauss(0.2, 1, 1) [1] 0.9005211
-> 
+>
 x = 0.3 [1, 1] 1.0728879234594337  // R SuppDists::dinvGauss(0.3, 1, 1) [1] 1.072888
 
 x = 1   [1, 1] 0.3989422804014327
 
 
- 0 "                NA"  
+ 0 "                NA"
  1 "0.3989422804014327"
- 2 "0.10984782236693059"   
+ 2 "0.10984782236693059"
  3 "0.039418357969819733"
  4 "0.016189699458236468"
- 5 "0.007204168934430732"  
- 6 "0.003379893528659049" 
+ 5 "0.007204168934430732"
+ 6 "0.003379893528659049"
  7 "0.0016462878258114036"
  8 "0.00082460931140859956"
  9 "0.00042207355643694234"
 10 "0.00021979480031862676"
 
 
-[1] "                NA"     " 0.690988298942671"     "0.11539974210409144"   
+[1] "                NA"     " 0.690988298942671"     "0.11539974210409144"
  [4] "0.01799698883772935"    "0.0029555399206496469"  "0.00050863023587406587"
  [7] "9.0761842931362914e-05" "1.6655279133132795e-05" "3.1243174913715429e-06"
 [10] "5.96530227727434e-07"   "1.1555606328299836e-07"
 
 
 matC(dinvGauss(0:10, 1, 3), digits=17)  df = 3
-[1] "                NA"     " 0.690988298942671"     "0.11539974210409144"   
+[1] "                NA"     " 0.690988298942671"     "0.11539974210409144"
  [4] "0.01799698883772935"    "0.0029555399206496469"  "0.00050863023587406587"
  [7] "9.0761842931362914e-05" "1.6655279133132795e-05" "3.1243174913715429e-06"
 [10] "5.96530227727434e-07"   "1.1555606328299836e-07"

@@ -22,8 +22,20 @@ Google Summer of Code project 2006.
 
 Bruno Lalande submitted the "compile time power of a runtime base" code.
 
-Johan R'''&#xE5;'''de wrote the optimised floating point classification
-code.
+Johan R'''&#xE5;'''de wrote the optimised floating-point classification
+and manipulation code, and nonfinite facets to permit C99 output of infinities and NaNs.
+(nonfinite facets were not added until Boost 1.47 but had been in use with Boost.Spirit).
+This library was based on a suggestion from Robert Ramey, author of Boost.Serialization.
+Paul A. Bristow expressed the need for better handling of 
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2022.pdf
+Input & Output of NaN and infinity for the C++ Standard Library]
+and suggested following the C99 format.
+
+H'''&#xE5;'''kan Ard'''&#xF6;''',
+Boris Gubenko, John Maddock,
+Markus Sch'''&#xF6;'''pflin
+and Olivier Verdier tested the floating-point library and 
+Martin Bonner, Peter Dimov and John Maddock provided valuable advice. 
 
 Gautam Sewani coded the logistic distribution as part of a Google Summer of Code project 2008.
 
