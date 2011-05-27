@@ -163,7 +163,7 @@ void test_spot(
       cdf(dist, cs), P, tol);
    try{
       BOOST_CHECK_CLOSE(
-         pdf(dist, cs), naive_pdf(dist.degrees_of_freedom(), ncp, cs), tol * 50);
+         pdf(dist, cs), naive_pdf(dist.degrees_of_freedom(), ncp, cs), tol * 150);
    }
    catch(const std::overflow_error&)
    {}

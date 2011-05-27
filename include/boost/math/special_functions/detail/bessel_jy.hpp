@@ -350,7 +350,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
         // define tag type that will dispatch to right limits:
         typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
 
-        T lim;
+        T lim, ratio;
         switch(kind)
         {
         case need_j:
@@ -388,15 +388,49 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
            T init = sqrt(tools::min_value<T>());
            prev = fv * s * init;
            current = s * init;
-           for (k = n; k > 0; k--)             // backward recurrence for J
+           if(v < max_factorial<T>::value)
            {
-               next = 2 * (u + k) * current / x - prev;
-               prev = current;
-               current = next;
+              for (k = n; k > 0; k--)             // backward recurrence for J
+              {
+                  next = 2 * (u + k) * current / x - prev;
+                  prev = current;
+                  current = next;
+              }
+              ratio = (s * init) / current;     // scaling ratio
+              // can also call CF1_jy() to get fu, not much difference in precision
+              fu = prev / current;
            }
-           T ratio = (s * init) / current;     // scaling ratio
-           // can also call CF1_jy() to get fu, not much difference in precision
-           fu = prev / current;
+           else
+           {
+              //
+              // When v is large we may get overflow in this calculation
+              // leading to NaN's and other nasty surprises:
+              //
+              bool over = false;
+              for (k = n; k > 0; k--)             // backward recurrence for J
+              {
+                  T t = 2 * (u + k) / x;
+                  if(tools::max_value<T>() / t < current)
+                  {
+                     over = true;
+                     break;
+                  }
+                  next = t * current - prev;
+                  prev = current;
+                  current = next;
+              }
+              if(!over)
+              {
+                 ratio = (s * init) / current;     // scaling ratio
+                 // can also call CF1_jy() to get fu, not much difference in precision
+                 fu = prev / current;
+              }
+              else
+              {
+                 ratio = 0;
+                 fu = 1;
+              }
+           }
            CF2_jy(u, x, &p, &q, pol);                  // continued fraction CF2_jy
            T t = u / x - fu;                   // t = J'/J
            gamma = (p - t) / q;

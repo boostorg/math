@@ -22,6 +22,62 @@
 
 namespace boost { namespace math { namespace detail{
 
+template <class T, class Policy>
+struct bessel_j_small_z_series_term
+{
+   typedef T result_type;
+
+   bessel_j_small_z_series_term(T v_, T x)
+      : N(0), v(v_)
+   {
+      BOOST_MATH_STD_USING
+      mult = x / 2;
+      mult *= -mult;
+      term = 1;
+   }
+   T operator()()
+   {
+      T r = term;
+      ++N;
+      term *= mult / (N * (N + v));
+      return r;
+   }
+private:
+   unsigned N;
+   T v;
+   T mult;
+   T term;
+};
+
+template <class T, class Policy>
+inline T bessel_j_small_z_series(T v, T x, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+   T prefix;
+   if(v < max_factorial<T>::value)
+   {
+      prefix = pow(x / 2, v) / boost::math::tgamma(v+1, pol);
+   }
+   else
+   {
+      prefix = v * log(x / 2) - boost::math::lgamma(v+1, pol);
+      prefix = exp(prefix);
+   }
+   if(0 == prefix)
+      return prefix;
+
+   bessel_j_small_z_series_term<T, Policy> s(v, x);
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+   T zero = 0;
+   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
+#else
+   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+#endif
+   policies::check_series_iterations("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
+   return prefix * result;
+}
+
 template <typename T, typename Policy>
 T bessel_jn(int n, T x, const Policy& pol)
 {
@@ -73,6 +129,10 @@ T bessel_jn(int n, T x, const Policy& pol)
             prev = current;
             current = value;
         }
+    }
+    else if(x < 1)
+    {
+       return factor * bessel_j_small_z_series(T(n), x, pol);
     }
     else                                    // backward recurrence
     {

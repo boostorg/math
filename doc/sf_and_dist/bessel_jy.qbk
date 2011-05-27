@@ -181,7 +181,7 @@ J.F. Hart et al, ['Computer Approximations], John Wiley & Sons, New York, 1968.
 These approximations are accurate to around 19 decimal digits: therefore
 these methods are not used when type T has more than 64 binary digits.
 
-When /x/ is small, J[sub x][space] is best computed directly from the series:
+When /x/ is small compared to /v/, J[sub v]x[space] is best computed directly from the series:
 
 [equation bessel2]
 
