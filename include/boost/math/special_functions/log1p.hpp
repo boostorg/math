@@ -99,7 +99,7 @@ T log1p_imp(T const & x, const Policy& pol, const mpl::int_<0>&)
    result_type zero = 0;
    result_type result = tools::sum_series(s, policies::get_epsilon<result_type, Policy>(), max_iter, zero);
 #endif
-   policies::check_series_iterations(function, max_iter, pol);
+   policies::check_series_iterations<T>(function, max_iter, pol);
    return result;
 }
 
@@ -452,7 +452,7 @@ inline typename tools::promote_args<T>::type
 #else
    T result = boost::math::tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter);
 #endif
-   policies::check_series_iterations(function, max_iter, pol);
+   policies::check_series_iterations<T>(function, max_iter, pol);
    return result;
 }
 

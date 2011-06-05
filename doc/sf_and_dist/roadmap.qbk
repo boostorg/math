@@ -1,5 +1,11 @@
 [template history[]
 
+[h4 Boost-1.48]
+
+* Added new series evaluation methods to the cyclic Bessel I, J, K and Y functions.
+Also taken great care to avoid spurious over and underflow of these functions.
+Fixes issue [@https://svn.boost.org/trac/boost/ticket/5560 #5560]
+
 [h4 Boost-1.47]
 
 * Added changesign function to sign.hpp to facilitate addition of nonfinite facets.

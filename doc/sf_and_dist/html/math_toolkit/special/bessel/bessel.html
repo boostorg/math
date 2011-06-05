@@ -28,7 +28,7 @@
         of the First and Second Kinds</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.bessel.bessel.synopsis"></a><h5>
-<a name="id1244783"></a>
+<a name="id1250831"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
@@ -44,7 +44,7 @@
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_neumann</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <a name="math_toolkit.special.bessel.bessel.description"></a><h5>
-<a name="id1245316"></a>
+<a name="id1251198"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.description">Description</a>
         </h5>
 <p>
@@ -105,7 +105,7 @@
           <span class="inlinemediaobject"><img src="../../../../graphs/cyl_neumann.png" align="middle"></span>
         </p>
 <a name="math_toolkit.special.bessel.bessel.testing"></a><h5>
-<a name="id1245595"></a>
+<a name="id1251478"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.testing">Testing</a>
         </h5>
 <p>
@@ -114,7 +114,7 @@
           (with all the special case handling removed).
         </p>
 <a name="math_toolkit.special.bessel.bessel.accuracy"></a><h5>
-<a name="id1245617"></a>
+<a name="id1251499"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -489,7 +489,7 @@
           were found.
         </p>
 <a name="math_toolkit.special.bessel.bessel.implementation"></a><h5>
-<a name="id1246346"></a>
+<a name="id1252194"></a>
           <a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.implementation">Implementation</a>
         </h5>
 <p>
@@ -555,6 +555,34 @@
 <p>
           These approximations are accurate to around 19 decimal digits: therefore
           these methods are not used when type T has more than 64 binary digits.
+        </p>
+<p>
+          When <span class="emphasis"><em>x</em></span> is smaller than machine epsilon then the following
+          approximations for Y<sub>0</sub>(x), Y<sub>1</sub>(x), Y<sub>2</sub>(x) and Y<sub>n</sub>(x) can be used (see: <a href="http://functions.wolfram.com/03.03.06.0037.01" target="_top">http://functions.wolfram.com/03.03.06.0037.01</a>,
+          <a href="http://functions.wolfram.com/03.03.06.0038.01" target="_top">http://functions.wolfram.com/03.03.06.0038.01</a>,
+          <a href="http://functions.wolfram.com/03.03.06.0039.01" target="_top">http://functions.wolfram.com/03.03.06.0039.01</a>
+          and <a href="http://functions.wolfram.com/03.03.06.0040.01" target="_top">http://functions.wolfram.com/03.03.06.0040.01</a>):
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/bessel_y0_small_z.png"></span>
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/bessel_y1_small_z.png"></span>
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/bessel_y2_small_z.png"></span>
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/bessel_yn_small_z.png"></span>
+        </p>
+<p>
+          When <span class="emphasis"><em>x</em></span> is small compared to <span class="emphasis"><em>v</em></span>
+          and <span class="emphasis"><em>v</em></span> is not an integer, then the following series
+          approximation can be used for Y<sub>v</sub>(x), this is also an area where other approximations
+          are often too slow to converge to be used (see <a href="http://functions.wolfram.com/03.03.06.0034.01" target="_top">http://functions.wolfram.com/03.03.06.0034.01</a>):
+        </p>
+<p>
+          <span class="inlinemediaobject"><img src="../../../../equations/bessel_yv_small_z.png"></span>
         </p>
 <p>
           When <span class="emphasis"><em>x</em></span> is small compared to <span class="emphasis"><em>v</em></span>,

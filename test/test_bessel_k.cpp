@@ -87,6 +87,13 @@ void expected_results()
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
+      ".*large.*",                   // test data group
+      ".*", 80, 50);                 // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
       ".*",                          // test data group
       ".*", 35, 15);                 // test function
    //
@@ -231,6 +238,14 @@ void test_bessel(T, const char* name)
         SC_(144793)/1024, SC_(200), SC_(9.11950412043225432171915100042647230802198254567007382956336e-68),
         SC_(-144793)/1024, SC_(50), SC_(1.30185229717525025165362673848737761549946548375142378172956e42),
     };
+    static const boost::array<boost::array<T, 3>, 5> kv_large_data = {
+        // Bug report https://svn.boost.org/trac/boost/ticket/5560:
+        SC_(-1), static_cast<T>(ldexp(0.5, -512)), SC_(2.68156158598851941991480499964116922549587316411847867554471e154),
+        SC_(1),  static_cast<T>(ldexp(0.5, -512)), SC_(2.68156158598851941991480499964116922549587316411847867554471e154),
+        SC_(-1.125), static_cast<T>(ldexp(0.5, -512)), SC_(5.53984048006472105611199242328122729730752165907526178753978e173),
+        SC_(1.125),  static_cast<T>(ldexp(0.5, -512)), SC_(5.53984048006472105611199242328122729730752165907526178753978e173),
+        SC_(0.5),  static_cast<T>(ldexp(0.5, -683)), SC_(1.12284149973980088540335945247019177715948513804063794284101e103),
+    };
     #undef SC_
 
     do_test_cyl_bessel_k(k0_data, name, "Bessel K0: Mathworld Data");
@@ -242,6 +257,8 @@ void test_bessel(T, const char* name)
     do_test_cyl_bessel_k_int(kn_data, name, "Bessel Kn: Mathworld Data (Integer Version)");
 
     do_test_cyl_bessel_k(kv_data, name, "Bessel Kv: Mathworld Data");
+    if(0 != static_cast<T>(ldexp(0.5, -512)))
+      do_test_cyl_bessel_k(kv_large_data, name, "Bessel Kv: Mathworld Data (large values)");
 
 #include "bessel_k_int_data.ipp"
     do_test_cyl_bessel_k(bessel_k_int_data, name, "Bessel Kn: Random Data");

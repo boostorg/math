@@ -74,7 +74,7 @@ inline T sph_bessel_j_small_z_series(unsigned v, T x, const Policy& pol)
 #else
    T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
 #endif
-   policies::check_series_iterations("boost::math::sph_bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
+   policies::check_series_iterations<T>("boost::math::sph_bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return result * sqrt(constants::pi<T>() / 4);
 }
 
@@ -216,7 +216,7 @@ inline T bessel_i_small_z_series(T v, T x, const Policy& pol)
 #else
    T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
 #endif
-   policies::check_series_iterations("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
+   policies::check_series_iterations<T>("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
    return prefix * result;
 }
 

@@ -506,7 +506,15 @@ void test_bessel(T, const char* name)
         SC_(1.5), SC_(8034)/1024, SC_(0.0339477646369710610146236955872928005087352629422508823945264),
     };
     do_test_cyl_bessel_j(jv_data, name, "Bessel J: Mathworld Data");
-
+    static const boost::array<boost::array<T, 3>, 4> jv_large_data = {
+        // Bug report https://svn.boost.org/trac/boost/ticket/5560:
+        SC_(-0.5), static_cast<T>(std::ldexp(0.5, -683)), SC_(7.14823099969225685526188875418476476336424046896822867989728e102),
+        SC_(256), SC_(512), SC_(0.00671672065717513246956991122723250578101154313313749938944675),
+        SC_(-256), SC_(8), SC_(1.46866142030022704638298523775638527553596432641223316232692e-353),
+        SC_(-2.5), SC_(4), SC_(-0.0145679476685218007666785535204236327832335803441449596297004),
+    };
+    if(jv_large_data[0][1] != 0)
+      do_test_cyl_bessel_j(jv_data, name, "Bessel J: Mathworld Data (large values)");
     #undef SC_
 
 #include "bessel_j_int_data.ipp"

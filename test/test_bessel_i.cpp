@@ -254,6 +254,14 @@ void test_bessel(T, const char* name)
         SC_(144794)/1024, SC_(200), SC_(2.23699739472246928794922868978337381373643889659337595319774e64),
         SC_(-144794)/1024, SC_(100), SC_(2066.27694672763190927440969155740243346136463461655104698748),
     };
+    static const boost::array<boost::array<T, 3>, 5> iv_large_data = {
+        // Bug report https://svn.boost.org/trac/boost/ticket/5560:
+        SC_(-1), static_cast<T>(ldexp(0.5, -512)), SC_(1.86458518280005168582274132886573345934411788365010172356788e-155),
+        SC_(1),  static_cast<T>(ldexp(0.5, -512)), SC_(1.86458518280005168582274132886573345934411788365010172356788e-155),
+        SC_(-1.125), static_cast<T>(ldexp(0.5, -512)), SC_(-1.34963720853101363690381585556234820027343435206156667634081e173),
+        SC_(1.125),  static_cast<T>(ldexp(0.5, -512)), SC_(8.02269390325932403421158766283366891170783955777638875887348e-175),
+        SC_(0.5), static_cast<T>(ldexp(0.5, -683)), SC_(8.90597649117647254543282704099383321071493400182381039079219e-104),
+    };
     #undef SC_
 
     do_test_cyl_bessel_i(i0_data, name, "Bessel I0: Mathworld Data");
@@ -270,6 +278,9 @@ void test_bessel(T, const char* name)
     do_test_cyl_bessel_i(bessel_i_int_data, name, "Bessel In: Random Data");
 #include "bessel_i_data.ipp"
     do_test_cyl_bessel_i(bessel_i_data, name, "Bessel Iv: Random Data");
+
+    if(0 != static_cast<T>(ldexp(0.5, -700)))
+      do_test_cyl_bessel_i(iv_large_data, name, "Bessel Iv: Mathworld Data (large values)");
 }
 
 int test_main(int, char* [])
