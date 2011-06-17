@@ -438,6 +438,7 @@ Now that you have the basics, the next section looks at some worked examples.
 [include distributions/normal_example.qbk]
 [/include distributions/inverse_gamma_example.qbk]
 [/include distributions/inverse_gaussian_example.qbk]
+[include distributions/inverse_chi_squared_eg.qbk]
 [include distributions/nc_chi_squared_example.qbk]
 [include distributions/error_handling_example.qbk]
 [include distributions/find_location_and_scale.qbk]
@@ -450,7 +451,7 @@ Now that you have the basics, the next section looks at some worked examples.
 [endsect] [/ section:stat_tut Statistical Distributions Tutorial]
 
 [/ dist_tutorial.qbk
-  Copyright 2006, 2010 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2010, 2011 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
