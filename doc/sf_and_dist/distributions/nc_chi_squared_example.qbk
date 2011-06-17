@@ -3,7 +3,7 @@
 (See also the reference documentation for the __non_central_chi_squared_distrib.)
 
 [section:nccs_power_eg Tables of the power function of the chi-squared test.]
-[/[chi super 2 failed to show the chi in pdf why??? (OK in html) so use words.]
+[/chi super 2 failed to show the chi in pdf why??? (OK in html) so use words.]
 
 [import ../../../example/nc_chi_sq_example.cpp]
 [nccs_eg]
@@ -18,4 +18,3 @@
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
-
