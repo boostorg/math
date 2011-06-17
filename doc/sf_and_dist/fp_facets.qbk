@@ -80,6 +80,12 @@ Or you can create a new locale in one step
 and, for example, use it to imbue an input and output stringstream.
 ]
 
+[tip To just change an input or output stream, you can concisely write
+`cout.imbue (std::locale(std::locale(), new boost::math::nonfinite_num_put<char>));`
+or
+`cin.imbue (std::locale(std::locale(), new boost::math::nonfinite_num_get<char>));`
+]
+
 [nonfinite_facets_sstream_2]
 
 [h4 C++0X standard for output of infinity and NaN]
