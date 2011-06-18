@@ -27,7 +27,7 @@
 <a name="math_toolkit.utils.fp_facets.intro"></a><a class="link" href="intro.html" title="Introduction">Introduction</a>
 </h4></div></div></div>
 <a name="math_toolkit.utils.fp_facets.intro.the_problem"></a><h6>
-<a name="id1287929"></a>
+<a name="id1156908"></a>
           <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.the_problem">The Problem</a>
         </h6>
 <p>
@@ -51,7 +51,7 @@
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">inf</span> <span class="special">==</span> <span class="identifier">y</span><span class="special">);</span> <span class="comment">// Fails!
 </span></pre>
 <a name="math_toolkit.utils.fp_facets.intro.the_solution"></a><h6>
-<a name="id1288176"></a>
+<a name="id1157156"></a>
           <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.the_solution">The Solution</a>
         </h6>
 <p>
@@ -95,6 +95,16 @@
           </p>
 </td></tr>
 </table></div>
+<div class="tip"><table border="0" summary="Tip">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../../../doc/src/images/tip.png"></td>
+<th align="left">Tip</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            To just change an input or output stream, you can concisely write <code class="computeroutput"><span class="identifier">cout</span><span class="special">.</span><span class="identifier">imbue</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span><span class="special">(),</span>
+            <span class="keyword">new</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">nonfinite_num_put</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;));</span></code> or <code class="computeroutput"><span class="identifier">cin</span><span class="special">.</span><span class="identifier">imbue</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">locale</span><span class="special">(),</span> <span class="keyword">new</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">nonfinite_num_get</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;));</span></code>
+          </p></td></tr>
+</table></div>
 <p>
           
 </p>
@@ -119,7 +129,7 @@
 <p>
         </p>
 <a name="math_toolkit.utils.fp_facets.intro.c__0x_standard_for_output_of_infinity_and_nan"></a><h5>
-<a name="id1291577"></a>
+<a name="id1157961"></a>
           <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.c__0x_standard_for_output_of_infinity_and_nan">C++0X
           standard for output of infinity and NaN</a>
         </h5>
@@ -131,7 +141,7 @@
           portable.
         </p>
 <a name="math_toolkit.utils.fp_facets.intro.c99_standard_for_output_of_infinity_and_nan"></a><h5>
-<a name="id1291598"></a>
+<a name="id1157982"></a>
           <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.c99_standard_for_output_of_infinity_and_nan">C99
           standard for output of infinity and NaN</a>
         </h5>
@@ -221,7 +231,7 @@
           formats.
         </p>
 <a name="math_toolkit.utils.fp_facets.intro.signaling_nans"></a><h6>
-<a name="id1291745"></a>
+<a name="id1158136"></a>
           <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.signaling_nans">Signaling
           NaNs</a>
         </h6>
