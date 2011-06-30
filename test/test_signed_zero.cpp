@@ -20,7 +20,7 @@
 #include <boost/test/auto_unit_test.hpp>
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
 #include "almost_equal.ipp"
-#include "S_.ipp"
+#include "s_.ipp"
 
 namespace {
 

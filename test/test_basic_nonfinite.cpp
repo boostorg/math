@@ -35,7 +35,7 @@ and checks that can input C99 infinity and NaN too.
 #include <boost/test/auto_unit_test.hpp>
 
 #include "almost_equal.ipp"
-#include "S_.ipp"
+#include "s_.ipp"
 
 #include <boost/math/special_functions/nonfinite_num_facets.hpp>
 
