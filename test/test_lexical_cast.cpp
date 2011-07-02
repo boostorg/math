@@ -23,7 +23,7 @@
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include "almost_equal.ipp"
-#include "S_.ipp"
+#include "s_.ipp"
 
 namespace {
 
