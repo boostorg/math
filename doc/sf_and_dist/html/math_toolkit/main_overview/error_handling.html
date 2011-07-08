@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Error Handling</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../main_overview.html" title="Overview">
 <link rel="prev" href="result_type.html" title="Calculation of the Type of the Result">
@@ -22,23 +22,23 @@
 <div class="spirit-nav">
 <a accesskey="p" href="result_type.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../main_overview.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="compilers_overview.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.main_overview.error_handling"></a><a class="link" href="error_handling.html" title="Error Handling">Error Handling</a>
 </h3></div></div></div>
 <a name="math_toolkit.main_overview.error_handling.quick_reference"></a><h5>
-<a name="id877626"></a>
+<a name="math_toolkit.main_overview.error_handling.quick_reference-heading"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.quick_reference">Quick
         Reference</a>
       </h5>
 <p>
         Handling of errors by this library is split into two orthogonal parts:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             What kind of error has been raised?
           </li>
-<li>
+<li class="listitem">
             What should be done when the error is raised?
           </li>
 </ul></div>
@@ -747,7 +747,7 @@
         <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">overflow_error</span><span class="special">;</span></code>.
       </p>
 <a name="math_toolkit.main_overview.error_handling.rationale"></a><h5>
-<a name="id880226"></a>
+<a name="math_toolkit.main_overview.error_handling.rationale-heading"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.rationale">Rationale</a>
       </h5>
 <p>
@@ -755,18 +755,18 @@
         the default behaviours were chosen based on feedback during the formal review
         of this library. It was felt that:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             Genuine errors should be flagged with exceptions rather than following
             C-compatible behaviour and setting <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>.
           </li>
-<li>
+<li class="listitem">
             Numeric underflow and denormalised results were not considered to be
             fatal errors in most cases, so it was felt that these should be ignored.
           </li>
 </ul></div>
 <a name="math_toolkit.main_overview.error_handling.finding_more_information"></a><h5>
-<a name="id880272"></a>
+<a name="math_toolkit.main_overview.error_handling.finding_more_information-heading"></a>
         <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling.finding_more_information">Finding
         More Information</a>
       </h5>
@@ -787,9 +787,9 @@
 <p>
         The various kind of errors are described in more detail below.
       </p>
-<a name="math_toolkit.main_overview.error_handling._anchor_id__domain_error____domain_errors"></a><h5>
-<a name="id880321"></a>
-        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__domain_error____domain_errors"><a name="domain_error"></a> Domain Errors</a>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__domain_error___domain_errors"></a><h5>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__domain_error___domain_errors-heading"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__domain_error___domain_errors"><a name="domain_error"></a>Domain Errors</a>
       </h5>
 <p>
         When a special function is passed an argument that is outside the range of
@@ -858,9 +858,9 @@
         <a href="../../../../../../format/index.html" target="_top">Boost.Format</a> documentation
         for more details.
       </p>
-<a name="math_toolkit.main_overview.error_handling._anchor_id__pole_error____evaluation_at_a_pole"></a><h5>
-<a name="id880576"></a>
-        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__pole_error____evaluation_at_a_pole"><a name="pole_error"></a> Evaluation at a pole</a>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__pole_error___evaluation_at_a_pole"></a><h5>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__pole_error___evaluation_at_a_pole-heading"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__pole_error___evaluation_at_a_pole"><a name="pole_error"></a>Evaluation at a pole</a>
       </h5>
 <p>
         When a special function is passed an argument that is at a pole without a
@@ -896,9 +896,9 @@
         <a href="../../../../../../format/index.html" target="_top">Boost.Format</a> documentation
         for more details.
       </p>
-<a name="math_toolkit.main_overview.error_handling._anchor_id__overflow_error____numeric_overflow"></a><h5>
-<a name="id880778"></a>
-        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__overflow_error____numeric_overflow"><a name="overflow_error"></a> Numeric Overflow</a>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__overflow_error___numeric_overflow"></a><h5>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__overflow_error___numeric_overflow-heading"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__overflow_error___numeric_overflow"><a name="overflow_error"></a>Numeric Overflow</a>
       </h5>
 <p>
         When the result of a special function is too large to fit in the argument
@@ -920,9 +920,9 @@
         In this situation if the type <code class="computeroutput"><span class="identifier">T</span></code>
         doesn't support infinities, the maximum value for the type is returned.
       </p>
-<a name="math_toolkit.main_overview.error_handling._anchor_id__underflow_error____numeric_underflow"></a><h5>
-<a name="id880960"></a>
-        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__underflow_error____numeric_underflow"><a name="underflow_error"></a> Numeric Underflow</a>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__underflow_error___numeric_underflow"></a><h5>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__underflow_error___numeric_underflow-heading"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__underflow_error___numeric_underflow"><a name="underflow_error"></a>Numeric Underflow</a>
       </h5>
 <p>
         If the result of a special function is known to be non-zero, but the calculated
@@ -942,9 +942,9 @@
         like <code class="computeroutput"><span class="identifier">throw_on_error</span></code>, throws
         an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
-<a name="math_toolkit.main_overview.error_handling._anchor_id__denorm_error____denormalisation_errors"></a><h5>
-<a name="id881102"></a>
-        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__denorm_error____denormalisation_errors"><a name="denorm_error"></a> Denormalisation Errors</a>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__denorm_error___denormalisation_errors"></a><h5>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__denorm_error___denormalisation_errors-heading"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__denorm_error___denormalisation_errors"><a name="denorm_error"></a>Denormalisation Errors</a>
       </h5>
 <p>
         If the result of a special function is a denormalised value <span class="emphasis"><em>z</em></span>
@@ -964,9 +964,9 @@
         with another policy, like <code class="computeroutput"><span class="identifier">throw_on_error</span></code>
         throws an <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">underflow_error</span></code> C++ exception.
       </p>
-<a name="math_toolkit.main_overview.error_handling._anchor_id__evaluation_error____evaluation_errors"></a><h5>
-<a name="id881811"></a>
-        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__evaluation_error____evaluation_errors"><a name="evaluation_error"></a> Evaluation Errors</a>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__evaluation_error___evaluation_errors"></a><h5>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__evaluation_error___evaluation_errors-heading"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__evaluation_error___evaluation_errors"><a name="evaluation_error"></a>Evaluation Errors</a>
       </h5>
 <p>
         When a special function calculates a result that is known to be erroneous,
@@ -1000,9 +1000,9 @@
         <a href="../../../../../../format/index.html" target="_top">Boost.Format</a> documentation
         for more details.
       </p>
-<a name="math_toolkit.main_overview.error_handling._anchor_id__indeterminate_result_error____indeterminate_result_errors"></a><h5>
-<a name="id882022"></a>
-        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__indeterminate_result_error____indeterminate_result_errors"><a name="indeterminate_result_error"></a> Indeterminate Result Errors</a>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__indeterminate_result_error___indeterminate_result_errors"></a><h5>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__indeterminate_result_error___indeterminate_result_errors-heading"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__indeterminate_result_error___indeterminate_result_errors"><a name="indeterminate_result_error"></a>Indeterminate Result Errors</a>
       </h5>
 <p>
         When the result of a special function is indeterminate for the value that
@@ -1028,9 +1028,9 @@
         for what the result should be: for example the C99 standard specifies that
         the result of 0<sup>0</sup> is 1, even though the result is actually mathematically indeterminate.
       </p>
-<a name="math_toolkit.main_overview.error_handling._anchor_id__rounding_error____rounding_errors"></a><h5>
-<a name="id882183"></a>
-        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__rounding_error____rounding_errors"><a name="rounding_error"></a> Rounding Errors</a>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__rounding_error___rounding_errors"></a><h5>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__rounding_error___rounding_errors-heading"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__rounding_error___rounding_errors"><a name="rounding_error"></a>Rounding Errors</a>
       </h5>
 <p>
         When one of the rounding functions <a class="link" href="../utils/rounding/round.html" title="Rounding Functions">round</a>,
@@ -1067,9 +1067,9 @@
         <a href="../../../../../../format/index.html" target="_top">Boost.Format</a> documentation
         for more details.
       </p>
-<a name="math_toolkit.main_overview.error_handling._anchor_id__checked_narrowing_cast____errors_from_typecasts"></a><h5>
-<a name="id882409"></a>
-        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__checked_narrowing_cast____errors_from_typecasts"><a name="checked_narrowing_cast"></a> Errors from typecasts</a>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__checked_narrowing_cast___errors_from_typecasts"></a><h5>
+<a name="math_toolkit.main_overview.error_handling._anchor_id__checked_narrowing_cast___errors_from_typecasts-heading"></a>
+        <a class="link" href="error_handling.html#math_toolkit.main_overview.error_handling._anchor_id__checked_narrowing_cast___errors_from_typecasts"><a name="checked_narrowing_cast"></a>Errors from typecasts</a>
       </h5>
 <p>
         Many special functions evaluate their results at a higher precision than
@@ -1090,9 +1090,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
-      Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
+      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -498,23 +498,12 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [endsect] [/section:status Status and Roadmap]
 
-[? enable_index
-'''
-  <index type="function_name">
-  <title>Function Index</title>
-  </index>
-  <index type="class_name">
-  <title>Class Index</title>
-  </index>
-  <index type="typedef_name">
-  <title>Typedef Index</title>
-  </index>
-  <index type="macro_name">
-  <title>Macro Index</title>
-  </index>
-  <index/>
-'''
-]
+[include ../../../../tools/auto_index/include/auto_index_helpers.qbk]
+[named_index function_name Function Index]
+[named_index class_name Class Index]
+[named_index typedef_name Typedef Index]
+[named_index macro_name Macro Index]
+[index]
 
 [/ math.qbk
   Copyright 2008, 2010 John Maddock and Paul A. Bristow.
@@ -522,4 +511,5 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 

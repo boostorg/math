@@ -4,29 +4,11 @@
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 using quickbook ;
+using auto-index ;
+import modules ;
 
 path-constant images_location : html ;
 path-constant here : . ;
-
-import modules ;
-
-if --enable-index in  [ modules.peek : ARGV ]
-{
-   ECHO "Building the Math docs with automatic index generation enabled." ;
-   using auto-index ;
-   project : requirements
-        <auto-index>on <format>pdf:<auto-index-internal>off
-        <format>html:<auto-index-internal>on
-        <auto-index-script>$(here)/index.idx
-        <auto-index-prefix>$(here)/../../../.. 
-        <auto-index-verbose>on
-        <quickbook-define>enable_index 
-        <format>pdf:<xsl:param>index.on.type=1 ;
-}
-else
-{
-   ECHO "Building the Math docs with automatic index generation disabled.  Try building with --enable-index." ;
-}
 
 xml math : math.qbk ;
 boostbook standalone
@@ -86,9 +68,19 @@ boostbook standalone
         <format>pdf:<xsl:param>img.src.path=$(images_location)/
         <format>pdf:<xsl:param>draft.mode="no"
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/math/doc/sf_and_dist/html
+        <auto-index>on <format>pdf:<auto-index-internal>off
+        <format>html:<auto-index-internal>on
+        <auto-index-script>$(here)/index.idx
+        <auto-index-prefix>$(here)/../../../.. 
+        <auto-index-verbose>on
+        <quickbook-define>enable_index 
+        <format>pdf:<xsl:param>index.on.type=1
     ;
 
 install pdf-install : standalone : <location>. <install-type>PDF <name>math.pdf ;
+
+
+
 
 
 
