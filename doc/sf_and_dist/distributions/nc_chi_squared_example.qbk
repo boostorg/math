@@ -2,13 +2,13 @@
 
 (See also the reference documentation for the __non_central_chi_squared_distrib.)
 
-[section:nccs_power_eg Tables of the power function of the chi-squared test.]
+[section:nccs_power_eg Tables of the power function of the chi[super 2] test.]
 [/chi super 2 failed to show the chi in pdf why??? (OK in html) so use words.]
 
 [import ../../../example/nc_chi_sq_example.cpp]
 [nccs_eg]
 
-[endsect] [/nccs_power_eg Tables of the power function of the [chi][super 2] test.]
+[endsect] [/nccs_power_eg Tables of the power function of the chi-squared [chi][super 2] test.]
 
 [endsect] [/section:nccs_eg Non Central Chi Squared Example]
 
