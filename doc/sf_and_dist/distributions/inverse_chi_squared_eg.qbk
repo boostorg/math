@@ -1,7 +1,6 @@
 
 [section:inverse_chi_squared_eg Inverse Chi-Squared Distribution Bayes Example]
 
-
 [import ../../../example/inverse_chi_squared_bayes_eg.cpp]
 [inverse_chi_squared_bayes_eg_1]
 [inverse_chi_squared_bayes_eg_output_1]
@@ -11,6 +10,8 @@
 [inverse_chi_squared_bayes_eg_output_3]
 [inverse_chi_squared_bayes_eg_4]
 [inverse_chi_squared_bayes_eg_output_4]
+
+[inverse_chi_squared_bayes_eg_5]
 
 A full sample output is:
 [inverse_chi_squared_bayes_eg_output]
