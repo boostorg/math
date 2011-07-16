@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Some Miscellaneous Examples of the Normal (Gaussian) Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../normal_example.html" title="Normal Distribution Examples">
 <link rel="prev" href="../normal_example.html" title="Normal Distribution Examples">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="../normal_example.html"><img src="../../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../normal_example.html"><img src="../../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../../index.html"><img src="../../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../inverse_chi_squared_eg.html"><img src="../../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
 <a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc"></a><a class="link" href="normal_misc.html" title="Some Miscellaneous Examples of the Normal (Gaussian) Distribution">Some
             Miscellaneous Examples of the Normal (Gaussian) Distribution</a>
@@ -32,7 +32,7 @@
               illustrates their use.
             </p>
 <a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.traditional_tables"></a><h5>
-<a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.traditional_tables-heading"></a>
+<a name="id971264"></a>
               <a class="link" href="normal_misc.html#math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.traditional_tables">Traditional
               Tables</a>
             </h5>
@@ -43,9 +43,9 @@
 <p>
               
 </p>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for normal_distribution</span>
-  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.</span>
-
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for normal_distribution
+</span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.
+</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
   <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">left</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">showpoint</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">noshowpoint</span><span class="special">;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iomanip</span><span class="special">&gt;</span>
@@ -68,17 +68,17 @@
 <p>
               
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">step</span> <span class="special">=</span> <span class="number">1.</span><span class="special">;</span> <span class="comment">// in z </span>
-<span class="keyword">double</span> <span class="identifier">range</span> <span class="special">=</span> <span class="number">4</span><span class="special">;</span> <span class="comment">// min and max z = -range to +range.</span>
-<span class="keyword">int</span> <span class="identifier">precision</span> <span class="special">=</span> <span class="number">17</span><span class="special">;</span> <span class="comment">// traditional tables are only computed to much lower precision.</span>
-<span class="comment">// but std::numeric_limits&lt;double&gt;::max_digits10; on new Standard Libraries gives</span>
-<span class="comment">// 17, the maximum number of digits that can possibly be significant.</span>
-<span class="comment">// std::numeric_limits&lt;double&gt;::digits10; == 15 is number of guaranteed digits,</span>
-<span class="comment">// the other two digits being 'noisy'.</span>
-
-<span class="comment">// Construct a standard normal distribution s</span>
-  <span class="identifier">normal</span> <span class="identifier">s</span><span class="special">;</span> <span class="comment">// (default mean = zero, and standard deviation = unity)</span>
-  <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Standard normal distribution, mean = "</span><span class="special">&lt;&lt;</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">step</span> <span class="special">=</span> <span class="number">1.</span><span class="special">;</span> <span class="comment">// in z 
+</span><span class="keyword">double</span> <span class="identifier">range</span> <span class="special">=</span> <span class="number">4</span><span class="special">;</span> <span class="comment">// min and max z = -range to +range.
+</span><span class="keyword">int</span> <span class="identifier">precision</span> <span class="special">=</span> <span class="number">17</span><span class="special">;</span> <span class="comment">// traditional tables are only computed to much lower precision.
+</span><span class="comment">// but std::numeric_limits&lt;double&gt;::max_digits10; on new Standard Libraries gives
+</span><span class="comment">// 17, the maximum number of digits that can possibly be significant.
+</span><span class="comment">// std::numeric_limits&lt;double&gt;::digits10; == 15 is number of guaranteed digits,
+</span><span class="comment">// the other two digits being 'noisy'.
+</span>
+<span class="comment">// Construct a standard normal distribution s
+</span>  <span class="identifier">normal</span> <span class="identifier">s</span><span class="special">;</span> <span class="comment">// (default mean = zero, and standard deviation = unity)
+</span>  <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Standard normal distribution, mean = "</span><span class="special">&lt;&lt;</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span>
     <span class="special">&lt;&lt;</span> <span class="string">", standard deviation = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
             </p>
@@ -106,8 +106,8 @@
 <p>
               
 </p>
-<pre class="programlisting"><span class="comment">// For a standard normal distribution </span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Standard normal mean = "</span><span class="special">&lt;&lt;</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span>
+<pre class="programlisting"><span class="comment">// For a standard normal distribution 
+</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Standard normal mean = "</span><span class="special">&lt;&lt;</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span>
   <span class="special">&lt;&lt;</span> <span class="string">", standard deviation = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Integral (area under the curve) from - infinity up to z "</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  z "</span> <span class="string">"      cdf "</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -179,8 +179,8 @@
 <p>
               
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha1</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="special">-</span><span class="number">1</span><span class="special">)</span> <span class="special">*</span> <span class="number">2</span><span class="special">;</span> <span class="comment">// 0.3173105078629142</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setprecision</span><span class="special">(</span><span class="number">17</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">"Significance level for z == 1 is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha1</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha1</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="special">-</span><span class="number">1</span><span class="special">)</span> <span class="special">*</span> <span class="number">2</span><span class="special">;</span> <span class="comment">// 0.3173105078629142
+</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setprecision</span><span class="special">(</span><span class="number">17</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">"Significance level for z == 1 is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha1</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
             </p>
 <p>
@@ -189,8 +189,8 @@
 <p>
               
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.3173105078629142</span><span class="special">,</span> <span class="comment">// z for 1 standard deviation.</span>
-  <span class="number">0.20</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.3173105078629142</span><span class="special">,</span> <span class="comment">// z for 1 standard deviation.
+</span>  <span class="number">0.20</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
 <p>
             </p>
 <p>
@@ -206,8 +206,8 @@
 <span class="keyword">for</span> <span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
 <span class="special">{</span>
   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">15</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">15</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">/</span><span class="number">2</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span>  <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]/</span><span class="number">2</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-  <span class="comment">// Use quantile(complement(s, alpha[i]/2)) to avoid potential loss of accuracy from quantile(s,  1 - alpha[i]/2) </span>
-<span class="special">}</span>
+  <span class="comment">// Use quantile(complement(s, alpha[i]/2)) to avoid potential loss of accuracy from quantile(s,  1 - alpha[i]/2) 
+</span><span class="special">}</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
             </p>
@@ -230,7 +230,7 @@
               the two tails is 0.025 + 0.025 = 0.05,
             </p>
 <a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.standard_deviations_either_side_of_the_mean"></a><h5>
-<a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.standard_deviations_either_side_of_the_mean-heading"></a>
+<a name="id973745"></a>
               <a class="link" href="normal_misc.html#math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.standard_deviations_either_side_of_the_mean">Standard
               deviations either side of the Mean</a>
             </h5>
@@ -244,8 +244,8 @@
 </p>
 <pre class="programlisting"><span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="number">3</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">showpoint</span> <span class="special">&lt;&lt;</span> <span class="string">"cdf(s, s.standard_deviation()) = "</span>
-  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">())</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>  <span class="comment">// from -infinity to 1 sd</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"cdf(complement(s, s.standard_deviation())) = "</span>
+  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">())</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>  <span class="comment">// from -infinity to 1 sd
+</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"cdf(complement(s, s.standard_deviation())) = "</span>
   <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Fraction 1 standard deviation within either side of mean is "</span>
   <span class="special">&lt;&lt;</span> <span class="number">1</span> <span class="special">-</span>  <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()))</span> <span class="special">*</span> <span class="number">2</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -280,12 +280,12 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
               estimated the standard deviation from only a few measurements.
             </p>
 <a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.some_simple_examples"></a><h5>
-<a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.some_simple_examples-heading"></a>
+<a name="id974266"></a>
               <a class="link" href="normal_misc.html#math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.some_simple_examples">Some
               simple examples</a>
             </h5>
 <a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.life_of_light_bulbs"></a><h5>
-<a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.life_of_light_bulbs-heading"></a>
+<a name="id974279"></a>
               <a class="link" href="normal_misc.html#math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.life_of_light_bulbs">Life
               of light bulbs</a>
             </h5>
@@ -300,8 +300,8 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
 <p>
               
 </p>
-<pre class="programlisting"><span class="comment">// K. Krishnamoorthy, Handbook of Statistical Distributions with Applications,</span>
- <span class="comment">// ISBN 1 58488 635 8, page 125, example 10.3.5</span></pre>
+<pre class="programlisting"><span class="comment">// K. Krishnamoorthy, Handbook of Statistical Distributions with Applications,
+</span> <span class="comment">// ISBN 1 58488 635 8, page 125, example 10.3.5</span></pre>
 <p>
             </p>
 <p>
@@ -326,16 +326,16 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
 <p>
               
 </p>
-<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Fraction of bulbs that will last at best (&lt;=) "</span> <span class="comment">// P(X &lt;= 1000)</span>
-  <span class="special">&lt;&lt;</span> <span class="identifier">expected_life</span> <span class="special">&lt;&lt;</span> <span class="string">" is "</span><span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">bulbs</span><span class="special">,</span> <span class="identifier">expected_life</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Fraction of bulbs that will last at least (&gt;) "</span> <span class="comment">// P(X &gt; 1000)</span>
-  <span class="special">&lt;&lt;</span> <span class="identifier">expected_life</span> <span class="special">&lt;&lt;</span> <span class="string">" is "</span><span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">bulbs</span><span class="special">,</span> <span class="identifier">expected_life</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Fraction of bulbs that will last at best (&lt;=) "</span> <span class="comment">// P(X &lt;= 1000)
+</span>  <span class="special">&lt;&lt;</span> <span class="identifier">expected_life</span> <span class="special">&lt;&lt;</span> <span class="string">" is "</span><span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">bulbs</span><span class="special">,</span> <span class="identifier">expected_life</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Fraction of bulbs that will last at least (&gt;) "</span> <span class="comment">// P(X &gt; 1000)
+</span>  <span class="special">&lt;&lt;</span> <span class="identifier">expected_life</span> <span class="special">&lt;&lt;</span> <span class="string">" is "</span><span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">bulbs</span><span class="special">,</span> <span class="identifier">expected_life</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">min_life</span> <span class="special">=</span> <span class="number">900</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">max_life</span> <span class="special">=</span> <span class="number">1200</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Fraction of bulbs that will last between "</span>
   <span class="special">&lt;&lt;</span> <span class="identifier">min_life</span> <span class="special">&lt;&lt;</span> <span class="string">" and "</span> <span class="special">&lt;&lt;</span> <span class="identifier">max_life</span> <span class="special">&lt;&lt;</span> <span class="string">" is "</span>
-  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">bulbs</span><span class="special">,</span> <span class="identifier">max_life</span><span class="special">)</span>  <span class="comment">// P(X &lt;= 1200)</span>
-   <span class="special">-</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">bulbs</span><span class="special">,</span> <span class="identifier">min_life</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// P(X &lt;= 900)</span></pre>
+  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">bulbs</span><span class="special">,</span> <span class="identifier">max_life</span><span class="special">)</span>  <span class="comment">// P(X &lt;= 1200)
+</span>   <span class="special">-</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">bulbs</span><span class="special">,</span> <span class="identifier">min_life</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// P(X &lt;= 900)</span></pre>
 <p>
             </p>
 <div class="note"><table border="0" summary="Note">
@@ -351,7 +351,7 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
               </p></td></tr>
 </table></div>
 <a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.how_many_onions_"></a><h5>
-<a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.how_many_onions_-heading"></a>
+<a name="id974787"></a>
               <a class="link" href="normal_misc.html#math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.how_many_onions_">How
               many onions?</a>
             </h5>
@@ -362,14 +362,14 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
 <p>
               
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">140.</span><span class="special">;</span> <span class="comment">// sacks per week.</span>
-<span class="keyword">double</span> <span class="identifier">standard_deviation</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span> 
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">140.</span><span class="special">;</span> <span class="comment">// sacks per week.
+</span><span class="keyword">double</span> <span class="identifier">standard_deviation</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span> 
 <span class="identifier">normal</span> <span class="identifier">sacks</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
 
-<span class="keyword">double</span> <span class="identifier">stock</span> <span class="special">=</span> <span class="number">160.</span><span class="special">;</span> <span class="comment">// per week.</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Percentage of weeks overstocked "</span>
-  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">sacks</span><span class="special">,</span> <span class="identifier">stock</span><span class="special">)</span> <span class="special">*</span> <span class="number">100.</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// P(X &lt;=160)</span>
-<span class="comment">// Percentage of weeks overstocked 97.7</span></pre>
+<span class="keyword">double</span> <span class="identifier">stock</span> <span class="special">=</span> <span class="number">160.</span><span class="special">;</span> <span class="comment">// per week.
+</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Percentage of weeks overstocked "</span>
+  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">sacks</span><span class="special">,</span> <span class="identifier">stock</span><span class="special">)</span> <span class="special">*</span> <span class="number">100.</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// P(X &lt;=160)
+</span><span class="comment">// Percentage of weeks overstocked 97.7</span></pre>
 <p>
             </p>
 <p>
@@ -396,7 +396,7 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
 <p>
             </p>
 <a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.packing_beef"></a><h5>
-<a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.packing_beef-heading"></a>
+<a name="id975202"></a>
               <a class="link" href="normal_misc.html#math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.packing_beef">Packing
               beef</a>
             </h5>
@@ -410,29 +410,29 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
 <p>
               
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">3.</span><span class="special">;</span> <span class="comment">// kg</span>
-<span class="keyword">double</span> <span class="identifier">standard_deviation</span> <span class="special">=</span> <span class="number">0.1</span><span class="special">;</span> <span class="comment">// kg</span>
-<span class="identifier">normal</span> <span class="identifier">packs</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">3.</span><span class="special">;</span> <span class="comment">// kg
+</span><span class="keyword">double</span> <span class="identifier">standard_deviation</span> <span class="special">=</span> <span class="number">0.1</span><span class="special">;</span> <span class="comment">// kg
+</span><span class="identifier">normal</span> <span class="identifier">packs</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
 
-<span class="keyword">double</span> <span class="identifier">max_weight</span> <span class="special">=</span> <span class="number">3.1</span><span class="special">;</span> <span class="comment">// kg</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Percentage of packs &gt; "</span> <span class="special">&lt;&lt;</span> <span class="identifier">max_weight</span> <span class="special">&lt;&lt;</span> <span class="string">" is "</span>
-<span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">packs</span><span class="special">,</span> <span class="identifier">max_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// P(X &gt; 3.1)</span>
-
+<span class="keyword">double</span> <span class="identifier">max_weight</span> <span class="special">=</span> <span class="number">3.1</span><span class="special">;</span> <span class="comment">// kg
+</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Percentage of packs &gt; "</span> <span class="special">&lt;&lt;</span> <span class="identifier">max_weight</span> <span class="special">&lt;&lt;</span> <span class="string">" is "</span>
+<span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">packs</span><span class="special">,</span> <span class="identifier">max_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// P(X &gt; 3.1)
+</span>
 <span class="keyword">double</span> <span class="identifier">under_weight</span> <span class="special">=</span> <span class="number">2.9</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span><span class="string">"fraction of packs &lt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">under_weight</span> <span class="special">&lt;&lt;</span> <span class="string">" with a mean of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">mean</span> 
   <span class="special">&lt;&lt;</span> <span class="string">" is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">packs</span><span class="special">,</span> <span class="identifier">under_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-<span class="comment">// fraction of packs &lt;= 2.9 with a mean of 3 is 0.841345</span>
-<span class="comment">// This is 0.84 - more than the target 0.95</span>
-<span class="comment">// Want 95% to be over this weight, so what should we set the mean weight to be?</span>
-<span class="comment">// KK StatCalc says:</span>
-<span class="keyword">double</span> <span class="identifier">over_mean</span> <span class="special">=</span> <span class="number">3.0664</span><span class="special">;</span>
+<span class="comment">// fraction of packs &lt;= 2.9 with a mean of 3 is 0.841345
+</span><span class="comment">// This is 0.84 - more than the target 0.95
+</span><span class="comment">// Want 95% to be over this weight, so what should we set the mean weight to be?
+</span><span class="comment">// KK StatCalc says:
+</span><span class="keyword">double</span> <span class="identifier">over_mean</span> <span class="special">=</span> <span class="number">3.0664</span><span class="special">;</span>
 <span class="identifier">normal</span> <span class="identifier">xpacks</span><span class="special">(</span><span class="identifier">over_mean</span><span class="special">,</span> <span class="identifier">standard_deviation</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"fraction of packs &gt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">under_weight</span>
 <span class="special">&lt;&lt;</span> <span class="string">" with a mean of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">xpacks</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span> 
   <span class="special">&lt;&lt;</span> <span class="string">" is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">xpacks</span><span class="special">,</span> <span class="identifier">under_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-<span class="comment">// fraction of packs &gt;= 2.9 with a mean of 3.06449 is 0.950005</span>
-<span class="keyword">double</span> <span class="identifier">under_fraction</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span>  <span class="comment">// so 95% are above the minimum weight mean - sd = 2.9</span>
-<span class="keyword">double</span> <span class="identifier">low_limit</span> <span class="special">=</span> <span class="identifier">standard_deviation</span><span class="special">;</span>
+<span class="comment">// fraction of packs &gt;= 2.9 with a mean of 3.06449 is 0.950005
+</span><span class="keyword">double</span> <span class="identifier">under_fraction</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span>  <span class="comment">// so 95% are above the minimum weight mean - sd = 2.9
+</span><span class="keyword">double</span> <span class="identifier">low_limit</span> <span class="special">=</span> <span class="identifier">standard_deviation</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">offset</span> <span class="special">=</span> <span class="identifier">mean</span> <span class="special">-</span> <span class="identifier">low_limit</span> <span class="special">-</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">packs</span><span class="special">,</span> <span class="identifier">under_fraction</span><span class="special">);</span>
 <span class="keyword">double</span> <span class="identifier">nominal_mean</span> <span class="special">=</span> <span class="identifier">mean</span> <span class="special">+</span> <span class="identifier">offset</span><span class="special">;</span>
 
@@ -463,8 +463,8 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
 <p>
               
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span> <span class="comment">// wanted p th quantile.</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Quantile of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">p</span> <span class="special">&lt;&lt;</span> <span class="string">" = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">packs</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span> <span class="comment">// wanted p th quantile.
+</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Quantile of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">p</span> <span class="special">&lt;&lt;</span> <span class="string">" = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">packs</span><span class="special">,</span> <span class="identifier">p</span><span class="special">)</span>
   <span class="special">&lt;&lt;</span> <span class="string">", mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="string">", sd = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">//</span></pre>
 <p>
             </p>
@@ -531,25 +531,25 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
 <p>
               
 </p>
-<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">s</span><span class="special">;</span> <span class="comment">// For standard normal distribution, </span>
-<span class="keyword">double</span> <span class="identifier">sd</span> <span class="special">=</span> <span class="number">0.1</span><span class="special">;</span>
-<span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">2.9</span><span class="special">;</span> <span class="comment">// Our required limit.</span>
-<span class="comment">// then probability p = N((x - mean) / sd)</span>
-<span class="comment">// So if we want to find the standard deviation that would be required to meet this limit,</span>
-<span class="comment">// so that the p th quantile is located at x,</span>
-<span class="comment">// in this case the 0.95 (95%) quantile at 2.9 kg pack weight, when the mean is 3 kg.</span>
-
+<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">s</span><span class="special">;</span> <span class="comment">// For standard normal distribution, 
+</span><span class="keyword">double</span> <span class="identifier">sd</span> <span class="special">=</span> <span class="number">0.1</span><span class="special">;</span>
+<span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">2.9</span><span class="special">;</span> <span class="comment">// Our required limit.
+</span><span class="comment">// then probability p = N((x - mean) / sd)
+</span><span class="comment">// So if we want to find the standard deviation that would be required to meet this limit,
+</span><span class="comment">// so that the p th quantile is located at x,
+</span><span class="comment">// in this case the 0.95 (95%) quantile at 2.9 kg pack weight, when the mean is 3 kg.
+</span>
 <span class="keyword">double</span> <span class="identifier">prob</span> <span class="special">=</span>  <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="special">(</span><span class="identifier">x</span> <span class="special">-</span> <span class="identifier">mean</span><span class="special">)</span> <span class="special">/</span> <span class="identifier">sd</span><span class="special">);</span>
 <span class="keyword">double</span> <span class="identifier">qp</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="number">0.95</span><span class="special">);</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"prob = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">prob</span> <span class="special">&lt;&lt;</span> <span class="string">", quantile(p) "</span> <span class="special">&lt;&lt;</span> <span class="identifier">qp</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// p = 0.241971, quantile(p) 1.64485</span>
-<span class="comment">// Rearranging, we can directly calculate the required standard deviation:</span>
-<span class="keyword">double</span> <span class="identifier">sd95</span> <span class="special">=</span> <span class="identifier">abs</span><span class="special">((</span><span class="identifier">x</span> <span class="special">-</span> <span class="identifier">mean</span><span class="special">))</span> <span class="special">/</span> <span class="identifier">qp</span><span class="special">;</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"prob = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">prob</span> <span class="special">&lt;&lt;</span> <span class="string">", quantile(p) "</span> <span class="special">&lt;&lt;</span> <span class="identifier">qp</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// p = 0.241971, quantile(p) 1.64485
+</span><span class="comment">// Rearranging, we can directly calculate the required standard deviation:
+</span><span class="keyword">double</span> <span class="identifier">sd95</span> <span class="special">=</span> <span class="identifier">abs</span><span class="special">((</span><span class="identifier">x</span> <span class="special">-</span> <span class="identifier">mean</span><span class="special">))</span> <span class="special">/</span> <span class="identifier">qp</span><span class="special">;</span>
 
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"If we want the "</span><span class="special">&lt;&lt;</span> <span class="identifier">p</span> <span class="special">&lt;&lt;</span> <span class="string">" th quantile to be located at "</span>  
   <span class="special">&lt;&lt;</span> <span class="identifier">x</span> <span class="special">&lt;&lt;</span> <span class="string">", would need a standard deviation of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sd95</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 
-<span class="identifier">normal</span> <span class="identifier">pack95</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">sd95</span><span class="special">);</span>  <span class="comment">// Distribution of the 'ideal better' packer.</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span><span class="string">"Fraction of packs &gt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">under_weight</span> <span class="special">&lt;&lt;</span> <span class="string">" with a mean of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">mean</span> 
+<span class="identifier">normal</span> <span class="identifier">pack95</span><span class="special">(</span><span class="identifier">mean</span><span class="special">,</span> <span class="identifier">sd95</span><span class="special">);</span>  <span class="comment">// Distribution of the 'ideal better' packer.
+</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span><span class="string">"Fraction of packs &gt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">under_weight</span> <span class="special">&lt;&lt;</span> <span class="string">" with a mean of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">mean</span> 
   <span class="special">&lt;&lt;</span> <span class="string">" and standard deviation of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pack95</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span>
   <span class="special">&lt;&lt;</span> <span class="string">" is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">pack95</span><span class="special">,</span> <span class="identifier">under_weight</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 
@@ -565,7 +565,7 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
               a few measurements.
             </p>
 <a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.length_of_bolts"></a><h5>
-<a name="math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.length_of_bolts-heading"></a>
+<a name="id977500"></a>
               <a class="link" href="normal_misc.html#math_toolkit.dist.stat_tut.weg.normal_example.normal_misc.length_of_bolts">Length
               of bolts</a>
             </h5>
@@ -600,8 +600,9 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

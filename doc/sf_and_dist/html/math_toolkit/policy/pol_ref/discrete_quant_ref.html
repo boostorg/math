@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Discrete Quantile Policies</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../pol_ref.html" title="Policy Reference">
 <link rel="prev" href="assert_undefined.html" title="Mathematically Undefined Function Policies">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="assert_undefined.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_ref.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="precision_pol.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref"></a><a class="link" href="discrete_quant_ref.html" title="Discrete Quantile Policies">Discrete
         Quantile Policies</a>
@@ -40,8 +40,8 @@
 <pre class="programlisting"><span class="keyword">enum</span> <span class="identifier">discrete_quantile_policy_type</span>
 <span class="special">{</span>
    <span class="identifier">real</span><span class="special">,</span>
-   <span class="identifier">integer_round_outwards</span><span class="special">,</span> <span class="comment">// default</span>
-   <span class="identifier">integer_round_inwards</span><span class="special">,</span>
+   <span class="identifier">integer_round_outwards</span><span class="special">,</span> <span class="comment">// default
+</span>   <span class="identifier">integer_round_inwards</span><span class="special">,</span>
    <span class="identifier">integer_round_down</span><span class="special">,</span>
    <span class="identifier">integer_round_up</span><span class="special">,</span>
    <span class="identifier">integer_round_nearest</span>
@@ -55,7 +55,7 @@
           can take have the following meanings:
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.real"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.real-heading"></a>
+<a name="id1290897"></a>
           <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.real">real</a>
         </h6>
 <p>
@@ -75,10 +75,10 @@
       <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">real</span><span class="special">&gt;</span> <span class="special">&gt;</span> 
    <span class="special">&gt;</span> <span class="identifier">dist_type</span><span class="special">;</span>
    
-<span class="comment">// Lower 5% quantile:</span>
-<span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span>
-<span class="comment">// Upper 95% quantile:</span>
-<span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span>
+<span class="comment">// Lower 5% quantile:
+</span><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span>
+<span class="comment">// Upper 95% quantile:
+</span><span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span>
 
 </pre>
 <p>
@@ -89,18 +89,18 @@
           <span class="special">=</span> <span class="number">68.1584</span></code>.
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards-heading"></a>
+<a name="id1291249"></a>
           <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards">integer_round_outwards</a>
         </h6>
 <p>
           This is the default policy: an integer value is returned so that:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
               Lower quantiles (where the probability is less than 0.5) are rounded
               down.
             </li>
-<li class="listitem">
+<li>
               Upper quantiles (where the probability is greater than 0.5) are rounded
               up.
             </li>
@@ -116,12 +116,12 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial</span><span class="special">;</span>
 
-<span class="comment">// Use the default rounding policy integer_round_outwards.</span>
-<span class="comment">// Lower quantile rounded down:</span>
-<span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// rounded up 27 from 27.3898</span>
-<span class="comment">// Upper quantile rounded up:</span>
-<span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span> <span class="comment">// rounded down to 69 from 68.1584</span>
-
+<span class="comment">// Use the default rounding policy integer_round_outwards.
+</span><span class="comment">// Lower quantile rounded down:
+</span><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// rounded up 27 from 27.3898
+</span><span class="comment">// Upper quantile rounded up:
+</span><span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span> <span class="comment">// rounded down to 69 from 68.1584
+</span>
 </pre>
 <p>
         </p>
@@ -143,19 +143,19 @@
           in each tail</em></span>.
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards-heading"></a>
+<a name="id1291799"></a>
           <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards">integer_round_inwards</a>
         </h6>
 <p>
           This is the opposite of <span class="emphasis"><em>integer_round_outwards</em></span>: an
           integer value is returned so that:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
               Lower quantiles (where the probability is less than 0.5) are rounded
               <span class="emphasis"><em>up</em></span>.
             </li>
-<li class="listitem">
+<li>
               Upper quantiles (where the probability is greater than 0.5) are rounded
               <span class="emphasis"><em>down</em></span>.
             </li>
@@ -176,11 +176,11 @@
       <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_inwards</span><span class="special">&gt;</span> <span class="special">&gt;</span> 
    <span class="special">&gt;</span> <span class="identifier">dist_type</span><span class="special">;</span>
    
-<span class="comment">// Lower quantile rounded up:</span>
-<span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 28 rounded up from 27.3898</span>
-<span class="comment">// Upper quantile rounded down:</span>
-<span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span> <span class="comment">// 68 rounded down from 68.1584</span>
-
+<span class="comment">// Lower quantile rounded up:
+</span><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 28 rounded up from 27.3898
+</span><span class="comment">// Upper quantile rounded down:
+</span><span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span> <span class="comment">// 68 rounded down from 68.1584
+</span>
 </pre>
 <p>
         </p>
@@ -202,7 +202,7 @@
           in each tail</em></span>.
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down-heading"></a>
+<a name="id1292293"></a>
           <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down">integer_round_down</a>
         </h6>
 <p>
@@ -210,7 +210,7 @@
           or a lower quantile.
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up-heading"></a>
+<a name="id1292312"></a>
           <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up">integer_round_up</a>
         </h6>
 <p>
@@ -218,7 +218,7 @@
           a lower quantile.
         </p>
 <a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest-heading"></a>
+<a name="id1292332"></a>
           <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest">integer_round_nearest</a>
         </h6>
 <p>
@@ -244,11 +244,11 @@
       <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_nearest</span><span class="special">&gt;</span> <span class="special">&gt;</span> 
    <span class="special">&gt;</span> <span class="identifier">dist_type</span><span class="special">;</span>
    
-<span class="comment">// Lower quantile rounded (down) to nearest:</span>
-<span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 27</span>
-<span class="comment">// Upper quantile rounded (down) to nearest:</span>
-<span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span> <span class="comment">// 68</span>
-
+<span class="comment">// Lower quantile rounded (down) to nearest:
+</span><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 27
+</span><span class="comment">// Upper quantile rounded (down) to nearest:
+</span><span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span> <span class="comment">// 68
+</span>
 </pre>
 <p>
         </p>
@@ -259,8 +259,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

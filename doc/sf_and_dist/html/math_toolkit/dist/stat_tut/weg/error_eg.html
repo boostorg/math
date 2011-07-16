@@ -3,10 +3,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Error Handling Example</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../weg.html" title="Worked Examples">
-<link rel="prev" href="nccs_eg/nccs_power_eg.html" title="Tables of the power function of the chi-squared test.">
+<link rel="prev" href="nccs_eg/nccs_power_eg.html" title="Tables of the power function of the chi2 test.">
 <link rel="next" href="find_eg.html" title="Find Location and Scale Examples">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="nccs_eg/nccs_power_eg.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../weg.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="find_eg.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.stat_tut.weg.error_eg"></a><a class="link" href="error_eg.html" title="Error Handling Example">Error Handling
           Example</a>
@@ -81,12 +81,12 @@
 <p>
             
 </p>
-<pre class="programlisting"><span class="comment">// Boost</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-   <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">students_t</span><span class="special">;</span>  <span class="comment">// Probability of students_t(df, t).</span>
-
-<span class="comment">// std</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="comment">// Boost
+</span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+   <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">students_t</span><span class="special">;</span>  <span class="comment">// Probability of students_t(df, t).
+</span>
+<span class="comment">// std
+</span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
    <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">;</span>
    <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 
@@ -111,21 +111,21 @@
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"BOOST_MATH_DOMAIN_ERROR_POLICY is set to: "</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">BOOST_STRINGIZE</span><span class="special">(</span><span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 
-   <span class="keyword">double</span> <span class="identifier">degrees_of_freedom</span> <span class="special">=</span> <span class="special">-</span><span class="number">1</span><span class="special">;</span> <span class="comment">// A bad argument!</span>
-   <span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
+   <span class="keyword">double</span> <span class="identifier">degrees_of_freedom</span> <span class="special">=</span> <span class="special">-</span><span class="number">1</span><span class="special">;</span> <span class="comment">// A bad argument!
+</span>   <span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
 
    <span class="keyword">try</span>
    <span class="special">{</span>
-      <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="comment">// Clear/reset.</span>
-      <span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">degrees_of_freedom</span><span class="special">);</span> <span class="comment">// exception is thrown here if enabled.</span>
-      <span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">t</span><span class="special">);</span>
-      <span class="comment">// Test for error reported by other means:</span>
-      <span class="keyword">if</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">isnan</span><span class="special">)(</span><span class="identifier">p</span><span class="special">))</span>
+      <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="comment">// Clear/reset.
+</span>      <span class="identifier">students_t</span> <span class="identifier">dist</span><span class="special">(</span><span class="identifier">degrees_of_freedom</span><span class="special">);</span> <span class="comment">// exception is thrown here if enabled.
+</span>      <span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="identifier">t</span><span class="special">);</span>
+      <span class="comment">// Test for error reported by other means:
+</span>      <span class="keyword">if</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">isnan</span><span class="special">)(</span><span class="identifier">p</span><span class="special">))</span>
       <span class="special">{</span>
          <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"cdf returned a NaN!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
          <span class="keyword">if</span> <span class="special">(</span><span class="identifier">errno</span> <span class="special">!=</span> <span class="number">0</span><span class="special">)</span>
-         <span class="special">{</span> <span class="comment">// So errno has been set.</span>
-           <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno is set to: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+         <span class="special">{</span> <span class="comment">// So errno has been set.
+</span>           <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno is set to: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
          <span class="special">}</span>
       <span class="special">}</span>
       <span class="keyword">else</span>
@@ -198,8 +198,9 @@ errno is set to: 33
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

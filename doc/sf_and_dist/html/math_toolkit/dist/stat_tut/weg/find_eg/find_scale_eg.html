@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Find Scale (Standard Deviation) Example</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../find_eg.html" title="Find Location and Scale Examples">
 <link rel="prev" href="find_location_eg.html" title="Find Location (Mean) Example">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="find_location_eg.html"><img src="../../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../find_eg.html"><img src="../../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../../index.html"><img src="../../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="find_mean_and_sd_eg.html"><img src="../../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
 <a name="math_toolkit.dist.stat_tut.weg.find_eg.find_scale_eg"></a><a class="link" href="find_scale_eg.html" title="Find Scale (Standard Deviation) Example">Find
             Scale (Standard Deviation) Example</a>
@@ -35,13 +35,13 @@
 <p>
               
 </p>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for normal_distribution</span>
-  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">find_scale</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for normal_distribution
+</span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.
+</span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">find_scale</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
   <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">find_scale</span><span class="special">;</span> 
-  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">;</span> <span class="comment">// Needed if you want to use the complement version.</span>
-  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span> <span class="comment">// Needed to specify the error handling policy.</span>
-
+  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">;</span> <span class="comment">// Needed if you want to use the complement version.
+</span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span> <span class="comment">// Needed to specify the error handling policy.
+</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
   <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iomanip</span><span class="special">&gt;</span>
@@ -60,8 +60,8 @@
 <p>
               
 </p>
-<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">N01</span><span class="special">;</span>  <span class="comment">// Default 'standard' normal distribution with zero mean</span>
-<span class="keyword">double</span> <span class="identifier">sd</span> <span class="special">=</span> <span class="number">1.</span><span class="special">;</span> <span class="comment">// and standard deviation is 1.</span></pre>
+<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">N01</span><span class="special">;</span>  <span class="comment">// Default 'standard' normal distribution with zero mean
+</span><span class="keyword">double</span> <span class="identifier">sd</span> <span class="special">=</span> <span class="number">1.</span><span class="special">;</span> <span class="comment">// and standard deviation is 1.</span></pre>
 <p>
             </p>
 <p>
@@ -72,12 +72,12 @@
 <p>
               
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">z</span> <span class="special">=</span> <span class="special">-</span><span class="number">2.</span><span class="special">;</span> <span class="comment">// z to give prob p</span>
-<span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="number">0.001</span><span class="special">;</span> <span class="comment">// only 0.1% below z = -2</span>
-
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">N01</span><span class="special">.</span><span class="identifier">location</span><span class="special">()</span>  <span class="comment">// aka N01.mean()</span>
-  <span class="special">&lt;&lt;</span> <span class="string">", standard deviation "</span> <span class="special">&lt;&lt;</span> <span class="identifier">N01</span><span class="special">.</span><span class="identifier">scale</span><span class="special">()</span> <span class="comment">// aka N01.standard_deviation()</span>
-  <span class="special">&lt;&lt;</span> <span class="string">", has "</span> <span class="special">&lt;&lt;</span> <span class="string">"fraction &lt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span> 
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">z</span> <span class="special">=</span> <span class="special">-</span><span class="number">2.</span><span class="special">;</span> <span class="comment">// z to give prob p
+</span><span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="number">0.001</span><span class="special">;</span> <span class="comment">// only 0.1% below z = -2
+</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">N01</span><span class="special">.</span><span class="identifier">location</span><span class="special">()</span>  <span class="comment">// aka N01.mean()
+</span>  <span class="special">&lt;&lt;</span> <span class="string">", standard deviation "</span> <span class="special">&lt;&lt;</span> <span class="identifier">N01</span><span class="special">.</span><span class="identifier">scale</span><span class="special">()</span> <span class="comment">// aka N01.standard_deviation()
+</span>  <span class="special">&lt;&lt;</span> <span class="string">", has "</span> <span class="special">&lt;&lt;</span> <span class="string">"fraction &lt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span> 
   <span class="special">&lt;&lt;</span> <span class="string">", p = "</span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">N01</span><span class="special">,</span> <span class="identifier">z</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">N01</span><span class="special">.</span><span class="identifier">location</span><span class="special">()</span>
   <span class="special">&lt;&lt;</span> <span class="string">", standard deviation "</span> <span class="special">&lt;&lt;</span> <span class="identifier">N01</span><span class="special">.</span><span class="identifier">scale</span><span class="special">()</span>
@@ -137,7 +137,7 @@ Normal distribution with mean = 0 has fraction &gt; -2, p = 0.97725
 Normal distribution with mean = 0 has fraction &gt; -2, p = 0.999
 </pre>
 <a name="math_toolkit.dist.stat_tut.weg.find_eg.find_scale_eg.controlling_how_errors_from_find_scale_are_handled"></a><h5>
-<a name="math_toolkit.dist.stat_tut.weg.find_eg.find_scale_eg.controlling_how_errors_from_find_scale_are_handled-heading"></a>
+<a name="id993757"></a>
               <a class="link" href="find_scale_eg.html#math_toolkit.dist.stat_tut.weg.find_eg.find_scale_eg.controlling_how_errors_from_find_scale_are_handled">Controlling
               how Errors from find_scale are handled</a>
             </h5>
@@ -165,15 +165,15 @@ Normal distribution with mean = 0 has fraction &gt; -2, p = 0.999
               
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">ignore_domain_policy</span><span class="special">;</span>
-<span class="comment">// find_scale with new policy, using typedef.</span>
-<span class="identifier">l</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">ignore_domain_policy</span><span class="special">());</span>
-<span class="comment">// Default policy policy&lt;&gt;, needs using boost::math::policies::policy;</span>
-
+<span class="comment">// find_scale with new policy, using typedef.
+</span><span class="identifier">l</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">ignore_domain_policy</span><span class="special">());</span>
+<span class="comment">// Default policy policy&lt;&gt;, needs using boost::math::policies::policy;
+</span>
 <span class="identifier">l</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;&gt;());</span>
-<span class="comment">// Default policy, fully specified.</span>
-<span class="identifier">l</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;());</span>
-<span class="comment">// New policy, without typedef.</span>
-<span class="identifier">l</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span> <span class="special">&gt;());</span></pre>
+<span class="comment">// Default policy, fully specified.
+</span><span class="identifier">l</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;());</span>
+<span class="comment">// New policy, without typedef.
+</span><span class="identifier">l</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">l</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span> <span class="special">&gt;());</span></pre>
 <p>
             </p>
 <p>
@@ -187,11 +187,11 @@ Normal distribution with mean = 0 has fraction &gt; -2, p = 0.999
               
 </p>
 <pre class="programlisting"><span class="identifier">z</span> <span class="special">=</span> <span class="special">-</span><span class="number">2.</span><span class="special">;</span>
-<span class="keyword">double</span> <span class="identifier">q</span> <span class="special">=</span> <span class="number">0.999</span><span class="special">;</span> <span class="comment">// = 1 - p; // complement of 0.001.</span>
-<span class="identifier">sd</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">q</span><span class="special">,</span> <span class="identifier">l</span><span class="special">));</span>
+<span class="keyword">double</span> <span class="identifier">q</span> <span class="special">=</span> <span class="number">0.999</span><span class="special">;</span> <span class="comment">// = 1 - p; // complement of 0.001.
+</span><span class="identifier">sd</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">q</span><span class="special">,</span> <span class="identifier">l</span><span class="special">));</span>
 
-<span class="identifier">normal</span> <span class="identifier">np95pc</span><span class="special">(</span><span class="identifier">l</span><span class="special">,</span> <span class="identifier">sd</span><span class="special">);</span> <span class="comment">// Same standard_deviation (scale) but with mean(scale) shifted</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span> <span class="special">&lt;&lt;</span> <span class="string">" has "</span> 
+<span class="identifier">normal</span> <span class="identifier">np95pc</span><span class="special">(</span><span class="identifier">l</span><span class="special">,</span> <span class="identifier">sd</span><span class="special">);</span> <span class="comment">// Same standard_deviation (scale) but with mean(scale) shifted
+</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span> <span class="special">&lt;&lt;</span> <span class="string">" has "</span> 
   <span class="special">&lt;&lt;</span> <span class="string">"fraction &lt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span> <span class="special">&lt;&lt;</span> <span class="string">" = "</span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">np95pc</span><span class="special">,</span> <span class="identifier">z</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span> <span class="special">&lt;&lt;</span> <span class="string">" has "</span> 
   <span class="special">&lt;&lt;</span> <span class="string">"fraction &gt; "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span> <span class="special">&lt;&lt;</span> <span class="string">" = "</span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">np95pc</span><span class="special">,</span> <span class="identifier">z</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
@@ -226,8 +226,9 @@ Normal distribution with mean = 0.946339 has fraction &gt; -2 = 0.999
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

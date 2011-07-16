@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>C99 C Functions</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../extern_c.html" title='TR1 and C99 external "C" Functions'>
 <link rel="prev" href="tr1.html" title="C99 and TR1 C Functions Overview">
@@ -22,12 +22,12 @@
 <div class="spirit-nav">
 <a accesskey="p" href="tr1.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../extern_c.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="tr1_ref.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.extern_c.c99"></a><a class="link" href="c99.html" title="C99 C Functions">C99 C Functions</a>
 </h3></div></div></div>
 <a name="math_toolkit.extern_c.c99.supported_c99_functions"></a><h5>
-<a name="math_toolkit.extern_c.c99.supported_c99_functions-heading"></a>
+<a name="id1195312"></a>
         <a class="link" href="c99.html#math_toolkit.extern_c.c99.supported_c99_functions">Supported
         C99 Functions</a>
       </h5>
@@ -116,8 +116,8 @@
 <span class="keyword">float</span> <span class="identifier">truncf</span><span class="special">(</span><span class="keyword">float</span> <span class="identifier">x</span><span class="special">);</span>
 <span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">truncl</span><span class="special">(</span><span class="keyword">long</span> <span class="keyword">double</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="special">}}}}</span> <span class="comment">// namespaces</span>
-</pre>
+<span class="special">}}}}</span> <span class="comment">// namespaces
+</span></pre>
 <p>
         In addition sufficient additional overloads of the <code class="computeroutput"><span class="keyword">double</span></code>
         versions of the above functions are provided, so that calling the function
@@ -130,15 +130,15 @@
 <p>
         For example:
       </p>
-<pre class="programlisting"><span class="identifier">acoshf</span><span class="special">(</span><span class="number">2.0f</span><span class="special">);</span>  <span class="comment">// float version, returns float.</span>
-<span class="identifier">acosh</span><span class="special">(</span><span class="number">2.0f</span><span class="special">);</span>   <span class="comment">// also calls the float version and returns float.</span>
-<span class="identifier">acosh</span><span class="special">(</span><span class="number">2.0</span><span class="special">);</span>    <span class="comment">// double version, returns double.</span>
-<span class="identifier">acoshl</span><span class="special">(</span><span class="number">2.0L</span><span class="special">);</span>  <span class="comment">// long double version, returns a long double.</span>
-<span class="identifier">acosh</span><span class="special">(</span><span class="number">2.0L</span><span class="special">);</span>   <span class="comment">// also calls the long double version.</span>
-<span class="identifier">acosh</span><span class="special">(</span><span class="number">2</span><span class="special">);</span>      <span class="comment">// integer argument is treated as a double, returns double.</span>
-</pre>
+<pre class="programlisting"><span class="identifier">acoshf</span><span class="special">(</span><span class="number">2.0f</span><span class="special">);</span>  <span class="comment">// float version, returns float.
+</span><span class="identifier">acosh</span><span class="special">(</span><span class="number">2.0f</span><span class="special">);</span>   <span class="comment">// also calls the float version and returns float.
+</span><span class="identifier">acosh</span><span class="special">(</span><span class="number">2.0</span><span class="special">);</span>    <span class="comment">// double version, returns double.
+</span><span class="identifier">acoshl</span><span class="special">(</span><span class="number">2.0L</span><span class="special">);</span>  <span class="comment">// long double version, returns a long double.
+</span><span class="identifier">acosh</span><span class="special">(</span><span class="number">2.0L</span><span class="special">);</span>   <span class="comment">// also calls the long double version.
+</span><span class="identifier">acosh</span><span class="special">(</span><span class="number">2</span><span class="special">);</span>      <span class="comment">// integer argument is treated as a double, returns double.
+</span></pre>
 <a name="math_toolkit.extern_c.c99.quick_reference"></a><h5>
-<a name="math_toolkit.extern_c.c99.quick_reference-heading"></a>
+<a name="id1197584"></a>
         <a class="link" href="c99.html#math_toolkit.extern_c.c99.quick_reference">Quick Reference</a>
       </h5>
 <p>
@@ -461,8 +461,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

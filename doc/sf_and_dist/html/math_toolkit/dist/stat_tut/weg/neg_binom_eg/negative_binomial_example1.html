@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Negative Binomial Sales Quota Example.</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../neg_binom_eg.html" title="Negative Binomial Distribution Examples">
 <link rel="prev" href="neg_binom_size_eg.html" title="Estimating Sample Sizes for the Negative Binomial.">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="neg_binom_size_eg.html"><img src="../../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../neg_binom_eg.html"><img src="../../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../../index.html"><img src="../../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="negative_binomial_example2.html"><img src="../../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
 <a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.negative_binomial_example1"></a><a class="link" href="negative_binomial_example1.html" title="Negative Binomial Sales Quota Example.">Negative
             Binomial Sales Quota Example.</a>
@@ -54,8 +54,8 @@
               of k failures and r successes in k+r Bernoulli(p) trials with success
               on the last trial. (A <a href="http://en.wikipedia.org/wiki/Bernoulli_distribution" target="_top">Bernoulli
               trial</a> is one with only two possible outcomes, success of failure,
-              and p is the probability of success). See also <a href="http://en.wikipedia.org/wiki/Bernoulli_distribution" target="_top">Bernoulli
-              distribution</a> and <a href="http://www.math.uah.edu/stat/bernoulli/Introduction.xhtml" target="_top">Bernoulli
+              and p is the probability of success). See also <a href="../../../../../" target="_top">http://en.wikipedia.org/wiki/Bernoulli_distribution
+              Bernoulli distribution</a> and <a href="http://www.math.uah.edu/stat/bernoulli/Introduction.xhtml" target="_top">Bernoulli
               applications</a>.
             </p>
 <p>
@@ -98,11 +98,11 @@
               
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-  <span class="comment">// for negative_binomial_distribution</span>
-  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.</span>
-  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">pdf</span><span class="special">;</span> <span class="comment">// Probability mass function.</span>
-  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">;</span> <span class="comment">// Cumulative density function.</span>
-  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quantile</span><span class="special">;</span>
+  <span class="comment">// for negative_binomial_distribution
+</span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.
+</span>  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">pdf</span><span class="special">;</span> <span class="comment">// Probability mass function.
+</span>  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">;</span> <span class="comment">// Cumulative density function.
+</span>  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quantile</span><span class="special">;</span>
 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
   <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
@@ -180,8 +180,8 @@
   <span class="special">&lt;&lt;</span> <span class="string">".\nTherefore he would, on average, sell "</span> <span class="special">&lt;&lt;</span> <span class="identifier">nb</span><span class="special">.</span><span class="identifier">success_fraction</span><span class="special">()</span> <span class="special">*</span> <span class="number">100</span>
   <span class="special">&lt;&lt;</span> <span class="string">" bars after trying 100 houses."</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 
-<span class="keyword">int</span> <span class="identifier">all_houses</span> <span class="special">=</span> <span class="number">30</span><span class="special">;</span> <span class="comment">// The number of houses on the estate.</span>
-
+<span class="keyword">int</span> <span class="identifier">all_houses</span> <span class="special">=</span> <span class="number">30</span><span class="special">;</span> <span class="comment">// The number of houses on the estate.
+</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"With a success rate of "</span> <span class="special">&lt;&lt;</span> <span class="identifier">nb</span><span class="special">.</span><span class="identifier">success_fraction</span><span class="special">()</span> 
   <span class="special">&lt;&lt;</span> <span class="string">", he might expect, on average,\n"</span>
     <span class="string">"to need to visit about "</span> <span class="special">&lt;&lt;</span> <span class="identifier">success_fraction</span> <span class="special">*</span> <span class="identifier">all_houses</span>
@@ -245,12 +245,12 @@ Probability that Pat finishes on the 8th house is 0.077414
 </p>
 <pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability that Pat finishes on or before the 8th house is sum "</span>
   <span class="string">"\n"</span> <span class="special">&lt;&lt;</span> <span class="string">"pdf(sales_quota) + pdf(6) + pdf(7) + pdf(8) = "</span>
-  <span class="comment">// Sum each of the mass/density probabilities for houses sales_quota = 5, 6, 7, &amp; 8.</span>
-  <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">5</span> <span class="special">-</span> <span class="identifier">sales_quota</span><span class="special">)</span> <span class="comment">// 0 failures.</span>
-    <span class="special">+</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">6</span> <span class="special">-</span> <span class="identifier">sales_quota</span><span class="special">)</span> <span class="comment">// 1 failure.</span>
-    <span class="special">+</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">7</span> <span class="special">-</span> <span class="identifier">sales_quota</span><span class="special">)</span> <span class="comment">// 2 failures.</span>
-    <span class="special">+</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">8</span> <span class="special">-</span> <span class="identifier">sales_quota</span><span class="special">)</span> <span class="comment">// 3 failures.</span>
-  <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
+  <span class="comment">// Sum each of the mass/density probabilities for houses sales_quota = 5, 6, 7, &amp; 8.
+</span>  <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">5</span> <span class="special">-</span> <span class="identifier">sales_quota</span><span class="special">)</span> <span class="comment">// 0 failures.
+</span>    <span class="special">+</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">6</span> <span class="special">-</span> <span class="identifier">sales_quota</span><span class="special">)</span> <span class="comment">// 1 failure.
+</span>    <span class="special">+</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">7</span> <span class="special">-</span> <span class="identifier">sales_quota</span><span class="special">)</span> <span class="comment">// 2 failures.
+</span>    <span class="special">+</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">8</span> <span class="special">-</span> <span class="identifier">sales_quota</span><span class="special">)</span> <span class="comment">// 3 failures.
+</span>  <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
             </p>
 <pre class="programlisting">pdf(sales_quota) + pdf(6) + pdf(7) + pdf(8) = 0.17367
@@ -442,8 +442,8 @@ even after visiting all 30 houses is 0.0015101
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"If the confidence of meeting sales quota is "</span> <span class="special">&lt;&lt;</span> <span class="number">0.5</span>
     <span class="special">&lt;&lt;</span> <span class="string">", then the finishing house is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">0.5</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">sales_quota</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"If the confidence of meeting sales quota is "</span> <span class="special">&lt;&lt;</span> <span class="number">1</span> <span class="special">-</span> <span class="number">0.00151</span> <span class="comment">// 30 th</span>
-    <span class="special">&lt;&lt;</span> <span class="string">", then the finishing house is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">1</span> <span class="special">-</span> <span class="number">0.00151</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">sales_quota</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"If the confidence of meeting sales quota is "</span> <span class="special">&lt;&lt;</span> <span class="number">1</span> <span class="special">-</span> <span class="number">0.00151</span> <span class="comment">// 30 th
+</span>    <span class="special">&lt;&lt;</span> <span class="string">", then the finishing house is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">1</span> <span class="special">-</span> <span class="number">0.00151</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">sales_quota</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
             </p>
 <pre class="programlisting">If the confidence of meeting sales quota is 0, then the finishing house is 5
@@ -476,8 +476,8 @@ If confidence of meeting quota is 0, then finishing house is 5
               
 </p>
 <pre class="programlisting"> <span class="keyword">double</span> <span class="identifier">ps</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.9</span><span class="special">,</span> <span class="number">0.95</span><span class="special">,</span> <span class="number">0.99</span><span class="special">,</span> <span class="number">0.999</span><span class="special">,</span> <span class="number">1.</span><span class="special">};</span>
- <span class="comment">// Confidence as fraction = 1-alpha, as percent =  100 * (1-alpha[i]) %</span>
- <span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="number">3</span><span class="special">);</span>
+ <span class="comment">// Confidence as fraction = 1-alpha, as percent =  100 * (1-alpha[i]) %
+</span> <span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="number">3</span><span class="special">);</span>
  <span class="keyword">for</span> <span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">ps</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">ps</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="identifier">i</span><span class="special">++)</span>
  <span class="special">{</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"If confidence of meeting quota is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">ps</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span>
@@ -578,9 +578,9 @@ If confidence of meeting quota is 0.95, then finishing house is 21
 </p>
 <pre class="programlisting"><span class="special">}</span>
 <span class="keyword">catch</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exception</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span>
-<span class="special">{</span> <span class="comment">// Since we have set an overflow policy of ignore_error,</span>
-  <span class="comment">// an overflow exception should never be thrown.</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\nMessage from thrown exception was:\n "</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">what</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span></pre>
+<span class="special">{</span> <span class="comment">// Since we have set an overflow policy of ignore_error,
+</span>  <span class="comment">// an overflow exception should never be thrown.
+</span>   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\nMessage from thrown exception was:\n "</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">what</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
             </p>
 <p>
@@ -598,8 +598,9 @@ If confidence of meeting quota is 0.95, then finishing house is 21
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

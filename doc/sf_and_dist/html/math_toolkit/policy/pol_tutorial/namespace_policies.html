@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Setting Policies at Namespace or Translation Unit Scope</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../pol_tutorial.html" title="Policy Tutorial">
 <link rel="prev" href="ad_hoc_sf_policies.html" title="Changing the Policy on an Ad Hoc Basis for the Special Functions">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="ad_hoc_sf_policies.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_tutorial.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="user_def_err_pol.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.policy.pol_tutorial.namespace_policies"></a><a class="link" href="namespace_policies.html" title="Setting Policies at Namespace or Translation Unit Scope">Setting
         Policies at Namespace or Translation Unit Scope</a>
@@ -69,9 +69,9 @@
           
 </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">C</span>
-<span class="special">{</span> <span class="comment">// To hold our C-style policy.</span>
-  <span class="comment">//using namespace boost::math::policies; or explicitly:</span>
-  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span>
+<span class="special">{</span> <span class="comment">// To hold our C-style policy.
+</span>  <span class="comment">//using namespace boost::math::policies; or explicitly:
+</span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span>
 
   <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">;</span>
   <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">pole_error</span><span class="special">;</span>
@@ -127,12 +127,12 @@
 <span class="special">{</span>
    <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(30000) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">C</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="number">30000</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// Note using C::tgamma</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// errno = 34</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">C</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="number">30000</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// Note using C::tgamma
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// errno = 34
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">C</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// errno = 33, overwriting previous value of 34.</span>
-<span class="special">}</span></pre>
+   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// errno = 33, overwriting previous value of 34.
+</span><span class="special">}</span></pre>
 <p>
         </p>
 <p>
@@ -157,13 +157,13 @@ errno = 33
           
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-<span class="comment">// using boost::math::tgamma; // Would create an ambiguity between</span>
-<span class="comment">// 'double boost::math::tgamma&lt;int&gt;(T)' and</span>
-<span class="comment">// 'double 'anonymous-namespace'::tgamma&lt;int&gt;(RT)'.</span>
-
+<span class="comment">// using boost::math::tgamma; // Would create an ambiguity between
+</span><span class="comment">// 'double boost::math::tgamma&lt;int&gt;(T)' and
+</span><span class="comment">// 'double 'anonymous-namespace'::tgamma&lt;int&gt;(RT)'.
+</span>
 <span class="keyword">namespace</span>
-<span class="special">{</span> <span class="comment">// unnamed</span>
-
+<span class="special">{</span> <span class="comment">// unnamed
+</span>
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
@@ -184,20 +184,20 @@ errno = 33
 <p>
           
 </p>
-<pre class="programlisting"><span class="special">}</span> <span class="comment">// close unnamed namespace</span>
-
+<pre class="programlisting"><span class="special">}</span> <span class="comment">// close unnamed namespace
+</span>
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
    <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(30000) is: "</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="number">30000</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-      <span class="comment">// tgamma in unnamed namespace in this translation unit (file) only.</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+      <span class="comment">// tgamma in unnamed namespace in this translation unit (file) only.
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-   <span class="comment">// Default tgamma policy would throw an exception, and abort.</span>
-<span class="special">}</span>
+   <span class="comment">// Default tgamma policy would throw an exception, and abort.
+</span><span class="special">}</span>
 
 </pre>
 <p>
@@ -221,14 +221,14 @@ errno = 33
 <p>
           Suppose we want a set of distributions to behave as follows:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
               Return infinity on overflow, rather than throwing an exception.
             </li>
-<li class="listitem">
+<li>
               Don't perform any promotion from double to long double internally.
             </li>
-<li class="listitem">
+<li>
               Return the closest integer result from the quantiles of discrete distributions.
             </li>
 </ul></div>
@@ -252,15 +252,15 @@ errno = 33
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">my_distributions</span>
 <span class="special">{</span>
   <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
-  <span class="comment">// using boost::math::policies::errno_on_error; // etc.</span>
-
+  <span class="comment">// using boost::math::policies::errno_on_error; // etc.
+</span>
   <span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
-     <span class="comment">// return infinity and set errno rather than throw:</span>
-     <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
-     <span class="comment">// Don't promote double -&gt; long double internally:</span>
-     <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;,</span>
-     <span class="comment">// Return the closest integer result for discrete quantiles:</span>
-     <span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_nearest</span><span class="special">&gt;</span>
+     <span class="comment">// return infinity and set errno rather than throw:
+</span>     <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
+     <span class="comment">// Don't promote double -&gt; long double internally:
+</span>     <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;,</span>
+     <span class="comment">// Return the closest integer result for discrete quantiles:
+</span>     <span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_nearest</span><span class="special">&gt;</span>
   <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span></pre>
 <p>
         </p>
@@ -288,8 +288,8 @@ errno = 33
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">normal</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cauchy_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">cauchy</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">gamma_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">gamma</span><span class="special">;</span>
-<span class="comment">// etc</span>
-</pre>
+<span class="comment">// etc
+</span></pre>
 <p>
         </p>
 <p>
@@ -300,24 +300,24 @@ errno = 33
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-   <span class="comment">// Construct distribution with something we know will overflow</span>
-  <span class="comment">// (using double rather than if promoted to long double):</span>
-   <span class="identifier">my_distributions</span><span class="special">::</span><span class="identifier">normal</span> <span class="identifier">norm</span><span class="special">(</span><span class="number">10</span><span class="special">,</span> <span class="number">2</span><span class="special">);</span>
+   <span class="comment">// Construct distribution with something we know will overflow
+</span>  <span class="comment">// (using double rather than if promoted to long double):
+</span>   <span class="identifier">my_distributions</span><span class="special">::</span><span class="identifier">normal</span> <span class="identifier">norm</span><span class="special">(</span><span class="number">10</span><span class="special">,</span> <span class="number">2</span><span class="special">);</span>
 
    <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of quantile(norm, 0) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">norm</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// -infinity.</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">norm</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// -infinity.
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of quantile(norm, 1) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">norm</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// +infinity.</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">norm</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// +infinity.
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 
-   <span class="comment">// Now try a discrete distribution.</span>
-   <span class="identifier">my_distributions</span><span class="special">::</span><span class="identifier">binomial</span> <span class="identifier">binom</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
+   <span class="comment">// Now try a discrete distribution.
+</span>   <span class="identifier">my_distributions</span><span class="special">::</span><span class="identifier">binomial</span> <span class="identifier">binom</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of quantile(binom, 0.05) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom</span><span class="special">,</span> <span class="number">0.05</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// To check we get integer results.</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of quantile(complement(binom, 0.05)) is: "</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom</span><span class="special">,</span> <span class="number">0.05</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// To check we get integer results.
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of quantile(complement(binom, 0.05)) is: "</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">binom</span><span class="special">,</span> <span class="number">0.05</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="special">}</span></pre>
 <p>
@@ -357,34 +357,34 @@ Result of quantile(complement(binom, 0.05)) is: 8
 <p>
           
 </p>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// All distributions.</span>
-<span class="comment">// using boost::math::normal; // Would create an ambguity between</span>
-<span class="comment">// boost::math::normal_distribution&lt;RealType&gt; boost::math::normal and</span>
-<span class="comment">// 'anonymous-namespace'::normal'.</span>
-
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// All distributions.
+</span><span class="comment">// using boost::math::normal; // Would create an ambguity between
+</span><span class="comment">// boost::math::normal_distribution&lt;RealType&gt; boost::math::normal and
+</span><span class="comment">// 'anonymous-namespace'::normal'.
+</span>
 <span class="keyword">namespace</span>
-<span class="special">{</span> <span class="comment">// anonymous or unnnamed (rather than named as in policy_eg_6.cpp).</span>
-
+<span class="special">{</span> <span class="comment">// anonymous or unnnamed (rather than named as in policy_eg_6.cpp).
+</span>
   <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
-   <span class="comment">// using boost::math::policies::errno_on_error; // etc.</span>
-  <span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
-     <span class="comment">// return infinity and set errno rather than throw:</span>
-     <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
-     <span class="comment">// Don't promote double -&gt; long double internally:</span>
-     <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;,</span>
-     <span class="comment">// Return the closest integer result for discrete quantiles:</span>
-     <span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_nearest</span><span class="special">&gt;</span>
+   <span class="comment">// using boost::math::policies::errno_on_error; // etc.
+</span>  <span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
+     <span class="comment">// return infinity and set errno rather than throw:
+</span>     <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
+     <span class="comment">// Don't promote double -&gt; long double internally:
+</span>     <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;,</span>
+     <span class="comment">// Return the closest integer result for discrete quantiles:
+</span>     <span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_nearest</span><span class="special">&gt;</span>
   <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
 
   <span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span><span class="special">(</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">)</span>
 
-<span class="special">}</span> <span class="comment">// close namespace my_namespace</span>
-
+<span class="special">}</span> <span class="comment">// close namespace my_namespace
+</span>
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-   <span class="comment">// Construct distribution with something we know will overflow.</span>
-   <span class="identifier">normal</span> <span class="identifier">norm</span><span class="special">(</span><span class="number">10</span><span class="special">,</span> <span class="number">2</span><span class="special">);</span> <span class="comment">// using 'anonymous-namespace'::normal</span>
-   <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+   <span class="comment">// Construct distribution with something we know will overflow.
+</span>   <span class="identifier">normal</span> <span class="identifier">norm</span><span class="special">(</span><span class="number">10</span><span class="special">,</span> <span class="number">2</span><span class="special">);</span> <span class="comment">// using 'anonymous-namespace'::normal
+</span>   <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of quantile(norm, 0) is: "</span> 
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">norm</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -392,9 +392,9 @@ Result of quantile(complement(binom, 0.05)) is: 8
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of quantile(norm, 1) is: "</span> 
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">norm</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-   <span class="comment">//</span>
-   <span class="comment">// Now try a discrete distribution:</span>
-   <span class="identifier">binomial</span> <span class="identifier">binom</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
+   <span class="comment">//
+</span>   <span class="comment">// Now try a discrete distribution:
+</span>   <span class="identifier">binomial</span> <span class="identifier">binom</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of quantile(binom, 0.05) is: "</span> 
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom</span><span class="special">,</span> <span class="number">0.05</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of quantile(complement(binom, 0.05)) is: "</span> 
@@ -407,8 +407,9 @@ Result of quantile(complement(binom, 0.05)) is: 8
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

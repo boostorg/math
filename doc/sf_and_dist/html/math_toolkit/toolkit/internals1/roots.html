@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schroeder</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../internals1.html" title="Utilities - Constants &amp; Tools">
 <link rel="prev" href="rational.html" title="Polynomial and Rational Function Evaluation">
@@ -22,13 +22,13 @@
 <div class="spirit-nav">
 <a accesskey="p" href="rational.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="roots2.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.toolkit.internals1.roots"></a><a class="link" href="roots.html" title="Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schroeder">Root Finding
         With Derivatives: Newton-Raphson, Halley &amp; Schroeder</a>
 </h4></div></div></div>
 <a name="math_toolkit.toolkit.internals1.roots.synopsis"></a><h5>
-<a name="math_toolkit.toolkit.internals1.roots.synopsis-heading"></a>
+<a name="id1222145"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -59,21 +59,21 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">schroeder_iterate</span><span class="special">(</span><span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">digits</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
-<span class="special">}}}</span> <span class="comment">// namespaces</span>
-</pre>
+<span class="special">}}}</span> <span class="comment">// namespaces
+</span></pre>
 <a name="math_toolkit.toolkit.internals1.roots.description"></a><h5>
-<a name="math_toolkit.toolkit.internals1.roots.description-heading"></a>
+<a name="id1225347"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.description">Description</a>
         </h5>
 <p>
           These functions all perform iterative root finding using derivatives:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
               <code class="computeroutput"><span class="identifier">newton_raphson_iterate</span></code>performs
               second order <a class="link" href="roots.html#newton">Newton-Raphson iteration</a>,
             </li>
-<li class="listitem">
+<li>
               <code class="computeroutput"><span class="identifier">halley_iterate</span></code> and<code class="computeroutput"><span class="identifier">schroeder_iterate</span></code> perform third order
               <a class="link" href="roots.html#halley">Halley</a> and <a class="link" href="roots.html#schroeder">Schroeder</a>
               iteration.
@@ -131,48 +131,48 @@
 <p>
           When using these functions you should note that:
         </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
               Default max_iter = <code class="computeroutput"><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&gt;::</span><span class="identifier">max</span><span class="special">)()</span></code> is effectively 'iterate for ever'!.
             </li>
-<li class="listitem">
+<li>
               They may be very sensitive to the initial guess, typically they converge
               very rapidly if the initial guess has two or three decimal digits correct.
               However convergence can be no better than bisection, or in some rare
               cases, even worse than bisection if the initial guess is a long way
               from the correct value and the derivatives are close to zero.
             </li>
-<li class="listitem">
+<li>
               These functions include special cases to handle zero first (and second
               where appropriate) derivatives, and fall back to bisection in this
               case. However, it is helpful if functor F is defined to return an arbitrarily
               small value <span class="emphasis"><em>of the correct sign</em></span> rather than zero.
             </li>
-<li class="listitem">
+<li>
               If the derivative at the current best guess for the result is infinite
               (or very close to being infinite) then these functions may terminate
               prematurely. A large first derivative leads to a very small next step,
               triggering the termination condition. Derivative based iteration may
               not be appropriate in such cases.
             </li>
-<li class="listitem">
+<li>
               If the function is 'Really Well Behaved' (monotonic and has only one
               root) the bracket bounds min and max may as well be set to the widest
               limits like zero and <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">max</span><span class="special">()</span></code>.
             </li>
-<li class="listitem">
+<li>
               But if the function more complex and may have more than one root or
               a pole, the choice of bounds is protection against jumping out to seek
               the 'wrong' root.
             </li>
-<li class="listitem">
+<li>
               These functions fall back to bisection if the next computed step would
               take the next value out of bounds. The bounds are updated after each
               step to ensure this leads to convergence. However, a good initial guess
               backed up by asymptotically-tight bounds will improve performance no
               end - rather than relying on bisection.
             </li>
-<li class="listitem">
+<li>
               The value of <span class="emphasis"><em>digits</em></span> is crucial to good performance
               of these functions, if it is set too high then at best you will get
               one extra (unnecessary) iteration, and at worst the last few steps
@@ -187,17 +187,17 @@
               final iteration just takes the next value into the zone where f(x)
               becomes inaccurate.
             </li>
-<li class="listitem">
+<li>
               To get the binary digits of accuracy, use policies::get_max_root_iterations&lt;Policy&gt;()).
             </li>
-<li class="listitem">
+<li>
               If you need some diagnostic output to see what is going on, you can
               <code class="computeroutput"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_INSTRUMENT</span></code>
               before the <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">roots</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>, and also ensure that display of
               all the possibly significant digits with <code class="computeroutput"> <span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span><span class="special">)</span></code>: but be warned, this may produce copious
               output!
             </li>
-<li class="listitem">
+<li>
               Finally: you may well be able to do better than these functions by
               hand-coding the heuristics used so that they are tailored to a specific
               function. You may also be able to compute the ratio of derivatives
@@ -206,7 +206,7 @@
             </li>
 </ul></div>
 <a name="newton"></a><a name="math_toolkit.toolkit.internals1.roots.newton_raphson_method"></a><h5>
-<a name="math_toolkit.toolkit.internals1.roots.newton_raphson_method-heading"></a>
+<a name="id1225843"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.newton_raphson_method">Newton
           Raphson Method</a>
         </h5>
@@ -224,7 +224,7 @@
           iteration.
         </p>
 <a name="halley"></a><a name="math_toolkit.toolkit.internals1.roots.halley_s_method"></a><h5>
-<a name="math_toolkit.toolkit.internals1.roots.halley_s_method-heading"></a>
+<a name="id1225898"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.halley_s_method">Halley's
           Method</a>
         </h5>
@@ -246,7 +246,7 @@
           iteration.
         </p>
 <a name="schroeder"></a><a name="math_toolkit.toolkit.internals1.roots.schroeder_s_method"></a><h5>
-<a name="math_toolkit.toolkit.internals1.roots.schroeder_s_method-heading"></a>
+<a name="id1225956"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.schroeder_s_method">Schroeder's
           Method</a>
         </h5>
@@ -270,7 +270,7 @@
           iteration.
         </p>
 <a name="math_toolkit.toolkit.internals1.roots.example"></a><h5>
-<a name="math_toolkit.toolkit.internals1.roots.example-heading"></a>
+<a name="id1226011"></a>
           <a class="link" href="roots.html#math_toolkit.toolkit.internals1.roots.example">Example</a>
         </h5>
 <p>
@@ -289,17 +289,17 @@
 <span class="keyword">struct</span> <span class="identifier">cbrt_functor</span>
 <span class="special">{</span>
    <span class="identifier">cbrt_functor</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">target</span><span class="special">)</span> <span class="special">:</span> <span class="identifier">a</span><span class="special">(</span><span class="identifier">target</span><span class="special">)</span>
-   <span class="special">{</span> <span class="comment">// Constructor stores value to be 'cube-rooted'.</span>
-   <span class="special">}</span>
+   <span class="special">{</span> <span class="comment">// Constructor stores value to be 'cube-rooted'.
+</span>   <span class="special">}</span>
    <a class="link" href="tuples.html" title="Tuples">boost::math::tuple</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">)</span>
-   <span class="special">{</span> <span class="comment">// z is estimate so far.</span>
-      <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">make_tuple</span><span class="special">(</span>
-      <span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span> <span class="special">-</span> <span class="identifier">a</span><span class="special">,</span> <span class="comment">// return both f(x)</span>
-      <span class="number">3</span> <span class="special">*</span> <span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">);</span>  <span class="comment">// and f'(x)</span>
-   <span class="special">}</span>
+   <span class="special">{</span> <span class="comment">// z is estimate so far.
+</span>      <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">make_tuple</span><span class="special">(</span>
+      <span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span> <span class="special">-</span> <span class="identifier">a</span><span class="special">,</span> <span class="comment">// return both f(x)
+</span>      <span class="number">3</span> <span class="special">*</span> <span class="identifier">z</span><span class="special">*</span><span class="identifier">z</span><span class="special">);</span>  <span class="comment">// and f'(x)
+</span>   <span class="special">}</span>
 <span class="keyword">private</span><span class="special">:</span>
-   <span class="identifier">T</span> <span class="identifier">a</span><span class="special">;</span> <span class="comment">// to be 'cube-rooted'.</span>
-<span class="special">};</span>
+   <span class="identifier">T</span> <span class="identifier">a</span><span class="special">;</span> <span class="comment">// to be 'cube-rooted'.
+</span><span class="special">};</span>
 </pre>
 <p>
           Implementing the cube root is fairly trivial now, the hardest part is finding
@@ -309,16 +309,16 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="identifier">T</span> <span class="identifier">cbrt</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">)</span>
 <span class="special">{</span>
-   <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">std</span><span class="special">;</span> <span class="comment">// for frexp, ldexp, numeric_limits.</span>
-   <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">;</span>
+   <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">std</span><span class="special">;</span> <span class="comment">// for frexp, ldexp, numeric_limits.
+</span>   <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tools</span><span class="special">;</span>
 
    <span class="keyword">int</span> <span class="identifier">exp</span><span class="special">;</span>
-   <span class="identifier">frexp</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">exp</span><span class="special">);</span> <span class="comment">// Get exponent of z (ignore mantissa).</span>
-   <span class="identifier">T</span> <span class="identifier">min</span> <span class="special">=</span> <span class="identifier">ldexp</span><span class="special">(</span><span class="number">0.5</span><span class="special">,</span> <span class="identifier">exp</span><span class="special">/</span><span class="number">3</span><span class="special">);</span>
+   <span class="identifier">frexp</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">exp</span><span class="special">);</span> <span class="comment">// Get exponent of z (ignore mantissa).
+</span>   <span class="identifier">T</span> <span class="identifier">min</span> <span class="special">=</span> <span class="identifier">ldexp</span><span class="special">(</span><span class="number">0.5</span><span class="special">,</span> <span class="identifier">exp</span><span class="special">/</span><span class="number">3</span><span class="special">);</span>
    <span class="identifier">T</span> <span class="identifier">max</span> <span class="special">=</span> <span class="identifier">ldexp</span><span class="special">(</span><span class="number">2.0</span><span class="special">,</span> <span class="identifier">exp</span><span class="special">/</span><span class="number">3</span><span class="special">);</span>
-   <span class="identifier">T</span> <span class="identifier">guess</span> <span class="special">=</span> <span class="identifier">ldexp</span><span class="special">(</span><span class="number">1.0</span><span class="special">,</span> <span class="identifier">exp</span><span class="special">/</span><span class="number">3</span><span class="special">);</span> <span class="comment">// Rough guess is to divide the exponent by three.</span>
-   <span class="keyword">int</span> <span class="identifier">digits</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span><span class="special">;</span> <span class="comment">// Maximum possible binary digits accuracy for type T.</span>
-   <span class="keyword">return</span> <span class="identifier">newton_raphson_iterate</span><span class="special">(</span><span class="identifier">detail</span><span class="special">::</span><span class="identifier">cbrt_functor</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">),</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">max</span><span class="special">,</span> <span class="identifier">digits</span><span class="special">);</span>
+   <span class="identifier">T</span> <span class="identifier">guess</span> <span class="special">=</span> <span class="identifier">ldexp</span><span class="special">(</span><span class="number">1.0</span><span class="special">,</span> <span class="identifier">exp</span><span class="special">/</span><span class="number">3</span><span class="special">);</span> <span class="comment">// Rough guess is to divide the exponent by three.
+</span>   <span class="keyword">int</span> <span class="identifier">digits</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span><span class="special">;</span> <span class="comment">// Maximum possible binary digits accuracy for type T.
+</span>   <span class="keyword">return</span> <span class="identifier">newton_raphson_iterate</span><span class="special">(</span><span class="identifier">detail</span><span class="special">::</span><span class="identifier">cbrt_functor</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">),</span> <span class="identifier">guess</span><span class="special">,</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">max</span><span class="special">,</span> <span class="identifier">digits</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -410,8 +410,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Complements are supported too - and when to use them</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../overview.html" title="Overview of Distributions">
 <link rel="prev" href="generic.html" title="Generic operations common to all distributions are non-member functions">
@@ -22,9 +22,9 @@
 <div class="spirit-nav">
 <a accesskey="p" href="generic.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../overview.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="parameters.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.stat_tut.overview.complements"></a><a name="complements"></a><a class="link" href="complements.html" title="Complements are supported too - and when to use them">Complements
+<a name="math_toolkit.dist.stat_tut.overview.complements"></a><a name="complements"></a> <a class="link" href="complements.html" title="Complements are supported too - and when to use them">Complements
           are supported too - and when to use them</a>
 </h5></div></div></div>
 <p>
@@ -56,10 +56,10 @@
 
 <span class="keyword">for</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="number">1e10</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">*=</span> <span class="number">10</span><span class="special">)</span>
 <span class="special">{</span>
-   <span class="comment">// Calculate the quantile for a 1 in i chance:</span>
-   <span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="number">1</span><span class="special">/</span><span class="identifier">i</span><span class="special">));</span>
-   <span class="comment">// Print it out:</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Quantile of students-t with 5 degrees of freedom\n"</span>
+   <span class="comment">// Calculate the quantile for a 1 in i chance:
+</span>   <span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist</span><span class="special">,</span> <span class="number">1</span><span class="special">/</span><span class="identifier">i</span><span class="special">));</span>
+   <span class="comment">// Print it out:
+</span>   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Quantile of students-t with 5 degrees of freedom\n"</span>
            <span class="string">"for a 1 in "</span> <span class="special">&lt;&lt;</span> <span class="identifier">i</span> <span class="special">&lt;&lt;</span> <span class="string">" chance is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="special">}</span>
 </pre>
@@ -103,14 +103,15 @@
             </p>
 </td></tr>
 </table></div>
-<a name="why_complements"></a><div class="tip"><table border="0" summary="Tip">
+<div class="tip"><table border="0" summary="Tip">
 <tr>
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../../../../doc/src/images/tip.png"></td>
 <th align="left">Tip</th>
 </tr>
 <tr><td align="left" valign="top">
 <p>
-              <span class="bold"><strong>Why bother with complements anyway?</strong></span>
+              <span class="bold"><strong><a name="why_complements"></a> Why bother with
+              complements anyway?</strong></span>
             </p>
 <p>
               It's very tempting to dispense with complements, and simply subtract
@@ -185,8 +186,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
+      Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
