@@ -282,7 +282,7 @@ and find a distribution clearly shifted to greater values (see figure).
     probability variance <= 25: 8.85e-010
     probability variance > 50: 0.489
   
-  */
+*/
 //] [/inverse_chi_squared_bayes_eg_output_4]
 
 //[inverse_chi_squared_bayes_eg_5
