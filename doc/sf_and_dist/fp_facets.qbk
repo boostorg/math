@@ -379,14 +379,18 @@ Same as `trap_infinity`, but positive and negative NaN are trapped instead.
 
 [h5 Use with lexical_cast]
 
-Without using a new locale that contains the nonfinite facets, `lexical_cast` is not portable
-(and often fails) if nonfinite values are found.
+[note From Boost 1.48, lexical_cast no longer uses stringstreams internally,
+and is now able to handle infinities and NaNs natively on most platforms.]
+
+Without using a new locale that contains the nonfinite facets,
+previous versions of `lexical_cast` using stringstream were not portable
+(and often failed) if nonfinite values are found.
 
 [nonfinite_facets_sstream_1]
 
 Although other examples imbue individual streams with the new locale,
 for the streams constructed inside lexical_cast,
-it is necesary to assign to a global locale.
+it was necesary to assign to a global locale.
 
   locale::global(new_locale);
 
@@ -397,6 +401,10 @@ it is necesary to assign to a global locale.
 
   string s = boost::lexical_cast<string>(numeric_limits<double>::infinity());
   assert(s == "inf");
+
+[warning If you use stringstream inside your functions,
+you may still need to use a global locale to handle nonfinites correctly.
+Or you need to imbue your stringstream with suitable get and put facets.]
 
 [warning You should be aware that the C++ specification does not explicitly require
 that input from decimal digits strings converts with rounding to the
