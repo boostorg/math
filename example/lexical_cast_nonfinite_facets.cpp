@@ -100,10 +100,11 @@ int main ()
   cout << "-std::numeric_limits<double>::infinity() = " << minus_infinity << endl;
   cout << "+std::numeric_limits<double>::quiet_NaN () = " << NaN << endl;
 
-  // Now try some 'round-tripping', 'reading' "inf"
+  // Now try some 'round-tripping', 'reading' "inf".
   double x = boost::lexical_cast<double>("inf");
   // and check we get a floating-point infinity.
   BOOST_ASSERT(x == std::numeric_limits<double>::infinity());
+  cout << "boost::lexical_cast<double>(\"inf\") = " << x << endl;
 
   // Check we can convert the other way from floating-point infinity,
   string s = boost::lexical_cast<string>(numeric_limits<double>::infinity());
@@ -121,11 +122,12 @@ int main ()
 /*
 
 Output:
-
   finite_num_facet with lexical_cast example.
-  Using C99_out_locale
+  Using C99_out_locale 
   +std::numeric_limits<double>::infinity() = inf
   -std::numeric_limits<double>::infinity() = -inf
   +std::numeric_limits<double>::quiet_NaN () = nan
+  boost::lexical_cast<double>("inf") = inf
+
 
 */
