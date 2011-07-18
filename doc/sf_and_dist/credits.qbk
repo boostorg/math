@@ -31,6 +31,9 @@ Paul A. Bristow expressed the need for better handling of
 Input & Output of NaN and infinity for the C++ Standard Library]
 and suggested following the C99 format.
 
+Antony Polukhin improved lexical cast avoiding stringstream so that 
+it was no longer necessary to use a globale C99 facet to handle nonfinites.
+
 H'''&#xE5;'''kan Ard'''&#xF6;''',
 Boris Gubenko, John Maddock,
 Markus Sch'''&#xF6;'''pflin
