@@ -167,7 +167,7 @@ void test_spots(RealType)
       static_cast<RealType>(0));
    BOOST_CHECK_EQUAL( // x > upper
       cdf(complement(uniform_distribution<RealType>(0, 1), static_cast<RealType>(2))), 
-      static_cast<RealType>(1));
+      static_cast<RealType>(0));
 
    // quantile
 
