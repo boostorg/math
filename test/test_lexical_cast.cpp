@@ -72,8 +72,8 @@ template<class CharType, class ValType> void lexical_cast_test_impl()
     ValType a6 = (changesign)(static_cast<ValType>(0));
     ValType a7 = static_cast<ValType>(-57);
     ValType a8 = -std::numeric_limits<ValType>::infinity();
-    ValType a9 = (changesign)(std::numeric_limits<ValType>::quiet_NaN());
-    ValType a10 = (changesign)(std::numeric_limits<ValType>::signaling_NaN());
+    ValType a9 = (changesign)(std::numeric_limits<ValType>::quiet_NaN()); // -NaN
+    ValType a10 = (changesign)(std::numeric_limits<ValType>::signaling_NaN()); // -NaN
 
     std::basic_string<CharType> s1 = S_("0");
     std::basic_string<CharType> s2 = S_("13");
