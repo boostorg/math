@@ -11,6 +11,8 @@ provided by Thomas Mang.
 
 * Added tests to use improved version of lexical_cast which handles C99 nonfinites without using globale facets.
 
+* Corrected wrong out-of-bound uniform distribution CDF complement values https://svn.boost.org/trac/boost/ticket/5733 #5733.
+
 [h4 Boost-1.47]
 
 * Added changesign function to sign.hpp to facilitate addition of nonfinite facets.
