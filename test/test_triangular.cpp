@@ -8,7 +8,7 @@
 
 // test_triangular.cpp
 
-#include <pch.hpp>
+// #include <pch.hpp>
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
