@@ -29,6 +29,7 @@ project
       <toolset>msvc:<warnings>all
       <toolset>msvc:<asynch-exceptions>on
       <toolset>msvc:<cxxflags>/wd4996
+      <toolset>msvc:<cxxflags>/wd4511 # copy constructor could not be generated 
       <toolset>msvc:<cxxflags>/wd4512 
       <toolset>msvc:<cxxflags>/wd4610 
       <toolset>msvc:<cxxflags>/wd4510 

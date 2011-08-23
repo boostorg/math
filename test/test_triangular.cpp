@@ -74,7 +74,7 @@ void test_spots(RealType)
   // Basic sanity checks:
   //
   // Some test values were generated for the triangular distribution
-  // using the online calculator at 
+  // using the online calculator at
   // http://espse.ed.psu.edu/edpsych/faculty/rhale/hale/507Mat/statlets/free/pdist.htm
   //
   // Tolerance is just over 5 epsilon expressed as a fraction:
@@ -82,7 +82,7 @@ void test_spots(RealType)
   RealType tol5eps = boost::math::tools::epsilon<RealType>() * 5; // 5 eps as a fraction.
 
   cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
-  
+
   using namespace std; // for ADL of std::exp;
 
   // Tests on construction
@@ -126,91 +126,91 @@ void test_spots(RealType)
   // Tests for PDF
   // // triangular_distribution<RealType>() default is (0, 0, 1), mode == lower.
   BOOST_CHECK_CLOSE_FRACTION( // x == lower == mode
-    pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(0)), 
-    static_cast<RealType>(2), 
+    pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(0)),
+    static_cast<RealType>(2),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x == upper
-    pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(1)), 
-    static_cast<RealType>(0), 
+    pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(1)),
+    static_cast<RealType>(0),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x > upper
-    pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-1)), 
-    static_cast<RealType>(0), 
-    tolerance); 
+    pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-1)),
+    static_cast<RealType>(0),
+    tolerance);
   BOOST_CHECK_CLOSE_FRACTION( // x < lower
-    pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(2)), 
-    static_cast<RealType>(0), 
+    pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(2)),
+    static_cast<RealType>(0),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x < lower
-    pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(2)), 
-    static_cast<RealType>(0), 
+    pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(2)),
+    static_cast<RealType>(0),
     tolerance);
 
   // triangular_distribution<RealType>() (0, 1, 1) mode == upper
   BOOST_CHECK_CLOSE_FRACTION( // x == lower
-    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0)), 
-    static_cast<RealType>(0), 
+    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0)),
+    static_cast<RealType>(0),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x == upper
-    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(1)), 
-    static_cast<RealType>(2), 
+    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(1)),
+    static_cast<RealType>(2),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x > upper
-    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(-1)), 
-    static_cast<RealType>(0), 
-    tolerance); 
+    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(-1)),
+    static_cast<RealType>(0),
+    tolerance);
   BOOST_CHECK_CLOSE_FRACTION( // x < lower
-    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(2)), 
-    static_cast<RealType>(0), 
+    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(2)),
+    static_cast<RealType>(0),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x < middle so Wiki says special case pdf = 2 * x
-    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0.25)), 
-    static_cast<RealType>(0.5), 
+    pdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0.25)),
+    static_cast<RealType>(0.5),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x < middle so Wiki says special case cdf = x * x
-    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0.25)), 
-    static_cast<RealType>(0.25 * 0.25), 
+    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0.25)),
+    static_cast<RealType>(0.25 * 0.25),
     tolerance);
 
   // triangular_distribution<RealType>() (0, 0.5, 1) mode == middle.
   BOOST_CHECK_CLOSE_FRACTION( // x == lower
-    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(0)), 
-    static_cast<RealType>(0), 
+    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(0)),
+    static_cast<RealType>(0),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x == upper
-    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(1)), 
-    static_cast<RealType>(0), 
+    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(1)),
+    static_cast<RealType>(0),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x > upper
-    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(-1)), 
-    static_cast<RealType>(0), 
-    tolerance); 
+    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(-1)),
+    static_cast<RealType>(0),
+    tolerance);
   BOOST_CHECK_CLOSE_FRACTION( // x < lower
-    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(2)), 
-    static_cast<RealType>(0), 
+    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(2)),
+    static_cast<RealType>(0),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x == mode
-    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(0.5)), 
-    static_cast<RealType>(2), 
+    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(0.5)),
+    static_cast<RealType>(2),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x == half mode
-    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(0.25)), 
-    static_cast<RealType>(1), 
+    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(0.25)),
+    static_cast<RealType>(1),
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION( // x == half mode
-    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(0.75)), 
-    static_cast<RealType>(1), 
+    pdf(triangular_distribution<RealType>(0, 0.5, 1), static_cast<RealType>(0.75)),
+    static_cast<RealType>(1),
     tolerance);
 
   if(std::numeric_limits<RealType>::has_infinity)
@@ -223,112 +223,112 @@ void test_spots(RealType)
     // of error handling is tested below with BOOST_CHECK_THROW tests.
 
     BOOST_CHECK_THROW( // x == infinity NOT OK.
-      pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(std::numeric_limits<RealType>::infinity())), 
+      pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(std::numeric_limits<RealType>::infinity())),
       std::domain_error);
 
     BOOST_CHECK_THROW( // x == minus infinity not OK too.
-      pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-std::numeric_limits<RealType>::infinity())), 
+      pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-std::numeric_limits<RealType>::infinity())),
       std::domain_error);
   }
   if(std::numeric_limits<RealType>::has_quiet_NaN)
   { // BOOST_CHECK tests for NaN using std::numeric_limits<>::has_quiet_NaN() - should throw.
     BOOST_CHECK_THROW(
-      pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN())), 
+      pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN())),
       std::domain_error);
     BOOST_CHECK_THROW(
-      pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-std::numeric_limits<RealType>::quiet_NaN())), 
+      pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-std::numeric_limits<RealType>::quiet_NaN())),
       std::domain_error);
   } // test for x = NaN using std::numeric_limits<>::quiet_NaN()
 
   // cdf
   BOOST_CHECK_EQUAL( // x < lower
-    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(-1)), 
+    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(-1)),
     static_cast<RealType>(0) );
   BOOST_CHECK_CLOSE_FRACTION( // x == lower
-    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0)), 
-    static_cast<RealType>(0), 
+    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0)),
+    static_cast<RealType>(0),
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION( // x == upper
-    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(1)), 
-    static_cast<RealType>(1), 
+    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(1)),
+    static_cast<RealType>(1),
     tolerance);
    BOOST_CHECK_EQUAL( // x > upper
-    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(2)), 
+    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(2)),
     static_cast<RealType>(1));
 
   BOOST_CHECK_CLOSE_FRACTION( // x == mode
-    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(0)), 
-    //static_cast<RealType>((mode - lower) / (upper - lower)), 
+    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(0)),
+    //static_cast<RealType>((mode - lower) / (upper - lower)),
     static_cast<RealType>(0.5),    // (0 --1) / (1 -- 1) = 0.5
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION(
-    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0.9L)), 
-    static_cast<RealType>(0.81L), 
+    cdf(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(0.9L)),
+    static_cast<RealType>(0.81L),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(
-    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(-1)), 
-    static_cast<RealType>(0), 
+    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(-1)),
+    static_cast<RealType>(0),
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION(
-    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(-0.5L)), 
-    static_cast<RealType>(0.125L), 
+    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(-0.5L)),
+    static_cast<RealType>(0.125L),
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION(
-    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(0)), 
-    static_cast<RealType>(0.5), 
+    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(0)),
+    static_cast<RealType>(0.5),
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION(
-    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(+0.5L)), 
-    static_cast<RealType>(0.875L), 
+    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(+0.5L)),
+    static_cast<RealType>(0.875L),
     tolerance);
   BOOST_CHECK_CLOSE_FRACTION(
-    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(1)), 
-    static_cast<RealType>(1), 
+    cdf(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(1)),
+    static_cast<RealType>(1),
     tolerance);
 
    // cdf complement
   BOOST_CHECK_EQUAL( // x < lower
-    cdf(complement(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-1))), 
+    cdf(complement(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-1))),
     static_cast<RealType>(1));
   BOOST_CHECK_EQUAL( // x == lower
-    cdf(complement(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(0))), 
+    cdf(complement(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(0))),
     static_cast<RealType>(1));
 
   BOOST_CHECK_EQUAL( // x == mode
-    cdf(complement(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(0))), 
+    cdf(complement(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(0))),
     static_cast<RealType>(0.5));
 
   BOOST_CHECK_EQUAL( // x == mode
-    cdf(complement(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(0))), 
+    cdf(complement(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(0))),
     static_cast<RealType>(1));
   BOOST_CHECK_EQUAL( // x == mode
-    cdf(complement(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(1))), 
+    cdf(complement(triangular_distribution<RealType>(0, 1, 1), static_cast<RealType>(1))),
     static_cast<RealType>(0));
 
-  BOOST_CHECK_EQUAL( // x > upper 
-    cdf(complement(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(2))), 
+  BOOST_CHECK_EQUAL( // x > upper
+    cdf(complement(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(2))),
     static_cast<RealType>(0));
   BOOST_CHECK_EQUAL( // x == upper
-    cdf(complement(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(1))), 
+    cdf(complement(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(1))),
     static_cast<RealType>(0));
 
   BOOST_CHECK_CLOSE_FRACTION( // x = -0.5
-    cdf(complement(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(-0.5))), 
-    static_cast<RealType>(0.875L), 
+    cdf(complement(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(-0.5))),
+    static_cast<RealType>(0.875L),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION( // x = +0.5
-    cdf(complement(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(0.5))), 
-    static_cast<RealType>(0.125), 
+    cdf(complement(triangular_distribution<RealType>(-1, 0, 1), static_cast<RealType>(0.5))),
+    static_cast<RealType>(0.125),
     tolerance);
-  
+
   triangular_distribution<RealType> triang; // Using typedef == triangular_distribution<double> tristd;
   triangular_distribution<RealType> tristd(0, 0.5, 1); // 'Standard' triangular distribution.
 
   BOOST_CHECK_CLOSE_FRACTION( // median of Standard triangular is sqrt(mode/2) if c > 1/2 else 1 - sqrt((1-c)/2)
-    median(tristd), 
-    static_cast<RealType>(0.5), 
+    median(tristd),
+    static_cast<RealType>(0.5),
     tolerance);
   triangular_distribution<RealType> tri011(0, 1, 1); // Using default RealType double.
   triangular_distribution<RealType> tri0q1(0, 0.25, 1); // mode is near bottom.
@@ -384,7 +384,7 @@ void test_spots(RealType)
     for (unsigned j = 0; j < sizeof(xs) /sizeof(RealType); j++)
     {
       RealType x = xs[j];
-      BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], x), quantile(complement(*dist, 1 - x)),  tol5eps); 
+      BOOST_CHECK_CLOSE_FRACTION(quantile(*dists[i], x), quantile(complement(*dist, 1 - x)),  tol5eps);
     } // for j
   } // for i
 
@@ -439,7 +439,7 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(
     variance(tridef), static_cast<RealType>(0.16666666666666666666666666666666666666666667L), tolerance);
   // was 0.0833333333333333333333333333333333333333333L
-                                                 
+
   // std deviation:
   BOOST_CHECK_CLOSE_FRACTION(
     standard_deviation(tridef), sqrt(variance(tridef)), tolerance);
@@ -485,8 +485,8 @@ void test_spots(RealType)
 
     // Define a (bad?) policy to ignore domain errors ('bad' arguments):
     typedef policy<domain_error<ignore_error> > inf_policy; // domain error returns infinity.
-    triangular_distribution<RealType, inf_policy> tridef_inf(-1, 0., 1); 
-    // But can't use BOOST_CHECK_EQUAL(?, quiet_NaN) 
+    triangular_distribution<RealType, inf_policy> tridef_inf(-1, 0., 1);
+    // But can't use BOOST_CHECK_EQUAL(?, quiet_NaN)
     using boost::math::isnan;
     BOOST_CHECK((isnan)(pdf(tridef_inf, std::numeric_limits<RealType>::infinity())));
   } // test for infinity using std::numeric_limits<>::infinity()
@@ -500,7 +500,7 @@ void test_spots(RealType)
     //BOOST_CHECK_THROW(pdf(tridef, std::numeric_limits<RealType>::infinity()),  std::domain_error);
     //BOOST_CHECK_THROW(pdf(tridef, std::numeric_limits<RealType>::quiet_NaN()),  std::domain_error);
     // BOOST_CHECK_THROW(pdf(tridef, boost::math::tools::max_value<RealType>() * 2),  std::domain_error); // Doesn't throw.
-    BOOST_CHECK_EQUAL(pdf(tridef, boost::math::tools::max_value<RealType>()), 0); 
+    BOOST_CHECK_EQUAL(pdf(tridef, boost::math::tools::max_value<RealType>()), 0);
   }
   // Special cases:
   BOOST_CHECK(pdf(tridef, -1) == 0);
@@ -544,7 +544,7 @@ int test_main(int, char* [])
 
   triangular tristd (0, 0.5, 1); // Using typedef
 
-  BOOST_CHECK_EQUAL(tristd.lower(), 0); 
+  BOOST_CHECK_EQUAL(tristd.lower(), 0);
   BOOST_CHECK_EQUAL(tristd.mode(), 0.5);
   BOOST_CHECK_EQUAL(tristd.upper(), 1);
 
@@ -642,22 +642,22 @@ int test_main(int, char* [])
 
   cout << showpos << setprecision(2) << endl;
 
-  //triangular_distribution<double>& dist = trim12; 
+  //triangular_distribution<double>& dist = trim12;
   for (unsigned i = 0; i < sizeof(xs) /sizeof(double); i++)
   {
     double x = xs[i] * (trim12.upper() - trim12.lower()) + trim12.lower();
     double dx = cdf(trim12, x);
     double cx = cdf(complement(trim12, x));
-    //cout << fixed << showpos << setprecision(3) 
+    //cout << fixed << showpos << setprecision(3)
     //  << xs[i] << ", " << x << ",  " << pdf(trim12, x) << ",  " << dx << ",  " << cx << ",, " ;
 
     BOOST_CHECK_CLOSE_FRACTION(cx, 1 - dx, tol500eps); // cx == 1 - dx
 
     // << setprecision(2) << scientific << cr - x << ", " // difference x - quan(cdf)
     // << setprecision(3) << fixed
-    // << quantile(trim12, dx) << ", " 
-    // << quantile(complement(trim12, 1 - dx)) << ", " 
-    // << quantile(complement(trim12, cx)) << ", " 
+    // << quantile(trim12, dx) << ", "
+    // << quantile(complement(trim12, 1 - dx)) << ", "
+    // << quantile(complement(trim12, cx)) << ", "
     // << endl;
     BOOST_CHECK_CLOSE_FRACTION(quantile(trim12, dx), quantile(complement(trim12, 1 - dx)), tol500eps);
   }

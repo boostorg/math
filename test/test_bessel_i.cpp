@@ -67,17 +67,24 @@ void expected_results()
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "Mac OS",                          // platform
+      "Mac OS",                      // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 100, 50);                 // test function
+      ".*", 400, 200);               // test function
+   //
+   // G++ on Linux, results vary a bit by processor type,
+   // on Itanium results are *much* better than listed here,
+   // but x86 appears to have much less accurate std::pow
+   // that throws off the results for tgamma(long double)
+   // which then impacts on the Bessel functions:
+   //
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
-      "Mac OS",                          // platform
-      "real_concept",                // test type(s)
-      ".*",                          // test data group
-      ".*", 100, 50);                 // test function
+      "linux",                       // platform
+      largest_type,                  // test type(s)
+      ".*Random.*",                    // test data group
+      ".*", 400, 200);               // test function
 
    add_expected_result(
       ".*",                          // compiler
@@ -86,13 +93,20 @@ void expected_results()
       largest_type,                  // test type(s)
       ".*",                          // test data group
       ".*", 15, 10);                 // test function
+   //
+   // Set error rates a little higher for real_concept - 
+   // now that we use a series approximation for small z
+   // that relies on tgamma the error rates are a little
+   // higher only when a Lanczos approximation is not available.
+   // All other types are unaffected.
+   //
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*",                          // test data group
-      ".*", 15, 10);                 // test function
+      ".*", 500, 200);               // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
@@ -215,7 +229,7 @@ void test_bessel(T, const char* name)
         SC_(1), SC_(100), SC_(1.06836939033816248120614576322429526544612284405623226965918e42),
         SC_(1), SC_(200), SC_(2.03458154933206270342742797713906950389661161681122964159220e85),
     };
-    static const boost::array<boost::array<T, 3>, 10> in_data = {
+    static const boost::array<boost::array<T, 3>, 11> in_data = {
         SC_(-2), SC_(0), SC_(0),
         SC_(2), SC_(1)/(1024*1024), SC_(1.13686837721624646204093977095674566928522671779753217215467e-13),
         SC_(5), SC_(10), SC_(777.188286403259959907293484802339632852674154572666041953297),
@@ -226,6 +240,7 @@ void test_bessel(T, const char* name)
         SC_(1e+02), SC_(9), SC_(2.74306601746058997093587654668959071522869282506446891736820e-93),
         SC_(1e+02), SC_(80), SC_(4.65194832850610205318128191404145885093970505338730540776711e8),
         SC_(-100), SC_(-200), SC_(4.35275044972702191438729017441198257508190719030765213981307e74),
+        SC_(10), SC_(1e-100), SC_(2.69114445546737213403880070546737213403880070546737213403880e-1010),
     };
     static const boost::array<boost::array<T, 3>, 10> iv_data = {
         SC_(2.25), SC_(1)/(1024*1024), SC_(2.34379212133481347189068464680335815256364262507955635911656e-15),
@@ -238,6 +253,14 @@ void test_bessel(T, const char* name)
         SC_(144794)/1024, SC_(100), SC_(2066.27694757392660413922181531984160871678224178890247540320),
         SC_(144794)/1024, SC_(200), SC_(2.23699739472246928794922868978337381373643889659337595319774e64),
         SC_(-144794)/1024, SC_(100), SC_(2066.27694672763190927440969155740243346136463461655104698748),
+    };
+    static const boost::array<boost::array<T, 3>, 5> iv_large_data = {
+        // Bug report https://svn.boost.org/trac/boost/ticket/5560:
+        SC_(-1), static_cast<T>(ldexp(0.5, -512)), SC_(1.86458518280005168582274132886573345934411788365010172356788e-155),
+        SC_(1),  static_cast<T>(ldexp(0.5, -512)), SC_(1.86458518280005168582274132886573345934411788365010172356788e-155),
+        SC_(-1.125), static_cast<T>(ldexp(0.5, -512)), SC_(-1.34963720853101363690381585556234820027343435206156667634081e173),
+        SC_(1.125),  static_cast<T>(ldexp(0.5, -512)), SC_(8.02269390325932403421158766283366891170783955777638875887348e-175),
+        SC_(0.5), static_cast<T>(ldexp(0.5, -683)), SC_(8.90597649117647254543282704099383321071493400182381039079219e-104),
     };
     #undef SC_
 
@@ -255,6 +278,9 @@ void test_bessel(T, const char* name)
     do_test_cyl_bessel_i(bessel_i_int_data, name, "Bessel In: Random Data");
 #include "bessel_i_data.ipp"
     do_test_cyl_bessel_i(bessel_i_data, name, "Bessel Iv: Random Data");
+
+    if(0 != static_cast<T>(ldexp(0.5, -700)))
+      do_test_cyl_bessel_i(iv_large_data, name, "Bessel Iv: Mathworld Data (large values)");
 }
 
 int test_main(int, char* [])

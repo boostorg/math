@@ -348,7 +348,7 @@ inline T lower_gamma_series(T a, T z, const Policy& pol, T init_value = 0)
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    T factor = policies::get_epsilon<T, Policy>();
    T result = boost::math::tools::sum_series(s, factor, max_iter, init_value);
-   policies::check_series_iterations("boost::math::detail::lower_gamma_series<%1%>(%1%)", max_iter, pol);
+   policies::check_series_iterations<T>("boost::math::detail::lower_gamma_series<%1%>(%1%)", max_iter, pol);
    return result;
 }
 
@@ -763,7 +763,7 @@ inline T tgamma_small_upper_part(T a, T x, const Policy& pol, T* pgam = 0, bool 
       *pderivative = p / (*pgam * exp(x));
    T init_value = invert ? *pgam : 0;
    result = -p * tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, (init_value - result) / p);
-   policies::check_series_iterations("boost::math::tgamma_small_upper_part<%1%>(%1%, %1%)", max_iter, pol);
+   policies::check_series_iterations<T>("boost::math::tgamma_small_upper_part<%1%>(%1%, %1%)", max_iter, pol);
    if(invert)
       result = -result;
    return result;

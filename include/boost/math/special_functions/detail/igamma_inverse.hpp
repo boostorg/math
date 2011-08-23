@@ -442,7 +442,7 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
       tools::max_value<T>(),
       digits,
       max_iter);
-   policies::check_root_iterations(function, max_iter, pol);
+   policies::check_root_iterations<T>(function, max_iter, pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(guess);
    if(guess == lower)
       guess = policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
@@ -501,7 +501,7 @@ T gamma_q_inv_imp(T a, T q, const Policy& pol)
       tools::max_value<T>(),
       digits,
       max_iter);
-   policies::check_root_iterations(function, max_iter, pol);
+   policies::check_root_iterations<T>(function, max_iter, pol);
    if(guess == lower)
       guess = policies::raise_underflow_error<T>(function, "Expected result known to be non-zero, but is smaller than the smallest available number.", pol);
    return guess;

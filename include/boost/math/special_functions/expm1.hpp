@@ -95,7 +95,7 @@ T expm1_imp(T x, const mpl::int_<0>&, const Policy& pol)
    T zero = 0;
    T result = tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, zero);
 #endif
-   policies::check_series_iterations("boost::math::expm1<%1%>(%1%)", max_iter, pol);
+   policies::check_series_iterations<T>("boost::math::expm1<%1%>(%1%)", max_iter, pol);
    return result;
 }
 

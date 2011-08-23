@@ -367,7 +367,7 @@ inline T expint_as_fraction(unsigned n, T z, const Policy& pol)
       f, 
       boost::math::policies::get_epsilon<T, Policy>(),
       max_iter);
-   policies::check_series_iterations("boost::math::expint_continued_fraction<%1%>(unsigned,%1%)", max_iter, pol);
+   policies::check_series_iterations<T>("boost::math::expint_continued_fraction<%1%>(unsigned,%1%)", max_iter, pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(result)
    BOOST_MATH_INSTRUMENT_VARIABLE(max_iter)
    result = exp(-z) / result;
@@ -423,7 +423,7 @@ inline T expint_as_series(unsigned n, T z, const Policy& pol)
 
    expint_series<T> s(k, z, x_k, denom, fact);
    result = tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, result);
-   policies::check_series_iterations("boost::math::expint_series<%1%>(unsigned,%1%)", max_iter, pol);
+   policies::check_series_iterations<T>("boost::math::expint_series<%1%>(unsigned,%1%)", max_iter, pol);
    BOOST_MATH_INSTRUMENT_VARIABLE(result)
    BOOST_MATH_INSTRUMENT_VARIABLE(max_iter)
    return result;
@@ -496,7 +496,7 @@ T expint_i_as_series(T z, const Policy& pol)
    expint_i_series<T> s(z);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
    result = tools::sum_series(s, policies::get_epsilon<T, Policy>(), max_iter, result);
-   policies::check_series_iterations("boost::math::expint_i_series<%1%>(%1%)", max_iter, pol);
+   policies::check_series_iterations<T>("boost::math::expint_i_series<%1%>(%1%)", max_iter, pol);
    return result;
 }
 

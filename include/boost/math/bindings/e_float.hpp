@@ -185,7 +185,7 @@ private:
          term = floor(f);
          e -= 30;
          m_value *= shift;
-         m_value += ::e_float(static_cast<UINT64>(term));
+         m_value += ::e_float(static_cast<INT64>(term));
          f -= term;
       }
       m_value *= ::ef::pow2(e);

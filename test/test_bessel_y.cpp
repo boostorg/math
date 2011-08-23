@@ -237,7 +237,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 60, 40);                 // test function
+      ".*", 80, 40);                 // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
@@ -414,6 +414,16 @@ void test_bessel(T, const char* name)
         SC_(141.75), SC_(2e+04), SC_(-0.00376577888677186194728129112270988602876597726657372330194186),
         SC_(-141.75), SC_(1e+02), SC_(-3.81009803444766877495905954105669819951653361036342457919021e9),
     };
+    static const boost::array<boost::array<T, 3>, 7> yv_large_data = {
+        // Bug report https://svn.boost.org/trac/boost/ticket/5560:
+        SC_(0.5), static_cast<T>(std::ldexp(0.5, -683)), SC_(-7.14823099969225685526188875418476476336424046896822867989728e102),
+        SC_(-0.5), static_cast<T>(std::ldexp(0.5, -683)), SC_(8.90597649117647254543282704099383321071493400182381039079219e-104),
+        SC_(0.0), static_cast<T>(std::ldexp(1.0, -53)), SC_(-23.4611779112897561252987257324561640034037313549011724328997),
+        SC_(1.0), static_cast<T>(std::ldexp(1.0, -53)), SC_(-5.73416113922265864550047623401604244038331542638719289100990e15),
+        SC_(2.0), static_cast<T>(std::ldexp(1.0, -53)), SC_(-1.03297463879542177245046832533417970379386617249046560049244e32),
+        SC_(3.0), static_cast<T>(std::ldexp(1.0, -53)), SC_(-3.72168335868978735639260528876490232745489151562358712422544e48),
+        SC_(10.0), static_cast<T>(std::ldexp(1.0, -53)), SC_(-4.15729476804920974669173904282420477878640623992500096231384e167),
+    };
 
     do_test_cyl_neumann_y(y0_data, name, "Y0: Mathworld Data");
     do_test_cyl_neumann_y(y1_data, name, "Y1: Mathworld Data");
@@ -422,6 +432,8 @@ void test_bessel(T, const char* name)
     do_test_cyl_neumann_y_int(y1_data, name, "Y1: Mathworld Data (Integer Version)");
     do_test_cyl_neumann_y_int(yn_data, name, "Yn: Mathworld Data (Integer Version)");
     do_test_cyl_neumann_y(yv_data, name, "Yv: Mathworld Data");
+    if(yv_large_data[0][1] != 0)
+      do_test_cyl_neumann_y(yv_large_data, name, "Yv: Mathworld Data (large values)");
 
 #include "bessel_y01_data.ipp"
     do_test_cyl_neumann_y(bessel_y01_data, name, "Y0 and Y1: Random Data");

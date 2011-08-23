@@ -81,7 +81,7 @@ int temme_ik(T v, T x, T* K, T* K1, const Policy& pol)
            break; 
         }
     }
-    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%) in temme_ik", k, pol);
+    policies::check_series_iterations<T>("boost::math::bessel_ik<%1%>(%1%,%1%) in temme_ik", k, pol);
 
     *K = sum;
     *K1 = 2 * sum1 / x;
@@ -128,7 +128,7 @@ int CF1_ik(T v, T x, T* fv, const Policy& pol)
         }
     }
     BOOST_MATH_INSTRUMENT_VARIABLE(k);
-    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%) in CF1_ik", k, pol);
+    policies::check_series_iterations<T>("boost::math::bessel_ik<%1%>(%1%,%1%) in CF1_ik", k, pol);
 
     *fv = f;
 
@@ -193,7 +193,7 @@ int CF2_ik(T v, T x, T* Kv, T* Kv1, const Policy& pol)
            break; 
         }
     }
-    policies::check_series_iterations("boost::math::bessel_ik<%1%>(%1%,%1%) in CF2_ik", k, pol);
+    policies::check_series_iterations<T>("boost::math::bessel_ik<%1%>(%1%,%1%) in CF2_ik", k, pol);
 
     *Kv = sqrt(pi<T>() / (2 * x)) * exp(-x) / S;
     *Kv1 = *Kv * (0.5f + v + x + (v * v - 0.25f) * f) / x;
@@ -219,6 +219,7 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
     T W, current, prev, next;
     bool reflect = false;
     unsigned n, k;
+    int org_kind = kind;
     BOOST_MATH_INSTRUMENT_VARIABLE(v);
     BOOST_MATH_INSTRUMENT_VARIABLE(x);
     BOOST_MATH_INSTRUMENT_VARIABLE(kind);
@@ -283,9 +284,17 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
     }
     prev = Ku;
     current = Ku1;
+    T scale = 1;
     for (k = 1; k <= n; k++)                   // forward recurrence for K
     {
-        next = 2 * (u + k) * current / x + prev;
+        T fact = 2 * (u + k) / x;
+        if((tools::max_value<T>() - fabs(prev)) / fact < fabs(current))
+        {
+           prev /= current;
+           scale /= current;
+           current = 1;
+        }
+        next = fact * current + prev;
         prev = current;
         current = next;
     }
@@ -306,10 +315,14 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
           // to get here - probably we're going to overflow:
           Iv = asymptotic_bessel_i_large_x(v, x, pol);
        }
+       else if((x / v < 0.25) && (v > 0))
+       {
+          Iv = bessel_i_small_z_series(v, x, pol);
+       }
        else
        {
           CF1_ik(v, x, &fv, pol);                         // continued fraction CF1_ik
-          Iv = W / (Kv * fv + Kv1);                  // Wronskian relation
+          Iv = scale * W / (Kv * fv + Kv1);                  // Wronskian relation
        }
     }
     else
@@ -318,14 +331,22 @@ int bessel_ik(T v, T x, T* I, T* K, int kind, const Policy& pol)
     if (reflect)
     {
         T z = (u + n % 2);
-        *I = Iv + (2 / pi<T>()) * boost::math::sin_pi(z) * Kv;   // reflection formula
-        *K = Kv;
+        T fact = (2 / pi<T>()) * (boost::math::sin_pi(z) * Kv);
+        if(fact == 0)
+           *I = Iv;
+        else if(tools::max_value<T>() * scale < fact)
+           *I = (org_kind & need_i) ? T(sign(fact) * sign(scale) * policies::raise_overflow_error<T>(function, 0, pol)) : T(0);
+        else
+         *I = Iv + fact / scale;   // reflection formula
     }
     else
     {
         *I = Iv;
-        *K = Kv;
     }
+    if(tools::max_value<T>() * scale < Kv)
+      *K = (org_kind & need_k) ? T(sign(Kv) * sign(scale) * policies::raise_overflow_error<T>(function, 0, pol)) : T(0);
+    else
+      *K = Kv / scale;
     BOOST_MATH_INSTRUMENT_VARIABLE(*I);
     BOOST_MATH_INSTRUMENT_VARIABLE(*K);
     return 0;

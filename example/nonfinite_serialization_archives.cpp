@@ -29,7 +29,6 @@ values in text and xml archives can be handled correctly and portably.
 
 
 #ifdef _MSC_VER
-#  pragma warning (disable :4224)
 #   pragma warning(disable : 4127) // conditional expression is constant.
 #endif
 

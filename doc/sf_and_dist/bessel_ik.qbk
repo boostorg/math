@@ -119,6 +119,10 @@ using rational the approximations above.  These rational approximations are
 accurate to around 19 digits, and are therefore only used when T has 
 no more than 64 binary digits of precision.
 
+When /x/ is small compared to /v/, I[sub v]x[space] is best computed directly from the series:
+
+[equation mbessel17]
+
 In the general case, we first normalize [nu][space] to \[[^0, [inf]])
 with the help of the reflection formulae:
 

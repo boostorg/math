@@ -181,7 +181,29 @@ J.F. Hart et al, ['Computer Approximations], John Wiley & Sons, New York, 1968.
 These approximations are accurate to around 19 decimal digits: therefore
 these methods are not used when type T has more than 64 binary digits.
 
-When /x/ is small, J[sub x][space] is best computed directly from the series:
+When /x/ is smaller than machine epsilon then the following approximations for
+Y[sub 0](x), Y[sub 1](x), Y[sub 2](x) and Y[sub n](x) can be used
+(see: [@http://functions.wolfram.com/03.03.06.0037.01 http://functions.wolfram.com/03.03.06.0037.01],
+[@http://functions.wolfram.com/03.03.06.0038.01 http://functions.wolfram.com/03.03.06.0038.01],
+[@http://functions.wolfram.com/03.03.06.0039.01 http://functions.wolfram.com/03.03.06.0039.01]
+and [@http://functions.wolfram.com/03.03.06.0040.01 http://functions.wolfram.com/03.03.06.0040.01]):
+
+[equation bessel_y0_small_z]
+
+[equation bessel_y1_small_z]
+
+[equation bessel_y2_small_z]
+
+[equation bessel_yn_small_z]
+
+When /x/ is small compared to /v/ and /v/ is not an integer, then the following
+series approximation can be used for Y[sub v](x), this is also an area where other
+approximations are often too slow to converge to be used 
+(see [@http://functions.wolfram.com/03.03.06.0034.01 http://functions.wolfram.com/03.03.06.0034.01]):
+
+[equation bessel_yv_small_z]
+
+When /x/ is small compared to /v/, J[sub v]x[space] is best computed directly from the series:
 
 [equation bessel2]
 
