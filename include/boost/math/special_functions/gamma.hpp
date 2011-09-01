@@ -433,7 +433,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l, int*si
    }
    else if((z != 1) && (z != 2))
    {
-      T limit = (std::max)(z+1, T(10));
+      T limit = (std::max)(T(z+1), T(10));
       T prefix = z * log(limit) - limit;
       T sum = detail::lower_gamma_series(z, limit, pol) / z;
       sum += detail::upper_gamma_fraction(z, limit, ::boost::math::policies::get_epsilon<T, Policy>());
