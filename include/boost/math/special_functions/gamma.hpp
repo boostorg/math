@@ -365,7 +365,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos& l)
       return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
    if(z <= -20)
    {
-      T result = gamma_imp(-z, pol, l) * sinpx(z);
+      T result = gamma_imp(T(-z), pol, l) * sinpx(z);
       if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
          return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
       result = -boost::math::constants::pi<T>() / result;
@@ -515,7 +515,7 @@ inline T tgammap1m1_imp(T dz, Policy const& pol,
    // algebra isn't easy for the general case....
    // Start by subracting 1 from tgamma:
    //
-   T result = gamma_imp(1 + dz, pol, l) - 1;
+   T result = gamma_imp(T(1 + dz), pol, l) - 1;
    BOOST_MATH_INSTRUMENT_CODE(result);
    //
    // Test the level of cancellation error observed: we loose one bit

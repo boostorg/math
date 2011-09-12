@@ -157,7 +157,7 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& /* l */, const Policy& po
    // set integration limits:
    T la = (std::max)(T(10), a);
    T lb = (std::max)(T(10), b);
-   T lc = (std::max)(T(10), a+b);
+   T lc = (std::max)(T(10), T(a+b));
 
    // calculate the fraction parts:
    T sa = detail::lower_gamma_series(a, la, pol) / a;

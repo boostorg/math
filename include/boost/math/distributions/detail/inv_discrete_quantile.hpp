@@ -24,7 +24,7 @@ struct distribution_quantile_finder
 
    value_type operator()(value_type const& x)
    {
-      return comp ? target - cdf(complement(dist, x)) : cdf(dist, x) - target;
+      return comp ? value_type(target - cdf(complement(dist, x))) : value_type(cdf(dist, x) - target);
    }
 
 private:
