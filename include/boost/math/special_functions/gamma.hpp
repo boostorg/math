@@ -264,7 +264,7 @@ T lgamma_imp(T z, const Policy& pol, const L& l, int* sign = 0)
             >,
             mpl::int_<113>, mpl::int_<0> >::type
           >::type tag_type;
-      result = lgamma_small_imp<T>(z, z - 1, z - 2, tag_type(), pol, l);
+      result = lgamma_small_imp<T>(z, T(z - 1), T(z - 2), tag_type(), pol, l);
    }
    else if((z >= 3) && (z < 100))
    {
@@ -1107,7 +1107,7 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const L&)
       result = pow(zgh / (zgh + delta), z - constants::half<T>());
    }
    result *= pow(constants::e<T>() / (zgh + delta), delta);
-   result *= L::lanczos_sum(z) / L::lanczos_sum(z + delta);
+   result *= L::lanczos_sum(z) / L::lanczos_sum(T(z + delta));
    return result;
 }
 //

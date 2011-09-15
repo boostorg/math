@@ -197,7 +197,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l *
             static_cast<T>(-0.827193521891290553639e-6L)
          };
          T r = zm2 * zm1;
-         T R = tools::evaluate_polynomial(P, -zm2) / tools::evaluate_polynomial(Q, -zm2);
+         T R = tools::evaluate_polynomial(P, T(-zm2)) / tools::evaluate_polynomial(Q, T(-zm2));
 
          result += r * Y + r * R;
       }
