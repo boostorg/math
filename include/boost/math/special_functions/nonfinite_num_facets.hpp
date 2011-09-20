@@ -141,7 +141,7 @@ namespace boost {
         OutputIterator& it, std::ios_base& iosb, const char* prefix,
         const char* body, CharType fill) const
       {
-        int width = (int)strlen(prefix) + (int)strlen(body);
+        int width = (int)std::strlen(prefix) + (int)std::strlen(body);
         std::ios_base::fmtflags adjust
           = iosb.flags() & std::ios_base::adjustfield;
         const std::ctype<CharType>& ct
