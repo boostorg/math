@@ -197,7 +197,7 @@ T digamma_imp_1_2(T x, const mpl::int_<0>*)
    g -= root3;
    g -= root4;
    g -= root5;
-   T r = tools::evaluate_polynomial(P, x-1) / tools::evaluate_polynomial(Q, x-1);
+   T r = tools::evaluate_polynomial(P, T(x-1)) / tools::evaluate_polynomial(Q, T(x-1));
    T result = g * Y + g * r;
 
    return result;
