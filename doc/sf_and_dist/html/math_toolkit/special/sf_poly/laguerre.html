@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Laguerre (and Associated) Polynomials</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="legendre.html" title="Legendre (and Associated) Polynomials">
@@ -22,13 +22,13 @@
 <div class="spirit-nav">
 <a accesskey="p" href="legendre.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_poly.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="hermite.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.sf_poly.laguerre"></a><a class="link" href="laguerre.html" title="Laguerre (and Associated) Polynomials">Laguerre (and
         Associated) Polynomials</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_poly.laguerre.synopsis"></a><h5>
-<a name="id1126352"></a>
+<a name="math_toolkit.special.sf_poly.laguerre.synopsis-heading"></a>
           <a class="link" href="laguerre.html#math_toolkit.special.sf_poly.laguerre.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -59,10 +59,10 @@
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">laguerre_next</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">T1</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">Ln</span><span class="special">,</span> <span class="identifier">T3</span> <span class="identifier">Lnm1</span><span class="special">);</span>
 
 
-<span class="special">}}</span> <span class="comment">// namespaces
-</span></pre>
+<span class="special">}}</span> <span class="comment">// namespaces</span>
+</pre>
 <a name="math_toolkit.special.sf_poly.laguerre.description"></a><h5>
-<a name="id1127021"></a>
+<a name="math_toolkit.special.sf_poly.laguerre.description-heading"></a>
           <a class="link" href="laguerre.html#math_toolkit.special.sf_poly.laguerre.description">Description</a>
         </h5>
 <p>
@@ -124,8 +124,8 @@
           For example we could produce a vector of the first 10 polynomial values
           using:
         </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>  <span class="comment">// Abscissa value
-</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>  <span class="comment">// Abscissa value</span>
+<span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">laguerre</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="identifier">x</span><span class="special">)).</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">laguerre</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
 <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">l</span> <span class="special">&lt;</span> <span class="number">10</span><span class="special">;</span> <span class="special">++</span><span class="identifier">l</span><span class="special">)</span>
    <span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">laguerre_next</span><span class="special">(</span><span class="identifier">l</span><span class="special">,</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">],</span> <span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">-</span><span class="number">1</span><span class="special">]));</span>
@@ -169,9 +169,9 @@
           For example we could produce a vector of the first 10 polynomial values
           using:
         </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>  <span class="comment">// Abscissa value
-</span><span class="keyword">int</span> <span class="identifier">m</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>      <span class="comment">// order
-</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>  <span class="comment">// Abscissa value</span>
+<span class="keyword">int</span> <span class="identifier">m</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>      <span class="comment">// order</span>
+<span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">laguerre</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">x</span><span class="special">)).</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">laguerre</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">x</span><span class="special">));</span>
 <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">l</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">l</span> <span class="special">&lt;</span> <span class="number">10</span><span class="special">;</span> <span class="special">++</span><span class="identifier">l</span><span class="special">)</span>
    <span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">laguerre_next</span><span class="special">(</span><span class="identifier">l</span><span class="special">,</span> <span class="identifier">m</span><span class="special">,</span> <span class="identifier">x</span><span class="special">,</span> <span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">],</span> <span class="identifier">v</span><span class="special">[</span><span class="identifier">l</span><span class="special">-</span><span class="number">1</span><span class="special">]));</span>
@@ -205,7 +205,7 @@
 </dl>
 </div>
 <a name="math_toolkit.special.sf_poly.laguerre.accuracy"></a><h5>
-<a name="id1129666"></a>
+<a name="math_toolkit.special.sf_poly.laguerre.accuracy-heading"></a>
           <a class="link" href="laguerre.html#math_toolkit.special.sf_poly.laguerre.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -422,7 +422,7 @@
           is very close to a root.
         </p>
 <a name="math_toolkit.special.sf_poly.laguerre.testing"></a><h5>
-<a name="id1130003"></a>
+<a name="math_toolkit.special.sf_poly.laguerre.testing-heading"></a>
           <a class="link" href="laguerre.html#math_toolkit.special.sf_poly.laguerre.testing">Testing</a>
         </h5>
 <p>
@@ -432,7 +432,7 @@
           precision.
         </p>
 <a name="math_toolkit.special.sf_poly.laguerre.implementation"></a><h5>
-<a name="id1130025"></a>
+<a name="math_toolkit.special.sf_poly.laguerre.implementation-heading"></a>
           <a class="link" href="laguerre.html#math_toolkit.special.sf_poly.laguerre.implementation">Implementation</a>
         </h5>
 <p>
@@ -443,9 +443,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
-      Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
+      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Policies</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../main_overview.html" title="Overview">
 <link rel="prev" href="config_macros.html" title="Configuration Macros">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="config_macros.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../main_overview.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="threads.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.main_overview.pol_overview"></a><a class="link" href="pol_overview.html" title="Policies">Policies</a>
 </h3></div></div></div>
@@ -49,31 +49,31 @@
 <p>
         Using policies you can control:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             <a class="link" href="../policy/pol_ref/error_handling_policies.html" title="Error Handling Policies">How
             results from 'bad' arguments are handled</a>, including those that
             cannot be fully evaluated.
           </li>
-<li>
+<li class="listitem">
             How <a class="link" href="../policy/pol_ref/internal_promotion.html" title="Internal Floating-point Promotion Policies">accuracy
             is controlled by internal promotion</a> to use more precise types.
           </li>
-<li>
+<li class="listitem">
             What working <a class="link" href="../policy/pol_ref/precision_pol.html" title="Precision Policies">precision</a>
             should be used to calculate results.
           </li>
-<li>
+<li class="listitem">
             What to do when a <a class="link" href="../policy/pol_ref/assert_undefined.html" title="Mathematically Undefined Function Policies">mathematically
             undefined function</a> is used: Should this raise a run-time or compile-time
             error?
           </li>
-<li>
+<li class="listitem">
             Whether <a class="link" href="../policy/pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">discrete
             functions</a>, like the binomial, should return real or only integral
             values, and how they are rounded.
           </li>
-<li>
+<li class="listitem">
             How many iterations a special function is permitted to perform in a series
             evaluation or root finding algorithm before it gives up and raises an
             <a class="link" href="error_handling.html#evaluation_error">evaluation_error</a>.
@@ -82,18 +82,18 @@
 <p>
         You can control policies:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             Using <a class="link" href="../policy/pol_ref/policy_defaults.html" title="Using Macros to Change the Policy Defaults">macros</a>
             to change any default policy: the is the prefered method for installation
             wide policies.
           </li>
-<li>
+<li class="listitem">
             At your chosen <a class="link" href="../policy/pol_ref/namespace_pol.html" title="Setting Polices at Namespace Scope">namespace
             scope</a> for distributions and/or functions: this is the prefered
             method for project, namespace, or translation unit scope policies.
           </li>
-<li>
+<li class="listitem">
             In an ad-hoc manner <a class="link" href="../policy/pol_tutorial/ad_hoc_sf_policies.html" title="Changing the Policy on an Ad Hoc Basis for the Special Functions">by
             passing a specific policy to a special function</a>, or to a <a class="link" href="../policy/pol_tutorial/ad_hoc_dist_policies.html" title="Setting Policies for Distributions on an Ad Hoc Basis">statistical
             distribution</a>.
@@ -102,9 +102,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
-      Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
+      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

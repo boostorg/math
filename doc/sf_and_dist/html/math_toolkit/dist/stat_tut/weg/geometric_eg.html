@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Geometric Distribution Examples</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../weg.html" title="Worked Examples">
 <link rel="prev" href="binom_eg/binom_size_eg.html" title="Estimating Sample Sizes for a Binomial Distribution.">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="binom_eg/binom_size_eg.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../weg.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="neg_binom_eg.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.stat_tut.weg.geometric_eg"></a><a class="link" href="geometric_eg.html" title="Geometric Distribution Examples">Geometric
           Distribution Examples</a>
@@ -59,21 +59,21 @@
             
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">geometric</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-  <span class="comment">// for geometric_distribution
-</span>  <span class="keyword">using</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">geometric_distribution</span><span class="special">;</span> <span class="comment">// 
-</span>  <span class="keyword">using</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">geometric</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.
-</span>  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">pdf</span><span class="special">;</span> <span class="comment">// Probability mass function.
-</span>  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">;</span> <span class="comment">// Cumulative density function.
-</span>  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quantile</span><span class="special">;</span>
+  <span class="comment">// for geometric_distribution</span>
+  <span class="keyword">using</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">geometric_distribution</span><span class="special">;</span> <span class="comment">// </span>
+  <span class="keyword">using</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">geometric</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.</span>
+  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">pdf</span><span class="special">;</span> <span class="comment">// Probability mass function.</span>
+  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">;</span> <span class="comment">// Cumulative density function.</span>
+  <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quantile</span><span class="special">;</span>
 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-  <span class="comment">// for negative_binomial_distribution
-</span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.
-</span>
+  <span class="comment">// for negative_binomial_distribution</span>
+  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.</span>
+
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-  <span class="comment">// for negative_binomial_distribution
-</span>  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.
-</span>
+  <span class="comment">// for negative_binomial_distribution</span>
+  <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.</span>
+
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
   <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
   <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">noshowpoint</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">fixed</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">right</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">left</span><span class="special">;</span>
@@ -94,7 +94,7 @@
             error message instead of an abrupt (and silent) program abort.
           </p>
 <a name="math_toolkit.dist.stat_tut.weg.geometric_eg.throwing_a_dice"></a><h6>
-<a name="id952219"></a>
+<a name="math_toolkit.dist.stat_tut.weg.geometric_eg.throwing_a_dice-heading"></a>
             <a class="link" href="geometric_eg.html#math_toolkit.dist.stat_tut.weg.geometric_eg.throwing_a_dice">Throwing
             a dice</a>
           </h6>
@@ -111,8 +111,8 @@
 <p>
             
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">success_fraction</span> <span class="special">=</span> <span class="number">1.</span><span class="special">/</span><span class="number">6</span><span class="special">;</span> <span class="comment">// success_fraction (p) = 0.1666
-</span><span class="comment">// (so failure_fraction is 1 - success_fraction = 5./6 = 1- 0.1666 = 0.8333)</span></pre>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">success_fraction</span> <span class="special">=</span> <span class="number">1.</span><span class="special">/</span><span class="number">6</span><span class="special">;</span> <span class="comment">// success_fraction (p) = 0.1666</span>
+<span class="comment">// (so failure_fraction is 1 - success_fraction = 5./6 = 1- 0.1666 = 0.8333)</span></pre>
 <p>
           </p>
 <p>
@@ -149,8 +149,8 @@
 <p>
             
 </p>
-<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">g6</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.1667
-</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">g6</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.1667</span></pre>
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">g6</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.1667</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">g6</span><span class="special">,</span> <span class="number">0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.1667</span></pre>
 <p>
           </p>
 <p>
@@ -221,8 +221,8 @@
             
 </p>
 <pre class="programlisting"><span class="identifier">negative_binomial</span> <span class="identifier">nb</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="identifier">success_fraction</span><span class="special">);</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.1389
-</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.3056</span></pre>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.1389</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">nb</span><span class="special">,</span> <span class="number">1</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.3056</span></pre>
 <p>
           </p>
 <p>
@@ -252,9 +252,9 @@
 <p>
             
 </p>
-<pre class="programlisting">    <span class="identifier">geometric</span> <span class="identifier">g05</span><span class="special">(</span><span class="number">0.5</span><span class="special">);</span>  <span class="comment">// Probability of success = 0.5 or 50%
-</span>    <span class="comment">// Output all potentially significant digits for the type, here double.
-</span>
+<pre class="programlisting">    <span class="identifier">geometric</span> <span class="identifier">g05</span><span class="special">(</span><span class="number">0.5</span><span class="special">);</span>  <span class="comment">// Probability of success = 0.5 or 50%</span>
+    <span class="comment">// Output all potentially significant digits for the type, here double.</span>
+
 <span class="preprocessor">#ifdef</span> <span class="identifier">BOOST_NO_NUMERIC_LIMITS_LOWEST</span>
   <span class="keyword">int</span> <span class="identifier">max_digits10</span> <span class="special">=</span> <span class="number">2</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">digits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;()</span> <span class="special">*</span> <span class="number">30103UL</span><span class="special">)</span> <span class="special">/</span> <span class="number">100000UL</span><span class="special">;</span>
   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"BOOST_NO_NUMERIC_LIMITS_LOWEST is defined"</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> 
@@ -263,8 +263,8 @@
 <span class="preprocessor">#endif</span>
   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Show all potentially significant decimal digits std::numeric_limits&lt;double&gt;::max_digits10 = "</span>
     <span class="special">&lt;&lt;</span> <span class="identifier">max_digits10</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> 
-  <span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">max_digits10</span><span class="special">);</span> <span class="comment">// 
-</span>
+  <span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">max_digits10</span><span class="special">);</span> <span class="comment">// </span>
+
     <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">g05</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// returns 0.5000346561579232, not exact 0.5.</span></pre>
 <p>
           </p>
@@ -288,7 +288,7 @@
             replicated in C++ if desired.
           </p>
 <a name="math_toolkit.dist.stat_tut.weg.geometric_eg.surveying_customers_to_find_one_with_a_faulty_product"></a><h6>
-<a name="id953910"></a>
+<a name="math_toolkit.dist.stat_tut.weg.geometric_eg.surveying_customers_to_find_one_with_a_faulty_product-heading"></a>
             <a class="link" href="geometric_eg.html#math_toolkit.dist.stat_tut.weg.geometric_eg.surveying_customers_to_find_one_with_a_faulty_product">Surveying
             customers to find one with a faulty product</a>
           </h6>
@@ -315,25 +315,25 @@
             
 </p>
 <pre class="programlisting"><span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="number">5</span><span class="special">);</span>
-<span class="identifier">geometric</span> <span class="identifier">g</span><span class="special">(</span><span class="number">0.02</span><span class="special">);</span> <span class="comment">// On average, 2 in 100 products are faulty.
-</span><span class="keyword">double</span> <span class="identifier">c</span> <span class="special">=</span> <span class="number">0.95</span><span class="special">;</span> <span class="comment">// 95% confidence.
-</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" quantile(g, "</span> <span class="special">&lt;&lt;</span> <span class="identifier">c</span> <span class="special">&lt;&lt;</span> <span class="string">") = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">g</span><span class="special">,</span> <span class="identifier">c</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">geometric</span> <span class="identifier">g</span><span class="special">(</span><span class="number">0.02</span><span class="special">);</span> <span class="comment">// On average, 2 in 100 products are faulty.</span>
+<span class="keyword">double</span> <span class="identifier">c</span> <span class="special">=</span> <span class="number">0.95</span><span class="special">;</span> <span class="comment">// 95% confidence.</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" quantile(g, "</span> <span class="special">&lt;&lt;</span> <span class="identifier">c</span> <span class="special">&lt;&lt;</span> <span class="string">") = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">g</span><span class="special">,</span> <span class="identifier">c</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"To be "</span> <span class="special">&lt;&lt;</span> <span class="identifier">c</span> <span class="special">*</span> <span class="number">100</span> 
   <span class="special">&lt;&lt;</span> <span class="string">"% confident of finding we customer with a fault, need to survey "</span>
-  <span class="special">&lt;&lt;</span>  <span class="identifier">ceil</span><span class="special">(</span><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">g</span><span class="special">,</span> <span class="identifier">c</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="string">" customers."</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 148
-</span><span class="identifier">c</span> <span class="special">=</span> <span class="number">0.99</span><span class="special">;</span> <span class="comment">// Very confident.
-</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"To be "</span> <span class="special">&lt;&lt;</span> <span class="identifier">c</span> <span class="special">*</span> <span class="number">100</span> 
+  <span class="special">&lt;&lt;</span>  <span class="identifier">ceil</span><span class="special">(</span><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">g</span><span class="special">,</span> <span class="identifier">c</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="string">" customers."</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 148</span>
+<span class="identifier">c</span> <span class="special">=</span> <span class="number">0.99</span><span class="special">;</span> <span class="comment">// Very confident.</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"To be "</span> <span class="special">&lt;&lt;</span> <span class="identifier">c</span> <span class="special">*</span> <span class="number">100</span> 
   <span class="special">&lt;&lt;</span> <span class="string">"% confident of finding we customer with a fault, need to survey "</span>
-  <span class="special">&lt;&lt;</span>  <span class="identifier">ceil</span><span class="special">(</span><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">g</span><span class="special">,</span> <span class="identifier">c</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="string">" customers."</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 227
-</span><span class="identifier">c</span> <span class="special">=</span> <span class="number">0.80</span><span class="special">;</span> <span class="comment">// Only reasonably confident.
-</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"To be "</span> <span class="special">&lt;&lt;</span> <span class="identifier">c</span> <span class="special">*</span> <span class="number">100</span> 
+  <span class="special">&lt;&lt;</span>  <span class="identifier">ceil</span><span class="special">(</span><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">g</span><span class="special">,</span> <span class="identifier">c</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="string">" customers."</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 227</span>
+<span class="identifier">c</span> <span class="special">=</span> <span class="number">0.80</span><span class="special">;</span> <span class="comment">// Only reasonably confident.</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"To be "</span> <span class="special">&lt;&lt;</span> <span class="identifier">c</span> <span class="special">*</span> <span class="number">100</span> 
   <span class="special">&lt;&lt;</span> <span class="string">"% confident of finding we customer with a fault, need to survey "</span>
   <span class="special">&lt;&lt;</span>  <span class="identifier">ceil</span><span class="special">(</span><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">g</span><span class="special">,</span> <span class="identifier">c</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="string">" customers."</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 79</span></pre>
 <p>
           </p>
 <a name="math_toolkit.dist.stat_tut.weg.geometric_eg.basket_ball_shooters"></a><h6>
-<a name="id956257"></a>
+<a name="math_toolkit.dist.stat_tut.weg.geometric_eg.basket_ball_shooters-heading"></a>
             <a class="link" href="geometric_eg.html#math_toolkit.dist.stat_tut.weg.geometric_eg.basket_ball_shooters">Basket
             Ball Shooters</a>
           </h6>
@@ -383,8 +383,8 @@
             
 </p>
 <pre class="programlisting"><span class="identifier">geometric</span> <span class="identifier">gbest</span><span class="special">(</span><span class="number">0.95</span><span class="special">);</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of score on 5th try = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">gbest</span><span class="special">,</span> <span class="number">4</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 5.9e-6
-</span><span class="identifier">geometric</span> <span class="identifier">gmediocre</span><span class="special">(</span><span class="number">0.50</span><span class="special">);</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of score on 5th try = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">gbest</span><span class="special">,</span> <span class="number">4</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 5.9e-6</span>
+<span class="identifier">geometric</span> <span class="identifier">gmediocre</span><span class="special">(</span><span class="number">0.50</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of score on 5th try = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">gmediocre</span><span class="special">,</span> <span class="number">4</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.031</span></pre>
 <p>
           </p>
@@ -393,7 +393,7 @@
             the best shooters, compared to the 0.03 of the mediocre.
           </p>
 <a name="math_toolkit.dist.stat_tut.weg.geometric_eg.estimating_failures"></a><h6>
-<a name="id956652"></a>
+<a name="math_toolkit.dist.stat_tut.weg.geometric_eg.estimating_failures-heading"></a>
             <a class="link" href="geometric_eg.html#math_toolkit.dist.stat_tut.weg.geometric_eg.estimating_failures">Estimating
             failures</a>
           </h6>
@@ -422,12 +422,12 @@
             
 </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span>
-<span class="keyword">double</span> <span class="identifier">k</span> <span class="special">=</span> <span class="number">100</span><span class="special">;</span> <span class="comment">// So frequency of occurence is 1/100.
-</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability is failure is "</span> <span class="special">&lt;&lt;</span> <span class="number">1</span><span class="special">/</span><span class="identifier">k</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+<span class="keyword">double</span> <span class="identifier">k</span> <span class="special">=</span> <span class="number">100</span><span class="special">;</span> <span class="comment">// So frequency of occurence is 1/100.</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability is failure is "</span> <span class="special">&lt;&lt;</span> <span class="number">1</span><span class="special">/</span><span class="identifier">k</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_lower_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"geometric::find_lower_bound_on_p("</span> <span class="special">&lt;&lt;</span> <span class="keyword">int</span><span class="special">(</span><span class="identifier">k</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">", "</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span> <span class="special">&lt;&lt;</span> <span class="string">") = "</span> 
-  <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.00025
-</span><span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_upper_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
+  <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.00025</span>
+<span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_upper_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"geometric::find_upper_bound_on_p("</span> <span class="special">&lt;&lt;</span> <span class="keyword">int</span><span class="special">(</span><span class="identifier">k</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">", "</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span> <span class="special">&lt;&lt;</span> <span class="string">") = "</span>
   <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.037</span></pre>
 <p>
@@ -441,19 +441,19 @@
 <p>
             
 </p>
-<pre class="programlisting"><span class="identifier">alpha</span> <span class="special">=</span> <span class="number">0.1</span><span class="special">;</span> <span class="comment">// 90% confidence.
-</span><span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_lower_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">alpha</span> <span class="special">=</span> <span class="number">0.1</span><span class="special">;</span> <span class="comment">// 90% confidence.</span>
+<span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_lower_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"geometric::find_lower_bound_on_p("</span> <span class="special">&lt;&lt;</span> <span class="keyword">int</span><span class="special">(</span><span class="identifier">k</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">", "</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span> <span class="special">&lt;&lt;</span> <span class="string">") = "</span>
-  <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.0005
-</span><span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_upper_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
+  <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.0005</span>
+<span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_upper_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"geometric::find_upper_bound_on_p("</span> <span class="special">&lt;&lt;</span> <span class="keyword">int</span><span class="special">(</span><span class="identifier">k</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">", "</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span> <span class="special">&lt;&lt;</span> <span class="string">") = "</span>
-  <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.03
-</span>
-<span class="identifier">alpha</span> <span class="special">=</span> <span class="number">0.01</span><span class="special">;</span> <span class="comment">// 99% confidence.
-</span><span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_lower_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
+  <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.03</span>
+
+<span class="identifier">alpha</span> <span class="special">=</span> <span class="number">0.01</span><span class="special">;</span> <span class="comment">// 99% confidence.</span>
+<span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_lower_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"geometric::find_lower_bound_on_p("</span> <span class="special">&lt;&lt;</span> <span class="keyword">int</span><span class="special">(</span><span class="identifier">k</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">", "</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span> <span class="special">&lt;&lt;</span> <span class="string">") = "</span>
-  <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 5e-005
-</span><span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_upper_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
+  <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 5e-005</span>
+<span class="identifier">t</span> <span class="special">=</span> <span class="identifier">geometric</span><span class="special">::</span><span class="identifier">find_upper_bound_on_p</span><span class="special">(</span><span class="identifier">k</span><span class="special">,</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"geometric::find_upper_bound_on_p("</span> <span class="special">&lt;&lt;</span> <span class="keyword">int</span><span class="special">(</span><span class="identifier">k</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">", "</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span><span class="special">/</span><span class="number">2</span> <span class="special">&lt;&lt;</span> <span class="string">") = "</span>
     <span class="special">&lt;&lt;</span> <span class="identifier">t</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// 0.052</span></pre>
 <p>
@@ -472,9 +472,9 @@
 </p>
 <pre class="programlisting"><span class="special">}</span>
 <span class="keyword">catch</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exception</span><span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span>
-<span class="special">{</span> <span class="comment">// Since we have set an overflow policy of ignore_error,
-</span>  <span class="comment">// an overflow exception should never be thrown.
-</span>   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\nMessage from thrown exception was:\n "</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">what</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span></pre>
+<span class="special">{</span> <span class="comment">// Since we have set an overflow policy of ignore_error,</span>
+  <span class="comment">// an overflow exception should never be thrown.</span>
+   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"\nMessage from thrown exception was:\n "</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">what</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
           </p>
 <p>
@@ -498,9 +498,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
-      Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
+      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

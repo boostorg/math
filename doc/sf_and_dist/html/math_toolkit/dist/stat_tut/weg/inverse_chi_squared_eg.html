@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Inverse Chi-Squared Distribution Bayes Example</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../weg.html" title="Worked Examples">
 <link rel="prev" href="normal_example/normal_misc.html" title="Some Miscellaneous Examples of the Normal (Gaussian) Distribution">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="normal_example/normal_misc.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../weg.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="nccs_eg.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg"></a><a class="link" href="inverse_chi_squared_eg.html" title="Inverse Chi-Squared Distribution Bayes Example">Inverse
           Chi-Squared Distribution Bayes Example</a>
@@ -46,12 +46,12 @@
 <p>
             For more general information on Bayesian type of analyses, see:
           </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
                 Andrew Gelman, John B. Carlin, Hal E. Stern, Donald B. Rubin, Bayesian
                 Data Analysis, 2003, ISBN 978-1439840955.
               </li>
-<li>
+<li class="listitem">
                 Jim Albert, Bayesian Compution with R, Springer, 2009, ISBN 978-0387922973.
               </li>
 </ul></div>
@@ -96,7 +96,7 @@
             a posterior distribution for that machine.
           </p>
 <a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_one__using_the_survey_information_"></a><h6>
-<a name="id979804"></a>
+<a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_one__using_the_survey_information_-heading"></a>
             <a class="link" href="inverse_chi_squared_eg.html#math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_one__using_the_survey_information_">Step
             one: Using the survey information.</a>
           </h6>
@@ -124,9 +124,9 @@
 <span class="keyword">double</span> <span class="identifier">priorScale</span> <span class="special">=</span> <span class="number">25.0</span><span class="special">;</span> 
 
 <span class="identifier">inverse_chi_squared</span> <span class="identifier">prior</span><span class="special">(</span><span class="identifier">priorDF</span><span class="special">,</span> <span class="identifier">priorScale</span><span class="special">);</span>
-<span class="comment">// Using an inverse_gamma distribution instead, we could equivalently write
-</span><span class="comment">// inverse_gamma prior(priorDF / 2.0, priorScale * priorDF / 2.0);
-</span>
+<span class="comment">// Using an inverse_gamma distribution instead, we could equivalently write</span>
+<span class="comment">// inverse_gamma prior(priorDF / 2.0, priorScale * priorDF / 2.0);</span>
+
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Prior distribution:"</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  2.5% quantile: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">prior</span><span class="special">,</span> <span class="number">0.025</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  50% quantile: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">prior</span><span class="special">,</span> <span class="number">0.5</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -186,7 +186,7 @@
             world.
           </p>
 <a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_2__investigate_a_single_machine"></a><h6>
-<a name="id980624"></a>
+<a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_2__investigate_a_single_machine-heading"></a>
             <a class="link" href="inverse_chi_squared_eg.html#math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_2__investigate_a_single_machine">Step
             2: Investigate a single machine</a>
           </h6>
@@ -364,9 +364,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
-      Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
+      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

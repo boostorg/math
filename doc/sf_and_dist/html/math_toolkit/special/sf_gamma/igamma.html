@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Incomplete Gamma Functions</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../sf_gamma.html" title="Gamma Functions">
 <link rel="prev" href="gamma_ratios.html" title="Ratios of Gamma Functions">
@@ -22,13 +22,13 @@
 <div class="spirit-nav">
 <a accesskey="p" href="gamma_ratios.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../sf_gamma.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="igamma_inv.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.sf_gamma.igamma"></a><a class="link" href="igamma.html" title="Incomplete Gamma Functions">Incomplete Gamma
         Functions</a>
 </h4></div></div></div>
 <a name="math_toolkit.special.sf_gamma.igamma.synopsis"></a><h5>
-<a name="id1090253"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.synopsis-heading"></a>
           <a class="link" href="igamma.html#math_toolkit.special.sf_gamma.igamma.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -64,10 +64,10 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">z</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 
-<span class="special">}}</span> <span class="comment">// namespaces
-</span></pre>
+<span class="special">}}</span> <span class="comment">// namespaces</span>
+</pre>
 <a name="math_toolkit.special.sf_gamma.igamma.description"></a><h5>
-<a name="id1091059"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.description-heading"></a>
           <a class="link" href="igamma.html#math_toolkit.special.sf_gamma.igamma.description">Description</a>
         </h5>
 <p>
@@ -155,7 +155,7 @@
           <span class="inlinemediaobject"><img src="../../../../equations/igamma1.png"></span>
         </p>
 <a name="math_toolkit.special.sf_gamma.igamma.accuracy"></a><h5>
-<a name="id1092015"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.accuracy-heading"></a>
           <a class="link" href="igamma.html#math_toolkit.special.sf_gamma.igamma.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -823,7 +823,7 @@
 </table></div>
 </div>
 <br class="table-break"><a name="math_toolkit.special.sf_gamma.igamma.testing"></a><h5>
-<a name="id1093104"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.testing-heading"></a>
           <a class="link" href="igamma.html#math_toolkit.special.sf_gamma.igamma.testing">Testing</a>
         </h5>
 <p>
@@ -839,7 +839,7 @@
           fraction (see below) is unstable for small a and z.
         </p>
 <a name="math_toolkit.special.sf_gamma.igamma.implementation"></a><h5>
-<a name="id1093130"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.implementation-heading"></a>
           <a class="link" href="igamma.html#math_toolkit.special.sf_gamma.igamma.implementation">Implementation</a>
         </h5>
 <p>
@@ -984,9 +984,9 @@
           15) <span class="inlinemediaobject"><img src="../../../../equations/igamma12.png"></span>
         </p>
 <p>
-          In the event that this causes underflow<span class="emphasis"><em>overflow then the exponent
-          can be reduced by a factor of /a</em></span> and brought inside the power
-          term.
+          In the event that this causes underflow/overflow then the exponent can
+          be reduced by a factor of <span class="emphasis"><em>a</em></span> and brought inside the
+          power term.
         </p>
 <p>
           When a and x are large, we end up with a very large exponent with a base
@@ -1008,24 +1008,24 @@
           by Temme (see references below).
         </p>
 <a name="math_toolkit.special.sf_gamma.igamma.references"></a><h5>
-<a name="id1093870"></a>
+<a name="math_toolkit.special.sf_gamma.igamma.references-heading"></a>
           <a class="link" href="igamma.html#math_toolkit.special.sf_gamma.igamma.references">References</a>
         </h5>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
               N. M. Temme, A Set of Algorithms for the Incomplete Gamma Functions,
               Probability in the Engineering and Informational Sciences, 8, 1994.
             </li>
-<li>
+<li class="listitem">
               N. M. Temme, The Asymptotic Expansion of the Incomplete Gamma Functions,
               Siam J. Math Anal. Vol 10 No 4, July 1979, p757.
             </li>
-<li>
+<li class="listitem">
               A. R. Didonato and A. H. Morris, Computation of the Incomplete Gamma
               Function Ratios and their Inverse. ACM TOMS, Vol 12, No 4, Dec 1986,
               p377.
             </li>
-<li>
+<li class="listitem">
               W. Gautschi, The Incomplete Gamma Functions Since Tricomi, In Tricomi's
               Ideas and Contemporary Applied Mathematics, Atti dei Convegni Lincei,
               n. 147, Accademia Nazionale dei Lincei, Roma, 1998, pp. 203--237.
@@ -1035,9 +1035,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
-      Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
+      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
