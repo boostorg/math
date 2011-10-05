@@ -44,7 +44,7 @@ T    acosh_error_evaluator(T x)
 
 BOOST_TEST_CASE_TEMPLATE_FUNCTION(acosh_test, T)
 {
-    BOOST_MESSAGE("Testing acosh in the real domain for "
+    BOOST_TEST_MESSAGE("Testing acosh in the real domain for "
         << string_type_name<T>::_() << ".");
     
     for    (int i = 0; i <= 100; i++)
@@ -60,8 +60,8 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(acosh_test, T)
 
 void    acosh_manual_check()
 {
-    BOOST_MESSAGE(" ");
-    BOOST_MESSAGE("acosh");
+    BOOST_TEST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("acosh");
     
     for    (int i = 0; i <= 100; i++)
     {
@@ -70,7 +70,7 @@ void    acosh_manual_check()
         long double  xl = 
                 static_cast<long double>(i-50)/static_cast<long double>(5);
         
-        BOOST_MESSAGE(  ::std::setw(15)
+        BOOST_TEST_MESSAGE(  ::std::setw(15)
                      << acosh_error_evaluator(xf)
                      << ::std::setw(15)
                      << acosh_error_evaluator(xd)
@@ -78,6 +78,6 @@ void    acosh_manual_check()
                      << acosh_error_evaluator(xl));
     }
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
 }
 

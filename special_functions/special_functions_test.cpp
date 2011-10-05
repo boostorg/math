@@ -13,8 +13,6 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_log.hpp>
-#include <boost/test/test_case_template.hpp>
-
 
 template<typename T>
 struct string_type_name;
@@ -52,21 +50,21 @@ typedef boost::mpl::list<float,double,long double>  near_eps_test_types;
 
 
 
-boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
+boost::unit_test::test_suite *    init_unit_test_suite(int, char *[])
 {
     ::boost::unit_test::unit_test_log.
         set_threshold_level(::boost::unit_test::log_messages);
     
-    boost::unit_test_framework::test_suite *    test =
+    boost::unit_test::test_suite *    test =
         BOOST_TEST_SUITE("special_functions_test");
     
-    BOOST_MESSAGE("Results of special functions test.");
-    BOOST_MESSAGE(" ");
-    BOOST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
-    BOOST_MESSAGE("Distributed under the Boost Software License, Version 1.0.");
-    BOOST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
-    BOOST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("Results of special functions test.");
+    BOOST_TEST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
+    BOOST_TEST_MESSAGE("Distributed under the Boost Software License, Version 1.0.");
+    BOOST_TEST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
+    BOOST_TEST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
+    BOOST_TEST_MESSAGE(" ");
     
 #define BOOST_SPECIAL_FUNCTIONS_COMMON_GENERATOR(fct)   \
     test->add(BOOST_TEST_CASE_TEMPLATE(fct##_test, test_types));
@@ -91,7 +89,7 @@ boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
 
 #define BOOST_SPECIAL_FUNCTIONS_TEST    \
     BOOST_SPECIAL_FUNCTIONS_COMMON_TEST \
-    BOOST_MESSAGE("Warning: no template templates; curtailed functionality.");
+    BOOST_TEST_MESSAGE("Warning: no template templates; curtailed functionality.");
     
 #else   /* BOOST_NO_TEMPLATE_TEMPLATES */
 
@@ -119,13 +117,13 @@ boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
         
     using    ::std::numeric_limits;
     
-    BOOST_MESSAGE("epsilon");
+    BOOST_TEST_MESSAGE("epsilon");
     
-    BOOST_MESSAGE( ::std::setw(15) << numeric_limits<float>::epsilon()
+    BOOST_TEST_MESSAGE( ::std::setw(15) << numeric_limits<float>::epsilon()
                 << ::std::setw(15) << numeric_limits<double>::epsilon()
                 << ::std::setw(15) << numeric_limits<long double>::epsilon());
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
     
     test->add(BOOST_TEST_CASE(atanh_manual_check));
     test->add(BOOST_TEST_CASE(asinh_manual_check));

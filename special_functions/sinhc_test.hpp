@@ -27,7 +27,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(sinhc_pi_test, T)
     using    ::boost::math::sinhc_pi;
     
     
-    BOOST_MESSAGE("Testing sinhc_pi in the real domain for "
+    BOOST_TEST_MESSAGE("Testing sinhc_pi in the real domain for "
         << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
@@ -46,7 +46,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(sinhc_pi_complex_test, T)
     using    ::boost::math::sinhc_pi;
     
     
-    BOOST_MESSAGE("Testing sinhc_pi in the complex domain for "
+    BOOST_TEST_MESSAGE("Testing sinhc_pi in the complex domain for "
         << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
@@ -61,12 +61,12 @@ void    sinhc_pi_manual_check()
     using    ::boost::math::sinhc_pi;
     
     
-    BOOST_MESSAGE(" ");
-    BOOST_MESSAGE("sinc_pi");
+    BOOST_TEST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("sinc_pi");
     
     for    (int i = 0; i <= 100; i++)
     {
-        BOOST_MESSAGE( ::std::setw(15)
+        BOOST_TEST_MESSAGE( ::std::setw(15)
                     << sinhc_pi<float>(static_cast<float>(i-50)/
                                                 static_cast<float>(50))
                     << ::std::setw(15)
@@ -77,7 +77,7 @@ void    sinhc_pi_manual_check()
                                                 static_cast<long double>(50)));
     }
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
 }
     
 
