@@ -23,7 +23,6 @@
 #include <boost/mpl/list.hpp>            // for boost::mpl::list
 #include <boost/operators.hpp>
 #include <boost/test/unit_test.hpp>
-#include <boost/test/test_case_template.hpp>
 
 #include <istream>  // for std::basic_istream
 #include <limits>   // for std::numeric_limits

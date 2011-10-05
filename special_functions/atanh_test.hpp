@@ -15,7 +15,6 @@
 
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/test_case_template.hpp>
 
 template<typename T>
 T    atanh_error_evaluator(T x)

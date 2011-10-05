@@ -8,7 +8,6 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_log.hpp>
-#include <boost/test/test_case_template.hpp>
 
 #include "quaternion_mi1.h"
 #include "quaternion_mi2.h"
