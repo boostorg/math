@@ -51,7 +51,7 @@ template<class CharType, class ValType> void signed_zero_test_impl()
 
   if (signbit(static_cast<CharType>(-1e-6f)/(std::numeric_limits<CharType>::max)()) != -0)
   { 
-    BOOST_MESSAGE("Signed zero is not supported on this platform.");
+    BOOST_TEST_MESSAGE("Signed zero is not supported on this platform.");
     return;
   }
 

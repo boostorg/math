@@ -22,8 +22,8 @@ namespace std{ using ::sqrt; using ::tan; using ::tanh; }
 #endif
 
 #ifndef VERBOSE
-#undef BOOST_MESSAGE
-#define BOOST_MESSAGE(x)
+#undef BOOST_TEST_MESSAGE
+#define BOOST_TEST_MESSAGE(x)
 #endif
 
 //
@@ -59,7 +59,7 @@ bool check_complex(const std::complex<T>& a, const std::complex<T>& b, int max_e
          }
          else
          {
-            BOOST_MESSAGE("Expected {0,0} but got: " << b);
+            BOOST_TEST_MESSAGE("Expected {0,0} but got: " << b);
          }
       }
       return result;
@@ -73,7 +73,7 @@ bool check_complex(const std::complex<T>& a, const std::complex<T>& b, int max_e
       }
       else
       {
-         BOOST_MESSAGE("Found {0,0} but expected: " << a);
+         BOOST_TEST_MESSAGE("Found {0,0} but expected: " << a);
       }
    }
 

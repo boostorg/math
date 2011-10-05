@@ -27,7 +27,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(sinc_pi_test, T)
     using    ::boost::math::sinc_pi;
     
     
-    BOOST_MESSAGE("Testing sinc_pi in the real domain for "
+    BOOST_TEST_MESSAGE("Testing sinc_pi in the real domain for "
         << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
@@ -46,7 +46,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(sinc_pi_complex_test, T)
     using    ::boost::math::sinc_pi;
     
     
-    BOOST_MESSAGE("Testing sinc_pi in the complex domain for "
+    BOOST_TEST_MESSAGE("Testing sinc_pi in the complex domain for "
         << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
@@ -61,13 +61,13 @@ void    sinc_pi_manual_check()
     using    ::boost::math::sinc_pi;
     
     
-    BOOST_MESSAGE(" ");
-    BOOST_MESSAGE("sinc_pi");
+    BOOST_TEST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("sinc_pi");
     
     for    (int i = 0; i <= 100; i++)
     {
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-        BOOST_MESSAGE( ::std::setw(15)
+        BOOST_TEST_MESSAGE( ::std::setw(15)
                     << sinc_pi<float>(static_cast<float>(i-50)/
                                                 static_cast<float>(50))
                     << ::std::setw(15)
@@ -77,7 +77,7 @@ void    sinc_pi_manual_check()
                     << sinc_pi<long double>(static_cast<long double>(i-50)/
                                                 static_cast<long double>(50)));
 #else
-        BOOST_MESSAGE( ::std::setw(15)
+        BOOST_TEST_MESSAGE( ::std::setw(15)
                     << sinc_pi<float>(static_cast<float>(i-50)/
                                                 static_cast<float>(50))
                     << ::std::setw(15)
@@ -86,7 +86,7 @@ void    sinc_pi_manual_check()
 #endif
     }
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
 }
 
 
