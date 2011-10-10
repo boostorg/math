@@ -5,6 +5,9 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_MATH_SF_PRIME_HPP
+#define BOOST_MATH_SF_PRIME_HPP
+
 #include <boost/array.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -1212,3 +1215,5 @@ namespace boost{ namespace math{
    static const unsigned max_prime = 10000;
 
 }} // namespace boost and math
+
+#endif // BOOST_MATH_SF_PRIME_HPP
