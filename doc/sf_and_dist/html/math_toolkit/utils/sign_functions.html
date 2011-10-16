@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Sign Manipulation Functions</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../utils.html" title="Floating Point Utilities">
 <link rel="prev" href="fpclass.html" title="Floating-Point Classification: Infinities and NaNs">
@@ -22,13 +22,13 @@
 <div class="spirit-nav">
 <a accesskey="p" href="fpclass.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../utils.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="fp_facets.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.utils.sign_functions"></a><a class="link" href="sign_functions.html" title="Sign Manipulation Functions">Sign Manipulation
       Functions</a>
 </h3></div></div></div>
 <a name="math_toolkit.utils.sign_functions.synopsis"></a><h5>
-<a name="id1170133"></a>
+<a name="math_toolkit.utils.sign_functions.synopsis-heading"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.synopsis">Synopsis</a>
       </h5>
 <p>
@@ -52,10 +52,10 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">changesign</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">);</span>
 
-<span class="special">}}</span> <span class="comment">// namespaces
-</span></pre>
+<span class="special">}}</span> <span class="comment">// namespaces</span>
+</pre>
 <a name="math_toolkit.utils.sign_functions.description"></a><h5>
-<a name="id1171991"></a>
+<a name="math_toolkit.utils.sign_functions.description-heading"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.description">Description</a>
       </h5>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> 
@@ -119,7 +119,7 @@
         may be the only portable way to ensure that the sign bit is changed.
       </p>
 <a name="math_toolkit.utils.sign_functions.sign_bits"></a><h6>
-<a name="id1172513"></a>
+<a name="math_toolkit.utils.sign_functions.sign_bits-heading"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.sign_bits">Sign bits</a>
       </h6>
 <p>
@@ -140,7 +140,7 @@
         it may be necessary to explicitly specialize then for UDT type T.
       </p>
 <a name="math_toolkit.utils.sign_functions.examples"></a><h6>
-<a name="id1172549"></a>
+<a name="math_toolkit.utils.sign_functions.examples-heading"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.examples">Examples</a>
       </h6>
 <pre class="programlisting"><span class="identifier">signbit</span><span class="special">(</span><span class="number">3.5</span><span class="special">)</span> <span class="identifier">is</span> <span class="identifier">zero</span> <span class="special">(</span><span class="keyword">or</span> <span class="keyword">false</span><span class="special">)</span>
@@ -153,29 +153,29 @@
 <span class="identifier">changesign</span><span class="special">(-</span><span class="number">1.8</span><span class="special">)</span> <span class="identifier">is</span> <span class="number">1.8</span>
 </pre>
 <a name="math_toolkit.utils.sign_functions.portability"></a><h6>
-<a name="id1172849"></a>
+<a name="math_toolkit.utils.sign_functions.portability-heading"></a>
         <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.portability">Portability</a>
       </h6>
 <p>
         The library supports the following binary floating-point formats:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             IEEE 754 single precision
           </li>
-<li>
+<li class="listitem">
             IEEE 754 double precision
           </li>
-<li>
+<li class="listitem">
             IEEE 754 extended double precision with 15 exponent bits
           </li>
-<li>
+<li class="listitem">
             Intel extended double precision
           </li>
-<li>
+<li class="listitem">
             PowerPC extended double precision
           </li>
-<li>
+<li class="listitem">
             Motorola 68K extended double precision
           </li>
 </ul></div>
@@ -186,14 +186,14 @@
 <p>
         The main portability issues are:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             Unsupported floating point formats
           </li>
-<li>
+<li class="listitem">
             The library depends on the header boost/detail/endian.hpp
           </li>
-<li>
+<li class="listitem">
             Code such as <code class="computeroutput"><span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">__ia64</span><span class="special">)</span> <span class="special">||</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">__ia64__</span><span class="special">)</span>
             <span class="special">||</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">_M_IA64</span><span class="special">)</span></code> is used to determine the processor type.
           </li>
@@ -201,47 +201,46 @@
 <p>
         The library has passed all tests on the following platforms:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
             Win32 / MSVC 7.1 / 10.0 / x86
           </li>
-<li>
+<li class="listitem">
             Win32 / Intel C++ 7.1, 8.1, 9.1 / x86
           </li>
-<li>
+<li class="listitem">
             Mac OS X / GCC 3.3, 4.0 / ppc
           </li>
-<li>
+<li class="listitem">
             Linux / Intel C++ 9.1 / x86, ia64
           </li>
-<li>
+<li class="listitem">
             Linux / GCC 3.3 / x86, x64, ia64, ppc, hppa, mips, m68k
           </li>
-<li>
+<li class="listitem">
             Linux / GCC 3.4 / x64
           </li>
-<li>
+<li class="listitem">
             HP-UX / aCC, GCC 4.1 / ia64
           </li>
-<li>
+<li class="listitem">
             HP-UX / aCC / hppa
           </li>
-<li>
+<li class="listitem">
             Tru64 / Compaq C++ 7.1 / alpha
           </li>
-<li>
+<li class="listitem">
             VMS / HP C++ 7.1 / alpha (in IEEE floating point mode)
           </li>
-<li>
+<li class="listitem">
             VMS / HP C++ 7.2 / ia64 (in IEEE floating point mode)
           </li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
-      Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
+      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -197,7 +197,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l *
             static_cast<T>(-0.827193521891290553639e-6L)
          };
          T r = zm2 * zm1;
-         T R = tools::evaluate_polynomial(P, -zm2) / tools::evaluate_polynomial(Q, -zm2);
+         T R = tools::evaluate_polynomial(P, T(-zm2)) / tools::evaluate_polynomial(Q, T(-zm2));
 
          result += r * Y + r * R;
       }
@@ -410,7 +410,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
             -0.17194794958274081373243161848194745111e-5L
          };
          T r = zm2 * zm1;
-         T R = tools::evaluate_polynomial(P, 0.625 - zm1) / tools::evaluate_polynomial(Q, 0.625 - zm1);
+         T R = tools::evaluate_polynomial(P, T(0.625 - zm1)) / tools::evaluate_polynomial(Q, T(0.625 - zm1));
 
          result += r * Y + r * R;
          BOOST_MATH_INSTRUMENT_CODE(result);
@@ -452,7 +452,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
          };
          // (2 - x) * (1 - x) * (c + R(2 - x))
          T r = zm2 * zm1;
-         T R = tools::evaluate_polynomial(P, -zm2) / tools::evaluate_polynomial(Q, -zm2);
+         T R = tools::evaluate_polynomial(P, T(-zm2)) / tools::evaluate_polynomial(Q, T(-zm2));
 
          result += r * Y + r * R;
          BOOST_MATH_INSTRUMENT_CODE(result);

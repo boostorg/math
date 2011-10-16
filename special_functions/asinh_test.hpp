@@ -44,7 +44,7 @@ T    asinh_error_evaluator(T x)
 
 BOOST_TEST_CASE_TEMPLATE_FUNCTION(asinh_test, T)
 {
-    BOOST_MESSAGE("Testing asinh in the real domain for "
+    BOOST_TEST_MESSAGE("Testing asinh in the real domain for "
         << string_type_name<T>::_() << ".");
     
     for    (int i = 0; i <= 100; i++)
@@ -60,8 +60,8 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(asinh_test, T)
 
 void    asinh_manual_check()
 {
-    BOOST_MESSAGE(" ");
-    BOOST_MESSAGE("asinh");
+    BOOST_TEST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("asinh");
     
     for    (int i = 0; i <= 100; i++)
     {
@@ -70,7 +70,7 @@ void    asinh_manual_check()
         long double  xl =
                 static_cast<long double>(i-50)/static_cast<long double>(5);
         
-        BOOST_MESSAGE(  ::std::setw(15)
+        BOOST_TEST_MESSAGE(  ::std::setw(15)
                      << asinh_error_evaluator(xf)
                      << ::std::setw(15)
                      << asinh_error_evaluator(xd)
@@ -78,6 +78,6 @@ void    asinh_manual_check()
                      << asinh_error_evaluator(xl));
     }
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
 }
 

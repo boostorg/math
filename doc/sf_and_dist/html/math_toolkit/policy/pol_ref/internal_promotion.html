@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Internal Floating-point Promotion Policies</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../pol_ref.html" title="Policy Reference">
 <link rel="prev" href="error_handling_policies.html" title="Error Handling Policies">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="error_handling_policies.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../pol_ref.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="assert_undefined.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section" lang="en">
+<div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.policy.pol_ref.internal_promotion"></a><a class="link" href="internal_promotion.html" title="Internal Floating-point Promotion Policies">Internal
         Floating-point Promotion Policies</a>
@@ -85,7 +85,7 @@
 </tbody>
 </table></div>
 <a name="math_toolkit.policy.pol_ref.internal_promotion.examples"></a><h5>
-<a name="id1289774"></a>
+<a name="math_toolkit.policy.pol_ref.internal_promotion.examples-heading"></a>
           <a class="link" href="internal_promotion.html#math_toolkit.policy.pol_ref.internal_promotion.examples">Examples</a>
         </h5>
 <p>
@@ -101,17 +101,17 @@
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
 
-<span class="comment">// Define a new policy *not* internally promoting RealType to double:
-</span><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
+<span class="comment">// Define a new policy *not* internally promoting RealType to double:</span>
+<span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
       <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> 
       <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
       
-<span class="comment">// Call the function, applying the new policy:
-</span><span class="keyword">double</span> <span class="identifier">t1</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">some_value</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">());</span>
+<span class="comment">// Call the function, applying the new policy:</span>
+<span class="keyword">double</span> <span class="identifier">t1</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">some_value</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">());</span>
 
-<span class="comment">// Alternatively we could use helper function make_policy,
-</span><span class="comment">// and concisely define everything at the call site:
-</span><span class="keyword">double</span> <span class="identifier">t2</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">some_value</span><span class="special">,</span> <span class="identifier">make_policy</span><span class="special">(</span><span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;()));</span>
+<span class="comment">// Alternatively we could use helper function make_policy,</span>
+<span class="comment">// and concisely define everything at the call site:</span>
+<span class="keyword">double</span> <span class="identifier">t2</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">some_value</span><span class="special">,</span> <span class="identifier">make_policy</span><span class="special">(</span><span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;()));</span>
 
 </pre>
 <p>
@@ -128,16 +128,16 @@
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 
-<span class="comment">// Define a policy:
-</span><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
+<span class="comment">// Define a policy:</span>
+<span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
       <span class="identifier">promote_float</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span>
       <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
 
-<span class="comment">// Define the new normal distribution using my_policy:
-</span><span class="keyword">typedef</span> <span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">my_norm</span><span class="special">;</span>
+<span class="comment">// Define the new normal distribution using my_policy:</span>
+<span class="keyword">typedef</span> <span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">my_norm</span><span class="special">;</span>
 
-<span class="comment">// Get a quantile:
-</span><span class="keyword">float</span> <span class="identifier">q</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">my_norm</span><span class="special">(),</span> <span class="number">0.05f</span><span class="special">);</span>
+<span class="comment">// Get a quantile:</span>
+<span class="keyword">float</span> <span class="identifier">q</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">my_norm</span><span class="special">(),</span> <span class="number">0.05f</span><span class="special">);</span>
 
 </pre>
 <p>
@@ -145,9 +145,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006 , 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani and
-      Thijs van den Berg<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
+      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

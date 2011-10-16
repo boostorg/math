@@ -31,7 +31,7 @@ public:
    bool operator()(const T& a, const T& b)
    {
       BOOST_MATH_STD_USING
-      return (fabs(a - b) / (std::min)(fabs(a), fabs(b))) <= eps;
+      return fabs(a - b) <= (eps * (std::min)(fabs(a), fabs(b)));
    }
 private:
    T eps;

@@ -282,8 +282,8 @@ namespace boost
             T operator()(const T& x)
             {
                return comp ?
-                  target - cdf(complement(dist, x))
-                  : cdf(dist, x) - target;
+                  T(target - cdf(complement(dist, x)))
+                  : T(cdf(dist, x) - target);
             }
 
          private:

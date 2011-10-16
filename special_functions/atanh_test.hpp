@@ -15,7 +15,6 @@
 
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/test_case_template.hpp>
 
 template<typename T>
 T    atanh_error_evaluator(T x)
@@ -53,7 +52,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(atanh_test, T)
     using    ::boost::math::atanh;
     
     
-    BOOST_MESSAGE("Testing atanh in the real domain for "
+    BOOST_TEST_MESSAGE("Testing atanh in the real domain for "
         << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
@@ -94,8 +93,8 @@ void    atanh_manual_check()
     using    ::std::numeric_limits;
     
     
-    BOOST_MESSAGE(" ");
-    BOOST_MESSAGE("atanh");
+    BOOST_TEST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("atanh");
     
     for    (int i = 0; i <= 100; i++)
     {
@@ -116,7 +115,7 @@ void    atanh_manual_check()
                 std::numeric_limits<long double>::has_infinity
             )
         {
-            BOOST_MESSAGE( ::std::setw(15)
+            BOOST_TEST_MESSAGE( ::std::setw(15)
                         << atanh_error_evaluator(xf)
                         << ::std::setw(15)
                         << atanh_error_evaluator(xd)
@@ -140,11 +139,11 @@ void    atanh_manual_check()
                         numeric_limits<long double>::epsilon())
                 )
             {
-                BOOST_MESSAGE("Platform's numerics may lack precision.");
+                BOOST_TEST_MESSAGE("Platform's numerics may lack precision.");
             }
             else
             {
-                BOOST_MESSAGE( ::std::setw(15)
+                BOOST_TEST_MESSAGE( ::std::setw(15)
                             << atanh_error_evaluator(xf)
                             << ::std::setw(15)
                             << atanh_error_evaluator(xd)
@@ -154,6 +153,6 @@ void    atanh_manual_check()
         }
     }
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
 }
 

@@ -13,7 +13,6 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_log.hpp>
-#include <boost/test/test_case_template.hpp>
 
 
 #include <boost/math/quaternion.hpp>
@@ -314,94 +313,94 @@ void    quaternion_manual_test()
     // using != (const quaternion<T> &,const quaternion<T> &)
     q2 != q3;
     
-    BOOST_MESSAGE("Please input a quaternion...");
+    BOOST_TEST_MESSAGE("Please input a quaternion...");
     
 #ifdef BOOST_INTERACTIVE_TEST_INPUT_ITERATOR
     ::std::cin >> q0;
     
     if    (::std::cin.fail())
     {
-        BOOST_MESSAGE("You have entered nonsense!");
+        BOOST_TEST_MESSAGE("You have entered nonsense!");
     }
     else
     {
-        BOOST_MESSAGE("You have entered the quaternion "<< q0 << " .");
+        BOOST_TEST_MESSAGE("You have entered the quaternion "<< q0 << " .");
     }
 #else
     ::std::istringstream                bogus("(1,2,3,4)");
     
     bogus >> q0;
     
-    BOOST_MESSAGE("You have entered the quaternion " << q0 << " .");
+    BOOST_TEST_MESSAGE("You have entered the quaternion " << q0 << " .");
 #endif
     
-    BOOST_MESSAGE("For this quaternion:");
+    BOOST_TEST_MESSAGE("For this quaternion:");
     
-    BOOST_MESSAGE( "the value of the real part is "
+    BOOST_TEST_MESSAGE( "the value of the real part is "
                 << real(q0));
     
-    BOOST_MESSAGE( "the value of the unreal part is "
+    BOOST_TEST_MESSAGE( "the value of the unreal part is "
                 << unreal(q0));
     
-    BOOST_MESSAGE( "the value of the sup norm is "
+    BOOST_TEST_MESSAGE( "the value of the sup norm is "
                 << sup(q0));
     
-    BOOST_MESSAGE( "the value of the l1 norm is "
+    BOOST_TEST_MESSAGE( "the value of the l1 norm is "
                 << l1(q0));
     
-    BOOST_MESSAGE( "the value of the magnitude (euclidian norm) is "
+    BOOST_TEST_MESSAGE( "the value of the magnitude (euclidian norm) is "
                 << abs(q0));
     
-    BOOST_MESSAGE( "the value of the (Cayley) norm is "
+    BOOST_TEST_MESSAGE( "the value of the (Cayley) norm is "
                 << norm(q0));
     
-    BOOST_MESSAGE( "the value of the conjugate is "
+    BOOST_TEST_MESSAGE( "the value of the conjugate is "
                 << conj(q0));
     
-    BOOST_MESSAGE( "the value of the exponential is "
+    BOOST_TEST_MESSAGE( "the value of the exponential is "
                 << exp(q0));
     
-    BOOST_MESSAGE( "the value of the cube is "
+    BOOST_TEST_MESSAGE( "the value of the cube is "
                 << pow(q0,3));
     
-    BOOST_MESSAGE( "the value of the cosinus is "
+    BOOST_TEST_MESSAGE( "the value of the cosinus is "
                 << cos(q0));
     
-    BOOST_MESSAGE( "the value of the sinus is "
+    BOOST_TEST_MESSAGE( "the value of the sinus is "
                 << sin(q0));
     
-    BOOST_MESSAGE( "the value of the tangent is "
+    BOOST_TEST_MESSAGE( "the value of the tangent is "
                 << tan(q0));
     
-    BOOST_MESSAGE( "the value of the hyperbolic cosinus is "
+    BOOST_TEST_MESSAGE( "the value of the hyperbolic cosinus is "
                 << cosh(q0));
     
-    BOOST_MESSAGE( "the value of the hyperbolic sinus is "
+    BOOST_TEST_MESSAGE( "the value of the hyperbolic sinus is "
                 << sinh(q0));
     
-    BOOST_MESSAGE( "the value of the hyperbolic tangent is "
+    BOOST_TEST_MESSAGE( "the value of the hyperbolic tangent is "
                 << tanh(q0));
     
 #ifdef    BOOST_NO_TEMPLATE_TEMPLATES
-    BOOST_MESSAGE("no template templates, can't compute cardinal functions");
+    BOOST_TEST_MESSAGE("no template templates, can't compute cardinal functions");
 #else    /* BOOST_NO_TEMPLATE_TEMPLATES */
-    BOOST_MESSAGE( "the value of "
+    BOOST_TEST_MESSAGE( "the value of "
                 << "the Sinus Cardinal (of index pi) is "
                 << sinc_pi(q0));
     
-    BOOST_MESSAGE( "the value of "
+    BOOST_TEST_MESSAGE( "the value of "
                 << "the Hyperbolic Sinus Cardinal (of index pi) is "
                 << sinhc_pi(q0));
 #endif    /* BOOST_NO_TEMPLATE_TEMPLATES */
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
     
     float                         rho = ::std::sqrt(8.0f);
     float                         theta = ::std::atan(1.0f);
     float                         phi1 = ::std::atan(1.0f);
     float                         phi2 = ::std::atan(1.0f);
     
-    BOOST_MESSAGE( "The value of the quaternion represented "
+    BOOST_TEST_MESSAGE( "The value of the quaternion represented "
                 << "in spherical form by "
                 << "rho = " << rho << " , theta = " << theta
                 << " , phi1 = " << phi1 << " , phi2 = " << phi2
@@ -410,7 +409,7 @@ void    quaternion_manual_test()
     
     float                         alpha = ::std::atan(1.0f);
     
-    BOOST_MESSAGE( "The value of the quaternion represented "
+    BOOST_TEST_MESSAGE( "The value of the quaternion represented "
                 << "in semipolar form by "
                 << "rho = " << rho << " , alpha = " << alpha
                 << " , phi1 = " << phi1 << " , phi2 = " << phi2
@@ -422,7 +421,7 @@ void    quaternion_manual_test()
     float                         theta1 = 0;
     float                         theta2 = ::std::atan(1.0f)*2;
     
-    BOOST_MESSAGE( "The value of the quaternion represented "
+    BOOST_TEST_MESSAGE( "The value of the quaternion represented "
                 << "in multipolar form by "
                 << "rho1 = " << rho1 << " , theta1 = " << theta1
                 << " , rho2 = " << rho2 << " , theta2 = " << theta2
@@ -434,7 +433,7 @@ void    quaternion_manual_test()
     float                         longitude = ::std::atan(1.0f);
     float                         lattitude = ::std::atan(::std::sqrt(3.0f));
     
-    BOOST_MESSAGE( "The value of the quaternion represented "
+    BOOST_TEST_MESSAGE( "The value of the quaternion represented "
                 << "in cylindrospherical form by "
                 << "t = " << t << " , radius = " << radius
                 << " , longitude = " << longitude << " , latitude = "
@@ -447,7 +446,7 @@ void    quaternion_manual_test()
     float                         h1 = 3;
     float                         h2 = 4;
     
-    BOOST_MESSAGE( "The value of the quaternion represented "
+    BOOST_TEST_MESSAGE( "The value of the quaternion represented "
                 << "in cylindrical form by "
                 << "r = " << r << " , angle = " << angle
                 << " , h1 = " << h1 << " , h2 = " << h2
@@ -462,34 +461,34 @@ void    quaternion_manual_test()
     ::boost::math::quaternion<double>        quaternion_j(0,0,1);
     ::boost::math::quaternion<double>        quaternion_k(0,0,0,1);
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
     
-    BOOST_MESSAGE( "Real 1: " << real_1 << " ; "
+    BOOST_TEST_MESSAGE( "Real 1: " << real_1 << " ; "
                 << "Complex 1: " << complex_1 << " ; "
                 << "Quaternion 1: " << quaternion_1 << " .");
     
-    BOOST_MESSAGE( "Complex i: " << complex_i << " ; "
+    BOOST_TEST_MESSAGE( "Complex i: " << complex_i << " ; "
                 << "Quaternion i: " << quaternion_i << " .");
     
-    BOOST_MESSAGE( "Quaternion j: " << quaternion_j << " .");
+    BOOST_TEST_MESSAGE( "Quaternion j: " << quaternion_j << " .");
     
-    BOOST_MESSAGE( "Quaternion k: " << quaternion_k << " .");
-    
-    
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE( "Quaternion k: " << quaternion_k << " .");
     
     
-    BOOST_MESSAGE( "i*i: " << quaternion_i*quaternion_i << " ; "
+    BOOST_TEST_MESSAGE(" ");
+    
+    
+    BOOST_TEST_MESSAGE( "i*i: " << quaternion_i*quaternion_i << " ; "
                 << "j*j: " << quaternion_j*quaternion_j << " ; "
                 << "k*k: " << quaternion_k*quaternion_k << " .");
-    BOOST_MESSAGE( "i*j: " << quaternion_i*quaternion_j << " ; "
+    BOOST_TEST_MESSAGE( "i*j: " << quaternion_i*quaternion_j << " ; "
                 << "j*i: " << quaternion_j*quaternion_i << " .");
-    BOOST_MESSAGE( "j*k: " << quaternion_j*quaternion_k << " ; "
+    BOOST_TEST_MESSAGE( "j*k: " << quaternion_j*quaternion_k << " ; "
                 << "k*j: " << quaternion_k*quaternion_j << " .");
-    BOOST_MESSAGE( "k*i: " << quaternion_k*quaternion_i << " ; "
+    BOOST_TEST_MESSAGE( "k*i: " << quaternion_k*quaternion_i << " ; "
                 << "i*k: " << quaternion_i*quaternion_k << " .");
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
 }
 
 
@@ -503,7 +502,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(multiplication_test, T)
 #endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing multiplication for "
+    BOOST_TEST_MESSAGE("Testing multiplication for "
         << string_type_name<T>::_() << ".");
     
     BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
@@ -576,7 +575,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(exp_test, T)
 #endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing exp for "
+    BOOST_TEST_MESSAGE("Testing exp for "
         << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
@@ -608,7 +607,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(cos_test, T)
 #endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing cos for "
+    BOOST_TEST_MESSAGE("Testing cos for "
         << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
@@ -640,7 +639,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(sin_test, T)
 #endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing sin for "
+    BOOST_TEST_MESSAGE("Testing sin for "
         << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
@@ -675,7 +674,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(cosh_test, T)
 #endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing cosh for "
+    BOOST_TEST_MESSAGE("Testing cosh for "
         << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
@@ -710,7 +709,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(sinh_test, T)
 #endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing sinh for "
+    BOOST_TEST_MESSAGE("Testing sinh for "
         << string_type_name<T>::_() << ".");
     
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
@@ -733,21 +732,21 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(sinh_test, T)
 }
 
 
-boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
+boost::unit_test::test_suite *    init_unit_test_suite(int, char *[])
 {
     ::boost::unit_test::unit_test_log.
         set_threshold_level(::boost::unit_test::log_messages);
     
-    boost::unit_test_framework::test_suite *    test =
+    boost::unit_test::test_suite *    test =
         BOOST_TEST_SUITE("quaternion_test");
     
-    BOOST_MESSAGE("Results of quaternion test.");
-    BOOST_MESSAGE(" ");
-    BOOST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
-    BOOST_MESSAGE("Distributed under the Boost Software License, Version 1.0.");
-    BOOST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
-    BOOST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("Results of quaternion test.");
+    BOOST_TEST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
+    BOOST_TEST_MESSAGE("Distributed under the Boost Software License, Version 1.0.");
+    BOOST_TEST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
+    BOOST_TEST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
+    BOOST_TEST_MESSAGE(" ");
     
 #define    BOOST_QUATERNION_COMMON_GENERATOR(fct)   \
     test->add(BOOST_TEST_CASE_TEMPLATE(fct##_test, test_types));

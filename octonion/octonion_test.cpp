@@ -13,8 +13,6 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_log.hpp>
-#include <boost/test/test_case_template.hpp>
-
 
 #include <boost/math/octonion.hpp>
 
@@ -407,86 +405,86 @@ void    octonion_manual_test()
     // using != (const octonion<T> &,const octonion<T> &)
     o0 != o4;
     
-    BOOST_MESSAGE("Please input an octonion...");
+    BOOST_TEST_MESSAGE("Please input an octonion...");
     
 #ifdef BOOST_INTERACTIVE_TEST_INPUT_ITERATOR
     ::std::cin >> o0;
     
     if    (::std::cin.fail())
     {
-        BOOST_MESSAGE("You have entered nonsense!");
+        BOOST_TEST_MESSAGE("You have entered nonsense!");
     }
     else
     {
-        BOOST_MESSAGE("You have entered the octonion " << o0 << " .");
+        BOOST_TEST_MESSAGE("You have entered the octonion " << o0 << " .");
     }
 #else
     ::std::istringstream                bogus("(1,2,3,4,5,6,7,8)");
     
     bogus >> o0;
     
-    BOOST_MESSAGE("You have entered the octonion " << o0 << " .");
+    BOOST_TEST_MESSAGE("You have entered the octonion " << o0 << " .");
 #endif
     
-    BOOST_MESSAGE("For this octonion:");
+    BOOST_TEST_MESSAGE("For this octonion:");
     
-    BOOST_MESSAGE( "the value of the real part is "
+    BOOST_TEST_MESSAGE( "the value of the real part is "
                 << real(o0));
     
-    BOOST_MESSAGE( "the value of the unreal part is "
+    BOOST_TEST_MESSAGE( "the value of the unreal part is "
                 << unreal(o0));
     
-    BOOST_MESSAGE( "the value of the sup norm is "
+    BOOST_TEST_MESSAGE( "the value of the sup norm is "
                 << sup(o0));
     
-    BOOST_MESSAGE( "the value of the l1 norm is "
+    BOOST_TEST_MESSAGE( "the value of the l1 norm is "
                 << l1(o0));
     
-    BOOST_MESSAGE( "the value of the magnitude (euclidian norm) is "
+    BOOST_TEST_MESSAGE( "the value of the magnitude (euclidian norm) is "
                 << abs(o0));
     
-    BOOST_MESSAGE( "the value of the (Cayley) norm is "
+    BOOST_TEST_MESSAGE( "the value of the (Cayley) norm is "
                 << norm(o0));
     
-    BOOST_MESSAGE( "the value of the conjugate is "
+    BOOST_TEST_MESSAGE( "the value of the conjugate is "
                 << conj(o0));
     
-    BOOST_MESSAGE( "the value of the exponential is "
+    BOOST_TEST_MESSAGE( "the value of the exponential is "
                 << exp(o0));
     
-    BOOST_MESSAGE( "the value of the cube is "
+    BOOST_TEST_MESSAGE( "the value of the cube is "
                 << pow(o0,3));
     
-    BOOST_MESSAGE( "the value of the cosinus is "
+    BOOST_TEST_MESSAGE( "the value of the cosinus is "
                 << cos(o0));
     
-    BOOST_MESSAGE( "the value of the sinus is "
+    BOOST_TEST_MESSAGE( "the value of the sinus is "
                 << sin(o0));
     
-    BOOST_MESSAGE( "the value of the tangent is "
+    BOOST_TEST_MESSAGE( "the value of the tangent is "
                 << tan(o0));
     
-    BOOST_MESSAGE( "the value of the hyperbolic cosinus is "
+    BOOST_TEST_MESSAGE( "the value of the hyperbolic cosinus is "
                 << cosh(o0));
     
-    BOOST_MESSAGE( "the value of the hyperbolic sinus is "
+    BOOST_TEST_MESSAGE( "the value of the hyperbolic sinus is "
                 << sinh(o0));
     
-    BOOST_MESSAGE( "the value of the hyperbolic tangent is "
+    BOOST_TEST_MESSAGE( "the value of the hyperbolic tangent is "
                 << tanh(o0));
     
 #ifdef    BOOST_NO_TEMPLATE_TEMPLATES
-    BOOST_MESSAGE( "no template templates, can't compute cardinal functions");
+    BOOST_TEST_MESSAGE( "no template templates, can't compute cardinal functions");
 #else    /* BOOST_NO_TEMPLATE_TEMPLATES */
-    BOOST_MESSAGE( "the value of the Sinus Cardinal (of index pi) is "
+    BOOST_TEST_MESSAGE( "the value of the Sinus Cardinal (of index pi) is "
                 << sinc_pi(o0));
     
-    BOOST_MESSAGE( "the value of "
+    BOOST_TEST_MESSAGE( "the value of "
                 << "the Hyperbolic Sinus Cardinal (of index pi) is "
                 << sinhc_pi(o0));
 #endif    /* BOOST_NO_TEMPLATE_TEMPLATES */
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
     
     float                            rho = ::std::sqrt(4096.0f);
     float                            theta = ::std::atan(1.0f);
@@ -497,7 +495,7 @@ void    octonion_manual_test()
     float                            phi5 = ::std::atan(1.0f);
     float                            phi6 = ::std::atan(1.0f);
     
-    BOOST_MESSAGE( "The value of the octonion represented "
+    BOOST_TEST_MESSAGE( "The value of the octonion represented "
                 << "in spherical form by "
                 << "rho = " << rho << " , theta = " << theta
                 << " , phi1 = " << phi1 << " , phi2 = " << phi2
@@ -516,7 +514,7 @@ void    octonion_manual_test()
     float                            theta3 = ::std::atan(1.0f);
     float                            theta4 = ::std::atan(::std::sqrt(3.0f));
     
-    BOOST_MESSAGE( "The value of the octonion represented "
+    BOOST_TEST_MESSAGE( "The value of the octonion represented "
                 << "in multipolar form by "
                 << "rho1 = " << rho1 << " , theta1 = " << theta1
                 << " , rho2 = " << rho2 << " , theta2 = " << theta2
@@ -535,7 +533,7 @@ void    octonion_manual_test()
     float                            h5 = 7;
     float                            h6 = 8;
     
-    BOOST_MESSAGE( "The value of the octonion represented "
+    BOOST_TEST_MESSAGE( "The value of the octonion represented "
                 << "in cylindrical form by "
                 << "r = " << r << " , angle = " << angle
                 << " , h1 = " << h1 << " , h2 = " << h2
@@ -561,34 +559,34 @@ void    octonion_manual_test()
     ::boost::math::octonion<double>      octonion_k_prime(0,0,0,0,0,0,0,1);
     
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
     
-    BOOST_MESSAGE( "Real 1: " << real_1
+    BOOST_TEST_MESSAGE( "Real 1: " << real_1
                 << " ; Complex 1: " << complex_1
                 << " ; Quaternion 1: " << quaternion_1
                 << " ; Octonion 1: " << octonion_1 << " .");
                 
-    BOOST_MESSAGE( "Complex i: " << complex_i
+    BOOST_TEST_MESSAGE( "Complex i: " << complex_i
                 << " ; Quaternion i: " << quaternion_i
                 << " ; Octonion i : " << octonion_i << " .");
                 
-    BOOST_MESSAGE( "Quaternion j: " << quaternion_j
+    BOOST_TEST_MESSAGE( "Quaternion j: " << quaternion_j
                 << " ; Octonion j: " << octonion_j << " .");
     
-    BOOST_MESSAGE( "Quaternion k: " << quaternion_k
+    BOOST_TEST_MESSAGE( "Quaternion k: " << quaternion_k
                 << " ; Octonion k: " << octonion_k << " .");
     
-    BOOST_MESSAGE( "Quaternion e\': " << octonion_e_prime << " .");
+    BOOST_TEST_MESSAGE( "Quaternion e\': " << octonion_e_prime << " .");
     
-    BOOST_MESSAGE( "Quaternion i\': " << octonion_i_prime << " .");
+    BOOST_TEST_MESSAGE( "Quaternion i\': " << octonion_i_prime << " .");
     
-    BOOST_MESSAGE( "Quaternion j\': " << octonion_j_prime << " .");
+    BOOST_TEST_MESSAGE( "Quaternion j\': " << octonion_j_prime << " .");
     
-    BOOST_MESSAGE( "Quaternion k\': " << octonion_k_prime << " .");
+    BOOST_TEST_MESSAGE( "Quaternion k\': " << octonion_k_prime << " .");
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
     
-    BOOST_MESSAGE( octonion_1*octonion_1 << " ; "
+    BOOST_TEST_MESSAGE( octonion_1*octonion_1 << " ; "
                 << octonion_1*octonion_i << " ; "
                 << octonion_1*octonion_j << " ; "
                 << octonion_1*octonion_k << " ; "
@@ -597,7 +595,7 @@ void    octonion_manual_test()
                 << octonion_1*octonion_j_prime << " ; "
                 << octonion_1*octonion_k_prime << " ; ");
     
-    BOOST_MESSAGE( octonion_i*octonion_1 << " ; "
+    BOOST_TEST_MESSAGE( octonion_i*octonion_1 << " ; "
                 << octonion_i*octonion_i << " ; "
                 << octonion_i*octonion_j << " ; "
                 << octonion_i*octonion_k << " ; "
@@ -606,7 +604,7 @@ void    octonion_manual_test()
                 << octonion_i*octonion_j_prime << " ; "
                 << octonion_i*octonion_k_prime << " ; ");
     
-    BOOST_MESSAGE( octonion_j*octonion_1 << " ; "
+    BOOST_TEST_MESSAGE( octonion_j*octonion_1 << " ; "
                 << octonion_j*octonion_i << " ; "
                 << octonion_j*octonion_j << " ; "
                 << octonion_j*octonion_k << " ; "
@@ -615,7 +613,7 @@ void    octonion_manual_test()
                 << octonion_j*octonion_j_prime << " ; "
                 << octonion_j*octonion_k_prime << " ; ");
     
-    BOOST_MESSAGE( octonion_k*octonion_1 << " ; "
+    BOOST_TEST_MESSAGE( octonion_k*octonion_1 << " ; "
                 << octonion_k*octonion_i << " ; "
                 << octonion_k*octonion_j << " ; "
                 << octonion_k*octonion_k << " ; "
@@ -624,7 +622,7 @@ void    octonion_manual_test()
                 << octonion_k*octonion_j_prime << " ; "
                 << octonion_k*octonion_k_prime << " ; ");
     
-    BOOST_MESSAGE( octonion_e_prime*octonion_1 << " ; "
+    BOOST_TEST_MESSAGE( octonion_e_prime*octonion_1 << " ; "
                 << octonion_e_prime*octonion_i << " ; "
                 << octonion_e_prime*octonion_j << " ; "
                 << octonion_e_prime*octonion_k << " ; "
@@ -633,7 +631,7 @@ void    octonion_manual_test()
                 << octonion_e_prime*octonion_j_prime << " ; "
                 << octonion_e_prime*octonion_k_prime << " ; ");
     
-    BOOST_MESSAGE( octonion_i_prime*octonion_1 << " ; "
+    BOOST_TEST_MESSAGE( octonion_i_prime*octonion_1 << " ; "
                 << octonion_i_prime*octonion_i << " ; "
                 << octonion_i_prime*octonion_j << " ; "
                 << octonion_i_prime*octonion_k << " ; "
@@ -642,7 +640,7 @@ void    octonion_manual_test()
                 << octonion_i_prime*octonion_j_prime << " ; "
                 << octonion_i_prime*octonion_k_prime << " ; ");
     
-    BOOST_MESSAGE( octonion_j_prime*octonion_1 << " ; "
+    BOOST_TEST_MESSAGE( octonion_j_prime*octonion_1 << " ; "
                 << octonion_j_prime*octonion_i << " ; "
                 << octonion_j_prime*octonion_j << " ; "
                 << octonion_j_prime*octonion_k << " ; "
@@ -651,7 +649,7 @@ void    octonion_manual_test()
                 << octonion_j_prime*octonion_j_prime << " ; "
                 << octonion_j_prime*octonion_k_prime << " ; ");
     
-    BOOST_MESSAGE( octonion_k_prime*octonion_1 << " ; "
+    BOOST_TEST_MESSAGE( octonion_k_prime*octonion_1 << " ; "
                 << octonion_k_prime*octonion_i << " ; "
                 << octonion_k_prime*octonion_j << " ; "
                 << octonion_k_prime*octonion_k << " ; "
@@ -660,15 +658,15 @@ void    octonion_manual_test()
                 << octonion_k_prime*octonion_j_prime << " ; "
                 << octonion_k_prime*octonion_k_prime << " ; ");
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
     
-    BOOST_MESSAGE("i\'*(e\'*j) : "
+    BOOST_TEST_MESSAGE("i\'*(e\'*j) : "
     << octonion_i_prime*(octonion_e_prime*octonion_j) << " ;");
     
-    BOOST_MESSAGE("(i\'*e\')*j : "
+    BOOST_TEST_MESSAGE("(i\'*e\')*j : "
     << (octonion_i_prime*octonion_e_prime)*octonion_j << " ;");
     
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE(" ");
 }
 
 
@@ -682,7 +680,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(multiplication_test, T)
 #endif /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing multiplication for "
+    BOOST_TEST_MESSAGE("Testing multiplication for "
         << string_type_name<T>::_() << ".");
     
     BOOST_REQUIRE_PREDICATE(::std::less_equal<T>(),
@@ -714,7 +712,7 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(exp_test, T)
 #endif  /* BOOST_WORKAROUND(__GNUC__, < 3) */
     
     
-    BOOST_MESSAGE("Testing exp for "
+    BOOST_TEST_MESSAGE("Testing exp for "
         << string_type_name<T>::_() << ".");
     
     for    (int idx = 1; idx < 8; ++idx)
@@ -729,21 +727,21 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(exp_test, T)
 }
 
 
-boost::unit_test_framework::test_suite *    init_unit_test_suite(int, char *[])
+boost::unit_test::test_suite *    init_unit_test_suite(int, char *[])
 {
     ::boost::unit_test::unit_test_log.
         set_threshold_level(::boost::unit_test::log_messages);
     
-    boost::unit_test_framework::test_suite *    test =
+    boost::unit_test::test_suite *    test =
         BOOST_TEST_SUITE("octonion_test");
     
-    BOOST_MESSAGE("Results of octonion test.");
-    BOOST_MESSAGE(" ");
-    BOOST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
-    BOOST_MESSAGE("Distributed under the Boost Software License, Version 1.0.");
-    BOOST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
-    BOOST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
-    BOOST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("Results of octonion test.");
+    BOOST_TEST_MESSAGE(" ");
+    BOOST_TEST_MESSAGE("(C) Copyright Hubert Holin 2003-2005.");
+    BOOST_TEST_MESSAGE("Distributed under the Boost Software License, Version 1.0.");
+    BOOST_TEST_MESSAGE("(See accompanying file LICENSE_1_0.txt or copy at");
+    BOOST_TEST_MESSAGE("http://www.boost.org/LICENSE_1_0.txt)");
+    BOOST_TEST_MESSAGE(" ");
     
 #define    BOOST_OCTONION_COMMON_GENERATOR(fct) \
     test->add(BOOST_TEST_CASE_TEMPLATE(fct##_test, test_types));
