@@ -46,7 +46,35 @@
           </li>
 <li class="listitem">
             Corrected wrong out-of-bound uniform distribution CDF complement values
-            https://svn.boost.org/trac/boost/ticket/5733 #5733.
+            <a href="https://svn.boost.org/trac/boost/ticket/5733" target="_top">#5733</a>.
+          </li>
+<li class="listitem">
+            Enabled long double support on OpenBSD (issue <a href="https://svn.boost.org/trac/boost/ticket/6014" target="_top">#6014</a>).
+          </li>
+<li class="listitem">
+            Changed nextafter and related functions to behave in the same way as
+            other implementations - so that nextafter(+INF, 0) is a finite value
+            (issue <a href="https://svn.boost.org/trac/boost/ticket/5823" target="_top">#5832</a>).
+          </li>
+<li class="listitem">
+            Changed tuple include configuration to fix issue when using in conjunction
+            with Boost.Tr1 (issue <a href="https://svn.boost.org/trac/boost/ticket/5934" target="_top">#5934</a>).
+          </li>
+<li class="listitem">
+            Changed class eps_tolerance to behave correctly when both ends of the
+            range are zero (issue <a href="https://svn.boost.org/trac/boost/ticket/6001" target="_top">#6001</a>).
+          </li>
+<li class="listitem">
+            Fixed missing include guards on prime.hpp (issue <a href="https://svn.boost.org/trac/boost/ticket/5927" target="_top">#5927</a>).
+          </li>
+<li class="listitem">
+            Removed unused/undocumented constants from constants.hpp (issue <a href="https://svn.boost.org/trac/boost/ticket/5982" target="_top">#5982</a>).
+          </li>
+<li class="listitem">
+            Fixed missing std:: prefix in nonfinite_num_facets.hpp (issue <a href="https://svn.boost.org/trac/boost/ticket/5914" target="_top">#5914</a>).
+          </li>
+<li class="listitem">
+            Minor patches for Cray compiler compatibility.
           </li>
 </ul></div>
 <a name="math_toolkit.status.history1.boost_1_47"></a><h5>

@@ -11,7 +11,24 @@ provided by Thomas Mang.
 
 * Added tests to use improved version of lexical_cast which handles C99 nonfinites without using globale facets.
 
-* Corrected wrong out-of-bound uniform distribution CDF complement values https://svn.boost.org/trac/boost/ticket/5733 #5733.
+* Corrected wrong out-of-bound uniform distribution CDF complement values [@https://svn.boost.org/trac/boost/ticket/5733 #5733].
+
+* Enabled long double support on OpenBSD (issue [@https://svn.boost.org/trac/boost/ticket/6014 #6014]).
+
+* Changed nextafter and related functions to behave in the same way as other implementations - so that nextafter(+INF, 0) 
+is a finite value (issue [@https://svn.boost.org/trac/boost/ticket/5823 #5832]).
+
+* Changed tuple include configuration to fix issue when using in conjunction with Boost.Tr1 (issue [@https://svn.boost.org/trac/boost/ticket/5934 #5934]).
+
+* Changed class eps_tolerance to behave correctly when both ends of the range are zero (issue [@https://svn.boost.org/trac/boost/ticket/6001 #6001]).
+
+* Fixed missing include guards on prime.hpp (issue [@https://svn.boost.org/trac/boost/ticket/5927 #5927]).
+
+* Removed unused/undocumented constants from constants.hpp (issue [@https://svn.boost.org/trac/boost/ticket/5982 #5982]).
+
+* Fixed missing std:: prefix in nonfinite_num_facets.hpp (issue [@https://svn.boost.org/trac/boost/ticket/5914 #5914]).
+
+* Minor patches for Cray compiler compatibility.
 
 [h4 Boost-1.47]
 
