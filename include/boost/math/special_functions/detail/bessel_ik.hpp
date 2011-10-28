@@ -23,6 +23,61 @@ namespace boost { namespace math {
 
 namespace detail {
 
+template <class T, class Policy>
+struct cyl_bessel_i_small_z
+{
+   typedef T result_type;
+
+   cyl_bessel_i_small_z(T v_, T z_) : k(0), v(v_), mult(z_*z_/4) 
+   {
+      BOOST_MATH_STD_USING
+      term = 1;
+   }
+
+   T operator()()
+   {
+      T result = term;
+      ++k;
+      term *= mult / k;
+      term /= k + v;
+      return result;
+   }
+private:
+   unsigned k;
+   T v;
+   T term;
+   T mult;
+};
+
+template <class T, class Policy>
+inline T bessel_i_small_z_series(T v, T x, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+   T prefix;
+   if(v < max_factorial<T>::value)
+   {
+      prefix = pow(x / 2, v) / boost::math::tgamma(v + 1, pol);
+   }
+   else
+   {
+      prefix = v * log(x / 2) - boost::math::lgamma(v + 1, pol);
+      prefix = exp(prefix);
+   }
+   if(prefix == 0)
+      return prefix;
+
+   cyl_bessel_i_small_z<T, Policy> s(v, x);
+   boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+   T zero = 0;
+   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
+#else
+   T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+#endif
+   policies::check_series_iterations<T>("boost::math::bessel_j_small_z_series<%1%>(%1%,%1%)", max_iter, pol);
+   return prefix * result;
+}
+
 // Calculate K(v, x) and K(v+1, x) by method analogous to
 // Temme, Journal of Computational Physics, vol 21, 343 (1976)
 template <typename T, typename Policy>
