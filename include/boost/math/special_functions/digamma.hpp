@@ -247,7 +247,7 @@ T digamma_imp_1_2(T x, const mpl::int_<64>*)
    T g = x - root1;
    g -= root2;
    g -= root3;
-   T r = tools::evaluate_polynomial(P, x-1) / tools::evaluate_polynomial(Q, x-1);
+   T r = tools::evaluate_polynomial(P, T(x-1)) / tools::evaluate_polynomial(Q, T(x-1));
    T result = g * Y + g * r;
 
    return result;
@@ -296,7 +296,7 @@ T digamma_imp_1_2(T x, const mpl::int_<53>*)
    T g = x - root1;
    g -= root2;
    g -= root3;
-   T r = tools::evaluate_polynomial(P, x-1) / tools::evaluate_polynomial(Q, x-1);
+   T r = tools::evaluate_polynomial(P, T(x-1)) / tools::evaluate_polynomial(Q, T(x-1));
    T result = g * Y + g * r;
 
    return result;
@@ -336,7 +336,7 @@ inline T digamma_imp_1_2(T x, const mpl::int_<24>*)
    };
    T g = x - root;
    g -= root_minor;
-   T r = tools::evaluate_polynomial(P, x-1) / tools::evaluate_polynomial(Q, x-1);
+   T r = tools::evaluate_polynomial(P, T(x-1)) / tools::evaluate_polynomial(Q, T(x-1));
    T result = g * Y + g * r;
 
    return result;

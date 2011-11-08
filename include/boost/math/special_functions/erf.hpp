@@ -178,11 +178,11 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
    if(z < 0)
    {
       if(!invert)
-         return -erf_imp(-z, invert, pol, t);
+         return -erf_imp(T(-z), invert, pol, t);
       else if(z < -0.5)
-         return 2 - erf_imp(-z, invert, pol, t);
+         return 2 - erf_imp(T(-z), invert, pol, t);
       else
-         return 1 + erf_imp(-z, false, pol, t);
+         return 1 + erf_imp(T(-z), false, pol, t);
    }
 
    T result;
@@ -264,7 +264,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
             0.0113385233577001411017L,
             0.337511472483094676155e-5L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 0.5) / tools::evaluate_polynomial(Q, z - 0.5);
+         result = Y + tools::evaluate_polynomial(P, T(z - 0.5)) / tools::evaluate_polynomial(Q, T(z - 0.5));
          result *= exp(-z * z) / z;
       }
       else if(z < 2.5f)
@@ -290,7 +290,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
             0.0563921837420478160373L,
             0.00410369723978904575884L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 1.5) / tools::evaluate_polynomial(Q, z - 1.5);
+         result = Y + tools::evaluate_polynomial(P, T(z - 1.5)) / tools::evaluate_polynomial(Q, T(z - 1.5));
          result *= exp(-z * z) / z;
       }
       else if(z < 4.5f)
@@ -316,7 +316,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
             0.0105982906484876531489L,
             0.000479411269521714493907L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 3.5) / tools::evaluate_polynomial(Q, z - 3.5);
+         result = Y + tools::evaluate_polynomial(P, T(z - 3.5)) / tools::evaluate_polynomial(Q, T(z - 3.5));
          result *= exp(-z * z) / z;
       }
       else
@@ -344,7 +344,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
             13.5064170191802889145L,
             5.48409182238641741584L,
          };
-         result = Y + tools::evaluate_polynomial(P, 1 / z) / tools::evaluate_polynomial(Q, 1 / z);
+         result = Y + tools::evaluate_polynomial(P, T(1 / z)) / tools::evaluate_polynomial(Q, T(1 / z));
          result *= exp(-z * z) / z;
       }
    }
@@ -376,11 +376,11 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
    if(z < 0)
    {
       if(!invert)
-         return -erf_imp(-z, invert, pol, t);
+         return -erf_imp(T(-z), invert, pol, t);
       else if(z < -0.5)
-         return 2 - erf_imp(-z, invert, pol, t);
+         return 2 - erf_imp(T(-z), invert, pol, t);
       else
-         return 1 + erf_imp(-z, false, pol, t);
+         return 1 + erf_imp(T(-z), false, pol, t);
    }
 
    T result;
@@ -426,7 +426,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
             0.000650511752687851548735L,
             0.189532519105655496778e-4L,
          };
-         result = z * (Y + tools::evaluate_polynomial(P, z * z) / tools::evaluate_polynomial(Q, z * z));
+         result = z * (Y + tools::evaluate_polynomial(P, T(z * z)) / tools::evaluate_polynomial(Q, T(z * z)));
       }
    }
    else if(invert ? (z < 110) : (z < 6.4f))
@@ -461,7 +461,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
             0.0396649631833002269861L,
             0.00279220237309449026796L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 0.5f) / tools::evaluate_polynomial(Q, z - 0.5f);
+         result = Y + tools::evaluate_polynomial(P, T(z - 0.5f)) / tools::evaluate_polynomial(Q, T(z - 0.5f));
          result *= exp(-z * z) / z;
       }
       else if(z < 2.5)
@@ -489,7 +489,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
             0.0158027197831887485261L,
             0.000897871370778031611439L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 1.5f) / tools::evaluate_polynomial(Q, z - 1.5f);
+         result = Y + tools::evaluate_polynomial(P, T(z - 1.5f)) / tools::evaluate_polynomial(Q, T(z - 1.5f));
          result *= exp(-z * z) / z;
       }
       else if(z < 4.5)
@@ -517,7 +517,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
             0.00221657568292893699158L,
             0.804149464190309799804e-4L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 3.5f) / tools::evaluate_polynomial(Q, z - 3.5f);
+         result = Y + tools::evaluate_polynomial(P, T(z - 3.5f)) / tools::evaluate_polynomial(Q, T(z - 3.5f));
          result *= exp(-z * z) / z;
       }
       else
@@ -549,7 +549,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
             104.365251479578577989L,
             30.8365511891224291717L,
          };
-         result = Y + tools::evaluate_polynomial(P, 1 / z) / tools::evaluate_polynomial(Q, 1 / z);
+         result = Y + tools::evaluate_polynomial(P, T(1 / z)) / tools::evaluate_polynomial(Q, T(1 / z));
          result *= exp(-z * z) / z;
       }
    }
@@ -581,11 +581,11 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
    if(z < 0)
    {
       if(!invert)
-         return -erf_imp(-z, invert, pol, t);
+         return -erf_imp(T(-z), invert, pol, t);
       else if(z < -0.5)
-         return 2 - erf_imp(-z, invert, pol, t);
+         return 2 - erf_imp(T(-z), invert, pol, t);
       else
-         return 1 + erf_imp(-z, false, pol, t);
+         return 1 + erf_imp(T(-z), false, pol, t);
    }
 
    T result;
@@ -635,7 +635,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
             0.196230608502104324965623171516808796e-5L,
             0.313388521582925207734229967907890146e-7L,
          };
-         result = z * (Y + tools::evaluate_polynomial(P, z * z) / tools::evaluate_polynomial(Q, z * z));
+         result = z * (Y + tools::evaluate_polynomial(P, T(z * z)) / tools::evaluate_polynomial(Q, T(z * z)));
       }
    }
    else if(invert ? (z < 110) : (z < 8.65f))
@@ -676,7 +676,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
             0.226988669466501655990637599399326874e-4L,
             0.270666232259029102353426738909226413e-10L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 0.5f) / tools::evaluate_polynomial(Q, z - 0.5f);
+         result = Y + tools::evaluate_polynomial(P, T(z - 0.5f)) / tools::evaluate_polynomial(Q, T(z - 0.5f));
          result *= exp(-z * z) / z;
       }
       else if(z < 1.5)
@@ -710,7 +710,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
             0.000349871943711566546821198612518656486L,
             0.123749319840299552925421880481085392e-4L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 1.0f) / tools::evaluate_polynomial(Q, z - 1.0f);
+         result = Y + tools::evaluate_polynomial(P, T(z - 1.0f)) / tools::evaluate_polynomial(Q, T(z - 1.0f));
          result *= exp(-z * z) / z;
       }
       else if(z < 2.25)
@@ -745,7 +745,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
             0.507158721790721802724402992033269266e-5L,
             0.18647774409821470950544212696270639e-12L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 1.5f) / tools::evaluate_polynomial(Q, z - 1.5f);
+         result = Y + tools::evaluate_polynomial(P, T(z - 1.5f)) / tools::evaluate_polynomial(Q, T(z - 1.5f));
          result *= exp(-z * z) / z;
       }
       else if (z < 3)
@@ -779,7 +779,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
             0.686843205749767250666787987163701209e-4L,
             0.192093541425429248675532015101904262e-5L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 2.25f) / tools::evaluate_polynomial(Q, z - 2.25f);
+         result = Y + tools::evaluate_polynomial(P, T(z - 2.25f)) / tools::evaluate_polynomial(Q, T(z - 2.25f));
          result *= exp(-z * z) / z;
       }
       else if(z < 3.5)
@@ -811,7 +811,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
             0.000144243326443913171313947613547085553L,
             0.407763415954267700941230249989140046e-5L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 3.0f) / tools::evaluate_polynomial(Q, z - 3.0f);
+         result = Y + tools::evaluate_polynomial(P, T(z - 3.0f)) / tools::evaluate_polynomial(Q, T(z - 3.0f));
          result *= exp(-z * z) / z;
       }
       else if(z < 5.5)
@@ -847,7 +847,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
             0.655068544833064069223029299070876623e-6L,
             0.11005507545746069573608988651927452e-7L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 4.5f) / tools::evaluate_polynomial(Q, z - 4.5f);
+         result = Y + tools::evaluate_polynomial(P, T(z - 4.5f)) / tools::evaluate_polynomial(Q, T(z - 4.5f));
          result *= exp(-z * z) / z;
       }
       else if(z < 7.5)
@@ -881,7 +881,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
             0.674128352521481412232785122943508729e-6L,
             0.997637501418963696542159244436245077e-8L,
          };
-         result = Y + tools::evaluate_polynomial(P, z - 6.5f) / tools::evaluate_polynomial(Q, z - 6.5f);
+         result = Y + tools::evaluate_polynomial(P, T(z - 6.5f)) / tools::evaluate_polynomial(Q, T(z - 6.5f));
          result *= exp(-z * z) / z;
       }
       else if(z < 11.5)
@@ -915,7 +915,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
             0.164033049810404773469413526427932109e-4L,
             0.356615210500531410114914617294694857e-6L,
          };
-         result = Y + tools::evaluate_polynomial(P, z / 2 - 4.75f) / tools::evaluate_polynomial(Q, z / 2 - 4.75f);
+         result = Y + tools::evaluate_polynomial(P, T(z / 2 - 4.75f)) / tools::evaluate_polynomial(Q, T(z / 2 - 4.75f));
          result *= exp(-z * z) / z;
       }
       else
@@ -953,7 +953,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
             799.359797306084372350264298361110448L,
             72.7415265778588087243442792401576737L,
          };
-         result = Y + tools::evaluate_polynomial(P, 1 / z) / tools::evaluate_polynomial(Q, 1 / z);
+         result = Y + tools::evaluate_polynomial(P, T(1 / z)) / tools::evaluate_polynomial(Q, T(1 / z));
          result *= exp(-z * z) / z;
       }
    }

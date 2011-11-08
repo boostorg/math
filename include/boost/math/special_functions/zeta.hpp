@@ -189,7 +189,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<53>&)
          0.000255784226140488490982,
          0.10991819782396112081e-4,
       };
-      result = tools::evaluate_polynomial(P, -sc) / tools::evaluate_polynomial(Q, -sc);
+      result = tools::evaluate_polynomial(P, T(-sc)) / tools::evaluate_polynomial(Q, T(-sc));
       result += 1 / (-sc);
    }
    else if(s <= 4)
@@ -214,7 +214,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<53>&)
          0.106951867532057341359e-4,
          0.236276623974978646399e-7,
       };
-      result = tools::evaluate_polynomial(P, s - 2) / tools::evaluate_polynomial(Q, s - 2);
+      result = tools::evaluate_polynomial(P, T(s - 2)) / tools::evaluate_polynomial(Q, T(s - 2));
       result += Y + 1 / (-sc);
    }
    else if(s <= 7)
@@ -242,7 +242,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<53>&)
          0.718833729365459760664e-8,
          -0.1129200113474947419e-9,
       };
-      result = tools::evaluate_polynomial(P, s - 4) / tools::evaluate_polynomial(Q, s - 4);
+      result = tools::evaluate_polynomial(P, T(s - 4)) / tools::evaluate_polynomial(Q, T(s - 4));
       result = 1 + exp(result);
    }
    else if(s < 15)
@@ -270,7 +270,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<53>&)
          -0.833378440625385520576e-10,
          0.699841545204845636531e-12,
         };
-      result = tools::evaluate_polynomial(P, s - 7) / tools::evaluate_polynomial(Q, s - 7);
+      result = tools::evaluate_polynomial(P, T(s - 7)) / tools::evaluate_polynomial(Q, T(s - 7));
       result = 1 + exp(result);
    }
    else if(s < 36)
@@ -297,7 +297,7 @@ inline T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<53>&)
          0.118507153474022900583e-7,
          0.222609483627352615142e-14,
       };
-      result = tools::evaluate_polynomial(P, s - 15) / tools::evaluate_polynomial(Q, s - 15);
+      result = tools::evaluate_polynomial(P, T(s - 15)) / tools::evaluate_polynomial(Q, T(s - 15));
       result = 1 + exp(result);
    }
    else if(s < 56)
@@ -367,7 +367,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<64>&)
          0.635994377921861930071e-5L,
          0.226583954978371199405e-7L,
       };
-      result = tools::evaluate_polynomial(P, -sc) / tools::evaluate_polynomial(Q, -sc);
+      result = tools::evaluate_polynomial(P, T(-sc)) / tools::evaluate_polynomial(Q, T(-sc));
       result += 1 / (-sc);
    }
    else if(s <= 4)
@@ -394,7 +394,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<64>&)
          0.278090318191657278204e-6L,
          -0.19683620233222028478e-8L,
       };
-      result = tools::evaluate_polynomial(P, s - 2) / tools::evaluate_polynomial(Q, s - 2);
+      result = tools::evaluate_polynomial(P, T(s - 2)) / tools::evaluate_polynomial(Q, T(s - 2));
       result += Y + 1 / (-sc);
    }
    else if(s <= 7)
@@ -421,7 +421,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<64>&)
          -0.927884739284359700764e-8L,
          0.119810501805618894381e-9L,
       };
-      result = tools::evaluate_polynomial(P, s - 4) / tools::evaluate_polynomial(Q, s - 4);
+      result = tools::evaluate_polynomial(P, T(s - 4)) / tools::evaluate_polynomial(Q, T(s - 4));
       result = 1 + exp(result);
    }
    else if(s < 15)
@@ -450,7 +450,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<64>&)
          0.117957556472335968146e-7L,
          -0.193432300973017671137e-12L,
         };
-      result = tools::evaluate_polynomial(P, s - 7) / tools::evaluate_polynomial(Q, s - 7);
+      result = tools::evaluate_polynomial(P, T(s - 7)) / tools::evaluate_polynomial(Q, T(s - 7));
       result = 1 + exp(result);
    }
    else if(s < 42)
@@ -480,7 +480,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<64>&)
          -0.939798249922234703384e-16L,
          0.264584017421245080294e-18L,
       };
-      result = tools::evaluate_polynomial(P, s - 15) / tools::evaluate_polynomial(Q, s - 15);
+      result = tools::evaluate_polynomial(P, T(s - 15)) / tools::evaluate_polynomial(Q, T(s - 15));
       result = 1 + exp(result);
    }
    else if(s < 63)
@@ -565,7 +565,7 @@ T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<113>&)
          -0.377105263588822468076813329270698909e-11L,
          -0.581926559304525152432462127383600681e-13L,
       };
-      result = tools::evaluate_polynomial(P, -sc) / tools::evaluate_polynomial(Q, -sc);
+      result = tools::evaluate_polynomial(P, T(-sc)) / tools::evaluate_polynomial(Q, T(-sc));
       result += 1 / (-sc);
    }
    else if(s <= 4)
@@ -602,7 +602,7 @@ T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<113>&)
          0.105677416606909614301995218444080615e-11L,
          0.547223964564003701979951154093005354e-15L,
       };
-      result = tools::evaluate_polynomial(P, s - 2) / tools::evaluate_polynomial(Q, s - 2);
+      result = tools::evaluate_polynomial(P, T(s - 2)) / tools::evaluate_polynomial(Q, T(s - 2));
       result += Y + 1 / (-sc);
    }
    else if(s <= 6)
@@ -643,7 +643,7 @@ T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<113>&)
          -0.275363878344548055574209713637734269e-13L,
          0.221564186807357535475441900517843892e-15L,
       };
-      result = tools::evaluate_polynomial(P, s - 4) / tools::evaluate_polynomial(Q, s - 4);
+      result = tools::evaluate_polynomial(P, T(s - 4)) / tools::evaluate_polynomial(Q, T(s - 4));
       result -= Y;
       result = 1 + exp(result);
    }
@@ -683,7 +683,7 @@ T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<113>&)
          0.294670713571839023181857795866134957e-16L,
          -0.147003914536437243143096875069813451e-18L,
         };
-      result = tools::evaluate_polynomial(P, s - 6) / tools::evaluate_polynomial(Q, s - 6);
+      result = tools::evaluate_polynomial(P, T(s - 6)) / tools::evaluate_polynomial(Q, T(s - 6));
       result = 1 + exp(result);
    }
    else if(s < 17)
@@ -721,7 +721,7 @@ T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<113>&)
          0.887948682401000153828241615760146728e-19L,
          -0.34980761098820347103967203948619072e-21L,
         };
-      result = tools::evaluate_polynomial(P, s - 10) / tools::evaluate_polynomial(Q, s - 10);
+      result = tools::evaluate_polynomial(P, T(s - 10)) / tools::evaluate_polynomial(Q, T(s - 10));
       result = 1 + exp(result);
    }
    else if(s < 30)
@@ -760,7 +760,7 @@ T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<113>&)
          -0.291354445847552426900293580511392459e-22L,
          0.73614324724785855925025452085443636e-25L,
       };
-      result = tools::evaluate_polynomial(P, s - 17) / tools::evaluate_polynomial(Q, s - 17);
+      result = tools::evaluate_polynomial(P, T(s - 17)) / tools::evaluate_polynomial(Q, T(s - 17));
       result = 1 + exp(result);
    }
    else if(s < 74)
@@ -801,7 +801,7 @@ T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<113>&)
          -0.557103423021951053707162364713587374e-31L,
          0.618708773442584843384712258199645166e-34L,
       };
-      result = tools::evaluate_polynomial(P, s - 30) / tools::evaluate_polynomial(Q, s - 30);
+      result = tools::evaluate_polynomial(P, T(s - 30)) / tools::evaluate_polynomial(Q, T(s - 30));
       result = 1 + exp(result);
    }
    else if(s < 117)

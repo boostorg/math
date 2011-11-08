@@ -517,7 +517,7 @@ T expint_i_imp(T z, const Policy& pol, const mpl::int_<53>& tag)
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::expint<%1%>(%1%)";
    if(z < 0)
-      return -expint_imp(1, -z, pol, tag);
+      return -expint_imp(1, T(-z), pol, tag);
    if(z == 0)
       return -policies::raise_overflow_error<T>(function, 0, pol);
 
@@ -729,7 +729,7 @@ T expint_i_imp(T z, const Policy& pol, const mpl::int_<64>& tag)
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::expint<%1%>(%1%)";
    if(z < 0)
-      return -expint_imp(1, -z, pol, tag);
+      return -expint_imp(1, T(-z), pol, tag);
    if(z == 0)
       return -policies::raise_overflow_error<T>(function, 0, pol);
 
@@ -964,7 +964,7 @@ T expint_i_imp(T z, const Policy& pol, const mpl::int_<113>& tag)
    BOOST_MATH_STD_USING
    static const char* function = "boost::math::expint<%1%>(%1%)";
    if(z < 0)
-      return -expint_imp(1, -z, pol, tag);
+      return -expint_imp(1, T(-z), pol, tag);
    if(z == 0)
       return -policies::raise_overflow_error<T>(function, 0, pol);
 

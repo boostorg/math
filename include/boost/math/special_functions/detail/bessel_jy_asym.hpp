@@ -215,21 +215,21 @@ template <class T>
 inline T asymptotic_bessel_j_limit(const T& v, const mpl::int_<53>&)
 {
    // double case:
-   T v2 = (std::max)(T(3), v * v);
+   T v2 = (std::max)(T(3), T(v * v));
    return v2 * 33 /*73*/;
 }
 template <class T>
 inline T asymptotic_bessel_j_limit(const T& v, const mpl::int_<64>&)
 {
    // 80-bit extended-double case:
-   T v2 = (std::max)(T(3), v * v);
+   T v2 = (std::max)(T(3), T(v * v));
    return v2 * 121 /*266*/;
 }
 template <class T>
 inline T asymptotic_bessel_j_limit(const T& v, const mpl::int_<113>&)
 {
    // 128-bit long double case:
-   T v2 = (std::max)(T(3), v * v);
+   T v2 = (std::max)(T(3), T(v * v));
    return v2 * 39154 /*85700*/;
 }
 
