@@ -2,6 +2,9 @@
 
 [h4 Boost-1.49]
 
+* Deprecated wrongly named `twothirds` math constant in favour of `two_thirds` (with underscore separator).
+(issue [@https://svn.boost.org/trac/boost/ticket/6199 #6199]).
+
 Fixed issues
 
 * Corrected CDF complement for Laplace distribution (issue [@https://svn.boost.org/trac/boost/ticket/6151 #6151]).
