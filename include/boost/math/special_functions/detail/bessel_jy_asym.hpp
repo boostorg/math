@@ -124,11 +124,17 @@ inline T asymptotic_bessel_y_large_x_2(T v, T x)
    // Get the phase and amplitude:
    T ampl = asymptotic_bessel_amplitude(v, x);
    T phase = asymptotic_bessel_phase_mx(v, x);
+   BOOST_MATH_INSTRUMENT_VARIABLE(ampl);
+   BOOST_MATH_INSTRUMENT_VARIABLE(phase);
    //
    // Calculate the sine of the phase, using:
    // sin(x+p) = sin(x)cos(p) + cos(x)sin(p)
    //
    T sin_phase = sin(phase) * cos(x) + cos(phase) * sin(x);
+   BOOST_MATH_INSTRUMENT_CODE(sin(phase));
+   BOOST_MATH_INSTRUMENT_CODE(cos(x));
+   BOOST_MATH_INSTRUMENT_CODE(cos(phase));
+   BOOST_MATH_INSTRUMENT_CODE(sin(x));
    return sin_phase * ampl;
 }
 
@@ -140,11 +146,18 @@ inline T asymptotic_bessel_j_large_x_2(T v, T x)
    // Get the phase and amplitude:
    T ampl = asymptotic_bessel_amplitude(v, x);
    T phase = asymptotic_bessel_phase_mx(v, x);
+   BOOST_MATH_INSTRUMENT_VARIABLE(ampl);
+   BOOST_MATH_INSTRUMENT_VARIABLE(phase);
    //
    // Calculate the sine of the phase, using:
    // cos(x+p) = cos(x)cos(p) - sin(x)sin(p)
    //
+   BOOST_MATH_INSTRUMENT_CODE(cos(phase));
+   BOOST_MATH_INSTRUMENT_CODE(cos(x));
+   BOOST_MATH_INSTRUMENT_CODE(sin(phase));
+   BOOST_MATH_INSTRUMENT_CODE(sin(x));
    T sin_phase = cos(phase) * cos(x) - sin(phase) * sin(x);
+   BOOST_MATH_INSTRUMENT_VARIABLE(sin_phase);
    return sin_phase * ampl;
 }
 

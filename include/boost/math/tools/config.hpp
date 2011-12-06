@@ -10,8 +10,8 @@
 #pragma once
 #endif
 
-#include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/config.hpp>
+#include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/detail/workaround.hpp>
 #include <algorithm>  // for min and max
 #include <boost/config/no_tr1/cmath.hpp>
@@ -252,6 +252,7 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
 {
    return (std::max)((std::max)(a, b), (std::max)(c, d));
 }
+
 } // namespace tools
 
 template <class T>
