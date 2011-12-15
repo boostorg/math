@@ -149,7 +149,7 @@ inline T log_min_value(const mpl::int_<0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_T
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
 #endif
    BOOST_MATH_STD_USING
-   static const T val = log((std::numeric_limits<T>::max)());
+   static const T val = log((std::numeric_limits<T>::min)());
    return val;
 }
 

@@ -116,6 +116,10 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
                        const char* test_name, 
                        const char* group_name)
 {
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
    using namespace std; // To aid selection of the right pow.
    T eps = boost::math::tools::epsilon<T>();
    std::cout << std::setprecision(4);
@@ -171,6 +175,9 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
       BOOST_CHECK(bounds.second >= mean_error_found);
    }
    std::cout << std::endl;
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 }
 
 template <class T, class Seq>

@@ -14,17 +14,17 @@
 namespace boost{ namespace math{ namespace tools{
 
 template <class T>
-inline long double make_big_value(long double v, const char* s, mpl::true_ const&, mpl::false_ const&)
+inline T make_big_value(long double v, const char*, mpl::true_ const&, mpl::false_ const&)
 {
-   return v;
+   return static_cast<T>(v);
 }
 template <class T>
-inline T make_big_value(long double v, const char* s, mpl::false_ const&, mpl::false_ const&)
+inline T make_big_value(long double, const char* s, mpl::false_ const&, mpl::false_ const&)
 {
    return boost::lexical_cast<T>(s);
 }
 template <class T>
-inline const char* make_big_value(long double v, const char* s, mpl::false_ const&, mpl::true_ const&)
+inline const char* make_big_value(long double, const char* s, mpl::false_ const&, mpl::true_ const&)
 {
    return s;
 }

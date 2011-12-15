@@ -814,7 +814,7 @@ void do_test_spots2(T, U)
    // Rational functions of order 2
    //
    static const U d3c[3] = { 3, 4, 10 };
-   static const boost::array<U, 3> d3a = { 3, 4, 10 };
+   static const boost::array<U, 3> d3a = {{ 3, 4, 10 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n3c, d3c, static_cast<T>(0.125), 3),
       static_cast<T>(0.2987179487179487179487179487179487179487e1L),
@@ -903,7 +903,7 @@ void do_test_spots3(T, U)
    // Polynomials of order 3
    //
    static const U n4c[4] = { 1, 4, 9, 11 };
-   static const boost::array<U, 4> n4a = { 1, 4, 9, 11 };
+   static const boost::array<U, 4> n4a = {{ 1, 4, 9, 11 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n4c, static_cast<T>(0.125), 4),
       static_cast<T>(0.1662109375e1L),
@@ -1133,7 +1133,7 @@ void do_test_spots3(T, U)
    // Rational functions of order 3
    //
    static const U d4c[4] = { 10, 2, 5, 4 };
-   static const boost::array<U, 4> d4a = { 10, 2, 5, 4 };
+   static const boost::array<U, 4> d4a = {{ 10, 2, 5, 4 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n4c, d4c, static_cast<T>(0.125), 4),
       static_cast<T>(0.1608087679516250944822373393801965230537e0L),
@@ -1222,7 +1222,7 @@ void do_test_spots4(T, U)
    // Polynomials of order 4
    //
    static const U n5c[5] = { 10, 10, 4, 11, 9 };
-   static const boost::array<U, 5> n5a = { 10, 10, 4, 11, 9 };
+   static const boost::array<U, 5> n5a = {{ 10, 10, 4, 11, 9 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n5c, static_cast<T>(0.125), 5),
       static_cast<T>(0.11336181640625e2L),
@@ -1452,7 +1452,7 @@ void do_test_spots4(T, U)
    // Rational functions of order 4
    //
    static const U d5c[5] = { 6, 9, 6, 2, 5 };
-   static const boost::array<U, 5> d5a = { 6, 9, 6, 2, 5 };
+   static const boost::array<U, 5> d5a = {{ 6, 9, 6, 2, 5 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n5c, d5c, static_cast<T>(0.125), 5),
       static_cast<T>(0.1569265605461489066882963263374902835513e1L),
@@ -1541,7 +1541,7 @@ void do_test_spots5(T, U)
    // Polynomials of order 5
    //
    static const U n6c[6] = { 6, 8, 12, 5, 7, 5 };
-   static const boost::array<U, 6> n6a = { 6, 8, 12, 5, 7, 5 };
+   static const boost::array<U, 6> n6a = {{ 6, 8, 12, 5, 7, 5 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n6c, static_cast<T>(0.125), 6),
       static_cast<T>(0.7199127197265625e1L),
@@ -1756,7 +1756,7 @@ void do_test_spots5(T, U)
    // Rational functions of order 5
    //
    static const U d6c[6] = { 5, 11, 7, 12, 10, 5 };
-   static const boost::array<U, 6> d6a = { 5, 11, 7, 12, 10, 5 };
+   static const boost::array<U, 6> d6a = {{ 5, 11, 7, 12, 10, 5 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n6c, d6c, static_cast<T>(0.125), 6),
       static_cast<T>(0.1105787665293227020667219792530925829572e1L),
@@ -1845,7 +1845,7 @@ void do_test_spots6(T, U)
    // Polynomials of order 6
    //
    static const U n7c[7] = { 3, 4, 11, 5, 10, 7, 9 };
-   static const boost::array<U, 7> n7a = { 3, 4, 11, 5, 10, 7, 9 };
+   static const boost::array<U, 7> n7a = {{ 3, 4, 11, 5, 10, 7, 9 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n7c, static_cast<T>(0.125), 7),
       static_cast<T>(0.3684329986572265625e1L),
@@ -2045,7 +2045,7 @@ void do_test_spots6(T, U)
    // Rational functions of order 6
    //
    static const U d7c[7] = { 2, 8, 10, 8, 1, 11, 1 };
-   static const boost::array<U, 7> d7a = { 2, 8, 10, 8, 1, 11, 1 };
+   static const boost::array<U, 7> d7a = {{ 2, 8, 10, 8, 1, 11, 1 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n7c, d7c, static_cast<T>(0.125), 7),
       static_cast<T>(0.1161348466465698540596242849979738853664e1L),
@@ -2134,7 +2134,7 @@ void do_test_spots7(T, U)
    // Polynomials of order 7
    //
    static const U n8c[8] = { 9, 5, 6, 1, 12, 2, 11, 1 };
-   static const boost::array<U, 8> n8a = { 9, 5, 6, 1, 12, 2, 11, 1 };
+   static const boost::array<U, 8> n8a = {{ 9, 5, 6, 1, 12, 2, 11, 1 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n8c, static_cast<T>(0.125), 8),
       static_cast<T>(0.9723736286163330078125e1L),
@@ -2334,7 +2334,7 @@ void do_test_spots7(T, U)
    // Rational functions of order 7
    //
    static const U d8c[8] = { 7, 10, 10, 11, 2, 4, 1, 7 };
-   static const boost::array<U, 8> d8a = { 7, 10, 10, 11, 2, 4, 1, 7 };
+   static const boost::array<U, 8> d8a = {{ 7, 10, 10, 11, 2, 4, 1, 7 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n8c, d8c, static_cast<T>(0.125), 8),
       static_cast<T>(0.1153693678861771369296601206130394355814e1L),
@@ -2423,7 +2423,7 @@ void do_test_spots8(T, U)
    // Polynomials of order 8
    //
    static const U n9c[9] = { 3, 9, 3, 9, 5, 6, 10, 7, 10 };
-   static const boost::array<U, 9> n9a = { 3, 9, 3, 9, 5, 6, 10, 7, 10 };
+   static const boost::array<U, 9> n9a = {{ 3, 9, 3, 9, 5, 6, 10, 7, 10 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n9c, static_cast<T>(0.125), 9),
       static_cast<T>(0.419089901447296142578125e1L),
@@ -2623,7 +2623,7 @@ void do_test_spots8(T, U)
    // Rational functions of order 8
    //
    static const U d9c[9] = { 12, 3, 10, 4, 6, 6, 6, 10, 7 };
-   static const boost::array<U, 9> d9a = { 12, 3, 10, 4, 6, 6, 6, 10, 7 };
+   static const boost::array<U, 9> d9a = {{ 12, 3, 10, 4, 6, 6, 6, 10, 7 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n9c, d9c, static_cast<T>(0.125), 9),
       static_cast<T>(0.3341827920887278954826517708316980450243e0L),
@@ -2712,7 +2712,7 @@ void do_test_spots9(T, U)
    // Polynomials of order 9
    //
    static const U n10c[10] = { 3, 4, 2, 6, 8, 1, 2, 4, 8, 8 };
-   static const boost::array<U, 10> n10a = { 3, 4, 2, 6, 8, 1, 2, 4, 8, 8 };
+   static const boost::array<U, 10> n10a = {{ 3, 4, 2, 6, 8, 1, 2, 4, 8, 8 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n10c, static_cast<T>(0.125), 10),
       static_cast<T>(0.3544962465763092041015625e1L),
@@ -2912,7 +2912,7 @@ void do_test_spots9(T, U)
    // Rational functions of order 9
    //
    static const U d10c[10] = { 3, 11, 1, 12, 8, 8, 7, 10, 8, 8 };
-   static const boost::array<U, 10> d10a = { 3, 11, 1, 12, 8, 8, 7, 10, 8, 8 };
+   static const boost::array<U, 10> d10a = {{ 3, 11, 1, 12, 8, 8, 7, 10, 8, 8 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n10c, d10c, static_cast<T>(0.125), 10),
       static_cast<T>(0.8027011456035955638016996485812217742707e0L),
@@ -3001,7 +3001,7 @@ void do_test_spots10(T, U)
    // Polynomials of order 10
    //
    static const U n11c[11] = { 2, 2, 8, 11, 3, 4, 10, 11, 5, 1, 6 };
-   static const boost::array<U, 11> n11a = { 2, 2, 8, 11, 3, 4, 10, 11, 5, 1, 6 };
+   static const boost::array<U, 11> n11a = {{ 2, 2, 8, 11, 3, 4, 10, 11, 5, 1, 6 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n11c, static_cast<T>(0.125), 11),
       static_cast<T>(0.239738257043063640594482421875e1L),
@@ -3186,7 +3186,7 @@ void do_test_spots10(T, U)
    // Rational functions of order 10
    //
    static const U d11c[11] = { 4, 1, 3, 9, 11, 8, 11, 2, 6, 6, 4 };
-   static const boost::array<U, 11> d11a = { 4, 1, 3, 9, 11, 8, 11, 2, 6, 6, 4 };
+   static const boost::array<U, 11> d11a = {{ 4, 1, 3, 9, 11, 8, 11, 2, 6, 6, 4 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n11c, d11c, static_cast<T>(0.125), 11),
       static_cast<T>(0.5718365676248588095654568811483084403598e0L),
@@ -3275,7 +3275,7 @@ void do_test_spots11(T, U)
    // Polynomials of order 11
    //
    static const U n12c[12] = { 10, 12, 4, 1, 12, 7, 11, 5, 12, 5, 10, 6 };
-   static const boost::array<U, 12> n12a = { 10, 12, 4, 1, 12, 7, 11, 5, 12, 5, 10, 6 };
+   static const boost::array<U, 12> n12a = {{ 10, 12, 4, 1, 12, 7, 11, 5, 12, 5, 10, 6 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n12c, static_cast<T>(0.125), 12),
       static_cast<T>(0.1156764154392294585704803466796875e2L),
@@ -3460,7 +3460,7 @@ void do_test_spots11(T, U)
    // Rational functions of order 11
    //
    static const U d12c[12] = { 12, 5, 2, 8, 3, 2, 6, 9, 2, 8, 9, 12 };
-   static const boost::array<U, 12> d12a = { 12, 5, 2, 8, 3, 2, 6, 9, 2, 8, 9, 12 };
+   static const boost::array<U, 12> d12a = {{ 12, 5, 2, 8, 3, 2, 6, 9, 2, 8, 9, 12 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n12c, d12c, static_cast<T>(0.125), 12),
       static_cast<T>(0.9128003783370762743953357962892418132189e0L),
@@ -3549,7 +3549,7 @@ void do_test_spots12(T, U)
    // Polynomials of order 12
    //
    static const U n13c[13] = { 4, 11, 7, 1, 1, 1, 8, 11, 10, 12, 8, 2, 1 };
-   static const boost::array<U, 13> n13a = { 4, 11, 7, 1, 1, 1, 8, 11, 10, 12, 8, 2, 1 };
+   static const boost::array<U, 13> n13a = {{ 4, 11, 7, 1, 1, 1, 8, 11, 10, 12, 8, 2, 1 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n13c, static_cast<T>(0.125), 13),
       static_cast<T>(0.5486639239141368307173252105712890625e1L),
@@ -3734,7 +3734,7 @@ void do_test_spots12(T, U)
    // Rational functions of order 12
    //
    static const U d13c[13] = { 4, 7, 1, 6, 11, 4, 9, 11, 1, 10, 1, 11, 12 };
-   static const boost::array<U, 13> d13a = { 4, 7, 1, 6, 11, 4, 9, 11, 1, 10, 1, 11, 12 };
+   static const boost::array<U, 13> d13a = {{ 4, 7, 1, 6, 11, 4, 9, 11, 1, 10, 1, 11, 12 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n13c, d13c, static_cast<T>(0.125), 13),
       static_cast<T>(0.1118537310443419140823936840990235560775e1L),
@@ -3822,7 +3822,7 @@ void do_test_spots13(T, U)
    // Polynomials of order 13
    //
    static const U n14c[14] = { 5, 5, 3, 5, 12, 8, 10, 5, 5, 9, 2, 10, 3, 3 };
-   static const boost::array<U, 14> n14a = { 5, 5, 3, 5, 12, 8, 10, 5, 5, 9, 2, 10, 3, 3 };
+   static const boost::array<U, 14> n14a = {{ 5, 5, 3, 5, 12, 8, 10, 5, 5, 9, 2, 10, 3, 3 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n14c, static_cast<T>(0.125), 14),
       static_cast<T>(0.5684855352437807596288621425628662109375e1L),
@@ -4007,7 +4007,7 @@ void do_test_spots13(T, U)
    // Rational functions of order 13
    //
    static const U d14c[14] = { 1, 2, 1, 8, 5, 8, 2, 11, 3, 6, 5, 9, 7, 10 };
-   static const boost::array<U, 14> d14a = { 1, 2, 1, 8, 5, 8, 2, 11, 3, 6, 5, 9, 7, 10 };
+   static const boost::array<U, 14> d14a = {{ 1, 2, 1, 8, 5, 8, 2, 11, 3, 6, 5, 9, 7, 10 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n14c, d14c, static_cast<T>(0.125), 14),
       static_cast<T>(0.4431848049037056640776200482297774574883e1L),
@@ -4096,7 +4096,7 @@ void do_test_spots14(T, U)
    // Polynomials of order 14
    //
    static const U n15c[15] = { 6, 2, 10, 2, 4, 11, 4, 6, 5, 5, 10, 12, 8, 6, 2 };
-   static const boost::array<U, 15> n15a = { 6, 2, 10, 2, 4, 11, 4, 6, 5, 5, 10, 12, 8, 6, 2 };
+   static const boost::array<U, 15> n15a = {{ 6, 2, 10, 2, 4, 11, 4, 6, 5, 5, 10, 12, 8, 6, 2 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n15c, static_cast<T>(0.125), 15),
       static_cast<T>(0.6411486971785507193999364972114562988281e1L),
@@ -4281,7 +4281,7 @@ void do_test_spots14(T, U)
    // Rational functions of order 14
    //
    static const U d15c[15] = { 7, 10, 7, 1, 10, 11, 11, 10, 7, 1, 10, 9, 8, 2, 3 };
-   static const boost::array<U, 15> d15a = { 7, 10, 7, 1, 10, 11, 11, 10, 7, 1, 10, 9, 8, 2, 3 };
+   static const boost::array<U, 15> d15a = {{ 7, 10, 7, 1, 10, 11, 11, 10, 7, 1, 10, 9, 8, 2, 3 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n15c, d15c, static_cast<T>(0.125), 15),
       static_cast<T>(0.7665435387801205084357966990293734431712e0L),
@@ -4370,7 +4370,7 @@ void do_test_spots15(T, U)
    // Polynomials of order 15
    //
    static const U n16c[16] = { 5, 3, 4, 6, 7, 9, 7, 6, 12, 12, 7, 12, 10, 3, 6, 2 };
-   static const boost::array<U, 16> n16a = { 5, 3, 4, 6, 7, 9, 7, 6, 12, 12, 7, 12, 10, 3, 6, 2 };
+   static const boost::array<U, 16> n16a = {{ 5, 3, 4, 6, 7, 9, 7, 6, 12, 12, 7, 12, 10, 3, 6, 2 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n16c, static_cast<T>(0.125), 16),
       static_cast<T>(0.545123276921327715172083117067813873291e1L),
@@ -4555,7 +4555,7 @@ void do_test_spots15(T, U)
    // Rational functions of order 15
    //
    static const U d16c[16] = { 9, 5, 2, 4, 4, 12, 11, 5, 1, 4, 1, 7, 9, 6, 6, 10 };
-   static const boost::array<U, 16> d16a = { 9, 5, 2, 4, 4, 12, 11, 5, 1, 4, 1, 7, 9, 6, 6, 10 };
+   static const boost::array<U, 16> d16a = {{ 9, 5, 2, 4, 4, 12, 11, 5, 1, 4, 1, 7, 9, 6, 6, 10 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n16c, d16c, static_cast<T>(0.125), 16),
       static_cast<T>(0.5639916333371058636233240074655101514789e0L),
@@ -4644,7 +4644,7 @@ void do_test_spots16(T, U)
    // Polynomials of order 16
    //
    static const U n17c[17] = { 9, 6, 11, 2, 9, 10, 6, 3, 3, 3, 4, 9, 10, 2, 3, 2, 2 };
-   static const boost::array<U, 17> n17a = { 9, 6, 11, 2, 9, 10, 6, 3, 3, 3, 4, 9, 10, 2, 3, 2, 2 };
+   static const boost::array<U, 17> n17a = {{ 9, 6, 11, 2, 9, 10, 6, 3, 3, 3, 4, 9, 10, 2, 3, 2, 2 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n17c, static_cast<T>(0.125), 17),
       static_cast<T>(0.9928308216189925872185995103791356086731e1L),
@@ -4829,7 +4829,7 @@ void do_test_spots16(T, U)
    // Rational functions of order 16
    //
    static const U d17c[17] = { 7, 12, 3, 11, 10, 2, 5, 10, 4, 11, 10, 6, 2, 12, 1, 2, 1 };
-   static const boost::array<U, 17> d17a = { 7, 12, 3, 11, 10, 2, 5, 10, 4, 11, 10, 6, 2, 12, 1, 2, 1 };
+   static const boost::array<U, 17> d17a = {{ 7, 12, 3, 11, 10, 2, 5, 10, 4, 11, 10, 6, 2, 12, 1, 2, 1 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n17c, d17c, static_cast<T>(0.125), 17),
       static_cast<T>(0.1158375951946763080209403673166347533318e1L),
@@ -4918,7 +4918,7 @@ void do_test_spots17(T, U)
    // Polynomials of order 17
    //
    static const U n18c[18] = { 6, 5, 7, 8, 12, 9, 4, 1, 3, 5, 1, 5, 12, 8, 4, 6, 1, 10 };
-   static const boost::array<U, 18> n18a = { 6, 5, 7, 8, 12, 9, 4, 1, 3, 5, 1, 5, 12, 8, 4, 6, 1, 10 };
+   static const boost::array<U, 18> n18a = {{ 6, 5, 7, 8, 12, 9, 4, 1, 3, 5, 1, 5, 12, 8, 4, 6, 1, 10 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n18c, static_cast<T>(0.125), 18),
       static_cast<T>(0.6753220299099845114199069939786568284035e1L),
@@ -5103,7 +5103,7 @@ void do_test_spots17(T, U)
    // Rational functions of order 17
    //
    static const U d18c[18] = { 6, 2, 11, 2, 12, 4, 1, 5, 7, 12, 5, 7, 5, 7, 5, 7, 2, 9 };
-   static const boost::array<U, 18> d18a = { 6, 2, 11, 2, 12, 4, 1, 5, 7, 12, 5, 7, 5, 7, 5, 7, 2, 9 };
+   static const boost::array<U, 18> d18a = {{ 6, 2, 11, 2, 12, 4, 1, 5, 7, 12, 5, 7, 5, 7, 5, 7, 2, 9 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n18c, d18c, static_cast<T>(0.125), 18),
       static_cast<T>(0.1050457095586493221315235501384188635425e1L),
@@ -5192,7 +5192,7 @@ void do_test_spots18(T, U)
    // Polynomials of order 18
    //
    static const U n19c[19] = { 7, 2, 4, 2, 4, 3, 9, 1, 9, 3, 7, 2, 10, 4, 2, 5, 11, 3, 9 };
-   static const boost::array<U, 19> n19a = { 7, 2, 4, 2, 4, 3, 9, 1, 9, 3, 7, 2, 10, 4, 2, 5, 11, 3, 9 };
+   static const boost::array<U, 19> n19a = {{ 7, 2, 4, 2, 4, 3, 9, 1, 9, 3, 7, 2, 10, 4, 2, 5, 11, 3, 9 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n19c, static_cast<T>(0.125), 19),
       static_cast<T>(0.7317509740045990140888676478425622917712e1L),
@@ -5377,7 +5377,7 @@ void do_test_spots18(T, U)
    // Rational functions of order 18
    //
    static const U d19c[19] = { 3, 2, 3, 3, 10, 6, 2, 6, 9, 8, 8, 10, 5, 7, 6, 4, 6, 9, 7 };
-   static const boost::array<U, 19> d19a = { 3, 2, 3, 3, 10, 6, 2, 6, 9, 8, 8, 10, 5, 7, 6, 4, 6, 9, 7 };
+   static const boost::array<U, 19> d19a = {{ 3, 2, 3, 3, 10, 6, 2, 6, 9, 8, 8, 10, 5, 7, 6, 4, 6, 9, 7 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n19c, d19c, static_cast<T>(0.125), 19),
       static_cast<T>(0.2213824709533496994632324982010106870288e1L),

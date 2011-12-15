@@ -19,8 +19,6 @@ local e_float_path = [ modules.peek : E_FLOAT_PATH ] ;
 
 project  
     : requirements 
-      <toolset>gcc:<cxxflags>-Wno-missing-braces
-      <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
       <toolset>intel-win:<cxxflags>-nologo 
       <toolset>intel-win:<linkflags>-nologo 
