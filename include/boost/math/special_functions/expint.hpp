@@ -965,6 +965,7 @@ T expint_i_imp(T z, const Policy& pol, const mpl::int_<64>& tag)
 template <class T>
 void expint_i_imp_113a(T& result, const T& z)
 {
+   BOOST_MATH_STD_USING
    // Maximum Deviation Found:                     1.230e-36
    // Expected Error Term:                         -1.230e-36
    // Max Error found at long double precision =   Poly: 4.355299e-34   Cheb: 7.512581e-34
@@ -1032,6 +1033,7 @@ void expint_i_imp_113a(T& result, const T& z)
 template <class T>
 void expint_i_113b(T& result, const T& z)
 {
+   BOOST_MATH_STD_USING
    // Maximum Deviation Found:                     7.779e-36
    // Expected Error Term:                         -7.779e-36
    // Max Error found at long double precision =   Poly: 2.576723e-35   Cheb: 1.236001e-34
@@ -1081,6 +1083,7 @@ void expint_i_113b(T& result, const T& z)
 template <class T>
 void expint_i_113c(T& result, const T& z)
 {
+   BOOST_MATH_STD_USING
    // Maximum Deviation Found:                     1.082e-34
    // Expected Error Term:                         1.080e-34
    // Max Error found at long double precision =   Poly: 1.958294e-34   Cheb: 2.472261e-34
@@ -1133,6 +1136,7 @@ void expint_i_113c(T& result, const T& z)
 template <class T>
 void expint_i_113d(T& result, const T& z)
 {
+   BOOST_MATH_STD_USING
    // Maximum Deviation Found:                     3.163e-35
    // Expected Error Term:                         3.163e-35
    // Max Error found at long double precision =   Poly: 4.158110e-35   Cheb: 5.385532e-35
@@ -1183,6 +1187,7 @@ void expint_i_113d(T& result, const T& z)
 template <class T>
 void expint_i_113e(T& result, const T& z)
 {
+   BOOST_MATH_STD_USING
    // Maximum Deviation Found:                     7.972e-36
    // Expected Error Term:                         7.962e-36
    // Max Error found at long double precision =   Poly: 1.711721e-34   Cheb: 3.100018e-34
@@ -1236,6 +1241,7 @@ void expint_i_113e(T& result, const T& z)
 template <class T>
 void expint_i_113f(T& result, const T& z)
 {
+   BOOST_MATH_STD_USING
    // Maximum Deviation Found:                     4.469e-36
    // Expected Error Term:                         4.468e-36
    // Max Error found at long double precision =   Poly: 1.288958e-35   Cheb: 2.304586e-35
@@ -1282,6 +1288,7 @@ void expint_i_113f(T& result, const T& z)
 template <class T>
 void expint_i_113g(T& result, const T& z)
 {
+   BOOST_MATH_STD_USING
    // Maximum Deviation Found:                     5.588e-35
    // Expected Error Term:                         -5.566e-35
    // Max Error found at long double precision =   Poly: 9.976345e-35   Cheb: 8.358865e-35
@@ -1326,6 +1333,7 @@ void expint_i_113g(T& result, const T& z)
 template <class T>
 void expint_i_113h(T& result, const T& z)
 {
+   BOOST_MATH_STD_USING
    // Maximum Deviation Found:                     4.448e-36
    // Expected Error Term:                         4.445e-36
    // Max Error found at long double precision =   Poly: 2.058532e-35   Cheb: 2.165465e-27
