@@ -19,6 +19,11 @@ inline T make_big_value(long double v, const char*, mpl::true_ const&, mpl::fals
    return static_cast<T>(v);
 }
 template <class T>
+inline T make_big_value(long double v, const char*, mpl::true_ const&, mpl::true_ const&)
+{
+   return static_cast<T>(v);
+}
+template <class T>
 inline T make_big_value(long double, const char* s, mpl::false_ const&, mpl::false_ const&)
 {
    return boost::lexical_cast<T>(s);
