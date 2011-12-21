@@ -28,14 +28,13 @@
           T Distribution</a>
 </h5></div></div></div>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">non_central_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_t_distribution</span><span class="special">;</span>
 
@@ -84,9 +83,9 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/nc_t_pdf.png" align="middle"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.member_functions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.member_functions-heading"></a>
-            <a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.member_functions">Member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.h0"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.member_functions"></a></span><a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.member_functions">Member
             Functions</a>
           </h5>
 <pre class="programlisting"><span class="identifier">non_central_t_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">lambda</span><span class="special">);</span>
@@ -110,9 +109,9 @@
             Returns the non-centrality parameter <span class="emphasis"><em>delta</em></span> from
             which this object was constructed.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.non_member_accessors"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.non_member_accessors-heading"></a>
-            <a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.non_member_accessors">Non-member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.h1"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.non_member_accessors"></a></span><a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
@@ -130,9 +129,9 @@
 <p>
             The domain of the random variable is [-&#8734;, +&#8734;].
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.accuracy"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.accuracy-heading"></a>
-            <a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.h2"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.accuracy"></a></span><a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             The following table shows the peak errors (in units of <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">epsilon</a>)
@@ -254,9 +253,9 @@
             and can not in principal be more accurate than the square root of machine
             epsilon.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.tests"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.tests-heading"></a>
-            <a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.tests">Tests</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.h3"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.tests"></a></span><a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.tests">Tests</a>
           </h5>
 <p>
             There are two sets of tests of this distribution: basic sanity checks
@@ -269,9 +268,9 @@
             interval arithmetic: this test data is believed to be accurate to at
             least 50 decimal places.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.implementation"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.implementation-heading"></a>
-            <a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.h4"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.nc_t_dist.implementation"></a></span><a class="link" href="nc_t_dist.html#math_toolkit.dist.dist_ref.dists.nc_t_dist.implementation">Implementation</a>
           </h5>
 <p>
             The CDF is computed using a modification of the method described in "Computing

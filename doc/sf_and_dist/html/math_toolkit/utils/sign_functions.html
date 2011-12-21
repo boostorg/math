@@ -27,12 +27,11 @@
 <a name="math_toolkit.utils.sign_functions"></a><a class="link" href="sign_functions.html" title="Sign Manipulation Functions">Sign Manipulation
       Functions</a>
 </h3></div></div></div>
-<a name="math_toolkit.utils.sign_functions.synopsis"></a><h5>
-<a name="math_toolkit.utils.sign_functions.synopsis-heading"></a>
-        <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.synopsis">Synopsis</a>
+<h5>
+<a name="math_toolkit.utils.sign_functions.h0"></a>
+        <span><a name="math_toolkit.utils.sign_functions.synopsis"></a></span><a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.synopsis">Synopsis</a>
       </h5>
 <p>
-        
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">sign</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -40,7 +39,7 @@
       </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> 
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">int</span> <span class="identifier">signbit</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -54,11 +53,11 @@
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
-<a name="math_toolkit.utils.sign_functions.description"></a><h5>
-<a name="math_toolkit.utils.sign_functions.description-heading"></a>
-        <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.description">Description</a>
+<h5>
+<a name="math_toolkit.utils.sign_functions.h1"></a>
+        <span><a name="math_toolkit.utils.sign_functions.description"></a></span><a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.description">Description</a>
       </h5>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">int</span> <span class="identifier">signbit</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 </pre>
 <p>
@@ -118,9 +117,10 @@
         and <a href="http://en.wikipedia.org/wiki/NaN" target="_top">NaNs</a>, the <code class="computeroutput"><span class="identifier">changesign</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code> function
         may be the only portable way to ensure that the sign bit is changed.
       </p>
-<a name="math_toolkit.utils.sign_functions.sign_bits"></a><h6>
-<a name="math_toolkit.utils.sign_functions.sign_bits-heading"></a>
-        <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.sign_bits">Sign bits</a>
+<h6>
+<a name="math_toolkit.utils.sign_functions.h2"></a>
+        <span><a name="math_toolkit.utils.sign_functions.sign_bits"></a></span><a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.sign_bits">Sign
+        bits</a>
       </h6>
 <p>
         One of the bits in the binary representation of a floating-point number gives
@@ -139,9 +139,9 @@
         may also not provide infinity or NaNs. To use these functions with a UDT,
         it may be necessary to explicitly specialize then for UDT type T.
       </p>
-<a name="math_toolkit.utils.sign_functions.examples"></a><h6>
-<a name="math_toolkit.utils.sign_functions.examples-heading"></a>
-        <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.examples">Examples</a>
+<h6>
+<a name="math_toolkit.utils.sign_functions.h3"></a>
+        <span><a name="math_toolkit.utils.sign_functions.examples"></a></span><a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.examples">Examples</a>
       </h6>
 <pre class="programlisting"><span class="identifier">signbit</span><span class="special">(</span><span class="number">3.5</span><span class="special">)</span> <span class="identifier">is</span> <span class="identifier">zero</span> <span class="special">(</span><span class="keyword">or</span> <span class="keyword">false</span><span class="special">)</span>
 <span class="identifier">signbit</span><span class="special">(-</span><span class="number">7.1</span><span class="special">)</span> <span class="identifier">is</span> <span class="number">1</span> <span class="special">(</span><span class="keyword">or</span> <span class="keyword">true</span><span class="special">)</span>
@@ -152,9 +152,9 @@
 <span class="identifier">changesign</span><span class="special">(</span><span class="number">6.9</span><span class="special">)</span> <span class="identifier">is</span> <span class="special">-</span><span class="number">6.9</span>
 <span class="identifier">changesign</span><span class="special">(-</span><span class="number">1.8</span><span class="special">)</span> <span class="identifier">is</span> <span class="number">1.8</span>
 </pre>
-<a name="math_toolkit.utils.sign_functions.portability"></a><h6>
-<a name="math_toolkit.utils.sign_functions.portability-heading"></a>
-        <a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.portability">Portability</a>
+<h6>
+<a name="math_toolkit.utils.sign_functions.h4"></a>
+        <span><a name="math_toolkit.utils.sign_functions.portability"></a></span><a class="link" href="sign_functions.html#math_toolkit.utils.sign_functions.portability">Portability</a>
       </h6>
 <p>
         The library supports the following binary floating-point formats:

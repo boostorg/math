@@ -28,14 +28,13 @@
           Chi Squared Distribution</a>
 </h5></div></div></div>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">inverse_chi_squared</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
-   
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">inverse_chi_squared_distribution</span>
 <span class="special">{</span>
@@ -139,7 +138,6 @@
               typedef:
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">inverse_chi_squared_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">inverse_chi_squared</span><span class="special">;</span></pre>
 <p>
@@ -149,7 +147,6 @@
               inverse_chi_squared distribution you can use
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">inverse_chi_squared_distribution</span><span class="special">&lt;&gt;</span></pre>
 <p>
@@ -197,9 +194,9 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/inverse_chi_squared_cdf.png" align="middle"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.member_functions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.member_functions-heading"></a>
-            <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.member_functions">Member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.h0"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.member_functions"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.member_functions">Member
             Functions</a>
           </h5>
 <pre class="programlisting"><span class="identifier">inverse_chi_squared_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">df</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span> <span class="comment">// Implicitly scaled 1/df.</span>
@@ -214,19 +211,19 @@
             Requires that the degrees of freedom &#957; parameter is greater than zero,
             otherwise calls <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
           </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> 
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
             Returns the degrees_of_freedom &#957; parameter of this distribution.
           </p>
-<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span> 
+<pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">scale</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
             Returns the scale &#958; parameter of this distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors-heading"></a>
-            <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors">Non-member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.h1"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
@@ -254,9 +251,9 @@
               equal to zero as a special case, returning zero for both pdf and cdf.
             </p></td></tr>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.accuracy"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.accuracy-heading"></a>
-            <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.h2"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.accuracy"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             The inverse gamma distribution is implemented in terms of the incomplete
@@ -270,9 +267,9 @@
             to a few epsilon, &gt;14 decimal digits accuracy for 64-bit double. unless
             iteration is involved, as for the estimation of degrees of freedom.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.implementation"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.implementation-heading"></a>
-            <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.h3"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.implementation"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table &#957; is the degrees of freedom parameter and &#958; is the
@@ -451,9 +448,9 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.references"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.references-heading"></a>
-            <a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.references">References</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.h4"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.references"></a></span><a class="link" href="inverse_chi_squared_dist.html#math_toolkit.dist.dist_ref.dists.inverse_chi_squared_dist.references">References</a>
           </h5>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">

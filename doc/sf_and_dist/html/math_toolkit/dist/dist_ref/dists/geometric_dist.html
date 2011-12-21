@@ -28,14 +28,13 @@
           Distribution</a>
 </h5></div></div></div>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">geometric</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">geometric_distribution</span><span class="special">;</span>
 
@@ -49,21 +48,21 @@
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>   <span class="identifier">policy_type</span><span class="special">;</span>
    <span class="comment">// Constructor from success_fraction:</span>
    <span class="identifier">geometric_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
-   
+
    <span class="comment">// Parameter accessors:</span>
    <span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-  
+
    <span class="comment">// Bounds on success fraction:</span>
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
-      <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span> 
+      <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// alpha</span>
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
-      <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span> 
+      <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// alpha</span>
-      
+
    <span class="comment">// Estimate min/max number of trials:</span>
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
       <span class="identifier">RealType</span> <span class="identifier">k</span><span class="special">,</span>     <span class="comment">// Number of failures.</span>
@@ -145,9 +144,9 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/geometric_cdf_discrete.png" align="middle"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.related_distributions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.related_distributions-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.related_distributions">Related
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h0"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.related_distributions"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.related_distributions">Related
             Distributions</a>
           </h5>
 <p>
@@ -205,14 +204,14 @@
             </p>
 </td></tr>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.member_functions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.member_functions-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.member_functions">Member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h1"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.member_functions"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.member_functions">Member
             Functions</a>
           </h5>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.constructor"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.constructor-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.constructor">Constructor</a>
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h2"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.constructor"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.constructor">Constructor</a>
           </h6>
 <pre class="programlisting"><span class="identifier">geometric_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
@@ -225,9 +224,9 @@
             <span class="identifier">p</span> <span class="special">&lt;=</span>
             <span class="number">1</span></code>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.accessors"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.accessors-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.accessors">Accessors</a>
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h3"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.accessors"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.accessors">Accessors</a>
           </h6>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span> <span class="comment">// successes / trials (0 &lt;= p &lt;= 1)</span>
 </pre>
@@ -252,13 +251,13 @@
             Distribution</a> and <a class="link" href="negative_binomial_dist.html" title="Negative Binomial Distribution">Negative
             Binomial Distribution</a> for more discussion.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_parameter__emphasis_p__emphasis_"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_parameter__emphasis_p__emphasis_-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_parameter__emphasis_p__emphasis_">Lower
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h4"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_parameter__emphasis_p__emphasis_"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.lower_bound_on_success_fraction_parameter__emphasis_p__emphasis_">Lower
             Bound on success_fraction Parameter <span class="emphasis"><em>p</em></span></a>
           </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
-  <span class="identifier">RealType</span> <span class="identifier">failures</span><span class="special">,</span> 
+  <span class="identifier">RealType</span> <span class="identifier">failures</span><span class="special">,</span>
   <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">)</span> <span class="comment">// (0 &lt;= alpha &lt;= 1), 0.05 equivalent to 95% confidence.</span>
 </pre>
 <p>
@@ -307,13 +306,13 @@
             Discrete Distributions. Computational statistics and data analysis, 2005,
             vol. 48, no3, 605-621</a>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_parameter_p"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_parameter_p-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_parameter_p">Upper
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h5"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_parameter_p"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.upper_bound_on_success_fraction_parameter_p">Upper
             Bound on success_fraction Parameter p</a>
           </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
-   <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span> 
+   <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
    <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">);</span> <span class="comment">// (0 &lt;= alpha &lt;= 1), 0.05 equivalent to 95% confidence.</span>
 </pre>
 <p>
@@ -362,9 +361,9 @@
             Discrete Distributions. Computational statistics and data analysis, 2005,
             vol. 48, no3, 605-621</a>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures">Estimating
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h6"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_at_least_a_certain_number_of_failures">Estimating
             Number of Trials to Ensure at Least a Certain Number of Failures</a>
           </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
@@ -414,9 +413,9 @@
             the number of trials (failures) that will lead to an <span class="emphasis"><em>alpha</em></span>
             probability of observing <span class="emphasis"><em>k</em></span> failures or fewer.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less">Estimating
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h7"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.estimating_number_of_trials_to_ensure_a_maximum_number_of_failures_or_less">Estimating
             Number of Trials to Ensure a Maximum Number of Failures or Less</a>
           </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_maximum_number_of_trials</span><span class="special">(</span>
@@ -462,9 +461,9 @@
             the number of trials that will lead to an <span class="emphasis"><em>alpha</em></span>
             probability of observing more than k failures.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.non_member_accessors"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.non_member_accessors-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.non_member_accessors">Non-member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h8"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.non_member_accessors"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
@@ -516,7 +515,6 @@
                       success fraction p. For example:
                     </p>
                     <p>
-                      
 </p>
 <pre class="programlisting"><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">geometric</span><span class="special">(</span><span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">)</span></pre>
 <p>
@@ -536,7 +534,6 @@
                       success fraction p and success on the last trial. For example:
                     </p>
                     <p>
-                      
 </p>
 <pre class="programlisting"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">geometric</span><span class="special">(</span><span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">)</span></pre>
 <p>
@@ -557,7 +554,6 @@
                       success fraction p and success on the last trial. For example:
                     </p>
                     <p>
-                      
 </p>
 <pre class="programlisting"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">geometric</span><span class="special">(</span><span class="identifier">p</span><span class="special">),</span> <span class="identifier">k</span><span class="special">))</span></pre>
 <p>
@@ -578,7 +574,7 @@
                       <span class="emphasis"><em>P</em></span>. Note that the value returned is a real-number,
                       and not an integer. Depending on the use case you may want
                       to take either the floor or ceiling of the real result. For
-                      example: 
+                      example:
 </p>
 <pre class="programlisting"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">geometric</span><span class="special">(</span><span class="identifier">p</span><span class="special">),</span> <span class="identifier">P</span><span class="special">)</span></pre>
 <p>
@@ -600,7 +596,7 @@
                       <span class="emphasis"><em>P</em></span>. Note that the value returned is a real-number,
                       and not an integer. Depending on the use case you may want
                       to take either the floor or ceiling of the real result. For
-                      example: 
+                      example:
 </p>
 <pre class="programlisting"><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">geometric</span><span class="special">(</span><span class="identifier">p</span><span class="special">),</span> <span class="identifier">P</span><span class="special">))</span></pre>
 <p>
@@ -610,9 +606,9 @@
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.accuracy"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.accuracy-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.accuracy">Accuracy</a>
+<br class="table-break"><h5>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h9"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.accuracy"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             This distribution is implemented using the pow and exp functions, so
@@ -621,9 +617,9 @@
             <span class="emphasis"><em>p</em></span>, for example 0.9999999999, accuracy can fall significantly,
             for example to 10 decimal digits (from 16).
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.implementation"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.implementation-heading"></a>
-            <a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.geometric_dist.h10"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.geometric_dist.implementation"></a></span><a class="link" href="geometric_dist.html#math_toolkit.dist.dist_ref.dists.geometric_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table, <span class="emphasis"><em>p</em></span> is the probability that

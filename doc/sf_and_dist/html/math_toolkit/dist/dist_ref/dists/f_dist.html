@@ -27,14 +27,13 @@
 <a name="math_toolkit.dist.dist_ref.dists.f_dist"></a><a class="link" href="f_dist.html" title="F Distribution">F Distribution</a>
 </h5></div></div></div>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">fisher_f</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
-   
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">fisher_f_distribution</span><span class="special">;</span>
 
@@ -45,10 +44,10 @@
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
    <span class="keyword">typedef</span> <span class="identifier">RealType</span> <span class="identifier">value_type</span><span class="special">;</span>
-   
+
    <span class="comment">// Construct:</span>
    <span class="identifier">fisher_f_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">j</span><span class="special">);</span>
-   
+
    <span class="comment">// Accessors:</span>
    <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom1</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom2</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
@@ -79,9 +78,9 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/fisher_f_pdf.png" align="middle"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.member_functions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.member_functions-heading"></a>
-            <a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.member_functions">Member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist.h0"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.f_dist.member_functions"></a></span><a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.member_functions">Member
             Functions</a>
           </h5>
 <pre class="programlisting"><span class="identifier">fisher_f_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">df1</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">df2</span><span class="special">);</span>
@@ -105,9 +104,9 @@
 <p>
             Returns the denominator degrees of freedom parameter of the distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.non_member_accessors"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.non_member_accessors-heading"></a>
-            <a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.non_member_accessors">Non-member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist.h1"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.f_dist.non_member_accessors"></a></span><a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
@@ -125,26 +124,26 @@
 <p>
             The domain of the random variable is [0, +&#8734;].
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.examples"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.examples-heading"></a>
-            <a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.examples">Examples</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist.h2"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.f_dist.examples"></a></span><a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.examples">Examples</a>
           </h5>
 <p>
             Various <a class="link" href="../../stat_tut/weg/f_eg.html" title="F Distribution Examples">worked examples</a>
             are available illustrating the use of the F Distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.accuracy"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.accuracy-heading"></a>
-            <a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist.h3"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.f_dist.accuracy"></a></span><a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             The normal distribution is implemented in terms of the <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">incomplete
             beta function</a> and its <a class="link" href="../../../special/sf_beta/ibeta_inv_function.html" title="The Incomplete Beta Function Inverses">inverses</a>,
             refer to those functions for accuracy data.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.implementation"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.f_dist.implementation-heading"></a>
-            <a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.f_dist.h4"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.f_dist.implementation"></a></span><a class="link" href="f_dist.html#math_toolkit.dist.dist_ref.dists.f_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table <span class="emphasis"><em>v1</em></span> and <span class="emphasis"><em>v2</em></span>

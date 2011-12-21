@@ -28,14 +28,13 @@
           Distribution</a>
 </h5></div></div></div>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">binomial_distribution</span><span class="special">;</span>
 
@@ -47,35 +46,35 @@
 <span class="keyword">public</span><span class="special">:</span>
    <span class="keyword">typedef</span> <span class="identifier">RealType</span>  <span class="identifier">value_type</span><span class="special">;</span>
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>    <span class="identifier">policy_type</span><span class="special">;</span>
-   
+
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="emphasis"><em>unspecified-type</em></span> <span class="identifier">clopper_pearson_exact_interval</span><span class="special">;</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="emphasis"><em>unspecified-type</em></span> <span class="identifier">jeffreys_prior_interval</span><span class="special">;</span>
-   
+
    <span class="comment">// construct:</span>
    <span class="identifier">binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
-   
+
    <span class="comment">// parameter access::</span>
    <span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-   
+
    <span class="comment">// Bounds on success fraction:</span>
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
-      <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span> 
+      <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">,</span>
       <span class="emphasis"><em>unspecified-type</em></span> <span class="identifier">method</span> <span class="special">=</span> <span class="identifier">clopper_pearson_exact_interval</span><span class="special">);</span>
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
-      <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span> 
+      <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
       <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">,</span>
       <span class="emphasis"><em>unspecified-type</em></span> <span class="identifier">method</span> <span class="special">=</span> <span class="identifier">clopper_pearson_exact_interval</span><span class="special">);</span>
-      
+
    <span class="comment">// estimate min/max number of trials:</span>
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
       <span class="identifier">RealType</span> <span class="identifier">k</span><span class="special">,</span>     <span class="comment">// number of events</span>
       <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">,</span>     <span class="comment">// success fraction</span>
       <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">);</span> <span class="comment">// risk level</span>
-      
+
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_maximum_number_of_trials</span><span class="special">(</span>
       <span class="identifier">RealType</span> <span class="identifier">k</span><span class="special">,</span>     <span class="comment">// number of events</span>
       <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">,</span>     <span class="comment">// success fraction</span>
@@ -160,14 +159,14 @@
             </p>
 </td></tr>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions">Member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h0"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.member_functions">Member
             Functions</a>
           </h5>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.construct"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.construct-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.construct">Construct</a>
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h1"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.construct"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.construct">Construct</a>
           </h6>
 <pre class="programlisting"><span class="identifier">binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">p</span><span class="special">);</span>
 </pre>
@@ -182,9 +181,9 @@
             <span class="special">&gt;=</span> <span class="number">0</span></code>,
             otherwise calls <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accessors"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accessors-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accessors">Accessors</a>
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h2"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accessors"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accessors">Accessors</a>
           </h6>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">success_fraction</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
 </pre>
@@ -198,13 +197,13 @@
             Returns the parameter <span class="emphasis"><em>n</em></span> from which this distribution
             was constructed.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction">Lower
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h3"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.lower_bound_on_the_success_fraction">Lower
             Bound on the Success Fraction</a>
           </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_lower_bound_on_p</span><span class="special">(</span>
-   <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span> 
+   <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
    <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
    <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span>
    <span class="emphasis"><em>unspecified-type</em></span> <span class="identifier">method</span> <span class="special">=</span> <span class="identifier">clopper_pearson_exact_interval</span><span class="special">);</span>
@@ -304,13 +303,13 @@
             Clopper, C. J. and Pearson, E. S. (1934). The use of confidence or fiducial
             limits illustrated in the case of the binomial. Biometrika 26 404-413.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction">Upper
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h4"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.upper_bound_on_the_success_fraction">Upper
             Bound on the Success Fraction</a>
           </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_upper_bound_on_p</span><span class="special">(</span>
-   <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span> 
+   <span class="identifier">RealType</span> <span class="identifier">trials</span><span class="special">,</span>
    <span class="identifier">RealType</span> <span class="identifier">successes</span><span class="special">,</span>
    <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span>
    <span class="emphasis"><em>unspecified-type</em></span> <span class="identifier">method</span> <span class="special">=</span> <span class="identifier">clopper_pearson_exact_interval</span><span class="special">);</span>
@@ -382,9 +381,9 @@
             </p>
 </td></tr>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes">Estimating
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h5"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_number_of_trials_required_for_a_certain_number_of_successes">Estimating
             the Number of Trials Required for a Certain Number of Successes</a>
           </h6>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_minimum_number_of_trials</span><span class="special">(</span>
@@ -424,9 +423,9 @@
             Returns the smallest number of trials we must conduct to be 95% sure
             of seeing 10 events that occur with frequency one half.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes">Estimating
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h6"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.estimating_the_maximum_number_of_trials_to_ensure_no_more_than_a_certain_number_of_successes">Estimating
             the Maximum Number of Trials to Ensure no more than a Certain Number
             of Successes</a>
           </h6>
@@ -472,9 +471,9 @@
             <a class="link" href="../../stat_tut/weg/binom_eg/binom_size_eg.html" title="Estimating Sample Sizes for a Binomial Distribution.">See
             Worked Example.</a>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors">Non-member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h7"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
@@ -621,17 +620,17 @@
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.examples"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.examples-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.examples">Examples</a>
+<br class="table-break"><h5>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h8"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.examples"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.examples">Examples</a>
           </h5>
 <p>
             Various <a class="link" href="../../stat_tut/weg/binom_eg.html" title="Binomial Distribution Examples">worked
             examples</a> are available illustrating the use of the binomial distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h9"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             This distribution is implemented using the incomplete beta functions
@@ -639,9 +638,9 @@
             and <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>,
             please refer to these functions for information on accuracy.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.implementation"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.implementation-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h10"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.implementation"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table <span class="emphasis"><em>p</em></span> is the probability that
@@ -708,7 +707,6 @@
                       Using the relation:
                     </p>
                     <p>
-                      
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">p</span> <span class="special">=</span> <span class="identifier">I</span><span class="special">[</span><span class="identifier">sub</span> <span class="number">1</span><span class="special">-</span><span class="identifier">p</span><span class="special">](</span><span class="identifier">n</span> <span class="special">-</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">k</span> <span class="special">+</span> <span class="number">1</span><span class="special">)</span>
   <span class="special">=</span> <span class="number">1</span> <span class="special">-</span> <span class="identifier">I</span><span class="special">[</span><span class="identifier">sub</span> <span class="identifier">p</span><span class="special">](</span><span class="identifier">k</span> <span class="special">+</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">n</span> <span class="special">-</span> <span class="identifier">k</span><span class="special">)</span>
@@ -883,9 +881,9 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.references"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.references-heading"></a>
-            <a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.references">References</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.binomial_dist.h11"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.binomial_dist.references"></a></span><a class="link" href="binomial_dist.html#math_toolkit.dist.dist_ref.dists.binomial_dist.references">References</a>
           </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">

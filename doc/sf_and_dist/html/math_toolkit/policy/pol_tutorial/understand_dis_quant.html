@@ -176,9 +176,9 @@
           when dealing with a discrete distribution</em></span>, and if in doubt,
           <span class="emphasis"><em>base your comparisons on CDF's instead</em></span>.
         </p>
-<a name="math_toolkit.policy.pol_tutorial.understand_dis_quant.other_rounding_policies_are_available"></a><h6>
-<a name="math_toolkit.policy.pol_tutorial.understand_dis_quant.other_rounding_policies_are_available-heading"></a>
-          <a class="link" href="understand_dis_quant.html#math_toolkit.policy.pol_tutorial.understand_dis_quant.other_rounding_policies_are_available">Other
+<h6>
+<a name="math_toolkit.policy.pol_tutorial.understand_dis_quant.h0"></a>
+          <span><a name="math_toolkit.policy.pol_tutorial.understand_dis_quant.other_rounding_policies_are_available"></a></span><a class="link" href="understand_dis_quant.html#math_toolkit.policy.pol_tutorial.understand_dis_quant.other_rounding_policies_are_available">Other
           Rounding Policies are Available</a>
         </h6>
 <p>
@@ -248,7 +248,6 @@
           Begin by including the needed headers (and some using statements for conciseness):
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">;</span> <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
@@ -265,7 +264,6 @@
           types for all the available rounding policies:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="comment">// Avoid </span>
 <span class="comment">// using namespace std; // and </span>
@@ -288,33 +286,33 @@
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">binomial_distribution</span><span class="special">;</span> <span class="comment">// Not std::binomial_distribution.</span>
 
 <span class="keyword">typedef</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;</span>
-            <span class="keyword">double</span><span class="special">,</span> 
-            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_outwards</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span> 
+            <span class="keyword">double</span><span class="special">,</span>
+            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_outwards</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span>
         <span class="identifier">binom_round_outwards</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;</span>
-            <span class="keyword">double</span><span class="special">,</span> 
-            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_inwards</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span> 
+            <span class="keyword">double</span><span class="special">,</span>
+            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_inwards</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span>
         <span class="identifier">binom_round_inwards</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;</span>
-            <span class="keyword">double</span><span class="special">,</span> 
-            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_down</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span> 
+            <span class="keyword">double</span><span class="special">,</span>
+            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_down</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span>
         <span class="identifier">binom_round_down</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;</span>
-            <span class="keyword">double</span><span class="special">,</span> 
-            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_up</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span> 
+            <span class="keyword">double</span><span class="special">,</span>
+            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_up</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span>
         <span class="identifier">binom_round_up</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;</span>
-            <span class="keyword">double</span><span class="special">,</span> 
-            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_nearest</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span> 
+            <span class="keyword">double</span><span class="special">,</span>
+            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_nearest</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span>
         <span class="identifier">binom_round_nearest</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">binomial_distribution</span><span class="special">&lt;</span>
-            <span class="keyword">double</span><span class="special">,</span> 
-            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">real</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span> 
+            <span class="keyword">double</span><span class="special">,</span>
+            <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">real</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;</span>
         <span class="identifier">binom_real_quantile</span><span class="special">;</span></pre>
 <p>
         </p>
@@ -322,73 +320,72 @@
           Now let's set to work calling those quantiles:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> 
+   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span>
       <span class="string">"Testing rounding policies for a 50 sample binomial distribution,\n"</span>
       <span class="string">"with a success fraction of 0.5.\n\n"</span>
       <span class="string">"Lower quantiles are calculated at p = 0.05\n\n"</span>
       <span class="string">"Upper quantiles at p = 0.95.\n\n"</span><span class="special">;</span>
 
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">25</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
-      <span class="special">&lt;&lt;</span> <span class="string">"Policy"</span><span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span> 
-      <span class="special">&lt;&lt;</span> <span class="string">"Lower Quantile"</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span> 
+      <span class="special">&lt;&lt;</span> <span class="string">"Policy"</span><span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
+      <span class="special">&lt;&lt;</span> <span class="string">"Lower Quantile"</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="string">"Upper Quantile"</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-   
+
    <span class="comment">// Test integer_round_outwards:</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">25</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="string">"integer_round_outwards"</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_outwards</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.05</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_outwards</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span> 
+      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_outwards</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-   
+
    <span class="comment">// Test integer_round_inwards:</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">25</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="string">"integer_round_inwards"</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_inwards</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.05</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_inwards</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span> 
+      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_inwards</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-   
+
    <span class="comment">// Test integer_round_down:</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">25</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="string">"integer_round_down"</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_down</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.05</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_down</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span> 
+      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_down</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-   
+
    <span class="comment">// Test integer_round_up:</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">25</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="string">"integer_round_up"</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_up</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.05</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_up</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span> 
+      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_up</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-   
+
    <span class="comment">// Test integer_round_nearest:</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">25</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="string">"integer_round_nearest"</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_nearest</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.05</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_nearest</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span> 
+      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_round_nearest</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-   
+
    <span class="comment">// Test real:</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">25</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="string">"real"</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_real_quantile</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.05</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">18</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">right</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_real_quantile</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span> 
+      <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">binom_real_quantile</span><span class="special">(</span><span class="number">50</span><span class="special">,</span> <span class="number">0.5</span><span class="special">),</span> <span class="number">0.95</span><span class="special">)</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="special">}</span> <span class="comment">// int main()</span></pre>
 <p>
@@ -399,11 +396,11 @@
 <pre class="programlisting">policy_eg_10.vcxproj -&gt; J:\Cpp\MathToolkit\test\Math_test\Release\policy_eg_10.exe
   Testing rounding policies for a 50 sample binomial distribution,
   with a success fraction of 0.5.
-  
+
   Lower quantiles are calculated at p = 0.05
-  
+
   Upper quantiles at p = 0.95.
-  
+
                      Policy    Lower Quantile    Upper Quantile
      integer_round_outwards                18                31
       integer_round_inwards                19                30

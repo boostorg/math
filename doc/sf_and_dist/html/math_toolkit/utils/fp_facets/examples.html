@@ -26,13 +26,12 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.utils.fp_facets.examples"></a><a class="link" href="examples.html" title="Examples">Examples</a>
 </h4></div></div></div>
-<a name="math_toolkit.utils.fp_facets.examples.simple_example_with_std__stringstreams"></a><h6>
-<a name="math_toolkit.utils.fp_facets.examples.simple_example_with_std__stringstreams-heading"></a>
-          <a class="link" href="examples.html#math_toolkit.utils.fp_facets.examples.simple_example_with_std__stringstreams">Simple
+<h6>
+<a name="math_toolkit.utils.fp_facets.examples.h0"></a>
+          <span><a name="math_toolkit.utils.fp_facets.examples.simple_example_with_std__stringstreams"></a></span><a class="link" href="examples.html#math_toolkit.utils.fp_facets.examples.simple_example_with_std__stringstreams">Simple
           example with std::stringstreams</a>
         </h6>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="identifier">locale</span> <span class="identifier">old_locale</span><span class="special">;</span>
 <span class="identifier">locale</span> <span class="identifier">tmp_locale</span><span class="special">(</span><span class="identifier">old_locale</span><span class="special">,</span> <span class="keyword">new</span> <span class="identifier">nonfinite_num_put</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;);</span>
@@ -41,7 +40,6 @@
 <p>
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="identifier">stringstream</span> <span class="identifier">ss</span><span class="special">;</span>
 <span class="identifier">ss</span><span class="special">.</span><span class="identifier">imbue</span><span class="special">(</span><span class="identifier">new_locale</span><span class="special">);</span>
@@ -63,9 +61,9 @@
 </pre>
 <p>
         </p>
-<a name="math_toolkit.utils.fp_facets.examples.use_with_lexical_cast"></a><h6>
-<a name="math_toolkit.utils.fp_facets.examples.use_with_lexical_cast-heading"></a>
-          <a class="link" href="examples.html#math_toolkit.utils.fp_facets.examples.use_with_lexical_cast">Use
+<h6>
+<a name="math_toolkit.utils.fp_facets.examples.h1"></a>
+          <span><a name="math_toolkit.utils.fp_facets.examples.use_with_lexical_cast"></a></span><a class="link" href="examples.html#math_toolkit.utils.fp_facets.examples.use_with_lexical_cast">Use
           with lexical_cast</a>
         </h6>
 <div class="note"><table border="0" summary="Note">
@@ -85,7 +83,6 @@
           are found.
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="identifier">locale</span> <span class="identifier">old_locale</span><span class="special">;</span>
 <span class="identifier">locale</span> <span class="identifier">tmp_locale</span><span class="special">(</span><span class="identifier">old_locale</span><span class="special">,</span> <span class="keyword">new</span> <span class="identifier">nonfinite_num_put</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;);</span>
@@ -171,9 +168,9 @@
 <span class="identifier">s</span> <span class="special">&lt;&lt;</span> <span class="identifier">setprecison</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">scientific</span> <span class="special">&lt;&lt;</span> <span class="identifier">output_value</span><span class="special">;</span>
 <span class="identifier">s</span> <span class="special">&gt;&gt;</span> <span class="identifier">input_value</span><span class="special">;</span>
 </pre>
-<a name="math_toolkit.utils.fp_facets.examples.use_with_serialization_archives"></a><h5>
-<a name="math_toolkit.utils.fp_facets.examples.use_with_serialization_archives-heading"></a>
-          <a class="link" href="examples.html#math_toolkit.utils.fp_facets.examples.use_with_serialization_archives">Use
+<h5>
+<a name="math_toolkit.utils.fp_facets.examples.h2"></a>
+          <span><a name="math_toolkit.utils.fp_facets.examples.use_with_serialization_archives"></a></span><a class="link" href="examples.html#math_toolkit.utils.fp_facets.examples.use_with_serialization_archives">Use
           with serialization archives</a>
         </h5>
 <p>
@@ -216,10 +213,9 @@
           archive, then you must set the exception mask of the stream. Serialization
           archives do not check the stream state.
         </p>
-<a name="math_toolkit.utils.fp_facets.examples.other_examples"></a><h6>
-<a name="math_toolkit.utils.fp_facets.examples.other_examples-heading"></a>
-          <a class="link" href="examples.html#math_toolkit.utils.fp_facets.examples.other_examples">Other
-          examples</a>
+<h6>
+<a name="math_toolkit.utils.fp_facets.examples.h3"></a>
+          <span><a name="math_toolkit.utils.fp_facets.examples.other_examples"></a></span><a class="link" href="examples.html#math_toolkit.utils.fp_facets.examples.other_examples">Other examples</a>
         </h6>
 <p>
           <a href="../../../../../../example/nonfinite_facet_simple.cpp" target="_top">nonfinite_facet_simple.cpp</a>

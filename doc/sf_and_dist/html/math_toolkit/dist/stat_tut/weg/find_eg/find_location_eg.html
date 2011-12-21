@@ -32,7 +32,6 @@
               algorithms to find location (and some std output of course).
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for normal_distribution</span>
   <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.</span>
@@ -61,7 +60,6 @@
               also the default for this implementation.
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">N01</span><span class="special">;</span>  <span class="comment">// Default 'standard' normal distribution with zero mean and </span>
 <span class="keyword">double</span> <span class="identifier">sd</span> <span class="special">=</span> <span class="number">1.</span><span class="special">;</span> <span class="comment">// normal default standard deviation is 1.</span></pre>
@@ -73,14 +71,13 @@
               certain chosen limit (here -2, two standard deviations).
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">z</span> <span class="special">=</span> <span class="special">-</span><span class="number">2.</span><span class="special">;</span> <span class="comment">// z to give prob p</span>
 <span class="keyword">double</span> <span class="identifier">p</span> <span class="special">=</span> <span class="number">0.001</span><span class="special">;</span> <span class="comment">// only 0.1% below z</span>
 
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">N01</span><span class="special">.</span><span class="identifier">location</span><span class="special">()</span>
   <span class="special">&lt;&lt;</span> <span class="string">", standard deviation "</span> <span class="special">&lt;&lt;</span> <span class="identifier">N01</span><span class="special">.</span><span class="identifier">scale</span><span class="special">()</span>
-  <span class="special">&lt;&lt;</span> <span class="string">", has "</span> <span class="special">&lt;&lt;</span> <span class="string">"fraction &lt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span> 
+  <span class="special">&lt;&lt;</span> <span class="string">", has "</span> <span class="special">&lt;&lt;</span> <span class="string">"fraction &lt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span>
   <span class="special">&lt;&lt;</span> <span class="string">", p = "</span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">N01</span><span class="special">,</span> <span class="identifier">z</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">N01</span><span class="special">.</span><span class="identifier">location</span><span class="special">()</span>
   <span class="special">&lt;&lt;</span> <span class="string">", standard deviation "</span> <span class="special">&lt;&lt;</span> <span class="identifier">N01</span><span class="special">.</span><span class="identifier">scale</span><span class="special">()</span>
@@ -95,7 +92,6 @@ Normal distribution with mean = 0, standard deviation 1, has fraction &gt; -2, p
               We can now use ''find_location'' to give a new offset mean.
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">l</span> <span class="special">=</span> <span class="identifier">find_location</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">p</span><span class="special">,</span> <span class="identifier">sd</span><span class="special">);</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"offset location (mean) = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
@@ -115,7 +111,6 @@ Normal distribution with mean = 0, standard deviation 1, has fraction &gt; -2, p
               a new distribution with the offset mean (but same standard deviation):
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">np001pc</span><span class="special">(</span><span class="identifier">l</span><span class="special">,</span> <span class="identifier">sd</span><span class="special">);</span> <span class="comment">// Same standard_deviation (scale) but with mean (location) shifted.</span></pre>
 <p>
@@ -124,22 +119,21 @@ Normal distribution with mean = 0, standard deviation 1, has fraction &gt; -2, p
               And re-calculating the fraction below our chosen limit.
             </p>
 <p>
-              
 </p>
-<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span> 
-    <span class="special">&lt;&lt;</span> <span class="string">" has "</span> <span class="special">&lt;&lt;</span> <span class="string">"fraction &lt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span> 
+<pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span>
+    <span class="special">&lt;&lt;</span> <span class="string">" has "</span> <span class="special">&lt;&lt;</span> <span class="string">"fraction &lt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span>
     <span class="special">&lt;&lt;</span> <span class="string">", p = "</span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">np001pc</span><span class="special">,</span> <span class="identifier">z</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-  <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span> 
-    <span class="special">&lt;&lt;</span> <span class="string">" has "</span> <span class="special">&lt;&lt;</span> <span class="string">"fraction &gt; "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span> 
+  <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span>
+    <span class="special">&lt;&lt;</span> <span class="string">" has "</span> <span class="special">&lt;&lt;</span> <span class="string">"fraction &gt; "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span>
     <span class="special">&lt;&lt;</span> <span class="string">", p = "</span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">np001pc</span><span class="special">,</span> <span class="identifier">z</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
 <p>
             </p>
 <pre class="programlisting">Normal distribution with mean = 1.09023 has fraction &lt;= -2, p = 0.001
 Normal distribution with mean = 1.09023 has fraction &gt; -2, p = 0.999
 </pre>
-<a name="math_toolkit.dist.stat_tut.weg.find_eg.find_location_eg.controlling_error_handling_from_find_location"></a><h5>
-<a name="math_toolkit.dist.stat_tut.weg.find_eg.find_location_eg.controlling_error_handling_from_find_location-heading"></a>
-              <a class="link" href="find_location_eg.html#math_toolkit.dist.stat_tut.weg.find_eg.find_location_eg.controlling_error_handling_from_find_location">Controlling
+<h5>
+<a name="math_toolkit.dist.stat_tut.weg.find_eg.find_location_eg.h0"></a>
+              <span><a name="math_toolkit.dist.stat_tut.weg.find_eg.find_location_eg.controlling_error_handling_from_find_location"></a></span><a class="link" href="find_location_eg.html#math_toolkit.dist.stat_tut.weg.find_eg.find_location_eg.controlling_error_handling_from_find_location">Controlling
               Error Handling from find_location</a>
             </h5>
 <p>
@@ -151,7 +145,6 @@ Normal distribution with mean = 1.09023 has fraction &gt; -2, p = 0.999
               Unless we are using the boost::math namespace, we will need:
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">;</span>
@@ -163,7 +156,6 @@ Normal distribution with mean = 1.09023 has fraction &gt; -2, p = 0.999
               it is not required, as the various examples below show.
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">ignore_error</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">ignore_domain_policy</span><span class="special">;</span>
 <span class="comment">// find_location with new policy, using typedef.</span>
@@ -183,16 +175,15 @@ Normal distribution with mean = 1.09023 has fraction &gt; -2, p = 0.999
               use the complement version.
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="identifier">z</span> <span class="special">=</span> <span class="number">2.</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">q</span> <span class="special">=</span> <span class="number">0.95</span><span class="special">;</span> <span class="comment">// = 1 - p; // complement.</span>
 <span class="identifier">l</span> <span class="special">=</span> <span class="identifier">find_location</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">q</span><span class="special">,</span> <span class="identifier">sd</span><span class="special">));</span>
 
 <span class="identifier">normal</span> <span class="identifier">np95pc</span><span class="special">(</span><span class="identifier">l</span><span class="special">,</span> <span class="identifier">sd</span><span class="special">);</span> <span class="comment">// Same standard_deviation (scale) but with mean(location) shifted</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span> <span class="special">&lt;&lt;</span> <span class="string">" has "</span> 
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span> <span class="special">&lt;&lt;</span> <span class="string">" has "</span>
   <span class="special">&lt;&lt;</span> <span class="string">"fraction &lt;= "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span> <span class="special">&lt;&lt;</span> <span class="string">" = "</span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">np95pc</span><span class="special">,</span> <span class="identifier">z</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span> <span class="special">&lt;&lt;</span> <span class="string">" has "</span> 
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Normal distribution with mean = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">l</span> <span class="special">&lt;&lt;</span> <span class="string">" has "</span>
   <span class="special">&lt;&lt;</span> <span class="string">"fraction &gt; "</span> <span class="special">&lt;&lt;</span> <span class="identifier">z</span> <span class="special">&lt;&lt;</span> <span class="string">" = "</span>  <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">np95pc</span><span class="special">,</span> <span class="identifier">z</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 </pre>
 <p>

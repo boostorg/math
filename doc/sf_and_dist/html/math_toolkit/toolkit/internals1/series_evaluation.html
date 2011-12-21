@@ -27,12 +27,11 @@
 <a name="math_toolkit.toolkit.internals1.series_evaluation"></a><a class="link" href="series_evaluation.html" title="Series Evaluation">Series
         Evaluation</a>
 </h4></div></div></div>
-<a name="math_toolkit.toolkit.internals1.series_evaluation.synopsis"></a><h5>
-<a name="math_toolkit.toolkit.internals1.series_evaluation.synopsis-heading"></a>
-          <a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.synopsis">Synopsis</a>
+<h5>
+<a name="math_toolkit.toolkit.internals1.series_evaluation.h0"></a>
+          <span><a name="math_toolkit.toolkit.internals1.series_evaluation.synopsis"></a></span><a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.synopsis">Synopsis</a>
         </h5>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">series</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -69,9 +68,9 @@
 
 <span class="special">}}}</span> <span class="comment">// namespaces</span>
 </pre>
-<a name="math_toolkit.toolkit.internals1.series_evaluation.description"></a><h5>
-<a name="math_toolkit.toolkit.internals1.series_evaluation.description-heading"></a>
-          <a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.description">Description</a>
+<h5>
+<a name="math_toolkit.toolkit.internals1.series_evaluation.h1"></a>
+          <span><a name="math_toolkit.toolkit.internals1.series_evaluation.description"></a></span><a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.description">Description</a>
         </h5>
 <p>
           These algorithms are intended for the <a href="http://en.wikipedia.org/wiki/Series_%28mathematics%29" target="_top">summation
@@ -126,9 +125,9 @@
           However, it should be pointed out that there are very few series that require
           summation in this way.
         </p>
-<a name="math_toolkit.toolkit.internals1.series_evaluation.example"></a><h5>
-<a name="math_toolkit.toolkit.internals1.series_evaluation.example-heading"></a>
-          <a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.example">Example</a>
+<h5>
+<a name="math_toolkit.toolkit.internals1.series_evaluation.h2"></a>
+          <span><a name="math_toolkit.toolkit.internals1.series_evaluation.example"></a></span><a class="link" href="series_evaluation.html#math_toolkit.toolkit.internals1.series_evaluation.example">Example</a>
         </h5>
 <p>
           Let's suppose we want to implement <span class="emphasis"><em>log(1+x)</em></span> via its
@@ -157,7 +156,7 @@
       <span class="comment">// the first term of the series, the second call the second </span>
       <span class="comment">// term and so on.</span>
       <span class="identifier">m_prod</span> <span class="special">*=</span> <span class="identifier">m_mult</span><span class="special">;</span>
-      <span class="keyword">return</span> <span class="identifier">m_prod</span> <span class="special">/</span> <span class="special">++</span><span class="identifier">k</span><span class="special">;</span> 
+      <span class="keyword">return</span> <span class="identifier">m_prod</span> <span class="special">/</span> <span class="special">++</span><span class="identifier">k</span><span class="special">;</span>
    <span class="special">}</span>
 
 <span class="keyword">private</span><span class="special">:</span>
@@ -174,7 +173,7 @@
 <span class="special">{</span>
    <span class="comment">// We really should add some error checking on x here!</span>
    <span class="identifier">assert</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">fabs</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">&lt;</span> <span class="number">1</span><span class="special">);</span>
-   
+
    <span class="comment">// Construct the series functor:</span>
    <span class="identifier">log1p_series</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">s</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
    <span class="comment">// Set a limit on how many iterations we permit:</span>

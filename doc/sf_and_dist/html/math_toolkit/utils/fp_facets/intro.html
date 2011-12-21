@@ -26,9 +26,10 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.utils.fp_facets.intro"></a><a class="link" href="intro.html" title="Introduction">Introduction</a>
 </h4></div></div></div>
-<a name="math_toolkit.utils.fp_facets.intro.the_problem"></a><h6>
-<a name="math_toolkit.utils.fp_facets.intro.the_problem-heading"></a>
-          <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.the_problem">The Problem</a>
+<h6>
+<a name="math_toolkit.utils.fp_facets.intro.h0"></a>
+          <span><a name="math_toolkit.utils.fp_facets.intro.the_problem"></a></span><a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.the_problem">The
+          Problem</a>
         </h6>
 <p>
           The C++98 standard does not specify how <span class="emphasis"><em>infinity</em></span> and
@@ -50,9 +51,10 @@
 
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">inf</span> <span class="special">==</span> <span class="identifier">y</span><span class="special">);</span> <span class="comment">// Fails!</span>
 </pre>
-<a name="math_toolkit.utils.fp_facets.intro.the_solution"></a><h6>
-<a name="math_toolkit.utils.fp_facets.intro.the_solution-heading"></a>
-          <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.the_solution">The Solution</a>
+<h6>
+<a name="math_toolkit.utils.fp_facets.intro.h1"></a>
+          <span><a name="math_toolkit.utils.fp_facets.intro.the_solution"></a></span><a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.the_solution">The
+          Solution</a>
         </h6>
 <p>
           The facets <code class="computeroutput"><span class="identifier">nonfinite_num_put</span></code>
@@ -65,7 +67,6 @@
           The following test succeeds with MSVC.
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="identifier">locale</span> <span class="identifier">old_locale</span><span class="special">;</span>
 <span class="identifier">locale</span> <span class="identifier">tmp_locale</span><span class="special">(</span><span class="identifier">old_locale</span><span class="special">,</span> <span class="keyword">new</span> <span class="identifier">nonfinite_num_put</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;);</span>
@@ -106,7 +107,6 @@
           </p></td></tr>
 </table></div>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="identifier">stringstream</span> <span class="identifier">ss</span><span class="special">;</span>
 <span class="identifier">ss</span><span class="special">.</span><span class="identifier">imbue</span><span class="special">(</span><span class="identifier">new_locale</span><span class="special">);</span>
@@ -128,9 +128,9 @@
 </pre>
 <p>
         </p>
-<a name="math_toolkit.utils.fp_facets.intro.c__0x_standard_for_output_of_infinity_and_nan"></a><h5>
-<a name="math_toolkit.utils.fp_facets.intro.c__0x_standard_for_output_of_infinity_and_nan-heading"></a>
-          <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.c__0x_standard_for_output_of_infinity_and_nan">C++0X
+<h5>
+<a name="math_toolkit.utils.fp_facets.intro.h2"></a>
+          <span><a name="math_toolkit.utils.fp_facets.intro.c__0x_standard_for_output_of_infinity_and_nan"></a></span><a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.c__0x_standard_for_output_of_infinity_and_nan">C++0X
           standard for output of infinity and NaN</a>
         </h5>
 <p>
@@ -140,9 +140,9 @@
           without some specific action, input and output of nonfinite values is not
           portable.
         </p>
-<a name="math_toolkit.utils.fp_facets.intro.c99_standard_for_output_of_infinity_and_nan"></a><h5>
-<a name="math_toolkit.utils.fp_facets.intro.c99_standard_for_output_of_infinity_and_nan-heading"></a>
-          <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.c99_standard_for_output_of_infinity_and_nan">C99
+<h5>
+<a name="math_toolkit.utils.fp_facets.intro.h3"></a>
+          <span><a name="math_toolkit.utils.fp_facets.intro.c99_standard_for_output_of_infinity_and_nan"></a></span><a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.c99_standard_for_output_of_infinity_and_nan">C99
           standard for output of infinity and NaN</a>
         </h5>
 <p>
@@ -230,9 +230,9 @@
           output of nonfinites in C++, and this implementation follows most of these
           formats.
         </p>
-<a name="math_toolkit.utils.fp_facets.intro.signaling_nans"></a><h6>
-<a name="math_toolkit.utils.fp_facets.intro.signaling_nans-heading"></a>
-          <a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.signaling_nans">Signaling
+<h6>
+<a name="math_toolkit.utils.fp_facets.intro.h4"></a>
+          <span><a name="math_toolkit.utils.fp_facets.intro.signaling_nans"></a></span><a class="link" href="intro.html#math_toolkit.utils.fp_facets.intro.signaling_nans">Signaling
           NaNs</a>
         </h6>
 <p>

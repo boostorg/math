@@ -34,9 +34,9 @@
 <dt><span class="section"><a href="fp_facets/portability.html">Portability</a></span></dt>
 <dt><span class="section"><a href="fp_facets/rationale.html">Design Rationale</a></span></dt>
 </dl></div>
-<a name="math_toolkit.utils.fp_facets.synopsis"></a><h5>
-<a name="math_toolkit.utils.fp_facets.synopsis-heading"></a>
-        <a class="link" href="fp_facets.html#math_toolkit.utils.fp_facets.synopsis">Synopsis</a>
+<h5>
+<a name="math_toolkit.utils.fp_facets.h0"></a>
+        <span><a name="math_toolkit.utils.fp_facets.synopsis"></a></span><a class="link" href="fp_facets.html#math_toolkit.utils.fp_facets.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span>
 <span class="special">{</span>
@@ -48,10 +48,10 @@
 
   <span class="keyword">template</span><span class="special">&lt;</span>
       <span class="keyword">class</span> <span class="identifier">CharType</span><span class="special">,</span>
-      <span class="keyword">class</span> <span class="identifier">OutputIterator</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostreambuf_iterator</span><span class="special">&lt;</span><span class="identifier">CharType</span><span class="special">&gt;</span> 
+      <span class="keyword">class</span> <span class="identifier">OutputIterator</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostreambuf_iterator</span><span class="special">&lt;</span><span class="identifier">CharType</span><span class="special">&gt;</span>
   <span class="special">&gt;</span>
   <span class="keyword">class</span> <span class="identifier">nonfinite_num_put</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">num_put</span><span class="special">&lt;</span><span class="identifier">CharType</span><span class="special">,</span> <span class="identifier">OutputIterator</span><span class="special">&gt;</span>
-  <span class="special">{</span> 
+  <span class="special">{</span>
   <span class="keyword">public</span><span class="special">:</span>
       <span class="keyword">explicit</span> <span class="identifier">nonfinite_num_put</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
   <span class="special">};</span>
@@ -64,7 +64,7 @@
   <span class="special">{</span>
   <span class="keyword">public</span><span class="special">:</span>
       <span class="keyword">explicit</span> <span class="identifier">nonfinite_num_get</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">flags</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>  <span class="comment">// legacy, sign_zero ...</span>
-  <span class="special">};</span> 
+  <span class="special">};</span>
 <span class="special">}}</span> <span class="comment">// namespace boost namespace math</span>
 </pre>
 <p>

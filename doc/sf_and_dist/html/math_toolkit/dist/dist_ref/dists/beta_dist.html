@@ -28,14 +28,13 @@
           Distribution</a>
 </h5></div></div></div>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">beta</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
- <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
+ <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
            <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">beta_distribution</span><span class="special">;</span>
 
@@ -51,28 +50,28 @@
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>    <span class="identifier">policy_type</span><span class="special">;</span>
    <span class="comment">// Constructor from two shape parameters, alpha &amp; beta:</span>
    <span class="identifier">beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">b</span><span class="special">);</span>
-   
+
    <span class="comment">// Parameter accessors:</span>
    <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
    <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
-   
+
    <span class="comment">// Parameter estimators of alpha or beta from mean and variance.</span>
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_alpha</span><span class="special">(</span>
      <span class="identifier">RealType</span> <span class="identifier">mean</span><span class="special">,</span> <span class="comment">// Expected value of mean.</span>
      <span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">);</span> <span class="comment">// Expected value of variance.</span>
-   
+
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
      <span class="identifier">RealType</span> <span class="identifier">mean</span><span class="special">,</span> <span class="comment">// Expected value of mean.</span>
      <span class="identifier">RealType</span> <span class="identifier">variance</span><span class="special">);</span> <span class="comment">// Expected value of variance.</span>
 
    <span class="comment">// Parameter estimators from from</span>
    <span class="comment">// either alpha or beta, and x and probability.</span>
-   
+
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_alpha</span><span class="special">(</span>
      <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">,</span> <span class="comment">// from beta.</span>
      <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="comment">//  x.</span>
      <span class="identifier">RealType</span> <span class="identifier">probability</span><span class="special">);</span> <span class="comment">// cdf</span>
-   
+
    <span class="keyword">static</span> <span class="identifier">RealType</span> <span class="identifier">find_beta</span><span class="special">(</span>
      <span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="comment">// alpha.</span>
      <span class="identifier">RealType</span> <span class="identifier">x</span><span class="special">,</span> <span class="comment">// probability x.</span>
@@ -131,14 +130,14 @@
             &#946;, then the shape is asymmetric and could be approximated by a triangle
             whose apex is away from the centre (where x = half).
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.member_functions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.member_functions-heading"></a>
-            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.member_functions">Member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist.h0"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.beta_dist.member_functions"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.member_functions">Member
             Functions</a>
           </h5>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.constructor"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.constructor-heading"></a>
-            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.constructor">Constructor</a>
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist.h1"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.beta_dist.constructor"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.constructor">Constructor</a>
           </h6>
 <pre class="programlisting"><span class="identifier">beta_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">beta</span><span class="special">);</span>
 </pre>
@@ -163,9 +162,9 @@
             Constructs a the beta distribution with alpha=2 and beta=5 (shown in
             yellow in the graph above).
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors"></a><h6>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors-heading"></a>
-            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors">Parameter
+<h6>
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist.h2"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_accessors">Parameter
             Accessors</a>
           </h6>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">alpha</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -187,9 +186,9 @@
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">mybeta</span><span class="special">.</span><span class="identifier">alpha</span><span class="special">()</span> <span class="special">==</span> <span class="number">2.</span><span class="special">);</span>  <span class="comment">// mybeta.alpha() returns 2</span>
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">mybeta</span><span class="special">.</span><span class="identifier">beta</span><span class="special">()</span> <span class="special">==</span> <span class="number">5.</span><span class="special">);</span>   <span class="comment">// mybeta.beta()  returns 5</span>
 </pre>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators-heading"></a>
-            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators">Parameter
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist.h3"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.parameter_estimators">Parameter
             Estimators</a>
           </h5>
 <p>
@@ -240,9 +239,9 @@
 <p>
             Returns the value of &#946; &#160; that gives: <code class="computeroutput"><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">beta_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="identifier">alpha</span><span class="special">,</span> <span class="identifier">beta</span><span class="special">),</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="identifier">probability</span></code>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions-heading"></a>
-            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions">Non-member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist.h4"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.non_member_accessor_functions">Non-member
             Accessor Functions</a>
           </h5>
 <p>
@@ -262,9 +261,9 @@
             at <a href="http://mathworld.wolfram.com/BetaDistribution.html" target="_top">Wolfram
             Mathworld</a>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.applications"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.applications-heading"></a>
-            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.applications">Applications</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist.h5"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.beta_dist.applications"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.applications">Applications</a>
           </h5>
 <p>
             The beta distribution can be used to model events constrained to take
@@ -275,9 +274,9 @@
             It is also widely used in <a href="http://en.wikipedia.org/wiki/Bayesian_inference" target="_top">Bayesian
             statistical inference</a>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions-heading"></a>
-            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions">Related
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist.h6"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.related_distributions">Related
             distributions</a>
           </h5>
 <p>
@@ -302,9 +301,9 @@
             are less than x, a probability given by summing over the <a class="link" href="binomial_dist.html" title="Binomial Distribution">Binomial
             Distribution</a> with its p parameter set to x.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.accuracy"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.accuracy-heading"></a>
-            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist.h7"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.beta_dist.accuracy"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             This distribution is implemented using the <a class="link" href="../../../special/sf_beta/beta_function.html" title="Beta">beta
@@ -314,9 +313,9 @@
             and <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">ibetac</a>;
             please refer to these functions for information on accuracy.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.implementation"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.implementation-heading"></a>
-            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist.h8"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.beta_dist.implementation"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table <span class="emphasis"><em>a</em></span> and <span class="emphasis"><em>b</em></span>
@@ -593,9 +592,9 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.references"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.beta_dist.references-heading"></a>
-            <a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.references">References</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.beta_dist.h9"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.beta_dist.references"></a></span><a class="link" href="beta_dist.html#math_toolkit.dist.dist_ref.dists.beta_dist.references">References</a>
           </h5>
 <p>
             <a href="http://en.wikipedia.org/wiki/Beta_distribution" target="_top">Wikipedia

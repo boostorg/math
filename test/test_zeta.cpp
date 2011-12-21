@@ -3,7 +3,6 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <pch.hpp>
 #include "test_zeta.hpp"
 
 //
@@ -75,7 +74,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*",                          // test data group
-      ".*", 16, 5);                  // test function
+      ".*", 40, 15);                  // test function
 
    std::cout << "Tests run with " << BOOST_COMPILER << ", " 
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;

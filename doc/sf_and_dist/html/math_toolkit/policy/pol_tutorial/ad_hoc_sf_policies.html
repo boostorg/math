@@ -59,7 +59,6 @@
           throw an exception:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
@@ -84,7 +83,7 @@
    <span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
    <span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
    <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;,</span>
-   <span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;</span> 
+   <span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;</span>
 <span class="special">&gt;</span> <span class="identifier">c_policy</span><span class="special">;</span>
 <span class="comment">//</span>
 <span class="comment">// Now use the policy when calling tgamma:</span>
@@ -95,10 +94,10 @@
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
    <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="comment">// Reset.</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(30000) is: "</span> 
+   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(30000) is: "</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="number">30000</span><span class="special">,</span> <span class="identifier">c_policy</span><span class="special">())</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// Too big parameter</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// errno 34 Numerical result out of range.</span>
-   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span> 
+   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(-</span><span class="number">10</span><span class="special">,</span> <span class="identifier">c_policy</span><span class="special">())</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// Negative parameter.</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// error 33 Numerical argument out of domain.</span>
 <span class="special">}</span> <span class="comment">// int main()</span>
@@ -120,7 +119,6 @@ errno = 33
           so is probably only preferred when a policy is going to be used once only:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
@@ -136,27 +134,27 @@ errno = 33
    <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">evaluation_error</span><span class="special">;</span>
 
    <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(30000) is: "</span> 
+   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(30000) is: "</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span>
-         <span class="number">30000</span><span class="special">,</span> 
+         <span class="number">30000</span><span class="special">,</span>
          <span class="identifier">make_policy</span><span class="special">(</span>
             <span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span>
             <span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span>
             <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span>
-            <span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;()</span> 
+            <span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;()</span>
          <span class="special">)</span>
       <span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
    <span class="comment">// Check errno was set:</span>
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
    <span class="comment">// and again with evaluation at a pole:</span>
-   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span> 
+   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span>
       <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span>
-         <span class="special">-</span><span class="number">10</span><span class="special">,</span> 
+         <span class="special">-</span><span class="number">10</span><span class="special">,</span>
          <span class="identifier">make_policy</span><span class="special">(</span>
             <span class="identifier">domain_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span>
             <span class="identifier">pole_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span>
             <span class="identifier">overflow_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;(),</span>
-            <span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;()</span> 
+            <span class="identifier">evaluation_error</span><span class="special">&lt;</span><span class="identifier">errno_on_error</span><span class="special">&gt;()</span>
          <span class="special">)</span>
       <span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
    <span class="comment">// Check errno was set:</span>

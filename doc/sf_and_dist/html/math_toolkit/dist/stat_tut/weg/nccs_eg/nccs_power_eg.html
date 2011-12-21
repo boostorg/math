@@ -40,7 +40,6 @@ test at the 5% significance
               (and some basic std output of course).
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">non_central_chi_squared</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">chi_squared</span><span class="special">;</span>
@@ -59,7 +58,6 @@ test at the 5% significance
               start with a table header:
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"[table\n[[[nu]]"</span><span class="special">;</span>
 <span class="keyword">for</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">lam</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span> <span class="identifier">lam</span> <span class="special">&lt;=</span> <span class="number">20</span><span class="special">;</span> <span class="identifier">lam</span> <span class="special">+=</span> <span class="number">2</span><span class="special">)</span>
@@ -77,7 +75,6 @@ test at the 5% significance
               each table cell:
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">for</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span> <span class="identifier">n</span> <span class="special">&lt;=</span> <span class="number">20</span><span class="special">;</span> <span class="special">++</span><span class="identifier">n</span><span class="special">)</span>
 <span class="special">{</span>
@@ -90,7 +87,6 @@ test at the 5% significance
               Calculate the &#967;<sup>2</sup> statistic for a 5% significance:
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">cs</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">chi_squared</span><span class="special">(</span><span class="identifier">n</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span></pre>
 <p>
@@ -100,7 +96,6 @@ test at the 5% significance
               non-central &#967;<sup>2</sup> distribution:
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">beta</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">non_central_chi_squared</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">lam</span><span class="special">),</span> <span class="identifier">cs</span><span class="special">));</span></pre>
 <p>
@@ -109,7 +104,6 @@ test at the 5% significance
               Then output the cell value:
             </p>
 <p>
-              
 </p>
 <pre class="programlisting">         <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"["</span> <span class="special">&lt;&lt;</span> <span class="identifier">setprecision</span><span class="special">(</span><span class="number">3</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">beta</span> <span class="special">&lt;&lt;</span> <span class="string">"]"</span><span class="special">;</span>
       <span class="special">}</span>

@@ -27,12 +27,11 @@
 <a name="math_toolkit.special.expint.expint_i"></a><a class="link" href="expint_i.html" title="Exponential Integral Ei">Exponential Integral
         Ei</a>
 </h4></div></div></div>
-<a name="math_toolkit.special.expint.expint_i.synopsis"></a><h5>
-<a name="math_toolkit.special.expint.expint_i.synopsis-heading"></a>
-          <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.synopsis">Synopsis</a>
+<h5>
+<a name="math_toolkit.special.expint.expint_i.h0"></a>
+          <span><a name="math_toolkit.special.expint.expint_i.synopsis"></a></span><a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.synopsis">Synopsis</a>
         </h5>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">expint</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -57,9 +56,9 @@
           optional and can be used to control the behaviour of the function: how
           it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
-<a name="math_toolkit.special.expint.expint_i.description"></a><h5>
-<a name="math_toolkit.special.expint.expint_i.description-heading"></a>
-          <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.description">Description</a>
+<h5>
+<a name="math_toolkit.special.expint.expint_i.h1"></a>
+          <span><a name="math_toolkit.special.expint.expint_i.description"></a></span><a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.description">Description</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">expint</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
@@ -77,9 +76,9 @@
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/expint_i.png" align="middle"></span>
         </p>
-<a name="math_toolkit.special.expint.expint_i.accuracy"></a><h5>
-<a name="math_toolkit.special.expint.expint_i.accuracy-heading"></a>
-          <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.special.expint.expint_i.h2"></a>
+          <span><a name="math_toolkit.special.expint.expint_i.accuracy"></a></span><a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.accuracy">Accuracy</a>
         </h5>
 <p>
           The following table shows the peak errors (in units of epsilon) found on
@@ -201,9 +200,9 @@
           SPECFUN along with this implementation increase their error rates very
           slightly over the range [4,6].
         </p>
-<a name="math_toolkit.special.expint.expint_i.testing"></a><h5>
-<a name="math_toolkit.special.expint.expint_i.testing-heading"></a>
-          <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.testing">Testing</a>
+<h5>
+<a name="math_toolkit.special.expint.expint_i.h3"></a>
+          <span><a name="math_toolkit.special.expint.expint_i.testing"></a></span><a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.testing">Testing</a>
         </h5>
 <p>
           The tests for these functions come in two parts: basic sanity checks use
@@ -216,9 +215,9 @@
           "known good" implementations also provides an additional sanity
           check.
         </p>
-<a name="math_toolkit.special.expint.expint_i.implementation"></a><h5>
-<a name="math_toolkit.special.expint.expint_i.implementation-heading"></a>
-          <a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.special.expint.expint_i.h4"></a>
+          <span><a name="math_toolkit.special.expint.expint_i.implementation"></a></span><a class="link" href="expint_i.html#math_toolkit.special.expint.expint_i.implementation">Implementation</a>
         </h5>
 <p>
           For x &lt; 0 this function just calls <a class="link" href="expint_n.html" title="Exponential Integral En">zeta</a>(1,
@@ -247,7 +246,7 @@
           a minimax rational approximation rescaled so that it is evaluated over
           [-1,1]. Note that while the rational approximation over [0,6] converges
           rapidly to the minimax solution it is rather ill-conditioned in practice.
-          Cody and Thacher <sup>[<a name="id1312639" href="#ftn.id1312639" class="footnote">2</a>]</sup> experienced the same issue and converted the polynomials into
+          Cody and Thacher <sup>[<a name="math_toolkit.special.expint.expint_i.f0" href="#ftn.math_toolkit.special.expint.expint_i.f0" class="footnote">2</a>]</sup> experienced the same issue and converted the polynomials into
           Chebeshev form to ensure stable computation. By experiment we found that
           the polynomials are just as stable in polynomial as Chebyshev form, <span class="emphasis"><em>provided</em></span>
           they are computed over the interval [-1,1].
@@ -277,7 +276,7 @@
         </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a id="ftn.id1312639" href="#id1312639" class="para">2</a>] </sup>
+<div class="footnote"><p><sup>[<a id="ftn.math_toolkit.special.expint.expint_i.f0" href="#math_toolkit.special.expint.expint_i.f0" class="para">2</a>] </sup>
             W. J. Cody and H. C. Thacher, Jr., Rational Chebyshev approximations
             for the exponential integral E<sub>1</sub>(x), Math. Comp. 22 (1968), 641-649, and
             W. J. Cody and H. C. Thacher, Jr., Chebyshev approximations for the exponential

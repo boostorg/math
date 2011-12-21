@@ -59,7 +59,6 @@
               (and some basic std output of course).
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial</span><span class="special">;</span>
@@ -76,7 +75,6 @@
               that the true occurrence frequency lies outside the calculated interval:
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
 <p>
@@ -91,7 +89,6 @@
               observed frequency of occurrence that follows a negative binomial distribution.
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">void</span> <span class="identifier">confidence_limits_on_frequency</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">trials</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">successes</span><span class="special">)</span>
 <span class="special">{</span>
@@ -131,7 +128,6 @@
               two.
             </p>
 <p>
-              
 </p>
 <pre class="programlisting">   <span class="comment">// Now print out the upper and lower limits for the alpha table values.</span>
    <span class="keyword">for</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
@@ -154,7 +150,6 @@
               of trials, but always the same success fraction 0.1, or 1 in 10.
             </p>
 <p>
-              
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>

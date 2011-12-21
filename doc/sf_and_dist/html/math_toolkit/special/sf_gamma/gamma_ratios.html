@@ -28,7 +28,6 @@
         of Gamma Functions</a>
 </h4></div></div></div>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -50,14 +49,14 @@
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.description"></a><h5>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.description-heading"></a>
-          <a class="link" href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.description">Description</a>
+<h5>
+<a name="math_toolkit.special.sf_gamma.gamma_ratios.h0"></a>
+          <span><a name="math_toolkit.special.sf_gamma.gamma_ratios.description"></a></span><a class="link" href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.description">Description</a>
         </h5>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span> 
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">tgamma_ratio</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">b</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
@@ -106,9 +105,9 @@
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/tgamma_delta_ratio.png" align="middle"></span>
         </p>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.accuracy"></a><h5>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.accuracy-heading"></a>
-          <a class="link" href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.special.sf_gamma.gamma_ratios.h1"></a>
+          <span><a name="math_toolkit.special.sf_gamma.gamma_ratios.accuracy"></a></span><a class="link" href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.accuracy">Accuracy</a>
         </h5>
 <p>
           The following table shows the peak errors (in units of epsilon) found on
@@ -316,18 +315,18 @@
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="math_toolkit.special.sf_gamma.gamma_ratios.testing"></a><h5>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.testing-heading"></a>
-          <a class="link" href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.testing">Testing</a>
+<br class="table-break"><h5>
+<a name="math_toolkit.special.sf_gamma.gamma_ratios.h2"></a>
+          <span><a name="math_toolkit.special.sf_gamma.gamma_ratios.testing"></a></span><a class="link" href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.testing">Testing</a>
         </h5>
 <p>
           Accuracy tests use data generated at very high precision (with <a href="http://shoup.net/ntl/doc/RR.txt" target="_top">NTL
           RR class</a> set at 1000-bit precision: about 300 decimal digits) and
           a deliberately naive calculation of &#915;(x)/&#915;(y).
         </p>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.implementation"></a><h5>
-<a name="math_toolkit.special.sf_gamma.gamma_ratios.implementation-heading"></a>
-          <a class="link" href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.special.sf_gamma.gamma_ratios.h3"></a>
+          <span><a name="math_toolkit.special.sf_gamma.gamma_ratios.implementation"></a></span><a class="link" href="gamma_ratios.html#math_toolkit.special.sf_gamma.gamma_ratios.implementation">Implementation</a>
         </h5>
 <p>
           The implementation of these functions is very similar to that of <a class="link" href="../sf_beta/beta_function.html" title="Beta">beta</a>, and is

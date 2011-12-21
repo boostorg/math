@@ -95,9 +95,9 @@
             in a Bayesian analysis with data on a specific single machine to derive
             a posterior distribution for that machine.
           </p>
-<a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_one__using_the_survey_information_"></a><h6>
-<a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_one__using_the_survey_information_-heading"></a>
-            <a class="link" href="inverse_chi_squared_eg.html#math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_one__using_the_survey_information_">Step
+<h6>
+<a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.h0"></a>
+            <span><a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_one__using_the_survey_information_"></a></span><a class="link" href="inverse_chi_squared_eg.html#math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_one__using_the_survey_information_">Step
             one: Using the survey information.</a>
           </h6>
 <p>
@@ -118,10 +118,9 @@
             list out a few quantiles:
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">priorDF</span> <span class="special">=</span> <span class="number">20.0</span><span class="special">;</span>
-<span class="keyword">double</span> <span class="identifier">priorScale</span> <span class="special">=</span> <span class="number">25.0</span><span class="special">;</span> 
+<span class="keyword">double</span> <span class="identifier">priorScale</span> <span class="special">=</span> <span class="number">25.0</span><span class="special">;</span>
 
 <span class="identifier">inverse_chi_squared</span> <span class="identifier">prior</span><span class="special">(</span><span class="identifier">priorDF</span><span class="special">,</span> <span class="identifier">priorScale</span><span class="special">);</span>
 <span class="comment">// Using an inverse_gamma distribution instead, we could equivalently write</span>
@@ -152,11 +151,10 @@
             and find a probability of about 0.031 (3.1%) for each case.
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  probability variance &lt;= 15: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">prior</span><span class="special">,</span> <span class="number">15.0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  probability variance &lt;= 25: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">prior</span><span class="special">,</span> <span class="number">25.0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  probability variance &gt; 50: "</span> 
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  probability variance &gt; 50: "</span>
   <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">prior</span><span class="special">,</span> <span class="number">50.0</span><span class="special">))</span>
 <span class="special">&lt;&lt;</span> <span class="identifier">endl</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 </pre>
@@ -185,9 +183,9 @@
             interpretationally a strict <span class="emphasis"><em>must-not</em></span>) in the frequentist
             world.
           </p>
-<a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_2__investigate_a_single_machine"></a><h6>
-<a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_2__investigate_a_single_machine-heading"></a>
-            <a class="link" href="inverse_chi_squared_eg.html#math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_2__investigate_a_single_machine">Step
+<h6>
+<a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.h1"></a>
+            <span><a name="math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_2__investigate_a_single_machine"></a></span><a class="link" href="inverse_chi_squared_eg.html#math_toolkit.dist.stat_tut.weg.inverse_chi_squared_eg.step_2__investigate_a_single_machine">Step
             2: Investigate a single machine</a>
           </h6>
 <p>
@@ -233,7 +231,6 @@
             with degrees-of-freedom (&#957;<sub>posterior</sub>) = 120 and scale (s<sub>posterior</sub>) = 49.54.
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">ballsSampleSize</span> <span class="special">=</span> <span class="number">100</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span><span class="string">"balls sample size: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">ballsSampleSize</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -244,7 +241,7 @@
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"prior degrees-of-freedom: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">priorDF</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"posterior degrees-of-freedom: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">posteriorDF</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 
-<span class="keyword">double</span> <span class="identifier">posteriorScale</span> <span class="special">=</span> 
+<span class="keyword">double</span> <span class="identifier">posteriorScale</span> <span class="special">=</span>
   <span class="special">(</span><span class="identifier">priorDF</span> <span class="special">*</span> <span class="identifier">priorScale</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">ballsSampleVariance</span> <span class="special">*</span> <span class="special">(</span><span class="identifier">ballsSampleSize</span> <span class="special">-</span> <span class="number">1</span><span class="special">)))</span> <span class="special">/</span> <span class="identifier">posteriorDF</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"prior scale: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">priorScale</span>  <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"posterior scale: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">posteriorScale</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span></pre>
@@ -275,7 +272,6 @@
             <span class="inlinemediaobject"><img src="../../../../../graphs/prior_posterior_plot.png" align="middle"></span>
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="identifier">inverse_chi_squared</span> <span class="identifier">posterior</span><span class="special">(</span><span class="identifier">posteriorDF</span><span class="special">,</span> <span class="identifier">posteriorScale</span><span class="special">);</span>
 
@@ -286,7 +282,7 @@
 
  <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  probability variance &lt;= 15: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">posterior</span><span class="special">,</span> <span class="number">15.0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
  <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  probability variance &lt;= 25: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">posterior</span><span class="special">,</span> <span class="number">25.0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
- <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  probability variance &gt; 50: "</span> 
+ <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"  probability variance &gt; 50: "</span>
    <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">posterior</span><span class="special">,</span> <span class="number">50.0</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 
 </pre>
@@ -296,11 +292,11 @@
             This produces this output:
           </p>
 <pre class="programlisting"><span class="identifier">Posterior</span> <span class="identifier">distribution</span><span class="special">:</span>
- 
+
    <span class="number">2.5</span><span class="special">%</span> <span class="identifier">quantile</span><span class="special">:</span> <span class="number">39.1</span>
    <span class="number">50</span><span class="special">%</span> <span class="identifier">quantile</span><span class="special">:</span> <span class="number">49.8</span>
    <span class="number">97.5</span><span class="special">%</span> <span class="identifier">quantile</span><span class="special">:</span> <span class="number">64.9</span>
- 
+
    <span class="identifier">probability</span> <span class="identifier">variance</span> <span class="special">&lt;=</span> <span class="number">15</span><span class="special">:</span> <span class="number">2.97e-031</span>
    <span class="identifier">probability</span> <span class="identifier">variance</span> <span class="special">&lt;=</span> <span class="number">25</span><span class="special">:</span> <span class="number">8.85e-010</span>
    <span class="identifier">probability</span> <span class="identifier">variance</span> <span class="special">&gt;</span> <span class="number">50</span><span class="special">:</span> <span class="number">0.489</span>
@@ -325,18 +321,18 @@
 <p>
             A full sample output is:
           </p>
-<pre class="programlisting">Inverse_chi_squared_distribution Bayes example: 
-  
+<pre class="programlisting">Inverse_chi_squared_distribution Bayes example:
+
    Prior distribution:
-  
+
     2.5% quantile: 14.6
     50% quantile: 25.9
     97.5% quantile: 52.1
-  
+
     probability variance &lt;= 15: 0.031
     probability variance &lt;= 25: 0.458
     probability variance &gt; 50: 0.0318
-  
+
   balls sample size: 100
   balls sample variance: 55
   prior degrees-of-freedom: 20
@@ -344,11 +340,11 @@
   prior scale: 25
   posterior scale: 49.5
   Posterior distribution:
-  
+
     2.5% quantile: 39.1
     50% quantile: 49.8
     97.5% quantile: 64.9
-  
+
     probability variance &lt;= 15: 2.97e-031
     probability variance &lt;= 25: 8.85e-010
     probability variance &gt; 50: 0.489

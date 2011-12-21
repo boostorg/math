@@ -85,17 +85,13 @@ to make their arguments positive:
 
 The generic versions of these functions are implemented using the series:
 
-[equation zeta1]
+[equation zeta6]
 
-for large z, and using the globally convergent series:
+except when the argument is close to 1, where the globally convergent series:
 
 [equation zeta2]
 
-In all other cases.  The crossover point for these is chosen so that the first
-series is used only if it will converge reasonably quickly, the problem with this
-series is that convergence become slower the more terms you take, so we really do
-have to be certain of convergence before using this series, even though the 
-alternative is often quite slow.
+Is used.
 
 When the significand (mantissa) size is recognised
 (currently for 53, 64 and 113-bit reals, plus single-precision 24-bit handled via promotion to double)

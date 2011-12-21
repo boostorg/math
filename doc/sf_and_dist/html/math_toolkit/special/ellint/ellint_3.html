@@ -27,12 +27,11 @@
 <a name="math_toolkit.special.ellint.ellint_3"></a><a class="link" href="ellint_3.html" title="Elliptic Integrals of the Third Kind - Legendre Form">Elliptic Integrals
         of the Third Kind - Legendre Form</a>
 </h4></div></div></div>
-<a name="math_toolkit.special.ellint.ellint_3.synopsis"></a><h6>
-<a name="math_toolkit.special.ellint.ellint_3.synopsis-heading"></a>
-          <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.synopsis">Synopsis</a>
+<h6>
+<a name="math_toolkit.special.ellint.ellint_3.h0"></a>
+          <span><a name="math_toolkit.special.ellint.ellint_3.synopsis"></a></span><a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.synopsis">Synopsis</a>
         </h6>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">ellint_3</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -54,9 +53,9 @@
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
-<a name="math_toolkit.special.ellint.ellint_3.description"></a><h6>
-<a name="math_toolkit.special.ellint.ellint_3.description-heading"></a>
-          <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.description">Description</a>
+<h6>
+<a name="math_toolkit.special.ellint.ellint_3.h1"></a>
+          <span><a name="math_toolkit.special.ellint.ellint_3.description"></a></span><a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.description">Description</a>
         </h6>
 <p>
           These two functions evaluate the incomplete elliptic integral of the third
@@ -118,9 +117,9 @@
           optional and can be used to control the behaviour of the function: how
           it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
-<a name="math_toolkit.special.ellint.ellint_3.accuracy"></a><h6>
-<a name="math_toolkit.special.ellint.ellint_3.accuracy-heading"></a>
-          <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.accuracy">Accuracy</a>
+<h6>
+<a name="math_toolkit.special.ellint.ellint_3.h2"></a>
+          <span><a name="math_toolkit.special.ellint.ellint_3.accuracy"></a></span><a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.accuracy">Accuracy</a>
         </h6>
 <p>
           These functions are computed using only basic arithmetic operations, so
@@ -230,9 +229,9 @@
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="math_toolkit.special.ellint.ellint_3.testing"></a><h6>
-<a name="math_toolkit.special.ellint.ellint_3.testing-heading"></a>
-          <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.testing">Testing</a>
+<br class="table-break"><h6>
+<a name="math_toolkit.special.ellint.ellint_3.h3"></a>
+          <span><a name="math_toolkit.special.ellint.ellint_3.testing"></a></span><a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.testing">Testing</a>
         </h6>
 <p>
           The tests use a mixture of spot test values calculated using the online
@@ -240,9 +239,9 @@
           and random test data generated using NTL::RR at 1000-bit precision and
           this implementation.
         </p>
-<a name="math_toolkit.special.ellint.ellint_3.implementation"></a><h6>
-<a name="math_toolkit.special.ellint.ellint_3.implementation-heading"></a>
-          <a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.implementation">Implementation</a>
+<h6>
+<a name="math_toolkit.special.ellint.ellint_3.h4"></a>
+          <span><a name="math_toolkit.special.ellint.ellint_3.implementation"></a></span><a class="link" href="ellint_3.html#math_toolkit.special.ellint.ellint_3.implementation">Implementation</a>
         </h6>
 <p>
           The implementation for &#928;(n, &#966;, k) first siphons off the special cases:
@@ -278,7 +277,7 @@
           <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) + 2m&#928;(n, k) ; n &lt;= 1</em></span>
         </p>
 <p>
-          <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) ; n &gt; 1</em></span> <sup>[<a name="id1308635" href="#ftn.id1308635" class="footnote">1</a>]</sup>
+          <span class="emphasis"><em>&#928;(n, &#966;+m&#960;, k) = &#928;(n, &#966;, k) ; n &gt; 1</em></span> <sup>[<a name="math_toolkit.special.ellint.ellint_3.f0" href="#ftn.math_toolkit.special.ellint.ellint_3.f0" class="footnote">1</a>]</sup>
         </p>
 <p>
           are used to move &#966; &#160; to the range [0, &#960;/2].
@@ -298,7 +297,7 @@
         </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a id="ftn.id1308635" href="#id1308635" class="para">1</a>] </sup>
+<div class="footnote"><p><sup>[<a id="ftn.math_toolkit.special.ellint.ellint_3.f0" href="#math_toolkit.special.ellint.ellint_3.f0" class="para">1</a>] </sup>
             I haven't been able to find a literature reference for this relation,
             but it appears to be the convention used by Mathematica. Intuitively
             the first <span class="emphasis"><em>2 * m * &#928;(n, k)</em></span> terms cancel out as the

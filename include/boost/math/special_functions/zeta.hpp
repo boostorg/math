@@ -89,6 +89,13 @@ T zeta_series_imp(T s, T sc, const Policy&)
 
    return sum * 1 / -boost::math::powm1(T(2), sc);
 }
+
+#if 0
+//
+// This code is commented out because we have a better more rapidly converging series
+// now.  Retained for future reference and in case the new code causes any issues down the line....
+//
+
 //
 // Classical p-series:
 //
@@ -119,12 +126,53 @@ inline T zeta_series2_imp(T s, const Policy& pol)
    policies::check_series_iterations<T>("boost::math::zeta_series2<%1%>(%1%)", max_iter, pol);
    return result;
 }
+#endif
+
+template <class T, class Policy>
+T zeta_polynomial_series(T s, T sc, Policy const &)
+{
+   //
+   // This is algorithm 3 from:
+   // 
+   // "An Efficient Algorithm for the Riemann Zeta Function", P. Borwein, 
+   // Canadian Mathematical Society, Conference Proceedings.
+   // See: http://www.cecm.sfu.ca/personal/pborwein/PAPERS/P155.pdf
+   //
+   BOOST_MATH_STD_USING
+   int n = itrunc(log(boost::math::tools::epsilon<T>()) / -2);
+   T sum = 0;
+   T two_n = ldexp(T(1), n);
+   int ej_sign = 1;
+   for(int j = 0; j < n; ++j)
+   {
+      sum += ej_sign * -two_n / pow(T(j + 1), s);
+      ej_sign = -ej_sign; 
+   }
+   T ej_sum = 1;
+   T ej_term = 1;
+   for(int j = n; j <= 2 * n - 1; ++j)
+   {
+      sum += ej_sign * (ej_sum - two_n) / pow(T(j + 1), s);
+      ej_sign = -ej_sign;
+      ej_term *= 2 * n - j;
+      ej_term /= j - n + 1;
+      ej_sum += ej_term;
+   }
+   return -sum / (two_n * (1 - pow(T(2), sc)));
+}
 
 template <class T, class Policy>
 T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<0>&)
 {
    BOOST_MATH_STD_USING
-   T result; 
+   T result;
+   if(fabs(sc) > 0.01f)
+      result = zeta_polynomial_series(s, sc, pol); 
+   else
+      result = detail::zeta_series_imp(s, sc, pol);
+#if 0
+   // Old code archived for future reference:
+
    //
    // Only use power series if it will converge in 100 
    // iterations or less: the more iterations it consumes
@@ -135,6 +183,7 @@ T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<0>&)
       result = detail::zeta_series2_imp(s, pol);
    else
       result = detail::zeta_series_imp(s, sc, pol);
+#endif
    return result;
 }
 

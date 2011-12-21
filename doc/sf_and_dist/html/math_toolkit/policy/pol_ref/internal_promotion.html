@@ -84,9 +84,9 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.policy.pol_ref.internal_promotion.examples"></a><h5>
-<a name="math_toolkit.policy.pol_ref.internal_promotion.examples-heading"></a>
-          <a class="link" href="internal_promotion.html#math_toolkit.policy.pol_ref.internal_promotion.examples">Examples</a>
+<h5>
+<a name="math_toolkit.policy.pol_ref.internal_promotion.h0"></a>
+          <span><a name="math_toolkit.policy.pol_ref.internal_promotion.examples"></a></span><a class="link" href="internal_promotion.html#math_toolkit.policy.pol_ref.internal_promotion.examples">Examples</a>
         </h5>
 <p>
           Suppose we want <code class="computeroutput"><span class="identifier">tgamma</span></code>
@@ -94,7 +94,6 @@
           <span class="keyword">double</span></code>, then we could use:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
@@ -103,9 +102,9 @@
 
 <span class="comment">// Define a new policy *not* internally promoting RealType to double:</span>
 <span class="keyword">typedef</span> <span class="identifier">policy</span><span class="special">&lt;</span>
-      <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> 
+      <span class="identifier">promote_double</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span>
       <span class="special">&gt;</span> <span class="identifier">my_policy</span><span class="special">;</span>
-      
+
 <span class="comment">// Call the function, applying the new policy:</span>
 <span class="keyword">double</span> <span class="identifier">t1</span> <span class="special">=</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">some_value</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">());</span>
 
@@ -121,7 +120,6 @@
           promoting <code class="computeroutput"><span class="keyword">float</span></code> to <code class="computeroutput"><span class="keyword">double</span></code>, then we could use:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">;</span>
