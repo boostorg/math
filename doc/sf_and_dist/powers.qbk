@@ -32,7 +32,7 @@ approximation to `log(1+x)` using a Taylor series expansion for accuracy
 Alternatively note that there are faster methods available, 
 for example using the equivalence:
 
-   log(1+x) == (log(1+x) * x) / ((1-x) - 1)
+   log(1+x) == (log(1+x) * x) / ((1+x) - 1)
 
 However, experience has shown that these methods tend to fail quite spectacularly
 once the compiler's optimizations are turned on, consequently they are
