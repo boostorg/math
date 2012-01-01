@@ -139,7 +139,7 @@ T zeta_polynomial_series(T s, T sc, Policy const &)
    // See: http://www.cecm.sfu.ca/personal/pborwein/PAPERS/P155.pdf
    //
    BOOST_MATH_STD_USING
-   int n = itrunc(log(boost::math::tools::epsilon<T>()) / -2);
+   int n = itrunc(T(log(boost::math::tools::epsilon<T>()) / -2));
    T sum = 0;
    T two_n = ldexp(T(1), n);
    int ej_sign = 1;

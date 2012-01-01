@@ -34,8 +34,16 @@ inline const char* make_big_value(long double, const char* s, mpl::false_ const&
    return s;
 }
 
+//
+// For constants which might fit in a long double (if it's big enough):
+//
 #define BOOST_MATH_BIG_CONSTANT(T, D, x)\
    boost::math::tools::make_big_value<T>(BOOST_JOIN(x, L), BOOST_STRINGIZE(x), mpl::bool_<D <= std::numeric_limits<long double>::digits>(), boost::is_convertible<const char*, T>())
+//
+// For constants too huge for any conceivable long double (and which generate compiler errors if we try and declare them as such):
+//
+#define BOOST_MATH_HUGE_CONSTANT(T, D, x)\
+   boost::math::tools::make_big_value<T>(0.0L, BOOST_STRINGIZE(x), mpl::bool_<false>(), boost::is_convertible<const char*, T>())
 
 }}} // namespaces
 
