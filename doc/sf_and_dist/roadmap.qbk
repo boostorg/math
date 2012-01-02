@@ -4,10 +4,17 @@
 
 * Deprecated wrongly named `twothirds` math constant in favour of `two_thirds` (with underscore separator).
 (issue [@https://svn.boost.org/trac/boost/ticket/6199 #6199]).
+* Refactored test data and some special function code to improve support for arbitary precision and/or expression-template-enabled types.
+* Added new faster zeta function evaluation method.
 
-Fixed issues
+Fixed issues:
 
 * Corrected CDF complement for Laplace distribution (issue [@https://svn.boost.org/trac/boost/ticket/6151 #6151]).
+* Corrected branch cuts on the complex inverse trig functions, to handle signed zeros (issue [@https://svn.boost.org/trac/boost/ticket/6171 #6171]).
+* Also fixed minor/cosmetic/configuration issues [@https://svn.boost.org/trac/boost/ticket/6120 #6120], [@https://svn.boost.org/trac/boost/ticket/6191 #6191],
+  [@https://svn.boost.org/trac/boost/ticket/5982 #5982], [@https://svn.boost.org/trac/boost/ticket/6130 #6130],
+  [@https://svn.boost.org/trac/boost/ticket/6234 #6234], [@https://svn.boost.org/trac/boost/ticket/6307 #6307],
+  [@https://svn.boost.org/trac/boost/ticket/6192 #6192].
 
 [h4 Boost-1.48]
 
