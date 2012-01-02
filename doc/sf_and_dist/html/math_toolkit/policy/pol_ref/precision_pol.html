@@ -60,7 +60,6 @@
           to approximately 5 decimal digits using:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
@@ -76,7 +75,6 @@
           Or again using helper function <code class="computeroutput"><span class="identifier">make_policy</span></code>:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">;</span>
@@ -92,7 +90,6 @@
           And for a quantile of a distribution to approximately 25-bit precision:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">;</span>
@@ -102,7 +99,7 @@
 <span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">bits</span> <span class="special">=</span> <span class="number">25</span><span class="special">;</span> <span class="comment">// approximate precision.</span>
 
 <span class="keyword">double</span> <span class="identifier">q</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span>
-      <span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">digits2</span><span class="special">&lt;</span><span class="identifier">bits</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;(),</span> 
+      <span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">digits2</span><span class="special">&lt;</span><span class="identifier">bits</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;(),</span>
       <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 5% quantile.</span>
 
 </pre>

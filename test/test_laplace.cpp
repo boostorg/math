@@ -45,8 +45,8 @@ Test 5: test_mmm_moments()
          excess kurtoris == 3
 
 Test 6: test_complemented()
-         Test the cdf an quantile complemented function
-         cdf(L,x) == cdf(complement(l,-x))
+         Test the cdf an quantile complemented function.
+         cdf(L,x) + cdf(complement(l,x)) == 1
          quantile(L,p) == quantile(complement(l,1-p))
 
 Test 7: test_bad_dist_parameters()
@@ -405,12 +405,12 @@ void test_mmm_moments()
 template <class RealType>
 void test_complemented()
 {
-   RealType tolerance(boost::math::tools::epsilon<RealType>() * 500); // 5 eps as a percentage
+   RealType tolerance(boost::math::tools::epsilon<RealType>() * 500); // 5 eps as a percentage.
 
-   const float xtest[7] = {  -2.0, -1.0, -0.5, 0.0, 0.5, 1.0, 2.0 };
-   const float ptest[7] = {  0.125, 0.25, 0.5, 0.75, 0.875 };
-   const float ltest[7] = {  -2.0, -1.0, -0.5, 0.0, 0.5, 1.0, 2.0 };
-   const float stest[3] = {  0.5, 1.0, 2.0 };
+   const float xtest[7] = {  -2.0, -1.0, -0.5, 0.0, 0.5, 1.0, 2.0 }; // x values.
+   const float ptest[7] = {  0.125, 0.25, 0.5, 0.75, 0.875 }; // probability values.
+   const float ltest[7] = {  -2.0, -1.0, -0.5, 0.0, 0.5, 1.0, 2.0 }; // locations.
+   const float stest[3] = {  0.5, 1.0, 2.0 }; // scales.
 
    for (int li=0; li<7; ++li)
       for (int si=0; si<3; ++si)
@@ -422,10 +422,13 @@ void test_complemented()
          {
             RealType x( static_cast<RealType>(xtest[xi]) );
 
+            // Check sum of cdf and complement = unity.
             BOOST_CHECK_CLOSE( 
-               cdf(complement(laplace_distribution<RealType>(l,s), -x)), 
-               cdf(laplace_distribution<RealType>(l,s), x),
+               cdf(complement(laplace_distribution<RealType>(l,s), x))
+                 + cdf(laplace_distribution<RealType>(l,s), x),
+               static_cast<RealType>(1),
                tolerance);
+
          }
 
          for (int pi=0; pi<5; ++pi)
@@ -537,42 +540,13 @@ BOOST_AUTO_TEST_CASE( extreme_function_arguments )
 
 Output:
 
-Microsoft Visual Studio 2008  Version 9.0.21022.8 RTM
-
-Debug Multi-threaded Debug (/MTd)
-
-Running 8 test cases...
-
-*** No errors detected
-Detected memory leaks!
-Dumping objects ->
-{286} normal block at 0x001E92D8, 7 bytes long.
- Data: <double > 64 6F 75 62 6C 65 00
-{285} normal block at 0x001E92A0, 8 bytes long.
- Data: <    0   > D8 92 1E 00 30 92 1E 00
-{230} normal block at 0x001E9268, 6 bytes long.
- Data: <float > 66 6C 6F 61 74 00
-{229} normal block at 0x001E9230, 8 bytes long.
- Data: <h       > 68 92 1E 00 00 00 00 00
-Object dump complete.
-Press any key to continue . . .
-
-// Why does debug cause memory leak?  Problem in Boost.Test - no - MS debug VC9 runtime
-// http://www.nabble.com/Re%3A--Boost.Test--Problem-with-vc9-runtime-library-p17864724.html
-// so we can ignore this.
-
-
-Release Multi-threaded (/MT)
-
-Compiling...
-test_laplace.cpp
-Linking...
-Generating code
-Finished generating code
-Embedding manifest...
-Autorun "j:\Cpp\MathToolkit\test\Math_test\release\test_laplace.exe"
-Running 8 test cases...
-*** No errors detected
+------ Rebuild All started: Project: test_laplace, Configuration: Debug Win32 ------
+  test_laplace.cpp
+  test_laplace.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Debug\test_laplace.exe
+  Running 8 test cases...
+  
+  *** No errors detected
+========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
 
 
 */

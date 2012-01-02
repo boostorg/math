@@ -27,16 +27,15 @@
 <a name="math_toolkit.special.inv_hyper.asinh"></a><a class="link" href="asinh.html" title="asinh">asinh</a>
 </h4></div></div></div>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">asinh</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> 
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">asinh</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">);</span>
 
-<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span> 
+<span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">asinh</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Policies">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
@@ -56,16 +55,16 @@
           optional and can be used to control the behaviour of the function: how
           it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
-<a name="math_toolkit.special.inv_hyper.asinh.accuracy"></a><h5>
-<a name="math_toolkit.special.inv_hyper.asinh.accuracy-heading"></a>
-          <a class="link" href="asinh.html#math_toolkit.special.inv_hyper.asinh.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.special.inv_hyper.asinh.h0"></a>
+          <span><a name="math_toolkit.special.inv_hyper.asinh.accuracy"></a></span><a class="link" href="asinh.html#math_toolkit.special.inv_hyper.asinh.accuracy">Accuracy</a>
         </h5>
 <p>
           Generally accuracy is to within 1 or 2 epsilon across all supported platforms.
         </p>
-<a name="math_toolkit.special.inv_hyper.asinh.testing"></a><h5>
-<a name="math_toolkit.special.inv_hyper.asinh.testing-heading"></a>
-          <a class="link" href="asinh.html#math_toolkit.special.inv_hyper.asinh.testing">Testing</a>
+<h5>
+<a name="math_toolkit.special.inv_hyper.asinh.h1"></a>
+          <span><a name="math_toolkit.special.inv_hyper.asinh.testing"></a></span><a class="link" href="asinh.html#math_toolkit.special.inv_hyper.asinh.testing">Testing</a>
         </h5>
 <p>
           This function is tested using a combination of random test values designed
@@ -79,9 +78,9 @@
           along with a selection of sanity check values computed using functions.wolfram.com
           to at least 50 decimal digits.
         </p>
-<a name="math_toolkit.special.inv_hyper.asinh.implementation"></a><h5>
-<a name="math_toolkit.special.inv_hyper.asinh.implementation-heading"></a>
-          <a class="link" href="asinh.html#math_toolkit.special.inv_hyper.asinh.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.special.inv_hyper.asinh.h2"></a>
+          <span><a name="math_toolkit.special.inv_hyper.asinh.implementation"></a></span><a class="link" href="asinh.html#math_toolkit.special.inv_hyper.asinh.implementation">Implementation</a>
         </h5>
 <p>
           For sufficiently large x we can use the <a href="http://functions.wolfram.com/ElementaryFunctions/ArcSinh/06/01/06/01/0001/" target="_top">approximation</a>:

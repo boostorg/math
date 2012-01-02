@@ -27,27 +27,26 @@
 <a name="math_toolkit.utils.next_float.nextafter"></a><a class="link" href="nextafter.html" title="Finding the Next Representable Value in a Specific Direction (nextafter)">Finding the
         Next Representable Value in a Specific Direction (nextafter)</a>
 </h4></div></div></div>
-<a name="math_toolkit.utils.next_float.nextafter.synopsis"></a><h5>
-<a name="math_toolkit.utils.next_float.nextafter.synopsis-heading"></a>
-          <a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.synopsis">Synopsis</a>
+<h5>
+<a name="math_toolkit.utils.next_float.nextafter.h0"></a>
+          <span><a name="math_toolkit.utils.next_float.nextafter.synopsis"></a></span><a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.synopsis">Synopsis</a>
         </h5>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">next</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <p>
         </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
- 
+
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">FPT</span><span class="special">&gt;</span>
 <span class="identifier">FPT</span> <span class="identifier">nextafter</span><span class="special">(</span><span class="identifier">FPT</span> <span class="identifier">val</span><span class="special">,</span> <span class="identifier">FPT</span> <span class="identifier">direction</span><span class="special">);</span>
- 
+
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
-<a name="math_toolkit.utils.next_float.nextafter.description___nextafter"></a><h5>
-<a name="math_toolkit.utils.next_float.nextafter.description___nextafter-heading"></a>
-          <a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.description___nextafter">Description
+<h5>
+<a name="math_toolkit.utils.next_float.nextafter.h1"></a>
+          <span><a name="math_toolkit.utils.next_float.nextafter.description___nextafter"></a></span><a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.description___nextafter">Description
           - nextafter</a>
         </h5>
 <p>
@@ -75,14 +74,13 @@
           If there is no such value in the direction of <span class="emphasis"><em>y</em></span> then
           returns an <a class="link" href="../../main_overview/error_handling.html#overflow_error">overflow_error</a>.
         </p>
-<a name="math_toolkit.utils.next_float.nextafter.examples___nextafter"></a><h5>
-<a name="math_toolkit.utils.next_float.nextafter.examples___nextafter-heading"></a>
-          <a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.examples___nextafter">Examples
+<h5>
+<a name="math_toolkit.utils.next_float.nextafter.h2"></a>
+          <span><a name="math_toolkit.utils.next_float.nextafter.examples___nextafter"></a></span><a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.examples___nextafter">Examples
           - nextafter</a>
         </h5>
 <p>
           The two representations using a 32-bit float either side of unity are:
-          
 </p>
 <pre class="programlisting"><span class="identifier">The</span> <span class="identifier">nearest</span> <span class="special">(</span><span class="identifier">exact</span><span class="special">)</span> <span class="identifier">representation</span> <span class="identifier">of</span> <span class="number">1.F</span> <span class="identifier">is</span>      <span class="number">1.00000000</span>
 <span class="identifier">nextafter</span><span class="special">(</span><span class="number">1.F</span><span class="special">,</span> <span class="number">999</span><span class="special">)</span> <span class="identifier">is</span>                            <span class="number">1.00000012</span>

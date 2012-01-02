@@ -54,16 +54,15 @@
           The values that <code class="computeroutput"><span class="identifier">discrete_quantile</span></code>
           can take have the following meanings:
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.real"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.real-heading"></a>
-          <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.real">real</a>
+<h6>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.h0"></a>
+          <span><a name="math_toolkit.policy.pol_ref.discrete_quant_ref.real"></a></span><a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.real">real</a>
         </h6>
 <p>
           Ignores the discreteness of the distribution, and returns a real-valued
           result. For example:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial_distribution</span><span class="special">;</span>
@@ -71,10 +70,10 @@
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span>
-      <span class="keyword">double</span><span class="special">,</span> 
-      <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">real</span><span class="special">&gt;</span> <span class="special">&gt;</span> 
+      <span class="keyword">double</span><span class="special">,</span>
+      <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">real</span><span class="special">&gt;</span> <span class="special">&gt;</span>
    <span class="special">&gt;</span> <span class="identifier">dist_type</span><span class="special">;</span>
-   
+
 <span class="comment">// Lower 5% quantile:</span>
 <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span>
 <span class="comment">// Upper 95% quantile:</span>
@@ -88,9 +87,9 @@
           <span class="number">27.3898</span></code> and <code class="computeroutput"><span class="identifier">y</span>
           <span class="special">=</span> <span class="number">68.1584</span></code>.
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards-heading"></a>
-          <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards">integer_round_outwards</a>
+<h6>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.h1"></a>
+          <span><a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards"></a></span><a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_outwards">integer_round_outwards</a>
         </h6>
 <p>
           This is the default policy: an integer value is returned so that:
@@ -111,7 +110,6 @@
           the requested coverage. For example:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial</span><span class="special">;</span>
@@ -142,9 +140,9 @@
           region overall</em></span>, and also <span class="emphasis"><em>no more than 5% coverage
           in each tail</em></span>.
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards-heading"></a>
-          <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards">integer_round_inwards</a>
+<h6>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.h2"></a>
+          <span><a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards"></a></span><a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_inwards">integer_round_inwards</a>
         </h6>
 <p>
           This is the opposite of <span class="emphasis"><em>integer_round_outwards</em></span>: an
@@ -164,7 +162,6 @@
           For example:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial_distribution</span><span class="special">;</span>
@@ -172,10 +169,10 @@
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span>
-      <span class="keyword">double</span><span class="special">,</span> 
-      <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_inwards</span><span class="special">&gt;</span> <span class="special">&gt;</span> 
+      <span class="keyword">double</span><span class="special">,</span>
+      <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_inwards</span><span class="special">&gt;</span> <span class="special">&gt;</span>
    <span class="special">&gt;</span> <span class="identifier">dist_type</span><span class="special">;</span>
-   
+
 <span class="comment">// Lower quantile rounded up:</span>
 <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 28 rounded up from 27.3898</span>
 <span class="comment">// Upper quantile rounded down:</span>
@@ -201,25 +198,25 @@
           central region overall</em></span>, and also <span class="emphasis"><em>at least 5% coverage
           in each tail</em></span>.
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down-heading"></a>
-          <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down">integer_round_down</a>
+<h6>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.h3"></a>
+          <span><a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down"></a></span><a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_down">integer_round_down</a>
         </h6>
 <p>
           Always rounds down to an integer value, no matter whether it's an upper
           or a lower quantile.
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up-heading"></a>
-          <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up">integer_round_up</a>
+<h6>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.h4"></a>
+          <span><a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up"></a></span><a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_up">integer_round_up</a>
         </h6>
 <p>
           Always rounds up to an integer value, no matter whether it's an upper or
           a lower quantile.
         </p>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest"></a><h6>
-<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest-heading"></a>
-          <a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest">integer_round_nearest</a>
+<h6>
+<a name="math_toolkit.policy.pol_ref.discrete_quant_ref.h5"></a>
+          <span><a name="math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest"></a></span><a class="link" href="discrete_quant_ref.html#math_toolkit.policy.pol_ref.discrete_quant_ref.integer_round_nearest">integer_round_nearest</a>
         </h6>
 <p>
           Always rounds to the nearest integer value, no matter whether it's an upper
@@ -232,7 +229,6 @@
           For example:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">negative_binomial</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">negative_binomial_distribution</span><span class="special">;</span>
@@ -240,10 +236,10 @@
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span>
-      <span class="keyword">double</span><span class="special">,</span> 
-      <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_nearest</span><span class="special">&gt;</span> <span class="special">&gt;</span> 
+      <span class="keyword">double</span><span class="special">,</span>
+      <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">discrete_quantile</span><span class="special">&lt;</span><span class="identifier">integer_round_nearest</span><span class="special">&gt;</span> <span class="special">&gt;</span>
    <span class="special">&gt;</span> <span class="identifier">dist_type</span><span class="special">;</span>
-   
+
 <span class="comment">// Lower quantile rounded (down) to nearest:</span>
 <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 27</span>
 <span class="comment">// Upper quantile rounded (down) to nearest:</span>

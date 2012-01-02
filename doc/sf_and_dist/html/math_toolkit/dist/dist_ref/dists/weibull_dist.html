@@ -28,14 +28,13 @@
           Distribution</a>
 </h5></div></div></div>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">weibull</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
-   
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">weibull_distribution</span><span class="special">;</span>
 
@@ -99,9 +98,9 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/weibull_pdf2.png" align="middle"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.related_distributions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.related_distributions-heading"></a>
-            <a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.related_distributions">Related
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.h0"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.weibull_dist.related_distributions"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.related_distributions">Related
             distributions</a>
           </h5>
 <p>
@@ -113,9 +112,9 @@
             distributions, of which the Weibull is but one, is discussed by <a href="http://www.worldscibooks.com/mathematics/p191.html" target="_top">Extreme Value
             Distributions, Theory and Applications Samuel Kotz &amp; Saralees Nadarajah</a>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.member_functions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.member_functions-heading"></a>
-            <a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.member_functions">Member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.h1"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.weibull_dist.member_functions"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.member_functions">Member
             Functions</a>
           </h5>
 <pre class="programlisting"><span class="identifier">weibull_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">shape</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">scale</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
@@ -139,9 +138,9 @@
 <p>
             Returns the <span class="emphasis"><em>scale</em></span> parameter of this distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.non_member_accessors"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.non_member_accessors-heading"></a>
-            <a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.non_member_accessors">Non-member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.h2"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.weibull_dist.non_member_accessors"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
@@ -159,9 +158,9 @@
 <p>
             The domain of the random variable is [0, &#8734;].
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.accuracy"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.accuracy-heading"></a>
-            <a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.h3"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.weibull_dist.accuracy"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             The Weibull distribution is implemented in terms of the standard library
@@ -169,9 +168,9 @@
             and <a class="link" href="../../../special/powers/log1p.html" title="log1p">log1p</a> and
             as such should have very low error rates.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.implementation"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.implementation-heading"></a>
-            <a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.h4"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.weibull_dist.implementation"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table &#945; &#160; is the shape parameter of the distribution, &#946; &#160; is
@@ -336,9 +335,9 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.references"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.references-heading"></a>
-            <a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.references">References</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.weibull_dist.h5"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.weibull_dist.references"></a></span><a class="link" href="weibull_dist.html#math_toolkit.dist.dist_ref.dists.weibull_dist.references">References</a>
           </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">

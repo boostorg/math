@@ -28,16 +28,15 @@
           Distribution</a>
 </h5></div></div></div>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">uniform</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
- <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
+ <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
            <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
  <span class="keyword">class</span> <span class="identifier">uniform_distribution</span><span class="special">;</span>
-   
+
  <span class="keyword">typedef</span> <span class="identifier">uniform_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">uniform</span><span class="special">;</span>
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a><span class="special">&gt;</span>
@@ -116,9 +115,9 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/uniform_cdf.png" align="middle"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.member_functions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.member_functions-heading"></a>
-            <a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.member_functions">Member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.h0"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.uniform_dist.member_functions"></a></span><a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.member_functions">Member
             Functions</a>
           </h5>
 <pre class="programlisting"><span class="identifier">uniform_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">lower</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">upper</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
@@ -143,9 +142,9 @@
 <p>
             Returns the <span class="emphasis"><em>upper</em></span> parameter of this distribution.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.non_member_accessors"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.non_member_accessors-heading"></a>
-            <a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.non_member_accessors">Non-member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.h1"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.uniform_dist.non_member_accessors"></a></span><a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
@@ -164,17 +163,17 @@
             The domain of the random variable is any finite value, but the supported
             range is only <span class="emphasis"><em>lower</em></span> &lt;= x &lt;= <span class="emphasis"><em>upper</em></span>.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.accuracy"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.accuracy-heading"></a>
-            <a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.h2"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.uniform_dist.accuracy"></a></span><a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             The uniform distribution is implemented with simple arithmetic operators
             and so should have errors within an epsilon or two.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.implementation"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.implementation-heading"></a>
-            <a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.h3"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.uniform_dist.implementation"></a></span><a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table a is the <span class="emphasis"><em>lower</em></span> parameter
@@ -336,9 +335,9 @@
 </tr>
 </tbody>
 </table></div>
-<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.references"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.references-heading"></a>
-            <a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.references">References</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.uniform_dist.h4"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.uniform_dist.references"></a></span><a class="link" href="uniform_dist.html#math_toolkit.dist.dist_ref.dists.uniform_dist.references">References</a>
           </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">

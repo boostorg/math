@@ -48,7 +48,6 @@
             C/C++, Preprocessor, Preprocessor definitions like:
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="identifier">BOOST_MATH_ASSERT_UNDEFINED_POLICY</span><span class="special">=</span><span class="number">0</span>
 <span class="identifier">BOOST_MATH_OVERFLOW_ERROR_POLICY</span><span class="special">=</span><span class="identifier">errno_on_error</span></pre>
@@ -59,7 +58,6 @@
             that may mean that the equivalent definitions in source code:
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_ASSERT_UNDEFINED_POLICY</span> <span class="keyword">false</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_OVERFLOW_ERROR_POLICY</span> <span class="identifier">errno_on_error</span></pre>
@@ -72,7 +70,6 @@
             The compiler command line shows:
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="special">/</span><span class="identifier">D</span> <span class="string">"BOOST_MATH_ASSERT_UNDEFINED_POLICY=0"</span>
 <span class="special">/</span><span class="identifier">D</span> <span class="string">"BOOST_MATH_OVERFLOW_ERROR_POLICY=errno_on_error"</span></pre>
@@ -164,7 +161,6 @@
           We'll begin our sample program with the needed includes:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="comment">// Boost</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -188,7 +184,6 @@
           handle either an exception or a NaN:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>

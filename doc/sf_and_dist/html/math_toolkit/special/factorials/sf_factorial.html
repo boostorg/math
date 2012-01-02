@@ -26,12 +26,11 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.factorials.sf_factorial"></a><a class="link" href="sf_factorial.html" title="Factorial">Factorial</a>
 </h4></div></div></div>
-<a name="math_toolkit.special.factorials.sf_factorial.synopsis"></a><h5>
-<a name="math_toolkit.special.factorials.sf_factorial.synopsis-heading"></a>
-          <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.synopsis">Synopsis</a>
+<h5>
+<a name="math_toolkit.special.factorials.sf_factorial.h0"></a>
+          <span><a name="math_toolkit.special.factorials.sf_factorial.synopsis"></a></span><a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.synopsis">Synopsis</a>
         </h5>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">factorials</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -53,9 +52,9 @@
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
-<a name="math_toolkit.special.factorials.sf_factorial.description"></a><h5>
-<a name="math_toolkit.special.factorials.sf_factorial.description-heading"></a>
-          <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.description">Description</a>
+<h5>
+<a name="math_toolkit.special.factorials.sf_factorial.h1"></a>
+          <span><a name="math_toolkit.special.factorials.sf_factorial.description"></a></span><a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.description">Description</a>
         </h5>
 <div class="important"><table border="0" summary="Important">
 <tr>
@@ -93,7 +92,6 @@
             and comment just after the will be:
           </p>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">(!</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_integral</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">);</span>
 <span class="comment">// factorial&lt;unsigned int&gt;(n) is not implemented</span>
@@ -156,27 +154,27 @@
           used where integral constant expressions are required: for example to define
           the size of further tables that depend on the factorials.
         </p>
-<a name="math_toolkit.special.factorials.sf_factorial.accuracy"></a><h5>
-<a name="math_toolkit.special.factorials.sf_factorial.accuracy-heading"></a>
-          <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.special.factorials.sf_factorial.h2"></a>
+          <span><a name="math_toolkit.special.factorials.sf_factorial.accuracy"></a></span><a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.accuracy">Accuracy</a>
         </h5>
 <p>
           For arguments smaller than <code class="computeroutput"><span class="identifier">max_factorial</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">value</span></code>
           the result should be correctly rounded. For larger arguments the accuracy
           will be the same as for <a class="link" href="../sf_gamma/tgamma.html" title="Gamma">tgamma</a>.
         </p>
-<a name="math_toolkit.special.factorials.sf_factorial.testing"></a><h5>
-<a name="math_toolkit.special.factorials.sf_factorial.testing-heading"></a>
-          <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.testing">Testing</a>
+<h5>
+<a name="math_toolkit.special.factorials.sf_factorial.h3"></a>
+          <span><a name="math_toolkit.special.factorials.sf_factorial.testing"></a></span><a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.testing">Testing</a>
         </h5>
 <p>
           Basic sanity checks and spot values to verify the data tables: the main
           tests for the <a class="link" href="../sf_gamma/tgamma.html" title="Gamma">tgamma</a>
           function handle those cases already.
         </p>
-<a name="math_toolkit.special.factorials.sf_factorial.implementation"></a><h5>
-<a name="math_toolkit.special.factorials.sf_factorial.implementation-heading"></a>
-          <a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.special.factorials.sf_factorial.h4"></a>
+          <span><a name="math_toolkit.special.factorials.sf_factorial.implementation"></a></span><a class="link" href="sf_factorial.html#math_toolkit.special.factorials.sf_factorial.implementation">Implementation</a>
         </h5>
 <p>
           The factorial function is table driven for small arguments, and is implemented

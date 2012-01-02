@@ -26,12 +26,11 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.zetas.zeta"></a><a class="link" href="zeta.html" title="Riemann Zeta Function">Riemann Zeta Function</a>
 </h4></div></div></div>
-<a name="math_toolkit.special.zetas.zeta.synopsis"></a><h5>
-<a name="math_toolkit.special.zetas.zeta.synopsis-heading"></a>
-          <a class="link" href="zeta.html#math_toolkit.special.zetas.zeta.synopsis">Synopsis</a>
+<h5>
+<a name="math_toolkit.special.zetas.zeta.h0"></a>
+          <span><a name="math_toolkit.special.zetas.zeta.synopsis"></a></span><a class="link" href="zeta.html#math_toolkit.special.zetas.zeta.synopsis">Synopsis</a>
         </h5>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">zeta</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -56,9 +55,9 @@
           optional and can be used to control the behaviour of the function: how
           it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
-<a name="math_toolkit.special.zetas.zeta.description"></a><h5>
-<a name="math_toolkit.special.zetas.zeta.description-heading"></a>
-          <a class="link" href="zeta.html#math_toolkit.special.zetas.zeta.description">Description</a>
+<h5>
+<a name="math_toolkit.special.zetas.zeta.h1"></a>
+          <span><a name="math_toolkit.special.zetas.zeta.description"></a></span><a class="link" href="zeta.html#math_toolkit.special.zetas.zeta.description">Description</a>
         </h5>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">zeta</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">z</span><span class="special">);</span>
@@ -79,9 +78,9 @@
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/zeta2.png" align="middle"></span>
         </p>
-<a name="math_toolkit.special.zetas.zeta.accuracy"></a><h5>
-<a name="math_toolkit.special.zetas.zeta.accuracy-heading"></a>
-          <a class="link" href="zeta.html#math_toolkit.special.zetas.zeta.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.special.zetas.zeta.h2"></a>
+          <span><a name="math_toolkit.special.zetas.zeta.accuracy"></a></span><a class="link" href="zeta.html#math_toolkit.special.zetas.zeta.accuracy">Accuracy</a>
         </h5>
 <p>
           The following table shows the peak errors (in units of epsilon) found on
@@ -228,9 +227,9 @@
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><a name="math_toolkit.special.zetas.zeta.testing"></a><h5>
-<a name="math_toolkit.special.zetas.zeta.testing-heading"></a>
-          <a class="link" href="zeta.html#math_toolkit.special.zetas.zeta.testing">Testing</a>
+<br class="table-break"><h5>
+<a name="math_toolkit.special.zetas.zeta.h3"></a>
+          <span><a name="math_toolkit.special.zetas.zeta.testing"></a></span><a class="link" href="zeta.html#math_toolkit.special.zetas.zeta.testing">Testing</a>
         </h5>
 <p>
           The tests for these functions come in two parts: basic sanity checks use
@@ -243,9 +242,9 @@
           "known good" implementations also provides an additional sanity
           check.
         </p>
-<a name="math_toolkit.special.zetas.zeta.implementation"></a><h5>
-<a name="math_toolkit.special.zetas.zeta.implementation-heading"></a>
-          <a class="link" href="zeta.html#math_toolkit.special.zetas.zeta.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.special.zetas.zeta.h4"></a>
+          <span><a name="math_toolkit.special.zetas.zeta.implementation"></a></span><a class="link" href="zeta.html#math_toolkit.special.zetas.zeta.implementation">Implementation</a>
         </h5>
 <p>
           All versions of these functions first use the usual reflection formulas
@@ -258,20 +257,16 @@
           The generic versions of these functions are implemented using the series:
         </p>
 <p>
-          <span class="inlinemediaobject"><img src="../../../../equations/zeta1.png"></span>
+          <span class="inlinemediaobject"><img src="../../../../equations/zeta6.png"></span>
         </p>
 <p>
-          for large z, and using the globally convergent series:
+          except when the argument is close to 1, where the globally convergent series:
         </p>
 <p>
           <span class="inlinemediaobject"><img src="../../../../equations/zeta2.png"></span>
         </p>
 <p>
-          In all other cases. The crossover point for these is chosen so that the
-          first series is used only if it will converge reasonably quickly, the problem
-          with this series is that convergence become slower the more terms you take,
-          so we really do have to be certain of convergence before using this series,
-          even though the alternative is often quite slow.
+          Is used.
         </p>
 <p>
           When the significand (mantissa) size is recognised (currently for 53, 64

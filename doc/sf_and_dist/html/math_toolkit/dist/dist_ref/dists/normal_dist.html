@@ -28,14 +28,13 @@
           (Gaussian) Distribution</a>
 </h5></div></div></div>
 <p>
-            
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
           </p>
-<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> 
-   
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span> 
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
           <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Policies">Policy</a>   <span class="special">=</span> <a class="link" href="../../../policy/pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">normal_distribution</span><span class="special">;</span>
 
@@ -78,9 +77,9 @@
 <p>
             <span class="inlinemediaobject"><img src="../../../../../graphs/normal_pdf.png" align="middle"></span>
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.normal_dist.member_functions"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.normal_dist.member_functions-heading"></a>
-            <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.member_functions">Member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.normal_dist.h0"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.normal_dist.member_functions"></a></span><a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.member_functions">Member
             Functions</a>
           </h5>
 <pre class="programlisting"><span class="identifier">normal_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">sd</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
@@ -94,7 +93,7 @@
             is called.
           </p>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">mean</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
-<span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>   
+<span class="identifier">RealType</span> <span class="identifier">location</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
 </pre>
 <p>
             both return the <span class="emphasis"><em>mean</em></span> of this distribution.
@@ -108,9 +107,9 @@
             distributions, allowing the functions find_location and find_scale to
             be used generically).
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.normal_dist.non_member_accessors"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.normal_dist.non_member_accessors-heading"></a>
-            <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.non_member_accessors">Non-member
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.normal_dist.h1"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.normal_dist.non_member_accessors"></a></span><a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
@@ -130,17 +129,17 @@
             the pdf of +&#8734; and -&#8734; = 0 is also supported, and cdf at -&#8734; = 0, cdf at +&#8734; = 1,
             and complement cdf -&#8734; = 1 and +&#8734; = 0, if RealType permits.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.normal_dist.accuracy"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.normal_dist.accuracy-heading"></a>
-            <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.accuracy">Accuracy</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.normal_dist.h2"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.normal_dist.accuracy"></a></span><a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             The normal distribution is implemented in terms of the <a class="link" href="../../../special/sf_erf/error_function.html" title="Error Functions">error
             function</a>, and as such should have very low error rates.
           </p>
-<a name="math_toolkit.dist.dist_ref.dists.normal_dist.implementation"></a><h5>
-<a name="math_toolkit.dist.dist_ref.dists.normal_dist.implementation-heading"></a>
-            <a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.implementation">Implementation</a>
+<h5>
+<a name="math_toolkit.dist.dist_ref.dists.normal_dist.h3"></a>
+            <span><a name="math_toolkit.dist.dist_ref.dists.normal_dist.implementation"></a></span><a class="link" href="normal_dist.html#math_toolkit.dist.dist_ref.dists.normal_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table <span class="emphasis"><em>m</em></span> is the mean of the distribution,

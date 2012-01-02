@@ -19,8 +19,6 @@ local e_float_path = [ modules.peek : E_FLOAT_PATH ] ;
 
 project  
     : requirements 
-      <toolset>gcc:<cxxflags>-Wno-missing-braces
-      <toolset>darwin:<cxxflags>-Wno-missing-braces
       <toolset>acc:<cxxflags>+W2068,2461,2236,4070,4069
       <toolset>intel-win:<cxxflags>-nologo 
       <toolset>intel-win:<linkflags>-nologo 
@@ -59,6 +57,9 @@ project
     ;
 
 cpp-pch pch : pch.hpp : <use>../../test/build//boost_test_exec_monitor ;
+
+lib test_instances : float_test_instances.cpp double_test_instances.cpp ldouble_test_instances.cpp real_concept_test_instances.cpp pch 
+                   : <link>static ;
 
 run hypot_test.cpp pch ../../test/build//boost_test_exec_monitor ;
 run pow_test.cpp ../../test/build//boost_test_exec_monitor ;
@@ -626,7 +627,7 @@ run test_toms748_solve.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_triangular.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_uniform.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_weibull.cpp ../../test/build//boost_test_exec_monitor ;
-run test_zeta.cpp pch ../../test/build//boost_test_exec_monitor ;
+run test_zeta.cpp test_instances ../../test/build//boost_test_exec_monitor ;
 
 run test_policy.cpp ../../test/build//boost_test_exec_monitor ;
 run test_policy_2.cpp ../../test/build//boost_test_exec_monitor ;

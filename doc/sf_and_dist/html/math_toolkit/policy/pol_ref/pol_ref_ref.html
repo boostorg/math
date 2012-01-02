@@ -32,7 +32,6 @@
           class is just a rag-bag compile-time container for a collection of policies:
         </p>
 <p>
-          
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">policies</span><span class="special">/</span><span class="identifier">policy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <p>
@@ -41,8 +40,8 @@
 <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 <span class="keyword">namespace</span> <span class="identifier">policies</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A1</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span> 
-          <span class="keyword">class</span> <span class="identifier">A2</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span> 
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">A1</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A2</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A3</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A4</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A5</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
@@ -75,9 +74,9 @@
 <span class="keyword">template</span> <span class="special">&lt;...</span><span class="identifier">argument</span> <span class="identifier">list</span><span class="special">...&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">normalise</span><span class="special">&lt;</span><span class="identifier">policy</span><span class="special">&lt;&gt;,</span> <span class="identifier">A1</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">make_policy</span><span class="special">(...</span><span class="identifier">argument</span> <span class="identifier">list</span><span class="special">..);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">,</span> 
-          <span class="keyword">class</span> <span class="identifier">A1</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span> 
-          <span class="keyword">class</span> <span class="identifier">A2</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span> 
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A1</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A2</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A3</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A4</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A5</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
@@ -207,9 +206,9 @@
           <code class="computeroutput"><span class="identifier">make_policy</span></code> is a helper
           function that converts a list of policies into a normalised <code class="computeroutput"><span class="identifier">policy</span></code> class.
         </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">,</span> 
-          <span class="keyword">class</span> <span class="identifier">A1</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span> 
-          <span class="keyword">class</span> <span class="identifier">A2</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span> 
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A1</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
+          <span class="keyword">class</span> <span class="identifier">A2</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A3</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A4</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>
           <span class="keyword">class</span> <span class="identifier">A5</span> <span class="special">=</span> <span class="identifier">default_policy</span><span class="special">,</span>

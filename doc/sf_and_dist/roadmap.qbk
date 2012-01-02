@@ -1,5 +1,14 @@
 [template history[]
 
+[h4 Boost-1.49]
+
+* Deprecated wrongly named `twothirds` math constant in favour of `two_thirds` (with underscore separator).
+(issue [@https://svn.boost.org/trac/boost/ticket/6199 #6199]).
+
+Fixed issues
+
+* Corrected CDF complement for Laplace distribution (issue [@https://svn.boost.org/trac/boost/ticket/6151 #6151]).
+
 [h4 Boost-1.48]
 
 * Added new series evaluation methods to the cyclic Bessel I, J, K and Y functions.

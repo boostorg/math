@@ -287,6 +287,10 @@ void test_inverses(const T& data)
    }
 }
 
+#ifndef SC_
+#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#endif
+
 template <class T>
 void test_beta(T, const char* /* name */)
 {

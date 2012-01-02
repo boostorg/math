@@ -67,7 +67,7 @@
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">;</span>
 
 <span class="comment">// This will not compile, cauchy has no mean!</span>
-<span class="keyword">double</span> <span class="identifier">m1</span> <span class="special">=</span> <span class="identifier">mean</span><span class="special">(</span><span class="identifier">cauchy</span><span class="special">());</span> 
+<span class="keyword">double</span> <span class="identifier">m1</span> <span class="special">=</span> <span class="identifier">mean</span><span class="special">(</span><span class="identifier">cauchy</span><span class="special">());</span>
 
 <span class="comment">// This will compile, but raises a domain error!</span>
 <span class="keyword">double</span> <span class="identifier">m2</span> <span class="special">=</span> <span class="identifier">mean</span><span class="special">(</span><span class="identifier">cauchy_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">assert_undefined</span><span class="special">&lt;</span><span class="keyword">false</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;());</span>
