@@ -3,12 +3,12 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <pch.hpp>
+#include <pch_light.hpp>
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <boost/math/special_functions/hypot.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 
 #include <cmath>
 

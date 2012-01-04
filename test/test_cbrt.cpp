@@ -9,7 +9,7 @@
 #  pragma warning (disable : 4224)
 #endif
 
-#include <pch.hpp> // include /libs/math/src/
+#include <pch_light.hpp> // include /libs/math/src/
 #include "test_cbrt.hpp"
 
 //

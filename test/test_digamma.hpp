@@ -7,7 +7,7 @@
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <boost/math/special_functions/digamma.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
 
