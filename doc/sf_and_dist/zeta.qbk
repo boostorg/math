@@ -87,12 +87,6 @@ The generic versions of these functions are implemented using the series:
 
 [equation zeta6]
 
-except when the argument is close to 1, where the globally convergent series:
-
-[equation zeta2]
-
-Is used.
-
 When the significand (mantissa) size is recognised
 (currently for 53, 64 and 113-bit reals, plus single-precision 24-bit handled via promotion to double)
 then a series of rational approximations [jm_rationals] are used.
