@@ -17,13 +17,13 @@ namespace boost{ namespace math{ namespace detail{
 //
 // lgamma for small arguments:
 //
-template <class T, class Policy, class L>
-T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l */, const L&)
+template <class T, class Policy, class Lanczos>
+T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l */, const Lanczos&)
 {
    // This version uses rational approximations for small
    // values of z accurate enough for 64-bit mantissas
    // (80-bit long doubles), works well for 53-bit doubles as well.
-   // L is only used to select the Lanczos function.
+   // Lanczos is only used to select the Lanczos function.
 
    BOOST_MATH_STD_USING  // for ADL of std names
    T result = 0;
@@ -206,8 +206,8 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l *
    }
    return result;
 }
-template <class T, class Policy, class L>
-T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l */, const L&)
+template <class T, class Policy, class Lanczos>
+T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l */, const Lanczos&)
 {
    //
    // This version uses rational approximations for small
@@ -463,8 +463,8 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<113>&, const Policy& /* l 
    BOOST_MATH_INSTRUMENT_CODE(result);
    return result;
 }
-template <class T, class Policy, class L>
-T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<0>&, const Policy& pol, const L&)
+template <class T, class Policy, class Lanczos>
+T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<0>&, const Policy& pol, const Lanczos&)
 {
    //
    // No rational approximations are available because either
@@ -482,28 +482,28 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<0>&, const Policy& pol, co
    else if(z < 0.5)
    {
       // taking the log of tgamma reduces the error, no danger of overflow here:
-      result = log(gamma_imp(z, pol, L()));
+      result = log(gamma_imp(z, pol, Lanczos()));
    }
    else if(z >= 3)
    {
       // taking the log of tgamma reduces the error, no danger of overflow here:
-      result = log(gamma_imp(z, pol, L()));
+      result = log(gamma_imp(z, pol, Lanczos()));
    }
    else if(z >= 1.5)
    {
       // special case near 2:
       T dz = zm2;
-      result = dz * log((z + L::g() - T(0.5)) / boost::math::constants::e<T>());
-      result += boost::math::log1p(dz / (L::g() + T(1.5)), pol) * T(1.5);
-      result += boost::math::log1p(L::lanczos_sum_near_2(dz), pol);
+      result = dz * log((z + Lanczos::g() - T(0.5)) / boost::math::constants::e<T>());
+      result += boost::math::log1p(dz / (Lanczos::g() + T(1.5)), pol) * T(1.5);
+      result += boost::math::log1p(Lanczos::lanczos_sum_near_2(dz), pol);
    }
    else
    {
       // special case near 1:
       T dz = zm1;
-      result = dz * log((z + L::g() - T(0.5)) / boost::math::constants::e<T>());
-      result += boost::math::log1p(dz / (L::g() + T(0.5)), pol) / 2;
-      result += boost::math::log1p(L::lanczos_sum_near_1(dz), pol);
+      result = dz * log((z + Lanczos::g() - T(0.5)) / boost::math::constants::e<T>());
+      result += boost::math::log1p(dz / (Lanczos::g() + T(0.5)), pol) / 2;
+      result += boost::math::log1p(Lanczos::lanczos_sum_near_1(dz), pol);
    }
    return result;
 }

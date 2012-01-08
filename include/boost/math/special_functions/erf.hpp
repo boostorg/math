@@ -365,7 +365,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
    }
 
    return result;
-} // template <class T, class L>T erf_imp(T z, bool invert, const L& l, const mpl::int_<53>& t)
+} // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const mpl::int_<53>& t)
 
 
 template <class T, class Policy>
@@ -571,7 +571,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<64>& t)
    }
 
    return result;
-} // template <class T, class L>T erf_imp(T z, bool invert, const L& l, const mpl::int_<64>& t)
+} // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const mpl::int_<64>& t)
 
 
 template <class T, class Policy>
@@ -976,7 +976,7 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<113>& t)
    }
 
    return result;
-} // template <class T, class L>T erf_imp(T z, bool invert, const L& l, const mpl::int_<113>& t)
+} // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const mpl::int_<113>& t)
 
 } // namespace detail
 

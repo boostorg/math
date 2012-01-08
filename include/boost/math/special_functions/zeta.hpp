@@ -19,6 +19,12 @@
 
 namespace boost{ namespace math{ namespace detail{
 
+#if 0
+//
+// This code is commented out because we have a better more rapidly converging series
+// now.  Retained for future reference and in case the new code causes any issues down the line....
+//
+
 template <class T, class Policy>
 struct zeta_series_cache_size
 {
@@ -90,12 +96,6 @@ T zeta_series_imp(T s, T sc, const Policy&)
    return sum * 1 / -boost::math::powm1(T(2), sc);
 }
 
-#if 0
-//
-// This code is commented out because we have a better more rapidly converging series
-// now.  Retained for future reference and in case the new code causes any issues down the line....
-//
-
 //
 // Classical p-series:
 //
@@ -158,7 +158,7 @@ T zeta_polynomial_series(T s, T sc, Policy const &)
       ej_term /= j - n + 1;
       ej_sum += ej_term;
    }
-   return -sum / (two_n * (1 - pow(T(2), sc)));
+   return -sum / (two_n * (-powm1(T(2), sc)));
 }
 
 template <class T, class Policy>
@@ -166,10 +166,7 @@ T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<0>&)
 {
    BOOST_MATH_STD_USING
    T result;
-   if(fabs(sc) > 0.01f)
-      result = zeta_polynomial_series(s, sc, pol); 
-   else
-      result = detail::zeta_series_imp(s, sc, pol);
+   result = zeta_polynomial_series(s, sc, pol); 
 #if 0
    // Old code archived for future reference:
 

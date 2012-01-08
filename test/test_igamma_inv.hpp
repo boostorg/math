@@ -5,7 +5,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
