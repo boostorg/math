@@ -11,6 +11,7 @@ Fixed issues:
 
 * Corrected CDF complement for Laplace distribution (issue [@https://svn.boost.org/trac/boost/ticket/6151 #6151]).
 * Corrected branch cuts on the complex inverse trig functions, to handle signed zeros (issue [@https://svn.boost.org/trac/boost/ticket/6171 #6171]).
+* Fixed bug in `bessel_yn` which caused incorrect overflow errors to be raised for negative ['n] (issue [@https://svn.boost.org/trac/boost/ticket/6367 #6367]).
 * Also fixed minor/cosmetic/configuration issues [@https://svn.boost.org/trac/boost/ticket/6120 #6120], [@https://svn.boost.org/trac/boost/ticket/6191 #6191],
   [@https://svn.boost.org/trac/boost/ticket/5982 #5982], [@https://svn.boost.org/trac/boost/ticket/6130 #6130],
   [@https://svn.boost.org/trac/boost/ticket/6234 #6234], [@https://svn.boost.org/trac/boost/ticket/6307 #6307],

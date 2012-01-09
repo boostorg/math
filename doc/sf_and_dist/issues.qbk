@@ -67,12 +67,12 @@ it's not clear how to solve this issue, or if it's ever likely
 to be an real problem in practice - especially as most other implementations
 don't support this domain either (Medium Priority).
 
-[h4 Inverse Hyperbolic Functions]
+[h4 Bessel Functions]
 
-* These functions are inherited from previous Boost versions,
-before __log1p became widely available.  Would they be better expressed
-in terms of this function?  This is probably only an issue
-for very high precision types (Low Priority).
+We should implement the Hankel H1 and H2 functions as linear combinations of Bessel functions.
+Requires refactoring the internals so we can reliably calculate pairs of Bessel functions at the same time.
+We may also be able to improve performance of the Bessel series evaluation by accelerating the alternating
+series.  This may also increase the scope of the series form.
 
 [h4 Jocobi elliptic functions]
 
