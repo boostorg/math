@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="../status.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../status.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="issues.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section math_toolkit_status_history1">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.status.history1"></a><a class="link" href="history1.html" title="History and What's New">History and What's New</a>
 </h3></div></div></div>
@@ -54,6 +54,11 @@
 <li class="listitem">
             Corrected branch cuts on the complex inverse trig functions, to handle
             signed zeros (issue <a href="https://svn.boost.org/trac/boost/ticket/6171" target="_top">#6171</a>).
+          </li>
+<li class="listitem">
+            Fixed bug in <code class="computeroutput"><span class="identifier">bessel_yn</span></code>
+            which caused incorrect overflow errors to be raised for negative <span class="emphasis"><em>n</em></span>
+            (issue <a href="https://svn.boost.org/trac/boost/ticket/6367" target="_top">#6367</a>).
           </li>
 <li class="listitem">
             Also fixed minor/cosmetic/configuration issues <a href="https://svn.boost.org/trac/boost/ticket/6120" target="_top">#6120</a>,
