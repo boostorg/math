@@ -37,6 +37,7 @@ using boost::math::negative_binomial_distribution;
 
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
+#include "table_type.hpp"
 
 #include <iostream>
 using std::cout;

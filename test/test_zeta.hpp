@@ -17,12 +17,13 @@
 
 #include "handle_test_result.hpp"
 #include "test_zeta_hooks.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <class T>
+template <class Real, class T>
 void do_test_zeta(const T& data, const char* type_name, const char* test_name)
 {
    //
@@ -30,7 +31,7 @@ void do_test_zeta(const T& data, const char* type_name, const char* test_name)
    //
    using namespace std;
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << test_name << " with type " << type_name << std::endl;
 
@@ -45,20 +46,20 @@ void do_test_zeta(const T& data, const char* type_name, const char* test_name)
    //
    // test zeta against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0),
-      extract_result(1));
+      bind_func<Real>(funcp, 0),
+      extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::zeta", test_name);
 #ifdef TEST_OTHER
    if(boost::is_floating_point<value_type>::value)
    {
       funcp = other::zeta;
 
-      result = boost::math::tools::test(
+      result = boost::math::tools::test_hetero<Real>(
          data,
-         bind_func(funcp, 0),
-         extract_result(1));
+         bind_func<Real>(funcp, 0),
+         extract_result<Real>(1));
       handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::zeta", test_name);
    }
 #endif
@@ -71,13 +72,13 @@ void test_zeta(T, const char* name)
    // The actual test data is rather verbose, so it's in a separate file
    //
 #include "zeta_data.ipp"
-   do_test_zeta(zeta_data, name, "Zeta: Random values greater than 1");
+   do_test_zeta<T>(zeta_data, name, "Zeta: Random values greater than 1");
 #include "zeta_neg_data.ipp"
-   do_test_zeta(zeta_neg_data, name, "Zeta: Random values less than 1");
+   do_test_zeta<T>(zeta_neg_data, name, "Zeta: Random values less than 1");
 #include "zeta_1_up_data.ipp"
-   do_test_zeta(zeta_1_up_data, name, "Zeta: Values close to and greater than 1");
+   do_test_zeta<T>(zeta_1_up_data, name, "Zeta: Values close to and greater than 1");
 #include "zeta_1_below_data.ipp"
-   do_test_zeta(zeta_1_below_data, name, "Zeta: Values close to and less than 1");
+   do_test_zeta<T>(zeta_1_below_data, name, "Zeta: Values close to and less than 1");
 }
 
 extern "C" double zetac(double);

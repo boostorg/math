@@ -23,6 +23,7 @@
 #include <boost/array.hpp>
 #include "functor.hpp"
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #include <boost/math/tools/config.hpp>
 
@@ -61,15 +62,15 @@ void do_test_std_function(const A& data, const char* type_name, const char* func
    //
    result = boost::math::tools::test(
       data, 
-      bind_func(proc, 0), 
-      extract_result(1));
+      bind_func<value_type>(proc, 0), 
+      extract_result<value_type>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, function_name, test_name);
    if(inv_proc)
    {
       result = boost::math::tools::test(
          data, 
-         bind_func(inv_proc, 1), 
-         extract_result(0));
+         bind_func<value_type>(inv_proc, 1), 
+         extract_result<value_type>(0));
       handle_test_result(result, data[result.worst()], result.worst(), type_name, inv_function_name, test_name);
    }
 }

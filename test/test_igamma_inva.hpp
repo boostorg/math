@@ -18,11 +18,11 @@
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
-
+#include "table_type.hpp"
 #include "handle_test_result.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
 #define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
@@ -38,7 +38,7 @@
       }\
    }
 
-template <class T>
+template <class Real, class T>
 void do_test_gamma_2(const T& data, const char* type_name, const char* test_name)
 {
    //
@@ -46,7 +46,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    //
    using namespace std;
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << test_name << " with type " << type_name << std::endl;
 
@@ -73,50 +73,50 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       // information left in the value we're using as input to the inverse
       // to be able to get back to the original value.
       //
-      if(data[i][5] == 0)
-         BOOST_CHECK_EQUAL(boost::math::gamma_p_inva(data[i][1], data[i][5]), boost::math::tools::max_value<value_type>());
-      else if((1 - data[i][5] > 0.001) && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<value_type>()))
+      if(Real(data[i][5]) == 0)
+         BOOST_CHECK_EQUAL(boost::math::gamma_p_inva(Real(data[i][1]), Real(data[i][5])), boost::math::tools::max_value<value_type>());
+      else if((1 - Real(data[i][5]) > 0.001) && (fabs(Real(data[i][5])) > 2 * boost::math::tools::min_value<value_type>()))
       {
-         value_type inv = boost::math::gamma_p_inva(data[i][1], data[i][5]);
-         BOOST_CHECK_CLOSE_EX(data[i][0], inv, precision, i);
+         value_type inv = boost::math::gamma_p_inva(Real(data[i][1]), Real(data[i][5]));
+         BOOST_CHECK_CLOSE_EX(Real(data[i][0]), inv, precision, i);
       }
-      else if(1 == data[i][5])
-         BOOST_CHECK_EQUAL(boost::math::gamma_p_inva(data[i][1], data[i][5]), boost::math::tools::min_value<value_type>());
-      else if(data[i][5] > 2 * boost::math::tools::min_value<value_type>())
+      else if(1 == Real(data[i][5]))
+         BOOST_CHECK_EQUAL(boost::math::gamma_p_inva(Real(data[i][1]), Real(data[i][5])), boost::math::tools::min_value<value_type>());
+      else if(Real(data[i][5]) > 2 * boost::math::tools::min_value<value_type>())
       {
          // not enough bits in our input to get back to x, but we should be in
          // the same ball park:
-         value_type inv = boost::math::gamma_p_inva(data[i][1], data[i][5]);
-         BOOST_CHECK_CLOSE_EX(data[i][0], inv, 100, i);
+         value_type inv = boost::math::gamma_p_inva(Real(data[i][1]), Real(data[i][5]));
+         BOOST_CHECK_CLOSE_EX(Real(data[i][0]), inv, 100, i);
       }
 
-      if(data[i][3] == 0)
-         BOOST_CHECK_EQUAL(boost::math::gamma_q_inva(data[i][1], data[i][3]), boost::math::tools::min_value<value_type>());
-      else if((1 - data[i][3] > 0.001) 
-         && (fabs(data[i][3]) > 2 * boost::math::tools::min_value<value_type>()) 
-         && (fabs(data[i][3]) > 2 * boost::math::tools::min_value<double>()))
+      if(Real(data[i][3]) == 0)
+         BOOST_CHECK_EQUAL(boost::math::gamma_q_inva(Real(data[i][1]), Real(data[i][3])), boost::math::tools::min_value<value_type>());
+      else if((1 - Real(data[i][3]) > 0.001) 
+         && (fabs(Real(data[i][3])) > 2 * boost::math::tools::min_value<value_type>()) 
+         && (fabs(Real(data[i][3])) > 2 * boost::math::tools::min_value<double>()))
       {
-         value_type inv = boost::math::gamma_q_inva(data[i][1], data[i][3]);
-         BOOST_CHECK_CLOSE_EX(data[i][0], inv, precision, i);
+         value_type inv = boost::math::gamma_q_inva(Real(data[i][1]), Real(data[i][3]));
+         BOOST_CHECK_CLOSE_EX(Real(data[i][0]), inv, precision, i);
       }
-      else if(1 == data[i][3])
-         BOOST_CHECK_EQUAL(boost::math::gamma_q_inva(data[i][1], data[i][3]), boost::math::tools::max_value<value_type>());
-      else if(data[i][3] > 2 * boost::math::tools::min_value<value_type>()) 
+      else if(1 == Real(data[i][3]))
+         BOOST_CHECK_EQUAL(boost::math::gamma_q_inva(Real(data[i][1]), Real(data[i][3])), boost::math::tools::max_value<value_type>());
+      else if(Real(data[i][3]) > 2 * boost::math::tools::min_value<value_type>()) 
       {
          // not enough bits in our input to get back to x, but we should be in
          // the same ball park:
-         value_type inv = boost::math::gamma_q_inva(data[i][1], data[i][3]);
-         BOOST_CHECK_CLOSE_EX(data[i][0], inv, 100, i);
+         value_type inv = boost::math::gamma_q_inva(Real(data[i][1]), Real(data[i][3]));
+         BOOST_CHECK_CLOSE_EX(Real(data[i][0]), inv, 100, i);
       }
    }
    std::cout << std::endl;
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_gamma_inva(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -133,10 +133,10 @@ void do_test_gamma_inva(const T& data, const char* type_name, const char* test_n
    //
    // test gamma_p_inva(T, T) against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1),
-      extract_result(2));
+      bind_func<Real>(funcp, 0, 1),
+      extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_p_inva", test_name);
    //
    // test gamma_q_inva(T, T) against data:
@@ -146,10 +146,10 @@ void do_test_gamma_inva(const T& data, const char* type_name, const char* test_n
 #else
    funcp = boost::math::gamma_q_inva;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1),
-      extract_result(3));
+      bind_func<Real>(funcp, 0, 1),
+      extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q_inva", test_name);
 }
 
@@ -168,20 +168,20 @@ void test_gamma(T, const char* name)
    //
 #  include "igamma_med_data.ipp"
 
-   do_test_gamma_2(igamma_med_data, name, "Running round trip sanity checks on incomplete gamma medium sized values");
+   do_test_gamma_2<T>(igamma_med_data, name, "Running round trip sanity checks on incomplete gamma medium sized values");
 
 #  include "igamma_small_data.ipp"
 
-   do_test_gamma_2(igamma_small_data, name, "Running round trip sanity checks on incomplete gamma small values");
+   do_test_gamma_2<T>(igamma_small_data, name, "Running round trip sanity checks on incomplete gamma small values");
 
 #  include "igamma_big_data.ipp"
 
-   do_test_gamma_2(igamma_big_data, name, "Running round trip sanity checks on incomplete gamma large values");
+   do_test_gamma_2<T>(igamma_big_data, name, "Running round trip sanity checks on incomplete gamma large values");
 
 #endif
 
 #  include "igamma_inva_data.ipp"
 
-   do_test_gamma_inva(igamma_inva_data, name, "Incomplete gamma inverses.");
+   do_test_gamma_inva<T>(igamma_inva_data, name, "Incomplete gamma inverses.");
 }
 

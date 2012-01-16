@@ -19,16 +19,17 @@
 
 #include "test_gamma_hooks.hpp"
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <class T>
+template <class Real, class T>
 void do_test_gamma_2(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -45,12 +46,12 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    //
    // test tgamma(T, T) against data:
    //
-   if(data[0][2] > 0)
+   if(Real(data[0][2]) > 0)
    {
-      result = boost::math::tools::test(
+      result = boost::math::tools::test_hetero<Real>(
          data,
-         bind_func(funcp, 0, 1),
-         extract_result(2));
+         bind_func<Real>(funcp, 0, 1),
+         extract_result<Real>(2));
       handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma", test_name);
       //
       // test tgamma_lower(T, T) against data:
@@ -60,10 +61,10 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
 #else
       funcp = boost::math::tgamma_lower;
 #endif
-      result = boost::math::tools::test(
+      result = boost::math::tools::test_hetero<Real>(
          data,
-         bind_func(funcp, 0, 1),
-         extract_result(4));
+         bind_func<Real>(funcp, 0, 1),
+         extract_result<Real>(4));
       handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_lower", test_name);
    }
    //
@@ -74,10 +75,10 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
 #else
    funcp = boost::math::gamma_q;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1),
-      extract_result(3));
+      bind_func<Real>(funcp, 0, 1),
+      extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q", test_name);
 #if defined(TEST_OTHER)
    //
@@ -86,10 +87,10 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    if(boost::is_floating_point<value_type>::value)
    {
       funcp = other::gamma_q;
-      result = boost::math::tools::test(
+      result = boost::math::tools::test_hetero<Real>(
          data,
-         bind_func(funcp, 0, 1),
-         extract_result(3));
+         bind_func<Real>(funcp, 0, 1),
+         extract_result<Real>(3));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_q");
    }
 #endif
@@ -101,10 +102,10 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
 #else
    funcp = boost::math::gamma_p;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1),
-      extract_result(5));
+      bind_func<Real>(funcp, 0, 1),
+      extract_result<Real>(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_p", test_name);
 #if defined(TEST_OTHER)
    //
@@ -113,10 +114,10 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    if(boost::is_floating_point<value_type>::value)
    {
       funcp = other::gamma_p;
-      result = boost::math::tools::test(
+      result = boost::math::tools::test_hetero<Real>(
          data,
-         bind_func(funcp, 0, 1),
-         extract_result(5));
+         bind_func<Real>(funcp, 0, 1),
+         extract_result<Real>(5));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_p");
    }
 #endif
@@ -137,19 +138,19 @@ void test_gamma(T, const char* name)
    //
 #  include "igamma_med_data.ipp"
 
-   do_test_gamma_2(igamma_med_data, name, "tgamma(a, z) medium values");
+   do_test_gamma_2<T>(igamma_med_data, name, "tgamma(a, z) medium values");
 
 #  include "igamma_small_data.ipp"
 
-   do_test_gamma_2(igamma_small_data, name, "tgamma(a, z) small values");
+   do_test_gamma_2<T>(igamma_small_data, name, "tgamma(a, z) small values");
 
 #  include "igamma_big_data.ipp"
 
-   do_test_gamma_2(igamma_big_data, name, "tgamma(a, z) large values");
+   do_test_gamma_2<T>(igamma_big_data, name, "tgamma(a, z) large values");
 
 #  include "igamma_int_data.ipp"
 
-   do_test_gamma_2(igamma_int_data, name, "tgamma(a, z) integer and half integer values");
+   do_test_gamma_2<T>(igamma_int_data, name, "tgamma(a, z) integer and half integer values");
 }
 
 template <class T>

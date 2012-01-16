@@ -14,10 +14,10 @@
 #include <boost/array.hpp>
 
 #include "handle_test_result.hpp"
-
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
 template <class T>
@@ -42,10 +42,10 @@ void test_binomial(T, const char* type_name)
 
 #include "binomial_data.ipp"
 
-   boost::math::tools::test_result<T> result = boost::math::tools::test(
+   boost::math::tools::test_result<T> result = boost::math::tools::test_hetero<T>(
       binomial_data, 
-      bind_func(f, 0, 1), 
-      extract_result(2));
+      bind_func<T>(f, 0, 1), 
+      extract_result<T>(2));
 
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
       "Test results for small arguments and type " << type_name << std::endl << std::endl;
@@ -55,10 +55,10 @@ void test_binomial(T, const char* type_name)
 
 #include "binomial_large_data.ipp"
 
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<T>(
       binomial_large_data, 
-      bind_func(f, 0, 1), 
-      extract_result(2));
+      bind_func<T>(f, 0, 1), 
+      extract_result<T>(2));
 
    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
       "Test results for large arguments and type " << type_name << std::endl << std::endl;

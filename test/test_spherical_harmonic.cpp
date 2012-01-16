@@ -14,6 +14,7 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 //
 // DESCRIPTION:
@@ -96,11 +97,11 @@ void expected_results()
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_spherical_harmonic(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(unsigned, int, value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -117,10 +118,10 @@ void do_test_spherical_harmonic(const T& data, const char* type_name, const char
    //
    // test Spheric Harmonic against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func_int2(funcp, 0, 1, 2, 3),
-      extract_result(4));
+      bind_func_int2<Real>(funcp, 0, 1, 2, 3),
+      extract_result<Real>(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::spherical_harmonic_r", test_name);
 
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -131,20 +132,20 @@ void do_test_spherical_harmonic(const T& data, const char* type_name, const char
    //
    // test Spheric Harmonic against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func_int2(funcp, 0, 1, 2, 3),
-      extract_result(5));
+      bind_func_int2<Real>(funcp, 0, 1, 2, 3),
+      extract_result<Real>(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::spherical_harmonic_i", test_name);
 
    std::cout << std::endl;
 }
 
-template <class T>
+template <class Real, class T>
 void test_complex_spherical_harmonic(const T& data, const char* /* name */, boost::mpl::true_ const &)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    for(unsigned i = 0; i < sizeof(data) / sizeof(data[0]); ++i)
    {
@@ -155,24 +156,24 @@ void test_complex_spherical_harmonic(const T& data, const char* /* name */, boos
       std::complex<value_type> r = boost::math::spherical_harmonic(
          boost::math::tools::real_cast<unsigned>(data[i][0]),
          boost::math::tools::real_cast<unsigned>(data[i][1]),
-         data[i][2],
-         data[i][3]);
+         Real(data[i][2]),
+         Real(data[i][3]));
       value_type re = boost::math::spherical_harmonic_r(
          boost::math::tools::real_cast<unsigned>(data[i][0]),
          boost::math::tools::real_cast<unsigned>(data[i][1]),
-         data[i][2],
-         data[i][3]);
+         Real(data[i][2]),
+         Real(data[i][3]));
       value_type im = boost::math::spherical_harmonic_i(
          boost::math::tools::real_cast<unsigned>(data[i][0]),
          boost::math::tools::real_cast<unsigned>(data[i][1]),
-         data[i][2],
-         data[i][3]);
+         Real(data[i][2]),
+         Real(data[i][3]));
       BOOST_CHECK_CLOSE_FRACTION(std::real(r), re, value_type(5));
       BOOST_CHECK_CLOSE_FRACTION(std::imag(r), im, value_type(5));
    }
 }
 
-template <class T>
+template <class Real, class T>
 void test_complex_spherical_harmonic(const T& /* data */, const char* /* name */, boost::mpl::false_ const &)
 {
    // T is not a built in type, can't use std::complex with it...
@@ -189,9 +190,9 @@ void test_spherical_harmonic(T, const char* name)
    //
 #  include "spherical_harmonic.ipp"
 
-   do_test_spherical_harmonic(spherical_harmonic, name, "Spherical Harmonics");
+   do_test_spherical_harmonic<T>(spherical_harmonic, name, "Spherical Harmonics");
 
-   test_complex_spherical_harmonic(spherical_harmonic, name, boost::is_floating_point<T>());
+   test_complex_spherical_harmonic<T>(spherical_harmonic, name, boost::is_floating_point<T>());
 }
 
 template <class T>

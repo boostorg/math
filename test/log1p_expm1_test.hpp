@@ -8,13 +8,14 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 
-template <class T>
+template <class Real, class T>
 void do_test(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real value_type;
 
    typedef value_type (*pg)(value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -34,10 +35,10 @@ void do_test(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = &boost::math::log1p;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-         bind_func(funcp, 0), 
-         extract_result(1));
+         bind_func<Real>(funcp, 0), 
+         extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::log1p", "log1p and expm1");
    std::cout << std::endl;
    //
@@ -48,10 +49,10 @@ void do_test(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::expm1;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(funcp, 0), 
-      extract_result(2));
+      bind_func<Real>(funcp, 0), 
+      extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::expm1", "log1p and expm1");
    std::cout << std::endl;
 }
@@ -61,7 +62,7 @@ void test(T, const char* type_name)
 {
 #  include "log1p_expm1_data.ipp"
 
-   do_test(log1p_expm1_data, type_name, "expm1 and log1p");
+   do_test<T>(log1p_expm1_data, type_name, "expm1 and log1p");
 
    //
    // C99 Appendix F special cases:

@@ -33,6 +33,7 @@
 
 #include <boost/math/special_functions/gamma.hpp> // for (incomplete) gamma.
 //   using boost::math::qamma_Q;
+#include "table_type.hpp"
 
 #include <iostream>
    using std::cout;

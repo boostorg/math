@@ -17,16 +17,17 @@
 
 #include "test_beta_hooks.hpp"
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <class T>
+template <class Real, class T>
 void do_test_beta(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -43,10 +44,10 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
    //
    // test beta against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1, 2),
-      extract_result(3));
+      bind_func<Real>(funcp, 0, 1, 2),
+      extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::beta", test_name);
 
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -54,10 +55,10 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::betac;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1, 2),
-      extract_result(4));
+      bind_func<Real>(funcp, 0, 1, 2),
+      extract_result<Real>(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::betac", test_name);
 
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -65,10 +66,10 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::ibeta;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1, 2),
-      extract_result(5));
+      bind_func<Real>(funcp, 0, 1, 2),
+      extract_result<Real>(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta", test_name);
 
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -76,18 +77,18 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::ibetac;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1, 2),
-      extract_result(6));
+      bind_func<Real>(funcp, 0, 1, 2),
+      extract_result<Real>(6));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibetac", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::ibeta;
-      result = boost::math::tools::test(
+      result = boost::math::tools::test_hetero<Real>(
          data,
-         bind_func(funcp, 0, 1, 2),
-         extract_result(5));
+         bind_func<Real>(funcp, 0, 1, 2),
+         extract_result<Real>(5));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::ibeta");
    }
 #endif
@@ -106,25 +107,25 @@ void test_beta(T, const char* name)
 #if !defined(TEST_DATA) || (TEST_DATA == 1)
 #  include "ibeta_small_data.ipp"
 
-   do_test_beta(ibeta_small_data, name, "Incomplete Beta Function: Small Values");
+   do_test_beta<T>(ibeta_small_data, name, "Incomplete Beta Function: Small Values");
 #endif
 
 #if !defined(TEST_DATA) || (TEST_DATA == 2)
 #  include "ibeta_data.ipp"
 
-   do_test_beta(ibeta_data, name, "Incomplete Beta Function: Medium Values");
+   do_test_beta<T>(ibeta_data, name, "Incomplete Beta Function: Medium Values");
 
 #endif
 #if !defined(TEST_DATA) || (TEST_DATA == 3)
 #  include "ibeta_large_data.ipp"
 
-   do_test_beta(ibeta_large_data, name, "Incomplete Beta Function: Large and Diverse Values");
+   do_test_beta<T>(ibeta_large_data, name, "Incomplete Beta Function: Large and Diverse Values");
 #endif
 
 #if !defined(TEST_DATA) || (TEST_DATA == 4)
 #  include "ibeta_int_data.ipp"
 
-   do_test_beta(ibeta_int_data, name, "Incomplete Beta Function: Small Integer Values");
+   do_test_beta<T>(ibeta_int_data, name, "Incomplete Beta Function: Small Integer Values");
 #endif
 }
 

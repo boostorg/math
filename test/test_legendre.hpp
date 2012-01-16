@@ -18,16 +18,17 @@
 
 #include "handle_test_result.hpp"
 #include "test_legendre_hooks.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <class T>
+template <class Real, class T>
 void do_test_legendre_p(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(int, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -44,18 +45,18 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
    //
    // test legendre_p against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func_int1(funcp, 0, 1),
-      extract_result(2));
+      bind_func_int1<Real>(funcp, 0, 1),
+      extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::legendre_p", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::legendre_p;
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func_int1(funcp, 0, 1),
-      extract_result(2));
+      bind_func_int1<Real>(funcp, 0, 1),
+      extract_result<Real>(2));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::legendre_p");
    }
 #endif
@@ -70,18 +71,18 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
    //
    // test legendre_q against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func_int1(funcp2, 0, 1),
-      extract_result(3));
+      bind_func_int1<Real>(funcp2, 0, 1),
+      extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::legendre_q", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::legendre_q;
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func_int1(funcp2, 0, 1),
-      extract_result(3));
+      bind_func_int1<Real>(funcp2, 0, 1),
+      extract_result<Real>(3));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::legendre_q");
    }
 #endif
@@ -90,11 +91,11 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
    std::cout << std::endl;
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_assoc_legendre_p(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(int, int, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -111,10 +112,10 @@ void do_test_assoc_legendre_p(const T& data, const char* type_name, const char* 
    //
    // test legendre_p against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func_int2(funcp, 0, 1, 2),
-      extract_result(3));
+      bind_func_int2<Real>(funcp, 0, 1, 2),
+      extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::legendre_p", test_name);
    std::cout << std::endl;
 }
@@ -130,15 +131,15 @@ void test_legendre_p(T, const char* name)
    //
 #  include "legendre_p.ipp"
 
-   do_test_legendre_p(legendre_p, name, "Legendre Polynomials: Small Values");
+   do_test_legendre_p<T>(legendre_p, name, "Legendre Polynomials: Small Values");
 
 #  include "legendre_p_large.ipp"
 
-   do_test_legendre_p(legendre_p_large, name, "Legendre Polynomials: Large Values");
+   do_test_legendre_p<T>(legendre_p_large, name, "Legendre Polynomials: Large Values");
 
 #  include "assoc_legendre_p.ipp"
 
-   do_test_assoc_legendre_p(assoc_legendre_p, name, "Associated Legendre Polynomials: Small Values");
+   do_test_assoc_legendre_p<T>(assoc_legendre_p, name, "Associated Legendre Polynomials: Small Values");
 
 }
 

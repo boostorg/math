@@ -15,28 +15,30 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
+template <class Real>
 struct negative_cbrt
 {
    negative_cbrt(){}
 
    template <class S>
-   typename S::value_type operator()(const S& row)
+   Real operator()(const S& row)
    {
-      return boost::math::cbrt(-row[1]);
+      return boost::math::cbrt(-Real(row[1]));
    }
 };
 
 
-template <class T>
+template <class Real, class T>
 void do_test_cbrt(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -53,14 +55,14 @@ void do_test_cbrt(const T& data, const char* type_name, const char* test_name)
    //
    // test cbrt against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(funcp, 1), 
-      extract_result(0));
-   result += boost::math::tools::test(
+      bind_func<Real>(funcp, 1), 
+      extract_result<Real>(0));
+   result += boost::math::tools::test_hetero<Real>(
       data, 
-      negative_cbrt(), 
-      negate(extract_result(0)));
+      negative_cbrt<Real>(), 
+      negate<Real>(extract_result<Real>(0)));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cbrt", test_name);
    std::cout << std::endl;
 }
@@ -75,7 +77,7 @@ void test_cbrt(T, const char* name)
    // 
 #  include "cbrt_data.ipp"
 
-   do_test_cbrt(cbrt_data, name, "cbrt Function");
+   do_test_cbrt<T>(cbrt_data, name, "cbrt Function");
 
 }
 

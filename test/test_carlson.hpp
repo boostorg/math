@@ -14,16 +14,17 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <typename T>
+template <class Real, typename T>
 void do_test_ellint_rf(T& data, const char* type_name, const char* test)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
@@ -34,10 +35,10 @@ void do_test_ellint_rf(T& data, const char* type_name, const char* test)
 #endif
     boost::math::tools::test_result<value_type> result;
  
-    result = boost::math::tools::test(
+    result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(fp, 0, 1, 2),
-      extract_result(3));
+      bind_func<Real>(fp, 0, 1, 2),
+      extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), 
       type_name, "boost::math::ellint_rf", test);
 
@@ -45,11 +46,11 @@ void do_test_ellint_rf(T& data, const char* type_name, const char* test)
 
 }
 
-template <typename T>
+template <class Real, typename T>
 void do_test_ellint_rc(T& data, const char* type_name, const char* test)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
@@ -60,22 +61,22 @@ void do_test_ellint_rc(T& data, const char* type_name, const char* test)
 #endif
     boost::math::tools::test_result<value_type> result;
  
-    result = boost::math::tools::test(
+    result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(fp, 0, 1),
-      extract_result(2));
-   handle_test_result(result, data[result.worst()], result.worst(), 
+      bind_func<Real>(fp, 0, 1),
+      extract_result<Real>(2));
+      handle_test_result(result, data[result.worst()], result.worst(), 
       type_name, "boost::math::ellint_rc", test);
 
    std::cout << std::endl;
 
 }
 
-template <typename T>
+template <class Real, typename T>
 void do_test_ellint_rj(T& data, const char* type_name, const char* test)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
@@ -86,22 +87,22 @@ void do_test_ellint_rj(T& data, const char* type_name, const char* test)
 #endif
     boost::math::tools::test_result<value_type> result;
  
-    result = boost::math::tools::test(
+    result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(fp, 0, 1, 2, 3),
-      extract_result(4));
-   handle_test_result(result, data[result.worst()], result.worst(), 
+      bind_func<Real>(fp, 0, 1, 2, 3),
+      extract_result<Real>(4));
+      handle_test_result(result, data[result.worst()], result.worst(), 
       type_name, "boost::math::ellint_rf", test);
 
    std::cout << std::endl;
 
 }
 
-template <typename T>
+template <class Real, typename T>
 void do_test_ellint_rd(T& data, const char* type_name, const char* test)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
@@ -112,11 +113,11 @@ void do_test_ellint_rd(T& data, const char* type_name, const char* test)
 #endif
     boost::math::tools::test_result<value_type> result;
  
-    result = boost::math::tools::test(
+    result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(fp, 0, 1, 2),
-      extract_result(3));
-   handle_test_result(result, data[result.worst()], result.worst(), 
+      bind_func<Real>(fp, 0, 1, 2),
+      extract_result<Real>(3));
+    handle_test_result(result, data[result.worst()], result.worst(), 
       type_name, "boost::math::ellint_rd", test);
 
    std::cout << std::endl;
@@ -202,18 +203,18 @@ void test_spots(T, const char* type_name)
    //
 #include "ellint_rf_data.ipp"
 
-   do_test_ellint_rf(ellint_rf_data, type_name, "RF: Random data");
+   do_test_ellint_rf<T>(ellint_rf_data, type_name, "RF: Random data");
 
 #include "ellint_rc_data.ipp"
 
-   do_test_ellint_rc(ellint_rc_data, type_name, "RC: Random data");
+   do_test_ellint_rc<T>(ellint_rc_data, type_name, "RC: Random data");
 
 #include "ellint_rj_data.ipp"
 
-   do_test_ellint_rj(ellint_rj_data, type_name, "RJ: Random data");
+   do_test_ellint_rj<T>(ellint_rj_data, type_name, "RJ: Random data");
 
 #include "ellint_rd_data.ipp"
 
-   do_test_ellint_rd(ellint_rd_data, type_name, "RD: Random data");
+   do_test_ellint_rd<T>(ellint_rd_data, type_name, "RD: Random data");
 }
 
