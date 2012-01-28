@@ -447,12 +447,13 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include tr1_ref.qbk]
 [endsect]
 
-[section:toolkit Tools, Constants and Internal Details]
+[include constants.qbk]
+
+[section:toolkit Tools and Internal Details]
 
 [include internals_overview.qbk]
 
 [section:internals1 Utilities - Constants & Tools]
-[include constants.qbk]
 [include series.qbk]
 [include fraction.qbk]
 [include rational.qbk]
@@ -511,5 +512,6 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 
 

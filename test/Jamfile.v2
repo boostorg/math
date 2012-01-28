@@ -54,7 +54,21 @@ project
       <include>$(ntl-path)/include
       <include>$(e_float_path)
       <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx <include>$(gmp_path)/mpfrc++
+      <search>$(gmp_path) 
+      <search>$(mpfr_path) 
+      <search>$(mpfr_path)/build.vc10/lib/Win32/Debug
     ;
+    
+if $(ntl-path)
+{
+   lib ntl : [ GLOB $(ntl-path)/src : *.cpp ] ;
+}
+else
+{
+   lib ntl ;
+}
+
+explicit ntl ;
 
 cpp-pch pch : pch.hpp : <use>../../test/build//boost_test_exec_monitor ;
 cpp-pch pch_light : pch_light.hpp : <use>../../test/build//boost_test_exec_monitor ;
@@ -68,7 +82,9 @@ run log1p_expm1_test.cpp test_instances pch_light ../../test/build//boost_test_e
 run powm1_sqrtp1m1_test.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run special_functions_test.cpp ../../test/build//boost_unit_test_framework/<link>static ;
 run test_bernoulli.cpp ../../test/build//boost_test_exec_monitor ;
-run test_constants.cpp pch ../../test/build//boost_test_exec_monitor ;
+run test_constants.cpp ../../test/build//boost_test_exec_monitor ;
+run test_print_info_on_type.cpp ;
+run test_constant_generate.cpp ntl/<link>static  : : : [ check-target-builds ../config//has_ntl_rr : : <build>no ] : test_constant_generate_ntl ;
 run test_bessel_j.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_bessel_y.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_bessel_i.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
@@ -807,6 +823,8 @@ compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float
 compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] ;
 
 build-project ../example ;
+
+
 
 
 
