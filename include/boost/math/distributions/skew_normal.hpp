@@ -21,9 +21,10 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/roots.hpp> // Newton-Raphson
-#include <boost/math/distributions/detail/generic_mode.hpp> // pdf max finder.
+//#include <boost/math/distributions/detail/generic_mode.hpp> // pdf max finder.
 
 #include <utility>
+#include <algorithm> // std::lower_bound, std::distance
 
 namespace boost{ namespace math{
 
@@ -32,16 +33,16 @@ namespace boost{ namespace math{
     template <class RealType, class Policy>
     inline bool check_skew_normal_shape(
       const char* function,
-      RealType location,
+      RealType shape,
       RealType* result,
       const Policy& pol)
     {
-      if(!(boost::math::isfinite)(location))
+      if(!(boost::math::isfinite)(shape))
       {
         *result =
           policies::raise_domain_error<RealType>(function,
           "Shape parameter is %1%, but must be finite!",
-          location, pol);
+          shape, pol);
         return false;
       }
       return true;
@@ -271,11 +272,10 @@ namespace boost{ namespace math{
 
     using namespace boost::math::constants;
     // TODO replace by root_two_div_pi<RealType>() when in boost-trunk
-    //static const RealType sqrt_two_over_pi = root_two_div_pi<RealType>(); // = ( 2 / pi ) ^ 0.5
-    static const RealType sqrt_two_over_pi = 7.978845608028654e-001; // = ( 2 / pi ) ^ 0.5
-    const RealType delta = dist.shape() / sqrt(1+dist.shape()*dist.shape());
 
-    return dist.location() + dist.scale()*delta*sqrt_two_over_pi;
+    const RealType delta = dist.shape() / sqrt(static_cast<RealType>(1)+dist.shape()*dist.shape());
+
+    return dist.location() + dist.scale()*delta*root_two<RealType>()/root_pi<RealType>();
     //return dist.location() + dist.scale() * delta * root_two_div_pi<RealType>();
   }
 
@@ -285,19 +285,157 @@ namespace boost{ namespace math{
     BOOST_MATH_STD_USING  // for ADL of std functions
 
     using namespace boost::math::constants;
-    //static const RealType two_over_pi = two_div_pi<RealType>(); // = 2 / pi
     // TODO replace by two_div_pi<RealType>() when in boost-trunk
-    static const RealType two_over_pi = 6.366197723675814e-001; // = 2 / pi
-    const RealType delta = dist.shape() / sqrt(1+dist.shape()*dist.shape());
-    RealType variance = dist.scale()*dist.scale()*(1-two_over_pi*delta*delta);
+
+    const RealType delta = dist.shape() / sqrt(static_cast<RealType>(1)+dist.shape()*dist.shape());
+    RealType variance = dist.scale()*dist.scale()*(static_cast<RealType>(1)-static_cast<RealType>(2)/pi<RealType>()*delta*delta);
     //RealType variance = dist.scale()*dist.scale()*(1-two_div_pi<RealType>() *delta*delta);
     return variance;
   }
 
   /*
+   * TODO No closed expression, so use f'(x) = 0.
+   */
+  
+  namespace detail
+  {
+
+    template <class RealType, class Policy>
+    struct skew_normal_mode_functor
+    { 
+      skew_normal_mode_functor(const boost::math::skew_normal_distribution<RealType, Policy> dist)
+        : distribution(dist)
+      {
+      }
+
+      boost::math::tuple<RealType, RealType> operator()(RealType const& x)
+      {
+        normal_distribution<RealType, Policy> std_normal;
+        const RealType shape = distribution.shape();
+        const RealType pdf_x = pdf(distribution, x);
+        const RealType normpdf_x = pdf(std_normal, x);
+        const RealType normpdf_ax = pdf(std_normal, x*shape);
+        RealType fx = static_cast<RealType>(2)*shape*normpdf_ax*normpdf_x - x*pdf_x;
+        RealType dx = static_cast<RealType>(2)*shape*x*normpdf_x*normpdf_ax*(static_cast<RealType>(1) + shape*shape) + pdf_x + x*fx;
+        // return both function evaluation difference f(x) and 1st derivative f'(x).
+        return boost::math::make_tuple(fx, -dx);
+      }
+    private:
+      const boost::math::skew_normal_distribution<RealType, Policy> distribution;
+    };
+
+  } // namespace detail
+  
+  template <class RealType, class Policy>
+  inline RealType mode(const skew_normal_distribution<RealType, Policy>& dist)
+  {
+    const RealType scale = dist.scale();
+    const RealType location = dist.location();
+    const RealType shape = dist.shape();
+
+    static const char* function = "boost::math::mode(const skew_normal_distribution<%1%>&, %1%)";
+
+    RealType result = 0;
+    if(false == detail::check_scale(function, scale, &result, Policy()))
+      return result;
+    if(false == detail::check_location(function, location, &result, Policy()))
+      return result;
+    if(false == detail::check_skew_normal_shape(function, shape, &result, Policy()))
+      return result;
+
+    if( shape == 0 )
+    {
+      return location;
+    }
+
+    if((boost::math::isinf)(shape))
+    {
+      return location;
+    }
+
+    if( shape < 0 )
+    {
+      skew_normal_distribution<RealType, Policy> D(0, 1, -shape);
+      result = mode(D);
+      result = location-scale*result;
+      return result;
+    }
+
+    // 20 elements
+    static const RealType shapes[] = {
+      1.000000000000000e-004,
+      2.069138081114790e-004,
+      4.281332398719396e-004,
+      8.858667904100824e-004,
+      1.832980710832436e-003,
+      3.792690190732250e-003,
+      7.847599703514606e-003,
+      1.623776739188722e-002,
+      3.359818286283781e-002,
+      6.951927961775606e-002,
+      1.438449888287663e-001,
+      2.976351441631319e-001,
+      6.158482110660261e-001,
+      1.274274985703135e+000,
+      2.636650898730361e+000,
+      5.455594781168514e+000,
+      1.128837891684688e+001,
+      2.335721469090121e+001,
+      4.832930238571753e+001,
+      1.000000000000000e+002};
+
+    // 21 elements
+    static const RealType guess[] = {
+      5.000050000525391e-005,
+      1.500015000148736e-004,
+      3.500035000350010e-004,
+      7.500075000752560e-004,
+      1.450014500145258e-003,
+      3.050030500305390e-003,
+      6.250062500624765e-003,
+      1.295012950129504e-002,
+      2.675026750267495e-002,
+      5.525055250552491e-002,
+      1.132511325113255e-001,
+      2.249522495224952e-001,
+      3.992539925399257e-001,
+      5.353553535535358e-001,
+      4.954549545495457e-001,
+      3.524535245352451e-001,
+      2.182521825218249e-001,
+      1.256512565125654e-001,
+      6.945069450694508e-002,
+      3.735037350373460e-002,
+      1.0e-004
+    };
+
+    const RealType* result_ptr = std::lower_bound(shapes, shapes+20, shape);
+
+    result = guess[std::distance(shapes, result_ptr)];
+
+    // TODO: make the search bounds smarter, depending on the shape parameter
+    const RealType search_min = 0; // below zero was caught above
+    const RealType search_max = 0.55; // will never go above 0.55
+
+    const int get_digits = policies::digits<RealType, Policy>();// get digits from policy, 
+    boost::uintmax_t m = policies::get_max_root_iterations<Policy>(); // and max iterations.
+
+    skew_normal_distribution<RealType, Policy> helper(0, 1, shape);
+
+    result = tools::newton_raphson_iterate(detail::skew_normal_mode_functor<RealType, Policy>(helper), result,
+      search_min, search_max, get_digits, m);
+
+    result = result*scale + location;
+
+    return result;
+}
+  
+  /*
      TODO No closed expression, so use max of pdf.
   */
-
+  
+  /*
+  
   template <class RealType, class Policy>
   inline RealType mode(const skew_normal_distribution<RealType, Policy>& dist)
   { // mode.
@@ -334,20 +472,23 @@ namespace boost{ namespace math{
         guess, 
         function);
   } // mode
+  
+  */
 
   template <class RealType, class Policy>
   inline RealType skewness(const skew_normal_distribution<RealType, Policy>& dist)
   {
     BOOST_MATH_STD_USING  // for ADL of std functions
+    using namespace boost::math::constants;
     // TODO replace by two_div_pi<RealType>() when in boost-trunk
     //    static const RealType two_over_pi = two_div_pi<RealType>(); // = 2 / pi
-    static const RealType two_over_pi = 6.366197723675814e-001; // = 2 / pi
-    static const RealType sqrt_two_over_pi = 7.978845608028654e-001; // = ( 2 / pi ) ^ 0.5
-    static const RealType factor = 4.292036732051034e-001; // = (4-pi)/2
-    const RealType delta = dist.shape() / sqrt(1+dist.shape()*dist.shape());
+    static const RealType two_over_pi = static_cast<RealType>(2)/pi<RealType>();
+    static const RealType sqrt_two_over_pi = root_two<RealType>()/root_pi<RealType>();
+    static const RealType factor = four_minus_pi<RealType>()/static_cast<RealType>(2);
+    const RealType delta = dist.shape() / sqrt(static_cast<RealType>(1)+dist.shape()*dist.shape());
 
     return factor * pow(sqrt_two_over_pi * delta, 3) /
-      pow(1 - two_over_pi * delta * delta, static_cast<RealType>(1.5));
+      pow(static_cast<RealType>(1)-two_over_pi*delta*delta, static_cast<RealType>(1.5));
   }
 
   template <class RealType, class Policy>
@@ -363,17 +504,15 @@ namespace boost{ namespace math{
      // TODO replace by two_div_pi<RealType>() etc when in boost-trunk
     using namespace boost::math::constants;
 
-    static const RealType two_over_pi = 6.366197723675814e-001; // = 2 / pi
-    static const RealType sqrt_two_over_pi = 7.978845608028654e-001; // = ( 2 / pi ) ^ 0.5 
-    // static const RealType factor = 2.831853071795862e-001; // = 2*(pi-3)  ???  not just 2 * pi_minus_three = 0.141593
+    static const RealType two_over_pi = static_cast<RealType>(2)/pi<RealType>();
     static const RealType factor = pi_minus_three<RealType>()*static_cast<RealType>(2);
 
-    const RealType delta = dist.shape() / sqrt(1+dist.shape()*dist.shape());
+    const RealType delta = dist.shape() / sqrt(static_cast<RealType>(1)+dist.shape()*dist.shape());
 
-    const RealType x = 1-two_over_pi *delta*delta;
+    const RealType x = static_cast<RealType>(1)-two_over_pi*delta*delta;
+    const RealType y = two_over_pi * delta * delta;
 
-    //return 2 * pi_minus_three<RealType>() * pow(sqrt_two_over_pi * delta, 4) / (x*x) ;
-     return factor * pow(sqrt_two_over_pi * delta, 4) / (x*x) ;
+    return factor * y*y / (x*x);
   }
 
   namespace detail

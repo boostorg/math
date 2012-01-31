@@ -30,9 +30,10 @@ void check(const double loc, const double sc, const double sh,
 
   // checks against tabulated values
   std::cout << "mean: table=" << cumulants[0] << "\tcompute=" << mean(D) << "\tdiff=" << fabs(cumulants[0]-mean(D)) << std::endl;
-  std::cout << "var: table=" << cumulants[1] << "\tcompute=" << variance(D) << "\tdiff=" << fabs(cumulants[0]-variance(D)) << std::endl;
+  std::cout << "var: table=" << cumulants[1] << "\tcompute=" << variance(D) << "\tdiff=" << fabs(cumulants[1]-variance(D)) << std::endl;
   std::cout << "skew: table=" << sk << "\tcompute=" << skewness(D) << "\tdiff=" << fabs(sk-skewness(D)) << std::endl;
   std::cout << "kur.: table=" << kt << "\tcompute=" << kurtosis_excess(D) << "\tdiff=" << fabs(kt-kurtosis_excess(D)) << std::endl;
+  std::cout << "mode: table=" << "N/A" << "\tcompute=" << mode(D) << "\tdiff=" << "N/A" << std::endl;
 
   const double q = quantile(D, qu.first);
   const double cq = quantile(complement(D, qu.first));
@@ -101,6 +102,7 @@ int main()
 
   //1 st
   loc = 1.1; sc = 2.2; sh = -3.3;
+  std::cout << "location: " << loc << "\tscale: " << sc << "\tshape: " << sh << std::endl;
   cumulants[0] = -0.5799089925398568;
   cumulants[1] =  2.0179057767837230;
   cumulants[2] = -2.0347951542374196;
@@ -129,6 +131,7 @@ int main()
 
   // 2nd
   loc = 1.1; sc = .02; sh = .03;
+  std::cout << "location: " << loc << "\tscale: " << sc << "\tshape: " << sh << std::endl;
   cumulants[0] = 1.1004785154529559e+00;
   cumulants[1] = 3.9977102296128255e-04;
   cumulants[2] = 4.7027439329779991e-11;
@@ -158,6 +161,7 @@ int main()
 
   // 3rd
   loc = 10.1; sc = 5; sh = -.03;
+  std::cout << "location: " << loc << "\tscale: " << sc << "\tshape: " << sh << std::endl;
   cumulants[0] = 9.980371136761052e+00;
   cumulants[1] = 2.498568893508016e+01;
   cumulants[2] = -7.348037395278123e-04;
@@ -186,6 +190,7 @@ int main()
 
   // 4th
   loc = -10.1; sc = 5; sh = 30;
+  std::cout << "location: " << loc << "\tscale: " << sc << "\tshape: " << sh << std::endl;
   cumulants[0] = -6.112791696741384;
   cumulants[1] = 9.102169946425548;
   cumulants[2] = 27.206345266148194;
@@ -195,6 +200,63 @@ int main()
   qsn = -3.692242172277;
   psn = 0.921592193425035;
   dsn = 0.0339105445232089;
+
+  check(loc, sc, sh, cumulants, std::make_pair(p,qsn), x, dsn, psn);
+  
+  
+  /* R:
+
+     > sn.cumulants(0,1,5)
+     [1] 0.7823901817554269 0.3878656034927102 0.2055576317962637 0.1061119471655128
+     > qsn(0.5,0,1,5)
+     [1] 0.674471117502844
+     > psn(-0.5, 0,1,5)
+     [1] 0.0002731513884140924
+     > dsn(-0.5, 0,1,5)
+     [1] 0.00437241570403263
+
+  */
+
+  // 5th
+  loc = 0; sc = 1; sh = 5;
+  std::cout << "location: " << loc << "\tscale: " << sc << "\tshape: " << sh << std::endl;
+  cumulants[0] = 0.7823901817554269;
+  cumulants[1] = 0.3878656034927102;
+  cumulants[2] = 0.2055576317962637;
+  cumulants[3] = 0.1061119471655128;
+  x = -0.5;
+  p = 0.5;
+  qsn = 0.674471117502844;
+  psn = 0.0002731513884140924;
+  dsn = 0.00437241570403263;
+
+  check(loc, sc, sh, cumulants, std::make_pair(p,qsn), x, dsn, psn);
+
+  /* R:
+
+     > sn.cumulants(0,1,1e5)
+     [1] 0.7978845607629713 0.3633802276960805 0.2180136141122883 0.1147706820312645
+     > qsn(0.5,0,1,1e5)
+     [1] 0.6744897501960818
+     > psn(-0.5, 0,1,1e5)
+     [1] 0
+     > dsn(-0.5, 0,1,1e5)
+     [1] 0
+
+  */
+
+  // 6th
+  loc = 0; sc = 1; sh = 1e5;
+  std::cout << "location: " << loc << "\tscale: " << sc << "\tshape: " << sh << std::endl;
+  cumulants[0] = 0.7978845607629713;
+  cumulants[1] = 0.3633802276960805;
+  cumulants[2] = 0.2180136141122883;
+  cumulants[3] = 0.1147706820312645;
+  x = -0.5;
+  p = 0.5;
+  qsn = 0.6744897501960818;
+  psn = 0.;
+  dsn = 0.;
 
   check(loc, sc, sh, cumulants, std::make_pair(p,qsn), x, dsn, psn);
 
