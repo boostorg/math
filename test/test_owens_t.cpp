@@ -32,12 +32,63 @@ using boost::math::owens_t;
 
 #include <boost/test/test_exec_monitor.hpp> // for test_main.
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE and  BOOST_CHECK_CLOSE_fraction.
+#include <boost/array.hpp>
+
+#include "libs/math/test/handle_test_result.hpp"
+#include "libs/math/test/table_type.hpp"
+#include "libs/math/test/functor.hpp"
 
 #include <iostream>
 using std::cout;
 using std::endl;
 #include <limits>
 using std::numeric_limits;
+
+void expected_results()
+{
+   //
+   // Define the max and mean errors expected for
+   // various compilers and platforms.
+   //
+   const char* largest_type;
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+   if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
+   {
+      largest_type = "(long\\s+)?double";
+   }
+   else
+   {
+      largest_type = "long double";
+   }
+#else
+   largest_type = "(long\\s+)?double";
+#endif
+
+   //
+   // Catch all cases come last:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
+      ".*",      // test data group
+      "boost::math::owens_t", 10, 5);  // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "real_concept",                  // test type(s)
+      ".*",      // test data group
+      "boost::math::owens_t", 10, 5);  // test function
+   //
+   // Finish off by printing out the compiler/stdlib/platform names,
+   // we do this to make it easier to mark up expected error rates.
+   //
+   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+      << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
+}
+
 
 template <class RealType>
 void test_spot(
@@ -91,9 +142,60 @@ void test_spots(RealType)
 
 } // template <class RealType>void test_spots(RealType)
 
+template <class Real, class T>
+void do_test_owens_t(const T& data, const char* type_name, const char* test_name)
+{
+   typedef typename T::value_type row_type;
+   typedef Real                   value_type;
+
+   typedef value_type (*pg)(value_type, value_type);
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   pg funcp = boost::math::owens_t<value_type>;
+#else
+   pg funcp = boost::math::owens_t;
+#endif
+
+   boost::math::tools::test_result<value_type> result;
+
+   std::cout << "Testing " << test_name << " with type " << type_name
+      << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+
+   //
+   // test hermite against data:
+   //
+   result = boost::math::tools::test_hetero<Real>(
+      data, 
+      bind_func<Real>(funcp, 0, 1), 
+      extract_result<Real>(2));
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::owens_t", test_name);
+
+   std::cout << std::endl;
+}
+
+template <class T>
+void test_owens_t(T, const char* name)
+{
+   //
+   // The actual test data is rather verbose, so it's in a separate file
+   //
+   // The contents are as follows, each row of data contains
+   // three items, input value a, input value b and erf(a, b):
+   // 
+#  include "owens_t.ipp"
+
+   do_test_owens_t<T>(owens_t, name, "Owens T (medium small values)");
+
+#include "owens_t_large_data.ipp"
+
+   do_test_owens_t<T>(owens_t_large_data, name, "Owens T (large and diverse values)");
+}
+
+
 int test_main(int, char* [])
 {
   BOOST_MATH_CONTROL_FP;
+
+  expected_results();
 
   // Basic sanity-check spot values.
 
@@ -104,6 +206,15 @@ int test_main(int, char* [])
   test_spots(0.0L); // Test long double.
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+#endif
+#endif
+
+  test_owens_t(0.0F, "float"); // Test float.
+  test_owens_t(0.0, "double"); // Test double.
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+  test_owens_t(0.0L, "long double"); // Test long double.
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+  test_owens_t(boost::math::concepts::real_concept(0.), "real_concept"); // Test real concept.
 #endif
 #endif
   return 0;
