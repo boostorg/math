@@ -13,6 +13,8 @@
 // So all values use static_cast<RealType>() of values at least 40 decimal digits
 // and that have suffix L to ensure floating-point type is long double.
 
+// Steve Moshier's command interpreter V1.3 100 digits calculator used for some values.
+
 #ifdef _MSC_VER
 #  pragma warning(disable : 4127) // conditional expression is constant.
 #endif
@@ -34,7 +36,7 @@ BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<
 
 // Policy to set precision at maximum possible using long double.
 typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits> > real_concept_policy_1;
-// Policy wiht precision +2 (could be any reasonable value),
+// Policy with precision +2 (could be any reasonable value),
 // forces the precision of the policy to be greater than
 // that of a long double, and therefore triggers different code (construct from string).
 typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits + 2> > real_concept_policy_2;
@@ -108,7 +110,7 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE_FRACTION(sqrt(3.14159265358979323846264338327950288419716939937510L * 2), root_two_pi<RealType>(), tolerance); 
    BOOST_CHECK_CLOSE_FRACTION(sqrt(log(4.0L)), root_ln_four<RealType>(), tolerance); 
    BOOST_CHECK_CLOSE_FRACTION(2.71828182845904523536028747135266249775724709369995L, e<RealType>(), tolerance); 
-   BOOST_CHECK_CLOSE_FRACTION(0.5, half<RealType>(), tolerance); 
+   BOOST_CHECK_CLOSE_FRACTION(0.5L, half<RealType>(), tolerance); 
    BOOST_CHECK_CLOSE_FRACTION(0.57721566490153286060651209008240243104259335L, euler<RealType>(), tolerance); 
    BOOST_CHECK_CLOSE_FRACTION(sqrt(2.0L), root_two<RealType>(), tolerance); 
    BOOST_CHECK_CLOSE_FRACTION(log(2.0L), ln_two<RealType>(), tolerance); 
@@ -328,7 +330,7 @@ void test_float_spots()
    BOOST_CHECK_CLOSE_FRACTION(log((1.F + sqrt(5.F)) /2), ln_phi, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(1.F / log((1.F + sqrt(5.F)) /2), one_div_ln_phi, tolerance);
 
-   //Euler's Gamma
+   // Euler's Gamma
    BOOST_CHECK_CLOSE_FRACTION(0.57721566490153286060651209008240243104215933593992F, euler, tolerance); // (sequence A001620 in OEIS).
    BOOST_CHECK_CLOSE_FRACTION(1.F/ 0.57721566490153286060651209008240243104215933593992F, one_div_euler, tolerance); // (from sequence A001620 in OEIS).
    BOOST_CHECK_CLOSE_FRACTION(0.57721566490153286060651209008240243104215933593992F * 0.57721566490153286060651209008240243104215933593992F, euler_sqr, tolerance); // (from sequence A001620 in OEIS).
@@ -550,6 +552,9 @@ void test_long_double_spots()
    BOOST_CHECK_CLOSE_FRACTION(cbrt_pi * cbrt_pi * cbrt_pi, pi, tolerance); 
    BOOST_CHECK_CLOSE_FRACTION((static_cast<long double>(1)/cbrt_pi), one_div_cbrt_pi, tolerance); 
 
+   BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(6.366197723675813430755350534900574481378385829618257E-1L), two_div_pi, tolerance * 3);  // 2/pi 
+   BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(7.97884560802865355879892119868763736951717262329869E-1L), root_two_div_pi, tolerance * 3);  //  sqrt(2/pi)
+
    // Euler
    BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(2.71828182845904523536028747135266249775724709369995L), e, tolerance); 
 
@@ -766,7 +771,11 @@ int test_main(int, char* [])
 
 Output:
 
-Running 1 test case...
+  1 Feb 2012 
+
+test_constants.cpp
+  test_constants.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Debug\test_constants.exe
+  Running 1 test case...
   Tolerance for type class boost::math::concepts::real_concept is 4.44089e-016.
   Tolerance for type class boost::math::concepts::real_concept is 4.44089e-016.
   Tolerance for type class boost::math::concepts::real_concept is 4.44089e-016.
@@ -777,5 +786,6 @@ Running 1 test case...
   Tolerance for type class boost::math::concepts::big_real_concept is 1.33227e-014.
   
   *** No errors detected
+
 */
 
