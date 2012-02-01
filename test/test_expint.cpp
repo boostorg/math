@@ -103,19 +103,12 @@ void expected_results()
          ".*", 150, 50);                // test function
    }
    add_expected_result(
-      "Sun.*",                       // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "real_concept",                // test type(s)
-      ".*Ei.*",                      // test data group
-      ".*", 150, 50);                // test function
-   add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*Ei.*",                      // test data group
-      ".*", 50, 20);                 // test function
+      ".*", 150, 50);                // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -160,4 +153,5 @@ int test_main(int, char* [])
 #endif
    return 0;
 }
+
 
