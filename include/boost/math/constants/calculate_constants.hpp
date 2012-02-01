@@ -74,6 +74,20 @@ inline T constant_two_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl:
    return 2 * pi<T, policies::policy<policies::digits2<N> > >();
 }
 
+template <class T> // 2 / pi
+template<int N>
+inline T constant_two_div_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
+{
+   return 2 / pi<T, policies::policy<policies::digits2<N> > >();
+}
+
+template <class T>  // sqrt(2/pi)
+template <int N>
+inline T constant_root_two_div_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
+{
+   return sqrt((2 / pi<T, policies::policy<policies::digits2<N> > >()));
+}
+
 template <class T>
 template<int N>
 inline T constant_one_div_two_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
@@ -931,6 +945,8 @@ inline T constant_rayleigh_kurtosis<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYP
    * (pi<T, policies::policy<policies::digits2<N> > >() - static_cast<T>(4)))
    );
 }
+
+
 
 }}}} // namespaces
 
