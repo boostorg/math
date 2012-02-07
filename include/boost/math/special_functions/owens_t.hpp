@@ -36,7 +36,7 @@ namespace boost
          inline RealType owens_t_znorm1(const RealType x)
          {
             using namespace boost::math::constants;
-            return erf(x/root_two<RealType>())*half<RealType>();
+            return erf(x*one_div_root_two<RealType>())*half<RealType>();
          } // RealType owens_t_znorm1(const RealType x)
 
          // owens_t_znorm2(x) = P(x<=Z<oo) with Z being normally distributed.
@@ -44,7 +44,7 @@ namespace boost
          inline RealType owens_t_znorm2(const RealType x)
          {
             using namespace boost::math::constants;
-            return erfc(x/root_two<RealType>())*half<RealType>();
+            return erfc(x*one_div_root_two<RealType>())*half<RealType>();
          } // RealType owens_t_znorm2(const RealType x)
 
          // Auxiliary function, it computes an array key that is used to determine
@@ -118,11 +118,11 @@ namespace boost
 
             unsigned short j=1;
             RealType jj = 1;
-            RealType aj = a / (static_cast<RealType>(2)*pi<RealType>());
+            RealType aj = a * one_div_two_pi<RealType>();
             RealType dj = expm1( hs );
             RealType gj = hs*dhs;
 
-            RealType val = atan( a ) / (static_cast<RealType>(2)*pi<RealType>());
+            RealType val = atan( a ) * one_div_two_pi<RealType>();
 
             while( true )
             {
@@ -155,7 +155,7 @@ namespace boost
 
             unsigned short ii = 1;
             RealType val = 0;
-            RealType vi = a * exp( -ah*ah*half<RealType>() ) / root_two_pi<RealType>();
+            RealType vi = a * exp( -ah*ah*half<RealType>() ) * one_div_root_two_pi<RealType>();
             RealType z = owens_t_znorm1(ah)/h;
 
             while( true )
@@ -163,7 +163,7 @@ namespace boost
                val += z;
                if( maxii <= ii )
                {
-                  val *= exp( -hs*half<RealType>() ) / root_two_pi<RealType>();
+                  val *= exp( -hs*half<RealType>() ) * one_div_root_two_pi<RealType>();
                   break;
                } // if( maxii <= ii )
                z = y * ( vi - static_cast<RealType>(ii) * z );
@@ -202,7 +202,7 @@ namespace boost
 
             RealType ii = 1;
             unsigned short i = 0;
-            RealType vi = a * exp( -ah*ah*half<RealType>() ) / root_two_pi<RealType>();
+            RealType vi = a * exp( -ah*ah*half<RealType>() ) * one_div_root_two_pi<RealType>();
             RealType zi = owens_t_znorm1(ah)/h;
             RealType val = 0;
 
@@ -212,7 +212,7 @@ namespace boost
                val += zi*c2[i];
                if( m <= i ) // if( m < i+1 )
                {
-                  val *= exp( -hs*half<RealType>() ) / root_two_pi<RealType>();
+                  val *= exp( -hs*half<RealType>() ) * one_div_root_two_pi<RealType>();
                   break;
                } // if( m < i )
                zi = y * (ii*zi - vi);
@@ -236,7 +236,7 @@ namespace boost
             const RealType as = -a*a;
 
             unsigned short ii = 1;
-            RealType ai = a * exp( -hs*(static_cast<RealType>(1)-as)*half<RealType>() ) / (static_cast<RealType>(2)*pi<RealType>());
+            RealType ai = a * exp( -hs*(static_cast<RealType>(1)-as)*half<RealType>() ) * one_div_two_pi<RealType>();
             RealType yi = 1;
             RealType val = 0;
 
@@ -258,6 +258,14 @@ namespace boost
          inline RealType owens_t_T5(const RealType h, const RealType a, const unsigned short m)
          {
             BOOST_MATH_STD_USING
+            /*
+               NOTICE:
+               - The pts[] array contains the squares (!) of the abscissas, i.e. the roots of the Legendre
+                 polynomial P_n(x), instead of the plain roots as required in Gauss-Legendre
+                 quadrature, because T5(h,a,m) contains only x^2 terms.
+               - The wts[] array contains the weights for Gauss-Legendre quadrature scaled with a factor
+                 of 1/(2*pi) according to T5(h,a,m).
+             */
             static const RealType pts[] = {0.35082039676451715489E-02,
                0.31279042338030753740E-01,  0.85266826283219451090E-01,
                0.16245071730812277011,      0.25851196049125434828,
@@ -301,7 +309,7 @@ namespace boost
             RealType val = normh * ( static_cast<RealType>(1) - normh ) * half<RealType>();
 
             if( r != 0 )
-               val -= r * exp( -y*h*h*half<RealType>()/r ) / (static_cast<RealType>(2)*pi<RealType>());
+               val -= r * exp( -y*h*h*half<RealType>()/r ) * one_div_two_pi<RealType>();
 
             return val;
          } // RealType owens_t_T6(const RealType h, const RealType a, const unsigned short m)
@@ -402,7 +410,7 @@ namespace boost
       {
          typedef typename tools::promote_args<T1, T2>::type result_type;
          typedef typename policies::evaluation<result_type, Policy>::type value_type;
-         return policies::checked_narrowing_cast<result_type, Policy>(detail::owens_t(static_cast<value_type>(h), static_cast<value_type>(a), pol), "boost::math::ellint_2<%1%>(%1%,%1%)");
+         return policies::checked_narrowing_cast<result_type, Policy>(detail::owens_t(static_cast<value_type>(h), static_cast<value_type>(a), pol), "boost::math::owens_t<%1%>(%1%,%1%)");
       }
 
       template <class T1, class T2>
