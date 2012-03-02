@@ -374,23 +374,23 @@ namespace boost
 
             if(fabs_a <= 1)
             {
-               val = detail::owens_t_dispatch(h, fabs_a, fabs_ah);
+               val = owens_t_dispatch(h, fabs_a, fabs_ah);
             } // if(fabs_a <= 1.0)
             else 
             {
                if( h <= 0.67 )
                {
-                  const RealType normh = detail::owens_t_znorm1(h);
-                  const RealType normah = detail::owens_t_znorm1(fabs_ah);
+                  const RealType normh = owens_t_znorm1(h);
+                  const RealType normah = owens_t_znorm1(fabs_ah);
                   val = static_cast<RealType>(1)/static_cast<RealType>(4) - normh*normah -
-                     detail::owens_t_dispatch(fabs_ah, static_cast<RealType>(1) / fabs_a, h);
+                     owens_t_dispatch(fabs_ah, static_cast<RealType>(1) / fabs_a, h);
                } // if( h <= 0.67 )
                else
                {
                   const RealType normh = detail::owens_t_znorm2(h);
                   const RealType normah = detail::owens_t_znorm2(fabs_ah);
                   val = constants::half<RealType>()*(normh+normah) - normh*normah -
-                     detail::owens_t_dispatch(fabs_ah, static_cast<RealType>(1) / fabs_a, h);
+                     owens_t_dispatch(fabs_ah, static_cast<RealType>(1) / fabs_a, h);
                } // else [if( h <= 0.67 )]
             } // else [if(fabs_a <= 1)]
 

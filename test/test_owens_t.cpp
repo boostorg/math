@@ -38,6 +38,8 @@ using boost::math::owens_t;
 #include "libs/math/test/table_type.hpp"
 #include "libs/math/test/functor.hpp"
 
+#include "owens_t_T7.hpp"
+
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -132,7 +134,35 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(2.L), static_cast<RealType>(0.5L)), static_cast<RealType>(0.00862507798552150713113488319154637187875641190390854291100809449487812876461L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(2L)), static_cast<RealType>(0.14158060365397839346662819588111542648867283386549027383784843786494855594607L), tolerance);
 
+  // check basic properties
+  BOOST_CHECK_EQUAL(owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(2L)), owens_t(static_cast<RealType>(-0.5L), static_cast<RealType>(2L)));
+  BOOST_CHECK_EQUAL(owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(2L)), -owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(-2L)));
+  BOOST_CHECK_EQUAL(owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(2L)), -owens_t(static_cast<RealType>(-0.5L), static_cast<RealType>(-2L)));
 
+} // template <class RealType>void test_spots(RealType)
+
+template <class RealType> // Any floating-point type RealType.
+void check_against_T7(RealType)
+{
+  // Basic sanity checks, test data is as accurate as long double,
+  // so set tolerance to a few epsilon expressed as a fraction.
+  RealType tolerance = boost::math::tools::epsilon<RealType>() * 30; // most OK with 3 eps tolerance.
+  cout << "Tolerance = " << tolerance << "." << endl;
+
+  using  ::boost::math::owens_t;
+  using namespace std; // ADL of std names.
+
+  // apply log scale because points near zero are more interesting
+  for(RealType a = static_cast<RealType>(-10.0l); a < static_cast<RealType>(3l); a+= static_cast<RealType>(0.1l))
+    for(RealType h = static_cast<RealType>(-10.0l); h < static_cast<RealType>(4l); h+= static_cast<RealType>(0.1l))
+    {
+      const RealType expa = exp(a);
+      const RealType exph = exp(h);
+      const RealType t = boost::math::owens_t(exph, expa);
+      const RealType t7 = boost::math::owens_t_T7(exph,expa);
+      BOOST_CHECK_CLOSE_FRACTION(t, t7, tolerance);
+    }
+    
 } // template <class RealType>void test_spots(RealType)
 
 template <class Real, class T>
@@ -199,6 +229,15 @@ int test_main(int, char* [])
   test_spots(0.0L); // Test long double.
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+#endif
+#endif
+
+  check_against_T7(0.0F); // Test float.
+  check_against_T7(0.0); // Test double.
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+  check_against_T7(0.0L); // Test long double.
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+  check_against_T7(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
 #endif
 
