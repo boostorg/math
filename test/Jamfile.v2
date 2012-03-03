@@ -1,0 +1,20 @@
+# copyright John Maddock 2012
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt.
+
+import modules ;
+import path ;
+
+project : requirements 
+   <include>../../.. 
+   ;
+
+
+run test_owens_t.cpp /boost/test//boost_test_exec_monitor/<link>static /boost/regex//boost_regex/<link>static ;
+run test_skew_normal.cpp /boost/test//boost_test_exec_monitor/<link>static ;
+run ../example/owens_t_drv.cpp ;
+run ../example/skew_normal_drv.cpp ;
+
+
+
