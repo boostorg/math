@@ -56,11 +56,11 @@ void expected_results()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
-      largest_type = "(long\\s+)?double";
+      largest_type = "(long\\s+)?double|real_concept";
    }
    else
    {
-      largest_type = "long double";
+      largest_type = "long double|real_concept";
    }
 #else
    largest_type = "(long\\s+)?double";
@@ -69,20 +69,26 @@ void expected_results()
    //
    // Catch all cases come last:
    //
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      largest_type,                  // test type(s)
-      ".*",      // test data group
-      "boost::math::owens_t", 10, 5);  // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "real_concept",                  // test type(s)
-      ".*",      // test data group
-      "boost::math::owens_t", 10, 5);  // test function
+   if(std::numeric_limits<long double>::digits > 60)
+   {
+      add_expected_result(
+         ".*",                            // compiler
+         ".*",                            // stdlib
+         ".*",                            // platform
+         largest_type,                    // test type(s)
+         ".*",      // test data group
+         "boost::math::owens_t", 500, 100);  // test function
+   }
+   else
+   {
+      add_expected_result(
+         ".*",                            // compiler
+         ".*",                            // stdlib
+         ".*",                            // platform
+         largest_type,                    // test type(s)
+         ".*",      // test data group
+         "boost::math::owens_t", 10, 5);  // test function
+   }
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
