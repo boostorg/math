@@ -170,14 +170,14 @@ namespace boost
                   const RealType normh = owens_t_znorm1(h);
                   const RealType normah = owens_t_znorm1(fabs_ah);
                   val = static_cast<RealType>(1)/static_cast<RealType>(4) - normh*normah -
-                     compute_owens_t_T7(fabs_ah, static_cast<RealType>(1) / fabs_a);
+                     compute_owens_t_T7(fabs_ah, static_cast<RealType>(1 / fabs_a));
                } // if( h <= 0.67 )
                else
                {
                   const RealType normh = owens_t_znorm2(h);
                   const RealType normah = owens_t_znorm2(fabs_ah);
                   val = constants::half<RealType>()*(normh+normah) - normh*normah -
-                     compute_owens_t_T7(fabs_ah, static_cast<RealType>(1) / fabs_a);
+                     compute_owens_t_T7(fabs_ah, static_cast<RealType>(1 / fabs_a));
                } // else [if( h <= 0.67 )]
             } // else [if(fabs_a <= 1)]
 
