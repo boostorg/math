@@ -95,22 +95,22 @@ namespace boost
 	const RealType hs = h*h;
 	const RealType as = a*a;
 
-	RealType u = one_div_two_pi<RealType>() * a * exp(-half<RealType>()*hs*(static_cast<RealType>(1)+as));
+	//RealType u = one_div_two_pi<RealType>() * a * exp(-half<RealType>()*hs*(static_cast<RealType>(1)+as));
 	RealType v = c2[0];
 
-	RealType val = u*v;
+	RealType val = v;
 	RealType last_val = val+1; // last_val must not be the same as val
 
-	unsigned k = 0;
+	int k = 0;
 
 	std::vector<RealType> memory;
-	memory.push_back(u*v);
+	memory.push_back(v);
 
-	while((val != last_val) || (k<c2.size())) // use all c2
+	while((val != last_val) || (k<51)) // use all c2
 	  {
 	    last_val = val;
 	    k++;
-	    u *= as;
+	    const RealType u = std::pow(as,k);
 	    if(k < c2.size())
 	      {
 		v = (hs*v + c2[k])/(static_cast<RealType>(2*k+1));
@@ -133,12 +133,17 @@ namespace boost
 	std::sort(ndx_4_sorted_data.begin(), ndx_4_sorted_data.end(),
 		  boost::bind(owens_t_sort_proxy<typename std::vector<RealType>::size_type, RealType>, _1, _2, &memory[0]));
 
-	val = static_cast<RealType>(0);
-	for(unsigned i = 0; i != memory.size(); i++)
+	val = memory[ndx_4_sorted_data[0]];
+	for(unsigned i = 1; i != memory.size(); i++)
 	  {
 	    val+=memory[ndx_4_sorted_data[i]];
 	  }
 
+        // split the exponential to avoid values that go below the minimum floating pt value
+        val *= exp(-half<RealType>()*hs*as);
+        val *= exp(-half<RealType>()*hs);
+        val *= one_div_two_pi<RealType>() * a;
+        
 	return val;
       } // RealType compute_owens_t_T7(const RealType h, const RealType a)
       

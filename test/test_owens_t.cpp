@@ -159,8 +159,8 @@ void check_against_T7(RealType)
   using namespace std; // ADL of std names.
 
   // apply log scale because points near zero are more interesting
-  for(RealType a = static_cast<RealType>(-10.0l); a < static_cast<RealType>(3l); a+= static_cast<RealType>(0.1l))
-    for(RealType h = static_cast<RealType>(-10.0l); h < static_cast<RealType>(4l); h+= static_cast<RealType>(0.1l))
+  for(RealType a = static_cast<RealType>(-10.0l); a < static_cast<RealType>(3l); a+= static_cast<RealType>(0.2l))
+    for(RealType h = static_cast<RealType>(-10.0l); h < static_cast<RealType>(4l); h+= static_cast<RealType>(0.2l))
     {
       const RealType expa = exp(a);
       const RealType exph = exp(h);
