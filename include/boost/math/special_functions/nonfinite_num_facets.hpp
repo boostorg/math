@@ -91,6 +91,12 @@ namespace boost {
         OutputIterator& it, std::ios_base& iosb,
         CharType fill, ValType val) const
       {
+        static const CharType prefix_plus[2] = { '+', '\0' };
+        static const CharType prefix_minus[2] = { '-', '\0' };
+        static const CharType body_inf[4] = { 'i', 'n', 'f', '\0' };
+        static const CharType body_nan[4] = { 'n', 'a', 'n', '\0' };
+        static const CharType* null_string = 0;
+
         switch((boost::math::fpclassify)(val))
         {
 
@@ -101,15 +107,15 @@ namespace boost {
           }
           else if((boost::math::signbit)(val))
           { // negative infinity.
-            put_num_and_fill(it, iosb, "-", "inf", fill, val);
+            put_num_and_fill(it, iosb, prefix_minus, body_inf, fill, val);
           }
           else if(iosb.flags() & std::ios_base::showpos)
           { // Explicit "+inf" wanted.
-            put_num_and_fill(it, iosb, "+", "inf", fill, val);
+            put_num_and_fill(it, iosb, prefix_plus, body_inf, fill, val);
           }
           else
           { // just "inf" wanted.
-            put_num_and_fill(it, iosb, "", "inf", fill, val);
+            put_num_and_fill(it, iosb, null_string, body_inf, fill, val);
           }
           break;
 
@@ -120,15 +126,15 @@ namespace boost {
           }
           else if((boost::math::signbit)(val))
           { // negative so "-nan".
-            put_num_and_fill(it, iosb, "-", "nan", fill, val);
+            put_num_and_fill(it, iosb, prefix_minus, body_nan, fill, val);
           }
           else if(iosb.flags() & std::ios_base::showpos)
           { // explicit "+nan" wanted.
-            put_num_and_fill(it, iosb, "+", "nan", fill, val);
+            put_num_and_fill(it, iosb, prefix_plus, body_nan, fill, val);
           }
           else
           { // Just "nan".
-            put_num_and_fill(it, iosb, "", "nan", fill, val);
+            put_num_and_fill(it, iosb, null_string, body_nan, fill, val);
           }
           break;
 
@@ -137,13 +143,8 @@ namespace boost {
           { // Flag set to distinguish between positive and negative zero.
             // But string "0" should have stuff after decimal point if setprecision and/or exp format. 
 
-            //std::basic_ostringstream<CharType> zeros; // Needs to be CharType version.
+            std::basic_ostringstream<CharType> zeros; // Needs to be CharType version.
 
-            std::ostringstream zeros;
-                         
-            //std::cout << "iosb.flags() = " << std::hex << iosb.flags() << std::endl;
-            //std::cout << "iosb.precision() = " << std::hex << iosb.precision() << std::endl;
-            //std::cout << "iosb.width() = " << std::hex << iosb.width() << std::endl;
             // Copy flags, fill, width and precision.
             zeros.flags(iosb.flags());
             zeros.unsetf(std::ios::showpos); // Ignore showpos because must be negative.
@@ -151,14 +152,11 @@ namespace boost {
             //zeros.width is set by put_num_and_fill
             zeros.fill(static_cast<char>(fill));
             zeros << ValType(0);
-            // std::cout << "zeros.str() = "<< zeros.str() << std::endl;
-            //  put_num_and_fill(it, iosb, "-", zeros.str().c_str(), fill, val); 
-          
-            put_num_and_fill(it, iosb, "-", zeros.str().c_str(), fill, val);
+            put_num_and_fill(it, iosb, prefix_minus, zeros.str().c_str(), fill, val);
           }
           else
           { // Output the platform default for positive and negative zero.
-            put_num_and_fill(it, iosb, 0, 0, fill, val);
+            put_num_and_fill(it, iosb, null_string, null_string, fill, val);
           }
           break;
 
@@ -170,11 +168,11 @@ namespace boost {
 
       template<class ValType>
       void put_num_and_fill(
-        OutputIterator& it, std::ios_base& iosb, const char* prefix,
-          const char* body, CharType fill, ValType val) const
+        OutputIterator& it, std::ios_base& iosb, const CharType* prefix,
+          const CharType* body, CharType fill, ValType val) const
       {
-        int prefix_length = prefix ? (int)std::strlen(prefix) : 0;
-        int body_length = body ? (int)std::strlen(body) : 0;
+        int prefix_length = prefix ? (int)std::char_traits<CharType>::length(prefix) : 0;
+        int body_length = body ? (int)std::char_traits<CharType>::length(body) : 0;
         int width = prefix_length + body_length;
         std::ios_base::fmtflags adjust = iosb.flags() & std::ios_base::adjustfield;
         const std::ctype<CharType>& ct
@@ -189,7 +187,7 @@ namespace boost {
         if(prefix)
         { // Adjust width for prefix.
           while(*prefix)
-            *it = ct.widen(*(prefix++));
+            *it = *(prefix++);
           iosb.width( iosb.width() - prefix_length );
           width -= prefix_length;
         }
@@ -203,12 +201,12 @@ namespace boost {
           if(iosb.flags() & std::ios_base::uppercase)
           {
               while(*body)
-                *it = ct.toupper(ct.widen(*(body++)));
+                *it = ct.toupper(*(body++));
           }
           else
           {
             while(*body)
-              *it = ct.widen(*(body++));
+              *it = *(body++);
           }
 
           if(adjust == std::ios_base::left)
