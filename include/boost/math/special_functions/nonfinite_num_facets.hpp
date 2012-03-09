@@ -32,7 +32,6 @@
 #  pragma warning(push)
 #  pragma warning(disable : 4127) // conditional expression is constant.
 #  pragma warning(disable : 4706) // assignment within conditional expression.
-#  pragma warning(disable : 4244) // TODO?  // Needs to be CharType version.
 #endif
 
 namespace boost {
@@ -150,7 +149,7 @@ namespace boost {
             zeros.unsetf(std::ios::showpos); // Ignore showpos because must be negative.
             zeros.precision(iosb.precision());
             //zeros.width is set by put_num_and_fill
-            zeros.fill(fill);
+            zeros.fill(static_cast<char>(fill));
             zeros << ValType(0);
             // std::cout << "zeros.str() = "<< zeros.str() << std::endl;
             //  put_num_and_fill(it, iosb, "-", zeros.str().c_str(), fill, val); 
