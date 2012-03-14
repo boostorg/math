@@ -39,6 +39,16 @@ namespace {
 
   BOOST_AUTO_TEST_CASE(signed_zero_test)
   {
+    std::cout 
+      << "BuildInfo:" << '\n'
+      << "  platform "  << BOOST_PLATFORM << '\n'
+      << "  compiler "  << BOOST_COMPILER << '\n'
+      << "  STL "       << BOOST_STDLIB << '\n'
+      << "  Boost version " << BOOST_VERSION/100000     << "."
+                            << BOOST_VERSION/100 % 1000 << "."
+                            << BOOST_VERSION % 100     
+    << std::endl;
+
     signed_zero_test_impl<char, float>();
     signed_zero_test_impl<char, double>();
     signed_zero_test_impl<char, long double>();
@@ -49,6 +59,8 @@ namespace {
 
   template<class CharType, class ValType> void signed_zero_test_impl()
   {
+
+
     if (signbit(static_cast<CharType>(-1e-6f) / (std::numeric_limits<CharType>::max)()) != -0)
     {
       BOOST_TEST_MESSAGE("Signed zero is not supported on this platform!");
@@ -128,10 +140,12 @@ namespace {
     CHECKOUT(std::right << std::setw(4) << 0., "   0");
     CHECKOUT(std::left << std::setw(4) << 0., "0   ");
     CHECKOUT(std::setw(4) << std::setfill('*') << 0., "***0");
-    CHECKOUT(std::setw(4) << std::internal << std::setfill('*') << 0., "***0"); // left adjust sign and right adjust value
-    CHECKOUT(std::showpos << std::setw(4) << std::internal << std::setfill('*') << 0., "+**0"); // left adjust sign and right adjust value
-    CHECKOUT(std::showpoint<< 0., "0.000000"); //  std::setprecision(6)
-    CHECKOUT(std::setprecision(2) << std::showpoint<< 0., "0.00");
+    CHECKOUT(std::setw(4) << std::internal << std::setfill('*') << 0., "***0"); // left adjust sign and right adjust value.
+    CHECKOUT(std::showpos << std::setw(4) << std::internal << std::setfill('*') << 0., "+**0"); // left adjust sign and right adjust value.
+    CHECKOUT(std::showpoint << 0., "0.000000"); //  std::setprecision(6)
+    // or 0.00000 
+    CHECKOUT(std::setprecision(2) << std::showpoint << 0., "0.00");
+    // or 0.0
 
     CHECKOUT(std::fixed << std::setw(5) << std::setfill('0') << std::setprecision(2) << 0., "00.00");
     CHECKOUT(std::fixed << std::setw(6) << std::setfill('0') << std::setprecision(2) << 0., "000.00");
@@ -141,7 +155,7 @@ namespace {
 
     CHECKOUT(std::showpos << 0., "+0");
     CHECKOUT(std::showpos << std::fixed << std::setw(6) << std::setfill('*') << std::setprecision(2) << std::left << 0.0, "+0.00*");
-    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << 0., "0.0e+000**");
+    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << 0., "0.0e+000**"); // or 0.0e+00*** 
     CHECKOUT(std::fixed << std::showpoint << std::setw(6) << std::setfill('*') << std::setprecision(3) << std::left << 0., "0.000*");
 
     double nz = (changesign)(static_cast<double>(0)); // negative signed zero.
@@ -162,12 +176,12 @@ namespace {
     CHECKOUT(std::fixed << std::setw(6) << std::setfill('*') << std::setprecision(3) << 0., "*0.000");
     CHECKOUT(std::fixed << std::setw(6) << std::setfill('*') << std::setprecision(2) << std::left << 0.0, "0.00**");
 
-    CHECKOUT(std::setprecision(2) << nz, "-0");
-    CHECKOUT(std::setprecision(2) << std::showpoint << nz, "-0.00");
+    CHECKOUT(std::setprecision(2) << nz, "-0"); // No showpoint, so no decimal point nor trailing zeros.
+    CHECKOUT(std::setprecision(2) << std::showpoint << nz, "-0.00"); // or "-0.0"
     CHECKOUT(std::fixed << std::showpoint << std::setw(6) << std::setfill('*') << std::setprecision(3) << std::left << 0., "0.000*");
-    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << nz, "-0.0e+000*");
+    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << nz, "-0.0e+000*"); // -0.0e+00**
 
-    CHECKOUT(std::setw(1) << std::setprecision(3) << std::showpoint << nz, "-0.000"); // Not enough width for precision overflows width.
+    CHECKOUT(std::setw(1) << std::setprecision(3) << std::showpoint << nz, "-0.000"); // Not enough width for precision overflows width.  or "-0.00"
 
     // Non zero values.
 
