@@ -110,7 +110,7 @@ namespace boost
 	  {
 	    last_val = val;
 	    k++;
-	    const RealType u = std::pow(as,k);
+	    const RealType u = pow(as,k);
 	    if(k < c2.size())
 	      {
 		v = (hs*v + c2[k])/(static_cast<RealType>(2*k+1));
@@ -215,6 +215,7 @@ namespace boost
 } // namespace boost
 
 #endif
+
 
 
 
