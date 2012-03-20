@@ -132,6 +132,8 @@ namespace {
   BOOST_AUTO_TEST_CASE(misc_output_tests)
   { // Tests of output using a variety of output options.
 
+
+
     // Positive zero.
     CHECKOUT(0, "0"); // integer zero.
     CHECKOUT(0., "0"); // double zero.
@@ -142,11 +144,15 @@ namespace {
     CHECKOUT(std::setw(4) << std::setfill('*') << 0., "***0");
     CHECKOUT(std::setw(4) << std::internal << std::setfill('*') << 0., "***0"); // left adjust sign and right adjust value.
     CHECKOUT(std::showpos << std::setw(4) << std::internal << std::setfill('*') << 0., "+**0"); // left adjust sign and right adjust value.
-    CHECKOUT(std::showpoint << 0., "0.000000"); //  std::setprecision(6)
-    // or 0.00000 
-    CHECKOUT(std::setprecision(2) << std::showpoint << 0., "0.00");
-    // or 0.0
 
+#if defined(BOOST_MSVC) && defined(_CPPLIB_VER)
+// BOOST_STDLIB == ("Dinkumware standard library version" BOOST_STRINGIZE(_CPPLIB_VER)) )
+    CHECKOUT(std::showpoint << 0., "0.000000"); //  std::setprecision(6)
+    CHECKOUT(std::setprecision(2) << std::showpoint << 0., "0.00");
+#else
+    CHECKOUT(std::showpoint << 0., "0.00000"); //  std::setprecision(6)
+    CHECKOUT(std::setprecision(2) << std::showpoint << 0., "0.0");
+#endif
     CHECKOUT(std::fixed << std::setw(5) << std::setfill('0') << std::setprecision(2) << 0., "00.00");
     CHECKOUT(std::fixed << std::setw(6) << std::setfill('0') << std::setprecision(2) << 0., "000.00");
     CHECKOUT(std::fixed << std::setw(6) << std::setfill('0') << std::setprecision(3) << 0., "00.000");
@@ -155,13 +161,17 @@ namespace {
 
     CHECKOUT(std::showpos << 0., "+0");
     CHECKOUT(std::showpos << std::fixed << std::setw(6) << std::setfill('*') << std::setprecision(2) << std::left << 0.0, "+0.00*");
-    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << 0., "0.0e+000**"); // or 0.0e+00*** 
+#if defined(BOOST_MSVC) && defined(_CPPLIB_VER)
+    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << 0., "0.0e+000**");
+#else
+    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << 0., "0.0e+00***"); 
+#endif
     CHECKOUT(std::fixed << std::showpoint << std::setw(6) << std::setfill('*') << std::setprecision(3) << std::left << 0., "0.000*");
 
     double nz = (changesign)(static_cast<double>(0)); // negative signed zero.
     CHECKOUT(nz, "-0");
     // CHECKOUT(std::defaultfloat << nz, "-0"); Only for C++11
-    CHECKOUT(std::showpos << nz, "-0"); // Ignore showpos because negative.
+    CHECKOUT(std::showpos << nz, "-0"); // Ignore showpos because is negative.
     CHECKOUT(std::setw(2) << nz, "-0");
     CHECKOUT(std::setw(4) << nz, "  -0");
     CHECKOUT(std::right << std::setw(4) << nz, "  -0");
@@ -175,13 +185,17 @@ namespace {
     CHECKOUT(std::fixed << std::setw(6) << std::setfill('0') << std::setprecision(3) << 0., "00.000");
     CHECKOUT(std::fixed << std::setw(6) << std::setfill('*') << std::setprecision(3) << 0., "*0.000");
     CHECKOUT(std::fixed << std::setw(6) << std::setfill('*') << std::setprecision(2) << std::left << 0.0, "0.00**");
-
     CHECKOUT(std::setprecision(2) << nz, "-0"); // No showpoint, so no decimal point nor trailing zeros.
+#if defined(BOOST_MSVC) && defined(_CPPLIB_VER)
     CHECKOUT(std::setprecision(2) << std::showpoint << nz, "-0.00"); // or "-0.0"
-    CHECKOUT(std::fixed << std::showpoint << std::setw(6) << std::setfill('*') << std::setprecision(3) << std::left << 0., "0.000*");
     CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << nz, "-0.0e+000*"); // -0.0e+00**
-
     CHECKOUT(std::setw(1) << std::setprecision(3) << std::showpoint << nz, "-0.000"); // Not enough width for precision overflows width.  or "-0.00"
+#else
+    CHECKOUT(std::setprecision(2) << std::showpoint << nz, "-0.0"); // or "-0.00"
+    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << nz, "-0.0e+00**"); // -0.0e+000*
+    CHECKOUT(std::setw(1) << std::setprecision(3) << std::showpoint << nz, "-0.00"); // Not enough width for precision overflows width.  or "-0.000"
+#endif
+    CHECKOUT(std::fixed << std::showpoint << std::setw(6) << std::setfill('*') << std::setprecision(3) << std::left << 0., "0.000*");
 
     // Non zero values.
 
