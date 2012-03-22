@@ -145,7 +145,7 @@ namespace {
     CHECKOUT(std::setw(4) << std::internal << std::setfill('*') << 0., "***0"); // left adjust sign and right adjust value.
     CHECKOUT(std::showpos << std::setw(4) << std::internal << std::setfill('*') << 0., "+**0"); // left adjust sign and right adjust value.
 
-#if defined(BOOST_MSVC) && defined(_CPPLIB_VER)
+#if defined(_CPPLIB_VER) && (_CPPLIB_VER >= 306)
 // BOOST_STDLIB == ("Dinkumware standard library version" BOOST_STRINGIZE(_CPPLIB_VER)) )
     CHECKOUT(std::showpoint << 0., "0.000000"); //  std::setprecision(6)
     CHECKOUT(std::setprecision(2) << std::showpoint << 0., "0.00");
