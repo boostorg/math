@@ -1,5 +1,9 @@
 [template history[]
 
+[h4 Boost-1.50]
+
+* Fixed issue in `bessel_jy` which causes Y[sub 8.5](4[pi]) to yield a NaN.
+
 [h4 Boost-1.49]
 
 * Deprecated wrongly named `twothirds` math constant in favour of `two_thirds` (with underscore separator).

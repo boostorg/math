@@ -8,6 +8,7 @@
 #include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
@@ -176,7 +177,7 @@ void test_bessel(T, const char* name)
         {{ SC_(-1e+03), SC_(7e+02), SC_(-1.88753109980945889960843803284345261796244752396992106755091e77) }},
         {{ SC_(-25), SC_(8), SC_(3.45113613777297661997458045843868931827873456761831907587263e8) }}
     }};
-    static const boost::array<boost::array<T, 3>, 9> yv_data = {{
+    static const boost::array<boost::array<T, 3>, 11> yv_data = {{
         //SC_(2.25), {{ SC_(1) / 1024, SC_(-1.01759203636941035147948317764932151601257765988969544340275e7) }},
         {{ SC_(0.5), T(1) / (1024*1024), SC_(-817.033790261762580469303126467917092806755460418223776544122) }},
         {{ SC_(5.5), SC_(3.125), SC_(-2.61489440328417468776474188539366752698192046890955453259866) }},
@@ -187,6 +188,8 @@ void test_bessel(T, const char* name)
         {{ SC_(141.75), SC_(1e+02), SC_(-5.38829231428696507293191118661269920130838607482708483122068e9) }},
         {{ SC_(141.75), SC_(2e+04), SC_(-0.00376577888677186194728129112270988602876597726657372330194186) }},
         {{ SC_(-141.75), SC_(1e+02), SC_(-3.81009803444766877495905954105669819951653361036342457919021e9) }},
+        {{ SC_(8.5), boost::math::constants::pi<T>() * 4, SC_(0.257086543428224355151772807588810984369026142375675714560864) }},
+        {{ SC_(-8.5), boost::math::constants::pi<T>() * 4, SC_(0.0436807946352780974532519564114026730332781693877984686758680) }},
     }};
     static const boost::array<boost::array<T, 3>, 7> yv_large_data = {{
         // Bug report https://svn.boost.org/trac/boost/ticket/5560:

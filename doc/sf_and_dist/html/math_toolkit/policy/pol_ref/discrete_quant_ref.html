@@ -78,7 +78,6 @@
 <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span>
 <span class="comment">// Upper 95% quantile:</span>
 <span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span>
-
 </pre>
 <p>
         </p>
@@ -119,7 +118,6 @@
 <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// rounded up 27 from 27.3898</span>
 <span class="comment">// Upper quantile rounded up:</span>
 <span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">negative_binomial</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span> <span class="comment">// rounded down to 69 from 68.1584</span>
-
 </pre>
 <p>
         </p>
@@ -177,7 +175,6 @@
 <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 28 rounded up from 27.3898</span>
 <span class="comment">// Upper quantile rounded down:</span>
 <span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span> <span class="comment">// 68 rounded down from 68.1584</span>
-
 </pre>
 <p>
         </p>
@@ -244,7 +241,6 @@
 <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">);</span> <span class="comment">// 27</span>
 <span class="comment">// Upper quantile rounded (down) to nearest:</span>
 <span class="keyword">double</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">dist_type</span><span class="special">(</span><span class="number">20</span><span class="special">,</span> <span class="number">0.3</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span> <span class="comment">// 68</span>
-
 </pre>
 <p>
         </p>

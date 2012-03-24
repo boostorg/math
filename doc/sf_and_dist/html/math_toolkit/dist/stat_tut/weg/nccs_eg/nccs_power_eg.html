@@ -50,7 +50,8 @@ test at the 5% significance
 <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">setprecision</span><span class="special">;</span>
 
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
-<span class="special">{</span></pre>
+<span class="special">{</span>
+</pre>
 <p>
             </p>
 <p>
@@ -64,7 +65,8 @@ test at the 5% significance
 <span class="special">{</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"[[lambda]="</span> <span class="special">&lt;&lt;</span> <span class="identifier">lam</span> <span class="special">&lt;&lt;</span> <span class="string">"]"</span><span class="special">;</span>
 <span class="special">}</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"]\n"</span><span class="special">;</span></pre>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"]\n"</span><span class="special">;</span>
+</pre>
 <p>
             </p>
 <p>
@@ -80,7 +82,8 @@ test at the 5% significance
 <span class="special">{</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"[["</span> <span class="special">&lt;&lt;</span> <span class="identifier">n</span> <span class="special">&lt;&lt;</span> <span class="string">"]"</span><span class="special">;</span>
    <span class="keyword">for</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">lam</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span> <span class="identifier">lam</span> <span class="special">&lt;=</span> <span class="number">20</span><span class="special">;</span> <span class="identifier">lam</span> <span class="special">+=</span> <span class="number">2</span><span class="special">)</span>
-   <span class="special">{</span></pre>
+   <span class="special">{</span>
+</pre>
 <p>
             </p>
 <p>
@@ -88,7 +91,8 @@ test at the 5% significance
             </p>
 <p>
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">cs</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">chi_squared</span><span class="special">(</span><span class="identifier">n</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span></pre>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">cs</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">chi_squared</span><span class="special">(</span><span class="identifier">n</span><span class="special">),</span> <span class="number">0.05</span><span class="special">));</span>
+</pre>
 <p>
             </p>
 <p>
@@ -97,7 +101,8 @@ test at the 5% significance
             </p>
 <p>
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">beta</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">non_central_chi_squared</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">lam</span><span class="special">),</span> <span class="identifier">cs</span><span class="special">));</span></pre>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">beta</span> <span class="special">=</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">non_central_chi_squared</span><span class="special">(</span><span class="identifier">n</span><span class="special">,</span> <span class="identifier">lam</span><span class="special">),</span> <span class="identifier">cs</span><span class="special">));</span>
+</pre>
 <p>
             </p>
 <p>
@@ -110,7 +115,8 @@ test at the 5% significance
       <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"]"</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="special">}</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"]"</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-<span class="special">}</span></pre>
+<span class="special">}</span>
+</pre>
 <p>
             </p>
 <p>

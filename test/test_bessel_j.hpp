@@ -8,6 +8,7 @@
 #include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
@@ -215,7 +216,7 @@ void test_bessel(T, const char* name)
     do_test_cyl_bessel_j_int<T>(j1_tricky, name, "Bessel J1: Mathworld Data (tricky cases) (Integer Version)");
     do_test_cyl_bessel_j_int<T>(jn_data, name, "Bessel JN: Mathworld Data (Integer Version)");
 
-    static const boost::array<boost::array<T, 3>, 18> jv_data = {{
+    static const boost::array<boost::array<T, 3>, 20> jv_data = {{
         //SC_(-2.4), {{ SC_(0), std::numeric_limits<T>::infinity() }},
         {{ T(2457)/1024, T(1)/1024, SC_(3.80739920118603335646474073457326714709615200130620574875292e-9) }},
         {{ SC_(5.5), T(3217)/1024, SC_(0.0281933076257506091621579544064767140470089107926550720453038) }},
@@ -236,6 +237,8 @@ void test_bessel(T, const char* name)
         {{ T(-10486074) / (1024*1024), SC_(1e+02), SC_(-0.0547613660316806551338637153942604550779513947674222863858713) }},
         // Bug report https://svn.boost.org/trac/boost/ticket/4812:
         {{ SC_(1.5), T(8034)/1024, SC_(0.0339477646369710610146236955872928005087352629422508823945264) }},
+        {{ SC_(8.5), boost::math::constants::pi<T>() * 4, SC_(0.0436807946352780974532519564114026730332781693877984686758680) }},
+        {{ SC_(-8.5), boost::math::constants::pi<T>() * 4, SC_(-0.257086543428224355151772807588810984369026142375675714560864) }},
     }};
     do_test_cyl_bessel_j<T>(jv_data, name, "Bessel J: Mathworld Data");
     static const boost::array<boost::array<T, 3>, 4> jv_large_data = {{
@@ -246,7 +249,7 @@ void test_bessel(T, const char* name)
         {{ SC_(-2.5), SC_(4), SC_(-0.0145679476685218007666785535204236327832335803441449596297004) }},
     }};
     if(jv_large_data[0][1] != 0)
-      do_test_cyl_bessel_j<T>(jv_data, name, "Bessel J: Mathworld Data (large values)");
+      do_test_cyl_bessel_j<T>(jv_large_data, name, "Bessel J: Mathworld Data (large values)");
 
 #include "bessel_j_int_data.ipp"
     do_test_cyl_bessel_j<T>(bessel_j_int_data, name, "Bessel JN: Random Data");

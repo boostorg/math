@@ -229,6 +229,16 @@ void expected_results()
       ".*",                          // test data group
       ".*", 80, 40);                 // test function
    //
+   // One set of float tests has inexact input values, so there is a slight error:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "float",                       // test type(s)
+      "Yv: Mathworld Data",    // test data group
+      ".*", 20, 20);                 // test function
+   //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
    //
