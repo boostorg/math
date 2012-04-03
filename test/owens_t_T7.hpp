@@ -121,6 +121,8 @@ namespace boost
 		v = hs*v/(static_cast<RealType>(2*k+1));
 	      }
 	    val += u*v;
+	    if(isinf(val))
+	      break;
 	    memory.push_back(u*v);
 	  } // while(val != last_val)
 

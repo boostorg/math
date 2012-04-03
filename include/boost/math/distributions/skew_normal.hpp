@@ -273,20 +273,24 @@ namespace boost{ namespace math{
 
     using namespace boost::math::constants;
 
-    const RealType delta = dist.shape() / sqrt(static_cast<RealType>(1)+dist.shape()*dist.shape());
+    //const RealType delta = dist.shape() / sqrt(static_cast<RealType>(1)+dist.shape()*dist.shape());
 
-    return dist.location() + dist.scale() * delta * root_two_div_pi<RealType>();
+    //return dist.location() + dist.scale() * delta * root_two_div_pi<RealType>();
+
+    return dist.location() + dist.scale() * dist.shape() / sqrt(pi<RealType>()+pi<RealType>()*dist.shape()*dist.shape()) * root_two<RealType>();
   }
 
   template <class RealType, class Policy>
   inline RealType variance(const skew_normal_distribution<RealType, Policy>& dist)
   {
-    BOOST_MATH_STD_USING  // for ADL of std functions
-
     using namespace boost::math::constants;
 
-    const RealType delta = dist.shape() / sqrt(static_cast<RealType>(1)+dist.shape()*dist.shape());
-    RealType variance = dist.scale()*dist.scale()*(static_cast<RealType>(1)-two_div_pi<RealType>()*delta*delta);
+    const RealType delta2 = static_cast<RealType>(1) / (static_cast<RealType>(1)+static_cast<RealType>(1)/(dist.shape()*dist.shape()));
+    //const RealType inv_delta2 = static_cast<RealType>(1)+static_cast<RealType>(1)/(dist.shape()*dist.shape());
+
+    RealType variance = dist.scale()*dist.scale()*(static_cast<RealType>(1)-two_div_pi<RealType>()*delta2);
+    //RealType variance = dist.scale()*dist.scale()*(static_cast<RealType>(1)-two_div_pi<RealType>()/inv_delta2);
+
     return variance;
   }
 
@@ -581,16 +585,14 @@ namespace boost{ namespace math{
   template <class RealType, class Policy>
   inline RealType kurtosis_excess(const skew_normal_distribution<RealType, Policy>& dist)
   {
-    BOOST_MATH_STD_USING  // for ADL of std functions
-
     using namespace boost::math::constants;
 
     static const RealType factor = pi_minus_three<RealType>()*static_cast<RealType>(2);
 
-    const RealType delta = dist.shape() / sqrt(static_cast<RealType>(1)+dist.shape()*dist.shape());
+    const RealType delta2 = static_cast<RealType>(1) / (static_cast<RealType>(1)+static_cast<RealType>(1)/(dist.shape()*dist.shape()));
 
-    const RealType x = static_cast<RealType>(1)-two_div_pi<RealType>()*delta*delta;
-    const RealType y = two_div_pi<RealType>() * delta * delta;
+    const RealType x = static_cast<RealType>(1)-two_div_pi<RealType>()*delta2;
+    const RealType y = two_div_pi<RealType>() * delta2;
 
     return factor * y*y / (x*x);
   }
