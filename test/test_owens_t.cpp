@@ -87,7 +87,7 @@ void expected_results()
          ".*",                            // platform
          largest_type,                    // test type(s)
          ".*",      // test data group
-         "boost::math::owens_t", 10, 5);  // test function
+         "boost::math::owens_t", 60, 5);  // test function
    }
    //
    // Finish off by printing out the compiler/stdlib/platform names,
@@ -152,7 +152,7 @@ void check_against_T7(RealType)
 {
   // Basic sanity checks, test data is as accurate as long double,
   // so set tolerance to a few epsilon expressed as a fraction.
-  RealType tolerance = boost::math::tools::epsilon<RealType>() * 90; // most OK with 3 eps tolerance.
+  RealType tolerance = boost::math::tools::epsilon<RealType>() * 150; // most OK with 3 eps tolerance.
   cout << "Tolerance = " << tolerance << "." << endl;
 
   using  ::boost::math::owens_t;
@@ -165,7 +165,9 @@ void check_against_T7(RealType)
       const RealType expa = exp(a);
       const RealType exph = exp(h);
       const RealType t = boost::math::owens_t(exph, expa);
-      const RealType t7 = boost::math::owens_t_T7(exph,expa);
+      RealType t7 = boost::math::owens_t_T7(exph,expa);
+      //if(!boost::math::isnormal(t) || !boost::math::isnormal(t7))
+      //   std::cout << "a = " << expa << " h = " << exph << " t = " << t << " t7 = " << t7 << std::endl;
       BOOST_CHECK_CLOSE_FRACTION(t, t7, tolerance);
     }
     

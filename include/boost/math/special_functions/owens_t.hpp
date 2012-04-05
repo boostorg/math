@@ -106,19 +106,17 @@ namespace boost
          } // unsigned short owens_t_compute_code(const RealType h, const RealType a)
 
          template<typename RealType>
-         inline unsigned short owens_t_get_order(const unsigned short icode, RealType)
+         inline unsigned short owens_t_get_order_imp(const unsigned short icode, RealType, const mpl::int_<53>&)
          {
             static const unsigned short ord[] = {2, 3, 4, 5, 7, 10, 12, 18, 10, 20, 30, 0, 4, 7, 8, 20, 0, 0}; // 18 entries
 
             BOOST_ASSERT(icode<18);
 
             return ord[icode];
-         } // unsigned short owens_t_get_order(const unsigned short icode, RealType)
+         } // unsigned short owens_t_get_order(const unsigned short icode, RealType, mpl::int<53> const&)
 
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-
-        template<>
-        inline unsigned short owens_t_get_order(const unsigned short icode, long double)
+         template<typename RealType>
+         inline unsigned short owens_t_get_order_imp(const unsigned short icode, RealType, const mpl::int_<64>&)
         {
            // method ================>>>       {1, 1, 1, 1, 1,  1,  1,  1,  2,  2,  2,  3, 4,  4,  4,  4,  5, 6}
            static const unsigned short ord[] = {3, 4, 5, 6, 8, 11, 13, 19, 10, 20, 30,  0, 7, 10, 11, 23,  0, 0}; // 18 entries
@@ -126,9 +124,23 @@ namespace boost
           BOOST_ASSERT(icode<18);
 
           return ord[icode];
-        } // unsigned short owens_t_get_order(const unsigned short icode, long double)
+        } // unsigned short owens_t_get_order(const unsigned short icode, RealType, mpl::int<64> const&)
 
-#endif // BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+         template<typename RealType, typename Policy>
+         inline unsigned short owens_t_get_order(const unsigned short icode, RealType r, const Policy&)
+         {
+            typedef typename policies::precision<RealType, Policy>::type precision_type;
+            typedef typename mpl::if_<
+               mpl::or_<
+                  mpl::less_equal<precision_type, mpl::int_<0> >,
+                  mpl::greater<precision_type, mpl::int_<53> >
+               >,
+               mpl::int_<64>,
+               mpl::int_<53>
+            >::type tag_type;
+
+            return owens_t_get_order_imp(icode, r, tag_type());
+         }
 
          // compute the value of Owen's T function with method T1 from the reference paper
          template<typename RealType>
@@ -201,7 +213,7 @@ namespace boost
 
          // compute the value of Owen's T function with method T3 from the reference paper
          template<typename RealType>
-         inline RealType owens_t_T3(const RealType h, const RealType a, const RealType ah)
+         inline RealType owens_t_T3_imp(const RealType h, const RealType a, const RealType ah, const mpl::int_<53>&)
          {
             BOOST_MATH_STD_USING
             using namespace boost::math::constants;
@@ -251,18 +263,16 @@ namespace boost
             return val;
          } // RealType owens_t_T3(const RealType h, const RealType a, const RealType ah)
 
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-
         // compute the value of Owen's T function with method T3 from the reference paper
-        template<>
-        inline long double owens_t_T3(const long double h, const long double a, const long double ah)
+        template<class RealType>
+        inline RealType owens_t_T3_imp(const RealType h, const RealType a, const RealType ah, const mpl::int_<64>&)
         {
           BOOST_MATH_STD_USING
           using namespace boost::math::constants;
           
           const unsigned short m = 30;
 
-          static const long double c2[] =
+          static const RealType c2[] =
           {
               0.99999999999999999999999729978162447266851932041876728736094298092917625009873l,
             -0.99999999999999999999467056379678391810626533251885323416799874878563998732905968l,
@@ -297,15 +307,15 @@ namespace boost
               9.072354320794357587710929507988814669454281514268844884841547607134260303118208e-6l
           };
 
-          const long double as = a*a;
-          const long double hs = h*h;
-          const long double y = 1.l/hs;
+          const RealType as = a*a;
+          const RealType hs = h*h;
+          const RealType y = 1.l/hs;
 
-          long double ii = 1;
+          RealType ii = 1;
           unsigned short i = 0;
-          long double vi = a * exp( -ah*ah*half<long double>() ) * one_div_root_two_pi<long double>();
-          long double zi = owens_t_znorm1(ah)/h;
-          long double val = 0;
+          RealType vi = a * exp( -ah*ah*half<RealType>() ) * one_div_root_two_pi<RealType>();
+          RealType zi = owens_t_znorm1(ah)/h;
+          RealType val = 0;
 
           while( true )
           {
@@ -313,7 +323,7 @@ namespace boost
               val += zi*c2[i];
               if( m <= i ) // if( m < i+1 )
               {
-                val *= exp( -hs*half<long double>() ) * one_div_root_two_pi<long double>();
+                val *= exp( -hs*half<RealType>() ) * one_div_root_two_pi<RealType>();
                 break;
               } // if( m < i )
               zi = y * (ii*zi - vi);
@@ -323,9 +333,23 @@ namespace boost
           } // while( true )
 
           return val;
-        } // long double owens_t_T3(const long double h, const long double a, const long double ah)
+        } // RealType owens_t_T3(const RealType h, const RealType a, const RealType ah)
 
-#endif // BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+        template<class RealType, class Policy>
+        inline RealType owens_t_T3(const RealType h, const RealType a, const RealType ah, const Policy&)
+        {
+            typedef typename policies::precision<RealType, Policy>::type precision_type;
+            typedef typename mpl::if_<
+               mpl::or_<
+                  mpl::less_equal<precision_type, mpl::int_<0> >,
+                  mpl::greater<precision_type, mpl::int_<53> >
+               >,
+               mpl::int_<64>,
+               mpl::int_<53>
+            >::type tag_type;
+
+            return owens_t_T3_imp(h, a, ah, tag_type());
+        }
 
          // compute the value of Owen's T function with method T4 from the reference paper
          template<typename RealType>
@@ -358,7 +382,7 @@ namespace boost
 
          // compute the value of Owen's T function with method T5 from the reference paper
          template<typename RealType>
-         inline RealType owens_t_T5(const RealType h, const RealType a)
+         inline RealType owens_t_T5_imp(const RealType h, const RealType a, const mpl::int_<53>&)
          {
             BOOST_MATH_STD_USING
             /*
@@ -400,11 +424,9 @@ namespace boost
             return val*a;
          } // RealType owens_t_T5(const RealType h, const RealType a)
 
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-
         // compute the value of Owen's T function with method T5 from the reference paper
-        template<>
-        inline long double owens_t_T5(const long double h, const long double a)
+        template<typename RealType>
+        inline RealType owens_t_T5_imp(const RealType h, const RealType a, const mpl::int_<64>&)
         {
           BOOST_MATH_STD_USING
             /*
@@ -417,7 +439,7 @@ namespace boost
             */
 
           const unsigned short m = 19;
-          static const long double pts[] = {0.0016634282895983227941l,
+          static const RealType pts[] = {0.0016634282895983227941l,
                                             0.014904509242697054183l,
                                             0.04103478879005817919l,
                                             0.079359853513391511008l,
@@ -436,7 +458,7 @@ namespace boost
                                             0.95032536436570154409l,
                                             0.97958418733152273717l,
                                             0.99610366384229088321l};
-          static const long double wts[] = {0.012975111395684900835l,
+          static const RealType wts[] = {0.012975111395684900835l,
                                             0.012888764187499150078l,
                                             0.012716644398857307844l,
                                             0.012459897461364705691l,
@@ -456,21 +478,35 @@ namespace boost
                                             0.0018483371329504443947l,
                                             0.00079623320100438873578l};
 
-          const long double as = a*a;
-          const long double hs = -h*h*boost::math::constants::half<long double>();
+          const RealType as = a*a;
+          const RealType hs = -h*h*boost::math::constants::half<RealType>();
 
-          long double val = 0;
+          RealType val = 0;
           for(unsigned short i = 0; i < m; ++i)
             {
               BOOST_ASSERT(i < 19);
-              const long double r = 1.l + as*pts[i];
+              const RealType r = 1.l + as*pts[i];
               val += wts[i] * exp( hs*r ) / r;
             } // for(unsigned short i = 0; i < m; ++i)
 
           return val*a;
-        } // long double owens_t_T5(const long double h, const long double a)
+        } // RealType owens_t_T5(const RealType h, const RealType a)
 
-#endif // BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+        template<class RealType, class Policy>
+        inline RealType owens_t_T5(const RealType h, const RealType a, const Policy&)
+        {
+            typedef typename policies::precision<RealType, Policy>::type precision_type;
+            typedef typename mpl::if_<
+               mpl::or_<
+                  mpl::less_equal<precision_type, mpl::int_<0> >,
+                  mpl::greater<precision_type, mpl::int_<53> >
+               >,
+               mpl::int_<64>,
+               mpl::int_<53>
+            >::type tag_type;
+
+            return owens_t_T5_imp(h, a, tag_type());
+        }
 
 
          // compute the value of Owen's T function with method T6 from the reference paper
@@ -495,8 +531,8 @@ namespace boost
          // This routine dispatches the call to one of six subroutines, depending on the values
          // of h and a.
          // preconditions: h >= 0, 0<=a<=1, ah=a*h
-         template<typename RealType>
-         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah)
+         template<typename RealType, typename Policy>
+         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol)
          {
             static const unsigned short meth[] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 4, 4, 5, 6}; // 18 entries
             //static const unsigned short ord[] = {2, 3, 4, 5, 7, 10, 12, 18, 10, 20, 30, 20, 4, 7, 8, 20, 13, 0}; // 18 entries
@@ -504,7 +540,7 @@ namespace boost
             RealType val = 0; // avoid compiler warnings, 0 will be overwritten in any case
 
             const unsigned short icode = owens_t_compute_code(h,a);
-            const unsigned short m = owens_t_get_order(icode, val /* just a dummy for the type */);
+            const unsigned short m = owens_t_get_order(icode, val /* just a dummy for the type */, pol);
 
             // determine the appropriate method, T1 ... T6
             switch( meth[icode] )
@@ -516,13 +552,13 @@ namespace boost
                val = owens_t_T2(h,a,m,ah);
                break;
             case 3: // T3
-               val = owens_t_T3(h,a,ah);
+               val = owens_t_T3(h,a,ah, pol);
                break;
             case 4: // T4
                val = owens_t_T4(h,a,m);
                break;
             case 5: // T5
-               val = owens_t_T5(h,a);
+               val = owens_t_T5(h,a, pol);
                break;
             case 6: // T6
                val = owens_t_T6(h,a);
@@ -535,7 +571,7 @@ namespace boost
 
          // compute Owen's T function, T(h,a), for arbitrary values of h and a
          template<typename RealType, class Policy>
-         inline RealType owens_t(RealType h, RealType a, const Policy&)
+         inline RealType owens_t(RealType h, RealType a, const Policy& pol)
          {
             BOOST_MATH_STD_USING
             // exploit that T(-h,a) == T(h,a)
@@ -552,7 +588,7 @@ namespace boost
 
             if(fabs_a <= 1)
             {
-               val = owens_t_dispatch(h, fabs_a, fabs_ah);
+               val = owens_t_dispatch(h, fabs_a, fabs_ah, pol);
             } // if(fabs_a <= 1.0)
             else 
             {
@@ -561,14 +597,14 @@ namespace boost
                   const RealType normh = owens_t_znorm1(h);
                   const RealType normah = owens_t_znorm1(fabs_ah);
                   val = static_cast<RealType>(1)/static_cast<RealType>(4) - normh*normah -
-                     owens_t_dispatch(fabs_ah, static_cast<RealType>(1 / fabs_a), h);
+                     owens_t_dispatch(fabs_ah, static_cast<RealType>(1 / fabs_a), h, pol);
                } // if( h <= 0.67 )
                else
                {
                   const RealType normh = detail::owens_t_znorm2(h);
                   const RealType normah = detail::owens_t_znorm2(fabs_ah);
                   val = constants::half<RealType>()*(normh+normah) - normh*normah -
-                     owens_t_dispatch(fabs_ah, static_cast<RealType>(1 / fabs_a), h);
+                     owens_t_dispatch(fabs_ah, static_cast<RealType>(1 / fabs_a), h, pol);
                } // else [if( h <= 0.67 )]
             } // else [if(fabs_a <= 1)]
 

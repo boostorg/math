@@ -1,5 +1,5 @@
 
-#include "owens_t.hpp"
+#include <boost/math/special_functions/owens_t.hpp>
 #include <iostream>
 
 int main()
@@ -86,7 +86,7 @@ int main()
       const double t = boost::math::owens_t(h, a);
       std::cout << "h=" << h << "\ta=" << a << "\tcomp="
 		<< t << "\ttab=" << t_vec[i]
-		<< "\tdiff=" << fabs(t_vec[i]-t) << std::endl;;
+		<< "\tdiff=" << std::fabs(t_vec[i]-t) << std::endl;;
     }
 
   return 0;

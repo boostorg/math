@@ -111,7 +111,7 @@ namespace boost
 	    last_val = val;
 	    k++;
 	    const RealType u = pow(as,k);
-	    if(k < c2.size())
+	    if(k < static_cast<int>(c2.size()))
 	      {
 		v = (hs*v + c2[k])/(static_cast<RealType>(2*k+1));
 	      }
@@ -121,7 +121,7 @@ namespace boost
 		v = hs*v/(static_cast<RealType>(2*k+1));
 	      }
 	    val += u*v;
-	    if(isinf(val))
+       if(val >= tools::max_value<RealType>())
 	      break;
 	    memory.push_back(u*v);
 	  } // while(val != last_val)
