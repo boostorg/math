@@ -10,9 +10,10 @@ Boost.Math provides a collection of mathematical constants.
 ``double area = pi * r * r;``
 (If that's all you want, jump direct to [link math_toolkit.constants.tutorial.non_templ use in non-template code]!)
 * Effortless - avoiding a search of reference sources.
+* Usable with both builtin floating point types, and user-defined, possibly extended precision, types such as
+NTL, MPFR/GMP, mp_float: in the latter case the constants are computed to the necessary precision and then cached.
 * Accurate - ensuring that the values are as accurate as possible for the 
-chosen floating-point type (both built-in and multiprecision user-defined type (UDT)
-floating-point like NTL, MPFR/GMP, mp_float).
+chosen floating-point type 
   * No loss of accuracy from repeated rounding of intermediate computations.
   * Result is computed with higher precision and only rounded once.
   * Less risk of inaccurate result from functions pow, trig and log at [@http://en.wikipedia.org/wiki/Corner_case corner cases].
@@ -282,8 +283,8 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 [[root_two] [[radic]2] [1.41421] [] ]
 [[root_three] [[radic]3] [1.73205] [] ]
 [[half_root_two] [[radic]2 /2] [0.707106] [] ]
-[[ln_two] [ln(2)] [6.93147] [] ]
-[[ln_ln_two] [ln(ln(2))] [-3.66512] [Gumbel distribution median] ]
+[[ln_two] [ln(2)] [0.693147] [] ]
+[[ln_ln_two] [ln(ln(2))] [-0.366512] [Gumbel distribution median] ]
 [[root_ln_four] [[radic]ln(4)] [1.177410] [] ]
 [[one_div_root_two] [1/[radic]2] [0.707106] [] ]
 
@@ -641,7 +642,7 @@ This class is used in Boost.Math and an option when using big_number projects to
 but are licensed under the [@http://www.gnu.org/copyleft/lesser.html Lesser GPL license]
 and are [*not licensed for commercial use].
 
-[h5 What happened to a previous collection of constants proposed for Boost?]
+[h4 What happened to a previous collection of constants proposed for Boost?]
 
 A review concluded that the way in which the constants were presented did not meet many peoples needs.
 None of the methods proposed met many users' essential requirement to allow writing simply `pi` rather than `pi()`.
@@ -654,14 +655,14 @@ has been added to allow users to have convenient access to float, double and lon
 but combined with template struct and functions to allow simultaneous use
 with other non-built-in floating-point types.
 
-[h5 Why do the constants (internally) have a struct rather than a simple function?]
+[h4 Why do the constants (internally) have a struct rather than a simple function?]
 
 A function mechanism was provided by in previous versions of Boost.Math.
 
 The new mechanism is to permit partial specialization. See Custom Specializing a constant above.
 It should also allow use with other packages like [@http://www.ttmath.org/ ttmath Bignum C++ library.]
 
-[h5 Where can I find other high precision constants?]
+[h4 Where can I find other high precision constants?]
 
 # Constants with very high precision and good accuracy (>40 decimal digits)
 from Simon Plouffe's web based collection [@http://pi.lacim.uqam.ca/eng/].

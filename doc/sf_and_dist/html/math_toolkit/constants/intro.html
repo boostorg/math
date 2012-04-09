@@ -46,9 +46,13 @@
             Effortless - avoiding a search of reference sources.
           </li>
 <li class="listitem">
+            Usable with both builtin floating point types, and user-defined, possibly
+            extended precision, types such as NTL, MPFR/GMP, mp_float: in the latter
+            case the constants are computed to the necessary precision and then cached.
+          </li>
+<li class="listitem">
             Accurate - ensuring that the values are as accurate as possible for the
-            chosen floating-point type (both built-in and multiprecision user-defined
-            type (UDT) floating-point like NTL, MPFR/GMP, mp_float).
+            chosen floating-point type
             <div class="itemizedlist"><ul class="itemizedlist" type="circle">
 <li class="listitem">
                   No loss of accuracy from repeated rounding of intermediate computations.
