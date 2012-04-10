@@ -85,8 +85,8 @@ int main()
       a = a_vec[i];
       const double t = boost::math::owens_t(h, a);
       std::cout << "h=" << h << "\ta=" << a << "\tcomp="
-		<< t << "\ttab=" << t_vec[i]
-		<< "\tdiff=" << std::fabs(t_vec[i]-t) << std::endl;;
+        << t << "\ttab=" << t_vec[i]
+        << "\tdiff=" << std::fabs(t_vec[i]-t) << std::endl;;
     }
 
   return 0;

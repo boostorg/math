@@ -18,6 +18,9 @@
 // not alter the result. The resultant values Tacc(h,a) say, were validated by evaluating (8) with
 // m = 48 (i.e. 96 point Gaussian quadrature).
 
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE main
+
 #ifdef _MSC_VER
 #  pragma warning (disable : 4127) // conditional expression is constant
 #  pragma warning (disable : 4305) // 'initializing' : truncation from 'double' to 'const float'
