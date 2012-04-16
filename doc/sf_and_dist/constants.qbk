@@ -392,7 +392,7 @@ Then define a placeholder for the constant itself:
 
    namespace boost{ namespace math{ namespace constants{
 
-   BOOST_DEFINE_MATH_CONSTANT(my_constant, 0, "0");
+   BOOST_DEFINE_MATH_CONSTANT(my_constant, 0.0, "0");
 
    }}}
 
@@ -409,23 +409,36 @@ For example, to calculate [pi]/2, add to `boost/math/constants/calculate_constan
 
 Then to `boost/math/constants/constants.hpp` add:
 
-   BOOST_DEFINE_MATH_CONSTANT(half_pi, 0, "0");  // actual values are temporary, we'll replace them later
+   BOOST_DEFINE_MATH_CONSTANT(half_pi, 0.0, "0");  // Actual values are temporary, we'll replace them later.
 
-[note Previously defined constants like pi and e can be used, but by not simply calling `pi<T>()`;
-specifying the precision via the policy is essential to ensure full accuracy.]
+[note Previously defined constants like pi and e can be used, but by *not simply calling* `pi<T>()`;
+specifying the precision via the policy 
+`pi<T, policies::policy<policies::digits2<N> > >()`
+is essential to ensure full accuracy.]
 
-[note Newly defined constants can only be used once they are included in
- `boost/math/constants/constants.hpp`. So if you add 
-`template <class T, class N> T calculate_new_constant{...}`,
-then you cannot define `calculate_one_div_new_constant`
-until you add the `BOOST_DEFINE_MATH_CONSTANT(new_constant, 1.234...)`.]
+[warning Newly defined constants can only be used once they are included in
+`boost/math/constants/constants.hpp`. So if you add 
+`template <class T, class N> T constant_my_constant{...}`,
+then you cannot define `constant_my_constant`
+until you add the temporary `BOOST_DEFINE_MATH_CONSTANT(my_constant, 0.0, "0")`.
+Failing to do this will result in surprising compile errors:
+``
+  error C2143: syntax error : missing ';' before '<'
+  error C2433: 'constant_root_two_div_pi' : 'inline' not permitted on data declarations
+  error C2888: 'T constant_root_two_div_pi' : symbol cannot be defined within namespace 'detail'
+  error C2988: unrecognizable template declaration/definition
+``
+]
 
-2. [*You will need an arbitary precision type to use to calculate the value]. This library
+2. [*You will need an arbitrary precision type to use to calculate the value]. This library
 currently supports either `cpp_float`, `NTL::RR` or `mpfr_class` used via the bindings in `boost/math/bindings`.
 The default is to use `NTL::RR` unless you define an alternate macro, for example,
 `USE_MPFR` or `USE_CPP_FLOAT` at the start of your program.
 
-3. The complete program to generate the constant `half_pi` using function `calculate_half_pi` is then:
+3. It is necessary to link to the Boost.Regex library,
+and probably to your chosen arbitrary precision type library.
+
+4. The complete program to generate the constant `half_pi` using function `calculate_half_pi` is then:
 
    #define USE_CPP_FLOAT // If required.
    #include <boost/math/constants/generate.hpp>
