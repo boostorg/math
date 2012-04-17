@@ -41,6 +41,18 @@ using boost::math::owens_t;
 #include "libs/math/test/table_type.hpp"
 #include "libs/math/test/functor.hpp"
 
+//
+// Defining TEST_CPP_DEC_FLOAT enables testing of multiprecision support.
+// This requires the multiprecision library from sandbox/big_number.
+// Note that these tests *do not pass*, but they do give an idea of the 
+// error rates that can be expected....
+//
+#ifdef TEST_CPP_DEC_FLOAT
+#include <boost/multiprecision/cpp_dec_float.hpp>
+using namespace boost;
+#define SC_(x) BOOST_MATH_BIG_CONSTANT(T, std::numeric_limits<T>::digits, x)
+#endif
+
 #include "owens_t_T7.hpp"
 
 #include <iostream>
@@ -259,6 +271,9 @@ int test_main(int, char* [])
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
   test_owens_t(boost::math::concepts::real_concept(0.), "real_concept"); // Test real concept.
 #endif
+#endif
+#ifdef TEST_CPP_DEC_FLOAT
+  test_owens_t(boost::multiprecision::cpp_dec_float_100(0), "cpp_dec_float"); // Test real concept.
 #endif
   return 0;
 } // int test_main(int, char* [])
