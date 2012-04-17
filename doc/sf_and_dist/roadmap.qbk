@@ -2,6 +2,7 @@
 
 [h4 Boost-1.50]
 
+* Fixed issue in `bessel_jy` which causes Y[sub 8.5](4[pi]) to yield a NaN.
 * Promoted math constants to be 1st class citizens,
 including convenient access to the most widely used
 built-in float, double, long double via three namespaces.
