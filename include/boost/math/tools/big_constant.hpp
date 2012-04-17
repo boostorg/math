@@ -14,12 +14,12 @@
 namespace boost{ namespace math{ namespace tools{
 
 template <class T>
-inline T make_big_value(long double v, const char*, mpl::true_ const&, mpl::false_ const&)
+inline BOOST_CONSTEXPR_OR_CONST T make_big_value(long double v, const char*, mpl::true_ const&, mpl::false_ const&)
 {
    return static_cast<T>(v);
 }
 template <class T>
-inline T make_big_value(long double v, const char*, mpl::true_ const&, mpl::true_ const&)
+inline BOOST_CONSTEXPR_OR_CONST T make_big_value(long double v, const char*, mpl::true_ const&, mpl::true_ const&)
 {
    return static_cast<T>(v);
 }
@@ -29,7 +29,7 @@ inline T make_big_value(long double, const char* s, mpl::false_ const&, mpl::fal
    return boost::lexical_cast<T>(s);
 }
 template <class T>
-inline const char* make_big_value(long double, const char* s, mpl::false_ const&, mpl::true_ const&)
+inline BOOST_CONSTEXPR_OR_CONST char* make_big_value(long double, const char* s, mpl::false_ const&, mpl::true_ const&)
 {
    return s;
 }
@@ -38,7 +38,11 @@ inline const char* make_big_value(long double, const char* s, mpl::false_ const&
 // For constants which might fit in a long double (if it's big enough):
 //
 #define BOOST_MATH_BIG_CONSTANT(T, D, x)\
-   boost::math::tools::make_big_value<T>(BOOST_JOIN(x, L), BOOST_STRINGIZE(x), mpl::bool_<D <= std::numeric_limits<long double>::digits>(), boost::is_convertible<const char*, T>())
+   boost::math::tools::make_big_value<T>(\
+      BOOST_JOIN(x, L), \
+      BOOST_STRINGIZE(x), \
+      mpl::bool_< (D <= std::numeric_limits<long double>::digits) || (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits)) >(), \
+      boost::is_convertible<const char*, T>())
 //
 // For constants too huge for any conceivable long double (and which generate compiler errors if we try and declare them as such):
 //
