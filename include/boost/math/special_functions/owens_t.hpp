@@ -638,10 +638,27 @@ namespace boost
          template<typename RealType, typename Policy>
          inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol)
          {
-            static const unsigned short meth[] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 4, 4, 5, 6}; // 18 entries
-            //static const unsigned short ord[] = {2, 3, 4, 5, 7, 10, 12, 18, 10, 20, 30, 20, 4, 7, 8, 20, 13, 0}; // 18 entries
-
-            RealType val = 0; // avoid compiler warnings, 0 will be overwritten in any case
+            BOOST_MATH_STD_USING
+            //
+            // Handle some special cases first, these are from
+            // page 1077 of Owen's original paper:
+            //
+            if(h == 0)
+            {
+               return atan(a) * constants::one_div_two_pi<RealType>();
+            }
+            if(a == 0)
+            {
+               return 0;
+            }
+            if(a == 1)
+            {
+               return owens_t_znorm2(RealType(-h)) * owens_t_znorm2(h) / 2;
+            }
+            if(a >= tools::max_value<RealType>())
+            {
+               return owens_t_znorm2(RealType(fabs(h)));
+            }
 
             if(policies::digits<RealType, Policy>() > 64)
             {
@@ -649,8 +666,7 @@ namespace boost
                try
                {
                   typedef boost::math::policies::normalise<Policy, boost::math::policies::evaluation_error<> >::type forwarding_policy;
-                  val = owens_t_T1_accelerated(h, a, forwarding_policy());
-                  return val;
+                  return owens_t_T1_accelerated(h, a, forwarding_policy());
                }
                catch(const boost::math::evaluation_error&)
                {
@@ -659,6 +675,10 @@ namespace boost
             }
 
 
+            static const unsigned short meth[] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 4, 4, 5, 6}; // 18 entries
+            //static const unsigned short ord[] = {2, 3, 4, 5, 7, 10, 12, 18, 10, 20, 30, 20, 4, 7, 8, 20, 13, 0}; // 18 entries
+
+            RealType val = 0; // avoid compiler warnings, 0 will be overwritten in any case
             const unsigned short icode = owens_t_compute_code(h, a);
             const unsigned short m = owens_t_get_order(icode, val /* just a dummy for the type */, pol);
 
