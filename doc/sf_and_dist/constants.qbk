@@ -320,8 +320,8 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 [[exp_minus_half] [e [super -1/2]] [0.606530] [] ]
 [[e_pow_pi] [e [super [pi]]] [23.14069] [] ] 
 [[root_e] [[radic] e] [1.64872] [] ]
-[[log10_e] [ln(e)] [0.434294] [] ]
-[[one_div_log10_e] [1/ln(e)] [2.30258] [] ]
+[[log10_e] [log10(e)] [0.434294] [] ]
+[[one_div_log10_e] [1/log10(e)] [2.30258] [] ]
 
 [[[*Trigonometric]] [] [] [] ]
 [[degree] [radians = [pi] / 180] [0.017453] [] ]
