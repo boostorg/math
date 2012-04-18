@@ -32,6 +32,7 @@ using ::boost::math::concepts::real_concept;
 
 #include <boost/math/special_functions/owens_t.hpp> // for owens_t function.
 using boost::math::owens_t;
+#include <boost/math/distributions/normal.hpp>
 
 #include <boost/test/test_exec_monitor.hpp> // for test_main.
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE and  BOOST_CHECK_CLOSE_fraction.
@@ -132,7 +133,8 @@ void test_spots(RealType)
   cout << "Tolerance = " << tolerance << "." << endl;
 
   using  ::boost::math::owens_t;
-  using namespace std; // ADL of std names.
+  using ::boost::math::normal_distribution;
+  BOOST_MATH_STD_USING // ADL of std names.
 
   // Checks of six sub-methods T1 to T6.
   BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.0625L), static_cast<RealType>(0.25L)), static_cast<RealType>(3.89119302347013668966224771378e-2L), tolerance);  // T1
@@ -160,6 +162,23 @@ void test_spots(RealType)
   BOOST_CHECK_EQUAL(owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(2L)), -owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(-2L)));
   BOOST_CHECK_EQUAL(owens_t(static_cast<RealType>(0.5L), static_cast<RealType>(2L)), -owens_t(static_cast<RealType>(-0.5L), static_cast<RealType>(-2L)));
 
+  // Special relations from Owen's original paper:
+  BOOST_CHECK_EQUAL(owens_t(static_cast<RealType>(0.5), static_cast<RealType>(0)), static_cast<RealType>(0));
+  BOOST_CHECK_EQUAL(owens_t(static_cast<RealType>(10), static_cast<RealType>(0)), static_cast<RealType>(0));
+  BOOST_CHECK_EQUAL(owens_t(static_cast<RealType>(10000), static_cast<RealType>(0)), static_cast<RealType>(0));
+
+  BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0), static_cast<RealType>(2L)), atan(static_cast<RealType>(2L)) / (boost::math::constants::pi<RealType>() * 2), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0), static_cast<RealType>(0.5L)), atan(static_cast<RealType>(0.5L)) / (boost::math::constants::pi<RealType>() * 2), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0), static_cast<RealType>(2000L)), atan(static_cast<RealType>(2000L)) / (boost::math::constants::pi<RealType>() * 2), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(5), static_cast<RealType>(1)), cdf(normal_distribution<RealType>(), 5) * cdf(complement(normal_distribution<RealType>(), 5)) / 2, tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.125), static_cast<RealType>(1)), cdf(normal_distribution<RealType>(), 0.125) * cdf(complement(normal_distribution<RealType>(), 0.125)) / 2, tolerance);
+  if(std::numeric_limits<RealType>::has_infinity)
+  {
+    BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(0.125), std::numeric_limits<RealType>::infinity()), cdf(complement(normal_distribution<RealType>(), 0.125)) / 2, tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(5), std::numeric_limits<RealType>::infinity()), cdf(complement(normal_distribution<RealType>(), 5)) / 2, tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(-0.125), std::numeric_limits<RealType>::infinity()), cdf(normal_distribution<RealType>(), -0.125) / 2, tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(owens_t(static_cast<RealType>(-5), std::numeric_limits<RealType>::infinity()), cdf(normal_distribution<RealType>(), -5) / 2, tolerance);
+  }
 } // template <class RealType>void test_spots(RealType)
 
 template <class RealType> // Any floating-point type RealType.

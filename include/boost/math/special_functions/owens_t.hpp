@@ -180,8 +180,8 @@ namespace boost
          } // RealType owens_t_T1(const RealType h, const RealType a, const unsigned short m)
 
          // compute the value of Owen's T function with method T2 from the reference paper
-         template<typename RealType>
-         inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah)
+         template<typename RealType, class Policy>
+         inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah, const Policy&, const mpl::false_&)
          {
             BOOST_MATH_STD_USING
             using namespace boost::math::constants;
@@ -593,6 +593,45 @@ namespace boost
             return (sum / d) / boost::math::constants::two_pi<T>();
          }
 
+         template<typename RealType, class Policy>
+         inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah, const Policy& pol, const mpl::true_&)
+         {
+            BOOST_MATH_STD_USING
+            using namespace boost::math::constants;
+
+            const unsigned short maxii = m+m+1;
+            const RealType hs = h*h;
+            const RealType as = -a*a;
+            const RealType y = static_cast<RealType>(1) / hs;
+
+            unsigned short ii = 1;
+            RealType val = 0;
+            RealType vi = a * exp( -ah*ah*half<RealType>() ) / root_two_pi<RealType>();
+            RealType z = owens_t_znorm1(ah)/h;
+            RealType last_z = fabs(z);
+            RealType lim = policies::get_epsilon<RealType, Policy>();
+
+            while( true )
+            {
+               val += z;
+               //
+               // This series stops converging after a while, so put a limit
+               // on how far we go before returning our best guess:
+               //
+               if((fabs(lim * val) > fabs(z)) || ((ii > maxii) && (fabs(z) > last_z)) || (z == 0))
+               {
+                  val *= exp( -hs*half<RealType>() ) / root_two_pi<RealType>();
+                  break;
+               } // if( maxii <= ii )
+               last_z = fabs(z);
+               z = y * ( vi - static_cast<RealType>(ii) * z );
+               vi *= as;
+               ii += 2;
+            } // while( true )
+
+            return val;
+         } // RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah)
+
          // This routine dispatches the call to one of six subroutines, depending on the values
          // of h and a.
          // preconditions: h >= 0, 0<=a<=1, ah=a*h
@@ -630,7 +669,9 @@ namespace boost
                val = owens_t_T1(h,a,m);
                break;
             case 2: // T2
-               val = owens_t_T2(h,a,m,ah);
+               typedef typename policies::precision<RealType, Policy>::type precision_type;
+               typedef mpl::bool_<(precision_type::value == 0) || (precision_type::value > 64)> tag_type;
+               val = owens_t_T2(h, a, m, ah, pol, tag_type());
                break;
             case 3: // T3
                val = owens_t_T3(h,a,ah, pol);
