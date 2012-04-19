@@ -50,8 +50,20 @@ using boost::math::owens_t;
 //
 #ifdef TEST_CPP_DEC_FLOAT
 #include <boost/multiprecision/cpp_dec_float.hpp>
-using namespace boost;
-#define SC_(x) BOOST_MATH_BIG_CONSTANT(T, std::numeric_limits<T>::digits, x)
+
+template <class R>
+inline R convert_to(const char* s)
+{
+   try{
+      return boost::lexical_cast<R>(s);
+   }
+   catch(const boost::bad_lexical_cast&)
+   {
+      return 0;
+   }
+}
+
+#define SC_(x) convert_to<T>(BOOST_STRINGIZE(x))
 #endif
 
 #include "owens_t_T7.hpp"
@@ -292,7 +304,10 @@ int test_main(int, char* [])
 #endif
 #endif
 #ifdef TEST_CPP_DEC_FLOAT
-  test_owens_t(boost::multiprecision::cpp_dec_float_100(0), "cpp_dec_float"); // Test real concept.
+  typedef boost::multiprecision::mp_number<boost::multiprecision::cpp_dec_float<35> > cpp_dec_float_35;
+  test_owens_t(cpp_dec_float_35(0), "cpp_dec_float_35"); // Test real concept.
+  test_owens_t(boost::multiprecision::cpp_dec_float_50(0), "cpp_dec_float_50"); // Test real concept.
+  test_owens_t(boost::multiprecision::cpp_dec_float_100(0), "cpp_dec_float_100"); // Test real concept.
 #endif
   return 0;
 } // int test_main(int, char* [])

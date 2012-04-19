@@ -534,7 +534,7 @@ namespace boost
          } // RealType owens_t_T6(const RealType h, const RealType a, const unsigned short m)
 
          template <class T, class Policy>
-         T owens_t_T1_accelerated(T h, T a, const Policy& pol)
+         std::pair<T, T> owens_t_T1_accelerated(T h, T a, const Policy& pol)
          {
             //
             // This is the same series as T1, but:
@@ -554,12 +554,30 @@ namespace boost
             T sum = a_pow * exp_term;
             T dj_pow = exp_term;
             T term = sum;
+            T abs_err;
             int j = 1;
 
-            int n = (boost::math::tools::digits<T>() * 392) / 1000;
-            n += itrunc(h*h*a*a / 2);
-            if(tools::log_max_value<T>() / n < 5.9)
-               policies::raise_evaluation_error(function, 0, T(0), pol);
+            //
+            // Normally with this form of series acceleration we can calculate
+            // up front how many terms will be required - based on the assumption
+            // that each term decreases in size by a factor of 3.  However,
+            // that assumption does not apply here, as the underlying T1 series can 
+            // go quite strongly divergent in the early terms, before strongly
+            // converging later.  Various "guestimates" have been tried to take account
+            // of this, but they don't always work.... so instead set "n" to the 
+            // largest value that won't cause overflow later, and abort iteration
+            // when the last accelerated term was small enough...
+            //
+            int n;
+            try
+            {
+               n = itrunc(tools::log_max_value<T>() / 6);
+            }
+            catch(...)
+            {
+               n = (std::numeric_limits<int>::max)();
+            }
+            n = (std::min)(n, 1500);
             T d = pow(3 + sqrt(T(8)), n);
             d = (d + 1 / d) / 2;
             T b = -1;
@@ -567,13 +585,7 @@ namespace boost
             c = b - c;
             sum *= c;
             b = -n * n * b * 2;
-
-            // We use this to check for gross cancellation error,
-            // if "sum" ever drops below this value 
-            // then we would probably be better off using the long double
-            // precision routines.  Note that this is a heuristic, it
-            // is not foolproof!
-            T lim = -sum;
+            abs_err = ldexp(fabs(sum), -tools::digits<T>());
 
             while(j < n)
             {
@@ -583,14 +595,19 @@ namespace boost
                term = one_minus_dj_sum * a_pow / (2 * j + 1);
                c = b - c;
                sum += c * term;
-               if(sum < lim)
-                  policies::raise_evaluation_error(function, 0, T(0), pol);
+               abs_err += ldexp(std::max(T(fabs(sum)), T(fabs(c*term))), -tools::digits<T>());
                b = (j + n) * (j - n) * b / ((j + T(0.5)) * (j + 1));
                ++j;
+               //
+               // Include an escape route to prevent calculating too many terms:
+               //
+               if((j > 10) && (fabs(sum * tools::epsilon<T>()) > fabs(c * term)))
+                  break;
             }
+            abs_err += fabs(c * term);
             if(sum < 0)  // sum must always be positive, if it's negative something really bad has happend:
                policies::raise_evaluation_error(function, 0, T(0), pol);
-            return (sum / d) / boost::math::constants::two_pi<T>();
+            return std::pair<T, T>((sum / d) / boost::math::constants::two_pi<T>(), abs_err / sum);
          }
 
          template<typename RealType, class Policy>
@@ -632,12 +649,122 @@ namespace boost
             return val;
          } // RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah)
 
+         template<typename RealType, class Policy>
+         inline std::pair<RealType, RealType> owens_t_T2_accelerated(const RealType h, const RealType a, const RealType ah, const Policy& pol)
+         {
+            //
+            // This is the same series as T2, but with acceleration applied.
+            // Note that we have to be *very* careful to check that nothing bad
+            // has happened during evaluation - this series will go divergent
+            // and/or fail to alternate at a drop of a hat! :-(
+            //
+            BOOST_MATH_STD_USING
+            using namespace boost::math::constants;
+
+            const RealType hs = h*h;
+            const RealType as = -a*a;
+            const RealType y = static_cast<RealType>(1) / hs;
+
+            unsigned short ii = 1;
+            RealType val = 0;
+            RealType vi = a * exp( -ah*ah*half<RealType>() ) / root_two_pi<RealType>();
+            RealType z = boost::math::detail::owens_t_znorm1(ah)/h;
+            RealType last_z = fabs(z);
+
+            //
+            // Normally with this form of series acceleration we can calculate
+            // up front how many terms will be required - based on the assumption
+            // that each term decreases in size by a factor of 3.  However,
+            // that assumption does not apply here, as the underlying T1 series can 
+            // go quite strongly divergent in the early terms, before strongly
+            // converging later.  Various "guestimates" have been tried to take account
+            // of this, but they don't always work.... so instead set "n" to the 
+            // largest value that won't cause overflow later, and abort iteration
+            // when the last accelerated term was small enough...
+            //
+            int n;
+            try
+            {
+               n = itrunc(tools::log_max_value<RealType>() / 6);
+            }
+            catch(...)
+            {
+               n = (std::numeric_limits<int>::max)();
+            }
+            n = (std::min)(n, 1500);
+            RealType d = pow(3 + sqrt(RealType(8)), n);
+            d = (d + 1 / d) / 2;
+            RealType b = -1;
+            RealType c = -d;
+            int s = 1;
+
+            for(int k = 0; k < n; ++k)
+            {
+               //
+               // Check for both convergence and whether the series has gone bad:
+               //
+               if(
+                  (fabs(z) > last_z)     // Series has gone divergent, abort
+                  || (fabs(val) * tools::epsilon<RealType>() > fabs(c * s * z))  // Convergence!
+                  || (z * s < 0)         // Series has stopped alternating - all bets are off - abort.
+                  )
+               {
+                  break;
+               }
+               c = b - c;
+               val += c * s * z;
+               b = (k + n) * (k - n) * b / ((k + RealType(0.5)) * (k + 1));
+               last_z = fabs(z);
+               s = -s;
+               z = y * ( vi - static_cast<RealType>(ii) * z );
+               vi *= as;
+               ii += 2;
+            } // while( true )
+            RealType err = fabs(c * z) / val;
+            return std::pair<RealType, RealType>(val * exp( -hs*half<RealType>() ) / (d * root_two_pi<RealType>()), err);
+         } // RealType owens_t_T2_accelerated(const RealType h, const RealType a, const RealType ah, const Policy&)
+
+         template<typename RealType, typename Policy>
+         inline RealType T4_mp(const RealType h, const RealType a, const Policy& pol)
+         {
+            BOOST_MATH_STD_USING
+            
+            const RealType hs = h*h;
+            const RealType as = -a*a;
+
+            unsigned short ii = 1;
+            RealType ai = constants::one_div_two_pi<RealType>() * a * exp( -0.5*hs*(1.0-as) );
+            RealType yi = 1.0;
+            RealType val = 0.0;
+
+            RealType lim = boost::math::policies::get_epsilon<RealType, Policy>();
+
+            while( true )
+            {
+               RealType term = ai*yi;
+               val += term;
+               if((yi != 0) && (fabs(val * lim) > fabs(term)))
+                  break;
+               ii += 2;
+               yi = (1.0-hs*yi) / static_cast<RealType>(ii);
+               ai *= as;
+               if(ii > (std::min)(1500, (int)policies::get_max_series_iterations<Policy>()))
+                  policies::raise_evaluation_error("boost::math::owens_t<%1%>", 0, val, pol);
+            } // while( true )
+
+            return val;
+         } // arg_type owens_t_T4(const arg_type h, const arg_type a, const unsigned short m)
+
+
          // This routine dispatches the call to one of six subroutines, depending on the values
          // of h and a.
          // preconditions: h >= 0, 0<=a<=1, ah=a*h
+         //
+         // Note there are different versions for different precisions....
          template<typename RealType, typename Policy>
-         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol)
+         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol, mpl::int_<64> const&)
          {
+            // Simple main case for 64-bit precision or less, this is as per the Patefield-Tandy paper:
             BOOST_MATH_STD_USING
             //
             // Handle some special cases first, these are from
@@ -659,28 +786,10 @@ namespace boost
             {
                return owens_t_znorm2(RealType(fabs(h)));
             }
-
-            if(policies::digits<RealType, Policy>() > 64)
-            {
-               // Attempt arbitrary precision code, this will throw if it goes wrong:
-               try
-               {
-                  typedef boost::math::policies::normalise<Policy, boost::math::policies::evaluation_error<> >::type forwarding_policy;
-                  return owens_t_T1_accelerated(h, a, forwarding_policy());
-               }
-               catch(const boost::math::evaluation_error&)
-               {
-                  // Do nothing, just fall through:
-               }
-            }
-
-
-            static const unsigned short meth[] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 4, 4, 5, 6}; // 18 entries
-            //static const unsigned short ord[] = {2, 3, 4, 5, 7, 10, 12, 18, 10, 20, 30, 20, 4, 7, 8, 20, 13, 0}; // 18 entries
-
             RealType val = 0; // avoid compiler warnings, 0 will be overwritten in any case
             const unsigned short icode = owens_t_compute_code(h, a);
             const unsigned short m = owens_t_get_order(icode, val /* just a dummy for the type */, pol);
+            static const unsigned short meth[] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 4, 4, 5, 6}; // 18 entries
 
             // determine the appropriate method, T1 ... T6
             switch( meth[icode] )
@@ -709,8 +818,136 @@ namespace boost
                BOOST_THROW_EXCEPTION(std::logic_error("selection routine in Owen's T function failed"));
             }
             return val;
-         } // RealType owens_t_dispatch(RealType h, RealType a, RealType ah)
+         }
 
+         template<typename RealType, typename Policy>
+         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol, const mpl::int_<65>&)
+         {
+            // Arbitrary precision version:
+            BOOST_MATH_STD_USING
+            //
+            // Handle some special cases first, these are from
+            // page 1077 of Owen's original paper:
+            //
+            if(h == 0)
+            {
+               return atan(a) * constants::one_div_two_pi<RealType>();
+            }
+            if(a == 0)
+            {
+               return 0;
+            }
+            if(a == 1)
+            {
+               return owens_t_znorm2(RealType(-h)) * owens_t_znorm2(h) / 2;
+            }
+            if(a >= tools::max_value<RealType>())
+            {
+               return owens_t_znorm2(RealType(fabs(h)));
+            }
+            // Attempt arbitrary precision code, this will throw if it goes wrong:
+            typedef boost::math::policies::normalise<Policy, boost::math::policies::evaluation_error<> >::type forwarding_policy;
+            std::pair<RealType, RealType> p1(0, tools::max_value<RealType>()), p2(0, tools::max_value<RealType>());
+            RealType target_precision = policies::get_epsilon<RealType, Policy>() * 1000;
+            bool have_t1(false), have_t2(false);
+            if(ah < 3)
+            {
+               try
+               {
+                  have_t1 = true;
+                  p1 = owens_t_T1_accelerated(h, a, forwarding_policy());
+                  if(p1.second < target_precision)
+                     return p1.first;
+               }
+               catch(const boost::math::evaluation_error&){}  // T1 may fail and throw, that's OK
+            }
+            if(ah > 1)
+            {
+               try
+               {
+                  have_t2 = true;
+                  p2 = owens_t_T2_accelerated(h, a, ah, forwarding_policy());
+                  if(p2.second < target_precision)
+                     return p2.first;
+               }
+               catch(const boost::math::evaluation_error&){}  // T2 may fail and throw, that's OK
+            }
+            //
+            // If we haven't tried T1 yet, do it now - sometimes it succeeds and the number of iterations
+            // is fairly low compared to T4.
+            //
+            if(!have_t1)
+            {
+               try
+               {
+                  have_t1 = true;
+                  p1 = owens_t_T1_accelerated(h, a, forwarding_policy());
+                  if(p1.second < target_precision)
+                     return p1.first;
+               }
+               catch(const boost::math::evaluation_error&){}  // T1 may fail and throw, that's OK
+            }
+            //
+            // If we haven't tried T2 yet, do it now - sometimes it succeeds and the number of iterations
+            // is fairly low compared to T4.
+            //
+            if(!have_t2)
+            {
+               try
+               {
+                  have_t2 = true;
+                  p2 = owens_t_T2_accelerated(h, a, ah, forwarding_policy());
+                  if(p2.second < target_precision)
+                     return p2.first;
+               }
+               catch(const boost::math::evaluation_error&){}  // T2 may fail and throw, that's OK
+            }
+            //
+            // OK, nothing left to do but try the most expensive option which is T4,
+            // this is often slow to converge, but when it does converge it tends to
+            // be accurate:
+            try
+            {
+               return T4_mp(h, a, pol);
+            }
+            catch(const boost::math::evaluation_error&){}  // T4 may fail and throw, that's OK
+            //
+            // Now look back at the results from T1 and T2 and see if either gave better
+            // results than we could get from the 64-bit precision versions.
+            //
+            if((std::min)(p1.second, p2.second) < 1e-20)
+            {
+               return p1.second < p2.second ? p1.first : p2.first;
+            }
+            //
+            // We give up - no arbitrary precision versions succeeded!
+            //
+            return owens_t_dispatch(h, a, ah, pol, mpl::int_<64>());
+         } // RealType owens_t_dispatch(RealType h, RealType a, RealType ah)
+         template<typename RealType, typename Policy>
+         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol, const mpl::int_<0>&)
+         {
+            // We don't know what the precision is until runtime:
+            if(tools::digits<RealType>() <= 64)
+               return owens_t_dispatch(h, a, ah, pol, mpl::int_<64>());
+            return owens_t_dispatch(h, a, ah, pol, mpl::int_<65>());
+         }
+         template<typename RealType, typename Policy>
+         inline RealType owens_t_dispatch(const RealType h, const RealType a, const RealType ah, const Policy& pol)
+         {
+            // Figure out the precision and forward to the correct version:
+            typedef typename policies::precision<RealType, Policy>::type precision_type;
+            typedef typename mpl::if_c<
+               precision_type::value == 0,
+               mpl::int_<0>,
+               typename mpl::if_c<
+                  precision_type::value <= 64,
+                  mpl::int_<64>,
+                  mpl::int_<65>
+               >::type
+            >::type tag_type;
+            return owens_t_dispatch(h, a, ah, pol, tag_type());
+         }
          // compute Owen's T function, T(h,a), for arbitrary values of h and a
          template<typename RealType, class Policy>
          inline RealType owens_t(RealType h, RealType a, const Policy& pol)
