@@ -26,7 +26,7 @@ of ['h] and ['a].
 
 [sixemspace][sixemspace][equation owens_t]
 
-[$plot_owens_t.png]
+[$../graphs/plot_owens_t.png]
 
 The function `owens_t(h, a)` gives the probability
 of the event ['(X > h and 0 < Y < a * X)],
@@ -43,7 +43,7 @@ That is the area shaded in the figure below (Owens 1956).
 
 and is also illustrated by a 3D plot.
 
-[$plot_owens_3d_xyp.png]
+[$../graphs/plot_owens_3d_xyp.png]
 
 This function is used in the computation of the __skew_normal_distrib.
 It is also used in the computation of bivariate and
@@ -109,4 +109,5 @@ even if RealType provides high precision, for example 50 decimal digits.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
 

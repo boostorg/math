@@ -67,7 +67,7 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       "Mac OS",                      // platform
-      "float|double|long double",    // test type(s)
+      "float|double|long double|real_concept",    // test type(s)
       ".*Ei.*",                      // test data group
       ".*", 300, 200);                   // test function
    add_expected_result(

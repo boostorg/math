@@ -210,14 +210,20 @@ namespace {
    if(precision_after)
    {
     CHECKOUT(std::setprecision(2) << std::showpoint << nz, "-0.00"); // or "-0.0"
-    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << nz, "-0.0e+000*"); // -0.0e+00**
     CHECKOUT(std::setw(1) << std::setprecision(3) << std::showpoint << nz, "-0.000"); // Not enough width for precision overflows width.  or "-0.00"
    }
    else
    {
     CHECKOUT(std::setprecision(2) << std::showpoint << nz, "-0.0"); // or "-0.00"
-    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << nz, "-0.0e+00**"); // -0.0e+000*
     CHECKOUT(std::setw(1) << std::setprecision(3) << std::showpoint << nz, "-0.00"); // Not enough width for precision overflows width.  or "-0.000"
+   }
+   if(triple_exponent)
+   {
+    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << nz, "-0.0e+000*"); // -0.0e+00**
+   }
+   else
+   {
+    CHECKOUT(std::scientific << std::showpoint << std::setw(10) << std::setfill('*') << std::setprecision(1) << std::left << nz, "-0.0e+00**"); // -0.0e+000*
    }
     CHECKOUT(std::fixed << std::showpoint << std::setw(6) << std::setfill('*') << std::setprecision(3) << std::left << 0., "0.000*");
 

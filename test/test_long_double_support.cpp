@@ -117,18 +117,13 @@ void test_spots()
    //
    // TAN:
    //
-   boost::array<boost::array<long double, 2>, 7> tan_test_data = {{
+   boost::array<boost::array<long double, 2>, 6> tan_test_data = {{
        0, 0,
        0.125L, 0.125655136575130967792678218629774000758665763892225542668867L,
        -0.125L, -0.125655136575130967792678218629774000758665763892225542668867L,
        1.125L, 2.09257127637217900442373398123488678225994171614872057291399L,
        1e-500L, 1e-500L,
        1e-1500L, 1e-1500L,
-#if LDBL_MAX_EXP > DBL_MAX_EXP
-       1.57079632679489661923132169163975144209858469968755291048747L, 1e500L,
-#else
-       0, 0,
-#endif
    }};
    unary_proc = std::tan;
    inv_unary_proc = std::atan;

@@ -195,6 +195,38 @@ void expected_results()
       "[^|]*", 100, 50);                 // test function
 
    //
+   // Minw:
+   //
+   add_expected_result(
+      "GNU[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Win32[^|]*",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 200, 100);                 // test function
+   add_expected_result(
+      "GNU[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Win32[^|]*",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*small[^|]*",                // test data group
+      "[^|]*", 100, 50);                  // test function
+   add_expected_result(
+      "GNU[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Win32[^|]*",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*medium[^|]*",               // test data group
+      "[^|]*", 400, 100);                // test function
+   add_expected_result(
+      "GNU[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "Win32[^|]*",                          // platform
+      "real_concept",                   // test type(s)
+      "[^|]*integer[^|]*",              // test data group
+      ".*", 80, 50);                    // test function
+
+   //
    // Large exponent range causes more extreme test cases to be evaluated:
    //
    if(std::numeric_limits<long double>::max_exponent > std::numeric_limits<double>::max_exponent)
