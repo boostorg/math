@@ -29,7 +29,7 @@ inline T make_big_value(long double, const char* s, mpl::false_ const&, mpl::fal
    return boost::lexical_cast<T>(s);
 }
 template <class T>
-inline BOOST_CONSTEXPR_OR_CONST char* make_big_value(long double, const char* s, mpl::false_ const&, mpl::true_ const&)
+inline const char* BOOST_CONSTEXPR_OR_CONST make_big_value(long double, const char* s, mpl::false_ const&, mpl::true_ const&)
 {
    return s;
 }
