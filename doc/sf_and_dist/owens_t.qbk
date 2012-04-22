@@ -53,34 +53,20 @@ the result is of type `double` when T is an integer type, and type T otherwise.
 
 Owen's original paper (page 1077) provides some additional corner cases.
 
-__spaces T(h, 0) = 0
+[: ['T(h, 0) = 0]]
 
-__spaces T(0, a) = 1/2[pi] arctan(a)
+[:['T(0, a) = [frac12][pi] arctan(a)]]
 
-__spaces T(h, 1) = [frac12] G(h) \[1 - G(h)\]
+[:['T(h, 1) = [frac12] G(h) \[1 - G(h)\]]]
+
+[:['T(h, [infin]) = G(|h|)]]
 
 where G(h) is the univariate normal with zero mean and unit variance integral from -[infin] to h.  
 
-Owen's expressions for infinity are not yet implemented.
-
 [h4 Accuracy]
-
-The Patefield-Tandy algorithm provides six methods of evalualution (T1 to T6);
-the best method is selected according to the values of ['a] and ['h].
-See the original paper and the source in
-[@../../../../../boost/math/special_functions/owens_t.hpp owens_t.hpp] for details.
 
 Over the built-in types and range tested,
 errors are less than 10 * std::numeric_limits<RealType>::epsilon().
-
-There is no fully generic version of this function:  all the implementations
-are tuned to specific accuracy levels, the most precise of which delivers
-about 30-digits of precision.
-
-For arbitrary precision calculation we just provide a
-T1 method as the default case and warn that only absolute errors can be guaranteed.
-We could maybe include T1b as well for h < 1,
-but the real problems come when h gets large.
 
 [h4 Testing]
 
@@ -112,9 +98,29 @@ The algorithms of Patefield, M. and Tandy, D.
 "Fast and accurate Calculation of Owen's T-Function", Journal of Statistical Software, 5 (5), 1 - 25 (2000)
 are adapted for C++ with arbitrary RealType.
 
-However, at present, some coefficients are limited to long double precision of 20 decimal digits,
-so this places a constraint on the accuracy of results,
-even if RealType provides high precision, for example 50 decimal digits.   
+The Patefield-Tandy algorithm provides six methods of evalualution (T1 to T6);
+the best method is selected according to the values of ['a] and ['h].
+See the original paper and the source in
+[@../../../../../boost/math/special_functions/owens_t.hpp owens_t.hpp] for details.
+
+The Patefield-Tandy algorithm is accurate to approximately 20 decimal places, so for
+types with greater precision we use:
+
+* A modified version of T1 which folds the calculation of ['atan(h)] into the T1 series
+(to avoid subtracting two values similar in magnitude), and then accelerates the
+resulting alternating series using method 1 from H. Cohen, F. Rodriguez Villegas, D. Zagier, 
+"Convergence acceleration of alternating series", Bonn, (1991).  The result is valid everywhere,
+but doesn't always converge, or may become too divergent in the first few terms to sum accurately.
+This is used for ['ah < 1].
+* A modified version of T2 which is accelerated in the same manner as T1.  This is used for ['h > 1].
+* A version of T4 only when both T1 and T2 have failed to produce an accurate answer.
+* Fallback to the Patefiled Tandy algorithm when all the above methods fail: this happens not at all
+for our test data at 100 decimal digits precision.  However, there is a difficult area when 
+['a] is very close to 1 and the precision increases which may cause this to happen in very exceptional 
+circumstances.
+
+Using the above algorithm and a 100-decimal digit type, results accurate to 80 decimal places were obtained
+in the difficult area where ['a] is close to 1, and greater than 95 decimal places elsewhere.
 
 [endsect] [/section:owens_t The owens_t Function]
 
