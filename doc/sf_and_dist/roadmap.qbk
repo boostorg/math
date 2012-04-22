@@ -6,7 +6,7 @@
 * Promoted math constants to be 1st class citizens,
 including convenient access to the most widely used
 built-in float, double, long double via three namespaces.
-* Added the Skew Normal distribution written by Benjamin Sobotta.
+* Added the Owen's T function and Skew Normal distribution written by Benjamin Sobotta.
 * Corrected issue [@https://svn.boost.org/trac/boost/ticket/6627 #6627 nonfinite_num_put formatting of 0.0 is incorrect]
 based on a patch submitted by K R Walker.
 
