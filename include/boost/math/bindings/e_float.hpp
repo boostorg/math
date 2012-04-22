@@ -318,6 +318,11 @@ inline e_float atan(const e_float& v)
    return ::ef::atan(v.value());
 }
 
+inline e_float atan2(const e_float& v, const e_float& u)
+{
+   return ::ef::atan2(v.value(), u.value());
+}
+
 inline e_float ldexp(const e_float& v, int e)
 {
    return v.value() * ::ef::pow2(e);

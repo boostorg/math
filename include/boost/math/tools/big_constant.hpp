@@ -41,10 +41,11 @@ inline BOOST_CONSTEXPR_OR_CONST char* make_big_value(long double, const char* s,
    boost::math::tools::make_big_value<T>(\
       BOOST_JOIN(x, L), \
       BOOST_STRINGIZE(x), \
-      mpl::bool_< (D <= std::numeric_limits<long double>::digits) \
+      mpl::bool_< (is_convertible<long double, T>::value) && \
+         ((D <= std::numeric_limits<long double>::digits) \
           || is_floating_point<T>::value \
           || (std::numeric_limits<T>::is_specialized && \
-             (std::numeric_limits<T>::digits10 <= std::numeric_limits<long double>::digits10)) >(), \
+             (std::numeric_limits<T>::digits10 <= std::numeric_limits<long double>::digits10))) >(), \
       boost::is_convertible<const char*, T>())
 //
 // For constants too huge for any conceivable long double (and which generate compiler errors if we try and declare them as such):

@@ -59,7 +59,7 @@
       </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">constants</span><span class="special">{</span>
 
-<span class="identifier">BOOST_DEFINE_MATH_CONSTANT</span><span class="special">(</span><span class="identifier">my_constant</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="string">"0"</span><span class="special">);</span>
+<span class="identifier">BOOST_DEFINE_MATH_CONSTANT</span><span class="special">(</span><span class="identifier">my_constant</span><span class="special">,</span> <span class="number">0.0</span><span class="special">,</span> <span class="string">"0"</span><span class="special">);</span>
 
 <span class="special">}}}</span>
 </pre>
@@ -77,7 +77,7 @@
 <p>
         Then to <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">constants</span><span class="special">/</span><span class="identifier">constants</span><span class="special">.</span><span class="identifier">hpp</span></code> add:
       </p>
-<pre class="programlisting"><span class="identifier">BOOST_DEFINE_MATH_CONSTANT</span><span class="special">(</span><span class="identifier">half_pi</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="string">"0"</span><span class="special">);</span>  <span class="comment">// actual values are temporary, we'll replace them later</span>
+<pre class="programlisting"><span class="identifier">BOOST_DEFINE_MATH_CONSTANT</span><span class="special">(</span><span class="identifier">half_pi</span><span class="special">,</span> <span class="number">0.0</span><span class="special">,</span> <span class="string">"0"</span><span class="special">);</span>  <span class="comment">// Actual values are temporary, we'll replace them later.</span>
 </pre>
 <div class="note"><table border="0" summary="Note">
 <tr>
@@ -85,27 +85,37 @@
 <th align="left">Note</th>
 </tr>
 <tr><td align="left" valign="top"><p>
-          Previously defined constants like pi and e can be used, but by not simply
-          calling <code class="computeroutput"><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;()</span></code>;
-          specifying the precision via the policy is essential to ensure full accuracy.
+          Previously defined constants like pi and e can be used, but by <span class="bold"><strong>not simply calling</strong></span> <code class="computeroutput"><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;()</span></code>; specifying the precision via the
+          policy <code class="computeroutput"><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">digits2</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">&gt;()</span></code> is essential to ensure full accuracy.
         </p></td></tr>
 </table></div>
-<div class="note"><table border="0" summary="Note">
+<div class="warning"><table border="0" summary="Warning">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../doc/src/images/note.png"></td>
-<th align="left">Note</th>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../../../../../../doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td align="left" valign="top">
+<p>
           Newly defined constants can only be used once they are included in <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">constants</span><span class="special">/</span><span class="identifier">constants</span><span class="special">.</span><span class="identifier">hpp</span></code>. So if you add <code class="computeroutput"><span class="keyword">template</span>
           <span class="special">&lt;</span><span class="keyword">class</span>
           <span class="identifier">T</span><span class="special">,</span>
-          <span class="keyword">class</span> <span class="identifier">N</span><span class="special">&gt;</span> <span class="identifier">T</span> <span class="identifier">calculate_new_constant</span><span class="special">{...}</span></code>,
-          then you cannot define <code class="computeroutput"><span class="identifier">calculate_one_div_new_constant</span></code>
-          until you add the <code class="computeroutput"><span class="identifier">BOOST_DEFINE_MATH_CONSTANT</span><span class="special">(</span><span class="identifier">new_constant</span><span class="special">,</span> <span class="number">1.234</span><span class="special">...)</span></code>.
-        </p></td></tr>
+          <span class="keyword">class</span> <span class="identifier">N</span><span class="special">&gt;</span> <span class="identifier">T</span> <span class="identifier">constant_my_constant</span><span class="special">{...}</span></code>,
+          then you cannot define <code class="computeroutput"><span class="identifier">constant_my_constant</span></code>
+          until you add the temporary <code class="computeroutput"><span class="identifier">BOOST_DEFINE_MATH_CONSTANT</span><span class="special">(</span><span class="identifier">my_constant</span><span class="special">,</span> <span class="number">0.0</span><span class="special">,</span>
+          <span class="string">"0"</span><span class="special">)</span></code>.
+          Failing to do this will result in surprising compile errors:
+</p>
+<pre class="programlisting"><span class="identifier">error</span> <span class="identifier">C2143</span><span class="special">:</span> <span class="identifier">syntax</span> <span class="identifier">error</span> <span class="special">:</span> <span class="identifier">missing</span> <span class="char">';'</span> <span class="identifier">before</span> <span class="char">'&lt;'</span>
+<span class="identifier">error</span> <span class="identifier">C2433</span><span class="special">:</span> <span class="char">'constant_root_two_div_pi'</span> <span class="special">:</span> <span class="char">'inline'</span> <span class="keyword">not</span> <span class="identifier">permitted</span> <span class="identifier">on</span> <span class="identifier">data</span> <span class="identifier">declarations</span>
+<span class="identifier">error</span> <span class="identifier">C2888</span><span class="special">:</span> <span class="char">'T constant_root_two_div_pi'</span> <span class="special">:</span> <span class="identifier">symbol</span> <span class="identifier">cannot</span> <span class="identifier">be</span> <span class="identifier">defined</span> <span class="identifier">within</span> <span class="keyword">namespace</span> <span class="char">'detail'</span>
+<span class="identifier">error</span> <span class="identifier">C2988</span><span class="special">:</span> <span class="identifier">unrecognizable</span> <span class="keyword">template</span> <span class="identifier">declaration</span><span class="special">/</span><span class="identifier">definition</span>
+</pre>
+<p>
+        </p>
+</td></tr>
 </table></div>
 <p>
-        2. <span class="bold"><strong>You will need an arbitary precision type to use
+        2. <span class="bold"><strong>You will need an arbitrary precision type to use
         to calculate the value</strong></span>. This library currently supports either
         <code class="computeroutput"><span class="identifier">cpp_float</span></code>, <code class="computeroutput"><span class="identifier">NTL</span><span class="special">::</span><span class="identifier">RR</span></code>
         or <code class="computeroutput"><span class="identifier">mpfr_class</span></code> used via the
@@ -116,7 +126,11 @@
         of your program.
       </p>
 <p>
-        3. The complete program to generate the constant <code class="computeroutput"><span class="identifier">half_pi</span></code>
+        3. It is necessary to link to the Boost.Regex library, and probably to your
+        chosen arbitrary precision type library.
+      </p>
+<p>
+        4. The complete program to generate the constant <code class="computeroutput"><span class="identifier">half_pi</span></code>
         using function <code class="computeroutput"><span class="identifier">calculate_half_pi</span></code>
         is then:
       </p>
@@ -239,7 +253,7 @@
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani and Thijs van den Berg<p>
+      Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin Sobotta<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

@@ -681,6 +681,13 @@ namespace boost
    template <class T, class Policy>
    typename tools::promote_args<T>::type zeta(T s, const Policy&);
 
+   // Owen's T function:
+   template <class T1, class T2, class Policy>
+   typename tools::promote_args<T1, T2>::type owens_t(T1 h, T2 a, const Policy& pol);
+
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type owens_t(T1 h, T2 a);
+
    template <class T>
    typename tools::promote_args<T>::type zeta(T s);
 
@@ -1063,6 +1070,9 @@ namespace boost
    template <class T> T float_next(const T& a){ return boost::math::float_next(a, Policy()); }\
    template <class T> T float_prior(const T& a){ return boost::math::float_prior(a, Policy()); }\
    template <class T> T float_distance(const T& a, const T& b){ return boost::math::float_distance(a, b, Policy()); }\
+   \
+   template <class RT1, class RT2>\
+   inline typename boost::math::tools::promote_args<RT1, RT2>::type owens_t(RT1 a, RT2 z){ return boost::math::owens_t(a, z, Policy()); }\
 
 
 #endif // BOOST_MATH_SPECIAL_MATH_FWD_HPP
