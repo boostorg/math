@@ -128,7 +128,7 @@ The maximum of the PDF is sought through searching the root of f'(x)=0.
 
 Both involve iterative methods that will have lower accuracy than other estimates.
 
-[h4 testing]
+[h4 Testing]
 
 __R using library(sn) described at
 [@http://azzalini.stat.unipd.it/SN/  Skew-Normal Probability Distribution],
@@ -138,6 +138,8 @@ Package sn provides functions related to the skew-normal (SN)
 and the skew-t (ST) probability distributions,
 both for the univariate and for the the multivariate case,
 including regression models. 
+
+__Mathematica was also used to generate some more accurate spot test data.
 
 [h4 Accuracy]
 
