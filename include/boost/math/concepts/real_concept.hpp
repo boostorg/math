@@ -28,6 +28,7 @@
 #include <boost/math/special_functions/round.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/modf.hpp>
+#include <boost/math/tools/big_constant.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/policies/policy.hpp>
 #if defined(__SGI_STL_PORT)
@@ -322,6 +323,12 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
 
 namespace tools
 {
+
+template <>
+inline concepts::real_concept make_big_value<concepts::real_concept>(long double val, const char* , mpl::false_ const&, mpl::false_ const&)
+{
+   return val;  // Can't use lexical_cast here, sometimes it fails....
+}
 
 template <>
 inline concepts::real_concept max_value<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))

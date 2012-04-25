@@ -182,14 +182,14 @@ int test_main(int, char* [])
     test_with_big_exponents<long double, -1>();
 
     cout << "Testing with concepts::real_concept precision bases and positive small exponents" << endl;
-    test_with_small_exponents<concepts::real_concept, 1>();
+    test_with_small_exponents<boost::math::concepts::real_concept, 1>();
     cout << "Testing with concepts::real_concept precision bases and negative small exponents" << endl;
-    test_with_small_exponents<concepts::real_concept, -1>();
+    test_with_small_exponents<boost::math::concepts::real_concept, -1>();
 
     cout << "Testing with concepts::real_concept precision bases and positive big exponents" << endl;
-    test_with_big_exponents<concepts::real_concept, 1>();
+    test_with_big_exponents<boost::math::concepts::real_concept, 1>();
     cout << "Testing with concepts::real_concept precision bases and negative big exponents" << endl;
-    test_with_big_exponents<concepts::real_concept, -1>();
+    test_with_big_exponents<boost::math::concepts::real_concept, -1>();
 #endif
 
     test_return_types();

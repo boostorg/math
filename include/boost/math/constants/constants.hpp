@@ -107,9 +107,9 @@ namespace boost{ namespace math
       template <class T, T (*F)(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
       struct constant_initializer
       {
-         static void do_nothing()
+         static void force_instantiate()
          {
-            init.do_nothing();
+            init.force_instantiate();
          }
       private:
          struct initializer
@@ -122,7 +122,7 @@ namespace boost{ namespace math
       #endif
                   );
             }
-            void do_nothing()const{}
+            void force_instantiate()const{}
          };
          static const initializer init;
       };
@@ -133,9 +133,9 @@ namespace boost{ namespace math
       template <class T, int N, T (*F)(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
       struct constant_initializer2
       {
-         static void do_nothing()
+         static void force_instantiate()
          {
-            init.do_nothing();
+            init.force_instantiate();
          }
       private:
          struct initializer
@@ -148,7 +148,7 @@ namespace boost{ namespace math
       #endif
                   );
             }
-            void do_nothing()const{}
+            void force_instantiate()const{}
          };
          static const initializer init;
       };
@@ -174,7 +174,7 @@ namespace boost{ namespace math
    public:\
    static inline T get(const mpl::int_<construct_from_string>&)\
    {\
-      constant_initializer<T, & BOOST_JOIN(constant_, name)<T>::get_from_string >::do_nothing();\
+      constant_initializer<T, & BOOST_JOIN(constant_, name)<T>::get_from_string >::force_instantiate();\
       return get_from_string();\
    }\
    static inline BOOST_CONSTEXPR T get(const mpl::int_<construct_from_float>)\
@@ -185,7 +185,7 @@ namespace boost{ namespace math
    { return BOOST_JOIN(x, L); }\
    template <int N> static inline T get(const mpl::int_<N>& n)\
    {\
-      constant_initializer2<T, N, & BOOST_JOIN(constant_, name)<T>::template compute<N> >::do_nothing();\
+      constant_initializer2<T, N, & BOOST_JOIN(constant_, name)<T>::template compute<N> >::force_instantiate();\
       return compute<N>(); \
    }\
    /* This one is for true arbitary precision, which may well vary at runtime: */ \

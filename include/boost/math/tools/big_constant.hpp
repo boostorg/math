@@ -11,7 +11,9 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-namespace boost{ namespace math{ namespace tools{
+namespace boost{ namespace math{ 
+
+namespace tools{
 
 template <class T>
 inline BOOST_CONSTEXPR_OR_CONST T make_big_value(long double v, const char*, mpl::true_ const&, mpl::false_ const&)

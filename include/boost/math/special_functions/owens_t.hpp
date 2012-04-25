@@ -996,6 +996,34 @@ namespace boost
             return val;
          } // RealType owens_t(RealType h, RealType a)
 
+         template <class T, class Policy, class tag>
+         struct owens_t_initializer
+         {
+            struct init
+            {
+               init()
+               {
+                  do_init(tag());
+               }
+               template <int N>
+               static void do_init(const mpl::int_<N>&){}
+               static void do_init(const mpl::int_<64>&)
+               {
+                  boost::math::owens_t(static_cast<T>(7), static_cast<T>(0.96875), Policy());
+                  boost::math::owens_t(static_cast<T>(2), static_cast<T>(0.5), Policy());
+               }
+               void force_instantiate()const{}
+            };
+            static const init initializer;
+            static void force_instantiate()
+            {
+               initializer.force_instantiate();
+            }
+         };
+
+         template <class T, class Policy, class tag>
+         const typename owens_t_initializer<T, Policy, tag>::init owens_t_initializer<T, Policy, tag>::initializer;
+
       } // namespace detail
 
       template <class T1, class T2, class Policy>
@@ -1003,6 +1031,19 @@ namespace boost
       {
          typedef typename tools::promote_args<T1, T2>::type result_type;
          typedef typename policies::evaluation<result_type, Policy>::type value_type;
+         typedef typename policies::precision<value_type, Policy>::type precision_type;
+         typedef typename mpl::if_c<
+               precision_type::value == 0,
+               mpl::int_<0>,
+               typename mpl::if_c<
+                  precision_type::value <= 64,
+                  mpl::int_<64>,
+                  mpl::int_<65>
+               >::type
+            >::type tag_type;
+
+         detail::owens_t_initializer<result_type, Policy, tag_type>::force_instantiate();
+            
          return policies::checked_narrowing_cast<result_type, Policy>(detail::owens_t(static_cast<value_type>(h), static_cast<value_type>(a), pol), "boost::math::owens_t<%1%>(%1%,%1%)");
       }
 
