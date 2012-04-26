@@ -334,7 +334,7 @@ int test_main(int, char* [])
    test_spots(0.0);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L);
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(0.1));
 #endif
 #endif

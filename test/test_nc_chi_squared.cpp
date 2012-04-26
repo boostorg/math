@@ -542,7 +542,7 @@ int test_main(int, char* [])
 #ifdef TEST_LDOUBLE
    test_accuracy(0.0L, "long double"); // Test long double.
 #endif
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #ifdef TEST_REAL_CONCEPT
    test_accuracy(boost::math::concepts::real_concept(0.), "real_concept"); // Test real concept.
 #endif

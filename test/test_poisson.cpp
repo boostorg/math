@@ -600,11 +600,11 @@ int test_main(int, char* [])
 #endif
   }
 
-  #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #ifdef TEST_REAL_CONCEPT
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
-  #endif
+#endif
 #endif
    return 0;
 } // int test_main(int, char* [])
