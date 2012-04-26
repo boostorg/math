@@ -49,6 +49,14 @@
             nonfinite_num_put formatting of 0.0 is incorrect</a> based on a patch
             submitted by K R Walker.
           </li>
+<li class="listitem">
+            Changed constant initialization mechanism so that it is thread safe even
+            for user-defined types, also so that user defined types get the full
+            precision of the constant, even when <code class="computeroutput"><span class="keyword">long</span>
+            <span class="keyword">double</span></code> does not. So for example
+            128-bit rational approximations will work with UDT's and do the right
+            thing, even though <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code> may be only 64 or 80 bits.
+          </li>
 </ul></div>
 <h5>
 <a name="math_toolkit.status.history1.h1"></a>
