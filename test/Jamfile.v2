@@ -191,6 +191,7 @@ run test_fisher_f.cpp ../../test/build//boost_test_exec_monitor ;
 run test_gamma.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_gamma_dist.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_geometric.cpp ../../test/build//boost_test_exec_monitor ;
+run test_hankel.cpp ../../test/build//boost_test_exec_monitor ;
 run test_hermite.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_hypergeometric_dist.cpp ../../test/build//boost_test_exec_monitor
         : # command line

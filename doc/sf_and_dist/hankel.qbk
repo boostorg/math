@@ -1,0 +1,135 @@
+
+[section:hankel Hankel Functions]
+[section:cyl_hankel Cyclic Hankel Functions]
+
+[h4 Synopsis]
+
+   template <class T1, class T2>
+   std::complex<``__sf_result``> cyl_hankel_h1(T1 v, T2 x);
+
+   template <class T1, class T2, class ``__Policy``>
+   std::complex<``__sf_result``> cyl_hankel_h1(T1 v, T2 x, const ``__Policy``&);
+
+   template <class T1, class T2>
+   std::complex<``__sf_result``> cyl_hankel_h2(T1 v, T2 x);
+   
+   template <class T1, class T2, class ``__Policy``>
+   std::complex<``__sf_result``> cyl_hankel_h2(T1 v, T2 x, const ``__Policy``&);
+   
+   
+[h4 Description]
+
+The functions __cyl_hankel_h1 and __cyl_hankel_h2 return the result of the
+Hankel H1 and H2 functions respectively:
+
+[:['cyl_hankel_h1(v, x) = H[sub v][super (1)](x) = J[sub v](x) + i Y[sub v](x)]]
+
+[:['cyl_hankel_h2(v, x) = H[sub v][super (2)](x) = J[sub v](x) - i Y[sub v](x)]]
+
+where:
+
+['J[sub v](x)] is the Bessel function of the first kind, and ['Y[sub v](x)] is the Bessel function of the second kind.
+
+The return type of these functions is computed using the __arg_pomotion_rules
+when T1 and T2 are different types.  The functions are also optimised for the
+relatively common case that T1 is an integer.
+
+[optional_policy]
+
+Note that since the result type is complex, these functions are extended to operate over the whole
+range of ['v] and ['x] (unlike __cyl_bessel_j and __cyl_neumann).
+
+[note Since the result type is complex, the functions can only be instantiated on types
+`float`, `double` and `long double`: this is a limitation of `std::complex`.  The arguments
+to these functions must be real-valued, rather than complex though.]
+
+[h4 Testing]
+
+There are just a few spot tests to exercise all the special case handling - the bulk of the testing is done
+on the Bessel functions upon which these are based.
+
+[h4 Accuracy]
+
+Refer to __cyl_bessel_j and __cyl_neumann.
+
+[h4 Implementation]
+
+For ['x < 0] the following reflection formulae are used:
+
+[equation hankel1]
+
+[equation hankel2]
+
+[equation hankel3]
+
+Otherwise the implementation is trivially in terms of the Bessel J and Y functions.
+
+Note however, that the Hankel functions compute the Bessel J and Y functions simultaneously,
+and therefore a single Hankel function call is more efficient than two Bessel function calls.
+The one exception is when ['v] is a small positive integer, in which case the usual Bessel function
+routines for integer order are used.
+
+[endsect]
+
+
+[section:sph_hankel Spherical Hankel Functions]
+
+[h4 Synopsis]
+
+   template <class T1, class T2>
+   std::complex<``__sf_result``> sph_hankel_h1(T1 v, T2 x);
+
+   template <class T1, class T2, class ``__Policy``>
+   std::complex<``__sf_result``> sph_hankel_h1(T1 v, T2 x, const ``__Policy``&);
+
+   template <class T1, class T2>
+   std::complex<``__sf_result``> sph_hankel_h2(T1 v, T2 x);
+   
+   template <class T1, class T2, class ``__Policy``>
+   std::complex<``__sf_result``> sph_hankel_h2(T1 v, T2 x, const ``__Policy``&);
+   
+   
+[h4 Description]
+
+The functions __sph_hankel_h1 and __sph_hankel_h2 return the result of the
+spherical Hankel H1 and H2 functions respectively:
+
+[equation hankel4]
+
+[equation hankel5]
+
+The return type of these functions is computed using the __arg_pomotion_rules
+when T1 and T2 are different types.  The functions are also optimised for the
+relatively common case that T1 is an integer.
+
+[optional_policy]
+
+Note that since the result type is complex, these functions are extended to operate over the whole
+range of ['v] and ['x] (unlike the Bessel functions upon which they're based).
+
+[note Since the result type is complex, the functions can only be instantiated on types
+`float`, `double` and `long double`: this is a limitation of `std::complex`.  The arguments
+to these functions must be real-valued, rather than complex though.]
+
+[h4 Testing]
+
+There are just a few spot tests to exercise all the special case handling - the bulk of the testing is done
+on the Bessel functions upon which these are based.
+
+[h4 Accuracy]
+
+Refer to __cyl_bessel_j and __cyl_neumann.
+
+[h4 Implementation]
+
+These functions are trivially implemented in terms of __cyl_hankel_h1 and __cyl_hankel_h2.
+
+[endsect]
+[endsect]
+
+[/ 
+  Copyright 2012 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

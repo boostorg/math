@@ -28,6 +28,7 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/mpl/comparison.hpp>
 #include <boost/config/no_tr1/complex.hpp>
+#include <complex>
 
 #define BOOST_NO_MACRO_EXPAND /**/
 
@@ -613,6 +614,18 @@ namespace boost
 
    template <class T>
    typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann(unsigned v, T x);
+
+   template <class T1, class T2, class Policy>
+   std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_h1(T1 v, T2 x, const Policy& pol);
+
+   template <class T1, class T2>
+   std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_h1(T1 v, T2 x);
+
+   template <class T1, class T2, class Policy>
+   std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_h2(T1 v, T2 x, const Policy& pol);
+
+   template <class T1, class T2>
+   std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_h2(T1 v, T2 x);
 
    template <class T, class Policy>
    typename tools::promote_args<T>::type sin_pi(T x, const Policy&);

@@ -150,6 +150,11 @@ and use the function's name as the link text.]
 [def __cyl_bessel_k  [link math_toolkit.special.bessel.mbessel cyl_bessel_k]]
 [def __sph_bessel  [link math_toolkit.special.bessel.sph_bessel sph_bessel]]
 [def __sph_neumann  [link math_toolkit.special.bessel.sph_bessel sph_neumann]]
+[/Hankel Functions]
+[def __cyl_hankel_h1  [link math_toolkit.special.hankel.cyl_hankel cyl_hankel_h1]]
+[def __cyl_hankel_h2  [link math_toolkit.special.hankel.cyl_hankel cyl_hankel_h2]]
+[def __sph_hankel_h1  [link math_toolkit.special.hankel.sph_hankel sph_hankel_h1]]
+[def __sph_hankel_h2  [link math_toolkit.special.hankel.sph_hankel sph_hankel_h2]]
 
 [/sinus cardinals]
 [def __sinc_pi  [link math_toolkit.special.sinc.sinc_pi sinc_pi]]
@@ -420,6 +425,9 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include bessel_ik.qbk]
 [include bessel_spherical.qbk]
 [endsect] [/section:bessel Bessel Functions]
+
+[/Hankel functions]
+[include hankel.qbk]
 
 [section:ellint Elliptic Integrals]
 [include ellint_introduction.qbk]
