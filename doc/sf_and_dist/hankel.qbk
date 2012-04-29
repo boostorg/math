@@ -20,7 +20,7 @@
 [h4 Description]
 
 The functions __cyl_hankel_1 and __cyl_hankel_2 return the result of the
-Hankel functions of the first and second kind respectively:
+[@http://dlmf.nist.gov/10.2#P3 Hankel functions] of the first and second kind respectively:
 
 [:['cyl_hankel_1(v, x) = H[sub v][super (1)](x) = J[sub v](x) + i Y[sub v](x)]]
 
@@ -36,12 +36,15 @@ relatively common case that T1 is an integer.
 
 [optional_policy]
 
-Note that since the result type is complex, these functions are extended to operate over the whole
-range of ['v] and ['x] (unlike __cyl_bessel_j and __cyl_neumann).
+Note that while the arguments to these functions are real values, the results are complex.
+That means that the functions can only be instantiated on types `float`, `double` and `long double`.
+The functions have also been extended to operate over the whole range of ['v] and ['x] 
+(unlike __cyl_bessel_j and __cyl_neumann).
 
-[note Since the result type is complex, the functions can only be instantiated on types
-`float`, `double` and `long double`: this is a limitation of `std::complex`.  The arguments
-to these functions must be real-valued, rather than complex though.]
+[h4 Performance]
+
+These functions are generally more efficient than two separate calls to the underlying Bessel
+functions as internally Bessel J and Y can be computed simultaneously.
 
 [h4 Testing]
 
@@ -56,11 +59,11 @@ Refer to __cyl_bessel_j and __cyl_neumann.
 
 For ['x < 0] the following reflection formulae are used:
 
-[equation hankel1]
+[@http://functions.wolfram.com/Bessel-TypeFunctions/BesselJ/16/01/01/ [equation hankel1]]
 
-[equation hankel2]
+[@http://functions.wolfram.com/Bessel-TypeFunctions/BesselY/16/01/01/ [equation hankel2]]
 
-[equation hankel3]
+[@http://functions.wolfram.com/Bessel-TypeFunctions/BesselY/16/01/01/ [equation hankel3]]
 
 Otherwise the implementation is trivially in terms of the Bessel J and Y functions.
 
@@ -92,7 +95,7 @@ routines for integer order are used.
 [h4 Description]
 
 The functions __sph_hankel_1 and __sph_hankel_2 return the result of the
-spherical Hankel functions of the first and second kind respectively:
+[@http://dlmf.nist.gov/10.47#P1 spherical Hankel functions] of the first and second kind respectively:
 
 [equation hankel4]
 
@@ -104,12 +107,10 @@ relatively common case that T1 is an integer.
 
 [optional_policy]
 
-Note that since the result type is complex, these functions are extended to operate over the whole
-range of ['v] and ['x] (unlike the Bessel functions upon which they're based).
-
-[note Since the result type is complex, the functions can only be instantiated on types
-`float`, `double` and `long double`: this is a limitation of `std::complex`.  The arguments
-to these functions must be real-valued, rather than complex though.]
+Note that while the arguments to these functions are real values, the results are complex.
+That means that the functions can only be instantiated on types `float`, `double` and `long double`.
+The functions have also been extended to operate over the whole range of ['v] and ['x] 
+(unlike __cyl_bessel_j and __cyl_neumann).
 
 [h4 Testing]
 

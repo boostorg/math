@@ -50,8 +50,8 @@
 <p>
           The functions <a class="link" href="sph_hankel.html" title="Spherical Hankel Functions">sph_hankel_1</a>
           and <a class="link" href="sph_hankel.html" title="Spherical Hankel Functions">sph_hankel_2</a>
-          return the result of the spherical Hankel functions of the first and second
-          kind respectively:
+          return the result of the <a href="http://dlmf.nist.gov/10.47#P1" target="_top">spherical
+          Hankel functions</a> of the first and second kind respectively:
         </p>
 <p>
           <span class="inlinemediaobject"><img src="../../../../equations/hankel4.png"></span>
@@ -71,23 +71,14 @@
           it handles errors, what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Policies">policy documentation for more details</a>.
         </p>
 <p>
-          Note that since the result type is complex, these functions are extended
-          to operate over the whole range of <span class="emphasis"><em>v</em></span> and <span class="emphasis"><em>x</em></span>
-          (unlike the Bessel functions upon which they're based).
+          Note that while the arguments to these functions are real values, the results
+          are complex. That means that the functions can only be instantiated on
+          types <code class="computeroutput"><span class="keyword">float</span></code>, <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">long</span>
+          <span class="keyword">double</span></code>. The functions have also
+          been extended to operate over the whole range of <span class="emphasis"><em>v</em></span>
+          and <span class="emphasis"><em>x</em></span> (unlike <a class="link" href="../bessel/bessel.html" title="Bessel Functions of the First and Second Kinds">cyl_bessel_j</a>
+          and <a class="link" href="../bessel/bessel.html" title="Bessel Functions of the First and Second Kinds">cyl_neumann</a>).
         </p>
-<div class="note"><table border="0" summary="Note">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../../../../../../../doc/src/images/note.png"></td>
-<th align="left">Note</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-            Since the result type is complex, the functions can only be instantiated
-            on types <code class="computeroutput"><span class="keyword">float</span></code>, <code class="computeroutput"><span class="keyword">double</span></code> and <code class="computeroutput"><span class="keyword">long</span>
-            <span class="keyword">double</span></code>: this is a limitation of
-            <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">complex</span></code>. The arguments to these functions
-            must be real-valued, rather than complex though.
-          </p></td></tr>
-</table></div>
 <h5>
 <a name="math_toolkit.special.hankel.sph_hankel.h2"></a>
           <span><a name="math_toolkit.special.hankel.sph_hankel.testing"></a></span><a class="link" href="sph_hankel.html#math_toolkit.special.hankel.sph_hankel.testing">Testing</a>
