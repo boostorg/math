@@ -33,17 +33,20 @@
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
-            Fixed issue in <code class="computeroutput"><span class="identifier">bessel_jy</span></code>
-            which causes Y<sub>8.5</sub>(4&#960;) to yield a NaN.
-          </li>
-<li class="listitem">
             Promoted math constants to be 1st class citizens, including convenient
             access to the most widely used built-in float, double, long double via
             three namespaces.
           </li>
 <li class="listitem">
             Added the Owen's T function and Skew Normal distribution written by Benjamin
-            Sobotta.
+            Sobotta: see <a class="link" href="../special/owens_t.html" title="Owen's T function">Owens T</a>
+            and skew_normal_distrib.
+          </li>
+<li class="listitem">
+            Added Hankel functions <a class="link" href="../special/hankel/cyl_hankel.html" title="Cyclic Hankel Functions">cyl_hankel_1</a>,
+            <a class="link" href="../special/hankel/cyl_hankel.html" title="Cyclic Hankel Functions">cyl_hankel_2</a>,
+            <a class="link" href="../special/hankel/sph_hankel.html" title="Spherical Hankel Functions">sph_hankel_1</a>
+            and <a class="link" href="../special/hankel/sph_hankel.html" title="Spherical Hankel Functions">sph_hankel_2</a>.
           </li>
 <li class="listitem">
             Corrected issue <a href="https://svn.boost.org/trac/boost/ticket/6627" target="_top">#6627
@@ -57,6 +60,10 @@
             <span class="keyword">double</span></code> does not. So for example
             128-bit rational approximations will work with UDT's and do the right
             thing, even though <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code> may be only 64 or 80 bits.
+          </li>
+<li class="listitem">
+            Fixed issue in <code class="computeroutput"><span class="identifier">bessel_jy</span></code>
+            which causes Y<sub>8.5</sub>(4&#960;) to yield a NaN.
           </li>
 </ul></div>
 <h5>

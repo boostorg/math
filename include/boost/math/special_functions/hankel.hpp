@@ -17,7 +17,7 @@ template <class T, class Policy>
 std::complex<T> hankel_imp(T v, T x, const bessel_no_int_tag&, const Policy& pol, int sign)
 {
    BOOST_MATH_STD_USING
-   static const char* function = "boost::math::cyl_hankel_h1<%1%>(%1%,%1%)";
+   static const char* function = "boost::math::cyl_hankel_1<%1%>(%1%,%1%)";
 
    if(x < 0)
    {
@@ -98,65 +98,65 @@ inline std::complex<T> sph_hankel_imp(T v, T x, const Policy& pol, int sign)
 } // namespace detail
 
 template <class T1, class T2, class Policy>
-inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_h1(T1 v, T2 x, const Policy& pol)
+inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_1(T1 v, T2 x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
    typedef typename detail::bessel_traits<T1, T2, Policy>::optimisation_tag tag_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<std::complex<result_type>, Policy>(detail::hankel_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol, 1), "boost::math::cyl_hankel_h1<%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<std::complex<result_type>, Policy>(detail::hankel_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol, 1), "boost::math::cyl_hankel_1<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
-inline std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_h1(T1 v, T2 x)
+inline std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_1(T1 v, T2 x)
 {
-   return cyl_hankel_h1(v, x, policies::policy<>());
+   return cyl_hankel_1(v, x, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_h2(T1 v, T2 x, const Policy& pol)
+inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_2(T1 v, T2 x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
    typedef typename detail::bessel_traits<T1, T2, Policy>::optimisation_tag tag_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<std::complex<result_type>, Policy>(detail::hankel_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol, -1), "boost::math::cyl_hankel_h1<%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<std::complex<result_type>, Policy>(detail::hankel_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol, -1), "boost::math::cyl_hankel_1<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
-inline std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_h2(T1 v, T2 x)
+inline std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_2(T1 v, T2 x)
 {
-   return cyl_hankel_h2(v, x, policies::policy<>());
+   return cyl_hankel_2(v, x, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_h1(T1 v, T2 x, const Policy& pol)
+inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_1(T1 v, T2 x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<std::complex<result_type>, Policy>(detail::sph_hankel_imp<value_type>(static_cast<value_type>(v), static_cast<value_type>(x), pol, 1), "boost::math::sph_hankel_h1<%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<std::complex<result_type>, Policy>(detail::sph_hankel_imp<value_type>(static_cast<value_type>(v), static_cast<value_type>(x), pol, 1), "boost::math::sph_hankel_1<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
-inline std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> sph_hankel_h1(T1 v, T2 x)
+inline std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> sph_hankel_1(T1 v, T2 x)
 {
-   return sph_hankel_h1(v, x, policies::policy<>());
+   return sph_hankel_1(v, x, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_h2(T1 v, T2 x, const Policy& pol)
+inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_2(T1 v, T2 x, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<std::complex<result_type>, Policy>(detail::sph_hankel_imp<value_type>(static_cast<value_type>(v), static_cast<value_type>(x), pol, -1), "boost::math::sph_hankel_h1<%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<std::complex<result_type>, Policy>(detail::sph_hankel_imp<value_type>(static_cast<value_type>(v), static_cast<value_type>(x), pol, -1), "boost::math::sph_hankel_1<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
-inline std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> sph_hankel_h2(T1 v, T2 x)
+inline std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> sph_hankel_2(T1 v, T2 x)
 {
-   return sph_hankel_h2(v, x, policies::policy<>());
+   return sph_hankel_2(v, x, policies::policy<>());
 }
 
 }} // namespaces

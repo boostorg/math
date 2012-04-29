@@ -5,26 +5,26 @@
 [h4 Synopsis]
 
    template <class T1, class T2>
-   std::complex<``__sf_result``> cyl_hankel_h1(T1 v, T2 x);
+   std::complex<``__sf_result``> cyl_hankel_1(T1 v, T2 x);
 
    template <class T1, class T2, class ``__Policy``>
-   std::complex<``__sf_result``> cyl_hankel_h1(T1 v, T2 x, const ``__Policy``&);
+   std::complex<``__sf_result``> cyl_hankel_1(T1 v, T2 x, const ``__Policy``&);
 
    template <class T1, class T2>
-   std::complex<``__sf_result``> cyl_hankel_h2(T1 v, T2 x);
+   std::complex<``__sf_result``> cyl_hankel_2(T1 v, T2 x);
    
    template <class T1, class T2, class ``__Policy``>
-   std::complex<``__sf_result``> cyl_hankel_h2(T1 v, T2 x, const ``__Policy``&);
+   std::complex<``__sf_result``> cyl_hankel_2(T1 v, T2 x, const ``__Policy``&);
    
    
 [h4 Description]
 
-The functions __cyl_hankel_h1 and __cyl_hankel_h2 return the result of the
-Hankel H1 and H2 functions respectively:
+The functions __cyl_hankel_1 and __cyl_hankel_2 return the result of the
+Hankel functions of the first and second kind respectively:
 
-[:['cyl_hankel_h1(v, x) = H[sub v][super (1)](x) = J[sub v](x) + i Y[sub v](x)]]
+[:['cyl_hankel_1(v, x) = H[sub v][super (1)](x) = J[sub v](x) + i Y[sub v](x)]]
 
-[:['cyl_hankel_h2(v, x) = H[sub v][super (2)](x) = J[sub v](x) - i Y[sub v](x)]]
+[:['cyl_hankel_2(v, x) = H[sub v][super (2)](x) = J[sub v](x) - i Y[sub v](x)]]
 
 where:
 
@@ -77,22 +77,22 @@ routines for integer order are used.
 [h4 Synopsis]
 
    template <class T1, class T2>
-   std::complex<``__sf_result``> sph_hankel_h1(T1 v, T2 x);
+   std::complex<``__sf_result``> sph_hankel_1(T1 v, T2 x);
 
    template <class T1, class T2, class ``__Policy``>
-   std::complex<``__sf_result``> sph_hankel_h1(T1 v, T2 x, const ``__Policy``&);
+   std::complex<``__sf_result``> sph_hankel_1(T1 v, T2 x, const ``__Policy``&);
 
    template <class T1, class T2>
-   std::complex<``__sf_result``> sph_hankel_h2(T1 v, T2 x);
+   std::complex<``__sf_result``> sph_hankel_2(T1 v, T2 x);
    
    template <class T1, class T2, class ``__Policy``>
-   std::complex<``__sf_result``> sph_hankel_h2(T1 v, T2 x, const ``__Policy``&);
+   std::complex<``__sf_result``> sph_hankel_2(T1 v, T2 x, const ``__Policy``&);
    
    
 [h4 Description]
 
-The functions __sph_hankel_h1 and __sph_hankel_h2 return the result of the
-spherical Hankel H1 and H2 functions respectively:
+The functions __sph_hankel_1 and __sph_hankel_2 return the result of the
+spherical Hankel functions of the first and second kind respectively:
 
 [equation hankel4]
 
@@ -122,7 +122,7 @@ Refer to __cyl_bessel_j and __cyl_neumann.
 
 [h4 Implementation]
 
-These functions are trivially implemented in terms of __cyl_hankel_h1 and __cyl_hankel_h2.
+These functions are trivially implemented in terms of __cyl_hankel_1 and __cyl_hankel_2.
 
 [endsect]
 [endsect]

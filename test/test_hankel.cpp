@@ -58,15 +58,15 @@ void test_hankel(T, const char* name)
    {
       if((i != 2) || (std::numeric_limits<T>::max_exponent10 > 80))
       {
-         check_close(boost::math::cyl_hankel_h1(data[i][0].real(), data[i][1].real()), data[i][2] + im * data[i][3]);
-         check_close(boost::math::cyl_hankel_h2(data[i][0].real(), data[i][1].real()), data[i][2] - im * data[i][3]);
+         check_close(boost::math::cyl_hankel_1(data[i][0].real(), data[i][1].real()), data[i][2] + im * data[i][3]);
+         check_close(boost::math::cyl_hankel_2(data[i][0].real(), data[i][1].real()), data[i][2] - im * data[i][3]);
 
          check_close(
-            boost::math::cyl_hankel_h1(data[i][0].real() + 0.5f, data[i][1].real()) * boost::math::constants::root_half_pi<T>() / sqrt(data[i][1]),
-            boost::math::sph_hankel_h1(data[i][0].real(), data[i][1].real()));
+            boost::math::cyl_hankel_1(data[i][0].real() + 0.5f, data[i][1].real()) * boost::math::constants::root_half_pi<T>() / sqrt(data[i][1]),
+            boost::math::sph_hankel_1(data[i][0].real(), data[i][1].real()));
          check_close(
-            boost::math::cyl_hankel_h2(data[i][0].real() + 0.5f, data[i][1].real()) * boost::math::constants::root_half_pi<T>() / sqrt(data[i][1]),
-            boost::math::sph_hankel_h2(data[i][0].real(), data[i][1].real()));
+            boost::math::cyl_hankel_2(data[i][0].real() + 0.5f, data[i][1].real()) * boost::math::constants::root_half_pi<T>() / sqrt(data[i][1]),
+            boost::math::sph_hankel_2(data[i][0].real(), data[i][1].real()));
       }
    }
 }
@@ -84,7 +84,7 @@ typedef boost::math::policies::policy<
    boost::math::policies::evaluation_error<boost::math::policies::throw_on_error>,
    boost::math::policies::indeterminate_result_error<boost::math::policies::throw_on_error> > pol1;
 
-template std::complex<double> boost::math::cyl_hankel_h1<double, double, pol1>(double, double, const pol1&);
+template std::complex<double> boost::math::cyl_hankel_1<double, double, pol1>(double, double, const pol1&);
 
 typedef boost::math::policies::policy<
    boost::math::policies::overflow_error<boost::math::policies::errno_on_error>,
@@ -96,7 +96,7 @@ typedef boost::math::policies::policy<
    boost::math::policies::evaluation_error<boost::math::policies::errno_on_error>,
    boost::math::policies::indeterminate_result_error<boost::math::policies::errno_on_error> > pol2;
 
-template std::complex<double> boost::math::cyl_hankel_h1<double, double, pol2>(double, double, const pol2&);
+template std::complex<double> boost::math::cyl_hankel_1<double, double, pol2>(double, double, const pol2&);
 
 typedef boost::math::policies::policy<
    boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
@@ -108,7 +108,7 @@ typedef boost::math::policies::policy<
    boost::math::policies::evaluation_error<boost::math::policies::ignore_error>,
    boost::math::policies::indeterminate_result_error<boost::math::policies::ignore_error> > pol3;
 
-template std::complex<double> boost::math::cyl_hankel_h1<double, double, pol3>(double, double, const pol3&);
+template std::complex<double> boost::math::cyl_hankel_1<double, double, pol3>(double, double, const pol3&);
 
 
 int test_main(int, char* [])

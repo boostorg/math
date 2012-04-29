@@ -67,13 +67,6 @@ it's not clear how to solve this issue, or if it's ever likely
 to be an real problem in practice - especially as most other implementations
 don't support this domain either (Medium Priority).
 
-[h4 Bessel Functions]
-
-We should implement the Hankel H1 and H2 functions as linear combinations of Bessel functions.
-Requires refactoring the internals so we can reliably calculate pairs of Bessel functions at the same time.
-We may also be able to improve performance of the Bessel series evaluation by accelerating the alternating
-series.  This may also increase the scope of the series form.
-
 [h4 Owen's T Function]
 
 There is a problem area at arbitrary precision when ['a] is very close to 1.  However, note that
