@@ -423,7 +423,7 @@ void test_spots(RealType)
            , static_cast<RealType>(-6.11279169674138408531365L), 2 * tol100);
         BOOST_CHECK_CLOSE(      // variance:
           variance(dist)
-          , static_cast<RealType>(9.10216994642554914628242L), tol100);
+          , static_cast<RealType>(9.10216994642554914628242L), tol100 * 2);
 
         BOOST_CHECK_CLOSE(      // skewness:
            skewness(dist)

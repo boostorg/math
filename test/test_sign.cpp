@@ -33,7 +33,7 @@ void test_spots(RealType /*T*/, const char* /*type_name*/)
 
    // Compare to formula for changsign(x) = copysign(x, signbit(x) ? 1.0 : -1.0)
    BOOST_CHECK_EQUAL((boost::math::changesign)(b),
-      (boost::math::copysign)(b, boost::math::signbit(b) ? RealType(1.) : RealType(-1.) ));
+      (boost::math::copysign)(b, (boost::math::signbit)(b) ? RealType(1.) : RealType(-1.) ));
 
 
    BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(1));
