@@ -241,6 +241,14 @@ inline T constant_ln_two<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl:
 
 template <class T>
 template<int N>
+inline T constant_ln_ten<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
+{
+   BOOST_MATH_STD_USING
+   return log(static_cast<T>(10));
+}
+
+template <class T>
+template<int N>
 inline T constant_ln_ln_two<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
 {
    BOOST_MATH_STD_USING
@@ -945,8 +953,6 @@ inline T constant_rayleigh_kurtosis<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYP
    * (pi<T, policies::policy<policies::digits2<N> > >() - static_cast<T>(4)))
    );
 }
-
-
 
 }}}} // namespaces
 
