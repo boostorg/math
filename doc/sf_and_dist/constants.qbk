@@ -284,6 +284,7 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 [[root_three] [[radic]3] [1.73205] [] ]
 [[half_root_two] [[radic]2 /2] [0.707106] [] ]
 [[ln_two] [ln(2)] [0.693147] [] ]
+[[ln_ten] [ln(10)] [2.30258] [] ]
 [[ln_ln_two] [ln(ln(2))] [-0.366512] [Gumbel distribution median] ]
 [[root_ln_four] [[radic]ln(4)] [1.177410] [] ]
 [[one_div_root_two] [1/[radic]2] [0.707106] [] ]
