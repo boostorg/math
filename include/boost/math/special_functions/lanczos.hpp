@@ -423,7 +423,7 @@ struct lanczos13 : public mpl::int_<72>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, -0.9685385411006641478305219367315965391289e-9)),
       };
       T result = 0;
-      T z = z = 2;
+      T z = dz + 2;
       for(unsigned k = 1; k <= sizeof(d)/sizeof(d[0]); ++k)
       {
          result += (-d[k-1]*dz)/(z + k*z + k*k - 1);
