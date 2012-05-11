@@ -542,7 +542,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<64>&)
 }
 
 template <class T, class Policy>
-T zeta_imp_prec(T s, T sc, const Policy& pol, const mpl::int_<113>&)
+T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<113>&)
 {
    BOOST_MATH_STD_USING
    T result;
