@@ -105,16 +105,16 @@ void expected_results()
    // causes more extreme test cases to be executed:
    //
    add_expected_result(
-      ".*mingw.*",                          // compiler
+      "GNU.*",                          // compiler
       ".*",                          // stdlib
-      ".*",                          // platform
+      "Win32.*",                          // platform
       "double",                // test type(s)
       ".*",                          // test data group
       ".*", 10, 10);         // test function
    add_expected_result(
-      ".*mingw.*",                          // compiler
+      "GNU.*",                          // compiler
       ".*",                          // stdlib
-      ".*",                          // platform
+      "Win32.*",                          // platform
       largest_type,                // test type(s)
       ".*",                          // test data group
       ".*", 300000, 20000);         // test function

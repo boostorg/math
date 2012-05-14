@@ -24,6 +24,7 @@
 #include <boost/array.hpp>
 #include "functor.hpp"
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #define BOOST_CHECK_EX(a) \
    {\
@@ -136,7 +137,7 @@ T ccdf_tester(T r, T n, T N, T x)
    return cdf(complement(d, x));
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_hypergeometric(const T& data, const char* type_name, const char* test_name)
 {
    // warning suppression:
@@ -146,7 +147,7 @@ void do_test_hypergeometric(const T& data, const char* type_name, const char* te
 
 #if !defined(TEST_QUANT) || (TEST_QUANT == 0)
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type, value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -163,10 +164,10 @@ void do_test_hypergeometric(const T& data, const char* type_name, const char* te
    //
    // test hypergeometric against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(funcp, 0, 1, 2, 3), 
-      extract_result(4));
+      bind_func<Real>(funcp, 0, 1, 2, 3), 
+      extract_result<Real>(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric PDF", test_name);
 
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -178,10 +179,10 @@ void do_test_hypergeometric(const T& data, const char* type_name, const char* te
    //
    // test hypergeometric against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(funcp, 0, 1, 2, 3), 
-      extract_result(5));
+      bind_func<Real>(funcp, 0, 1, 2, 3), 
+      extract_result<Real>(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric CDF", test_name);
 
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -193,20 +194,20 @@ void do_test_hypergeometric(const T& data, const char* type_name, const char* te
    //
    // test hypergeometric against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(funcp, 0, 1, 2, 3), 
-      extract_result(6));
+      bind_func<Real>(funcp, 0, 1, 2, 3), 
+      extract_result<Real>(6));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric CDF complement", test_name);
    std::cout << std::endl;
 #endif
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_hypergeometric_quantile(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << "Checking quantiles with " << test_name << " with type " << type_name
       << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
@@ -419,7 +420,7 @@ void test_spots(RealType /*T*/, const char* type_name)
    // Test data taken from Mathematica 6
 #define T RealType
 #include "hypergeometric_test_data.ipp"
-   do_test_hypergeometric(hypergeometric_test_data, type_name, "Mathematica data");
+   do_test_hypergeometric<T>(hypergeometric_test_data, type_name, "Mathematica data");
 
 #include "hypergeometric_dist_data2.ipp"
    if(boost::is_floating_point<RealType>::value)
@@ -427,16 +428,16 @@ void test_spots(RealType /*T*/, const char* type_name)
       //
       // Don't test this for real_concept: it's too slow!!!
       //
-      do_test_hypergeometric(hypergeometric_dist_data2, type_name, "Random large data");
+      do_test_hypergeometric<T>(hypergeometric_dist_data2, type_name, "Random large data");
    }
 
-   do_test_hypergeometric_quantile(hypergeometric_test_data, type_name, "Mathematica data");
+   do_test_hypergeometric_quantile<T>(hypergeometric_test_data, type_name, "Mathematica data");
    if(boost::is_floating_point<RealType>::value)
    {
       //
       // Don't test this for real_concept: it's too slow!!!
       //
-      do_test_hypergeometric_quantile(hypergeometric_dist_data2, type_name, "Random large data");
+      do_test_hypergeometric_quantile<T>(hypergeometric_dist_data2, type_name, "Random large data");
    }
 
    RealType tolerance = (std::max)(
@@ -485,7 +486,9 @@ int test_main(int, char* [])
    test_spots(0.0, "double"); // Test double. OK at decdigits 7, tolerance = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double"); // Test long double.
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(0), "real_concept"); // Test real_concept.
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "

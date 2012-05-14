@@ -860,7 +860,11 @@ inline mpfr_class bessel_i1(mpfr_class x)
 
 } // namespace detail
 
-}}
+}
+
+template<> struct is_convertible<long double, mpfr_class> : public mpl::false_{};
+
+}
 
 #endif // BOOST_MATH_MPLFR_BINDINGS_HPP
 

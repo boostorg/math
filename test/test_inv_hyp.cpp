@@ -19,6 +19,7 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 //
 // DESCRIPTION:
@@ -88,7 +89,7 @@ void expected_results()
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_asinh(const T& data, const char* type_name, const char* test_name)
 {
    //
@@ -96,7 +97,7 @@ void do_test_asinh(const T& data, const char* type_name, const char* test_name)
    //
    using namespace std;
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << test_name << " with type " << type_name << std::endl;
 
@@ -111,15 +112,15 @@ void do_test_asinh(const T& data, const char* type_name, const char* test_name)
    //
    // test asinh against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0),
-      extract_result(1));
+      bind_func<Real>(funcp, 0),
+      extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::asinh", test_name);
    std::cout << std::endl;
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_acosh(const T& data, const char* type_name, const char* test_name)
 {
    //
@@ -127,7 +128,7 @@ void do_test_acosh(const T& data, const char* type_name, const char* test_name)
    //
    using namespace std;
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << test_name << " with type " << type_name << std::endl;
 
@@ -142,15 +143,15 @@ void do_test_acosh(const T& data, const char* type_name, const char* test_name)
    //
    // test acosh against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0),
-      extract_result(1));
+      bind_func<Real>(funcp, 0),
+      extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::acosh", test_name);
    std::cout << std::endl;
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_atanh(const T& data, const char* type_name, const char* test_name)
 {
    //
@@ -158,7 +159,7 @@ void do_test_atanh(const T& data, const char* type_name, const char* test_name)
    //
    using namespace std;
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << test_name << " with type " << type_name << std::endl;
 
@@ -173,10 +174,10 @@ void do_test_atanh(const T& data, const char* type_name, const char* test_name)
    //
    // test atanh against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0),
-      extract_result(1));
+      bind_func<Real>(funcp, 0),
+      extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::atanh", test_name);
    std::cout << std::endl;
 }
@@ -185,8 +186,8 @@ template <class T>
 void test_inv_hyperbolics(T, const char* name)
 {
     // function values calculated on http://functions.wolfram.com/
-    #define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
-    static const boost::array<boost::array<T, 2>, 16> data1 = {{
+    #define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
+    static const boost::array<boost::array<typename table_type<T>::type, 2>, 16> data1 = {{
         {{ SC_(1), SC_(0) }},
         {{ SC_(18014398509481985.0)/SC_(18014398509481984.0), (SC_(18014398509481985.0)/SC_(18014398509481984.0) == 1 ? 0 : SC_(1.05367121277235078980001569764860129317209081216314559121044e-8)) }},
         {{ SC_(140737488355329.0)/SC_(140737488355328.0), (SC_(140737488355329.0)/SC_(140737488355328.0) == 1 ? 0 : SC_(1.19209289550781179413921062141751258430803882725295121500042e-7)) }},
@@ -210,12 +211,12 @@ void test_inv_hyperbolics(T, const char* name)
    // The actual test data is rather verbose, so it's in a separate file
    //
 #include "asinh_data.ipp"
-   do_test_asinh(asinh_data, name, "asinh");
+   do_test_asinh<T>(asinh_data, name, "asinh");
 #include "acosh_data.ipp"
-   do_test_acosh(data1, name, "acosh: Mathworld Data");
-   do_test_acosh(acosh_data, name, "acosh");
+   do_test_acosh<T>(data1, name, "acosh: Mathworld Data");
+   do_test_acosh<T>(acosh_data, name, "acosh");
 #include "atanh_data.ipp"
-   do_test_atanh(atanh_data, name, "atanh");
+   do_test_atanh<T>(atanh_data, name, "atanh");
 }
 
 extern "C" double zetac(double);
@@ -258,7 +259,9 @@ int test_main(int, char* [])
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "
@@ -270,7 +273,9 @@ int test_main(int, char* [])
    test_inv_hyperbolics(0.1, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_inv_hyperbolics(0.1L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_inv_hyperbolics(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "

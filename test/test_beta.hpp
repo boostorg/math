@@ -23,18 +23,19 @@
 
 #include "test_beta_hooks.hpp"
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #undef small // VC++ #defines small char !!!!!!
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <class T>
+template <class Real, class T>
 void do_test_beta(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -51,18 +52,18 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
    //
    // test beta against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(funcp, 0, 1), 
-      extract_result(2));
+      bind_func<Real>(funcp, 0, 1), 
+      extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::beta", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::beta;
-      result = boost::math::tools::test(
+      result = boost::math::tools::test_hetero<Real>(
          data, 
-         bind_func(funcp, 0, 1), 
-         extract_result(2));
+         bind_func<Real>(funcp, 0, 1), 
+         extract_result<Real>(2));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::beta");
    }
 #endif
@@ -79,15 +80,15 @@ void test_beta(T, const char* name)
    // 
 #  include "beta_small_data.ipp"
 
-   do_test_beta(beta_small_data, name, "Beta Function: Small Values");
+   do_test_beta<T>(beta_small_data, name, "Beta Function: Small Values");
 
 #  include "beta_med_data.ipp"
 
-   do_test_beta(beta_med_data, name, "Beta Function: Medium Values");
+   do_test_beta<T>(beta_med_data, name, "Beta Function: Medium Values");
 
 #  include "beta_exp_data.ipp"
 
-   do_test_beta(beta_exp_data, name, "Beta Function: Divergent Values");
+   do_test_beta<T>(beta_exp_data, name, "Beta Function: Divergent Values");
 }
 
 template <class T>

@@ -37,6 +37,7 @@ using boost::math::negative_binomial_distribution;
 
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
+#include "table_type.hpp"
 
 #include <iostream>
 using std::cout;
@@ -818,7 +819,7 @@ int test_main(int, char* [])
 #ifdef TEST_LDOUBLE
   test_spots(0.0L); // Test long double.
 #endif
-  #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #ifdef TEST_REAL_CONCEPT
     test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif

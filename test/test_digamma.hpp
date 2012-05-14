@@ -12,16 +12,17 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <class T>
+template <class Real, class T>
 void do_test_digamma(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -38,10 +39,10 @@ void do_test_digamma(const T& data, const char* type_name, const char* test_name
    //
    // test digamma against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(funcp, 0), 
-      extract_result(1));
+      bind_func<Real>(funcp, 0), 
+      extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::digamma", test_name);
    std::cout << std::endl;
 }
@@ -57,19 +58,19 @@ void test_digamma(T, const char* name)
    // 
 #  include "digamma_data.ipp"
 
-   do_test_digamma(digamma_data, name, "Digamma Function: Large Values");
+   do_test_digamma<T>(digamma_data, name, "Digamma Function: Large Values");
 
 #  include "digamma_root_data.ipp"
 
-   do_test_digamma(digamma_root_data, name, "Digamma Function: Near the Positive Root");
+   do_test_digamma<T>(digamma_root_data, name, "Digamma Function: Near the Positive Root");
 
 #  include "digamma_small_data.ipp"
 
-   do_test_digamma(digamma_small_data, name, "Digamma Function: Near Zero");
+   do_test_digamma<T>(digamma_small_data, name, "Digamma Function: Near Zero");
 
 #  include "digamma_neg_data.ipp"
 
-   do_test_digamma(digamma_neg_data, name, "Digamma Function: Negative Values");
+   do_test_digamma<T>(digamma_neg_data, name, "Digamma Function: Negative Values");
 
 }
 

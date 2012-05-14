@@ -19,16 +19,17 @@
 
 #include "test_gamma_hooks.hpp"
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <class T>
+template <class Real, class T>
 void do_test_gamma(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -45,18 +46,18 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
    //
    // test tgamma against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0),
-      extract_result(1));
+      bind_func<Real>(funcp, 0),
+      extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::tgamma;
-      result = boost::math::tools::test(
+      result = boost::math::tools::test_hetero<Real>(
          data,
-         bind_func(funcp, 0),
-         extract_result(1));
+         bind_func<Real>(funcp, 0),
+         extract_result<Real>(1));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::tgamma");
    }
 #endif
@@ -68,18 +69,18 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::lgamma;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0),
-      extract_result(2));
+      bind_func<Real>(funcp, 0),
+      extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::lgamma", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::lgamma;
-      result = boost::math::tools::test(
+      result = boost::math::tools::test_hetero<Real>(
          data,
-         bind_func(funcp, 0),
-         extract_result(2));
+         bind_func<Real>(funcp, 0),
+         extract_result<Real>(2));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::lgamma");
    }
 #endif
@@ -87,11 +88,11 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
    std::cout << std::endl;
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_gammap1m1(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -108,10 +109,10 @@ void do_test_gammap1m1(const T& data, const char* type_name, const char* test_na
    //
    // test tgamma1pm1 against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0),
-      extract_result(1));
+      bind_func<Real>(funcp, 0),
+      extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma1pm1", test_name);
    std::cout << std::endl;
 }
@@ -151,17 +152,17 @@ void test_gamma(T, const char* name)
    //
 #  include "test_gamma_data.ipp"
 
-   do_test_gamma(factorials, name, "factorials");
-   do_test_gamma(near_0, name, "near 0");
-   do_test_gamma(near_1, name, "near 1");
-   do_test_gamma(near_2, name, "near 2");
-   do_test_gamma(near_m10, name, "near -10");
-   do_test_gamma(near_m55, name, "near -55");
+   do_test_gamma<T>(factorials, name, "factorials");
+   do_test_gamma<T>(near_0, name, "near 0");
+   do_test_gamma<T>(near_1, name, "near 1");
+   do_test_gamma<T>(near_2, name, "near 2");
+   do_test_gamma<T>(near_m10, name, "near -10");
+   do_test_gamma<T>(near_m55, name, "near -55");
 
    //
    // And now tgamma1pm1 which computes gamma(1+dz)-1:
    //
-   do_test_gammap1m1(gammap1m1_data, name, "tgamma1pm1(dz)");
+   do_test_gammap1m1<T>(gammap1m1_data, name, "tgamma1pm1(dz)");
 }
 
 template <class T>

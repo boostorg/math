@@ -5,14 +5,11 @@
 
 #ifdef BOOST_BUILD_PCH_ENABLED
 
-#define ONE <boost/math/special_functions.hpp>
-#define TWO <boost/math/distributions.hpp>
-
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include <boost/test/test_exec_monitor.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include ONE
-#include TWO
+#include <boost/math/special_functions.hpp>
+#include <boost/math/distributions.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/math/tools/stats.hpp>
 #include <boost/type_traits.hpp>

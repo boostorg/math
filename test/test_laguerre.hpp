@@ -14,16 +14,17 @@
 
 #include "handle_test_result.hpp"
 #include "test_legendre_hooks.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <class T>
+template <class Real, class T>
 void do_test_laguerre2(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(unsigned, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -40,20 +41,20 @@ void do_test_laguerre2(const T& data, const char* type_name, const char* test_na
    //
    // test laguerre against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func_int1(funcp, 0, 1), 
-      extract_result(2));
+      bind_func_int1<Real>(funcp, 0, 1), 
+      extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::laguerre(n, x)", test_name);
 
    std::cout << std::endl;
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_laguerre3(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(unsigned, unsigned, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -70,10 +71,10 @@ void do_test_laguerre3(const T& data, const char* type_name, const char* test_na
    //
    // test laguerre against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func_int2(funcp, 0, 1, 2), 
-      extract_result(3));
+      bind_func_int2<Real>(funcp, 0, 1, 2), 
+      extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::laguerre(n, m, x)", test_name);
    std::cout << std::endl;
 }
@@ -89,11 +90,11 @@ void test_laguerre(T, const char* name)
    // 
 #  include "laguerre2.ipp"
 
-   do_test_laguerre2(laguerre2, name, "Laguerre Polynomials");
+   do_test_laguerre2<T>(laguerre2, name, "Laguerre Polynomials");
 
 #  include "laguerre3.ipp"
 
-   do_test_laguerre3(laguerre3, name, "Associated Laguerre Polynomials");
+   do_test_laguerre3<T>(laguerre3, name, "Associated Laguerre Polynomials");
 }
 
 template <class T>

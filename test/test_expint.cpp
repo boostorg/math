@@ -67,7 +67,7 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       "Mac OS",                      // platform
-      "float|double|long double",    // test type(s)
+      "float|double|long double|real_concept",    // test type(s)
       ".*Ei.*",                      // test data group
       ".*", 300, 200);                   // test function
    add_expected_result(
@@ -103,19 +103,12 @@ void expected_results()
          ".*", 150, 50);                // test function
    }
    add_expected_result(
-      "Sun.*",                       // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "real_concept",                // test type(s)
-      ".*Ei.*",                      // test data group
-      ".*", 150, 50);                // test function
-   add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*Ei.*",                      // test data group
-      ".*", 50, 20);                 // test function
+      ".*", 150, 50);                // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -139,7 +132,9 @@ int test_main(int, char* [])
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "
@@ -151,7 +146,9 @@ int test_main(int, char* [])
    test_expint(0.1, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_expint(0.1L, "long double");
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_expint(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "
@@ -160,4 +157,5 @@ int test_main(int, char* [])
 #endif
    return 0;
 }
+
 

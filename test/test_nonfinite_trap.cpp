@@ -5,23 +5,26 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+// test_nonfinite_trap.cpp
+
 #ifdef _MSC_VER
 #   pragma warning(disable : 4702)
 #endif
 
 #define BOOST_TEST_MAIN
 
+#include <boost/test/auto_unit_test.hpp>
+#include "almost_equal.ipp" // Similar to BOOST_CLOSE_FRACTION.
+#include "s_.ipp" // To create test strings like std::basic_string<CharType> s = S_("0 -0"); 
+#include <boost/math/special_functions/nonfinite_num_facets.hpp>
+
 #include <locale>
 #include <sstream>
-#include <boost/test/auto_unit_test.hpp>
-#include "almost_equal.ipp"
-#include "s_.ipp"
-#include <boost/math/special_functions/nonfinite_num_facets.hpp>
 
 namespace {
 
-// the anonymous namespace resolves ambiguities on platforms
-// with fpclassify etc functions at global scope
+// Using an anonymous namespace resolves ambiguities on platforms
+// with fpclassify etc functions at global scope.
 
 using namespace boost::math;
 using boost::math::signbit;
@@ -233,3 +236,4 @@ template<class CharType, class ValType> void trap_test_get_nan_impl()
 //------------------------------------------------------------------------------
 
 }   // anonymous namespace
+

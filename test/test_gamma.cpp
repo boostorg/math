@@ -60,7 +60,30 @@ void expected_results()
       largest_type,                  // test type(s)
       "factorials",                  // test data group
       "boost::math::tgamma", 100, 15); // test function
-
+   //
+   // G++ On Win32:
+   //
+   add_expected_result(
+      "GNU.*",                          // compiler
+      ".*",                          // stdlib
+      "Win32.*",                      // platform
+      largest_type,                  // test type(s)
+      "factorials",                  // test data group
+      "boost::math::tgamma", 100, 15); // test function
+   add_expected_result(
+      "GNU.*",                          // compiler
+      ".*",                          // stdlib
+      "Win32.*",                          // platform
+      "real_concept",                // test type(s)
+      "factorials",                  // test data group
+      "boost::math::tgamma", 200, 100);  // test function
+   add_expected_result(
+      "GNU.*",                          // compiler
+      ".*",                          // stdlib
+      "Win32.*",                          // platform
+      "real_concept",                // test type(s)
+      "near.*",                      // test data group
+      "boost::math::tgamma", 200, 60);  // test function
    //
    // G++ on Linux, result vary a bit by processor type,
    // on Itanium results are *much* better than listed here,

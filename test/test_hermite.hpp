@@ -21,16 +21,17 @@
 
 #include "handle_test_result.hpp"
 #include "test_legendre_hooks.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <class T>
+template <class Real, class T>
 void do_test_hermite(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(unsigned, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -49,10 +50,10 @@ void do_test_hermite(const T& data, const char* type_name, const char* test_name
    //
    // test hermite against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func_int1(funcp, 0, 1), 
-      extract_result(2));
+      bind_func_int1<Real>(funcp, 0, 1), 
+      extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::hermite", test_name);
 
    std::cout << std::endl;
@@ -69,7 +70,7 @@ void test_hermite(T, const char* name)
    // 
 #  include "hermite.ipp"
 
-   do_test_hermite(hermite, name, "Hermite Polynomials");
+   do_test_hermite<T>(hermite, name, "Hermite Polynomials");
 }
 
 template <class T>

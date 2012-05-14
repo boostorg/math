@@ -33,7 +33,7 @@ void test_spots(RealType /*T*/, const char* /*type_name*/)
 
    // Compare to formula for changsign(x) = copysign(x, signbit(x) ? 1.0 : -1.0)
    BOOST_CHECK_EQUAL((boost::math::changesign)(b),
-      boost::math::copysign(b, boost::math::signbit(b) ? RealType(1.) : RealType(-1.) ));
+      (boost::math::copysign)(b, (boost::math::signbit)(b) ? RealType(1.) : RealType(-1.) ));
 
 
    BOOST_CHECK_EQUAL((boost::math::copysign)(b, a), RealType(1));
@@ -146,7 +146,9 @@ int test_main(int, char* [])
    test_spots(0.0, "double"); // Test double. OK at decdigits 7, tolerance = 1e07 %
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_spots(0.0L, "long double"); // Test long double.
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_spots(boost::math::concepts::real_concept(0), "real_concept"); // Test real_concept.
+#endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
       "either because the long double overloads of the usual math functions are "

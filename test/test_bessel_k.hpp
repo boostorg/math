@@ -14,9 +14,10 @@
 
 #include "handle_test_result.hpp"
 #include "test_bessel_hooks.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#  define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#  define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
 template <class T>
@@ -27,11 +28,11 @@ T cyl_bessel_k_int_wrapper(T v, T x)
       boost::math::itrunc(v), x));
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_cyl_bessel_k(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -48,10 +49,10 @@ void do_test_cyl_bessel_k(const T& data, const char* type_name, const char* test
    //
    // test cyl_bessel_k against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(funcp, 0, 1), 
-      extract_result(2));
+      bind_func<Real>(funcp, 0, 1), 
+      extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_k", test_name);
    std::cout << std::endl;
 
@@ -63,21 +64,21 @@ void do_test_cyl_bessel_k(const T& data, const char* type_name, const char* test
       //
       // test other::cyl_bessel_k against data:
       //
-      result = boost::math::tools::test(
+      result = boost::math::tools::test_hetero(
          data, 
-         bind_func(funcp, 0, 1), 
-         extract_result(2));
+         bind_func<Real>(funcp, 0, 1), 
+         extract_result<Real>(2));
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::cyl_bessel_k");
       std::cout << std::endl;
    }
 #endif
 }
 
-template <class T>
+template <class Real, class T>
 void do_test_cyl_bessel_k_int(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -94,10 +95,10 @@ void do_test_cyl_bessel_k_int(const T& data, const char* type_name, const char* 
    //
    // test cyl_bessel_k against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data, 
-      bind_func(funcp, 0, 1), 
-      extract_result(2));
+      bind_func<Real>(funcp, 0, 1), 
+      extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_k", test_name);
    std::cout << std::endl;
 }
@@ -143,14 +144,14 @@ void test_bessel(T, const char* name)
         {{ SC_(0.5), SC_(0.875), SC_(0.558532231646608646115729767013630967055657943463362504577189) }},
         {{ SC_(0.5), SC_(1.125), SC_(0.383621010650189547146769320487006220295290256657827220786527) }},
         {{ SC_(2.25), T(std::ldexp(1.0, -30)), SC_(5.62397392719283271332307799146649700147907612095185712015604e20) }},
-        {{ SC_(5.5), SC_(3217)/1024, SC_(1.30623288775012596319554857587765179889689223531159532808379) }},
+        {{ SC_(5.5), T(3217)/1024, SC_(1.30623288775012596319554857587765179889689223531159532808379) }},
         {{ SC_(-5.5), SC_(10), SC_(0.0000733045300798502164644836879577484533096239574909573072142667) }},
         {{ SC_(-5.5), SC_(100), SC_(5.41274555306792267322084448693957747924412508020839543293369e-45) }},
-        {{ SC_(10240)/1024, SC_(1)/1024, SC_(2.35522579263922076203415803966825431039900000000993410734978e38) }},
-        {{ SC_(10240)/1024, SC_(10), SC_(0.00161425530039067002345725193091329085443750382929208307802221) }},
-        {{ SC_(144793)/1024, SC_(100), SC_(1.39565245860302528069481472855619216759142225046370312329416e-6) }},
-        {{ SC_(144793)/1024, SC_(200), SC_(9.11950412043225432171915100042647230802198254567007382956336e-68) }},
-        {{ SC_(-144793)/1024, SC_(50), SC_(1.30185229717525025165362673848737761549946548375142378172956e42) }},
+        {{ T(10240)/1024, T(1)/1024, SC_(2.35522579263922076203415803966825431039900000000993410734978e38) }},
+        {{ T(10240)/1024, SC_(10), SC_(0.00161425530039067002345725193091329085443750382929208307802221) }},
+        {{ T(144793)/1024, SC_(100), SC_(1.39565245860302528069481472855619216759142225046370312329416e-6) }},
+        {{ T(144793)/1024, SC_(200), SC_(9.11950412043225432171915100042647230802198254567007382956336e-68) }},
+        {{ T(-144793)/1024, SC_(50), SC_(1.30185229717525025165362673848737761549946548375142378172956e42) }},
     }};
     static const boost::array<boost::array<T, 3>, 5> kv_large_data = {{
         // Bug report https://svn.boost.org/trac/boost/ticket/5560:
@@ -161,20 +162,20 @@ void test_bessel(T, const char* name)
         {{ SC_(0.5),  static_cast<T>(ldexp(0.5, -683)), SC_(1.12284149973980088540335945247019177715948513804063794284101e103) }},
     }};
 
-    do_test_cyl_bessel_k(k0_data, name, "Bessel K0: Mathworld Data");
-    do_test_cyl_bessel_k(k1_data, name, "Bessel K1: Mathworld Data");
-    do_test_cyl_bessel_k(kn_data, name, "Bessel Kn: Mathworld Data");
+    do_test_cyl_bessel_k<T>(k0_data, name, "Bessel K0: Mathworld Data");
+    do_test_cyl_bessel_k<T>(k1_data, name, "Bessel K1: Mathworld Data");
+    do_test_cyl_bessel_k<T>(kn_data, name, "Bessel Kn: Mathworld Data");
 
-    do_test_cyl_bessel_k_int(k0_data, name, "Bessel K0: Mathworld Data (Integer Version)");
-    do_test_cyl_bessel_k_int(k1_data, name, "Bessel K1: Mathworld Data (Integer Version)");
-    do_test_cyl_bessel_k_int(kn_data, name, "Bessel Kn: Mathworld Data (Integer Version)");
+    do_test_cyl_bessel_k_int<T>(k0_data, name, "Bessel K0: Mathworld Data (Integer Version)");
+    do_test_cyl_bessel_k_int<T>(k1_data, name, "Bessel K1: Mathworld Data (Integer Version)");
+    do_test_cyl_bessel_k_int<T>(kn_data, name, "Bessel Kn: Mathworld Data (Integer Version)");
 
-    do_test_cyl_bessel_k(kv_data, name, "Bessel Kv: Mathworld Data");
+    do_test_cyl_bessel_k<T>(kv_data, name, "Bessel Kv: Mathworld Data");
     if(0 != static_cast<T>(ldexp(0.5, -512)))
-      do_test_cyl_bessel_k(kv_large_data, name, "Bessel Kv: Mathworld Data (large values)");
+      do_test_cyl_bessel_k<T>(kv_large_data, name, "Bessel Kv: Mathworld Data (large values)");
 #include "bessel_k_int_data.ipp"
-    do_test_cyl_bessel_k(bessel_k_int_data, name, "Bessel Kn: Random Data");
+    do_test_cyl_bessel_k<T>(bessel_k_int_data, name, "Bessel Kn: Random Data");
 #include "bessel_k_data.ipp"
-    do_test_cyl_bessel_k(bessel_k_data, name, "Bessel Kv: Random Data");
+    do_test_cyl_bessel_k<T>(bessel_k_data, name, "Bessel Kv: Random Data");
 }
 

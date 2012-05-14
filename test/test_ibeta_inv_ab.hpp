@@ -23,17 +23,18 @@
 #endif
 
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #ifndef SC_
-#define SC_(x) static_cast<T>(BOOST_JOIN(x, L))
+#define SC_(x) static_cast<typename table_type<T>::type>(BOOST_JOIN(x, L))
 #endif
 
-template <class T>
+template <class Real, class T>
 void test_inverses(const T& data)
 {
    using namespace std;
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policies::digits<value_type, boost::math::policies::policy<> >()/2)) * 100;
    if(boost::math::policies::digits<value_type, boost::math::policies::policy<> >() < 50)
@@ -47,53 +48,53 @@ void test_inverses(const T& data)
       // information left in the value we're using as input to the inverse
       // to be able to get back to the original value.
       //
-      if(data[i][5] == 0)
+      if(Real(data[i][5]) == 0)
       {
-         BOOST_CHECK_EQUAL(boost::math::ibeta_inva(data[i][1], data[i][2], data[i][5]), boost::math::tools::max_value<value_type>());
-         BOOST_CHECK_EQUAL(boost::math::ibeta_invb(data[i][0], data[i][2], data[i][5]), boost::math::tools::min_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::ibeta_inva(Real(data[i][1]), Real(data[i][2]), Real(data[i][5])), boost::math::tools::max_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::ibeta_invb(Real(data[i][0]), Real(data[i][2]), Real(data[i][5])), boost::math::tools::min_value<value_type>());
       }
-      else if((1 - data[i][5] > 0.001) 
-         && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<value_type>()) 
-         && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<double>()))
+      else if((1 - Real(data[i][5]) > 0.001) 
+         && (fabs(Real(data[i][5])) > 2 * boost::math::tools::min_value<value_type>()) 
+         && (fabs(Real(data[i][5])) > 2 * boost::math::tools::min_value<double>()))
       {
-         value_type inv = boost::math::ibeta_inva(data[i][1], data[i][2], data[i][5]);
-         BOOST_CHECK_CLOSE(data[i][0], inv, precision);
-         inv = boost::math::ibeta_invb(data[i][0], data[i][2], data[i][5]);
-         BOOST_CHECK_CLOSE(data[i][1], inv, precision);
+         value_type inv = boost::math::ibeta_inva(Real(data[i][1]), Real(data[i][2]), Real(data[i][5]));
+         BOOST_CHECK_CLOSE(Real(data[i][0]), inv, precision);
+         inv = boost::math::ibeta_invb(Real(data[i][0]), Real(data[i][2]), Real(data[i][5]));
+         BOOST_CHECK_CLOSE(Real(data[i][1]), inv, precision);
       }
-      else if(1 == data[i][5])
+      else if(1 == Real(data[i][5]))
       {
-         BOOST_CHECK_EQUAL(boost::math::ibeta_inva(data[i][1], data[i][2], data[i][5]), boost::math::tools::min_value<value_type>());
-         BOOST_CHECK_EQUAL(boost::math::ibeta_invb(data[i][0], data[i][2], data[i][5]), boost::math::tools::max_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::ibeta_inva(Real(data[i][1]), Real(data[i][2]), Real(data[i][5])), boost::math::tools::min_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::ibeta_invb(Real(data[i][0]), Real(data[i][2]), Real(data[i][5])), boost::math::tools::max_value<value_type>());
       }
 
-      if(data[i][6] == 0)
+      if(Real(data[i][6]) == 0)
       {
-         BOOST_CHECK_EQUAL(boost::math::ibetac_inva(data[i][1], data[i][2], data[i][6]), boost::math::tools::min_value<value_type>());
-         BOOST_CHECK_EQUAL(boost::math::ibetac_invb(data[i][0], data[i][2], data[i][6]), boost::math::tools::max_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::ibetac_inva(Real(data[i][1]), Real(data[i][2]), Real(data[i][6])), boost::math::tools::min_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::ibetac_invb(Real(data[i][0]), Real(data[i][2]), Real(data[i][6])), boost::math::tools::max_value<value_type>());
       }
-      else if((1 - data[i][6] > 0.001) 
-         && (fabs(data[i][6]) > 2 * boost::math::tools::min_value<value_type>()) 
-         && (fabs(data[i][6]) > 2 * boost::math::tools::min_value<double>()))
+      else if((1 - Real(data[i][6]) > 0.001) 
+         && (fabs(Real(data[i][6])) > 2 * boost::math::tools::min_value<value_type>()) 
+         && (fabs(Real(data[i][6])) > 2 * boost::math::tools::min_value<double>()))
       {
-         value_type inv = boost::math::ibetac_inva(data[i][1], data[i][2], data[i][6]);
-         BOOST_CHECK_CLOSE(data[i][0], inv, precision);
-         inv = boost::math::ibetac_invb(data[i][0], data[i][2], data[i][6]);
-         BOOST_CHECK_CLOSE(data[i][1], inv, precision);
+         value_type inv = boost::math::ibetac_inva(Real(data[i][1]), Real(data[i][2]), Real(data[i][6]));
+         BOOST_CHECK_CLOSE(Real(data[i][0]), inv, precision);
+         inv = boost::math::ibetac_invb(Real(data[i][0]), Real(data[i][2]), Real(data[i][6]));
+         BOOST_CHECK_CLOSE(Real(data[i][1]), inv, precision);
       }
-      else if(data[i][6] == 1)
+      else if(Real(data[i][6]) == 1)
       {
-         BOOST_CHECK_EQUAL(boost::math::ibetac_inva(data[i][1], data[i][2], data[i][6]), boost::math::tools::max_value<value_type>());
-         BOOST_CHECK_EQUAL(boost::math::ibetac_invb(data[i][0], data[i][2], data[i][6]), boost::math::tools::min_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::ibetac_inva(Real(data[i][1]), Real(data[i][2]), Real(data[i][6])), boost::math::tools::max_value<value_type>());
+         BOOST_CHECK_EQUAL(boost::math::ibetac_invb(Real(data[i][0]), Real(data[i][2]), Real(data[i][6])), boost::math::tools::min_value<value_type>());
       }
    }
 }
 
-template <class T>
+template <class Real, class T>
 void test_inverses2(const T& data, const char* type_name, const char* test_name)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -110,10 +111,10 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
    //
    // test ibeta_inva(T, T, T) against data:
    //
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1, 2),
-      extract_result(3));
+      bind_func<Real>(funcp, 0, 1, 2),
+      extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta_inva", test_name);
    //
    // test ibetac_inva(T, T, T) against data:
@@ -123,10 +124,10 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::ibetac_inva;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1, 2),
-      extract_result(4));
+      bind_func<Real>(funcp, 0, 1, 2),
+      extract_result<Real>(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibetac_inva", test_name);
    //
    // test ibeta_invb(T, T, T) against data:
@@ -136,10 +137,10 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::ibeta_invb;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1, 2),
-      extract_result(5));
+      bind_func<Real>(funcp, 0, 1, 2),
+      extract_result<Real>(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta_invb", test_name);
    //
    // test ibetac_invb(T, T, T) against data:
@@ -149,10 +150,10 @@ void test_inverses2(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::ibetac_invb;
 #endif
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(funcp, 0, 1, 2),
-      extract_result(6));
+      bind_func<Real>(funcp, 0, 1, 2),
+      extract_result<Real>(6));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibetac_invb", test_name);
 }
 
@@ -170,19 +171,19 @@ void test_beta(T, const char* name)
 #if !defined(TEST_DATA) || (TEST_DATA == 1)
 #  include "ibeta_small_data.ipp"
 
-   test_inverses(ibeta_small_data);
+   test_inverses<T>(ibeta_small_data);
 #endif
 
 #if !defined(TEST_DATA) || (TEST_DATA == 2)
 #  include "ibeta_data.ipp"
 
-   test_inverses(ibeta_data);
+   test_inverses<T>(ibeta_data);
 #endif
 
 #if !defined(TEST_DATA) || (TEST_DATA == 3)
 #  include "ibeta_large_data.ipp"
 
-   test_inverses(ibeta_large_data);
+   test_inverses<T>(ibeta_large_data);
 #endif
 
 #if !defined(TEST_REAL_CONCEPT) || defined(FULL_TEST) || (TEST_DATA == 4)
@@ -197,7 +198,7 @@ void test_beta(T, const char* name)
    //
 #  include "ibeta_inva_data.ipp"
 
-   test_inverses2(ibeta_inva_data, name, "Inverse incomplete beta");
+   test_inverses2<T>(ibeta_inva_data, name, "Inverse incomplete beta");
 #ifndef FULL_TEST
    }
 #endif

@@ -31,6 +31,7 @@ using boost::math::binomial_distribution;
 
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
+#include "table_type.hpp"
 
 #include <iostream>
 using std::cout;
@@ -626,13 +627,7 @@ void test_spots(RealType)
     //7 0.00036621093749999984 0.9999847412109375
     //8 1.52587890625e-005 1 1 0
   }
-#if !defined(TEST_REAL_CONCEPT)
 #define T RealType
-#else
-  // This reduces compile time and compiler memory usage by storing test data
-  // as an array of long double's rather than an array of real_concept's:
-#define T long double
-#endif
 #include "binomial_quantile.ipp"
 
   for(unsigned i = 0; i < binomial_quantile_data.size(); ++i)
@@ -734,7 +729,7 @@ int test_main(int, char* [])
 #ifdef TEST_LDOUBLE
   test_spots(0.0L); // Test long double.
 #endif
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#if !defined(BOOST_MATH_NO_REAL_CONCEPT_TESTS)
 #ifdef TEST_REAL_CONCEPT
   test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif

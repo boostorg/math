@@ -29,6 +29,7 @@
 
 #include "functor.hpp"
 #include "handle_test_result.hpp"
+#include "table_type.hpp"
 
 #include <iostream>
 using std::cout;
@@ -343,29 +344,29 @@ T nct_ccdf(T df, T nc, T x)
    return cdf(complement(boost::math::non_central_t_distribution<T>(df, nc), x));
 }
 
-template <typename T>
+template <typename Real, typename T>
 void do_test_nc_t(T& data, const char* type_name, const char* test)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
    value_type (*fp1)(value_type, value_type, value_type) = nct_cdf;
    boost::math::tools::test_result<value_type> result;
 
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(fp1, 0, 1, 2),
-      extract_result(3));
+      bind_func<Real>(fp1, 0, 1, 2),
+      extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "CDF", test);
 
    fp1 = nct_ccdf;
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(fp1, 0, 1, 2),
-      extract_result(4));
+      bind_func<Real>(fp1, 0, 1, 2),
+      extract_result<Real>(4));
    handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "CCDF", test);
 
@@ -373,11 +374,11 @@ void do_test_nc_t(T& data, const char* type_name, const char* test)
 
 }
 
-template <typename T>
+template <typename Real, typename T>
 void quantile_sanity_check(T& data, const char* type_name, const char* test)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    //
    // Tests with type real_concept take rather too long to run, so
@@ -478,8 +479,8 @@ template <typename T>
 void test_accuracy(T, const char* type_name)
 {
 #include "nct.ipp"
-    do_test_nc_t(nct, type_name, "Non Central T");
-    quantile_sanity_check(nct, type_name, "Non Central T");
+    do_test_nc_t<T>(nct, type_name, "Non Central T");
+    quantile_sanity_check<T>(nct, type_name, "Non Central T");
 }
 
 int test_main(int, char* [])
@@ -499,7 +500,7 @@ int test_main(int, char* [])
 #ifdef TEST_LDOUBLE
    test_spots(0.0L); // Test long double.
 #endif
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #ifdef TEST_REAL_CONCEPT
    test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
 #endif
@@ -516,7 +517,7 @@ int test_main(int, char* [])
 #ifdef TEST_LDOUBLE
    test_accuracy(0.0L, "long double"); // Test long double.
 #endif
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+#ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
 #ifdef TEST_REAL_CONCEPT
    test_accuracy(boost::math::concepts::real_concept(0.), "real_concept"); // Test real concept.
 #endif

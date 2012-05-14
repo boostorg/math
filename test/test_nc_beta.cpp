@@ -34,6 +34,7 @@
 #include "functor.hpp"
 #include "handle_test_result.hpp"
 #include "test_ncbeta_hooks.hpp"
+#include "table_type.hpp"
 
 #include <iostream>
 using std::cout;
@@ -290,38 +291,38 @@ T nc_beta_ccdf(T a, T b, T nc, T x)
    return cdf(complement(boost::math::non_central_beta_distribution<T>(a, b, nc), x));
 }
 
-template <typename T>
+template <typename Real, typename T>
 void do_test_nc_chi_squared(T& data, const char* type_name, const char* test)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
    value_type (*fp1)(value_type, value_type, value_type, value_type) = nc_beta_cdf;
    boost::math::tools::test_result<value_type> result;
 
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(fp1, 0, 1, 2, 3),
-      extract_result(4));
+      bind_func<Real>(fp1, 0, 1, 2, 3),
+      extract_result<Real>(4));
    handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "CDF", test);
 
    fp1 = nc_beta_ccdf;
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(fp1, 0, 1, 2, 3),
-      extract_result(5));
+      bind_func<Real>(fp1, 0, 1, 2, 3),
+      extract_result<Real>(5));
    handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "CCDF", test);
 
 #ifdef TEST_OTHER
    fp1 = other::ncbeta_cdf;
-   result = boost::math::tools::test(
+   result = boost::math::tools::test_hetero<Real>(
       data,
-      bind_func(fp1, 0, 1, 2, 3),
-      extract_result(4));
+      bind_func<Real>(fp1, 0, 1, 2, 3),
+      extract_result<Real>(4));
    handle_test_result(result, data[result.worst()], result.worst(),
       type_name, "Other::CDF", test);
 #endif
@@ -329,11 +330,11 @@ void do_test_nc_chi_squared(T& data, const char* type_name, const char* test)
 
 }
 
-template <typename T>
+template <typename Real, typename T>
 void quantile_sanity_check(T& data, const char* type_name, const char* test)
 {
    typedef typename T::value_type row_type;
-   typedef typename row_type::value_type value_type;
+   typedef Real                   value_type;
 
    //
    // Tests with type real_concept take rather too long to run, so
@@ -415,12 +416,12 @@ void test_accuracy(T, const char* type_name)
 {
 #if !defined(TEST_DATA) || (TEST_DATA == 1)
 #include "ncbeta.ipp"
-    do_test_nc_chi_squared(ncbeta, type_name, "Non Central Beta, medium parameters");
-    quantile_sanity_check(ncbeta, type_name, "Non Central Beta, medium parameters");
+    do_test_nc_chi_squared<T>(ncbeta, type_name, "Non Central Beta, medium parameters");
+    quantile_sanity_check<T>(ncbeta, type_name, "Non Central Beta, medium parameters");
 #endif
 #if !defined(TEST_DATA) || (TEST_DATA == 2)
 #include "ncbeta_big.ipp"
-    do_test_nc_chi_squared(ncbeta_big, type_name, "Non Central Beta, large parameters");
+    do_test_nc_chi_squared<T>(ncbeta_big, type_name, "Non Central Beta, large parameters");
     // Takes too long to run:
     // quantile_sanity_check(ncbeta_big, type_name, "Non Central Beta, large parameters");
 #endif

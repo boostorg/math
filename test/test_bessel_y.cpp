@@ -131,23 +131,23 @@ void expected_results()
    // MinGW:
    //
       add_expected_result(
-         ".*mingw.*",                          // compiler
+         "GNU.*",                          // compiler
          ".*",                          // stdlib
-         ".*",                          // platform
+         "Win32.*",                          // platform
          largest_type,                  // test type(s)
          ".*Yv.*Random.*",              // test data group
          ".*", 200000, 200000);         // test function
       add_expected_result(
-         ".*mingw.*",                          // compiler
+         "GNU.*",                          // compiler
          ".*",                          // stdlib
-         ".*",                          // platform
+         "Win32.*",                          // platform
          largest_type,                  // test type(s)
          ".*Y[01v].*",              // test data group
          ".*", 2000, 1000);         // test function
       add_expected_result(
-         ".*mingw.*",                          // compiler
+         "GNU.*",                          // compiler
          ".*",                          // stdlib
-         ".*",                          // platform
+         "Win32.*",                          // platform
          largest_type,                  // test type(s)
          ".*Yn.*",              // test data group
          ".*", 30000, 30000);         // test function
@@ -228,6 +228,16 @@ void expected_results()
       largest_type,                  // test type(s)
       ".*",                          // test data group
       ".*", 80, 40);                 // test function
+   //
+   // One set of float tests has inexact input values, so there is a slight error:
+   //
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      "float",                       // test type(s)
+      "Yv: Mathworld Data",    // test data group
+      ".*", 20, 20);                 // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
