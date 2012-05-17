@@ -88,8 +88,10 @@ these are sine waves, while as /k/ tends to 1 they become hyperbolic functions:
 
 [heading Accuracy]
 
-These functions are computed using only basic arithmetic operations, so
+These functions are computed using only basic arithmetic operations and trigomometric functions, so
 there isn't much variation in accuracy over differing platforms.
+Typically errors are trivially small for small angles, and as is typical for cyclic
+functions, grow as the angle increases.
 Note that only results for the widest floating point type on the 
 system are given as narrower types have __zero_error.  All values
 are relative errors in units of epsilon.
@@ -97,7 +99,7 @@ are relative errors in units of epsilon.
 [table Errors Rates in the Jacobi Elliptic Functions
 [[Significand Size] [Platform and Compiler] [[phi] < 1] [Large [phi]] ]
 [[53] [Win32 / Visual C++ 8.0] [Peak=2 Mean=0.5] [Peak=44000 Mean=2500] ]
-[[64] [Red Hat Linux / G++ 3.4] [Peak=2.6 Mean=1.7] [Peak=2.2 Mean=1.8]  ]
+[[64] [Ubuntu Linux / G++ 4.7] [Peak=2.0 Mean=0.5] [Peak=25000 Mean=1500]  ]
 ]
 
 

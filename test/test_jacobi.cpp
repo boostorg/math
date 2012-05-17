@@ -72,6 +72,27 @@ void expected_results()
       largest_type,                  // test type(s)
       ".*near 1.*",               // test data group
       ".*", 7000, 500);            // test function
+
+   if(std::numeric_limits<long double>::digits == 64)
+   {
+      //
+      // Some errors spill over into double precision:
+      //
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                  // test type(s)
+         ".*Large Phi.*",                  // test data group
+         ".*", 500, 50);                // test function
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                  // test type(s)
+         ".*near 1.*",                  // test data group
+         ".*", 10, 5);                // test function
+   }
    //
    // Catch all cases come last:
    //

@@ -156,11 +156,13 @@
           <span><a name="math_toolkit.special.jacobi.jacobi_elliptic.accuracy"></a></span><a class="link" href="jacobi_elliptic.html#math_toolkit.special.jacobi.jacobi_elliptic.accuracy">Accuracy</a>
         </h6>
 <p>
-          These functions are computed using only basic arithmetic operations, so
-          there isn't much variation in accuracy over differing platforms. Note that
-          only results for the widest floating point type on the system are given
-          as narrower types have <a class="link" href="../../backgrounders/relative_error.html#zero_error">effectively zero error</a>.
-          All values are relative errors in units of epsilon.
+          These functions are computed using only basic arithmetic operations and
+          trigomometric functions, so there isn't much variation in accuracy over
+          differing platforms. Typically errors are trivially small for small angles,
+          and as is typical for cyclic functions, grow as the angle increases. Note
+          that only results for the widest floating point type on the system are
+          given as narrower types have <a class="link" href="../../backgrounders/relative_error.html#zero_error">effectively zero
+          error</a>. All values are relative errors in units of epsilon.
         </p>
 <div class="table">
 <a name="math_toolkit.special.jacobi.jacobi_elliptic.errors_rates_in_the_jacobi_elliptic_functions"></a><p class="title"><b>Table&#160;47.&#160;Errors Rates in the Jacobi Elliptic Functions</b></p>
@@ -224,17 +226,17 @@
                 </td>
 <td>
                   <p>
-                    Red Hat Linux / G++ 3.4
+                    Ubuntu Linux / G++ 4.7
                   </p>
                 </td>
 <td>
                   <p>
-                    Peak=2.6 Mean=1.7
+                    Peak=2.0 Mean=0.5
                   </p>
                 </td>
 <td>
                   <p>
-                    Peak=2.2 Mean=1.8
+                    Peak=25000 Mean=1500
                   </p>
                 </td>
 </tr>
