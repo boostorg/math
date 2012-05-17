@@ -130,7 +130,7 @@ inline std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >:
 }
 
 template <class T1, class T2, class Policy>
-inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_1(T1 v, T2 x, const Policy& pol)
+inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_1(T1 v, T2 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
@@ -152,7 +152,7 @@ inline std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >:
 }
 
 template <class T1, class T2, class Policy>
-inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_2(T1 v, T2 x, const Policy& pol)
+inline std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> sph_hankel_2(T1 v, T2 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;

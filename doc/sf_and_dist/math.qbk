@@ -157,6 +157,9 @@ and use the function's name as the link text.]
 [def __sph_hankel_1  [link math_toolkit.special.hankel.sph_hankel sph_hankel_1]]
 [def __sph_hankel_2  [link math_toolkit.special.hankel.sph_hankel sph_hankel_2]]
 
+[/Jacobi Elliptic Functions]
+[def __jacobi_elliptic [link math_toolkit.special.jacobi.jacobi_elliptic jacobi_elliptic]]
+
 [/sinus cardinals]
 [def __sinc_pi  [link math_toolkit.special.sinc.sinc_pi sinc_pi]]
 [def __sinhc_pi  [link math_toolkit.special.sinc.sinhc_pi sinhc_pi]]
@@ -435,6 +438,8 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include ellint_carlson.qbk]
 [include ellint_legendre.qbk]
 [endsect] [/section:ellint Elliptic Integrals]
+
+[include jacobi_elliptic.qbk]
 
 [section:zetas Zeta Functions]
 [include zeta.qbk]

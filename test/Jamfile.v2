@@ -445,6 +445,7 @@ run test_inverse_gamma_distribution.cpp ../../test/build//boost_test_exec_monito
 
 run test_inverse_gaussian.cpp ../../test/build//boost_test_exec_monitor ;
 
+run test_jacobi.cpp pch_light ../../test/build//boost_test_exec_monitor ;
 run test_laplace.cpp ../../test/build//boost_unit_test_framework ;
 run test_inv_hyp.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_laguerre.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
