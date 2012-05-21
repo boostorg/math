@@ -248,7 +248,7 @@ int main()
    double (*f2i)(int, double);
    double (*f3)(double, double, double);
    double (*f4)(double, double, double, double);
-
+#if 0
    f = boost::math::zeta;
    plot.add(f, 1 + find_end_point(f, 0.1, 40.0, false, 1.0), 10, "");
    plot.add(f, -20, 1 + find_end_point(f, -0.1, -40.0, false, 1.0), "");
@@ -675,6 +675,27 @@ int main()
    plot.add(boost::bind(f2, 0.95, _1), -2.5, 2.5, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), -2.5, 2.5, "k=1");
    plot.plot("Jacobi Elliptic sd", "jacobi_sd.svg", "k", "jacobi_sd(k, phi)");
+#endif
+
+   f = boost::math::airy_ai;
+   plot.clear();
+   plot.add(f, -20, 20, "");
+   plot.plot("Ai", "airy_ai.svg", "z", "airy_ai(z)");
+
+   f = boost::math::airy_bi;
+   plot.clear();
+   plot.add(f, -20, 3, "");
+   plot.plot("Bi", "airy_bi.svg", "z", "airy_bi(z)");
+
+   f = boost::math::airy_ai_prime;
+   plot.clear();
+   plot.add(f, -20, 20, "");
+   plot.plot("Ai'", "airy_aip.svg", "z", "airy_ai_prime(z)");
+
+   f = boost::math::airy_bi_prime;
+   plot.clear();
+   plot.add(f, -20, 3, "");
+   plot.plot("Bi'", "airy_bip.svg", "z", "airy_bi_prime(z)");
 
    return 0;
 }

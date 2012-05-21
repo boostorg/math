@@ -12,6 +12,7 @@
 #ifndef BOOST_MATH_SPECIAL_FUNCTIONS_HPP
 #define BOOST_MATH_SPECIAL_FUNCTIONS_HPP
 
+#include <boost/math/special_functions/airy.hpp>
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
 #include <boost/math/special_functions/atanh.hpp>

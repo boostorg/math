@@ -354,6 +354,17 @@ namespace boost{ namespace math{
 
    template detail::bessel_traits<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE, policies::policy<> >::result_type sph_neumann(unsigned v, BOOST_MATH_TEST_TYPE x);
 
+   // Airy Functions:
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_ai(BOOST_MATH_TEST_TYPE x, const policies::policy<>&);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_ai(BOOST_MATH_TEST_TYPE x);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_bi(BOOST_MATH_TEST_TYPE x, const policies::policy<>&);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_bi(BOOST_MATH_TEST_TYPE x);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_ai_prime(BOOST_MATH_TEST_TYPE x, const policies::policy<>&);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_ai_prime(BOOST_MATH_TEST_TYPE x);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_bi_prime(BOOST_MATH_TEST_TYPE x, const policies::policy<>&);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_bi_prime(BOOST_MATH_TEST_TYPE x);
+
+   // Exponential Integral
    template tools::promote_args<BOOST_MATH_TEST_TYPE>::type expint(unsigned n, BOOST_MATH_TEST_TYPE z, const policies::policy<> &);
 
    template detail::expint_result<int, BOOST_MATH_TEST_TYPE>::type expint(int const z, BOOST_MATH_TEST_TYPE const u);

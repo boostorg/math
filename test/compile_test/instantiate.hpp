@@ -255,6 +255,10 @@ void instantiate(RealType)
    boost::math::sph_hankel_2(v1, v2);
    boost::math::sph_hankel_2(i, v2);
 #endif
+   boost::math::airy_ai(v1);
+   boost::math::airy_bi(v1);
+   boost::math::airy_ai_prime(v1);
+   boost::math::airy_bi_prime(v1);
    boost::math::expint(v1);
    boost::math::expint(i);
    boost::math::expint(i, v2);
@@ -397,6 +401,10 @@ void instantiate(RealType)
    boost::math::sph_hankel_2(v1, v2, pol);
    boost::math::sph_hankel_2(i, v2, pol);
 #endif
+   boost::math::airy_ai(v1, pol);
+   boost::math::airy_bi(v1, pol);
+   boost::math::airy_ai_prime(v1, pol);
+   boost::math::airy_bi_prime(v1, pol);
    boost::math::expint(v1, pol);
    boost::math::expint(i, pol);
    boost::math::expint(i, v2, pol);
@@ -550,6 +558,10 @@ void instantiate(RealType)
    test::sph_hankel_2(v1, v2);
    test::sph_hankel_2(i, v2);
 #endif
+   boost::math::airy_ai(i);
+   boost::math::airy_bi(i);
+   boost::math::airy_ai_prime(i);
+   boost::math::airy_bi_prime(i);
    test::expint(v1);
    test::expint(i);
    test::expint(i, v2);
@@ -961,6 +973,10 @@ void instantiate_mixed(RealType)
    test::sph_bessel(i, 1);
    test::sph_neumann(i, lr);
    test::sph_neumann(i, i);
+   test::airy_ai(i);
+   test::airy_bi(i);
+   test::airy_ai_prime(i);
+   test::airy_bi_prime(i);
    test::owens_t(fr, dr);
    test::owens_t(i, s);
 #endif

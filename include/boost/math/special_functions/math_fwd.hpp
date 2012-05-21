@@ -640,6 +640,30 @@ namespace boost
    std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> sph_hankel_2(T1 v, T2 x);
 
    template <class T, class Policy>
+   typename tools::promote_args<T>::type airy_ai(T x, const Policy&);
+
+   template <class T>
+   typename tools::promote_args<T>::type airy_ai(T x);
+
+   template <class T, class Policy>
+   typename tools::promote_args<T>::type airy_bi(T x, const Policy&);
+
+   template <class T>
+   typename tools::promote_args<T>::type airy_bi(T x);
+
+   template <class T, class Policy>
+   typename tools::promote_args<T>::type airy_ai_prime(T x, const Policy&);
+
+   template <class T>
+   typename tools::promote_args<T>::type airy_ai_prime(T x);
+
+   template <class T, class Policy>
+   typename tools::promote_args<T>::type airy_bi_prime(T x, const Policy&);
+
+   template <class T>
+   typename tools::promote_args<T>::type airy_bi_prime(T x);
+
+   template <class T, class Policy>
    typename tools::promote_args<T>::type sin_pi(T x, const Policy&);
 
    template <class T>
@@ -1247,6 +1271,23 @@ namespace boost
    inline typename boost::math::tools::promote_args<T, U>::type jacobi_cs(T k, U theta)\
    { return boost::math::jacobi_cs(k, theta, Policy()); }\
    \
+   template <class T>\
+   inline typename boost::math::tools::promote_args<T>::type airy_ai(T x)\
+   {  return boost::math::airy_ai(x, Policy());  }\
+   \
+   template <class T>\
+   inline typename boost::math::tools::promote_args<T>::type airy_bi(T x)\
+   {  return boost::math::airy_bi(x, Policy());  }\
+   \
+   template <class T>\
+   inline typename boost::math::tools::promote_args<T>::type airy_ai_prime(T x)\
+   {  return boost::math::airy_ai_prime(x, Policy());  }\
+   \
+   template <class T>\
+   inline typename boost::math::tools::promote_args<T>::type airy_bi_prime(T x)\
+   {  return boost::math::airy_bi_prime(x, Policy());  }\
+   \
+
 
 
 
