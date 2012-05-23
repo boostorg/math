@@ -742,7 +742,7 @@ namespace boost
    typename tools::promote_args<T>::type jacobi_elliptic(T k, T theta, T* pcn, T* pdn, const Policy&);
 
    template <class T>
-   typename tools::promote_args<T>::type jacobi_elliptic(T k, T theta, T* pcn, T* pdn);
+   typename tools::promote_args<T>::type jacobi_elliptic(T k, T theta, T* pcn = 0, T* pdn = 0);
 
    template <class U, class T, class Policy>
    typename tools::promote_args<T, U>::type jacobi_sn(U k, T theta, const Policy& pol);

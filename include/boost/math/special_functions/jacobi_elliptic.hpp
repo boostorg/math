@@ -140,7 +140,7 @@ inline typename tools::promote_args<T>::type jacobi_elliptic(T k, T theta, T* pc
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type jacobi_elliptic(T k, T theta, T* pcn = 0, T* pdn = 0)
+inline typename tools::promote_args<T>::type jacobi_elliptic(T k, T theta, T* pcn, T* pdn)
 {
    return jacobi_elliptic(k, theta, pcn, pdn, policies::policy<>());
 }
