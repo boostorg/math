@@ -1,5 +1,5 @@
 //  Copyright John Maddock 2007-8.
-//  Copyright Paul A. bristow 2009
+//  Copyright Paul A. Bristow 2009, 2011
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -14,6 +14,8 @@
 #ifdef _MSC_VER
 #  pragma warning (disable : 4100) // unreferenced formal parameter
 #endif
+
+
 
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 
