@@ -163,9 +163,9 @@ inline RealType quantile(const students_t_distribution<RealType, Policy>& dist, 
    //
    static const char* function = "boost::math::quantile(const students_t_distribution<%1%>&, %1%)";
    RealType error_result;
-   if(false == detail::check_df(
+   if(false == (detail::check_df(
       function, degrees_of_freedom, &error_result, Policy())
-         && detail::check_probability(function, probability, &error_result, Policy()))
+         && detail::check_probability(function, probability, &error_result, Policy())))
       return error_result;
 
    // Special cases, regardless of degrees_of_freedom.

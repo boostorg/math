@@ -282,7 +282,11 @@ void test_spots(RealType)
        standard_deviation(def_norm01),
        static_cast<RealType>(1), 0); // Mean == zero
 
-
+    // Error tests:
+    BOOST_CHECK_THROW(pdf(normal_distribution<RealType>(0, 0), 0), std::domain_error);
+    BOOST_CHECK_THROW(pdf(normal_distribution<RealType>(0, -1), 0), std::domain_error);
+    BOOST_CHECK_THROW(quantile(normal_distribution<RealType>(0, 1), -1), std::domain_error);
+    BOOST_CHECK_THROW(quantile(normal_distribution<RealType>(0, 1), 2), std::domain_error);
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
