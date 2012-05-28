@@ -85,6 +85,7 @@ template <class T>  // sqrt(2/pi)
 template <int N>
 inline T constant_root_two_div_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
 {
+   BOOST_MATH_STD_USING
    return sqrt((2 / pi<T, policies::policy<policies::digits2<N> > >()));
 }
 

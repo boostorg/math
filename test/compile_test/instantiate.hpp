@@ -18,7 +18,7 @@
 
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
 
-typedef boost::math::policies::policy<> test_policy;
+typedef boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > test_policy;
 
 namespace test{
 
@@ -67,6 +67,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<poisson_distribution<RealType> > >();
    function_requires<DistributionConcept<rayleigh_distribution<RealType> > >();
    function_requires<DistributionConcept<students_t_distribution<RealType> > >();
+   function_requires<DistributionConcept<skew_normal_distribution<RealType> > >();
    function_requires<DistributionConcept<triangular_distribution<RealType> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType> > >();
@@ -97,6 +98,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<pareto_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<poisson_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<rayleigh_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<skew_normal_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<students_t_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<triangular_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType, test_policy> > >();
