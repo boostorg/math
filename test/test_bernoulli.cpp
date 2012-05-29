@@ -1,7 +1,7 @@
 // test_bernoulli.cpp
 
 // Copyright John Maddock 2006.
-// Copyright  Paul A. Bristow 2007.
+// Copyright  Paul A. Bristow 2007, 2012.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -11,9 +11,10 @@
 // Basic sanity test for Bernoulli Cumulative Distribution Function.
 
 #ifdef _MSC_VER
-#  pragma warning (disable : 4535) // calling _set_se_translator() requires /EHa
-#  pragma warning (disable : 4244) // converion possible loss of data
-#  pragma warning (disable : 4996) // 'putenv': The POSIX name for this item is deprecated
+#  pragma warning (disable : 4535) // calling _set_se_translator() requires /EHa.
+#  pragma warning (disable : 4244) // conversion possible loss of data.
+#  pragma warning (disable : 4996) // 'putenv': The POSIX name for this item is deprecated.
+#  pragma warning (disable : 4127) // conditional expression is constant.
 #endif
 
 // Default domain error policy is
@@ -211,6 +212,52 @@ void test_spots(RealType)
         static_cast<RealType>(0.9L))),  // > p
         static_cast<RealType>(0) 
      );
+
+   // Checks for 'bad' parameters.
+   // Construction.
+   BOOST_CHECK_THROW(bernoulli_distribution<RealType>(-1), std::domain_error); // p outside 0 to 1.
+   BOOST_CHECK_THROW(bernoulli_distribution<RealType>(+2), std::domain_error); // p outside 0 to 1.
+
+   // Parameters.
+   bernoulli_distribution<RealType> dist(RealType(1)); 
+   BOOST_CHECK_THROW(pdf(dist, -1), std::domain_error);
+   BOOST_CHECK_THROW(cdf(dist, -1), std::domain_error);
+   BOOST_CHECK_THROW(cdf(complement(dist, -1)), std::domain_error);
+   BOOST_CHECK_THROW(quantile(dist, 2), std::domain_error);
+   BOOST_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
+   BOOST_CHECK_THROW(quantile(dist, -1), std::domain_error);
+   BOOST_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
+     
+   // No longer allow any parameter to be NaN or inf, so all these tests should throw.
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   { 
+    // Attempt to construct from non-finite should throw.
+     RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+     BOOST_CHECK_THROW(bernoulli_distribution<RealType> b(nan), std::domain_error);
+     
+    // Non-finite parameters should throw.
+     bernoulli_distribution<RealType> b(RealType(1)); 
+     BOOST_CHECK_THROW(pdf(b, +nan), std::domain_error); // x = NaN
+     BOOST_CHECK_THROW(cdf(b, +nan), std::domain_error); // x = NaN
+     BOOST_CHECK_THROW(cdf(complement(b, +nan)), std::domain_error); // x = + nan
+     BOOST_CHECK_THROW(quantile(b, +nan), std::domain_error); // p = + nan
+     BOOST_CHECK_THROW(quantile(complement(b, +nan)), std::domain_error); // p = + nan
+  } // has_quiet_NaN
+
+  if (std::numeric_limits<RealType>::has_infinity)
+  {
+     RealType inf = std::numeric_limits<RealType>::infinity(); 
+     BOOST_CHECK_THROW(bernoulli_distribution<RealType> w(inf), std::domain_error);
+
+     bernoulli_distribution<RealType> w(RealType(1)); 
+     BOOST_CHECK_THROW(bernoulli_distribution<RealType> w(inf), std::domain_error);
+     BOOST_CHECK_THROW(pdf(w, +inf), std::domain_error); // x = inf
+     BOOST_CHECK_THROW(cdf(w, +inf), std::domain_error); // x = inf
+     BOOST_CHECK_THROW(cdf(complement(w, +inf)), std::domain_error); // x = + inf
+     BOOST_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
+     BOOST_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
+   } // has_infinity
+
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
@@ -222,11 +269,6 @@ int test_main(int, char* [])
 
   BOOST_CHECK_EQUAL(bn1.success_fraction(), 0.5);
   BOOST_CHECK_EQUAL(bn2.success_fraction(), 0.5);
-
-  BOOST_CHECK_THROW(bernoulli_distribution<double>(-1), std::domain_error); // p outside 0 to 1.
-  BOOST_CHECK_THROW(bernoulli_distribution<double>(+2), std::domain_error); // p outside 0 to 1.
-  BOOST_CHECK_THROW(bernoulli_distribution<double> bn3(std::numeric_limits<double>::quiet_NaN() ), std::domain_error); // p outside 0 to 1.
-  BOOST_CHECK_THROW(bernoulli_distribution<double> bn4(std::numeric_limits<double>::infinity() ), std::domain_error); // p outside 0 to 1.
 
   BOOST_CHECK_EQUAL(kurtosis(bn2) -3, kurtosis_excess(bn2));
   BOOST_CHECK_EQUAL(kurtosis_excess(bn2), -2);
@@ -260,14 +302,15 @@ int test_main(int, char* [])
 
 Output is:
 
-Running 1 test case...
-Tolerance for type float is 1.19e-005 (or 0.00119%).
-Tolerance for type double is 2.22e-014 (or 2.22e-012%).
-Tolerance for type long double is 2.22e-014 (or 2.22e-012%).
-Tolerance for type class boost::math::concepts::real_concept is 2.22e-014 (or 2.22e-012%).
-*** No errors detected
+  Description: Autorun "J:\Cpp\MathToolkit\test\Math_test\Debug\test_bernouilli.exe"
+  Running 1 test case...
+  Tolerance for type float is 1.19e-005 (or 0.00119%).
+  Tolerance for type double is 2.22e-014 (or 2.22e-012%).
+  Tolerance for type long double is 2.22e-014 (or 2.22e-012%).
+  Tolerance for type class boost::math::concepts::real_concept is 2.22e-014 (or 2.22e-012%).
+  
+  *** No errors detected
 
-No warnings MSVC level 4 31 Jul 2007
 
 */
 
