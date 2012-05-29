@@ -15,7 +15,7 @@ template <class Distro>
 void check_support(const Distro& d)
 {
    typedef typename Distro::value_type value_type;
-   if(range(d).first != -boost::math::tools::max_value<value_type>())
+   if((boost::math::isfinite)(range(d).first) && (range(d).first != -boost::math::tools::max_value<value_type>()))
    {
       value_type m = boost::math::float_prior(range(d).first);
       BOOST_ASSERT(m != range(d).first);
@@ -24,7 +24,7 @@ void check_support(const Distro& d)
       BOOST_CHECK_THROW(cdf(d, m), std::domain_error);
       BOOST_CHECK_THROW(cdf(complement(d, m)), std::domain_error);
    }
-   if(range(d).second != boost::math::tools::max_value<value_type>())
+   if((boost::math::isfinite)(range(d).second) && (range(d).second != boost::math::tools::max_value<value_type>()))
    {
       value_type m = boost::math::float_next(range(d).second);
       BOOST_ASSERT(m != range(d).first);
@@ -35,12 +35,18 @@ void check_support(const Distro& d)
    }
    if(std::numeric_limits<value_type>::has_infinity)
    {
-      BOOST_CHECK_THROW(pdf(d, std::numeric_limits<value_type>::infinity()), std::domain_error);
-      BOOST_CHECK_THROW(cdf(d, std::numeric_limits<value_type>::infinity()), std::domain_error);
-      BOOST_CHECK_THROW(cdf(complement(d, std::numeric_limits<value_type>::infinity())), std::domain_error);
-      BOOST_CHECK_THROW(pdf(d, -std::numeric_limits<value_type>::infinity()), std::domain_error);
-      BOOST_CHECK_THROW(cdf(d, -std::numeric_limits<value_type>::infinity()), std::domain_error);
-      BOOST_CHECK_THROW(cdf(complement(d, -std::numeric_limits<value_type>::infinity())), std::domain_error);
+      if((boost::math::isfinite)(range(d).second))
+      {
+         BOOST_CHECK_THROW(pdf(d, std::numeric_limits<value_type>::infinity()), std::domain_error);
+         BOOST_CHECK_THROW(cdf(d, std::numeric_limits<value_type>::infinity()), std::domain_error);
+         BOOST_CHECK_THROW(cdf(complement(d, std::numeric_limits<value_type>::infinity())), std::domain_error);
+      }
+      if((boost::math::isfinite)(range(d).first))
+      {
+         BOOST_CHECK_THROW(pdf(d, -std::numeric_limits<value_type>::infinity()), std::domain_error);
+         BOOST_CHECK_THROW(cdf(d, -std::numeric_limits<value_type>::infinity()), std::domain_error);
+         BOOST_CHECK_THROW(cdf(complement(d, -std::numeric_limits<value_type>::infinity())), std::domain_error);
+      }
       BOOST_CHECK_THROW(quantile(d, std::numeric_limits<value_type>::infinity()), std::domain_error);
       BOOST_CHECK_THROW(quantile(d, -std::numeric_limits<value_type>::infinity()), std::domain_error);
       BOOST_CHECK_THROW(quantile(complement(d, std::numeric_limits<value_type>::infinity())), std::domain_error);
