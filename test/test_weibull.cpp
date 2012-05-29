@@ -1,5 +1,5 @@
-// Copyright John Maddock 2006.
-// Copyright Paul A. Bristow 2007.
+// Copyright John Maddock 2006, 2012.
+// Copyright Paul A. Bristow 2007, 2012.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -7,6 +7,11 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // test_weibull.cpp
+
+#ifdef _MSC_VER
+#  pragma warning (disable : 4127) //  conditional expression is constant.
+#endif
+
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/test/test_exec_monitor.hpp> // Boost.Test
@@ -337,6 +342,41 @@ void test_spots(RealType)
    BOOST_CHECK_EQUAL(pdf(weibull_distribution<RealType>(1, 3), 0), exp(-pow(RealType(0) / RealType(3), RealType(1))) * pow(RealType(0), RealType(0)) * RealType(1) / RealType(3));
    BOOST_CHECK_THROW(pdf(weibull_distribution<RealType>(0.5, 3), 0), std::overflow_error);
 
+ // No longer allow any parameter to be NaN or inf, so all these tests should throw.
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   { 
+    // Attempt to construct from non-finite should throw.
+     RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+     BOOST_CHECK_THROW(weibull_distribution<RealType> w(nan), std::domain_error);
+     BOOST_CHECK_THROW(weibull_distribution<RealType> w(1, nan), std::domain_error);
+     
+    // Non-finite parameters should throw.
+     weibull_distribution<RealType> w(RealType(1)); 
+     BOOST_CHECK_THROW(pdf(w, +nan), std::domain_error); // x = NaN
+     BOOST_CHECK_THROW(cdf(w, +nan), std::domain_error); // x = NaN
+     BOOST_CHECK_THROW(cdf(complement(w, +nan)), std::domain_error); // x = + nan
+     BOOST_CHECK_THROW(quantile(w, +nan), std::domain_error); // p = + nan
+     BOOST_CHECK_THROW(quantile(complement(w, +nan)), std::domain_error); // p = + nan
+  } // has_quiet_NaN
+
+  if (std::numeric_limits<RealType>::has_infinity)
+  {
+     RealType inf = std::numeric_limits<RealType>::infinity(); 
+
+     BOOST_CHECK_THROW(weibull_distribution<RealType> w(inf), std::domain_error);
+     BOOST_CHECK_THROW(weibull_distribution<RealType> w(1, inf), std::domain_error);
+
+     weibull_distribution<RealType> w(RealType(1)); 
+     BOOST_CHECK_THROW(weibull_distribution<RealType> w(inf), std::domain_error);
+     BOOST_CHECK_THROW(weibull_distribution<RealType> w(1, inf), std::domain_error);
+     BOOST_CHECK_THROW(pdf(w, +inf), std::domain_error); // x = inf
+     BOOST_CHECK_THROW(cdf(w, +inf), std::domain_error); // x = inf
+     BOOST_CHECK_THROW(cdf(complement(w, +inf)), std::domain_error); // x = + inf
+     BOOST_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
+     BOOST_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
+   } // has_infinity
+
+
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
@@ -370,17 +410,19 @@ int test_main(int, char* [])
 
 Output:
 
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_weibull.exe"
-Running 1 test case...
-Tolerance for type float is 0.002 %
-Tolerance for type float is 5.96046e-005 %
-Tolerance for type double is 0.002 %
-Tolerance for type double is 1.11022e-013 %
-Tolerance for type long double is 0.002 %
-Tolerance for type long double is 1.11022e-013 %
-Tolerance for type class boost::math::concepts::real_concept is 0.002 %
-Tolerance for type class boost::math::concepts::real_concept is 1.11022e-013 %
-*** No errors detected
+  Description: Autorun "J:\Cpp\MathToolkit\test\Math_test\Debug\test_weibull.exe"
+  Running 1 test case...
+  Tolerance for type float is 0.002 %
+  Tolerance for type float is 5.96046e-005 %
+  Tolerance for type double is 0.002 %
+  Tolerance for type double is 1.11022e-013 %
+  Tolerance for type long double is 0.002 %
+  Tolerance for type long double is 1.11022e-013 %
+  Tolerance for type class boost::math::concepts::real_concept is 0.002 %
+  Tolerance for type class boost::math::concepts::real_concept is 1.11022e-013 %
+  
+  *** No errors detected
+
 
 */
 
