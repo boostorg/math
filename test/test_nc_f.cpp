@@ -26,6 +26,7 @@
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
+#include "test_out_of_range.hpp"
 
 #include "functor.hpp"
 #include "handle_test_result.hpp"
@@ -282,6 +283,15 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE(
       kurtosis_excess(dist)
       , static_cast<RealType>(13.225781681053154767604638331440974359675882226873L), tol2);
+
+   // Error handling checks:
+   check_out_of_range<boost::math::non_central_f_distribution<RealType> >(1, 1, 1);
+   BOOST_CHECK_THROW(pdf(boost::math::non_central_f_distribution<RealType>(0, 1, 1), 0), std::domain_error);
+   BOOST_CHECK_THROW(pdf(boost::math::non_central_f_distribution<RealType>(-1, 1, 1), 0), std::domain_error);
+   BOOST_CHECK_THROW(pdf(boost::math::non_central_f_distribution<RealType>(1, 0, 1), 0), std::domain_error);
+   BOOST_CHECK_THROW(pdf(boost::math::non_central_f_distribution<RealType>(1, -1, 1), 0), std::domain_error);
+   BOOST_CHECK_THROW(quantile(boost::math::non_central_f_distribution<RealType>(1, 1, 1), -1), std::domain_error);
+   BOOST_CHECK_THROW(quantile(boost::math::non_central_f_distribution<RealType>(1, 1, 1), 2), std::domain_error);
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])

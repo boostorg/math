@@ -30,6 +30,7 @@
 #include "functor.hpp"
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
+#include "test_out_of_range.hpp"
 
 #include <iostream>
 using std::cout;
@@ -330,6 +331,13 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(126, -2), -4), static_cast<RealType>(5.797932289365814702402873546466798025787e-2L), tolerance);
    BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(126, 2), 4), static_cast<RealType>(5.797932289365814702402873546466798025787e-2L), tolerance);
    BOOST_CHECK_CLOSE(pdf(boost::math::non_central_t_distribution<RealType>(126, 2), 0), static_cast<RealType>(5.388394890639957139696546086044839573749e-2L), tolerance);
+
+   // Error handling checks:
+   check_out_of_range<boost::math::non_central_t_distribution<RealType> >(1, 1);
+   BOOST_CHECK_THROW(pdf(boost::math::non_central_t_distribution<RealType>(0, 1), 0), std::domain_error);
+   BOOST_CHECK_THROW(pdf(boost::math::non_central_t_distribution<RealType>(-1, 1), 0), std::domain_error);
+   BOOST_CHECK_THROW(quantile(boost::math::non_central_t_distribution<RealType>(1, 1), -1), std::domain_error);
+   BOOST_CHECK_THROW(quantile(boost::math::non_central_t_distribution<RealType>(1, 1), 2), std::domain_error);
 } // template <class RealType>void test_spots(RealType)
 
 template <class T>
