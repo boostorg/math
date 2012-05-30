@@ -1,7 +1,7 @@
 // test_beta_dist.cpp
 
 // Copyright John Maddock 2006.
-// Copyright  Paul A. Bristow 2007, 2009, 2010.
+// Copyright  Paul A. Bristow 2007, 2009, 2010, 2012.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -28,9 +28,8 @@
 
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // conditional expression is constant.
-# pragma warning (disable : 4996) // POSIX name for this item is deprecated
-# pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'arg' was previously defined as a type
-# pragma warning (disable : 4180) // qualifier applied to function type has no meaning; ignored
+# pragma warning (disable : 4996) // POSIX name for this item is deprecated.
+# pragma warning (disable : 4224) // nonstandard extension used : formal parameter 'arg' was previously defined as a type.
 #endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
@@ -42,6 +41,8 @@ using boost::math::beta;
 
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION
+
+#include "test_out_of_range.hpp"
 
 #include <iostream>
 using std::cout;
@@ -456,6 +457,70 @@ void test_spots(RealType)
      static_cast<RealType>(1-0.5545844446520295253493059553548880128511L),  // Complement of CDF Q = 1 - P
      tolerance); // Test tolerance.
 
+    //
+   // Error checks:
+   // Construction with 'bad' parameters.
+   BOOST_CHECK_THROW(beta_distribution<RealType>(1, -1), std::domain_error);
+   BOOST_CHECK_THROW(beta_distribution<RealType>(-1, 1), std::domain_error);
+   BOOST_CHECK_THROW(beta_distribution<RealType>(1, 0), std::domain_error);
+   BOOST_CHECK_THROW(beta_distribution<RealType>(0, 1), std::domain_error);
+
+   beta_distribution<> dist;
+   BOOST_CHECK_THROW(pdf(dist, -1), std::domain_error);
+   BOOST_CHECK_THROW(cdf(dist, -1), std::domain_error);
+   BOOST_CHECK_THROW(cdf(complement(dist, -1)), std::domain_error);
+   BOOST_CHECK_THROW(quantile(dist, -1), std::domain_error);
+   BOOST_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
+   BOOST_CHECK_THROW(quantile(dist, -1), std::domain_error);
+   BOOST_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
+
+ // No longer allow any parameter to be NaN or inf, so all these tests should throw.
+   if (std::numeric_limits<RealType>::has_quiet_NaN)
+   { 
+    // Attempt to construct from non-finite should throw.
+     RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+     BOOST_CHECK_THROW(beta_distribution<RealType> w(nan), std::domain_error);
+     BOOST_CHECK_THROW(beta_distribution<RealType> w(1, nan), std::domain_error);
+     
+    // Non-finite parameters should throw.
+     beta_distribution<RealType> w(RealType(1)); 
+     BOOST_CHECK_THROW(pdf(w, +nan), std::domain_error); // x = NaN
+     BOOST_CHECK_THROW(cdf(w, +nan), std::domain_error); // x = NaN
+     BOOST_CHECK_THROW(cdf(complement(w, +nan)), std::domain_error); // x = + nan
+     BOOST_CHECK_THROW(quantile(w, +nan), std::domain_error); // p = + nan
+     BOOST_CHECK_THROW(quantile(complement(w, +nan)), std::domain_error); // p = + nan
+  } // has_quiet_NaN
+
+  if (std::numeric_limits<RealType>::has_infinity)
+  {
+     // Attempt to construct from non-finite should throw.
+     RealType inf = std::numeric_limits<RealType>::infinity(); 
+
+     BOOST_CHECK_THROW(beta_distribution<RealType> w(inf), std::domain_error);
+     BOOST_CHECK_THROW(beta_distribution<RealType> w(1, inf), std::domain_error);
+
+    // Non-finite parameters should throw.
+     beta_distribution<RealType> w(RealType(1)); 
+     BOOST_CHECK_THROW(beta_distribution<RealType> w(inf), std::domain_error);
+     BOOST_CHECK_THROW(beta_distribution<RealType> w(1, inf), std::domain_error);
+     BOOST_CHECK_THROW(pdf(w, +inf), std::domain_error); // x = inf
+     BOOST_CHECK_THROW(cdf(w, +inf), std::domain_error); // x = inf
+     BOOST_CHECK_THROW(cdf(complement(w, +inf)), std::domain_error); // x = + inf
+     BOOST_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
+     BOOST_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
+   } // has_infinity
+
+   // Error handling checks:
+   check_out_of_range<boost::math::beta_distribution<RealType> >(1, 1); // (All) valid constructor parameter values.
+   // and range and non-finite.
+
+   // Not needed??????
+   BOOST_CHECK_THROW(pdf(boost::math::beta_distribution<RealType>(0, 1), 0), std::domain_error);
+   BOOST_CHECK_THROW(pdf(boost::math::beta_distribution<RealType>(-1, 1), 0), std::domain_error);
+   BOOST_CHECK_THROW(quantile(boost::math::beta_distribution<RealType>(1, 1), -1), std::domain_error);
+   BOOST_CHECK_THROW(quantile(boost::math::beta_distribution<RealType>(1, 1), 2), std::domain_error);
+
+
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
@@ -576,6 +641,8 @@ Boost::math::tools::epsilon = 2.22045e-016
 std::numeric_limits::epsilon = 0
 epsilon = 2.22045e-016, Tolerance = 2.22045e-011%.
 *** No errors detected
+
+
 */
 
 
