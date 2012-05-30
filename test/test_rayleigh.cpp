@@ -18,6 +18,7 @@
 
 #include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -58,6 +59,13 @@ void test_spot(RealType s, RealType x, RealType p, RealType q, RealType toleranc
             x,
             tolerance); // %
    }
+   if(std::numeric_limits<RealType>::has_infinity)
+   {
+      RealType inf = std::numeric_limits<RealType>::infinity();
+      BOOST_CHECK_EQUAL(pdf(rayleigh_distribution<RealType>(s), inf), 0);
+      BOOST_CHECK_EQUAL(cdf(rayleigh_distribution<RealType>(s), inf), 1);
+      BOOST_CHECK_EQUAL(cdf(complement(rayleigh_distribution<RealType>(s), inf)), 0);
+   }
 } // void test_spot
 
 template <class RealType>
@@ -79,6 +87,7 @@ void test_spots(RealType T)
    // Things that are errors:
    rayleigh_distribution<RealType> dist(0.5);
 
+   check_out_of_range<rayleigh_distribution<RealType> >(1);
    BOOST_CHECK_THROW(
        quantile(dist,
        RealType(1.)), // quantile unity should overflow.

@@ -34,6 +34,7 @@
 #include <boost/math/special_functions/gamma.hpp> // for (incomplete) gamma.
 //   using boost::math::qamma_Q;
 #include "table_type.hpp"
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -485,7 +486,7 @@ void test_spots(RealType)
      x = quantile(complement(p6, poisson_quantile_data[i][1]));
      BOOST_CHECK_EQUAL(x, floor(poisson_quantile_data[i][3] + 0.5f));
   }
-
+   check_out_of_range<poisson_distribution<RealType> >(1);
 } // template <class RealType>void test_spots(RealType)
 
 //

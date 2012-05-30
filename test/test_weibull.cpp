@@ -20,6 +20,7 @@
 #include <boost/math/distributions/weibull.hpp>
     using boost::math::weibull_distribution;
 #include <boost/math/tools/test.hpp> 
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -342,41 +343,7 @@ void test_spots(RealType)
    BOOST_CHECK_EQUAL(pdf(weibull_distribution<RealType>(1, 3), 0), exp(-pow(RealType(0) / RealType(3), RealType(1))) * pow(RealType(0), RealType(0)) * RealType(1) / RealType(3));
    BOOST_CHECK_THROW(pdf(weibull_distribution<RealType>(0.5, 3), 0), std::overflow_error);
 
- // No longer allow any parameter to be NaN or inf, so all these tests should throw.
-   if (std::numeric_limits<RealType>::has_quiet_NaN)
-   { 
-    // Attempt to construct from non-finite should throw.
-     RealType nan = std::numeric_limits<RealType>::quiet_NaN();
-     BOOST_CHECK_THROW(weibull_distribution<RealType> w(nan), std::domain_error);
-     BOOST_CHECK_THROW(weibull_distribution<RealType> w(1, nan), std::domain_error);
-     
-    // Non-finite parameters should throw.
-     weibull_distribution<RealType> w(RealType(1)); 
-     BOOST_CHECK_THROW(pdf(w, +nan), std::domain_error); // x = NaN
-     BOOST_CHECK_THROW(cdf(w, +nan), std::domain_error); // x = NaN
-     BOOST_CHECK_THROW(cdf(complement(w, +nan)), std::domain_error); // x = + nan
-     BOOST_CHECK_THROW(quantile(w, +nan), std::domain_error); // p = + nan
-     BOOST_CHECK_THROW(quantile(complement(w, +nan)), std::domain_error); // p = + nan
-  } // has_quiet_NaN
-
-  if (std::numeric_limits<RealType>::has_infinity)
-  {
-     RealType inf = std::numeric_limits<RealType>::infinity(); 
-
-     BOOST_CHECK_THROW(weibull_distribution<RealType> w(inf), std::domain_error);
-     BOOST_CHECK_THROW(weibull_distribution<RealType> w(1, inf), std::domain_error);
-
-     weibull_distribution<RealType> w(RealType(1)); 
-     BOOST_CHECK_THROW(weibull_distribution<RealType> w(inf), std::domain_error);
-     BOOST_CHECK_THROW(weibull_distribution<RealType> w(1, inf), std::domain_error);
-     BOOST_CHECK_THROW(pdf(w, +inf), std::domain_error); // x = inf
-     BOOST_CHECK_THROW(cdf(w, +inf), std::domain_error); // x = inf
-     BOOST_CHECK_THROW(cdf(complement(w, +inf)), std::domain_error); // x = + inf
-     BOOST_CHECK_THROW(quantile(w, +inf), std::domain_error); // p = + inf
-     BOOST_CHECK_THROW(quantile(complement(w, +inf)), std::domain_error); // p = + inf
-   } // has_infinity
-
-
+   check_out_of_range<weibull_distribution<RealType> >(1, 1);
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])

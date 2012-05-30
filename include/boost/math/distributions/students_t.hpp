@@ -87,6 +87,9 @@ inline RealType pdf(const students_t_distribution<RealType, Policy>& dist, const
    if(false == detail::check_df(
       "boost::math::pdf(const students_t_distribution<%1%>&, %1%)", degrees_of_freedom, &error_result, Policy()))
       return error_result;
+   if(false == detail::check_x(
+      "boost::math::pdf(const students_t_distribution<%1%>&, %1%)", t, &error_result, Policy()))
+      return error_result;
    // Might conceivably permit df = +infinity and use normal distribution.
    RealType result;
    RealType basem1 = t * t / degrees_of_freedom;
@@ -110,6 +113,9 @@ inline RealType cdf(const students_t_distribution<RealType, Policy>& dist, const
    RealType error_result;
    if(false == detail::check_df(
       "boost::math::cdf(const students_t_distribution<%1%>&, %1%)", degrees_of_freedom, &error_result, Policy()))
+      return error_result;
+   if(false == detail::check_x(
+      "boost::math::pdf(const students_t_distribution<%1%>&, %1%)", t, &error_result, Policy()))
       return error_result;
 
    if (t == 0)
