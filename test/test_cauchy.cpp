@@ -23,6 +23,8 @@
 #include <boost/math/distributions/cauchy.hpp>
     using boost::math::cauchy_distribution;
 
+#include "test_out_of_range.hpp"
+
 #include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
@@ -33,38 +35,16 @@
 template <class RealType>
 void test_spots(RealType T)
 {
-  // Check some bad parameters to the distribution,
-   BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, 0), std::domain_error); // zero sd
-   BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, -1), std::domain_error); // negative scale (shape)
+  // Check some bad parameters to construct the distribution,
+  BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, 0), std::domain_error); // zero scale.
+  BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(0, -1), std::domain_error); // negative scale (shape).
+
   cauchy_distribution<RealType> C01;
 
   BOOST_CHECK_EQUAL(C01.location(), 0); // Check standard values.
   BOOST_CHECK_EQUAL(C01.scale(), 1);
 
-  // Tests on extreme values of random variate x, if has numeric_limit infinity etc.
-  if(std::numeric_limits<RealType>::has_infinity)
-  {
-    BOOST_CHECK_EQUAL(pdf(C01, +std::numeric_limits<RealType>::infinity()), 0); // x = + infinity, pdf = 0
-    BOOST_CHECK_EQUAL(pdf(C01, -std::numeric_limits<RealType>::infinity()), 0); // x = - infinity, pdf = 0
-    BOOST_CHECK_EQUAL(cdf(C01, +std::numeric_limits<RealType>::infinity()), 1); // x = + infinity, cdf = 1
-    BOOST_CHECK_EQUAL(cdf(C01, -std::numeric_limits<RealType>::infinity()), 0); // x = - infinity, cdf = 0
-    BOOST_CHECK_EQUAL(cdf(complement(C01, +std::numeric_limits<RealType>::infinity())), 0); // x = + infinity, cdf = 0
-    BOOST_CHECK_EQUAL(cdf(complement(C01, -std::numeric_limits<RealType>::infinity())), 1); // x = - infinity, cdf = 1
-    BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), std::domain_error); // +infinite mean
-     BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(-std::numeric_limits<RealType>::infinity(),  static_cast<RealType>(1)), std::domain_error); // -infinite mean
-     BOOST_CHECK_THROW(boost::math::cauchy_distribution<RealType> nbad1(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error); // infinite sd
-  }
-
-  if (std::numeric_limits<RealType>::has_quiet_NaN)
-  { // No longer allow x to be NaN, so these tests should throw.
-    BOOST_CHECK_THROW(pdf(C01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
-    BOOST_CHECK_THROW(cdf(C01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
-    BOOST_CHECK_THROW(cdf(complement(C01, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // x = + infinity
-    BOOST_CHECK_THROW(quantile(C01, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // p = + infinity
-    BOOST_CHECK_THROW(quantile(complement(C01, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // p = + infinity
-  }
-
-  // Basic sanity checks.
+   // Basic sanity checks.
   // 50eps as a percentage, up to a maximum of double precision
   // (that's the limit of our test data).
   RealType tolerance = (std::max)(
@@ -709,16 +689,19 @@ void test_spots(RealType T)
        quantile(complement(dist, RealType(1.0))),
        std::overflow_error);
 
+   check_out_of_range<boost::math::cauchy_distribution<RealType> >(0, 1); // (All) valid constructor parameter values.
+
+
 
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
 {
-    BOOST_MATH_CONTROL_FP;
+  BOOST_MATH_CONTROL_FP;
    // Check that can generate cauchy distribution using the two convenience methods:
-   boost::math::cauchy mycd1(1.); // Using typedef
-   cauchy_distribution<> mycd2(1.); // Using default RealType double.
-   cauchy_distribution<> C01; // Using default RealType double for Standard Cauchy.
+  boost::math::cauchy mycd1(1.); // Using typedef
+  cauchy_distribution<> mycd2(1.); // Using default RealType double.
+  cauchy_distribution<> C01; // Using default RealType double for Standard Cauchy.
   BOOST_CHECK_EQUAL(C01.location(), 0); // Check standard values.
   BOOST_CHECK_EQUAL(C01.scale(), 1);
 
@@ -741,7 +724,6 @@ int test_main(int, char* [])
    return 0;
 } // int test_main(int, char* [])
 
-
 /*
 Output:
 
@@ -751,6 +733,5 @@ Tolerance for type double is 1.11022e-012 %
 Tolerance for type long double is 1.11022e-012 %
 Tolerance for type class boost::math::concepts::real_concept is 1.11022e-012 %
 *** No errors detected
-
 
 */
