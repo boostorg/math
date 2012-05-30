@@ -53,7 +53,9 @@ namespace boost { namespace math {
     inline const std::pair<RealType, RealType> range(const logistic_distribution<RealType, Policy>& /* dist */)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
-      return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>()); // - to + infinity
+      return std::pair<RealType, RealType>(
+         std::numeric_limits<RealType>::has_infinity ? -std::numeric_limits<RealType>::infinity() : -max_value<RealType>(), 
+         std::numeric_limits<RealType>::has_infinity ? std::numeric_limits<RealType>::infinity() : max_value<RealType>());
     }
     
     template <class RealType, class Policy>

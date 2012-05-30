@@ -30,6 +30,11 @@ but does *not* check finite but out-of-range parameters to the constructor
 because these are specific to each distribution.
 */
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+
 template <class Distro>
 void check_support(const Distro& d)
 { // Checks that
@@ -156,5 +161,9 @@ void check_out_of_range(typename Distro::value_type p1, typename Distro::value_t
       BOOST_CHECK_THROW(pdf(Distro(p1, p2, std::numeric_limits<value_type>::quiet_NaN()), range(d).first), std::domain_error);
    }
 }
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_MATH_TEST_OUT_OF_RANGE_HPP
