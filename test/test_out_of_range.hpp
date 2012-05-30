@@ -11,12 +11,31 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/test/test_tools.hpp>
 
+/*` check_out_of_range functions check that bad parameters
+passed to constructors and functions throw domain_error exceptions.
+
+Usage is `check_out_of_range<DistributionType >(list-of-params);`
+Where list-of-params is a list of *valid* parameters from which the distribution can be constructed
+- ie the same number of args are passed to the function,
+as are passed to the distribution constructor.
+
+Checks:
+
+* Infinity or NaN passed in place of each of the valid params.
+* Infinity or NaN as a random variable.
+* Out-of-range random variable passed to pdf and cdf (ie outside of "range(distro)").
+* Out-of-range probability passed to quantile function and complement.
+
+but does *not* check finite but out-of-range parameters to the constructor
+because these are specific to each distribution.
+*/
+
 template <class Distro>
 void check_support(const Distro& d)
-{
+{ // Checks that
    typedef typename Distro::value_type value_type;
    if((boost::math::isfinite)(range(d).first) && (range(d).first != -boost::math::tools::max_value<value_type>()))
-   {
+   { // If possible, check that a value just less than the bottom of the supported range throws domain errors.
       value_type m = boost::math::float_prior(range(d).first);
       BOOST_ASSERT(m != range(d).first);
       BOOST_ASSERT(m < range(d).first);
@@ -25,7 +44,7 @@ void check_support(const Distro& d)
       BOOST_CHECK_THROW(cdf(complement(d, m)), std::domain_error);
    }
    if((boost::math::isfinite)(range(d).second) && (range(d).second != boost::math::tools::max_value<value_type>()))
-   {
+   { // If possible, check that a value just more than the top of the supported range throws domain errors.
       value_type m = boost::math::float_next(range(d).second);
       BOOST_ASSERT(m != range(d).first);
       BOOST_ASSERT(m > range(d).first);
@@ -34,26 +53,29 @@ void check_support(const Distro& d)
       BOOST_CHECK_THROW(cdf(complement(d, m)), std::domain_error);
    }
    if(std::numeric_limits<value_type>::has_infinity)
-   {
+   { // Infinity is available,
       if((boost::math::isfinite)(range(d).second))
-      {
+      {  // and top of range doesn't include infinity,
+         // check that using infinity throws domain errors.
          BOOST_CHECK_THROW(pdf(d, std::numeric_limits<value_type>::infinity()), std::domain_error);
          BOOST_CHECK_THROW(cdf(d, std::numeric_limits<value_type>::infinity()), std::domain_error);
          BOOST_CHECK_THROW(cdf(complement(d, std::numeric_limits<value_type>::infinity())), std::domain_error);
       }
       if((boost::math::isfinite)(range(d).first))
-      {
+      {  // and bottom of range doesn't include infinity,
+         // check that using infinity throws domain_error exception.
          BOOST_CHECK_THROW(pdf(d, -std::numeric_limits<value_type>::infinity()), std::domain_error);
          BOOST_CHECK_THROW(cdf(d, -std::numeric_limits<value_type>::infinity()), std::domain_error);
          BOOST_CHECK_THROW(cdf(complement(d, -std::numeric_limits<value_type>::infinity())), std::domain_error);
       }
+      // Check that using infinity with quantiles always throws domain_error exception.
       BOOST_CHECK_THROW(quantile(d, std::numeric_limits<value_type>::infinity()), std::domain_error);
       BOOST_CHECK_THROW(quantile(d, -std::numeric_limits<value_type>::infinity()), std::domain_error);
       BOOST_CHECK_THROW(quantile(complement(d, std::numeric_limits<value_type>::infinity())), std::domain_error);
       BOOST_CHECK_THROW(quantile(complement(d, -std::numeric_limits<value_type>::infinity())), std::domain_error);
    }
    if(std::numeric_limits<value_type>::has_quiet_NaN)
-   {
+   { // NaN is available.
       BOOST_CHECK_THROW(pdf(d, std::numeric_limits<value_type>::quiet_NaN()), std::domain_error);
       BOOST_CHECK_THROW(cdf(d, std::numeric_limits<value_type>::quiet_NaN()), std::domain_error);
       BOOST_CHECK_THROW(cdf(complement(d, std::numeric_limits<value_type>::quiet_NaN())), std::domain_error);
@@ -65,11 +87,14 @@ void check_support(const Distro& d)
       BOOST_CHECK_THROW(quantile(complement(d, std::numeric_limits<value_type>::quiet_NaN())), std::domain_error);
       BOOST_CHECK_THROW(quantile(complement(d, -std::numeric_limits<value_type>::quiet_NaN())), std::domain_error);
    }
+   // Check that using probability outside [0,1] with quantiles always throws domain_error exception.
    BOOST_CHECK_THROW(quantile(d, -1), std::domain_error);
    BOOST_CHECK_THROW(quantile(d, 2), std::domain_error);
    BOOST_CHECK_THROW(quantile(complement(d, -1)), std::domain_error);
    BOOST_CHECK_THROW(quantile(complement(d, 2)), std::domain_error);
 }
+
+// Four check_out_of_range versions for distributions with zero to 3 constructor parameters.
 
 template <class Distro>
 void check_out_of_range()
@@ -77,6 +102,7 @@ void check_out_of_range()
    Distro d;
    check_support(d);
 }
+
 template <class Distro>
 void check_out_of_range(typename Distro::value_type p1)
 {
@@ -92,6 +118,7 @@ void check_out_of_range(typename Distro::value_type p1)
       BOOST_CHECK_THROW(pdf(Distro(std::numeric_limits<value_type>::quiet_NaN()), range(d).first), std::domain_error);
    }
 }
+
 template <class Distro>
 void check_out_of_range(typename Distro::value_type p1, typename Distro::value_type p2)
 {
