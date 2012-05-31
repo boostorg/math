@@ -231,12 +231,12 @@ inline RealType quantile(const complemented2_type<fisher_f_distribution<RealType
    RealType p = c.param;
    // Error check:
    RealType error_result = 0;
-   if(false == detail::check_df(
+   if(false == (detail::check_df(
             function, df1, &error_result, Policy())
          && detail::check_df(
             function, df2, &error_result, Policy())
          && detail::check_probability(
-            function, p, &error_result, Policy()))
+            function, p, &error_result, Policy())))
       return error_result;
 
    RealType x, y;

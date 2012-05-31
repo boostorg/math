@@ -16,6 +16,7 @@ using boost::math::fisher_f_distribution;
 
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
+#include "test_out_of_range.hpp"
 
 #include <iostream>
 using std::cout;
@@ -498,7 +499,7 @@ void test_spots(RealType)
           fisher_f_distribution<RealType>(8, 8),
           static_cast<RealType>(1.1))), std::domain_error
        );
-
+   check_out_of_range<fisher_f_distribution<RealType> >(2, 3);
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
