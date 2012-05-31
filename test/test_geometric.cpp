@@ -37,6 +37,7 @@ using boost::math::geometric; // using typedef for geometric_distribution<double
 
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION
+#include "test_out_of_range.hpp"
 
 #include <iostream>
 using std::cout;
@@ -719,6 +720,7 @@ if(std::numeric_limits<RealType>::is_specialized)
   quantile( // Success_fraction > 1!
   geometric_distribution<RealType>(static_cast<RealType>(1.25)),
   static_cast<RealType>(0)), std::domain_error);
+   check_out_of_range<geometric_distribution<RealType> >(0.5);
   // End of check throwing 'duff' out-of-domain values.
 
   { // Compare geometric and negative binomial functions.

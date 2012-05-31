@@ -380,7 +380,7 @@ inline RealType cdf(const complemented2_type<inverse_gaussian_distribution<RealT
       return result;
    if(false == detail::check_location(function, mean, &result, Policy()))
       return result;
-   if(false == detail::check_x(function, x, &result, Policy()))
+   if(false == detail::check_positive_x(function, x, &result, Policy()))
       return result;
 
    normal_distribution<RealType> n01;

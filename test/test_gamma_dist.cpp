@@ -24,6 +24,7 @@
 #include <boost/math/distributions/gamma.hpp>
     using boost::math::gamma_distribution;
 #include <boost/math/tools/test.hpp>
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -212,6 +213,13 @@ void test_spots(RealType)
        median(dist), static_cast<RealType>(23.007748327502412), // double precision test value
        (std::max)(tol2, static_cast<RealType>(std::numeric_limits<double>::epsilon() * 2 * 100))); // 2 eps as persent
     // Rely on default definition in derived accessors.
+
+   // error tests
+   check_out_of_range<gamma_distribution<RealType> >(1, 1);
+   BOOST_CHECK_THROW(gamma_distribution<RealType>(0, 1), std::domain_error);
+   BOOST_CHECK_THROW(gamma_distribution<RealType>(-1, 1), std::domain_error);
+   BOOST_CHECK_THROW(gamma_distribution<RealType>(1, 0), std::domain_error);
+   BOOST_CHECK_THROW(gamma_distribution<RealType>(1, -1), std::domain_error);
 
 } // template <class RealType>void test_spots(RealType)
 
