@@ -15,6 +15,8 @@
 #include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
+#include "test_out_of_range.hpp"
+
 #include <iostream>
    using std::cout;
    using std::endl;
@@ -249,6 +251,8 @@ void test_spots(RealType T)
    BOOST_CHECK_THROW(
        quantile(dist, RealType(2)),
        std::domain_error);
+
+   check_out_of_range<boost::math::exponential_distribution<RealType> >(1); // (All) valid constructor parameter values.
 
 } // template <class RealType>void test_spots(RealType)
 
