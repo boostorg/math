@@ -9,6 +9,9 @@ Handling of errors by this library is split into two orthogonal parts:
 * What kind of error has been raised?
 * What should be done when the error is raised?
 
+[warning The default error actions are to throw an exception with an informative error message.
+If you do not try to catch the exception, you will not see the message!]
+
 The kinds of errors that can be raised are:
 
 [variablelist
@@ -153,6 +156,8 @@ this library.  It was felt that:
 rather than following C-compatible behaviour and setting `::errno`.
 * Numeric underflow and denormalised results were not considered to be
 fatal errors in most cases, so it was felt that these should be ignored.
+* If there is more than one error,
+only the first detected will be reported in the throw message.
 
 [heading Finding More Information]
 
@@ -390,7 +395,7 @@ listed above on [link overflow_error overflow],
 [endsect][/section:error_handling Error Handling]
 
 [/ 
-  Copyright 2006 - 2010 John Maddock and Paul A. Bristow.
+  Copyright 2006 - 2012 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

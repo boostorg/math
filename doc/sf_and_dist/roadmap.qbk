@@ -1,5 +1,13 @@
 [template history[]
 
+[h4 Boost-1.51]
+
+* Corrected failure to detect bad parameters in many distributions
+[@https://svn.boost.org/trac/boost/ticket/6934 #6934] (reported by Florian Schoppmann)
+by adding a function check_out_of_range to test many possible bad parameters.
+This test revealed several distributions where the checks for bad parameters were ineffective,
+and these have been rectified. 
+
 [h4 Boost-1.50]
 
 * Promoted math constants to be 1st class citizens,
