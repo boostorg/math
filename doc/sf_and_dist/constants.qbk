@@ -34,26 +34,27 @@ see [link math_toolkit.constants.tutorial.templ use in template code].
 [section:non_templ Use in non-template code]
 
 When using the math constants at your chosen fixed precision in non-template code,
-you can simply add a `using` declaration, for example, `using boost::math::double_constants`,
+you can simply add a `using namespace` declaration, for example,
+`using namespace boost::math::double_constants`,
 to make the constants of the correct precision for your code
-visible in the current scope, and then use each constant ['as a simple variable]:
+visible in the current scope, and then use each constant ['as a simple variable - sans brackets]:
 
-   #include <boost/math/constants.hpp>
+   #include <boost/math/constants/constants.hpp>
 
    double area(double r)
    {
-      using boost::math::double_constants;
+      using namespace boost::math::double_constants;
       return pi * r * r;
    }
 
 Had our function been written as taking a `float` rather than a `double`,
 we could have written instead:
 
-   #include <boost/math/constants.hpp>
+   #include <boost/math/constants/constants.hpp>
 
    float area(float r)
    {
-      using boost::math::float_constants;
+      using namespace boost::math::float_constants;
       return pi * r * r;
    }
 
@@ -61,6 +62,8 @@ Likewise, constants that are suitable for use at `long double` precision
 are available in the namespace `boost::math::long_double_constants`.
 
 You can see the full list of available constants at [link math_toolkit.constants.constants].
+
+Some examples of using constants are at [@../../../example/constants_eg1.cpp constants_eg1].
 
 [endsect]
  
@@ -71,7 +74,7 @@ we use a constant of the correct precision for our template parameters.
 We can do this by calling the function-template versions, `pi<FPType>()`, of the constants
 like this:
 
-   #include <boost/math/constants.hpp>
+   #include <boost/math/constants/constants.hpp>
 
    template <class Real>
    Real area(Real r)
@@ -139,7 +142,7 @@ You can also avoid this by being explicit about the type of `Area`.
 The syntax for using the function-call constants with user-defined types is the same
 as it is in the template class, which is to say we use:
 
-   #include <boost/math/constants.hpp>
+   #include <boost/math/constants/constants.hpp>
 
    boost::math::constants::pi<UserDefinedType>();
 
