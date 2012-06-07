@@ -42,6 +42,17 @@
             What should be done when the error is raised?
           </li>
 </ul></div>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../../../../../../doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          The default error actions are to throw an exception with an informative
+          error message. If you do not try to catch the exception, you will not see
+          the message!
+        </p></td></tr>
+</table></div>
 <p>
         The kinds of errors that can be raised are:
       </p>
@@ -763,6 +774,10 @@
 <li class="listitem">
             Numeric underflow and denormalised results were not considered to be
             fatal errors in most cases, so it was felt that these should be ignored.
+          </li>
+<li class="listitem">
+            If there is more than one error, only the first detected will be reported
+            in the throw message.
           </li>
 </ul></div>
 <h5>

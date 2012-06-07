@@ -29,17 +29,18 @@
 </h4></div></div></div>
 <p>
           When using the math constants at your chosen fixed precision in non-template
-          code, you can simply add a <code class="computeroutput"><span class="keyword">using</span></code>
-          declaration, for example, <code class="computeroutput"><span class="keyword">using</span>
+          code, you can simply add a <code class="computeroutput"><span class="keyword">using</span>
+          <span class="keyword">namespace</span></code> declaration, for example,
+          <code class="computeroutput"><span class="keyword">using</span> <span class="keyword">namespace</span>
           <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">double_constants</span></code>, to make the constants
           of the correct precision for your code visible in the current scope, and
-          then use each constant <span class="emphasis"><em>as a simple variable</em></span>:
+          then use each constant <span class="emphasis"><em>as a simple variable - sans brackets</em></span>:
         </p>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">constants</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">constants</span><span class="special">/</span><span class="identifier">constants</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">double</span> <span class="identifier">area</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">r</span><span class="special">)</span>
 <span class="special">{</span>
-   <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">double_constants</span><span class="special">;</span>
+   <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">double_constants</span><span class="special">;</span>
    <span class="keyword">return</span> <span class="identifier">pi</span> <span class="special">*</span> <span class="identifier">r</span> <span class="special">*</span> <span class="identifier">r</span><span class="special">;</span>
 <span class="special">}</span>
 </pre>
@@ -48,11 +49,11 @@
           rather than a <code class="computeroutput"><span class="keyword">double</span></code>, we could
           have written instead:
         </p>
-<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">constants</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">constants</span><span class="special">/</span><span class="identifier">constants</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">float</span> <span class="identifier">area</span><span class="special">(</span><span class="keyword">float</span> <span class="identifier">r</span><span class="special">)</span>
 <span class="special">{</span>
-   <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">float_constants</span><span class="special">;</span>
+   <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">float_constants</span><span class="special">;</span>
    <span class="keyword">return</span> <span class="identifier">pi</span> <span class="special">*</span> <span class="identifier">r</span> <span class="special">*</span> <span class="identifier">r</span><span class="special">;</span>
 <span class="special">}</span>
 </pre>
@@ -63,6 +64,9 @@
         </p>
 <p>
           You can see the full list of available constants at <a class="link" href="../constants.html" title="The Mathematical Constants">math_toolkit.constants.constants</a>.
+        </p>
+<p>
+          Some examples of using constants are at <a href="../../../../../../example/constants_eg1.cpp" target="_top">constants_eg1</a>.
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

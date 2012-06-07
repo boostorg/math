@@ -318,7 +318,22 @@
 <p>
         However in a few cases, for example normal, where we felt it obvious, we
         have permitted argument(s) to be infinity, provided infinity is implemented
-        for the realType on that implementation.
+        for the <code class="computeroutput"><span class="identifier">RealType</span></code> on that
+        implementation, and it is supported and tested by the distribution.
+      </p>
+<p>
+        The range for these distributions is set to infinity if supported by the
+        platform, (by testing <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">has_infinity</span></code>)
+        else the maximum value provided for the <code class="computeroutput"><span class="identifier">RealType</span></code>
+        by Boost.Math.
+      </p>
+<p>
+        Testing for has_infinity is obviously important for arbitrary precision types
+        where infinity makes much less sense than for IEEE754 floating-point.
+      </p>
+<p>
+        So far we have not set <code class="computeroutput"><span class="identifier">support</span><span class="special">()</span></code> function (only range) on the grounds that
+        the PDF is uninteresting/zero for infinities.
       </p>
 <p>
         Users who require special handling of infinity (or other specific value)
@@ -547,6 +562,74 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h13"></a>
+        <span><a name="math_toolkit.backgrounders.implementation.testing_for_invalid_parameters_to_functions_and_constructors"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.testing_for_invalid_parameters_to_functions_and_constructors">Testing
+        for Invalid Parameters to Functions and Constructors</a>
+      </h5>
+<p>
+        After finding that some 'bad' parameters (like NaN) were not throwing a
+        <code class="computeroutput"><span class="identifier">domain_error</span></code> exception as
+        they should, a function
+      </p>
+<p>
+        <code class="computeroutput"><span class="identifier">check_out_of_range</span></code> (in <code class="computeroutput"><span class="identifier">test_out_of_range</span><span class="special">.</span><span class="identifier">hpp</span></code>) was devised by JM to check (using
+        Boost.Test's BOOST_CHECK_THROW macro) that bad parameters passed to constructors
+        and functions throw <code class="computeroutput"><span class="identifier">domain_error</span></code>
+        exceptions.
+      </p>
+<p>
+        Usage is <code class="computeroutput"><span class="identifier">check_out_of_range</span><span class="special">&lt;</span> <span class="identifier">DistributionType</span>
+        <span class="special">&gt;(</span><span class="identifier">list</span><span class="special">-</span><span class="identifier">of</span><span class="special">-</span><span class="identifier">params</span><span class="special">);</span></code>
+        Where list-of-params is a list of <span class="bold"><strong>valid</strong></span>
+        parameters from which the distribution can be constructed - ie the same number
+        of args are passed to the function, as are passed to the distribution constructor.
+      </p>
+<p>
+        The values of the parameters are not important, but must be <span class="bold"><strong>valid</strong></span>
+        to pass the contructor checks; the default values are suitable, but must
+        be explicitly provided, for example:
+      </p>
+<pre class="programlisting"><span class="identifier">check_out_of_range</span><span class="special">&lt;</span><span class="identifier">extreme_value_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;</span> <span class="special">&gt;(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">);</span>
+</pre>
+<p>
+        Checks made are:
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem">
+            Infinity or NaN (if available) passed in place of each of the valid params.
+          </li>
+<li class="listitem">
+            Infinity or NaN (if available) as a random variable.
+          </li>
+<li class="listitem">
+            Out-of-range random variable passed to pdf and cdf (ie outside of "range(DistributionType)").
+          </li>
+<li class="listitem">
+            Out-of-range probability passed to quantile function and complement.
+          </li>
+</ul></div>
+<p>
+        but does <span class="bold"><strong>not</strong></span> check finite but out-of-range
+        parameters to the constructor because these are specific to each distribution,
+        for example:
+      </p>
+<pre class="programlisting"><span class="identifier">BOOST_CHECK_THROW</span><span class="special">(</span><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">pareto_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="number">0</span><span class="special">,</span> <span class="number">1</span><span class="special">),</span> <span class="number">0</span><span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">);</span>
+<span class="identifier">BOOST_CHECK_THROW</span><span class="special">(</span><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">pareto_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="number">1</span><span class="special">,</span> <span class="number">0</span><span class="special">),</span> <span class="number">0</span><span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">);</span>
+</pre>
+<p>
+        checks <code class="computeroutput"><span class="identifier">scale</span></code> and <code class="computeroutput"><span class="identifier">shape</span></code> parameters are both &gt; 0 by checking
+        that <code class="computeroutput"><span class="identifier">domain_error</span></code> exception
+        is thrown if either are == 0.
+      </p>
+<p>
+        (Use of <code class="computeroutput"><span class="identifier">check_out_of_range</span></code>
+        function may mean that some previous tests are now redundant).
+      </p>
+<p>
+        It was also noted that if more than one parameter is bad, then only the first
+        detected will be reported by the error message.
+      </p>
+<h5>
+<a name="math_toolkit.backgrounders.implementation.h14"></a>
         <span><a name="math_toolkit.backgrounders.implementation.creating_and_managing_the_equations"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.creating_and_managing_the_equations">Creating
         and Managing the Equations</a>
       </h5>
@@ -736,7 +819,7 @@ done</pre>
         HTML: this needs further investigation.
       </p>
 <h5>
-<a name="math_toolkit.backgrounders.implementation.h14"></a>
+<a name="math_toolkit.backgrounders.implementation.h15"></a>
         <span><a name="math_toolkit.backgrounders.implementation.producing_graphs"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.producing_graphs">Producing
         Graphs</a>
       </h5>
