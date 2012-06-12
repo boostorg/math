@@ -16,7 +16,7 @@
           <mi>n</mi>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
               <mo>,</mo>
               <mi>k</mi>
             </mrow>
@@ -29,7 +29,7 @@
           <mi>sin</mi>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
             </mrow>
           </mfenced>
           <mo>&#x2212;</mo>
@@ -43,18 +43,18 @@
           </msup>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
               <mo>&#x2212;</mo>
               <mi>sin</mi>
               <mfenced>
                 <mrow>
-                  <mi>x</mi>
+                  <mi>u</mi>
                 </mrow>
               </mfenced>
               <mi>cos</mi>
               <mfenced>
                 <mrow>
-                  <mi>x</mi>
+                  <mi>u</mi>
                 </mrow>
               </mfenced>
             </mrow>
@@ -62,7 +62,7 @@
           <mi>cos</mi>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
             </mrow>
           </mfenced>
         </mtd>
@@ -73,7 +73,7 @@
           <mi>n</mi>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
               <mo>,</mo>
               <mi>k</mi>
             </mrow>
@@ -86,7 +86,7 @@
           <mi>cos</mi>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
             </mrow>
           </mfenced>
           <mo>+</mo>
@@ -100,18 +100,18 @@
           </msup>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
               <mo>&#x2212;</mo>
               <mi>sin</mi>
               <mfenced>
                 <mrow>
-                  <mi>x</mi>
+                  <mi>u</mi>
                 </mrow>
               </mfenced>
               <mi>cos</mi>
               <mfenced>
                 <mrow>
-                  <mi>x</mi>
+                  <mi>u</mi>
                 </mrow>
               </mfenced>
             </mrow>
@@ -119,7 +119,7 @@
           <mi>sin</mi>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
             </mrow>
           </mfenced>
         </mtd>
@@ -130,7 +130,7 @@
           <mi>n</mi>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
               <mo>,</mo>
               <mi>k</mi>
             </mrow>
@@ -150,13 +150,14 @@
             <mi>k</mi>
             <mn>2</mn>
           </msup>
+          <mi>sin</mi>
           <msup>
-            <mi>sin</mi>
+            <mi/>
             <mn>2</mn>
           </msup>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
             </mrow>
           </mfenced>
         </mtd>
@@ -166,3 +167,4 @@
 </math>
 </body>
 </html>
+

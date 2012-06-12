@@ -7,6 +7,42 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 [section:jacobi Jacobi Elliptic Functions]
 
+[section:jac_over Overvew of the Jacobi Elliptic Functions]
+
+There are twelve Jacobi Elliptic functions, of which the three copolar functions ['sn], ['cn] and ['dn] are the most important
+as the other nine can be computed from these three
+[footnote [@http://en.wikipedia.org/wiki/Jacobi_elliptic_functions Wikipedia: Jacobi elliptic functions]]
+[footnote [@http://mathworld.wolfram.com/JacobiEllipticFunctions.html Weisstein, Eric W. "Jacobi Elliptic Functions." From MathWorld - A Wolfram Web Resource.]]
+[footnote [@http://dlmf.nist.gov/22 Digital Library of Mathematical Functions: Jacobian Elliptic Functions]].
+
+These functions each take two arguments: a parameter, and a variable as described below.
+
+Like all elliptic functions these can be parameterised in a number of ways:
+
+* In terms of a parameter ['m].
+* In terms of the elliptic modulus ['k] where ['m = k[super 2]].
+* In terms of the modular angle [alpha], where ['m = sin[super 2][alpha]].
+
+In our implementation, these functions all take the elliptic modulus /k/ as the parameter.
+
+In addition the variable /u/ is sometimes expressed as an amplitude [phi], in our implementation we always use /u/.
+
+Finally note that our functions all take the elliptic modulus as the first argument - this is for alignment with
+the Elliptic Integrals.
+
+There are twenve functions for computing the twelve individual Jacobi elliptic functions: __jacobi_cd, __jacobi_cn, __jacobi_cs,
+__jacobi_dc, __jacobi_dn, __jacobi_ds, __jacobi_nc, __jacobi_nd, __jacobi_ns, __jacobi_sc, __jacobi_sd and __jacobi_sn.
+
+They are all called as for example:
+
+   jacobi_cs(k, u);
+
+Note however that these individual functions are all really thin wrappers around the function __jacobi_elliptic which calculates
+the three copolar functions ['sn], ['cn] and ['dn] in a single function call.  Thus if you need more than one of these functions
+for a given set of arguments, it's most efficient to use __jacobi_elliptic.
+
+[endsect]
+
 [section:jacobi_elliptic Jacobi Elliptic SN, CN and DN]
 
 [heading Synopsis]
@@ -18,19 +54,19 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   namespace boost { namespace math {
 
    template <class T>
-   ``__sf_result`` jacobi_elliptic(T k, T phi, T* pcn, T* pdn);
+   ``__sf_result`` jacobi_elliptic(T k, T u, T* pcn, T* pdn);
 
    template <class T, class Policy>
-   ``__sf_result`` jacobi_elliptic(T k, T phi, T* pcn, T* pdn, const Policy&);
+   ``__sf_result`` jacobi_elliptic(T k, T u, T* pcn, T* pdn, const Policy&);
 
   }} // namespaces
   
 [heading Description]
 
 The function __jacobi_elliptic calculates the three copolar Jacobi elliptic functions
-['sn([phi], k)], ['cn([phi], k)] and ['dn([phi], k)].  The returned value is 
-['sn([phi], k)], and if provided, ['*pcn] is
-set to ['cn([phi], k)], and ['*pdn] is set to ['dn([phi], k)].
+['sn(u, k)], ['cn(u, k)] and ['dn(u, k)].  The returned value is 
+['sn(u, k)], and if provided, ['*pcn] is
+set to ['cn(u, k)], and ['*pdn] is set to ['dn(u, k)].
 
 The functions are defined as follows, given:
 
@@ -58,11 +94,11 @@ m = k[super 2] = sin[super 2][alpha]
 So that the function ['sn] (for example) may be expressed as
 either:
 
-sn([phi], k)
+sn(u, k)
 
-sn([phi] \\ [alpha])
+sn(u \\ [alpha])
 
-sn([phi]| m)
+sn(u| m)
 
 To further complicate matters, some texts refer to the ['complement
 of the parameter m], or 1 - m, where:
@@ -97,7 +133,7 @@ system are given as narrower types have __zero_error.  All values
 are relative errors in units of epsilon.
 
 [table Errors Rates in the Jacobi Elliptic Functions
-[[Significand Size] [Platform and Compiler] [[phi] < 1] [Large [phi]] ]
+[[Significand Size] [Platform and Compiler] [u < 1] [Large u] ]
 [[53] [Win32 / Visual C++ 8.0] [Peak=2 Mean=0.5] [Peak=44000 Mean=2500] ]
 [[64] [Ubuntu Linux / G++ 4.7] [Peak=2.0 Mean=0.5] [Peak=25000 Mean=1500]  ]
 ]
@@ -120,9 +156,9 @@ Then filter off the special cases:
 
 ['sn(0, k) = 0] and ['cn(0, k) = dn(0, k) = 1].
 
-['sn(x, 0) = sin(x), cn(x, 0) = cos(x) and dn(x, 0) = 1].
+['sn(u, 0) = sin(u), cn(u, 0) = cos(u) and dn(u, 0) = 1].
 
-['sn(x, 1) = tanh(x), cn(x, 1) = dn(x, 1) = 1 / cosh(x)].
+['sn(u, 1) = tanh(u), cn(u, 1) = dn(u, 1) = 1 / cosh(u)].
 
 And for ['k[super 4] < [epsilon]] we have:
 
@@ -143,10 +179,10 @@ Otherwise the values are calculated using the method of [@http://dlmf.nist.gov/2
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_cd(T k, U theta);
+   ``__sf_result`` jacobi_cd(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_cd(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_cd(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -158,7 +194,7 @@ This function returns the Jacobi elliptic function ['cd].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['cd(x, k) = cn(x, k) / dn(x, k)]
+['cd(u, k) = cn(u, k) / dn(u, k)]
 
 [graph jacobi_cd]
 
@@ -175,10 +211,10 @@ This function is a trivial wrapper around __jacobi_elliptic, with:
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_cn(T k, U theta);
+   ``__sf_result`` jacobi_cn(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_cn(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_cn(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -205,10 +241,10 @@ This function is a trivial wrapper around __jacobi_elliptic.
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_cs(T k, U theta);
+   ``__sf_result`` jacobi_cs(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_cs(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_cs(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -220,7 +256,7 @@ This function returns the Jacobi elliptic function ['cs].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['cs(x, k) = cn(x, k) / sn(x, k)]
+['cs(u, k) = cn(u, k) / sn(u, k)]
 
 [graph jacobi_cs]
 
@@ -237,10 +273,10 @@ This function is a trivial wrapper around __jacobi_elliptic, with:
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_dc(T k, U theta);
+   ``__sf_result`` jacobi_dc(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_dc(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_dc(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -252,7 +288,7 @@ This function returns the Jacobi elliptic function ['dc].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['dc(x, k) = dn(x, k) / cn(x, k)]
+['dc(u, k) = dn(u, k) / cn(u, k)]
 
 [graph jacobi_dc]
 
@@ -269,10 +305,10 @@ This function is a trivial wrapper around __jacobi_elliptic, with:
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_dn(T k, U theta);
+   ``__sf_result`` jacobi_dn(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_dn(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_dn(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -299,10 +335,10 @@ This function is a trivial wrapper around __jacobi_elliptic.
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_ds(T k, U theta);
+   ``__sf_result`` jacobi_ds(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_ds(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_ds(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -314,7 +350,7 @@ This function returns the Jacobi elliptic function ['ds].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['ds(x, k) = dn(x, k) / sn(x, k)]
+['ds(u, k) = dn(u, k) / sn(u, k)]
 
 [graph jacobi_ds]
 
@@ -331,10 +367,10 @@ This function is a trivial wrapper around __jacobi_elliptic, with:
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_nc(T k, U theta);
+   ``__sf_result`` jacobi_nc(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_nc(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_nc(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -346,7 +382,7 @@ This function returns the Jacobi elliptic function ['nc].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['nc(x, k) = 1 / cn(x, k)]
+['nc(u, k) = 1 / cn(u, k)]
 
 [graph jacobi_nc]
 
@@ -363,10 +399,10 @@ This function is a trivial wrapper around __jacobi_elliptic, with:
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_nd(T k, U theta);
+   ``__sf_result`` jacobi_nd(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_nd(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_nd(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -378,7 +414,7 @@ This function returns the Jacobi elliptic function ['nd].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['nd(x, k) = 1 / dn(x, k)]
+['nd(u, k) = 1 / dn(u, k)]
 
 [graph jacobi_nd]
 
@@ -395,10 +431,10 @@ This function is a trivial wrapper around __jacobi_elliptic, with:
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_ns(T k, U theta);
+   ``__sf_result`` jacobi_ns(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_ns(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_ns(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -410,7 +446,7 @@ This function returns the Jacobi elliptic function ['ns].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['ns(x, k) = 1 / sn(x, k)]
+['ns(u, k) = 1 / sn(u, k)]
 
 [graph jacobi_ns]
 
@@ -427,10 +463,10 @@ This function is a trivial wrapper around __jacobi_elliptic, with:
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_sc(T k, U theta);
+   ``__sf_result`` jacobi_sc(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_sc(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_sc(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -442,7 +478,7 @@ This function returns the Jacobi elliptic function ['sc].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['sc(x, k) = sn(x, k) / cn(x, k)]
+['sc(u, k) = sn(u, k) / cn(u, k)]
 
 [graph jacobi_sc]
 
@@ -459,10 +495,10 @@ This function is a trivial wrapper around __jacobi_elliptic, with:
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_sd(T k, U theta);
+   ``__sf_result`` jacobi_sd(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_sd(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_sd(T k, U u, const Policy& pol);
 
   }} // namespaces
   
@@ -474,7 +510,7 @@ This function returns the Jacobi elliptic function ['sd].
 
 This function is a trivial wrapper around __jacobi_elliptic, with:
 
-['sd(x, k) = sn(x, k) / dn(x, k)]
+['sd(u, k) = sn(u, k) / dn(u, k)]
 
 [graph jacobi_sd]
 
@@ -491,10 +527,10 @@ This function is a trivial wrapper around __jacobi_elliptic, with:
   namespace boost { namespace math {
 
    template <class T, class U>
-   ``__sf_result`` jacobi_sn(T k, U theta);
+   ``__sf_result`` jacobi_sn(T k, U u);
 
    template <class T, class U, class Policy>
-   ``__sf_result`` jacobi_sn(T k, U theta, const Policy& pol);
+   ``__sf_result`` jacobi_sn(T k, U u, const Policy& pol);
 
   }} // namespaces
   

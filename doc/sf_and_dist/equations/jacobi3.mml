@@ -37,7 +37,7 @@
           <mo>=</mo>
         </mtd>
         <mtd>
-          <mi>x</mi>
+          <mi>u</mi>
           <mi>k</mi>
         </mtd>
       </mtr>
@@ -47,7 +47,7 @@
           <mi>n</mi>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
               <mo>,</mo>
               <mi>k</mi>
             </mrow>
@@ -79,7 +79,7 @@
           <mi>n</mi>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
               <mo>,</mo>
               <mi>k</mi>
             </mrow>
@@ -106,7 +106,7 @@
           <mi>n</mi>
           <mfenced>
             <mrow>
-              <mi>x</mi>
+              <mi>u</mi>
               <mo>,</mo>
               <mi>k</mi>
             </mrow>
@@ -132,3 +132,4 @@
 </math>
 </body>
 </html>
+

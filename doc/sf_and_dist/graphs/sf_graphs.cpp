@@ -248,7 +248,7 @@ int main()
    double (*f2i)(int, double);
    double (*f3)(double, double, double);
    double (*f4)(double, double, double, double);
-#if 0
+
    f = boost::math::zeta;
    plot.add(f, 1 + find_end_point(f, 0.1, 40.0, false, 1.0), 10, "");
    plot.add(f, -20, 1 + find_end_point(f, -0.1, -40.0, false, 1.0), "");
@@ -575,7 +575,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), -10, 10, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), -10, 10, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), -10, 10, "k=1");
-   plot.plot("Jacobi Elliptic sn", "jacobi_sn.svg", "k", "jacobi_sn(k, phi)");
+   plot.plot("Jacobi Elliptic sn", "jacobi_sn.svg", "k", "jacobi_sn(k, u)");
 
    f2 = boost::math::jacobi_cn;
    plot.clear();
@@ -584,7 +584,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), -10, 10, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), -10, 10, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), -10, 10, "k=1");
-   plot.plot("Jacobi Elliptic cn", "jacobi_cn.svg", "k", "jacobi_cn(k, phi)");
+   plot.plot("Jacobi Elliptic cn", "jacobi_cn.svg", "k", "jacobi_cn(k, u)");
 
    f2 = boost::math::jacobi_dn;
    plot.clear();
@@ -593,7 +593,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), -10, 10, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), -10, 10, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), -10, 10, "k=1");
-   plot.plot("Jacobi Elliptic dn", "jacobi_dn.svg", "k", "jacobi_dn(k, phi)");
+   plot.plot("Jacobi Elliptic dn", "jacobi_dn.svg", "k", "jacobi_dn(k, u)");
 
    f2 = boost::math::jacobi_cd;
    plot.clear();
@@ -602,7 +602,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), -10, 10, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), -10, 10, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), -10, 10, "k=1");
-   plot.plot("Jacobi Elliptic cd", "jacobi_cd.svg", "k", "jacobi_cd(k, phi)");
+   plot.plot("Jacobi Elliptic cd", "jacobi_cd.svg", "k", "jacobi_cd(k, u)");
 
    f2 = boost::math::jacobi_cs;
    plot.clear();
@@ -611,7 +611,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), 0.1, 3, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), 0.1, 3, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), 0.1, 3, "k=1");
-   plot.plot("Jacobi Elliptic cs", "jacobi_cs.svg", "k", "jacobi_cs(k, phi)");
+   plot.plot("Jacobi Elliptic cs", "jacobi_cs.svg", "k", "jacobi_cs(k, u)");
 
    f2 = boost::math::jacobi_dc;
    plot.clear();
@@ -620,7 +620,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), -10, 10, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), -10, 10, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), -10, 10, "k=1");
-   plot.plot("Jacobi Elliptic dc", "jacobi_dc.svg", "k", "jacobi_dc(k, phi)");
+   plot.plot("Jacobi Elliptic dc", "jacobi_dc.svg", "k", "jacobi_dc(k, u)");
 
    f2 = boost::math::jacobi_ds;
    plot.clear();
@@ -629,7 +629,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), 0.1, 3, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), 0.1, 3, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), 0.1, 3, "k=1");
-   plot.plot("Jacobi Elliptic ds", "jacobi_ds.svg", "k", "jacobi_ds(k, phi)");
+   plot.plot("Jacobi Elliptic ds", "jacobi_ds.svg", "k", "jacobi_ds(k, u)");
 
    f2 = boost::math::jacobi_nc;
    plot.clear();
@@ -638,7 +638,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), -5, 5, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), -5, 5, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), -5, 5, "k=1");
-   plot.plot("Jacobi Elliptic nc", "jacobi_nc.svg", "k", "jacobi_nc(k, phi)");
+   plot.plot("Jacobi Elliptic nc", "jacobi_nc.svg", "k", "jacobi_nc(k, u)");
 
    f2 = boost::math::jacobi_ns;
    plot.clear();
@@ -647,7 +647,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), 0.1, 4, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), 0.1, 4, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), 0.1, 4, "k=1");
-   plot.plot("Jacobi Elliptic ns", "jacobi_ns.svg", "k", "jacobi_ns(k, phi)");
+   plot.plot("Jacobi Elliptic ns", "jacobi_ns.svg", "k", "jacobi_ns(k, u)");
 
    f2 = boost::math::jacobi_nd;
    plot.clear();
@@ -656,7 +656,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), -2, 2, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), -2, 2, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), -2, 2, "k=1");
-   plot.plot("Jacobi Elliptic nd", "jacobi_nd.svg", "k", "jacobi_nd(k, phi)");
+   plot.plot("Jacobi Elliptic nd", "jacobi_nd.svg", "k", "jacobi_nd(k, u)");
 
    f2 = boost::math::jacobi_sc;
    plot.clear();
@@ -665,7 +665,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), -5, 5, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), -5, 5, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), -5, 5, "k=1");
-   plot.plot("Jacobi Elliptic sc", "jacobi_sc.svg", "k", "jacobi_sc(k, phi)");
+   plot.plot("Jacobi Elliptic sc", "jacobi_sc.svg", "k", "jacobi_sc(k, u)");
 
    f2 = boost::math::jacobi_sd;
    plot.clear();
@@ -674,8 +674,7 @@ int main()
    plot.add(boost::bind(f2, 0.75, _1), -2.5, 2.5, "k=0.75");
    plot.add(boost::bind(f2, 0.95, _1), -2.5, 2.5, "k=0.95");
    plot.add(boost::bind(f2, 1, _1), -2.5, 2.5, "k=1");
-   plot.plot("Jacobi Elliptic sd", "jacobi_sd.svg", "k", "jacobi_sd(k, phi)");
-#endif
+   plot.plot("Jacobi Elliptic sd", "jacobi_sd.svg", "k", "jacobi_sd(k, u)");
 
    f = boost::math::airy_ai;
    plot.clear();

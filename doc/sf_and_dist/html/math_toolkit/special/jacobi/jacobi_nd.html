@@ -40,10 +40,10 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span>
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
- <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">jacobi_nd</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">U</span> <span class="identifier">theta</span><span class="special">);</span>
+ <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">jacobi_nd</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">U</span> <span class="identifier">u</span><span class="special">);</span>
 
  <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">&gt;</span>
- <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">jacobi_nd</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">U</span> <span class="identifier">theta</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
+ <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">jacobi_nd</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">k</span><span class="special">,</span> <span class="identifier">U</span> <span class="identifier">u</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
 
 <span class="special">}}</span> <span class="comment">// namespaces</span>
 </pre>
@@ -64,7 +64,7 @@
           with:
         </p>
 <p>
-          <span class="emphasis"><em>nd(x, k) = 1 / dn(x, k)</em></span>
+          <span class="emphasis"><em>nd(u, k) = 1 / dn(u, k)</em></span>
         </p>
 <p>
           <span class="inlinemediaobject"><img src="../../../../graphs/jacobi_nd.png" align="middle"></span>
