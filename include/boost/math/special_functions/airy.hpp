@@ -21,7 +21,7 @@ T airy_ai_imp(T x, const Policy& pol)
 
    if(x < 0)
    {
-      T p = -x * sqrt(-x) * 2 / 3;
+      T p = (-x * sqrt(-x) * 2) / 3;
       T v = T(1) / 3;
       T j1 = boost::math::cyl_bessel_j(v, p, pol);
       T j2 = boost::math::cyl_bessel_j(-v, p, pol);
@@ -59,7 +59,7 @@ T airy_bi_imp(T x, const Policy& pol)
 
    if(x < 0)
    {
-      T p = -x * sqrt(-x) * 2 / 3;
+      T p = (-x * sqrt(-x) * 2) / 3;
       T v = T(1) / 3;
       T j1 = boost::math::cyl_bessel_j(v, p, pol);
       T j2 = boost::math::cyl_bessel_j(-v, p, pol);
@@ -92,7 +92,7 @@ T airy_ai_prime_imp(T x, const Policy& pol)
 
    if(x < 0)
    {
-      T p = -x * sqrt(-x) * 2 / 3;
+      T p = (-x * sqrt(-x) * 2) / 3;
       T v = T(2) / 3;
       T j1 = boost::math::cyl_bessel_j(v, p, pol);
       T j2 = boost::math::cyl_bessel_j(-v, p, pol);
@@ -127,7 +127,7 @@ T airy_bi_prime_imp(T x, const Policy& pol)
 
    if(x < 0)
    {
-      T p = -x * sqrt(-x) * 2 / 3;
+      T p = (-x * sqrt(-x) * 2) / 3;
       T v = T(2) / 3;
       T j1 = boost::math::cyl_bessel_j(v, p, pol);
       T j2 = boost::math::cyl_bessel_j(-v, p, pol);
