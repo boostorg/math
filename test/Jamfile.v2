@@ -827,6 +827,9 @@ compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal :
 compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] ;
 compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] ;
 
+run ztest_max_digits10.cpp ;
+run zztest_max_digits10.cpp ;
+
 build-project ../example ;
 
 
