@@ -28,7 +28,6 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/mpl/comparison.hpp>
 #include <boost/config/no_tr1/complex.hpp>
-#include <complex>
 
 #define BOOST_NO_MACRO_EXPAND /**/
 
