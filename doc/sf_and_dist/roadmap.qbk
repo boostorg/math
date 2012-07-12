@@ -16,7 +16,7 @@ and these have been rectified.
 * Added Airy functions and Jacobe Elliptic functions.
 * Fixed issues [@https://svn.boost.org/trac/boost/ticket/6517 #6517], [@https://svn.boost.org/trac/boost/ticket/6362 #6362],
 [@https://svn.boost.org/trac/boost/ticket/7053 #7053], [@https://svn.boost.org/trac/boost/ticket/2693 #2693],
-[@https://svn.boost.org/trac/boost/ticket/6937 #6937].
+[@https://svn.boost.org/trac/boost/ticket/6937 #6937], [@https://svn.boost.org/trac/boost/ticket/7099 #7099].
 
 [h4 Boost-1.50]
 
