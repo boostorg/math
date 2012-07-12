@@ -1,5 +1,11 @@
 [template history[]
 
+Currently open bug reports can be viewed 
+[@https://svn.boost.org/trac/boost/query?status=assigned&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
+
+All bug reports including closed ones can be viewed 
+[@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
+
 [h4 Boost-1.51]
 
 * Corrected failure to detect bad parameters in many distributions
@@ -7,6 +13,10 @@
 by adding a function check_out_of_range to test many possible bad parameters.
 This test revealed several distributions where the checks for bad parameters were ineffective,
 and these have been rectified. 
+* Added Airy functions and Jacobe Elliptic functions.
+* Fixed issues [@https://svn.boost.org/trac/boost/ticket/6517 #6517], [@https://svn.boost.org/trac/boost/ticket/6362 #6362],
+[@https://svn.boost.org/trac/boost/ticket/7053 #7053], [@https://svn.boost.org/trac/boost/ticket/2693 #2693],
+[@https://svn.boost.org/trac/boost/ticket/6937 #6937].
 
 [h4 Boost-1.50]
 
