@@ -331,28 +331,6 @@ struct erf_inv_initializer
       {
          do_init();
       }
-      template <class Tag>
-      static void do_init_big(const Tag&)
-      {
-         // Make this a template so it's not instantiated if these constants are too large
-         // for the compiler to handle.  See https://svn.boost.org/trac/boost/ticket/7099
-         if(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-800)) != 0)
-            boost::math::erfc_inv(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-800)), Policy());
-         if(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-900)) != 0)
-            boost::math::erfc_inv(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-900)), Policy());
-      }
-      static void do_init_big(const mpl::false_&)
-      {
-         // Initialization here is pointless for (built in) floating point types,
-         // but may still be required for UDT's:
-         if(!is_floating_point<T>::value)
-         {
-            if(static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 64, 1e-800)) != 0)
-               boost::math::erfc_inv(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-800)), Policy());
-            if(static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 64, 1e-900)) != 0)
-               boost::math::erfc_inv(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-900)), Policy());
-         }
-      }
       static void do_init()
       {
          boost::math::erf_inv(static_cast<T>(0.25), Policy());
@@ -362,9 +340,19 @@ struct erf_inv_initializer
          if(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-130)) != 0)
             boost::math::erfc_inv(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-130)), Policy());
 
-         typedef mpl::bool_<(LDBL_MIN_EXP < -1030)> tag_type;
-
-         do_init_big(tag_type());
+         // Some compilers choke on constants that would underflow, even in code that isn't instantiated
+         // so try and filter these cases out in the preprocessor:
+#if LDBL_MAX_10_EXP >= 800
+         if(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-800)) != 0)
+            boost::math::erfc_inv(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-800)), Policy());
+         if(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-900)) != 0)
+            boost::math::erfc_inv(static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1e-900)), Policy());
+#else
+         if(static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 64, 1e-800)) != 0)
+            boost::math::erfc_inv(static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 64, 1e-800)), Policy());
+         if(static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 64, 1e-900)) != 0)
+            boost::math::erfc_inv(static_cast<T>(BOOST_MATH_HUGE_CONSTANT(T, 64, 1e-900)), Policy());
+#endif
       }
       void force_instantiate()const{}
    };
