@@ -781,6 +781,8 @@ run  compile_test/sf_airy_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/sf_hankel_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/sf_jacobi_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/sf_owens_t_incl_test.cpp compile_test/main.cpp ;
+run  compile_test/dist_skew_norm_incl_test.cpp compile_test/main.cpp ;
+run  compile_test/constants_incl_test.cpp compile_test/main.cpp ;
 compile  compile_test/test_traits.cpp ;
 compile  compile_test/tools_config_inc_test.cpp ;
 compile  compile_test/tools_fraction_inc_test.cpp ;

@@ -39,6 +39,10 @@
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
+            Added <a class="link" href="../special/airy.html" title="Airy Functions">Airy functions</a>
+            and <a class="link" href="../special/jacobi.html" title="Jacobi Elliptic Functions">Jacobi Elliptic functions</a>.
+          </li>
+<li class="listitem">
             Corrected failure to detect bad parameters in many distributions <a href="https://svn.boost.org/trac/boost/ticket/6934" target="_top">#6934</a> (reported
             by Florian Schoppmann) by adding a function check_out_of_range to test
             many possible bad parameters. This test revealed several distributions
@@ -46,7 +50,8 @@
             been rectified.
           </li>
 <li class="listitem">
-            Added Airy functions and Jacobe Elliptic functions.
+            Fixed issue in Hankel functions that causes incorrect values to be returned
+            for <span class="emphasis"><em>x &lt; 0</em></span> and &#957; odd, see <a href="https://svn.boost.org/trac/boost/ticket/7135" target="_top">#7135</a>.
           </li>
 <li class="listitem">
             Fixed issues <a href="https://svn.boost.org/trac/boost/ticket/6517" target="_top">#6517</a>,

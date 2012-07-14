@@ -8,12 +8,13 @@ All bug reports including closed ones can be viewed
 
 [h4 Boost-1.51]
 
+* Added [link math_toolkit.special.airy Airy functions] and [link math_toolkit.special.jacobi Jacobi Elliptic functions].
 * Corrected failure to detect bad parameters in many distributions
 [@https://svn.boost.org/trac/boost/ticket/6934 #6934] (reported by Florian Schoppmann)
 by adding a function check_out_of_range to test many possible bad parameters.
 This test revealed several distributions where the checks for bad parameters were ineffective,
 and these have been rectified. 
-* Added Airy functions and Jacobe Elliptic functions.
+* Fixed issue in Hankel functions that causes incorrect values to be returned for ['x < 0] and [nu] odd, see [@https://svn.boost.org/trac/boost/ticket/7135 #7135].
 * Fixed issues [@https://svn.boost.org/trac/boost/ticket/6517 #6517], [@https://svn.boost.org/trac/boost/ticket/6362 #6362],
 [@https://svn.boost.org/trac/boost/ticket/7053 #7053], [@https://svn.boost.org/trac/boost/ticket/2693 #2693],
 [@https://svn.boost.org/trac/boost/ticket/6937 #6937], [@https://svn.boost.org/trac/boost/ticket/7099 #7099].
