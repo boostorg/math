@@ -14,6 +14,15 @@
 #pragma warning(disable:4127)
 #endif
 
+#if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
+#if (defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__)
+#include <float.h>
+#include "xmmintrin.h"
+#define TEST_SSE2
+#endif
+#endif
+
+
 template <class T>
 void test_value(const T& val, const char* name)
 {
@@ -56,6 +65,18 @@ void test_values(const T& val, const char* name)
    static const T z = 0;
    static const T one = 1;
    static const T two = 2;
+
+   std::cout << "Testing type " << name << std::endl;
+
+   T den = (std::numeric_limits<T>::min)() / 4;
+   if(den != 0)
+   {
+      std::cout << "Denormals are active\n";
+   }
+   else
+   {
+      std::cout << "Denormals are flushed to zero.\n";
+   }
 
    test_value(a, name);
    test_value(-a, name);
@@ -134,6 +155,21 @@ int test_main(int, char* [])
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_values(1.0L, "long double");
    test_values(boost::math::concepts::real_concept(0), "real_concept");
+#endif
+#if defined(TEST_SSE2)
+   _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+   std::cout << "Testing again with Flush-To-Zero set" << std::endl;
+   std::cout << "SSE2 control word is: " << std::hex << _mm_getcsr() << std::endl;
+   test_values(1.0f, "float");
+   test_values(1.0, "double");
+   _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_OFF);
+
+   BOOST_ASSERT((_mm_getcsr() & 0x40) == 0);
+   _mm_setcsr(_mm_getcsr() | 0x40);
+   std::cout << "Testing again with Denormals-Are-Zero set" << std::endl;
+   std::cout << "SSE2 control word is: " << std::hex << _mm_getcsr() << std::endl;
+   test_values(1.0f, "float");
+   test_values(1.0, "double");
 #endif
    return 0;
 }
