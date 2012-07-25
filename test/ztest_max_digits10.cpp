@@ -16,7 +16,8 @@ new max_digits10.
 This is needed to produce or select a macro to avoid compilation failure in Boost.Test
 for platforms that do not include either or both of these.
 
-BOOST_NO_NUMERIC_LIMITS_LOWEST may be suitable?
+BOOST_NO_NUMERIC_LIMITS_LOWEST is suitable but deprecated.
+
 
 [Boost C++ Libraries]
 
@@ -42,9 +43,9 @@ int main()
    int digits10 = std::numeric_limits<double>::digits10;
    int max_digits10 = std::numeric_limits<double>::max_digits10;
 
-   std::cout << "std::numeric_limits<double>::digits10 = " << std::numeric_limits<double>::digits10 << std::endl;
+   std::cout << "std::numeric_limits<double>::digits10 = " << digits10 << std::endl;
 
-   std::cout << "std::numeric_limits<double>::max_digits10 = " << std::numeric_limits<double>::max_digits10 << std::endl;
+   std::cout << "std::numeric_limits<double>::max_digits10 = " << max_digits10 << std::endl;
 
 
 } // int main()

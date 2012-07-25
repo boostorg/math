@@ -1,5 +1,5 @@
 
- // Copyright 2010 Paul A. Bristow
+// Copyright 2010 Paul A. Bristow
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -16,7 +16,11 @@ new max_digits10.
 This is needed to produce or select a macro to avoid compilation failure in Boost.Test
 for platforms that do not include either or both of these.
 
-BOOST_NO_NUMERIC_LIMITS_LOWEST may be suitable and is tested here.
+BOOST_NO_NUMERIC_LIMITS_LOWEST is suitable but is deprecated in favour of
+
+BOOST_NO_CXX11_NUMERIC_LIMITS
+
+and is tested here.
 
 [Boost C++ Libraries]
 
@@ -40,11 +44,13 @@ int main()
                         << BOOST_VERSION % 100       << std::endl;
 
    int digits10 = std::numeric_limits<double>::digits10;
-   std::cout << "std::numeric_limits<double>::digits10 = " << std::numeric_limits<double>::digits10 << std::endl;
+   std::cout << "std::numeric_limits<double>::digits10 = " << digits10 << std::endl;
 
-#ifndef BOOST_NO_NUMERIC_LIMITS_LOWEST
+//#ifndef BOOST_NO_NUMERIC_LIMITS_LOWEST
+
+#ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
    int max_digits10 = std::numeric_limits<double>::max_digits10;
-   std::cout << "std::numeric_limits<double>::max_digits10 = " << std::numeric_limits<double>::max_digits10 << std::endl;
+   std::cout << "std::numeric_limits<double>::max_digits10 = " << max_digits10 << std::endl;
 #endif
 
 } // int main()
