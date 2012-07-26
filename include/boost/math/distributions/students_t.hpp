@@ -293,19 +293,37 @@ RealType students_t_distribution<RealType, Policy>::find_degrees_of_freedom(
 }
 
 template <class RealType, class Policy>
-inline RealType mean(const students_t_distribution<RealType, Policy>& )
-{
+inline RealType mean(const students_t_distribution<RealType, Policy>& dist)
+{  // Revised for https://svn.boost.org/trac/boost/ticket/7177
+  RealType df = dist.degrees_of_freedom();
+   if(df <= 1)
+   {
+      policies::raise_domain_error<RealType>(
+      "boost::math::mean(students_t_distribution<%1%> const&, %1%)",
+      "Mean is undefined for degrees of freedom < 1 but got %1%.", df, Policy());
+      return std::numeric_limits<RealType>::quiet_NaN();
+   }
    return 0;
 }
 
 template <class RealType, class Policy>
 inline RealType variance(const students_t_distribution<RealType, Policy>& dist)
-{
-   // Error check:
-   RealType error_result;
-   if(false == detail::check_df(
-      "boost::math::variance(students_t_distribution<%1%> const&, %1%)", dist.degrees_of_freedom(), &error_result, Policy()))
-      return error_result;
+{ // http://en.wikipedia.org/wiki/Student%27s_t-distribution
+
+  // Revised for https://svn.boost.org/trac/boost/ticket/7177
+
+   RealType df = dist.degrees_of_freedom();
+   if((df <= 2) || !(boost::math::isfinite)(df))
+   {
+      if (df > 1)
+      {
+        return std::numeric_limits<RealType>::infinity();
+      }
+      policies::raise_domain_error<RealType>(
+         "boost::math::variance(students_t_distribution<%1%> const&, %1%)",
+         "Degrees of freedom is undefined for <= 2 but got %1%.", df, Policy());
+      return std::numeric_limits<RealType>::quiet_NaN();
+   }
 
    RealType v = dist.degrees_of_freedom();
    return v / (v - 2);
