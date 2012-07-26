@@ -466,10 +466,20 @@ void test_spots(RealType)
          static_cast<RealType>(1.0))),
          9);
 
+
     BOOST_CHECK_THROW(quantile(dist, -1), std::domain_error);
     BOOST_CHECK_THROW(quantile(dist, 2), std::domain_error);
     BOOST_CHECK_THROW(pdf(students_t_distribution<RealType>(0), 0), std::domain_error);
     BOOST_CHECK_THROW(pdf(students_t_distribution<RealType>(-1), 0), std::domain_error);
+
+    // Checks added for Trac #7717 report by Thomas Mang
+    BOOST_CHECK_EQUAL(mean(students_t_distribution<RealType>(2)), 0);
+    BOOST_CHECK_THROW(mean(students_t_distribution<RealType>(1)), std::domain_error);
+
+    BOOST_CHECK_THROW(variance(students_t_distribution<RealType>(1)), std::domain_error);
+    BOOST_CHECK_EQUAL(variance(students_t_distribution<RealType>(1.5)), std::numeric_limits<RealType>::infinity());
+    BOOST_CHECK_EQUAL(variance(students_t_distribution<RealType>(2)), std::numeric_limits<RealType>::infinity());
+
     check_out_of_range<students_t_distribution<RealType> >(1);
 } // template <class RealType>void test_spots(RealType)
 
@@ -480,6 +490,8 @@ int test_main(int, char* [])
   students_t myst1(2); // Using typedef
    students_t_distribution<> myst2(2); // Using default RealType double.
    //students_t_distribution<double> myst3(2); // Using explicit RealType double.
+
+   
 
     // Basic sanity-check spot values.
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
