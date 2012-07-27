@@ -293,10 +293,24 @@ RealType students_t_distribution<RealType, Policy>::find_degrees_of_freedom(
 }
 
 template <class RealType, class Policy>
+inline RealType mode(const students_t_distribution<RealType, Policy>& /*dist*/)
+{
+   return 0;
+}
+
+template <class RealType, class Policy>
+inline RealType median(const students_t_distribution<RealType, Policy>& /*dist*/)
+{
+   return 0;
+}
+
+// See section 5.1 on moments at  http://en.wikipedia.org/wiki/Student%27s_t-distribution
+
+template <class RealType, class Policy>
 inline RealType mean(const students_t_distribution<RealType, Policy>& dist)
 {  // Revised for https://svn.boost.org/trac/boost/ticket/7177
-  RealType df = dist.degrees_of_freedom();
-   if(df <= 1)
+   RealType df = dist.degrees_of_freedom();
+   if((!(boost::math::isfinite)(df)) || (df <= 1) )// Undefined for moment <= 1
    {
       policies::raise_domain_error<RealType>(
       "boost::math::mean(students_t_distribution<%1%> const&, %1%)",
@@ -309,47 +323,49 @@ inline RealType mean(const students_t_distribution<RealType, Policy>& dist)
 template <class RealType, class Policy>
 inline RealType variance(const students_t_distribution<RealType, Policy>& dist)
 { // http://en.wikipedia.org/wiki/Student%27s_t-distribution
-
   // Revised for https://svn.boost.org/trac/boost/ticket/7177
-
-   RealType df = dist.degrees_of_freedom();
-   if((df <= 2) || !(boost::math::isfinite)(df))
-   {
-      if (df > 1)
-      {
-        return std::numeric_limits<RealType>::infinity();
-      }
-      policies::raise_domain_error<RealType>(
-         "boost::math::variance(students_t_distribution<%1%> const&, %1%)",
-         "Degrees of freedom is undefined for <= 2 but got %1%.", df, Policy());
-      return std::numeric_limits<RealType>::quiet_NaN();
-   }
-
-   RealType v = dist.degrees_of_freedom();
-   return v / (v - 2);
-}
-
-template <class RealType, class Policy>
-inline RealType mode(const students_t_distribution<RealType, Policy>& /*dist*/)
-{
-   return 0;
-}
-
-template <class RealType, class Policy>
-inline RealType median(const students_t_distribution<RealType, Policy>& /*dist*/)
-{
-   return 0;
-}
+  RealType df = dist.degrees_of_freedom();
+  if (!(boost::math::isfinite)(df))
+  { // Infinity or NaN
+    policies::raise_domain_error<RealType>(
+      "boost::math::variance(students_t_distribution<%1%> const&, %1%)",
+      "variance is undefined for nonfinite degrees of freedom, but got %1%.",
+      df, Policy());
+    return std::numeric_limits<RealType>::quiet_NaN(); // Undefined.
+  }
+  if (df > 2)
+  { // normal case.
+      return df / (df - 2);
+  }
+  if ((df > 1) && (df <= 2))
+  { // 
+      policies::raise_overflow_error<RealType>(
+      "boost::math::variance(students_t_distribution<%1%> const&, %1%)",
+      "variance is infinity for 1 < degrees of freedom <= 2.",
+      Policy());
+      return std::numeric_limits<RealType>::infinity(); // Infinity.
+  }
+  else
+  {
+     policies::raise_domain_error<RealType>(
+      "boost::math::variance(students_t_distribution<%1%> const&, %1%)",
+      "variance is undefined for degrees of freedom <= 1, but got %1%.",
+      df, Policy());
+    return std::numeric_limits<RealType>::quiet_NaN(); // Undefined.
+  }
+} // variance
 
 template <class RealType, class Policy>
 inline RealType skewness(const students_t_distribution<RealType, Policy>& dist)
 {
-   if(dist.degrees_of_freedom() <= 3)
-   {
+    RealType df = dist.degrees_of_freedom();
+   if( (!(boost::math::isfinite)(df)) || (dist.degrees_of_freedom() <= 3))
+   { // Undefined for moment k = 3.
       policies::raise_domain_error<RealType>(
          "boost::math::skewness(students_t_distribution<%1%> const&, %1%)",
          "Skewness is undefined for degrees of freedom <= 3, but got %1%.",
          dist.degrees_of_freedom(), Policy());
+      return std::numeric_limits<RealType>::quiet_NaN();
    }
    return 0;
 }
@@ -358,12 +374,26 @@ template <class RealType, class Policy>
 inline RealType kurtosis(const students_t_distribution<RealType, Policy>& dist)
 {
    RealType df = dist.degrees_of_freedom();
-   if(df <= 3)
-   {
-      policies::raise_domain_error<RealType>(
+   if((!(boost::math::isfinite)(df)) || (df <= 4))
+   { // Undefined or infinity for moment k = 4.
+      RealType result;
+      if ((df > 2) && (df <= 4))
+      {
+         policies::raise_overflow_error<RealType>(
          "boost::math::kurtosis(students_t_distribution<%1%> const&, %1%)",
-         "Skewness is undefined for degrees of freedom <= 3, but got %1%.",
-         df, Policy());
+         "Kurtosis is infinity for 2 < degrees of freedom <= 4.",
+          Policy());
+         return std::numeric_limits<RealType>::infinity(); // Infinity.
+      }
+      else
+      {
+         policies::raise_domain_error<RealType>(
+         "boost::math::kurtosis(students_t_distribution<%1%> const&, %1%)",
+         "Kurtosis is undefined for degrees of freedom <= 2, but got %1%.",
+          df, Policy());
+        return std::numeric_limits<RealType>::quiet_NaN(); // Undefined.
+      }
+      return result;
    }
    return 3 * (df - 2) / (df - 4);
 }
@@ -372,13 +402,28 @@ template <class RealType, class Policy>
 inline RealType kurtosis_excess(const students_t_distribution<RealType, Policy>& dist)
 {
    // see http://mathworld.wolfram.com/Kurtosis.html
+
    RealType df = dist.degrees_of_freedom();
-   if(df <= 3)
-   {
-      policies::raise_domain_error<RealType>(
+   if((!(boost::math::isfinite)(df)) || (df <= 4))
+   { // Undefined or infinity for moment k = 4.
+      RealType result;
+      if ((df > 2) && (df <= 4))
+      {
+         policies::raise_overflow_error<RealType>(
          "boost::math::kurtosis_excess(students_t_distribution<%1%> const&, %1%)",
-         "Skewness is undefined for degrees of freedom <= 3, but got %1%.",
-         df, Policy());
+         "Kurtosis_excess is infinity for 2 < degrees of freedom <= 4.",
+          Policy());
+         return std::numeric_limits<RealType>::infinity(); // Infinity.
+      }
+      else
+      {
+         policies::raise_domain_error<RealType>(
+         "boost::math::kurtosis_excess(students_t_distribution<%1%> const&, %1%)",
+         "Kurtosis_excess is undefined for degrees of freedom <= 2, but got %1%.",
+          df, Policy());
+        return std::numeric_limits<RealType>::quiet_NaN(); // Undefined.
+      }
+      return result;
    }
    return 6 / (df - 4);
 }
