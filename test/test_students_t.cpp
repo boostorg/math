@@ -535,30 +535,43 @@ void test_spots(RealType)
     // Use a new distribution ignore_error_students_t with a custom policy to ignore all errors,
     // and check returned values are as expected.
 
+    /*
+     Sandia-darwin-intel-12.0 - math - test_students_t / intel-darwin-12.0
+
+    ../libs/math/test/test_students_t.cpp(544): error: "domain_error" has already been declared in the current scope
+    using boost::math::policies::domain_error;
+                                 ^
+
+../libs/math/test/test_students_t.cpp(552): error: "pole_error" has already been declared in the current scope
+    using boost::math::policies::pole_error;
+
+    Unclear where previous declaration is.  Does seem to be in student_t.hpp or any included files???
+
+    */
     using boost::math::policies::policy;
   // Types of error whose action can be altered by policies:.
-  using boost::math::policies::evaluation_error;
-  using boost::math::policies::domain_error;
-  using boost::math::policies::overflow_error;
-  using boost::math::policies::underflow_error;
-  using boost::math::policies::domain_error;
-  using boost::math::policies::pole_error;
+  //using boost::math::policies::evaluation_error;
+  //using boost::math::policies::domain_error;
+  //using boost::math::policies::overflow_error;
+  //using boost::math::policies::underflow_error;
+  //using boost::math::policies::domain_error;
+  //using boost::math::policies::pole_error;
 
-  // Actions on error (in enum error_policy_type):
-  using boost::math::policies::errno_on_error;
-  using boost::math::policies::ignore_error;
-  using boost::math::policies::throw_on_error;
-  using boost::math::policies::denorm_error;
-  using boost::math::policies::pole_error;
-  using boost::math::policies::user_error;
+  //// Actions on error (in enum error_policy_type):
+  //using boost::math::policies::errno_on_error;
+  //using boost::math::policies::ignore_error;
+  //using boost::math::policies::throw_on_error;
+  //using boost::math::policies::denorm_error;
+  //using boost::math::policies::pole_error;
+  //using boost::math::policies::user_error;
 
   typedef policy<
-    domain_error<ignore_error>,
-    overflow_error<ignore_error>,
-    underflow_error<ignore_error>,
-    denorm_error<ignore_error>,
-    pole_error<ignore_error>,
-    evaluation_error<ignore_error>
+    boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+    boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+    boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+    boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+    boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+    boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
               > my_ignore_policy;
 
   typedef students_t_distribution<RealType, my_ignore_policy> ignore_error_students_t;
