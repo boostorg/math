@@ -596,7 +596,7 @@ inline T constant_zeta_three<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(
   //"1.202056903159594285399738161511449990, 76498629234049888179227155534183820578631309018645587360933525814619915"  A002117
   // 1.202056903159594285399738161511449990, 76498629234049888179227155534183820578631309018645587360933525814619915780, +00);
   //"1.2020569031595942 double
-  // http://www.spaennare.se/SSPROG/ssnum.pdf  // section 11, Algorithmfor Apery’s constant zeta(3).
+  // http://www.spaennare.se/SSPROG/ssnum.pdf  // section 11, Algorithm for Apery's constant zeta(3).
   // Programs to Calculate some Mathematical Constants to Large Precision, Document Version 1.50
 
   // by Stefan Spannare  September 19, 2007
