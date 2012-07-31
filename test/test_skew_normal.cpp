@@ -371,7 +371,7 @@ void test_spots(RealType)
 
         skew_normal_distribution<RealType> dist(static_cast<RealType>(0.l), static_cast<RealType>(1.l), static_cast<RealType>(4.l));
 
-        cout << "pdf(dist, 0) = " << pdf(dist, 0) <<  ", pdf(dist, 0.45) = " << pdf(dist, 0.45) << endl;
+       // cout << "pdf(dist, 0) = " << pdf(dist, 0) <<  ", pdf(dist, 0.45) = " << pdf(dist, 0.45) << endl;
        // BOOST_CHECK_CLOSE(mode(dist), boost::math::constants::root_two<RealType>() / 2, tol5);
         BOOST_CHECK_CLOSE(mode(dist), static_cast<RealType>(0.41697299497388863932L), tol1000);
       }
