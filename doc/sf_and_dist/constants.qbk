@@ -655,7 +655,7 @@ This class is used in Boost.Math and an option when using big_number projects to
 
 [h5 GMP and MPFR]
 
-[@gmplib.org GMP] and [@http://www.mpfr.org/ MPFR] have also been used to compute constants,
+[@http://gmplib.org GMP] and [@http://www.mpfr.org/ MPFR] have also been used to compute constants,
 but are licensed under the [@http://www.gnu.org/copyleft/lesser.html Lesser GPL license]
 and are [*not licensed for commercial use].
 
@@ -707,7 +707,13 @@ Some physical constants may be available in Boost.Units.
 
 [endsect] [/section:FAQ FAQ]
 
-[endsect]
+[endsect] [/section:constants Mathematical Constants]
 
+[/ 
+  Copyright 2012 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
 
 

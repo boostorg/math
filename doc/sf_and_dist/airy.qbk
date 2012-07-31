@@ -49,7 +49,7 @@ only the absolute error is low for /x < 0/.
 [heading Testing]
 
 Since this function is implemented in terms of other special functions, there are only a few 
-basic sanity checks, using test values from [@http:functions.wolfram.com functions.wolfram.com].
+basic sanity checks, using test values from [@http://mathworld.wolfram.com/AiryFunctions.html Wolfram Airy Functions].
 
 [heading Implementation]
 
