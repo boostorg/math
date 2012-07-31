@@ -1,5 +1,5 @@
-//  Copyright John Maddock 2006, 2007.
-//  Copyright Paul A. Bristow 2006, 2007.
+//  Copyright John Maddock 2006, 2007, 2012.
+//  Copyright Paul A. Bristow 2006, 2007, 2012
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -44,6 +44,7 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/next.hpp>
+#include <boost/math/special_functions/owens_t.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
