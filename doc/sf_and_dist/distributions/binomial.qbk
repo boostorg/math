@@ -394,7 +394,7 @@ There are also various special cases: refer to the code for details. ]]
 * [@http://en.wikipedia.org/wiki/Beta_distribution Wikipedia binomial distribution]. 
 * [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366i.htm  NIST Explorary Data Analysis]. 
 
-[endsect][/section:binomial_dist Binomial]
+[endsect] [/section:binomial_dist Binomial]
 
 [/ binomial.qbk
   Copyright 2006 John Maddock and Paul A. Bristow.
