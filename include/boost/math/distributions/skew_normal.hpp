@@ -655,8 +655,8 @@ namespace boost{ namespace math{
       const RealType exk = kurtosis_excess(dist);
 
       x = x + (x*x-static_cast<RealType>(1))*skew/static_cast<RealType>(6)
-	+ x*(x*x-static_cast<RealType>(3))*exk/static_cast<RealType>(24)
-	- x*(static_cast<RealType>(2)*x*x-static_cast<RealType>(5))*skew*skew/static_cast<RealType>(36);
+  + x*(x*x-static_cast<RealType>(3))*exk/static_cast<RealType>(24)
+  - x*(static_cast<RealType>(2)*x*x-static_cast<RealType>(5))*skew*skew/static_cast<RealType>(36);
     } // if(shape != 0)
 
     result = standard_deviation(dist)*x+mean(dist);
