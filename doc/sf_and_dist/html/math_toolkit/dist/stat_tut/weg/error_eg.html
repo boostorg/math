@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Error Handling Example</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../weg.html" title="Worked Examples">
 <link rel="prev" href="nccs_eg/nccs_power_eg.html" title="Tables of the power function of the chi2 test.">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="nccs_eg/nccs_power_eg.html"><img src="../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../weg.html"><img src="../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="find_eg.html"><img src="../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section math_toolkit_dist_stat_tut_weg_error_eg">
+<div class="section math_toolkit_dist_stat_tut_weg_error_eg" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.dist.stat_tut.weg.error_eg"></a><a class="link" href="error_eg.html" title="Error Handling Example">Error Handling
           Example</a>
@@ -80,7 +80,9 @@
           </p>
 <p>
 </p>
-<pre class="programlisting"><span class="comment">// Boost</span>
+<pre class="programlisting">   <span class="preprocessor">#define</span> <span class="identifier">BOOST_MATH_DOMAIN_ERROR_POLICY</span> <span class="identifier">ignore_error</span>
+
+<span class="comment">// Boost</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">students_t</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
    <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">students_t</span><span class="special">;</span>  <span class="comment">// Probability of students_t(df, t).</span>
 
@@ -93,8 +95,7 @@
    <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exception</span><span class="special">;</span>
 
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">cstddef</span><span class="special">&gt;</span>
-   <span class="comment">// using ::errno</span>
-</pre>
+   <span class="comment">// using ::errno</span></pre>
 <p>
           </p>
 <p>
@@ -136,8 +137,7 @@
          <span class="string">"\n"</span><span class="string">"Message from thrown exception was:\n   "</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">what</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
    <span class="special">}</span>
    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
-<span class="special">}</span> <span class="comment">// int main()</span>
-</pre>
+<span class="special">}</span> <span class="comment">// int main()</span></pre>
 <p>
           </p>
 <p>

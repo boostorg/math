@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Design Rationale</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../fp_facets.html" title="Facets for Floating-Point Infinities and NaNs">
 <link rel="prev" href="portability.html" title="Portability">
@@ -22,12 +22,12 @@
 <div class="spirit-nav">
 <a accesskey="p" href="portability.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../fp_facets.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../next_float.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section math_toolkit_utils_fp_facets_rationale">
+<div class="section math_toolkit_utils_fp_facets_rationale" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.utils.fp_facets.rationale"></a><a class="link" href="rationale.html" title="Design Rationale">Design Rationale</a>
 </h4></div></div></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
               The flags are implemented as a const data member of the facet. Facets
               are reference counted, and locales can share facets. Therefore changing
               the flags of a facet would have effects that are hard to predict. An
@@ -38,7 +38,7 @@
               file would have to be added to the library. It was judged be more desirable
               to have a headers only library, than to have mutable flags and manipulators.
             </li>
-<li class="listitem">
+<li>
               The facet <code class="computeroutput"><span class="identifier">nonfinite_num_put</span></code>
               throws an exception when the <code class="computeroutput"><span class="identifier">trap_infinity</span></code>
               or <code class="computeroutput"><span class="identifier">trap_nan</span></code> flag is

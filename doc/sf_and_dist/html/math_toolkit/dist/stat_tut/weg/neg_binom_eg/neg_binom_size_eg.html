@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Estimating Sample Sizes for the Negative Binomial.</title>
 <link rel="stylesheet" href="../../../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../neg_binom_eg.html" title="Negative Binomial Distribution Examples">
 <link rel="prev" href="neg_binom_conf.html" title="Calculating Confidence Limits on the Frequency of Occurrence for the Negative Binomial Distribution">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="neg_binom_conf.html"><img src="../../../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../neg_binom_eg.html"><img src="../../../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../../index.html"><img src="../../../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="negative_binomial_example1.html"><img src="../../../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section math_toolkit_dist_stat_tut_weg_neg_binom_eg_neg_binom_size_eg">
+<div class="section math_toolkit_dist_stat_tut_weg_neg_binom_eg_neg_binom_size_eg" lang="en">
 <div class="titlepage"><div><div><h6 class="title">
 <a name="math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_size_eg"></a><a class="link" href="neg_binom_size_eg.html" title="Estimating Sample Sizes for the Negative Binomial.">Estimating
             Sample Sizes for the Negative Binomial.</a>
@@ -48,8 +48,7 @@
             </p>
 <p>
 </p>
-<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">failures</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">);</span>
-</pre>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">failures</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">);</span></pre>
 <p>
             </p>
 <p>
@@ -59,8 +58,7 @@
             </p>
 <p>
 </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span>
-</pre>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">alpha</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.25</span><span class="special">,</span> <span class="number">0.1</span><span class="special">,</span> <span class="number">0.05</span><span class="special">,</span> <span class="number">0.01</span><span class="special">,</span> <span class="number">0.001</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">,</span> <span class="number">0.00001</span> <span class="special">};</span></pre>
 <p>
             </p>
 <p>
@@ -82,7 +80,8 @@
             </p>
 <p>
 </p>
-<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">failures</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">)</span>
+<pre class="programlisting">
+<span class="keyword">void</span> <span class="identifier">find_number_of_trials</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">failures</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">p</span><span class="special">)</span>
 <span class="special">{</span>
    <span class="comment">// trials = number of trials</span>
    <span class="comment">// failures = number of failures before achieving required success(es).</span>
@@ -108,8 +107,7 @@
       <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="special">}</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-<span class="special">}</span> <span class="comment">// void find_number_of_trials(double failures, double p)</span>
-</pre>
+<span class="special">}</span> <span class="comment">// void find_number_of_trials(double failures, double p)</span></pre>
 <p>
             </p>
 <p>
@@ -129,6 +127,7 @@
 
     <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span> <span class="comment">// int main()</span>
+
 </pre>
 <p>
             </p>

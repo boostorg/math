@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Error Handling</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../main_overview.html" title="Overview">
 <link rel="prev" href="result_type.html" title="Calculation of the Type of the Result">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="result_type.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../main_overview.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="compilers_overview.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section math_toolkit_main_overview_error_handling">
+<div class="section math_toolkit_main_overview_error_handling" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.main_overview.error_handling"></a><a class="link" href="error_handling.html" title="Error Handling">Error Handling</a>
 </h3></div></div></div>
@@ -34,11 +34,11 @@
 <p>
         Handling of errors by this library is split into two orthogonal parts:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
             What kind of error has been raised?
           </li>
-<li class="listitem">
+<li>
             What should be done when the error is raised?
           </li>
 </ul></div>
@@ -766,16 +766,16 @@
         the default behaviours were chosen based on feedback during the formal review
         of this library. It was felt that:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
+<div class="itemizedlist"><ul type="disc">
+<li>
             Genuine errors should be flagged with exceptions rather than following
             C-compatible behaviour and setting <code class="computeroutput"><span class="special">::</span><span class="identifier">errno</span></code>.
           </li>
-<li class="listitem">
+<li>
             Numeric underflow and denormalised results were not considered to be
             fatal errors in most cases, so it was felt that these should be ignored.
           </li>
-<li class="listitem">
+<li>
             If there is more than one error, only the first detected will be reported
             in the throw message.
           </li>
