@@ -8,9 +8,7 @@
 // test_nonfinite_trap.cpp
 
 #ifdef _MSC_VER
-#  pragma warning(disable : 4702) // Unreachable code.
 #  pragma warning(disable : 4127) // Expression is constant.
-
 #endif
 
 #define BOOST_TEST_MAIN
@@ -35,6 +33,11 @@ using boost::math::changesign;
 using boost::math::isnan;
 
 //------------------------------------------------------------------------------
+// Test nonfinite_num_put and nonfinite_num_get facets by checking
+// loopback (output and re-input) of a few values,
+// but using all the built-in char and floating-point types.
+// Only the default output is used but various ostream options are tested seperately below.
+// Finite, infinite and NaN values (positive and negative) are used for the test.
 
 void trap_test_finite();
 void trap_test_inf();
@@ -52,7 +55,7 @@ BOOST_AUTO_TEST_CASE(trap_test)
 template<class CharType, class ValType> void trap_test_finite_impl();
 
 void trap_test_finite()
-{
+{ // Test finite using all the built-in char and floating-point types.
     trap_test_finite_impl<char, float>();
     trap_test_finite_impl<char, double>();
     trap_test_finite_impl<char, long double>();
@@ -105,7 +108,7 @@ template<class CharType, class ValType> void trap_test_put_inf_impl();
 template<class CharType, class ValType> void trap_test_get_inf_impl();
 
 void trap_test_inf()
-{
+{ // Test infinity using all the built-in char and floating-point types.
     trap_test_inf_impl<char, float>();
     trap_test_inf_impl<char, double>();
     trap_test_inf_impl<char, long double>();
@@ -174,7 +177,7 @@ template<class CharType, class ValType> void trap_test_put_nan_impl();
 template<class CharType, class ValType> void trap_test_get_nan_impl();
 
 void trap_test_nan()
-{
+{ // Test NaN using all the built-in char and floating-point types.
     trap_test_nan_impl<char, float>();
     trap_test_nan_impl<char, double>();
     trap_test_nan_impl<char, long double>();
@@ -238,6 +241,9 @@ template<class CharType, class ValType> void trap_test_get_nan_impl()
 
 //------------------------------------------------------------------------------
 
+// Test a selection of stream output options comparing result with expected string.
+// Only uses CharType = char and ValType  = double.
+// Other types have already been tested above.
 
 #define CHECKOUT(manips, expected)\
   {\

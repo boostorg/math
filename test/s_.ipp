@@ -2,6 +2,7 @@
 #define BOOST_MATH_S__HPP
 
 // Copyright (c) 2006 Johan Rade
+// Copyright (c) 2012 Paul A. Bristow
 
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
@@ -10,16 +11,18 @@
 // The macro S_ lets you write
 //
 //     basic_string<CharType> s = S_("foo");
+// and
 //     CharType c = S_('a');
 //
-// provided that CharType is char or wchar_t
-
-#include <string>
+// provided that CharType is either char or wchar_t.
+// Used by tests of output of signed zero and others.
 
 #ifdef _MSC_VER
 #   pragma warning(push)
-#   pragma warning(disable : 4512)
+#   pragma warning(disable : 4512) // conditional expression is constant.
 #endif
+
+#include <string>
 
 //------------------------------------------------------------------------------
 
@@ -61,4 +64,5 @@ inline string_literal_helper make_literal_helper(const char* s, const wchar_t* w
 #   pragma warning(pop)
 #endif
 
-#endif
+#endif // BOOST_MATH_S__HPP
+
