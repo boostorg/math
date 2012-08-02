@@ -127,7 +127,7 @@ T float_next(const T& val, const Policy& pol)
       // would not be a denorm, then shift the input, increment, and shift back.
       // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
       //
-      return ldexp(float_next(ldexp(val, 2 * tools::digits<T>()), pol), -2 * tools::digits<T>());
+      return ldexp(float_next(T(ldexp(val, 2 * tools::digits<T>())), pol), -2 * tools::digits<T>());
    }
 
    if(-0.5f == frexp(val, &expon))
@@ -198,7 +198,7 @@ T float_prior(const T& val, const Policy& pol)
       // would not be a denorm, then shift the input, increment, and shift back.
       // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
       //
-      return ldexp(float_prior(ldexp(val, 2 * tools::digits<T>()), pol), -2 * tools::digits<T>());
+      return ldexp(float_prior(T(ldexp(val, 2 * tools::digits<T>())), pol), -2 * tools::digits<T>());
    }
 
    T remain = frexp(val, &expon);
@@ -323,7 +323,7 @@ T float_distance(const T& a, const T& b, const Policy& pol)
       //
       T a2 = ldexp(a, tools::digits<T>());
       T b2 = ldexp(b, tools::digits<T>());
-      mb = -(std::min)(ldexp(upper, tools::digits<T>()), b2);
+      mb = -(std::min)(T(ldexp(upper, tools::digits<T>())), b2);
       x = a2 + mb;
       z = x - a2;
       y = (a2 - (x - z)) + (mb - z);
