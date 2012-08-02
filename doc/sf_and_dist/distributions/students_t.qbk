@@ -35,7 +35,8 @@
    
 A statistical distribution published by William Gosset in 1908. 
 His employer, Guinness Breweries, required him to publish under a 
-pseudonym, so he chose "Student". Given N independent measurements, let
+pseudonym (possibly to hide that they were using statistics),
+so he chose "Student". Given N independent measurements, let
 
 [equation students_t_dist]
 
@@ -152,18 +153,26 @@ y = 1 - x
 The quantities /x/ and /y/ are both returned by __ibeta_inv
 without the subtraction implied above.]]
 [[quantile from the complement][Using the relation: t = -quantile(q)]]
-[[mean][0]]
-[[variance][v \/ (v - 2)]]
 [[mode][0]]
-[[skewness][0]]
-[[kurtosis][3 * (v - 2) \/ (v - 4)]]
-[[kurtosis excess][6 \/ (df - 4)]]
+[[mean][0]]
+[[variance][if (v > 2) v \/ (v - 2) else NaN]]
+[[skewness][if (v > 3) 0 else NaN ]]
+[[kurtosis][if (v > 4) 3 * (v - 2) \/ (v - 4) else NaN]]
+[[kurtosis excess][if (v > 4) 6 \/ (df - 4) else NaN]]
 ]
 
-[endsect][/section:students_t_dist Students t]
+If the moment index k is less than v, then the moment is undefined.
+Evaluating the moment will throw a 'domain_error' unless ignored by a policy,
+when it will return 'std::numeric_limits<>::quiet_NaN();'
+
+(For simplicity, we have not implemented the return of infinity in some cases
+as suggested by [@http://en.wikipedia.org/wiki/Student%27s_t-distribution Wikipedia Student's t].
+See also [@https://svn.boost.org/trac/boost/ticket/7177].)
+
+[endsect] [/section:students_t_dist Students t]
 
 [/ students_t.qbk
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2012 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
