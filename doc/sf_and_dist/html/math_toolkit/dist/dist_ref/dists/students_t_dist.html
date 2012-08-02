@@ -65,8 +65,9 @@
 </pre>
 <p>
             A statistical distribution published by William Gosset in 1908. His employer,
-            Guinness Breweries, required him to publish under a pseudonym, so he
-            chose "Student". Given N independent measurements, let
+            Guinness Breweries, required him to publish under a pseudonym (possibly
+            to hide that they were using statistics), so he chose "Student".
+            Given N independent measurements, let
           </p>
 <p>
             <span class="inlinemediaobject"><img src="../../../../../equations/students_t_dist.png"></span>
@@ -333,6 +334,18 @@
 <tr>
 <td>
                     <p>
+                      mode
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      0
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
                       mean
                     </p>
                   </td>
@@ -350,19 +363,7 @@
                   </td>
 <td>
                     <p>
-                      v / (v - 2)
-                    </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                    <p>
-                      mode
-                    </p>
-                  </td>
-<td>
-                    <p>
-                      0
+                      if (v &gt; 2) v / (v - 2) else NaN
                     </p>
                   </td>
 </tr>
@@ -374,7 +375,7 @@
                   </td>
 <td>
                     <p>
-                      0
+                      if (v &gt; 3) 0 else NaN
                     </p>
                   </td>
 </tr>
@@ -386,7 +387,7 @@
                   </td>
 <td>
                     <p>
-                      3 * (v - 2) / (v - 4)
+                      if (v &gt; 4) 3 * (v - 2) / (v - 4) else NaN
                     </p>
                   </td>
 </tr>
@@ -398,12 +399,22 @@
                   </td>
 <td>
                     <p>
-                      6 / (df - 4)
+                      if (v &gt; 4) 6 / (df - 4) else NaN
                     </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
+<p>
+            If the moment index k is less than v, then the moment is undefined. Evaluating
+            the moment will throw a 'domain_error' unless ignored by a policy, when
+            it will return 'std::numeric_limits&lt;&gt;::quiet_NaN();'
+          </p>
+<p>
+            (For simplicity, we have not implemented the return of infinity in some
+            cases as suggested by <a href="http://en.wikipedia.org/wiki/Student%27s_t-distribution" target="_top">Wikipedia
+            Student's t</a>. See also <a href="https://svn.boost.org/trac/boost/ticket/7177" target="_top">https://svn.boost.org/trac/boost/ticket/7177</a>.)
+          </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
