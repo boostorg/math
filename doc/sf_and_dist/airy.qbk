@@ -27,9 +27,14 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   
 [heading Description]
 
-The function __airy_ai calculates the Airy function Ai which is the first solution to the differential equation:
+The function __airy_ai calculates the Airy function Ai which is the first solution
+to the differential equation:
 
 [equation airy]
+
+See Weisstein, Eric W. "Airy Functions." From MathWorld--A Wolfram Web Resource.
+[*http://mathworld.wolfram.com/AiryFunctions.html];
+
 
 [optional_policy]
 
@@ -49,7 +54,7 @@ only the absolute error is low for /x < 0/.
 [heading Testing]
 
 Since this function is implemented in terms of other special functions, there are only a few 
-basic sanity checks, using test values from [@http://mathworld.wolfram.com/AiryFunctions.html Wolfram Airy Functions].
+basic sanity checks, using test values from [@http://functions.wolfram.com/ Wolfram Airy Functions].
 
 [heading Implementation]
 
@@ -101,7 +106,7 @@ only the absolute error is low for /x < 0/.
 [heading Testing]
 
 Since this function is implemented in terms of other special functions, there are only a few 
-basic sanity checks, using test values from [@http:functions.wolfram.com functions.wolfram.com].
+basic sanity checks, using test values from [@http://functions.wolfram.com functions.wolfram.com].
 
 [heading Implementation]
 
@@ -153,7 +158,7 @@ only the absolute error is low for /x < 0/.
 [heading Testing]
 
 Since this function is implemented in terms of other special functions, there are only a few 
-basic sanity checks, using test values from [@http:functions.wolfram.com functions.wolfram.com].
+basic sanity checks, using test values from [@http://functions.wolfram.com functions.wolfram.com].
 
 [heading Implementation]
 
@@ -205,7 +210,7 @@ only the absolute error is low for /x < 0/.
 [heading Testing]
 
 Since this function is implemented in terms of other special functions, there are only a few 
-basic sanity checks, using test values from [@http:functions.wolfram.com functions.wolfram.com].
+basic sanity checks, using test values from [@http://functions.wolfram.com functions.wolfram.com].
 
 [heading Implementation]
 
