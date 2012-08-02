@@ -6,6 +6,9 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed 
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
+[h4 Boost-1.52]
+* Corrected moments for small degrees of freedom [@https://svn.boost.org/trac/boost/ticket/7177 #7177] (reported by Thomas Mang).
+
 [h4 Boost-1.51]
 
 * Added [link math_toolkit.special.airy Airy functions] and [link math_toolkit.special.jacobi Jacobi Elliptic functions].
