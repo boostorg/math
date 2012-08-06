@@ -471,6 +471,29 @@ void test_spots(RealType)
          static_cast<RealType>(1.0))),
          9);
 
+    // Test for large degrees of freedom when should be same as normal.
+
+    std::string type = typeid(RealType).name();
+    if (type != "class boost::math::concepts::real_concept")
+    {
+      RealType limit = 1/ boost::math::tools::epsilon<RealType>();
+      // Default policy to get full accuracy.
+      // std::cout << "Switch over to normal if df > " << limit << std::endl;
+      // float Switch over to normal if df > 8.38861e+006
+      // double Switch over to normal if df > 4.5036e+015
+      // Can't test real_concept - doesn't converge.
+
+      boost::math::normal_distribution<RealType> n(0, 1); // 
+      students_t_distribution<RealType> st(boost::math::tools::max_value<RealType>()); // Well over the switchover point,
+      // PDF
+      BOOST_CHECK_EQUAL(pdf(st, 0), pdf(n, 0.)); // should be exactly equal.
+      students_t_distribution<RealType> st2(limit /5 ); // Just below the switchover point,
+      BOOST_CHECK_CLOSE_FRACTION(pdf(st2, 0), pdf(n, 0.), tolerance); // should be very close to normal.
+      // CDF
+      BOOST_CHECK_EQUAL(cdf(st, 0), cdf(n, 0.)); // should be exactly equal.
+      BOOST_CHECK_CLOSE_FRACTION(cdf(st2, 0), cdf(n, 0.), tolerance); // should be very close to normal.
+    }
+
 
     // Checks added for Trac #7717 report by Thomas Mang.
     RealType inf = std::numeric_limits<RealType>::infinity();
