@@ -14,6 +14,7 @@
 #include <boost/math/special_functions/beta.hpp> // for ibeta(a, b, x).
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
+#include <boost/math/distributions/normal.hpp> 
 
 #include <utility>
 
@@ -53,9 +54,9 @@ public:
 
 private:
    //
-   // Data members:
+   // Data member:
    //
-   RealType m_df;  // degrees of freedom are a real number.
+   RealType m_df;  // degrees of freedom is a real number.
 };
 
 typedef students_t_distribution<double> students_t;
@@ -63,6 +64,7 @@ typedef students_t_distribution<double> students_t;
 template <class RealType, class Policy>
 inline const std::pair<RealType, RealType> range(const students_t_distribution<RealType, Policy>& /*dist*/)
 { // Range of permissible values for random variable x.
+  // No including infinity.
    using boost::math::tools::max_value;
    return std::pair<RealType, RealType>(-max_value<RealType>(), max_value<RealType>());
 }
@@ -76,32 +78,48 @@ inline const std::pair<RealType, RealType> support(const students_t_distribution
 }
 
 template <class RealType, class Policy>
-inline RealType pdf(const students_t_distribution<RealType, Policy>& dist, const RealType& t)
+inline RealType pdf(const students_t_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_FPU_EXCEPTION_GUARD
    BOOST_MATH_STD_USING  // for ADL of std functions
 
    RealType degrees_of_freedom = dist.degrees_of_freedom();
-   // Error check:
+   // common handling Error check is for finite and > 0:
+   // Might conceivably permit df = +infinity too?
    RealType error_result;
    if(false == detail::check_df(
       "boost::math::pdf(const students_t_distribution<%1%>&, %1%)", degrees_of_freedom, &error_result, Policy()))
       return error_result;
    if(false == detail::check_x(
-      "boost::math::pdf(const students_t_distribution<%1%>&, %1%)", t, &error_result, Policy()))
+      "boost::math::pdf(const students_t_distribution<%1%>&, %1%)", x, &error_result, Policy()))
       return error_result;
-   // Might conceivably permit df = +infinity and use normal distribution.
+
    RealType result;
-   RealType basem1 = t * t / degrees_of_freedom;
-   if(basem1 < 0.125)
-   {
-      result = exp(-boost::math::log1p(basem1, Policy()) * (1+degrees_of_freedom) / 2);
+
+   RealType limit = policies::get_epsilon<RealType, Policy>();
+   // Use policies so that if policy requests lower precision, 
+   // then get the normal distribution approximation earlier.
+   limit = static_cast<RealType>(1) / limit; // 1/eps
+   // for 64-bit double 1/eps = 4503599627370496
+   if (degrees_of_freedom > limit)
+   { // Special case for really big degrees_of_freedom > 1 / eps (perhaps infinite?)
+     // - use normal distribution which is much faster and more accurate.
+     normal_distribution<RealType, Policy> n(0, 1); 
+     result = pdf(n, x);
    }
    else
-   {
-      result = pow(1 / (1 + basem1), (degrees_of_freedom + 1) / 2);
+   { // 
+     RealType basem1 = x * x / degrees_of_freedom;
+     if(basem1 < 0.125)
+     {
+        result = exp(-boost::math::log1p(basem1, Policy()) * (1+degrees_of_freedom) / 2);
+     }
+     else
+     {
+        result = pow(1 / (1 + basem1), (degrees_of_freedom + 1) / 2);
+     }
+     result /= sqrt(degrees_of_freedom) * boost::math::beta(degrees_of_freedom / 2, RealType(0.5f), Policy());
    }
-   result /= sqrt(degrees_of_freedom) * boost::math::beta(degrees_of_freedom / 2, RealType(0.5f), Policy());
    return result;
 } // pdf
 
@@ -122,37 +140,54 @@ inline RealType cdf(const students_t_distribution<RealType, Policy>& dist, const
    {
      return 0.5;
    }
-   //
-   // Calculate probability of Student's t using the incomplete beta function.
-   // probability = ibeta(degrees_of_freedom / 2, 1/2, degrees_of_freedom / (degrees_of_freedom + t*t))
-   //
-   // However when t is small compared to the degrees of freedom, that formula
-   // suffers from rounding error, use the identity formula to work around
-   // the problem:
-   //
-   // I[x](a,b) = 1 - I[1-x](b,a)
-   //
-   // and:
-   //
-   //     x = df / (df + t^2)
-   //
-   // so:
-   //
-   // 1 - x = t^2 / (df + t^2)
-   //
-   RealType t2 = t * t;
-   RealType probability;
-   if(degrees_of_freedom > 2 * t2)
-   {
-      RealType z = t2 / (degrees_of_freedom + t2);
-      probability = ibetac(static_cast<RealType>(0.5), degrees_of_freedom / 2, z, Policy()) / 2;
+
+   RealType limit = policies::get_epsilon<RealType, Policy>();
+   // Use policies so that if policy requests lower precision, 
+   // then get the normal distribution approximation earlier.
+   limit = static_cast<RealType>(1) / limit; // 1/eps
+   // for 64-bit double 1/eps = 4503599627370496
+   if (degrees_of_freedom > limit)
+   { // Special case for really big degrees_of_freedom > 1 / eps (perhaps infinite?)
+     // - use normal distribution which is much faster and more accurate.
+     normal_distribution<RealType, Policy> n(0, 1); 
+     RealType result = cdf(n, t);
+     return result;
    }
    else
-   {
-      RealType z = degrees_of_freedom / (degrees_of_freedom + t2);
-      probability = ibeta(degrees_of_freedom / 2, static_cast<RealType>(0.5), z, Policy()) / 2;
-   }
-   return (t > 0 ? 1   - probability : probability);
+   { // normal case.
+
+     //
+     // Calculate probability of Student's t using the incomplete beta function.
+     // probability = ibeta(degrees_of_freedom / 2, 1/2, degrees_of_freedom / (degrees_of_freedom + t*t))
+     //
+     // However when t is small compared to the degrees of freedom, that formula
+     // suffers from rounding error, use the identity formula to work around
+     // the problem:
+     //
+     // I[x](a,b) = 1 - I[1-x](b,a)
+     //
+     // and:
+     //
+     //     x = df / (df + t^2)
+     //
+     // so:
+     //
+     // 1 - x = t^2 / (df + t^2)
+     //
+     RealType t2 = t * t;
+     RealType probability;
+     if(degrees_of_freedom > 2 * t2)
+     {
+        RealType z = t2 / (degrees_of_freedom + t2);
+        probability = ibetac(static_cast<RealType>(0.5), degrees_of_freedom / 2, z, Policy()) / 2;
+     }
+     else
+     {
+        RealType z = degrees_of_freedom / (degrees_of_freedom + t2);
+        probability = ibeta(degrees_of_freedom / 2, static_cast<RealType>(0.5), z, Policy()) / 2;
+     }
+     return (t > 0 ? 1   - probability : probability);
+  }
 } // cdf
 
 template <class RealType, class Policy>
@@ -182,10 +217,9 @@ inline RealType quantile(const students_t_distribution<RealType, Policy>& dist, 
    if (probability == static_cast<RealType>(0.5))
      return 0;
    //
-   // This next block is disabled in favour of a faster method than
-   // incomplete beta inverse, code retained for future reference:
-   //
 #if 0
+   // This next block is disabled in favour of a faster method than
+   // incomplete beta inverse, but code retained for future reference:
    //
    // Calculate quantile of Student's t using the incomplete beta function inverse:
    //
@@ -326,8 +360,7 @@ inline RealType variance(const students_t_distribution<RealType, Policy>& dist)
   // Revised for https://svn.boost.org/trac/boost/ticket/7177
   RealType df = dist.degrees_of_freedom();
   if (!(boost::math::isfinite)(df) ||  (df <= 2))
-  { // Infinity or NaN
-
+  { // Infinity or NaN.
      policies::raise_domain_error<RealType>(
       "boost::math::variance(students_t_distribution<%1%> const&, %1%)",
       "variance is undefined for degrees of freedom <= 2, but got %1%.",
