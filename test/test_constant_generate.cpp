@@ -32,6 +32,7 @@ int main()
    BOOST_CONSTANTS_GENERATE(root_three);
    BOOST_CONSTANTS_GENERATE(half_root_two);
    BOOST_CONSTANTS_GENERATE(ln_two);
+   BOOST_CONSTANTS_GENERATE(ln_ten);
    BOOST_CONSTANTS_GENERATE(ln_ln_two);
    BOOST_CONSTANTS_GENERATE(root_ln_four);
    BOOST_CONSTANTS_GENERATE(one_div_root_two);
