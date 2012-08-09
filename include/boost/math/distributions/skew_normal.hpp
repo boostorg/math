@@ -1,4 +1,4 @@
-// (C) Benjamin Sobotta 2012
+//  Copyright Benjamin Sobotta 2012
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -645,23 +645,23 @@ namespace boost{ namespace math{
     if(false == detail::check_probability(function, p, &result, Policy()))
       return result;
 
-    // compute initial guess via Cornish-Fisher expansion
+    // Compute initial guess via Cornish-Fisher expansion.
     RealType x = -boost::math::erfc_inv(2 * p, Policy()) * constants::root_two<RealType>();
 
-    // avoid unnecessary computations if there is no skew
+    // Avoid unnecessary computations if there is no skew.
     if(shape != 0)
     {
       const RealType skew = skewness(dist);
       const RealType exk = kurtosis_excess(dist);
 
       x = x + (x*x-static_cast<RealType>(1))*skew/static_cast<RealType>(6)
-  + x*(x*x-static_cast<RealType>(3))*exk/static_cast<RealType>(24)
-  - x*(static_cast<RealType>(2)*x*x-static_cast<RealType>(5))*skew*skew/static_cast<RealType>(36);
+      + x*(x*x-static_cast<RealType>(3))*exk/static_cast<RealType>(24)
+      - x*(static_cast<RealType>(2)*x*x-static_cast<RealType>(5))*skew*skew/static_cast<RealType>(36);
     } // if(shape != 0)
 
     result = standard_deviation(dist)*x+mean(dist);
 
-    // handle special case of non-skew normal distribution
+    // handle special case of non-skew normal distribution.
     if(shape == 0)
       return result;
 
@@ -681,7 +681,7 @@ namespace boost{ namespace math{
 
   template <class RealType, class Policy>
   inline RealType quantile(const complemented2_type<skew_normal_distribution<RealType, Policy>, RealType>& c)
-  {	
+  {
     const RealType scale = c.dist.scale();
     const RealType location = c.dist.location();
     const RealType shape = c.dist.shape();
