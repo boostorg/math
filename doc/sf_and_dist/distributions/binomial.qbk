@@ -58,7 +58,7 @@ The class type `binomial_distribution` represents a
 it is used when there are exactly two mutually 
 exclusive outcomes of a trial. These outcomes are labelled 
 "success" and "failure". The
-[@ binomial distribution] is used to obtain 
+__binomial_distrib is used to obtain 
 the probability of observing k successes in N trials, with the 
 probability of success on a single trial denoted by p. The 
 binomial distribution assumes that p is fixed for all trials.
