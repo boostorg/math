@@ -1,4 +1,4 @@
-// (C) Benjamin Sobotta 2012
+// Copyright Benjamin Sobotta 2012
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -69,7 +69,7 @@ int main()
      to install packages into?  (y/n) y
      --- Please select a CRAN mirror for use in this session ---
      Loading Tcl/Tk interface ... done
-     also installing the dependency ‘mnormt’
+     also installing the dependency mnormt
 
      trying URL 'http://mirrors.dotsrc.org/cran/src/contrib/mnormt_1.4-5.tar.gz'
      Content type 'application/x-gzip' length 34049 bytes (33 Kb)

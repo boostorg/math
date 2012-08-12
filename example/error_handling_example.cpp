@@ -51,6 +51,9 @@ is a certain sign that it will /not/ have the desired effect.
 We'll begin our sample program with the needed includes:
 */
 
+
+   #define BOOST_MATH_DOMAIN_ERROR_POLICY ignore_error
+
 // Boost
 #include <boost/math/distributions/students_t.hpp>
    using boost::math::students_t;  // Probability of students_t(df, t).
