@@ -117,6 +117,7 @@ void check_out_of_range(typename Distro::value_type p1)
    if(std::numeric_limits<value_type>::has_infinity)
    {
       BOOST_CHECK_THROW(pdf(Distro(std::numeric_limits<value_type>::infinity()), range(d).first), std::domain_error);
+ //     BOOST_CHECK_THROW(pdf(Distro(std::numeric_limits<value_type>::infinity()), range(d).second), std::domain_error);
    }
    if(std::numeric_limits<value_type>::has_quiet_NaN)
    {
