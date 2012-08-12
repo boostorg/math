@@ -83,7 +83,7 @@ template <class T, class Policy>
 inline std::complex<T> hankel_imp(int v, T x, const bessel_int_tag&, const Policy& pol, int sign)
 {
    BOOST_MATH_STD_USING
-   if((std::abs(v < 200)) && (x > 0))
+   if((std::abs(v) < 200) && (x > 0))
       return std::complex<T>(bessel_jn(v, x, pol), sign * bessel_yn(v, x, pol));
    return hankel_imp(static_cast<T>(v), x, bessel_no_int_tag(), pol, sign);
 }
