@@ -443,8 +443,9 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          try{
             value_type m = mode(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]));
             value_type p = pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m);
-            BOOST_CHECK_EX(pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m * (1 + sqrt(precision) * 100)) <= p, i);
-            BOOST_CHECK_EX(pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m * (1 - sqrt(precision)) * 100) <= p, i);
+            value_type delta = (std::max)(fabs(m * sqrt(precision) * 50), sqrt(precision) * 50);
+            BOOST_CHECK_EX(pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m + delta) <= p, i);
+            BOOST_CHECK_EX(pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m - delta) <= p, i);
          }
          catch(const boost::math::evaluation_error& ) {}
 #if 0
@@ -452,7 +453,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          // Sanity check degrees-of-freedom finder, don't bother at float
          // precision though as there's not enough data in the probability
          // values to get back to the correct degrees of freedom or 
-         // non-cenrality parameter:
+         // non-centrality parameter:
          //
          try{
             if((data[i][3] < 0.99) && (data[i][3] != 0))
@@ -489,6 +490,16 @@ void test_accuracy(T, const char* type_name)
 #include "nct.ipp"
     do_test_nc_t<T>(nct, type_name, "Non Central T");
     quantile_sanity_check<T>(nct, type_name, "Non Central T");
+    if(std::numeric_limits<T>::is_specialized)
+    {
+       //
+       // Don't run these tests for real_concept: they take too long and don't converge
+       // without numeric_limits and lanczos support:
+       //
+#include "nct_small_delta.ipp"
+       do_test_nc_t<T>(nct_small_delta, type_name, "Non Central T (large parameters)");
+       quantile_sanity_check<T>(nct_small_delta, type_name, "Non Central T (large parameters)");
+    }
 }
 
 int test_main(int, char* [])

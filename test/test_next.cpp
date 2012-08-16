@@ -15,7 +15,7 @@
 #endif
 
 #if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
-#if (defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__)
+#if (defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__) || defined(TEST_SSE2)
 #include <float.h>
 #include "xmmintrin.h"
 #define TEST_SSE2
@@ -157,6 +157,14 @@ int test_main(int, char* [])
    test_values(boost::math::concepts::real_concept(0), "real_concept");
 #endif
 #if defined(TEST_SSE2)
+
+#ifdef _MSC_VER
+#  pragma message("Compiling SSE2 test code")
+#endif
+#ifdef __GNUC__
+#  pragma message "Compiling SSE2 test code"
+#endif
+
 #ifdef _WIN32
    // These tests fail pretty badly on Linux x64, especially with Intel-12.1
    _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);

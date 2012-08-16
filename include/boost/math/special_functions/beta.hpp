@@ -1115,7 +1115,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
       
       if(b < 40)
       {
-         if((floor(a) == a) && (floor(b) == b))
+         if((floor(a) == a) && (floor(b) == b) && (a < (std::numeric_limits<int>::max)() - 100))
          {
             // relate to the binomial distribution and use a finite sum:
             T k = a - 1;

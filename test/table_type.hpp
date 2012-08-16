@@ -26,17 +26,4 @@ struct table_type<boost::math::concepts::real_concept>
    typedef long double type;
 };
 
-namespace boost{ namespace multiprecision{
-
-   template <class Backend, bool ExpressionTemplates>
-   class mp_number;
-
-}}
-
-template <class Backend, bool ExpressionTemplates>
-struct table_type<boost::multiprecision::mp_number<Backend, ExpressionTemplates> >
-{
-   typedef const char* type;
-};
-
 #endif
