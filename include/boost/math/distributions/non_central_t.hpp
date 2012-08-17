@@ -27,7 +27,7 @@ namespace boost
       namespace detail{
 
          template <class T, class Policy>
-         T non_central_t2_p(T n, T delta, T x, T y, const Policy& pol, T init_val)
+         T non_central_t2_p(T v, T delta, T x, T y, const Policy& pol, T init_val)
          {
             BOOST_MATH_STD_USING
             //
@@ -55,9 +55,9 @@ namespace boost
             T xterm, beta;
             // Recurrance & starting beta terms:
             beta = x < y
-               ? detail::ibeta_imp(T(k + 1), T(n / 2), x, pol, false, true, &xterm)
-               : detail::ibeta_imp(T(n / 2), T(k + 1), y, pol, true, true, &xterm);
-            xterm *= y / (n / 2 + k);
+               ? detail::ibeta_imp(T(k + 1), T(v / 2), x, pol, false, true, &xterm)
+               : detail::ibeta_imp(T(v / 2), T(k + 1), y, pol, true, true, &xterm);
+            xterm *= y / (v / 2 + k);
             T poisf(pois), betaf(beta), xtermf(xterm);
             T sum = init_val;
             if((xterm == 0) && (beta == 0))
@@ -79,14 +79,14 @@ namespace boost
                last_term = term;
                pois *= (i + 0.5f) / d2;
                beta += xterm;
-               xterm *= (i) / (x * (n / 2 + i - 1));
+               xterm *= (i) / (x * (v / 2 + i - 1));
                ++count;
             }
             last_term = 0;
             for(int i = k + 1; ; ++i)
             {
                poisf *= d2 / (i + 0.5f);
-               xtermf *= (x * (n / 2 + i - 1)) / (i);
+               xtermf *= (x * (v / 2 + i - 1)) / (i);
                betaf -= xtermf;
                T term = poisf * betaf;
                sum += term;
@@ -105,7 +105,7 @@ namespace boost
          }
 
          template <class T, class Policy>
-         T non_central_t2_q(T n, T delta, T x, T y, const Policy& pol, T init_val)
+         T non_central_t2_q(T v, T delta, T x, T y, const Policy& pol, T init_val)
          {
             BOOST_MATH_STD_USING
             //
@@ -151,14 +151,14 @@ namespace boost
             if(k != 0)
             {
                beta = x < y 
-                  ? detail::ibeta_imp(T(k + 1), T(n / 2), x, pol, true, true, &xterm) 
-                  : detail::ibeta_imp(T(n / 2), T(k + 1), y, pol, false, true, &xterm);
+                  ? detail::ibeta_imp(T(k + 1), T(v / 2), x, pol, true, true, &xterm) 
+                  : detail::ibeta_imp(T(v / 2), T(k + 1), y, pol, false, true, &xterm);
 
-               xterm *= y / (n / 2 + k);
+               xterm *= y / (v / 2 + k);
             }
             else
             {
-               beta = pow(y, n / 2);
+               beta = pow(y, v / 2);
                xterm = beta;
             }
             T poisf(pois), betaf(beta), xtermf(xterm);
@@ -174,7 +174,7 @@ namespace boost
             for(int i = k + 1, j = k; ; ++i, --j)
             {
                poisf *= d2 / (i + 0.5f);
-               xtermf *= (x * (n / 2 + i - 1)) / (i);
+               xtermf *= (x * (v / 2 + i - 1)) / (i);
                betaf += xtermf;
                T term = poisf * betaf;
 
@@ -183,7 +183,7 @@ namespace boost
                   term += beta * pois;
                   pois *= (j + 0.5f) / d2;
                   beta -= xterm;
-                  xterm *= (j) / (x * (n / 2 + j - 1));
+                  xterm *= (j) / (x * (v / 2 + j - 1));
                }
 
                sum += term;
@@ -203,7 +203,7 @@ namespace boost
          }
 
          template <class T, class Policy>
-         T non_central_t_cdf(T n, T delta, T t, bool invert, const Policy& pol)
+         T non_central_t_cdf(T v, T delta, T t, bool invert, const Policy& pol)
          {
             BOOST_MATH_STD_USING
             //
@@ -215,14 +215,14 @@ namespace boost
                delta = -delta;
                invert = !invert;
             }
-            if(fabs(delta / (4 * n)) < policies::get_epsilon<T, Policy>())
+            if(fabs(delta / (4 * v)) < policies::get_epsilon<T, Policy>())
             {
                // Approximate with a Student's T centred on delta,
                // the crossover point is based on eq 2.6 from
                // "A Comparison of Approximations To Persentiles of the
                // Noncentral t-Distribution".  H. Sahai and M. M. Ojeda,
                // Revista Investigacion Operacional Vol 21, No 2, 2000.
-               T result = cdf(students_t_distribution<T, Policy>(n), t - delta);
+               T result = cdf(students_t_distribution<T, Policy>(v), t - delta);
                return invert ? 1 - result : result;
             }
             //
@@ -230,11 +230,11 @@ namespace boost
             // variables for the noncentral beta distribution,
             // with y = 1 - x:
             //
-            T x = t * t / (n + t * t);
-            T y = n / (n + t * t);
+            T x = t * t / (v + t * t);
+            T y = v / (v + t * t);
             T d2 = delta * delta;
             T a = 0.5f;
-            T b = n / 2;
+            T b = v / 2;
             T c = a + b + d2 / 2;
             //
             // Crossover point for calculating p or q is the same
@@ -250,7 +250,7 @@ namespace boost
                if(x != 0)
                {
                   result = non_central_beta_p(a, b, d2, x, y, pol);
-                  result = non_central_t2_p(n, delta, x, y, pol, result);
+                  result = non_central_t2_p(v, delta, x, y, pol, result);
                   result /= 2;
                }
                else
@@ -266,7 +266,7 @@ namespace boost
                if(x != 0)
                {
                   result = non_central_beta_q(a, b, d2, x, y, pol);
-                  result = non_central_t2_q(n, delta, x, y, pol, result);
+                  result = non_central_t2_q(v, delta, x, y, pol, result);
                   result /= 2;
                }
                else
