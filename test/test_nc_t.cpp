@@ -99,6 +99,13 @@ void expected_results()
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
+      "[^|]*large[^|]*",                // test data group
+      "[^|]*", 1500, 300);              // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      largest_type,                     // test type(s)
       "[^|]*",                          // test data group
       "[^|]*", 250, 50);                // test function
 
@@ -497,8 +504,11 @@ void test_accuracy(T, const char* type_name)
        // without numeric_limits and lanczos support:
        //
 #include "nct_small_delta.ipp"
-       do_test_nc_t<T>(nct_small_delta, type_name, "Non Central T (large parameters)");
-       quantile_sanity_check<T>(nct_small_delta, type_name, "Non Central T (large parameters)");
+       do_test_nc_t<T>(nct_small_delta, type_name, "Non Central T (small non-centrality)");
+       quantile_sanity_check<T>(nct_small_delta, type_name, "Non Central T (small non-centrality)");
+#include "nct_asym.ipp"
+       do_test_nc_t<T>(nct_asym, type_name, "Non Central T (large parameters)");
+       quantile_sanity_check<T>(nct_asym, type_name, "Non Central T (large parameters)");
     }
 }
 

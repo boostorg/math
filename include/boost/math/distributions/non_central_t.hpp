@@ -68,18 +68,21 @@ namespace boost
             // direction for recursion:
             //
             boost::uintmax_t count = 0;
+            T last_term = 0;
             for(int i = k; i >= 0; --i)
             {
                T term = beta * pois;
                sum += term;
                // Don't terminate on first term in case we "fixed" k above:
-               if((i != k) && fabs(term/sum) < errtol)
+               if((fabs(last_term) > fabs(term)) && fabs(term/sum) < errtol)
                   break;
+               last_term = term;
                pois *= (i + 0.5f) / d2;
                beta += xterm;
                xterm *= (i) / (x * (n / 2 + i - 1));
                ++count;
             }
+            last_term = 0;
             for(int i = k + 1; ; ++i)
             {
                poisf *= d2 / (i + 0.5f);
@@ -87,8 +90,9 @@ namespace boost
                betaf -= xtermf;
                T term = poisf * betaf;
                sum += term;
-               if(fabs(term/sum) < errtol)
+               if((fabs(last_term) > fabs(term)) && (fabs(term/sum) < errtol))
                   break;
+               last_term = term;
                ++count;
                if(count > max_iter)
                {
@@ -166,6 +170,7 @@ namespace boost
             // Fused forward and backwards recursion:
             //
             boost::uintmax_t count = 0;
+            T last_term = 0;
             for(int i = k + 1, j = k; ; ++i, --j)
             {
                poisf *= d2 / (i + 0.5f);
@@ -183,8 +188,9 @@ namespace boost
 
                sum += term;
                // Don't terminate on first term in case we "fixed" the value of k above:
-               if((j != k) && fabs(term/sum) < errtol)
+               if((fabs(last_term) > fabs(term)) && fabs(term/sum) < errtol)
                   break;
+               last_term = term;
                if(count > max_iter)
                {
                   return policies::raise_evaluation_error(
