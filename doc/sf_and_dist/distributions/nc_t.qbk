@@ -159,6 +159,19 @@ The PDF can be computed by a very similar method using:
 
 Where I[sub x][super '](a,b) is the derivative of the incomplete beta function.
 
+For both the PDF and CDF we switch to approximating the distribution by a
+Student's t distribution centred on [delta] when [nu] is very large.
+The crossover location appears to be when [delta]/(4[nu]) < [epsilon],
+this location was estimated by inspection of equation 2.6 in 
+"A Comparison of Approximations To Persentiles of the
+Noncentral t-Distribution".  H. Sahai and M. M. Ojeda,
+Revista Investigacion Operacional Vol 21, No 2, 2000, and confirmed by
+experimental testing.  See also 
+"Some Approximations to the Persentage Points of the Noncentral
+t-Distribution". C. van Eeden. International Statistical Review, 29, 4-31.
+"Continuous Univariate Distributions".  N.L. Johnson, S. Kotz and
+N. Balkrishnan. 1995. John Wiley and Sons New York.
+
 The quantile is calculated via the usual 
 [link math_toolkit.toolkit.internals1.roots2
 derivative-free root-finding techniques],
