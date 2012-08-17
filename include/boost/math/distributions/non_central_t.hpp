@@ -214,6 +214,16 @@ namespace boost
                delta = -delta;
                invert = !invert;
             }
+            if(fabs(delta / (4 * n)) < policies::get_epsilon<T, Policy>())
+            {
+               // Approximate with a Student's T centred on delta,
+               // the crossover point is based on eq 2.6 from
+               // "A Comparison of Approximations To Persentiles of the
+               // Noncentral t-Distribution".  H. Sahai and M. M. Ojeda,
+               // Revista Investigacion Operacional Vol 21, No 2, 2000.
+               T result = cdf(students_t_distribution<T, Policy>(n), t - delta);
+               return invert ? 1 - result : result;
+            }
             //
             // x and y are the corresponding random
             // variables for the noncentral beta distribution,
@@ -436,6 +446,15 @@ namespace boost
                return tgamma_delta_ratio(n / 2 + 0.5f, T(0.5f))
                   * sqrt(n / constants::pi<T>()) 
                   * exp(-delta * delta / 2) / 2;
+            }
+            if(fabs(delta / (4 * n)) < policies::get_epsilon<T, Policy>())
+            {
+               // Approximate with a Student's T centred on delta,
+               // the crossover point is based on eq 2.6 from
+               // "A Comparison of Approximations To Persentiles of the
+               // Noncentral t-Distribution".  H. Sahai and M. M. Ojeda,
+               // Revista Investigacion Operacional Vol 21, No 2, 2000.
+               return pdf(students_t_distribution<T, Policy>(n), t - delta);
             }
             //
             // x and y are the corresponding random
