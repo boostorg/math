@@ -222,6 +222,11 @@ namespace boost
                // "A Comparison of Approximations To Persentiles of the
                // Noncentral t-Distribution".  H. Sahai and M. M. Ojeda,
                // Revista Investigacion Operacional Vol 21, No 2, 2000.
+               // Original sources referenced in the above are:
+               // "Some Approximations to the Persentage Points of the Noncentral
+               // t-Distribution". C. van Eeden. International Statistical Review, 29, 4-31.
+               // "Continuous Univariate Distributions".  N.L. Johnson, S. Kotz and
+               // N. Balkrishnan. 1995. John Wiley and Sons New York.
                T result = cdf(students_t_distribution<T, Policy>(v), t - delta);
                return invert ? 1 - result : result;
             }
@@ -455,6 +460,11 @@ namespace boost
                // "A Comparison of Approximations To Persentiles of the
                // Noncentral t-Distribution".  H. Sahai and M. M. Ojeda,
                // Revista Investigacion Operacional Vol 21, No 2, 2000.
+               // Original sources referenced in the above are:
+               // "Some Approximations to the Persentage Points of the Noncentral
+               // t-Distribution". C. van Eeden. International Statistical Review, 29, 4-31.
+               // "Continuous Univariate Distributions".  N.L. Johnson, S. Kotz and
+               // N. Balkrishnan. 1995. John Wiley and Sons New York.
                return pdf(students_t_distribution<T, Policy>(n), t - delta);
             }
             //
