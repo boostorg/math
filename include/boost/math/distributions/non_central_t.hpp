@@ -205,6 +205,7 @@ namespace boost
          template <class T, class Policy>
          T non_central_t_cdf(T n, T delta, T t, bool invert, const Policy& pol)
          {
+            BOOST_MATH_STD_USING
             //
             // For t < 0 we have to use reflect:
             //
