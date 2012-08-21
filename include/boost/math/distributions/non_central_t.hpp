@@ -206,9 +206,13 @@ namespace boost
          T non_central_t_cdf(T v, T delta, T t, bool invert, const Policy& pol)
          {
             BOOST_MATH_STD_USING
+            if (boost::math::isinf(v))
+            { // Infinite degrees of freedom, so use normal distribution located at delta.
+               normal_distribution<T, Policy> n(delta, 1); 
+               return cdf(n, t);
+            }
             //
-            // For t < 0 we have to use reflect:
-            //
+            // Otherwise, for t < 0 we have to use the reflection formula:
             if(t < 0)
             {
                t = -t;
@@ -219,11 +223,11 @@ namespace boost
             {
                // Approximate with a Student's T centred on delta,
                // the crossover point is based on eq 2.6 from
-               // "A Comparison of Approximations To Persentiles of the
+               // "A Comparison of Approximations To Percentiles of the
                // Noncentral t-Distribution".  H. Sahai and M. M. Ojeda,
                // Revista Investigacion Operacional Vol 21, No 2, 2000.
                // Original sources referenced in the above are:
-               // "Some Approximations to the Persentage Points of the Noncentral
+               // "Some Approximations to the Percentage Points of the Noncentral
                // t-Distribution". C. van Eeden. International Statistical Review, 29, 4-31.
                // "Continuous Univariate Distributions".  N.L. Johnson, S. Kotz and
                // N. Balkrishnan. 1995. John Wiley and Sons New York.
@@ -274,7 +278,7 @@ namespace boost
                   result = non_central_t2_q(v, delta, x, y, pol, result);
                   result /= 2;
                }
-               else
+               else // x == 0
                   result = cdf(complement(boost::math::normal_distribution<T, Policy>(), -delta));
             }
             if(invert)
@@ -283,10 +287,11 @@ namespace boost
          }
 
          template <class T, class Policy>
-         T non_central_t_quantile(T v, T delta, T p, T q, const Policy&)
+         T non_central_t_quantile(const char* function, T v, T delta, T p, T q, const Policy&)
          {
             BOOST_MATH_STD_USING
-            static const char* function = "quantile(non_central_t_distribution<%1%>, %1%)";
+     //       static const char* function = "quantile(non_central_t_distribution<%1%>, %1%)";
+     // now passed as function
             typedef typename policies::evaluation<T, Policy>::type value_type;
             typedef typename policies::normalise<
                Policy, 
@@ -296,7 +301,7 @@ namespace boost
                policies::assert_undefined<> >::type forwarding_policy;
 
                T r;
-               if(!detail::check_df(
+               if(!detail::check_df_gt0_to_inf(
                   function,
                   v, &r, Policy())
                   ||
@@ -313,9 +318,22 @@ namespace boost
                   Policy()))
                      return r;
 
+
             value_type guess = 0;
-            if(v > 3)
-            {
+            if (boost::math::isinf(v))
+            { // Infinite degrees of freedom, so use normal distribution located at delta.
+               normal_distribution<T, Policy> n(delta, 1);
+               if (p < q)
+               {
+                 return quantile(n, p);
+               }
+               else
+               {
+                 return quantile(complement(n, q));
+               }
+             }
+            else if(v > 3)
+            { // Use normal distribution to calculate guess.
                value_type mean = delta * sqrt(v / 2) * tgamma_delta_ratio((v - 1) * 0.5f, T(0.5f));
                value_type var = ((delta * delta + 1) * v) / (v - 2) - mean * mean;
                if(p < q)
@@ -429,9 +447,13 @@ namespace boost
          T non_central_t_pdf(T n, T delta, T t, const Policy& pol)
          {
             BOOST_MATH_STD_USING
+            if (boost::math::isinf(n))
+            { // Infinite degrees of freedom, so use normal distribution located at delta.
+               normal_distribution<T, Policy> n(delta, 1); 
+               return pdf(n, t);
+            }
             //
-            // For t < 0 we have to use the reflection formula:
-            //
+            // Otherwise, for t < 0 we have to use the reflection formula:
             if(t < 0)
             {
                t = -t;
@@ -457,11 +479,11 @@ namespace boost
             {
                // Approximate with a Student's T centred on delta,
                // the crossover point is based on eq 2.6 from
-               // "A Comparison of Approximations To Persentiles of the
+               // "A Comparison of Approximations To Percentiles of the
                // Noncentral t-Distribution".  H. Sahai and M. M. Ojeda,
                // Revista Investigacion Operacional Vol 21, No 2, 2000.
                // Original sources referenced in the above are:
-               // "Some Approximations to the Persentage Points of the Noncentral
+               // "Some Approximations to the Percentage Points of the Noncentral
                // t-Distribution". C. van Eeden. International Statistical Review, 29, 4-31.
                // "Continuous Univariate Distributions".  N.L. Johnson, S. Kotz and
                // N. Balkrishnan. 1995. John Wiley and Sons New York.
@@ -493,6 +515,10 @@ namespace boost
          template <class T, class Policy>
          T mean(T v, T delta, const Policy& pol)
          {
+            if (boost::math::isinf(v))
+            {
+               return delta;
+            }
             BOOST_MATH_STD_USING
             return delta * sqrt(v / 2) * tgamma_delta_ratio((v - 1) * 0.5f, T(0.5f), pol);
          }
@@ -500,6 +526,11 @@ namespace boost
          template <class T, class Policy>
          T variance(T v, T delta, const Policy& pol)
          {
+            if (boost::math::isinf(v))
+            {
+               return 1;
+            }
+
             T result = ((delta * delta + 1) * v) / (v - 2);
             T m = mean(v, delta, pol);
             result -= m * m;
@@ -510,6 +541,10 @@ namespace boost
          T skewness(T v, T delta, const Policy& pol)
          {
             BOOST_MATH_STD_USING
+            if (boost::math::isinf(v))
+            {
+               return 0;
+            }
             T mean = boost::math::detail::mean(v, delta, pol);
             T l2 = delta * delta;
             T var = ((l2 + 1) * v) / (v - 2) - mean * mean;
@@ -524,6 +559,10 @@ namespace boost
          T kurtosis_excess(T v, T delta, const Policy& pol)
          {
             BOOST_MATH_STD_USING
+            if (boost::math::isinf(v))
+            {
+               return 3;
+            }
             T mean = boost::math::detail::mean(v, delta, pol);
             T l2 = delta * delta;
             T var = ((l2 + 1) * v) / (v - 2) - mean * mean;
@@ -625,7 +664,7 @@ namespace boost
                // Can't do a thing if one of p and q is zero:
                //
                return policies::raise_evaluation_error<RealType>(function, 
-                  "Can't find non centrality parameter when the probability is 0 or 1, only possible answer is %1%", 
+                  "Can't find non-centrality parameter when the probability is 0 or 1, only possible answer is %1%", 
                   RealType(std::numeric_limits<RealType>::quiet_NaN()), Policy());
             }
             t_non_centrality_finder<RealType, Policy> f(v, x, p < q ? p : q, p < q ? false : true);
@@ -651,7 +690,7 @@ namespace boost
             return result;
          }
 #endif
-      } // namespace detail
+      } // namespace detail ======================================================================
 
       template <class RealType = double, class Policy = policies::policy<> >
       class non_central_t_distribution
@@ -664,7 +703,7 @@ namespace boost
          { 
             const char* function = "boost::math::non_central_t_distribution<%1%>::non_central_t_distribution(%1%,%1%)";
             RealType r;
-            detail::check_df(
+            detail::check_df_gt0_to_inf(
                function,
                v, &r, Policy());
             detail::check_finite(
@@ -802,7 +841,7 @@ namespace boost
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
-         if(!detail::check_df(
+         if(!detail::check_df_gt0_to_inf(
             function,
             v, &r, Policy())
             ||
@@ -840,7 +879,7 @@ namespace boost
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
-         if(!detail::check_df(
+         if(!detail::check_df_gt0_to_inf(
             function,
             v, &r, Policy())
             ||
@@ -853,7 +892,7 @@ namespace boost
          if(v <= 1)
             return policies::raise_domain_error<RealType>(
                function, 
-               "The non central t distribution has no defined mean for degrees of freedom <= 1: got v=%1%.", v, Policy());
+               "The non-central t distribution has no defined mean for degrees of freedom <= 1: got v=%1%.", v, Policy());
          // return l * sqrt(v / 2) * tgamma_delta_ratio((v - 1) * 0.5f, RealType(0.5f));
          return policies::checked_narrowing_cast<RealType, forwarding_policy>(
             detail::mean(static_cast<value_type>(v), static_cast<value_type>(l), forwarding_policy()), function);
@@ -875,7 +914,7 @@ namespace boost
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
-         if(!detail::check_df(
+         if(!detail::check_df_gt0_to_inf(
             function,
             v, &r, Policy())
             ||
@@ -888,7 +927,7 @@ namespace boost
          if(v <= 2)
             return policies::raise_domain_error<RealType>(
                function, 
-               "The non central t distribution has no defined variance for degrees of freedom <= 2: got v=%1%.", v, Policy());
+               "The non-central t distribution has no defined variance for degrees of freedom <= 2: got v=%1%.", v, Policy());
          return policies::checked_narrowing_cast<RealType, forwarding_policy>(
             detail::variance(static_cast<value_type>(v), static_cast<value_type>(l), forwarding_policy()), function);
       }
@@ -910,7 +949,7 @@ namespace boost
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
-         if(!detail::check_df(
+         if(!detail::check_df_gt0_to_inf(
             function,
             v, &r, Policy())
             ||
@@ -923,7 +962,7 @@ namespace boost
          if(v <= 3)
             return policies::raise_domain_error<RealType>(
                function, 
-               "The non central t distribution has no defined skewness for degrees of freedom <= 3: got v=%1%.", v, Policy());;
+               "The non-central t distribution has no defined skewness for degrees of freedom <= 3: got v=%1%.", v, Policy());;
          return policies::checked_narrowing_cast<RealType, forwarding_policy>(
             detail::skewness(static_cast<value_type>(v), static_cast<value_type>(l), forwarding_policy()), function);
       }
@@ -942,7 +981,7 @@ namespace boost
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
-         if(!detail::check_df(
+         if(!detail::check_df_gt0_to_inf(
             function,
             v, &r, Policy())
             ||
@@ -955,7 +994,7 @@ namespace boost
          if(v <= 4)
             return policies::raise_domain_error<RealType>(
                function, 
-               "The non central t distribution has no defined kurtosis for degrees of freedom <= 4: got v=%1%.", v, Policy());;
+               "The non-central t distribution has no defined kurtosis for degrees of freedom <= 4: got v=%1%.", v, Policy());;
          return policies::checked_narrowing_cast<RealType, forwarding_policy>(
             detail::kurtosis_excess(static_cast<value_type>(v), static_cast<value_type>(l), forwarding_policy()), function);
       } // kurtosis_excess
@@ -969,7 +1008,7 @@ namespace boost
       template <class RealType, class Policy>
       inline RealType pdf(const non_central_t_distribution<RealType, Policy>& dist, const RealType& t)
       { // Probability Density/Mass Function.
-         const char* function = "cdf(non_central_t_distribution<%1%>, %1%)";
+         const char* function = "pdf(non_central_t_distribution<%1%>, %1%)";
          typedef typename policies::evaluation<RealType, Policy>::type value_type;
          typedef typename policies::normalise<
             Policy, 
@@ -981,7 +1020,7 @@ namespace boost
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
-         if(!detail::check_df(
+         if(!detail::check_df_gt0_to_inf(
             function,
             v, &r, Policy())
             ||
@@ -1008,7 +1047,8 @@ namespace boost
       template <class RealType, class Policy>
       RealType cdf(const non_central_t_distribution<RealType, Policy>& dist, const RealType& x)
       { 
-         const char* function = "boost::math::non_central_t_distribution<%1%>::cdf(%1%)";
+         const char* function = "boost::math::cdf(non_central_t_distribution<%1%>&, %1%)";
+//   was const char* function = "boost::math::non_central_t_distribution<%1%>::cdf(%1%)";
          typedef typename policies::evaluation<RealType, Policy>::type value_type;
          typedef typename policies::normalise<
             Policy, 
@@ -1020,7 +1060,7 @@ namespace boost
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
          RealType r;
-         if(!detail::check_df(
+         if(!detail::check_df_gt0_to_inf(
             function,
             v, &r, Policy())
             ||
@@ -1036,10 +1076,17 @@ namespace boost
             &r,
             Policy()))
                return (RealType)r;
+          if (boost::math::isinf(v))
+          { // Infinite degrees of freedom, so use normal distribution located at delta.
+             normal_distribution<RealType, Policy> n(l, 1); 
+             cdf(n, x);
+              //return cdf(normal_distribution<RealType, Policy>(l, 1), x);
+          }
 
          if(l == 0)
+         { // NO non-centrality, so use Student's t instead.
             return cdf(students_t_distribution<RealType, Policy>(v), x);
-
+         }
          return policies::checked_narrowing_cast<RealType, forwarding_policy>(
             detail::non_central_t_cdf(
                static_cast<value_type>(v), 
@@ -1052,7 +1099,8 @@ namespace boost
       template <class RealType, class Policy>
       RealType cdf(const complemented2_type<non_central_t_distribution<RealType, Policy>, RealType>& c)
       { // Complemented Cumulative Distribution Function
-         const char* function = "boost::math::non_central_t_distribution<%1%>::cdf(%1%)";
+  // was       const char* function = "boost::math::non_central_t_distribution<%1%>::cdf(%1%)";
+         const char* function = "boost::math::cdf(const complement(non_central_t_distribution<%1%>&), %1%)";
          typedef typename policies::evaluation<RealType, Policy>::type value_type;
          typedef typename policies::normalise<
             Policy, 
@@ -1064,9 +1112,9 @@ namespace boost
          non_central_t_distribution<RealType, Policy> const& dist = c.dist;
          RealType x = c.param;
          RealType v = dist.degrees_of_freedom();
-         RealType l = dist.non_centrality();
+         RealType l = dist.non_centrality(); // aka delta
          RealType r;
-         if(!detail::check_df(
+         if(!detail::check_df_gt0_to_inf(
             function,
             v, &r, Policy())
             ||
@@ -1083,9 +1131,15 @@ namespace boost
             Policy()))
                return (RealType)r;
 
+         if (boost::math::isinf(v))
+         { // Infinite degrees of freedom, so use normal distribution located at delta.
+             normal_distribution<RealType, Policy> n(l, 1); 
+             return cdf(complement(n, x));
+         }
          if(l == 0)
+         { // zero non-centrality so use Student's t distribution.
             return cdf(complement(students_t_distribution<RealType, Policy>(v), x));
-
+         }
          return policies::checked_narrowing_cast<RealType, forwarding_policy>(
             detail::non_central_t_cdf(
                static_cast<value_type>(v), 
@@ -1098,19 +1152,21 @@ namespace boost
       template <class RealType, class Policy>
       inline RealType quantile(const non_central_t_distribution<RealType, Policy>& dist, const RealType& p)
       { // Quantile (or Percent Point) function.
+         static const char* function = "quantile(const non_central_t_distribution<%1%>, %1%)";
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
-         return detail::non_central_t_quantile(v, l, p, RealType(1-p), Policy());
+         return detail::non_central_t_quantile(function, v, l, p, RealType(1-p), Policy());
       } // quantile
 
       template <class RealType, class Policy>
       inline RealType quantile(const complemented2_type<non_central_t_distribution<RealType, Policy>, RealType>& c)
       { // Quantile (or Percent Point) function.
+         static const char* function = "quantile(const complement(non_central_t_distribution<%1%>, %1%))";
          non_central_t_distribution<RealType, Policy> const& dist = c.dist;
          RealType q = c.param;
          RealType v = dist.degrees_of_freedom();
          RealType l = dist.non_centrality();
-         return detail::non_central_t_quantile(v, l, RealType(1-q), q, Policy());
+         return detail::non_central_t_quantile(function, v, l, RealType(1-q), q, Policy());
       } // quantile complement.
 
    } // namespace math
