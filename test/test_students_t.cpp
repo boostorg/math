@@ -624,6 +624,8 @@ void test_spots(RealType)
 
   typedef students_t_distribution<RealType, my_ignore_policy> ignore_error_students_t;
 
+
+
   // Only test NaN and infinity if type has these features (realconcept returns zero).
   // Integers are always converted to RealType,
   // others requires static cast to RealType from long double.
