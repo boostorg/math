@@ -1,6 +1,6 @@
 [article Math Toolkit
     [quickbook 1.5]
-    [copyright 2006, 2007, 2008, 2009, 2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan Råde, Gautam Sewani, Thijs van den Berg and Benjamin Sobotta]
+    [copyright 2006, 2007, 2008, 2009, 2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan Råde, Gautam Sewani, Thijs van den Berg and Benjamin Sobotta]
     [/purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
@@ -369,8 +369,8 @@ for these distributions.
 ] [/ caution]
 ] [/ template discrete_quantile_warning]
 
-This manual is also available in 
-[@http://sourceforge.net/projects/boost/files/boost-docs/ 
+This manual is also available in
+[@http://sourceforge.net/projects/boost/files/boost-docs/
 printer friendly PDF format],
 and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
@@ -407,7 +407,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [section:dist Statistical Distributions and Functions]
 [include dist_tutorial.qbk]
-[include dist_reference.qbk] [/includes all individual distribution.qbk files] 
+[include dist_reference.qbk] [/includes all individual distribution.qbk files]
 [endsect] [/section:dist Statistical Distributions and Functions]
 
 [section:special Special Functions]
