@@ -27,20 +27,6 @@
 
 namespace boost{ namespace math{
 
-template <class RealType, class Policy>
-inline bool check_df(const char* function, RealType const& df, RealType* result, const Policy& pol)
-{  // df > 0 or +infinity are allowed.
-   // if((df <= 0) || (boost::math::isnan)(df)) // but use signbit to ensure catch -inf and -NaN.
-   if(((boost::math::signbit)(df) != 0) || (boost::math::isnan)(df))
-   { // is bad df <= 0 or NaN or -infinity.
-      *result = policies::raise_domain_error<RealType>(
-         function,
-         "Degrees of freedom argument is %1%, but must be > 0 !", df, pol);
-      return false;
-   }
-   return true;
-} // check_df
-
 template <class RealType = double, class Policy = policies::policy<> >
 class students_t_distribution
 {
@@ -51,7 +37,7 @@ public:
    students_t_distribution(RealType df) : df_(df)
    { // Constructor.
       RealType result;
-      check_df( // Checks that df > 0 or df == inf.
+      detail::check_df_gt0_to_inf( // Checks that df > 0 or df == inf.
          "boost::math::students_t_distribution<%1%>::students_t_distribution", df_, &result, Policy());
    } // students_t_distribution
 
@@ -102,7 +88,7 @@ inline RealType pdf(const students_t_distribution<RealType, Policy>& dist, const
       "boost::math::pdf(const students_t_distribution<%1%>&, %1%)", x, &error_result, Policy()))
       return error_result;
    RealType df = dist.degrees_of_freedom();
-   if(false == check_df( // Check that df > 0 or == +infinity.
+   if(false == detail::check_df_gt0_to_inf( // Check that df > 0 or == +infinity.
       "boost::math::pdf(const students_t_distribution<%1%>&, %1%)", df, &error_result, Policy()))
       return error_result;
 
@@ -150,7 +136,7 @@ inline RealType cdf(const students_t_distribution<RealType, Policy>& dist, const
    RealType df = dist.degrees_of_freedom();
    // Error check:
 
-   if(false == check_df(  // Check that df > 0 or == +infinity.
+   if(false == detail::check_df_gt0_to_inf(  // Check that df > 0 or == +infinity.
       "boost::math::cdf(const students_t_distribution<%1%>&, %1%)", df, &error_result, Policy()))
       return error_result;
 
@@ -224,7 +210,7 @@ inline RealType quantile(const students_t_distribution<RealType, Policy>& dist, 
    RealType df = dist.degrees_of_freedom();
    static const char* function = "boost::math::quantile(const students_t_distribution<%1%>&, %1%)";
    RealType error_result;
-   if(false == (check_df( // Check that df > 0 or == +infinity.
+   if(false == (detail::check_df_gt0_to_inf( // Check that df > 0 or == +infinity.
       function, df, &error_result, Policy())
          && detail::check_probability(function, probability, &error_result, Policy())))
       return error_result;

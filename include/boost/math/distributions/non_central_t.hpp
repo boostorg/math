@@ -520,7 +520,16 @@ namespace boost
                return delta;
             }
             BOOST_MATH_STD_USING
-            return delta * sqrt(v / 2) * tgamma_delta_ratio((v - 1) * 0.5f, T(0.5f), pol);
+            if (v > 1 / boost::math::tools::epsilon<T>() )
+            {
+              normal_distribution<T, Policy> n(delta, 1);
+              return boost::math::mean(n); 
+            }
+            else
+            {
+             return delta * sqrt(v / 2) * tgamma_delta_ratio((v - 1) * 0.5f, T(0.5f), pol);
+            }
+            // Other moments use mean so using normal distribution is propagated.
          }
 
          template <class T, class Policy>
