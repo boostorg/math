@@ -628,9 +628,13 @@ void test_big_df(RealType)
     BOOST_CHECK_CLOSE_FRACTION(quantile(infdf10, 0.5), static_cast<RealType>(10), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(quantile(maxdf10, 0.5), static_cast<RealType>(10), tolerance);
 
+    BOOST_TEST_MESSAGE("non_central_t_distribution<RealType> infdf100(inf, 100);");
     non_central_t_distribution<RealType> infdf100(inf, 100);
+    BOOST_TEST_MESSAGE("non_central_t_distribution<RealType> maxdf100(max_val, 100);");
     non_central_t_distribution<RealType> maxdf100(max_val, 100);
+    BOOST_TEST_MESSAGE("BOOST_CHECK_CLOSE_FRACTION(quantile(infdf100, 0.5), static_cast<RealType>(100), tolerance);");
     BOOST_CHECK_CLOSE_FRACTION(quantile(infdf100, 0.5), static_cast<RealType>(100), tolerance);
+    BOOST_TEST_MESSAGE("BOOST_CHECK_CLOSE_FRACTION(quantile(maxdf100, 0.5), static_cast<RealType>(100), tolerance);");
     BOOST_CHECK_CLOSE_FRACTION(quantile(maxdf100, 0.5), static_cast<RealType>(100), tolerance);
     { // Loop back.
       RealType p = static_cast<RealType>(0.01);
