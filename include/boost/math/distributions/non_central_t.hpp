@@ -320,8 +320,8 @@ namespace boost
 
 
             value_type guess = 0;
-            if (boost::math::isinf(v))
-            { // Infinite degrees of freedom, so use normal distribution located at delta.
+            if ( (boost::math::isinf(v)) || (v > 1 / boost::math::tools::epsilon<T>()) )
+            { // Infinite or very large degrees of freedom, so use normal distribution located at delta.
                normal_distribution<T, Policy> n(delta, 1);
                if (p < q)
                {
@@ -331,7 +331,7 @@ namespace boost
                {
                  return quantile(complement(n, q));
                }
-             }
+            }
             else if(v > 3)
             { // Use normal distribution to calculate guess.
                value_type mean = (v > 1 / policies::get_epsilon<T, Policy>()) ? delta : delta * sqrt(v / 2) * tgamma_delta_ratio((v - 1) * 0.5f, T(0.5f));
