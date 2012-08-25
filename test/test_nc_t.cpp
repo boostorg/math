@@ -91,6 +91,23 @@ void expected_results()
    //
    // Catch all cases come last:
    //
+   if(std::numeric_limits<long double>::digits > 54)
+   {
+      add_expected_result(
+         "[^|]*",                          // compiler
+         "[^|]*",                          // stdlib
+         "[^|]*",                          // platform
+         largest_type,                     // test type(s)
+         "[^|]*large[^|]*",                // test data group
+         "[^|]*", 2000000, 200000);        // test function
+      add_expected_result(
+         "[^|]*",                          // compiler
+         "[^|]*",                          // stdlib
+         "[^|]*",                          // platform
+         "double",                         // test type(s)
+         "[^|]*large[^|]*",                // test data group
+         "[^|]*", 500, 100);               // test function
+   }
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -105,6 +122,13 @@ void expected_results()
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                // test data group
       "[^|]*", 1500, 300);              // test function
+   add_expected_result(
+      "[^|]*",                          // compiler
+      "[^|]*",                          // stdlib
+      "[^|]*",                          // platform
+      largest_type,                     // test type(s)
+      "[^|]*small[^|]*",                // test data group
+      "[^|]*", 400, 100);              // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
