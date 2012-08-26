@@ -522,8 +522,9 @@ namespace boost
             BOOST_MATH_STD_USING
             if (v > 1 / boost::math::tools::epsilon<T>() )
             {
-              normal_distribution<T, Policy> n(delta, 1);
-              return boost::math::mean(n); 
+              //normal_distribution<T, Policy> n(delta, 1);
+              //return boost::math::mean(n); 
+              return delta;
             }
             else
             {
@@ -539,7 +540,10 @@ namespace boost
             {
                return 1;
             }
-
+            if (delta == 0)
+            {  // == Student's t
+              return v / (v - 2);
+            }
             T result = ((delta * delta + 1) * v) / (v - 2);
             T m = mean(v, delta, pol);
             result -= m * m;
@@ -553,6 +557,10 @@ namespace boost
             if (boost::math::isinf(v))
             {
                return 0;
+            }
+            if(delta == 0)
+            { // == Student's t
+              return 0;
             }
             T mean = boost::math::detail::mean(v, delta, pol);
             T l2 = delta * delta;
@@ -571,6 +579,10 @@ namespace boost
             if (boost::math::isinf(v))
             {
                return 3;
+            }
+            if (delta == 0)
+            { // == Student's t
+              return 3;
             }
             T mean = boost::math::detail::mean(v, delta, pol);
             T l2 = delta * delta;
