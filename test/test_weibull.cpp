@@ -1,5 +1,5 @@
-// Copyright John Maddock 2006.
-// Copyright Paul A. Bristow 2007.
+// Copyright John Maddock 2006, 2012.
+// Copyright Paul A. Bristow 2007, 2012.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -8,6 +8,11 @@
 
 // test_weibull.cpp
 
+#ifdef _MSC_VER
+#  pragma warning (disable : 4127) //  conditional expression is constant.
+#endif
+
+
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
@@ -15,6 +20,7 @@
 #include <boost/math/distributions/weibull.hpp>
     using boost::math::weibull_distribution;
 #include <boost/math/tools/test.hpp> 
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -311,23 +317,33 @@ void test_spots(RealType)
    //
    // Special cases:
    //
-   BOOST_CHECK(pdf(dist, 0) == 0);
    BOOST_CHECK(cdf(dist, 0) == 0);
    BOOST_CHECK(cdf(complement(dist, 0)) == 1);
    BOOST_CHECK(quantile(dist, 0) == 0);
    BOOST_CHECK(quantile(complement(dist, 1)) == 0);
 
+   BOOST_CHECK_EQUAL(pdf(weibull_distribution<RealType>(1, 1), 0), 1);
+
    //
    // Error checks:
    //
-   BOOST_CHECK_THROW(weibull_distribution<RealType>(0, -1), std::domain_error);
+   BOOST_CHECK_THROW(weibull_distribution<RealType>(1, -1), std::domain_error);
    BOOST_CHECK_THROW(weibull_distribution<RealType>(-1, 1), std::domain_error);
+   BOOST_CHECK_THROW(weibull_distribution<RealType>(1, 0), std::domain_error);
+   BOOST_CHECK_THROW(weibull_distribution<RealType>(0, 1), std::domain_error);
    BOOST_CHECK_THROW(pdf(dist, -1), std::domain_error);
    BOOST_CHECK_THROW(cdf(dist, -1), std::domain_error);
    BOOST_CHECK_THROW(cdf(complement(dist, -1)), std::domain_error);
    BOOST_CHECK_THROW(quantile(dist, 1), std::overflow_error);
    BOOST_CHECK_THROW(quantile(complement(dist, 0)), std::overflow_error);
+   BOOST_CHECK_THROW(quantile(dist, -1), std::domain_error);
+   BOOST_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
 
+   BOOST_CHECK_EQUAL(pdf(dist, 0), exp(-pow(RealType(0) / RealType(3), RealType(2))) * pow(RealType(0), RealType(1)) * RealType(2) / RealType(3));
+   BOOST_CHECK_EQUAL(pdf(weibull_distribution<RealType>(1, 3), 0), exp(-pow(RealType(0) / RealType(3), RealType(1))) * pow(RealType(0), RealType(0)) * RealType(1) / RealType(3));
+   BOOST_CHECK_THROW(pdf(weibull_distribution<RealType>(0.5, 3), 0), std::overflow_error);
+
+   check_out_of_range<weibull_distribution<RealType> >(1, 1);
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
@@ -361,17 +377,19 @@ int test_main(int, char* [])
 
 Output:
 
-Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\test_weibull.exe"
-Running 1 test case...
-Tolerance for type float is 0.002 %
-Tolerance for type float is 5.96046e-005 %
-Tolerance for type double is 0.002 %
-Tolerance for type double is 1.11022e-013 %
-Tolerance for type long double is 0.002 %
-Tolerance for type long double is 1.11022e-013 %
-Tolerance for type class boost::math::concepts::real_concept is 0.002 %
-Tolerance for type class boost::math::concepts::real_concept is 1.11022e-013 %
-*** No errors detected
+  Description: Autorun "J:\Cpp\MathToolkit\test\Math_test\Debug\test_weibull.exe"
+  Running 1 test case...
+  Tolerance for type float is 0.002 %
+  Tolerance for type float is 5.96046e-005 %
+  Tolerance for type double is 0.002 %
+  Tolerance for type double is 1.11022e-013 %
+  Tolerance for type long double is 0.002 %
+  Tolerance for type long double is 1.11022e-013 %
+  Tolerance for type class boost::math::concepts::real_concept is 0.002 %
+  Tolerance for type class boost::math::concepts::real_concept is 1.11022e-013 %
+  
+  *** No errors detected
+
 
 */
 

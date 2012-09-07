@@ -18,7 +18,7 @@
 
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
 
-typedef boost::math::policies::policy<> test_policy;
+typedef boost::math::policies::policy<boost::math::policies::promote_float<false>, boost::math::policies::promote_double<false> > test_policy;
 
 namespace test{
 
@@ -67,6 +67,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<poisson_distribution<RealType> > >();
    function_requires<DistributionConcept<rayleigh_distribution<RealType> > >();
    function_requires<DistributionConcept<students_t_distribution<RealType> > >();
+   function_requires<DistributionConcept<skew_normal_distribution<RealType> > >();
    function_requires<DistributionConcept<triangular_distribution<RealType> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType> > >();
@@ -97,6 +98,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<pareto_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<poisson_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<rayleigh_distribution<RealType, test_policy> > >();
+   function_requires<DistributionConcept<skew_normal_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<students_t_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<triangular_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType, test_policy> > >();
@@ -212,6 +214,19 @@ void instantiate(RealType)
    boost::math::ellint_rd(v1, v2, v3);
    boost::math::ellint_rf(v1, v2, v3);
    boost::math::ellint_rj(v1, v2, v3, v1);
+   boost::math::jacobi_elliptic(v1, v2, &v1, &v2);
+   boost::math::jacobi_cd(v1, v2);
+   boost::math::jacobi_cn(v1, v2);
+   boost::math::jacobi_cs(v1, v2);
+   boost::math::jacobi_dc(v1, v2);
+   boost::math::jacobi_dn(v1, v2);
+   boost::math::jacobi_ds(v1, v2);
+   boost::math::jacobi_nc(v1, v2);
+   boost::math::jacobi_nd(v1, v2);
+   boost::math::jacobi_ns(v1, v2);
+   boost::math::jacobi_sc(v1, v2);
+   boost::math::jacobi_sd(v1, v2);
+   boost::math::jacobi_sn(v1, v2);
    boost::math::hypot(v1, v2);
    boost::math::sinc_pi(v1);
    boost::math::sinhc_pi(v1);
@@ -242,6 +257,10 @@ void instantiate(RealType)
    boost::math::sph_hankel_2(v1, v2);
    boost::math::sph_hankel_2(i, v2);
 #endif
+   boost::math::airy_ai(v1);
+   boost::math::airy_bi(v1);
+   boost::math::airy_ai_prime(v1);
+   boost::math::airy_bi_prime(v1);
    boost::math::expint(v1);
    boost::math::expint(i);
    boost::math::expint(i, v2);
@@ -341,6 +360,19 @@ void instantiate(RealType)
    boost::math::ellint_rd(v1, v2, v3, pol);
    boost::math::ellint_rf(v1, v2, v3, pol);
    boost::math::ellint_rj(v1, v2, v3, v1, pol);
+   boost::math::jacobi_elliptic(v1, v2, &v1, &v2, pol);
+   boost::math::jacobi_cd(v1, v2, pol);
+   boost::math::jacobi_cn(v1, v2, pol);
+   boost::math::jacobi_cs(v1, v2, pol);
+   boost::math::jacobi_dc(v1, v2, pol);
+   boost::math::jacobi_dn(v1, v2, pol);
+   boost::math::jacobi_ds(v1, v2, pol);
+   boost::math::jacobi_nc(v1, v2, pol);
+   boost::math::jacobi_nd(v1, v2, pol);
+   boost::math::jacobi_ns(v1, v2, pol);
+   boost::math::jacobi_sc(v1, v2, pol);
+   boost::math::jacobi_sd(v1, v2, pol);
+   boost::math::jacobi_sn(v1, v2, pol);
    boost::math::hypot(v1, v2, pol);
    boost::math::sinc_pi(v1, pol);
    boost::math::sinhc_pi(v1, pol);
@@ -371,6 +403,10 @@ void instantiate(RealType)
    boost::math::sph_hankel_2(v1, v2, pol);
    boost::math::sph_hankel_2(i, v2, pol);
 #endif
+   boost::math::airy_ai(v1, pol);
+   boost::math::airy_bi(v1, pol);
+   boost::math::airy_ai_prime(v1, pol);
+   boost::math::airy_bi_prime(v1, pol);
    boost::math::expint(v1, pol);
    boost::math::expint(i, pol);
    boost::math::expint(i, v2, pol);
@@ -481,6 +517,19 @@ void instantiate(RealType)
    test::ellint_rd(v1, v2, v3);
    test::ellint_rf(v1, v2, v3);
    test::ellint_rj(v1, v2, v3, v1);
+   test::jacobi_elliptic(v1, v2, &v1, &v2);
+   test::jacobi_cd(v1, v2);
+   test::jacobi_cn(v1, v2);
+   test::jacobi_cs(v1, v2);
+   test::jacobi_dc(v1, v2);
+   test::jacobi_dn(v1, v2);
+   test::jacobi_ds(v1, v2);
+   test::jacobi_nc(v1, v2);
+   test::jacobi_nd(v1, v2);
+   test::jacobi_ns(v1, v2);
+   test::jacobi_sc(v1, v2);
+   test::jacobi_sd(v1, v2);
+   test::jacobi_sn(v1, v2);
    test::hypot(v1, v2);
    test::sinc_pi(v1);
    test::sinhc_pi(v1);
@@ -511,6 +560,10 @@ void instantiate(RealType)
    test::sph_hankel_2(v1, v2);
    test::sph_hankel_2(i, v2);
 #endif
+   boost::math::airy_ai(i);
+   boost::math::airy_bi(i);
+   boost::math::airy_ai_prime(i);
+   boost::math::airy_bi_prime(i);
    test::expint(v1);
    test::expint(i);
    test::expint(i, v2);
@@ -648,6 +701,18 @@ void instantiate_mixed(RealType)
    boost::math::ellint_rf(fr, dr, lr);
    boost::math::ellint_rj(i, i, s, l);
    boost::math::ellint_rj(i, fr, dr, lr);
+   boost::math::jacobi_cd(i, fr);
+   boost::math::jacobi_cn(i, fr);
+   boost::math::jacobi_cs(i, fr);
+   boost::math::jacobi_dc(i, fr);
+   boost::math::jacobi_dn(i, fr);
+   boost::math::jacobi_ds(i, fr);
+   boost::math::jacobi_nc(i, fr);
+   boost::math::jacobi_nd(i, fr);
+   boost::math::jacobi_ns(i, fr);
+   boost::math::jacobi_sc(i, fr);
+   boost::math::jacobi_sd(i, fr);
+   boost::math::jacobi_sn(i, fr);
    boost::math::hypot(i, s);
    boost::math::hypot(fr, lr);
    boost::math::sinc_pi(i);
@@ -761,6 +826,18 @@ void instantiate_mixed(RealType)
    boost::math::ellint_rf(fr, dr, lr, pol);
    boost::math::ellint_rj(i, i, s, l, pol);
    boost::math::ellint_rj(i, fr, dr, lr, pol);
+   boost::math::jacobi_cd(i, fr, pol);
+   boost::math::jacobi_cn(i, fr, pol);
+   boost::math::jacobi_cs(i, fr, pol);
+   boost::math::jacobi_dc(i, fr, pol);
+   boost::math::jacobi_dn(i, fr, pol);
+   boost::math::jacobi_ds(i, fr, pol);
+   boost::math::jacobi_nc(i, fr, pol);
+   boost::math::jacobi_nd(i, fr, pol);
+   boost::math::jacobi_ns(i, fr, pol);
+   boost::math::jacobi_sc(i, fr, pol);
+   boost::math::jacobi_sd(i, fr, pol);
+   boost::math::jacobi_sn(i, fr, pol);
    boost::math::hypot(i, s, pol);
    boost::math::hypot(fr, lr, pol);
    boost::math::sinc_pi(i, pol);
@@ -898,6 +975,10 @@ void instantiate_mixed(RealType)
    test::sph_bessel(i, 1);
    test::sph_neumann(i, lr);
    test::sph_neumann(i, i);
+   test::airy_ai(i);
+   test::airy_bi(i);
+   test::airy_ai_prime(i);
+   test::airy_bi_prime(i);
    test::owens_t(fr, dr);
    test::owens_t(i, s);
 #endif

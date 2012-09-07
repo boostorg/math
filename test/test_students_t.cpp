@@ -14,6 +14,10 @@
 // Basic sanity test for Student's t probability (quantile) (0. < p < 1).
 // and Student's t probability Quantile (0. < p < 1).
 
+#ifdef _MSC_VER
+#  pragma warning (disable :4127) // conditional expression is constant.
+#endif
+
 #include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
@@ -21,6 +25,7 @@
 #include <boost/math/distributions/students_t.hpp>
     using boost::math::students_t_distribution;
 #include <boost/math/tools/test.hpp> // for real_concept
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -375,9 +380,10 @@ void test_spots(RealType)
        mean(dist)
        , static_cast<RealType>(0), tol2);
     // variance:
-    BOOST_CHECK_CLOSE(
-       variance(dist)
-       , static_cast<RealType>(8.0L / 6.0L), tol2);
+ //   BOOST_CHECK_CLOSE(
+ //      variance(dist)
+ //      , static_cast<RealType>(13.0L / 6.0L), tol2);
+ //// was     , static_cast<RealType>(8.0L / 6.0L), tol2);
     // std deviation:
     BOOST_CHECK_CLOSE(
        standard_deviation(dist)
@@ -465,6 +471,223 @@ void test_spots(RealType)
          static_cast<RealType>(1.0))),
          9);
 
+    // Test for large degrees of freedom when should be same as normal.
+    RealType inf = std::numeric_limits<RealType>::infinity();
+    RealType nan = std::numeric_limits<RealType>::quiet_NaN();
+
+    std::string type = typeid(RealType).name();
+//    if (type != "class boost::math::concepts::real_concept") fails for gcc
+    if (typeid(RealType) != typeid(boost::math::concepts::real_concept))
+    { // Ordinary floats only.
+      RealType limit = 1/ boost::math::tools::epsilon<RealType>();
+      // Default policy to get full accuracy.
+      // std::cout << "Switch over to normal if df > " << limit << std::endl;
+      // float Switch over to normal if df > 8.38861e+006
+      // double Switch over to normal if df > 4.5036e+015
+      // Can't test real_concept - doesn't converge.
+
+      boost::math::normal_distribution<RealType> n(0, 1); // 
+      students_t_distribution<RealType> st(boost::math::tools::max_value<RealType>()); // Well over the switchover point,
+      // PDF
+      BOOST_CHECK_EQUAL(pdf(st, 0), pdf(n, 0.)); // should be exactly equal.
+      students_t_distribution<RealType> st2(limit /5 ); // Just below the switchover point,
+      BOOST_CHECK_CLOSE_FRACTION(pdf(st2, 0), pdf(n, 0.), tolerance); // should be very close to normal.
+      // CDF
+      BOOST_CHECK_EQUAL(cdf(st, 0), cdf(n, 0.)); // should be exactly equal.
+      BOOST_CHECK_CLOSE_FRACTION(cdf(st2, 0), cdf(n, 0.), tolerance); // should be very close to normal.
+
+     // Tests for df = infinity.
+      students_t_distribution<RealType> infdf(inf);
+      BOOST_CHECK_EQUAL(infdf.degrees_of_freedom(), inf);
+      BOOST_CHECK_EQUAL(mean(infdf), 0); // OK.
+      BOOST_CHECK_THROW(students_t_distribution<RealType> minfdf(-inf), std::domain_error);
+      BOOST_CHECK_THROW(students_t_distribution<RealType> minfdf(nan), std::domain_error);
+      BOOST_CHECK_THROW(students_t_distribution<RealType> minfdf(-nan), std::domain_error);
+
+     // BOOST_CHECK_CLOSE_FRACTION(pdf(infdf, 0), static_cast<RealType>(0.3989422804014326779399460599343818684759L), tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(pdf(infdf, 0),boost::math::constants::one_div_root_two_pi<RealType>() , tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(cdf(infdf, 0),boost::math::constants::half<RealType>() , tolerance);
+
+    // Checks added for Trac #7717 report by Thomas Mang.
+
+    BOOST_CHECK_THROW(quantile(dist, -1), std::domain_error);
+    BOOST_CHECK_THROW(quantile(dist, 2), std::domain_error);
+    BOOST_CHECK_THROW(pdf(students_t_distribution<RealType>(0), 0), std::domain_error);
+    BOOST_CHECK_THROW(pdf(students_t_distribution<RealType>(-1), 0), std::domain_error);
+  
+    // Check on df for mean (moment k = 1)
+    BOOST_CHECK_THROW(mean(students_t_distribution<RealType>(nan)), std::domain_error);
+//    BOOST_CHECK_THROW(mean(students_t_distribution<RealType>(inf)), std::domain_error); inf is now OK
+    BOOST_CHECK_THROW(mean(students_t_distribution<RealType>(-1)), std::domain_error);
+    BOOST_CHECK_THROW(mean(students_t_distribution<RealType>(0)), std::domain_error);
+    BOOST_CHECK_THROW(mean(students_t_distribution<RealType>(1)), std::domain_error); // df == k
+    BOOST_CHECK_EQUAL(mean(students_t_distribution<RealType>(2)), 0); // OK.
+    BOOST_CHECK_EQUAL(mean(students_t_distribution<RealType>(inf)), 0); // OK.
+
+
+    // Check on df for variance (moment 2)
+    BOOST_CHECK_THROW(variance(students_t_distribution<RealType>(nan)), std::domain_error);
+//    BOOST_CHECK_THROW(variance(students_t_distribution<RealType>(inf)), std::domain_error); // inf is now OK.
+    BOOST_CHECK_THROW(variance(students_t_distribution<RealType>(-1)), std::domain_error);
+    BOOST_CHECK_THROW(variance(students_t_distribution<RealType>(0)), std::domain_error);
+    BOOST_CHECK_THROW(variance(students_t_distribution<RealType>(1)), std::domain_error);
+    BOOST_CHECK_THROW(variance(students_t_distribution<RealType>(static_cast<RealType>(1.99999L))), std::domain_error);
+    BOOST_CHECK_THROW(variance(students_t_distribution<RealType>(static_cast<RealType>(1.99999L))), std::domain_error);
+    BOOST_CHECK_THROW(variance(students_t_distribution<RealType>(2)), std::domain_error); // df == 
+    BOOST_CHECK_EQUAL(variance(students_t_distribution<RealType>(2.5)), 5); // OK.
+    BOOST_CHECK_EQUAL(variance(students_t_distribution<RealType>(3)), 3); // OK.
+    BOOST_CHECK_EQUAL(variance(students_t_distribution<RealType>(inf)), 1); // OK.
+
+    // Check on df for skewness (moment 3)
+    BOOST_CHECK_THROW(skewness(students_t_distribution<RealType>(nan)), std::domain_error);
+    BOOST_CHECK_THROW(skewness(students_t_distribution<RealType>(-1)), std::domain_error);
+    BOOST_CHECK_THROW(skewness(students_t_distribution<RealType>(0)), std::domain_error);
+    BOOST_CHECK_THROW(skewness(students_t_distribution<RealType>(1)), std::domain_error);
+    BOOST_CHECK_THROW(skewness(students_t_distribution<RealType>(1.5L)), std::domain_error);
+    BOOST_CHECK_THROW(skewness(students_t_distribution<RealType>(2)), std::domain_error); 
+    BOOST_CHECK_THROW(skewness(students_t_distribution<RealType>(3)), std::domain_error); // df == k
+    BOOST_CHECK_EQUAL(skewness(students_t_distribution<RealType>(3.5)), 0); // OK.
+    BOOST_CHECK_EQUAL(skewness(students_t_distribution<RealType>(4)), 0); // OK.
+    BOOST_CHECK_EQUAL(skewness(students_t_distribution<RealType>(inf)), 0); // OK.
+
+    // Check on df for kurtosis_excess (moment 4)
+    BOOST_CHECK_THROW(kurtosis_excess(students_t_distribution<RealType>(nan)), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis_excess(students_t_distribution<RealType>(-1)), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis_excess(students_t_distribution<RealType>(0)), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis_excess(students_t_distribution<RealType>(1)), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis_excess(students_t_distribution<RealType>(1.5L)), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis_excess(students_t_distribution<RealType>(2)), std::domain_error); 
+    BOOST_CHECK_THROW(kurtosis(students_t_distribution<RealType>(static_cast<RealType>(2.1))), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis_excess(students_t_distribution<RealType>(3)), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis_excess(students_t_distribution<RealType>(4)), std::domain_error); // df == k
+    BOOST_CHECK_EQUAL(kurtosis_excess(students_t_distribution<RealType>(5)), 6); // OK.
+    BOOST_CHECK_EQUAL(kurtosis_excess(students_t_distribution<RealType>(inf)), 0); // OK.
+
+    // Check on df for kurtosis (moment 4)
+    BOOST_CHECK_THROW(kurtosis(students_t_distribution<RealType>(nan)), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis(students_t_distribution<RealType>(-1)), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis(students_t_distribution<RealType>(0)), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis(students_t_distribution<RealType>(1)), std::domain_error); 
+    BOOST_CHECK_THROW(kurtosis(students_t_distribution<RealType>(2)), std::domain_error); 
+    BOOST_CHECK_THROW(kurtosis(students_t_distribution<RealType>(static_cast<RealType>(2.0001L))), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis(students_t_distribution<RealType>(3)), std::domain_error);
+    BOOST_CHECK_THROW(kurtosis(students_t_distribution<RealType>(4)), std::domain_error); // df == k
+    BOOST_CHECK_EQUAL(kurtosis(students_t_distribution<RealType>(5)), 9); // OK.
+    BOOST_CHECK_EQUAL(kurtosis(students_t_distribution<RealType>(inf)), 3); // OK.
+
+   }
+
+
+    // Use a new distribution ignore_error_students_t with a custom policy to ignore all errors,
+    // and check returned values are as expected.
+
+    /* 
+     Sandia-darwin-intel-12.0 - math - test_students_t / intel-darwin-12.0
+    ../libs/math/test/test_students_t.cpp(544): error: "domain_error" has already been declared in the current scope
+    using boost::math::policies::domain_error;
+
+../libs/math/test/test_students_t.cpp(552): error: "pole_error" has already been declared in the current scope
+    using boost::math::policies::pole_error;
+
+    Unclear where previous declaration is. 
+    Does not seem to be in student_t.hpp or any included files???
+
+    So to avoid this perceived problem by this compiler,
+    the ignore policy below uses fully specified names.
+    */
+
+    using boost::math::policies::policy;
+  // Types of error whose action can be altered by policies:.
+  //using boost::math::policies::evaluation_error;
+  //using boost::math::policies::domain_error;
+  //using boost::math::policies::overflow_error;
+  //using boost::math::policies::underflow_error;
+  //using boost::math::policies::domain_error;
+  //using boost::math::policies::pole_error;
+
+  //// Actions on error (in enum error_policy_type):
+  //using boost::math::policies::errno_on_error;
+  //using boost::math::policies::ignore_error;
+  //using boost::math::policies::throw_on_error;
+  //using boost::math::policies::denorm_error;
+  //using boost::math::policies::pole_error;
+  //using boost::math::policies::user_error;
+
+  typedef policy<
+    boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+    boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+    boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+    boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+    boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+    boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+              > my_ignore_policy;
+
+  typedef students_t_distribution<RealType, my_ignore_policy> ignore_error_students_t;
+
+
+
+  // Only test NaN and infinity if type has these features (realconcept returns zero).
+  // Integers are always converted to RealType,
+  // others requires static cast to RealType from long double.
+
+  if(std::numeric_limits<RealType>::has_quiet_NaN)
+  {
+  // Mean
+    BOOST_CHECK(boost::math::isnan(mean(ignore_error_students_t(-1))));
+    BOOST_CHECK(boost::math::isnan(mean(ignore_error_students_t(0))));
+    BOOST_CHECK(boost::math::isnan(mean(ignore_error_students_t(1))));
+
+    // Variance
+    BOOST_CHECK(boost::math::isnan(variance(ignore_error_students_t(std::numeric_limits<RealType>::quiet_NaN()))));
+    BOOST_CHECK(boost::math::isnan(variance(ignore_error_students_t(-1))));
+    BOOST_CHECK(boost::math::isnan(variance(ignore_error_students_t(0))));
+    BOOST_CHECK(boost::math::isnan(variance(ignore_error_students_t(1))));
+    BOOST_CHECK(boost::math::isnan(variance(ignore_error_students_t(static_cast<RealType>(1.7L)))));
+    BOOST_CHECK(boost::math::isnan(variance(ignore_error_students_t(2))));
+
+  // Skewness
+    BOOST_CHECK(boost::math::isnan(skewness(ignore_error_students_t(std::numeric_limits<RealType>::quiet_NaN()))));
+    BOOST_CHECK(boost::math::isnan(skewness(ignore_error_students_t(-1))));
+    BOOST_CHECK(boost::math::isnan(skewness(ignore_error_students_t(0))));
+    BOOST_CHECK(boost::math::isnan(skewness(ignore_error_students_t(1))));
+    BOOST_CHECK(boost::math::isnan(skewness(ignore_error_students_t(2))));
+    BOOST_CHECK(boost::math::isnan(skewness(ignore_error_students_t(3))));
+
+  // Kurtosis 
+    BOOST_CHECK(boost::math::isnan(kurtosis(ignore_error_students_t(std::numeric_limits<RealType>::quiet_NaN()))));
+    BOOST_CHECK(boost::math::isnan(kurtosis(ignore_error_students_t(-1))));
+    BOOST_CHECK(boost::math::isnan(kurtosis(ignore_error_students_t(0))));
+    BOOST_CHECK(boost::math::isnan(kurtosis(ignore_error_students_t(1))));
+    BOOST_CHECK(boost::math::isnan(kurtosis(ignore_error_students_t(2))));
+    BOOST_CHECK(boost::math::isnan(kurtosis(ignore_error_students_t(static_cast<RealType>(2.0001L)))));
+    BOOST_CHECK(boost::math::isnan(kurtosis(ignore_error_students_t(3))));
+    BOOST_CHECK(boost::math::isnan(kurtosis(ignore_error_students_t(4))));
+ 
+    // Kurtosis excess
+    BOOST_CHECK(boost::math::isnan(kurtosis_excess(ignore_error_students_t(std::numeric_limits<RealType>::quiet_NaN()))));
+    BOOST_CHECK(boost::math::isnan(kurtosis_excess(ignore_error_students_t(-1))));
+    BOOST_CHECK(boost::math::isnan(kurtosis_excess(ignore_error_students_t(0))));
+    BOOST_CHECK(boost::math::isnan(kurtosis_excess(ignore_error_students_t(1))));
+    BOOST_CHECK(boost::math::isnan(kurtosis_excess(ignore_error_students_t(2))));
+    BOOST_CHECK(boost::math::isnan(kurtosis_excess(ignore_error_students_t(static_cast<RealType>(2.0001L)))));
+    BOOST_CHECK(boost::math::isnan(kurtosis_excess(ignore_error_students_t(3))));
+    BOOST_CHECK(boost::math::isnan(kurtosis_excess(ignore_error_students_t(4))));
+  } // has_quiet_NaN
+
+  BOOST_CHECK(boost::math::isfinite(mean(ignore_error_students_t(1 + std::numeric_limits<RealType>::epsilon()))));
+  BOOST_CHECK(boost::math::isfinite(variance(ignore_error_students_t(2 + 2 * std::numeric_limits<RealType>::epsilon()))));
+  BOOST_CHECK(boost::math::isfinite(variance(ignore_error_students_t(static_cast<RealType>(2.0001L)))));
+  BOOST_CHECK(boost::math::isfinite(variance(ignore_error_students_t(2 + 2 * std::numeric_limits<RealType>::epsilon()))));
+  BOOST_CHECK(boost::math::isfinite(skewness(ignore_error_students_t(3 + 3 * std::numeric_limits<RealType>::epsilon()))));
+  BOOST_CHECK(boost::math::isfinite(kurtosis(ignore_error_students_t(4 + 4 * std::numeric_limits<RealType>::epsilon()))));
+  BOOST_CHECK(boost::math::isfinite(kurtosis(ignore_error_students_t(static_cast<RealType>(4.0001L)))));
+
+  // check_out_of_range<students_t_distribution<RealType> >(1);
+  // Cannot be used because fails "exception std::domain_error is expected" 
+  // because df = +infinity is allowed.
+
+   check_support<students_t_distribution<RealType> >(students_t_distribution<RealType>(1));
+
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])
@@ -472,10 +695,10 @@ int test_main(int, char* [])
   // Check that can construct students_t distribution using the two convenience methods:
   using namespace boost::math;
   students_t myst1(2); // Using typedef
-   students_t_distribution<> myst2(2); // Using default RealType double.
+  students_t_distribution<> myst2(2); // Using default RealType double.
    //students_t_distribution<double> myst3(2); // Using explicit RealType double.
 
-    // Basic sanity-check spot values.
+   // Basic sanity-check spot values.
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
   test_spots(0.0F); // Test float. OK at decdigits = 0 tolerance = 0.0001 %
   test_spots(0.0); // Test double. OK at decdigits 7, tolerance = 1e07 %
@@ -490,6 +713,7 @@ int test_main(int, char* [])
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::cout;
 #endif
+
 
    return 0;
 } // int test_main(int, char* [])

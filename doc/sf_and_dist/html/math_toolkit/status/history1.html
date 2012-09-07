@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>History and What's New</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../status.html" title="Library Status">
 <link rel="prev" href="../status.html" title="Library Status">
@@ -26,11 +26,73 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="math_toolkit.status.history1"></a><a class="link" href="history1.html" title="History and What's New">History and What's New</a>
 </h3></div></div></div>
+<p>
+        Currently open bug reports can be viewed <a href="https://svn.boost.org/trac/boost/query?status=assigned&amp;status=new&amp;status=reopened&amp;component=math&amp;col=id&amp;col=summary&amp;col=status&amp;col=type&amp;col=milestone&amp;col=component&amp;order=priority" target="_top">here</a>.
+      </p>
+<p>
+        All bug reports including closed ones can be viewed <a href="https://svn.boost.org/trac/boost/query?status=assigned&amp;status=closed&amp;status=new&amp;status=reopened&amp;component=math&amp;col=id&amp;col=summary&amp;col=status&amp;col=type&amp;col=milestone&amp;col=component&amp;order=priority" target="_top">here</a>.
+      </p>
 <h5>
 <a name="math_toolkit.status.history1.h0"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_50"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_50">Boost-1.50</a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_52"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_52">Boost-1.52</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Corrected moments for small degrees of freedom <a href="https://svn.boost.org/trac/boost/ticket/7177" target="_top">#7177</a>
+            (reported by Thomas Mang).
+          </li>
+<li class="listitem">
+            Added <a class="link" href="../special/airy.html" title="Airy Functions">Airy functions</a>
+            and <a class="link" href="../special/jacobi.html" title="Jacobi Elliptic Functions">Jacobi Elliptic functions</a>.
+          </li>
+<li class="listitem">
+            Corrected failure to detect bad parameters in many distributions <a href="https://svn.boost.org/trac/boost/ticket/6934" target="_top">#6934</a> (reported
+            by Florian Schoppmann) by adding a function check_out_of_range to test
+            many possible bad parameters. This test revealed several distributions
+            where the checks for bad parameters were ineffective, and these have
+            been rectified.
+          </li>
+<li class="listitem">
+            Fixed issue in Hankel functions that causes incorrect values to be returned
+            for <span class="emphasis"><em>x &lt; 0</em></span> and &#957; odd, see <a href="https://svn.boost.org/trac/boost/ticket/7135" target="_top">#7135</a>.
+          </li>
+<li class="listitem">
+            Fixed issues <a href="https://svn.boost.org/trac/boost/ticket/6517" target="_top">#6517</a>,
+            <a href="https://svn.boost.org/trac/boost/ticket/6362" target="_top">#6362</a>,
+            <a href="https://svn.boost.org/trac/boost/ticket/7053" target="_top">#7053</a>,
+            <a href="https://svn.boost.org/trac/boost/ticket/2693" target="_top">#2693</a>,
+            <a href="https://svn.boost.org/trac/boost/ticket/6937" target="_top">#6937</a>,
+            <a href="https://svn.boost.org/trac/boost/ticket/7099" target="_top">#7099</a>.
+          </li>
+<li class="listitem">
+            Permitted infinite degrees of freedom <a href="https://svn.boost.org/trac/boost/ticket/7259" target="_top">#7259</a>
+            implemented using the normal distribution (requested by Thomas Mang).
+          </li>
+<li class="listitem">
+            Much enhanced accuracy for large degrees of freedom &#957; and/or large non-centrality
+            &#948;
+by switching to use the Students t distribution (or Normal distribution
+            for infinite degrees of freedom) centered at delta, when &#948; / (4 * &#957;) &lt;
+            epsilon for the floating-point type in use. <a href="https://svn.boost.org/trac/boost/ticket/7259" target="_top">#7259</a>.
+            It was found that the incomplete beta was suffering from serious cancellation
+            errors when degrees of freedom was very large. (That has now been fixed
+            in our code, but any code based on Didonato and Morris's original papers
+            (probably every implementation out there actually) will have the same
+            issue).
+          </li>
+</ul></div>
+<h5>
+<a name="math_toolkit.status.history1.h1"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_51"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_51">Boost-1.51</a>
+      </h5>
+<p>
+        See Boost-1.52 - some items were added but not listed in time for the release.
+      </p>
+<h5>
+<a name="math_toolkit.status.history1.h2"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_50"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_50">Boost-1.50</a>
+      </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Promoted math constants to be 1st class citizens, including convenient
             access to the most widely used built-in float, double, long double via
@@ -66,10 +128,10 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h1"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_49"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_49">Boost-1.49</a>
+<a name="math_toolkit.status.history1.h3"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_49"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_49">Boost-1.49</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Deprecated wrongly named <code class="computeroutput"><span class="identifier">twothirds</span></code>
             math constant in favour of <code class="computeroutput"><span class="identifier">two_thirds</span></code>
@@ -86,7 +148,7 @@
 <p>
         Fixed issues:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Corrected CDF complement for Laplace distribution (issue <a href="https://svn.boost.org/trac/boost/ticket/6151" target="_top">#6151</a>).
           </li>
@@ -110,10 +172,10 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h2"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_48"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_48">Boost-1.48</a>
+<a name="math_toolkit.status.history1.h4"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_48"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_48">Boost-1.48</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Added new series evaluation methods to the cyclic Bessel I, J, K and
             Y functions. Also taken great care to avoid spurious over and underflow
@@ -161,10 +223,10 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h3"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_47"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_47">Boost-1.47</a>
+<a name="math_toolkit.status.history1.h5"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_47"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_47">Boost-1.47</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Added changesign function to sign.hpp to facilitate addition of nonfinite
             facets.
@@ -178,18 +240,18 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h4"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_46_1"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_46_1">Boost-1.46.1</a>
+<a name="math_toolkit.status.history1.h6"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_46_1"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_46_1">Boost-1.46.1</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
             Fixed issues <a href="https://svn.boost.org/trac/boost/ticket/5095" target="_top">#5095</a>,
             <a href="https://svn.boost.org/trac/boost/ticket/5095" target="_top">#5113</a>.
           </li></ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h5"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_46_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_46_0">Boost-1.46.0</a>
+<a name="math_toolkit.status.history1.h7"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_46_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_46_0">Boost-1.46.0</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Added Wald, Inverse Gaussian and geometric distributions.
           </li>
@@ -201,10 +263,10 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h6"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_45_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_45_0">Boost-1.45.0</a>
+<a name="math_toolkit.status.history1.h8"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_45_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_45_0">Boost-1.45.0</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Added warnings about potential ambiguity with std random library in distribution
             and function names.
@@ -218,10 +280,10 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h7"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_44_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_44_0">Boost-1.44.0</a>
+<a name="math_toolkit.status.history1.h9"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_44_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_44_0">Boost-1.44.0</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Fixed incorrect range and support for Rayleigh distribution.
           </li>
@@ -232,18 +294,18 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h8"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_41_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_41_0">Boost-1.41.0</a>
+<a name="math_toolkit.status.history1.h10"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_41_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_41_0">Boost-1.41.0</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
             Significantly improved performance for the incomplete gamma function
             and its inverse.
           </li></ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h9"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_40_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_40_0">Boost-1.40.0</a>
+<a name="math_toolkit.status.history1.h11"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_40_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_40_0">Boost-1.40.0</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Added support for MPFR as a bignum type.
           </li>
@@ -277,10 +339,10 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h10"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_38_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_38_0">Boost-1.38.0</a>
+<a name="math_toolkit.status.history1.h12"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_38_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_38_0">Boost-1.38.0</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Added Johan R&#229;de's optimised floating point classification routines.
           </li>
@@ -289,17 +351,17 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h11"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_37_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_37_0">Boost-1.37.0</a>
+<a name="math_toolkit.status.history1.h13"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_37_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_37_0">Boost-1.37.0</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
             Improved accuracy and testing of the inverse hypergeometric functions.
           </li></ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h12"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_36_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_36_0">Boost-1.36.0</a>
+<a name="math_toolkit.status.history1.h14"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_36_0"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_36_0">Boost-1.36.0</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Added Noncentral Chi Squared Distribution.
           </li>
@@ -329,11 +391,11 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h13"></a>
-        <span><a name="math_toolkit.status.history1.boost_1_35_0__post_review_first_official_release"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_35_0__post_review_first_official_release">Boost-1.35.0:
+<a name="math_toolkit.status.history1.h15"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.boost_1_35_0__post_review_first_official_release"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.boost_1_35_0__post_review_first_official_release">Boost-1.35.0:
         Post Review First Official Release</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Added Policy based framework that allows fine grained control over function
             behaviour.
@@ -361,11 +423,11 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h14"></a>
-        <span><a name="math_toolkit.status.history1.milestone_4__second_review_candidate__1st_march_2007_"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.milestone_4__second_review_candidate__1st_march_2007_">Milestone
+<a name="math_toolkit.status.history1.h16"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.milestone_4__second_review_candidate__1st_march_2007_"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.milestone_4__second_review_candidate__1st_march_2007_">Milestone
         4: Second Review Candidate (1st March 2007)</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Moved Xiaogang Zhang's Bessel Functions code into the library, and brought
             them into line with the rest of the code.
@@ -375,11 +437,11 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h15"></a>
-        <span><a name="math_toolkit.status.history1.milestone_3__first_review_candidate__31st_dec_2006_"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.milestone_3__first_review_candidate__31st_dec_2006_">Milestone
+<a name="math_toolkit.status.history1.h17"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.milestone_3__first_review_candidate__31st_dec_2006_"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.milestone_3__first_review_candidate__31st_dec_2006_">Milestone
         3: First Review Candidate (31st Dec 2006)</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Implemented the main probability distribution and density functions.
           </li>
@@ -403,11 +465,11 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h16"></a>
-        <span><a name="math_toolkit.status.history1.milestone_2__released_september_10th_2006"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.milestone_2__released_september_10th_2006">Milestone
+<a name="math_toolkit.status.history1.h18"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.milestone_2__released_september_10th_2006"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.milestone_2__released_september_10th_2006">Milestone
         2: Released September 10th 2006</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Implement preview release of the statistical distributions.
           </li>
@@ -439,11 +501,11 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.status.history1.h17"></a>
-        <span><a name="math_toolkit.status.history1.milestone_1__released_march_31st_2006"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.milestone_1__released_march_31st_2006">Milestone
+<a name="math_toolkit.status.history1.h19"></a>
+        <span class="phrase"><a name="math_toolkit.status.history1.milestone_1__released_march_31st_2006"></a></span><a class="link" href="history1.html#math_toolkit.status.history1.milestone_1__released_march_31st_2006">Milestone
         1: Released March 31st 2006</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Implement gamma/beta/erf functions along with their incomplete counterparts.
           </li>
@@ -473,8 +535,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin Sobotta<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang
+      Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin
+      Sobotta<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

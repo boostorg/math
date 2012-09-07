@@ -314,40 +314,73 @@ int test_main(int, char* [])
 /*
 
 Output:
------- Rebuild All started: Project: test_owens_t_sandbox, Configuration: Release Win32 ------
-  test_owens_t.cpp
-  Generating code
-  Finished generating code
-  test_owens_t_sandbox.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\test_owens_t_sandbox.exe
+
+  Description: Autorun "J:\Cpp\MathToolkit\test\Math_test\Debug\test_owens_t.exe"
   Running 1 test case...
-  Platform: Win32
-  Compiler: Microsoft Visual C++ version 10.0
-  STL     : Dinkumware standard library version 520
-  Boost   : 1.49.0
-  Tolerance = 3.57628e-007.
-  Tolerance = 6.66134e-016.
-  Tolerance = 6.66134e-016.
-  Tolerance = 6.66134e-016.
-
-  *** No errors detected
-========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
-
-
------- Build started: Project: test_owens_t_sandbox, Configuration: Debug Win32 ------
-  test_owens_t.cpp
-  test_owens_t_sandbox.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Debug\test_owens_t_sandbox.exe
-  Running 1 test case...
-  Platform: Win32
-  Compiler: Microsoft Visual C++ version 10.0
-  STL     : Dinkumware standard library version 520
-  Boost   : 1.49.0
+  Tests run with Microsoft Visual C++ version 10.0, Dinkumware standard library version 520, Win32
   Tolerance = 3.57628e-006.
   Tolerance = 6.66134e-015.
   Tolerance = 6.66134e-015.
   Tolerance = 6.66134e-015.
-
+  Tolerance = 1.78814e-005.
+  Tolerance = 3.33067e-014.
+  Tolerance = 3.33067e-014.
+  Tolerance = 3.33067e-014.
+  Testing Owens T (medium small values) with type float
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  boost::math::owens_t<float> Max = 0 RMS Mean=0
+  
+  
+  Testing Owens T (large and diverse values) with type float
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  boost::math::owens_t<float> Max = 0 RMS Mean=0
+  
+  
+  Testing Owens T (medium small values) with type double
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  boost::math::owens_t<double> Max = 4.375 RMS Mean=0.9728
+      worst case at row: 81
+      { 4.4206809997558594, 0.1269868016242981, 1.0900281236140834e-006 }
+  
+  
+  Testing Owens T (large and diverse values) with type double
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  boost::math::owens_t<double> Max = 3.781 RMS Mean=0.6206
+      worst case at row: 430
+      { 3.4516773223876953, 0.0010718167759478092, 4.413983645332431e-007 }
+  
+  
+  Testing Owens T (medium small values) with type long double
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  boost::math::owens_t<long double> Max = 4.375 RMS Mean=0.9728
+      worst case at row: 81
+      { 4.4206809997558594, 0.1269868016242981, 1.0900281236140834e-006 }
+  
+  
+  Testing Owens T (large and diverse values) with type long double
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  boost::math::owens_t<long double> Max = 3.781 RMS Mean=0.6206
+      worst case at row: 430
+      { 3.4516773223876953, 0.0010718167759478092, 4.413983645332431e-007 }
+  
+  
+  Testing Owens T (medium small values) with type real_concept
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  boost::math::owens_t<real_concept> Max = 4.375 RMS Mean=1.032
+      worst case at row: 81
+      { 4.4206809997558594, 0.1269868016242981, 1.0900281236140834e-006 }
+  
+  
+  Testing Owens T (large and diverse values) with type real_concept
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  boost::math::owens_t<real_concept> Max = 21.04 RMS Mean=1.102
+      worst case at row: 439
+      { 3.4516773223876953, 0.98384737968444824, 0.00013923002576038691 }
+  
+  
+  
   *** No errors detected
-========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+
 
 */
 

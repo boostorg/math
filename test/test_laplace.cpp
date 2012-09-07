@@ -62,6 +62,7 @@ Test 8: test_extreme_function_arguments()
 #include <boost/test/unit_test.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/distributions/laplace.hpp>
+#include "test_out_of_range.hpp"
 using boost::math::laplace_distribution;
 
 /*
@@ -281,6 +282,10 @@ void test_pdf_cdf_ocatave()
    //   static_cast<RealType>(0.93233235838169L),
       static_cast<RealType>(0.93233235838169365405300025251375779829618422688019L),
    tolerance);
+
+   check_out_of_range<laplace_distribution<RealType> >(0, 1);
+   BOOST_CHECK_THROW(laplace_distribution<RealType>(0, 0), std::domain_error);
+   BOOST_CHECK_THROW(laplace_distribution<RealType>(0, -1), std::domain_error);
 }
 
 template <class RealType>

@@ -70,6 +70,8 @@ run nonfinite_loopback_ok.cpp ;
 run nonfinite_serialization_archives.cpp ../../serialization/build//boost_serialization ;
 run nonfinite_facet_sstream.cpp ;
 
+run constants_eg1.cpp ;
+
 run normal_misc_examples.cpp ;
 run owens_t_example.cpp ;
 run policy_eg_1.cpp ;
@@ -101,6 +103,7 @@ run students_t_example2.cpp ;
 run students_t_example3.cpp ;
 run students_t_single_sample.cpp ;
 run students_t_two_samples.cpp ;
+
 
 
 

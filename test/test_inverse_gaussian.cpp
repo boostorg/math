@@ -25,6 +25,7 @@ using boost::math::inverse_gaussian_distribution;
 using boost::math::inverse_gaussian;
 
 #include <boost/math/tools/test.hpp>
+#include "test_out_of_range.hpp"
 
 #include <iostream>
 using std::cout;
@@ -90,33 +91,12 @@ void test_spots(RealType)
   BOOST_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType> nbad1(0, 0), std::domain_error); // zero scale
   BOOST_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType> nbad1(0, -1), std::domain_error); // negative scale
 
-  // Tests on extreme values of random variate x, if has numeric_limit infinity etc.
-
-  // Infinity is not allowed, so all should throw.
   inverse_gaussian_distribution<RealType> w11;
-  if(std::numeric_limits<RealType>::has_infinity)
-  {
-    BOOST_CHECK_THROW(pdf(w11, +std::numeric_limits<RealType>::infinity()),  std::domain_error); 
-    BOOST_CHECK_THROW(pdf(w11, -std::numeric_limits<RealType>::infinity()),  std::domain_error);
-    BOOST_CHECK_THROW(cdf(w11, +std::numeric_limits<RealType>::infinity()),  std::domain_error);
-    BOOST_CHECK_THROW(cdf(w11, -std::numeric_limits<RealType>::infinity()),  std::domain_error);
-    BOOST_CHECK_THROW(cdf(complement(w11, +std::numeric_limits<RealType>::infinity())),  std::domain_error); // x = + infinity, 
-    BOOST_CHECK_THROW(cdf(complement(w11, -std::numeric_limits<RealType>::infinity())),  std::domain_error); // x = - infinity, 
-    BOOST_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType> nbad1(std::numeric_limits<RealType>::infinity(), static_cast<RealType>(1)), std::domain_error); // +infinite mean
-    BOOST_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType> nbad1(-std::numeric_limits<RealType>::infinity(),  static_cast<RealType>(1)), std::domain_error); // -infinite mean
-    BOOST_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType> nbad1(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error); // infinite scale
-  }
 
-  if (std::numeric_limits<RealType>::has_quiet_NaN)
-  {
-    // No longer allow x to be NaN, so these tests should throw.
-    BOOST_CHECK_THROW(pdf(w11, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
-    BOOST_CHECK_THROW(cdf(w11, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // x = NaN
-    BOOST_CHECK_THROW(cdf(complement(w11, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // x = + infinity
-    BOOST_CHECK_THROW(quantile(w11, +std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // p = + infinity
-    BOOST_CHECK_THROW(quantile(complement(w11, +std::numeric_limits<RealType>::quiet_NaN())), std::domain_error); // p = + infinity
-  }
-    // Check complements.
+  // Error tests:
+  check_out_of_range<inverse_gaussian_distribution<RealType> >(0, 1);
+  
+  // Check complements.
 
     BOOST_CHECK_CLOSE_FRACTION(
      cdf(complement(w11, 1.)), static_cast<RealType>(1) - cdf(w11, 1.), tolerance); // cdf complement

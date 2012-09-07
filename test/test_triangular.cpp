@@ -23,6 +23,7 @@
 using boost::math::triangular_distribution;
 #include <boost/math/tools/test.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include "test_out_of_range.hpp"
 
 #include <iostream>
 using std::cout;
@@ -524,6 +525,7 @@ void test_spots(RealType)
   }
   BOOST_CHECK_THROW(triangular_distribution<RealType>(1, 0), std::domain_error); // lower > upper!
 
+  check_out_of_range<triangular_distribution<RealType> >(-1, 0, 1);
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])

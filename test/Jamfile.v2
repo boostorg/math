@@ -77,6 +77,7 @@ run pow_test.cpp ../../test/build//boost_test_exec_monitor ;
 run log1p_expm1_test.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run powm1_sqrtp1m1_test.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run special_functions_test.cpp ../../test/build//boost_unit_test_framework ;
+run test_airy.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_bernoulli.cpp ../../test/build//boost_test_exec_monitor ;
 run test_constants.cpp ../../test/build//boost_test_exec_monitor ;
 run test_print_info_on_type.cpp ;
@@ -445,6 +446,7 @@ run test_inverse_gamma_distribution.cpp ../../test/build//boost_test_exec_monito
 
 run test_inverse_gaussian.cpp ../../test/build//boost_test_exec_monitor ;
 
+run test_jacobi.cpp pch_light ../../test/build//boost_test_exec_monitor ;
 run test_laplace.cpp ../../test/build//boost_unit_test_framework ;
 run test_inv_hyp.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_laguerre.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
@@ -775,6 +777,12 @@ run  compile_test/sf_sqrt1pm1_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/sf_trunc_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/sf_zeta_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/std_real_concept_check.cpp ;
+run  compile_test/sf_airy_incl_test.cpp compile_test/main.cpp ;
+run  compile_test/sf_hankel_incl_test.cpp compile_test/main.cpp ;
+run  compile_test/sf_jacobi_incl_test.cpp compile_test/main.cpp ;
+run  compile_test/sf_owens_t_incl_test.cpp compile_test/main.cpp ;
+run  compile_test/dist_skew_norm_incl_test.cpp compile_test/main.cpp ;
+run  compile_test/constants_incl_test.cpp compile_test/main.cpp ;
 compile  compile_test/test_traits.cpp ;
 compile  compile_test/tools_config_inc_test.cpp ;
 compile  compile_test/tools_fraction_inc_test.cpp ;
@@ -820,6 +828,9 @@ compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class
 compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] ;
 compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] ;
 compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] ;
+
+run ztest_max_digits10.cpp ;
+run zztest_max_digits10.cpp ;
 
 build-project ../example ;
 

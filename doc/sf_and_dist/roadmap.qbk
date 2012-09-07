@@ -1,5 +1,40 @@
 [template history[]
 
+Currently open bug reports can be viewed
+[@https://svn.boost.org/trac/boost/query?status=assigned&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
+
+All bug reports including closed ones can be viewed
+[@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
+
+[h4 Boost-1.52]
+* Corrected moments for small degrees of freedom [@https://svn.boost.org/trac/boost/ticket/7177 #7177] (reported by Thomas Mang).
+* Added [link math_toolkit.special.airy Airy functions] and [link math_toolkit.special.jacobi Jacobi Elliptic functions].
+* Corrected failure to detect bad parameters in many distributions
+[@https://svn.boost.org/trac/boost/ticket/6934 #6934] (reported by Florian Schoppmann)
+by adding a function check_out_of_range to test many possible bad parameters.
+This test revealed several distributions where the checks for bad parameters were ineffective,
+and these have been rectified.
+* Fixed issue in Hankel functions that causes incorrect values to be returned for ['x < 0] and [nu] odd, see [@https://svn.boost.org/trac/boost/ticket/7135 #7135].
+* Fixed issues [@https://svn.boost.org/trac/boost/ticket/6517 #6517], [@https://svn.boost.org/trac/boost/ticket/6362 #6362],
+[@https://svn.boost.org/trac/boost/ticket/7053 #7053], [@https://svn.boost.org/trac/boost/ticket/2693 #2693],
+[@https://svn.boost.org/trac/boost/ticket/6937 #6937], [@https://svn.boost.org/trac/boost/ticket/7099 #7099].
+
+* Permitted infinite degrees of freedom [@https://svn.boost.org/trac/boost/ticket/7259 #7259]
+implemented using the normal distribution (requested by Thomas Mang).
+* Much enhanced accuracy for large degrees of freedom [nu] and/or large non-centrality [delta]
+by switching to use the Students t distribution
+(or Normal distribution for infinite degrees of freedom)
+ centered at delta,
+when [delta] / (4 * [nu])  < epsilon for the floating-point type in use.
+[@https://svn.boost.org/trac/boost/ticket/7259 #7259].
+It was found that the incomplete beta was suffering from serious cancellation errors
+when degrees of freedom was very large. (That has now been fixed in our code,
+but any code based on Didonato and Morris's original papers
+(probably every implementation out there actually) will have the same issue).
+
+[h4 Boost-1.51]
+See Boost-1.52 - some items were added but not listed in time for the release.
+
 [h4 Boost-1.50]
 
 * Promoted math constants to be 1st class citizens,
@@ -10,7 +45,7 @@ built-in float, double, long double via three namespaces.
 * Corrected issue [@https://svn.boost.org/trac/boost/ticket/6627 #6627 nonfinite_num_put formatting of 0.0 is incorrect]
 based on a patch submitted by K R Walker.
 * Changed constant initialization mechanism so that it is thread safe even for user-defined types, also
-so that user defined types get the full precision of the constant, even when `long double` does not.  
+so that user defined types get the full precision of the constant, even when `long double` does not.
 So for example 128-bit rational approximations will work with UDT's and do the right thing, even though
 `long double` may be only 64 or 80 bits.
 * Fixed issue in `bessel_jy` which causes Y[sub 8.5](4[pi]) to yield a NaN.
@@ -47,7 +82,7 @@ provided by Thomas Mang.
 
 * Enabled long double support on OpenBSD (issue [@https://svn.boost.org/trac/boost/ticket/6014 #6014]).
 
-* Changed nextafter and related functions to behave in the same way as other implementations - so that nextafter(+INF, 0) 
+* Changed nextafter and related functions to behave in the same way as other implementations - so that nextafter(+INF, 0)
 is a finite value (issue [@https://svn.boost.org/trac/boost/ticket/5823 #5832]).
 
 * Changed tuple include configuration to fix issue when using in conjunction with Boost.Tr1 (issue [@https://svn.boost.org/trac/boost/ticket/5934 #5934]).
@@ -76,7 +111,7 @@ examples of use for C99 format infinity and NaN, and documentation.
 [h4 Boost-1.46.0]
 
 * Added Wald, Inverse Gaussian and geometric distributions.
-* Added information about configuration macros. 
+* Added information about configuration macros.
 * Added support for mpreal as a real-numbered type.
 
 [h4 Boost-1.45.0]
@@ -110,7 +145,7 @@ returning garbage values for non-integer degrees of freedom between 2 and 3.
 [h4 Boost-1.38.0]
 
 * Added Johan R'''&#xE5;'''de's optimised floating point classification routines.
-* Fixed code so that it compiles in GCC's -pedantic mode (bug report 
+* Fixed code so that it compiles in GCC's -pedantic mode (bug report
 [@https://svn.boost.org/trac/boost/ticket/1451 #1451]).
 
 [h4 Boost-1.37.0]
@@ -156,7 +191,7 @@ and brought them into line with the rest of the code.
 * Implemented the main probability distribution and density functions.
 * Implemented digamma.
 * Added more factorial functions.
-* Implemented the Hermite, Legendre and Laguerre polynomials plus the 
+* Implemented the Hermite, Legendre and Laguerre polynomials plus the
 spherical harmonic functions from TR1.
 * Moved Xiaogang Zhang's elliptic integral code into the library,
 and brought them into line with the rest of the code.
@@ -192,7 +227,7 @@ SVN Revisions:
 Sandbox and trunk last synchonised at revision: .
 
 ]
-[/ 
+[/
   Copyright 2006 - 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at

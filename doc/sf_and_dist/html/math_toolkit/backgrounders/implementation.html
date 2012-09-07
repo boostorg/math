@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Additional Implementation Notes</title>
 <link rel="stylesheet" href="../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../backgrounders.html" title="Backgrounders">
 <link rel="prev" href="../backgrounders.html" title="Backgrounders">
@@ -34,7 +34,7 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h0"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.implemention_philosophy"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.implemention_philosophy">Implemention
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.implemention_philosophy"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.implemention_philosophy">Implemention
         philosophy</a>
       </h5>
 <p>
@@ -86,7 +86,7 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h1"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values">Accuracy
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.accuracy_and_representation_of_test_values">Accuracy
         and Representation of Test Values</a>
       </h5>
 <p>
@@ -131,13 +131,13 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h2"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.tolerance_of_tests"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.tolerance_of_tests">Tolerance
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.tolerance_of_tests"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.tolerance_of_tests">Tolerance
         of Tests</a>
       </h5>
 <p>
         The tolerances need to be set to the maximum of:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Some epsilon value.
           </li>
@@ -157,7 +157,7 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h3"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.handling_unsuitable_arguments"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.handling_unsuitable_arguments">Handling
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.handling_unsuitable_arguments"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.handling_unsuitable_arguments">Handling
         Unsuitable Arguments</a>
       </h5>
 <p>
@@ -166,7 +166,7 @@
         it is proposed that signalling a domain error is mandatory when the argument
         would give an mathematically undefined result.
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
             Guideline 1
           </li></ul></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -183,7 +183,7 @@
           a domain error whenever evaluated with argument values for which the mathematical
           function is undefined.
         </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
             Guideline 2
           </li></ul></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -225,7 +225,7 @@
 </table></div>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h4"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined">Handling
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.handling_of_functions_that_are_not_mathematically_defined">Handling
         of Functions that are Not Mathematically defined</a>
       </h5>
 <p>
@@ -259,7 +259,7 @@
 </table></div>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h5"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.median_of_distributions"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.median_of_distributions">Median
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.median_of_distributions"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.median_of_distributions">Median
         of distributions</a>
       </h5>
 <p>
@@ -294,7 +294,7 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h6"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity">Handling
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity">Handling
         of Floating-Point Infinity</a>
       </h5>
 <p>
@@ -318,7 +318,22 @@
 <p>
         However in a few cases, for example normal, where we felt it obvious, we
         have permitted argument(s) to be infinity, provided infinity is implemented
-        for the realType on that implementation.
+        for the <code class="computeroutput"><span class="identifier">RealType</span></code> on that
+        implementation, and it is supported and tested by the distribution.
+      </p>
+<p>
+        The range for these distributions is set to infinity if supported by the
+        platform, (by testing <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;::</span><span class="identifier">has_infinity</span></code>)
+        else the maximum value provided for the <code class="computeroutput"><span class="identifier">RealType</span></code>
+        by Boost.Math.
+      </p>
+<p>
+        Testing for has_infinity is obviously important for arbitrary precision types
+        where infinity makes much less sense than for IEEE754 floating-point.
+      </p>
+<p>
+        So far we have not set <code class="computeroutput"><span class="identifier">support</span><span class="special">()</span></code> function (only range) on the grounds that
+        the PDF is uninteresting/zero for infinities.
       </p>
 <p>
         Users who require special handling of infinity (or other specific value)
@@ -338,7 +353,7 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h7"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.scale__shape_and_location"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.scale__shape_and_location">Scale,
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.scale__shape_and_location"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.scale__shape_and_location">Scale,
         Shape and Location</a>
       </h5>
 <p>
@@ -365,10 +380,10 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h8"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions">Notes
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.notes_on_implementation_of_specific_functions__amp__distributions">Notes
         on Implementation of Specific Functions &amp; Distributions</a>
       </h5>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
             Default parameters for the Triangular Distribution. We are uncertain
             about the best default parameters. Some sources suggest that the Standard
             Triangular Distribution has lower = 0, mode = half and upper = 1. However
@@ -377,7 +392,7 @@
           </li></ul></div>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h9"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.rational_approximations_used"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">Rational
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.rational_approximations_used"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.rational_approximations_used">Rational
         Approximations Used</a>
       </h5>
 <p>
@@ -420,7 +435,7 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h10"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.representation_of_mathematical_constants"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.representation_of_mathematical_constants">Representation
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.representation_of_mathematical_constants"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.representation_of_mathematical_constants">Representation
         of Mathematical Constants</a>
       </h5>
 <p>
@@ -481,7 +496,7 @@
 </pre>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h11"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.thread_safety"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.thread_safety">Thread
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.thread_safety"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.thread_safety">Thread
         safety</a>
       </h5>
 <p>
@@ -506,7 +521,7 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h12"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.sources_of_test_data"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.sources_of_test_data">Sources
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.sources_of_test_data"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.sources_of_test_data">Sources
         of Test Data</a>
       </h5>
 <p>
@@ -547,7 +562,75 @@
       </p>
 <h5>
 <a name="math_toolkit.backgrounders.implementation.h13"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.creating_and_managing_the_equations"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.creating_and_managing_the_equations">Creating
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.testing_for_invalid_parameters_to_functions_and_constructors"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.testing_for_invalid_parameters_to_functions_and_constructors">Testing
+        for Invalid Parameters to Functions and Constructors</a>
+      </h5>
+<p>
+        After finding that some 'bad' parameters (like NaN) were not throwing a
+        <code class="computeroutput"><span class="identifier">domain_error</span></code> exception as
+        they should, a function
+      </p>
+<p>
+        <code class="computeroutput"><span class="identifier">check_out_of_range</span></code> (in <code class="computeroutput"><span class="identifier">test_out_of_range</span><span class="special">.</span><span class="identifier">hpp</span></code>) was devised by JM to check (using
+        Boost.Test's BOOST_CHECK_THROW macro) that bad parameters passed to constructors
+        and functions throw <code class="computeroutput"><span class="identifier">domain_error</span></code>
+        exceptions.
+      </p>
+<p>
+        Usage is <code class="computeroutput"><span class="identifier">check_out_of_range</span><span class="special">&lt;</span> <span class="identifier">DistributionType</span>
+        <span class="special">&gt;(</span><span class="identifier">list</span><span class="special">-</span><span class="identifier">of</span><span class="special">-</span><span class="identifier">params</span><span class="special">);</span></code>
+        Where list-of-params is a list of <span class="bold"><strong>valid</strong></span>
+        parameters from which the distribution can be constructed - ie the same number
+        of args are passed to the function, as are passed to the distribution constructor.
+      </p>
+<p>
+        The values of the parameters are not important, but must be <span class="bold"><strong>valid</strong></span>
+        to pass the contructor checks; the default values are suitable, but must
+        be explicitly provided, for example:
+      </p>
+<pre class="programlisting"><span class="identifier">check_out_of_range</span><span class="special">&lt;</span><span class="identifier">extreme_value_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;</span> <span class="special">&gt;(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">);</span>
+</pre>
+<p>
+        Checks made are:
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Infinity or NaN (if available) passed in place of each of the valid params.
+          </li>
+<li class="listitem">
+            Infinity or NaN (if available) as a random variable.
+          </li>
+<li class="listitem">
+            Out-of-range random variable passed to pdf and cdf (ie outside of "range(DistributionType)").
+          </li>
+<li class="listitem">
+            Out-of-range probability passed to quantile function and complement.
+          </li>
+</ul></div>
+<p>
+        but does <span class="bold"><strong>not</strong></span> check finite but out-of-range
+        parameters to the constructor because these are specific to each distribution,
+        for example:
+      </p>
+<pre class="programlisting"><span class="identifier">BOOST_CHECK_THROW</span><span class="special">(</span><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">pareto_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="number">0</span><span class="special">,</span> <span class="number">1</span><span class="special">),</span> <span class="number">0</span><span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">);</span>
+<span class="identifier">BOOST_CHECK_THROW</span><span class="special">(</span><span class="identifier">pdf</span><span class="special">(</span><span class="identifier">pareto_distribution</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(</span><span class="number">1</span><span class="special">,</span> <span class="number">0</span><span class="special">),</span> <span class="number">0</span><span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">domain_error</span><span class="special">);</span>
+</pre>
+<p>
+        checks <code class="computeroutput"><span class="identifier">scale</span></code> and <code class="computeroutput"><span class="identifier">shape</span></code> parameters are both &gt; 0 by checking
+        that <code class="computeroutput"><span class="identifier">domain_error</span></code> exception
+        is thrown if either are == 0.
+      </p>
+<p>
+        (Use of <code class="computeroutput"><span class="identifier">check_out_of_range</span></code>
+        function may mean that some previous tests are now redundant).
+      </p>
+<p>
+        It was also noted that if more than one parameter is bad, then only the first
+        detected will be reported by the error message.
+      </p>
+<h5>
+<a name="math_toolkit.backgrounders.implementation.h14"></a>
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.creating_and_managing_the_equations"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.creating_and_managing_the_equations">Creating
         and Managing the Equations</a>
       </h5>
 <p>
@@ -736,8 +819,8 @@ done</pre>
         HTML: this needs further investigation.
       </p>
 <h5>
-<a name="math_toolkit.backgrounders.implementation.h14"></a>
-        <span><a name="math_toolkit.backgrounders.implementation.producing_graphs"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.producing_graphs">Producing
+<a name="math_toolkit.backgrounders.implementation.h15"></a>
+        <span class="phrase"><a name="math_toolkit.backgrounders.implementation.producing_graphs"></a></span><a class="link" href="implementation.html#math_toolkit.backgrounders.implementation.producing_graphs">Producing
         Graphs</a>
       </h5>
 <p>
@@ -755,8 +838,9 @@ done</pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin Sobotta<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang
+      Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin
+      Sobotta<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

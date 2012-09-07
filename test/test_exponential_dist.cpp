@@ -14,6 +14,7 @@
 
 #include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -250,6 +251,16 @@ void test_spots(RealType T)
        quantile(dist, RealType(2)),
        std::domain_error);
 
+   check_out_of_range<exponential_distribution<RealType> >(2);
+   BOOST_CHECK_THROW(exponential_distribution<RealType>(0), std::domain_error);
+   BOOST_CHECK_THROW(exponential_distribution<RealType>(-1), std::domain_error);
+   if(std::numeric_limits<RealType>::has_infinity)
+   {
+      RealType inf = std::numeric_limits<RealType>::infinity();
+      BOOST_CHECK_EQUAL(pdf(exponential_distribution<RealType>(2), inf), 0);
+      BOOST_CHECK_EQUAL(cdf(exponential_distribution<RealType>(2), inf), 1);
+      BOOST_CHECK_EQUAL(cdf(complement(exponential_distribution<RealType>(2), inf)), 0);
+   }
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])

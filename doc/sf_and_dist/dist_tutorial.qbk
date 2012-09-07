@@ -1,4 +1,5 @@
 [/ def names all end in distrib to avoid clashes with names of functions]
+
 [def __binomial_distrib [link math_toolkit.dist.dist_ref.dists.binomial_dist Binomial Distribution]]
 [def __chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.chi_squared_dist Chi Squared Distribution]]
 [def __normal_distrib [link math_toolkit.dist.dist_ref.dists.normal_dist Normal Distribution]]

@@ -207,7 +207,18 @@ much more work to test, and much less readable.
 
 However in a few cases, for example normal, where we felt it obvious,
 we have permitted argument(s) to be infinity,
-provided infinity is implemented for the realType on that implementation.
+provided infinity is implemented for the `RealType` on that implementation,
+and it is supported and tested by the distribution.
+
+The range for these distributions is set to infinity if supported by the platform,
+(by testing `std::numeric_limits<RealType>::has_infinity`) 
+else the maximum value provided for the `RealType` by Boost.Math.
+
+Testing for has_infinity is obviously important for arbitrary precision types
+where infinity makes much less sense than for IEEE754 floating-point.
+
+So far we have not set `support()` function (only range) 
+on the grounds that the PDF is uninteresting/zero for infinities.
 
 Users who require special handling of infinity (or other specific value) can,
 of course, always intercept this before calling a distribution or function
@@ -393,6 +404,48 @@ It calculates pdf, cdf, survivor, log survivor, hazard, tail areas,
 It is also the only independent source found for the Weibull distribution;
 unfortunately it appears to suffer from very poor accuracy in areas where
 the underlying special function is known to be difficult to implement.
+
+[h4 Testing for Invalid Parameters to Functions and Constructors]
+
+After finding that some 'bad' parameters (like NaN) were not throwing
+a `domain_error` exception as they should, a function
+
+`check_out_of_range` (in `test_out_of_range.hpp`)
+was devised by JM to check
+(using Boost.Test's BOOST_CHECK_THROW macro)
+that bad parameters passed to constructors and functions throw `domain_error` exceptions.
+
+Usage is `check_out_of_range< DistributionType >(list-of-params);`
+Where list-of-params is a list of *valid* parameters from which the distribution can be constructed
+- ie the same number of args are passed to the function,
+as are passed to the distribution constructor. 
+
+The values of the parameters are not important, but must be *valid* to pass the contructor checks;
+the default values are suitable, but must be explicitly provided, for example:
+
+   check_out_of_range<extreme_value_distribution<RealType> >(1, 2);
+
+Checks made are:
+
+* Infinity or NaN (if available) passed in place of each of the valid params.
+* Infinity or NaN (if available) as a random variable.
+* Out-of-range random variable passed to pdf and cdf
+(ie outside of "range(DistributionType)").
+* Out-of-range probability passed to quantile function and complement.
+
+but does *not* check finite but out-of-range parameters to the constructor
+because these are specific to each distribution, for example:
+
+    BOOST_CHECK_THROW(pdf(pareto_distribution<RealType>(0, 1), 0), std::domain_error);
+    BOOST_CHECK_THROW(pdf(pareto_distribution<RealType>(1, 0), 0), std::domain_error);
+
+checks `scale` and `shape` parameters are both > 0
+by checking that `domain_error` exception is thrown if either are == 0.
+
+(Use of `check_out_of_range` function may mean that some previous tests are now redundant).
+
+It was also noted that if more than one parameter is bad,
+then only the first detected will be reported by the error message.
 
 [h4 Creating and Managing the Equations]
 

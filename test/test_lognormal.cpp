@@ -15,6 +15,7 @@
 #include <boost/math/distributions/lognormal.hpp>
     using boost::math::lognormal_distribution;
 #include <boost/math/tools/test.hpp>
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -248,12 +249,14 @@ void test_spots(RealType)
    //
    // Error checks:
    //
-   BOOST_CHECK_THROW(lognormal_distribution<RealType>(0, -1), std::domain_error);
+   BOOST_CHECK_THROW(lognormal_distribution<RealType>(0, 0), std::domain_error);
+   BOOST_CHECK_THROW(lognormal_distribution<RealType>(2, -1), std::domain_error);
    BOOST_CHECK_THROW(pdf(dist, -1), std::domain_error);
    BOOST_CHECK_THROW(cdf(dist, -1), std::domain_error);
    BOOST_CHECK_THROW(cdf(complement(dist, -1)), std::domain_error);
    BOOST_CHECK_THROW(quantile(dist, 1), std::overflow_error);
    BOOST_CHECK_THROW(quantile(complement(dist, 0)), std::overflow_error);
+   check_out_of_range<lognormal_distribution<RealType> >(1, 2);
 
 } // template <class RealType>void test_spots(RealType)
 

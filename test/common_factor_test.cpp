@@ -148,6 +148,9 @@ public:
 
     BOOST_STATIC_CONSTANT(int, digits      = limits_type::digits);
     BOOST_STATIC_CONSTANT(int, digits10    = limits_type::digits10);
+#ifndef BOOST_NO_NUMERIC_LIMITS_LOWEST
+    BOOST_STATIC_CONSTANT(int, max_digits10    = limits_type::max_digits10);
+#endif
     BOOST_STATIC_CONSTANT(bool, is_signed  = limits_type::is_signed);
     BOOST_STATIC_CONSTANT(bool, is_integer = limits_type::is_integer);
     BOOST_STATIC_CONSTANT(bool, is_exact   = limits_type::is_exact);
@@ -195,6 +198,9 @@ public:
 
     BOOST_STATIC_CONSTANT(int, digits      = limits_type::digits);
     BOOST_STATIC_CONSTANT(int, digits10    = limits_type::digits10);
+#ifndef BOOST_NO_NUMERIC_LIMITS_LOWEST
+    BOOST_STATIC_CONSTANT(int, max_digits10    = limits_type::max_digits10);
+#endif
     BOOST_STATIC_CONSTANT(bool, is_signed  = limits_type::is_signed);
     BOOST_STATIC_CONSTANT(bool, is_integer = limits_type::is_integer);
     BOOST_STATIC_CONSTANT(bool, is_exact   = limits_type::is_exact);

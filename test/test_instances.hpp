@@ -354,6 +354,17 @@ namespace boost{ namespace math{
 
    template detail::bessel_traits<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE, policies::policy<> >::result_type sph_neumann(unsigned v, BOOST_MATH_TEST_TYPE x);
 
+   // Airy Functions:
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_ai(BOOST_MATH_TEST_TYPE x, const policies::policy<>&);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_ai(BOOST_MATH_TEST_TYPE x);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_bi(BOOST_MATH_TEST_TYPE x, const policies::policy<>&);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_bi(BOOST_MATH_TEST_TYPE x);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_ai_prime(BOOST_MATH_TEST_TYPE x, const policies::policy<>&);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_ai_prime(BOOST_MATH_TEST_TYPE x);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_bi_prime(BOOST_MATH_TEST_TYPE x, const policies::policy<>&);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type airy_bi_prime(BOOST_MATH_TEST_TYPE x);
+
+   // Exponential Integral
    template tools::promote_args<BOOST_MATH_TEST_TYPE>::type expint(unsigned n, BOOST_MATH_TEST_TYPE z, const policies::policy<> &);
 
    template detail::expint_result<int, BOOST_MATH_TEST_TYPE>::type expint(int const z, BOOST_MATH_TEST_TYPE const u);
@@ -364,5 +375,33 @@ namespace boost{ namespace math{
    template tools::promote_args<BOOST_MATH_TEST_TYPE>::type zeta(BOOST_MATH_TEST_TYPE s, const policies::policy<>&);
 
    template tools::promote_args<BOOST_MATH_TEST_TYPE>::type zeta(BOOST_MATH_TEST_TYPE s);
+
+   // Jacobi Functions:
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type jacobi_elliptic(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, BOOST_MATH_TEST_TYPE* pcn, BOOST_MATH_TEST_TYPE* pdn, const policies::policy<>&);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type jacobi_elliptic(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, BOOST_MATH_TEST_TYPE* pcn, BOOST_MATH_TEST_TYPE* pdn);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_sn(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_sn(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_cn(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_cn(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_dn(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_dn(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_cd(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_cd(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_dc(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_dc(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_ns(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_ns(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_sd(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_sd(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_ds(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_ds(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_nc(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_nc(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_nd(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_nd(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_sc(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_sc(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_cs(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta, const policies::policy<>& pol);
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type jacobi_cs(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE theta);
 
 }} // namespaces

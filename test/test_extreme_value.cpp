@@ -13,6 +13,7 @@
 
 #include <boost/test/test_exec_monitor.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -124,7 +125,7 @@ void test_spots(RealType)
          tolerance); // %
    BOOST_CHECK_CLOSE(
       ::boost::math::standard_deviation(
-         extreme_value_distribution<RealType>(-1, 0.5)), 
+         extreme_value_distribution<RealType>(1, 0.5)), 
          static_cast<RealType>(0.6412749150809320477720181798355L),
          tolerance); // %
    BOOST_CHECK_CLOSE(
@@ -179,6 +180,17 @@ void test_spots(RealType)
    BOOST_CHECK_THROW(
        quantile(dist, RealType(2)),
        std::domain_error);
+   check_out_of_range<extreme_value_distribution<RealType> >(1, 2);
+   if(std::numeric_limits<RealType>::has_infinity)
+   {
+      RealType inf = std::numeric_limits<RealType>::infinity();
+      BOOST_CHECK_EQUAL(pdf(extreme_value_distribution<RealType>(), -inf), 0);
+      BOOST_CHECK_EQUAL(pdf(extreme_value_distribution<RealType>(), inf), 0);
+      BOOST_CHECK_EQUAL(cdf(extreme_value_distribution<RealType>(), -inf), 0);
+      BOOST_CHECK_EQUAL(cdf(extreme_value_distribution<RealType>(), inf), 1);
+      BOOST_CHECK_EQUAL(cdf(complement(extreme_value_distribution<RealType>(), -inf)), 1);
+      BOOST_CHECK_EQUAL(cdf(complement(extreme_value_distribution<RealType>(), inf)), 0);
+   }
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])

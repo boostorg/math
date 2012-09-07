@@ -14,7 +14,7 @@
 #include <boost/test/test_exec_monitor.hpp>
 
 #ifdef _MSC_VER
-#pragma warning(disable: 4127) //  conditional expression is constant
+#pragma warning(disable: 4127 4146) //  conditional expression is constant
 #endif
 
 const char* method_name(const boost::math::detail::native_tag&)
@@ -83,16 +83,19 @@ void test_classify(T t, const char* type)
       BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), true);
       BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), true);
       t = (std::numeric_limits<T>::min)();
-      BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
-      BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);
-      BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), true);
-      BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), true);
-      BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
-      BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
-      BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
-      BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
-      BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), true);
-      BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), true);
+      if(t != 0)
+      {
+         BOOST_CHECK_EQUAL((::boost::math::fpclassify)(t), (int)FP_NORMAL);
+         BOOST_CHECK_EQUAL((::boost::math::fpclassify)(-t), (int)FP_NORMAL);
+         BOOST_CHECK_EQUAL((::boost::math::isfinite)(t), true);
+         BOOST_CHECK_EQUAL((::boost::math::isfinite)(-t), true);
+         BOOST_CHECK_EQUAL((::boost::math::isinf)(t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isinf)(-t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnan)(t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnan)(-t), false);
+         BOOST_CHECK_EQUAL((::boost::math::isnormal)(t), true);
+         BOOST_CHECK_EQUAL((::boost::math::isnormal)(-t), true);
+      }
    }
    if(std::numeric_limits<T>::has_denorm)
    {
@@ -273,6 +276,9 @@ int test_main(int, char* [] )
    test_classify((long double)(0), "long double");
    test_classify((boost::math::concepts::real_concept)(0), "real_concept");
 #endif
+   // We should test with integer types as well:
+   test_classify(int(0), "int");
+   test_classify(unsigned(0), "unsigned");
   return 0;
 }
 

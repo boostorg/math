@@ -2,12 +2,12 @@
 
 ``#include <boost/math/distributions/students_t.hpp>``
 
-   namespace boost{ namespace math{ 
-      
-   template <class RealType = double, 
+   namespace boost{ namespace math{
+
+   template <class RealType = double,
              class ``__Policy``   = ``__policy_class`` >
    class students_t_distribution;
-   
+
    typedef students_t_distribution<> students_t;
 
    template <class RealType, class ``__Policy``>
@@ -15,13 +15,13 @@
    {
       typedef RealType value_type;
       typedef Policy   policy_type;
-      
+
       // Construct:
       students_t_distribution(const RealType& v);
-      
+
       // Accessor:
       RealType degrees_of_freedom()const;
-      
+
       // degrees of freedom estimation:
       static RealType find_degrees_of_freedom(
          RealType difference_from_mean,
@@ -30,20 +30,21 @@
          RealType sd,
          RealType hint = 100);
    };
-   
+
    }} // namespaces
-   
-A statistical distribution published by William Gosset in 1908. 
-His employer, Guinness Breweries, required him to publish under a 
-pseudonym, so he chose "Student". Given N independent measurements, let
+
+A statistical distribution published by William Gosset in 1908.
+His employer, Guinness Breweries, required him to publish under a
+pseudonym (possibly to hide that they were using statistics),
+so he chose "Student". Given N independent measurements, let
 
 [equation students_t_dist]
 
-where /M/ is the population mean,[' ''' &#x3BC; '''] is the sample mean, and /s/ is the 
+where /M/ is the population mean,[' ''' &#x3BC; '''] is the sample mean, and /s/ is the
 sample variance.
 
-Student's t-distribution is defined as the distribution of the random 
-variable t which is  - very loosely - the "best" that we can do not 
+Student's t-distribution is defined as the distribution of the random
+variable t which is  - very loosely - the "best" that we can do not
 knowing the true standard deviation of the sample.  It has the PDF:
 
 [equation students_t_ref1]
@@ -60,15 +61,15 @@ illustrates how the PDF varies with the degrees of freedom [nu]:
 [h4 Member Functions]
 
    students_t_distribution(const RealType& v);
-   
+
 Constructs a Student's t-distribution with /v/ degrees of freedom.
 
-Requires v > 0, otherwise calls __domain_error.  Note that 
-non-integral degrees of freedom are supported, and 
-meaningful under certain circumstances.
+Requires /v/ > 0, otherwise calls __domain_error.  Note that
+non-integral degrees of freedom are supported,
+and are meaningful under certain circumstances.
 
    RealType degrees_of_freedom()const;
-   
+
 Returns the number of degrees of freedom of this distribution.
 
    static RealType find_degrees_of_freedom(
@@ -79,15 +80,15 @@ Returns the number of degrees of freedom of this distribution.
       RealType hint = 100);
 
 Returns the number of degrees of freedom required to observe a significant
-result in the Student's t test when the mean differs from the "true" 
+result in the Student's t test when the mean differs from the "true"
 mean by /difference_from_mean/.
 
 [variablelist
 [[difference_from_mean][The difference between the true mean and the sample mean
                         that we wish to show is significant.]]
-[[alpha][The maximum acceptable probability of rejecting the null hypothesis 
+[[alpha][The maximum acceptable probability of rejecting the null hypothesis
         when it is in fact true.]]
-[[beta][The maximum acceptable probability of failing to reject the null hypothesis 
+[[beta][The maximum acceptable probability of failing to reject the null hypothesis
         when it is in fact false.]]
 [[sd][The sample standard deviation.]]
 [[hint][A hint for the location to start looking for the result, a good choice for this
@@ -98,10 +99,10 @@ mean by /difference_from_mean/.
 Remember that for a two-sided test, you must divide alpha by two
 before calling this function.]
 
-For more information on this function see the 
-[@http://www.itl.nist.gov/div898/handbook/prc/section2/prc222.htm 
+For more information on this function see the
+[@http://www.itl.nist.gov/div898/handbook/prc/section2/prc222.htm
 NIST Engineering Statistics Handbook].
-      
+
 [h4 Non-member Accessors]
 
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
@@ -116,14 +117,14 @@ distribution.
 
 [h4 Accuracy]
 
-The normal distribution is implemented in terms of the 
+The normal distribution is implemented in terms of the
 [link math_toolkit.special.sf_beta.ibeta_function incomplete beta function]
 and [link math_toolkit.special.sf_beta.ibeta_inv_function its inverses],
 refer to accuracy data on those functions for more information.
 
 [h4 Implementation]
 
-In the following table /v/ is the degrees of freedom of the distribution, 
+In the following table /v/ is the degrees of freedom of the distribution,
 /t/ is the random variate, /p/ is the probability and /q = 1-p/.
 
 [table
@@ -152,18 +153,26 @@ y = 1 - x
 The quantities /x/ and /y/ are both returned by __ibeta_inv
 without the subtraction implied above.]]
 [[quantile from the complement][Using the relation: t = -quantile(q)]]
-[[mean][0]]
-[[variance][v \/ (v - 2)]]
 [[mode][0]]
-[[skewness][0]]
-[[kurtosis][3 * (v - 2) \/ (v - 4)]]
-[[kurtosis excess][6 \/ (df - 4)]]
+[[mean][0]]
+[[variance][if (v > 2) v \/ (v - 2) else NaN]]
+[[skewness][if (v > 3) 0 else NaN ]]
+[[kurtosis][if (v > 4) 3 * (v - 2) \/ (v - 4) else NaN]]
+[[kurtosis excess][if (v > 4) 6 \/ (df - 4) else NaN]]
 ]
 
-[endsect][/section:students_t_dist Students t]
+If the moment index /k/ is less than /v/, then the moment is undefined.
+Evaluating the moment will throw a __domain_error unless ignored by a policy,
+when it will return `std::numeric_limits<>::quiet_NaN();`
+
+(For simplicity, we have not implemented the return of infinity in some cases
+as suggested by [@http://en.wikipedia.org/wiki/Student%27s_t-distribution Wikipedia Student's t].
+See also [@https://svn.boost.org/trac/boost/ticket/7177].)
+
+[endsect] [/section:students_t_dist Students t]
 
 [/ students_t.qbk
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2012 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

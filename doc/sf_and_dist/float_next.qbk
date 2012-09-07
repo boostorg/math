@@ -49,6 +49,12 @@ Returns the next representable value after /x/ in the direction of /y/.  If
 a __domain_error.  If there is no such value in the direction of /y/ then
 returns an __overflow_error.
 
+[warning The template parameter FTP must be a floating-point type. 
+An integer type, for example, will produce an unhelpful error message.]
+
+[tip Nearly always, you just want the next or prior representable value,
+so instead use `float_next` or `float_prior` below.] 
+
 [h4 Examples - nextafter]
 
 The two representations using a 32-bit float either side of unity are:
@@ -88,7 +94,7 @@ returns an __overflow_error.
 
 Has the same effect as
 
-  nextafter(val, std::numeric_limits<FPT>::max());
+  nextafter(val, (std::numeric_limits<FPT>::max)());
 
 [endsect] [/section:float_next Finding the Next Greater Representable Value (float_prior)]
 
@@ -117,7 +123,7 @@ returns an __overflow_error.
 
 Has the same effect as
 
-  nextafter(val, -std::numeric_limits<FPT>::max());  // Note most negative value -max.
+  nextafter(val, -(std::numeric_limits<FPT>::max)());  // Note most negative value -max.
 
 [endsect] [/section:float_prior Finding the Next Smaller Representable Value (float_prior)]
 

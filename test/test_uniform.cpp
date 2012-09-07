@@ -22,6 +22,7 @@
 #include <boost/math/distributions/uniform.hpp>
     using boost::math::uniform_distribution;
 #include <boost/math/tools/test.hpp> 
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -367,6 +368,7 @@ void test_spots(RealType)
    BOOST_CHECK_THROW(uniform_distribution<RealType>(1, 0), std::domain_error); // lower > upper!
    BOOST_CHECK_THROW(uniform_distribution<RealType>(1, 1), std::domain_error); // lower == upper!
 
+   check_out_of_range<uniform_distribution<RealType> >(1, 5);
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])

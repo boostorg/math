@@ -391,7 +391,18 @@ int main()
    nc_t_plotter.add(boost::math::non_central_t(10, 0), "v=10, &#x3B4;=0");
    nc_t_plotter.add(boost::math::non_central_t(10, 5), "v=10, &#x3B4;=5");
    nc_t_plotter.add(boost::math::non_central_t(10, 10), "v=10, &#x3B4;=10");
+   nc_t_plotter.add(boost::math::non_central_t(std::numeric_limits<double>::infinity(), 15), "v=inf, &#x3B4;=15");
    nc_t_plotter.plot("Non Central T PDF", "nc_t_pdf.svg");
+
+   distribution_plotter<boost::math::non_central_t>
+     nc_t_CDF_plotter(false);
+   nc_t_CDF_plotter.add(boost::math::non_central_t(10, -10), "v=10, &#x3B4;=-10");
+   nc_t_CDF_plotter.add(boost::math::non_central_t(10, -5), "v=10, &#x3B4;=-5");
+   nc_t_CDF_plotter.add(boost::math::non_central_t(10, 0), "v=10, &#x3B4;=0");
+   nc_t_CDF_plotter.add(boost::math::non_central_t(10, 5), "v=10, &#x3B4;=5");
+   nc_t_CDF_plotter.add(boost::math::non_central_t(10, 10), "v=10, &#x3B4;=10");
+   nc_t_CDF_plotter.add(boost::math::non_central_t(std::numeric_limits<double>::infinity(), 15), "v=inf, &#x3B4;=15");
+   nc_t_CDF_plotter.plot("Non Central T CDF", "nc_t_cdf.svg");
 
    distribution_plotter<boost::math::beta_distribution<> >
       beta_plotter;

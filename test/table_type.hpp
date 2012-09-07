@@ -1,3 +1,9 @@
+// Copyright John Maddock 2012.
+
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MATH_TEST_TABLE_TYPE_HPP
 #define BOOST_MATH_TEST_TABLE_TYPE_HPP
@@ -18,19 +24,6 @@ template <>
 struct table_type<boost::math::concepts::real_concept>
 {
    typedef long double type;
-};
-
-namespace boost{ namespace multiprecision{
-
-   template <class Backend, bool ExpressionTemplates>
-   class mp_number;
-
-}}
-
-template <class Backend, bool ExpressionTemplates>
-struct table_type<boost::multiprecision::mp_number<Backend, ExpressionTemplates> >
-{
-   typedef const char* type;
 };
 
 #endif

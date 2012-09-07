@@ -26,19 +26,19 @@ Johan R'''&#xE5;'''de wrote the optimised floating-point classification
 and manipulation code, and nonfinite facets to permit C99 output of infinities and NaNs.
 (nonfinite facets were not added until Boost 1.47 but had been in use with Boost.Spirit).
 This library was based on a suggestion from Robert Ramey, author of Boost.Serialization.
-Paul A. Bristow expressed the need for better handling of 
+Paul A. Bristow expressed the need for better handling of
 [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2022.pdf
 Input & Output of NaN and infinity for the C++ Standard Library]
 and suggested following the C99 format.
 
-Antony Polukhin improved lexical cast avoiding stringstream so that 
+Antony Polukhin improved lexical cast avoiding stringstream so that
 it was no longer necessary to use a globale C99 facet to handle nonfinites.
 
 H'''&#xE5;'''kan Ard'''&#xF6;''',
 Boris Gubenko, John Maddock,
 Markus Sch'''&#xF6;'''pflin
-and Olivier Verdier tested the floating-point library and 
-Martin Bonner, Peter Dimov and John Maddock provided valuable advice. 
+and Olivier Verdier tested the floating-point library and
+Martin Bonner, Peter Dimov and John Maddock provided valuable advice.
 
 Gautam Sewani coded the logistic distribution as part of a Google Summer of Code project 2008.
 
@@ -46,7 +46,8 @@ M. A. (Thijs) van den Berg coded the Laplace distribution.
 (Thijs has also threatened to implement some multivariate distributions).
 
 Thomas Mang requested the inverse gamma in chi squared distributions
-for Bayesian applications and helped in their implementation.
+for Bayesian applications and helped in their implementation,
+and provided a nice example of their use.
 
 Professor Nico Temme for advice on the inverse incomplete beta function.
 
@@ -60,22 +61,17 @@ We are grateful to Joel Guzman for helping us stress-test his
 program used to generate the html and pdf versions
 of this document, adding several new features en route.
 
-Thanks to Mark Coleman and Georgi Boshnakov for spot test values
-from __Mathematica, and of course,
-to Eric Weissten for nurturing __Mathworld, an invaluable resource. 
-
-The Skew-normal distribution and Owen's t function were written by Benjamin Sobotta.
-
 Plots of the functions and distributions were prepared in
 [@http://www.w3.org/ W3C] standard
 [@http://www.svg.org/ Scalable Vector Graphic (SVG)] format
 using a program created by Jacob Voytko during a
 [@http://code.google.com/soc/2007/ Google Summer of Code (2007)].
-Since browser support for rendering SVG is still not universal
-(Microsoft Internet Explorer, even IE 8 beta, still lacks native SVG support
+From 2012, the latest versions of all Internet Browsers have support
+for rendering SVG (with varying quality).  Older versions, especially
+(Microsoft Internet Explorer (before IE 9) lack native SVG support
 but can be made to work with
-[@http://www.adobe.com/svg/viewer/install/ Adobe's free SVG viewer] plugin),
-so the SVG files were batch converted to JPEG using
+[@http://www.adobe.com/svg/viewer/install/ Adobe's free SVG viewer] plugin).
+The SVG files can be converted to JPEG or PNG using
 [@http://www.inkscape.org/ Inkscape].
 
 We are also indebted to Matthias Schabel for managing the formal Boost-review
@@ -83,10 +79,21 @@ of this library, and to all the reviewers - including Guillaume Melquiond,
 Arnaldur Gylfason, John Phillips, Stephan Tolksdorf and Jeff Garland
 - for their many helpful comments.
 
+Thanks to Mark Coleman and Georgi Boshnakov for spot test values
+from __Mathematica, and of course,
+to Eric Weissten for nurturing __Mathworld, an invaluable resource.
+
+The Skew-normal distribution and Owen's t function were written by Benjamin Sobotta.
+
+We thank Thomas Mang for persuading us to allow t distributions
+to have infinite degrees of freedom
+and contributing to some long discussions about how to improve accuracy
+for large non-centrality and/or large degrees of freedom.
+
 [endsect] [/section:credits Credits and Acknowledgements]
 
 [/
-  Copyright 2006, 2007, 2008, 2009, 2010 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2007, 2008, 2009, 2010, 2012 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

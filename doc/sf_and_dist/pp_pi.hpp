@@ -88,3 +88,12 @@ namespace boost
 } // namespace boost
 
 //] [/preprocessed_pi]
+
+/*
+  Copyright 2012 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt)
+*/
+
+

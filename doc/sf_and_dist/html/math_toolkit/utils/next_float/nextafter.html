@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Finding the Next Representable Value in a Specific Direction (nextafter)</title>
 <link rel="stylesheet" href="../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../next_float.html" title="Floating-Point Representation Distance (ULP), and Finding Adjacent Floating-Point Values">
 <link rel="prev" href="../next_float.html" title="Floating-Point Representation Distance (ULP), and Finding Adjacent Floating-Point Values">
@@ -29,7 +29,7 @@
 </h4></div></div></div>
 <h5>
 <a name="math_toolkit.utils.next_float.nextafter.h0"></a>
-          <span><a name="math_toolkit.utils.next_float.nextafter.synopsis"></a></span><a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.synopsis">Synopsis</a>
+          <span class="phrase"><a name="math_toolkit.utils.next_float.nextafter.synopsis"></a></span><a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.synopsis">Synopsis</a>
         </h5>
 <p>
 </p>
@@ -46,7 +46,7 @@
 </pre>
 <h5>
 <a name="math_toolkit.utils.next_float.nextafter.h1"></a>
-          <span><a name="math_toolkit.utils.next_float.nextafter.description___nextafter"></a></span><a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.description___nextafter">Description
+          <span class="phrase"><a name="math_toolkit.utils.next_float.nextafter.description___nextafter"></a></span><a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.description___nextafter">Description
           - nextafter</a>
         </h5>
 <p>
@@ -74,9 +74,30 @@
           If there is no such value in the direction of <span class="emphasis"><em>y</em></span> then
           returns an <a class="link" href="../../main_overview/error_handling.html#overflow_error">overflow_error</a>.
         </p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../../../../../../../doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            The template parameter FTP must be a floating-point type. An integer
+            type, for example, will produce an unhelpful error message.
+          </p></td></tr>
+</table></div>
+<div class="tip"><table border="0" summary="Tip">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../../../doc/src/images/tip.png"></td>
+<th align="left">Tip</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            Nearly always, you just want the next or prior representable value, so
+            instead use <code class="computeroutput"><span class="identifier">float_next</span></code>
+            or <code class="computeroutput"><span class="identifier">float_prior</span></code> below.
+          </p></td></tr>
+</table></div>
 <h5>
 <a name="math_toolkit.utils.next_float.nextafter.h2"></a>
-          <span><a name="math_toolkit.utils.next_float.nextafter.examples___nextafter"></a></span><a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.examples___nextafter">Examples
+          <span class="phrase"><a name="math_toolkit.utils.next_float.nextafter.examples___nextafter"></a></span><a class="link" href="nextafter.html#math_toolkit.utils.next_float.nextafter.examples___nextafter">Examples
           - nextafter</a>
         </h5>
 <p>
@@ -95,8 +116,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin Sobotta<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang
+      Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin
+      Sobotta<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

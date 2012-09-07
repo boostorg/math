@@ -18,7 +18,7 @@
 #include <pch.hpp> // include directory /libs/math/src/tr1/ is needed.
 
 #ifdef _MSC_VER
-#pragma warning (disable: 4127) // conditional expression is constant
+#  pragma warning (disable: 4127) // conditional expression is constant
 // caused by using   if(std::numeric_limits<RealType>::has_infinity)
 // and   if (std::numeric_limits<RealType>::has_quiet_NaN)
 #endif
@@ -30,6 +30,7 @@
 #include <boost/math/distributions/normal.hpp>
     using boost::math::normal_distribution;
 #include <boost/math/tools/test.hpp>
+#include "test_out_of_range.hpp"
 
 #include <iostream>
    using std::cout;
@@ -282,7 +283,13 @@ void test_spots(RealType)
        standard_deviation(def_norm01),
        static_cast<RealType>(1), 0); // Mean == zero
 
-
+    // Error tests:
+    check_out_of_range<boost::math::normal_distribution<RealType> >(0, 1); // (All) valid constructor parameter values.
+    
+    BOOST_CHECK_THROW(pdf(normal_distribution<RealType>(0, 0), 0), std::domain_error);
+    BOOST_CHECK_THROW(pdf(normal_distribution<RealType>(0, -1), 0), std::domain_error);
+    BOOST_CHECK_THROW(quantile(normal_distribution<RealType>(0, 1), -1), std::domain_error);
+    BOOST_CHECK_THROW(quantile(normal_distribution<RealType>(0, 1), 2), std::domain_error);
 } // template <class RealType>void test_spots(RealType)
 
 int test_main(int, char* [])

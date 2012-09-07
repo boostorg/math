@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Students t Distribution</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="skew_normal_dist.html" title="Skew Normal Distribution">
@@ -65,8 +65,9 @@
 </pre>
 <p>
             A statistical distribution published by William Gosset in 1908. His employer,
-            Guinness Breweries, required him to publish under a pseudonym, so he
-            chose "Student". Given N independent measurements, let
+            Guinness Breweries, required him to publish under a pseudonym (possibly
+            to hide that they were using statistics), so he chose "Student".
+            Given N independent measurements, let
           </p>
 <p>
             <span class="inlinemediaobject"><img src="../../../../../equations/students_t_dist.png"></span>
@@ -97,7 +98,7 @@
           </p>
 <h5>
 <a name="math_toolkit.dist.dist_ref.dists.students_t_dist.h0"></a>
-            <span><a name="math_toolkit.dist.dist_ref.dists.students_t_dist.member_functions"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.member_functions">Member
+            <span class="phrase"><a name="math_toolkit.dist.dist_ref.dists.students_t_dist.member_functions"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.member_functions">Member
             Functions</a>
           </h5>
 <pre class="programlisting"><span class="identifier">students_t_distribution</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RealType</span><span class="special">&amp;</span> <span class="identifier">v</span><span class="special">);</span>
@@ -107,8 +108,8 @@
             of freedom.
           </p>
 <p>
-            Requires v &gt; 0, otherwise calls <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
-            Note that non-integral degrees of freedom are supported, and meaningful
+            Requires <span class="emphasis"><em>v</em></span> &gt; 0, otherwise calls <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a>.
+            Note that non-integral degrees of freedom are supported, and are meaningful
             under certain circumstances.
           </p>
 <pre class="programlisting"><span class="identifier">RealType</span> <span class="identifier">degrees_of_freedom</span><span class="special">()</span><span class="keyword">const</span><span class="special">;</span>
@@ -130,7 +131,7 @@
           </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
-<dl>
+<dl class="variablelist">
 <dt><span class="term">difference_from_mean</span></dt>
 <dd><p>
                   The difference between the true mean and the sample mean that we
@@ -174,7 +175,7 @@
           </p>
 <h5>
 <a name="math_toolkit.dist.dist_ref.dists.students_t_dist.h1"></a>
-            <span><a name="math_toolkit.dist.dist_ref.dists.students_t_dist.non_member_accessors"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.non_member_accessors">Non-member
+            <span class="phrase"><a name="math_toolkit.dist.dist_ref.dists.students_t_dist.non_member_accessors"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.non_member_accessors">Non-member
             Accessors</a>
           </h5>
 <p>
@@ -194,7 +195,7 @@
           </p>
 <h5>
 <a name="math_toolkit.dist.dist_ref.dists.students_t_dist.h2"></a>
-            <span><a name="math_toolkit.dist.dist_ref.dists.students_t_dist.examples"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.examples">Examples</a>
+            <span class="phrase"><a name="math_toolkit.dist.dist_ref.dists.students_t_dist.examples"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.examples">Examples</a>
           </h5>
 <p>
             Various <a class="link" href="../../stat_tut/weg/st_eg.html" title="Student's t Distribution Examples">worked examples</a>
@@ -202,7 +203,7 @@
           </p>
 <h5>
 <a name="math_toolkit.dist.dist_ref.dists.students_t_dist.h3"></a>
-            <span><a name="math_toolkit.dist.dist_ref.dists.students_t_dist.accuracy"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.accuracy">Accuracy</a>
+            <span class="phrase"><a name="math_toolkit.dist.dist_ref.dists.students_t_dist.accuracy"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.accuracy">Accuracy</a>
           </h5>
 <p>
             The normal distribution is implemented in terms of the <a class="link" href="../../../special/sf_beta/ibeta_function.html" title="Incomplete Beta Functions">incomplete
@@ -211,7 +212,7 @@
           </p>
 <h5>
 <a name="math_toolkit.dist.dist_ref.dists.students_t_dist.h4"></a>
-            <span><a name="math_toolkit.dist.dist_ref.dists.students_t_dist.implementation"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.implementation">Implementation</a>
+            <span class="phrase"><a name="math_toolkit.dist.dist_ref.dists.students_t_dist.implementation"></a></span><a class="link" href="students_t_dist.html#math_toolkit.dist.dist_ref.dists.students_t_dist.implementation">Implementation</a>
           </h5>
 <p>
             In the following table <span class="emphasis"><em>v</em></span> is the degrees of freedom
@@ -333,6 +334,18 @@
 <tr>
 <td>
                     <p>
+                      mode
+                    </p>
+                  </td>
+<td>
+                    <p>
+                      0
+                    </p>
+                  </td>
+</tr>
+<tr>
+<td>
+                    <p>
                       mean
                     </p>
                   </td>
@@ -350,19 +363,7 @@
                   </td>
 <td>
                     <p>
-                      v / (v - 2)
-                    </p>
-                  </td>
-</tr>
-<tr>
-<td>
-                    <p>
-                      mode
-                    </p>
-                  </td>
-<td>
-                    <p>
-                      0
+                      if (v &gt; 2) v / (v - 2) else NaN
                     </p>
                   </td>
 </tr>
@@ -374,7 +375,7 @@
                   </td>
 <td>
                     <p>
-                      0
+                      if (v &gt; 3) 0 else NaN
                     </p>
                   </td>
 </tr>
@@ -386,7 +387,7 @@
                   </td>
 <td>
                     <p>
-                      3 * (v - 2) / (v - 4)
+                      if (v &gt; 4) 3 * (v - 2) / (v - 4) else NaN
                     </p>
                   </td>
 </tr>
@@ -398,17 +399,28 @@
                   </td>
 <td>
                     <p>
-                      6 / (df - 4)
+                      if (v &gt; 4) 6 / (df - 4) else NaN
                     </p>
                   </td>
 </tr>
 </tbody>
 </table></div>
+<p>
+            If the moment index <span class="emphasis"><em>k</em></span> is less than <span class="emphasis"><em>v</em></span>,
+            then the moment is undefined. Evaluating the moment will throw a <a class="link" href="../../../main_overview/error_handling.html#domain_error">domain_error</a> unless ignored by a policy,
+            when it will return <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;::</span><span class="identifier">quiet_NaN</span><span class="special">();</span></code>
+          </p>
+<p>
+            (For simplicity, we have not implemented the return of infinity in some
+            cases as suggested by <a href="http://en.wikipedia.org/wiki/Student%27s_t-distribution" target="_top">Wikipedia
+            Student's t</a>. See also <a href="https://svn.boost.org/trac/boost/ticket/7177" target="_top">https://svn.boost.org/trac/boost/ticket/7177</a>.)
+          </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno
-      Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin Sobotta<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang
+      Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin
+      Sobotta<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

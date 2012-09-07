@@ -105,7 +105,7 @@ the binomial distribution with a single trial should be used, for example:
 
 [h4 References]
 * [@http://en.wikipedia.org/wiki/Bernoulli_distribution Wikpedia Bernoulli distribution]
-* [@ Weisstein, Eric W. "Bernoulli Distribution." From MathWorld--A Wolfram Web Resource.]
+* [@http://mathworld.wolfram.com/BernoulliDistribution.html Weisstein, Eric W. "Bernoulli Distribution." From MathWorld--A Wolfram Web Resource.]
 
 [endsect][/section:bernoulli_dist bernoulli]
 

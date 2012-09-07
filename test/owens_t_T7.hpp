@@ -1,4 +1,4 @@
-// (C) Benjamin Sobotta 2012
+// Copyright (C) Benjamin Sobotta 2012
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -145,10 +145,10 @@ namespace boost
         val *= exp(-half<RealType>()*hs*as);
         val *= exp(-half<RealType>()*hs);
         val *= one_div_two_pi<RealType>() * a;
-        
+
         return val;
       } // RealType compute_owens_t_T7(const RealType h, const RealType a)
-      
+
       // compute Owen's T function, T(h,a), for arbitrary values of h and a
      template<typename RealType, class Policy>
      inline RealType owens_t_T7(RealType h, RealType a, const Policy&)
@@ -170,7 +170,7 @@ namespace boost
         {
            val = compute_owens_t_T7(h, fabs_a);
         } // if(fabs_a <= 1.0)
-        else 
+        else
         {
            if( h <= 0.67 )
            {
@@ -196,9 +196,9 @@ namespace boost
 
         return val;
       } // RealType owens_t(RealType h, RealType a)
-      
+
     } // namespace detail
-    
+
     template <class T1, class T2, class Policy>
     inline typename tools::promote_args<T1, T2>::type owens_t_T7(T1 h, T2 a, const Policy& pol)
     {
@@ -212,7 +212,7 @@ namespace boost
     {
        return owens_t_T7(h, a, policies::policy<>());
     }
-      
+
   } // namespace math
 } // namespace boost
 
