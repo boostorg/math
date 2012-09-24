@@ -67,7 +67,7 @@ namespace boost
             }
             else if    (x <= -tools::forth_root_epsilon<T>())
             {
-                return(-asinh(-x));
+                return(-asinh(-x, pol));
             }
             else
             {
