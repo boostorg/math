@@ -61,9 +61,9 @@ void two_samples_t_test_equal_sd(
    // Degrees of freedom:
    double v = Sn1 + Sn2 - 2;
    cout << setw(55) << left << "Degrees of Freedom" << "=  " << v << "\n";
-   // Pooled variance:
+   // Pooled variance and hence standard deviation:
    double sp = sqrt(((Sn1-1) * Sd1 * Sd1 + (Sn2-1) * Sd2 * Sd2) / v);
-   cout << setw(55) << left << "Pooled Standard Deviation" << "=  " << v << "\n";
+   cout << setw(55) << left << "Pooled Standard Deviation" << "=  " << sp << "\n";
    // t-statistic:
    double t_stat = (Sm1 - Sm2) / (sp * sqrt(1.0 / Sn1 + 1.0 / Sn2));
    cout << setw(55) << left << "T Statistic" << "=  " << t_stat << "\n";
@@ -193,12 +193,8 @@ int main()
 } // int main()
 
 /*
-Output is
------- Rebuild All started: Project: students_t_two_samples, Configuration: Release Win32 ------
-  students_t_two_samples.cpp
-  Generating code
-  Finished generating code
-  students_t_two_samples.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\students_t_two_samples.exe
+Output is:
+
   _______________________________________________
   Student t test for two samples (equal variances)
   _______________________________________________
@@ -210,7 +206,7 @@ Output is
   Sample 2 Mean                                          =  30.481
   Sample 2 Standard Deviation                            =  6.1077
   Degrees of Freedom                                     =  326
-  Pooled Standard Deviation                              =  326
+  Pooled Standard Deviation                              =  6.3426
   T Statistic                                            =  -12.621
   Probability that difference is due to chance           =  5.273e-030
   
@@ -243,8 +239,6 @@ Output is
   Sample 1 Mean <  Sample 2 Mean       NOT REJECTED
   Sample 1 Mean >  Sample 2 Mean       REJECTED
   
-  
-========== Rebuild All: 1 succeeded, 0 failed, 0 skipped ==========
 
 
 */
