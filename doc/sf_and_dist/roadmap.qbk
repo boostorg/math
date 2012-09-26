@@ -10,6 +10,8 @@ All bug reports including closed ones can be viewed
 
 * Fixed issues [@https://svn.boost.org/trac/boost/ticket/7325 #7325], [@https://svn.boost.org/trac/boost/ticket/7415 #7415]
 and [@https://svn.boost.org/trac/boost/ticket/7416 #7416].
+* Fixed mistake in calculating pooled standard deviation in two-sample students t example
+[@https://svn.boost.org/trac/boost/ticket/7402 #7402].
 
 [h4 Boost-1.52]
 
@@ -24,6 +26,7 @@ and these have been rectified.
 * Fixed issues [@https://svn.boost.org/trac/boost/ticket/6517 #6517], [@https://svn.boost.org/trac/boost/ticket/6362 #6362],
 [@https://svn.boost.org/trac/boost/ticket/7053 #7053], [@https://svn.boost.org/trac/boost/ticket/2693 #2693],
 [@https://svn.boost.org/trac/boost/ticket/6937 #6937], [@https://svn.boost.org/trac/boost/ticket/7099 #7099].
+
 
 * Permitted infinite degrees of freedom [@https://svn.boost.org/trac/boost/ticket/7259 #7259]
 implemented using the normal distribution (requested by Thomas Mang).
