@@ -15,7 +15,10 @@
 // "BOOST_MATH_OVERFLOW_ERROR_POLICY=errno_on_error"
 // to avoid complications with pre-compiled headers.
 
-#pragma once
+#ifdef _MSC_VER
+#  pragma once
+#  pragma warning (disable : 4127)
+#endif
 
 using namespace System;
 

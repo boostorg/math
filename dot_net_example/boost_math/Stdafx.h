@@ -3,16 +3,20 @@
 // but are changed infrequently.
 
 // Copyright John Maddock 2007.
-// Copyright Paul A. Bristow 2007, 2009, 2010
+// Copyright Paul A. Bristow 2007, 2009, 2010, 2012
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Laplace added Aug 2009 PAB, and several others Nov 2010.
+// Laplace added Aug 2009 PAB, and several others Nov 2010, 
+// added skew_normal 2012.
 
-#pragma once
+#ifdef _MSC_VER
+#  pragma once
+#  pragma warning (disable : 4127)
+#endif
 
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error
@@ -44,6 +48,7 @@
 #include <boost/math/distributions/poisson.hpp>
 #include <boost/math/distributions/rayleigh.hpp>
 #include <boost/math/distributions/students_t.hpp>
+#include <boost/math/distributions/skew_normal.hpp>
 #include <boost/math/distributions/triangular.hpp>
 #include <boost/math/distributions/uniform.hpp>
 #include <boost/math/distributions/weibull.hpp>
