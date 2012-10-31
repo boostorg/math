@@ -76,9 +76,9 @@ Math Toolkit C++ source code to produce boost_math.dll is in the most recent Boo
 
 Installation
 ============
-Statistical Distribution Explorer is distributed as a single Windows Installer package Setupdistex.msi. Unzip the distexplorer.zip to a temporary location of your choice and run Setupdistex.msi. (If necessary run setup.exe to install MS redistributables).
+Statistical Distribution Explorer is distributed as a single Windows Installer package setupdistex.msi. Unzip the distexplorer.zip file to a temporary location of your choice and run setupdistex.msi.
 
-(Note that .NET Framework 4.0 Client Profile and VC Redistributable X86 are requirements for this program. Most recent and updated Windows environments will already have these installed, but they are quickly, easily and safely installed from the Microsoft site if required.)
+(If the program installs OK, but does not run, it will be necessary to run setup.exe to install Microsoft redistributables. This is because .NET Framework 4.0 Client Profile and VC Redistributable X86 are requirements for this program. Most recent and updated Windows environments will already have these installed, but they are quickly, easily and safely installed from the Microsoft site if required. This program has been tested on Windows 200 up to Windows 8).
 
 (The package cannot be run on other platforms at present but it should be possible to build an equivalent utility on any C/C++ platform if anyone would like to undertake this task.)
 
