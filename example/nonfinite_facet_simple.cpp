@@ -191,8 +191,8 @@ int main ()
   // Example varying the width and position of the nonfinite representations.
   // With the nonfinite_num_put and _get facets, the width of the output is constant.
 
-  #ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
-  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined, so no max_digits10 available." << endl;
+  #ifdef BOOST_NO_CXX11_NUMERIC_LIMITS
+  cout << "BOOST_NO_CXX11_NUMERIC_LIMITS is defined, so no max_digits10 available." << endl;
   std::streamsize  max_digits10 = 2 + std::numeric_limits<double>::digits * 30103UL / 100000UL;
 #else
   // Can use new C++0X max_digits10 (the maximum potentially significant digits).
