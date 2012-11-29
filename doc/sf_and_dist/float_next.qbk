@@ -156,8 +156,8 @@ representing the number of distinct representations between /a/ and /b/.
 Note that
 
 * `float_distance(a, a)` always returns 0.
-* `float_distance(float_next(a), a)` always returns 1.
-* `float_distance(float_prior(a), a)` always returns -1.
+* `float_distance(float_next(a), a)` always returns -1.
+* `float_distance(float_prior(a), a)` always returns 1.
 
 The function `float_distance` is equivalent to calculating the number
 of ULP (Units in the Last Place) between /a/ and /b/ except that it 
