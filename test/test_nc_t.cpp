@@ -25,7 +25,6 @@
 #include <boost/math/distributions/non_central_t.hpp> // for chi_squared_distribution.
 #include <boost/math/distributions/normal.hpp> // for normal distribution (for comparison).
 
-
 #include <boost/test/test_exec_monitor.hpp> // for test_main
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
