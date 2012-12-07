@@ -121,7 +121,7 @@ class weibull_distribution;
    typedef boost::math::fisher_f_distribution<Type, Policy> fisher_f;\
    typedef boost::math::gamma_distribution<Type, Policy> gamma;\
    typedef boost::math::geometric_distribution<Type, Policy> geometric;\
-   typedef boost::math::hyper_geometric_distribution<Type, Policy> hyper_geometric;\
+   typedef boost::math::hypergeometric_distribution<Type, Policy> hypergeometric;\
    typedef boost::math::inverse_chi_squared_distribution<Type, Policy> inverse_chi_squared;\
    typedef boost::math::inverse_gaussian_distribution<Type, Policy> inverse_gaussian;\
    typedef boost::math::inverse_gamma_distribution<Type, Policy> inverse_gamma;\
