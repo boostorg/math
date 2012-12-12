@@ -245,7 +245,7 @@
 <span class="keyword">struct</span> <span class="identifier">constant_pi</span><span class="special">&lt;</span><span class="identifier">mpfr_class</span><span class="special">&gt;</span>
 <span class="special">{</span>
    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="identifier">N</span><span class="special">&gt;</span>
-   <span class="keyword">inline</span> <span class="identifier">T</span> <span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;&amp;)</span>
+   <span class="keyword">static</span> <span class="identifier">mpfr_class</span> <span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;&amp;)</span>
    <span class="special">{</span>
       <span class="comment">// The template param N is one of the values in the table above,</span>
       <span class="comment">// we can either handle all cases in one as is the case here,</span>

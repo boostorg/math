@@ -221,7 +221,7 @@ mechanism.  We can achieve this by specialising the class template `boost::math:
    struct constant_pi<mpfr_class>
    {
       template<int N>
-      inline T get(const mpl::int_<N>&)
+      static mpfr_class get(const mpl::int_<N>&)
       {
          // The template param N is one of the values in the table above,
          // we can either handle all cases in one as is the case here,
