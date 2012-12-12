@@ -28,9 +28,9 @@ int main()
 {
   cout << "Example 1 using Inverse Gamma function. " << endl;
 
-  #ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
+  #ifdef BOOST_NO_CXX11_NUMERIC_LIMITS
   int max_digits10 = 2 + (boost::math::policies::digits<double, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
-  cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined" << endl; 
+  cout << "BOOST_NO_CXX11_NUMERIC_LIMITS is defined" << endl; 
 #else 
   int max_digits10 = std::numeric_limits<double>::max_digits10;
 #endif

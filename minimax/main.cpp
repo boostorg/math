@@ -14,8 +14,8 @@ using boost::math::ntl::pow;
 #include <boost/math/tools/remez.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/math/special_functions/binomial.hpp>
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/actor.hpp>
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_actor.hpp>
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <iomanip>
@@ -30,7 +30,7 @@ extern void show_extra(
    const boost::math::ntl::RR& y_offset, 
    int variant);
 
-using namespace boost::spirit;
+using namespace boost::spirit::classic;
 
 boost::math::ntl::RR a(0), b(1);   // range to optimise over
 bool rel_error(true);

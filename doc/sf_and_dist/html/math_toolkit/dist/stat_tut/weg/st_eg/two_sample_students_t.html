@@ -89,7 +89,7 @@
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">55</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">left</span> <span class="special">&lt;&lt;</span> <span class="string">"Degrees of Freedom"</span> <span class="special">&lt;&lt;</span> <span class="string">"=  "</span> <span class="special">&lt;&lt;</span> <span class="identifier">v</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
 <span class="comment">// Pooled variance:</span>
 <span class="keyword">double</span> <span class="identifier">sp</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(((</span><span class="identifier">Sn1</span><span class="special">-</span><span class="number">1</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">Sd1</span> <span class="special">*</span> <span class="identifier">Sd1</span> <span class="special">+</span> <span class="special">(</span><span class="identifier">Sn2</span><span class="special">-</span><span class="number">1</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">Sd2</span> <span class="special">*</span> <span class="identifier">Sd2</span><span class="special">)</span> <span class="special">/</span> <span class="identifier">v</span><span class="special">);</span>
-<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">55</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">left</span> <span class="special">&lt;&lt;</span> <span class="string">"Pooled Standard Deviation"</span> <span class="special">&lt;&lt;</span> <span class="string">"=  "</span> <span class="special">&lt;&lt;</span> <span class="identifier">v</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
+<span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">55</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">left</span> <span class="special">&lt;&lt;</span> <span class="string">"Pooled Standard Deviation"</span> <span class="special">&lt;&lt;</span> <span class="string">"=  "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sp</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
 <span class="comment">// t-statistic:</span>
 <span class="keyword">double</span> <span class="identifier">t_stat</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">Sm1</span> <span class="special">-</span> <span class="identifier">Sm2</span><span class="special">)</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">sp</span> <span class="special">*</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="number">1.0</span> <span class="special">/</span> <span class="identifier">Sn1</span> <span class="special">+</span> <span class="number">1.0</span> <span class="special">/</span> <span class="identifier">Sn2</span><span class="special">));</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">55</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">left</span> <span class="special">&lt;&lt;</span> <span class="string">"T Statistic"</span> <span class="special">&lt;&lt;</span> <span class="string">"=  "</span> <span class="special">&lt;&lt;</span> <span class="identifier">t_stat</span> <span class="special">&lt;&lt;</span> <span class="string">"\n"</span><span class="special">;</span>
@@ -228,14 +228,14 @@
    ________________________________________________
 
    Number of Observations (Sample 1)                      =  249
-   Sample 1 Mean                                          =  20.14458
-   Sample 1 Standard Deviation                            =  6.41470
+   Sample 1 Mean                                          =  20.145
+   Sample 1 Standard Deviation                            =  6.4147
    Number of Observations (Sample 2)                      =  79
-   Sample 2 Mean                                          =  30.48101
-   Sample 2 Standard Deviation                            =  6.10771
-   Degrees of Freedom                                     =  326.00000
-   Pooled Standard Deviation                              =  326.00000
-   T Statistic                                            =  -12.62059
+   Sample 2 Mean                                          =  30.481
+   Sample 2 Standard Deviation                            =  6.1077
+   Degrees of Freedom                                     =  326
+   Pooled Standard Deviation                              =  6.3426
+   T Statistic                                            =  -12.621
    Probability that difference is due to chance           =  5.273e-030
 
    Results for Alternative Hypothesis and alpha           =  0.0500

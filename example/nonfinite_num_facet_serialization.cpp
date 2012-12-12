@@ -44,7 +44,7 @@ static const char sep = ','; // Separator of bracketed float and double values.
 // Use max_digits10 (or equivalent) to obtain 
 // all potentially significant decimal digits for the floating-point types.
     
-#ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
+#ifdef BOOST_NO_CXX11_NUMERIC_LIMITS
   std::streamsize  max_digits10_float = 2 + std::numeric_limits<float>::digits * 30103UL / 100000UL;
   std::streamsize  max_digits10_double = 2 + std::numeric_limits<double>::digits * 30103UL / 100000UL;
 #else
@@ -173,8 +173,8 @@ int main (void)
   std::clog << std::endl
       << "Nonfinite_serialization.cpp' example program." << std::endl;
 
-#ifdef BOOST_NO_NUMERIC_LIMITS_LOWEST
-  std::cout << "BOOST_NO_NUMERIC_LIMITS_LOWEST is defined, so no max_digits10 available either,"
+#ifdef BOOST_NO_CXX11_NUMERIC_LIMITS
+  std::cout << "BOOST_NO_CXX11_NUMERIC_LIMITS is defined, so no max_digits10 available either,"
      "using our own version instead." << std::endl;
 #endif  
   std::cout << "std::numeric_limits<float>::max_digits10 is " << max_digits10_float << std::endl;

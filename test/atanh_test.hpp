@@ -82,6 +82,13 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(atanh_test, T)
                 (static_cast<T>(4)));
         }
     }
+    //
+    // Error handling checks:
+    //
+    BOOST_CHECK_THROW(atanh(T(-1)), std::overflow_error);
+    BOOST_CHECK_THROW(atanh(T(1)), std::overflow_error);
+    BOOST_CHECK_THROW(atanh(T(-2)), std::domain_error);
+    BOOST_CHECK_THROW(atanh(T(2)), std::domain_error);
 }
 
 

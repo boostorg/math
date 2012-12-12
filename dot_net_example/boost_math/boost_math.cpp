@@ -1,5 +1,5 @@
 // Copyright John Maddock 2007.
-// Copyright Paul A. Bristow 2007, 2009.
+// Copyright Paul A. Bristow 2007, 2009, 2012.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -20,10 +20,14 @@
 
 #include "stdafx.h"
 
-#pragma warning(disable: 4400) // 'const boost_math::any_distribution ^' : const/volatile qualifiers on this type are not supported
-#pragma warning(disable: 4244) // 'argument' : conversion from 'double' to 'unsigned int', possible loss of data
-#pragma warning(disable: 4512) // assignment operator could not be generated
+#ifdef _MSC_VER
+#  pragma warning(disable: 4400) // 'const boost_math::any_distribution ^' : const/volatile qualifiers on this type are not supported
+#  pragma warning(disable: 4244) // 'argument' : conversion from 'double' to 'unsigned int', possible loss of data
+#  pragma warning(disable: 4512) // assignment operator could not be generated
 // hypergeometric expects integer parameters.
+#  pragma warning(disable: 4127) // constant
+#endif
+
 #include "boost_math.h"
 
 namespace boost_math
@@ -114,15 +118,18 @@ any_distribution::any_distribution(int t, double arg1, double arg2, double arg3)
       this->reset(new concrete_distribution<boost::math::rayleigh>(boost::math::rayleigh(arg1)));
       break;
    case 26:
-      this->reset(new concrete_distribution<boost::math::students_t>(boost::math::students_t(arg1)));
+      this->reset(new concrete_distribution<boost::math::skew_normal>(boost::math::skew_normal(arg1, arg2, arg3)));
       break;
    case 27:
-      this->reset(new concrete_distribution<boost::math::triangular>(boost::math::triangular(arg1, arg2, arg3)));
+      this->reset(new concrete_distribution<boost::math::students_t>(boost::math::students_t(arg1)));
       break;
    case 28:
-      this->reset(new concrete_distribution<boost::math::uniform>(boost::math::uniform(arg1, arg2)));
+      this->reset(new concrete_distribution<boost::math::triangular>(boost::math::triangular(arg1, arg2, arg3)));
       break;
    case 29:
+      this->reset(new concrete_distribution<boost::math::uniform>(boost::math::uniform(arg1, arg2)));
+      break;
+   case 30:
       this->reset(new concrete_distribution<boost::math::weibull>(boost::math::weibull(arg1, arg2)));
       break;
 
@@ -179,11 +186,12 @@ distribution_info distributions[] =
    { "Pareto", "Location", "Shape","", 1, 1, 0}, // case 23
    { "Poisson", "Mean", "", "", 1, 0, 0}, // case 24
    { "Rayleigh", "Shape", "", "", 1, 0, 0}, // case 25
-   { "Student's t", "Degrees of Freedom", "", "", 1, 0, 0}, // case 26
-   { "Triangular", "Lower", "Mode", "Upper", -1, 0, +1 }, // case 27 3rd parameter!
+   { "Skew Normal", "Location", "Shape", "Skew", 0, 1, 0}, // case 27  (defaults to Gaussian).
+   { "Student's t", "Degrees of Freedom", "", "", 1, 0, 0}, // case 28
+   { "Triangular", "Lower", "Mode", "Upper", -1, 0, +1 }, // case 29 3rd parameter!
    // 0, 0.5, 1 also said to be 'standard' but this is most like an approximation to Gaussian distribution.
-   { "Uniform", "Lower", "Upper", "", 0, 1, 0}, // case 28
-   { "Weibull", "Shape", "Scale", "", 1, 1, 0}, // case 29
+   { "Uniform", "Lower", "Upper", "", 0, 1, 0}, // case 30
+   { "Weibull", "Shape", "Scale", "", 1, 1, 0}, // case 31
 };
 
 // How many distributions are supported:

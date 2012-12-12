@@ -555,26 +555,26 @@ namespace distribution_explorer
     { // In lieu of proper help.
       string helpText = "\n" + AssemblyDescription +
       "\nVersion " + Assembly.GetExecutingAssembly().GetName().Version.ToString() +
-      "\nA Windows utility to show the properties of distributions" +
-      "\n and permits calculation of probability density (or mass) function (PDF)" +
-      "\nand cumulative distribution function (CDF) and complement from values provided." +
+      "\nA Windows utility to show the properties of distributions " +
+      "\nand permit calculation of probability density (or mass) function (PDF) " +
+      "\nand cumulative distribution function (CDF) and complements from values provided." +
       "\nQuantiles are also calculated for typical risk (alpha) probabilities" +
       "\nand for probabilities provided by the user." +
       "\n" +
       "\nResults can be saved to text files using Save or SaveAs." +
       "\nAll the values on the four tabs are output to the file chosen," +
       "\nand are tab separated to assist input to other programs," +
-       "\nfor example, spreadsheets or text editors." +
-      "\nNote: when importing to Excel only 10 decimal digits are shown by default:" +
+      "\nfor example, spreadsheets or text editors." +
+      "\nNote: when importing to Excel, by default only 10 decimal digits are shown by Excel:" +
       "\nit is necessary to format all cells to display the full 15 decimal digits," +
-      "\nalthough not all computed values will be as accurate as this.\n" +
-      "\nValues shown as NaN cannot be calculated from the value given," +
+      "\nalthough not all computed values will be as accurate as this." +
+      "\n\nValues shown as NaN cannot be calculated for the value given," +
       "\nmost commonly because the value is outside the range for the distribution." +
       "\n" +
       "\nFor more information, including downloads, see " +
       "\nhttp://sourceforge.net/projects/distexplorer/" +
       "\n(Note that .NET framework 4.0 and VC Redistribution X86 are requirements for this program.)" +
-      "\n\nCopyright John Maddock & Paul A. Bristow 2007, 2009, 2010";
+      "\n\nCopyright John Maddock & Paul A. Bristow 2007, 2009, 2010, 2012";
 
       MessageBox.Show("Statistical Distribution Explorer\n" + helpText);
     }
@@ -600,8 +600,6 @@ namespace distribution_explorer
       MessageBox.Show("Print Preview is not yet implemented." +
         "\nSave all values to a text file and print that file.");
     }
-
-
 
 
     private void exitToolStripMenuItem_Click(object sender, EventArgs e)

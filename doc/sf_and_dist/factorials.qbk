@@ -163,6 +163,8 @@ The source code `static_assert` and comment just after the  will be:
 ``
 ]
 
+[note The argument to `double_factorial` is type `unsigned` even though technically -1!! is defined.]
+
 [h4 Accuracy]
 
 The implementation uses a trivial adaptation of

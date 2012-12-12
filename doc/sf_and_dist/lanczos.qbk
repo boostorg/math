@@ -103,7 +103,7 @@ at high precision, and then stored as part of the program.
 Calculation of the coefficients is performed via the method of __godfrey;
 let the constants be contained in a column vector P, then:
 
-P = B D C F
+P = D B C F
 
 where B is an NxN matrix:
 

@@ -76,6 +76,15 @@ BOOST_TEST_CASE_TEMPLATE_FUNCTION(acosh_test, T)
     BOOST_CHECK_PREDICATE(::std::less_equal<T>(),
        (acosh_error_evaluator(x))
        (static_cast<T>(4)));
+    //
+    // Special cases:
+    //
+    if(std::numeric_limits<T>::has_infinity)
+    {
+       T inf = std::numeric_limits<T>::infinity();
+       boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::ignore_error> > pol;
+       BOOST_CHECK_EQUAL(boost::math::asinh(inf, pol), inf);
+    }
 }
 
 
