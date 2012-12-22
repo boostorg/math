@@ -17,6 +17,7 @@ and [@https://svn.boost.org/trac/boost/ticket/7416 #7416], [@https://svn.boost.o
 * Improve complex acos/asin/atan, see [@https://svn.boost.org/trac/boost/ticket/7290 #7290], 
 [@https://svn.boost.org/trac/boost/ticket/7291 #7291].
 * Improve accuracy in some corner cases of __cyl_bessel_j and __gamma_p/__gamma_q thanks to suggestions from Rocco Romeo.
+* Improve accuracy of Bessel J and Y for integer orders thanks to suggestions from Rocco Romeo.
 
 [h4 Boost-1.52]
 
