@@ -191,13 +191,6 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      largest_type,                  // test type(s)
-      ".*Y0.*Random.*",           // test data group
-      ".*", 600, 400);               // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
       "real_concept",                // test type(s)
       ".*(Y[nv]|y).*Random.*",           // test data group
       ".*", 2000, 2000);             // test function

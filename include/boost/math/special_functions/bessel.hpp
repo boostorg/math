@@ -301,7 +301,7 @@ inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& po
 
    if(floor(v) == v)
    {
-      if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
+      if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (4 * fabs(x) * sqrt(sqrt(sqrt(14 * tools::epsilon<T>() * (fabs(x) + fabs(v) / 2) / (5120 * fabs(x))))) > fabs(v)))
       {
          T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
          if((v < 0) && (itrunc(v, pol) & 1))
@@ -330,7 +330,7 @@ inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
    BOOST_MATH_INSTRUMENT_VARIABLE(v);
    BOOST_MATH_INSTRUMENT_VARIABLE(x);
 
-   if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
+   if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (4 * fabs(x) * sqrt(sqrt(sqrt(14 * tools::epsilon<T>() * (fabs(x) + abs(v) / 2) / (5120 * x)))) > abs(v)))
    {
       T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
       if((v < 0) && (v & 1))

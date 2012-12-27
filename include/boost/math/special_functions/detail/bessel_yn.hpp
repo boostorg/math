@@ -78,7 +78,7 @@ T bessel_yn(int n, T x, const Policy& pol)
        do
        {
            T fact = 2 * k / x;
-           if((tools::max_value<T>() - fabs(prev)) / fact < fabs(current))
+           if((fact > 1) && ((tools::max_value<T>() - fabs(prev)) / fact < fabs(current)))
            {
               prev /= current;
               factor /= current;

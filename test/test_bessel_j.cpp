@@ -254,14 +254,7 @@ void expected_results()
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
-      ".*JN.*Integer.*",              // test data group
-      ".*", 30000, 10000);       // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      largest_type,                  // test type(s)
-      ".*(JN|j).*|.*Tricky.*",       // test data group
+      "Bessel j:.*|Bessel JN: Mathworld.*|.*Tricky.*",       // test data group
       ".*", 1500, 700);               // test function
    add_expected_result(
       ".*",                          // compiler

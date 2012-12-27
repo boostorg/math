@@ -307,7 +307,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
     // x is positive until reflection
     W = T(2) / (x * pi<T>());               // Wronskian
     T Yv_scale = 1;
-    if((x > 8) && (x < 1000) && hankel_PQ(v, x, &p, &q, pol))
+    if((x > 8) && hankel_PQ(v, x, &p, &q, pol))
     {
        //
        // Hankel approximation: note that this method works best when x 
@@ -315,10 +315,22 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
        // of large values, with horrendous resulting accuracy.  It is fast though
        // when it works....
        //
-       T chi = x - fmod(T(v / 2 + 0.25f), T(2)) * boost::math::constants::pi<T>();
-       T sc = sin(chi);
-       T cc = cos(chi);
-       chi = sqrt(2 / (boost::math::constants::pi<T>() * x));
+       // Normally we calculate sin/cos(chi) where:
+       //
+       // chi = x - fmod(T(v / 2 + 0.25f), T(2)) * boost::math::constants::pi<T>();
+       //
+       // But this introduces large errors, so use sin/cos addition formulae to
+       // improve accuracy:
+       //
+       T mod_v = fmod(T(v / 2 + 0.25f), T(2));
+       T sx = sin(x);
+       T cx = cos(x);
+       T sv = sin_pi(mod_v);
+       T cv = cos_pi(mod_v);
+
+       T sc = sx * cv - sv * cx; // == sin(chi);
+       T cc = cx * cv + sx * sv; // == cos(chi);
+       T chi = boost::math::constants::root_two<T>() / (boost::math::constants::root_pi<T>() * sqrt(x)); //sqrt(2 / (boost::math::constants::pi<T>() * x));
        Yv = chi * (p * sc + q * cc);
        Jv = chi * (p * cc - q * sc);
     }
@@ -459,7 +471,7 @@ int bessel_jy(T v, T x, T* J, T* Y, int kind, const Policy& pol)
               for (k = n; k > 0; k--)             // backward recurrence for J
               {
                   T t = 2 * (u + k) / x;
-                  if(tools::max_value<T>() / t < current)
+                  if((t > 1) && (tools::max_value<T>() / t < current))
                   {
                      over = true;
                      break;
