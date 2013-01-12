@@ -170,6 +170,11 @@ namespace boost{ namespace math
    }\
    /* This one is for very high precision that is none the less known at compile time: */ \
    template <int N> static T compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>));\
+   template <int N> static inline T get_from_compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))\
+   {\
+      static const T result = compute<N>();\
+      return result;\
+   }\
    /* public getters come next */\
    public:\
    static inline T get(const mpl::int_<construct_from_string>&)\
@@ -185,8 +190,8 @@ namespace boost{ namespace math
    { return BOOST_JOIN(x, L); }\
    template <int N> static inline T get(const mpl::int_<N>& n)\
    {\
-      constant_initializer2<T, N, & BOOST_JOIN(constant_, name)<T>::template compute<N> >::force_instantiate();\
-      return compute<N>(); \
+      constant_initializer2<T, N, & BOOST_JOIN(constant_, name)<T>::template get_from_compute<N> >::force_instantiate();\
+      return get_from_compute<N>(); \
    }\
    /* This one is for true arbitary precision, which may well vary at runtime: */ \
    static inline T get(const mpl::int_<0>&)\
