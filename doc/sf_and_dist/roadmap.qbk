@@ -6,6 +6,10 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
+[h4 Boost-1.54]
+
+* Fixed constants to use a thread safe cache of computed values when used at arbitrary precision.
+
 [h4 Boost-1.53]
 
 * Fixed issues [@https://svn.boost.org/trac/boost/ticket/7325 #7325], [@https://svn.boost.org/trac/boost/ticket/7415 #7415]
