@@ -188,7 +188,7 @@ namespace boost{ namespace math
    { return x; }\
    static inline BOOST_CONSTEXPR T get(const mpl::int_<construct_from_long_double>&)\
    { return BOOST_JOIN(x, L); }\
-   template <int N> static inline T get(const mpl::int_<N>& n)\
+   template <int N> static inline T get(const mpl::int_<N>&)\
    {\
       constant_initializer2<T, N, & BOOST_JOIN(constant_, name)<T>::template get_from_compute<N> >::force_instantiate();\
       return get_from_compute<N>(); \
