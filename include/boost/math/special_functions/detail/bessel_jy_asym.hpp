@@ -99,13 +99,14 @@ T asymptotic_bessel_phase_mx(T v, T x)
    //
    // Calculate the phase of J(v, x) and Y(v, x) for large x.
    // See A&S 9.2.29.
-   // Note that the result returned is the phase less x.
+   // Note that the result returned is the phase less (x - PI(v/2 + 1/4))
+   // which we'll factor in later when we calculate the sines/cosines of the result:
    //
    T mu = 4 * v * v;
    T denom = 4 * x;
    T denom_mult = denom * denom;
 
-   T s = 0; //-constants::pi<T>() * (v / 2 + 0.25f);
+   T s = 0;
    s += (mu - 1) / (2 * denom);
    denom *= denom_mult;
    s += (mu - 1) * (mu - 25) / (6 * denom);
@@ -127,8 +128,10 @@ inline T asymptotic_bessel_y_large_x_2(T v, T x)
    BOOST_MATH_INSTRUMENT_VARIABLE(ampl);
    BOOST_MATH_INSTRUMENT_VARIABLE(phase);
    //
-   // Calculate the sine of the phase, using:
-   // sin(x+p) = sin(x)cos(p) + cos(x)sin(p)
+   // Calculate the sine of the phase, using
+   // sine/cosine addition rules to factor in
+   // the x - PI(v/2 + 1/4) term not added to the
+   // phase when we calculated it.
    //
    T cx = cos(x);
    T sx = sin(x);
@@ -153,8 +156,10 @@ inline T asymptotic_bessel_j_large_x_2(T v, T x)
    BOOST_MATH_INSTRUMENT_VARIABLE(ampl);
    BOOST_MATH_INSTRUMENT_VARIABLE(phase);
    //
-   // Calculate the sine of the phase, using:
-   // cos(x+p) = cos(x)cos(p) - sin(x)sin(p)
+   // Calculate the sine of the phase, using
+   // sine/cosine addition rules to factor in
+   // the x - PI(v/2 + 1/4) term not added to the
+   // phase when we calculated it.
    //
    BOOST_MATH_INSTRUMENT_CODE(cos(phase));
    BOOST_MATH_INSTRUMENT_CODE(cos(x));
