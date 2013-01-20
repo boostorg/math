@@ -9,6 +9,7 @@ All bug reports including closed ones can be viewed
 [h4 Boost-1.54]
 
 * Fixed constants to use a thread safe cache of computed values when used at arbitrary precision.
+* More accuracy improvements to the Bessel J and Y functions from Rocco Romeo.
 
 [h4 Boost-1.53]
 

@@ -85,7 +85,7 @@ __cephes Peak=2.5 Mean=1.1]
 GSL Peak=11 
 
 __cephes Peak=17 Mean=2.5] 
-      [Peak=413 Mean=110 
+      [Peak=59 Mean=10 
 
 GSL Peak=6x10[super 11] 
 
@@ -96,19 +96,19 @@ __cephes Peak=2x10[super 5] ] ]
 ]
 
 [table Errors Rates in cyl_neumann
-[[Significand Size] [Platform and Compiler] [J[sub 0][space] and J[sub 1]] [J[sub n] (integer orders)] [J[sub v] (fractional orders)] ]
+[[Significand Size] [Platform and Compiler] [Y[sub 0][space] and Y[sub 1]] [Y[sub n] (integer orders)] [Y[sub v] (fractional orders)] ]
 [[53] [Win32 / Visual C++ 8.0] 
-      [Peak=330 Mean=54 
+      [Peak=4.7 Mean=1.7 
 
 GSL Peak=34 Mean=9 
 
 __cephes Peak=330 Mean=54] 
-      [Peak=923 Mean=83 
+      [Peak=117 Mean=10 
 
 GSL Peak=500 Mean=54 
 
 __cephes Peak=923 Mean=83] 
-      [Peak=561 Mean=36 
+      [Peak=800 Mean=40 
 
 GSL Peak=1.4x10[super 6][space] Mean\=7x10[super 4][space] 
 

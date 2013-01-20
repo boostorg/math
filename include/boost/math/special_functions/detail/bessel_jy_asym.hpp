@@ -105,7 +105,7 @@ T asymptotic_bessel_phase_mx(T v, T x)
    T denom = 4 * x;
    T denom_mult = denom * denom;
 
-   T s = -constants::pi<T>() * (v / 2 + 0.25f);
+   T s = 0; //-constants::pi<T>() * (v / 2 + 0.25f);
    s += (mu - 1) / (2 * denom);
    denom *= denom_mult;
    s += (mu - 1) * (mu - 25) / (6 * denom);
@@ -130,7 +130,11 @@ inline T asymptotic_bessel_y_large_x_2(T v, T x)
    // Calculate the sine of the phase, using:
    // sin(x+p) = sin(x)cos(p) + cos(x)sin(p)
    //
-   T sin_phase = sin(phase) * cos(x) + cos(phase) * sin(x);
+   T cx = cos(x);
+   T sx = sin(x);
+   T ci = cos_pi(v / 2 + 0.25f);
+   T si = sin_pi(v / 2 + 0.25f);
+   T sin_phase = sin(phase) * (cx * ci + sx * si) + cos(phase) * (sx * ci - cx * si);
    BOOST_MATH_INSTRUMENT_CODE(sin(phase));
    BOOST_MATH_INSTRUMENT_CODE(cos(x));
    BOOST_MATH_INSTRUMENT_CODE(cos(phase));
@@ -156,7 +160,11 @@ inline T asymptotic_bessel_j_large_x_2(T v, T x)
    BOOST_MATH_INSTRUMENT_CODE(cos(x));
    BOOST_MATH_INSTRUMENT_CODE(sin(phase));
    BOOST_MATH_INSTRUMENT_CODE(sin(x));
-   T sin_phase = cos(phase) * cos(x) - sin(phase) * sin(x);
+   T cx = cos(x);
+   T sx = sin(x);
+   T ci = cos_pi(v / 2 + 0.25f);
+   T si = sin_pi(v / 2 + 0.25f);
+   T sin_phase = cos(phase) * (cx * ci + sx * si) - sin(phase) * (sx * ci - cx * si);
    BOOST_MATH_INSTRUMENT_VARIABLE(sin_phase);
    return sin_phase * ampl;
 }
