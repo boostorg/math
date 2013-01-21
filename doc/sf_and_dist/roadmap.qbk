@@ -16,7 +16,8 @@ All bug reports including closed ones can be viewed
 * Fixed issues [@https://svn.boost.org/trac/boost/ticket/7325 #7325], [@https://svn.boost.org/trac/boost/ticket/7415 #7415]
 and [@https://svn.boost.org/trac/boost/ticket/7416 #7416], [@https://svn.boost.org/trac/boost/ticket/7183 #7183],
 [@https://svn.boost.org/trac/boost/ticket/7649 #7649], [@https://svn.boost.org/trac/boost/ticket/7694 #7694],
-[@https://svn.boost.org/trac/boost/ticket/4445 #4445], [@https://svn.boost.org/trac/boost/ticket/7492 #7492].
+[@https://svn.boost.org/trac/boost/ticket/4445 #4445], [@https://svn.boost.org/trac/boost/ticket/7492 #7492],
+[@https://svn.boost.org/trac/boost/ticket/7891 #7891], [@https://svn.boost.org/trac/boost/ticket/7429 #7429].
 * Fixed mistake in calculating pooled standard deviation in two-sample students t example
 [@https://svn.boost.org/trac/boost/ticket/7402 #7402].
 * Improve complex acos/asin/atan, see [@https://svn.boost.org/trac/boost/ticket/7290 #7290], 
