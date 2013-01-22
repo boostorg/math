@@ -27,7 +27,7 @@ namespace boost{ namespace math
 {
   namespace constants
   {
-    // To permit other calculations at about 100 decimal digits with NTL::RR type,
+    // To permit other calculations at about 100 decimal digits with some UDT,
     // it is obviously necessary to define constants to this accuracy.
 
     // However, some compilers do not accept decimal digits strings as long as this.
@@ -93,6 +93,15 @@ namespace boost{ namespace math
 
    namespace detail{
 
+      template <class Real, class Policy = boost::math::policies::policy<> >
+      struct constant_return
+      {
+         typedef typename construction_traits<Real, Policy>::type construct_type;
+         typedef typename mpl::if_c<
+            (construct_type::value >= construct_from_string),
+            const Real&, Real>::type type;
+      };
+
       template <class Real>
       Real convert_from_string(const char* p, const mpl::false_&)
       {
@@ -104,7 +113,7 @@ namespace boost{ namespace math
          return p;
       }
 
-      template <class T, T (*F)(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
+      template <class T, const T& (*F)(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
       struct constant_initializer
       {
          static void force_instantiate()
@@ -127,10 +136,10 @@ namespace boost{ namespace math
          static const initializer init;
       };
 
-      template <class T, T (*F)(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
+      template <class T, const T& (*F)(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
       typename constant_initializer<T, F>::initializer const constant_initializer<T, F>::init;
 
-      template <class T, int N, T (*F)(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
+      template <class T, int N, const T& (*F)(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
       struct constant_initializer2
       {
          static void force_instantiate()
@@ -153,7 +162,7 @@ namespace boost{ namespace math
          static const initializer init;
       };
 
-      template <class T, int N, T (*F)(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
+      template <class T, int N, const T& (*F)(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
       typename constant_initializer2<T, N, F>::initializer const constant_initializer2<T, N, F>::init;
 
    }
@@ -163,21 +172,21 @@ namespace boost{ namespace math
    template <class T> struct BOOST_JOIN(constant_, name){\
    private:\
    /* The default implementations come next: */ \
-   static inline T get_from_string()\
+   static inline const T& get_from_string()\
    {\
       static const T result = convert_from_string<T>(y, boost::is_convertible<const char*, T>());\
       return result;\
    }\
    /* This one is for very high precision that is none the less known at compile time: */ \
    template <int N> static T compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>));\
-   template <int N> static inline T get_from_compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))\
+   template <int N> static inline const T& get_from_compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))\
    {\
       static const T result = compute<N>();\
       return result;\
    }\
    /* public getters come next */\
    public:\
-   static inline T get(const mpl::int_<construct_from_string>&)\
+   static inline const T& get(const mpl::int_<construct_from_string>&)\
    {\
       constant_initializer<T, & BOOST_JOIN(constant_, name)<T>::get_from_string >::force_instantiate();\
       return get_from_string();\
@@ -188,7 +197,7 @@ namespace boost{ namespace math
    { return x; }\
    static inline BOOST_CONSTEXPR T get(const mpl::int_<construct_from_long_double>&)\
    { return BOOST_JOIN(x, L); }\
-   template <int N> static inline T get(const mpl::int_<N>&)\
+   template <int N> static inline const T& get(const mpl::int_<N>&)\
    {\
       constant_initializer2<T, N, & BOOST_JOIN(constant_, name)<T>::template get_from_compute<N> >::force_instantiate();\
       return get_from_compute<N>(); \
@@ -201,9 +210,9 @@ namespace boost{ namespace math
    \
    \
    /* The actual forwarding function: */ \
-   template <class T, class Policy> inline BOOST_CONSTEXPR T name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy))\
+   template <class T, class Policy> inline BOOST_CONSTEXPR typename detail::constant_return<T, Policy>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(Policy))\
    { return detail:: BOOST_JOIN(constant_, name)<T>::get(typename construction_traits<T, Policy>::type()); }\
-   template <class T> inline BOOST_CONSTEXPR T name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T))\
+   template <class T> inline BOOST_CONSTEXPR typename detail::constant_return<T>::type name(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T))\
    { return name<T, boost::math::policies::policy<> >(); }\
    \
    \

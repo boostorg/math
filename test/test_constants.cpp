@@ -40,9 +40,20 @@ typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeri
 // forces the precision of the policy to be greater than
 // that of a long double, and therefore triggers different code (construct from string).
 typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits + 2> > real_concept_policy_2;
+// Policy with precision greater than the string representations, forces computation of values (i.e. different code path):
+typedef boost::math::policies::policy<boost::math::policies::digits2<400> > real_concept_policy_3;
 
 BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_1 >::type, boost::mpl::int_<(sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double) > >::value));
 BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_2 >::type, boost::mpl::int_<boost::math::constants::construct_from_string> >::value));
+BOOST_STATIC_ASSERT((boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_3>::type::value >= 5));
+
+#ifndef BOOST_NO_CXX11_CONSTEXPR
+
+constexpr float fval = boost::math::constants::pi<float>();
+constexpr double dval = boost::math::constants::pi<double>();
+constexpr long double ldval = boost::math::constants::pi<long double>();
+
+#endif
 
 // We need to declare a conceptual type whose precision is unknown at
 // compile time, and is so enormous when checked at runtime,
@@ -605,6 +616,8 @@ void test_real_concept_policy(const Policy&)
    using boost::math::concepts::real_concept;
 
    boost::math::concepts::real_concept tolerance = boost::math::tools::epsilon<real_concept>() * 2;  // double
+   if(Policy::precision_type::value > 200)
+      tolerance *= 50;
    std::cout << "Tolerance for type " << typeid(real_concept).name()  << " is " << tolerance << "." << std::endl;
 
    //typedef typename boost::math::policies::precision<boost::math::concepts::real_concept, boost::math::policies::policy<> >::type t1;
@@ -748,6 +761,7 @@ int test_main(int, char* [])
 
    test_real_concept_policy(real_concept_policy_1());
    test_real_concept_policy(real_concept_policy_2()); // Increased precision forcing construction from string.
+   test_real_concept_policy(real_concept_policy_3()); // Increased precision forcing caching of computed values.
    test_real_concept_policy(boost::math::policies::policy<>()); // Default.
 
    // (Parameter value, arbitrarily zero, only communicates the floating-point type).

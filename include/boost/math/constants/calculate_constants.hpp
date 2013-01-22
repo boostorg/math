@@ -161,7 +161,7 @@ inline T constant_euler<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::
    // See equation 17 with p = 2.
    //
    T n = 3 + (M ? (std::min)(M, tools::digits<T>()) : tools::digits<T>()) / 4;
-   T lim = M ? ldexp(T(1), (std::min)(M, tools::digits<T>())) : tools::epsilon<T>();
+   T lim = M ? ldexp(T(1), 1 - (std::min)(M, tools::digits<T>())) : tools::epsilon<T>();
    T lnn = log(n);
    T term = 1;
    T N = -lnn;
