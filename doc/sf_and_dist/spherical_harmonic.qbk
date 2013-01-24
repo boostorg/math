@@ -3,7 +3,7 @@
 [h4 Synopsis]
 
 ``
-#include <boost/math/special_functions/spheric_harmonic.hpp>
+#include <boost/math/special_functions/spherical_harmonic.hpp>
 ``
 
    namespace boost{ namespace math{

@@ -203,6 +203,19 @@ struct lanczos<mpfr_class, Policy>
 
 } // namespace lanczos
 
+namespace constants{
+
+template <class Real, class Policy>
+struct construction_traits;
+
+template <class Policy>
+struct construction_traits<mpfr_class, Policy>
+{
+   typedef mpl::int_<0> type;
+};
+
+}
+
 namespace tools
 {
 

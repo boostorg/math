@@ -275,12 +275,12 @@ T float_distance(const T& a, const T& b, const Policy& pol)
    if(a == b)
       return 0;
    if(a == 0)
-      return 1 + fabs(float_distance(static_cast<T>((b < 0) ? -detail::get_smallest_value<T>() : detail::get_smallest_value<T>()), b, pol));
+      return 1 + fabs(float_distance(static_cast<T>((b < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), b, pol));
    if(b == 0)
-      return 1 + fabs(float_distance(static_cast<T>((a < 0) ? -detail::get_smallest_value<T>() : detail::get_smallest_value<T>()), a, pol));
+      return 1 + fabs(float_distance(static_cast<T>((a < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), a, pol));
    if(boost::math::sign(a) != boost::math::sign(b))
-      return 2 + fabs(float_distance(static_cast<T>((b < 0) ? -detail::get_smallest_value<T>() : detail::get_smallest_value<T>()), b, pol))
-         + fabs(float_distance(static_cast<T>((a < 0) ? -detail::get_smallest_value<T>() : detail::get_smallest_value<T>()), a, pol));
+      return 2 + fabs(float_distance(static_cast<T>((b < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), b, pol))
+         + fabs(float_distance(static_cast<T>((a < 0) ? T(-detail::get_smallest_value<T>()) : detail::get_smallest_value<T>()), a, pol));
    //
    // By the time we get here, both a and b must have the same sign, we want
    // b > a and both postive for the following logic:

@@ -69,24 +69,24 @@ explicit ntl ;
 cpp-pch pch : pch.hpp : <use>../../test/build//boost_test_exec_monitor ;
 cpp-pch pch_light : pch_light.hpp : <use>../../test/build//boost_test_exec_monitor ;
 
-lib test_instances : float_test_instances.cpp double_test_instances.cpp ldouble_test_instances.cpp real_concept_test_instances.cpp pch 
-                   : <link>static ;
+#lib test_instances : float_test_instances.cpp double_test_instances.cpp ldouble_test_instances.cpp real_concept_test_instances.cpp pch 
+#                   : <link>static ;
 
-run hypot_test.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run hypot_test.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run pow_test.cpp ../../test/build//boost_test_exec_monitor ;
-run log1p_expm1_test.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
-run powm1_sqrtp1m1_test.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run log1p_expm1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run powm1_sqrtp1m1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run special_functions_test.cpp ../../test/build//boost_unit_test_framework ;
-run test_airy.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_airy.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_bernoulli.cpp ../../test/build//boost_test_exec_monitor ;
 run test_constants.cpp ../../test/build//boost_test_exec_monitor ;
 run test_print_info_on_type.cpp ;
 run test_constant_generate.cpp ntl  : : : [ check-target-builds ../config//has_ntl_rr : : <build>no ] : test_constant_generate_ntl ;
-run test_bessel_j.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
-run test_bessel_y.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
-run test_bessel_i.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
-run test_bessel_k.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
-run test_beta.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_bessel_y.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_bessel_i.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_bessel_k.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_beta.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_beta_dist.cpp ../../test/build//boost_test_exec_monitor ;
 run test_binomial.cpp  ../../test/build//boost_test_exec_monitor
         : # command line
@@ -166,30 +166,30 @@ run test_binomial.cpp  ../../test/build//boost_test_exec_monitor
 	      <toolset>intel:<pch>off
         : test_binomial_real_concept6 ;
 run test_binomial_coeff.cpp pch ../../test/build//boost_test_exec_monitor ;
-run test_carlson.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_carlson.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_cauchy.cpp ../../test/build//boost_test_exec_monitor ;
-run test_cbrt.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_cbrt.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_chi_squared.cpp ../../test/build//boost_test_exec_monitor ;
 run test_classify.cpp pch ../../test/build//boost_test_exec_monitor ;
-run test_digamma.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_digamma.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_dist_overloads.cpp ../../test/build//boost_test_exec_monitor ;
-run test_ellint_1.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
-run test_ellint_2.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
-run test_ellint_3.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
-run test_erf.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_ellint_1.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_ellint_2.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_ellint_3.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_erf.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_error_handling.cpp ../../test/build//boost_test_exec_monitor ;
-run test_expint.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_expint.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_exponential_dist.cpp ../../test/build//boost_test_exec_monitor ;
 run test_extreme_value.cpp ../../test/build//boost_test_exec_monitor ;
 run test_factorials.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_find_location.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_find_scale.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_fisher_f.cpp ../../test/build//boost_test_exec_monitor ;
-run test_gamma.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_gamma.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_gamma_dist.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_geometric.cpp ../../test/build//boost_test_exec_monitor ;
 run test_hankel.cpp ../../test/build//boost_test_exec_monitor ;
-run test_hermite.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_hermite.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_hypergeometric_dist.cpp ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
@@ -232,28 +232,28 @@ run test_hypergeometric_dist.cpp ../../test/build//boost_test_exec_monitor
 	      <define>TEST_QUANT=5
 	      <toolset>intel:<pch>off
         : test_hypergeometric_dist5 ;
-run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_FLOAT
 	      <toolset>intel:<pch>off
         : test_ibeta_float ;
-run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_DOUBLE
 	      <toolset>intel:<pch>off
         : test_ibeta_double ;
-run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_LDOUBLE
 	      <toolset>intel:<pch>off
         : test_ibeta_long_double ;
-run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -261,7 +261,7 @@ run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_m
 	      <define>TEST_DATA=1
 	      <toolset>intel:<pch>off
         : test_ibeta_real_concept1 ;
-run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -269,7 +269,7 @@ run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_m
 	      <define>TEST_DATA=2
 	      <toolset>intel:<pch>off
         : test_ibeta_real_concept2 ;
-run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -277,7 +277,7 @@ run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_m
 	      <define>TEST_DATA=3
 	      <toolset>intel:<pch>off
         : test_ibeta_real_concept3 ;
-run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -285,28 +285,28 @@ run test_ibeta.cpp  test_instances pch_light ../../test/build//boost_test_exec_m
 	      <define>TEST_DATA=4
 	      <toolset>intel:<pch>off
         : test_ibeta_real_concept4 ;
-run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_FLOAT
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_float ;
-run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_DOUBLE
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_double ;
-run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_LDOUBLE
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_long_double ;
-run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -314,7 +314,7 @@ run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_ex
 	      <define>TEST_DATA=1
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_real_concept1 ;
-run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -322,7 +322,7 @@ run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_ex
 	      <define>TEST_DATA=2
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_real_concept2 ;
-run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -330,7 +330,7 @@ run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_ex
 	      <define>TEST_DATA=3
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_real_concept3 ;
-run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -338,28 +338,28 @@ run test_ibeta_inv.cpp  test_instances pch_light ../../test/build//boost_test_ex
 	      <define>TEST_DATA=4
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_real_concept4 ;
-run test_ibeta_inv_ab.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv_ab.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_FLOAT
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_ab_float ;
-run test_ibeta_inv_ab.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv_ab.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_DOUBLE
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_ab_double ;
-run test_ibeta_inv_ab.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv_ab.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_LDOUBLE
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_ab_long_double ;
-run test_ibeta_inv_ab.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv_ab.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -367,7 +367,7 @@ run test_ibeta_inv_ab.cpp  test_instances pch_light ../../test/build//boost_test
 	      <define>TEST_DATA=1
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_ab_real_concept1 ;
-run test_ibeta_inv_ab.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv_ab.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -375,7 +375,7 @@ run test_ibeta_inv_ab.cpp  test_instances pch_light ../../test/build//boost_test
 	      <define>TEST_DATA=2
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_ab_real_concept2 ;
-run test_ibeta_inv_ab.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_ibeta_inv_ab.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -383,57 +383,57 @@ run test_ibeta_inv_ab.cpp test_instances pch_light ../../test/build//boost_test_
 	      <define>TEST_DATA=3
 	      <toolset>intel:<pch>off
         : test_ibeta_inv_ab_real_concept3 ;
-run test_igamma.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
-run test_igamma_inv.cpp test_instances pch_light  ../../test/build//boost_test_exec_monitor
+run test_igamma.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_igamma_inv.cpp test_instances//test_instances pch_light  ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_FLOAT
 	      <toolset>intel:<pch>off
         : test_igamma_inv_float ;
-run test_igamma_inv.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_igamma_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_DOUBLE
 	      <toolset>intel:<pch>off
         : test_igamma_inv_double ;
-run test_igamma_inv.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_igamma_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_LDOUBLE
 	      <toolset>intel:<pch>off
         : test_igamma_inv_long_double ;
-run test_igamma_inv.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_igamma_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_REAL_CONCEPT
 	      <toolset>intel:<pch>off
         : test_igamma_inv_real_concept ;
-run test_igamma_inva.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_igamma_inva.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_FLOAT
 	      <toolset>intel:<pch>off
         : test_igamma_inva_float ;
-run test_igamma_inva.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_igamma_inva.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_DOUBLE
 	      <toolset>intel:<pch>off
         : test_igamma_inva_double ;
-run test_igamma_inva.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_igamma_inva.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
 	      <define>TEST_LDOUBLE
 	      <toolset>intel:<pch>off
         : test_igamma_inva_long_double ;
-run test_igamma_inva.cpp  test_instances pch_light ../../test/build//boost_test_exec_monitor
+run test_igamma_inva.cpp  test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor
         : # command line
         : # input files
         : # requirements
@@ -449,8 +449,8 @@ run test_inverse_gaussian.cpp ../../test/build//boost_test_exec_monitor ;
 run test_jacobi.cpp pch_light ../../test/build//boost_test_exec_monitor ;
 run test_laplace.cpp ../../test/build//boost_unit_test_framework ;
 run test_inv_hyp.cpp pch ../../test/build//boost_test_exec_monitor ;
-run test_laguerre.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
-run test_legendre.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_logistic_dist.cpp ../../test/build//boost_test_exec_monitor ;
 run test_lognormal.cpp ../../test/build//boost_test_exec_monitor ;
 run test_minima.cpp pch ../../test/build//boost_test_exec_monitor ;
@@ -636,7 +636,7 @@ run test_real_concept.cpp ../../test/build//boost_test_exec_monitor ;
 run test_remez.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_roots.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_round.cpp pch ../../test/build//boost_test_exec_monitor ;
-run test_spherical_harmonic.cpp test_instances pch_light ../../test/build//boost_test_exec_monitor ;
+run test_spherical_harmonic.cpp test_instances//test_instances pch_light ../../test/build//boost_test_exec_monitor ;
 run test_students_t.cpp ../../test/build//boost_test_exec_monitor ;
 run test_sign.cpp ../../test/build//boost_test_exec_monitor ;
 run test_skew_normal.cpp ../../test/build//boost_test_exec_monitor ;
@@ -645,7 +645,7 @@ run test_toms748_solve.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_triangular.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_uniform.cpp pch ../../test/build//boost_test_exec_monitor ;
 run test_weibull.cpp ../../test/build//boost_test_exec_monitor ;
-run test_zeta.cpp test_instances ../../test/build//boost_test_exec_monitor pch_light ;
+run test_zeta.cpp test_instances//test_instances ../../test/build//boost_test_exec_monitor pch_light ;
 
 run test_policy.cpp ../../test/build//boost_test_exec_monitor ;
 run test_policy_2.cpp ../../test/build//boost_test_exec_monitor ;

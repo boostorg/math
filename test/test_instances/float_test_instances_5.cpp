@@ -7,9 +7,11 @@
 
 #ifndef BOOST_BUILD_PCH_ENABLED
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
-#include <boost/math/special_functions.hpp>
+#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/digamma.hpp>
 #endif
 
 #define BOOST_MATH_TEST_TYPE float
+#define TEST_GROUP_5
 #include "test_instances.hpp"
 
