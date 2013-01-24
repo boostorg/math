@@ -36,7 +36,7 @@ If these prove accurate enough to be "fit for his purpose",
 then a user may substitute his custom specialization.
 
 For example, there are approximations dating back from times
-when computation was a *lot* more expensive:
+when computation was a [*lot] more expensive:
 
 H Goldberg and H Levine, Approximate formulas for
 percentage points and normalisation of t and chi squared,
@@ -160,14 +160,14 @@ then if the un-implemented function is called,
 mean(cauchy<>()) will return std::numeric_limits<T>::quiet_NaN().
 
 [warning If `std::numeric_limits<T>::has_quiet_NaN` is false
-(for example T is a User-defined type),
+(for example, if T is a User-defined type without NaN support),
 then an exception will always be thrown when a domain error occurs.
 Catching exceptions is therefore strongly recommended.]
 
 [h4 Median of distributions]
 
 There are many distributions for which we have been unable to find an analytic formula,
-and this has deterred us from implementing 
+and this has deterred us from implementing
 [@http://en.wikipedia.org/wiki/Median median functions], the mid-point in a list of values.
 
 However a useful numerical approximation for distribution `dist`
@@ -211,13 +211,13 @@ provided infinity is implemented for the `RealType` on that implementation,
 and it is supported and tested by the distribution.
 
 The range for these distributions is set to infinity if supported by the platform,
-(by testing `std::numeric_limits<RealType>::has_infinity`) 
+(by testing `std::numeric_limits<RealType>::has_infinity`)
 else the maximum value provided for the `RealType` by Boost.Math.
 
 Testing for has_infinity is obviously important for arbitrary precision types
 where infinity makes much less sense than for IEEE754 floating-point.
 
-So far we have not set `support()` function (only range) 
+So far we have not set `support()` function (only range)
 on the grounds that the PDF is uninteresting/zero for infinities.
 
 Users who require special handling of infinity (or other specific value) can,
@@ -307,7 +307,8 @@ A macro BOOST_DEFINE_MATH_CONSTANT in constants.hpp is used
 to provide high accuracy constants to mathematical functions and distributions,
 since it is important to provide values uniformly for both built-in
 float, double and long double types,
-and for User Defined types like NTL::quad_float and NTL::RR.
+and for User Defined types in __multiprecision like __cpp_dec_float.
+and others like NTL::quad_float and NTL::RR.
 
 To permit calculations in this Math ToolKit and its tests, (and elsewhere)
 at about 100 decimal digits with NTL::RR type,
@@ -353,21 +354,19 @@ Neither can you write:
 
 [h4 Thread safety]
 
-Reporting of error by setting errno should be thread safe already
+Reporting of error by setting `errno` should be thread-safe already
 (otherwise none of the std lib math functions would be thread safe?).
-If you turn on reporting of errors via exceptions, errno gets left unused anyway.
+If you turn on reporting of errors via exceptions, `errno` gets left unused anyway.
 
-Other than that, the code is intended to be thread safe *for built in
-real-number types* : so float, double and long double are all thread safe.
+For normal C++ usage, the Boost.Math `static const` constants are now thread-safe so
+for built-in real-number types: `float`, `double` and `long double` are all thread safe.
 
-For non-built-in types - NTL::RR for example - initialisation of the various
-constants used in the implementation is potentially *not* thread safe.
-This most undesiable, but it would be a signficant challenge to fix it.
-Some compilers may offer the option of having
-static-constants initialised in a thread safe manner (Commeau, and maybe
-others?), if that's the case then the problem is solved.  This is a topic of
-hot debate for the next C++ std revision, so hopefully all compilers
-will be required to do the right thing here at some point.
+For User_defined types, for example, __cpp_dec_float,
+the Boost.Math should also be thread-safe,
+(thought we are unsure how to rigorously prove this).
+
+(Thread safety has received attention in the C++11 Standard revision,
+so hopefully all compilers will do the right thing here at some point.)
 
 [h4 Sources of Test Data]
 
@@ -381,7 +380,7 @@ Only [@http://functions.wolfram.com/ Wolfram Mathematica functions]
 provided a higher accuracy than
 C++ double (64-bit floating-point) and was regarded as
 the most-trusted source by far.
-The __R provided the widest range of distributions, 
+The __R provided the widest range of distributions,
 but the usual Intel X86 distribution uses 64-but doubles,
 so our use was limited to the 15 to 17 decimal digit accuracy.
 
@@ -418,7 +417,7 @@ that bad parameters passed to constructors and functions throw `domain_error` ex
 Usage is `check_out_of_range< DistributionType >(list-of-params);`
 Where list-of-params is a list of *valid* parameters from which the distribution can be constructed
 - ie the same number of args are passed to the function,
-as are passed to the distribution constructor. 
+as are passed to the distribution constructor.
 
 The values of the parameters are not important, but must be *valid* to pass the contructor checks;
 the default values are suitable, but must be explicitly provided, for example:
@@ -628,12 +627,12 @@ generated HTML: this needs further investigation.
 [h4 Producing Graphs]
 
 Graphs were produced in SVG format and then converted to PNG's using the same
-process as the equations.  
+process as the equations.
 
-The programs 
+The programs
 `/libs/math/doc/sf_and_dist/graphs/dist_graphs.cpp`
 and `/libs/math/doc/sf_and_dist/graphs/sf_graphs.cpp`
-generate the SVG's directly using the 
+generate the SVG's directly using the
 [@http://code.google.com/soc/2007/boost/about.html Google Summer of Code 2007]
 project of Jacob Voytko (whose work so far,
 considerably enhanced and now reasonably mature and usable, by Paul A. Bristow,

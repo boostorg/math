@@ -1,13 +1,13 @@
 [article Math Toolkit
     [quickbook 1.5]
-    [copyright 2006, 2007, 2008, 2009, 2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan Råde, Gautam Sewani, Thijs van den Berg and Benjamin Sobotta]
+    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan Råde, Gautam Sewani, Thijs van den Berg, Benjamin Sobotta and Christopher Kormanyos]
     [/purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Maddock, John], [Bristow, Paul A.], [Holin, Hubert], [Zhang, Xiaogang], [Lalande, Bruno], [Råde, Johan], [Sewani, Gautam], [van den Berg, Thijs], [Sobotta, Benjamin]]
+    [authors [Maddock, John], [Bristow, Paul A.], [Holin, Hubert], [Zhang, Xiaogang], [Lalande, Bruno], [Råde, Johan], [Sewani, Gautam], [van den Berg, Thijs], [Sobotta, Benjamin], [Kormanyos, Christopher] ]
     [/last-revision $Date$]
 ]
 
@@ -310,8 +310,10 @@ and use the function's name as the link text.]
 [def __NTL [@http://www.shoup.net/ntl/ NTL A Library for doing Number Theory]]
 [def __NTL_RR [@http://shoup.net/ntl/doc/RR.txt NTL::RR]]
 [def __NTL_quad_float [@http://shoup.net/ntl/doc/quad_float.txt NTL::quad_float]]
-[def __MPFR [@http://www.mpfr.org/ MPFR]]
+[def __MPFR [@http://www.mpfr.org/ GNU MPFR library]]
 [def __GMP [@http://gmplib.org/ GNU Multiple Precision Arithmetic Library]]
+[def __multiprecision [@http://www.boost.org/doc/libs/1_53_0_beta1/libs/multiprecision/doc/html/index.html Boost.Multiprecision]]
+[def __cpp_dec_float [@http://www.boost.org/doc/libs/1_53_0_beta1/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_dec_float.html cpp_dec_float]]
 [def __R [@http://www.r-project.org/ The R Project for Statistical Computing]]
 [def __godfrey [link godfrey Godfrey]]
 [def __pugh [link pugh Pugh]]
@@ -319,11 +321,14 @@ and use the function's name as the link text.]
 [def __errno [@http://en.wikipedia.org/wiki/Errno `::errno`]]
 [def __Mathworld [@http://mathworld.wolfram.com Wolfram MathWorld]]
 [def __Mathematica [@http://www.wolfram.com/products/mathematica/index.html Wolfram Mathematica]]
+[def __WolframAlpha [@http://www.wolframalpha.com/ Wolfram Alpha]]
 [def __TOMS748 [@http://portal.acm.org/citation.cfm?id=210111 TOMS Algorithm 748: enclosing zeros of continuous functions]]
+[def __TOMS910 [@http://portal.acm.org/citation.cfm?id=1916469 TOMS Algorithm 910: A Portable C++ Multiple-Precision System for Special-Function Calculations]]
 [def __why_complements [link why_complements why complements?]]
 [def __complements [link complements complements]]
 [def __performance [link math_toolkit.perf performance]]
 [def __building [link math_toolkit.main_overview.building building libraries]]
+
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']

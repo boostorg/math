@@ -12,20 +12,23 @@ Boost.Math provides a collection of mathematical constants.
 * Effortless - avoiding a search of reference sources.
 * Usable with both builtin floating point types, and user-defined, possibly extended precision, types such as
 NTL, MPFR/GMP, mp_float: in the latter case the constants are computed to the necessary precision and then cached.
-* Accurate - ensuring that the values are as accurate as possible for the 
-chosen floating-point type 
+* Accurate - ensuring that the values are as accurate as possible for the
+chosen floating-point type
   * No loss of accuracy from repeated rounding of intermediate computations.
   * Result is computed with higher precision and only rounded once.
   * Less risk of inaccurate result from functions pow, trig and log at [@http://en.wikipedia.org/wiki/Corner_case corner cases].
-  * Less risk of [@http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html cancellation error]. 
-* Faster - can avoid (re-)calculation at runtime. This can be significant if:
-  * Functions pow, trig or log are used.
-  * Inside an inner loop.
-  * Using a high-precision UDT.
-  * Compiler optimizations possible with built-in types, especially `double`, are not available.
+  * Less risk of [@http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html cancellation error].
 * Portable - as possible between different systems using different floating-point precisions:
 see [link math_toolkit.constants.tutorial.templ use in template code].
 * Tested - by comparison with other published sources, or separately computed at long double precision.
+* Faster - can avoid (re-)calculation at runtime.
+  * If the value returned is a builtin type then it's returned by value as a `constexpr` (C++11 feature, if available).
+  * If the value is computed and cached (or constructed from a string representation and cached), then it's returned by constant reference.[br]
+This can be significant if:
+  * Functions pow, trig or log are used.
+  * Inside an inner loop.
+  * Using a high-precision UDT like __multiprecision.
+  * Compiler optimizations possible with built-in types, especially `double`, are not available.
 
 [endsect] [/section:intro Introduction]
 
@@ -66,7 +69,7 @@ You can see the full list of available constants at [link math_toolkit.constants
 Some examples of using constants are at [@../../../example/constants_eg1.cpp constants_eg1].
 
 [endsect]
- 
+
 [section:templ Use in template code]
 
 When using the constants inside a function template, we need to ensure that
@@ -137,7 +140,9 @@ You can also avoid this by being explicit about the type of `Area`.
 
 [endsect] [/section:templ Use in template code]
 
-[section:user_def Use With User Defined Types]
+[section:user_def Use With User-Defined Types]
+
+The most common example of a high-precision user-defined type will probably be __multiprecision.
 
 The syntax for using the function-call constants with user-defined types is the same
 as it is in the template class, which is to say we use:
@@ -146,8 +151,14 @@ as it is in the template class, which is to say we use:
 
    boost::math::constants::pi<UserDefinedType>();
 
+For example:
+
+  boost::math::constants::pi<boost::multiprecision::cpp_dec_float_50>();
+
+giving [pi] with a precision of 50 decimal digits.
+
 However, since the precision of the user-defined type may be much greater than that
-of the built-in floating pointer types, how the value returned is created is as follows:
+of the built-in floating point types, how the value returned is created is as follows:
 
 * If the precision of the type is known at compile time:
    * If the precision is less than or equal to that of a `float` and the type is constructable from a `float`
@@ -159,10 +170,10 @@ of the built-in floating pointer types, how the value returned is created is as 
    * If the precision is less than or equal to that of a `long double` and the type is constructable from a `long double`
      then our code returns a `long double` literal.  If the user-defined type is a literal type
      then the function call that returns the constant will be a `constexp`.
-   * If the precision is less than 100 decimal digits, then the constant will be constructed 
+   * If the precision is less than 100 decimal digits, then the constant will be constructed
       (just the once, then cached in a thread-safe manner) from a string representation of the constant.
       In this case the value is returned as a const reference to the cached value.
-   * Otherwise the value is computed (just once, then cached in a thread-safe manner).  
+   * Otherwise the value is computed (just once, then cached in a thread-safe manner).
      In this case the value is returned as a const reference to the cached value.
 * If the precision is unknown at compile time then:
    * If the runtime precision (obtained from a call to `boost::math::tools::digits<T>()`) is
@@ -324,7 +335,7 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 [[[*Euler's e and related]] [] [] [] ]
 [[e] [e] [2.71828] [[@http://en.wikipedia.org/wiki/E_(mathematical_constant) Euler's constant e]] ]
 [[exp_minus_half] [e [super -1/2]] [0.606530] [] ]
-[[e_pow_pi] [e [super [pi]]] [23.14069] [] ] 
+[[e_pow_pi] [e [super [pi]]] [23.14069] [] ]
 [[root_e] [[radic] e] [1.64872] [] ]
 [[log10_e] [log10(e)] [0.434294] [] ]
 [[one_div_log10_e] [1/log10(e)] [2.30258] [] ]
@@ -393,7 +404,7 @@ The function should look like this:
   }
 
   }}}} // namespaces
-  
+
 Then define a placeholder for the constant itself:
 
    namespace boost{ namespace math{ namespace constants{
@@ -406,7 +417,7 @@ Then define a placeholder for the constant itself:
 For example, to calculate [pi]/2, add to `boost/math/constants/calculate_constants.hpp`
 
   template <class T>
-  template<int N> 
+  template<int N>
   inline T constant_half_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
   {
      BOOST_MATH_STD_USING
@@ -418,12 +429,12 @@ Then to `boost/math/constants/constants.hpp` add:
    BOOST_DEFINE_MATH_CONSTANT(half_pi, 0.0, "0");  // Actual values are temporary, we'll replace them later.
 
 [note Previously defined constants like pi and e can be used, but by *not simply calling* `pi<T>()`;
-specifying the precision via the policy 
+specifying the precision via the policy
 `pi<T, policies::policy<policies::digits2<N> > >()`
 is essential to ensure full accuracy.]
 
 [warning Newly defined constants can only be used once they are included in
-`boost/math/constants/constants.hpp`. So if you add 
+`boost/math/constants/constants.hpp`. So if you add
 `template <class T, class N> T constant_my_constant{...}`,
 then you cannot define `constant_my_constant`
 until you add the temporary `BOOST_DEFINE_MATH_CONSTANT(my_constant, 0.0, "0")`.
@@ -488,7 +499,7 @@ Some of the criteria we have used are:
 * Expensive to compute.
 * Requested by users.
 * [@http://en.wikipedia.org/wiki/Mathematical_constant Used in science and mathematics.]
-* No integer values (because so cheap to construct).[br] 
+* No integer values (because so cheap to construct).[br]
 (You can easily define your own if found convenient, for example: `FPT one =static_cast<FPT>(42);`).
 
 [h4 How are constants named?]
@@ -497,7 +508,7 @@ Some of the criteria we have used are:
 * No CamelCase.
 * Underscore as _ delimiter between words.
 * Numbers spelt as words rather than decimal digits (except following pow).
-* Abbreviation conventions: 
+* Abbreviation conventions:
   * root for square root.
   * cbrt for cube root.
   * pow for pow function using decimal digits like pow23 for n[super 2/3].
@@ -527,7 +538,7 @@ and should meet most high-precision computations.
 with at least 35 decimal digits, enough to be accurate for all long double implementations.
 The tolerance is usually twice `long double epsilon`.
 
-# Comparison with calculation at long double precision. 
+# Comparison with calculation at long double precision.
 This often requires a slightly higher tolerance than two epsilon
 because of computational noise from round-off etc,
 especially when trig and other functions are called.
@@ -565,11 +576,11 @@ to diverge wildly because internal comparisons just fail.
 [h4 What is the Internal Format of the constants, and why?]
 
 See [link math_toolkit.constants.tutorial tutorial] above for normal use,
-but this FAQ explains the internal details used for the constants. 
+but this FAQ explains the internal details used for the constants.
 
 Constants are stored as 100 decimal digit values.
 However, some compilers do not accept decimal digits strings as long as this.
-So the constant is split into two parts, with the first containing at least 
+So the constant is split into two parts, with the first containing at least
 128-bit long double precision (35 decimal digits),
 and for consistency should be in scientific format with a signed exponent.
 
@@ -605,7 +616,7 @@ but most are not licensed for commercial use.
 
 This work is based on an earlier work called e-float:
 Algorithm 910: A Portable C++ Multiple-Precision System for Special-Function Calculations,
-in ACM TOMS, {VOL 37, ISSUE 4, (February 2011)} (C) ACM, 2011. 
+in ACM TOMS, {VOL 37, ISSUE 4, (February 2011)} (C) ACM, 2011.
 [@http://doi.acm.org/10.1145/1916461.1916469]
 [@https://svn.boost.org/svn/boost/sandbox/e_float/ e_float]
 but is now re-factored and available under the Boost license in the Boost-sandbox at
@@ -644,6 +655,8 @@ Apple Mac/Darwin uses a similar ['doubledouble] 106-bit for its built-in `long d
 
 [note The precision of all `doubledouble` floating-point types is rather odd and values given are only approximate.]
 
+[*New projects should use __multiprecision.]
+
 [h5 NTL class RR]
 
 Arbitrary precision floating point with NTL class RR,
@@ -651,9 +664,11 @@ default is 150 bit (about 50 decimal digits)
 used here with 300 bit to output 100 decimal digits,
 enough for many practical non-'number-theoretic' C++ applications.
 
-NTL is [*not licenced for commercial use].
+__NTL is [*not licenced for commercial use].
 
-This class is used in Boost.Math and an option when using big_number projects to calculate new math constants.
+This class is used in Boost.Math and is an option when using big_number projects to calculate new math constants.
+
+[*New projects should use __multiprecision.]
 
 [h5 GMP and MPFR]
 
@@ -674,6 +689,7 @@ has been added to allow users to have convenient access to float, double and lon
 but combined with template struct and functions to allow simultaneous use
 with other non-built-in floating-point types.
 
+
 [h4 Why do the constants (internally) have a struct rather than a simple function?]
 
 A function mechanism was provided by in previous versions of Boost.Math.
@@ -690,7 +706,7 @@ from Simon Plouffe's web based collection [@http://pi.lacim.uqam.ca/eng/].
 D. E. Knuth, Art of Computer Programming, Appendix A, Table 1, Vol 1, ISBN 0 201 89683 4 (1997)
 # M. Abrahamovitz & I. E. Stegun, National Bureau of Standards, Handbook of Mathematical Functions,
 a reference source for formulae now superceded by
-# Frank W. Olver, Daniel W. Lozier, Ronald F. Boisvert, Charles W. Clark, NIST Handbook of Mathemetical Functions, Cambridge University Press, ISBN 978-0-521-14063-8, 2010. 
+# Frank W. Olver, Daniel W. Lozier, Ronald F. Boisvert, Charles W. Clark, NIST Handbook of Mathemetical Functions, Cambridge University Press, ISBN 978-0-521-14063-8, 2010.
 # John F Hart, Computer Approximations, Kreiger (1978) ISBN 0 88275 642 7.
 # Some values from Cephes Mathematical Library, Stephen L. Moshier
 and CALC100 100 decimal digit Complex Variable Calculator Program, a DOS utility.
@@ -700,7 +716,7 @@ and CALC100 100 decimal digit Complex Variable Calculator Program, a DOS utility
 
 Not here in this Boost.Math collection, because physical constants:
 
-* Are measurements.
+* Are measurements, not truely constants.
 * Are not truly constant and keeping changing as mensuration technology improves.
 * Have a instrinsic uncertainty.
 * Mathematical constants are stored and represented at varying precision, but should never be inaccurate.
@@ -711,7 +727,7 @@ Some physical constants may be available in Boost.Units.
 
 [endsect] [/section:constants Mathematical Constants]
 
-[/ 
+[/
   Copyright 2012 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at

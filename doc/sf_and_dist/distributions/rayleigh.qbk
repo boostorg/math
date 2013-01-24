@@ -3,14 +3,14 @@
 
 ``#include <boost/math/distributions/rayleigh.hpp>``
 
-   namespace boost{ namespace math{ 
-      
-   template <class RealType = double, 
+   namespace boost{ namespace math{
+
+   template <class RealType = double,
              class ``__Policy``   = ``__policy_class`` >
    class rayleigh_distribution;
-   
+
    typedef rayleigh_distribution<> rayleigh;
-   
+
    template <class RealType, class ``__Policy``>
    class rayleigh_distribution
    {
@@ -22,11 +22,11 @@
       // Accessors:
       RealType sigma()const;
    };
-   
+
    }} // namespaces
-   
+
 The [@http://en.wikipedia.org/wiki/Rayleigh_distribution Rayleigh distribution]
-is a continuous distribution with the 
+is a continuous distribution with the
 [@http://en.wikipedia.org/wiki/Probability_density_function probability density function]:
 
 f(x; sigma) = x * exp(-x[super 2]/2 [sigma][super 2]) / [sigma][super 2]
@@ -54,22 +54,22 @@ is a Rayleigh distribution.
 The [@http://en.wikipedia.org/wiki/Chi_distribution Chi],
 [@http://en.wikipedia.org/wiki/Rice_distribution Rice]
 and [@http://en.wikipedia.org/wiki/Weibull_distribution Weibull] distributions are generalizations of the
-[@http://en.wikipedia.org/wiki/Rayleigh_distribution Rayleigh distribution]. 
+[@http://en.wikipedia.org/wiki/Rayleigh_distribution Rayleigh distribution].
 
 [h4 Member Functions]
 
    rayleigh_distribution(RealType sigma = 1);
-   
-Constructs a [@http://en.wikipedia.org/wiki/Rayleigh_distribution 
+
+Constructs a [@http://en.wikipedia.org/wiki/Rayleigh_distribution
 Rayleigh distribution] with [sigma] /sigma/.
 
-Requires that the [sigma] parameter is greater than zero, 
+Requires that the [sigma] parameter is greater than zero,
 otherwise calls __domain_error.
 
    RealType sigma()const;
-   
+
 Returns the /sigma/ parameter of this distribution.
-   
+
 [h4 Non-member Accessors]
 
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
@@ -79,14 +79,14 @@ The domain of the random variable is \[0, max_value\].
 
 [h4 Accuracy]
 
-The Rayleigh distribution is implemented in terms of the 
+The Rayleigh distribution is implemented in terms of the
 standard library `sqrt` and `exp` and as such should have very low error rates.
 Some constants such as skewness and kurtosis were calculated using
 NTL RR type with 150-bit accuracy, about 50 decimal digits.
 
 [h4 Implementation]
 
-In the following table [sigma][space] is the sigma parameter of the distribution, 
+In the following table [sigma][space] is the sigma parameter of the distribution,
 /x/ is the random variate, /p/ is the probability and /q = 1-p/.
 
 [table
@@ -108,9 +108,9 @@ In the following table [sigma][space] is the sigma parameter of the distribution
 * [@http://en.wikipedia.org/wiki/Rayleigh_distribution ]
 * [@http://mathworld.wolfram.com/RayleighDistribution.html Weisstein, Eric W. "Rayleigh Distribution." From MathWorld--A Wolfram Web Resource.]
 
-[endsect][/section:Rayleigh Rayleigh]
+[endsect] [/section:Rayleigh Rayleigh]
 
-[/ 
+[/
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at

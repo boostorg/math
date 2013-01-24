@@ -11,16 +11,15 @@
 
 In all of the following tables, the best performing
 result in each row, is assigned a relative value of "1" and shown
-in bold, so a score of "2" means ['"twice as slow as the best 
+in bold, so a score of "2" means ['"twice as slow as the best
 performing result".]  Actual timings in seconds per function call
-are also shown in parenthesis.  
+are also shown in parenthesis.
 
 Result were obtained on a system
 with an Intel 2.8GHz Pentium 4 processor with 2Gb of RAM and running
-either Windows XP or Mandriva Linux.  
+either Windows XP or Mandriva Linux.
 
-[caution As usual
-with performance results these should be taken with a large pinch
+[caution As usual with performance results these should be taken with a large pinch
 of salt: relative performance is known to shift quite a bit depending
 upon the architecture of the particular test system used.  Further
 more, our performance results were obtained using our own test data:
@@ -37,18 +36,18 @@ and processor speeds have improved too, so these results are known to be out of 
 [section:getting_best Getting the Best Performance from this Library]
 
 By far the most important thing you can do when using this library
-is turn on your compiler's optimisation options.  As the following 
-table shows the penalty for using the library in debug mode can be 
-quite large.  
+is turn on your compiler's optimisation options.  As the following
+table shows the penalty for using the library in debug mode can be
+quite large.
 
 [table  Performance Comparison of Release and Debug Settings
 [[Function]
       [Microsoft Visual C++ 8.0
-      
+
       Debug Settings: /Od /ZI
       ]
          [Microsoft Visual C++ 8.0
-   
+
          Release settings: /Ox /arch:SSE2
          ]]
 
@@ -66,25 +65,25 @@ quite large.
 
 [section:comp_compilers Comparing Compilers]
 
-After a good choice of build settings the next most important thing 
+After a good choice of build settings the next most important thing
 you can do, is choose your compiler
 - and the standard C library it sits on top of - very carefully.  GCC-3.x
-in particular has been found to be particularly bad at inlining code, 
+in particular has been found to be particularly bad at inlining code,
 and performing the kinds of high level transformations that good C++ performance
 demands (thankfully GCC-4.x is somewhat better in this respect).
 
 [table  Performance Comparison of Various Windows Compilers
 [[Function]
    [Intel C++ 10.0
-   
+
    ( /Ox /Qipo /QxN )
    ]
       [Microsoft Visual C++ 8.0
-      
+
       ( /Ox /arch:SSE2 )
       ]
       [Cygwin G++ 3.4
-      
+
       ( /O3 )
       ]]
 [[__erf][[perf intel-erf..[para *1.00*][para (4.118e-008s)]]][[perf msvc-erf..[para *1.00*][para (1.483e-007s)]]][[perf gcc-erf..[para 3.24][para (1.336e-007s)]]]]
@@ -105,7 +104,7 @@ There are a small number of performance tuning options
 that are determined by configuration macros.  These should be set
 in boost/math/tools/user.hpp; or else reported to the Boost-development
 mailing list so that the appropriate option for a given compiler and
-OS platform can be set automatically in our configuration setup.  
+OS platform can be set automatically in our configuration setup.
 
 [table
 [[Macro][Meaning]]
@@ -127,16 +126,16 @@ OS platform can be set automatically in our configuration setup.
    [Many of the coefficients to the polynomials and rational functions
    used by this library are integers.  Normally these are stored as tables
    as integers, but if mixed integer / floating point arithmetic is much
-   slower than regular floating point arithmetic then they can be stored 
+   slower than regular floating point arithmetic then they can be stored
    as tables of floating point values instead.  If mixed arithmetic is slow
    then add:
-   
+
       #define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
-   
+
    to boost/math/tools/user.hpp, otherwise the default of:
-   
+
       #define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
-   
+
    Set in boost/math/config.hpp is fine, and may well result in smaller
    code.
    ]]
@@ -148,8 +147,8 @@ may be set are as follows:
 [table
 [[Value][Effect]]
 [[0][The polynomial or rational function is evaluated using Horner's
-      method, and a simple for-loop.  
-      
+      method, and a simple for-loop.
+
       Note that if the order of the polynomial
       or rational function is a runtime parameter, or the order is
       greater than the value of `BOOST_MATH_MAX_POLY_ORDER`, then
@@ -179,13 +178,13 @@ may be set are as follows:
       than or equal to `BOOST_MATH_MAX_POLY_ORDER`.]]
 ]
 
-To determine which 
+To determine which
 of these options is best for your particular compiler/platform build
 the performance test application with your usual release settings,
 and run the program with the --tune command line option.
 
 In practice the difference between methods is rather small at present,
-as the following table shows.  However, parallelisation /vectorisation 
+as the following table shows.  However, parallelisation /vectorisation
 is likely to become more important in the future: quite likely the methods
 currently supported will need to be supplemented or replaced by ones more
 suited to highly vectorisable processors in the future.
@@ -205,25 +204,25 @@ suited to highly vectorisable processors in the future.
 There is one final performance tuning option that is available as a compile time
 [link math_toolkit.policy policy].  Normally when evaluating functions at `double`
 precision, these are actually evaluated at `long double` precision internally:
-this helps to ensure that as close to full `double` precision as possible is 
+this helps to ensure that as close to full `double` precision as possible is
 achieved, but may slow down execution in some environments.  The defaults for
-this policy can be changed by 
-[link math_toolkit.policy.pol_ref.policy_defaults 
+this policy can be changed by
+[link math_toolkit.policy.pol_ref.policy_defaults
 defining the macro `BOOST_MATH_PROMOTE_DOUBLE_POLICY`]
-to `false`, or 
-[link math_toolkit.policy.pol_ref.internal_promotion 
+to `false`, or
+[link math_toolkit.policy.pol_ref.internal_promotion
 by specifying a specific policy] when calling the special
-functions or distributions.  See also the 
+functions or distributions.  See also the
 [link math_toolkit.policy.pol_tutorial policy tutorial].
 
 [table  Performance Comparison with and Without Internal Promotion to long double
 [[Function]
    [GCC 4.2 , Linux
-   
+
    (with internal promotion of double to long double).
    ]
       [GCC 4.2, Linux
-      
+
       (without promotion of double).
       ]
 ]
@@ -241,15 +240,15 @@ functions or distributions.  See also the
 [section:comparisons Comparisons to Other Open Source Libraries]
 
 We've run our performance tests both for our own code, and against other
-open source implementations of the same functions.  The results are 
+open source implementations of the same functions.  The results are
 presented below to give you a rough idea of how they all compare.
 
 [caution
 You should exercise extreme caution when interpreting
 these results, relative performance may vary by platform, the tests use
-data that gives good code coverage of /our/ code, but which may skew the 
-results towards the corner cases.  Finally, remember that different 
-libraries make different choices with regard to performance verses 
+data that gives good code coverage of /our/ code, but which may skew the
+results towards the corner cases.  Finally, remember that different
+libraries make different choices with regard to performance verses
 numerical stability.
 ]
 
@@ -325,7 +324,7 @@ machine, with the test program compiled with Microsoft Visual C++ 2009 using the
 
 All the results were measured on a 2.0GHz Intel T5800 Core 2 Duo, 4Gb RAM, Windows Vista
 machine, with the test program compiled with Microsoft Visual C++ 2009, and
-R-2.9.2 compiled in "standalone mode" with MinGW-4.3 
+R-2.9.2 compiled in "standalone mode" with MinGW-4.3
 (R-2.9.2 appears not to be buildable with Visual C++).
 
 [table A Comparison to the R Statistical Library on Windows XP
@@ -343,12 +342,12 @@ R-2.9.2 compiled in "standalone mode" with MinGW-4.3
 [[__F_distrib CDF][[perf msvc-dist-fisher_f-cdf..[para *1.00*][para (9.556e-007s)]]][[perf msvc-dist-f-R-cdf..[para 1.34][para (1.283e-006s)]]][[perf msvc-dist-f-dcd-cdf..[para 1.24][para (1.183e-006s)]]]]
 [[__F_distrib Quantile][[perf msvc-dist-fisher_f-quantile..[para *1.00*][para (6.987e-006s)]]][[perf msvc-dist-f-R-quantile..[para 1.33][para (9.325e-006s)]]][[perf msvc-dist-f-dcd-quantile..[para 3.16][para (2.205e-005s)]]]]
 [[__gamma_distrib CDF][[perf msvc-dist-gamma-cdf..[para 1.52][para (6.240e-007s)]]][[perf msvc-dist-gamma-R-cdf..[para 3.11][para (1.279e-006s)]]][[perf msvc-dist-gam-dcd-cdf..[para *1.00*][para (4.111e-007s)]]]]
-[[__gamma_distrib Quantile][[perf msvc-dist-gamma-quantile..[para 1.24][para (2.179e-006s)]]][[perf msvc-dist-gamma-R-quantile..[para 6.25][para (1.102e-005s)]]][[perf msvc-dist-gam-dcd-quantile..[para *1.00*][para (1.764e-006s)]]]] 
+[[__gamma_distrib Quantile][[perf msvc-dist-gamma-quantile..[para 1.24][para (2.179e-006s)]]][[perf msvc-dist-gamma-R-quantile..[para 6.25][para (1.102e-005s)]]][[perf msvc-dist-gam-dcd-quantile..[para *1.00*][para (1.764e-006s)]]]]
 
 [[__hypergeometric_distrib CDF][[perf msvc-dist-hypergeometric-cdf..[para 3.60[footnote This result is somewhat misleading: for small values of the parameters there is  virtually no difference between the two libraries, but for large values the Boost implementation is /much/ slower, albeit with much improved precision.]][para (5.987e-007s)]]][[perf msvc-dist-hypergeo-R-cdf..[para *1.00*][para (1.665e-007s)]]][NA]]
-[[__hypergeometric_distrib Quantile][[perf msvc-dist-hypergeometric-quantile..[para *1.00*][para (5.684e-007s)]]][[perf msvc-dist-hypergeo-R-quantile..[para 3.53][para (2.004e-006s)]]][NA]] 
+[[__hypergeometric_distrib Quantile][[perf msvc-dist-hypergeometric-quantile..[para *1.00*][para (5.684e-007s)]]][[perf msvc-dist-hypergeo-R-quantile..[para 3.53][para (2.004e-006s)]]][NA]]
 [[__logistic_distrib CDF][[perf msvc-dist-logistic-cdf..[para *1.00*][para (1.714e-007s)]]][[perf msvc-dist-logis-R-cdf..[para 5.24][para (8.984e-007s)]]][NA]]
-[[__logistic_distrib Quantile][[perf msvc-dist-logistic-quantile..[para 1.02][para (2.084e-007s)]]][[perf msvc-dist-logis-R-quantile..[para *1.00*][para (2.043e-007s)]]][NA]] 
+[[__logistic_distrib Quantile][[perf msvc-dist-logistic-quantile..[para 1.02][para (2.084e-007s)]]][[perf msvc-dist-logis-R-quantile..[para *1.00*][para (2.043e-007s)]]][NA]]
 
 [[__lognormal_distrib CDF][[perf msvc-dist-lognormal-cdf..[para *1.00*][para (3.579e-007s)]]][[perf msvc-dist-lnorm-R-cdf..[para 1.49][para (5.332e-007s)]]][NA]]
 [[__lognormal_distrib Quantile][[perf msvc-dist-lognormal-quantile..[para *1.00*][para (9.622e-007s)]]][[perf msvc-dist-lnorm-R-quantile..[para 1.57][para (1.507e-006s)]]][NA]]
@@ -392,12 +391,12 @@ machine, with the test program and R-2.9.2 compiled with GNU G++ 4.3.3 using -O3
 [[__F_distrib CDF][[perf gcc-4_3_2-dist-fisher_f-cdf..[para 1.62][para (2.324e-006s)]]][[perf gcc-4_3_2-dist-f-R-cdf..[para 1.19][para (1.711e-006s)]]][[perf gcc-4_3_2-dist-f-dcd-cdf..[para *1.00*][para (1.437e-006s)]]]]
 [[__F_distrib Quantile][[perf gcc-4_3_2-dist-fisher_f-quantile..[para 1.53][para (1.577e-005s)]]][[perf gcc-4_3_2-dist-f-R-quantile..[para *1.00*][para (1.033e-005s)]]][[perf gcc-4_3_2-dist-f-dcd-quantile..[para 2.63][para (2.719e-005s)]]]]
 [[__gamma_distrib CDF][[perf gcc-4_3_2-dist-gamma-cdf..[para 3.18][para (1.582e-006s)]]][[perf gcc-4_3_2-dist-gamma-R-cdf..[para 2.63][para (1.309e-006s)]]][[perf gcc-4_3_2-dist-gam-dcd-cdf..[para *1.00*][para (4.980e-007s)]]]]
-[[__gamma_distrib Quantile][[perf gcc-4_3_2-dist-gamma-quantile..[para 2.19][para (4.770e-006s)]]][[perf gcc-4_3_2-dist-gamma-R-quantile..[para 6.94][para (1.513e-005s)]]][[perf gcc-4_3_2-dist-gam-dcd-quantile..[para *1.00*][para (2.179e-006s)]]]] 
+[[__gamma_distrib Quantile][[perf gcc-4_3_2-dist-gamma-quantile..[para 2.19][para (4.770e-006s)]]][[perf gcc-4_3_2-dist-gamma-R-quantile..[para 6.94][para (1.513e-005s)]]][[perf gcc-4_3_2-dist-gam-dcd-quantile..[para *1.00*][para (2.179e-006s)]]]]
 
 [[__hypergeometric_distrib CDF][[perf gcc-4_3_2-dist-hypergeometric-cdf..[para 2.20[footnote This result is somewhat misleading: for small values of the parameters there is  virtually no difference between the two libraries, but for large values the Boost implementation is /much/ slower, albeit with much improved precision.]][para (3.522e-007s)]]][[perf gcc-4_3_2-dist-hypergeo-R-cdf..[para *1.00*][para (1.601e-007s)]]][NA]]
-[[__hypergeometric_distrib Quantile][[perf gcc-4_3_2-dist-hypergeometric-quantile..[para *1.00*][para (8.279e-007s)]]][[perf gcc-4_3_2-dist-hypergeo-R-quantile..[para 2.57][para (2.125e-006s)]]][NA]] 
+[[__hypergeometric_distrib Quantile][[perf gcc-4_3_2-dist-hypergeometric-quantile..[para *1.00*][para (8.279e-007s)]]][[perf gcc-4_3_2-dist-hypergeo-R-quantile..[para 2.57][para (2.125e-006s)]]][NA]]
 [[__logistic_distrib CDF][[perf gcc-4_3_2-dist-logistic-cdf..[para *1.00*][para (9.398e-008s)]]][[perf gcc-4_3_2-dist-logis-R-cdf..[para 2.75][para (2.588e-007s)]]][NA]]
-[[__logistic_distrib Quantile][[perf gcc-4_3_2-dist-logistic-quantile..[para *1.00*][para (9.893e-008s)]]][[perf gcc-4_3_2-dist-logis-R-quantile..[para 1.30][para (1.285e-007s)]]][NA]] 
+[[__logistic_distrib Quantile][[perf gcc-4_3_2-dist-logistic-quantile..[para *1.00*][para (9.893e-008s)]]][[perf gcc-4_3_2-dist-logis-R-quantile..[para 1.30][para (1.285e-007s)]]][NA]]
 
 [[__lognormal_distrib CDF][[perf gcc-4_3_2-dist-lognormal-cdf..[para *1.00*][para (1.831e-007s)]]][[perf gcc-4_3_2-dist-lnorm-R-cdf..[para 1.39][para (2.539e-007s)]]][NA]]
 [[__lognormal_distrib Quantile][[perf gcc-4_3_2-dist-lognormal-quantile..[para 1.10][para (5.551e-007s)]]][[perf gcc-4_3_2-dist-lnorm-R-quantile..[para *1.00*][para (5.037e-007s)]]][NA]]
@@ -425,26 +424,26 @@ machine, with the test program and R-2.9.2 compiled with GNU G++ 4.3.3 using -O3
 
 [section:perf_test_app The Performance Test Application]
 
-Under ['boost-path]\/libs\/math\/performance you will find a 
+Under ['boost-path]\/libs\/math\/performance you will find a
 (fairly rudimentary) performance test application for this library.
 
 To run this application yourself, build the all the .cpp files in
 ['boost-path]\/libs\/math\/performance into an application using
 your usual release-build settings.  Run the application with --help
-to see a full list of options, or with --all to test everything 
-(which takes quite a while), or with --tune to test the 
+to see a full list of options, or with --all to test everything
+(which takes quite a while), or with --tune to test the
 [link math_toolkit.perf.tuning available performance tuning options].
 
 If you want to use this application to test the effect of changing
-any of the __policy_section, then you will need to build and run it twice: 
-once with the default __policy_section, and then a second time with the 
+any of the __policy_section, then you will need to build and run it twice:
+once with the default __policy_section, and then a second time with the
 __policy_section you want to test set as the default.
 
 [endsect]
 
 [endsect]
 
-[/ 
+[/
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at

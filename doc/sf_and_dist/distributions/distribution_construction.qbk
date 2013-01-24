@@ -1,15 +1,15 @@
-[section:dist_construct_eg Distribution Construction Example]
+[section:dist_construct_eg Distribution Construction Examples]
+
+[import ../../../example/distribution_construction.cpp]
+[distribution_construction_1]
+[distribution_construction_2]
 
 See [@../../../example/distribution_construction.cpp distribution_construction.cpp] for full source code.
 
-[import ../../../example/distribution_construction.cpp]
-[distribution_construction1]
-[distribution_construction2]
+[endsect] [/section:dist_construct_eg Distribution Construction Examples]
 
-[endsect] [/section:dist_construct_eg Distribution Construction Example]
-
-[/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+[/
+  Copyright 2006, 2012 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
