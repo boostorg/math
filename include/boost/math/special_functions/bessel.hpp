@@ -17,6 +17,7 @@
 #include <boost/math/special_functions/detail/bessel_jy.hpp>
 #include <boost/math/special_functions/detail/bessel_jn.hpp>
 #include <boost/math/special_functions/detail/bessel_yn.hpp>
+#include <boost/math/special_functions/detail/bessel_jy_zero.hpp>
 #include <boost/math/special_functions/detail/bessel_ik.hpp>
 #include <boost/math/special_functions/detail/bessel_i0.hpp>
 #include <boost/math/special_functions/detail/bessel_i1.hpp>
@@ -30,6 +31,7 @@
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/tools/series.hpp>
+#include <boost/math/tools/roots.hpp>
 
 namespace boost{ namespace math{
 
@@ -301,7 +303,7 @@ inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& po
 
    if(floor(v) == v)
    {
-      if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (4 * fabs(x) * sqrt(sqrt(sqrt(14 * tools::epsilon<T>() * (fabs(x) + fabs(v) / 2) / (5120 * fabs(x))))) > fabs(v)))
+      if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
       {
          T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
          if((v < 0) && (itrunc(v, pol) & 1))
@@ -330,7 +332,7 @@ inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
    BOOST_MATH_INSTRUMENT_VARIABLE(v);
    BOOST_MATH_INSTRUMENT_VARIABLE(x);
 
-   if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (4 * fabs(x) * sqrt(sqrt(sqrt(14 * tools::epsilon<T>() * (fabs(x) + abs(v) / 2) / (5120 * x)))) > abs(v)))
+   if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (fabs(x) > 5 * abs(v)))
    {
       T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
       if((v < 0) && (v & 1))
@@ -365,6 +367,120 @@ inline T sph_neumann_imp(unsigned v, T x, const Policy& pol)
       return -policies::raise_overflow_error<T>(function, 0, pol);
 
    return result * tx;
+}
+
+template <class T, class Policy>
+inline T cyl_bessel_j_zero_imp(T v, unsigned m, const Policy& pol)
+{
+   BOOST_MATH_STD_USING // ADL of std names, needed for log.
+
+   // Handle negative order or if the zero'th zero is requested.
+   // Return NaN if NaN is available or return 0 if NaN is not available.
+   if((v < T(0)) || (m == 0U))
+      return (std::numeric_limits<T>::has_quiet_NaN ? std::numeric_limits<T>::quiet_NaN() : T(0));
+
+   // Set up the initial guess for the upcoming root-finding.
+   const T guess_root = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess<T>(v, m);
+
+   // Select the maximum allowed iterations, being at least 24.
+   boost::uintmax_t number_of_iterations = (std::max)(24, int(std::numeric_limits<T>::digits10));
+
+   // Select the desired number of binary digits of precision.
+   // Account for the radix of number representations having non-two radix!
+   const int my_digits2 = int(float(std::numeric_limits<T>::digits)
+                              * (  log(float(std::numeric_limits<T>::radix))
+                                 / log(2.0F)));
+
+   // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
+   const T jvm =
+      boost::math::tools::newton_raphson_iterate(
+         boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::function_object<T, Policy>(v, pol),
+         guess_root,
+         T(guess_root - 0.3F),
+         T(guess_root + 0.3F),
+         my_digits2,
+         number_of_iterations);
+
+   static_cast<void>(number_of_iterations);
+
+   return jvm;
+}
+
+template <class output_iterator, class T, class Policy>
+inline void cyl_bessel_j_zero_imp(output_iterator out_it,
+                                  T v,
+                                  unsigned number_of_zeros,
+                                  unsigned start_index,
+                                  const Policy& pol)
+{
+   if(number_of_zeros > 0U)
+   {
+      const output_iterator end_it(out_it + number_of_zeros);
+
+      while(out_it != end_it)
+      {
+         *out_it = boost::math::detail::cyl_bessel_j_zero_imp(v, start_index, pol);
+         ++start_index;
+         ++out_it;
+      }
+   }
+}
+
+template <class T, class Policy>
+inline T cyl_neumann_zero_imp(T v, unsigned m, const Policy& pol)
+{
+   BOOST_MATH_STD_USING // ADL of std names, needed for log.
+
+   // Handle negative order or if the zero'th zero is requested.
+   // Return NaN if NaN is available or return 0 if NaN is not available.
+   if((v < T(0)) || (m == 0U))
+      return (std::numeric_limits<T>::has_quiet_NaN ? std::numeric_limits<T>::quiet_NaN() : T(0));
+
+   // Set up the initial guess for the upcoming root-finding.
+   const T guess_root = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess<T>(v, m);
+
+   // Select the maximum allowed iterations, being at least 24.
+   boost::uintmax_t number_of_iterations = (std::max)(24, int(std::numeric_limits<T>::digits10));
+
+   // Select the desired number of binary digits of precision.
+   // Account for the radix of number representations having non-two radix!
+   const int my_digits2 = int(float(std::numeric_limits<T>::digits)
+                              * (  log(float(std::numeric_limits<T>::radix))
+                                 / log(2.0F)));
+
+   // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
+   const T yvm =
+      boost::math::tools::newton_raphson_iterate(
+         boost::math::detail::bessel_zero::cyl_neumann_zero_detail::function_object<T, Policy>(v, pol),
+         guess_root,
+         T(guess_root - 0.3F),
+         T(guess_root + 0.3F),
+         my_digits2,
+         number_of_iterations);
+
+   static_cast<void>(number_of_iterations);
+
+   return yvm;
+}
+
+template <class output_iterator, class T, class Policy>
+inline void cyl_neumann_zero_imp(output_iterator out_it,
+                                 T v,
+                                 unsigned number_of_zeros,
+                                 unsigned start_index,
+                                 const Policy& pol)
+{
+   if(number_of_zeros > 0U)
+   {
+      const output_iterator end_it(out_it + number_of_zeros);
+
+      while(out_it != end_it)
+      {
+         *out_it = boost::math::detail::cyl_neumann_zero_imp(v, start_index, pol);
+         ++start_index;
+         ++out_it;
+      }
+   }
 }
 
 } // namespace detail
@@ -460,6 +576,80 @@ template <class T>
 inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann(unsigned v, T x)
 {
    return sph_neumann(v, x, policies::policy<>());
+}
+
+template <class T, class Policy>
+inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_zero(T v, unsigned m, const Policy& pol)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_zero_imp<value_type>(v, m, pol), "boost::math::cyl_bessel_j_zero<%1%>(%1%,%1%)");
+}
+
+template <class T>
+inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_bessel_j_zero(T v, unsigned m)
+{
+   return cyl_bessel_j_zero(v, m, policies::policy<>());
+}
+
+template <class output_iterator, class T, class Policy>
+inline void cyl_bessel_j_zero(output_iterator out_it,
+                              T v,
+                              unsigned number_of_zeros,
+                              unsigned start_index,
+                              const Policy& pol)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   detail::cyl_bessel_j_zero_imp<output_iterator, value_type, Policy>(out_it, v, number_of_zeros, start_index, pol);
+}
+
+template <class output_iterator, class T>
+inline void cyl_bessel_j_zero(output_iterator out_it,
+                              T v,
+                              unsigned number_of_zeros,
+                              unsigned start_index)
+{
+   detail::cyl_bessel_j_zero_imp(out_it, v, number_of_zeros, start_index, policies::policy<>());
+}
+
+template <class T, class Policy>
+inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zero(T v, unsigned m, const Policy& pol)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_zero_imp<value_type>(v, m, pol), "boost::math::cyl_neumann_zero<%1%>(%1%,%1%)");
+}
+
+template <class T>
+inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neumann_zero(T v, unsigned m)
+{
+   return cyl_neumann_zero(v, m, policies::policy<>());
+}
+
+template <class output_iterator, class T, class Policy>
+inline void cyl_neumann_zero(output_iterator out_it,
+                             T v,
+                             unsigned number_of_zeros,
+                             unsigned start_index,
+                             const Policy& pol)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   detail::cyl_neumann_zero_imp<output_iterator, value_type, Policy>(out_it, v, number_of_zeros, start_index, pol);
+}
+
+template <class output_iterator, class T>
+inline void cyl_neumann_zero(output_iterator out_it,
+                             T v,
+                             unsigned number_of_zeros,
+                             unsigned start_index)
+{
+   detail::cyl_neumann_zero_imp(out_it, v, number_of_zeros, start_index, policies::policy<>());
 }
 
 } // namespace math
