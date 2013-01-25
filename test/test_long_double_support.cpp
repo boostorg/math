@@ -61,15 +61,15 @@ void do_test_std_function(const A& data, const char* type_name, const char* func
    // test against data:
    //
    result = boost::math::tools::test(
-      data, 
-      bind_func<value_type>(proc, 0), 
+      data,
+      bind_func<value_type>(proc, 0),
       extract_result<value_type>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, function_name, test_name);
    if(inv_proc)
    {
       result = boost::math::tools::test(
-         data, 
-         bind_func<value_type>(inv_proc, 1), 
+         data,
+         bind_func<value_type>(inv_proc, 1),
          extract_result<value_type>(0));
       handle_test_result(result, data[result.worst()], result.worst(), type_name, inv_function_name, test_name);
    }
@@ -156,12 +156,12 @@ void test_spots()
        -23.0258509299404568401799145468436420760110148862877297603333L, 1e-10L,
        -4.60517018598809136803598290936872841520220297725754595206666L, 0.01L,
 #if LDBL_MAX_EXP > DBL_MAX_EXP
-       1151.29254649702284200899572734218210380055074431438648801666L, 1e500L,
-       2302.58509299404568401799145468436420760110148862877297603333L, 1e1000L,
-       11351.7445084606452222086978715939155434734303389398507718443L, 1e4930L,
-       -11351.7445084606452222086978715939155434734303389398507718443L, 1e-4930L,
-       -2302.58509299404568401799145468436420760110148862877297603333L, 1e-1000L,
-       -1151.29254649702284200899572734218210380055074431438648801666L, 1e-500L,
+       1151.5L, 1.23054049904018215810329849694e+500L,
+       2302.5, 9.1842687219959504902800771504e+999L,
+       11351.5, 7.83089362896060182981072520459e+4929L,
+       -11351.5, 1.27699346636729947157842192471e-4930L,
+       -2302.5, 1.0888183156107362404277325218e-1000L,
+       -1151.5, 8.12651026747999724274336150307e-501L,
 #else
        0, 1,
        0, 1,
