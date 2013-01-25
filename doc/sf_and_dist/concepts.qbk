@@ -104,13 +104,15 @@ The table output is:
 [fft_sines_table_example_check]
 
 
-[import ../../example/ibeta_mp_example.cpp]
+[/TODO another example needed here]
 
-[ibeta_mp_example_1]
+[/import ../../example/ibeta_mp_example.cpp]
 
-The program output is:
+[/ibeta_mp_example_1]
 
-[ibeta_mp_output_1]
+[/The program output is:]
+
+[/ibeta_mp_output_1]
 
 
 
