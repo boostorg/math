@@ -32,7 +32,7 @@ inline T get_smallest_value(mpl::true_ const&)
    // when using the SSE2 registers in DAZ or FTZ mode.
    //
    static const T m = std::numeric_limits<T>::denorm_min();
-   return (0 == m) ? tools::min_value<T>() : m;
+   return ((tools::min_value<T>() - m) == tools::min_value<T>()) ? tools::min_value<T>() : m;
 }
 
 template <class T>
@@ -52,7 +52,7 @@ inline T get_smallest_value()
 }
 
 //
-// Returns the smallest value that won't generate denorms when 
+// Returns the smallest value that won't generate denorms when
 // we calculate the value of the least-significant-bit:
 //
 template <class T>
@@ -123,7 +123,7 @@ T float_next(const T& val, const Policy& pol)
    if((fpclass != FP_SUBNORMAL) && (fpclass != FP_ZERO) && (fabs(val) < detail::get_min_shift_value<T>()) && (val != -tools::min_value<T>()))
    {
       //
-      // Special case: if the value of the least significant bit is a denorm, and the result 
+      // Special case: if the value of the least significant bit is a denorm, and the result
       // would not be a denorm, then shift the input, increment, and shift back.
       // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
       //
@@ -194,7 +194,7 @@ T float_prior(const T& val, const Policy& pol)
    if((fpclass != FP_SUBNORMAL) && (fpclass != FP_ZERO) && (fabs(val) < detail::get_min_shift_value<T>()) && (val != tools::min_value<T>()))
    {
       //
-      // Special case: if the value of the least significant bit is a denorm, and the result 
+      // Special case: if the value of the least significant bit is a denorm, and the result
       // would not be a denorm, then shift the input, increment, and shift back.
       // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
       //
@@ -310,7 +310,7 @@ T float_distance(const T& a, const T& b, const Policy& pol)
       result = float_distance(upper, b);
    }
    //
-   // Use compensated double-double addition to avoid rounding 
+   // Use compensated double-double addition to avoid rounding
    // errors in the subtraction:
    //
    T mb, x, y, z;
@@ -384,7 +384,7 @@ T float_advance(T val, int distance, const Policy& pol)
    if(fabs(val) < detail::get_min_shift_value<T>())
    {
       //
-      // Special case: if the value of the least significant bit is a denorm, 
+      // Special case: if the value of the least significant bit is a denorm,
       // implement in terms of float_next/float_prior.
       // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
       //
@@ -411,7 +411,7 @@ T float_advance(T val, int distance, const Policy& pol)
    {
       distance -= itrunc(limit_distance);
       val = limit;
-      if(distance < 0) 
+      if(distance < 0)
       {
          limit /= 2;
          expon--;
