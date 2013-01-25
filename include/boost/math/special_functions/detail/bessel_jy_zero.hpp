@@ -33,7 +33,7 @@
     namespace bessel_zero
     {
       template<class T>
-      T equation_nist_10_21_19(const T& v, const T& a)
+      T equation_nist_10_21_19(T v, T a)
       {
         // Get the initial estimate of the m'th root of Jv or Yv.
         // This subroutine is used for the order m with m > 1.
@@ -60,9 +60,9 @@
       class equation_as_9_3_39_and_its_derivative
       {
       public:
-        equation_as_9_3_39_and_its_derivative(const T& zt) : zeta(zt) { }
+        equation_as_9_3_39_and_its_derivative(T zt) : zeta(zt) { }
 
-        boost::math::tuple<T, T> operator()(const T& z) const
+        boost::math::tuple<T, T> operator()(T z) const
         {
           BOOST_MATH_STD_USING // ADL of std names, needed for acos, sqrt.
 
@@ -86,7 +86,7 @@
       };
 
       template<class T>
-      static T equation_as_9_5_26(const T& v, const T& ai_bi_root)
+      static T equation_as_9_5_26(T v, T ai_bi_root)
       {
         BOOST_MATH_STD_USING // ADL of std names, needed for pow.
 
@@ -165,7 +165,7 @@
       namespace cyl_bessel_j_zero_detail
       {
         template<class T>
-        T equation_nist_10_21_40_a(const T& v)
+        T equation_nist_10_21_40_a(T v)
         {
           BOOST_MATH_STD_USING // ADL of std names, needed for pow.
 
@@ -180,7 +180,7 @@
         }
 
         template<class T>
-        T initial_guess(const T& v, unsigned m)
+        T initial_guess(T v, unsigned m)
         {
           // Compute an estimate of the m'th root of cyl_bessel_j.
 
@@ -241,11 +241,11 @@
         class function_object
         {
         public:
-          function_object(const T& v,
+          function_object(T v,
                           const Policy& pol) : my_v(v),
                                                my_pol(pol) { }
 
-          boost::math::tuple<T, T> operator()(const T& x) const
+          boost::math::tuple<T, T> operator()(T x) const
           {
             // Obtain Jv(x) and Jv'(x).
             const T j_v      (boost::math::detail::cyl_bessel_j_imp(  my_v,      x, boost::math::detail::bessel_no_int_tag(), my_pol));
@@ -265,7 +265,7 @@
       namespace cyl_neumann_zero_detail
       {
         template<class T>
-        T equation_nist_10_21_40_b(const T& v)
+        T equation_nist_10_21_40_b(T v)
         {
           BOOST_MATH_STD_USING // ADL of std names, needed for pow.
 
@@ -341,11 +341,11 @@
         class function_object
         {
         public:
-          function_object(const T& v,
+          function_object(T v,
                           const Policy& pol) : my_v(v),
                                                my_pol(pol) { }
 
-          boost::math::tuple<T, T> operator()(const T& x) const
+          boost::math::tuple<T, T> operator()(T x) const
           {
             // Obtain Yv(x) and Yv'(x).
             const T y_v      (boost::math::detail::cyl_neumann_imp(  my_v,      x, boost::math::detail::bessel_no_int_tag(), my_pol));

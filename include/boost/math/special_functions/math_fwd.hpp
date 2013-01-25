@@ -623,12 +623,6 @@ namespace boost
    template <class T1, class T2, class Policy>
    std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_1(T1 v, T2 x, const Policy& pol);
 
-   template <class output_iterator, class T>
-   inline void cyl_bessel_j_zero_imp(output_iterator out_it,
-                                     T v,
-                                     std::size_t number_of_zeros,
-                                     unsigned start_index);
-
    template <class T, class Policy>
    typename detail::bessel_traits<T, T, Policy>::result_type cyl_neuman_zero(T v, unsigned m, const Policy& pol);
 
@@ -637,12 +631,6 @@ namespace boost
 
    template <class T1, class T2, class Policy>
    std::complex<typename detail::bessel_traits<T1, T2, Policy>::result_type> cyl_hankel_1(T1 v, T2 x, const Policy& pol);
-
-   template <class output_iterator, class T>
-   inline void cyl_neuman_zero_imp(output_iterator out_it,
-                                   T v,
-                                   std::size_t number_of_zeros,
-                                   unsigned start_index);
 
    template <class T1, class T2>
    std::complex<typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type> cyl_hankel_1(T1 v, T2 x);

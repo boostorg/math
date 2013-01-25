@@ -376,7 +376,7 @@ inline T cyl_bessel_j_zero_imp(T v, unsigned m, const Policy& pol)
 
    // Handle negative order or if the zero'th zero is requested.
    // Return NaN if NaN is available or return 0 if NaN is not available.
-   if((v < T(0)) || (m == 0U))
+   if((v < 0) || (m == 0U))
       return (std::numeric_limits<T>::has_quiet_NaN ? std::numeric_limits<T>::quiet_NaN() : T(0));
 
    // Set up the initial guess for the upcoming root-finding.
@@ -419,7 +419,7 @@ inline void cyl_bessel_j_zero_imp(output_iterator out_it,
 
       while(out_it != end_it)
       {
-         *out_it = boost::math::detail::cyl_bessel_j_zero_imp(v, start_index, pol);
+         *out_it = boost::math::detail::cyl_bessel_j_zero_imp<T, Policy>(v, start_index, pol);
          ++start_index;
          ++out_it;
       }
