@@ -15,6 +15,7 @@
 
 #include <boost/math/special_functions.hpp>
 #include <boost/math/concepts/distributions.hpp>
+#include <boost/concept_archetype.hpp>
 
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
 
@@ -138,6 +139,8 @@ void instantiate(RealType)
 #endif
    int i;
    RealType v1(0.5), v2(0.5), v3(0.5);
+   boost::detail::dummy_constructor dc;
+   boost::output_iterator_archetype<RealType> oi(dc);
    boost::math::tgamma(v1);
    boost::math::tgamma1pm1(v1);
    boost::math::lgamma(v1);
@@ -247,6 +250,10 @@ void instantiate(RealType)
    boost::math::sph_bessel(i, 1);
    boost::math::sph_neumann(i, v2);
    boost::math::sph_neumann(i, i);
+   boost::math::cyl_bessel_j_zero(v1, i);
+   boost::math::cyl_bessel_j_zero(oi, v1, i, i);
+   boost::math::cyl_neumann_zero(v1, i);
+   boost::math::cyl_neumann_zero(oi, v1, i, i);
 #ifdef TEST_COMPLEX
    boost::math::cyl_hankel_1(v1, v2);
    boost::math::cyl_hankel_1(i, v2);
@@ -393,6 +400,10 @@ void instantiate(RealType)
    boost::math::sph_bessel(i, 1, pol);
    boost::math::sph_neumann(i, v2, pol);
    boost::math::sph_neumann(i, i, pol);
+   boost::math::cyl_bessel_j_zero(v1, i, pol);
+   boost::math::cyl_bessel_j_zero(oi, v1, i, i, pol);
+   boost::math::cyl_neumann_zero(v1, i, pol);
+   boost::math::cyl_neumann_zero(oi, v1, i, i, pol);
 #ifdef TEST_COMPLEX
    boost::math::cyl_hankel_1(v1, v2, pol);
    boost::math::cyl_hankel_1(i, v2, pol);
@@ -550,6 +561,10 @@ void instantiate(RealType)
    test::sph_bessel(i, 1);
    test::sph_neumann(i, v2);
    test::sph_neumann(i, i);
+   test::cyl_bessel_j_zero(v1, i);
+   test::cyl_bessel_j_zero(oi, v1, i, i);
+   test::cyl_neumann_zero(v1, i);
+   test::cyl_neumann_zero(oi, v1, i, i);
 #ifdef TEST_COMPLEX
    test::cyl_hankel_1(v1, v2);
    test::cyl_hankel_1(i, v2);

@@ -413,16 +413,10 @@ inline void cyl_bessel_j_zero_imp(output_iterator out_it,
                                   unsigned start_index,
                                   const Policy& pol)
 {
-   if(number_of_zeros > 0U)
+   for(unsigned i = 0; i < number_of_zeros; ++i)
    {
-      const output_iterator end_it(out_it + number_of_zeros);
-
-      while(out_it != end_it)
-      {
-         *out_it = boost::math::detail::cyl_bessel_j_zero_imp<T, Policy>(v, start_index, pol);
-         ++start_index;
-         ++out_it;
-      }
+      *out_it = boost::math::detail::cyl_bessel_j_zero_imp<T, Policy>(v, start_index + i, pol);
+      ++out_it;
    }
 }
 
@@ -470,16 +464,10 @@ inline void cyl_neumann_zero_imp(output_iterator out_it,
                                  unsigned start_index,
                                  const Policy& pol)
 {
-   if(number_of_zeros > 0U)
+   for(unsigned i = 0; i < number_of_zeros; ++i)
    {
-      const output_iterator end_it(out_it + number_of_zeros);
-
-      while(out_it != end_it)
-      {
-         *out_it = boost::math::detail::cyl_neumann_zero_imp<T, Policy>(v, start_index, pol);
-         ++start_index;
-         ++out_it;
-      }
+      *out_it = boost::math::detail::cyl_neumann_zero_imp<T, Policy>(v, start_index + i, pol);
+      ++out_it;
    }
 }
 
@@ -592,7 +580,7 @@ template <class T>
 inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_bessel_j_zero(T v, unsigned m)
 {
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
-   return cyl_bessel_j_zero_imp<T, policies::policy<> >(v, m, policies::policy<>());
+   return cyl_bessel_j_zero<T, policies::policy<> >(v, m, policies::policy<>());
 }
 
 template <class output_iterator, class T, class Policy>
@@ -636,7 +624,7 @@ template <class T>
 inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neumann_zero(T v, unsigned m)
 {
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
-   return cyl_neumann_zero_imp<T, policies::policy<> >(v, m, policies::policy<>());
+   return cyl_neumann_zero<T, policies::policy<> >(v, m, policies::policy<>());
 }
 
 template <class output_iterator, class T, class Policy>

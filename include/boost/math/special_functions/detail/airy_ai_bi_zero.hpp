@@ -29,8 +29,8 @@
       const T z_pow_two_thirds(pow(z, T(2) / 3U));
 
       // Implement the top line of Eq. 10.4.105.
-      const T fz(z_pow_two_thirds * (((((                     + (T(162375596875ULL) / 334430208UL)
-                                         * one_over_z_squared - (   T(108056875ULL) /   6967296UL))
+      const T fz(z_pow_two_thirds * (((((                     + (T(162375596875.0) / 334430208UL)
+                                         * one_over_z_squared - (   T(108056875.0) /   6967296UL))
                                          * one_over_z_squared + (       T(77125UL)  /     82944UL))
                                          * one_over_z_squared - (           T(5U)   /        36U))
                                          * one_over_z_squared + (           T(5U)   /        48U))
