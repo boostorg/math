@@ -406,20 +406,6 @@ inline T cyl_bessel_j_zero_imp(T v, unsigned m, const Policy& pol)
    return jvm;
 }
 
-template <class output_iterator, class T, class Policy>
-inline void cyl_bessel_j_zero_imp(output_iterator out_it,
-                                  T v,
-                                  unsigned number_of_zeros,
-                                  unsigned start_index,
-                                  const Policy& pol)
-{
-   for(unsigned i = 0; i < number_of_zeros; ++i)
-   {
-      *out_it = boost::math::detail::cyl_bessel_j_zero_imp<T, Policy>(v, start_index + i, pol);
-      ++out_it;
-   }
-}
-
 template <class T, class Policy>
 inline T cyl_neumann_zero_imp(T v, unsigned m, const Policy& pol)
 {
@@ -455,20 +441,6 @@ inline T cyl_neumann_zero_imp(T v, unsigned m, const Policy& pol)
    static_cast<void>(number_of_iterations);
 
    return yvm;
-}
-
-template <class output_iterator, class T, class Policy>
-inline void cyl_neumann_zero_imp(output_iterator out_it,
-                                 T v,
-                                 unsigned number_of_zeros,
-                                 unsigned start_index,
-                                 const Policy& pol)
-{
-   for(unsigned i = 0; i < number_of_zeros; ++i)
-   {
-      *out_it = boost::math::detail::cyl_neumann_zero_imp<T, Policy>(v, start_index + i, pol);
-      ++out_it;
-   }
 }
 
 } // namespace detail
@@ -590,11 +562,12 @@ inline void cyl_bessel_j_zero(output_iterator out_it,
                               unsigned start_index,
                               const Policy& pol)
 {
-   BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
-   typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<value_type>::is_integer, "Order must be a floating-point type.");
-   detail::cyl_bessel_j_zero_imp<output_iterator, value_type, Policy>(out_it, v, number_of_zeros, start_index, pol);
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
+   for(unsigned i = 0; i < number_of_zeros; ++i)
+   {
+      *out_it = boost::math::cyl_bessel_j_zero(v, start_index + i, pol);
+      ++out_it;
+   }
 }
 
 template <class output_iterator, class T>
@@ -603,11 +576,7 @@ inline void cyl_bessel_j_zero(output_iterator out_it,
                               unsigned number_of_zeros,
                               unsigned start_index)
 {
-   BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T, T, policies::policy<> >::result_type result_type;
-   typedef typename policies::evaluation<result_type, policies::policy<> >::type value_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<value_type>::is_integer, "Order must be a floating-point type.");
-   detail::cyl_bessel_j_zero_imp<output_iterator, value_type, policies::policy<> >(out_it, v, number_of_zeros, start_index, policies::policy<>());
+   return cyl_bessel_j_zero(out_it, v, number_of_zeros, start_index, policies::policy<>());
 }
 
 template <class T, class Policy>
@@ -634,11 +603,12 @@ inline void cyl_neumann_zero(output_iterator out_it,
                              unsigned start_index,
                              const Policy& pol)
 {
-   BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
-   typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<value_type>::is_integer, "Order must be a floating-point type.");
-   detail::cyl_neumann_zero_imp<output_iterator, value_type, Policy>(out_it, v, number_of_zeros, start_index, pol);
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
+   for(unsigned i = 0; i < number_of_zeros; ++i)
+   {
+      *out_it = boost::math::cyl_neumann_zero(v, start_index + i, pol);
+      ++out_it;
+   }
 }
 
 template <class output_iterator, class T>
@@ -647,11 +617,7 @@ inline void cyl_neumann_zero(output_iterator out_it,
                              unsigned number_of_zeros,
                              unsigned start_index)
 {
-   BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T, T, policies::policy<> >::result_type result_type;
-   typedef typename policies::evaluation<result_type, policies::policy<> >::type value_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<value_type>::is_integer, "Order must be a floating-point type.");
-   detail::cyl_neumann_zero_imp<output_iterator, value_type, policies::policy<> >(out_it, v, number_of_zeros, start_index, policies::policy<>());
+   return cyl_neumann_zero(out_it, v, number_of_zeros, start_index, policies::policy<>());
 }
 
 } // namespace math

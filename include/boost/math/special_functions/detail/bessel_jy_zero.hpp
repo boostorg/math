@@ -83,6 +83,7 @@
         }
 
       private:
+        equation_as_9_3_39_and_its_derivative& operator = (const equation_as_9_3_39_and_its_derivative&);
         const T zeta;
       };
 
@@ -262,6 +263,7 @@
         private:
           const T my_v;
           const Policy& my_pol;
+          function_object& operator = (const function_object&);
         };
       } // namespace cyl_bessel_j_zero_detail
 
@@ -361,6 +363,7 @@
         private:
           const T my_v;
           const Policy& my_pol;
+          function_object* operator = (const function_object&);
         };
       } // namespace cyl_neumann_zero_detail
     } // namespace bessel_zero
