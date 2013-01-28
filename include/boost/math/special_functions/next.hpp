@@ -94,10 +94,8 @@ inline T get_min_shift_value()
    return val;
 }
 
-}
-
 template <class T, class Policy>
-T float_next(const T& val, const Policy& pol)
+T float_next_imp(const T& val, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    int expon;
@@ -138,6 +136,15 @@ T float_next(const T& val, const Policy& pol)
    return val + diff;
 }
 
+}
+
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type float_next(const T& val, const Policy& pol)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   return detail::float_next_imp(static_cast<result_type>(val), pol);
+}
+
 #if 0 //def BOOST_MSVC
 //
 // We used to use ::_nextafter here, but doing so fails when using
@@ -162,13 +169,15 @@ inline double float_next(const double& val, const Policy& pol)
 #endif
 
 template <class T>
-inline T float_next(const T& val)
+inline typename tools::promote_args<T>::type float_next(const T& val)
 {
    return float_next(val, policies::policy<>());
 }
 
+namespace detail{
+
 template <class T, class Policy>
-T float_prior(const T& val, const Policy& pol)
+T float_prior_imp(const T& val, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    int expon;
@@ -210,6 +219,15 @@ T float_prior(const T& val, const Policy& pol)
    return val - diff;
 }
 
+}
+
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type float_prior(const T& val, const Policy& pol)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   return detail::float_prior_imp(static_cast<result_type>(val), pol);
+}
+
 #if 0 //def BOOST_MSVC
 //
 // We used to use ::_nextafter here, but doing so fails when using
@@ -234,25 +252,28 @@ inline double float_prior(const double& val, const Policy& pol)
 #endif
 
 template <class T>
-inline T float_prior(const T& val)
+inline typename tools::promote_args<T>::type float_prior(const T& val)
 {
    return float_prior(val, policies::policy<>());
 }
 
-template <class T, class Policy>
-inline T nextafter(const T& val, const T& direction, const Policy& pol)
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction, const Policy& pol)
 {
-   return val < direction ? boost::math::float_next(val, pol) : val == direction ? val : boost::math::float_prior(val, pol);
+   typedef typename tools::promote_args<T, U>::type result_type;
+   return val < direction ? boost::math::float_next<result_type>(val, pol) : val == direction ? val : boost::math::float_prior<result_type>(val, pol);
 }
 
-template <class T>
-inline T nextafter(const T& val, const T& direction)
+template <class T, class U>
+inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction)
 {
    return nextafter(val, direction, policies::policy<>());
 }
 
+namespace detail{
+
 template <class T, class Policy>
-T float_distance(const T& a, const T& b, const Policy& pol)
+T float_distance_imp(const T& a, const T& b, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
@@ -350,14 +371,25 @@ T float_distance(const T& a, const T& b, const Policy& pol)
    return result;
 }
 
-template <class T>
-T float_distance(const T& a, const T& b)
+}
+
+template <class T, class U, class Policy>
+inline typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
+{
+   typedef typename tools::promote_args<T, U>::type result_type;
+   return detail::float_distance_imp(static_cast<result_type>(a), static_cast<result_type>(b), pol);
+}
+
+template <class T, class U>
+typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 {
    return boost::math::float_distance(a, b, policies::policy<>());
 }
 
+namespace detail{
+
 template <class T, class Policy>
-T float_advance(T val, int distance, const Policy& pol)
+T float_advance_imp(T val, int distance, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
@@ -437,8 +469,17 @@ T float_advance(T val, int distance, const Policy& pol)
    return val += diff;
 }
 
+}
+
+template <class T, class Policy>
+inline typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   return detail::float_advance_imp(static_cast<result_type>(val), distance, pol);
+}
+
 template <class T>
-inline T float_advance(const T& val, int distance)
+inline typename tools::promote_args<T>::type float_advance(const T& val, int distance)
 {
    return boost::math::float_advance(val, distance, policies::policy<>());
 }

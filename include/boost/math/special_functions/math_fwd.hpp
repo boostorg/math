@@ -639,13 +639,13 @@ namespace boost
    typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neuman_zero(T v, unsigned m);
 
    template <class output_iterator, class T>
-   inline void cyl_neuman_zero(output_iterator out_it,
+   void cyl_neuman_zero(output_iterator out_it,
                                    T v,
                                    std::size_t number_of_zeros,
                                    unsigned start_index);
 
    template <class output_iterator, class T, class Policy>
-   inline void cyl_neuman_zero(output_iterator out_it,
+   void cyl_neuman_zero(output_iterator out_it,
                                    T v,
                                    std::size_t number_of_zeros,
                                    unsigned start_index, const Policy&);
@@ -731,11 +731,11 @@ namespace boost
    template <class T>
    int sign BOOST_NO_MACRO_EXPAND(const T& z);
 
-   template <class T>
-   T copysign BOOST_NO_MACRO_EXPAND(const T& x, const T& y);
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y);
 
    template <class T>
-   T changesign BOOST_NO_MACRO_EXPAND(const T& z);
+   typename tools::promote_args<T>::type changesign BOOST_NO_MACRO_EXPAND(const T& z);
 
    // Exponential integrals:
    namespace detail{
@@ -773,11 +773,11 @@ namespace boost
    typename tools::promote_args<T1, T2>::type owens_t(T1 h, T2 a);
 
    // Jacobi Functions:
-   template <class T, class Policy>
-   typename tools::promote_args<T>::type jacobi_elliptic(T k, T theta, T* pcn, T* pdn, const Policy&);
+   template <class T, class U, class V, class Policy>
+   typename tools::promote_args<T, U, V>::type jacobi_elliptic(T k, U theta, V* pcn, V* pdn, const Policy&);
 
-   template <class T>
-   typename tools::promote_args<T>::type jacobi_elliptic(T k, T theta, T* pcn = 0, T* pdn = 0);
+   template <class T, class U, class V>
+   typename tools::promote_args<T, U, V>::type jacobi_elliptic(T k, U theta, V* pcn = 0, V* pdn = 0);
 
    template <class U, class T, class Policy>
    typename tools::promote_args<T, U>::type jacobi_sn(U k, T theta, const Policy& pol);
@@ -863,22 +863,26 @@ namespace boost
    typename tools::promote_args<T>::type pow(T base);
 
    // next:
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type nextafter(const T&, const U&, const Policy&);
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type nextafter(const T&, const U&);
    template <class T, class Policy>
-   T nextafter(const T&, const T&, const Policy&);
+   typename tools::promote_args<T>::type float_next(const T&, const Policy&);
    template <class T>
-   T nextafter(const T&, const T&);
+   typename tools::promote_args<T>::type float_next(const T&);
    template <class T, class Policy>
-   T float_next(const T&, const Policy&);
+   typename tools::promote_args<T>::type float_prior(const T&, const Policy&);
    template <class T>
-   T float_next(const T&);
+   typename tools::promote_args<T>::type float_prior(const T&);
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type float_distance(const T&, const U&, const Policy&);
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type float_distance(const T&, const U&);
    template <class T, class Policy>
-   T float_prior(const T&, const Policy&);
+   typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol);
    template <class T>
-   T float_prior(const T&);
-   template <class T, class Policy>
-   T float_distance(const T&, const T&, const Policy&);
-   template <class T>
-   T float_distance(const T&, const T&);
+   typename tools::promote_args<T>::type float_advance(const T& val, int distance);
 
     } // namespace math
 } // namespace boost

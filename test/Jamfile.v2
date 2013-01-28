@@ -823,11 +823,15 @@ run test_signed_zero.cpp ../../test/build//boost_test_exec_monitor ;
   
 run complex_test.cpp ../../test/build//boost_test_exec_monitor ;
 
-compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] ;
-compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] ;
-compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] ;
-compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] ;
-compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] ;
+compile multiprc_concept_check_1.cpp : <debug-symbols>off ;
+compile multiprc_concept_check_2.cpp : <debug-symbols>off ;
+compile multiprc_concept_check_3.cpp : <debug-symbols>off ;
+compile multiprc_concept_check_4.cpp : <debug-symbols>off ;
+compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] <debug-symbols>off ;
+compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off ;
+compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off ;
+compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] <debug-symbols>off ;
+compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] <debug-symbols>off ;
 
 run ztest_max_digits10.cpp ;
 run zztest_max_digits10.cpp ;

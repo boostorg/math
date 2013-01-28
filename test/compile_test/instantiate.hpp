@@ -34,13 +34,27 @@ BOOST_MATH_DECLARE_DISTRIBUTIONS(double, test_policy)
 }
 #endif
 
+#if !defined(TEST_GROUP_1) && !defined(TEST_GROUP_2) && !defined(TEST_GROUP_3) \
+   && !defined(TEST_GROUP_4) && !defined(TEST_GROUP_5) && !defined(TEST_GROUP_6) \
+   && !defined(TEST_GROUP_7) && !defined(TEST_GROUP_8) && !defined(TEST_GROUP_9)
+#  define TEST_GROUP_1
+#  define TEST_GROUP_2
+#  define TEST_GROUP_3
+#  define TEST_GROUP_4
+#  define TEST_GROUP_5
+#  define TEST_GROUP_6
+#  define TEST_GROUP_7
+#  define TEST_GROUP_8
+#  define TEST_GROUP_9
+#endif
+
 template <class RealType>
 void instantiate(RealType)
 {
    using namespace boost;
    using namespace boost::math;
    using namespace boost::math::concepts;
-
+#ifdef TEST_GROUP_1
    function_requires<DistributionConcept<bernoulli_distribution<RealType> > >();
    function_requires<DistributionConcept<beta_distribution<RealType> > >();
    function_requires<DistributionConcept<binomial_distribution<RealType> > >();
@@ -72,7 +86,9 @@ void instantiate(RealType)
    function_requires<DistributionConcept<triangular_distribution<RealType> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType> > >();
+#endif
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
+#ifdef TEST_GROUP_2
    function_requires<DistributionConcept<bernoulli_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<beta_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<binomial_distribution<RealType, test_policy> > >();
@@ -104,7 +120,8 @@ void instantiate(RealType)
    function_requires<DistributionConcept<triangular_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<uniform_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<weibull_distribution<RealType, test_policy> > >();
-
+#endif
+#ifdef TEST_GROUP_3
    function_requires<DistributionConcept<dist_test::bernoulli > >();
    function_requires<DistributionConcept<dist_test::beta > >();
    function_requires<DistributionConcept<dist_test::binomial > >();
@@ -137,10 +154,12 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::weibull > >();
    function_requires<DistributionConcept<dist_test::hypergeometric > >();
 #endif
+#endif
    int i;
    RealType v1(0.5), v2(0.5), v3(0.5);
    boost::detail::dummy_constructor dc;
    boost::output_iterator_archetype<RealType> oi(dc);
+#ifdef TEST_GROUP_4
    boost::math::tgamma(v1);
    boost::math::tgamma1pm1(v1);
    boost::math::lgamma(v1);
@@ -296,7 +315,169 @@ void instantiate(RealType)
    boost::math::float_next(v1);
    boost::math::float_prior(v1);
    boost::math::float_distance(v1, v1);
+#endif
+#ifdef TEST_GROUP_9
+   //
+   // Over again, but arguments may be expression templates:
+   //
+   boost::math::tgamma(v1 + 0);
+   boost::math::tgamma1pm1(v1 + 0);
+   boost::math::lgamma(v1 * 1);
+   boost::math::lgamma(v1 * 1, &i);
+   boost::math::digamma(v1 * 1);
+   boost::math::tgamma_ratio(v1 * 1, v2 + 0);
+   boost::math::tgamma_delta_ratio(v1 * 1, v2 + 0);
+   boost::math::factorial<RealType>(i);
+   boost::math::unchecked_factorial<RealType>(i);
+   i = boost::math::max_factorial<RealType>::value;
+   boost::math::double_factorial<RealType>(i);
+   boost::math::rising_factorial(v1 * 1, i);
+   boost::math::falling_factorial(v1 * 1, i);
+   boost::math::tgamma(v1 * 1, v2 + 0);
+   boost::math::tgamma_lower(v1 * 1, v2 - 0);
+   boost::math::gamma_p(v1 * 1, v2 + 0);
+   boost::math::gamma_q(v1 * 1, v2 + 0);
+   boost::math::gamma_p_inv(v1 * 1, v2 + 0);
+   boost::math::gamma_q_inv(v1 * 1, v2 + 0);
+   boost::math::gamma_p_inva(v1 * 1, v2 + 0);
+   boost::math::gamma_q_inva(v1 * 1, v2 + 0);
+   boost::math::erf(v1 * 1);
+   boost::math::erfc(v1 * 1);
+   boost::math::erf_inv(v1 * 1);
+   boost::math::erfc_inv(v1 * 1);
+   boost::math::beta(v1 * 1, v2 + 0);
+   boost::math::beta(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::betac(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ibeta(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ibetac(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ibeta_inv(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ibetac_inv(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ibeta_inva(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ibetac_inva(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ibeta_invb(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ibetac_invb(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::gamma_p_derivative(v2 * 1, v3 + 0);
+   boost::math::ibeta_derivative(v1 * 1, v2 + 0, v3 / 1);
+   (boost::math::fpclassify)(v1 * 1);
+   (boost::math::isfinite)(v1 * 1);
+   (boost::math::isnormal)(v1 * 1);
+   (boost::math::isnan)(v1 * 1);
+   (boost::math::isinf)(v1 * 1);
+   (boost::math::signbit)(v1 * 1);
+   (boost::math::copysign)(v1 * 1, v2 + 0);
+   (boost::math::changesign)(v1 * 1);
+   (boost::math::sign)(v1 * 1);
+   boost::math::log1p(v1 * 1);
+   boost::math::expm1(v1 * 1);
+   boost::math::cbrt(v1 * 1);
+   boost::math::sqrt1pm1(v1 * 1);
+   boost::math::powm1(v1 * 1, v2 + 0);
+   boost::math::legendre_p(1, v1 * 1);
+   boost::math::legendre_p(1, 0, v1 * 1);
+   boost::math::legendre_q(1, v1 * 1);
+   boost::math::legendre_next(2, v1 * 1, v2 + 0, v3 / 1);
+   boost::math::legendre_next(2, 2, v1 * 1, v2 + 0, v3 / 1);
+   boost::math::laguerre(1, v1 * 1);
+   boost::math::laguerre(2, 1, v1 * 1);
+   boost::math::laguerre(2u, 1u, v1 * 1);
+   boost::math::laguerre_next(2, v1 * 1, v2 + 0, v3 / 1);
+   boost::math::laguerre_next(2, 1, v1 * 1, v2 + 0, v3 / 1);
+   boost::math::hermite(1, v1 * 1);
+   boost::math::hermite_next(2, v1 * 1, v2 + 0, v3 / 1);
+   boost::math::spherical_harmonic_r(2, 1, v1 * 1, v2 + 0);
+   boost::math::spherical_harmonic_i(2, 1, v1 * 1, v2 + 0);
+   boost::math::ellint_1(v1 * 1);
+   boost::math::ellint_1(v1 * 1, v2 + 0);
+   boost::math::ellint_2(v1 * 1);
+   boost::math::ellint_2(v1 * 1, v2 + 0);
+   boost::math::ellint_3(v1 * 1, v2 + 0);
+   boost::math::ellint_3(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ellint_rc(v1 * 1, v2 + 0);
+   boost::math::ellint_rd(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ellint_rf(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ellint_rj(v1 * 1, v2 + 0, v3 / 1, v1 * 1);
+   boost::math::jacobi_elliptic(v1 * 1, v2 + 0, &v1, &v2);
+   boost::math::jacobi_cd(v1 * 1, v2 + 0);
+   boost::math::jacobi_cn(v1 * 1, v2 + 0);
+   boost::math::jacobi_cs(v1 * 1, v2 + 0);
+   boost::math::jacobi_dc(v1 * 1, v2 + 0);
+   boost::math::jacobi_dn(v1 * 1, v2 + 0);
+   boost::math::jacobi_ds(v1 * 1, v2 + 0);
+   boost::math::jacobi_nc(v1 * 1, v2 + 0);
+   boost::math::jacobi_nd(v1 * 1, v2 + 0);
+   boost::math::jacobi_ns(v1 * 1, v2 + 0);
+   boost::math::jacobi_sc(v1 * 1, v2 + 0);
+   boost::math::jacobi_sd(v1 * 1, v2 + 0);
+   boost::math::jacobi_sn(v1 * 1, v2 + 0);
+   boost::math::hypot(v1 * 1, v2 + 0);
+   boost::math::sinc_pi(v1 * 1);
+   boost::math::sinhc_pi(v1 * 1);
+   boost::math::asinh(v1 * 1);
+   boost::math::acosh(v1 * 1);
+   boost::math::atanh(v1 * 1);
+   boost::math::sin_pi(v1 * 1);
+   boost::math::cos_pi(v1 * 1);
+   boost::math::cyl_neumann(v1 * 1, v2 + 0);
+   boost::math::cyl_neumann(i, v2 * 1);
+   boost::math::cyl_bessel_j(v1 * 1, v2 + 0);
+   boost::math::cyl_bessel_j(i, v2 * 1);
+   boost::math::cyl_bessel_i(v1 * 1, v2 + 0);
+   boost::math::cyl_bessel_i(i, v2 * 1);
+   boost::math::cyl_bessel_k(v1 * 1, v2 + 0);
+   boost::math::cyl_bessel_k(i, v2 * 1);
+   boost::math::sph_bessel(i, v2 * 1);
+   boost::math::sph_bessel(i, 1);
+   boost::math::sph_neumann(i, v2 * 1);
+   boost::math::sph_neumann(i, i);
+   boost::math::cyl_bessel_j_zero(v1 * 1, i);
+   boost::math::cyl_bessel_j_zero(oi, v1 * 1, i, i);
+   boost::math::cyl_neumann_zero(v1 * 1, i);
+   boost::math::cyl_neumann_zero(oi, v1 * 1, i, i);
+#ifdef TEST_COMPLEX
+   boost::math::cyl_hankel_1(v1, v2);
+   boost::math::cyl_hankel_1(i, v2);
+   boost::math::cyl_hankel_2(v1, v2);
+   boost::math::cyl_hankel_2(i, v2);
+   boost::math::sph_hankel_1(v1, v2);
+   boost::math::sph_hankel_1(i, v2);
+   boost::math::sph_hankel_2(v1, v2);
+   boost::math::sph_hankel_2(i, v2);
+#endif
+   boost::math::airy_ai(v1 * 1);
+   boost::math::airy_bi(v1 * 1);
+   boost::math::airy_ai_prime(v1 * 1);
+   boost::math::airy_bi_prime(v1 * 1);
+   boost::math::expint(v1 * 1);
+   boost::math::expint(i);
+   boost::math::expint(i, v2 * 1);
+   boost::math::expint(i, i);
+   boost::math::zeta(v1 * 1);
+   boost::math::zeta(i);
+   boost::math::owens_t(v1 * 1, v2 + 0);
+   boost::math::trunc(v1 * 1);
+   boost::math::itrunc(v1 * 1);
+   boost::math::ltrunc(v1 * 1);
+   boost::math::round(v1 * 1);
+   boost::math::iround(v1 * 1);
+   boost::math::lround(v1 * 1);
+   //boost::math::modf(v1 * 1, &v1);
+   //boost::math::modf(v1 * 1, &i);
+   //long l;
+   //boost::math::modf(v1 * 1, &l);
+#ifdef BOOST_HAS_LONG_LONG
+   boost::math::lltrunc(v1 * 1);
+   boost::math::llround(v1 * 1);
+   //boost::long_long_type ll;
+   //boost::math::modf(v1 * 1, &ll);
+#endif
+   boost::math::pow<2>(v1 * 1);
+   boost::math::nextafter(v1 * 1, v1 + 0);
+   boost::math::float_next(v1 * 1);
+   boost::math::float_prior(v1 * 1);
+   boost::math::float_distance(v1 * 1, v1 * 1);
+#endif
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
+#ifdef TEST_GROUP_5
    //
    // All over again, with a policy this time:
    //
@@ -450,6 +631,8 @@ void instantiate(RealType)
    boost::math::float_next(v1, pol);
    boost::math::float_prior(v1, pol);
    boost::math::float_distance(v1, v1, pol);
+#endif
+#ifdef TEST_GROUP_6
    //
    // All over again with the versions in test::
    //
@@ -606,6 +789,7 @@ void instantiate(RealType)
    test::float_prior(v1);
    test::float_distance(v1, v1);
 #endif
+#endif
 }
 
 template <class RealType>
@@ -624,7 +808,7 @@ void instantiate_mixed(RealType)
 #else
    double lr = 0.5L;
 #endif
-
+#ifdef TEST_GROUP_7
    boost::math::tgamma(i);
    boost::math::tgamma1pm1(i);
    boost::math::lgamma(i);
@@ -876,8 +1060,8 @@ void instantiate_mixed(RealType)
    boost::math::sph_neumann(i, i, pol);
    boost::math::owens_t(fr, dr, pol);
    boost::math::owens_t(i, s, pol);
-
-
+#endif
+#ifdef TEST_GROUP_8
    test::tgamma(i);
    test::tgamma1pm1(i);
    test::lgamma(i);
@@ -996,6 +1180,7 @@ void instantiate_mixed(RealType)
    test::airy_bi_prime(i);
    test::owens_t(fr, dr);
    test::owens_t(i, s);
+#endif
 #endif
 }
 
