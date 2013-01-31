@@ -833,8 +833,9 @@ compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal :
 compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] <debug-symbols>off ;
 compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] <debug-symbols>off ;
 
-run ztest_max_digits10.cpp ;
-run zztest_max_digits10.cpp ;
+# Temporary tests for support of max_digits10
+# run ztest_max_digits10.cpp ;
+# run zztest_max_digits10.cpp ;
 
 build-project ../example ;
 
