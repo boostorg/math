@@ -9,6 +9,8 @@
 
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/cbrt.hpp>
+#include <boost/math/special_functions/detail/airy_ai_bi_zero.hpp>
+#include <boost/math/tools/roots.hpp>
 
 namespace boost{ namespace math{
 
@@ -151,6 +153,131 @@ T airy_bi_prime_imp(T x, const Policy& pol)
    }
 }
 
+template <class T>
+T airy_ai_zero_imp(T dummy, unsigned m)
+{
+   BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
+
+   static_cast<void>(dummy);
+
+   // Handle cases when the zero'th zero is requested.
+   // Return NaN if NaN is available or return 0 if NaN is not available.
+   if(m == 0U)
+      return (std::numeric_limits<T>::has_quiet_NaN ? std::numeric_limits<T>::quiet_NaN() : T(0));
+
+   // Set up the initial guess for the upcoming root-finding.
+   const T guess_root = boost::math::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m);
+
+   // Select the maximum allowed iterations, being at least 24.
+   boost::uintmax_t number_of_iterations = (std::max)(24, int(std::numeric_limits<T>::digits10));
+
+   // Select the desired number of binary digits of precision.
+   // Account for the radix of number representations having non-two radix!
+   const int my_digits2 = int(float(std::numeric_limits<T>::digits)
+                              * (  log(float(std::numeric_limits<T>::radix))
+                                 / log(2.0F)));
+
+   // Use a dynamic tolerance because the roots get closer the higher m gets.
+   T tolerance;
+
+   if     (m <=   10U) { tolerance = T(0.3F); }
+   else if(m <=  100U) { tolerance = T(0.1F); }
+   else if(m <= 1000U) { tolerance = T(0.05F); }
+   else                { tolerance = T(1) / sqrt(T(m)); }
+
+   // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
+   const T am =
+      boost::math::tools::newton_raphson_iterate(
+         boost::math::detail::airy_zero::airy_ai_zero_detail::function_object<T, policies::policy<> >(policies::policy<>()),
+         guess_root,
+         T(guess_root - tolerance),
+         T(guess_root + tolerance),
+         my_digits2,
+         number_of_iterations);
+
+   static_cast<void>(number_of_iterations);
+
+   return am;
+}
+
+template <class output_iterator, class T>
+void airy_ai_zero_imp(T dummy,
+                      unsigned number_of_zeros,
+                      unsigned start_index,
+                      output_iterator out_it)
+{
+   static_cast<void>(dummy);
+
+   for(unsigned i = 0; i < number_of_zeros; ++i)
+   {
+      *out_it = boost::math::detail::airy_ai_zero_imp<T>(T(), start_index + i);
+      ++out_it;
+   }
+}
+
+template <class T>
+T airy_bi_zero_imp(T dummy, unsigned m)
+{
+   BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
+
+   static_cast<void>(dummy);
+
+   // Handle cases when the zero'th zero is requested.
+   // Return NaN if NaN is available or return 0 if NaN is not available.
+   if(m == 0U)
+      return (std::numeric_limits<T>::has_quiet_NaN ? std::numeric_limits<T>::quiet_NaN() : T(0));
+
+   // Set up the initial guess for the upcoming root-finding.
+   const T guess_root = boost::math::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m);
+
+   // Select the maximum allowed iterations, being at least 24.
+   boost::uintmax_t number_of_iterations = (std::max)(24, int(std::numeric_limits<T>::digits10));
+
+   // Select the desired number of binary digits of precision.
+   // Account for the radix of number representations having non-two radix!
+   const int my_digits2 = int(float(std::numeric_limits<T>::digits)
+                              * (  log(float(std::numeric_limits<T>::radix))
+                                 / log(2.0F)));
+
+   // Use a dynamic tolerance because the roots get closer the higher m gets.
+   // Use a dynamic tolerance because the roots get closer the higher m gets.
+   T tolerance;
+
+   if     (m <=   10U) { tolerance = T(0.3F); }
+   else if(m <=  100U) { tolerance = T(0.1F); }
+   else if(m <= 1000U) { tolerance = T(0.05F); }
+   else                { tolerance = T(1) / sqrt(T(m)); }
+
+   // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
+   const T bm =
+      boost::math::tools::newton_raphson_iterate(
+         boost::math::detail::airy_zero::airy_bi_zero_detail::function_object<T, policies::policy<> >(policies::policy<>()),
+         guess_root,
+         T(guess_root - tolerance),
+         T(guess_root + tolerance),
+         my_digits2,
+         number_of_iterations);
+
+   static_cast<void>(number_of_iterations);
+
+   return bm;
+}
+
+template <class output_iterator, class T>
+void airy_bi_zero_imp(T dummy,
+                      unsigned number_of_zeros,
+                      unsigned start_index,
+                      output_iterator out_it)
+{
+   static_cast<void>(dummy);
+
+   for(unsigned i = 0; i < number_of_zeros; ++i)
+   {
+      *out_it = boost::math::detail::airy_bi_zero_imp<T>(T(), start_index + i);
+      ++out_it;
+   }
+}
+
 } // namespace detail
 
 template <class T, class Policy>
@@ -239,6 +366,50 @@ template <class T>
 inline typename tools::promote_args<T>::type airy_bi_prime(T x)
 {
    return airy_bi_prime(x, policies::policy<>());
+}
+
+template <class T>
+inline typename tools::promote_args<T>::type airy_ai_zero(T dummy, unsigned m)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T>::type result_type;
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy dummy parameter must be a floating-point type.");
+   return policies::checked_narrowing_cast<result_type, policies::policy<> >(detail::airy_ai_zero_imp<result_type>(dummy, m), "boost::math::airy_ai_zero<%1%>(%1%)");
+}
+
+template <class output_iterator, class T>
+inline void airy_ai_zero(T dummy,
+                         unsigned number_of_zeros,
+                         unsigned start_index,
+                         output_iterator out_it)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   static_cast<void>(dummy);
+   typedef typename tools::promote_args<T>::type result_type;
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy dummy parameter must be a floating-point type.");
+   boost::math::detail::airy_ai_zero_imp<output_iterator, result_type>(result_type(), number_of_zeros, start_index, out_it);
+}
+
+template <class T>
+inline typename tools::promote_args<T>::type airy_bi_zero(T dummy, unsigned m)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename tools::promote_args<T>::type result_type;
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy dummy parameter must be a floating-point type.");
+   return policies::checked_narrowing_cast<result_type, policies::policy<> >(detail::airy_bi_zero_imp<result_type>(result_type(), m), "boost::math::airy_bi_zero<%1%>(%1%)");
+}
+
+template <class output_iterator, class T>
+inline void airy_bi_zero(T dummy,
+                         unsigned number_of_zeros,
+                         unsigned start_index,
+                         output_iterator out_it)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   static_cast<void>(dummy);
+   typedef typename tools::promote_args<T>::type result_type;
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy dummy parameter must be a floating-point type.");
+   boost::math::detail::airy_bi_zero_imp<output_iterator, result_type>(result_type(), number_of_zeros, start_index, out_it);
 }
 
 }} // namespaces

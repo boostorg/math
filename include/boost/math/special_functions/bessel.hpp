@@ -556,10 +556,10 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cy
 }
 
 template <class output_iterator, class T, class Policy>
-inline void cyl_bessel_j_zero(output_iterator out_it,
-                              T v,
+inline void cyl_bessel_j_zero(T v,
                               unsigned number_of_zeros,
                               unsigned start_index,
+                              output_iterator out_it,
                               const Policy& pol)
 {
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
@@ -571,12 +571,12 @@ inline void cyl_bessel_j_zero(output_iterator out_it,
 }
 
 template <class output_iterator, class T>
-inline void cyl_bessel_j_zero(output_iterator out_it,
-                              T v,
+inline void cyl_bessel_j_zero(T v,
                               unsigned number_of_zeros,
-                              unsigned start_index)
+                              unsigned start_index,
+                              output_iterator out_it)
 {
-   return cyl_bessel_j_zero(out_it, v, number_of_zeros, start_index, policies::policy<>());
+   return cyl_bessel_j_zero(v, number_of_zeros, start_index, out_it, policies::policy<>());
 }
 
 template <class T, class Policy>
@@ -597,10 +597,10 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cy
 }
 
 template <class output_iterator, class T, class Policy>
-inline void cyl_neumann_zero(output_iterator out_it,
-                             T v,
+inline void cyl_neumann_zero(T v,
                              unsigned number_of_zeros,
                              unsigned start_index,
+                             output_iterator out_it,
                              const Policy& pol)
 {
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
@@ -612,12 +612,12 @@ inline void cyl_neumann_zero(output_iterator out_it,
 }
 
 template <class output_iterator, class T>
-inline void cyl_neumann_zero(output_iterator out_it,
-                             T v,
+inline void cyl_neumann_zero(T v,
                              unsigned number_of_zeros,
-                             unsigned start_index)
+                             unsigned start_index,
+                             output_iterator out_it)
 {
-   return cyl_neumann_zero(out_it, v, number_of_zeros, start_index, policies::policy<>());
+   return cyl_neumann_zero(v, number_of_zeros, start_index, out_it, policies::policy<>());
 }
 
 } // namespace math

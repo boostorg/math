@@ -94,7 +94,7 @@
 
         // Obtain the estimate of the m'th zero of Jv or Yv.
         // The order m has been used to create the input parameter ai_bi_root.
-        // Here, v is larger than about 1.2. The estimate is computed
+        // Here, v is larger than about 2.2. The estimate is computed
         // from Abramowitz and Stegun Eqs. 9.5.22 and 9.5.26, page 371.
         //
         // The inversion of z as a function of zeta is mentioned in the text
@@ -102,9 +102,9 @@
         // performing a Taylor expansion of Eq. 9.3.39 for large z to order 2
         // and solving the resulting quadratic equation, thereby taking
         // the positive root of the quadratic.
-        //
         // In other words: (2/3)(-zeta)^(3/2) approx = z + 1/(2z) - pi/2.
         // This leads to: z^2 - [(2/3)(-zeta)^(3/2) + pi/2]z + 1/2 = 0.
+        //
         // With this initial estimate, Newton-Raphson iteration is used
         // to refine the value of the estimate of the root of z
         // as a function of zeta.
@@ -200,18 +200,20 @@
           {
             // Get the initial estimate of the first root.
 
-            if(v < T(1.2))
+            if(v < T(2.2))
             {
               // For small v, use the results of empirical curve fitting.
               // Mathematica(R) session for the coefficients:
-              //  Table[{n, BesselJZero[n, 1]}, {n, 0, 12/10, 1/10}]
+              //  Table[{n, BesselJZero[n, 1]}, {n, 0, 22/10, 1/10}]
               //  N[%, 20]
-              //  Fit[%, {n^0, n^1, n^2, n^3, n^4}, n]
-              guess = (((    - T(0.0131733516699981)
-                         * v + T(0.062016703196207))
-                         * v - T(0.163263189752310))
-                         * v + T(1.5412938080110762))
-                         * v + T(2.40485167005651374);
+              //  Fit[%, {n^0, n^1, n^2, n^3, n^4, n^5, n^6}, n]
+              guess = (((((    - T(0.0008342379046010)
+                           * v + T(0.007590035637410))
+                           * v - T(0.030640914772013))
+                           * v + T(0.078232088020106))
+                           * v - T(0.169668712590620))
+                           * v + T(1.542187960073750))
+                           * v + T(2.4048359915254634);
             }
             else
             {
@@ -221,17 +223,17 @@
           }
           else
           {
-            if(v < T(1.2))
+            if(v < T(2.2))
             {
               // Use Eq. 10.21.19 in the NIST Handbook.
-              const T a = ((v + T(m * 2U)) - T(0.5)) * boost::math::constants::half_pi<T>();
+              const T a(((v + T(m * 2U)) - T(0.5)) * boost::math::constants::half_pi<T>());
 
               guess = boost::math::detail::bessel_zero::equation_nist_10_21_19(v, a);
             }
             else
             {
               // Get an estimate of the m'th root of airy_ai.
-              const T airy_ai_root = boost::math::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m);
+              const T airy_ai_root(boost::math::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m));
 
               // Use Eq. 9.5.26 in the A&S Handbook.
               guess = boost::math::detail::bessel_zero::equation_as_9_5_26(v, airy_ai_root);
@@ -251,10 +253,24 @@
 
           boost::math::tuple<T, T> operator()(const T& x) const
           {
+            const bool order_is_zero = (   (my_v > -boost::math::tools::epsilon<T>())
+                                        && (my_v < +boost::math::tools::epsilon<T>()));
+
             // Obtain Jv(x) and Jv'(x).
-            const T j_v      (boost::math::detail::cyl_bessel_j_imp(  my_v,      x, boost::math::detail::bessel_no_int_tag(), my_pol));
-            const T j_v_m1   (boost::math::detail::cyl_bessel_j_imp(T(my_v - 1), x, boost::math::detail::bessel_no_int_tag(), my_pol));
-            const T j_v_prime(j_v_m1 - ((my_v * j_v) / x));
+            T j_v;
+            T j_v_prime;
+
+            if(order_is_zero)
+            {
+              j_v       =  boost::math::detail::cyl_bessel_j_imp(T(0), x, boost::math::detail::bessel_no_int_tag(), my_pol);
+              j_v_prime = -boost::math::detail::cyl_bessel_j_imp(T(1), x, boost::math::detail::bessel_no_int_tag(), my_pol);
+            }
+            else
+            {
+                      j_v       = boost::math::detail::cyl_bessel_j_imp(  my_v,      x, boost::math::detail::bessel_no_int_tag(), my_pol);
+              const T j_v_m1     (boost::math::detail::cyl_bessel_j_imp(T(my_v - 1), x, boost::math::detail::bessel_no_int_tag(), my_pol));
+                      j_v_prime = j_v_m1 - ((my_v * j_v) / x);
+            }
 
             // Return a tuple containing both Jv(x) and Jv'(x).
             return boost::math::make_tuple(j_v, j_v_prime);
@@ -300,18 +316,20 @@
           {
             // Get the initial estimate of the first root.
 
-            if(v < T(1.2))
+            if(v < T(2.2))
             {
               // For small v, use the results of empirical curve fitting.
               // Mathematica(R) session for the coefficients:
-              //  Table[{n, BesselYZero[n, 1]}, {n, 0, 12/10, 1/10}]
+              //  Table[{n, BesselYZero[n, 1]}, {n, 0, 22/10, 1/10}]
               //  N[%, 20]
-              //  Fit[%, {n^0, n^1, n^2, n^3, n^4}, n]
-              guess = (((    - T(0.0288448856660199)
-                         * v + T(0.1157780677827211))
-                         * v - T(0.2248646596163634))
-                         * v + T(1.4414721779748667))
-                         * v + T(0.89366124647143352);
+              //  Fit[%, {n^0, n^1, n^2, n^3, n^4, n^5, n^6}, n]
+              guess = (((((    - T(0.0025095909235652)
+                           * v + T(0.021291887049053))
+                           * v - T(0.076487785486526))
+                           * v + T(0.159110268115362))
+                           * v - T(0.241681668765196))
+                           * v + T(1.4437846310885244))
+                           * v + T(0.89362115190200490);
             }
             else
             {
@@ -321,17 +339,17 @@
           }
           else
           {
-            if(v < T(1.2))
+            if(v < T(2.2))
             {
               // Use Eq. 10.21.19 in the NIST Handbook.
-              const T a = ((v + T(m * 2U)) - T(1.5)) * boost::math::constants::half_pi<T>();
+              const T a(((v + T(m * 2U)) - T(1.5)) * boost::math::constants::half_pi<T>());
 
               guess = boost::math::detail::bessel_zero::equation_nist_10_21_19(v, a);
             }
             else
             {
               // Get an estimate of the m'th root of airy_bi.
-              const T airy_bi_root = boost::math::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m);
+              const T airy_bi_root(boost::math::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m));
 
               // Use Eq. 9.5.26 in the A&S Handbook.
               guess = boost::math::detail::bessel_zero::equation_as_9_5_26(v, airy_bi_root);

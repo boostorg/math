@@ -14,85 +14,155 @@
   #define _AIRY_AI_BI_ZERO_2013_01_20_HPP_
 
   #include <boost/math/constants/constants.hpp>
+  #include <boost/math/special_functions/cbrt.hpp>
 
-  namespace boost { namespace math { namespace detail {
-  namespace airy_zero
+  namespace boost { namespace math {
+  namespace detail
   {
-    template<class T>
-    T equation_as_10_4_105(const T& z)
-    {
-      BOOST_MATH_STD_USING // ADL of std names, needed for pow.
+    // Forward declarations of the needed Airy function implementations.
+    template <class T, class Policy>
+    T airy_ai_imp(T x, const Policy& pol);
+    template <class T, class Policy>
+    T airy_bi_imp(T x, const Policy& pol);
+    template <class T, class Policy>
+    T airy_ai_prime_imp(T x, const Policy& pol);
+    template <class T, class Policy>
+    T airy_bi_prime_imp(T x, const Policy& pol);
 
-      const T one_over_z         = T(1) / z;
-      const T one_over_z_squared = one_over_z * one_over_z;
-
-      const T z_pow_two_thirds(pow(z, T(2) / 3U));
-
-      // Implement the top line of Eq. 10.4.105.
-      const T fz(z_pow_two_thirds * (((((                     + (T(162375596875.0) / 334430208UL)
-                                         * one_over_z_squared - (   T(108056875.0) /   6967296UL))
-                                         * one_over_z_squared + (       T(77125UL)  /     82944UL))
-                                         * one_over_z_squared - (           T(5U)   /        36U))
-                                         * one_over_z_squared + (           T(5U)   /        48U))
-                                         * one_over_z_squared + (1)));
-
-      return fz;
-    }
-
-    namespace airy_ai_zero_detail
+    namespace airy_zero
     {
       template<class T>
-      T initial_guess(const unsigned m)
+      T equation_as_10_4_105(const T& z)
       {
-        switch(m)
-        {
-          case 1U:  return T(-2.33810741045976703849);
-          case 2U:  return T(-4.08794944413097061664);
-          case 3U:  return T(-5.52055982809555105913);
-          case 4U:  return T(-6.78670809007175899878);
-          case 5U:  return T(-7.94413358712085312314);
-          case 6U:  return T(-9.02265085334098038016);
-          case 7U:  return T(-10.0401743415580859306);
-          case 8U:  return T(-11.0085243037332628932);
-          case 9U:  return T(-11.9360155632362625170);
-          case 10U: return T(-12.8287767528657572004);
-          default:
-          {
-            const T t = ((boost::math::constants::pi<T>() * 3U) * T((T(m) * 4U) - 1)) / 8U;
+        const T one_over_z        (T(1) / z);
+        const T one_over_z_squared(one_over_z * one_over_z);
 
-            return -boost::math::detail::airy_zero::equation_as_10_4_105(t);
-          }
-        }
+        const T z_pow_third     (boost::math::cbrt(z));
+        const T z_pow_two_thirds(z_pow_third * z_pow_third);
+
+        // Implement the top line of Eq. 10.4.105.
+        const T fz(z_pow_two_thirds * (((((                     + (T(162375596875.0) / 334430208UL)
+                                           * one_over_z_squared - (   T(108056875.0) /   6967296UL))
+                                           * one_over_z_squared + (       T(77125UL) /     82944UL))
+                                           * one_over_z_squared - (           T(5U)  /        36U))
+                                           * one_over_z_squared + (           T(5U)  /        48U))
+                                           * one_over_z_squared + (1)));
+
+        return fz;
       }
-    } // namespace airy_ai_zero_detail
 
-    namespace airy_bi_zero_detail
-    {
-      template<class T>
-      T initial_guess(const unsigned m)
+      namespace airy_ai_zero_detail
       {
-        switch(m)
+        template<class T>
+        T initial_guess(const unsigned m)
         {
-          case 1U:  return T(-1.17371322270912792492);
-          case 2U:  return T(-3.27109330283635271568);
-          case 3U:  return T(-4.83073784166201593267);
-          case 4U:  return T(-6.16985212831025125983);
-          case 5U:  return T(-7.37676207936776371360);
-          case 6U:  return T(-8.49194884650938801345);
-          case 7U:  return T(-9.53819437934623888663);
-          case 8U:  return T(-10.5299135067053579244);
-          case 9U:  return T(-11.4769535512787794379);
-          case 10U: return T(-12.3864171385827387456);
-          default:
-          {
-            const T t = ((boost::math::constants::pi<T>() * 3U) * T((T(m) * 4U) - 3)) / 8U;
+          T guess;
 
-            return -boost::math::detail::airy_zero::equation_as_10_4_105(t);
+          if(m == 0U)
+          {
+            // Requesting an estimate of the zero'th root is an error.
+            // Return zero.
+            guess = T(0);
           }
+
+          switch(m)
+          {
+            case 1U: { guess = T(-2.33810741045976703849); break; }
+            case 2U: { guess = T(-4.08794944413097061664); break; }
+            case 3U: { guess = T(-5.52055982809555105913); break; }
+            case 4U: { guess = T(-6.78670809007175899878); break; }
+            case 5U: { guess = T(-7.94413358712085312314); break; }
+            case 6U: { guess = T(-9.02265085334098038016); break; }
+            case 7U: { guess = T(-10.0401743415580859306); break; }
+            case 8U: { guess = T(-11.0085243037332628932); break; }
+            case 9U: { guess = T(-11.9360155632362625170); break; }
+            case 10U:{ guess = T(-12.8287767528657572004); break; }
+            default:
+            {
+              const T t(((boost::math::constants::pi<T>() * 3U) * ((T(m) * 4U) - 1)) / 8U);
+              guess = -boost::math::detail::airy_zero::equation_as_10_4_105(t);
+              break;
+            }
+          }
+
+          return guess;
         }
-      }
-    } // namespace airy_bi_zero_detail
-  } // namespace airy_zero
+
+        template<class T, class Policy>
+        class function_object
+        {
+        public:
+          function_object(const Policy pol) : my_pol(pol) { }
+
+          boost::math::tuple<T, T> operator()(const T& x) const
+          {
+            // Return a tuple containing both Ai(x) and Ai'(x).
+            return boost::math::make_tuple(
+              boost::math::detail::airy_ai_imp      (x, my_pol),
+              boost::math::detail::airy_ai_prime_imp(x, my_pol));
+          }
+
+        private:
+          const Policy& my_pol;
+        };
+      } // namespace airy_ai_zero_detail
+
+      namespace airy_bi_zero_detail
+      {
+        template<class T>
+        T initial_guess(const unsigned m)
+        {
+          T guess;
+
+          if(m == 0U)
+          {
+            // Requesting an estimate of the zero'th root is an error.
+            // Return zero.
+            guess = T(0);
+          }
+
+          switch(m)
+          {
+            case 1U: { guess = T(-1.17371322270912792492); break; }
+            case 2U: { guess = T(-3.27109330283635271568); break; }
+            case 3U: { guess = T(-4.83073784166201593267); break; }
+            case 4U: { guess = T(-6.16985212831025125983); break; }
+            case 5U: { guess = T(-7.37676207936776371360); break; }
+            case 6U: { guess = T(-8.49194884650938801345); break; }
+            case 7U: { guess = T(-9.53819437934623888663); break; }
+            case 8U: { guess = T(-10.5299135067053579244); break; }
+            case 9U: { guess = T(-11.4769535512787794379); break; }
+            case 10U:{ guess = T(-12.3864171385827387456); break; }
+            default:
+            {
+              const T t(((boost::math::constants::pi<T>() * 3U) * ((T(m) * 4U) - 3)) / 8U);
+              guess = -boost::math::detail::airy_zero::equation_as_10_4_105(t);
+              break;
+            }
+          }
+
+          return guess;
+        }
+
+        template<class T, class Policy>
+        class function_object
+        {
+        public:
+          function_object(const Policy pol) : my_pol(pol) { }
+
+          boost::math::tuple<T, T> operator()(const T& x) const
+          {
+            // Return a tuple containing both Bi(x) and Bi'(x).
+            return boost::math::make_tuple(
+              boost::math::detail::airy_bi_imp      (x, my_pol),
+              boost::math::detail::airy_bi_prime_imp(x, my_pol));
+          }
+
+        private:
+          const Policy& my_pol;
+        };
+      } // namespace airy_bi_zero_detail
+    } // namespace airy_zero
   } // namespace detail
   } // namespace math
   } // namespaces boost
