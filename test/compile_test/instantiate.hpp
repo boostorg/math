@@ -270,9 +270,9 @@ void instantiate(RealType)
    boost::math::sph_neumann(i, v2);
    boost::math::sph_neumann(i, i);
    boost::math::cyl_bessel_j_zero(v1, i);
-   boost::math::cyl_bessel_j_zero(oi, v1, i, i);
+   boost::math::cyl_bessel_j_zero(v1, i, i, oi);
    boost::math::cyl_neumann_zero(v1, i);
-   boost::math::cyl_neumann_zero(oi, v1, i, i);
+   boost::math::cyl_neumann_zero(v1, i, i, oi);
 #ifdef TEST_COMPLEX
    boost::math::cyl_hankel_1(v1, v2);
    boost::math::cyl_hankel_1(i, v2);
@@ -430,9 +430,9 @@ void instantiate(RealType)
    boost::math::sph_neumann(i, v2 * 1);
    boost::math::sph_neumann(i, i);
    boost::math::cyl_bessel_j_zero(v1 * 1, i);
-   boost::math::cyl_bessel_j_zero(oi, v1 * 1, i, i);
+   boost::math::cyl_bessel_j_zero(v1 * 1, i, i, oi);
    boost::math::cyl_neumann_zero(v1 * 1, i);
-   boost::math::cyl_neumann_zero(oi, v1 * 1, i, i);
+   boost::math::cyl_neumann_zero(v1 * 1, i, i, oi);
 #ifdef TEST_COMPLEX
    boost::math::cyl_hankel_1(v1, v2);
    boost::math::cyl_hankel_1(i, v2);
@@ -582,9 +582,9 @@ void instantiate(RealType)
    boost::math::sph_neumann(i, v2, pol);
    boost::math::sph_neumann(i, i, pol);
    boost::math::cyl_bessel_j_zero(v1, i, pol);
-   boost::math::cyl_bessel_j_zero(oi, v1, i, i, pol);
+   boost::math::cyl_bessel_j_zero(v1, i, i, oi, pol);
    boost::math::cyl_neumann_zero(v1, i, pol);
-   boost::math::cyl_neumann_zero(oi, v1, i, i, pol);
+   boost::math::cyl_neumann_zero(v1, i, i, oi, pol);
 #ifdef TEST_COMPLEX
    boost::math::cyl_hankel_1(v1, v2, pol);
    boost::math::cyl_hankel_1(i, v2, pol);
@@ -745,9 +745,9 @@ void instantiate(RealType)
    test::sph_neumann(i, v2);
    test::sph_neumann(i, i);
    test::cyl_bessel_j_zero(v1, i);
-   test::cyl_bessel_j_zero(oi, v1, i, i);
+   test::cyl_bessel_j_zero(v1, i, i, oi);
    test::cyl_neumann_zero(v1, i);
-   test::cyl_neumann_zero(oi, v1, i, i);
+   test::cyl_neumann_zero(v1, i, i, oi);
 #ifdef TEST_COMPLEX
    test::cyl_hankel_1(v1, v2);
    test::cyl_hankel_1(i, v2);
