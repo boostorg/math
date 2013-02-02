@@ -153,12 +153,10 @@ T airy_bi_prime_imp(T x, const Policy& pol)
    }
 }
 
-template <class T>
-T airy_ai_zero_imp(T dummy, unsigned m)
+template <class T, class Policy>
+T airy_ai_zero_imp(unsigned m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
-
-   static_cast<void>(dummy);
 
    // Handle cases when the zero'th zero is requested.
    // Return NaN if NaN is available or return 0 if NaN is not available.
@@ -188,7 +186,7 @@ T airy_ai_zero_imp(T dummy, unsigned m)
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T am =
       boost::math::tools::newton_raphson_iterate(
-         boost::math::detail::airy_zero::airy_ai_zero_detail::function_object<T, policies::policy<> >(policies::policy<>()),
+         boost::math::detail::airy_zero::airy_ai_zero_detail::function_object<T, Policy>(pol),
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
@@ -200,27 +198,10 @@ T airy_ai_zero_imp(T dummy, unsigned m)
    return am;
 }
 
-template <class output_iterator, class T>
-void airy_ai_zero_imp(T dummy,
-                      unsigned number_of_zeros,
-                      unsigned start_index,
-                      output_iterator out_it)
-{
-   static_cast<void>(dummy);
-
-   for(unsigned i = 0; i < number_of_zeros; ++i)
-   {
-      *out_it = boost::math::detail::airy_ai_zero_imp<T>(T(), start_index + i);
-      ++out_it;
-   }
-}
-
-template <class T>
-T airy_bi_zero_imp(T dummy, unsigned m)
+template <class T, class Policy>
+T airy_bi_zero_imp(unsigned m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
-
-   static_cast<void>(dummy);
 
    // Handle cases when the zero'th zero is requested.
    // Return NaN if NaN is available or return 0 if NaN is not available.
@@ -251,7 +232,7 @@ T airy_bi_zero_imp(T dummy, unsigned m)
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T bm =
       boost::math::tools::newton_raphson_iterate(
-         boost::math::detail::airy_zero::airy_bi_zero_detail::function_object<T, policies::policy<> >(policies::policy<>()),
+         boost::math::detail::airy_zero::airy_bi_zero_detail::function_object<T, Policy>(pol),
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
@@ -261,21 +242,6 @@ T airy_bi_zero_imp(T dummy, unsigned m)
    static_cast<void>(number_of_iterations);
 
    return bm;
-}
-
-template <class output_iterator, class T>
-void airy_bi_zero_imp(T dummy,
-                      unsigned number_of_zeros,
-                      unsigned start_index,
-                      output_iterator out_it)
-{
-   static_cast<void>(dummy);
-
-   for(unsigned i = 0; i < number_of_zeros; ++i)
-   {
-      *out_it = boost::math::detail::airy_bi_zero_imp<T>(T(), start_index + i);
-      ++out_it;
-   }
 }
 
 } // namespace detail
@@ -368,48 +334,100 @@ inline typename tools::promote_args<T>::type airy_bi_prime(T x)
    return airy_bi_prime(x, policies::policy<>());
 }
 
-template <class T>
-inline typename tools::promote_args<T>::type airy_ai_zero(T dummy, unsigned m)
+template <class T, class Policy>
+inline T airy_ai_zero(unsigned m, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   typedef typename tools::promote_args<T>::type result_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy dummy parameter must be a floating-point type.");
-   return policies::checked_narrowing_cast<result_type, policies::policy<> >(detail::airy_ai_zero_imp<result_type>(dummy, m), "boost::math::airy_ai_zero<%1%>(%1%)");
-}
-
-template <class output_iterator, class T>
-inline void airy_ai_zero(T dummy,
-                         unsigned number_of_zeros,
-                         unsigned start_index,
-                         output_iterator out_it)
-{
-   BOOST_FPU_EXCEPTION_GUARD
-   static_cast<void>(dummy);
-   typedef typename tools::promote_args<T>::type result_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy dummy parameter must be a floating-point type.");
-   boost::math::detail::airy_ai_zero_imp<output_iterator, result_type>(result_type(), number_of_zeros, start_index, out_it);
+   typedef typename policies::evaluation<T, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Airy return type must be a floating-point type.");
+   return policies::checked_narrowing_cast<T, Policy>(detail::airy_ai_zero_imp<T>(m, pol), "boost::math::airy_ai_zero<%1%>(unsigned)");
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type airy_bi_zero(T dummy, unsigned m)
+inline T airy_ai_zero(unsigned m)
 {
-   BOOST_FPU_EXCEPTION_GUARD
-   typedef typename tools::promote_args<T>::type result_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy dummy parameter must be a floating-point type.");
-   return policies::checked_narrowing_cast<result_type, policies::policy<> >(detail::airy_bi_zero_imp<result_type>(result_type(), m), "boost::math::airy_bi_zero<%1%>(%1%)");
+   return airy_ai_zero<T>(m, policies::policy<>());
 }
 
-template <class output_iterator, class T>
-inline void airy_bi_zero(T dummy,
+template <class T, class OutputIterator, class Policy>
+inline OutputIterator airy_ai_zero(
                          unsigned number_of_zeros,
                          unsigned start_index,
-                         output_iterator out_it)
+                         OutputIterator out_it,
+                         const Policy& pol)
+{
+   typedef T result_type;
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy output type must be a floating-point type.");
+
+   for(unsigned i = 0; i < number_of_zeros; ++i)
+   {
+      *out_it = boost::math::airy_ai_zero<result_type>(start_index + i, pol);
+      ++out_it;
+   }
+   return out_it;
+}
+
+template <class T, class OutputIterator>
+inline OutputIterator airy_ai_zero(
+                         unsigned number_of_zeros,
+                         unsigned start_index,
+                         OutputIterator out_it)
+{
+   return airy_ai_zero<T>(number_of_zeros, start_index, out_it, policies::policy<>());
+}
+
+template <class T, class Policy>
+inline T airy_bi_zero(unsigned m, const Policy& pol)
 {
    BOOST_FPU_EXCEPTION_GUARD
-   static_cast<void>(dummy);
-   typedef typename tools::promote_args<T>::type result_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy dummy parameter must be a floating-point type.");
-   boost::math::detail::airy_bi_zero_imp<output_iterator, result_type>(result_type(), number_of_zeros, start_index, out_it);
+   typedef typename policies::evaluation<T, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Airy return type must be a floating-point type.");
+   return policies::checked_narrowing_cast<T, Policy>(detail::airy_bi_zero_imp<T>(m, pol), "boost::math::airy_bi_zero<%1%>(unsigned)");
+}
+
+template <class T>
+inline T airy_bi_zero(unsigned m)
+{
+   return airy_bi_zero<T>(m, policies::policy<>());
+}
+
+template <class T, class OutputIterator, class Policy>
+inline OutputIterator airy_bi_zero(
+                         unsigned number_of_zeros,
+                         unsigned start_index,
+                         OutputIterator out_it,
+                         const Policy& pol)
+{
+   typedef T result_type;
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy output type must be a floating-point type.");
+
+   for(unsigned i = 0; i < number_of_zeros; ++i)
+   {
+      *out_it = boost::math::airy_bi_zero<result_type>(start_index + i, pol);
+      ++out_it;
+   }
+   return out_it;
+}
+
+template <class T, class OutputIterator>
+inline OutputIterator airy_bi_zero(
+                         unsigned number_of_zeros,
+                         unsigned start_index,
+                         OutputIterator out_it)
+{
+   return airy_bi_zero<T>(number_of_zeros, start_index, out_it, policies::policy<>());
 }
 
 }} // namespaces

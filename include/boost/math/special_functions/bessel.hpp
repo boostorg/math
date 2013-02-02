@@ -555,11 +555,11 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cy
    return cyl_bessel_j_zero<T, policies::policy<> >(v, m, policies::policy<>());
 }
 
-template <class output_iterator, class T, class Policy>
-inline void cyl_bessel_j_zero(T v,
+template <class T, class OutputIterator, class Policy>
+inline OutputIterator cyl_bessel_j_zero(T v,
                               unsigned number_of_zeros,
                               unsigned start_index,
-                              output_iterator out_it,
+                              OutputIterator out_it,
                               const Policy& pol)
 {
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
@@ -568,13 +568,14 @@ inline void cyl_bessel_j_zero(T v,
       *out_it = boost::math::cyl_bessel_j_zero(v, start_index + i, pol);
       ++out_it;
    }
+   return out_it;
 }
 
-template <class output_iterator, class T>
-inline void cyl_bessel_j_zero(T v,
+template <class T, class OutputIterator>
+inline OutputIterator cyl_bessel_j_zero(T v,
                               unsigned number_of_zeros,
                               unsigned start_index,
-                              output_iterator out_it)
+                              OutputIterator out_it)
 {
    return cyl_bessel_j_zero(v, number_of_zeros, start_index, out_it, policies::policy<>());
 }
@@ -596,11 +597,11 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cy
    return cyl_neumann_zero<T, policies::policy<> >(v, m, policies::policy<>());
 }
 
-template <class output_iterator, class T, class Policy>
-inline void cyl_neumann_zero(T v,
+template <class T, class OutputIterator, class Policy>
+inline OutputIterator cyl_neumann_zero(T v,
                              unsigned number_of_zeros,
                              unsigned start_index,
-                             output_iterator out_it,
+                             OutputIterator out_it,
                              const Policy& pol)
 {
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
@@ -609,13 +610,14 @@ inline void cyl_neumann_zero(T v,
       *out_it = boost::math::cyl_neumann_zero(v, start_index + i, pol);
       ++out_it;
    }
+   return out_it;
 }
 
-template <class output_iterator, class T>
-inline void cyl_neumann_zero(T v,
+template <class T, class OutputIterator>
+inline OutputIterator cyl_neumann_zero(T v,
                              unsigned number_of_zeros,
                              unsigned start_index,
-                             output_iterator out_it)
+                             OutputIterator out_it)
 {
    return cyl_neumann_zero(v, number_of_zeros, start_index, out_it, policies::policy<>());
 }

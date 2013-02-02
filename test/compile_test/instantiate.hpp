@@ -287,6 +287,12 @@ void instantiate(RealType)
    boost::math::airy_bi(v1);
    boost::math::airy_ai_prime(v1);
    boost::math::airy_bi_prime(v1);
+
+   boost::math::airy_ai_zero<RealType>(i);
+   boost::math::airy_bi_zero<RealType>(i);
+   boost::math::airy_ai_zero<RealType>(i, i, oi);
+   boost::math::airy_bi_zero<RealType>(i, i, oi);
+
    boost::math::expint(v1);
    boost::math::expint(i);
    boost::math::expint(i, v2);
@@ -599,6 +605,12 @@ void instantiate(RealType)
    boost::math::airy_bi(v1, pol);
    boost::math::airy_ai_prime(v1, pol);
    boost::math::airy_bi_prime(v1, pol);
+
+   boost::math::airy_ai_zero<RealType>(i, pol);
+   boost::math::airy_bi_zero<RealType>(i, pol);
+   boost::math::airy_ai_zero<RealType>(i, i, oi, pol);
+   boost::math::airy_bi_zero<RealType>(i, i, oi, pol);
+
    boost::math::expint(v1, pol);
    boost::math::expint(i, pol);
    boost::math::expint(i, v2, pol);
@@ -758,10 +770,16 @@ void instantiate(RealType)
    test::sph_hankel_2(v1, v2);
    test::sph_hankel_2(i, v2);
 #endif
-   boost::math::airy_ai(i);
-   boost::math::airy_bi(i);
-   boost::math::airy_ai_prime(i);
-   boost::math::airy_bi_prime(i);
+   test::airy_ai(i);
+   test::airy_bi(i);
+   test::airy_ai_prime(i);
+   test::airy_bi_prime(i);
+
+   test::airy_ai_zero<RealType>(i);
+   test::airy_bi_zero<RealType>(i);
+   test::airy_ai_zero<RealType>(i, i, oi);
+   test::airy_bi_zero<RealType>(i, i, oi);
+
    test::expint(v1);
    test::expint(i);
    test::expint(i, v2);
