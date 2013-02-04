@@ -15,6 +15,9 @@
 #include <iomanip>
 #include <iterator>
 
+#include <boost/multiprecision/cpp_dec_float.hpp>
+
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 
 /*
@@ -28,42 +31,255 @@ inline void cyl_bessel_j_zero(
    unsigned start_index)
 */
 
-#include <boost/multiprecision/cpp_dec_float.hpp>
+// Weisstein, Eric W. "Bessel Function Zeros." From MathWorld--A Wolfram Web Resource.
+// http://mathworld.wolfram.com/BesselFunctionZeros.html 
+// See also http://dlmf.nist.gov/10.21
 
-namespace
+// To use the Boost.Multiprecision 50 decimal digits type.
+typedef boost::multiprecision::cpp_dec_float_50 float_type;
+
+using namespace boost::math;
+
+/*`This example shows obtaining both a single zero or root of the Bessel function,
+and placing multiple zeros into a container like `std::vector` by providing an iterator.
+The signature of the single value function is:
+
+
+  template <class T>
+  inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type 
+    cyl_bessel_j_zero(T v,  // Floating-point value for Jv.
+    unsigned m); // start index.
+
+The result type is controlled by the floating-point type of parameter `v`
+(but subject to the usual policy and promotion rules).
+
+and for multiple zeros:
+
+  template <class T, class OutputIterator>
+  inline OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
+                                unsigned number_of_zeros,
+                                unsigned start_index,
+                                OutputIterator out_it); // 
+
+There is also a version which allows control of the policy for error handling and precision.
+
+  template <class T, class OutputIterator, class Policy>
+  inline OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
+                                unsigned number_of_zeros,
+                                unsigned start_index,
+                                OutputIterator out_it,
+                                const Policy& pol);
+
+This exmaple also shows how to use the output iterator to create a sum of 1/zeros^2.
+*/
+
+template <class T>
+struct output_summation_iterator
 {
-//  typedef boost::multiprecision::cpp_dec_float_50 float_type;
- // typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<50>, boost::multiprecision::et_off> float_type;
-  typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<50>, boost::multiprecision::et_on> float_type;
-//  typedef float float_type;
-}
+   output_summation_iterator(T* p) : p_sum(p)
+   {
+   }
+   output_summation_iterator& operator*()
+   {
+     return *this;
+   }
+   output_summation_iterator& operator = (T const& val)
+   {
+     *p_sum += 1./ (val * val); // 1/zero^2
+     //std::cout << *p_sum << ", ";
+     return *this;
+   }
+   output_summation_iterator& operator++()
+   { return *this; }
+   output_summation_iterator& operator++(int)
+   {
+     return *this;
+   }
+private:
+   T* p_sum;
+};
+
+double s_m_nu(int m, int nu)
+{
+  switch(m)
+  {
+
+    case 2:
+    return 1./(4 * (nu + 1));
+    case 4:
+      return 1./(16 * (nu+1)*(nu+1)*(nu+2));
+    default:
+      return 0;
+  }
+} // double s_m_nu(int m, int nu)
 
 int main()
 {
-  // Generate three double roots of Jv for integral order 2.
 
-  std::vector<double> roots_3(3U);
-  boost::math::cyl_bessel_j_zero(roots_3.begin(), 2, 3U, 1U);
+  { // Evaluate a single Bessel zero.
 
-  std::cout << "1st root = " << roots_3[0] << std::endl;
-  std::cout << "2nd root = " << roots_3[1] << std::endl;
-  std::cout << "3rd root = " << roots_3[2] << std::endl;
+   //  T cyl_bessel_j_zero(T v, unsigned int index)
+    // The precision is controlled by the float-point type of template parameter T of v.
+    // so this example has double precision, at least 15 but up to 17 decimal digits.
+    double root = boost::math::cyl_bessel_j_zero(0.0, 1U);
+    // Using default precision of 6 decimal digits:
+    std::cout << "boost::math::cyl_bessel_j_zero(0.0, 1U) " << root << std::endl; // 2.40483
+    std::cout.precision(std::numeric_limits<double>::digits10);
+    std::cout << "boost::math::cyl_bessel_j_zero(0.0, 1U) " << root << std::endl; // 2.40482555769577
+
+
+/*`But note that because the parameter v controls the precision of the result,
+it *must* be a [[floating-point type].
+So if you provide an integer type, say 0, rather than 0.0, then it will fail to compile thus:
+``
+    root = boost::math::cyl_bessel_j_zero(0, 1U);
+``
+error C2338: Order must be a floating-point type.
+*/
+  }
+  {
+
+    // IAN N. SNEDDON, Infinite sums of Bessel Zeros.
+    // page 150 equation 40.
+    using boost::math::cyl_bessel_j_zero;
+    std::cout.precision(std::numeric_limits<double>::digits10);
+    double nu = 1.;
+    double sum = 0;
+    output_summation_iterator<double> it(&sum);  // sum of 1/zeros^2
+    cyl_bessel_j_zero(nu, 100000U, 1U, it);
+
+    std::cout << "Final " << sum << std::endl; //   0.0 Final 0.249999
+    // 1.0  Final 0.124998986795763
+
+    double s = 1/(4 * (nu + 1)); // 0.125 = 1/8 is exact analytical solution.
+    std::cout << s << std::endl;
+
+  }
+
+  {
+/*`The Neumann functions zeros are evaluated very similarly:
+*/
+
+    using boost::math::cyl_neumann_zero;
+
+    double sum = 0;
+    output_summation_iterator<double> it(&sum);
+    cyl_neumann_zero(2.5, 1, 10, it);
+
+    std::cout << sum << std::endl;
+
+  }
+/*`Another version allows calculation of multiple zeros with one call,
+placing the results in a container, often `std::vector`.
+For example, generate five double roots of Jv for integral order 2.
+*/
+  {
+    double azero = boost::math::cyl_bessel_j_zero(0.0, 1U);
 
 
 
-  // Generate 20 roots of Jv for order v=71/19.
-  std::vector<float_type> roots(20U);
+    unsigned int n_roots = 5U;
+    std::vector<double> roots;
 
-  boost::math::cyl_bessel_j_zero(roots.begin(), float_type(71) / 19, unsigned(roots.size()), 1U);
+    boost::math::cyl_bessel_j_zero(0.0, n_roots, 1U, std::back_inserter(roots));
 
-  // Set the precision of the output stream.
-  std::cout.precision(std::numeric_limits<float_type>::digits10);
+     // Note must provide an floating-point type, not an integer type, so v = 2.0, not 2.
+     //boost::math::cyl_bessel_j_zero(std::back_inserter(roots_3), 2, 3U, 1U);
+     // error C2338: Order must be a floating-point type.
 
-  // Print the roots to the output stream.
-  std::copy(roots.begin(),
-            roots.end(),
-            std::ostream_iterator<float_type>(std::cout, "\n"));
-}
+      std::copy(roots.begin(),
+              roots.end(),
+              std::ostream_iterator<double>(std::cout, "\n"));
+
+  // 5 roots v = 0.0
+  // 1.#QNAN
+  //2.40483
+  //5.52008
+  //8.65373
+  //11.7915
+  //14.9309
+
+  }
+
+/*`Or generate 20 roots of Jv for non-integral order v=71/19.
+*/
+  {
+    // Set the precision of the output stream.
+    std::cout << std::showpoint << std::endl; // Show trailing zeros.
+    std::cout.precision(std::numeric_limits<float_type>::digits10);
+
+    float_type x = float_type(71) / 19;
+    float_type r = boost::math::cyl_bessel_j_zero(x, 1U);
+
+    std::cout << "x = " << x << ", r = " << r << std::endl;
+
+    r = boost::math::cyl_bessel_j_zero(x, 50U);
+
+    std::cout << "x = " << x << ", r = " << r << std::endl;
+
+    std::vector<float_type> roots(20U);
+
+    boost::math::cyl_bessel_j_zero(float_type(71) / 19, unsigned(roots.size()), 1U, roots.begin());
+
+    // Print the roots to the output stream.
+    std::copy(roots.begin(),
+              roots.end(),
+              std::ostream_iterator<float_type>(std::cout, "\n"));
+ }
+/*
+*/
+
+/*`Test some corner cases:
+
+
+
+*/
+  try
+  { 
+/*
+     [N[BesselJZero[0, 1000], 50]] 
+     3140.8072952250786288955454534711266789940767025137
+     3.140807295225079e+003
+     j 1000(x = 0), r = 3.140807295225079e+003
+     j 1000(x = 0.000000000000000), r = 3140.80729522508
+
+    [N[BesselJZero[0, 1000000], 50]]
+     3.1415918681916696297600539252789979000145664979511×10^6
+     3.141591868191670e+006
+      j 1000000(x = 0.000000000000000), r = 3141591.86819167
+
+    [N[BesselJZero[0, 1000000000], 50]]
+     3.1415926528043950751049838094467630562626412341405×10^9
+     3.141592652804395e+009
+       j 1000000000(x = 0), r = 3.141592652804395e+009
+       j 1000000000(x = 0), r = 3141592652.8044
+
+       */
+
+//  [N[BesselJZero[0, 4294967295], 50]]
+    
+    std::cout.precision(std::numeric_limits<double>::digits10);
+    double x = 0.;
+    // double r = boost::math::cyl_bessel_j_zero(x, 1U); // 2.4
+    // double r = boost::math::cyl_bessel_j_zero(x, 0U); // NAN
+
+    unsigned int j = std::numeric_limits<unsigned int>::max();
+    j = 1000U;
+    double r = boost::math::cyl_bessel_j_zero(x, j);
+   
+    std::cout << "j " << j << "(x = " << x << "), r = "
+      << std::scientific << r << std::endl;
+    // j 4294967295(x = 0.000000000000000), r = 6746518848.33402
+
+    // 1.3493037700595028141621005137780845320949701145378×10^10
+
+  }
+  catch (std::exception ex)
+  {
+    std::cout << "Throw exception " << ex.what() << std::endl;
+  }
+
+ } // int main()
 
 /*
 Mathematica: Table[N[BesselJZero[71/19, n], 50], {n, 1, 20, 1}]
@@ -110,7 +326,6 @@ Mathematica: Table[N[BesselJZero[71/19, n], 50], {n, 1, 20, 1}]
 64.66863105379093036834648221487366079456596628716
 67.815145619696290925556791375555951165111460585458
 */
-
 
 /*
 

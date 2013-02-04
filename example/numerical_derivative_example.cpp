@@ -14,6 +14,7 @@
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_floating_point.hpp> 
+#include <boost/math/special_functions/next.hpp> // for float_distance
 
 //[numeric_derivative_example
 /*`The following example shows how multiprecision calculations can be used to
@@ -101,16 +102,15 @@ typedef number<mp_backend> mp_type;
 int main()
 {
   {
-   const double d =
-    derivative
-    ( 1.5, // x = 3.2
-      std::ldexp (1., -9), // step size 2^-9 = see below for choice.
-      [](const double & x)->double // Function f(x).
-      {
-        return std::sqrt((x * x) - 1.) - std::acos(1. / x);
-      }
-    );
-
+    const double d =
+      derivative
+      ( 1.5, // x = 3.2
+        std::ldexp (1., -9), // step size 2^-9 = see below for choice.
+        [](const double & x)->double // Function f(x).
+        {
+          return std::sqrt((x * x) - 1.) - std::acos(1. / x);
+        }
+      );
   
     // The 'exactly right' result is [sqrt]5 / 3 = 0.74535599249992989880.
     const double rel_error = (d - 0.74535599249992989880) / 0.74535599249992989880;
@@ -123,6 +123,10 @@ int main()
     // Can compute an 'exact' value using multiprecision type.
     std::cout << " expected   : " << sqrt(static_cast<mp_type>(5))/3U << std::endl;
     std::cout << " bit_error : " << static_cast<unsigned long>(bit_error)  << std::endl;
+
+    std::cout.precision(6);
+    std::cout << "float_distance = " << boost::math::float_distance(0.74535599249992989880, d) << std::endl;
+
   }
 
   { // Compute using multiprecision type with an extra 5 decimal digits of precision.
@@ -141,9 +145,16 @@ int main()
     std::cout.precision (std::numeric_limits <double>::digits10); // All guaranteed decimal digits.
     std::cout << std::showpoint ; // Ensure that any trailing zeros are shown too.
     std::cout << " derivative : " << d << std::endl;
+    // Can compute an 'exact' value using multiprecision type.
+    std::cout << " expected   : " << sqrt(static_cast<mp_type>(5))/3U << std::endl;
     std::cout << " expected   : " << 0.74535599249992989880
     << std::endl;
     std::cout << " bit_error : "  << static_cast<unsigned long>(bit_error)  << std::endl;
+
+    std::cout.precision(6);
+    std::cout << "float_distance = " << boost::math::float_distance(0.74535599249992989880, d) << std::endl;
+
+    
   }
 
 
@@ -178,8 +189,6 @@ to an ill-conditioned calculation that suffers from precision loss. When the res
 of the multiprecision calculation is converted to a built-in type such as double,
 the entire precision of the result in double is preserved.
 
-
-
  */
 
 /*
@@ -189,8 +198,11 @@ the entire precision of the result in double is preserved.
    expected   : 0.745355992499930
    expected   : 0.745355992499930
    bit_error : 78
+  float_distance = 117.000
    derivative : 0.745355992499930
    expected   : 0.745355992499930
+   expected   : 0.745355992499930
    bit_error : 0
+  float_distance = 0.000000
 
-   */
+ */
