@@ -28,7 +28,6 @@ supplies a template data type called cpp_dec_float. The number of decimal
 digits of precision is fixed at compile-time via template parameter.
 
 To use these floating-point types and constants, we need some includes:
-
 */
 #include <boost/math/constants/constants.hpp>
 // using boost::math::constants::pi;
@@ -167,7 +166,7 @@ Now output all the sine table, to a file of your chosen name.
 "#else""\n"
 "  static const std::array<double, " << size << "> sines =\n"
 "#endif""\n"
-    "{\n";
+    "{{\n"; // 2nd { needed for some GCC compiler versions.
     fout.precision(precision);
 
     for (unsigned int i = 0U; ;)
@@ -175,7 +174,7 @@ Now output all the sine table, to a file of your chosen name.
       fout << "  " << sin_values[i];
       if (i == sin_values.size()-1)
       { // next is last value.
-        fout << "\n};\n";
+        fout << "\n}};\n"; // 2nd } needed for some GCC compiler versions.
         break;
       }
       else
