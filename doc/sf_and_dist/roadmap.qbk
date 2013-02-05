@@ -11,7 +11,7 @@ All bug reports including closed ones can be viewed
 * Added many references to Boost.Multiprecision and `cpp_dec_float_50` as an example of a User-defined Type (UDT).
 * Added Clang to list of supported compilers.
 * Fixed constants to use a thread-safe cache of computed values when used at arbitrary precision.
-* Added finding zeros of Bessel functions `cyl_bessel_j_zero` and `cyl_neumann_zero` (by Christopher Kormanyos).
+* Added finding zeros of Bessel functions `cyl_bessel_j_zero`, `cyl_neumann_zero`, `air_ai_zeros` and `air_bi_zeros`(by Christopher Kormanyos).
 * More accuracy improvements to the Bessel J and Y functions from Rocco Romeo.
 
 [h4 Boost-1.53]

@@ -11,11 +11,11 @@
 
    template <class T1, class T2>
    ``__sf_result`` cyl_neumann(T1 v, T2 x);
-   
+
    template <class T1, class T2, class ``__Policy``>
    ``__sf_result`` cyl_neumann(T1 v, T2 x, const ``__Policy``&);
-   
-   
+
+
 [h4 Description]
 
 The functions __cyl_bessel_j and __cyl_neumann return the result of the
@@ -68,26 +68,26 @@ functions means that they have an infinite number of irrational
 roots: in general these functions have arbitrarily large /relative/
 errors when the arguments are sufficiently close to a root.  Of
 course the absolute error in such cases is always small.
-Note that only results for the widest floating-point type on the 
+Note that only results for the widest floating-point type on the
 system are given as narrower types have __zero_error.  All values
 are relative errors in units of epsilon.
 
 [table Errors Rates in cyl_bessel_j
 [[Significand Size] [Platform and Compiler] [J[sub 0][space] and J[sub 1]] [J[sub v]] [J[sub v][space] (large values of x > 1000)] ]
-[[53] [Win32 / Visual C++ 8.0] 
-      [Peak=2.5 Mean=1.1 
+[[53] [Win32 / Visual C++ 8.0]
+      [Peak=2.5 Mean=1.1
 
-GSL Peak=6.6 
+GSL Peak=6.6
 
-__cephes Peak=2.5 Mean=1.1] 
-      [Peak=11 Mean=2.2 
+__cephes Peak=2.5 Mean=1.1]
+      [Peak=11 Mean=2.2
 
-GSL Peak=11 
+GSL Peak=11
 
-__cephes Peak=17 Mean=2.5] 
-      [Peak=59 Mean=10 
+__cephes Peak=17 Mean=2.5]
+      [Peak=59 Mean=10
 
-GSL Peak=6x10[super 11] 
+GSL Peak=6x10[super 11]
 
 __cephes Peak=2x10[super 5] ] ]
 [[64] [Red Hat Linux IA64 / G++ 3.4] [Peak=7 Mean=3] [Peak=117 Mean=10] [Peak=2x10[super 4][space] Mean=6x10[super 3]] ]
@@ -97,20 +97,20 @@ __cephes Peak=2x10[super 5] ] ]
 
 [table Errors Rates in cyl_neumann
 [[Significand Size] [Platform and Compiler] [Y[sub 0][space] and Y[sub 1]] [Y[sub n] (integer orders)] [Y[sub v] (fractional orders)] ]
-[[53] [Win32 / Visual C++ 8.0] 
-      [Peak=4.7 Mean=1.7 
+[[53] [Win32 / Visual C++ 8.0]
+      [Peak=4.7 Mean=1.7
 
-GSL Peak=34 Mean=9 
+GSL Peak=34 Mean=9
 
-__cephes Peak=330 Mean=54] 
-      [Peak=117 Mean=10 
+__cephes Peak=330 Mean=54]
+      [Peak=117 Mean=10
 
-GSL Peak=500 Mean=54 
+GSL Peak=500 Mean=54
 
-__cephes Peak=923 Mean=83] 
-      [Peak=800 Mean=40 
+__cephes Peak=923 Mean=83]
+      [Peak=800 Mean=40
 
-GSL Peak=1.4x10[super 6][space] Mean\=7x10[super 4][space] 
+GSL Peak=1.4x10[super 6][space] Mean\=7x10[super 4][space]
 
 __cephes Peak=+INF]]
 [[64] [Red Hat Linux IA64 / G++ 3.4] [Peak=470 Mean=56] [Peak=843 Mean=51] [Peak=741 Mean=51] ]
@@ -122,8 +122,8 @@ Note that for large /x/ these functions are largely dependent on
 the accuracy of the `std::sin` and `std::cos` functions.
 
 Comparison to GSL and __cephes is interesting: both __cephes and this library optimise
-the integer order case - leading to identical results - simply using the general 
-case is for the most part slightly more accurate though, as noted by the 
+the integer order case - leading to identical results - simply using the general
+case is for the most part slightly more accurate though, as noted by the
 better accuracy of GSL in the integer argument cases.  This implementation tends to
 perform much better when the arguments become large, __cephes in particular produces
 some remarkably inaccurate results with some of the test data (no significant figures
@@ -157,26 +157,26 @@ However, in general, a negative order implies that we will need to compute
 both J and Y.
 
 When /x/ is large compared to the order /v/ then the asymptotic expansions
-for large /x/ in M. Abramowitz and I.A. Stegun, 
-['Handbook of Mathematical Functions] 9.2.19 are used 
+for large /x/ in M. Abramowitz and I.A. Stegun,
+['Handbook of Mathematical Functions] 9.2.19 are used
 (these were found to be more reliable
 than those in A&S 9.2.5).
 
 When the order /v/ is an integer the method first relates the result
 to J[sub 0], J[sub 1], Y[sub 0][space] and Y[sub 1][space] using either
 forwards or backwards recurrence (Miller's algorithm) depending upon which is stable.
-The values for J[sub 0], J[sub 1], Y[sub 0][space] and Y[sub 1][space] are 
+The values for J[sub 0], J[sub 1], Y[sub 0][space] and Y[sub 1][space] are
 calculated using the rational minimax approximations on
 root-bracketing intervals for small ['|x|] and Hankel asymptotic
 expansion for large ['|x|]. The coefficients are from:
 
-W.J. Cody, ['ALGORITHM 715: SPECFUN - A Portable FORTRAN Package of 
-Special Function Routines and Test Drivers], ACM Transactions on Mathematical 
-Software, vol 19, 22 (1993). 
+W.J. Cody, ['ALGORITHM 715: SPECFUN - A Portable FORTRAN Package of
+Special Function Routines and Test Drivers], ACM Transactions on Mathematical
+Software, vol 19, 22 (1993).
 
 and
 
-J.F. Hart et al, ['Computer Approximations], John Wiley & Sons, New York, 1968. 
+J.F. Hart et al, ['Computer Approximations], John Wiley & Sons, New York, 1968.
 
 These approximations are accurate to around 19 decimal digits: therefore
 these methods are not used when type T has more than 64 binary digits.
@@ -198,7 +198,7 @@ and [@http://functions.wolfram.com/03.03.06.0040.01 http://functions.wolfram.com
 
 When /x/ is small compared to /v/ and /v/ is not an integer, then the following
 series approximation can be used for Y[sub v](x), this is also an area where other
-approximations are often too slow to converge to be used 
+approximations are often too slow to converge to be used
 (see [@http://functions.wolfram.com/03.03.06.0034.01 http://functions.wolfram.com/03.03.06.0034.01]):
 
 [equation bessel_yv_small_z]
@@ -207,11 +207,11 @@ When /x/ is small compared to /v/, J[sub v]x[space] is best computed directly fr
 
 [equation bessel2]
 
-In the general case we compute J[sub v][space] and 
+In the general case we compute J[sub v][space] and
 Y[sub v][space] simultaneously.
 
 To get the initial values, let
-[mu][space] = [nu] - floor([nu] + 1/2), then [mu][space] is the fractional part 
+[mu][space] = [nu] - floor([nu] + 1/2), then [mu][space] is the fractional part
 of [nu][space] such that
 |[mu]| <= 1/2 (we need this for convergence later). The idea is to
 calculate J[sub [mu]](x), J[sub [mu]+1](x), Y[sub [mu]](x), Y[sub [mu]+1](x)
@@ -231,7 +231,7 @@ See: F.S. Acton, ['Numerical Methods that Work],
 
 The continued fractions are computed using the modified Lentz's method
 (W.J. Lentz, ['Generating Bessel functions in Mie scattering calculations
-using continued fractions], Applied Optics, vol 15, 668 (1976)). 
+using continued fractions], Applied Optics, vol 15, 668 (1976)).
 Their convergence rates depend on ['x], therefore we need
 different strategies for large ['x] and small ['x].
 
@@ -263,20 +263,85 @@ where
 
 g[sub k][space] and h[sub k][space]
 are also computed by recursions (involving gamma functions), but the
-formulas are a little complicated, readers are refered to 
+formulas are a little complicated, readers are refered to
 N.M. Temme, ['On the numerical evaluation of the ordinary Bessel function
 of the second kind], Journal of Computational Physics, vol 21, 343 (1976).
 Note Temme's series converge only for |[mu]| <= 1/2.
 
 As the previous case, Y[sub [nu]][space] is calculated from the forward
 recurrence, so is Y[sub [nu]+1]. With these two
-values and f[sub [nu]], the Wronskian yields J[sub [nu]](x) directly 
+values and f[sub [nu]], the Wronskian yields J[sub [nu]](x) directly
 without backward recurrence.
 
 [endsect]
 
-[/ 
-  Copyright 2006 John Maddock, Paul A. Bristow and Xiaogang Zhang.
+[section:bessel Finding Zeros of Bessel Functions of the First and Second Kinds]
+
+[h4 Synopsis]
+
+Functions for obtaining both a single zero or root of the Bessel function,
+and placing multiple zeros into a container like `std::vector` by providing an output iterator.
+
+The signature of the single value function is:
+
+  template <class T>
+  inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type
+    cyl_bessel_j_zero(T v,  // Floating-point value for Jv.
+    unsigned m); // start index.
+
+and for multiple zeros:
+
+ template <class T, class OutputIterator>
+  inline OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
+                                unsigned start_index,
+                                unsigned number_of_zeros,
+                                OutputIterator out_it); //
+
+There are also versions which allows control of the
+__policy_section for error handling and precision.
+
+  template <class T, class OutputIterator, class Policy>
+  inline OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
+                                unsigned start_index,
+                                unsigned number_of_zeros,
+                                OutputIterator out_it,
+                                const Policy& pol);
+
+[h4 Description]
+The zeros or roots (values of x where the function crosses the y = 0 axis)
+of the Bessel and Neumann functions are computed by two functions.
+
+
+
+[h4 Examples of finding Bessel and Neumann zeros]
+
+[import ../../example/bessel_zeros_example.cpp]
+
+[bessel_zero_example_1]
+
+[bessel_zero_example_2]
+
+[bessel_zero_example_iterator_1]
+[bessel_zero_example_iterator_2]
+
+The full code for this example for Bessel `cyl_bessel_j_zeros` is at
+[../../example/bessel_zeros_example.cpp Bessel, Neumann and Airy zeros].
+
+
+[h4 Implementation and testing]
+
+The method uses Newton-Raphson method starting with McMahon's approximation.
+TODO needa good reference here
+
+
+The precision of evaluation of zeros was tested at 50 decimal digits using `cpp_dec_float_50`
+and found identical with spot values computed by __WolframAlpha.
+
+[endsect]  [/section:bessel Finding Zeros of Bessel Functions of the First and Second Kinds]
+
+[/
+  Copyright 2006, 2013 John Maddock, Paul A. Bristow, Xiaogang Zhang and Christor Kormanyos.
+
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
