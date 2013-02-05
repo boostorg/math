@@ -346,7 +346,7 @@ n |
   16 | 51.320322762482062633162699745957897178885350674038
   */
 
-  //BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(220)/100, 1U), static_cast<RealType>(3.6154383428745996706772556069431792744372398748425L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(220)/100, 1U), static_cast<RealType>(3.6154383428745996706772556069431792744372398748425L), tolerance);
   // cyl_neumann_zero(static_cast<RealType>(220)/100, 1U){3.6154383428746009} 
   //and                             static_cast<RealType>(3.6154383428745996706772556069431792744372398748425L)
   //                                                     {3.6154383428745995}
@@ -473,9 +473,6 @@ properly resolves very closely spaced zeros.
   BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(1000000000U), static_cast<RealType>(-2.81078366593344513918947921096193426320298300481145E+6L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(1000000001U), static_cast<RealType>(-2.81078366780730091663459728526906320267920607427246E+6L), tolerance);
 
-
-
-
   // Test Data for airy_bi
   using boost::math::airy_bi_zero;
 
@@ -524,7 +521,6 @@ properly resolves very closely spaced zeros.
   //Table[N[AiryBiZero[n], 51], {n, 1000000000, 1000000001, 1}]
   BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(1000000000U), static_cast<RealType>(-2.81078366499651725023268820158218492845371527054171E+6L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(1000000001U), static_cast<RealType>(-2.81078366687037302799011557215619265502627118526716E+6L), tolerance);
-
   
 } // template <class RealType> void test_spots(RealType)
 
