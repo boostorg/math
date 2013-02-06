@@ -130,7 +130,7 @@ void test_bessel_zeros(RealType)
 
   { // Same test using the multiple zeros version.
     std::vector<RealType> zeros;
-    cyl_bessel_j_zero(static_cast<RealType>(0.0), 3, 1U, std::back_inserter(zeros) );
+    cyl_bessel_j_zero(static_cast<RealType>(0.0), 1U, 3, std::back_inserter(zeros) );
     BOOST_CHECK_CLOSE_FRACTION(zeros[0], static_cast<RealType>(2.4048255576957727686216318793264546431242449091460L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(zeros[1], static_cast<RealType>(5.5200781102863106495966041128130274252218654787829L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(zeros[2], static_cast<RealType>(8.6537279129110122169541987126609466855657952312754L), tolerance);

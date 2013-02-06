@@ -281,20 +281,29 @@ without backward recurrence.
 
 [h4 Synopsis]
 
+`#include <boost/math/special_functions/bessel.hpp>`
+
 Functions for obtaining both a single zero or root of the Bessel function,
 and placing multiple zeros into a container like `std::vector` by providing an output iterator.
 
-The signature of the single value function is:
+The signature of the single value functions are:
 
   template <class T>
-  inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type
-    cyl_bessel_j_zero(T v,  // Floating-point value for Jv.
-    unsigned m); // start index.
+  T cyl_bessel_j_zero(T v,  // Floating-point value for Jv.
+    unsigned m); // index of zero
+  template <class T>
+  T cyl_neumann_zero(T v,  // Floating-point value for Jv.
+    unsigned m); // index of zero
 
 and for multiple zeros:
 
  template <class T, class OutputIterator>
-  inline OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
+ OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
+                                unsigned start_index,
+                                unsigned number_of_zeros,
+                                OutputIterator out_it); //
+ template <class T, class OutputIterator>
+ OutputIterator cyl_neumann_zero(T v, // Floating-point value for Jv.
                                 unsigned start_index,
                                 unsigned number_of_zeros,
                                 OutputIterator out_it); //
@@ -302,18 +311,44 @@ and for multiple zeros:
 There are also versions which allows control of the
 __policy_section for error handling and precision.
 
+  template <class T>
+  T cyl_bessel_j_zero(T v,  // Floating-point value for Jv.
+    unsigned m,  // start index.
+    const Policy& pol); // Policy
+  template <class T>
+  T cyl_neumann_zero(T v,  // Floating-point value for Jv.
+    unsigned m,  // start index.
+    const Policy& pol); // Policy
+
   template <class T, class OutputIterator, class Policy>
-  inline OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
+  OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
+                                unsigned start_index,
+                                unsigned number_of_zeros,
+                                OutputIterator out_it,
+                                const Policy& pol);
+  template <class T, class OutputIterator, class Policy>
+  OutputIterator cyl_neumann_zero(T v, // Floating-point value for Jv.
                                 unsigned start_index,
                                 unsigned number_of_zeros,
                                 OutputIterator out_it,
                                 const Policy& pol);
 
 [h4 Description]
+
 The zeros or roots (values of x where the function crosses the y = 0 axis)
-of the Bessel and Neumann functions are computed by two functions.
+of the Bessel and Neumann functions are computed by two functions,
+`cyl_bessel_j_zero` and `cyl_neumann_zero`.  
 
+In each case the index of the zero
+returned is 1-based, which is to say:
 
+   cyl_bessel_j_zero(v, 1);
+
+returns the first zero of Bessel J, and
+
+   cyl_bessel_j_zero(v, 0);
+
+results in a __domain_error being raised.
 
 [h4 Examples of finding Bessel and Neumann zeros]
 
@@ -324,17 +359,18 @@ of the Bessel and Neumann functions are computed by two functions.
 [bessel_zero_example_2]
 
 [bessel_zero_example_iterator_1]
+
 [bessel_zero_example_iterator_2]
 
 The full code for this example for Bessel `cyl_bessel_j_zeros` is at
-[../../example/bessel_zeros_example.cpp Bessel, Neumann and Airy zeros].
+[@../../../example/bessel_zeros_example.cpp Bessel, Neumann and Airy zeros].
 
 
 [h4 Implementation and testing]
 
 The method uses Newton-Raphson method starting with McMahon's approximation.
-TODO needa good reference here
-
+See "Handbook of Mathematical Functions", M. Abramowitz and I. A. Stegan, section 9.5.
+Also: NIST Digital Library of Mathematical Functions, [@http://dlmf.nist.gov/10.21#vi Bessel Function Zeros].
 
 The precision of evaluation of zeros was tested at 50 decimal digits using `cpp_dec_float_50`
 and found identical with spot values computed by __WolframAlpha.

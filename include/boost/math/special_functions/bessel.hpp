@@ -557,8 +557,8 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cy
 
 template <class T, class OutputIterator, class Policy>
 inline OutputIterator cyl_bessel_j_zero(T v,
-                              unsigned number_of_zeros,
                               unsigned start_index,
+                              unsigned number_of_zeros,
                               OutputIterator out_it,
                               const Policy& pol)
 {
@@ -573,8 +573,8 @@ inline OutputIterator cyl_bessel_j_zero(T v,
 
 template <class T, class OutputIterator>
 inline OutputIterator cyl_bessel_j_zero(T v,
-                              unsigned number_of_zeros,
                               unsigned start_index,
+                              unsigned number_of_zeros,
                               OutputIterator out_it)
 {
    return cyl_bessel_j_zero(v, number_of_zeros, start_index, out_it, policies::policy<>());
@@ -599,8 +599,8 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cy
 
 template <class T, class OutputIterator, class Policy>
 inline OutputIterator cyl_neumann_zero(T v,
-                             unsigned number_of_zeros,
                              unsigned start_index,
+                             unsigned number_of_zeros,
                              OutputIterator out_it,
                              const Policy& pol)
 {
@@ -615,8 +615,8 @@ inline OutputIterator cyl_neumann_zero(T v,
 
 template <class T, class OutputIterator>
 inline OutputIterator cyl_neumann_zero(T v,
-                             unsigned number_of_zeros,
                              unsigned start_index,
+                             unsigned number_of_zeros,
                              OutputIterator out_it)
 {
    return cyl_neumann_zero(v, number_of_zeros, start_index, out_it, policies::policy<>());

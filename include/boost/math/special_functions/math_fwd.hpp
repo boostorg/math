@@ -622,14 +622,14 @@ namespace boost
 
    template <class T, class OutputIterator>
    OutputIterator cyl_bessel_j_zero(T v,
-                          unsigned number_of_zeros,
                           unsigned start_index,
+                          unsigned number_of_zeros,
                           OutputIterator out_it);
 
    template <class T, class OutputIterator, class Policy>
    OutputIterator cyl_bessel_j_zero(T v,
-                          unsigned number_of_zeros,
                           unsigned start_index,
+                          unsigned number_of_zeros,
                           OutputIterator out_it,
                           const Policy&);
 
@@ -641,14 +641,14 @@ namespace boost
 
    template <class T, class OutputIterator>
    OutputIterator cyl_neumann_zero(T v,
-                         unsigned number_of_zeros,
                          unsigned start_index,
+                         unsigned number_of_zeros,
                          OutputIterator out_it);
 
    template <class T, class OutputIterator, class Policy>
    OutputIterator cyl_neumann_zero(T v,
-                         unsigned number_of_zeros,
                          unsigned start_index,
+                         unsigned number_of_zeros,
                          OutputIterator out_it,
                          const Policy&);
 
@@ -707,13 +707,13 @@ namespace boost
 
    template <class OutputIterator>
    OutputIterator airy_ai_zero(
-                     unsigned number_of_zeros,
                      unsigned start_index,
+                     unsigned number_of_zeros,
                      OutputIterator out_it);
    template <class OutputIterator, class Policy>
    OutputIterator airy_ai_zero(
-                     unsigned number_of_zeros,
                      unsigned start_index,
+                     unsigned number_of_zeros,
                      OutputIterator out_it,
                      const Policy&);
 
@@ -724,13 +724,13 @@ namespace boost
 
    template <class OutputIterator>
    OutputIterator airy_bi_zero(
-                     unsigned number_of_zeros,
                      unsigned start_index,
+                     unsigned number_of_zeros,
                      OutputIterator out_it);
    template <class OutputIterator, class Policy>
    OutputIterator airy_bi_zero(
-                     unsigned number_of_zeros,
                      unsigned start_index,
+                     unsigned number_of_zeros,
                      OutputIterator out_it,
                      const Policy&);
 
@@ -1220,10 +1220,10 @@ namespace boost
 \
 template <class OutputIterator, class T>\
    inline void cyl_bessel_j_zero(T v,\
-                                 unsigned number_of_zeros,\
                                  unsigned start_index,\
+                                 unsigned number_of_zeros,\
                                  OutputIterator out_it)\
-   { boost::math::cyl_bessel_j_zero(v, number_of_zeros, start_index, out_it, Policy()); }\
+   { boost::math::cyl_bessel_j_zero(v, start_index, number_of_zeros, out_it, Policy()); }\
 \
    template <class T>\
    inline typename boost::math::detail::bessel_traits<T, T, Policy >::result_type cyl_neumann_zero(T v, unsigned m)\
@@ -1231,10 +1231,10 @@ template <class OutputIterator, class T>\
 \
 template <class OutputIterator, class T>\
    inline void cyl_neumann_zero(T v,\
-                                unsigned number_of_zeros,\
                                 unsigned start_index,\
+                                unsigned number_of_zeros,\
                                 OutputIterator out_it)\
-   { boost::math::cyl_neumann_zero(v, number_of_zeros, start_index, out_it, Policy()); }\
+   { boost::math::cyl_neumann_zero(v, start_index, number_of_zeros, out_it, Policy()); }\
 \
    template <class T>\
    inline typename boost::math::tools::promote_args<T>::type sin_pi(T x){ return boost::math::sin_pi(x); }\
@@ -1388,15 +1388,15 @@ template <class OutputIterator, class T>\
    inline T airy_ai_zero(unsigned m)\
    { return boost::math::airy_ai_zero<T>(m, Policy()); }\
    template <class T, class OutputIterator>\
-   OutputIterator airy_ai_zero(unsigned number_of_zeros, unsigned start_index, OutputIterator out_it)\
-   { return boost::math::airy_ai_zero<T>(number_of_zeros, start_index, out_it, Policy()); }\
+   OutputIterator airy_ai_zero(unsigned start_index, unsigned number_of_zeros, OutputIterator out_it)\
+   { return boost::math::airy_ai_zero<T>(start_index, number_of_zeros, out_it, Policy()); }\
    \
    template <class T>\
    inline T airy_bi_zero(unsigned m)\
    { return boost::math::airy_bi_zero<T>(m, Policy()); }\
    template <class T, class OutputIterator>\
-   OutputIterator airy_bi_zero(unsigned number_of_zeros, unsigned start_index, OutputIterator out_it)\
-   { return boost::math::airy_bi_zero<T>(number_of_zeros, start_index, out_it, Policy()); }\
+   OutputIterator airy_bi_zero(unsigned start_index, unsigned number_of_zeros, OutputIterator out_it)\
+   { return boost::math::airy_bi_zero<T>(start_index, number_of_zeros, out_it, Policy()); }\
    \
 
 

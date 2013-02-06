@@ -357,8 +357,8 @@ inline T airy_ai_zero(unsigned m)
 
 template <class T, class OutputIterator, class Policy>
 inline OutputIterator airy_ai_zero(
-                         unsigned number_of_zeros,
                          unsigned start_index,
+                         unsigned number_of_zeros,
                          OutputIterator out_it,
                          const Policy& pol)
 {
@@ -375,8 +375,8 @@ inline OutputIterator airy_ai_zero(
 
 template <class T, class OutputIterator>
 inline OutputIterator airy_ai_zero(
-                         unsigned number_of_zeros,
                          unsigned start_index,
+                         unsigned number_of_zeros,
                          OutputIterator out_it)
 {
    return airy_ai_zero<T>(number_of_zeros, start_index, out_it, policies::policy<>());
@@ -405,8 +405,8 @@ inline T airy_bi_zero(unsigned m)
 
 template <class T, class OutputIterator, class Policy>
 inline OutputIterator airy_bi_zero(
-                         unsigned number_of_zeros,
                          unsigned start_index,
+                         unsigned number_of_zeros,
                          OutputIterator out_it,
                          const Policy& pol)
 {
@@ -423,8 +423,8 @@ inline OutputIterator airy_bi_zero(
 
 template <class T, class OutputIterator>
 inline OutputIterator airy_bi_zero(
-                         unsigned number_of_zeros,
                          unsigned start_index,
+                         unsigned number_of_zeros,
                          OutputIterator out_it)
 {
    return airy_bi_zero<T>(number_of_zeros, start_index, out_it, policies::policy<>());
