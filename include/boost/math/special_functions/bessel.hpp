@@ -577,7 +577,7 @@ inline OutputIterator cyl_bessel_j_zero(T v,
                               unsigned number_of_zeros,
                               OutputIterator out_it)
 {
-   return cyl_bessel_j_zero(v, number_of_zeros, start_index, out_it, policies::policy<>());
+   return cyl_bessel_j_zero(v, start_index, number_of_zeros, out_it, policies::policy<>());
 }
 
 template <class T, class Policy>
@@ -619,7 +619,7 @@ inline OutputIterator cyl_neumann_zero(T v,
                              unsigned number_of_zeros,
                              OutputIterator out_it)
 {
-   return cyl_neumann_zero(v, number_of_zeros, start_index, out_it, policies::policy<>());
+   return cyl_neumann_zero(v, start_index, number_of_zeros, out_it, policies::policy<>());
 }
 
 } // namespace math
