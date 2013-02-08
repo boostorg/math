@@ -90,10 +90,8 @@ void test_bessel_zeros(RealType)
    using boost::math::cyl_bessel_j_zero; // (nu, j) 
    using boost::math::isnan;
 
-  if (std::numeric_limits<RealType>::has_quiet_NaN)
-  {
-    BOOST_CHECK(isnan(cyl_bessel_j_zero(static_cast<RealType>(0), 0U))); // yes - returns NaN - is this right?
-  }
+  BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(0), 0U), std::domain_error);
+  BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(-1), 2U), std::domain_error);
 
   // Abuse with infinity and max.
   if (std::numeric_limits<RealType>::has_infinity)
@@ -307,6 +305,9 @@ n |
   // Some simple integer values.
 
   using boost::math::cyl_neumann_zero;
+
+  BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), 0U), std::domain_error);
+  BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(-1), 2U), std::domain_error);
 
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(0), 1U), static_cast<RealType>(0.89357696627916752158488710205833824122514686193001L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(1), 2U), static_cast<RealType>(5.4296810407941351327720051908525841965837574760291L), tolerance);

@@ -374,10 +374,13 @@ inline T cyl_bessel_j_zero_imp(T v, unsigned m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log.
 
+   static const char* function = "boost::math::cyl_bessel_j_zero<%1%>(%1%, unsigned)";
    // Handle negative order or if the zero'th zero is requested.
    // Return NaN if NaN is available or return 0 if NaN is not available.
-   if((v < T(0)) || (m == 0U))
-      return (std::numeric_limits<T>::has_quiet_NaN ? std::numeric_limits<T>::quiet_NaN() : T(0));
+   if(v < 0) 
+      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be >= 0 !", v, pol);
+   if(m == 0)
+      return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but must be > 0 !", m, pol);
 
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess<T>(v, m);
@@ -411,10 +414,12 @@ inline T cyl_neumann_zero_imp(T v, unsigned m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log.
 
+   static const char* function = "boost::math::cyl_neumann_zero<%1%>(%1%, unsigned)";
    // Handle negative order or if the zero'th zero is requested.
-   // Return NaN if NaN is available or return 0 if NaN is not available.
-   if((v < T(0)) || (m == 0U))
-      return (std::numeric_limits<T>::has_quiet_NaN ? std::numeric_limits<T>::quiet_NaN() : T(0));
+   if(v < 0) 
+      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be >= 0 !", v, pol);
+   if(m == 0)
+      return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but must be > 0 !", m, pol);
 
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess<T>(v, m);
