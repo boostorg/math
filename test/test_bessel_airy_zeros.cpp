@@ -314,7 +314,7 @@ n |
   
   { // Repeat rest using multiple zeros version.
     std::vector<RealType> zeros;
-    cyl_neumann_zero(static_cast<RealType>(0.0), 3, 1U, std::back_inserter(zeros) );
+    cyl_neumann_zero(static_cast<RealType>(0.0), 1, 3, std::back_inserter(zeros) );
     BOOST_CHECK_CLOSE_FRACTION(zeros[0], static_cast<RealType>(0.89357696627916752158488710205833824122514686193001L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(zeros[1], static_cast<RealType>(3.9576784193148578683756771869174012814186037655636L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(zeros[2], static_cast<RealType>(7.0860510603017726976236245968203524689715103811778L), tolerance);
@@ -525,14 +525,8 @@ properly resolves very closely spaced zeros.
   
 } // template <class RealType> void test_spots(RealType)
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE(test_main)
 {
-#ifdef TEST_GSL
-   gsl_set_error_handler_off();
-#endif
-   //expected_results();
-   BOOST_MATH_CONTROL_FP;
-
    test_bessel_zeros(0.1F);
    test_bessel_zeros(0.1);
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
@@ -546,8 +540,7 @@ int test_main(int, char* [])
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::cout;
 #endif
-   return 0;
-} // int test_main(int, char* [])
+} 
 
 
 
