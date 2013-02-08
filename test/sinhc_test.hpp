@@ -14,7 +14,7 @@
 
 #include <boost/math/special_functions/sinhc.hpp>
 
-
+#define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
 

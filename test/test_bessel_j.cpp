@@ -281,7 +281,7 @@ void expected_results()
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
 #ifdef TEST_GSL
    gsl_set_error_handler_off();
@@ -302,7 +302,6 @@ int test_main(int, char* [])
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::cout;
 #endif
-   return 0;
 }
 
 

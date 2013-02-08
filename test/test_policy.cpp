@@ -8,7 +8,8 @@
 
 #include <boost/math/policies/policy.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/test/test_exec_monitor.hpp> // for test_main
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp> // for test_main
 #include <iostream>
 
 template <class P1, class P2>
@@ -23,7 +24,7 @@ bool check_same(const P1&, const P2&)
 }
 
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    using namespace boost::math::policies;
    using namespace boost;
@@ -169,8 +170,8 @@ int test_main(int, char* [])
    BOOST_CHECK((is_same<policy<discrete_quantile<integer_round_up> >::promote_double_type, policy<>::promote_double_type>::value));
    BOOST_CHECK((is_same<policy<discrete_quantile<integer_round_up> >::discrete_quantile_type, discrete_quantile<integer_round_up> >::value));
 
-   return 0;
-} // int test_main(int, char* [])
+   
+} // BOOST_AUTO_TEST_CASE( test_main )
 
 
 

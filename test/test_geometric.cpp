@@ -35,7 +35,8 @@ using boost::math::geometric; // using typedef for geometric_distribution<double
 
 #include <boost/math/distributions/negative_binomial.hpp> // for some comparisons.
 
-#include <boost/test/test_exec_monitor.hpp> // for test_main
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION
 #include "test_out_of_range.hpp"
 
@@ -748,7 +749,7 @@ if(std::numeric_limits<RealType>::is_specialized)
    return;
 } // template <class RealType> void test_spots(RealType) // Any floating-point type RealType.
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
   // Check that can generate geometric distribution using the two convenience methods:
    using namespace boost::math;
@@ -790,8 +791,8 @@ int test_main(int, char* [])
       "to pass.</note>" << std::cout;
 #endif
 
-  return 0;
-} // int test_main(int, char* [])
+  
+} // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
 

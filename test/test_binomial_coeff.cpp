@@ -111,7 +111,7 @@ void test_spots(T, const char* name)
    BOOST_CHECK_CLOSE(boost::math::binomial_coefficient<T>(300, 275), static_cast<T>(1.953265141442868389822364184842211512000000e36L), tolerance);
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    expected_results();
    BOOST_MATH_CONTROL_FP;
@@ -136,7 +136,6 @@ int test_main(int, char* [])
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::cout;
 #endif
-   return 0;
 }
 
 

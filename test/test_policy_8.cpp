@@ -1,4 +1,4 @@
-
+#define BOOST_TEST_MAIN
 // Copyright John Maddock 2007.
 
 // Use, modification and distribution are subject to the
@@ -8,7 +8,7 @@
 
 #include <boost/math/policies/policy.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/test/test_exec_monitor.hpp> // for test_main
+#include <boost/test/unit_test.hpp> // for test_main
 #include <iostream>
 
 template <class P1, class P2>
@@ -23,7 +23,7 @@ bool check_same(const P1&, const P2&)
 }
 
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    using namespace boost::math::policies;
    using namespace boost;
@@ -43,8 +43,8 @@ int test_main(int, char* [])
    BOOST_CHECK(check_same(make_policy(domain_error<ignore_error>(), pole_error<ignore_error>(), overflow_error<ignore_error>(), underflow_error<throw_on_error>(), denorm_error<throw_on_error>(), evaluation_error<ignore_error>(), indeterminate_result_error<throw_on_error>(), digits2<10>(), promote_float<false>(), promote_double<false>(), discrete_quantile<integer_round_down>()), policy<domain_error<ignore_error>, pole_error<ignore_error>, overflow_error<ignore_error>, underflow_error<throw_on_error>, denorm_error<throw_on_error>, evaluation_error<ignore_error>, indeterminate_result_error<throw_on_error>, digits2<10>, promote_float<false>, promote_double<false>, discrete_quantile<integer_round_down> >()));
 #endif
 
-   return 0;
-} // int test_main(int, char* [])
+   
+} // BOOST_AUTO_TEST_CASE( test_main )
 
 
 

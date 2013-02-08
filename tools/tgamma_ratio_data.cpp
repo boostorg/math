@@ -4,7 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/bindings/rr.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/tools/test.hpp>
 #include <fstream>
@@ -34,7 +34,7 @@ boost::math::ntl::RR tgamma_ratio2(const boost::math::ntl::RR& a, const boost::m
 }
 
 
-int test_main(int argc, char*argv [])
+int cpp_main(int argc, char*argv [])
 {
    boost::math::ntl::RR::SetPrecision(1000);
    boost::math::ntl::RR::SetOutputPrecision(40);

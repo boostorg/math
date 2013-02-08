@@ -5,7 +5,7 @@
 
 #if 1
 #include <boost/math/bindings/rr.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/test.hpp>
@@ -57,7 +57,7 @@ struct ibeta_inv_data_generator
    }
 };
 
-int test_main(int argc, char*argv [])
+int cpp_main(int argc, char*argv [])
 {
    boost::math::ntl::RR::SetPrecision(1000);
    boost::math::ntl::RR::SetOutputPrecision(100);

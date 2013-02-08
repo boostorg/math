@@ -25,7 +25,8 @@
 #include <boost/math/distributions/non_central_t.hpp> // for chi_squared_distribution.
 #include <boost/math/distributions/normal.hpp> // for normal distribution (for comparison).
 
-#include <boost/test/test_exec_monitor.hpp> // for test_main
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp> // for test_main
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE
@@ -798,7 +799,7 @@ void test_ignore_policy(RealType)
 } // template <class RealType> void test_ignore_policy(RealType)
 
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
   BOOST_MATH_CONTROL_FP;
    // Basic sanity-check spot values.
@@ -843,8 +844,8 @@ int test_main(int, char* [])
    test_big_df(0.F); // float
    test_big_df(0.); // double
 
-   return 0;
-} // int test_main(int, char* [])
+   
+} // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
 

@@ -6,8 +6,6 @@
 #ifdef BOOST_BUILD_PCH_ENABLED
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
-#include <boost/test/test_exec_monitor.hpp>
-#include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions.hpp>
 #include <boost/math/distributions.hpp>
 #include <boost/math/tools/test.hpp>

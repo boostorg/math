@@ -18,7 +18,8 @@
 #include <pch.hpp> // include directory libs/math/src/tr1/ is needed.
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
-#include <boost/test/test_exec_monitor.hpp> // Boost.Test
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/distributions/gamma.hpp>
@@ -223,7 +224,7 @@ void test_spots(RealType)
 
 } // template <class RealType>void test_spots(RealType)
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    // Basic sanity-check spot values.
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
@@ -241,8 +242,8 @@ int test_main(int, char* [])
       "to pass.</note>" << std::cout;
 #endif
 
-   return 0;
-} // int test_main(int, char* [])
+   
+} // BOOST_AUTO_TEST_CASE( test_main )
 
 
 /*

@@ -6,7 +6,7 @@
 //#define BOOST_MATH_INSTRUMENT
 
 #include <boost/math/bindings/rr.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/math/distributions/hypergeometric.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -69,7 +69,7 @@ struct hypergeometric_generator
    }
 };
 
-int test_main(int argc, char*argv [])
+int cpp_main(int argc, char*argv [])
 {
    boost::math::ntl::RR::SetPrecision(1000);
    boost::math::ntl::RR::SetOutputPrecision(100);

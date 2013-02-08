@@ -8,7 +8,8 @@
 #include <pch.hpp>
 
 #include <boost/math/tools/minima.hpp>
-#include <boost/test/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 
@@ -48,14 +49,14 @@ void test_minima(T, const char* /* name */)
    BOOST_CHECK_CLOSE(m.first, T(1.461632), T(0.1));
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    test_minima(0.1f, "float");
    test_minima(0.1, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_minima(0.1L, "long double");
 #endif
-   return 0;
+   
 }
 
 

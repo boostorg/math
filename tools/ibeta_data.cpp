@@ -4,7 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/bindings/rr.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -239,7 +239,7 @@ struct beta_data_generator_int
    }
 };
 
-int test_main(int, char* [])
+int cpp_main(int, char* [])
 {
    boost::math::ntl::RR::SetPrecision(1000);
    boost::math::ntl::RR::SetOutputPrecision(40);

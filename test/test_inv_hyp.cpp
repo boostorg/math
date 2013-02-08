@@ -9,7 +9,8 @@
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
 #include <boost/math/special_functions/atanh.hpp>
-#include <boost/test/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/tools/test.hpp>
@@ -250,7 +251,7 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE(::boost::math::atanh(static_cast<T>(-0.5)), static_cast<T>(-0.549306144334054845697622618461262852323745278911374725867347L), tolerance);
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    expected_results();
    BOOST_MATH_CONTROL_FP;
@@ -282,7 +283,7 @@ int test_main(int, char* [])
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::cout;
 #endif
-   return 0;
+   
 }
 
 

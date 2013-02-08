@@ -33,7 +33,8 @@ using ::boost::math::concepts::real_concept;
 using boost::math::owens_t;
 #include <boost/math/distributions/normal.hpp>
 
-#include <boost/test/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/array.hpp>
 
@@ -267,7 +268,7 @@ void test_owens_t(T, const char* name)
 }
 
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
   BOOST_MATH_CONTROL_FP;
 
@@ -308,8 +309,8 @@ int test_main(int, char* [])
   test_owens_t(boost::multiprecision::cpp_dec_float_50(0), "cpp_dec_float_50"); // Test real concept.
   test_owens_t(boost::multiprecision::cpp_dec_float_100(0), "cpp_dec_float_100"); // Test real concept.
 #endif
-  return 0;
-} // int test_main(int, char* [])
+  
+} // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
 

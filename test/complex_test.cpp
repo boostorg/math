@@ -3,8 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/test/test_tools.hpp>
-#include <boost/test/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
@@ -896,7 +896,7 @@ void test_boundaries()
 }
 
 
-int test_main(int, char*[])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    std::cout << "Running complex trig sanity checks for type float." << std::endl;
    test_inverse_trig(float(0));
@@ -915,7 +915,6 @@ int test_main(int, char*[])
 
    std::cout << "Running complex trig boundary and accuracy tests." << std::endl;
    test_boundaries();
-   return 0;
 }
 
 

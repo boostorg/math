@@ -6,7 +6,7 @@
 #include <boost/math/bindings/rr.hpp>
 //#include <boost/math/tools/dual_precision.hpp>
 #include <boost/math/tools/test_data.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/math/special_functions/ellint_2.hpp>
 #include <boost/math/special_functions/ellint_3.hpp>
 #include <fstream>
@@ -17,7 +17,7 @@ using namespace boost::math::tools;
 using namespace boost::math;
 using namespace std;
 
-int test_main(int argc, char*argv [])
+int cpp_main(int argc, char*argv [])
 {
    using namespace boost::math::tools;
 

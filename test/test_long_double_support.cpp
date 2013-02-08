@@ -9,7 +9,8 @@
 #include <math.h>
 #include <limits.h>
 
-#include <boost/test/test_exec_monitor.hpp> // Boost.Test
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -204,7 +205,7 @@ void test_spots()
 }
 
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    expected_results();
    std::cout << "Running tests with BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS "
@@ -218,6 +219,6 @@ int test_main(int, char* [])
    // (Parameter value, arbitrarily zero, only communicates the floating point type).
    test_spots(); // Test long double.
 
-   return 0;
-} // int test_main(int, char* [])
+   
+} // BOOST_AUTO_TEST_CASE( test_main )
 

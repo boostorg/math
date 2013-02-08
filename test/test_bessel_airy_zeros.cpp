@@ -18,7 +18,8 @@
 #include <boost/math/special_functions/airy.hpp>
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
-#include <boost/test/test_exec_monitor.hpp> // Boost.Test
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 
@@ -59,12 +60,12 @@ treated differently than the remaining ones.
 
 So I would be most interested in various regions of order,
 each one tested with about 20 zeros should suffice:
-•	Order 219/100: This checks a region just below a critical cutoff
-•	Order 221/100: This checks a region just above a critical cutoff
-•	Order 0: Something always tends to go wrong at zero.
-•	Order 1/1000: A small order
-•	Order 71/19: Merely an intermediate order.
-•	Order 7001/19: A medium-large order, small enough to retain moderate efficiency of calculation.
+•   Order 219/100: This checks a region just below a critical cutoff
+•   Order 221/100: This checks a region just above a critical cutoff
+•   Order 0: Something always tends to go wrong at zero.
+•   Order 1/1000: A small order
+•   Order 71/19: Merely an intermediate order.
+•   Order 7001/19: A medium-large order, small enough to retain moderate efficiency of calculation.
  
 If we would like, we could add a few selected high zeros
 such as the 1000th zero for a few modest orders such as 71/19, etc.

@@ -10,7 +10,7 @@
 #include <iomanip>
 #include <iostream>
 
-
+#define BOOST_TEST_MAiN
 #include <boost/math/special_functions/asinh.hpp>
 
 

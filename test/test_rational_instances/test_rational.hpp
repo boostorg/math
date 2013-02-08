@@ -8,7 +8,7 @@
 #define BOOST_MATH_TEST_RATIONAL_HPP
 
 #include <boost/test/floating_point_comparison.hpp>
-#include <boost/test/test_exec_monitor.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/array.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/precision.hpp>

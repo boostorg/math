@@ -5,7 +5,7 @@
 
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/test_data.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/math/special_functions/ellint_1.hpp>
 #include <fstream>
 #include <boost/math/tools/test_data.hpp>
@@ -21,7 +21,7 @@ T ellint_k_data(T k)
    return ellint_1(k);
 }
 
-int test_main(int argc, char*argv [])
+int cpp_main(int argc, char*argv [])
 {
    using namespace boost::math::tools;
 

@@ -6,7 +6,8 @@
 #include <pch_light.hpp>
 
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -285,7 +286,7 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE_FRACTION(::boost::math::spherical_harmonic_i(53, 42, static_cast<T>(-8.75), static_cast<T>(-2.25)), static_cast<T>(0.0002099802242493057018193798824353982612756L), tolerance);
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    BOOST_MATH_CONTROL_FP;
    test_spots(0.0F, "float");
@@ -310,7 +311,7 @@ int test_main(int, char* [])
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::cout;
 #endif
-   return 0;
+   
 }
 
 
