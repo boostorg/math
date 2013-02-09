@@ -386,13 +386,11 @@ inline T cyl_bessel_j_zero_imp(T v, unsigned m, const Policy& pol)
    const T guess_root = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess<T>(v, m);
 
    // Select the maximum allowed iterations, being at least 24.
-   boost::uintmax_t number_of_iterations = (std::max)(24, int(std::numeric_limits<T>::digits10));
+   boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
 
    // Select the desired number of binary digits of precision.
    // Account for the radix of number representations having non-two radix!
-   const int my_digits2 = int(float(std::numeric_limits<T>::digits)
-                              * (  log(float(std::numeric_limits<T>::radix))
-                                 / log(2.0F)));
+   const int my_digits2 = policies::digits<T, Policy>();
 
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T jvm =
@@ -404,7 +402,11 @@ inline T cyl_bessel_j_zero_imp(T v, unsigned m, const Policy& pol)
          my_digits2,
          number_of_iterations);
 
-   static_cast<void>(number_of_iterations);
+   if(number_of_iterations >= policies::get_max_root_iterations<Policy>())
+   {
+      policies::raise_evaluation_error<T>(function, "Unable to locate root in a reasonable time:"
+         "  Current best guess is %1%", jvm, Policy());
+   }
 
    return jvm;
 }
@@ -425,13 +427,11 @@ inline T cyl_neumann_zero_imp(T v, unsigned m, const Policy& pol)
    const T guess_root = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess<T>(v, m);
 
    // Select the maximum allowed iterations, being at least 24.
-   boost::uintmax_t number_of_iterations = (std::max)(24, int(std::numeric_limits<T>::digits10));
+   boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
 
    // Select the desired number of binary digits of precision.
    // Account for the radix of number representations having non-two radix!
-   const int my_digits2 = int(float(std::numeric_limits<T>::digits)
-                              * (  log(float(std::numeric_limits<T>::radix))
-                                 / log(2.0F)));
+   const int my_digits2 = policies::digits<T, Policy>();
 
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T yvm =
@@ -443,7 +443,11 @@ inline T cyl_neumann_zero_imp(T v, unsigned m, const Policy& pol)
          my_digits2,
          number_of_iterations);
 
-   static_cast<void>(number_of_iterations);
+   if(number_of_iterations >= policies::get_max_root_iterations<Policy>())
+   {
+      policies::raise_evaluation_error<T>(function, "Unable to locate root in a reasonable time:"
+         "  Current best guess is %1%", yvm, Policy());
+   }
 
    return yvm;
 }
@@ -457,7 +461,13 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j(
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
    typedef typename detail::bessel_traits<T1, T2, Policy>::optimisation_tag tag_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol), "boost::math::cyl_bessel_j<%1%>(%1%,%1%)");
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_imp<value_type>(v, static_cast<value_type>(x), tag_type(), forwarding_policy()), "boost::math::cyl_bessel_j<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
@@ -472,7 +482,13 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel(unsi
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_bessel_j_imp<value_type>(v, static_cast<value_type>(x), pol), "boost::math::sph_bessel<%1%>(%1%,%1%)");
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_bessel_j_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::sph_bessel<%1%>(%1%,%1%)");
 }
 
 template <class T>
@@ -487,7 +503,13 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i(
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_i_imp<value_type>(v, static_cast<value_type>(x), pol), "boost::math::cyl_bessel_i<%1%>(%1%,%1%)");
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_i_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_i<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
@@ -503,7 +525,13 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k(
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
    typedef typename detail::bessel_traits<T1, T2, Policy>::optimisation_tag tag_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_k_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol), "boost::math::cyl_bessel_k<%1%>(%1%,%1%)");
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_k_imp<value_type>(v, static_cast<value_type>(x), tag_type(), forwarding_policy()), "boost::math::cyl_bessel_k<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
@@ -519,7 +547,13 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann(T
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
    typedef typename detail::bessel_traits<T1, T2, Policy>::optimisation_tag tag_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_imp<value_type>(v, static_cast<value_type>(x), tag_type(), pol), "boost::math::cyl_neumann<%1%>(%1%,%1%)");
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_imp<value_type>(v, static_cast<value_type>(x), tag_type(), forwarding_policy()), "boost::math::cyl_neumann<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
@@ -534,7 +568,13 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann(uns
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_neumann_imp<value_type>(v, static_cast<value_type>(x), pol), "boost::math::sph_neumann<%1%>(%1%,%1%)");
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_neumann_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::sph_neumann<%1%>(%1%,%1%)");
 }
 
 template <class T>
@@ -549,8 +589,14 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_ze
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<value_type>::is_integer, "Order must be a floating-point type.");
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_zero_imp<value_type>(v, m, pol), "boost::math::cyl_bessel_j_zero<%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_zero_imp<value_type>(v, m, forwarding_policy()), "boost::math::cyl_bessel_j_zero<%1%>(%1%,%1%)");
 }
 
 template <class T>
@@ -591,8 +637,14 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zer
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<value_type>::is_integer, "Order must be a floating-point type.");
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_zero_imp<value_type>(v, m, pol), "boost::math::cyl_neumann_zero<%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_zero_imp<value_type>(v, m, forwarding_policy()), "boost::math::cyl_neumann_zero<%1%>(%1%,%1%)");
 }
 
 template <class T>

@@ -257,18 +257,21 @@
                                         && (my_v < +boost::math::tools::epsilon<T>()));
 
             // Obtain Jv(x) and Jv'(x).
+            // Chris's original code called the Bessel function implementation layer direct, 
+            // but that circumvented optimizations for integer-orders.  Call the documented
+            // top level functions instead, and let them sort out which implementation to use.
             T j_v;
             T j_v_prime;
 
             if(order_is_zero)
             {
-              j_v       =  boost::math::detail::cyl_bessel_j_imp(T(0), x, boost::math::detail::bessel_no_int_tag(), my_pol);
-              j_v_prime = -boost::math::detail::cyl_bessel_j_imp(T(1), x, boost::math::detail::bessel_no_int_tag(), my_pol);
+              j_v       =  boost::math::cyl_bessel_j(0, x, my_pol);
+              j_v_prime = -boost::math::cyl_bessel_j(1, x, my_pol);
             }
             else
             {
-                      j_v       = boost::math::detail::cyl_bessel_j_imp(  my_v,      x, boost::math::detail::bessel_no_int_tag(), my_pol);
-              const T j_v_m1     (boost::math::detail::cyl_bessel_j_imp(T(my_v - 1), x, boost::math::detail::bessel_no_int_tag(), my_pol));
+                      j_v       = boost::math::cyl_bessel_j(  my_v,      x, my_pol);
+              const T j_v_m1     (boost::math::cyl_bessel_j(T(my_v - 1), x, my_pol));
                       j_v_prime = j_v_m1 - ((my_v * j_v) / x);
             }
 
@@ -370,8 +373,11 @@
           boost::math::tuple<T, T> operator()(const T& x) const
           {
             // Obtain Yv(x) and Yv'(x).
-            const T y_v      (boost::math::detail::cyl_neumann_imp(  my_v,      x, boost::math::detail::bessel_no_int_tag(), my_pol));
-            const T y_v_m1   (boost::math::detail::cyl_neumann_imp(T(my_v - 1), x, boost::math::detail::bessel_no_int_tag(), my_pol));
+            // Chris's original code called the Bessel function implementation layer direct, 
+            // but that circumvented optimizations for integer-orders.  Call the documented
+            // top level functions instead, and let them sort out which implementation to use.
+            const T y_v      (boost::math::cyl_neumann(  my_v,      x, my_pol));
+            const T y_v_m1   (boost::math::cyl_neumann(T(my_v - 1), x, my_pol));
             const T y_v_prime(y_v_m1 - ((my_v * y_v) / x));
 
             // Return a tuple containing both Yv(x) and Yv'(x).
