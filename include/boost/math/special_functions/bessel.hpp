@@ -455,7 +455,7 @@ inline T cyl_neumann_zero_imp(T v, unsigned m, const Policy& pol)
 } // namespace detail
 
 template <class T1, class T2, class Policy>
-inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j(T1 v, T2 x, const Policy& pol)
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
@@ -477,7 +477,7 @@ inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type 
 }
 
 template <class T, class Policy>
-inline typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel(unsigned v, T x, const Policy& pol)
+inline typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel(unsigned v, T x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
@@ -498,7 +498,7 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sp
 }
 
 template <class T1, class T2, class Policy>
-inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i(T1 v, T2 x, const Policy& pol)
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
@@ -519,7 +519,7 @@ inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type 
 }
 
 template <class T1, class T2, class Policy>
-inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k(T1 v, T2 x, const Policy& pol)
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
@@ -541,7 +541,7 @@ inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type 
 }
 
 template <class T1, class T2, class Policy>
-inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann(T1 v, T2 x, const Policy& pol)
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
@@ -563,7 +563,7 @@ inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type 
 }
 
 template <class T, class Policy>
-inline typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann(unsigned v, T x, const Policy& pol)
+inline typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann(unsigned v, T x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
@@ -584,7 +584,7 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sp
 }
 
 template <class T, class Policy>
-inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_zero(T v, unsigned m, const Policy& pol)
+inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_zero(T v, unsigned m, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
@@ -632,7 +632,7 @@ inline OutputIterator cyl_bessel_j_zero(T v,
 }
 
 template <class T, class Policy>
-inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zero(T v, unsigned m, const Policy& pol)
+inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zero(T v, unsigned m, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
