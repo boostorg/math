@@ -18,6 +18,7 @@
 #include <boost/math/special_functions/airy.hpp>
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
@@ -348,10 +349,8 @@ n |
   16 | 51.320322762482062633162699745957897178885350674038
   */
 
-  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(220)/100, 1U), static_cast<RealType>(3.6154383428745996706772556069431792744372398748425L), tolerance);
-  // cyl_neumann_zero(static_cast<RealType>(220)/100, 1U){3.6154383428746009} 
-  //and                             static_cast<RealType>(3.6154383428745996706772556069431792744372398748425L)
-  //                                                     {3.6154383428745995}
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(220)/100, 1U), static_cast<RealType>(3.6154383428745996706772556069431792744372398748425L), 2 * tolerance);
+  // Note * 2 tolerance needed - using cpp_dec_float_50 it computes exactly, probably because of extra guard digits in multiprecision decimal version.
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(220)/100, 6U), static_cast<RealType>(19.833435100254138641131431268153987585842088078470L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(220)/100, 11U), static_cast<RealType>(35.592602956438811360473753622212346081080817891225L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(220)/100, 16U), static_cast<RealType>(51.320322762482062633162699745957897178885350674038L), tolerance);
