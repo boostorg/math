@@ -100,22 +100,6 @@ T cyl_bessel_j_imp(T v, T x, const bessel_no_int_tag& t, const Policy& pol)
             function,
             "Got x = %1%, but we need x >= 0", x, pol);
    }
-   if(x == 0)
-      return (v == 0) ? 1 : (v > 0) ? 0 : 
-         policies::raise_domain_error<T>(
-            function, 
-            "Got v = %1%, but require v >= 0 or a negative integer: the result would be complex.", v, pol);
-   
-   
-   if((v >= 0) && ((x < 1) || (v > x * x / 4) || (x < 5)))
-   {
-      //
-      // This series will actually converge rapidly for all small
-      // x - say up to x < 20 - but the first few terms are large
-      // and divergent which leads to large errors :-(
-      //
-      return bessel_j_small_z_series(v, x, pol);
-   }
    
    T j, y;
    bessel_jy(v, x, &j, &y, need_j, pol);
@@ -127,9 +111,11 @@ inline T cyl_bessel_j_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& p
 {
    BOOST_MATH_STD_USING  // ADL of std names.
    int ival = detail::iconv(v, pol);
-   if((abs(ival) < 200) && (0 == v - ival))
+   // If v is an integer, use the integer recursion
+   // method, both that and Steeds method are O(v):
+   if((0 == v - ival))
    {
-      return bessel_jn(ival/*iround(v, pol)*/, x, pol);
+      return bessel_jn(ival, x, pol);
    }
    return cyl_bessel_j_imp(v, x, bessel_no_int_tag(), pol);
 }
@@ -296,14 +282,13 @@ template <class T, class Policy>
 inline T cyl_neumann_imp(T v, T x, const bessel_maybe_int_tag&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
 
    BOOST_MATH_INSTRUMENT_VARIABLE(v);
    BOOST_MATH_INSTRUMENT_VARIABLE(x);
 
    if(floor(v) == v)
    {
-      if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (4 * fabs(x) * sqrt(sqrt(sqrt(14 * tools::epsilon<T>() * (fabs(x) + fabs(v) / 2) / (5120 * fabs(x))))) > fabs(v)))
+      if(asymptotic_bessel_large_x_limit(v, x))
       {
          T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
          if((v < 0) && (itrunc(v, pol) & 1))
@@ -327,12 +312,11 @@ template <class T, class Policy>
 inline T cyl_neumann_imp(int v, T x, const bessel_int_tag&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
 
    BOOST_MATH_INSTRUMENT_VARIABLE(v);
    BOOST_MATH_INSTRUMENT_VARIABLE(x);
 
-   if((fabs(x) > asymptotic_bessel_y_limit<T>(tag_type())) && (4 * fabs(x) * sqrt(sqrt(sqrt(14 * tools::epsilon<T>() * (fabs(x) + abs(v) / 2) / (5120 * x)))) > abs(v)))
+   if(asymptotic_bessel_large_x_limit(T(v), x))
    {
       T r = asymptotic_bessel_y_large_x_2(static_cast<T>(abs(v)), x);
       if((v < 0) && (v & 1))

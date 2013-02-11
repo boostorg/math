@@ -186,10 +186,11 @@ void test_bessel(T, const char* name)
         {{ SC_(1), T(10667654)/(1024*1024), SC_(1.24591331097191900488116495350277530373473085499043086981229e-7) }},
     }};
 
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 16> jn_data = {{
+    static const boost::array<boost::array<typename table_type<T>::type, 3>, 17> jn_data = {{
         // This first one is a modified test case from https://svn.boost.org/trac/boost/ticket/2733
         {{ SC_(-1), SC_(1.25), SC_(-0.510623260319880467069474837274910375352924050139633057168856) }},
         {{ SC_(2), SC_(0), SC_(0) }},
+        {{ SC_(-2), SC_(0), SC_(0) }},
         {{ SC_(2), SC_(1e-02), SC_(1.249989583365885362413250958437642113452e-05) }},
         {{ SC_(5), SC_(10), SC_(-0.2340615281867936404436949416457777864635) }},
         {{ SC_(5), SC_(-10), SC_(0.2340615281867936404436949416457777864635) }},
@@ -217,8 +218,9 @@ void test_bessel(T, const char* name)
     do_test_cyl_bessel_j_int<T>(j1_tricky, name, "Bessel J1: Mathworld Data (tricky cases) (Integer Version)");
     do_test_cyl_bessel_j_int<T>(jn_data, name, "Bessel JN: Mathworld Data (Integer Version)");
 
-    static const boost::array<boost::array<T, 3>, 20> jv_data = {{
+    static const boost::array<boost::array<T, 3>, 21> jv_data = {{
         //SC_(-2.4), {{ SC_(0), std::numeric_limits<T>::infinity() }},
+        {{ T(22.5), T(0), SC_(0) }},
         {{ T(2457)/1024, T(1)/1024, SC_(3.80739920118603335646474073457326714709615200130620574875292e-9) }},
         {{ SC_(5.5), T(3217)/1024, SC_(0.0281933076257506091621579544064767140470089107926550720453038) }},
         {{ SC_(-5.5), T(3217)/1024, SC_(-2.55820064470647911823175836997490971806135336759164272675969) }},
@@ -263,5 +265,12 @@ void test_bessel(T, const char* name)
 
 #include "sph_bessel_data.ipp"
     do_test_sph_bessel_j<T>(sph_bessel_data, name, "Bessel j: Random Data");
+
+    //
+    // Special cases that are errors:
+    //
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(0)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(-2)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_j(T(2.5), T(-2)), std::domain_error);
 }
 
