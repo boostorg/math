@@ -184,7 +184,7 @@
         }
 
         template<class T>
-        T initial_guess(const T& v, unsigned m)
+        T initial_guess(const T& v, int m)
         {
           // Compute an estimate of the m'th root of cyl_bessel_j.
 
@@ -303,7 +303,7 @@
         }
 
         template<class T>
-        T initial_guess(T v, unsigned m)
+        T initial_guess(T v, int m)
         {
           // Compute an estimate of the m'th root of cyl_neumann.
 

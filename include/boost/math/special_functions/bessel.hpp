@@ -1,4 +1,5 @@
-//  Copyright (c) 2007 John Maddock
+//  Copyright (c) 2007, 2013 John Maddock
+//  Copyright Christopher Kormanyos 2013.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -11,7 +12,7 @@
 #define BOOST_MATH_BESSEL_HPP
 
 #ifdef _MSC_VER
-#pragma once
+#  pragma once
 #endif
 
 #include <boost/math/special_functions/detail/bessel_jy.hpp>
@@ -354,18 +355,25 @@ inline T sph_neumann_imp(unsigned v, T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline T cyl_bessel_j_zero_imp(T v, unsigned m, const Policy& pol)
+inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log.
 
-   static const char* function = "boost::math::cyl_bessel_j_zero<%1%>(%1%, unsigned)";
+   static const char* function = "boost::math::cyl_bessel_j_zero<%1%>(%1%, int)";
    // Handle negative order or if the zero'th zero is requested.
    // Return NaN if NaN is available or return 0 if NaN is not available.
    if(v < 0) 
+   {
       return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be >= 0 !", v, pol);
-   if(m == 0)
+   }
+   else if (!(boost::math::isfinite)(v) )
+   {
+     return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be finite >= 0 !", v, pol);
+   }
+   if(m <= 0)
+   {
       return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but must be > 0 !", m, pol);
-
+   }
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess<T>(v, m);
 
@@ -396,16 +404,24 @@ inline T cyl_bessel_j_zero_imp(T v, unsigned m, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline T cyl_neumann_zero_imp(T v, unsigned m, const Policy& pol)
+inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log.
 
-   static const char* function = "boost::math::cyl_neumann_zero<%1%>(%1%, unsigned)";
+   static const char* function = "boost::math::cyl_neumann_zero<%1%>(%1%, int)";
    // Handle negative order or if the zero'th zero is requested.
-   if(v < 0) 
+   if (!(boost::math::isfinite)(v) )
+   {
+     return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be finite >= 0 !", v, pol);
+   }
+   else if(v < 0)
+   {
       return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be >= 0 !", v, pol);
-   if(m == 0)
+   }
+   if(m <= 0)
+   {
       return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but must be > 0 !", m, pol);
+   }
 
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess<T>(v, m);
@@ -568,7 +584,7 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sp
 }
 
 template <class T, class Policy>
-inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_zero(T v, unsigned m, const Policy& /* pol */)
+inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_zero(T v, int m, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
@@ -584,7 +600,7 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_ze
 }
 
 template <class T>
-inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_bessel_j_zero(T v, unsigned m)
+inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_bessel_j_zero(T v, int m)
 {
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
    return cyl_bessel_j_zero<T, policies::policy<> >(v, m, policies::policy<>());
@@ -592,7 +608,7 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cy
 
 template <class T, class OutputIterator, class Policy>
 inline OutputIterator cyl_bessel_j_zero(T v,
-                              unsigned start_index,
+                              int start_index,
                               unsigned number_of_zeros,
                               OutputIterator out_it,
                               const Policy& pol)
@@ -608,7 +624,7 @@ inline OutputIterator cyl_bessel_j_zero(T v,
 
 template <class T, class OutputIterator>
 inline OutputIterator cyl_bessel_j_zero(T v,
-                              unsigned start_index,
+                              int start_index,
                               unsigned number_of_zeros,
                               OutputIterator out_it)
 {
@@ -616,7 +632,7 @@ inline OutputIterator cyl_bessel_j_zero(T v,
 }
 
 template <class T, class Policy>
-inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zero(T v, unsigned m, const Policy& /* pol */)
+inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zero(T v, int m, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
@@ -632,7 +648,7 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type cyl_neumann_zer
 }
 
 template <class T>
-inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neumann_zero(T v, unsigned m)
+inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cyl_neumann_zero(T v, int m)
 {
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
    return cyl_neumann_zero<T, policies::policy<> >(v, m, policies::policy<>());
@@ -640,7 +656,7 @@ inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type cy
 
 template <class T, class OutputIterator, class Policy>
 inline OutputIterator cyl_neumann_zero(T v,
-                             unsigned start_index,
+                             int start_index,
                              unsigned number_of_zeros,
                              OutputIterator out_it,
                              const Policy& pol)
@@ -656,7 +672,7 @@ inline OutputIterator cyl_neumann_zero(T v,
 
 template <class T, class OutputIterator>
 inline OutputIterator cyl_neumann_zero(T v,
-                             unsigned start_index,
+                             int start_index,
                              unsigned number_of_zeros,
                              OutputIterator out_it)
 {
