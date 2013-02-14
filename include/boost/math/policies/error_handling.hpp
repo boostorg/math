@@ -383,7 +383,7 @@ inline T raise_evaluation_error(
 }
 
 template <class T, class TargetType>
-inline T raise_rounding_error(
+inline TargetType raise_rounding_error(
            const char* function, 
            const char* message, 
            const T& val, 
@@ -392,11 +392,11 @@ inline T raise_rounding_error(
 {
    raise_error<boost::math::rounding_error, T>(function, message, val);
    // we never get here:
-   return T(0);
+   return TargetType(0);
 }
 
 template <class T, class TargetType>
-inline T raise_rounding_error(
+inline TargetType raise_rounding_error(
            const char* , 
            const char* , 
            const T& val, 
@@ -405,11 +405,12 @@ inline T raise_rounding_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
-   return std::numeric_limits<T>::is_specialized ? (val > 0 ? (std::numeric_limits<T>::max)() : -(std::numeric_limits<T>::max)()): val;
+   BOOST_STATIC_ASSERT(std::numeric_limits<TargetType>::is_specialized);
+   return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
 }
 
 template <class T, class TargetType>
-inline T raise_rounding_error(
+inline TargetType raise_rounding_error(
            const char* , 
            const char* , 
            const T& val, 
@@ -419,11 +420,12 @@ inline T raise_rounding_error(
    errno = ERANGE;
    // This may or may not do the right thing, but the user asked for the error
    // to be silent so here we go anyway:
-   return std::numeric_limits<T>::is_specialized ? (val > 0 ? (std::numeric_limits<T>::max)() : -(std::numeric_limits<T>::max)()): val;
+   BOOST_STATIC_ASSERT(std::numeric_limits<TargetType>::is_specialized);
+   return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
 }
 
 template <class T, class TargetType>
-inline T raise_rounding_error(
+inline TargetType raise_rounding_error(
            const char* function, 
            const char* message, 
            const T& val, 
@@ -542,7 +544,7 @@ inline T raise_evaluation_error(const char* function, const char* message, const
 }
 
 template <class T, class TargetType, class Policy>
-inline T raise_rounding_error(const char* function, const char* message, const T& val, const TargetType& t, const Policy&)
+inline TargetType raise_rounding_error(const char* function, const char* message, const T& val, const TargetType& t, const Policy&)
 {
    typedef typename Policy::rounding_error_type policy_type;
    return detail::raise_rounding_error(
