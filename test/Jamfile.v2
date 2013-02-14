@@ -87,6 +87,7 @@ run test_bessel_y.cpp test_instances//test_instances pch_light ../../test/build/
 run test_bessel_i.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_k.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_beta.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_bessel_airy_zeros.cpp ../../test/build//boost_unit_test_framework ;
 run test_beta_dist.cpp ../../test/build//boost_unit_test_framework ;
 run test_binomial.cpp  ../../test/build//boost_unit_test_framework
         : # command line
