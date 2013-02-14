@@ -9,9 +9,10 @@
 #ifdef _MSC_VER
 #  pragma warning(disable : 4127) // conditional expression is constant.
 #  pragma warning(disable : 4512) // assignment operator could not be generated.
+#  pragma warning(disable : 4996) // use -D_SCL_SECURE_NO_WARNINGS.
 #endif
 
-//#include <pch_light.hpp> // commente dout during testing.
+//#include <pch_light.hpp> // commented out during testing.
 
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/bessel.hpp>
@@ -61,12 +62,12 @@ treated differently than the remaining ones.
 
 So I would be most interested in various regions of order,
 each one tested with about 20 zeros should suffice:
-•   Order 219/100: This checks a region just below a critical cutoff
-•   Order 221/100: This checks a region just above a critical cutoff
-•   Order 0: Something always tends to go wrong at zero.
-•   Order 1/1000: A small order
-•   Order 71/19: Merely an intermediate order.
-•   Order 7001/19: A medium-large order, small enough to retain moderate efficiency of calculation.
+* Order 219/100: This checks a region just below a critical cutof
+* Order 221/100: This checks a region just above a critical cutoff
+* Order 0: Something always tends to go wrong at zero.
+* Order 1/1000: A small order
+* Order 71/19: Merely an intermediate order.
+* Order 7001/19: A medium-large order, small enough to retain moderate efficiency of calculation.
  
 If we would like, we could add a few selected high zeros
 such as the 1000th zero for a few modest orders such as 71/19, etc.
@@ -258,21 +259,43 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(7001)/19, 2U), static_cast<RealType>(392.175086576487375026512998530998525670012392177242L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(7001)/19, 20U), static_cast<RealType>(496.394350379382525575353754985779897202722983108025L), tolerance);
   
+
+
   //BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(0), -1), std::domain_error);
   //  warning C4245: 'argument' : conversion from 'int' to 'unsigned int', signed/unsigned mismatch
 
   //BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN()), -1), std::domain_error); // OK if unsigned.
   // doesn't throw :-(
 
+  
+  typedef boost::math::policies::policy<
+    boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+    boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+    boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+    boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+    boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+    boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+              > ignore_all_policy;
+
   if (std::numeric_limits<RealType>::has_quiet_NaN)
   {
     BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN()), 1U), std::domain_error);
+    BOOST_CHECK(boost::math::isnan<RealType>(cyl_bessel_j_zero(std::numeric_limits<RealType>::quiet_NaN(), 1U, ignore_all_policy())) );
+
   }
- // BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::infinity()), 0U), std::domain_error);
   //BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::infinity()), -1), std::domain_error); // OK if unsigned.
+
   if (std::numeric_limits<RealType>::has_infinity)
   {
-     BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::infinity()), 1U), std::domain_error);
+    BOOST_CHECK_THROW(cyl_bessel_j_zero(std::numeric_limits<RealType>::infinity(), 0U), std::domain_error);
+    //BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::infinity()), -1), std::domain_error); // -1 Should be caught as too big as unsigned.
+    BOOST_CHECK_THROW(cyl_bessel_j_zero(std::numeric_limits<RealType>::infinity(), 1U), std::domain_error);
+    //BOOST_CHECK_THROW(cyl_bessel_j_zero(0.0, std::numeric_limits<RealType>::infinity()), std::domain_error);
+    // warning C4244: 'argument' : conversion from 'std::numeric_limits<float>::_Ty' to 'unsigned int', possible loss of data.
+    // error C2664: 'boost::math::cyl_bessel_j_zero' : 
+    // cannot convert parameter 2 from 'boost::math::concepts::real_concept' to 'unsigned int'
+    // Check that NaN is returned is error ignored.
+    BOOST_CHECK(boost::math::isnan<RealType>(cyl_bessel_j_zero(std::numeric_limits<RealType>::infinity(), 1U, ignore_all_policy())) );
   }
   
   // Tests of cyc_neumann zero function (BesselKZero in Wolfram).
@@ -309,6 +332,24 @@ n |
 
   BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), 0U), std::domain_error);
   BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(-1), 2U), std::domain_error);
+  //BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), -1U), std::domain_error);
+  // Should fail when limit applied.
+
+  if (std::numeric_limits<RealType>::has_quiet_NaN)
+  {
+    BOOST_CHECK_THROW(cyl_neumann_zero(std::numeric_limits<RealType>::quiet_NaN(), 1U), std::domain_error);
+    // BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), std::numeric_limits<RealType>::quiet_NaN()), std::domain_error);
+    // warning C4244: 'argument' : conversion from 'std::numeric_limits<long double>::_Ty' to 'unsigned int', possible loss of data.
+    // error C2664: 'boost::math::cyl_bessel_j_zero' : cannot convert parameter 2 from 'boost::math::concepts::real_concept' to 'unsigned int'.
+  }
+  if (std::numeric_limits<RealType>::has_infinity)
+  {
+    BOOST_CHECK_THROW(cyl_neumann_zero(std::numeric_limits<RealType>::infinity(), 2U), std::domain_error);
+    // BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error);
+    // warning C4244: 'argument' : conversion from 'std::numeric_limits<long double>::_Ty' to 'unsigned int', possible loss of data.
+    // error C2664: 'boost::math::cyl_bessel_j_zero' :
+    // cannot convert parameter 2 from 'boost::math::concepts::real_concept' to 'unsigned int'
+  }
 
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(0), 1U), static_cast<RealType>(0.89357696627916752158488710205833824122514686193001L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(1), 2U), static_cast<RealType>(5.4296810407941351327720051908525841965837574760291L), tolerance);
@@ -524,6 +565,8 @@ properly resolves very closely spaced zeros.
   BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(1000000001U), static_cast<RealType>(-2.81078366687037302799011557215619265502627118526716E+6L), tolerance);
   
 } // template <class RealType> void test_spots(RealType)
+
+  #include <boost/multiprecision/cpp_dec_float.hpp>
 
 BOOST_AUTO_TEST_CASE(test_main)
 {
