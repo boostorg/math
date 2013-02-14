@@ -32,7 +32,7 @@
 // DESCRIPTION:
 // ~~~~~~~~~~~~
 //
-// This file tests the functions that evaluate zeros (or roots) of Bessel and Airy functions.
+// This file tests the functions that evaluate zeros (or roots) of Bessel, Neumann and Airy functions.
 
 // Spot tests which compare our results with selected values computed 
 // using the online special function calculator at functions.wolfram.com,
@@ -45,13 +45,14 @@
 
 // See also NIST Handbook of Mathetmatical Function http://dlmf.nist.gov/10.21
 /*
+Tests of cyl Bessel and cyl Neumann zeros.
+==========================================
 
 The algorithms for estimating the roots of both cyl. Bessel
 as well as cyl. Neumann have the same cross-over points,
 and also use expansions that have the same order of approximation.
 
-Therefore, tests will be equally effective for both functions
-in the regions of order.
+Therefore, tests will be equally effective for both functions in the regions of order.
 
 I have recently changed a critical cross-over in the algorithms
 from a value of order of 1.2 to a value of order of 2.2.
@@ -59,19 +60,36 @@ In addition, there is a critical cross-over in the rank of the
 zero from rank 1 to rank 2 and above. The first zero is
 treated differently than the remaining ones.
 
-So I would be most interested in various regions of order,
-each one tested with about 20 zeros should suffice:
-  * Order 219/100: This checks a region just below a critical cutof
-  * Order 221/100: This checks a region just above a critical cutoff
+The test cover various regions of order,
+each one tested with several zeros:
+  * Order 219/100: This checks a region just below a critical cutof.
+  * Order 221/100: This checks a region just above a critical cutoff.
   * Order 0: Something always tends to go wrong at zero.
-  * Order 1/1000: A small order
+  * Order 1/1000: A small order.
   * Order 71/19: Merely an intermediate order.
   * Order 7001/19: A medium-large order, small enough to retain moderate efficiency of calculation.
  
-If we would like, we could add a few selected high zeros
+There are also a few selected high zeros
 such as the 1000th zero for a few modest orders such as 71/19, etc.
 
+Tests of Airy zeros.
+====================
+
+The Airy zeros algorithms use tabulated values for the first 10 zeros,
+whereby algorithms are used for rank 11 and higher.
+So testing the zeros of Ai and Bi from 1 through 20 handles
+this cross-over nicely.
+
+In addition, the algorithms for the estimates of the zeros
+become increasingly accurate for larger, negative argument.
+
+On the other hand, the zeros become increasingly close
+for large, negative argument. So another nice test
+involves testing pairs of zeros for different orders of
+magnitude of the zeros, to insure that the program
+properly resolves very closely spaced zeros.
 */
+
 
 template <class RealType>
 void test_bessel_zeros(RealType)
@@ -99,17 +117,32 @@ void test_bessel_zeros(RealType)
   {
     //BOOST_CHECK_EQUAL(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::infinity()), 1),
     //  static_cast<RealType>(std::numeric_limits<RealType>::infinity()) );
-    // unknown location(0): fatal error in "test_main_caller( argc, argv )": 
-    // class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class std::domain_error> >:
-    // Error in function boost::math::cbrt<long double>(long double): Argument to function must be finite but got 1.#INF.
-    //BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::infinity()), 1),
-    // std::domain_error);
+    // unknown location(0): fatal error in "test_main":
+    // class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class std::domain_error> >: 
+    // Error in function boost::math::cyl_bessel_j_zero<double>(double, int): Order argument is 1.#INF, but must be finite >= 0 !
+    // Note that the reported type long double is not the type of the original call RealType,
+    // but the promoted value, here long double, if applicable.
+    BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::infinity()), 1),
+     std::domain_error);
+    BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(-std::numeric_limits<RealType>::infinity()), 1),
+     std::domain_error);
 
   }
+  // Test with maximum value of v that will cause evaluation error
   //BOOST_CHECK_THROW(cyl_bessel_j_zero(boost::math::tools::max_value<RealType>(), 1), std::domain_error);
-   //   unknown location(0): fatal error in "test_main_caller( argc, argv )": 
-   //class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class boost::math::rounding_error> >:
-   //  Error in function boost::math::iround<double>(double): Value 3.4028234663852886e+038 can not be represented in the target integer type.
+  // unknown location(0): fatal error in "test_main": 
+  // class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class boost::math::evaluation_error> >: 
+  // Error in function boost::math::bessel_jy<double>(double,double): Order of Bessel function is too large to evaluate: got 3.4028234663852886e+038
+  
+  BOOST_CHECK_THROW(cyl_bessel_j_zero(boost::math::tools::max_value<RealType>(), 1), boost::math::evaluation_error);
+
+  BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(boost::math::tools::min_value<RealType>(), 1),
+    static_cast<RealType>(2.4048255576957727686216318793264546431242449091460L), tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(-cyl_bessel_j_zero(boost::math::tools::min_value<RealType>(), 1),
+    static_cast<RealType>(-2.4048255576957727686216318793264546431242449091460L), tolerance);
+
+  // Checks on some spot values.
 
   // http://mathworld.wolfram.com/BesselFunctionZeros.html provides some spot values,
   // evaluation at 50 deciaml digits using WoldramAlpha.
@@ -259,14 +292,13 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(7001)/19, 20), static_cast<RealType>(496.394350379382525575353754985779897202722983108025L), tolerance);
   
 
+  // Confirm that negative m throws domain_error.
+  BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(0), -1), std::domain_error);
+  // unknown location(0): fatal error in "test_main": 
+  // class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class std::domain_error> >:
+  // Error in function boost::math::cyl_bessel_j_zero<double>(double, int): Requested the -1'th zero, but must be > 0 !
 
-  //BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(0), -1), std::domain_error);
-  //  warning C4245: 'argument' : conversion from 'int' to 'unsigned int', signed/unsigned mismatch
-
-  //BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN()), -1), std::domain_error); // OK if unsigned.
-  // doesn't throw :-(
-
-  
+  // Confirm that a C-style ignore_all policy returns NaN for bad input.
   typedef boost::math::policies::policy<
     boost::math::policies::domain_error<boost::math::policies::ignore_error>,
     boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
@@ -277,28 +309,27 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
               > ignore_all_policy;
 
   if (std::numeric_limits<RealType>::has_quiet_NaN)
-  {
+  { 
     BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN()), 1), std::domain_error);
+    // bad m returns NaN.
     BOOST_CHECK(boost::math::isnan<RealType>(cyl_bessel_j_zero(std::numeric_limits<RealType>::quiet_NaN(), 1, ignore_all_policy())) );
-
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN()), -1), std::domain_error); 
   }
-  //BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::infinity()), -1), std::domain_error); // OK if unsigned.
+  else
+  { // real_concept bad m returns zero.
+    //std::cout << boost::math::cyl_bessel_j_zero(static_cast<RealType>(0), -1, ignore_all_policy()) << std::endl; // 0 for real_concept.
+      BOOST_CHECK_EQUAL(boost::math::cyl_bessel_j_zero(static_cast<RealType>(0), -1, ignore_all_policy() ), 0);
+  }
 
   if (std::numeric_limits<RealType>::has_infinity)
   {
     BOOST_CHECK_THROW(cyl_bessel_j_zero(std::numeric_limits<RealType>::infinity(), 0), std::domain_error);
-    //BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::infinity()), -1), std::domain_error); // -1 Should be caught as too big as unsigned.
     BOOST_CHECK_THROW(cyl_bessel_j_zero(std::numeric_limits<RealType>::infinity(), 1), std::domain_error);
-    //BOOST_CHECK_THROW(cyl_bessel_j_zero(0.0, std::numeric_limits<RealType>::infinity()), std::domain_error);
-    // warning C4244: 'argument' : conversion from 'std::numeric_limits<float>::_Ty' to 'unsigned int', possible loss of data.
-    // error C2664: 'boost::math::cyl_bessel_j_zero' : 
-    // cannot convert parameter 2 from 'boost::math::concepts::real_concept' to 'unsigned int'
-    // Check that NaN is returned is error ignored.
+    // Check that NaN is returned if error ignored.
     BOOST_CHECK(boost::math::isnan<RealType>(cyl_bessel_j_zero(std::numeric_limits<RealType>::infinity(), 1, ignore_all_policy())) );
   }
   
-  // Tests of cyc_neumann zero function (BesselKZero in Wolfram).
-
+  // Tests of cyc_neumann zero function (BesselKZero in Wolfram for spot values).
   /*
   Table[N[BesselKZero[0, n], 50], {n, 1, 5, 1}]
 n | 
@@ -331,23 +362,17 @@ n |
 
   BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), 0), std::domain_error);
   BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(-1), 2), std::domain_error);
-  //BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), -1), std::domain_error);
-  // Should fail when limit applied.
+  BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), -1), std::domain_error);
 
   if (std::numeric_limits<RealType>::has_quiet_NaN)
   {
     BOOST_CHECK_THROW(cyl_neumann_zero(std::numeric_limits<RealType>::quiet_NaN(), 1), std::domain_error);
-    // BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), std::numeric_limits<RealType>::quiet_NaN()), std::domain_error);
-    // warning C4244: 'argument' : conversion from 'std::numeric_limits<long double>::_Ty' to 'unsigned int', possible loss of data.
-    // error C2664: 'boost::math::cyl_bessel_j_zero' : cannot convert parameter 2 from 'boost::math::concepts::real_concept' to 'unsigned int'.
+    BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), -1), std::domain_error);
   }
   if (std::numeric_limits<RealType>::has_infinity)
   {
     BOOST_CHECK_THROW(cyl_neumann_zero(std::numeric_limits<RealType>::infinity(), 2), std::domain_error);
-    // BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), std::numeric_limits<RealType>::infinity()), std::domain_error);
-    // warning C4244: 'argument' : conversion from 'std::numeric_limits<long double>::_Ty' to 'unsigned int', possible loss of data.
-    // error C2664: 'boost::math::cyl_bessel_j_zero' :
-    // cannot convert parameter 2 from 'boost::math::concepts::real_concept' to 'unsigned int'
+    BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), -1), std::domain_error);
   }
 
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(0), 1), static_cast<RealType>(0.89357696627916752158488710205833824122514686193001L), tolerance);
@@ -363,9 +388,7 @@ n |
   }
   // Order 0: Something always tends to go wrong at zero.
 
-  // TODO ???
-
-  /* Order 219/100: This checks a region just below a critical cutoff.
+  /* Order 219/100: This checks accuracy in a region just below a critical cutoff.
 
   Table[N[BesselKZero[219/100, n], 50], {n, 1, 20, 4}]
 
@@ -442,38 +465,29 @@ n |
    Standard computation time exceeded :-(
  */
 
-// Tests of Airy zeros.
-
-
-/*  The algorithms use tabulated values for the first 10 zeros,
-whereby algorithms are used for rank 11 and higher.
-So testing the zeros of Ai and Bi from 1 through 20 handles
-this cross-over nicely.
-
-In addition, the algorithms for the estimates of the zeros
-become increasingly accurate for larger, negative argument.
-
-On the other hand, the zeros become increasingly close
-for large, negative argument. So another nice test
-involves testing pairs of zeros for different orders of
-magnitude of the zeros, to insure that the program
-properly resolves very closely spaced zeros.
-*/
-
   // Test Data for airy_ai
    using boost::math::airy_ai_zero; // 
 
    using boost::math::isnan;
 
   if (std::numeric_limits<RealType>::has_quiet_NaN)
-  {
+  { // return NaN.
     BOOST_CHECK(isnan(airy_ai_zero<RealType>(0)) );
+    BOOST_CHECK(boost::math::isnan(airy_ai_zero<RealType>(std::numeric_limits<unsigned>::min())) );
   }
+  else
+  { // real_concept NaN not available, so return zero.
+    BOOST_CHECK_EQUAL(airy_ai_zero<RealType>(0), 0);
+    // BOOST_CHECK_EQUAL(airy_ai_zero<RealType>(-1), 0); //  warning C4245: 'argument' : conversion from 'int' to 'unsigned int', signed/unsigned mismatch
+  }
+
+  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.756393184, tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<int>::max()), -4678579.3330197316, tolerance);
 
   // Can't abuse with infinity because won't compile - no conversion.
   //if (std::numeric_limits<RealType>::has_infinity)
   //{
-  //  BOOST_CHECK(isnan(airy_bi_zero<RealType>(std::numeric_limits<RealType>::infinity)) );
+  //  BOOST_CHECK(isnan(airy_bi_zero<RealType>(-1)) );
   //}
 
 
@@ -518,9 +532,18 @@ properly resolves very closely spaced zeros.
   using boost::math::airy_bi_zero;
 
   if (std::numeric_limits<RealType>::has_quiet_NaN)
-  {
+  { // return NaN.
     BOOST_CHECK(isnan(airy_bi_zero<RealType>(0)) );
+    BOOST_CHECK(boost::math::isnan(airy_bi_zero<RealType>(std::numeric_limits<unsigned>::min())) );
   }
+  else
+  { // real_concept NaN not available, so return zero.
+    BOOST_CHECK_EQUAL(airy_bi_zero<RealType>(0), 0);
+    // BOOST_CHECK_EQUAL(airy_bi_zero<RealType>(-1), 0); //  warning C4245: 'argument' : conversion from 'int' to 'unsigned int', signed/unsigned mismatch
+  }
+
+  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.7558167893, tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<int>::max()), -4678579.3322935198, tolerance);
 
   // Can't abuse with infinity because won't compile - no conversion.
   //if (std::numeric_limits<RealType>::has_infinity)
