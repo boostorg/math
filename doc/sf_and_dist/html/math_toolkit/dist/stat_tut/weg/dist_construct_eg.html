@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Distribution Construction Example</title>
+<title>Distribution Construction Examples</title>
 <link rel="stylesheet" href="../../../../../../../../../doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
@@ -24,25 +24,29 @@
 </div>
 <div class="section math_toolkit_dist_stat_tut_weg_dist_construct_eg">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="math_toolkit.dist.stat_tut.weg.dist_construct_eg"></a><a class="link" href="dist_construct_eg.html" title="Distribution Construction Example">Distribution
-          Construction Example</a>
+<a name="math_toolkit.dist.stat_tut.weg.dist_construct_eg"></a><a class="link" href="dist_construct_eg.html" title="Distribution Construction Examples">Distribution
+          Construction Examples</a>
 </h5></div></div></div>
 <p>
-            See <a href="../../../../../../../example/distribution_construction.cpp" target="_top">distribution_construction.cpp</a>
-            for full source code.
-          </p>
-<p>
             The structure of distributions is rather different from some other statistical
-            libraries, for example in less object-oriented language like FORTRAN
-            and C, that provide a few arguments to each free function. This library
-            provides each distribution as a template C++ class. A distribution is
-            constructed with a few arguments, and then member and non-member functions
-            are used to find values of the distribution, often a function of a random
-            variate.
+            libraries, for example, those written in less object-oriented language
+            like FORTRAN and C: these provide a few arguments to each free function.
           </p>
 <p>
-            First we need some includes to access the negative binomial distribution
-            (and the binomial, beta and gamma too).
+            Boost.Math library provides each distribution as a template C++ class.
+            A distribution is constructed with a few arguments, and then member and
+            non-member functions are used to find values of the distribution, often
+            a function of a random variate.
+          </p>
+<p>
+            For this demonstration, first we need some includes to access the negative
+            binomial distribution (and the binomial, beta and gamma distributions
+            too).
+          </p>
+<p>
+            To demonstrate the use with a high precision User-defined floating-point
+            type <code class="computeroutput"><span class="identifier">cpp_dec_float</span></code> we
+            also need an include from Boost.Multiprecision.
           </p>
 <p>
 </p>
@@ -53,6 +57,8 @@
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">beta</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for beta_distribution.</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">gamma</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for gamma_distribution.</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">normal</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for normal_distribution.</span>
+
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">multiprecision</span><span class="special">/</span><span class="identifier">cpp_dec_float</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// for cpp_dec_float_100</span>
 </pre>
 <p>
           </p>
@@ -79,8 +85,10 @@
 <p>
           </p>
 <p>
-            but this might risk ambiguity with names in std random so *much better
-            is explicit <code class="computeroutput"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span> </code> * ... statements like
+            but this might risk ambiguity with names in <code class="computeroutput"><span class="identifier">std</span>
+            <span class="identifier">random</span></code> so <span class="bold"><strong>much</strong></span>
+            better is explicit <code class="computeroutput"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span></code>
+            statements, for example:
           </p>
 <p>
 </p>
@@ -92,19 +100,21 @@
             and we can still reduce typing.
           </p>
 <p>
-            Since the vast majority of applications use will be using double precision,
-            the template argument to the distribution (RealType) defaults to type
-            double, so we can also write:
+            Since the vast majority of applications use will be using <code class="computeroutput"><span class="keyword">double</span></code> precision, the template argument
+            to the distribution (<code class="computeroutput"><span class="identifier">RealType</span></code>)
+            defaults to type <code class="computeroutput"><span class="keyword">double</span></code>,
+            so we can also write:
           </p>
 <p>
 </p>
-<pre class="programlisting"><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">mydist9</span><span class="special">(</span><span class="number">8.</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span> <span class="comment">// Uses default RealType = double.</span>
+<pre class="programlisting"><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">mydist9</span><span class="special">(</span><span class="number">8.</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span> <span class="comment">// Uses default `RealType = double`.</span>
 </pre>
 <p>
           </p>
 <p>
-            But the name "negative_binomial_distribution" is still inconveniently
-            long, so for most distributions, a convenience typedef is provided, for
+            But the name <code class="computeroutput"><span class="identifier">negative_binomial_distribution</span></code>
+            is still inconveniently long, so, for most distributions, a convenience
+            <code class="computeroutput"><span class="keyword">typedef</span></code> is provided, for
             example:
           </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">negative_binomial</span><span class="special">;</span> <span class="comment">// Reserved name of type double.</span>
@@ -115,9 +125,9 @@
 <th align="left">Caution</th>
 </tr>
 <tr><td align="left" valign="top"><p>
-              This convenience typedef is <span class="emphasis"><em>not</em></span> provided if a
-              clash would occur with the name of a function: currently only "beta"
-              and "gamma" fall into this category.
+              This convenience typedef is <span class="bold"><strong>not provided</strong></span>
+              if a clash would occur with the name of a function: currently only
+              <code class="computeroutput"><span class="identifier">beta</span></code> and <code class="computeroutput"><span class="identifier">gamma</span></code> fall into this category.
             </p></td></tr>
 </table></div>
 <p>
@@ -216,13 +226,13 @@ error C3861: 'mybetad0': identifier not found
           </p>
 <p>
 </p>
-<pre class="programlisting"><span class="comment">// Explicit double precision:</span>
+<pre class="programlisting"><span class="comment">// Explicit double precision:  both arguments are double:</span>
 <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span>        <span class="identifier">mydist1</span><span class="special">(</span><span class="number">8.</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
 
 <span class="comment">// Explicit float precision, double arguments are truncated to float:</span>
 <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span>         <span class="identifier">mydist2</span><span class="special">(</span><span class="number">8.</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
 
-<span class="comment">// Explicit float precision, integer &amp; double arguments converted to float.</span>
+<span class="comment">// Explicit float precision, integer &amp; double arguments converted to float:</span>
 <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span>         <span class="identifier">mydist3</span><span class="special">(</span><span class="number">8</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
 
 <span class="comment">// Explicit float precision, float arguments, so no conversion:</span>
@@ -240,30 +250,115 @@ error C3861: 'mybetad0': identifier not found
 <p>
           </p>
 <p>
-            And if you have your own RealType called MyFPType, for example NTL RR
-            (an arbitrary precision type), then we can write:
+            And you can use your own RealType, for example, <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cpp_dec_float_50</span></code>
+            (an arbitrary 50 decimal digits precision type), then we can write:
           </p>
-<pre class="programlisting"><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">MyFPType</span><span class="special">&gt;</span>  <span class="identifier">mydist6</span><span class="special">(</span><span class="number">8</span><span class="special">,</span> <span class="number">1</span><span class="special">);</span> <span class="comment">// Integer arguments -&gt; MyFPType.</span>
+<p>
+</p>
+<pre class="programlisting"> <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">;</span>
+
+ <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;</span>  <span class="identifier">mydist8</span><span class="special">(</span><span class="number">8</span><span class="special">,</span> <span class="number">0.25</span><span class="special">);</span>
+ <span class="comment">// `integer` arguments are promoted to your RealType exactly, but</span>
+ <span class="comment">// `double` argument are converted to RealType,</span>
+ <span class="comment">// possibly losing precision, so don't write:</span>
+
+ <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;</span>  <span class="identifier">mydist20</span><span class="special">(</span><span class="number">8</span><span class="special">,</span> <span class="number">0.23456789012345678901234567890</span><span class="special">);</span>
+<span class="comment">// to avoid truncation of second parameter to `0.2345678901234567`.</span>
+
+ <span class="identifier">negative_binomial_distribution</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;</span>  <span class="identifier">mydist21</span><span class="special">(</span><span class="number">8</span><span class="special">,</span> <span class="identifier">cpp_dec_float_50</span><span class="special">(</span><span class="string">"0.23456789012345678901234567890"</span><span class="special">)</span> <span class="special">);</span>
+
+ <span class="comment">// Ensure that all potentially significant digits are shown.</span>
+ <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;::</span><span class="identifier">digits10</span><span class="special">);</span>
+ <span class="identifier">cpp_dec_float_50</span> <span class="identifier">x</span><span class="special">(</span><span class="string">"1.23456789012345678901234567890"</span><span class="special">);</span>
+ <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">mydist8</span><span class="special">,</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
-<h6>
+<p>
+          </p>
+<pre class="programlisting"><span class="identifier">showing</span>  <span class="number">0.00012630010495970320103876754721976419438231705359935</span>
+</pre>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../../../../../../../../doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+              When using multiprecision, it is all too easy to get accidental truncation!
+            </p></td></tr>
+</table></div>
+<p>
+            For example, if you write
+          </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">mydist8</span><span class="special">,</span> <span class="number">1.23456789012345678901234567890</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</pre>
+<p>
+          </p>
+<p>
+            showing 0.00012630010495970318465064569310967179576805651692929, which
+            is wrong at about the 17th decimal digit!
+          </p>
+<p>
+            This is because the value provided is truncated to a <code class="computeroutput"><span class="keyword">double</span></code>,
+            effectively <code class="computeroutput"><span class="keyword">double</span> <span class="identifier">x</span>
+            <span class="special">=</span> <span class="number">1.23456789012345678901234567890</span><span class="special">;</span></code>
+          </p>
+<p>
+            Then the now <code class="computeroutput"><span class="keyword">double</span> <span class="identifier">x</span></code>
+            is passed to function <code class="computeroutput"><span class="identifier">pdf</span></code>,
+            and this truncated <code class="computeroutput"><span class="keyword">double</span></code>
+            value is finally promoted to <code class="computeroutput"><span class="identifier">cpp_dec_float_50</span></code>.
+          </p>
+<p>
+            Another way of quietly getting the wrong answer is to write:
+          </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">mydist8</span><span class="special">,</span> <span class="identifier">cpp_dec_float_50</span><span class="special">(</span><span class="number">1.23456789012345678901234567890</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</pre>
+<p>
+          </p>
+<p>
+            A correct way from a multi-digit string value is
+          </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">pdf</span><span class="special">(</span><span class="identifier">mydist8</span><span class="special">,</span> <span class="identifier">cpp_dec_float_50</span><span class="special">(</span><span class="string">"1.23456789012345678901234567890"</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</pre>
+<p>
+          </p>
+<div class="tip"><table border="0" summary="Tip">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../../../../../doc/src/images/tip.png"></td>
+<th align="left">Tip</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+              Getting about 17 decimal digits followed by many zeros is often a sign
+              of accidental truncation.
+            </p></td></tr>
+</table></div>
+<h5>
 <a name="math_toolkit.dist.stat_tut.weg.dist_construct_eg.h0"></a>
             <span class="phrase"><a name="math_toolkit.dist.stat_tut.weg.dist_construct_eg.default_arguments_to_distribution_constructors_"></a></span><a class="link" href="dist_construct_eg.html#math_toolkit.dist.stat_tut.weg.dist_construct_eg.default_arguments_to_distribution_constructors_">Default
             arguments to distribution constructors.</a>
-          </h6>
+          </h5>
 <p>
             Note that default constructor arguments are only provided for some distributions.
-            So if you wrongly assume a default argument you will get an error message,
+            So if you wrongly assume a default argument, you will get an error message,
             for example:
           </p>
 <pre class="programlisting"><span class="identifier">negative_binomial_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">mydist8</span><span class="special">;</span>
 </pre>
 <pre class="programlisting">error C2512 no appropriate default constructor available.</pre>
 <p>
-            No default constructors are provided for the negative binomial, because
+            No default constructors are provided for the <code class="computeroutput"><span class="identifier">negative</span>
+            <span class="identifier">binomial</span></code> distribution, because
             it is difficult to chose any sensible default values for this distribution.
+          </p>
+<p>
             For other distributions, like the normal distribution, it is obviously
-            very useful to provide 'standard' defaults for the mean and standard
-            deviation thus:
+            very useful to provide 'standard' defaults for the mean (zero) and standard
+            deviation (unity) thus:
           </p>
 <pre class="programlisting"><span class="identifier">normal_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">mean</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">RealType</span> <span class="identifier">sd</span> <span class="special">=</span> <span class="number">1</span><span class="special">);</span>
 </pre>
@@ -284,14 +379,18 @@ error C3861: 'mybetad0': identifier not found
 <p>
           </p>
 <p>
-            There is no useful output from this program, of course.
+            There is no useful output from this demonstration program, of course.
+          </p>
+<p>
+            See <a href="../../../../../../../example/distribution_construction.cpp" target="_top">distribution_construction.cpp</a>
+            for full source code.
           </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang
-      Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin
-      Sobotta<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs
+      van den Berg, Benjamin Sobotta and Christopher Kormanyos<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

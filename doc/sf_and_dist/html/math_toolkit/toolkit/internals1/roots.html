@@ -69,8 +69,8 @@
         </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-              <code class="computeroutput"><span class="identifier">newton_raphson_iterate</span></code>performs
-              second order <a class="link" href="roots.html#newton">Newton-Raphson iteration</a>,
+              <code class="computeroutput"><span class="identifier">newton_raphson_iterate</span></code>
+              performs second order <a class="link" href="roots.html#newton">Newton-Raphson iteration</a>,
             </li>
 <li class="listitem">
               <code class="computeroutput"><span class="identifier">halley_iterate</span></code> and<code class="computeroutput"><span class="identifier">schroeder_iterate</span></code> perform third order
@@ -321,13 +321,13 @@
 <span class="special">}</span>
 </pre>
 <p>
-          Using the test data in libs/math/test/cbrt_test.cpp this found the cube
-          root exact to the last digit in every case, and in no more than 6 iterations
-          at double precision. However, you will note that a high precision was used
-          in this example, exactly what was warned against earlier on in these docs!
-          In this particular case it is possible to compute f(x) exactly and without
-          undue cancellation error, so a high limit is not too much of an issue.
-          However, reducing the limit to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span>
+          Using the test data in <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">cbrt_test</span><span class="special">.</span><span class="identifier">cpp</span></code>
+          this found the cube root exact to the last digit in every case, and in
+          no more than 6 iterations at double precision. However, you will note that
+          a high precision was used in this example, exactly what was warned against
+          earlier on in these docs! In this particular case it is possible to compute
+          f(x) exactly and without undue cancellation error, so a high limit is not
+          too much of an issue. However, reducing the limit to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">digits</span>
           <span class="special">*</span> <span class="number">2</span> <span class="special">/</span> <span class="number">3</span></code> gave
           full precision in all but one of the test cases (and that one was out by
           just one bit). The maximum number of iterations remained 6, but in most
@@ -339,7 +339,8 @@
           of z correctly. (These are left as an exercise for the reader!)
         </p>
 <p>
-          The boost::math::cbrt function also includes these and other improvements.
+          The <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cbrt</span></code> function also includes these and
+          other improvements.
         </p>
 <p>
           Now let's adapt the functor slightly to return the second derivative as
@@ -394,13 +395,13 @@
           and see".
         </p>
 <p>
-          Finally, had we called cbrt with <a href="http://shoup.net/ntl/doc/RR.txt" target="_top">NTL::RR</a>
-          set to 1000 bit precision, then full precision can be obtained with just
-          7 iterations. To put that in perspective, an increase in precision by a
-          factor of 20, has less than doubled the number of iterations. That just
-          goes to emphasise that most of the iterations are used up getting the first
-          few digits correct: after that these methods can churn out further digits
-          with remarkable efficiency.
+          Finally, had we called <code class="computeroutput"><span class="identifier">cbrt</span></code>
+          with <a href="http://shoup.net/ntl/doc/RR.txt" target="_top">NTL::RR</a> set to
+          1000 bit precision, then full precision can be obtained with just 7 iterations.
+          To put that in perspective, an increase in precision by a factor of 20,
+          has less than doubled the number of iterations. That just goes to emphasise
+          that most of the iterations are used up getting the first few digits correct:
+          after that these methods can churn out further digits with remarkable efficiency.
         </p>
 <p>
           Or to put it another way: <span class="emphasis"><em>nothing beats a really good initial
@@ -409,9 +410,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang
-      Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin
-      Sobotta<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs
+      van den Berg, Benjamin Sobotta and Christopher Kormanyos<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

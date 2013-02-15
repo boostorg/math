@@ -88,15 +88,16 @@
         of guard digits. However it should be remembered that if the result is a
         <span class="emphasis"><em>transcendental number</em></span> then as a point of principle we
         can never be sure that the result is accurate to more than 1 ulp. This is
-        an example of <span class="emphasis"><em>the table makers dilemma</em></span>: consider what
-        happens if the first guard digit is a one, and the remaining guard digits
-        are all zero. Do we have a tie or not? Since the only thing we can tell about
-        a transcendental number is that its digits have no particular pattern, we
-        can never tell if we have a tie, no matter how many guard digits we have.
-        Therefore, we can never be completely sure that the result has been rounded
-        in the right direction. Of course, transcendental numbers that just happen
-        to be a tie - for however many guard digits we have - are extremely rare,
-        and get rarer the more guard digits we have, but even so....
+        an example of what <a href="http://en.wikipedia.org/wiki/William_Kahan" target="_top">http://en.wikipedia.org/wiki/William_Kahan</a>
+        called <a href="http://en.wikipedia.org/wiki/Rounding#The_table-maker.27s_dilemma" target="_top">http://en.wikipedia.org/wiki/Rounding#The_table-maker.27s_dilemma</a>:
+        consider what happens if the first guard digit is a one, and the remaining
+        guard digits are all zero. Do we have a tie or not? Since the only thing
+        we can tell about a transcendental number is that its digits have no particular
+        pattern, we can never tell if we have a tie, no matter how many guard digits
+        we have. Therefore, we can never be completely sure that the result has been
+        rounded in the right direction. Of course, transcendental numbers that just
+        happen to be a tie - for however many guard digits we have - are extremely
+        rare, and get rarer the more guard digits we have, but even so....
       </p>
 <p>
         Refer to the classic text <a href="http://docs.sun.com/source/806-3568/ncg_goldberg.html" target="_top">What
@@ -106,9 +107,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang
-      Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin
-      Sobotta<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs
+      van den Berg, Benjamin Sobotta and Christopher Kormanyos<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

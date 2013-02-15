@@ -4,7 +4,7 @@ The special functions, distributions, constants and tools in this library
 can be used with a number of high-precision libraries, including:
 
 * __multiprecision
-* e_float
+* __e_float
 * __NTL
 * __GMP
 * __MPFR
@@ -29,8 +29,8 @@ decimal digits, though examples of computing tens of thousands of digits have be
 [section:why_high_precision  Why use a high-precision library rather than built-in floating-point types?]
 
 For nearly all applications, the built-in floating-point types, `double`
-(and `long double` if this offers higher precision) offer enough precision,
-typically a dozen decimal digits.
+(and `long double` if this offers higher precision than `double`)
+offer enough precision, typically a dozen decimal digits.
 
 Some reasons why one would want to use a higher precision:
 
@@ -114,9 +114,6 @@ The table output is:
 
 [/ibeta_mp_output_1]
 
-
-
-
 [endsect] [/section:use_multiprecision Using Boost.Multiprecision]
 
 
@@ -139,12 +136,10 @@ Unfortunately neither `mpfr_class` nor `mpreal` quite satisfy our conceptual req
 so there is a very thin set of additional interfaces and some helper traits defined in
 [@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp] and
 [@../../../../../boost/math/bindings/mpreal.hpp boost/math/bindings/mpreal.hpp]
-that you
-should use in place of including 'gmpfrxx.h' or 'mpreal.h' directly.  The classes
-`mpfr_class` or `mpreal` are
+that you should use in place of including 'gmpfrxx.h' or 'mpreal.h' directly.
+The classes `mpfr_class` or `mpreal` are
 then usable unchanged once this header is included, so for example `mpfr_class`'s
-performance-enhancing
-expression templates are preserved and fully supported by this library:
+performance-enhancing expression templates are preserved and fully supported by this library:
 
    #include <boost/math/bindings/mpfr.hpp>
    #include <boost/math/special_functions/gamma.hpp>
@@ -185,8 +180,7 @@ There is a concept checking test program for mpfr support
 
 [section:e_float Using e_float Library]
 
-__multiprecision was a development from the e_float library [@http://calgo.acm.org/910.zip e_float (TOMS Algorithm 910)]
-by Christopher Kormanyos.
+__multiprecision was a development from the __e_float library by Christopher Kormanyos.
 
 e_float can still be used with Boost.Math library via the header:
 
@@ -232,6 +226,25 @@ There is a concept checking test program for NTL support
 
 
 [endsect] [/section:use_ntl Using With NTL - a High-Precision Floating-Point Library]
+
+[section:using_test Using without expression templates for Boost.Test and others]
+
+As noted in the __multiprecision documentation, certain program constructs will not compile
+when using expression templates.  One example that many users may encounter
+is Boost.Test (1.54 and earlier) when using macro BOOST_CHECK_CLOSE and BOOST_CHECK_CLOSE_FRACTION.
+
+If, for example, you wish to use any multiprecision type like `cpp_dec_float_50`
+in place of `double` to give more precision,
+you will need to override the default `boost::multiprecision::et_on` with
+`boost::multiprecision::et_off`.
+
+[import ../../example/test_cpp_float_close_fraction.cpp]
+
+[expression_template_1]
+
+A full example code is at [@../../../example/test_cpp_float_close_fraction.cpp test_cpp_float_close_fraction.cpp]
+
+[endsect] [/section:using_test Using without expression templates for Boost.Test and others]
 
 [endsect] [/section:high_precision Using With High-Precision Floating-Point Libraries]
 

@@ -328,7 +328,7 @@ and use the function's name as the link text.]
 [def __complements [link complements complements]]
 [def __performance [link math_toolkit.perf performance]]
 [def __building [link math_toolkit.main_overview.building building libraries]]
-
+[def __e_float [@http://calgo.acm.org/910.zip e_float (TOMS Algorithm 910)]]
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']

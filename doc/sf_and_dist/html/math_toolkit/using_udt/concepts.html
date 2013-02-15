@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit">
 <link rel="up" href="../using_udt.html" title="Use with User-Defined Floating-Point Types">
-<link rel="prev" href="e_float.html" title="e_float Support">
+<link rel="prev" href="high_precision/using_test.html" title="Using without expression templates for Boost.Test and others">
 <link rel="next" href="dist_concept.html" title="Conceptual Requirements for Distribution Types">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="e_float.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../using_udt.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="dist_concept.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="high_precision/using_test.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../using_udt.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="dist_concept.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section math_toolkit_using_udt_concepts">
 <div class="titlepage"><div><div><h3 class="title">
@@ -30,16 +30,22 @@
 <p>
         The functions, and statistical distributions in this library can be used
         with any type <span class="emphasis"><em>RealType</em></span> that meets the conceptual requirements
-        given below. All the built in floating point types will meet these requirements.
-        User defined types that meet the requirements can also be used. For example,
-        with <a class="link" href="use_ntl.html" title="Using With NTL - a High-Precision Floating-Point Library">a thin wrapper class</a>
-        one of the types provided with <a href="http://shoup.net/ntl/" target="_top">NTL (RR)</a>
-        can be used. Submissions of binding to other extended precision types would
-        also be most welcome!
+        given below. All the built-in floating-point types will meet these requirements.
+        User-defined types that meet the requirements can also be used.
       </p>
 <p>
-        The guiding principal behind these requirements, is that a <span class="emphasis"><em>RealType</em></span>
-        behaves just like a built in floating point type.
+        For example, with <a class="link" href="high_precision/use_ntl.html" title="Using NTL Library">a
+        thin wrapper class</a> one of the types provided with <a href="http://shoup.net/ntl/" target="_top">NTL
+        (RR)</a> can be used. But now that <a href="http://www.boost.org/doc/libs/1_53_0_beta1/libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
+        library is available, this has become the reference real number type.
+      </p>
+<p>
+        Submissions of binding to other extended precision types would also still
+        be welcome.
+      </p>
+<p>
+        The guiding principal behind these requirements is that a <span class="emphasis"><em>RealType</em></span>
+        behaves just like a built-in floating-point type.
       </p>
 <h5>
 <a name="math_toolkit.using_udt.concepts.h0"></a>
@@ -1351,9 +1357,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang
-      Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin
-      Sobotta<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs
+      van den Berg, Benjamin Sobotta and Christopher Kormanyos<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -1361,7 +1367,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="e_float.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../using_udt.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="dist_concept.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="high_precision/using_test.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../using_udt.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="dist_concept.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
