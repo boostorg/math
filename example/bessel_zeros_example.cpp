@@ -43,7 +43,7 @@ a many decimal digit precision. For 50 decimal digit precision we need to includ
 
 //`This file has the forward declaration signatures for the zero-finding functions:
 
-  #include <boost/math/special_functions/math_fwd.hpp>
+//  #include <boost/math/special_functions/math_fwd.hpp>
 
 /*`but more details are in the full documentation, for example at
 [@http://www.boost.org/doc/libs/1_53_0/libs/math/doc/sf_and_dist/html/math_toolkit/special/bessel/bessel_over.html Boost.Math Bessel functions]
@@ -106,6 +106,7 @@ private:
    T* p_sum;
 };
 
+
 //] [/bessel_zero_example_iterator_1]
 
 int main()
@@ -140,6 +141,33 @@ with this error message
   error C2338: Order must be a floating-point type.
 ``
 */
+
+/*` We can use a policy to ignore errors, C-style, returning some value
+perhaps infinity or NaN or the best that can be done. (See __user_error_handling). */
+    
+/*`Create a policy that ignores all errors (possibly unwise!).*/
+
+  typedef boost::math::policies::policy<
+    boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+    boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+    boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+    boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+    boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+    boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+              > ignore_all_policy;
+
+   // std::cout.precision(6); // Show 6 decimal digits.
+
+    double inf = std::numeric_limits<double>::infinity();
+    double nan = std::numeric_limits<double>::quiet_NaN();
+
+    double dodgy_root = boost::math::cyl_bessel_j_zero(-1.0, 1U, ignore_all_policy());
+    std::cout << "boost::math::cyl_bessel_j_zero(-1.0, 1U) " << dodgy_root << std::endl; // 1.#QNAN
+    double inf_root = boost::math::cyl_bessel_j_zero(inf, 1U, ignore_all_policy());
+    std::cout << "boost::math::cyl_bessel_j_zero(inf, 1U) " << inf_root << std::endl; // 1.#QNAN
+    double nan_root = boost::math::cyl_bessel_j_zero(nan, 1U, ignore_all_policy());
+    std::cout << "boost::math::cyl_bessel_j_zero(nan, 1U) " << nan_root << std::endl; // 1.#QNAN
+
 /*`Another version of `cyl_bessel_j_zero`  allows calculation of multiple zeros with one call,
 placing the results in a container, often `std::vector`.
 For example, generate five `double` roots of J[sub v] for integral order 2.
@@ -154,6 +182,8 @@ As column J[sub 2](x) in table 1 of
     std::copy(roots.begin(),
               roots.end(),
               std::ostream_iterator<double>(std::cout, "\n"));
+
+
 
 /*`Or generate 50 decimal digit roots of J[sub v] for non-integral order `v=71/19`.
 
@@ -176,6 +206,7 @@ We set the precision of the output stream and show trailing zeros to display a f
     std::copy(zeros.begin(), zeros.end(),
               std::ostream_iterator<float_type>(std::cout, "\n"));
 
+
 /*`The Neumann functions zeros are evaluated very similarly:
 */
     using boost::math::cyl_neumann_zero;
@@ -187,6 +218,11 @@ We set the precision of the output stream and show trailing zeros to display a f
     // Print the zeros to the output stream.
     std::copy(nzeros.begin(), nzeros.end(),
               std::ostream_iterator<float>(std::cout, "\n"));
+
+
+    std::cout << cyl_neumann_zero(static_cast<float_type>(220)/100, 1U) << std::endl;
+    // 3.6154383428745996706772556069431792744372398748422
+
 
 /*`Finally we show how the output interator can be used to compute a sum of zeros.
 
@@ -216,6 +252,92 @@ page 150 equation 40.
   {
     std::cout << "Throw exception " << ex.what() << std::endl;
   }
+  
+  // Show effect of 'bad' arguments that throw a domain_error exception.
+  try
+  { // Try a negative order v.
+    double dodgy_root = boost::math::cyl_bessel_j_zero(-1.0, 1U);
+    std::cout << "boost::math::cyl_bessel_j_zero(-1.0, 1U) " << dodgy_root << std::endl;
+    // Throw exception Error in function boost::math::cyl_bessel_j_zero<long double>(long double, unsigned):
+    // Order argument is -1, but must be >= 0 !
+  }
+  catch (std::exception ex)
+  {
+    std::cout << "Throw exception " << ex.what() << std::endl;
+  }
+
+  try
+  { // order v = inf
+     double inf = std::numeric_limits<double>::infinity();
+     double inf_root = boost::math::cyl_bessel_j_zero(inf, 1U);
+     std::cout << "boost::math::cyl_bessel_j_zero(inf, 1U) " << inf_root << std::endl;
+     // Throw exception Error in function boost::math::cyl_bessel_j_zero<long double>(long double, unsigned):
+     // Order argument is 1.#INF, but must be finite >= 0 !
+  }
+  catch (std::exception ex)
+  {
+    std::cout << "Throw exception " << ex.what() << std::endl;
+  }
+
+  try
+  { // order v = NaN
+     double nan = std::numeric_limits<double>::quiet_NaN();
+     double nan_root = boost::math::cyl_bessel_j_zero(nan, 1);
+     std::cout << "boost::math::cyl_bessel_j_zero(nan, 1U) " << nan_root << std::endl;
+     // Throw exception Error in function boost::math::cyl_bessel_j_zero<long double>(long double, unsigned):
+     // Order argument is 1.#QNAN, but must be finite >= 0 !
+  }
+  catch (std::exception ex)
+  {
+    std::cout << "Throw exception " << ex.what() << std::endl;
+  }
+
+
+
+  try
+  {   // Try a negative m.
+    double dodgy_root = boost::math::cyl_bessel_j_zero(0.0, -1);
+    //  warning C4146: unary minus operator applied to unsigned type, result still unsigned.
+    std::cout << "boost::math::cyl_bessel_j_zero(0.0, -1) " << dodgy_root << std::endl;
+    //  boost::math::cyl_bessel_j_zero(0.0, -1U) 6.74652e+009
+    // This *should* fail because m is unreasonably large.
+
+  }
+  catch (std::exception ex)
+  {
+    std::cout << "Throw exception " << ex.what() << std::endl;
+  }
+
+  try
+  { // m = inf
+     double inf = std::numeric_limits<double>::infinity();
+     double inf_root = boost::math::cyl_bessel_j_zero(0.0, inf);
+     // warning C4244: 'argument' : conversion from 'double' to 'unsigned int', possible loss of data
+     std::cout << "boost::math::cyl_bessel_j_zero(0.0, inf) " << inf_root << std::endl;
+     //  Throw exception Error in function boost::math::cyl_bessel_j_zero<long double>(long double, unsigned):
+     // Requested the 0'th zero, but must be > 0 !
+
+  }
+  catch (std::exception ex)
+  {
+    std::cout << "Throw exception " << ex.what() << std::endl;
+  }
+
+  try
+  { // m = NaN
+     double nan = std::numeric_limits<double>::quiet_NaN();
+     double nan_root = boost::math::cyl_bessel_j_zero(0.0, nan);
+     // warning C4244: 'argument' : conversion from 'double' to 'unsigned int', possible loss of data
+     std::cout << "boost::math::cyl_bessel_j_zero(0.0, nan) " << nan_root << std::endl;
+     // Throw exception Error in function boost::math::cyl_bessel_j_zero<long double>(long double, unsigned):
+     // Requested the 0'th zero, but must be > 0 !
+  }
+  catch (std::exception ex)
+  {
+    std::cout << "Throw exception " << ex.what() << std::endl;
+  }
+
+
 
  } // int main()
 
