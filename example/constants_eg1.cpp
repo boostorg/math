@@ -1,4 +1,4 @@
-// Copyright Paul Bristow 2012.
+// Copyright Paul Bristow 2013.
 // Copyright John Maddock 2010.
 
 // Use, modification and distribution are subject to the
@@ -42,14 +42,20 @@ Real area(Real r)
 
 int main()
 {
-  
+
   { // Boost.Math constants using function calls like pi().
     // using namespace boost::math::constants;
- 
+
    using boost::math::constants::pi;
    using boost::math::constants::one_div_two_pi;
 
-  cout.precision(numeric_limits<double>::max_digits10);
+#ifdef BOOST_NO_CXX11_NUMERIC_LIMITS
+     std::size_t max_digits10 = 2 + std::numeric_limits<double>::digits * 3010/10000;
+#else
+   std::size_t max_digits10 = std::numeric_limits<double>::max_digits10;
+#endif
+
+  std::cout.precision(max_digits10);
   cout << "double pi =  boost::math::double_constants::pi = " << pi<double>() << endl;
   //   double pi =  boost::math::double_constants::pi = 3.1415926535897931
   double r = 1.234567890123456789;
@@ -83,7 +89,7 @@ int main()
     double my2pi = two_pi; // Uses boost::math::double_constants::two_pi;
 
     cout << "double my2pi = " << my2pi << endl;
-    
+
     using boost::math::float_constants::e;
     float my_e = e;
     cout << "float my_e  " << my_e << endl;
@@ -138,7 +144,7 @@ int main()
     // For example, naively providing an @b integer instead of a floating-point type can be disastrous.
     // cout << "Area = " << area(2) << endl; // warning : 'return' : conversion from 'double' to 'int', possible loss of data
     // Failure to heed this warning can lead to very wrong answers!
-    //  Area = 12 !!  = 3 * 2 * 2 
+    //  Area = 12 !!  = 3 * 2 * 2
 //[math_constants_template_integer_type
     //cout << "Area = " << area(2) << endl; //   Area = 12!
     cout << "Area = " << area(2.) << endl;  //   Area = 12.566371
