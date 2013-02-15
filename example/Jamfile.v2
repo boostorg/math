@@ -32,7 +32,9 @@ project
       #  because serialization library is built with MS extensions enabled (default).
       <include>../../..
     ;
-
+    
+run bessel_zeros_example.cpp ;
+run test_cpp_float_close_fraction.cpp ;
 run binomial_coinflip_example.cpp ;
 run binomial_confidence_limits.cpp ;
 run binomial_example_nag.cpp ;
