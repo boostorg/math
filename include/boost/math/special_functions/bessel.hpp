@@ -357,9 +357,12 @@ inline T sph_neumann_imp(unsigned v, T x, const Policy& pol)
 template <class T, class Policy>
 inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
 {
-   BOOST_MATH_STD_USING // ADL of std names, needed for log.
-
    static const char* function = "boost::math::cyl_bessel_j_zero<%1%>(%1%, int)";
+
+   const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
+
+   const bool order_is_zero = ((v > -half_epsilon) && (v < +half_epsilon));
+
    // Handle negative order or if the zero'th zero is requested.
    // Return NaN if NaN is available or return 0 if NaN is not available.
    if(v < 0) 
@@ -372,12 +375,17 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
    }
    if(m <= 0)
    {
+      // Special case: The zero'th zero of Jv(x) is zero for v != 0.
+      if((m == 0) && (!order_is_zero))
+         return T(0);
+
+      // Otherwise, the zero'th zero of Jv(x) is not defined and requesting it raises a domain error.
       return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but must be > 0 !", m, pol);
    }
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess<T>(v, m);
 
-   // Select the maximum allowed iterations, being at least 24.
+   // Select the maximum allowed iterations from the policy.
    boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
 
    // Select the desired number of binary digits of precision.
@@ -406,8 +414,6 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
 template <class T, class Policy>
 inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
 {
-   BOOST_MATH_STD_USING // ADL of std names, needed for log.
-
    static const char* function = "boost::math::cyl_neumann_zero<%1%>(%1%, int)";
    // Handle negative order or if the zero'th zero is requested.
    if (!(boost::math::isfinite)(v) )
@@ -426,7 +432,7 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess<T>(v, m);
 
-   // Select the maximum allowed iterations, being at least 24.
+   // Select the maximum allowed iterations from the policy.
    boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
 
    // Select the desired number of binary digits of precision.

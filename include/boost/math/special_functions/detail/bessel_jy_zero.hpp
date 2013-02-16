@@ -253,8 +253,9 @@
 
           boost::math::tuple<T, T> operator()(const T& x) const
           {
-            const bool order_is_zero = (   (my_v > -boost::math::tools::epsilon<T>())
-                                        && (my_v < +boost::math::tools::epsilon<T>()));
+            const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
+
+            const bool order_is_zero = ((my_v > -half_epsilon) && (my_v < +half_epsilon));
 
             // Obtain Jv(x) and Jv'(x).
             // Chris's original code called the Bessel function implementation layer direct, 
@@ -372,13 +373,28 @@
 
           boost::math::tuple<T, T> operator()(const T& x) const
           {
+            const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
+
+            const bool order_is_zero = ((my_v > -half_epsilon) && (my_v < +half_epsilon));
+
             // Obtain Yv(x) and Yv'(x).
             // Chris's original code called the Bessel function implementation layer direct, 
             // but that circumvented optimizations for integer-orders.  Call the documented
             // top level functions instead, and let them sort out which implementation to use.
-            const T y_v      (boost::math::cyl_neumann(  my_v,      x, my_pol));
-            const T y_v_m1   (boost::math::cyl_neumann(T(my_v - 1), x, my_pol));
-            const T y_v_prime(y_v_m1 - ((my_v * y_v) / x));
+            T y_v;
+            T y_v_prime;
+
+            if(order_is_zero)
+            {
+              y_v       =  boost::math::cyl_neumann(0, x, my_pol);
+              y_v_prime = -boost::math::cyl_neumann(1, x, my_pol);
+            }
+            else
+            {
+                      y_v       = boost::math::cyl_neumann(  my_v,      x, my_pol);
+              const T y_v_m1     (boost::math::cyl_neumann(T(my_v - 1), x, my_pol));
+                      y_v_prime = y_v_m1 - ((my_v * y_v) / x);
+            }
 
             // Return a tuple containing both Yv(x) and Yv'(x).
             return boost::math::make_tuple(y_v, y_v_prime);
