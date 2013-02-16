@@ -22,7 +22,6 @@
 #endif
 
 #include <boost/math/tools/user.hpp>
-#include <boost/math/special_functions/detail/round_fwd.hpp>
 
 #if (defined(__CYGWIN__) || defined(__FreeBSD__) || defined(__NetBSD__) \
    || (defined(__hppa) && !defined(__OpenBSD__)) || (defined(__NO_LONG_DOUBLE_MATH) && (DBL_MANT_DIG != LDBL_MANT_DIG))) \
@@ -218,7 +217,7 @@
 //
 // Helper macro for using statements:
 //
-#define BOOST_MATH_STD_USING \
+#define BOOST_MATH_STD_USING_CORE \
    using std::abs;\
    using std::acos;\
    using std::cos;\
@@ -241,15 +240,9 @@
    using std::ceil;\
    using std::floor;\
    using std::log10;\
-   using std::sqrt;\
-   using boost::math::round;\
-   using boost::math::iround;\
-   using boost::math::lround;\
-   using boost::math::trunc;\
-   using boost::math::itrunc;\
-   using boost::math::ltrunc;\
-   using boost::math::modf;
+   using std::sqrt;
 
+#define BOOST_MATH_STD_USING BOOST_MATH_STD_USING_CORE
 
 namespace boost{ namespace math{
 namespace tools
