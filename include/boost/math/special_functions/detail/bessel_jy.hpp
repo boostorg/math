@@ -556,7 +556,7 @@ namespace boost { namespace math {
             if((cp != 0) && (tools::max_value<T>() * fabs(Yv_scale) < fabs(cp * Yv)))
                *Y = org_kind & need_y ? T(-sign(cp) * sign(Yv) * sign(Yv_scale) * policies::raise_overflow_error<T>(function, 0, pol)) : T(0);
             else
-               *Y = sp * Jv + (cp == 0 ? T(0) : T((cp * Yv) / Yv_scale));
+               *Y = (sp != 0 ? sp * Jv : T(0)) + (cp == 0 ? T(0) : T((cp * Yv) / Yv_scale));
          }
          else
          {
