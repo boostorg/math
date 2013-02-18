@@ -291,6 +291,11 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(7001)/19, 2), static_cast<RealType>(392.175086576487375026512998530998525670012392177242L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(7001)/19, 20), static_cast<RealType>(496.394350379382525575353754985779897202722983108025L), tolerance);
   
+  // Zero'th cases.
+  BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(0), 0), std::domain_error); // Zero'th zero of J0(x).
+  BOOST_CHECK(boost::math::cyl_bessel_j_zero(static_cast<RealType>(1), 0) == 0); // Zero'th zero of J1(x).
+  BOOST_CHECK(boost::math::cyl_bessel_j_zero(static_cast<RealType>(2), 0) == 0); // Zero'th zero of J2(x).
+
 
   // Confirm that negative m throws domain_error.
   BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(0), -1), std::domain_error);
@@ -481,8 +486,8 @@ n |
     // BOOST_CHECK_EQUAL(airy_ai_zero<RealType>(-1), 0); //  warning C4245: 'argument' : conversion from 'int' to 'unsigned int', signed/unsigned mismatch
   }
 
-  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.756393184, tolerance);
-  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<int>::max()), -4678579.3330197316, tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.75639318326103, tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<int>::max()), -4678579.33301973093739, tolerance);
 
   // Can't abuse with infinity because won't compile - no conversion.
   //if (std::numeric_limits<RealType>::has_infinity)
@@ -542,8 +547,8 @@ n |
     // BOOST_CHECK_EQUAL(airy_bi_zero<RealType>(-1), 0); //  warning C4245: 'argument' : conversion from 'int' to 'unsigned int', signed/unsigned mismatch
   }
 
-  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.7558167893, tolerance);
-  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<int>::max()), -4678579.3322935198, tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.75581678913522, tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<int>::max()), -4678579.33229351984573, tolerance);
 
   // Can't abuse with infinity because won't compile - no conversion.
   //if (std::numeric_limits<RealType>::has_infinity)

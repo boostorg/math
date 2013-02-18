@@ -135,7 +135,8 @@ void test_spots(T)
 {
    //
    // basic sanity checks, tolerance is 30 epsilon expressed as a percentage:
-   //
+   // Spot values are from http://functions.wolfram.com/webMathematica/FunctionEvaluation.jsp?name=BetaRegularized
+   // using precision of 50 decimal digits.
    T tolerance = boost::math::tools::epsilon<T>() * 3000;
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
@@ -240,7 +241,7 @@ void test_spots(T)
          static_cast<T>(1),
          static_cast<T>(32)/100),
       static_cast<T>(0.94856839398626914764591440181367780660208493234722L), tolerance);
-   
+
    // try with some integer arguments:
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
