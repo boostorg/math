@@ -180,6 +180,19 @@ void test_spots(T)
    // Lower tolerance on this one, is only really needed on Linux x86 systems, result is mostly down to std lib accuracy:
    BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(-53249.0/1024)), static_cast<T>(-1.2646559519067605488251406578743995122462767733517e-65L), tolerance * 3);
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+   // Test bug fixes in tgamma:
+   if(std::numeric_limits<T>::max_exponent10 > 244)
+   {
+      BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(142.75)), static_cast<T>(7.8029496083318133344429227511387928576820621466e244L), tolerance);
+   }
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+
    int sign = 1;
    BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(3.5), &sign), static_cast<T>(1.2009736023470742248160218814507129957702389154682L), tolerance);
    BOOST_CHECK(sign == 1);

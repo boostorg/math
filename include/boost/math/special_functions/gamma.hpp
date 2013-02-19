@@ -179,14 +179,15 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
    else
    {
       result *= Lanczos::lanczos_sum(z);
+      T zgh = (z + static_cast<T>(Lanczos::g()) - boost::math::constants::half<T>());
+      T lzgh = log(zgh);
       BOOST_MATH_INSTRUMENT_VARIABLE(result);
       BOOST_MATH_INSTRUMENT_VARIABLE(tools::log_max_value<T>());
-      if(z * log(z) > tools::log_max_value<T>())
+      if(z * lzgh > tools::log_max_value<T>())
       {
          // we're going to overflow unless this is done with care:
-         T zgh = (z + static_cast<T>(Lanczos::g()) - boost::math::constants::half<T>());
          BOOST_MATH_INSTRUMENT_VARIABLE(zgh);
-         if(log(zgh) * z / 2 > tools::log_max_value<T>())
+         if(lzgh * z / 2 > tools::log_max_value<T>())
             return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
          T hp = pow(zgh, (z / 2) - T(0.25));
          BOOST_MATH_INSTRUMENT_VARIABLE(hp);
@@ -199,7 +200,6 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
       }
       else
       {
-         T zgh = (z + static_cast<T>(Lanczos::g()) - boost::math::constants::half<T>());
          BOOST_MATH_INSTRUMENT_VARIABLE(zgh);
          BOOST_MATH_INSTRUMENT_VARIABLE(pow(zgh, z - boost::math::constants::half<T>()));
          BOOST_MATH_INSTRUMENT_VARIABLE(exp(zgh));
