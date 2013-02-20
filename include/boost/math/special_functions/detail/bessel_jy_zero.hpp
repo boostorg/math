@@ -25,12 +25,6 @@
   namespace boost { namespace math {
   namespace detail
   {
-    // Forward declarations of the needed Bessel function implementations.
-    template <class T, class Policy>
-    T cyl_bessel_j_imp(T v, T x, const bessel_no_int_tag&, const Policy& pol);
-    template <class T, class Policy>
-    T cyl_neumann_imp(T v, T x, const bessel_no_int_tag&, const Policy& pol);
-
     namespace bessel_zero
     {
       template<class T>
@@ -83,7 +77,7 @@
         }
 
       private:
-        equation_as_9_3_39_and_its_derivative& operator = (const equation_as_9_3_39_and_its_derivative&);
+        const equation_as_9_3_39_and_its_derivative& operator=(const equation_as_9_3_39_and_its_derivative&);
         const T zeta;
       };
 
@@ -183,20 +177,142 @@
                           * v_pow_minus_two_thirds + T(1));
         }
 
-        template<class T>
-        T initial_guess(const T& v, int m)
+        template<class T, class Policy>
+        class function_object_jv
         {
+        public:
+          function_object_jv(const T& v,
+                             const Policy& pol) : my_v(v),
+                                                  my_pol(pol) { }
+
+          T operator()(const T& x) const
+          {
+            return boost::math::cyl_bessel_j(my_v, x, my_pol);
+          }
+
+        private:
+          const T my_v;
+          const Policy& my_pol;
+          const function_object_jv& operator=(const function_object_jv&);
+        };
+
+        template<class T, class Policy>
+        class function_object_jv_and_jv_prime
+        {
+        public:
+          function_object_jv_and_jv_prime(const T& v,
+                                          const bool order_is_zero,
+                                          const Policy& pol) : my_v(v),
+                                                               my_order_is_zero(order_is_zero),
+                                                               my_pol(pol) { }
+
+          boost::math::tuple<T, T> operator()(const T& x) const
+          {
+            // Obtain Jv(x) and Jv'(x).
+            // Chris's original code called the Bessel function implementation layer direct, 
+            // but that circumvented optimizations for integer-orders.  Call the documented
+            // top level functions instead, and let them sort out which implementation to use.
+            T j_v;
+            T j_v_prime;
+
+            if(my_order_is_zero)
+            {
+              j_v       =  boost::math::cyl_bessel_j(0, x, my_pol);
+              j_v_prime = -boost::math::cyl_bessel_j(1, x, my_pol);
+            }
+            else
+            {
+                      j_v       = boost::math::cyl_bessel_j(  my_v,      x, my_pol);
+              const T j_v_m1     (boost::math::cyl_bessel_j(T(my_v - 1), x, my_pol));
+                      j_v_prime = j_v_m1 - ((my_v * j_v) / x);
+            }
+
+            // Return a tuple containing both Jv(x) and Jv'(x).
+            return boost::math::make_tuple(j_v, j_v_prime);
+          }
+
+        private:
+          const T my_v;
+          const bool my_order_is_zero;
+          const Policy& my_pol;
+          const function_object_jv_and_jv_prime& operator=(const function_object_jv_and_jv_prime&);
+        };
+
+        template<class T> bool my_bisection_unreachable_tolerance(const T&, const T&) { return false; }
+
+        template<class T, class Policy>
+        T initial_guess(const T& v, const int m, const Policy& pol)
+        {
+          BOOST_MATH_STD_USING // ADL of std names, needed for floor.
+
           // Compute an estimate of the m'th root of cyl_bessel_j.
 
           T guess;
 
-          if(m == 0U)
+          // There is special handling for negative order.
+          if(v < 0)
           {
-            // Requesting an estimate of the zero'th root is an error.
-            // Return zero.
-            guess = T(0);
+            // Extract the absolute value of the order.
+            const T vv(-v);
+            const T vv_floor = floor(vv);
+
+            // Check for pure negative integer order.
+            if((vv - vv_floor) < boost::math::tools::epsilon<T>())
+            {
+              return initial_guess(vv, m, pol);
+            }
+
+            // The to-be-found root is bracketed by the roots of the
+            // Bessel function whose reflected, positive integer order
+            // is less than, but nearest to vv.
+
+            T root_hi = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess(vv_floor, m, pol);
+            T root_lo;
+
+            if(m == 1)
+            {
+              // The estimate of the first root for negative order is found using
+              // an adaptive range-searching algorithm.
+              root_lo = T(root_hi - 0.1F);
+
+              const bool hi_end_of_bracket_is_negative = (boost::math::cyl_bessel_j(v, root_hi, pol) < 0);
+
+              while((root_lo > boost::math::tools::epsilon<T>()))
+              {
+                const bool lo_end_of_bracket_is_negative = (boost::math::cyl_bessel_j(v, root_lo, pol) < 0);
+
+                if(hi_end_of_bracket_is_negative != lo_end_of_bracket_is_negative)
+                {
+                  break;
+                }
+
+                root_hi = root_lo;
+
+                // Decrease the lower end of the bracket using an adaptive algorithm.
+                (root_lo > 0.5F) ? root_lo -= 0.5F : root_lo *= 0.85F;
+              }
+            }
+            else
+            {
+              root_lo = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess(vv_floor, m - 1, pol);
+            }
+
+            // Perform several steps of bisection iteration to refine the guess.
+            boost::uintmax_t number_of_iterations(12U);
+
+            // Do the bisection iteration.
+            const boost::math::tuple<T, T> guess_pair =
+               boost::math::tools::bisect(
+                  boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::function_object_jv<T, Policy>(v, pol),
+                  root_lo,
+                  root_hi,
+                  boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::my_bisection_unreachable_tolerance<T>,
+                  number_of_iterations);
+
+            return (boost::math::get<0>(guess_pair) + boost::math::get<1>(guess_pair)) / 2U;
           }
-          else if(m == 1U)
+
+          if(m == 1U)
           {
             // Get the initial estimate of the first root.
 
@@ -242,49 +358,6 @@
 
           return guess;
         }
-
-        template<class T, class Policy>
-        class function_object
-        {
-        public:
-          function_object(const T& v,
-                          const Policy& pol) : my_v(v),
-                                               my_pol(pol) { }
-
-          boost::math::tuple<T, T> operator()(const T& x) const
-          {
-            const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
-
-            const bool order_is_zero = ((my_v > -half_epsilon) && (my_v < +half_epsilon));
-
-            // Obtain Jv(x) and Jv'(x).
-            // Chris's original code called the Bessel function implementation layer direct, 
-            // but that circumvented optimizations for integer-orders.  Call the documented
-            // top level functions instead, and let them sort out which implementation to use.
-            T j_v;
-            T j_v_prime;
-
-            if(order_is_zero)
-            {
-              j_v       =  boost::math::cyl_bessel_j(0, x, my_pol);
-              j_v_prime = -boost::math::cyl_bessel_j(1, x, my_pol);
-            }
-            else
-            {
-                      j_v       = boost::math::cyl_bessel_j(  my_v,      x, my_pol);
-              const T j_v_m1     (boost::math::cyl_bessel_j(T(my_v - 1), x, my_pol));
-                      j_v_prime = j_v_m1 - ((my_v * j_v) / x);
-            }
-
-            // Return a tuple containing both Jv(x) and Jv'(x).
-            return boost::math::make_tuple(j_v, j_v_prime);
-          }
-
-        private:
-          const T my_v;
-          const Policy& my_pol;
-          function_object& operator = (const function_object&);
-        };
       } // namespace cyl_bessel_j_zero_detail
 
       namespace cyl_neumann_zero_detail
@@ -303,6 +376,49 @@
                           * v_pow_minus_two_thirds + T(1));
         }
 
+        template<class T, class Policy>
+        class function_object_yv_and_yv_prime
+        {
+        public:
+          function_object_yv_and_yv_prime(const T& v,
+                                          const Policy& pol) : my_v(v),
+                                                               my_pol(pol) { }
+
+          boost::math::tuple<T, T> operator()(const T& x) const
+          {
+            const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
+
+            const bool order_is_zero = ((my_v > -half_epsilon) && (my_v < +half_epsilon));
+
+            // Obtain Yv(x) and Yv'(x).
+            // Chris's original code called the Bessel function implementation layer direct, 
+            // but that circumvented optimizations for integer-orders.  Call the documented
+            // top level functions instead, and let them sort out which implementation to use.
+            T y_v;
+            T y_v_prime;
+
+            if(order_is_zero)
+            {
+              y_v       =  boost::math::cyl_neumann(0, x, my_pol);
+              y_v_prime = -boost::math::cyl_neumann(1, x, my_pol);
+            }
+            else
+            {
+                      y_v       = boost::math::cyl_neumann(  my_v,      x, my_pol);
+              const T y_v_m1     (boost::math::cyl_neumann(T(my_v - 1), x, my_pol));
+                      y_v_prime = y_v_m1 - ((my_v * y_v) / x);
+            }
+
+            // Return a tuple containing both Yv(x) and Yv'(x).
+            return boost::math::make_tuple(y_v, y_v_prime);
+          }
+
+        private:
+          const T my_v;
+          const Policy& my_pol;
+          const function_object_yv_and_yv_prime& operator=(const function_object_yv_and_yv_prime&);
+        };
+
         template<class T>
         T initial_guess(T v, int m)
         {
@@ -310,13 +426,7 @@
 
           T guess;
 
-          if(m == 0U)
-          {
-            // Requesting an estimate of the zero'th root is an error.
-            // Return zero.
-            guess = T(0);
-          }
-          else if(m == 1U)
+          if(m == 1U)
           {
             // Get the initial estimate of the first root.
 
@@ -362,49 +472,6 @@
 
           return guess;
         }
-
-        template<class T, class Policy>
-        class function_object
-        {
-        public:
-          function_object(const T& v,
-                          const Policy& pol) : my_v(v),
-                                               my_pol(pol) { }
-
-          boost::math::tuple<T, T> operator()(const T& x) const
-          {
-            const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
-
-            const bool order_is_zero = ((my_v > -half_epsilon) && (my_v < +half_epsilon));
-
-            // Obtain Yv(x) and Yv'(x).
-            // Chris's original code called the Bessel function implementation layer direct, 
-            // but that circumvented optimizations for integer-orders.  Call the documented
-            // top level functions instead, and let them sort out which implementation to use.
-            T y_v;
-            T y_v_prime;
-
-            if(order_is_zero)
-            {
-              y_v       =  boost::math::cyl_neumann(0, x, my_pol);
-              y_v_prime = -boost::math::cyl_neumann(1, x, my_pol);
-            }
-            else
-            {
-                      y_v       = boost::math::cyl_neumann(  my_v,      x, my_pol);
-              const T y_v_m1     (boost::math::cyl_neumann(T(my_v - 1), x, my_pol));
-                      y_v_prime = y_v_m1 - ((my_v * y_v) / x);
-            }
-
-            // Return a tuple containing both Yv(x) and Yv'(x).
-            return boost::math::make_tuple(y_v, y_v_prime);
-          }
-
-        private:
-          const T my_v;
-          const Policy& my_pol;
-          function_object* operator = (const function_object&);
-        };
       } // namespace cyl_neumann_zero_detail
     } // namespace bessel_zero
   } } } // namespace boost::math::detail

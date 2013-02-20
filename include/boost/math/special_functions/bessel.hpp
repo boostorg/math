@@ -361,29 +361,47 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
 
    const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
 
-   const bool order_is_zero = ((v > -half_epsilon) && (v < +half_epsilon));
-
-   // Handle negative order or if the zero'th zero is requested.
+   // Handle the zero'th zero, if requested.
    // Return NaN if NaN is available or return 0 if NaN is not available.
-   if(v < 0) 
-   {
-      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be >= 0 !", v, pol);
-   }
-   else if (!(boost::math::isfinite)(v) )
+   if (!(boost::math::isfinite)(v) )
    {
      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be finite >= 0 !", v, pol);
    }
-   if(m <= 0)
-   {
-      // Special case: The zero'th zero of Jv(x) is zero for v != 0.
-      if((m == 0) && (!order_is_zero))
-         return T(0);
 
-      // Otherwise, the zero'th zero of Jv(x) is not defined and requesting it raises a domain error.
-      return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but must be > 0 !", m, pol);
+   if(m < 0)
+   {
+      // Zeros of Jv(x) with negative rank are not defined and requesting one raises a domain error.
+      return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but the rank must be positive !", m, pol);
    }
+
+   const bool order_is_negative = (v < 0);
+
+   const T vv((!order_is_negative) ? v : -v);
+
+   const bool order_is_zero     = (vv < half_epsilon);
+   const bool order_is_integer  = ((vv - floor(vv)) < half_epsilon);
+
+   if(m == 0)
+   {
+      if(order_is_zero)
+      {
+         // The zero'th zero of J0(x) is not defined and requesting it raises a domain error.
+         return policies::raise_domain_error<T>(function, "Requested the %1%'th zero of J0, but the rank must be > 0 !", m, pol);
+      }
+
+      if(order_is_negative && (!order_is_integer))
+      {
+         // The zero'th zero of Jv(x) for v < 0 is only defined for negative integer order.
+         // For non-integer, negative order, requesting the zero'th zero raises a domain error.
+         return policies::raise_domain_error<T>(function, "Requested the %1%'th zero of Jv for negative, non-integer order, but the rank must be > 0 !", m, pol);
+      }
+
+      // The zero'th zero does exist and its value is zero.
+      return T(0);
+   }
+
    // Set up the initial guess for the upcoming root-finding.
-   const T guess_root = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess<T>(v, m);
+   const T guess_root = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess<T, Policy>((order_is_integer ? vv : v), m, pol);
 
    // Select the maximum allowed iterations from the policy.
    boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
@@ -395,9 +413,9 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T jvm =
       boost::math::tools::newton_raphson_iterate(
-         boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::function_object<T, Policy>(v, pol),
+         boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::function_object_jv_and_jv_prime<T, Policy>((order_is_integer ? vv : v), order_is_zero, pol),
          guess_root,
-         T(guess_root - 0.3F),
+         (std::max)(T(guess_root - 0.3F), T(0)),
          T(guess_root + 0.3F),
          my_digits2,
          number_of_iterations);
@@ -442,9 +460,9 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T yvm =
       boost::math::tools::newton_raphson_iterate(
-         boost::math::detail::bessel_zero::cyl_neumann_zero_detail::function_object<T, Policy>(v, pol),
+         boost::math::detail::bessel_zero::cyl_neumann_zero_detail::function_object_yv_and_yv_prime<T, Policy>(v, pol),
          guess_root,
-         T(guess_root - 0.3F),
+         (std::max)(T(guess_root - 0.3F), T(0)),
          T(guess_root + 0.3F),
          my_digits2,
          number_of_iterations);
