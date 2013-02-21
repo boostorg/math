@@ -321,7 +321,7 @@ See full code for other examples that promote from `double` to `long double`.
   { // m = inf
      double inf = std::numeric_limits<double>::infinity();
      double inf_root = boost::math::cyl_bessel_j_zero(0.0, inf);
-     // warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     // warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data.
      std::cout << "boost::math::cyl_bessel_j_zero(0.0, inf) " << inf_root << std::endl;
      // Throw exception Error in function boost::math::cyl_bessel_j_zero<long double>(long double, int):
      // Requested the 0'th zero, but must be > 0 !
@@ -336,7 +336,7 @@ See full code for other examples that promote from `double` to `long double`.
   { // m = NaN
      double nan = std::numeric_limits<double>::quiet_NaN();
      double nan_root = boost::math::cyl_bessel_j_zero(0.0, nan);
-     // warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     // warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data.
      std::cout << "boost::math::cyl_bessel_j_zero(0.0, nan) " << nan_root << std::endl;
      // Throw exception Error in function boost::math::cyl_bessel_j_zero<long double>(long double, int):
      // Requested the 0'th zero, but must be > 0 !
