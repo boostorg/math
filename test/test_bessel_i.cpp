@@ -87,7 +87,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 15, 10);                 // test function
+      ".*", 20, 10);                 // test function
    //
    // Set error rates a little higher for real_concept - 
    // now that we use a series approximation for small z
