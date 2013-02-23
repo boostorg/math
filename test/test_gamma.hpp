@@ -187,7 +187,7 @@ void test_spots(T)
    // Test bug fixes in tgamma:
    if(std::numeric_limits<T>::max_exponent10 > 244)
    {
-      BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(142.75)), static_cast<T>(7.8029496083318133344429227511387928576820621466e244L), tolerance);
+      BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(142.75)), static_cast<T>(7.8029496083318133344429227511387928576820621466e244L), tolerance * 4);
    }
 #ifdef BOOST_MSVC
 #pragma warning(pop)
