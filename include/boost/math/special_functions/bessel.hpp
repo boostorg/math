@@ -363,12 +363,13 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
 
    const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
 
-   // Handle the non-finite order.
+   // Handle non-finite order.
    if (!(boost::math::isfinite)(v) )
    {
      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be finite >= 0 !", v, pol);
    }
 
+   // Handle negative rank.
    if(m < 0)
    {
       // Zeros of Jv(x) with negative rank are not defined and requesting one raises a domain error.
@@ -415,12 +416,14 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
    // Account for the radix of number representations having non-two radix!
    const int my_digits2 = policies::digits<T, Policy>();
 
+   const T delta_lo = ((guess_root > 0.2F) ? T(0.2) : T(guess_root / 2U));
+
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T jvm =
       boost::math::tools::newton_raphson_iterate(
          boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::function_object_jv_and_jv_prime<T, Policy>((order_is_integer ? vv : v), order_is_zero, pol),
          guess_root,
-         (std::max)(T(guess_root - 0.2F), T(0)),
+         T(guess_root - delta_lo),
          T(guess_root + 0.2F),
          my_digits2,
          number_of_iterations);
@@ -447,7 +450,7 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be finite >= 0 !", v, pol);
    }
 
-   // Handle if the zero'th root or a negative root is requested.
+   // Handle negative rank.
    if(m < 0)
    {
       return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but the rank must be positive !", m, pol);
@@ -459,10 +462,19 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
    const bool order_is_negative = (v < 0);
    const T vv((!order_is_negative) ? v : -v);
 
-   // Check if the order is very close to a negative half-integer.
-   const bool order_is_negative_half_integer = (order_is_negative && (((vv * 2U) - floor(vv * 2U)) < boost::math::tools::epsilon<T>()));
+   const bool order_is_integer = ((vv - floor(vv)) < half_epsilon);
 
-   // The zero'th zero of Jv(x) for v < 0 is not defined
+   // For negative integers, use reflection to positive integer order.
+   if(order_is_negative && order_is_integer)
+      return boost::math::detail::cyl_neumann_zero_imp(vv, m, pol);
+
+   // Check if the order is very close to a negative half-integer.
+   const T delta_half_integer(vv - (floor(vv) + 0.5F));
+
+   const bool order_is_negative_half_integer =
+      (order_is_negative && ((delta_half_integer > -half_epsilon) && (delta_half_integer < +half_epsilon)));
+
+   // The zero'th zero of Yv(x) for v < 0 is not defined
    // unless the order is a negative integer.
    if((m == 0) && (!order_is_negative_half_integer))
    {
@@ -470,7 +482,7 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
       return policies::raise_domain_error<T>(function, "Requested the %1%'th zero of Yv for negative, non-half-integer order, but the rank must be > 0 !", m, pol);
    }
 
-   // For nrgative half-integers, use the corresponding
+   // For negative half-integers, use the corresponding
    // spherical Bessel function of positive half-integer order.
    if(order_is_negative_half_integer)
       return boost::math::detail::cyl_bessel_j_zero_imp(vv, m, pol);
@@ -487,12 +499,14 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
    // Account for the radix of number representations having non-two radix!
    const int my_digits2 = policies::digits<T, Policy>();
 
+   const T delta_lo = ((guess_root > 0.2F) ? T(0.2) : T(guess_root / 2U));
+
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T yvm =
       boost::math::tools::newton_raphson_iterate(
          boost::math::detail::bessel_zero::cyl_neumann_zero_detail::function_object_yv_and_yv_prime<T, Policy>(v, pol),
          guess_root,
-         (std::max)(T(guess_root - 0.2F), T(0)),
+         T(guess_root - delta_lo),
          T(guess_root + 0.2F),
          my_digits2,
          number_of_iterations);

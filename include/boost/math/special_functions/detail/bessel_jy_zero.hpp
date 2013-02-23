@@ -9,9 +9,11 @@
 //
 // This header contains implementation details for estimating the zeros
 // of cylindrical Bessel and Neumann functions on the positive real axis.
+// Support is included for both positive as well as negative order.
 // Various methods are used to estimate the roots. These include
 // empirical curve fitting and McMahon's asymptotic approximation
-// for small order, and uniform asymptotic expansion for large order.
+// for small order, uniform asymptotic expansion for large order,
+// and iteration and root interlacing for negative order.
 //
 #ifndef _BESSEL_JY_ZERO_2013_01_18_HPP_
   #define _BESSEL_JY_ZERO_2013_01_18_HPP_
@@ -283,7 +285,14 @@
                 root_hi = root_lo;
 
                 // Decrease the lower end of the bracket using an adaptive algorithm.
-                (root_lo > 0.5F) ? root_lo -= 0.5F : root_lo *= 0.85F;
+                if(root_lo > 0.5F)
+                {
+                  root_lo -= 0.5F;
+                }
+                else
+                {
+                  root_lo *= 0.85F;
+                }
               }
             }
             else
@@ -437,7 +446,7 @@
         template<class T, class Policy>
         T initial_guess(const T& v, const int m, const Policy& pol)
         {
-          BOOST_MATH_STD_USING // ADL of std names, needed for ceil.
+          BOOST_MATH_STD_USING // ADL of std names, needed for floor.
 
           // Compute an estimate of the m'th root of cyl_neumann.
 
@@ -448,12 +457,17 @@
           {
             // Create the positive order and extract its positive floor and ceiling integer parts.
             const T vv(-v);
-            const T vv_ceil (ceil (vv));
             const T vv_floor(floor(vv));
 
             // The to-be-found root is bracketed by the roots of the
             // Bessel function whose reflected, positive integer order
-            // is greater than, but nearest to vv.
+            // is less than, but nearest to vv.
+
+            // The special case of negative, half-integer order uses
+            // the relation between Yv and spherical Bessel functions
+            // in order to obtain the bracket for the root.
+            // In these special cases, cyl_neumann(-n/2, x) = sph_bessel_j(+n/2, x)
+            // for v = -n/2.
 
             T root_hi;
             T root_lo;
@@ -462,6 +476,8 @@
             {
               // The estimate of the first root for negative order is found using
               // an adaptive range-searching algorithm.
+              // Take special precautions for the discontinuity at negative,
+              // half-integer orders and use different brackets above and below these.
               if(T(vv - vv_floor) < 0.5F)
               {
                 root_hi = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess(vv_floor, m, pol);
@@ -487,7 +503,14 @@
                 root_hi = root_lo;
 
                 // Decrease the lower end of the bracket using an adaptive algorithm.
-                (root_lo > 0.5F) ? root_lo -= 0.5F : root_lo *= 0.85F;
+                if(root_lo > 0.5F)
+                {
+                  root_lo -= 0.5F;
+                }
+                else
+                {
+                  root_lo *= 0.85F;
+                }
               }
             }
             else
