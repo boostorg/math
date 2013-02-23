@@ -357,12 +357,13 @@ inline T sph_neumann_imp(unsigned v, T x, const Policy& pol)
 template <class T, class Policy>
 inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
 {
+   BOOST_MATH_STD_USING // ADL of std names, needed for floor.
+
    static const char* function = "boost::math::cyl_bessel_j_zero<%1%>(%1%, int)";
 
    const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
 
-   // Handle the zero'th zero, if requested.
-   // Return NaN if NaN is available or return 0 if NaN is not available.
+   // Handle the non-finite order.
    if (!(boost::math::isfinite)(v) )
    {
      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be finite >= 0 !", v, pol);
@@ -374,12 +375,13 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
       return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but the rank must be positive !", m, pol);
    }
 
+   // Get the absolute value of the order.
    const bool order_is_negative = (v < 0);
-
    const T vv((!order_is_negative) ? v : -v);
 
-   const bool order_is_zero     = (vv < half_epsilon);
-   const bool order_is_integer  = ((vv - floor(vv)) < half_epsilon);
+   // Check if the order is very close to zero or very close to an integer.
+   const bool order_is_zero    = (vv < half_epsilon);
+   const bool order_is_integer = ((vv - floor(vv)) < half_epsilon);
 
    if(m == 0)
    {
@@ -389,9 +391,10 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
          return policies::raise_domain_error<T>(function, "Requested the %1%'th zero of J0, but the rank must be > 0 !", m, pol);
       }
 
+      // The zero'th zero of Jv(x) for v < 0 is not defined
+      // unless the order is a negative integer.
       if(order_is_negative && (!order_is_integer))
       {
-         // The zero'th zero of Jv(x) for v < 0 is only defined for negative integer order.
          // For non-integer, negative order, requesting the zero'th zero raises a domain error.
          return policies::raise_domain_error<T>(function, "Requested the %1%'th zero of Jv for negative, non-integer order, but the rank must be > 0 !", m, pol);
       }
@@ -401,6 +404,8 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
    }
 
    // Set up the initial guess for the upcoming root-finding.
+   // If the order is a negative integer, then use the corresponding
+   // positive integer for the order.
    const T guess_root = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess<T, Policy>((order_is_integer ? vv : v), m, pol);
 
    // Select the maximum allowed iterations from the policy.
@@ -415,8 +420,8 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
       boost::math::tools::newton_raphson_iterate(
          boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::function_object_jv_and_jv_prime<T, Policy>((order_is_integer ? vv : v), order_is_zero, pol),
          guess_root,
-         (std::max)(T(guess_root - 0.3F), T(0)),
-         T(guess_root + 0.3F),
+         (std::max)(T(guess_root - 0.2F), T(0)),
+         T(guess_root + 0.2F),
          my_digits2,
          number_of_iterations);
 
@@ -432,23 +437,48 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
 template <class T, class Policy>
 inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
 {
+   BOOST_MATH_STD_USING // ADL of std names, needed for floor.
+
    static const char* function = "boost::math::cyl_neumann_zero<%1%>(%1%, int)";
-   // Handle negative order or if the zero'th zero is requested.
+
+   // Handle non-finite order.
    if (!(boost::math::isfinite)(v) )
    {
      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be finite >= 0 !", v, pol);
    }
-   else if(v < 0)
+
+   // Handle if the zero'th root or a negative root is requested.
+   if(m < 0)
    {
-      return policies::raise_domain_error<T>(function, "Order argument is %1%, but must be >= 0 !", v, pol);
-   }
-   if(m <= 0)
-   {
-      return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but must be > 0 !", m, pol);
+      return policies::raise_domain_error<T>(function, "Requested the %1%'th zero, but the rank must be positive !", m, pol);
    }
 
+   const T half_epsilon(boost::math::tools::epsilon<T>() / 2U);
+
+   // Get the absolute value of the order.
+   const bool order_is_negative = (v < 0);
+   const T vv((!order_is_negative) ? v : -v);
+
+   // Check if the order is very close to a negative half-integer.
+   const bool order_is_negative_half_integer = (order_is_negative && (((vv * 2U) - floor(vv * 2U)) < boost::math::tools::epsilon<T>()));
+
+   // The zero'th zero of Jv(x) for v < 0 is not defined
+   // unless the order is a negative integer.
+   if((m == 0) && (!order_is_negative_half_integer))
+   {
+      // For non-integer, negative order, requesting the zero'th zero raises a domain error.
+      return policies::raise_domain_error<T>(function, "Requested the %1%'th zero of Yv for negative, non-half-integer order, but the rank must be > 0 !", m, pol);
+   }
+
+   // For nrgative half-integers, use the corresponding
+   // spherical Bessel function of positive half-integer order.
+   if(order_is_negative_half_integer)
+      return boost::math::detail::cyl_bessel_j_zero_imp(vv, m, pol);
+
    // Set up the initial guess for the upcoming root-finding.
-   const T guess_root = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess<T>(v, m);
+   // If the order is a negative integer, then use the corresponding
+   // positive integer for the order.
+   const T guess_root = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess<T, Policy>(v, m, pol);
 
    // Select the maximum allowed iterations from the policy.
    boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
@@ -462,8 +492,8 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
       boost::math::tools::newton_raphson_iterate(
          boost::math::detail::bessel_zero::cyl_neumann_zero_detail::function_object_yv_and_yv_prime<T, Policy>(v, pol),
          guess_root,
-         (std::max)(T(guess_root - 0.3F), T(0)),
-         T(guess_root + 0.3F),
+         (std::max)(T(guess_root - 0.2F), T(0)),
+         T(guess_root + 0.2F),
          my_digits2,
          number_of_iterations);
 

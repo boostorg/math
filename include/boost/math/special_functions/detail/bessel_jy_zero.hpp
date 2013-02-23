@@ -252,15 +252,9 @@
           // There is special handling for negative order.
           if(v < 0)
           {
-            // Extract the absolute value of the order.
+            // Create the positive order and extract its positive floor integer part.
             const T vv(-v);
-            const T vv_floor = floor(vv);
-
-            // Check for pure negative integer order.
-            if((vv - vv_floor) < boost::math::tools::epsilon<T>())
-            {
-              return initial_guess(vv, m, pol);
-            }
+            const T vv_floor(floor(vv));
 
             // The to-be-found root is bracketed by the roots of the
             // Bessel function whose reflected, positive integer order
@@ -377,6 +371,25 @@
         }
 
         template<class T, class Policy>
+        class function_object_yv
+        {
+        public:
+          function_object_yv(const T& v,
+                             const Policy& pol) : my_v(v),
+                                                  my_pol(pol) { }
+
+          T operator()(const T& x) const
+          {
+            return boost::math::cyl_neumann(my_v, x, my_pol);
+          }
+
+        private:
+          const T my_v;
+          const Policy& my_pol;
+          const function_object_yv& operator=(const function_object_yv&);
+        };
+
+        template<class T, class Policy>
         class function_object_yv_and_yv_prime
         {
         public:
@@ -419,12 +432,92 @@
           const function_object_yv_and_yv_prime& operator=(const function_object_yv_and_yv_prime&);
         };
 
-        template<class T>
-        T initial_guess(T v, int m)
+        template<class T> bool my_bisection_unreachable_tolerance(const T&, const T&) { return false; }
+
+        template<class T, class Policy>
+        T initial_guess(const T& v, const int m, const Policy& pol)
         {
+          BOOST_MATH_STD_USING // ADL of std names, needed for ceil.
+
           // Compute an estimate of the m'th root of cyl_neumann.
 
           T guess;
+
+          // There is special handling for negative order.
+          if(v < 0)
+          {
+            // Create the positive order and extract its positive floor and ceiling integer parts.
+            const T vv(-v);
+            const T vv_ceil (ceil (vv));
+            const T vv_floor(floor(vv));
+
+            // The to-be-found root is bracketed by the roots of the
+            // Bessel function whose reflected, positive integer order
+            // is greater than, but nearest to vv.
+
+            T root_hi;
+            T root_lo;
+
+            if(m == 1)
+            {
+              // The estimate of the first root for negative order is found using
+              // an adaptive range-searching algorithm.
+              if(T(vv - vv_floor) < 0.5F)
+              {
+                root_hi = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess(vv_floor, m, pol);
+              }
+              else
+              {
+                root_hi = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess(T(vv_floor + 0.5F), m, pol);
+              }
+
+              root_lo = T(root_hi - 0.1F);
+
+              const bool hi_end_of_bracket_is_negative = (boost::math::cyl_neumann(v, root_hi, pol) < 0);
+
+              while((root_lo > boost::math::tools::epsilon<T>()))
+              {
+                const bool lo_end_of_bracket_is_negative = (boost::math::cyl_neumann(v, root_lo, pol) < 0);
+
+                if(hi_end_of_bracket_is_negative != lo_end_of_bracket_is_negative)
+                {
+                  break;
+                }
+
+                root_hi = root_lo;
+
+                // Decrease the lower end of the bracket using an adaptive algorithm.
+                (root_lo > 0.5F) ? root_lo -= 0.5F : root_lo *= 0.85F;
+              }
+            }
+            else
+            {
+              if(T(vv - vv_floor) < 0.5F)
+              {
+                root_lo = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess(vv_floor, m - 1, pol);
+                root_hi = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess(vv_floor, m, pol);
+              }
+              else
+              {
+                root_lo = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess(T(vv_floor + 0.5F), m - 1, pol);
+                root_hi = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess(T(vv_floor + 0.5F), m, pol);
+              }
+            }
+
+            // Perform several steps of bisection iteration to refine the guess.
+            boost::uintmax_t number_of_iterations(12U);
+
+            // Do the bisection iteration.
+            const boost::math::tuple<T, T> guess_pair =
+               boost::math::tools::bisect(
+                  boost::math::detail::bessel_zero::cyl_neumann_zero_detail::function_object_yv<T, Policy>(v, pol),
+                  root_lo,
+                  root_hi,
+                  boost::math::detail::bessel_zero::cyl_neumann_zero_detail::my_bisection_unreachable_tolerance<T>,
+                  number_of_iterations);
+
+            return (boost::math::get<0>(guess_pair) + boost::math::get<1>(guess_pair)) / 2U;
+          }
 
           if(m == 1U)
           {
