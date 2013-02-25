@@ -34,16 +34,16 @@
 //
 // This file tests the functions that evaluate zeros (or roots) of Bessel, Neumann and Airy functions.
 
-// Spot tests which compare our results with selected values computed 
+// Spot tests which compare our results with selected values computed
 // using the online special function calculator at functions.wolfram.com,
 // and values generated with Boost.Multiprecision at about 1000-bit or 100 decimal digits precision.
 
 // We are most grateful for the invaluable
 // Weisstein, Eric W. "Bessel Function Zeros." From MathWorld--A Wolfram Web Resource.
-// http://mathworld.wolfram.com/BesselFunctionZeros.html 
+// http://mathworld.wolfram.com/BesselFunctionZeros.html
 // and the newer http://www.wolframalpha.com/
 
-// See also NIST Handbook of Mathetmatical Function http://dlmf.nist.gov/10.21
+// See also NIST Handbook of Mathematical Function http://dlmf.nist.gov/10.21
 /*
 Tests of cyl Bessel and cyl Neumann zeros.
 ==========================================
@@ -68,7 +68,7 @@ each one tested with several zeros:
   * Order 1/1000: A small order.
   * Order 71/19: Merely an intermediate order.
   * Order 7001/19: A medium-large order, small enough to retain moderate efficiency of calculation.
- 
+
 There are also a few selected high zeros
 such as the 1000th zero for a few modest orders such as 71/19, etc.
 
@@ -106,7 +106,7 @@ void test_bessel_zeros(RealType)
    std::cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << "." << std::endl;
 
    // http://www.wolframalpha.com/
-   using boost::math::cyl_bessel_j_zero; // (nu, j) 
+   using boost::math::cyl_bessel_j_zero; // (nu, j)
    using boost::math::isnan;
 
   BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(0), 0), std::domain_error);
@@ -119,7 +119,7 @@ void test_bessel_zeros(RealType)
     //BOOST_CHECK_EQUAL(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::infinity()), 1),
     //  static_cast<RealType>(std::numeric_limits<RealType>::infinity()) );
     // unknown location(0): fatal error in "test_main":
-    // class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class std::domain_error> >: 
+    // class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class std::domain_error> >:
     // Error in function boost::math::cyl_bessel_j_zero<double>(double, int): Order argument is 1.#INF, but must be finite >= 0 !
     // Note that the reported type long double is not the type of the original call RealType,
     // but the promoted value, here long double, if applicable.
@@ -131,10 +131,10 @@ void test_bessel_zeros(RealType)
   }
   // Test with maximum value of v that will cause evaluation error
   //BOOST_CHECK_THROW(cyl_bessel_j_zero(boost::math::tools::max_value<RealType>(), 1), std::domain_error);
-  // unknown location(0): fatal error in "test_main": 
-  // class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class boost::math::evaluation_error> >: 
+  // unknown location(0): fatal error in "test_main":
+  // class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class boost::math::evaluation_error> >:
   // Error in function boost::math::bessel_jy<double>(double,double): Order of Bessel function is too large to evaluate: got 3.4028234663852886e+038
-  
+
   BOOST_CHECK_THROW(cyl_bessel_j_zero(boost::math::tools::max_value<RealType>(), 1), boost::math::evaluation_error);
 
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(boost::math::tools::min_value<RealType>(), 1),
@@ -149,7 +149,7 @@ void test_bessel_zeros(RealType)
   // evaluation at 50 deciaml digits using WoldramAlpha.
 
   /* Table[N[BesselJZero[0, n], 50], {n, 1, 5, 1}]
-  n | 
+  n |
   1 | 2.4048255576957727686216318793264546431242449091460
   2 | 5.5200781102863106495966041128130274252218654787829
   3 | 8.6537279129110122169541987126609466855657952312754
@@ -171,14 +171,14 @@ void test_bessel_zeros(RealType)
   }
   // 1/1000 a small order.
   /* Table[N[BesselJZero[1/1000, n], 50], {n, 1, 4, 1}]
-  n | 
+  n |
 1 | 2.4063682720422009275161970278295108254321633626292
 2 | 5.5216426858401848664019464270992222126391378706092
 3 | 8.6552960859298799453893840513333150237193779482071
 4 | 11.793103797689738596231262077785930962647860975357
 
 Table[N[BesselJZero[1/1000, n], 50], {n, 10, 20, 1}]
-n | 
+n |
 10 | 30.636177039613574749066837922778438992469950755736
 11 | 33.777390823252864715296422192027816488172667994611
 12 | 36.918668992567585467000743488690258054442556198147
@@ -200,7 +200,7 @@ n |
 
     /*
   Table[N[BesselJZero[1, n], 50], {n, 1, 4, 1}]
-  n | 
+  n |
   1 | 3.8317059702075123156144358863081607665645452742878
   2 | 7.0155866698156187535370499814765247432763115029142
   3 | 10.173468135062722077185711776775844069819512500192
@@ -214,7 +214,7 @@ n |
 
   /*
   Table[N[BesselJZero[5, n], 50], {n, 1, 5, 1}]
-  n | 
+  n |
   1 | 8.7714838159599540191228671334095605629810770148974
   2 | 12.338604197466943986082097644459004412683491122239
   3 | 15.700174079711671037587715595026422501346662246893
@@ -233,24 +233,24 @@ n |
   Table[N[BesselJZero[71/19, n], 50], {n, 1, 20, 1}]
 
   7.27317519383164895031856942622907655889631967016227,
-  10.7248583088831417325361727458514166471107495990849, 
-  14.0185045994523881061204595580426602824274719315813, 
-  17.2524984591704171821624871665497773491959038386104, 
-  20.4566788740445175951802340838942858854605020778141, 
-  23.6436308971423452249455142271473195998540517250404, 
-  26.8196711402550877454213114709650192615223905192969, 
-  29.9883431174236747426791417966614320438788681941419, 
-  33.1517968976905208712508624699734452654447919661140, 
-  36.3114160002162074157243540350393860813165201842005, 
-  39.4681324675052365879451978080833378877659670320292, 
-  42.6225978013912364748550348312979540188444334802274, 
-  45.7752814645368477533902062078067265814959500124386, 
-  48.9265304891735661983677668174785539924717398947994, 
-  52.0766070453430027942797460418789248768734780634716, 
-  55.2257129449125713935942243278172656890590028901917, 
-  58.3740061015388864367751881504390252017351514189321, 
-  61.5216118730009652737267426593531362663909441035715, 
-  64.6686310537909303683464822148736607945659662871596, 
+  10.7248583088831417325361727458514166471107495990849,
+  14.0185045994523881061204595580426602824274719315813,
+  17.2524984591704171821624871665497773491959038386104,
+  20.4566788740445175951802340838942858854605020778141,
+  23.6436308971423452249455142271473195998540517250404,
+  26.8196711402550877454213114709650192615223905192969,
+  29.9883431174236747426791417966614320438788681941419,
+  33.1517968976905208712508624699734452654447919661140,
+  36.3114160002162074157243540350393860813165201842005,
+  39.4681324675052365879451978080833378877659670320292,
+  42.6225978013912364748550348312979540188444334802274,
+  45.7752814645368477533902062078067265814959500124386,
+  48.9265304891735661983677668174785539924717398947994,
+  52.0766070453430027942797460418789248768734780634716,
+  55.2257129449125713935942243278172656890590028901917,
+  58.3740061015388864367751881504390252017351514189321,
+  61.5216118730009652737267426593531362663909441035715,
+  64.6686310537909303683464822148736607945659662871596,
   67.8151456196962909255567913755559511651114605854579
   */
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(71)/19, 1), static_cast<RealType>(7.27317519383164895031856942622907655889631967016227L), tolerance);
@@ -265,7 +265,7 @@ n |
 2 | 392.17508657648737502651299853099852567001239217724
 
 Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
- 
+
 19 | 491.67809669154347398205298745712766193052308172472
 20 | 496.39435037938252557535375498577989720272298310802
 
@@ -278,7 +278,7 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(3.73684210526315789473684210526315789473684210526315789L), 1), static_cast<RealType>(7.273175193831648950318569426229076558896319670162279791988152000556091140599946365217211157877052381L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(3.73684210526315789473684210526315789473684210526315789L), 20), static_cast<RealType>(67.81514561969629092555679137555595116511146058545787883557679231060644931096494584364894743334132014L), tolerance);
 
-  // Some non-integral tests in 'tough' regions. 
+  // Some non-integral tests in 'tough' regions.
   // Order 219/100: This checks a region just below a critical cutoff.
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(219)/100, 1), static_cast<RealType>(5.37568854370623186731066365697341253761466705063679L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(219)/100, 2), static_cast<RealType>(8.67632060963888122764226633146460596009874991130394L), tolerance);
@@ -291,7 +291,7 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(7001)/19, 1), static_cast<RealType>(381.922015230244893869172044704348426991540311353476L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(7001)/19, 2), static_cast<RealType>(392.175086576487375026512998530998525670012392177242L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(7001)/19, 20), static_cast<RealType>(496.394350379382525575353754985779897202722983108025L), tolerance);
-  
+
   // Zero'th cases.
   BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(0), 0), std::domain_error); // Zero'th zero of J0(x).
   BOOST_CHECK(boost::math::cyl_bessel_j_zero(static_cast<RealType>(1), 0) == 0); // Zero'th zero of J1(x).
@@ -341,7 +341,7 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
     //7.58834489983121936102504707121493271448122800440112
 
     std::cout.precision(2+ std::numeric_limits<RealType>::digits * 3010/10000);
-    v = -static_cast<RealType>(3); 
+    v = -static_cast<RealType>(3);
     std::cout << "v = " << v << std::endl;
     RealType d = static_cast<RealType>(999999)/1000000;
     std::cout << "d = " << d << std::endl;
@@ -369,7 +369,7 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
 
   // Confirm that negative m throws domain_error.
   BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(0), -1), std::domain_error);
-  // unknown location(0): fatal error in "test_main": 
+  // unknown location(0): fatal error in "test_main":
   // class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class std::domain_error> >:
   // Error in function boost::math::cyl_bessel_j_zero<double>(double, int): Requested the -1'th zero, but must be > 0 !
 
@@ -384,11 +384,11 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
               > ignore_all_policy;
 
   if (std::numeric_limits<RealType>::has_quiet_NaN)
-  { 
+  {
     BOOST_CHECK_THROW(cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN()), 1), std::domain_error);
     // bad m returns NaN.
     BOOST_CHECK(boost::math::isnan<RealType>(cyl_bessel_j_zero(std::numeric_limits<RealType>::quiet_NaN(), 1, ignore_all_policy())) );
-    BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN()), -1), std::domain_error); 
+    BOOST_CHECK_THROW(boost::math::cyl_bessel_j_zero(static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN()), -1), std::domain_error);
   }
   else
   { // real_concept bad m returns zero.
@@ -403,11 +403,11 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
     // Check that NaN is returned if error ignored.
     BOOST_CHECK(boost::math::isnan<RealType>(cyl_bessel_j_zero(std::numeric_limits<RealType>::infinity(), 1, ignore_all_policy())) );
   }
-  
+
   // Tests of cyc_neumann zero function (BesselKZero in Wolfram for spot values).
   /*
   Table[N[BesselKZero[0, n], 50], {n, 1, 5, 1}]
-n | 
+n |
 1 | 0.89357696627916752158488710205833824122514686193001
 2 | 3.9576784193148578683756771869174012814186037655636
 3 | 7.0860510603017726976236245968203524689715103811778
@@ -415,7 +415,7 @@ n |
 5 | 13.361097473872763478267694585713786426579135174880
 
 Table[N[BesselKZero[1, n], 50], {n, 1, 5, 1}]
-n | 
+n |
 1 | 2.1971413260310170351490335626989662730530183315003
 2 | 5.4296810407941351327720051908525841965837574760291
 3 | 8.5960058683311689264296061801639678511029215669749
@@ -423,7 +423,7 @@ n |
 5 | 14.897442128336725378844819156429870879807150630875
 
 Table[N[BesselKZero[2, n], 50], {n, 1, 5, 1}]
-n | 
+n |
 1 | 3.3842417671495934727014260185379031127323883259329
 2 | 6.7938075132682675382911671098369487124493222183854
 3 | 10.023477979360037978505391792081418280789658279097
@@ -436,7 +436,7 @@ n |
   using boost::math::cyl_neumann_zero;
 
   BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), 0), std::domain_error);
-  BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(-1), 2), std::domain_error);
+  //BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(-1), 2), std::domain_error); now implemented negative order.
   BOOST_CHECK_THROW(cyl_neumann_zero(static_cast<RealType>(0), -1), std::domain_error);
 
   if (std::numeric_limits<RealType>::has_quiet_NaN)
@@ -453,7 +453,7 @@ n |
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(0), 1), static_cast<RealType>(0.89357696627916752158488710205833824122514686193001L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(1), 2), static_cast<RealType>(5.4296810407941351327720051908525841965837574760291L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(2), 3), static_cast<RealType>(10.023477979360037978505391792081418280789658279097L), tolerance);
-  
+
   { // Repeat rest using multiple zeros version.
     std::vector<RealType> zeros;
     cyl_neumann_zero(static_cast<RealType>(0.0), 1, 3, std::back_inserter(zeros) );
@@ -540,8 +540,144 @@ n |
    Standard computation time exceeded :-(
  */
 
+  /*
+  Negative order cyl_neumann.
+  
+/*  Table[N[BesselKZero[-1, n], 50], {n, 1, 20, 5}]
+1 | 2.1971413260310170351490335626989662730530183315003
+6 | 18.043402276727855564304555507889508902163088324834
+11 | 33.761017796109325692471759911249650993879821495802
+16 | 49.472505679924095824128003887609267273294894411716
+
+*/
+
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-1), 1), static_cast<RealType>(2.1971413260310170351490335626989662730530183315003L), tolerance * 3);
+  // Note this test passes at tolerance for float, double and long double, but fails for real_concept if tolerance <= 2.
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-1), 6), static_cast<RealType>(18.043402276727855564304555507889508902163088324834L), tolerance * 3);
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-1), 11), static_cast<RealType>(33.761017796109325692471759911249650993879821495802L), tolerance * 3);
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-1), 16), static_cast<RealType>(49.472505679924095824128003887609267273294894411716L), tolerance * 3);
+
+ /*
+  Table[N[BesselKZero[-2, n], 50], {n, 1, 20, 5}]
+1 | 3.3842417671495934727014260185379031127323883259329
+6 | 19.539039990286384411511740683423888947393156497603
+11 | 35.289793869635804143323234828826075805683602368473
+16 | 51.014128749483902310217774804582826908060740157564
+  */
+
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2), 1), static_cast<RealType>(3.3842417671495934727014260185379031127323883259329L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2), 6), static_cast<RealType>(19.539039990286384411511740683423888947393156497603L), tolerance * 3);
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2), 11), static_cast<RealType>(35.289793869635804143323234828826075805683602368473L), tolerance * 3);
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2), 16), static_cast<RealType>(51.014128749483902310217774804582826908060740157564L), tolerance * 3);
+
+/* Table[N[BesselKZero[-39, n], 51], {n, 1, 20, 5}]
+
+n | 
+1 | 42.2362394762664681287397356668342141701037684436723
+6 | 65.8250353430045981408288669790173009159561533403819
+11 | 84.2674082411341814641248554679382420802125973458922
+16 | 101.589776978258493441843447810649346266014624868410
+*/
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-39), 1), static_cast<RealType>(42.2362394762664681287397356668342141701037684436723L), tolerance );
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-39), 6), static_cast<RealType>(65.8250353430045981408288669790173009159561533403819L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-39), 11), static_cast<RealType>(84.2674082411341814641248554679382420802125973458922L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-39), 16), static_cast<RealType>(101.589776978258493441843447810649346266014624868410L), tolerance);
+
+/* Table[N[BesselKZero[-39 -(1/3), n], 51], {n, 1, 20, 5}]
+n | 
+1 | 39.3336965099558453809241429692683050137281997313679
+6 | 64.9038181444904768984884565999608291433823953030822
+11 | 83.4922341795560713832607574604255239776551554961143
+16 | 100.878386349724826125265571457142254077564666532665
+*/
+
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-39) - static_cast<RealType>(1)/3, 1), static_cast<RealType>(39.3336965099558453809241429692683050137281997313679L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-39) - static_cast<RealType>(1)/3, 6), static_cast<RealType>(64.9038181444904768984884565999608291433823953030822L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-39) - static_cast<RealType>(1)/3, 11), static_cast<RealType>(83.4922341795560713832607574604255239776551554961143L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-39) - static_cast<RealType>(1)/3, 16), static_cast<RealType>(100.878386349724826125265571457142254077564666532665L), tolerance * 4);
+/* Table[N[BesselKZero[-(1/3), n], 51], {n, 1, 20, 5}]
+n | 
+1 | 0.364442931311036254896373762996743259918847602789703
+6 | 15.9741013584105984633772025789145590038676373673203
+11 | 31.6799168750213003020847708007848147516190373648194
+16 | 47.3871543280673235432396563497681616285970326011211
+*/
+
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/3, 1), static_cast<RealType>(0.364442931311036254896373762996743259918847602789703L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/3, 6), static_cast<RealType>(15.9741013584105984633772025789145590038676373673203L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/3, 11), static_cast<RealType>(31.6799168750213003020847708007848147516190373648194L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/3, 16), static_cast<RealType>(47.3871543280673235432396563497681616285970326011211L), tolerance * 4);
+
+/*Table[N[BesselKZero[-3 -(9999/10000), n], 51], {n, 1, 20, 5}]
+    n | 
+1 | 5.64546089250283694562642537496601708928630550185069
+2 | 9.36184180108088288881787970896747209376324330610979
+3 | 12.7303431758275183078115963473808796340618061355885
+4 | 15.9998152121877557837972245675029531998475502716021
+6 | 9.36184180108088288881787970896747209376324330610979
+
+
+11 | 25.6104419106589739931633042959774157385787405502820
+16 | 41.4361281441868132581487460354904567452973524446193
+*/
+
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-3) -static_cast<RealType>(9999)/10000, 1), static_cast<RealType>(5.64546089250283694562642537496601708928630550185069L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-3) -static_cast<RealType>(9999)/10000, 2), static_cast<RealType>(9.36184180108088288881787970896747209376324330610979L), tolerance * 4);
+
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-3) -static_cast<RealType>(9999)/10000, 3), static_cast<RealType>(12.7303431758275183078115963473808796340618061355885L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-3) -static_cast<RealType>(9999)/10000, 4), static_cast<RealType>(15.9998152121877557837972245675029531998475502716021L), tolerance * 4);
+ 
+/* Table[N[BesselKZero[-3 -(9999/10000), n], 51], {n, 1, 7, 1}]
+1 | 5.64546089250283694562642537496601708928630550185069
+2 | 9.36184180108088288881787970896747209376324330610979
+3 | 12.7303431758275183078115963473808796340618061355885
+4 | 15.9998152121877557837972245675029531998475502716021
+5 | 5.64546089250283694562642537496601708928630550184982
+6 | 9.36184180108088288881787970896747209376324330610979
+7 | 12.7303431758275183078115963473808796340618061355885
+
+
+Something odd here 1 == 5, 2 == 6
+*/
+    
+    //BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-3) -static_cast<RealType>(9999)/10000, 6), static_cast<RealType>(25.6104419106589739931633042959774157385787405502820L), tolerance * 4);
+    //BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-3) -static_cast<RealType>(9999)/10000, 5), static_cast<RealType>(41.4361281441868132581487460354904567452973524446193L), tolerance * 4);
+
+/*Table[N[BesselKZero[-1/81799, n], 51], {n, 1, 10, 5}]
+
+1 | 0.893559276290122922836047849416713592133322804889757
+
+n | 
+2 | 3.95765935645507004204986415533750122885237402118726
+3 | 7.08603190350579828577279552434514387474680226004173
+4 | 10.2223258629823064789904339889550588869985272176335
+5 | 13.3610782840659145864973521693322670264135672594988
+3 | 7.08603190350579828577279552434514387474680226004173
+5 | 13.3610782840659145864973521693322670264135672594988
+6 | 16.5009032471619898684110089652474861084220781491575
+7 | 19.6412905039556082160052482410981245043314155416354
+9 | 25.9229384536173175152381652048590136247796591153244
+
+*/
+   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/81799, 1), static_cast<RealType>(0.893559276290122922836047849416713592133322804889757L), tolerance * 4);
+   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/81799, 2), static_cast<RealType>(3.95765935645507004204986415533750122885237402118726L), tolerance * 4);
+   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/81799, 3), static_cast<RealType>(7.08603190350579828577279552434514387474680226004173L), tolerance * 4);
+
+   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/81799, 4), static_cast<RealType>(10.2223258629823064789904339889550588869985272176335L), tolerance * 4);
+
+   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/81799, 5), static_cast<RealType>(13.3610782840659145864973521693322670264135672594988L), tolerance * 4);
+   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/81799, 6), static_cast<RealType>(16.5009032471619898684110089652474861084220781491575L), tolerance * 4);
+   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(-static_cast<RealType>(1)/81799, 9), static_cast<RealType>(25.9229384536173175152381652048590136247796591153244L), tolerance * 4);
+
+
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-7) - static_cast<RealType>(1)/3, 1), static_cast<RealType>(7.3352783956690540155848592759652828459644819344081L), tolerance * 1000);
+
+// I:/boost-trunk/libs/math/test/test_bessel_airy_zeros.cpp(565): error : in "test_main": difference{0.367191} between cyl_neumann_zero(static_cast<RealType>(-7) - static_cast<RealType>(-1)/3, 1){10.0287285} and static_cast<RealType>(7.3352783956690540155848592759652828459644819344081L){7.33527851} exceeds 1.1920929e-007
+
+
+
   // Test Data for airy_ai
-   using boost::math::airy_ai_zero; // 
+   using boost::math::airy_ai_zero; //
 
    using boost::math::isnan;
 
@@ -660,7 +796,7 @@ n |
   //Table[N[AiryBiZero[n], 51], {n, 1000000000, 1000000001, 1}]
   BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(1000000000), static_cast<RealType>(-2.81078366499651725023268820158218492845371527054171E+6L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(1000000001), static_cast<RealType>(-2.81078366687037302799011557215619265502627118526716E+6L), tolerance);
-  
+
 } // template <class RealType> void test_spots(RealType)
 
   #include <boost/multiprecision/cpp_dec_float.hpp>
@@ -672,7 +808,7 @@ BOOST_AUTO_TEST_CASE(test_main)
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_bessel_zeros(0.1L);
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-   test_bessel_zeros(boost::math::concepts::real_concept(0.1)); 
+   test_bessel_zeros(boost::math::concepts::real_concept(0.1));
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "
@@ -680,7 +816,7 @@ BOOST_AUTO_TEST_CASE(test_main)
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::cout;
 #endif
-} 
+}
 
 
 
