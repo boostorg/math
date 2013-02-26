@@ -159,9 +159,8 @@ T airy_ai_zero_imp(unsigned m, const Policy& pol)
    BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
 
    // Handle cases when the zero'th zero is requested.
-   // Return NaN if NaN is available or return 0 if NaN is not available.
    if(m == 0U)
-      return (std::numeric_limits<T>::has_quiet_NaN ? std::numeric_limits<T>::quiet_NaN() : T(0));
+      return policies::raise_domain_error<T>(function, "The requested rank of the zero is %1%, but must be 1 or more !", m, pol);
 
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m);
@@ -186,7 +185,7 @@ T airy_ai_zero_imp(unsigned m, const Policy& pol)
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T am =
       boost::math::tools::newton_raphson_iterate(
-         boost::math::detail::airy_zero::airy_ai_zero_detail::function_object<T, Policy>(pol),
+         boost::math::detail::airy_zero::airy_ai_zero_detail::function_object_ai_and_ai_prime<T, Policy>(pol),
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
@@ -204,9 +203,8 @@ T airy_bi_zero_imp(unsigned m, const Policy& pol)
    BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
 
    // Handle cases when the zero'th zero is requested.
-   // Return NaN if NaN is available or return 0 if NaN is not available.
    if(m == 0U)
-      return (std::numeric_limits<T>::has_quiet_NaN ? std::numeric_limits<T>::quiet_NaN() : T(0));
+      return policies::raise_domain_error<T>(function, "The requested rank of the zero is %1%, but must be 1 or more !", m, pol);
 
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m);
@@ -221,7 +219,6 @@ T airy_bi_zero_imp(unsigned m, const Policy& pol)
                                  / log(2.0F)));
 
    // Use a dynamic tolerance because the roots get closer the higher m gets.
-   // Use a dynamic tolerance because the roots get closer the higher m gets.
    T tolerance;
 
    if     (m <=   10U) { tolerance = T(0.3F); }
@@ -232,7 +229,7 @@ T airy_bi_zero_imp(unsigned m, const Policy& pol)
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T bm =
       boost::math::tools::newton_raphson_iterate(
-         boost::math::detail::airy_zero::airy_bi_zero_detail::function_object<T, Policy>(pol),
+         boost::math::detail::airy_zero::airy_bi_zero_detail::function_object_bi_and_bi_prime<T, Policy>(pol),
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),

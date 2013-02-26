@@ -58,15 +58,9 @@
         {
           T guess;
 
-          if(m == 0U)
-          {
-            // Requesting an estimate of the zero'th root is an error.
-            // Return zero.
-            guess = T(0);
-          }
-
           switch(m)
           {
+            case 0U: { guess = T(0);                       break; }
             case 1U: { guess = T(-2.33810741045976703849); break; }
             case 2U: { guess = T(-4.08794944413097061664); break; }
             case 3U: { guess = T(-5.52055982809555105913); break; }
@@ -89,10 +83,10 @@
         }
 
         template<class T, class Policy>
-        class function_object
+        class function_object_ai_and_ai_prime
         {
         public:
-          function_object(const Policy pol) : my_pol(pol) { }
+          function_object_ai_and_ai_prime(const Policy pol) : my_pol(pol) { }
 
           boost::math::tuple<T, T> operator()(const T& x) const
           {
@@ -104,6 +98,7 @@
 
         private:
           const Policy& my_pol;
+          const function_object_ai_and_ai_prime& operator=(const function_object_ai_and_ai_prime&);
         };
       } // namespace airy_ai_zero_detail
 
@@ -114,15 +109,9 @@
         {
           T guess;
 
-          if(m == 0U)
-          {
-            // Requesting an estimate of the zero'th root is an error.
-            // Return zero.
-            guess = T(0);
-          }
-
           switch(m)
           {
+            case 0U: { guess = T(0);                       break; }
             case 1U: { guess = T(-1.17371322270912792492); break; }
             case 2U: { guess = T(-3.27109330283635271568); break; }
             case 3U: { guess = T(-4.83073784166201593267); break; }
@@ -145,10 +134,10 @@
         }
 
         template<class T, class Policy>
-        class function_object
+        class function_object_bi_and_bi_prime
         {
         public:
-          function_object(const Policy pol) : my_pol(pol) { }
+          function_object_bi_and_bi_prime(const Policy pol) : my_pol(pol) { }
 
           boost::math::tuple<T, T> operator()(const T& x) const
           {
@@ -160,6 +149,7 @@
 
         private:
           const Policy& my_pol;
+          const function_object_bi_and_bi_prime& operator=(const function_object_bi_and_bi_prime&);
         };
       } // namespace airy_bi_zero_detail
     } // namespace airy_zero
