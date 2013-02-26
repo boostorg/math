@@ -254,6 +254,24 @@
           // There is special handling for negative order.
           if(v < 0)
           {
+            if((m == 1) && (v > -0.5F))
+            {
+              // For small, negative v, use the results of empirical curve fitting.
+              // Mathematica(R) session for the coefficients:
+              //  Table[{n, BesselJZero[n, 1]}, {n, -(1/2), 0, 1/10}]
+              //  N[%, 20]
+              //  Fit[%, {n^0, n^1, n^2, n^3, n^4, n^5, n^6}, n]
+              guess = (((((    - T(0.2321156900729)
+                           * v - T(0.1493247777488))
+                           * v - T(0.15205419167239))
+                           * v + T(0.07814930561249))
+                           * v - T(0.17757573537688))
+                           * v + T(1.542805677045663))
+                           * v + T(2.40482555769577277);
+
+              return guess;
+            }
+
             // Create the positive order and extract its positive floor integer part.
             const T vv(-v);
             const T vv_floor(floor(vv));
@@ -291,7 +309,7 @@
                 }
                 else
                 {
-                  root_lo *= 0.85F;
+                  root_lo *= 0.75F;
                 }
               }
             }
@@ -319,7 +337,7 @@
           {
             // Get the initial estimate of the first root.
 
-            if(v < T(2.2))
+            if(v < 2.2F)
             {
               // For small v, use the results of empirical curve fitting.
               // Mathematica(R) session for the coefficients:
@@ -342,7 +360,7 @@
           }
           else
           {
-            if(v < T(2.2))
+            if(v < 2.2F)
             {
               // Use Eq. 10.21.19 in the NIST Handbook.
               const T a(((v + T(m * 2U)) - T(0.5)) * boost::math::constants::half_pi<T>());
@@ -509,7 +527,7 @@
                 }
                 else
                 {
-                  root_lo *= 0.85F;
+                  root_lo *= 0.75F;
                 }
               }
             }
@@ -517,13 +535,17 @@
             {
               if(T(vv - vv_floor) < 0.5F)
               {
-                root_lo = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess(vv_floor, m - 1, pol);
+                root_lo  = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess(vv_floor, m - 1, pol);
                 root_hi = boost::math::detail::bessel_zero::cyl_neumann_zero_detail::initial_guess(vv_floor, m, pol);
+                root_lo += 0.01F;
+                root_hi += 0.01F;
               }
               else
               {
                 root_lo = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess(T(vv_floor + 0.5F), m - 1, pol);
                 root_hi = boost::math::detail::bessel_zero::cyl_bessel_j_zero_detail::initial_guess(T(vv_floor + 0.5F), m, pol);
+                root_lo += 0.01F;
+                root_hi += 0.01F;
               }
             }
 
@@ -546,7 +568,7 @@
           {
             // Get the initial estimate of the first root.
 
-            if(v < T(2.2))
+            if(v < 2.2F)
             {
               // For small v, use the results of empirical curve fitting.
               // Mathematica(R) session for the coefficients:
@@ -569,7 +591,7 @@
           }
           else
           {
-            if(v < T(2.2))
+            if(v < 2.2F)
             {
               // Use Eq. 10.21.19 in the NIST Handbook.
               const T a(((v + T(m * 2U)) - T(1.5)) * boost::math::constants::half_pi<T>());
