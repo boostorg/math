@@ -158,9 +158,12 @@ T airy_ai_zero_imp(unsigned m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
 
-   // Handle cases when the zero'th zero is requested.
+   // Handle case when the zero'th zero is requested.
    if(m == 0U)
-      return policies::raise_domain_error<T>(function, "The requested rank of the zero is %1%, but must be 1 or more !", m, pol);
+   {
+      return policies::raise_domain_error<T>("boost::math::airy_ai_zero<%1%>(%1%,%1%)",
+        "The requested rank of the zero is %1%, but must be 1 or more !", static_cast<T>(m), pol);
+   }
 
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m);
@@ -202,10 +205,12 @@ T airy_bi_zero_imp(unsigned m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
 
-   // Handle cases when the zero'th zero is requested.
+   // Handle case when the zero'th zero is requested.
    if(m == 0U)
-      return policies::raise_domain_error<T>(function, "The requested rank of the zero is %1%, but must be 1 or more !", m, pol);
-
+   {
+      return policies::raise_domain_error<T>("boost::math::airy_bi_zero<%1%>(%1%,%1%)",
+        "The requested rank of the zero is %1%, but must be 1 or more !", static_cast<T>(m), pol);
+   }
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m);
 
@@ -360,7 +365,7 @@ inline OutputIterator airy_ai_zero(
                          const Policy& pol)
 {
    typedef T result_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy output type must be a floating-point type.");
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy return type must be a floating-point type.");
 
    for(unsigned i = 0; i < number_of_zeros; ++i)
    {
@@ -408,7 +413,7 @@ inline OutputIterator airy_bi_zero(
                          const Policy& pol)
 {
    typedef T result_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy output type must be a floating-point type.");
+   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy return type must be a floating-point type.");
 
    for(unsigned i = 0; i < number_of_zeros; ++i)
    {
