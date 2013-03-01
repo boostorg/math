@@ -50,6 +50,7 @@ int main()
    BOOST_CONSTANTS_GENERATE(root_pi);
    BOOST_CONSTANTS_GENERATE(root_half_pi);
    BOOST_CONSTANTS_GENERATE(root_two_pi);
+   BOOST_CONSTANTS_GENERATE(log_root_two_pi);
    BOOST_CONSTANTS_GENERATE(two_div_pi);
    BOOST_CONSTANTS_GENERATE(root_two_div_pi);
 

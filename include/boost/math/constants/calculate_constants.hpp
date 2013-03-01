@@ -122,6 +122,14 @@ inline T constant_root_two_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC
 
 template <class T>
 template<int N>
+inline T constant_log_root_two_pi<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
+{
+   BOOST_MATH_STD_USING
+   return log(root_two_pi<T, policies::policy<policies::digits2<N> > >());
+}
+
+template <class T>
+template<int N>
 inline T constant_root_ln_four<T>::compute(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>))
 {
    BOOST_MATH_STD_USING
