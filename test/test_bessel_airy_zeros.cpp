@@ -322,9 +322,9 @@ Table[N[BesselJZero[7001/19, n], 50], {n, 19, 20, 1}]
    // BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(v, 1), static_cast<RealType>(43.803165820025277290601047312311146608776920513241L), tolerance);
   //  BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(-39) - static_cast<RealType>(1)/3, 1), static_cast<RealType>(43.803165820025277290601047312311146608776920513241L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(v, 2), static_cast<RealType>(49.624678304306778749502719837270544976331123155017L), tolerance * 4);
-    BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(-39) - static_cast<RealType>(0.333333333333333333333333333333333333333333333), 5), static_cast<RealType>(62.911281619408963609400485687996804820400102193455L), tolerance * 4);
-    BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(-39) - static_cast<RealType>(0.333333333333333333333333333333333333333333333), 10), static_cast<RealType>(81.705998611506506523381866527389118594062841737382L), tolerance * 4);
-    BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(-39) - static_cast<RealType>(0.333333333333333333333333333333333333333333333), 20), static_cast<RealType>(116.05368337161392034833932554892349580959931408963L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(-39) - static_cast<RealType>(0.333333333333333333333333333333333333333333333L), 5), static_cast<RealType>(62.911281619408963609400485687996804820400102193455L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(-39) - static_cast<RealType>(0.333333333333333333333333333333333333333333333L), 10), static_cast<RealType>(81.705998611506506523381866527389118594062841737382L), tolerance * 4);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_bessel_j_zero(static_cast<RealType>(-39) - static_cast<RealType>(0.333333333333333333333333333333333333333333333L), 20), static_cast<RealType>(116.05368337161392034833932554892349580959931408963L), tolerance * 4);
 
 
   // Table[N[BesselJZero[-1/3, n], 51], {n, 1, 20, 1}]
@@ -474,8 +474,8 @@ n |
   5 | 17.818455232945520262553239064736739443380352162752
   */
 
-    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(3), 1), static_cast<RealType>(4.5270246611496438503700268671036276386651555486109L), tolerance);
-    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(3), 2), static_cast<RealType>(8.0975537628604907044022139901128042290432231369075L), tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(3), 1), static_cast<RealType>(4.5270246611496438503700268671036276386651555486109L), tolerance * 2);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(3), 2), static_cast<RealType>(8.0975537628604907044022139901128042290432231369075L), tolerance * 2);
     BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(3), 3), static_cast<RealType>(11.396466739595866739252048190629504945984969192535L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(3), 4), static_cast<RealType>(14.623077742393873174076722507725200649352970569915L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(3), 5), static_cast<RealType>(17.818455232945520262553239064736739443380352162752L), tolerance);
@@ -844,8 +844,8 @@ Calculated using cpp_dec_float_50
     // BOOST_CHECK_EQUAL(airy_ai_zero<RealType>(-1), 0); //  warning C4245: 'argument' : conversion from 'int' to 'unsigned int', signed/unsigned mismatch
   }
 
-  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.75639318326103, tolerance);
-  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<int>::max()), -4678579.33301973093739, tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.75639318326103L, tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<int>::max()), -4678579.33301973093739L, tolerance);
 
   // Can't abuse with infinity because won't compile - no conversion.
   //if (std::numeric_limits<RealType>::has_infinity)
