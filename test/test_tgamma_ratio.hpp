@@ -116,5 +116,18 @@ void test_tgamma_ratio(T, const char* name)
 
    do_test_tgamma_ratio<T>(tgamma_ratio_data, name, "tgamma ratios");
 
+   //
+   // A few special spot tests:
+   //
+   BOOST_MATH_STD_USING
+   T tol = boost::math::tools::epsilon<T>() * 20;
+   if(std::numeric_limits<T>::max_exponent > 200)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -500), T(180.25)), 8.0113754557649679470816892372669519037339812035512e-178L, tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -525), T(192.25)), 1.5966560279353205461166489184101261541784867035063e-197L, tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(182.25), ldexp(T(1), -500)), 4.077990437521002194346763299159975185747917450788e+181L, tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(193.25), ldexp(T(1), -525)), 1.2040790040958522422697601672703926839178050326148e+199L, tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(193.25), T(194.75)), 0.00037151765099653237632823607820104961270831942138159L, tol);
+   }
 }
 
