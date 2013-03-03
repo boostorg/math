@@ -19,7 +19,7 @@
 #include <iterator>
 
 // Weisstein, Eric W. "Bessel Function Zeros." From MathWorld--A Wolfram Web Resource.
-// http://mathworld.wolfram.com/BesselFunctionZeros.html 
+// http://mathworld.wolfram.com/BesselFunctionZeros.html
 // Test values can be calculated using [@wolframalpha.com WolframAplha]
 // See also http://dlmf.nist.gov/10.21
 
@@ -54,7 +54,7 @@ and then placing multiple zeros into a container like `std::vector` by providing
 The signature of the single value function is:
 
   template <class T>
-  inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type 
+  inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type
     cyl_bessel_j_zero(T v,  // Floating-point value for Jv.
     int m); // start index.
 
@@ -67,7 +67,7 @@ The signature of multiple zeros function is:
   inline OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
                                 int start_index, // 1-based start index.
                                 unsigned number_of_zeros,
-                                OutputIterator out_it); // iterator into container for zeros. 
+                                OutputIterator out_it); // iterator into container for zeros.
 
 There is also a version which allows control of the __policy_section for error handling and precision.
 
@@ -76,7 +76,7 @@ There is also a version which allows control of the __policy_section for error h
                                 int start_index, // 1-based start index.
                                 unsigned number_of_zeros,
                                 OutputIterator out_it,
-                                const Policy& pol); // iterator into container for zeros. 
+                                const Policy& pol); // iterator into container for zeros.
 
 */
 //]  [/bessel_zero_example_1]
@@ -112,7 +112,7 @@ private:
 int main()
 {
   try
-  { 
+  {
 //[bessel_zero_example_2]
 
 /*`[tip It is always wise to place code using Boost.Math inside try'n'catch blocks;
@@ -142,23 +142,25 @@ with this error message
 
 Optionally, we can use a policy to ignore errors, C-style, returning some value
 perhaps infinity or NaN, or the best that can be done. (See __user_error_handling).
-    
+
 To create a (possibly unwise!) policy that ignores all errors:
 */
 
-  typedef boost::math::policies::policy<
-    boost::math::policies::domain_error<boost::math::policies::ignore_error>,
-    boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
-    boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
-    boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
-    boost::math::policies::pole_error<boost::math::policies::ignore_error>,
-    boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
-              > ignore_all_policy;
+  typedef boost::math::policies::policy
+    <
+      boost::math::policies::domain_error<boost::math::policies::ignore_error>,
+      boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::underflow_error<boost::math::policies::ignore_error>,
+      boost::math::policies::denorm_error<boost::math::policies::ignore_error>,
+      boost::math::policies::pole_error<boost::math::policies::ignore_error>,
+      boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
+    > ignore_all_policy;
 
     double inf = std::numeric_limits<double>::infinity();
     double nan = std::numeric_limits<double>::quiet_NaN();
 
-    double dodgy_root = boost::math::cyl_bessel_j_zero(-1.0, 1, ignore_all_policy());
+    std::cout << "boost::math::cyl_bessel_j_zero(-1.0, 0) " << std::endl;
+    double dodgy_root = boost::math::cyl_bessel_j_zero(-1.0, 0, ignore_all_policy());
     std::cout << "boost::math::cyl_bessel_j_zero(-1.0, 1) " << dodgy_root << std::endl; // 1.#QNAN
     double inf_root = boost::math::cyl_bessel_j_zero(inf, 1, ignore_all_policy());
     std::cout << "boost::math::cyl_bessel_j_zero(inf, 1) " << inf_root << std::endl; // 1.#QNAN
@@ -183,7 +185,7 @@ As column J[sub 2](x) in table 1 of
 /*`Or generate 50 decimal digit roots of J[sub v] for non-integral order `v=71/19`.
 
 We set the precision of the output stream and show trailing zeros to display a fixed 50 decimal digits.
-*/  
+*/
     std::cout.precision(std::numeric_limits<float_type>::digits10); // 50 decimal digits.
     std::cout << std::showpoint << std::endl; // Show trailing zeros.
 
@@ -194,9 +196,10 @@ We set the precision of the output stream and show trailing zeros to display a f
     r = boost::math::cyl_bessel_j_zero(x, 20U); // 20th root.
     std::cout << "x = " << x << ", r = " << r << std::endl;
 
-    std::vector<float_type> zeros(3); // Space for 3 roots.
-    boost::math::cyl_bessel_j_zero(float_type(71) / 19, 1, unsigned(zeros.size()), zeros.begin());
+    std::vector<float_type> zeros;
+    boost::math::cyl_bessel_j_zero(x, 1, 3, std::back_inserter(zeros));
 
+    std::cout << "cyl_bessel_j_zeros" << std::endl;
     // Print the roots to the output stream.
     std::copy(zeros.begin(), zeros.end(),
               std::ostream_iterator<float_type>(std::cout, "\n"));
@@ -204,11 +207,21 @@ We set the precision of the output stream and show trailing zeros to display a f
 /*`The Neumann function zeros are evaluated very similarly:
 */
     using boost::math::cyl_neumann_zero;
-    std::cout << "cyl_neumann_zero(2., 1) = " << cyl_neumann_zero(2., 1) << std::endl;
+
+    double zn = cyl_neumann_zero(2., 1);
+
+    std::cout << "cyl_neumann_zero(2., 1) = " << std::endl;
+    //double zn0 = zn;
+    //    std::cout << "zn0 = " << std::endl;
+    //    std::cout << zn0 << std::endl;
+    //
+    std::cout << zn << std::endl;
+    //  std::cout << cyl_neumann_zero(2., 1) << std::endl;
 
     std::vector<float> nzeros(3); // Space for 3 zeros.
-    cyl_neumann_zero(2.F, 1, unsigned(nzeros.size()), nzeros.begin());
+    cyl_neumann_zero<float>(2.F, 1, nzeros.size(), nzeros.begin());
 
+    std::cout << "cyl_neumann_zero<float>(2.F, 1, " << std::endl;
     // Print the zeros to the output stream.
     std::copy(nzeros.begin(), nzeros.end(),
               std::ostream_iterator<float>(std::cout, "\n"));
@@ -220,7 +233,7 @@ We set the precision of the output stream and show trailing zeros to display a f
 
 (See [@http://dx.doi.org/10.1017/S2040618500034067 Ian N. Sneddon, Infinite Sums of Bessel Zeros],
 page 150 equation 40).
-*/  
+*/
 //] [/bessel_zero_example_2]
 
     {
@@ -235,28 +248,29 @@ page 150 equation 40).
 
     double s = 1/(4 * (nu + 1)); // 0.125 = 1/8 is exact analytical solution.
     std::cout << std::setprecision(6) << "nu = " << nu << ", sum = " << sum
-      << ", exact = " << s << std::endl; 
+      << ", exact = " << s << std::endl;
     // nu = 1.00000, sum = 0.124990, exact = 0.125000
 //] [/bessel_zero_example_iterator_2]
     }
   }
-  catch (std::exception ex)
+  catch (std::exception& ex)
   {
-    std::cout << "Throw exception " << ex.what() << std::endl;
+    std::cout << "Thrown exception " << ex.what() << std::endl;
   }
 
 //[bessel_zero_example_iterator_3]
-  
+
 /*`Examples below show effect of 'bad' arguments that throw a `domain_error` exception.
 */
   try
-  { // Try a negative order v.
-    float dodgy_root = boost::math::cyl_bessel_j_zero(-1.F, 1);
-    std::cout << "boost::math::cyl_bessel_j_zero(-1.F, 1) " << dodgy_root << std::endl;
+  { // Try a negative rank m.
+    std::cout << "boost::math::cyl_bessel_j_zero(-1.F, -1) " << std::endl;
+    float dodgy_root = boost::math::cyl_bessel_j_zero(-1.F, -1);
+    std::cout << "boost::math::cyl_bessel_j_zero(-1.F, -1) " << dodgy_root << std::endl;
     // Throw exception Error in function boost::math::cyl_bessel_j_zero<double>(double, int):
     // Order argument is -1, but must be >= 0 !
   }
-  catch (std::exception ex)
+  catch (std::exception& ex)
   {
     std::cout << "Throw exception " << ex.what() << std::endl;
   }
@@ -276,7 +290,20 @@ See full code for other examples that promote from `double` to `long double`.
 */
 
 //] [/bessel_zero_example_iterator_3]
-
+    try
+  { // order v = inf
+     std::cout << "boost::math::cyl_bessel_j_zero(infF, 1) " << std::endl;
+     float infF = std::numeric_limits<float>::infinity();
+     float inf_root = boost::math::cyl_bessel_j_zero(infF, 1);
+      std::cout << "boost::math::cyl_bessel_j_zero(infF, 1) " << inf_root << std::endl;
+     //  boost::math::cyl_bessel_j_zero(-1.F, -1) 
+     //Thrown exception Error in function boost::math::cyl_bessel_j_zero<double>(double, int):
+     // Requested the -1'th zero, but the rank must be positive !
+  }
+  catch (std::exception& ex)
+  {
+    std::cout << "Thrown exception " << ex.what() << std::endl;
+  }
   try
   { // order v = inf
      double inf = std::numeric_limits<double>::infinity();
@@ -285,9 +312,9 @@ See full code for other examples that promote from `double` to `long double`.
      // Throw exception Error in function boost::math::cyl_bessel_j_zero<long double>(long double, unsigned):
      // Order argument is 1.#INF, but must be finite >= 0 !
   }
-  catch (std::exception ex)
+  catch (std::exception& ex)
   {
-    std::cout << "Throw exception " << ex.what() << std::endl;
+    std::cout << "Thrown exception " << ex.what() << std::endl;
   }
 
   try
@@ -298,9 +325,9 @@ See full code for other examples that promote from `double` to `long double`.
      // Throw exception Error in function boost::math::cyl_bessel_j_zero<long double>(long double, unsigned):
      // Order argument is 1.#QNAN, but must be finite >= 0 !
   }
-  catch (std::exception ex)
+  catch (std::exception& ex)
   {
-    std::cout << "Throw exception " << ex.what() << std::endl;
+    std::cout << "Thrown exception " << ex.what() << std::endl;
   }
 
   try
@@ -312,9 +339,9 @@ See full code for other examples that promote from `double` to `long double`.
     // This *should* fail because m is unreasonably large.
 
   }
-  catch (std::exception ex)
+  catch (std::exception& ex)
   {
-    std::cout << "Throw exception " << ex.what() << std::endl;
+    std::cout << "Thrown exception " << ex.what() << std::endl;
   }
 
   try
@@ -327,23 +354,24 @@ See full code for other examples that promote from `double` to `long double`.
      // Requested the 0'th zero, but must be > 0 !
 
   }
-  catch (std::exception ex)
+  catch (std::exception& ex)
   {
-    std::cout << "Throw exception " << ex.what() << std::endl;
+    std::cout << "Thrown exception " << ex.what() << std::endl;
   }
 
   try
   { // m = NaN
+     std::cout << "boost::math::cyl_bessel_j_zero(0.0, nan) " << std::endl ;
      double nan = std::numeric_limits<double>::quiet_NaN();
      double nan_root = boost::math::cyl_bessel_j_zero(0.0, nan);
      // warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data.
-     std::cout << "boost::math::cyl_bessel_j_zero(0.0, nan) " << nan_root << std::endl;
+     std::cout << nan_root << std::endl;
      // Throw exception Error in function boost::math::cyl_bessel_j_zero<long double>(long double, int):
      // Requested the 0'th zero, but must be > 0 !
   }
-  catch (std::exception ex)
+  catch (std::exception& ex)
   {
-    std::cout << "Throw exception " << ex.what() << std::endl;
+    std::cout << "Thrown exception " << ex.what() << std::endl;
   }
 
  } // int main()
@@ -373,7 +401,7 @@ Mathematica: Table[N[BesselJZero[71/19, n], 50], {n, 1, 20, 1}]
 67.815145619696290925556791375555951165111460585458
 
 Mathematica: Table[N[BesselKZero[2, n], 50], {n, 1, 5, 1}]
-n | 
+n |
 1 | 3.3842417671495934727014260185379031127323883259329
 2 | 6.7938075132682675382911671098369487124493222183854
 3 | 10.023477979360037978505391792081418280789658279097
@@ -394,7 +422,7 @@ n |
   11.6198411721491
   14.7959517823513
   17.9598194949878
-  
+
   x = 3.7368421052631578947368421052631578947368421052632, r = 7.2731751938316489503185694262290765588963196701623
   x = 3.7368421052631578947368421052631578947368421052632, r = 67.815145619696290925556791375555951165111460585458
   7.2731751938316489503185694262290765588963196701623
