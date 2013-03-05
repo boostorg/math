@@ -1212,9 +1212,9 @@ T tgamma_ratio_imp(T x, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
-   if(x <= 0)
+   if((x <= tools::min_value<T>()) || (boost::math::isinf)(x))
       policies::raise_domain_error<T>("boost::math::tgamma_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got a=%1%).", x, pol);
-   if(y <= 0)
+   if((y <= tools::min_value<T>()) || (boost::math::isinf)(y))
       policies::raise_domain_error<T>("boost::math::tgamma_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got b=%1%).", y, pol);
 
    if((x < max_factorial<T>::value) && (y < max_factorial<T>::value))
