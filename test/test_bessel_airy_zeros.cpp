@@ -601,7 +601,7 @@ n |
   16 | 51.014128749483902310217774804582826908060740157564
   */
 
-  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2), 1), static_cast<RealType>(3.3842417671495934727014260185379031127323883259329L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2), 1), static_cast<RealType>(3.3842417671495934727014260185379031127323883259329L), tolerance * 3);
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2), 6), static_cast<RealType>(19.539039990286384411511740683423888947393156497603L), tolerance * 3);
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2), 11), static_cast<RealType>(35.289793869635804143323234828826075805683602368473L), tolerance * 3);
   BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-2), 16), static_cast<RealType>(51.014128749483902310217774804582826908060740157564L), tolerance * 3);
@@ -731,7 +731,7 @@ Calculated using cpp_dec_float_50
   4 | 22.2951449444372591060253508661432751300205474374696
 */
 
-    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-7) -static_cast<RealType>(4999)/10000, 1), static_cast<RealType>(3.59209698655443348407622952525352410710983745802573L), tolerance * 1000);
+    BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-7) -static_cast<RealType>(4999)/10000, 1), static_cast<RealType>(3.59209698655443348407622952525352410710983745802573L), tolerance * 2000);
     BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-7) -static_cast<RealType>(4999)/10000, 2), static_cast<RealType>(11.6573245781899449398248761667833391837824916603434L), tolerance * 100);
     BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-7) -static_cast<RealType>(4999)/10000, 3), static_cast<RealType>(15.4315262542144355217979771618575628291362029097236L), tolerance * 100);
     BOOST_CHECK_CLOSE_FRACTION(cyl_neumann_zero(static_cast<RealType>(-7) -static_cast<RealType>(4999)/10000, 4), static_cast<RealType>(18.9232143766706670333395285892576635207736306576135L), tolerance * 100);
@@ -912,8 +912,8 @@ Calculated using cpp_dec_float_50
     // check airy_bi_zero<RealType>(-1) == 0 has failed [-7.42678e+006 != 0]
   }
 
-  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.75581678913522, tolerance * 100);
-  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<int>::max()), -4678579.33229351984573, tolerance * 100);
+  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.75581678913522, tolerance * 300);
+  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<int>::max()), -4678579.33229351984573, tolerance * 300);
 
   // Can't abuse with infinity because won't compile - no conversion.
   //if (std::numeric_limits<RealType>::has_infinity)
