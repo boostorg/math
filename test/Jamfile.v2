@@ -81,7 +81,7 @@ run test_airy.cpp test_instances//test_instances pch_light ../../test/build//boo
 run test_bernoulli.cpp ../../test/build//boost_unit_test_framework ;
 run test_constants.cpp ../../test/build//boost_unit_test_framework ;
 run test_print_info_on_type.cpp ;
-run test_constant_generate.cpp ntl  : : : [ check-target-builds ../config//has_ntl_rr : : <build>no ] : test_constant_generate_ntl ;
+run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 ;
 run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_y.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_i.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
