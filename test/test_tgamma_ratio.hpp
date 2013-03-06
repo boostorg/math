@@ -116,7 +116,11 @@ void test_tgamma_ratio(T, const char* name)
 
    do_test_tgamma_ratio<T>(tgamma_ratio_data, name, "tgamma ratios");
 
+}
 
+template <class T>
+void test_spots(T, const char*)
+{
 #ifdef _MSC_VER
 # pragma warning(push)
 # pragma warning(disable:4127 4756)
