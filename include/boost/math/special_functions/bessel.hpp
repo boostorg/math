@@ -378,7 +378,7 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
 
    // Get the absolute value of the order.
    const bool order_is_negative = (v < 0);
-   const T vv((!order_is_negative) ? v : -v);
+   const T vv((!order_is_negative) ? v : T(-v));
 
    // Check if the order is very close to zero or very close to an integer.
    const bool order_is_zero    = (vv < half_epsilon);
@@ -460,7 +460,7 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
 
    // Get the absolute value of the order.
    const bool order_is_negative = (v < 0);
-   const T vv((!order_is_negative) ? v : -v);
+   const T vv((!order_is_negative) ? v : T(-v));
 
    const bool order_is_integer = ((vv - floor(vv)) < half_epsilon);
 

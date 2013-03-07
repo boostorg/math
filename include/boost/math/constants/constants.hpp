@@ -23,6 +23,7 @@
 #include <boost/mpl/int.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+
 namespace boost{ namespace math
 {
   namespace constants
@@ -46,7 +47,10 @@ namespace boost{ namespace math
       construct_from_float = 1,
       construct_from_double = 2,
       construct_from_long_double = 3,
-      construct_from_string = 4
+      construct_from_string = 4,
+      construct_from_float128 = 5,
+      // Must be the largest value above:
+      construct_max = construct_from_float128
    };
 
    //
@@ -63,6 +67,9 @@ namespace boost{ namespace math
       typedef typename policies::precision<float, Policy>::type t2;
       typedef typename policies::precision<double, Policy>::type t3;
       typedef typename policies::precision<long double, Policy>::type t4;
+#ifdef BOOST_MATH_USE_FLOAT128
+      typedef mpl::int_<FLT128_MANT_DIG> t5;
+#endif
    public:
       typedef typename mpl::if_<
          mpl::and_<boost::is_convertible<float, Real>, mpl::bool_< t1::value <= t2::value>, mpl::bool_<0 != t1::value> >,
@@ -73,11 +80,23 @@ namespace boost{ namespace math
             typename mpl::if_<
                mpl::and_<boost::is_convertible<long double, Real>, mpl::bool_< t1::value <= t4::value>, mpl::bool_<0 != t1::value> >,
                mpl::int_<construct_from_long_double>,
+#ifdef BOOST_MATH_USE_FLOAT128
+               typename mpl::if_<
+                  mpl::and_<boost::is_convertible<__float128, Real>, mpl::bool_< t1::value <= t5::value>, mpl::bool_<0 != t1::value> >,
+                  mpl::int_<construct_from_float128>,
+                  typename mpl::if_<
+                     mpl::and_<mpl::bool_< t1::value <= max_string_digits>, mpl::bool_<0 != t1::value> >,
+                     mpl::int_<construct_from_string>,
+                     mpl::int_<t1::value>
+                  >::type
+               >::type
+#else
                typename mpl::if_<
                   mpl::and_<mpl::bool_< t1::value <= max_string_digits>, mpl::bool_<0 != t1::value> >,
                   mpl::int_<construct_from_string>,
                   mpl::int_<t1::value>
                >::type
+#endif
             >::type
          >::type
       >::type type;
@@ -98,7 +117,7 @@ namespace boost{ namespace math
       {
          typedef typename construction_traits<Real, Policy>::type construct_type;
          typedef typename mpl::if_c<
-            (construct_type::value >= construct_from_string),
+            (construct_type::value == construct_from_string) || (construct_type::value > construct_max),
             const Real&, Real>::type type;
       };
 
@@ -167,6 +186,14 @@ namespace boost{ namespace math
 
    }
 
+#ifdef BOOST_MATH_USE_FLOAT128
+#  define BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x) \
+   static inline BOOST_CONSTEXPR T get(const mpl::int_<construct_from_float128>&)\
+   { return BOOST_JOIN(x, Q); }
+#else
+#  define BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x)
+#endif
+
    #define BOOST_DEFINE_MATH_CONSTANT(name, x, y)\
    namespace detail{\
    template <class T> struct BOOST_JOIN(constant_, name){\
@@ -197,6 +224,7 @@ namespace boost{ namespace math
    { return x; }\
    static inline BOOST_CONSTEXPR T get(const mpl::int_<construct_from_long_double>&)\
    { return BOOST_JOIN(x, L); }\
+   BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x) \
    template <int N> static inline const T& get(const mpl::int_<N>&)\
    {\
       constant_initializer2<T, N, & BOOST_JOIN(constant_, name)<T>::template get_from_compute<N> >::force_instantiate();\

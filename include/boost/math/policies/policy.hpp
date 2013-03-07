@@ -813,6 +813,16 @@ struct precision
 
 #endif
 
+#ifdef BOOST_MATH_USE_FLOAT128
+
+template <class Policy>
+struct precision<__float128, Policy>
+{
+   typedef mpl::int_<FLT128_MANT_DIG> type;
+};
+
+#endif
+
 namespace detail{
 
 template <class T, class Policy>

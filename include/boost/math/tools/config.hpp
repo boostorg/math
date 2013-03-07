@@ -207,6 +207,13 @@
 #ifndef BOOST_MATH_INT_VALUE_SUFFIX
 #  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##SUF
 #endif
+//
+// Test whether to support __float128:
+//
+#ifdef _GLIBCXX_USE_FLOAT128
+#  define BOOST_MATH_USE_FLOAT128
+#include <quadmath.h>
+#endif
 
 //
 // Helper macro for controlling the FP behaviour:

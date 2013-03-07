@@ -92,6 +92,7 @@ void test_spots(T, const char* t)
    // Basic sanity checks, tolerance is either 5 or 10 epsilon 
    // expressed as a percentage:
    //
+   BOOST_MATH_STD_USING
    T tolerance = boost::math::tools::epsilon<T>() * 100 *
       (boost::is_floating_point<T>::value ? 5 : 10);
    BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(0.125)), static_cast<T>(-0.63277562349869525529352526763564627152686379131122L), tolerance);
