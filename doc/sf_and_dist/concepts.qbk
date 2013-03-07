@@ -8,6 +8,7 @@ can be used with a number of high-precision libraries, including:
 * __NTL
 * __GMP
 * __MPFR
+* __float128
 
 The last four have some license restrictions;
 only __multiprecision when using the `cpp_float` backend
@@ -116,6 +117,18 @@ The table output is:
 
 [endsect] [/section:use_multiprecision Using Boost.Multiprecision]
 
+[section:float128 Using with GCC's __float128 datatype]
+
+At present support for GCC's native `__float128` datatype is extremely limited: the numeric constants
+will all work with that type, and that's about it.  If you want to use the distributions or special
+functions then you will need to provide your own wrapper header that:
+
+* Provides std::numeric_limits<__float128> support.
+* Provides overloads of the standard library math function for type __float128 and which forward to the libquadmath equivalents.
+
+Ultimately these facilities should be provided by GCC and libstdc++.
+
+[endsect]
 
 [section:use_mpfr Using With MPFR or GMP - High-Precision Floating-Point Library]
 

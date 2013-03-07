@@ -16,6 +16,7 @@ All bug reports including closed ones can be viewed
 * Fixed nasty cyclic dependency bug that caused some headers to not compile [@https://svn.boost.org/trac/boost/ticket/7999 #7999].
 * Fixed bug in __tgamma that caused spurious overflow for arguments between 142.5 and 143.
 * Fixed bug in raise_rounding_error that caused it to return an incorrect result when throwing an exception is turned off [@https://svn.boost.org/trac/boost/ticket/7905 #7905].
+* Added minimal __float128 support.
 
 [h4 Boost-1.53]
 

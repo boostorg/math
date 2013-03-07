@@ -79,6 +79,13 @@
                     function call that returns the constant will be a <code class="computeroutput"><span class="identifier">constexp</span></code>.
                   </li>
 <li class="listitem">
+                    If the precision is less than or equal to that of a <code class="computeroutput"><span class="identifier">__float128</span></code> (and the compiler
+                    supports such a type) and the type is constructable from a <code class="computeroutput"><span class="identifier">__float128</span></code> then our code returns
+                    a <code class="computeroutput"><span class="identifier">__float128</span></code>
+                    literal. If the user-defined type is a literal type then the
+                    function call that returns the constant will be a <code class="computeroutput"><span class="identifier">constexp</span></code>.
+                  </li>
+<li class="listitem">
                     If the precision is less than 100 decimal digits, then the constant
                     will be constructed (just the once, then cached in a thread-safe
                     manner) from a string representation of the constant. In this

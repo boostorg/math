@@ -170,6 +170,10 @@ of the built-in floating point types, how the value returned is created is as fo
    * If the precision is less than or equal to that of a `long double` and the type is constructable from a `long double`
      then our code returns a `long double` literal.  If the user-defined type is a literal type
      then the function call that returns the constant will be a `constexp`.
+   * If the precision is less than or equal to that of a `__float128` (and the compiler supports such a type)
+     and the type is constructable from a `__float128`
+     then our code returns a `__float128` literal.  If the user-defined type is a literal type
+     then the function call that returns the constant will be a `constexp`.
    * If the precision is less than 100 decimal digits, then the constant will be constructed
       (just the once, then cached in a thread-safe manner) from a string representation of the constant.
       In this case the value is returned as a const reference to the cached value.

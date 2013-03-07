@@ -39,12 +39,39 @@
       </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-            Fixed constants to use a thread safe cache of computed values when used
+            Added many references to Boost.Multiprecision and <code class="computeroutput"><span class="identifier">cpp_dec_float_50</span></code>
+            as an example of a User-defined Type (UDT).
+          </li>
+<li class="listitem">
+            Added Clang to list of supported compilers.
+          </li>
+<li class="listitem">
+            Fixed constants to use a thread-safe cache of computed values when used
             at arbitrary precision.
+          </li>
+<li class="listitem">
+            Added finding zeros of Bessel functions <code class="computeroutput"><span class="identifier">cyl_bessel_j_zero</span></code>,
+            <code class="computeroutput"><span class="identifier">cyl_neumann_zero</span></code>, <code class="computeroutput"><span class="identifier">air_ai_zeros</span></code> and <code class="computeroutput"><span class="identifier">air_bi_zeros</span></code>(by
+            Christopher Kormanyos).
           </li>
 <li class="listitem">
             More accuracy improvements to the Bessel J and Y functions from Rocco
             Romeo.
+          </li>
+<li class="listitem">
+            Fixed nasty cyclic dependency bug that caused some headers to not compile
+            <a href="https://svn.boost.org/trac/boost/ticket/7999" target="_top">#7999</a>.
+          </li>
+<li class="listitem">
+            Fixed bug in <a class="link" href="../special/sf_gamma/tgamma.html" title="Gamma">tgamma</a>
+            that caused spurious overflow for arguments between 142.5 and 143.
+          </li>
+<li class="listitem">
+            Fixed bug in raise_rounding_error that caused it to return an incorrect
+            result when throwing an exception is turned off <a href="https://svn.boost.org/trac/boost/ticket/7905" target="_top">#7905</a>.
+          </li>
+<li class="listitem">
+            Added minimal __float128 support.
           </li>
 </ul></div>
 <h5>
@@ -585,9 +612,9 @@ by switching to use the Students t distribution (or Normal distribution
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang
-      Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin
-      Sobotta<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs
+      van den Berg, Benjamin Sobotta and Christopher Kormanyos<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
