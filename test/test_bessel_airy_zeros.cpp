@@ -26,7 +26,6 @@
 
 #include <typeinfo>
 
-
 // #include <boost/math/tools/
 //
 // DESCRIPTION:
@@ -855,7 +854,7 @@ Calculated using cpp_dec_float_50
 
   // WolframAlpha  Table[N[AiryAiZero[n], 51], {n, 1, 20, 1}]
 
-  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(1), static_cast<RealType>(-2.33810741045976703848919725244673544063854014567239L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(1), static_cast<RealType>(-2.33810741045976703848919725244673544063854014567239L), tolerance * 2);
   BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(2), static_cast<RealType>(-4.08794944413097061663698870145739106022476469910853L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(3), static_cast<RealType>(-5.52055982809555105912985551293129357379721428061753L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(4), static_cast<RealType>(-6.78670809007175899878024638449617696605388247739349L), tolerance);
@@ -922,7 +921,7 @@ Calculated using cpp_dec_float_50
   //}
 
   // Table[N[AiryBiZero[n], 51], {n, 1, 20, 1}]
-  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(1), static_cast<RealType>(-1.17371322270912792491997996247390210454364638917570L), tolerance);
+  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(1), static_cast<RealType>(-1.17371322270912792491997996247390210454364638917570L), tolerance * 2);
   BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(2), static_cast<RealType>(-3.27109330283635271568022824016641380630093596910028L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(3), static_cast<RealType>(-4.83073784166201593266770933990517817696614261732301L), tolerance);
   BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(4), static_cast<RealType>(-6.16985212831025125983336452055593667996554943427563L), tolerance);
