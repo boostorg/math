@@ -78,7 +78,8 @@
 [template frasl[]'''&#x2044;'''] [/  / fraction slash]
 [template weierp[]'''&#x2118;'''] [/  P script capital P = power set = Weierstrass p]
 [template image[]'''&#x2111;'''] [/  I blackletter capital I = imaginary part]
-[template real[]'''&#x211C;'''] [/  R blackletter capital R = real part symbol]
+[template real[]'''&#x211C;'''] [/  R blackletter capital R = real part math symbol]
+[template negative[]'''&#x2115;'''] [/  N blackletter capital N = Negative number math symbol]
 [template trade[]'''&#x2122;'''] [/  ™ trade mark sign]
 [template alefsym[]'''&#x2135;'''] [/  ? alef symbol = first transfinite cardinal]
 [template larr[]'''&#x2190;'''] [/  ? leftwards arrow]
@@ -116,6 +117,7 @@
 [template there4[]'''&#x2234;'''] [/  ? therefore]
 [template sim[]'''&#x223C;'''] [/  ~ tilde operator = varies with = similar to]
 [template cong[]'''&#x2245;'''] [/  ? approximately equal to]
+[template approx[]'''&#x2248;'''] [/  ? ~~ very approximately equal to]
 [template asymp[]'''&#x2248;'''] [/  ˜ almost equal to = asymptotic to]
 [template ne[]'''&#x2260;'''] [/  ? not equal to]
 [template equiv[]'''&#x2261;'''] [/  = identical to]
@@ -157,6 +159,7 @@
 [template dot[]'''&#x2024;'''] [/  dot leader]
 [template dot2[]'''&#x2025;'''] [/  ? dots leader]
 [template ellipsis[]'''&#x2026;'''] [/  horizontal ellipsis]
+[template sect[]'''&#x00A7;'''] [/  ? section or paragraph sign]
 
 [template dotover[]'''&#x0307;'''] [/  dot over symbol]
 [template recur[]'''&#x200A;&#x0307;'''] [/ math recurring symbol, eg after 0.333]
@@ -193,10 +196,15 @@
 [template pow4[]'''&#x2074;'''] [/ superscript 4 character]
 [template pown[]'''&#x207F;'''] [/ superscript n character]
 [template frac12[]'''&#x00BD;'''] [/ fraction half]
+[template frac13[]'''&#x2153;'''] [/ fraction third]
 [template frac14[]'''&#x00BC;'''] [/ fraction quarter]
 [template frac34[]'''&#x00BE;'''] [/ fraction three quarter]
+[template frac23[]'''&#x2154;'''] [/ fraction two third]
 [template sup1[]'''&#xB9;'''] [/ superscript one = superscript digit one ]
 [template sup2[]'''&#xB2;'''] [/ superscript two = superscript digit two = squared ]
+[template supminus[]'''&#x207B;'''] [/ superscript minus]
+[template supplus[]'''&#x207A;'''] [/ superscript plus]
+
 [template cubed[]'''&#xB3;'''] [/ superscript three = superscript digit three = cubed ]
 [template macron[]'''&#xAF;'''] [/ macron = spacing macron = overline = APL overbar ]
 [template deg[]'''&#xB0;'''] [/ degree sign ]
@@ -208,7 +216,7 @@
 [template laquo[]'''&#xAB;'''] [/ left-pointing double angle quotation mark = left pointing guillemet ]
 [template raquo[]'''&#xBB;'''] [/ right-pointing double angle quotation mark = right pointing guillemet  ]
 
-[/ 
+[/
 Copyright 2007, 2010, 2012 Paul A. Bristow.
 Distributed under the Boost Software License, Version 1.0.
 (See accompanying file LICENSE_1_0.txt or copy at
