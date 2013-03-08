@@ -69,7 +69,7 @@ int main()
   cout << "pidf =  boost::math::constants::pi() = " << pif << endl;
   //   pidf =  boost::math::float_constants::pi = 3.1415927410125732
 
-    //float df = pi * rf * rf; // conversion from 'const double' to 'float', possible loss of data
+    //float df = pi * rf * rf; // conversion from 'const double' to 'float', possible loss of data.
   float df = pif * rf * rf;
 
   cout << "df = " << df << ", rf = " << rf << endl;
@@ -100,7 +100,7 @@ int main()
     // If you try to use two namespaces, this may, of course, create ambiguity:
     // it is not too difficult to do this inadvertently.
     using namespace boost::math::float_constants;
-    //cout << pi << endl; // error C2872: 'pi' : ambiguous symbol
+    //cout << pi << endl; // error C2872: 'pi' : ambiguous symbol.
 
   }
   {
@@ -156,13 +156,15 @@ int main()
 
 
   }
-  {
+/*
+{
     using  boost::math::constants::pi;
-    double my_pi3 = pi<double>();
+    //double my_pi3 = pi<double>(); // OK
     //double my_pi4 = pi<>(); cannot find template type.
-    //double my_pi4 = pi();
+    //double my_pi4 = pi(); // Can't find a function.
 
   }
+*/
 
 } // int main()
 

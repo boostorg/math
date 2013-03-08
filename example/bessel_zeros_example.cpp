@@ -167,11 +167,11 @@ To create a (possibly unwise!) policy that ignores all errors:
     double nan_root = boost::math::cyl_bessel_j_zero(nan, 1, ignore_all_policy());
     std::cout << "boost::math::cyl_bessel_j_zero(nan, 1) " << nan_root << std::endl; // 1.#QNAN
 
-/*`Another version of `cyl_bessel_j_zero`  allows calculation of multiple zeros with one call,
+/*`Another version of `cyl_bessel_j_zero` allows calculation of multiple zeros with one call,
 placing the results in a container, often `std::vector`.
 For example, generate five `double` roots of J[sub v] for integral order 2.
 
-As column J[sub 2](x) in table 1 of
+showing the same results as column J[sub 2](x) in table 1 of
 [@ http://mathworld.wolfram.com/BesselFunctionZeros.html Wolfram Bessel Function Zeros].
 
 */
@@ -182,7 +182,7 @@ As column J[sub 2](x) in table 1 of
               roots.end(),
               std::ostream_iterator<double>(std::cout, "\n"));
 
-/*`Or generate 50 decimal digit roots of J[sub v] for non-integral order `v=71/19`.
+/*`Or generate 50 decimal digit roots of J[sub v] for non-integral order `v = 71/19`.
 
 We set the precision of the output stream and show trailing zeros to display a fixed 50 decimal digits.
 */
