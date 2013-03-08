@@ -30,7 +30,7 @@ void do_test_spots1(T, U)
    // Polynomials of order 0
    //
    static const U n1c[1] = { 2 };
-   static const boost::array<U, 1> n1a = { 2 };
+   static const boost::array<U, 1> n1a = {{ 2 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n1c, static_cast<T>(0.125), 1),
       static_cast<T>(0.2e1L),
@@ -185,7 +185,7 @@ void do_test_spots1(T, U)
    // Rational functions of order 0
    //
    static const U d1c[1] = { 3 };
-   static const boost::array<U, 1> d1a = { 3 };
+   static const boost::array<U, 1> d1a = {{ 3 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n1c, d1c, static_cast<T>(0.125), 1),
       static_cast<T>(0.6666666666666666666666666666666666666667e0L),
@@ -265,7 +265,7 @@ void do_test_spots1(T, U)
    // Polynomials of order 1
    //
    static const U n2c[2] = { 3, 1 };
-   static const boost::array<U, 2> n2a = { 3, 1 };
+   static const boost::array<U, 2> n2a = {{ 3, 1 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n2c, static_cast<T>(0.125), 2),
       static_cast<T>(0.3125e1L),
@@ -495,7 +495,7 @@ void do_test_spots1(T, U)
    // Rational functions of order 1
    //
    static const U d2c[2] = { 5, 9 };
-   static const boost::array<U, 2> d2a = { 5, 9 };
+   static const boost::array<U, 2> d2a = {{ 5, 9 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_rational(n2c, d2c, static_cast<T>(0.125), 2),
       static_cast<T>(0.5102040816326530612244897959183673469388e0L),
@@ -584,7 +584,7 @@ void do_test_spots2(T, U)
    // Polynomials of order 2
    //
    static const U n3c[3] = { 10, 6, 11 };
-   static const boost::array<U, 3> n3a = { 10, 6, 11 };
+   static const boost::array<U, 3> n3a = {{ 10, 6, 11 }};
    BOOST_CHECK_CLOSE(
       boost::math::tools::evaluate_polynomial(n3c, static_cast<T>(0.125), 3),
       static_cast<T>(0.10921875e2L),

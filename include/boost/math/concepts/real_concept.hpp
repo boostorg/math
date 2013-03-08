@@ -369,7 +369,7 @@ inline concepts::real_concept epsilon<concepts::real_concept>(BOOST_MATH_EXPLICI
 
 template <>
 inline int digits<concepts::real_concept>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(concepts::real_concept))
-{ 
+{
    // Assume number of significand bits is same as real_concept_base_type,
    // unless std::numeric_limits<T>::is_specialized to provide digits.
    return tools::digits<concepts::real_concept_base_type>();
@@ -435,7 +435,7 @@ inline long double real_cast<long double, concepts::real_concept>(concepts::real
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
 //
-// For some strange reason ADL sometimes fails to find the 
+// For some strange reason ADL sometimes fails to find the
 // correct overloads, unless we bring these declarations into scope:
 //
 using concepts::itrunc;

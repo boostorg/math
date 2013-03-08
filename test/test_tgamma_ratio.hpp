@@ -55,13 +55,13 @@ void do_test_tgamma_delta_ratio(const T& data, const char* type_name, const char
    // test tgamma_delta_ratio against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data, 
-      bind_func<Real>(funcp, 0, 1), 
+      data,
+      bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_delta_ratio(a, delta)", test_name);
    result = boost::math::tools::test_hetero<Real>(
-      data, 
-      negative_tgamma_ratio<Real>(), 
+      data,
+      negative_tgamma_ratio<Real>(),
       extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_delta_ratio(a -delta)", test_name);
 }
@@ -88,8 +88,8 @@ void do_test_tgamma_ratio(const T& data, const char* type_name, const char* test
    // test tgamma_ratio against data:
    //
    result = boost::math::tools::test_hetero<Real>(
-      data, 
-      bind_func<Real>(funcp, 0, 1), 
+      data,
+      bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_ratio(a, b)", test_name);
 }
@@ -132,11 +132,11 @@ void test_spots(T, const char*)
    T tol = boost::math::tools::epsilon<T>() * 20;
    if(std::numeric_limits<T>::max_exponent > 200)
    {
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -500), T(180.25)), T(8.0113754557649679470816892372669519037339812035512e-178L), tol);
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -525), T(192.25)), T(1.5966560279353205461166489184101261541784867035063e-197L), tol);
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(182.25), ldexp(T(1), -500)), T(4.077990437521002194346763299159975185747917450788e+181L), tol);
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(193.25), ldexp(T(1), -525)), T(1.2040790040958522422697601672703926839178050326148e+199L), tol);
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(193.25), T(194.75)), T(0.00037151765099653237632823607820104961270831942138159L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -500), T(180.25)), T(8.0113754557649679470816892372669519037339812035512e-178L), 3 * tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -525), T(192.25)), T(1.5966560279353205461166489184101261541784867035063e-197L), 3 * tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(182.25), ldexp(T(1), -500)), T(4.077990437521002194346763299159975185747917450788e+181L), 3 * tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(193.25), ldexp(T(1), -525)), T(1.2040790040958522422697601672703926839178050326148e+199L), 3 * tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(193.25), T(194.75)), T(0.00037151765099653237632823607820104961270831942138159L), 3 * tol);
    }
    BOOST_CHECK_THROW(boost::math::tgamma_ratio(0, 2), std::domain_error);
    BOOST_CHECK_THROW(boost::math::tgamma_ratio(2, 0), std::domain_error);
