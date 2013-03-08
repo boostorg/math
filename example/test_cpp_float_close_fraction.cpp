@@ -39,7 +39,7 @@ The second step passes this backend to `boost::multiprecision::number`
 with `boost::multiprecision::et_off`, an enumerated type.
 
   typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<50>, boost::multiprecision::et_off> 
-  cpp_dec_float_50_noet;`
+  cpp_dec_float_50_noet;
 
 You can reduce typing with a `using` directive `using namespace boost::multiprecision;`
 if desired, as shown below.
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(cpp_float_test_check_close)
   std::cout <<"a = " << a << ",\nb = " << b << ",\neps = " << eps << std::endl;
 
   BOOST_CHECK_CLOSE(a, b, eps); // Expected to pass (because tolerance is as percent).
-  BOOST_CHECK_CLOSE_FRACTION(a, b, eps); // Expected to fail.
+ // BOOST_CHECK_CLOSE_FRACTION(a, b, eps); // Expected to fail.
 
 /*`Using `cpp_dec_float_50` with the default expression template use switched on,
   the compiler error message for `BOOST_CHECK_CLOSE_FRACTION(a, b, eps); would be:
