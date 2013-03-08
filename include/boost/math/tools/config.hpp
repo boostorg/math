@@ -212,7 +212,6 @@
 //
 #ifdef _GLIBCXX_USE_FLOAT128
 #  define BOOST_MATH_USE_FLOAT128
-#include <quadmath.h>
 #endif
 
 //

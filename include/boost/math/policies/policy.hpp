@@ -818,7 +818,7 @@ struct precision
 template <class Policy>
 struct precision<__float128, Policy>
 {
-   typedef mpl::int_<FLT128_MANT_DIG> type;
+   typedef mpl::int_<113> type;
 };
 
 #endif

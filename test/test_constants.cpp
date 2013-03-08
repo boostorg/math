@@ -759,12 +759,14 @@ void test_real_concept_policy(const Policy&)
 #ifdef BOOST_MATH_USE_FLOAT128
 void test_float128()
 {
+   static const __float128 eps = 1.92592994438723585305597794258492732e-34Q;
+
    __float128 p = boost::math::constants::pi<__float128>();
    __float128 r = 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651Q;
    __float128 err = (p - r) / r;
    if(err < 0)
       err = -err;
-   BOOST_CHECK(err < 2 * FLT128_EPSILON);
+   BOOST_CHECK(err < 2 * eps);
 }
 #endif
 

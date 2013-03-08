@@ -68,7 +68,7 @@ namespace boost{ namespace math
       typedef typename policies::precision<double, Policy>::type t3;
       typedef typename policies::precision<long double, Policy>::type t4;
 #ifdef BOOST_MATH_USE_FLOAT128
-      typedef mpl::int_<FLT128_MANT_DIG> t5;
+      typedef mpl::int_<113> t5;
 #endif
    public:
       typedef typename mpl::if_<
