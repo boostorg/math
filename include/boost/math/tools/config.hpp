@@ -210,7 +210,11 @@
 //
 // Test whether to support __float128:
 //
-#ifdef _GLIBCXX_USE_FLOAT128
+#if defined(_GLIBCXX_USE_FLOAT128) && defined(BOOST_GCC)
+//
+// Only enable this when the compiler really is GCC as clang and probably 
+// intel too don't support __float128 yet :-(
+//
 #  define BOOST_MATH_USE_FLOAT128
 #endif
 
