@@ -56,8 +56,9 @@ The signature of the single value function is:
 
   template <class T>
   inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type
-    cyl_bessel_j_zero(T v,  // Floating-point value for Jv.
-    int m); // start index.
+    cyl_bessel_j_zero(
+           T v,      // Floating-point value for Jv.
+           int m);   // start index.
 
 The result type is controlled by the floating-point type of parameter `v`
 (but subject to the usual __precision_policy and __promotion_policy).
@@ -65,19 +66,21 @@ The result type is controlled by the floating-point type of parameter `v`
 The signature of multiple zeros function is:
 
   template <class T, class OutputIterator>
-  inline OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
-                                int start_index, // 1-based start index.
-                                unsigned number_of_zeros,
-                                OutputIterator out_it); // iterator into container for zeros.
+  inline OutputIterator cyl_bessel_j_zero(
+                                T v,                      // Floating-point value for Jv.
+                                int start_index,          // 1-based start index.
+                                unsigned number_of_zeros, // How many zeros to generate
+                                OutputIterator out_it);   // Destination for zeros.
 
 There is also a version which allows control of the __policy_section for error handling and precision.
 
   template <class T, class OutputIterator, class Policy>
-  inline OutputIterator cyl_bessel_j_zero(T v, // Floating-point value for Jv.
-                                int start_index, // 1-based start index.
-                                unsigned number_of_zeros,
-                                OutputIterator out_it,
-                                const Policy& pol); // iterator into container for zeros.
+  inline OutputIterator cyl_bessel_j_zero(
+                                T v,                      // Floating-point value for Jv.
+                                int start_index,          // 1-based start index.
+                                unsigned number_of_zeros, // How many zeros to generate
+                                OutputIterator out_it,    // Destination for zeros.
+                                const Policy& pol);       // Policy to use.
 
 */
 //] [/bessel_zeros_example_1]
