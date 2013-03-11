@@ -305,47 +305,46 @@ and for multiple zeros:
  OutputIterator cyl_bessel_j_zero(
                       T v,                       // Floating-point value for Jv.
                       int start_index,           // 1-based index of first zero.
-                      unsigned number_of_zeros,  // How many zeros to generate
-                      OutputIterator out_it);    // Destination for zeros
+                      unsigned number_of_zeros,  // How many zeros to generate.
+                      OutputIterator out_it);    // Destination for zeros.
 
  template <class T, class OutputIterator>
  OutputIterator cyl_neumann_zero(
                       T v,                       // Floating-point value for Jv.
                       int start_index,           // 1-based index of zero.
                       unsigned number_of_zeros,  // How many zeros to generate
-                      OutputIterator out_it);    // Destination for zeros
+                      OutputIterator out_it);    // Destination for zeros.
 
-There are also versions which allow control of the
-__policy_section for error handling and precision.
+There are also versions which allow control of the __policy_section for error handling and precision.
 
-template <class T>
+  template <class T>
   T cyl_bessel_j_zero(
            T v,            // Floating-point value for Jv.
            int m,          // 1-based index of zero.
-           const Policy&); // Policy to use
+           const Policy&); // Policy to use.
 
   template <class T>
   T cyl_neumann_zero(
            T v,            // Floating-point value for Jv.
            int m,          // 1-based index of zero.
-           const Policy&); // Policy to use
+           const Policy&); // Policy to use.
 
 
  template <class T, class OutputIterator>
  OutputIterator cyl_bessel_j_zero(
                       T v,                       // Floating-point value for Jv.
                       int start_index,           // 1-based index of first zero.
-                      unsigned number_of_zeros,  // How many zeros to generate
-                      OutputIterator out_it,     // Destination for zeros
-                      const Policy& pol);        // Policy to use
+                      unsigned number_of_zeros,  // How many zeros to generate.
+                      OutputIterator out_it,     // Destination for zeros.
+                      const Policy& pol);        // Policy to use.
 
  template <class T, class OutputIterator>
  OutputIterator cyl_neumann_zero(
                       T v,                       // Floating-point value for Jv.
                       int start_index,           // 1-based index of zero.
-                      unsigned number_of_zeros,  // How many zeros to generate
-                      OutputIterator out_it,     // Destination for zeros
-                      const Policy& pol);        // Policy to use
+                      unsigned number_of_zeros,  // How many zeros to generate.
+                      OutputIterator out_it,     // Destination for zeros.
+                      const Policy& pol);        // Policy to use.
 
 [h4 Description]
 
@@ -371,13 +370,9 @@ returned is 1-based, which is to say:
 
    cyl_bessel_j_zero(v, 1);
 
-returns the first zero of Bessel J,
+returns the first zero of Bessel J.
 
-Passing a start_index <= 0
-
-   cyl_bessel_j_zero(v, 0);
-
-results in a __domain_error being raised.
+Passing an index of zero results in a `std::domain_error` being raised.
 
 The order `v` of `J` can be positive, negative and zero for the `cyl_bessel_j`
 and `cyl_neumann` functions, but not infinite nor NaN.
@@ -429,9 +424,9 @@ as well as its derivative. The derivatives of ['J[sub [nu]](x)] and ['Y[sub [nu]
 with respect to  ['x] are given by __Abramowitz_Stegun.
 In particular,
 
-[emquad] ['d/[sub dx] ['J[sub [nu]](x)] = ['J[sub [nu]-1](x)] - [nu]/[sub x] [sdot] J[sub [nu]](x)]
+[emquad] ['d/[sub dx] ['J[sub [nu]](x)] = ['J[sub [nu]-1](x)] - [nu] J[sub [nu]](x)] / x
 
-[emquad] ['d/[sub dx] ['Y[sub [nu]](x)] = ['Y[sub [nu]-1](x)] - [nu]/[sub x] [sdot] Y[sub [nu]](x)]
+[emquad] ['d/[sub dx] ['Y[sub [nu]](x)] = ['Y[sub [nu]-1](x)] - [nu] Y[sub [nu]](x)] / x
 
 Enumeration of the rank of a root (in other words the index of a root)
 begins with one and counts up, in other words
