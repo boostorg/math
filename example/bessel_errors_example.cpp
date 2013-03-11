@@ -58,7 +58,7 @@ Examples below show messages from several 'bad' arguments that throw a `domain_e
     std::cout << "Thrown exception " << ex.what() << std::endl;
   }
 
-/*`[note The type shown is the type [*after promotion],
+/*`[note The type shown in the error message is the type [*after promotion],
 using __precision_policy and __promotion_policy, from `float` to `double` in this case.]
 
 In this example the promotion goes:
@@ -66,7 +66,7 @@ In this example the promotion goes:
 # Arguments are `float` and `int`.
 # Treat `int` "as if" it were a `double`, so arguments are `float` and `double`.
 # Common type is `double` - so that's the precision we want (and the type that will be returned).
-# Evaluate internally as `long double` for full `double` precision.
+# Evaluate internally as `double` for full `float` precision.
 
 See full code for other examples that promote from `double` to `long double`.
 
