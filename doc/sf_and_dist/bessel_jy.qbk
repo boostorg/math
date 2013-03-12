@@ -372,7 +372,13 @@ returned is 1-based, which is to say:
 
 returns the first zero of Bessel J.
 
-Passing an index of zero results in a `std::domain_error` being raised.
+Passing an `start_index <= 0` results in a `std::domain_error` being raised.
+
+For certain parameters, however, the zero'th root is defined and
+it has a value of zero. For example, the zero'th root
+of `J[sub v](x)` is defined and it has a value of zero for all
+values of `v > 0` and for negative integer values of `v = -n`.
+Similar cases are described in the implementation details below.
 
 The order `v` of `J` can be positive, negative and zero for the `cyl_bessel_j`
 and `cyl_neumann` functions, but not infinite nor NaN.
@@ -500,7 +506,7 @@ all in __Abramowitz_Stegun explicit and easy-to-understand treatment
 for asymptotic expansion of zeros.
 The latter two equations are expressed for argument ['(x)] greater than one.
 (Olver also gives the series form of the equations in
-[@http://dlmf.nist.gov/10.21#vi [sect]10.21(vi) McMahon's Asymptotic Expansions for Large Zeros] - using slightly difference variable names).
+[@http://dlmf.nist.gov/10.21#vi [sect]10.21(vi) McMahon's Asymptotic Expansions for Large Zeros] - using slightly different variable names).
 
 In summary,
 
@@ -526,7 +532,7 @@ and
 [emquad] ['b[sub 0](-[zeta]) = -5/(48[zeta][sup2]) + 1/(-[zeta])[super [frac12]] [sdot] { 5/(24(x[super 2]-1)[super 3/2]) + 1/(8(x[super 2]-1)[super [frac12])]}]
 
 When solving for ['x(-[zeta])] in Eq. 7 above,
-the right-hand-side is expanded to order -['x[sup2]] in
+the right-hand-side is expanded to order 2 in
 a Taylor series for large ['x]. This results in
 
 [emquad] ['[frac23](-[zeta])[super 3/2] [approx] x + 1/2x - [pi]/2]
