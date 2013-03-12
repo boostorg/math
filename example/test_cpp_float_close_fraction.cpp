@@ -65,8 +65,8 @@ BOOST_AUTO_TEST_CASE(cpp_float_test_check_close)
 
   std::cout <<"a = " << a << ",\nb = " << b << ",\neps = " << eps << std::endl;
 
-  BOOST_CHECK_CLOSE(a, b, eps); // Expected to pass (because tolerance is as percent).
- // BOOST_CHECK_CLOSE_FRACTION(a, b, eps); // Expected to fail.
+  BOOST_CHECK_CLOSE(a, b, eps * 100); // Expected to pass (because tolerance is as percent).
+  BOOST_CHECK_CLOSE_FRACTION(a, b, eps); // Expected to pass (because tolerance is as fraction).
 
 /*`Using `cpp_dec_float_50` with the default expression template use switched on,
   the compiler error message for `BOOST_CHECK_CLOSE_FRACTION(a, b, eps); would be:
@@ -88,12 +88,9 @@ Output:
   a = 1.0000000000000000000000000000000000000000000000000,
   b = 1.0000000000000000000000000000000000000000000000001,
   eps = 1.0000000000000000000000000000000000000000000000000e-49
-test_cpp_float_close_fraction.cpp(68): error : in "cpp_float_test_check_close":
-difference{1e-49%} between
-  a{1}
-and
-  b{1.0000000000000000000000000000000000000000000000001} exceeds 1e-49%
   
-  *** 1 failure detected in test module "Master Test Suite"
+  *** No errors detected
+
+
 */
 
