@@ -381,7 +381,7 @@ inline OutputIterator airy_ai_zero(
                          unsigned number_of_zeros,
                          OutputIterator out_it)
 {
-   return airy_ai_zero<T>(number_of_zeros, start_index, out_it, policies::policy<>());
+   return airy_ai_zero<T>(start_index, number_of_zeros, out_it, policies::policy<>());
 }
 
 template <class T, class Policy>
@@ -399,7 +399,7 @@ inline T airy_bi_zero(unsigned m, const Policy& pol)
    return policies::checked_narrowing_cast<T, Policy>(detail::airy_bi_zero_imp<T>(m, pol), "boost::math::airy_bi_zero<%1%>(unsigned)");
 }
 
-template <class T>
+template <typename T>
 inline T airy_bi_zero(unsigned m)
 {
    return airy_bi_zero<T>(m, policies::policy<>());
@@ -429,7 +429,7 @@ inline OutputIterator airy_bi_zero(
                          unsigned number_of_zeros,
                          OutputIterator out_it)
 {
-   return airy_bi_zero<T>(number_of_zeros, start_index, out_it, policies::policy<>());
+   return airy_bi_zero<T>(start_index, number_of_zeros, out_it, policies::policy<>());
 }
 
 }} // namespaces
