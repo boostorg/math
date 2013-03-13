@@ -26,7 +26,7 @@
 
 //[bessel_zeros_example_1
 
-/*`This example demonstrates calculating zeros of the Bessel, Neumann and Airy functions.
+/*`This example demonstrates calculating zeros of the Bessel and Neumann functions.
 It also shows how Boost.Math and Boost.Multiprecision can be combined to provide
 a many decimal digit precision. For 50 decimal digit precision we need to include
 */
@@ -52,7 +52,10 @@ a many decimal digit precision. For 50 decimal digit precision we need to includ
 
 /*`This example shows obtaining both a single zero of the Bessel function,
 and then placing multiple zeros into a container like `std::vector` by providing an iterator.
-The signature of the single value function is:
+*/
+//] [/bessel_zeros_example_1]
+
+/*The signature of the single value function is:
 
   template <class T>
   inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type
@@ -81,9 +84,7 @@ There is also a version which allows control of the __policy_section for error h
                                 unsigned number_of_zeros, // How many zeros to generate
                                 OutputIterator out_it,    // Destination for zeros.
                                 const Policy& pol);       // Policy to use.
-
 */
-//] [/bessel_zeros_example_1]
 
 int main()
 {
@@ -187,9 +188,7 @@ We set the precision of the output stream, and show trailing zeros to display a 
 
  } // int main()
 
-
-
-/*
+ /*
 
  Output:
 
