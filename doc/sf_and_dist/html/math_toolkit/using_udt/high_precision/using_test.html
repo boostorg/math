@@ -65,7 +65,7 @@
           with <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">et_off</span></code>, an enumerated type.
         </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">number</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_dec_float</span><span class="special">&lt;</span><span class="number">50</span><span class="special">&gt;,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">et_off</span><span class="special">&gt;</span>
-<span class="identifier">cpp_dec_float_50_noet</span><span class="special">;</span><span class="error">`</span>
+<span class="identifier">cpp_dec_float_50_noet</span><span class="special">;</span>
 </pre>
 <p>
           You can reduce typing with a <code class="computeroutput"><span class="keyword">using</span></code>
@@ -101,8 +101,8 @@
 
   <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span><span class="string">"a = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">a</span> <span class="special">&lt;&lt;</span> <span class="string">",\nb = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">b</span> <span class="special">&lt;&lt;</span> <span class="string">",\neps = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">eps</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 
-  <span class="identifier">BOOST_CHECK_CLOSE</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">eps</span><span class="special">);</span> <span class="comment">// Expected to pass (because tolerance is as percent).</span>
-  <span class="identifier">BOOST_CHECK_CLOSE_FRACTION</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">eps</span><span class="special">);</span> <span class="comment">// Expected to fail.</span>
+  <span class="identifier">BOOST_CHECK_CLOSE</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">eps</span> <span class="special">*</span> <span class="number">100</span><span class="special">);</span> <span class="comment">// Expected to pass (because tolerance is as percent).</span>
+  <span class="identifier">BOOST_CHECK_CLOSE_FRACTION</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">eps</span><span class="special">);</span> <span class="comment">// Expected to pass (because tolerance is as fraction).</span>
 </pre>
 <p>
         </p>

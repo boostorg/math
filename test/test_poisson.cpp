@@ -146,6 +146,26 @@ void test_spots(RealType)
       static_cast<RealType>(-1)),  // bad probability. 
       std::domain_error);
 
+  BOOST_CHECK_THROW(
+     quantile(poisson_distribution<RealType>(static_cast<RealType>(1)), 
+      static_cast<RealType>(1)),  // bad probability. 
+      std::overflow_error);
+
+  BOOST_CHECK_THROW(
+     quantile(complement(poisson_distribution<RealType>(static_cast<RealType>(1)), 
+      static_cast<RealType>(0))),  // bad probability. 
+      std::overflow_error);
+
+  BOOST_CHECK_EQUAL(
+     quantile(poisson_distribution<RealType>(static_cast<RealType>(1)), 
+      static_cast<RealType>(0)),  // bad probability. 
+      0);
+
+  BOOST_CHECK_EQUAL(
+     quantile(complement(poisson_distribution<RealType>(static_cast<RealType>(1)), 
+      static_cast<RealType>(1))),  // bad probability. 
+      0);
+
   // Check some test values.
 
   BOOST_CHECK_CLOSE( // mode

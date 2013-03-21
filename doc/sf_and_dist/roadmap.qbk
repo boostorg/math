@@ -17,6 +17,10 @@ All bug reports including closed ones can be viewed
 * Fixed bug in __tgamma that caused spurious overflow for arguments between 142.5 and 143.
 * Fixed bug in raise_rounding_error that caused it to return an incorrect result when throwing an exception is turned off [@https://svn.boost.org/trac/boost/ticket/7905 #7905].
 * Added minimal __float128 support.
+* Fixed bug in edge-cases of poisson quantile [@https://svn.boost.org/trac/boost/ticket/8308 #8308].
+* Adjusted heuristics used in Halley iteration to cope with inverting the incomplete beta in tricky regions
+where the derivative is flatlining.  Example is computing the quantile of the Fisher F distribution for probabilities
+smaller than machine epsilon.  See ticket [@https://svn.boost.org/trac/boost/ticket/8314 #8314].
 
 [h4 Boost-1.53]
 

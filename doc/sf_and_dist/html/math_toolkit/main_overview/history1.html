@@ -73,6 +73,15 @@
 <li class="listitem">
             Added minimal __float128 support.
           </li>
+<li class="listitem">
+            Fixed bug in edge-cases of poisson quantile <a href="https://svn.boost.org/trac/boost/ticket/8308" target="_top">#8308</a>.
+          </li>
+<li class="listitem">
+            Adjusted heuristics used in Halley iteration to cope with inverting the
+            incomplete beta in tricky regions where the derivative is flatlining.
+            Example is computing the quantile of the Fisher F distribution for probabilities
+            smaller than machine epsilon. See ticket <a href="https://svn.boost.org/trac/boost/ticket/8314" target="_top">#8314</a>.
+          </li>
 </ul></div>
 <h5>
 <a name="math_toolkit.main_overview.history1.h1"></a>
