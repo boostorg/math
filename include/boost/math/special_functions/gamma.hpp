@@ -14,17 +14,6 @@
 #endif
 
 #include <boost/config.hpp>
-#ifdef BOOST_MSVC
-# pragma warning(push)
-# pragma warning(disable: 4127 4701)
-//  // For lexical_cast, until fixed in 1.35?
-//  // conditional expression is constant &
-//  // Potentially uninitialized local variable 'name' used
-#endif
-#include <boost/lexical_cast.hpp>
-#ifdef BOOST_MSVC
-# pragma warning(pop)
-#endif
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
@@ -49,12 +38,6 @@
 
 #include <boost/config/no_tr1/cmath.hpp>
 #include <algorithm>
-
-#ifdef BOOST_MATH_INSTRUMENT
-#include <iostream>
-#include <iomanip>
-#include <typeinfo>
-#endif
 
 #ifdef BOOST_MSVC
 # pragma warning(push)

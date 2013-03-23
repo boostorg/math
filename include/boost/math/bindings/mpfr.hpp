@@ -12,6 +12,7 @@
 #define BOOST_MATH_MPLFR_BINDINGS_HPP
 
 #include <boost/config.hpp>
+#include <boost/lexical_cast.hpp>
 
 #ifdef BOOST_MSVC
 //
