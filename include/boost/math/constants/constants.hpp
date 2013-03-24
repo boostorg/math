@@ -14,7 +14,9 @@
 #pragma warning(push)
 #pragma warning(disable: 4127 4701)
 #endif
+#ifndef BOOST_MATH_NO_LEXICAL_CAST
 #include <boost/lexical_cast.hpp>
+#endif
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
@@ -124,7 +126,12 @@ namespace boost{ namespace math
       template <class Real>
       Real convert_from_string(const char* p, const mpl::false_&)
       {
+#ifdef BOOST_MATH_NO_LEXICAL_CAST
+         // This function should not compile, we don't have the necesary functionality to support it:
+         BOOST_STATIC_ASSERT(sizeof(Real) == 0);
+#else
          return boost::lexical_cast<Real>(p);
+#endif
       }
       template <class Real>
       const char* convert_from_string(const char* p, const mpl::true_&)

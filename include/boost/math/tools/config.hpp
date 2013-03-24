@@ -217,6 +217,12 @@
 //
 #  define BOOST_MATH_USE_FLOAT128
 #endif
+//
+// Check for WinCE with no iostream support:
+//
+#if defined(_WIN32_WCE) && !defined(__SGI_STL_PORT)
+#  define BOOST_MATH_NO_LEXICAL_CAST
+#endif
 
 //
 // Helper macro for controlling the FP behaviour:
