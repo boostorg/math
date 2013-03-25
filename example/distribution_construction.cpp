@@ -13,6 +13,10 @@
 #ifdef _MSC_VER
 #  pragma warning (disable : 4996) // disable -D_SCL_SECURE_NO_WARNINGS C++ 'Checked Iterators'
 #endif
+
+#include <iostream>
+#include <exception>
+
 //[distribution_construction_1
 
 /*`
@@ -48,6 +52,8 @@ Several examples of constructing distributions follow:
 
 int main()
 {
+  try
+  {
 //[distribution_construction_2
 /*`
 First, a negative binomial distribution with 8 successes
@@ -243,10 +249,30 @@ So in this case we can write:
   normal norm2(2);    // Mean = 2, std deviation = 1.
   normal norm3(2, 3); // Mean = 2, std deviation = 3.
 
+  }
+  catch(std::exception &ex)
+  {
+    std::cout << ex.what() << std::endl;
+  }
+
   return 0;
 }  // int main()
 
 /*`There is no useful output from this demonstration program, of course. */
 
 //] [/end of distribution_construction_2]
+
+/*
+//[distribution_construction_output
+
+  0.00012630010495970320103876754721976419438231705359935
+  0.00012630010495970318465064569310967179576805651692929
+  0.00012630010495970318465064569310967179576805651692929
+  0.00012630010495970320103876754721976419438231705359935
+
+//] [/distribution_construction_output]
+
+*/
+
+
 

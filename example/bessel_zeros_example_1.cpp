@@ -47,7 +47,7 @@ a many decimal digit precision. For 50 decimal digit precision we need to includ
 //  #include <boost/math/special_functions/math_fwd.hpp>
 
 /*`but more details are in the full documentation, for example at
-[@http://www.boost.org/doc/libs/1_53_0/libs/math/doc/sf_and_dist/html/math_toolkit/special/bessel/bessel_over.html Boost.Math Bessel functions]
+[@http://www.boost.org/doc/libs/1_53_0/libs/math/doc/sf_and_dist/html/math_toolkit/special/bessel/bessel_over.html Boost.Math Bessel functions].
 */
 
 /*`This example shows obtaining both a single zero of the Bessel function,
@@ -117,7 +117,7 @@ with this error message
   error C2338: Order must be a floating-point type.
 ``
 
-Optionally, we can use a policy to ignore errors, C-style, returning some value
+Optionally, we can use a policy to ignore errors, C-style, returning some value,
 perhaps infinity or NaN, or the best that can be done. (See __user_error_handling).
 
 To create a (possibly unwise!) policy `ignore_all_policy` that ignores all errors:
