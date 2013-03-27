@@ -836,7 +836,7 @@ compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpx
 
 # Temporary tests for support of max_digits10
 # run ztest_max_digits10.cpp ;
-# run zztest_max_digits10.cpp ;
+run zztest_max_digits10.cpp ;
 
 build-project ../example ;
 
