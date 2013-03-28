@@ -36,7 +36,6 @@ project
 # run bessel_zeros_example.cpp ; # Now split into four examples.
 run bessel_zeros_example_1.cpp ;
 run bessel_zeros_interator_example.cpp ;
-run bessel_zeros_example_1.cpp ;
 run neumann_zeros_example_1.cpp ;
 
 run test_cpp_float_close_fraction.cpp ../../test/build//boost_unit_test_framework/<link>static ;
