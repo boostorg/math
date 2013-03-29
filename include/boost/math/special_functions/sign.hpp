@@ -110,7 +110,7 @@ template<class T> int (signbit)(T x)
 { 
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
-   typedef typename boost::is_floating_point<T>::type fp_tag;
+   // typedef typename boost::is_floating_point<T>::type fp_tag;
    typedef typename tools::promote_args<T>::type result_type;
    return detail::signbit_impl(static_cast<result_type>(x), method());
 }
@@ -125,7 +125,7 @@ template <class T> typename tools::promote_args<T>::type (changesign)(const T& x
 { //!< \brief return unchanged binary pattern of x, except for change of sign bit. 
    typedef typename detail::fp_traits<T>::sign_change_type traits;
    typedef typename traits::method method;
-   typedef typename boost::is_floating_point<T>::type fp_tag;
+   // typedef typename boost::is_floating_point<T>::type fp_tag;
    typedef typename tools::promote_args<T>::type result_type;
 
    return detail::changesign_impl(static_cast<result_type>(x), method());

@@ -210,7 +210,7 @@
 //
 // Test whether to support __float128:
 //
-#if defined(_GLIBCXX_USE_FLOAT128) && defined(BOOST_GCC)
+#if defined(_GLIBCXX_USE_FLOAT128) && defined(BOOST_GCC) && !defined(__STRICT_ANSI__)
 //
 // Only enable this when the compiler really is GCC as clang and probably 
 // intel too don't support __float128 yet :-(

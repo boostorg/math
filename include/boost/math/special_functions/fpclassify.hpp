@@ -328,7 +328,7 @@ inline bool (isfinite)(T x)
 { //!< \brief return true if floating-point type t is finite.
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
-   typedef typename boost::is_floating_point<T>::type fp_tag;
+   // typedef typename boost::is_floating_point<T>::type fp_tag;
    typedef typename tools::promote_args<T>::type value_type;
    return detail::isfinite_impl(static_cast<value_type>(x), method());
 }
@@ -399,7 +399,7 @@ inline bool (isnormal)(T x)
 {
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
-   typedef typename boost::is_floating_point<T>::type fp_tag;
+   //typedef typename boost::is_floating_point<T>::type fp_tag;
    typedef typename tools::promote_args<T>::type value_type;
    return detail::isnormal_impl(static_cast<value_type>(x), method());
 }
@@ -488,7 +488,7 @@ inline bool (isinf)(T x)
 {
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
-   typedef typename boost::is_floating_point<T>::type fp_tag;
+   // typedef typename boost::is_floating_point<T>::type fp_tag;
    typedef typename tools::promote_args<T>::type value_type;
    return detail::isinf_impl(static_cast<value_type>(x), method());
 }
@@ -571,7 +571,7 @@ inline bool (isnan)(T x)
 { //!< \brief return true if floating-point type t is NaN (Not A Number).
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
-   typedef typename boost::is_floating_point<T>::type fp_tag;
+   // typedef typename boost::is_floating_point<T>::type fp_tag;
    return detail::isnan_impl(x, method());
 }
 
