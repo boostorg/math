@@ -69,12 +69,12 @@ void test(T, const char* type_name)
    static const T zero = 0;
    static const T m_one = -1;
    BOOST_CHECK_EQUAL(boost::math::log1p(zero), zero);
-   BOOST_CHECK_EQUAL(boost::math::log1p(-zero), zero);
+   BOOST_CHECK_EQUAL(boost::math::log1p(T(-zero)), zero);
    BOOST_CHECK_EQUAL(boost::math::expm1(zero), zero);
    if(std::numeric_limits<T>::has_infinity)
    {
       BOOST_CHECK_EQUAL(boost::math::log1p(m_one), -std::numeric_limits<T>::infinity());
-      BOOST_CHECK_EQUAL(boost::math::expm1(-std::numeric_limits<T>::infinity()), m_one);
+      BOOST_CHECK_EQUAL(boost::math::expm1(T(-std::numeric_limits<T>::infinity())), m_one);
       BOOST_CHECK_EQUAL(boost::math::expm1(std::numeric_limits<T>::infinity()), std::numeric_limits<T>::infinity());
 #ifndef __BORLANDC__
       // When building with Borland's compiler, simply the *presence*

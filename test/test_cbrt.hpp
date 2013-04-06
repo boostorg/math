@@ -30,7 +30,7 @@ struct negative_cbrt
    template <class S>
    Real operator()(const S& row)
    {
-      return boost::math::cbrt(-Real(row[1]));
+      return boost::math::cbrt(Real(-Real(row[1])));
    }
 };
 
