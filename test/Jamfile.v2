@@ -672,7 +672,7 @@ run test_tr1.cpp
    ../../test/build//boost_unit_test_framework 
    : : :
    <define>TEST_LD=1
-   [ check-target-builds ../config//has_long_double_support : : <build>no ]
+   [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
    :
    test_tr1_long_double
    ;
@@ -694,13 +694,13 @@ run test_tr1.c
    ../../test/build//boost_unit_test_framework 
    : : :
    <define>TEST_LD=1
-   [ check-target-builds ../config//has_long_double_support : : <build>no ]
+   [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ]
    :
    test_tr1_c_long_double
    ;
 
 run test_long_double_support.cpp ../../test/build//boost_unit_test_framework 
-: : : [ check-target-builds ../config//has_long_double_support : : <build>no ] ;
+: : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ;
 
 run  compile_test/compl_abs_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/compl_acos_incl_test.cpp compile_test/main.cpp ;
