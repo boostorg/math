@@ -7,7 +7,7 @@
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../bessel.html" title="Bessel Functions">
 <link rel="prev" href="bessel_over.html" title="Bessel Function Overview">
-<link rel="next" href="mbessel.html" title="Modified Bessel Functions of the First and Second Kinds">
+<link rel="next" href="bessel0.html" title="Finding Zeros of Bessel Functions of the First and Second Kinds">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,9 +20,9 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="bessel_over.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="mbessel.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="bessel_over.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="bessel0.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section math_toolkit_special_bessel_bessel">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.special.bessel.bessel"></a><a class="link" href="bessel.html" title="Bessel Functions of the First and Second Kinds">Bessel Functions
         of the First and Second Kinds</a>
@@ -31,6 +31,9 @@
 <a name="math_toolkit.special.bessel.bessel.h0"></a>
           <span class="phrase"><a name="math_toolkit.special.bessel.bessel.synopsis"></a></span><a class="link" href="bessel.html#math_toolkit.special.bessel.bessel.synopsis">Synopsis</a>
         </h5>
+<p>
+          <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">bessel</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T2</span><span class="special">&gt;</span>
 <a class="link" href="../../main_overview/result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">cyl_bessel_j</span><span class="special">(</span><span class="identifier">T1</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">T2</span> <span class="identifier">x</span><span class="special">);</span>
 
@@ -204,7 +207,7 @@
                 </td>
 <td>
                   <p>
-                    Peak=413 Mean=110
+                    Peak=59 Mean=10
                   </p>
                   <p>
                     GSL Peak=6x10<sup>11</sup>
@@ -321,17 +324,17 @@
                 </th>
 <th>
                   <p>
-                    J<sub>0</sub> &#160; and J<sub>1</sub>
+                    Y<sub>0</sub> &#160; and Y<sub>1</sub>
                   </p>
                 </th>
 <th>
                   <p>
-                    J<sub>n</sub> (integer orders)
+                    Y<sub>n</sub> (integer orders)
                   </p>
                 </th>
 <th>
                   <p>
-                    J<sub>v</sub> (fractional orders)
+                    Y<sub>v</sub> (fractional orders)
                   </p>
                 </th>
 </tr></thead>
@@ -349,7 +352,7 @@
                 </td>
 <td>
                   <p>
-                    Peak=330 Mean=54
+                    Peak=4.7 Mean=1.7
                   </p>
                   <p>
                     GSL Peak=34 Mean=9
@@ -361,7 +364,7 @@
                 </td>
 <td>
                   <p>
-                    Peak=923 Mean=83
+                    Peak=117 Mean=10
                   </p>
                   <p>
                     GSL Peak=500 Mean=54
@@ -373,7 +376,7 @@
                 </td>
 <td>
                   <p>
-                    Peak=561 Mean=36
+                    Peak=800 Mean=40
                   </p>
                   <p>
                     GSL Peak=1.4x10<sup>6</sup> &#160; Mean=7x10<sup>4</sup> &#160;
@@ -680,9 +683,9 @@ are also computed by recursions (involving gamma functions), but
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012 John Maddock, Paul A. Bristow, Hubert Holin, Xiaogang
-      Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs van den Berg and Benjamin
-      Sobotta<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs
+      van den Berg, Benjamin Sobotta and Christopher Kormanyos<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -690,7 +693,7 @@ are also computed by recursions (involving gamma functions), but
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="bessel_over.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="mbessel.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="bessel_over.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../bessel.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="bessel0.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

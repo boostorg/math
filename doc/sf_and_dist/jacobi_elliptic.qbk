@@ -53,11 +53,11 @@ for a given set of arguments, it's most efficient to use __jacobi_elliptic.
 
   namespace boost { namespace math {
 
-   template <class T>
-   ``__sf_result`` jacobi_elliptic(T k, T u, T* pcn, T* pdn);
+   template <class T, class U, class V>
+   ``__sf_result`` jacobi_elliptic(T k, U u, V* pcn, V* pdn);
 
-   template <class T, class Policy>
-   ``__sf_result`` jacobi_elliptic(T k, T u, T* pcn, T* pdn, const Policy&);
+   template <class T, class U, class V, class Policy>
+   ``__sf_result`` jacobi_elliptic(T k, U u, V* pcn, V* pdn, const Policy&);
 
   }} // namespaces
   

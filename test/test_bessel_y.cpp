@@ -191,13 +191,6 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      largest_type,                  // test type(s)
-      ".*Y0.*Random.*",           // test data group
-      ".*", 600, 400);               // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
       "real_concept",                // test type(s)
       ".*(Y[nv]|y).*Random.*",           // test data group
       ".*", 2000, 2000);             // test function
@@ -246,7 +239,7 @@ void expected_results()
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
 #ifdef TEST_GSL
    gsl_set_error_handler_off();
@@ -269,7 +262,6 @@ int test_main(int, char* [])
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::cout;
 #endif
-   return 0;
 }
 
 

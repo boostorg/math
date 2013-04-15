@@ -5,7 +5,7 @@
 
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/test_data.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/math/special_functions/spherical_harmonic.hpp>
 #include <fstream>
 #include <boost/math/tools/test_data.hpp>
@@ -45,7 +45,7 @@ boost::math::tuple<T, T, T, T, T, T> spherical_harmonic_data(T i)
    return boost::math::make_tuple(n, m, theta, phi, r1, r2);
 }
 
-int test_main(int argc, char*argv [])
+int cpp_main(int argc, char*argv [])
 {
    using namespace boost::math::tools;
 

@@ -11,7 +11,8 @@
 #include <iostream>
 
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/typeof/typeof.hpp>
@@ -141,7 +142,7 @@ void test_error_policy()
                 == 456.78);
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
     using namespace std;
 
@@ -195,8 +196,6 @@ int test_main(int, char* [])
     test_return_types();
 
     test_error_policy();
-
-    return 0;
 }
 
 /*

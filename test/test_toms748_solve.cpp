@@ -5,7 +5,8 @@
 
 #include <pch.hpp>
 
-#include <boost/test/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/tools/toms748_solve.hpp>
@@ -161,7 +162,7 @@ void run_test(T a, T b, int id, T p1, T p2)
    toms748tester<double>::reset();
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    std::cout << std::setprecision(18);
    run_test(3.14/2, 3.14, 1);
@@ -266,7 +267,5 @@ int test_main(int, char* [])
       toms748tester<double>::reset();
       BOOST_CHECK(c < 20);
    }
-
-   return 0;
 }
 

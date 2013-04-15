@@ -9,8 +9,22 @@ of the component, but do not effect it's accuracy or functionality.
 Items labled "Low Priority" should probably be investigated at
 some point.  Such classifications are obviously highly subjective.
 
-If you don't see a component listed here, then we don't have any known 
+If you don't see a component listed here, then we don't have any known
 issues with it.
+
+[h4 Derivatives of Bessel functions (and their zeros)]
+
+Potentially, there could be native support
+for `cyl_bessel_j_prime()` and `cyl_neumann_prime()`.
+One could also imagine supporting the zeros
+thereof, but they might be slower to calculate
+since root bracketing might be needed instead
+of Newton iteration (for the lack of 2nd derivatives).
+
+Since Boost.Math's Bessel functions are so excellent,
+the quick way to `cyl_bessel_j_prime()` and
+`cyl_neumann_prime()` would be via relationship with
+`cyl_bessel_j()` and `cyl_neumann()`.
 
 [h4 tgamma]
 
@@ -18,7 +32,7 @@ issues with it.
 
 [h4 Incomplete Beta]
 
-* Investigate Didonato and Morris' asymptotic expansion for large a and b 
+* Investigate Didonato and Morris' asymptotic expansion for large a and b
 (medium priority).
 
 [h4 Inverse Gamma]
@@ -53,13 +67,13 @@ can be accurately identified. (Medium Priority).]
 would it be more efficient evaluated this way, rather than by Carlson's
 algorithms? (Low Priority).
 * Should we add an implementation of Carlson's R[sub G]?  It's not
-required for the Legendre form integrals, but some people may find it 
+required for the Legendre form integrals, but some people may find it
 useful (Low Priority).
-* There are a several other integrals: D([phi], k), Z([beta], k), 
+* There are a several other integrals: D([phi], k), Z([beta], k),
 [Lambda][sub 0]([beta], k) and Bulirsch's ['el] functions that could
 be implemented using Carlson's integrals (Low Priority).
 * The integrals K(k) and E(k) could be implemented using rational
-approximations (both for efficiency and accuracy), 
+approximations (both for efficiency and accuracy),
 assuming we can find them. (Medium Priority).
 * There is a sub-domain of __ellint_3 that is unimplemented (see the docs
 for details), currently
@@ -82,7 +96,7 @@ These are useful in engineering applications - we have had a request to add thes
 
 [h4 Statistical distributions]
 
-* Student's t Perhaps switch to normal distribution 
+* Student's t Perhaps switch to normal distribution
 as a better approximation for very large degrees of freedom?
 
 [h4 Feature Requests]
@@ -136,7 +150,7 @@ is found, the higher the priority for implementing it:
 
 Also asked for more than once:
 
-* Add support for interpolated distributions, possibly combine with numeric 
+* Add support for interpolated distributions, possibly combine with numeric
 integration and differentiation.
 * Add support for bivariate and multivariate distributions: most especially the normal.
 * Add support for the log of the cdf and pdf:
@@ -146,7 +160,7 @@ by returning the log of the result.
 
 [endsect] [/section:issues Known Issues, and Todo List]
 
-[/ 
+[/
   Copyright 2006, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at

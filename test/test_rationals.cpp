@@ -4,7 +4,8 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/test/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/array.hpp>
 #include <boost/math/tools/rational.hpp>
@@ -26,7 +27,7 @@ void test_spots(T t, const char* n)
    do_test_spots(t, T(0));
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    test_spots(0.0F, "float");
    test_spots(0.0, "double");
@@ -41,7 +42,7 @@ int test_main(int, char* [])
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::cout;
 #endif
-   return 0;
+   
 }
 
 

@@ -18,7 +18,8 @@
 using ::boost::math::concepts::real_concept;
 
 //#include <boost/math/tools/test.hpp>
-#include <boost/test/test_exec_monitor.hpp> // for test_main
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp> // for test_main
 #include <boost/test/floating_point_comparison.hpp> // for BOOST_CHECK_CLOSE_FRACTION
 #include "test_out_of_range.hpp"
 
@@ -327,7 +328,7 @@ void test_spots(RealType)
    check_out_of_range<inverse_gamma_distribution<RealType> >(1, 1);
 } // template <class RealType>void test_spots(RealType)
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
   BOOST_MATH_CONTROL_FP;
 
@@ -412,8 +413,8 @@ int test_main(int, char* [])
     "not available at all, or because they are too inaccurate for these tests "
     "to pass.</note>" << std::cout;
 #endif
-  return 0;
-} // int test_main(int, char* [])
+  
+} // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
 

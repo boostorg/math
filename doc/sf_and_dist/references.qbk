@@ -10,12 +10,12 @@ is a replacement for the legendary
 Abramowitz and Stegun's Handbook of Mathematical Functions (often called simply A&S),
 
 M. Abramowitz and I. A. Stegun (Eds.) (1964)
-Handbook of Mathematical Functions with Formulas, Graphs, and Mathematical Tables,      
+Handbook of Mathematical Functions with Formulas, Graphs, and Mathematical Tables,
 National Bureau of Standards Applied Mathematics Series,
 U.S. Government Printing Office, Washington, D.C.
+[/ __Abramowitz_Stegun]
 
 NIST Handbook of Mathematical Functions
-
 Edited by: Frank W. J. Olver, University of Maryland and National Institute of Standards and Technology, Maryland,
 Daniel W. Lozier, National Institute of Standards and Technology, Maryland,
 Ronald F. Boisvert, National Institute of Standards and Technology, Maryland,
@@ -48,8 +48,8 @@ Pugh Msc Thesis on the Lanczos approximation to the gamma function.
 We found (and used to create cross-check spot values - as far as their accuracy allowed).
 
 [@http://functions.wolfram.com/ The Wolfram Functions Site]
-The Wolfram Functions Site - Providing 
-the mathematical and scientific community with the world's largest 
+The Wolfram Functions Site - Providing
+the mathematical and scientific community with the world's largest
 (and most authorititive) collection of formulas and graphics about mathematical functions.
 
 [@http://www.moshier.net/cephes28.zip 100-decimal digit calculator] provided some spot values.
@@ -95,7 +95,7 @@ For use of R, see:
 
 Jim Albert, Bayesian Computation with R,  ISBN 978-0-387-71384-7.
 
-[@http://www.quantnet.com/cplusplus-statistical-distributions-boost 
+[@http://www.quantnet.com/cplusplus-statistical-distributions-boost
 C++ Statistical Distributions in Boost - QuantNetwork forum]
 discusses using Boost.Math in finance.
 
@@ -106,7 +106,7 @@ and Volume II  ISBN 978-94-91028-01-4,  Advanced Libraries and Applications, ISB
 discusses application of Boost.Math, especially in finance.]
 
 [endsect] [/section:references References]
-[/ 
+[/
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at

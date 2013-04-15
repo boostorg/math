@@ -4,7 +4,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/bindings/rr.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/erf.hpp> // for inverses
 #include <boost/math/constants/constants.hpp>
@@ -128,7 +128,7 @@ boost::math::tuple<boost::math::ntl::RR, boost::math::ntl::RR> erfc_inv(boost::m
 }
 
 
-int test_main(int argc, char*argv [])
+int cpp_main(int argc, char*argv [])
 {
    boost::math::ntl::RR::SetPrecision(1000);
    boost::math::ntl::RR::SetOutputPrecision(40);

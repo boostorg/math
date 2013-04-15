@@ -2,14 +2,14 @@
 
 ``#include <boost/math/distributions/negative_binomial.hpp>``
 
-   namespace boost{ namespace math{ 
-   
-   template <class RealType = double, 
+   namespace boost{ namespace math{
+
+   template <class RealType = double,
              class ``__Policy``   = ``__policy_class`` >
    class negative_binomial_distribution;
-   
+
    typedef negative_binomial_distribution<> negative_binomial;
-   
+
    template <class RealType, class ``__Policy``>
    class negative_binomial_distribution
    {
@@ -18,21 +18,21 @@
       typedef Policy   policy_type;
       // Constructor from successes and success_fraction:
       negative_binomial_distribution(RealType r, RealType p);
-      
+
       // Parameter accessors:
       RealType success_fraction() const;
       RealType successes() const;
-      
+
       // Bounds on success fraction:
       static RealType find_lower_bound_on_p(
-         RealType trials, 
+         RealType trials,
          RealType successes,
          RealType probability); // alpha
       static RealType find_upper_bound_on_p(
-         RealType trials, 
+         RealType trials,
          RealType successes,
          RealType probability); // alpha
-         
+
       // Estimate min/max number of trials:
       static RealType find_minimum_number_of_trials(
          RealType k,     // Number of failures.
@@ -43,9 +43,9 @@
          RealType p,     // Success fraction.
          RealType probability); // Probability threshold alpha.
    };
-   
+
    }} // namespaces
-   
+
 The class type `negative_binomial_distribution` represents a
 [@http://en.wikipedia.org/wiki/Negative_binomial_distribution negative_binomial distribution]:
 it is used when there are exactly two mutually exclusive outcomes of a
@@ -53,9 +53,9 @@ it is used when there are exactly two mutually exclusive outcomes of a
 these outcomes are labelled "success" and "failure".
 
 For k + r Bernoulli trials each with success fraction p, the
-negative_binomial distribution gives the probability of observing 
-k failures and r successes with success on the last trial. 
-The negative_binomial distribution 
+negative_binomial distribution gives the probability of observing
+k failures and r successes with success on the last trial.
+The negative_binomial distribution
 assumes that success_fraction p is fixed for all (k + r) trials.
 
 [note The random variable for the negative binomial distribution is the number of trials,
@@ -67,7 +67,7 @@ It has the PDF:
 
 [equation neg_binomial_ref]
 
-The following graph illustrate how the PDF varies as the success fraction 
+The following graph illustrate how the PDF varies as the success fraction
 /p/ changes:
 
 [graph negative_binomial_pdf_1]
@@ -91,7 +91,7 @@ This real-valued version is also called the Polya Distribution.
 The Poisson distribution is a generalization of the Pascal distribution,
 where the success parameter r is an integer: to obtain the Pascal
 distribution you must ensure that an integer value is provided for r,
-and take integer values (floor or ceiling) from functions that return 
+and take integer values (floor or ceiling) from functions that return
 a number of successes.
 
 For large values of r (successes), the negative binomial distribution
@@ -107,7 +107,7 @@ The Poisson distribution is a special case for large successes
 poisson([lambda]) = lim [sub r [rarr] [infin]] [space] negative_binomial(r, r / ([lambda] + r)))
 
 [discrete_quantile_warning Negative Binomial]
-   
+
 [h4 Member Functions]
 
 [h5 Construct]
@@ -122,27 +122,27 @@ Requires: `r > 0` and `0 <= p <= 1`.
 [h5 Accessors]
 
    RealType success_fraction() const; // successes / trials (0 <= p <= 1)
-   
+
 Returns the parameter /p/ from which this distribution was constructed.
-   
+
    RealType successes() const; // required successes (r > 0)
-   
+
 Returns the parameter /r/ from which this distribution was constructed.
 
 The best method of calculation for the following functions is disputed:
-see __binomial_distrib for more discussion. 
+see __binomial_distrib for more discussion.
 
 [h5 Lower Bound on Parameter p]
 
       static RealType find_lower_bound_on_p(
-        RealType failures, 
+        RealType failures,
         RealType successes,
         RealType probability) // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
-      
+
 Returns a *lower bound* on the success fraction:
 
 [variablelist
-[[failures][The total number of failures before the r th success.]]
+[[failures][The total number of failures before the ['r]th success.]]
 [[successes][The number of successes required.]]
 [[alpha][The largest acceptable probability that the true value of
          the success fraction is [*less than] the value returned.]]
@@ -150,16 +150,16 @@ Returns a *lower bound* on the success fraction:
 
 For example, if you observe /k/ failures and /r/ successes from /n/ = k + r trials
 the best estimate for the success fraction is simply ['r/n], but if you
-want to be 95% sure that the true value is [*greater than] some value, 
+want to be 95% sure that the true value is [*greater than] some value,
 ['p[sub min]], then:
 
    p``[sub min]`` = negative_binomial_distribution<RealType>::find_lower_bound_on_p(
                        failures, successes, 0.05);
 
 [link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
-      
+
 This function uses the Clopper-Pearson method of computing the lower bound on the
-success fraction, whilst many texts refer to this method as giving an "exact" 
+success fraction, whilst many texts refer to this method as giving an "exact"
 result in practice it produces an interval that guarantees ['at least] the
 coverage required, and may produce pessimistic estimates for some combinations
 of /failures/ and /successes/.  See:
@@ -171,10 +171,10 @@ Computational statistics and data analysis, 2005, vol. 48, no3, 605-621].
 [h5 Upper Bound on Parameter p]
 
    static RealType find_upper_bound_on_p(
-      RealType trials, 
+      RealType trials,
       RealType successes,
       RealType alpha); // (0 <= alpha <= 1), 0.05 equivalent to 95% confidence.
-      
+
 Returns an *upper bound* on the success fraction:
 
 [variablelist
@@ -186,7 +186,7 @@ Returns an *upper bound* on the success fraction:
 
 For example, if you observe /k/ successes from /n/ trials the
 best estimate for the success fraction is simply ['k/n], but if you
-want to be 95% sure that the true value is [*less than] some value, 
+want to be 95% sure that the true value is [*less than] some value,
 ['p[sub max]], then:
 
    p``[sub max]`` = negative_binomial_distribution<RealType>::find_upper_bound_on_p(
@@ -195,7 +195,7 @@ want to be 95% sure that the true value is [*less than] some value,
 [link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
 
 This function uses the Clopper-Pearson method of computing the lower bound on the
-success fraction, whilst many texts refer to this method as giving an "exact" 
+success fraction, whilst many texts refer to this method as giving an "exact"
 result in practice it produces an interval that guarantees ['at least] the
 coverage required, and may produce pessimistic estimates for some combinations
 of /failures/ and /successes/.  See:
@@ -210,7 +210,7 @@ Computational statistics and data analysis, 2005, vol. 48, no3, 605-621].
       RealType k,     // number of failures.
       RealType p,     // success fraction.
       RealType alpha); // probability threshold (0.05 equivalent to 95%).
-      
+
 This functions estimates the number of trials required to achieve a certain
 probability that [*more than k failures will be observed].
 
@@ -221,12 +221,12 @@ probability that [*more than k failures will be observed].
 ]
 
 For example:
-   
+
    negative_binomial_distribution<RealType>::find_minimum_number_of_trials(10, 0.5, 0.05);
-      
+
 Returns the smallest number of trials we must conduct to be 95% sure
 of seeing 10 failures that occur with frequency one half.
-   
+
 [link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_size_eg Worked Example.]
 
 This function uses numeric inversion of the negative binomial distribution
@@ -240,7 +240,7 @@ of observing k failures or fewer.
       RealType k,     // number of failures.
       RealType p,     // success fraction.
       RealType alpha); // probability threshold (0.05 equivalent to 95%).
-      
+
 This functions estimates the maximum number of trials we can conduct and achieve
 a certain probability that [*k failures or fewer will be observed].
 
@@ -251,12 +251,12 @@ a certain probability that [*k failures or fewer will be observed].
 ]
 
 For example:
-   
+
    negative_binomial_distribution<RealType>::find_maximum_number_of_trials(0, 1.0-1.0/1000000, 0.05);
-      
+
 Returns the largest number of trials we can conduct and still be 95% sure
 of seeing no failures that occur with frequency one in one million.
-   
+
 This function uses numeric inversion of the negative binomial distribution
 to obtain the result: another interpretation of the result, is that it finds
 the number of trials (success+failures) that will lead to an /alpha/ probability
@@ -267,7 +267,7 @@ of observing more than k failures.
 All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
-However it's worth taking a moment to define what these actually mean in 
+However it's worth taking a moment to define what these actually mean in
 the context of this distribution:
 
 [table Meaning of the non-member accessors.
@@ -285,14 +285,14 @@ the context of this distribution:
 [[__ccdf]
    [The probability of obtaining [*more than k failures] from k+r trials
    with success fraction p and success on the last trial.  For example:
-   
+
 ``cdf(complement(negative_binomial(r, p), k))``]]
 [[__quantile]
    [The [*greatest] number of failures k expected to be observed from k+r trials
    with success fraction p, at probability P.  Note that the value returned
    is a real-number, and not an integer.  Depending on the use case you may
    want to take either the floor or ceiling of the real result.  For example:
-   
+
 ``quantile(negative_binomial(r, p), P)``]]
 [[__quantile_c]
    [The [*smallest] number of failures k expected to be observed from k+r trials
@@ -304,8 +304,8 @@ the context of this distribution:
 
 [h4 Accuracy]
 
-This distribution is implemented using the 
-incomplete beta functions __ibeta and __ibetac: 
+This distribution is implemented using the
+incomplete beta functions __ibeta and __ibetac:
 please refer to these functions for information on accuracy.
 
 [h4 Implementation]
@@ -326,7 +326,7 @@ been optimised for the lowest possible error - indeed this is really
 just a thin wrapper around part of the internals of the incomplete
 beta function.
 ]]
-[[cdf][Using the relation: 
+[[cdf][Using the relation:
 
 cdf = I[sub p](r, k+1) = ibeta(r, k+1, p)
 

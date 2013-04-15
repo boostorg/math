@@ -7,7 +7,8 @@
 
 #ifndef BOOST_BUILD_PCH_ENABLED
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
-#include <boost/math/special_functions.hpp>
+#include <boost/math/special_functions/expint.hpp>
+#include <boost/math/special_functions/zeta.hpp>
 #endif
 
 #include <boost/math/tools/config.hpp>
@@ -16,6 +17,7 @@
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 
 #define BOOST_MATH_TEST_TYPE boost::math::concepts::real_concept
+#define TEST_GROUP_9
 #include "test_instances.hpp"
 
 #endif

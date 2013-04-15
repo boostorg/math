@@ -16,7 +16,8 @@
 #include <boost/math/distributions/rayleigh.hpp>
     using boost::math::rayleigh_distribution;
 
-#include <boost/test/test_exec_monitor.hpp> // Boost.Test
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 #include "test_out_of_range.hpp"
 
@@ -213,7 +214,7 @@ void test_spots(RealType T)
 
 } // template <class RealType>void test_spots(RealType)
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
   // Check that can generate rayleigh distribution using the two convenience methods:
    boost::math::rayleigh ray1(1.); // Using typedef
@@ -308,8 +309,8 @@ int test_main(int, char* [])
       "to pass.</note>" << std::cout;
 #endif
 
-   return 0;
-} // int test_main(int, char* [])
+   
+} // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
 

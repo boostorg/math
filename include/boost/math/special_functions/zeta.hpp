@@ -866,15 +866,15 @@ template <class T, class Policy, class Tag>
 T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
 {
    BOOST_MATH_STD_USING
-   if(s == 1)
+   if(sc == 0)
       return policies::raise_pole_error<T>(
          "boost::math::zeta<%1%>", 
          "Evaluation of zeta function at pole %1%", 
          s, pol);
    T result;
-   if(s == 0)
+   if(fabs(s) < tools::root_epsilon<T>())
    {
-      result = -0.5;
+      result = -0.5f - constants::log_root_two_pi<T, Policy>() * s;
    }
    else if(s < 0)
    {

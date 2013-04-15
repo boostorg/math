@@ -112,7 +112,7 @@ void expected_results()
 }
 
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
     expected_results();
     BOOST_MATH_CONTROL_FP;
@@ -131,5 +131,5 @@ int test_main(int, char* [])
       "to pass.</note>" << std::cout;
 #endif
 
-    return 0;
+    
 }

@@ -6,7 +6,8 @@
 #include <pch_light.hpp>
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
-#include <boost/test/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN 
+#include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 
@@ -121,10 +122,9 @@ void test_spots()
    }
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    BOOST_MATH_CONTROL_FP;
    test_boundaries();
    test_spots();
-   return 0;
 }

@@ -20,7 +20,7 @@ using boost::math::ntl::pow;
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <boost/test/included/test_exec_monitor.hpp> // for test_main
+#include <boost/test/included/unit_test.hpp> // for test_main
 
 extern boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant);
 extern void show_extra(
@@ -497,7 +497,7 @@ void graph_poly(const char*, const char*)
    }
 }
 
-int test_main(int, char* [])
+BOOST_AUTO_TEST_CASE( test_main )
 {
    std::string line;
    real_parser<long double/*boost::math::ntl::RR*/ > const rr_p;
@@ -604,5 +604,4 @@ int test_main(int, char* [])
          std::cout << std::endl;
      }
    }
-   return 0;
 }

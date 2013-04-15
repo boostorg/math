@@ -13,8 +13,8 @@ To use this tool, you will need to have a reasonable grasp of what the Remez
 algorithm is, and the general form of the approximation you want to achieve.
 
 Unless you already familar with the Remez method,
-you should first read the [link math_toolkit.backgrounders.remez 
-brief background article explaining the principles behind the 
+you should first read the [link math_toolkit.backgrounders.remez
+brief background article explaining the principles behind the
 Remez algorithm].
 
 The program consists of two parts:
@@ -29,18 +29,18 @@ approximate.  The tools supports multiple function approximations within
 the same compiled program: each as a separate variant:
 
    NTL::RR f(const NTL::RR& x, int variant);
-   
+
 Returns the value of the function /variant/ at point /x/.  So if you
 wish you can just add the function to approximate as a new variant
 after the existing examples.
 
 In addition to those two files, the program needs to be linked to
-a [link math_toolkit.using_udt.use_ntl patched NTL library to compile].
+a [link math_toolkit.using_udt.high_precision.use_ntl patched NTL library to compile].
 
 Note that the function /f/ must return the rational part of the
 approximation: for example if you are approximating a function
 /f(x)/ then it is quite common to use:
-   
+
    f(x) = g(x)(Y + R(x))
 
 where /g(x)/ is the dominant part of /f(x)/, /Y/ is some constant, and
@@ -50,7 +50,7 @@ absolute error compared to |Y|.
 In this case you would define /f/ to return ['f(x)/g(x)] and then set the
 y-offset of the approximation to /Y/ (see command line options below).
 
-Many other forms are possible, but in all cases the objective is to 
+Many other forms are possible, but in all cases the objective is to
 split /f(x)/ into a dominant part that you can evaluate easily using
 standard math functions, and a smooth and slowly changing rational approximation
 part.  Refer to your favourite textbook for more examples.
@@ -62,7 +62,7 @@ Command line options for the program are as follows:
              that are to be approximated to be compiled into the same executable.
              Defaults to 0.]]
 [[range a b][Sets the domain for the approximation to the range \[a,b\], defaults
-             to \[0,1\].]] 
+             to \[0,1\].]]
 [[relative][Sets the Remez code to optimise for relative error.  This is the default
             at program startup.  Note that relative error can only be used
             if f(x) has no roots over the range being optimised.]]
@@ -70,7 +70,7 @@ Command line options for the program are as follows:
 [[pin \[true|false\]]["Pins" the code so that the rational approximation
                      passes through the origin.  Obviously only set this to
                      /true/ if R(0) must be zero.  This is typically used when
-                     trying to preserve a root at \[0,0\] while also optimising 
+                     trying to preserve a root at \[0,0\] while also optimising
                      for relative error.]]
 [[order N D][Sets the order of the approximation to /N/ in the numerator and /D/
             in the denominator.  If /D/ is zero then the result will be a polynomial
@@ -78,7 +78,7 @@ Command line options for the program are as follows:
             coefficient of the numerator is zero if /pin/ was set to true, and the
             first coefficient of the denominator is always one.]]
 [[working-precision N][Sets the working precision of NTL::RR to /N/ binary digits.  Defaults to 250.]]
-[[target-precision N][Sets the precision of printed output to /N/ binary digits: 
+[[target-precision N][Sets the precision of printed output to /N/ binary digits:
                set to the same number of digits as the type that will be used to
                evaluate the approximation.  Defaults to 53 (for double precision).]]
 [[skew val]["Skews" the initial interpolated control points towards one
@@ -89,32 +89,32 @@ Command line options for the program are as follows:
             try adjusting the skew parameter until the first step yields
             the smallest possible error.  /val/ should be in the range
             \[-100,+100\], the default is zero.]]
-[[brake val][Sets a brake on each step so that the change in the 
+[[brake val][Sets a brake on each step so that the change in the
             control points is braked by /val%/.  Defaults to 50,
             try a higher value if an approximation won't converge,
             or a lower value to get speedier convergence.]]
 [[x-offset val][Sets the x-offset to /val/: the approximation will
-            be generated for `f(S * (x + X)) + Y` where /X/ is the 
+            be generated for `f(S * (x + X)) + Y` where /X/ is the
             x-offset, /S/ is the x-scale
             and /Y/ is the y-offset.  Defaults to zero.  To avoid
             rounding errors, take care to specify a value that can
             be exactly represented as a floating point number.]]
 [[x-scale val][Sets the x-scale to /val/: the approximation will
-            be generated for `f(S * (x + X)) + Y` where /S/ is the 
+            be generated for `f(S * (x + X)) + Y` where /S/ is the
             x-scale, /X/ is the x-offset
             and /Y/ is the y-offset.  Defaults to one.  To avoid
             rounding errors, take care to specify a value that can
             be exactly represented as a floating point number.]]
 [[y-offset val][Sets the y-offset to /val/: the approximation will
-            be generated for `f(S * (x + X)) + Y` where /X/ 
+            be generated for `f(S * (x + X)) + Y` where /X/
             is the x-offset, /S/ is the x-scale
             and /Y/ is the y-offset.  Defaults to zero.  To avoid
             rounding errors, take care to specify a value that can
             be exactly represented as a floating point number.]]
 [[y-offset auto][Sets the y-offset to the average value of f(x)
             evaluated at the two endpoints of the range plus the midpoint
-            of the range.  The calculated value is deliberately truncated 
-            to /float/ precision (and should be stored as a /float/ 
+            of the range.  The calculated value is deliberately truncated
+            to /float/ precision (and should be stored as a /float/
             in your code).  The approximation will
             be generated for `f(x + X) + Y` where /X/ is the x-offset
             and /Y/ is the y-offset.  Defaults to zero.]]
@@ -124,7 +124,7 @@ Command line options for the program are as follows:
             of interest.]]
 [[step N][Performs /N/ steps, or one step if /N/ is unspecified.
          After each step prints: the peek error at the extrema of
-         the error function of the approximation, 
+         the error function of the approximation,
          the theoretical error term solved for on the last step,
          and the maximum relative change in the location of the
          Chebyshev control points.  The approximation is converged on the
@@ -154,12 +154,12 @@ Command line options for the program are as follows:
 [[info][Prints out the current approximation: the location of the zeros of the
          error function, the location of the Chebyshev control points, the
          x and y offsets, and of course the coefficients of the polynomials.]]
-] 
+]
 
 
 [endsect][/section:minimax Minimax Approximations and the Remez Algorithm]
 
-[/ 
+[/
   Copyright 2006 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at

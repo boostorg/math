@@ -7,9 +7,10 @@
 
 #ifndef BOOST_BUILD_PCH_ENABLED
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
-#include <boost/math/special_functions.hpp>
+#include <boost/math/special_functions/jacobi_elliptic.hpp>
 #endif
 
-#define BOOST_MATH_TEST_TYPE double
+#define BOOST_MATH_TEST_TYPE float
+#define TEST_GROUP_10
 #include "test_instances.hpp"
 

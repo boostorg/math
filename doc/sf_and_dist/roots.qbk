@@ -1,4 +1,4 @@
-[section:roots Root Finding With Derivatives: Newton-Raphson, Halley & Schroeder]
+ [section:roots Root Finding With Derivatives: Newton-Raphson, Halley & Schroeder]
 
 [h4 Synopsis]
 
@@ -6,35 +6,35 @@
 #include <boost/math/tools/roots.hpp>
 ``
 
-   namespace boost{ namespace math{ 
+   namespace boost{ namespace math{
    namespace tools{
-   
+
    template <class F, class T>
    T newton_raphson_iterate(F f, T guess, T min, T max, int digits);
-   
+
    template <class F, class T>
    T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
-   
+
    template <class F, class T>
    T halley_iterate(F f, T guess, T min, T max, int digits);
-   
+
    template <class F, class T>
    T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
-   
+
    template <class F, class T>
    T schroeder_iterate(F f, T guess, T min, T max, int digits);
-   
+
    template <class F, class T>
    T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
-   
+
    }}} // namespaces
 
 [h4 Description]
 
 These functions all perform iterative root finding using derivatives:
 
-* `newton_raphson_iterate`performs second order
-[link newton Newton-Raphson iteration], 
+* `newton_raphson_iterate` performs second order
+[link newton Newton-Raphson iteration],
 
 * `halley_iterate` and`schroeder_iterate` perform third order
 [link halley Halley] and [link schroeder Schroeder] iteration.
@@ -42,15 +42,15 @@ These functions all perform iterative root finding using derivatives:
 The functions all take the same parameters:
 
 [variablelist Parameters of the root finding functions
-[[F f] [Type F must be a callable function object that accepts one parameter and 
+[[F f] [Type F must be a callable function object that accepts one parameter and
         returns a __tuple:
-        
+
 For the second order iterative methods ([@http://en.wikipedia.org/wiki/Newton_Raphson Newton Raphson])
         the __tuple should have *two* elements containing the evaluation
         of the function and its first derivative.
-        
+
 For the third order methods
-([@http://en.wikipedia.org/wiki/Halley%27s_method Halley] and 
+([@http://en.wikipedia.org/wiki/Halley%27s_method Halley] and
 Schroeder)
         the __tuple should have *three* elements containing the evaluation of
         the function and its first and second derivatives.]]
@@ -78,22 +78,22 @@ very close to being infinite) then these functions may terminate prematurely.
 A large first derivative leads to a very small next step, triggering the termination
 condition.  Derivative based iteration may not be appropriate in such cases.
 * If the function is 'Really Well Behaved' (monotonic and has only one root)
-the bracket bounds min and max may as well be set to the widest limits 
-like zero and `numeric_limits<T>::max()`. 
+the bracket bounds min and max may as well be set to the widest limits
+like zero and `numeric_limits<T>::max()`.
 *But if the function more complex and may have more than one root or a pole,
 the choice of bounds is protection against jumping out to seek the 'wrong' root.
 * These functions fall back to bisection if the next computed step would take the
 next value out of bounds.  The bounds are updated after each step to ensure this leads
 to convergence.  However, a good initial guess backed up by asymptotically-tight
 bounds will improve performance no end - rather than relying on bisection.
-* The value of /digits/ is crucial to good performance of these functions, 
+* The value of /digits/ is crucial to good performance of these functions,
 if it is set too high then at best you will get one extra (unnecessary)
 iteration, and at worst the last few steps will proceed by bisection.
 Remember that the returned value can never be more accurate than f(x) can be
 evaluated, and that if f(x) suffers from cancellation errors as it
 tends to zero then the computed steps will be effectively random.  The
 value of /digits/ should be set so that iteration terminates before this point:
-remember that for second and third order methods the number of correct 
+remember that for second and third order methods the number of correct
 digits in the result is increasing quite
 substantially with each iteration, /digits/ should be set by experiment so that the final
 iteration just takes the next value into the zone where f(x) becomes inaccurate.
@@ -196,11 +196,11 @@ by three:
       return newton_raphson_iterate(detail::cbrt_functor<T>(z), guess, min, max, digits);
    }
 
-Using the test data in libs/math/test/cbrt_test.cpp this found the cube root
+Using the test data in `libs/math/test/cbrt_test.cpp` this found the cube root
 exact to the last digit in every case, and in no more than 6 iterations at double
-precision.  However, you will note that a high precision was used in this 
+precision.  However, you will note that a high precision was used in this
 example, exactly what was warned against earlier on in these docs!  In this
-particular case it is possible to compute f(x) exactly and without undue 
+particular case it is possible to compute f(x) exactly and without undue
 cancellation error, so a high limit is not too much of an issue.  However,
 reducing the limit to `std::numeric_limits<T>::digits * 2 / 3` gave full
 precision in all but one of the test cases (and that one was out by just one bit).
@@ -210,7 +210,7 @@ Note also that the above code omits a probably optimization by computing z[sup2]
 and reusing it, omits error handling, and does not handle
 negative values of z correctly. (These are left as an exercise for the reader!)
 
-The boost::math::cbrt function also includes these and other improvements.
+The `boost::math::cbrt` function also includes these and other improvements.
 
 Now let's adapt the functor slightly to return the second derivative as well:
 
@@ -221,7 +221,7 @@ Now let's adapt the functor slightly to return the second derivative as well:
       ``__tuple``<T, T, T> operator()(T const& z)
       {
          return boost::math::make_tuple(
-         z*z*z - a, 
+         z*z*z - a,
          3 * z*z,
          6 * z);
       }
@@ -247,7 +247,7 @@ And then adapt the `cbrt` function to use Halley iterations:
    }
 
 Note that the iterations are set to stop at just one-half of full precision,
-and yet, even so, not one of the test cases had a single bit wrong. 
+and yet, even so, not one of the test cases had a single bit wrong.
 What's more, the maximum number of iterations was now just 4.
 
 Just to complete the picture, we could have called `schroeder_iterate` in the last
@@ -257,10 +257,10 @@ may vary depending upon the nature of f(x), and the accuracy to which the initia
 guess can be computed.  There appear to be no generalisations that can be made
 except "try them and see".
 
-Finally, had we called cbrt with [@http://shoup.net/ntl/doc/RR.txt NTL::RR]
+Finally, had we called `cbrt` with [@http://shoup.net/ntl/doc/RR.txt NTL::RR]
 set to 1000 bit precision, then full precision can be obtained with just 7 iterations.
 To put that in perspective,
-an increase in precision by a factor of 20, has less than doubled the number of 
+an increase in precision by a factor of 20, has less than doubled the number of
 iterations.  That just goes to emphasise that most of the iterations are used
 up getting the first few digits correct: after that these methods can churn out
 further digits with remarkable efficiency.
@@ -269,8 +269,8 @@ Or to put it another way: ['nothing beats a really good initial guess!]
 
 [endsect] [/section:roots Root Finding With Derivatives]
 
-[/ 
-  Copyright 2006, 2010 John Maddock and Paul A. Bristow.
+[/
+  Copyright 2006, 2010, 2012 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

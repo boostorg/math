@@ -81,7 +81,7 @@ Arnaldur Gylfason, John Phillips, Stephan Tolksdorf and Jeff Garland
 
 Thanks to Mark Coleman and Georgi Boshnakov for spot test values
 from __Mathematica, and of course,
-to Eric Weissten for nurturing __Mathworld, an invaluable resource.
+to Eric Weisstein for nurturing __Mathworld, an invaluable resource.
 
 The Skew-normal distribution and Owen's t function were written by Benjamin Sobotta.
 
@@ -90,10 +90,20 @@ to have infinite degrees of freedom
 and contributing to some long discussions about how to improve accuracy
 for large non-centrality and/or large degrees of freedom.
 
+Christopher Kormanyos wrote the e_float multiprecision library __TOMS910
+which formed the basis for the Boost.Multiprecision library
+which now can be used to allow most functions and distributions
+to be computed up to a precision of the users' choice,
+no longer restricted to built-in floating-point types like double.
+(And thanks to Topher Cooper for bring Christopher's e_float to our attention).
+
+Christopher Kormanyos wrote some examples for using __multiprecision,
+and added methods for finding zeros of Bessel Functions.
+
 [endsect] [/section:credits Credits and Acknowledgements]
 
 [/
-  Copyright 2006, 2007, 2008, 2009, 2010, 2012 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

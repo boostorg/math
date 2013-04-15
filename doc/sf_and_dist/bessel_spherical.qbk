@@ -3,6 +3,8 @@
 
 [h4 Synopsis]
 
+`#include <boost/math/special_functions/bessel.hpp>`
+
    template <class T1, class T2>
    ``__sf_result`` sph_bessel(unsigned v, T2 x);
 

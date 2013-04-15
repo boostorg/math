@@ -5,7 +5,7 @@
 
 #include <boost/math/bindings/rr.hpp>
 #include <boost/math/tools/test_data.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/included/prg_exec_monitor.hpp>
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <fstream>
@@ -37,7 +37,7 @@ boost::math::tuple<T, T, T, T> assoc_legendre_p_data(T n, T x)
    return boost::math::make_tuple(n, m, x, r1);
 }
 
-int test_main(int argc, char*argv [])
+int cpp_main(int argc, char*argv [])
 {
    using namespace boost::math::tools;
 

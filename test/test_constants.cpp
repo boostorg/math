@@ -20,7 +20,8 @@
 #endif
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
-#include <boost/test/test_exec_monitor.hpp> // Boost.Test
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/math/constants/constants.hpp>
@@ -39,10 +40,25 @@ typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeri
 // Policy with precision +2 (could be any reasonable value),
 // forces the precision of the policy to be greater than
 // that of a long double, and therefore triggers different code (construct from string).
+#ifdef BOOST_MATH_USE_FLOAT128
+typedef boost::math::policies::policy<boost::math::policies::digits2<115> > real_concept_policy_2;
+#else
 typedef boost::math::policies::policy<boost::math::policies::digits2<std::numeric_limits<long double>::digits + 2> > real_concept_policy_2;
+#endif
+// Policy with precision greater than the string representations, forces computation of values (i.e. different code path):
+typedef boost::math::policies::policy<boost::math::policies::digits2<400> > real_concept_policy_3;
 
 BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_1 >::type, boost::mpl::int_<(sizeof(double) == sizeof(long double) ? boost::math::constants::construct_from_double : boost::math::constants::construct_from_long_double) > >::value));
 BOOST_STATIC_ASSERT((boost::is_same<boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_2 >::type, boost::mpl::int_<boost::math::constants::construct_from_string> >::value));
+BOOST_STATIC_ASSERT((boost::math::constants::construction_traits<boost::math::concepts::real_concept, real_concept_policy_3>::type::value >= 5));
+
+#ifndef BOOST_NO_CXX11_CONSTEXPR
+
+constexpr float fval = boost::math::constants::pi<float>();
+constexpr double dval = boost::math::constants::pi<double>();
+constexpr long double ldval = boost::math::constants::pi<long double>();
+
+#endif
 
 // We need to declare a conceptual type whose precision is unknown at
 // compile time, and is so enormous when checked at runtime,
@@ -605,6 +621,8 @@ void test_real_concept_policy(const Policy&)
    using boost::math::concepts::real_concept;
 
    boost::math::concepts::real_concept tolerance = boost::math::tools::epsilon<real_concept>() * 2;  // double
+   if(Policy::precision_type::value > 200)
+      tolerance *= 50;
    std::cout << "Tolerance for type " << typeid(real_concept).name()  << " is " << tolerance << "." << std::endl;
 
    //typedef typename boost::math::policies::precision<boost::math::concepts::real_concept, boost::math::policies::policy<> >::type t1;
@@ -738,16 +756,51 @@ void test_real_concept_policy(const Policy&)
 
 } // template <class boost::math::concepts::real_concept>void test_spots(boost::math::concepts::real_concept)
 
-int test_main(int, char* [])
+#ifdef BOOST_MATH_USE_FLOAT128
+void test_float128()
+{
+   static const __float128 eps = 1.92592994438723585305597794258492732e-34Q;
+
+   __float128 p = boost::math::constants::pi<__float128>();
+   __float128 r = 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651Q;
+   __float128 err = (p - r) / r;
+   if(err < 0)
+      err = -err;
+   BOOST_CHECK(err < 2 * eps);
+}
+#endif
+
+void test_constexpr()
+{
+#ifndef BOOST_NO_CXX11_CONSTEXPR
+   constexpr float f1 = boost::math::constants::pi<float>();
+   constexpr double f2 = boost::math::constants::pi<double>();
+   constexpr long double f3 = boost::math::constants::pi<long double>();
+   (void)f1;
+   (void)f2;
+   (void)f3;
+#ifdef BOOST_MATH_USE_FLOAT128
+   constexpr __float128 f4 = boost::math::constants::pi<__float128>();
+   (void)f4;
+#endif
+#endif
+}
+
+BOOST_AUTO_TEST_CASE( test_main )
 {
    // Basic sanity-check spot values.
 
    test_float_spots(); // Test float_constants, like boost::math::float_constants::pi;
    test_double_spots(); // Test double_constants.
    test_long_double_spots(); // Test long_double_constants.
+#ifdef BOOST_MATH_USE_FLOAT128
+   test_float128();
+#endif
+   test_constexpr();
 
    test_real_concept_policy(real_concept_policy_1());
    test_real_concept_policy(real_concept_policy_2()); // Increased precision forcing construction from string.
+   test_real_concept_policy(real_concept_policy_3()); // Increased precision forcing caching of computed values.
    test_real_concept_policy(boost::math::policies::policy<>()); // Default.
 
    // (Parameter value, arbitrarily zero, only communicates the floating-point type).
@@ -766,8 +819,7 @@ int test_main(int, char* [])
     "to pass.</note>" << std::cout;
 #endif
 
-  return 0;
-} // int test_main(int, char* [])
+} // BOOST_AUTO_TEST_CASE( test_main )
 
 /*
 

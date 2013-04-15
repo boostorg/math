@@ -16,7 +16,7 @@
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/array.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+#include <boost/test/included/prg_exec_monitor.hpp>
 
 //
 // this is a sort of recursive include, since this file
@@ -4278,7 +4278,7 @@ void find_best_lanczos(const char* name, T eps, int max_scan = 100)
 
    print_code(best, name);
 }
-int test_main(int argc, char*argv [])
+int cpp_main(int argc, char*argv [])
 {
    bool test_double(false), test_long(false), test_float(false), test_quad(false), spots(false), test_data(false);
 

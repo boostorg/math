@@ -46,12 +46,17 @@ int main()
    int digits10 = std::numeric_limits<double>::digits10;
    std::cout << "std::numeric_limits<double>::digits10 = " << digits10 << std::endl;
 
-//#ifndef BOOST_NO_NUMERIC_LIMITS_LOWEST
-
 #ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
+   // OK to use C++11 max_digits10;
    int max_digits10 = std::numeric_limits<double>::max_digits10;
    std::cout << "std::numeric_limits<double>::max_digits10 = " << max_digits10 << std::endl;
+#else
+   // No support for max_digits10; so use Kahan formula instead.
+   int max_digits10 = 2 + std::numeric_limits<double>::digits * 3010/10000;
+   std::cout << "2 + std::numeric_limits<double>::digits * 3010/10000; = " <<
+   2 + std::numeric_limits<double>::digits * 3010/10000;
 #endif
+
 
 } // int main()
 
