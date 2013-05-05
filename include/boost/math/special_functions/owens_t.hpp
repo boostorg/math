@@ -1,4 +1,4 @@
-// (C) Benjamin Sobotta 2012
+// Copyright Benjamin Sobotta 2012
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -219,7 +219,7 @@ namespace boost
             BOOST_MATH_STD_USING
             using namespace boost::math::constants;
 
-	    const unsigned short m = 20;
+      const unsigned short m = 20;
 
             static const RealType c2[] =
             {
@@ -310,7 +310,7 @@ namespace boost
 
           const RealType as = a*a;
           const RealType hs = h*h;
-          const RealType y = 1.l/hs;
+          const RealType y = 1 / hs;
 
           RealType ii = 1;
           unsigned short i = 0;
@@ -490,7 +490,7 @@ namespace boost
           for(unsigned short i = 0; i < m; ++i)
             {
               BOOST_ASSERT(i < 19);
-              const RealType r = 1.l + as*pts[i];
+              const RealType r = 1 + as*pts[i];
               val += wts[i] * exp( hs*r ) / r;
             } // for(unsigned short i = 0; i < m; ++i)
 
@@ -523,7 +523,7 @@ namespace boost
 
             const RealType normh = owens_t_znorm2( h );
             const RealType y = static_cast<RealType>(1) - a;
-            const RealType r = atan2(y, ( static_cast<RealType>(1) + a ) );
+            const RealType r = atan2(y, static_cast<RealType>(1 + a) );
 
             RealType val = normh * ( static_cast<RealType>(1) - normh ) * half<RealType>();
 
@@ -571,7 +571,7 @@ namespace boost
             int n;
             try
             {
-               n = itrunc(tools::log_max_value<T>() / 6);
+               n = itrunc(T(tools::log_max_value<T>() / 6));
             }
             catch(...)
             {
@@ -595,7 +595,7 @@ namespace boost
                term = one_minus_dj_sum * a_pow / (2 * j + 1);
                c = b - c;
                sum += c * term;
-               abs_err += ldexp(std::max(T(fabs(sum)), T(fabs(c*term))), -tools::digits<T>());
+               abs_err += ldexp((std::max)(T(fabs(sum)), T(fabs(c*term))), -tools::digits<T>());
                b = (j + n) * (j - n) * b / ((j + T(0.5)) * (j + 1));
                ++j;
                //
@@ -611,7 +611,7 @@ namespace boost
          }
 
          template<typename RealType, class Policy>
-         inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah, const Policy& pol, const mpl::true_&)
+         inline RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah, const Policy&, const mpl::true_&)
          {
             BOOST_MATH_STD_USING
             using namespace boost::math::constants;
@@ -650,7 +650,7 @@ namespace boost
          } // RealType owens_t_T2(const RealType h, const RealType a, const unsigned short m, const RealType ah)
 
          template<typename RealType, class Policy>
-         inline std::pair<RealType, RealType> owens_t_T2_accelerated(const RealType h, const RealType a, const RealType ah, const Policy& pol)
+         inline std::pair<RealType, RealType> owens_t_T2_accelerated(const RealType h, const RealType a, const RealType ah, const Policy&)
          {
             //
             // This is the same series as T2, but with acceleration applied.
@@ -685,7 +685,7 @@ namespace boost
             int n;
             try
             {
-               n = itrunc(tools::log_max_value<RealType>() / 6);
+               n = itrunc(RealType(tools::log_max_value<RealType>() / 6));
             }
             catch(...)
             {
@@ -846,7 +846,7 @@ namespace boost
                return owens_t_znorm2(RealType(fabs(h)));
             }
             // Attempt arbitrary precision code, this will throw if it goes wrong:
-            typedef boost::math::policies::normalise<Policy, boost::math::policies::evaluation_error<> >::type forwarding_policy;
+            typedef typename boost::math::policies::normalise<Policy, boost::math::policies::evaluation_error<> >::type forwarding_policy;
             std::pair<RealType, RealType> p1(0, tools::max_value<RealType>()), p2(0, tools::max_value<RealType>());
             RealType target_precision = policies::get_epsilon<RealType, Policy>() * 1000;
             bool have_t1(false), have_t2(false);
@@ -996,6 +996,34 @@ namespace boost
             return val;
          } // RealType owens_t(RealType h, RealType a)
 
+         template <class T, class Policy, class tag>
+         struct owens_t_initializer
+         {
+            struct init
+            {
+               init()
+               {
+                  do_init(tag());
+               }
+               template <int N>
+               static void do_init(const mpl::int_<N>&){}
+               static void do_init(const mpl::int_<64>&)
+               {
+                  boost::math::owens_t(static_cast<T>(7), static_cast<T>(0.96875), Policy());
+                  boost::math::owens_t(static_cast<T>(2), static_cast<T>(0.5), Policy());
+               }
+               void force_instantiate()const{}
+            };
+            static const init initializer;
+            static void force_instantiate()
+            {
+               initializer.force_instantiate();
+            }
+         };
+
+         template <class T, class Policy, class tag>
+         const typename owens_t_initializer<T, Policy, tag>::init owens_t_initializer<T, Policy, tag>::initializer;
+
       } // namespace detail
 
       template <class T1, class T2, class Policy>
@@ -1003,6 +1031,19 @@ namespace boost
       {
          typedef typename tools::promote_args<T1, T2>::type result_type;
          typedef typename policies::evaluation<result_type, Policy>::type value_type;
+         typedef typename policies::precision<value_type, Policy>::type precision_type;
+         typedef typename mpl::if_c<
+               precision_type::value == 0,
+               mpl::int_<0>,
+               typename mpl::if_c<
+                  precision_type::value <= 64,
+                  mpl::int_<64>,
+                  mpl::int_<65>
+               >::type
+            >::type tag_type;
+
+         detail::owens_t_initializer<result_type, Policy, tag_type>::force_instantiate();
+            
          return policies::checked_narrowing_cast<result_type, Policy>(detail::owens_t(static_cast<value_type>(h), static_cast<value_type>(a), pol), "boost::math::owens_t<%1%>(%1%,%1%)");
       }
 

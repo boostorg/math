@@ -1,0 +1,54 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Implementation and Accuracy</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="../../index.html" title="Math Toolkit">
+<link rel="up" href="../inverse_complex.html" title="Complex Number Functions">
+<link rel="prev" href="../inverse_complex.html" title="Complex Number Functions">
+<link rel="next" href="asin.html" title="asin">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="spirit-nav">
+<a accesskey="p" href="../inverse_complex.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../inverse_complex.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="asin.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+<div class="section  math_toolkit_inverse_complex_implementation">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="math_toolkit.inverse_complex.implementation"></a><a class="link" href="implementation.html" title="Implementation and Accuracy">Implementation
+      and Accuracy</a>
+</h3></div></div></div>
+<p>
+        Although there are deceptively simple formulae available for all of these
+        functions, a naive implementation that used these formulae would fail catastrophically
+        for some input values. The Boost versions of these functions have been implemented
+        using the methodology described in "Implementing the Complex Arcsine
+        and Arccosine Functions Using Exception Handling" by T. E. Hull Thomas
+        F. Fairgrieve and Ping Tak Peter Tang, ACM Transactions on Mathematical Software,
+        Vol. 23, No. 3, September 1997. This means that the functions are well defined
+        over the entire complex number range, and produce accurate values even at
+        the extremes of that range, where as a naive formula would cause overflow
+        or underflow to occur during the calculation, even though the result is actually
+        a representable value. The maximum theoretical relative error for all of
+        these functions is less than 9.5&#949; for every machine-representable point in
+        the complex plane. Please refer to comments in the header files themselves
+        and to the above mentioned paper for more information on the implementation
+        methodology.
+      </p>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 John Maddock, Paul A. Bristow,
+      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs
+      van den Berg, Benjamin Sobotta and Christopher Kormanyos<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../inverse_complex.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../inverse_complex.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="asin.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
