@@ -108,7 +108,7 @@ Returns true only if /z/ is a normal number (not zero, infinite, NaN, or denorma
 If you wish to find details of the floating-point format for any particular processor,
 there is a program
 
-[@../../../example/inspect_fp.cpp inspect_fp.cpp]
+[@../../example/inspect_fp.cpp inspect_fp.cpp]
 
 by Johan Rade which can be used to print out the processor type,
 endianness, and detailed bit layout of a selection of floating-point values,

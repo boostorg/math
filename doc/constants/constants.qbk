@@ -68,7 +68,7 @@ are available in the namespace `boost::math::long_double_constants`.
 
 You can see the full list of available constants at [link math_toolkit.constants].
 
-Some examples of using constants are at [@../../../example/constants_eg1.cpp constants_eg1].
+Some examples of using constants are at [@../../example/constants_eg1.cpp constants_eg1].
 
 [endsect]
 

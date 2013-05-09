@@ -509,7 +509,7 @@ This is probably not what you intend!]
 If you want to alter the defaults for any or all of 
 the policies for *all* functions and distributions, installation-wide,
 then you can do so by defining various macros in
-[@../../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp].
+[@../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp].
 
 [h5 BOOST_MATH_DOMAIN_ERROR_POLICY]
 

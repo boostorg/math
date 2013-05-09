@@ -151,7 +151,7 @@ Definition Rule (ODR)" and result in unpredictable program behaviour.]
 
 That means there are only two safe ways to use these macros:
 
-* Edit them in [@../../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp],
+* Edit them in [@../../../../boost/math/tools/user.hpp boost/math/tools/user.hpp],
 so that the defaults are set on an installation-wide basis.
 Unfortunately this may not be convenient if
 you are using a pre-installed Boost distribution (on Linux for example).

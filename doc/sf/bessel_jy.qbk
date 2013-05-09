@@ -410,10 +410,10 @@ and `cyl_neumann` functions, but not infinite nor NaN.
 [bessel_errors_example_2]
 
 The full code (and output) for these examples is at
-[@../../../example/bessel_zeros_example_1.cpp Bessel zeros],
-[@../../../example/bessel_zeros_interator_example.cpp Bessel zeros iterator],
-[@../../../example/neumann_zeros_example_1.cpp Neumann zeros],
-[@../../../example/bessel_errors_example.cpp  Bessel error messages].
+[@../../example/bessel_zeros_example_1.cpp Bessel zeros],
+[@../../example/bessel_zeros_interator_example.cpp Bessel zeros iterator],
+[@../../example/neumann_zeros_example_1.cpp Neumann zeros],
+[@../../example/bessel_errors_example.cpp  Bessel error messages].
 
 [h3 Implementation]
 

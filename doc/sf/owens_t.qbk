@@ -101,7 +101,7 @@ are adapted for C++ with arbitrary RealType.
 The Patefield-Tandy algorithm provides six methods of evalualution (T1 to T6);
 the best method is selected according to the values of ['a] and ['h].
 See the original paper and the source in
-[@../../../../../boost/math/special_functions/owens_t.hpp owens_t.hpp] for details.
+[@../../../../boost/math/special_functions/owens_t.hpp owens_t.hpp] for details.
 
 The Patefield-Tandy algorithm is accurate to approximately 20 decimal places, so for
 types with greater precision we use:

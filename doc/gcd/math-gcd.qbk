@@ -42,7 +42,7 @@ programming problems.
 
 [section GCD Function Object]
 
-[*Header: ] [@../../../../boost/math/common_factor_rt.hpp <boost/math/common_factor_rt.hpp>]
+[*Header: ] [@../../../boost/math/common_factor_rt.hpp <boost/math/common_factor_rt.hpp>]
 
    template < typename IntegerType >
    class boost::math::gcd_evaluator
@@ -74,7 +74,7 @@ gcd_evaluator class template.
 
 [section LCM Function Object]
 
-[*Header: ] [@../../../../boost/math/common_factor_rt.hpp <boost/math/common_factor_rt.hpp>]
+[*Header: ] [@../../../boost/math/common_factor_rt.hpp <boost/math/common_factor_rt.hpp>]
 
    template < typename IntegerType >
    class boost::math::lcm_evaluator
@@ -107,7 +107,7 @@ specialize on the lcm_evaluator class template.
 
 [section:run_time Run-time GCD & LCM Determination]
 
-[*Header: ] [@../../../../boost/math/common_factor_rt.hpp <boost/math/common_factor_rt.hpp>]
+[*Header: ] [@../../../boost/math/common_factor_rt.hpp <boost/math/common_factor_rt.hpp>]
 
    template < typename IntegerType >
    IntegerType  boost::math::gcd( IntegerType const &a, IntegerType const &b );
@@ -128,7 +128,7 @@ gcd_evaluator and lcm_evaluator class templates, respectively.
 
 [section:compile_time Compile time GCD and LCM determination]
 
-[*Header: ] [@../../../../boost/math/common_factor_ct.hpp <boost/math/common_factor_ct.hpp>]
+[*Header: ] [@../../../boost/math/common_factor_ct.hpp <boost/math/common_factor_ct.hpp>]
 
    typedef ``['unspecified]`` static_gcd_type;
 
@@ -189,8 +189,8 @@ is beyond the range of `static_gcd_type`.
 [section:header Header <boost/math/common_factor.hpp>]
 
 This header simply includes the headers
-[@../../../../boost/math/common_factor_ct.hpp <boost/math/common_factor_ct.hpp>]
-and [@../../../../boost/math/common_factor_rt.hpp <boost/math/common_factor_rt.hpp>].
+[@../../../boost/math/common_factor_ct.hpp <boost/math/common_factor_ct.hpp>]
+and [@../../../boost/math/common_factor_rt.hpp <boost/math/common_factor_rt.hpp>].
 
 Note this is a legacy header: it used to contain the actual implementation,
 but the compile-time and run-time facilities

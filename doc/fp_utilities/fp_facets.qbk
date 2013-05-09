@@ -493,34 +493,34 @@ Serialization archives do not check the stream state.
 
 [h5 Other examples]
 
-[@../../../example/nonfinite_facet_simple.cpp nonfinite_facet_simple.cpp]
+[@../../example/nonfinite_facet_simple.cpp nonfinite_facet_simple.cpp]
 give some more simple demonstrations of the difference between using classic C locale
 and constructing a C99 infinty and NaN compliant locale for input and output.
 
-See [@../../../example/nonfinite_facet_sstream.cpp  nonfinite_facet_sstream.cpp]
+See [@../../example/nonfinite_facet_sstream.cpp  nonfinite_facet_sstream.cpp]
 for this example of use with `std::stringstream`s.
 
 For an example of how to enforce the MSVC 'legacy'
 "1.#INF"  and "1.#QNAN" representations of infinity and NaNs,
 for input and output,
-see [@../../../example/nonfinite_legacy.cpp nonfinite_legacy.cpp].
+see [@../../example/nonfinite_legacy.cpp nonfinite_legacy.cpp].
 
 Treatment of signaling NaN is demonstrated at
-[@../../../example/nonfinite_signaling_NaN.cpp]
+[@../../example/nonfinite_signaling_NaN.cpp]
 
-Example [@../../../example/nonfinite_loopback_ok.cpp] shows loopback works OK.
+Example [@../../example/nonfinite_loopback_ok.cpp] shows loopback works OK.
 
-Example [@../../../example/nonfinite_num_facet.cpp] shows output and re-input
+Example [@../../example/nonfinite_num_facet.cpp] shows output and re-input
 of various finite and nonfinite values.
 
 A simple example of trapping nonfinite output is at
-[@../../../example/nonfinite_num_facet_trap.cpp nonfinite_num_facet_trap.cpp].
+[@../../example/nonfinite_num_facet_trap.cpp nonfinite_num_facet_trap.cpp].
 
 A very basic example of using Boost.Archive is at
-[@../../../example/nonfinite_serialization_archives.cpp].
+[@../../example/nonfinite_serialization_archives.cpp].
 
 A full demonstration of serialization by Francois Mauger is at
-[@../../../example/nonfinite_num_facet_serialization.cpp]
+[@../../example/nonfinite_num_facet_serialization.cpp]
 
 [endsect] [/section:examples Examples]
 

@@ -984,7 +984,7 @@
           The function <code class="computeroutput"><span class="identifier">epsilon</span></code> can
           be synthesised from the others, so no explicit specialisation is required
           provided the precision of RealType does not vary at runtime (see the header
-          <a href="../../../../../../boost/math/bindings/rr.hpp" target="_top">boost/math/bindings/rr.hpp</a>
+          <a href="../../../../../boost/math/bindings/rr.hpp" target="_top">boost/math/bindings/rr.hpp</a>
           for an example where the precision does vary at runtime).
         </li>
 <li class="listitem">
@@ -995,7 +995,7 @@
           these functions, <span class="emphasis"><em>unless</em></span> you explicitly specialise
           them. For example if the precision of RealType varies at runtime, then
           <code class="computeroutput"><span class="identifier">numeric_limits</span></code> support
-          may not be appropriate, see <a href="../../../../../../boost/math/bindings/rr.hpp" target="_top">boost/math/bindings/rr.hpp</a>
+          may not be appropriate, see <a href="../../../../../boost/math/bindings/rr.hpp" target="_top">boost/math/bindings/rr.hpp</a>
           for examples.
         </li>
 </ol></div>
@@ -1331,8 +1331,8 @@
 <p>
       In addition, for efficient and accurate results, a <a class="link" href="lanczos.html" title="The Lanczos Approximation">Lanczos
       approximation</a> is highly desirable. You may be able to adapt an existing
-      approximation from <a href="../../../../../../boost/math/special_functions/lanczos.hpp" target="_top">boost/math/special_functions/lanczos.hpp</a>
-      or <a href="../../../../../../boost/math/bindings/detail/big_lanczos.hpp" target="_top">boost/math/bindings/detail/big_lanczos.hpp</a>:
+      approximation from <a href="../../../../../boost/math/special_functions/lanczos.hpp" target="_top">boost/math/special_functions/lanczos.hpp</a>
+      or <a href="../../../../../boost/math/bindings/detail/big_lanczos.hpp" target="_top">boost/math/bindings/detail/big_lanczos.hpp</a>:
       in the former case you will need change static_cast's to lexical_cast's, and
       the constants to <span class="emphasis"><em>strings</em></span> (in order to ensure the coefficients
       aren't truncated to long double) and then specialise <code class="computeroutput"><span class="identifier">lanczos_traits</span></code>

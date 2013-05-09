@@ -5,7 +5,7 @@ power of a run-time base.
 
 [h4 Synopsis]
 
-[@../../../../../boost/math/special_functions/pow.hpp `#include <boost/math/special_functions/pow.hpp>`]
+[@../../../../boost/math/special_functions/pow.hpp `#include <boost/math/special_functions/pow.hpp>`]
 
     namespace boost { namespace math {
 

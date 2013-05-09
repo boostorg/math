@@ -134,8 +134,8 @@ Ultimately these facilities should be provided by GCC and libstdc++.
 
 The special functions and tools in this library can be used with
 [@http://www.mpfr.org MPFR] (an arbitrary precision number type based on the __GMP),
-either via the bindings in [@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp],
-or via [@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpreal.hpp].
+either via the bindings in [@../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp],
+or via [@../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpreal.hpp].
 
 [*New projects are recommended to use __multiprecision with GMP/MPFR backend instead.]
 
@@ -147,8 +147,8 @@ or [@http://www.holoborodko.com/pavel/mpfr/ mpfr-C++ (mpreal)].
 
 Unfortunately neither `mpfr_class` nor `mpreal` quite satisfy our conceptual requirements,
 so there is a very thin set of additional interfaces and some helper traits defined in
-[@../../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp] and
-[@../../../../../boost/math/bindings/mpreal.hpp boost/math/bindings/mpreal.hpp]
+[@../../../../boost/math/bindings/mpfr.hpp boost/math/bindings/mpfr.hpp] and
+[@../../../../boost/math/bindings/mpreal.hpp boost/math/bindings/mpreal.hpp]
 that you should use in place of including 'gmpfrxx.h' or 'mpreal.h' directly.
 The classes `mpfr_class` or `mpreal` are
 then usable unchanged once this header is included, so for example `mpfr_class`'s
@@ -215,7 +215,7 @@ There is also a concept checking test program for e_float support
 [@http://shoup.net/ntl/doc/RR.txt NTL::RR]
 (an arbitrarily-fixed precision floating-point number type),
 can be used via the bindings in
-[@../../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp].
+[@../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp].
 For details, see [@http://shoup.net/ntl/ NTL: A Library for doing Number Theory by
 Victor Shoup].
 
@@ -223,7 +223,7 @@ Victor Shoup].
 
 Unfortunately `NTL::RR` doesn't quite satisfy our conceptual requirements,
 so there is a very thin wrapper class `boost::math::ntl::RR` defined in
-[@../../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp] that you
+[@../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp] that you
 should use in place of `NTL::RR`.  The class is intended to be a drop-in
 replacement for the "real" NTL::RR that adds some syntactic sugar to keep
 this library happy, plus some of the standard library functions not implemented
@@ -255,7 +255,7 @@ you will need to override the default `boost::multiprecision::et_on` with
 
 [expression_template_1]
 
-A full example code is at [@../../../example/test_cpp_float_close_fraction.cpp test_cpp_float_close_fraction.cpp]
+A full example code is at [@../../example/test_cpp_float_close_fraction.cpp test_cpp_float_close_fraction.cpp]
 
 [endsect] [/section:using_test Using without expression templates for Boost.Test and others]
 
@@ -357,7 +357,7 @@ synthesised from the others, and so no explicit specialisation is required.
 # The function `epsilon` can be synthesised from the others, so no
 explicit specialisation is required provided the precision
 of RealType does not vary at runtime (see the header
-[@../../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp]
+[@../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp]
 for an example where the precision does vary at runtime).
 # The functions `digits`, `max_value` and `min_value`, all get synthesised
 automatically from `std::numeric_limits`.  However, if `numeric_limits`
@@ -365,7 +365,7 @@ is not specialised for type RealType, then you will get a compiler error
 when code tries to use these functions, /unless/ you explicitly specialise them.
 For example if the precision of RealType varies at runtime, then
 `numeric_limits` support may not be appropriate, see
-[@../../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp] for examples.
+[@../../../../boost/math/bindings/rr.hpp boost/math/bindings/rr.hpp] for examples.
 
 [warning
 If `std::numeric_limits<>` is *not specialized*
@@ -436,9 +436,9 @@ argument-dependent-lookup can take place.
 
 In addition, for efficient and accurate results, a __lanczos is highly desirable.
 You may be able to adapt an existing approximation from
-[@../../../../../boost/math/special_functions/lanczos.hpp
+[@../../../../boost/math/special_functions/lanczos.hpp
 boost/math/special_functions/lanczos.hpp] or
-[@../../../../../boost/math/bindings/detail/big_lanczos.hpp
+[@../../../../boost/math/bindings/detail/big_lanczos.hpp
 boost/math/bindings/detail/big_lanczos.hpp]:
 in the former case you will need change
 static_cast's to lexical_cast's, and the constants to /strings/
@@ -543,7 +543,7 @@ been brought into the current scope with a using declaration.
 [h6 Testing the real concept]
 
 There is a test program
-[@../../../test/std_real_concept_check.cpp libs/math/test/std_real_concept_check.cpp]
+[@../../test/std_real_concept_check.cpp libs/math/test/std_real_concept_check.cpp]
 that instantiates every template in this library with type
 `std_real_concept` to verify its usage of standard library functions.
 
@@ -604,7 +604,7 @@ for distribution types.
 [h6 Testing the distribution concept]
 
 The test program
-[@../../../test/compile_test/distribution_concept_check.cpp distribution_concept_check.cpp]
+[@../../test/compile_test/distribution_concept_check.cpp distribution_concept_check.cpp]
 is responsible for using `DistributionConcept` to verify that all the
 distributions in this library conform to the
 [link math_toolkit.dist_concept Distribution concept].
