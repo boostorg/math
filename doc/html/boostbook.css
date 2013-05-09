@@ -34,12 +34,12 @@
     /* Code on paragraphs */
     p tt.computeroutput
     {
-        font-size: 9pt;
+        font-size: 10pt;
     }
 
     pre.synopsis
     {
-        font-size: 9pt;
+        font-size: 10pt;
         margin: 1pc 4% 0pc 4%;
         padding: 0.5pc 0.5pc 0.5pc 0.5pc;
     }
@@ -47,7 +47,7 @@
     .programlisting,
     .screen
     {
-        font-size: 9pt;
+        font-size: 10pt;
         display: block;
         margin: 1pc 4% 0pc 4%;
         padding: 0.5pc 0.5pc 0.5pc 0.5pc;
@@ -209,7 +209,7 @@
     {
        margin: 1pc 4% 0pc 4%;
        padding: 0.1pc 1pc 0.1pc 1pc;
-       font-size: 80%;
+       font-size: 100%;
        line-height: 1.15;
     }
 

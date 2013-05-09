@@ -44,7 +44,7 @@
       <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
    <span class="identifier">bisect</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
@@ -52,7 +52,7 @@
       <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">,</span>
-      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&amp;);</span>
+      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
      <span class="comment">// Bracket and Solve Root</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
@@ -65,7 +65,7 @@
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
    <span class="identifier">bracket_and_solve_root</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
@@ -74,7 +74,7 @@
       <span class="keyword">bool</span> <span class="identifier">rising</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">,</span>
-      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&amp;);</span>
+      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
  <span class="comment">// TOMS 748 algorithm</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
@@ -86,7 +86,7 @@
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
    <span class="identifier">toms748_solve</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
@@ -94,7 +94,7 @@
       <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">b</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">,</span>
-      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&amp;);</span>
+      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -107,7 +107,7 @@
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
    <span class="identifier">toms748_solve</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
@@ -117,7 +117,7 @@
       <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">fb</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">,</span>
-      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&amp;);</span>
+      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="comment">// Termination conditions:</span>
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -187,7 +187,7 @@
       <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
    <span class="identifier">bisect</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
@@ -195,7 +195,7 @@
       <span class="identifier">T</span> <span class="identifier">max</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">,</span>
-      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&amp;);</span>
+      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         These functions locate the root using bisection: function arguments are:
@@ -233,9 +233,9 @@
 </dl>
 </div>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -280,7 +280,7 @@
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
    <span class="identifier">bracket_and_solve_root</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
@@ -289,7 +289,7 @@
       <span class="keyword">bool</span> <span class="identifier">rising</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">,</span>
-      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&amp;);</span>
+      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         This is a convenience function that calls <span class="emphasis"><em>toms748_solve</em></span>
@@ -341,9 +341,9 @@
 </dl>
 </div>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -387,7 +387,7 @@
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
    <span class="identifier">toms748_solve</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
@@ -395,7 +395,7 @@
       <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">b</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">,</span>
-      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&amp;);</span>
+      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
@@ -408,7 +408,7 @@
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">);</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Tol</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span>
    <span class="identifier">toms748_solve</span><span class="special">(</span>
       <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span>
@@ -418,7 +418,7 @@
       <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">fb</span><span class="special">,</span>
       <span class="identifier">Tol</span> <span class="identifier">tol</span><span class="special">,</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uintmax_t</span><span class="special">&amp;</span> <span class="identifier">max_iter</span><span class="special">,</span>
-      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a><span class="special">&amp;);</span>
+      <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
         These two functions implement TOMS Algorithm 748: it uses a mixture of cubic,
@@ -471,9 +471,9 @@
 </dl>
 </div>
 <p>
-        The final <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">Policy</a> argument is optional and can
+        The final <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
         be used to control the behaviour of the function: how it handles errors,
-        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies">policy
+        what level of precision to use etc. Refer to the <a class="link" href="../../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">policy
         documentation for more details</a>.
       </p>
 <p>
@@ -560,9 +560,9 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 John Maddock, Paul A. Bristow,
-      Hubert Holin, Xiaogang Zhang, Bruno Lalande, Johan R&#229;de, Gautam Sewani, Thijs
-      van den Berg, Daryle Walker, Benjamin Sobotta and Christopher Kormanyos<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 Paul A. Bristow, Christopher Kormanyos,
+      Hubert Holin, Bruno Lalande, John Maddock, Johan R&#229;de, Gautam Sewani, Benjamin
+      Sobotta, Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

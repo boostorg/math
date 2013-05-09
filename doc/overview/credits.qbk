@@ -1,9 +1,12 @@
 [section:credits Credits and Acknowledgements]
 
-Hubert Holin started the Boost.Math library.  The inverse
+Hubert Holin started the Boost.Math library.  The 
+Quaternions, Octonions, inverse
 hyperbolic functions, and the sinus cardinal functions are his.
 
-John Maddock started this library, the beta, gamma, erf, polynomial,
+Daryle Walker wrote the integer gcd and lcm functions.
+
+John Maddock started the special functions, the beta, gamma, erf, polynomial,
 and factorial functions are his, as is the "Toolkit" section, and many
 of the statistical distributions.
 

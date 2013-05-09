@@ -1,6 +1,5 @@
-[def foo______ bar]
 
-[mathpart policy Policies]
+[mathpart policy Policies: Controlling Precision, Error Handling etc]
 
 [section:pol_overview Policy Overview]
 [policy_overview]
