@@ -380,12 +380,12 @@ for these distributions.
 ] [/ caution]
 ] [/ template discrete_quantile_warning]
 
-[/
+[block '''<bookinfo><releaseinfo>'''
 This manual is also available in
 [@http://sourceforge.net/projects/boost/files/boost-docs/
 printer friendly PDF format],
 and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
-]
+'''</releaseinfo></bookinfo>''']
 
 [mathpart overview Overview]
 [include overview/overview.qbk]
