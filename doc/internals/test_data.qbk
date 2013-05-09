@@ -389,7 +389,6 @@ So it's pretty clear that this fraction shouldn't be used for small values
 of a and z.
 
 [h4 reference]
-[#test_data_reference]
 
 Most of this tool has been described already in the examples above, we'll 
 just add the following notes on the non-member functions:

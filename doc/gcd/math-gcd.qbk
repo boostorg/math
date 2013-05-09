@@ -1,4 +1,5 @@
-[section:gcd_lcm Integer Utilities (Greatest Common Divisor and Least Common Multiple)]
+
+[mathpart gcd_lcm Integer Utilities (Greatest Common Divisor and Least Common Multiple)]
 
 [section Introduction]
 
@@ -233,5 +234,5 @@ pool library. The code had updates by Helmut Zeisel.
 
 [endsect]
 
-[endsect]
+[endmathpart]
 

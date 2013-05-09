@@ -269,7 +269,7 @@ any type /RealType/ that meets the conceptual requirements given below.  All
 the built-in floating-point types will meet these requirements.
 User-defined types that meet the requirements can also be used.
 
-For example, with [link math_toolkit.using_udt.high_precision.use_ntl a thin wrapper class]
+For example, with [link math_toolkit.high_precision.use_ntl a thin wrapper class]
 one of the types provided with [@http://shoup.net/ntl/ NTL (RR)] can be used.
 But now that __multiprecision library is available,
 this has become the reference real number type.
@@ -459,8 +459,8 @@ requirements, and encapsulates a statistical distribution.
 
 Please note that this documentation should not be used as a substitute
 for the
-[link math_toolkit.dist.dist_ref reference documentation], and
-[link math_toolkit.dist.stat_tut tutorial] of the statistical
+[link math_toolkit.dist_ref reference documentation], and
+[link math_toolkit.stat_tut tutorial] of the statistical
 distributions.
 
 In the following table, /d/ is an object of type `DistributionType`,
@@ -558,7 +558,7 @@ that instantiates every template in this library with type
    }}} // namespaces
 
 `real_concept` is an archetype for
-[link math_toolkit.using_udt.concepts user defined real types],
+[link math_toolkit.concepts user defined real types],
 it declares its standard library functions in its own
 namespace: these will only be found if they are called unqualified
 allowing argument dependent lookup to locate them.  In addition
@@ -566,11 +566,11 @@ this type is useable at runtime:
 this allows code that would not otherwise be exercised by the built-in
 floating point types to be tested.  There is no std::numeric_limits<>
 support for this type, since numeric_limits is not a conceptual requirement
-for [link math_toolkit.using_udt.concepts RealType]s.
+for [link math_toolkit.concepts RealType]s.
 
 NTL RR is an example of a type meeting the requirements that this type
 models, but note that use of a thin wrapper class is required: refer to
-[linkmath_toolkit.using_udt.high_precision.use_ntl "Using With NTL - a High-Precision Floating-Point Library"].
+[link math_toolkit.high_precision.use_ntl "Using With NTL - a High-Precision Floating-Point Library"].
 
 There is no specific test case for type `real_concept`, instead, since this
 type is usable at runtime, each individual test case as well as testing
@@ -595,7 +595,7 @@ Distribution Concept models statistical distributions.
    }}} // namespaces
 
 The class template `distribution_archetype` is a model of the
-[link math_toolkit.using_udt.dist_concept Distribution concept].
+[link math_toolkit.dist_concept Distribution concept].
 
 The class template `DistributionConcept` is a
 [@../../../../../libs/concept_check/index.html concept checking class]
@@ -607,11 +607,11 @@ The test program
 [@../../../test/compile_test/distribution_concept_check.cpp distribution_concept_check.cpp]
 is responsible for using `DistributionConcept` to verify that all the
 distributions in this library conform to the
-[link math_toolkit.using_udt.dist_concept Distribution concept].
+[link math_toolkit.dist_concept Distribution concept].
 
 The class template `DistributionConcept` verifies the existence
 (but not proper function) of the non-member accessors
-required by the [link math_toolkit.using_udt.dist_concept Distribution concept].
+required by the [link math_toolkit.dist_concept Distribution concept].
 These are checked by calls like
 
 v = pdf(dist, x); // (Result v is ignored).

@@ -125,14 +125,14 @@ This implementation is believed to follow these proposals and to assist compatib
 ['ISO/IEC 9899:1999 Programming languages - C]
 and with the
 [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Draft Technical Report on C++ Library Extensions, 2005-06-24, section 5.2.1, paragraph 5].
-[link math_toolkit.main_overview.error_handling See also domain_error].
+[link math_toolkit.error_handling See also domain_error].
 
 See __policy_ref for details of the error handling policies that should allow
 a user to comply with any of these recommendations, as well as other behaviour.
 
-See [link math_toolkit.main_overview.error_handling error handling]
+See [link math_toolkit.error_handling error handling]
 for a detailed explanation of the mechanism, and
-[link math_toolkit.dist.stat_tut.weg.error_eg error_handling example]
+[link math_toolkit.stat_tut.weg.error_eg error_handling example]
 and
 [@../../../example/error_handling_example.cpp error_handling_example.cpp]
 
@@ -146,7 +146,7 @@ However, for simplicity, this is not done for most examples.]
 
 Functions that are not mathematically defined,
 like the Cauchy mean, fail to compile by default.
-A [link math_toolkit.policy.pol_ref.assert_undefined policy]
+A [link math_toolkit.pol_ref.assert_undefined policy]
 allows control of this.
 
 If the policy is to permit undefined functions, then calling them
@@ -267,7 +267,7 @@ the most common usage, lower = -1, mode = 0 and upper = 1 would be more suitable
 Some of the special functions in this library are implemented via
 rational approximations.  These are either taken from the literature,
 or devised by John Maddock using
-[link math_toolkit.toolkit.internals2.minimax our Remez code].
+[link math_toolkit.internals2.minimax our Remez code].
 
 Rational rather than Polynomial approximations are used to ensure
 accuracy: polynomial approximations are often wonderful up to
@@ -541,8 +541,8 @@ If you fail to do this you will get XEP warnings in the log file like
 
 [pre \[warning\]could not find any font family matching "Times New Roman"; replaced by Helvetica]
 
-(html is the default so it is generated at math_toolkit\libs\math\doc\sf_and_dist\html\index.html
-using command line >bjam -a > math_docs.log).
+(html is the default so it is generated at libs\math\doc\html\index.html
+using command line >bjam -a > math_toolkit.docs.log).
 
  <!-- Sample configuration for Windows TrueType fonts.  -->
 is provided in the xep.xml downloaded, but the Windows TrueType fonts are commented out.

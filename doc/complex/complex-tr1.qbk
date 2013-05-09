@@ -4,7 +4,7 @@
 [def __ex '''<code>e<superscript>x</superscript></code>''']
 [def __te '''2&#x03B5;''']
 
-[section:inverse_complex Complex Number Functions]
+[mathpart inverse_complex..Complex Number Functions]
 
 The following complex number algorithms are the inverses of trigonometric functions currently
 present in the C++ standard.  Equivalents to these functions are part of the C99 standard, and
@@ -137,7 +137,7 @@ __formula [$../../images/atanh.png]
 
 [endsect]
 
-[endsect]
+[endmathpart]
 
 
 

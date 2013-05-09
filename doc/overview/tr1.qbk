@@ -93,13 +93,13 @@ no templates being instantiated any more), and also speed up debugging
 runtimes - since the externally compiled libraries can be 
 compiler optimised, rather than built using full settings - the difference
 in performance between 
-[link math_toolkit.perf.getting_best 
+[link math_toolkit.getting_best 
 release and debug builds can be as much as 20 times],
 so for complex applications this can be a big win.
 
 [h4 Supported C99 Functions]
 
-See also the [link math_toolkit.extern_c.c99 
+See also the [link math_toolkit.c99 
 quick reference guide for these functions].
 
    namespace boost{ namespace math{ namespace tr1{ extern "C"{
@@ -191,7 +191,7 @@ quick reference guide for these functions].
    
 [h4 Supported TR1 Functions]
 
-See also the [link math_toolkit.extern_c.tr1 
+See also the [link math_toolkit.tr1 
 quick reference guide for these functions].
 
    namespace boost{ namespace math{ namespace tr1{ extern "C"{

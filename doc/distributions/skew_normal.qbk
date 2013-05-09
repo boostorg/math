@@ -112,7 +112,7 @@ by Adelchi Azzalini (2005-11-2).
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is ['-[max_value], +[min_value]].
@@ -145,7 +145,7 @@ __Mathematica was also used to generate some more accurate spot test data.
 
 The skew_normal distribution with shape = zero is implemented as a special case,
 equivalent to the normal distribution in terms of the
-[link math_toolkit.special.sf_erf.error_function error function], 
+[link math_toolkit.sf_erf.error_function error function], 
 and therefore should have excellent accuracy.
 
 The PDF and mean, variance, skewness and kurtosis are also accurately evaluated using

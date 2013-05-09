@@ -364,7 +364,7 @@ Suppose we conduct a Chi Squared test for standard deviation and the result
 is borderline, a legitimate question to ask is "How large would the sample size
 have to be in order to produce a definitive result?"
 
-The class template [link math_toolkit.dist.dist_ref.dists.chi_squared_dist 
+The class template [link math_toolkit.dist_ref.dists.chi_squared_dist 
 chi_squared_distribution] has a static method 
 `find_degrees_of_freedom` that will calculate this value for
 some acceptable risk of type I failure /alpha/, type II failure 

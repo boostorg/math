@@ -49,10 +49,10 @@ Designed primarily for internal use and development.]]
 
 [table Boost.Math Tuning 
 [[ Macros for Tuning performance options for specific compilers] [Notes]] 
-[[`BOOST_MATH_POLY_METHOD`] [See the [link math_toolkit.perf.tuning performance tuning section].]]
-[[`BOOST_MATH_RATIONAL_METHOD`] [See the [link math_toolkit.perf.tuning performance tuning section].]]
-[[`BOOST_MATH_MAX_POLY_ORDER`] [See the [link math_toolkit.perf.tuning performance tuning section].]]
-[[`BOOST_MATH_INT_TABLE_TYPE`] [See the [link math_toolkit.perf.tuning performance tuning section].]]
+[[`BOOST_MATH_POLY_METHOD`] [See the [link math_toolkit.tuning performance tuning section].]]
+[[`BOOST_MATH_RATIONAL_METHOD`] [See the [link math_toolkit.tuning performance tuning section].]]
+[[`BOOST_MATH_MAX_POLY_ORDER`] [See the [link math_toolkit.tuning performance tuning section].]]
+[[`BOOST_MATH_INT_TABLE_TYPE`] [See the [link math_toolkit.tuning performance tuning section].]]
 [[`BOOST_MATH_INT_VALUE_SUFFIX`] [Helper macro for appending the correct suffix to integer constants
 which may actually be stored as reals depending on the value of BOOST_MATH_INT_TABLE_TYPE.]]
 ] [/table]

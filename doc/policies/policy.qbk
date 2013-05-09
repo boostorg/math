@@ -1,4 +1,6 @@
-[section:policy Policies]
+[def foo______ bar]
+
+[mathpart policy Policies]
 
 [section:pol_overview Policy Overview]
 [policy_overview]
@@ -123,7 +125,7 @@ if there is a %1% specifier in the ['message] string then it
 should be replaced with the value of ['val].
 
 There is more information on user-defined error handlers in
-the [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+the [link math_toolkit.pol_tutorial.user_def_err_pol 
 tutorial here].
 
 [h4 Kinds of Error Raised]                  
@@ -884,9 +886,9 @@ actually use.
 [endsect][/section:pol_ref_ref Policy Class Reference]
 
 [endsect][/section:pol_ref Policy Reference]
-[endsect][/section:policy Policies]
+[endmathpart][/section:policy Policies]
 
-[/ policy.qbk
+[/ qbk
   Copyright 2007, 2010 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at

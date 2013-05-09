@@ -7,7 +7,7 @@
 See full source C++ of this example at
 [@../../example/geometric_examples.cpp geometric_examples.cpp]
                        
-[link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative_binomial confidence interval example.]
+[link math_toolkit.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative_binomial confidence interval example.]
 
 [endsect] [/section:geometric_eg Geometric Distribution Examples]
 

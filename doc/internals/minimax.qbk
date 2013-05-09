@@ -13,7 +13,7 @@ To use this tool, you will need to have a reasonable grasp of what the Remez
 algorithm is, and the general form of the approximation you want to achieve.
 
 Unless you already familar with the Remez method,
-you should first read the [link math_toolkit.backgrounders.remez
+you should first read the [link math_toolkit.remez
 brief background article explaining the principles behind the
 Remez algorithm].
 
@@ -35,7 +35,7 @@ wish you can just add the function to approximate as a new variant
 after the existing examples.
 
 In addition to those two files, the program needs to be linked to
-a [link math_toolkit.using_udt.high_precision.use_ntl patched NTL library to compile].
+a [link math_toolkit.high_precision.use_ntl patched NTL library to compile].
 
 Note that the function /f/ must return the rational part of the
 approximation: for example if you are approximating a function

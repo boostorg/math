@@ -41,7 +41,7 @@ In other words: two implementations of the same function, whose
 maximum relative errors differ by a factor of 2, can actually be accurate
 to the same number of binary digits.  You have been warned!
 
-[#zero_error][h4 The Impossibility of Zero Error]
+[h4:zero_error The Impossibility of Zero Error]
 
 For many of the functions in this library, it is assumed that the error is
 "effectively zero" if the computation can be done with a number of guard

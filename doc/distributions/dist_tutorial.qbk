@@ -1,10 +1,10 @@
 [/ def names all end in distrib to avoid clashes with names of functions]
 
-[def __binomial_distrib [link math_toolkit.dist.dist_ref.dists.binomial_dist Binomial Distribution]]
-[def __chi_squared_distrib [link math_toolkit.dist.dist_ref.dists.chi_squared_dist Chi Squared Distribution]]
-[def __normal_distrib [link math_toolkit.dist.dist_ref.dists.normal_dist Normal Distribution]]
-[def __F_distrib [link math_toolkit.dist.dist_ref.dists.f_dist Fisher F Distribution]]
-[def __students_t_distrib [link math_toolkit.dist.dist_ref.dists.students_t_dist Students t Distribution]]
+[def __binomial_distrib [link math_toolkit.dist_ref.dists.binomial_dist Binomial Distribution]]
+[def __chi_squared_distrib [link math_toolkit.dist_ref.dists.chi_squared_dist Chi Squared Distribution]]
+[def __normal_distrib [link math_toolkit.dist_ref.dists.normal_dist Normal Distribution]]
+[def __F_distrib [link math_toolkit.dist_ref.dists.f_dist Fisher F Distribution]]
+[def __students_t_distrib [link math_toolkit.dist_ref.dists.students_t_dist Students t Distribution]]
 
 [def __handbook [@http://www.itl.nist.gov/div898/handbook/
 NIST/SEMATECH e-Handbook of Statistical Methods.]]
@@ -41,14 +41,14 @@ or specific  `using` declarations like `using boost::math::normal;` (*recommende
 
 Each kind of distribution in this library is a class type - an object.
 
-[link math_toolkit.policy Policies] provide fine-grained control
+[link policy Policies] provide fine-grained control
 of the behaviour of these classes, allowing the user to customise
 behaviour such as how errors are handled, or how the quantiles
 of discrete distribtions behave.
 
 [tip If you are familiar with statistics libraries using functions,
 and 'Distributions as Objects' seem alien, see
-[link math_toolkit.dist.stat_tut.weg.nag_library the comparison to
+[link math_toolkit.stat_tut.weg.nag_library the comparison to
 other statistics libraries.]
 ] [/tip]
 
@@ -216,7 +216,7 @@ Mathematically, the functions may make sense with an (+ or -) infinite value,
 but except for a few special cases (in the Normal and Cauchy distributions)
 this implementation limits random variates to finite values from the `max`
 to `min` for the `RealType`.
-(See [link math_toolkit.backgrounders.implementation.handling_of_floating_point_infinity
+(See [link math_toolkit.implementation0.handling_of_floating_point_infin
 Handling of Floating-Point Infinity] for rationale).
 
 
@@ -250,12 +250,12 @@ the requested coverage will be present in the tails.
 
 This behaviour can be changed so that the quantile functions are rounded
 differently, or return a real-valued result using
-[link math_toolkit.policy.pol_overview Policies].  It is strongly
+[link math_toolkit.pol_overview Policies].  It is strongly
 recommended that you read the tutorial
-[link math_toolkit.policy.pol_tutorial.understand_dis_quant
+[link math_toolkit.pol_tutorial.understand_dis_quant
 Understanding Quantiles of Discrete Distributions] before
 using the quantile function on a discrete distribtion.  The
-[link math_toolkit.policy.pol_ref.discrete_quant_ref reference docs]
+[link math_toolkit.pol_ref.discrete_quant_ref reference docs]
 describe how to change the rounding policy
 for these distributions.
 
@@ -269,7 +269,6 @@ degrees of freedom do have a genuine meaning.
 
 [endsect] [/ section:generic Generic operations common to all distributions are non-member functions]
 
-[#complements]
 [section:complements Complements are supported too - and when to use them]
 
 Often you don't want the value of the CDF, but its complement, which is

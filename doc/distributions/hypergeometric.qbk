@@ -75,7 +75,7 @@ Returns the number of objects /n/ which are sampled from the population /N/.
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is the unsigned integers in the range
@@ -93,12 +93,12 @@ the requested coverage will be present in the tails.
 
 This behaviour can be changed so that the quantile functions are rounded
 differently using
-[link math_toolkit.policy.pol_overview Policies].  It is strongly
+[link math_toolkit.pol_overview Policies].  It is strongly
 recommended that you read the tutorial
-[link math_toolkit.policy.pol_tutorial.understand_dis_quant
+[link math_toolkit.pol_tutorial.understand_dis_quant
 Understanding Quantiles of Discrete Distributions] before
 using the quantile function on the Hypergeometric distribution.  The
-[link math_toolkit.policy.pol_ref.discrete_quant_ref reference docs]
+[link math_toolkit.pol_ref.discrete_quant_ref reference docs]
 describe how to change the rounding policy
 for these distributions.
 

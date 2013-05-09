@@ -10,7 +10,7 @@ For most simple uses,
 including a header (or few) is best for compile time and program size.
 
 Refer to
-[link math_toolkit.extern_c C99 and C++ TR1 C-style Functions]
+[link extern_c C99 and C++ TR1 C-style Functions]
 for pros and cons of using
 the TR1 components as opposed to the header only ones.
 

@@ -127,7 +127,7 @@ using the inverse or quantile.
 /*`Note that the value returned is not an integer:
 if you want an integer result you should use either floor, round or ceil functions,
 or use the policies mechanism.
-See [link math_toolkit.policy.pol_tutorial.understand_dis_quant
+See [link math_toolkit.pol_tutorial.understand_dis_quant
 Understanding Quantiles of Discrete Distributions] 
 
 The geometric distribution is related to the negative binomial

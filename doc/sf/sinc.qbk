@@ -55,7 +55,7 @@ and [@http://mathworld.wolfram.com/Octonion.html octonions].
    U<T> sinc_pi(const U<T> x, const ``__Policy``&);
 
 Computes 
-[link math_toolkit.special.sinc.sinc_overview 
+[link math_toolkit.sinc.sinc_overview 
 the Sinus Cardinal] of x:
 
    sinc_pi(x) = sin(x) / x
@@ -89,7 +89,7 @@ to ensure accuracy.
    U<T> sinhc_pi(const U<T> x, const ``__Policy``&);
 
 Computes http://mathworld.wolfram.com/SinhcFunction.html
-[link math_toolkit.special.sinc.sinc_overview
+[link math_toolkit.sinc.sinc_overview
 the Hyperbolic Sinus Cardinal] of x:
 
    sinhc_pi(x) = sinh(x) / x

@@ -115,7 +115,7 @@ this function returns the non centrality parameter /lambda/ such that:
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[0, +[infin]\].
@@ -123,7 +123,7 @@ The domain of the random variable is \[0, +[infin]\].
 [h4 Examples]
 
 There is a 
-[link math_toolkit.dist.stat_tut.weg.nccs_eg worked example] 
+[link math_toolkit.stat_tut.weg.nccs_eg worked example] 
 for the noncentral chi-squared distribution.
 
 [h4 Accuracy]

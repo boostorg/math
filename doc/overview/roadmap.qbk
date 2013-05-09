@@ -39,7 +39,7 @@ and [@https://svn.boost.org/trac/boost/ticket/7416 #7416], [@https://svn.boost.o
 [h4 Boost-1.52]
 
 * Corrected moments for small degrees of freedom [@https://svn.boost.org/trac/boost/ticket/7177 #7177] (reported by Thomas Mang).
-* Added [link math_toolkit.special.airy Airy functions] and [link math_toolkit.special.jacobi Jacobi Elliptic functions].
+* Added [link math_toolkit.airy Airy functions] and [link math_toolkit.jacobi Jacobi Elliptic functions].
 * Corrected failure to detect bad parameters in many distributions
 [@https://svn.boost.org/trac/boost/ticket/6934 #6934] (reported by Florian Schoppmann)
 by adding a function check_out_of_range to test many possible bad parameters.

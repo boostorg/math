@@ -1,4 +1,6 @@
-[section:constants Mathematical Constants]
+
+
+[mathpart constants..Mathematical Constants]
 
 [section:intro Introduction]
 
@@ -8,7 +10,7 @@ Boost.Math provides a collection of mathematical constants.
 
 * Readable. For the very many jobs just using built-in like `double`, you can just write expressions like
 ``double area = pi * r * r;``
-(If that's all you want, jump direct to [link math_toolkit.constants.tutorial.non_templ use in non-template code]!)
+(If that's all you want, jump direct to [link math_toolkit.tutorial.non_templ use in non-template code]!)
 * Effortless - avoiding a search of reference sources.
 * Usable with both builtin floating point types, and user-defined, possibly extended precision, types such as
 NTL, MPFR/GMP, mp_float: in the latter case the constants are computed to the necessary precision and then cached.
@@ -19,7 +21,7 @@ chosen floating-point type
   * Less risk of inaccurate result from functions pow, trig and log at [@http://en.wikipedia.org/wiki/Corner_case corner cases].
   * Less risk of [@http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html cancellation error].
 * Portable - as possible between different systems using different floating-point precisions:
-see [link math_toolkit.constants.tutorial.templ use in template code].
+see [link math_toolkit.tutorial.templ use in template code].
 * Tested - by comparison with other published sources, or separately computed at long double precision.
 * Faster - can avoid (re-)calculation at runtime.
   * If the value returned is a builtin type then it's returned by value as a `constexpr` (C++11 feature, if available).
@@ -64,7 +66,7 @@ we could have written instead:
 Likewise, constants that are suitable for use at `long double` precision
 are available in the namespace `boost::math::long_double_constants`.
 
-You can see the full list of available constants at [link math_toolkit.constants.constants].
+You can see the full list of available constants at [link math_toolkit.constants].
 
 Some examples of using constants are at [@../../../example/constants_eg1.cpp constants_eg1].
 
@@ -579,7 +581,7 @@ to diverge wildly because internal comparisons just fail.
 
 [h4 What is the Internal Format of the constants, and why?]
 
-See [link math_toolkit.constants.tutorial tutorial] above for normal use,
+See [link math_toolkit.tutorial tutorial] above for normal use,
 but this FAQ explains the internal details used for the constants.
 
 Constants are stored as 100 decimal digit values.
@@ -605,7 +607,7 @@ So, for example, a constant like pi is internally defined as
 
 In this case the significand is 109 decimal digits, ensuring 100 decimal digits are exact, and exponent is zero.
 
-See [link math_toolkit.constants.new_const defining new constants] to calculate new constants.
+See [link math_toolkit.new_const defining new constants] to calculate new constants.
 
 A macro definition like this can be pasted into user code where convenient,
 or into `boost/math/constants.hpp` if it is to be added to the Boost.Math library.
@@ -729,7 +731,7 @@ Some physical constants may be available in Boost.Units.
 
 [endsect] [/section:FAQ FAQ]
 
-[endsect] [/section:constants Mathematical Constants]
+[endmathpart] [/section:constants Mathematical Constants]
 
 [/
   Copyright 2012 John Maddock and Paul A. Bristow.

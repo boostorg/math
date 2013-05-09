@@ -137,7 +137,7 @@ to need to visit about 12 houses in order to sell all 5 bars.
 The random variable of interest is the number of houses
 that must be visited to sell five candy bars,
 so we substitute k = n - 5 into a negative_binomial(5, 0.4)
-and obtain the [link math.dist.pdf probability mass (density) function (pdf or pmf)]
+and obtain the [link math_toolkit.dist_ref.nmp.pdf probability mass (density) function (pdf or pmf)]
 of the distribution of houses visited.
 Obviously, the best possible case is that Pat makes sales on all the first five houses.
 

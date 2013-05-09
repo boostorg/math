@@ -65,7 +65,7 @@ Probability arguments must be [0, 1], otherwise __domain_error is called.
 
 If the choice of arguments would give a negative scale, __domain_error is called, unless the policy is to ignore, when the negative (impossible) value of scale is returned.    
     
-[link math_toolkit.dist.stat_tut.weg.find_eg Find Mean and standard deviation examples]
+[link math_toolkit.stat_tut.weg.find_eg Find Mean and standard deviation examples]
 gives simple examples of use of both find_scale and find_location, and a longer example finding means and standard deviations of normally distributed weights to meet a specification.
 
 [endsect] [/section:dist_algorithms dist_algorithms]

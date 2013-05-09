@@ -1,7 +1,7 @@
 [template perf[name value] [value]]
 [template para[text] '''<para>'''[text]'''</para>''']
 
-[section:perf Performance]
+[mathpart perf Performance]
 
 [section:perf_over Performance Overview]
 [performance_overview]
@@ -202,18 +202,18 @@ suited to highly vectorisable processors in the future.
 ]
 
 There is one final performance tuning option that is available as a compile time
-[link math_toolkit.policy policy].  Normally when evaluating functions at `double`
+[link policy policy].  Normally when evaluating functions at `double`
 precision, these are actually evaluated at `long double` precision internally:
 this helps to ensure that as close to full `double` precision as possible is
 achieved, but may slow down execution in some environments.  The defaults for
 this policy can be changed by
-[link math_toolkit.policy.pol_ref.policy_defaults
+[link math_toolkit.pol_ref.policy_defaults
 defining the macro `BOOST_MATH_PROMOTE_DOUBLE_POLICY`]
 to `false`, or
-[link math_toolkit.policy.pol_ref.internal_promotion
+[link math_toolkit.pol_ref.internal_promotion
 by specifying a specific policy] when calling the special
 functions or distributions.  See also the
-[link math_toolkit.policy.pol_tutorial policy tutorial].
+[link math_toolkit.pol_tutorial policy tutorial].
 
 [table  Performance Comparison with and Without Internal Promotion to long double
 [[Function]
@@ -432,7 +432,7 @@ To run this application yourself, build the all the .cpp files in
 your usual release-build settings.  Run the application with --help
 to see a full list of options, or with --all to test everything
 (which takes quite a while), or with --tune to test the
-[link math_toolkit.perf.tuning available performance tuning options].
+[link math_toolkit.tuning available performance tuning options].
 
 If you want to use this application to test the effect of changing
 any of the __policy_section, then you will need to build and run it twice:
@@ -441,7 +441,7 @@ __policy_section you want to test set as the default.
 
 [endsect]
 
-[endsect]
+[endmathpart]
 
 [/
   Copyright 2006 John Maddock and Paul A. Bristow.
@@ -449,17 +449,5 @@ __policy_section you want to test set as the default.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
-
-
-
-
-
-
-
-
-
-
-
-
 
 

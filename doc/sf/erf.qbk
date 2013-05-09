@@ -180,7 +180,7 @@ disappear from the result.  As a result the error for erf and erfc in this
 region is very low: the last bit is incorrect in only a very small number of 
 cases.
 
-For `z > 0.5` we observe that over a small interval [a, b) then:
+For `z > 0.5` we observe that over a small interval \[a, b) then:
 
    erfc(z) * exp(z*z) * z ~ c
    

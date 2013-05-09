@@ -156,7 +156,7 @@ want to be 95% sure that the true value is [*greater than] some value,
    p``[sub min]`` = negative_binomial_distribution<RealType>::find_lower_bound_on_p(
                        failures, successes, 0.05);
 
-[link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
+[link math_toolkit.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
 
 This function uses the Clopper-Pearson method of computing the lower bound on the
 success fraction, whilst many texts refer to this method as giving an "exact"
@@ -192,7 +192,7 @@ want to be 95% sure that the true value is [*less than] some value,
    p``[sub max]`` = negative_binomial_distribution<RealType>::find_upper_bound_on_p(
                        r, k, 0.05);
 
-[link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
+[link math_toolkit.stat_tut.weg.neg_binom_eg.neg_binom_conf See negative binomial confidence interval example.]
 
 This function uses the Clopper-Pearson method of computing the lower bound on the
 success fraction, whilst many texts refer to this method as giving an "exact"
@@ -227,7 +227,7 @@ For example:
 Returns the smallest number of trials we must conduct to be 95% sure
 of seeing 10 failures that occur with frequency one half.
 
-[link math_toolkit.dist.stat_tut.weg.neg_binom_eg.neg_binom_size_eg Worked Example.]
+[link math_toolkit.stat_tut.weg.neg_binom_eg.neg_binom_size_eg Worked Example.]
 
 This function uses numeric inversion of the negative binomial distribution
 to obtain the result: another interpretation of the result, is that it finds
@@ -264,7 +264,7 @@ of observing more than k failures.
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
 However it's worth taking a moment to define what these actually mean in

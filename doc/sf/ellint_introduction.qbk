@@ -25,7 +25,7 @@ As does [@http://en.wikipedia.org/wiki/Elliptic_integral Wikipedia Elliptic inte
 
 All variables are real numbers unless otherwise noted.
 
-[h4 [#ellint_def]Definition]
+[h4 Definition]
 
 [equation ellint1]
 
@@ -138,13 +138,13 @@ where ['x] is nonnegative and ['y] is nonzero.
 ['R[sub D](x, y, z) = R[sub J](x, y, z, z)]]
 
 
-[h4 [#ellint_theorem]Duplication Theorem]
+[h4 Duplication Theorem]
 
 Carlson proved in [[link ellint_ref_carlson78  Carlson78]] that
 
 [equation ellint13]
 
-[h4 [#ellint_formula]Carlson's Formulas]
+[h4 Carlson's Formulas]
 
 The Legendre form and Carlson form of elliptic integrals are related
 by equations:
@@ -165,7 +165,7 @@ third kind. Carlson's algorithm [[link ellint_ref_carlson79  Carlson79]] [[link 
 provides a unified method for all three kinds of elliptic integrals
 with satisfactory precisions.
 
-[h4 [#ellint_refs]References]
+[h4 References]
 
 Special mention goes to:
 

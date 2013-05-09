@@ -188,7 +188,7 @@ Now output all the sine table, to a file of your chosen name.
     std::cout << "Close file " << sines_name << " for output OK." << std::endl;
 
   }
-//`The output file generated can be seen at [@..\sines.hpp]
+//`The output file generated can be seen at [@..\\sines.hpp]
 //] [/fft_sines_table_example_1]
 
   return EXIT_SUCCESS;

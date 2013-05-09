@@ -180,7 +180,7 @@ Returns the value of [beta][space] that gives:
       
 [h4 Non-member Accessor Functions]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
 The formulae for calculating these are shown in the table below, and at
@@ -217,8 +217,8 @@ with its p parameter set to x.
 [h4 Accuracy]
 
 This distribution is implemented using the 
-[link math_toolkit.special.sf_beta.beta_function beta functions] __beta and 
-[link math_toolkit.special.sf_beta.ibeta_function incomplete beta functions] __ibeta and __ibetac;
+[link math_toolkit.sf_beta.beta_function beta functions] __beta and 
+[link math_toolkit.sf_beta.ibeta_function incomplete beta functions] __ibeta and __ibetac;
 please refer to these functions for information on accuracy.
 
 [h4 Implementation]

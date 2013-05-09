@@ -4,11 +4,11 @@
 
 Policies are a powerful fine-grain mechanism that allow you to customise the
 behaviour of this library according to your needs.  There is more information
-available in the [link math_toolkit.policy.pol_tutorial policy tutorial]
-and the [link math_toolkit.policy.pol_ref policy reference].
+available in the [link math_toolkit.pol_tutorial policy tutorial]
+and the [link math_toolkit.pol_ref policy reference].
 
 Generally speaking, unless you find that the
-[link math_toolkit.policy.pol_tutorial.policy_tut_defaults
+[link math_toolkit.pol_tutorial.policy_tut_defaults
  default policy behaviour]
 when encountering 'bad' argument values does not meet your needs,
 you should not need to worry about policies.
@@ -22,13 +22,13 @@ in practice it is easy to use, and very flexible.
 
 Using policies you can control:
 
-* [link math_toolkit.policy.pol_ref.error_handling_policies How results from 'bad' arguments are handled],
+* [link math_toolkit.pol_ref.error_handling_policies How results from 'bad' arguments are handled],
    including those that cannot be fully evaluated.
-* How [link math_toolkit.policy.pol_ref.internal_promotion accuracy is controlled by internal promotion] to use more precise types.
-* What working [link math_toolkit.policy.pol_ref.precision_pol precision] should be used to calculate results.
-* What to do when a [link math_toolkit.policy.pol_ref.assert_undefined mathematically undefined function]
+* How [link math_toolkit.pol_ref.internal_promotion accuracy is controlled by internal promotion] to use more precise types.
+* What working [link math_toolkit.pol_ref.precision_pol precision] should be used to calculate results.
+* What to do when a [link math_toolkit.pol_ref.assert_undefined mathematically undefined function]
   is used:  Should this raise a run-time or compile-time error?
-* Whether [link math_toolkit.policy.pol_ref.discrete_quant_ref discrete functions],
+* Whether [link math_toolkit.pol_ref.discrete_quant_ref discrete functions],
   like the binomial, should return real or only integral values, and how they are rounded.
 * How many iterations a special function is permitted to perform in
   a series evaluation or root finding algorithm before it gives up and raises an
@@ -36,16 +36,16 @@ Using policies you can control:
 
 You can control policies:
 
-* Using [link math_toolkit.policy.pol_ref.policy_defaults macros] to
+* Using [link math_toolkit.pol_ref.policy_defaults macros] to
 change any default policy: the is the prefered method for installation
 wide policies.
-* At your chosen [link math_toolkit.policy.pol_ref.namespace_pol
+* At your chosen [link math_toolkit.pol_ref.namespace_pol
 namespace scope] for distributions and/or functions: this is the
 prefered method for project, namespace, or translation unit scope
 policies.
-* In an ad-hoc manner [link math_toolkit.policy.pol_tutorial.ad_hoc_sf_policies
+* In an ad-hoc manner [link math_toolkit.pol_tutorial.ad_hoc_sf_policies
 by passing a specific policy to a special function], or to a
-[link math_toolkit.policy.pol_tutorial.ad_hoc_dist_policies
+[link math_toolkit.pol_tutorial.ad_hoc_dist_policies
 statistical distribution].
 
 ]
@@ -70,12 +70,12 @@ The two most important things you can do to ensure the best performance
 from this library are:
 
 # Turn on your compilers optimisations: the difference between "release"
-and "debug" builds can easily be a [link math_toolkit.perf.getting_best factor of 20].
-# Pick your compiler carefully: [link math_toolkit.perf.comp_compilers
+and "debug" builds can easily be a [link math_toolkit.getting_best factor of 20].
+# Pick your compiler carefully: [link math_toolkit.comp_compilers
 performance differences of up to
 8 fold] have been found between some Windows compilers for example.
 
-The [link math_toolkit.perf performance section] contains more
+The [link perf performance section] contains more
 information on the performance
 of this library, what you can do to fine tune it, and how this library
 compares to some other open source alternatives.

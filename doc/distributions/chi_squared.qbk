@@ -102,7 +102,7 @@ See also section on Sample sizes required in
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
 (We have followed the usual restriction of the mode to degrees of freedom >= 2,
@@ -114,13 +114,13 @@ The domain of the random variable is \[0, +[infin]\].
 
 [h4 Examples]
 
-Various [link math_toolkit.dist.stat_tut.weg.cs_eg worked examples] 
+Various [link math_toolkit.stat_tut.weg.cs_eg worked examples] 
 are available illustrating the use of the Chi Squared Distribution.
 
 [h4 Accuracy]
 
 The Chi-Squared distribution is implemented in terms of the 
-[link math_toolkit.special.sf_gamma.igamma incomplete gamma functions]:
+[link math_toolkit.sf_gamma.igamma incomplete gamma functions]:
 please refer to the accuracy data for those functions.
 
 [h4 Implementation]

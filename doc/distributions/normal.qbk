@@ -74,7 +74,7 @@ allowing the functions find_location and find_scale to be used generically).
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[-[max_value], +[min_value]\].
@@ -86,7 +86,7 @@ if RealType permits.
 [h4 Accuracy]
 
 The normal distribution is implemented in terms of the 
-[link math_toolkit.special.sf_erf.error_function error function], 
+[link math_toolkit.sf_erf.error_function error function], 
 and as such should have very low error rates.
 
 [h4 Implementation]

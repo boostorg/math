@@ -64,21 +64,21 @@ Returns the denominator degrees of freedom parameter of the distribution.
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[0, +[infin]\].
 
 [h4 Examples]
 
-Various [link math_toolkit.dist.stat_tut.weg.f_eg worked examples] are 
+Various [link math_toolkit.stat_tut.weg.f_eg worked examples] are 
 available illustrating the use of the F Distribution.
 
 [h4 Accuracy]
 
 The normal distribution is implemented in terms of the 
-[link math_toolkit.special.sf_beta.ibeta_function incomplete beta function]
-and its [link math_toolkit.special.sf_beta.ibeta_inv_function inverses], 
+[link math_toolkit.sf_beta.ibeta_function incomplete beta function]
+and its [link math_toolkit.sf_beta.ibeta_inv_function inverses], 
 refer to those functions for accuracy data.
 
 [h4 Implementation]

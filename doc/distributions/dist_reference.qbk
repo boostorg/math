@@ -110,7 +110,7 @@ package could be added reasonably easily, for example:
        InputIterator b,
        typename std::iterator_traits<InputIterator>::value_type expected_mean);
 
-Returns the probability that the data in the sequence [a,b) has the mean
+Returns the probability that the data in the sequence \[a,b) has the mean
 /expected_mean/.
 
 [h4 Integration With Statistical Accumulators]

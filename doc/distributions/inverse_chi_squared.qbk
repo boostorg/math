@@ -118,7 +118,7 @@ Returns the scale [xi] parameter of this distribution.
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions] that are generic to all
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all
 distributions are supported: __usual_accessors.
 
 The domain of the random variate is \[0,+[infin]\].

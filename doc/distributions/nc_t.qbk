@@ -69,7 +69,7 @@ Returns the non-centrality parameter /delta/ from which this object was construc
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
 The domain of the random variable is \[-[infin], +[infin]\].
@@ -194,7 +194,7 @@ t-Distribution". C. van Eeden. International Statistical Review, 29, 4-31.
 N. Balkrishnan. 1995. John Wiley and Sons New York.
 
 The quantile is calculated via the usual
-[link math_toolkit.toolkit.internals1.roots2
+[link math_toolkit.internals1.roots2
 derivative-free root-finding techniques],
 with the initial guess taken as the quantile of a normal approximation
 to the noncentral T.

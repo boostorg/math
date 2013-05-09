@@ -53,7 +53,7 @@ The available actions are:
 appropriate result]]
 [[ignore_error][Ignores the error and simply the returns the most appropriate result.]]
 [[user_error][Calls a 
-   [link math_toolkit.policy.pol_tutorial.user_def_err_pol user-supplied error handler].]]
+   [link math_toolkit.pol_tutorial.user_def_err_pol user-supplied error handler].]]
 ]
 
 The following tables show all the permutations of errors and actions, 
@@ -65,7 +65,7 @@ with the *default action for each error shown in bold*:
 [[errno_on_error][Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::quiet_NaN()`]]
 [[ignore_error][Returns `std::numeric_limits<T>::quiet_NaN()`]]
 [[user_error][Returns the result of `boost::math::policies::user_domain_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+            [link math_toolkit.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
     
@@ -75,7 +75,7 @@ with the *default action for each error shown in bold*:
 [[errno_on_error][Sets `::errno` to `EDOM` and returns `std::numeric_limits<T>::quiet_NaN()`]]
 [[ignore_error][Returns `std::numeric_limits<T>::quiet_NaN()`]]
 [[user_error][Returns the result of `boost::math::policies::user_pole_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+            [link math_toolkit.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -85,7 +85,7 @@ with the *default action for each error shown in bold*:
 [[errno_on_error][Sets `::errno` to `ERANGE` and returns `std::numeric_limits<T>::infinity()`]]
 [[ignore_error][Returns `std::numeric_limits<T>::infinity()`]]
 [[user_error][Returns the result of `boost::math::policies::user_overflow_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+            [link math_toolkit.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -95,7 +95,7 @@ with the *default action for each error shown in bold*:
 [[errno_on_error][Sets `::errno` to `ERANGE` and returns 0.]]
 [[ignore_error][[*Returns 0]]]
 [[user_error][Returns the result of `boost::math::policies::user_underflow_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+            [link math_toolkit.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -105,7 +105,7 @@ with the *default action for each error shown in bold*:
 [[errno_on_error][Sets `::errno` to `ERANGE` and returns the denormalised value.]]
 [[ignore_error][[*Returns the denormalised value.]]]
 [[user_error][Returns the result of `boost::math::policies::user_denorm_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+            [link math_toolkit.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -117,7 +117,7 @@ with the *default action for each error shown in bold*:
 [[ignore_error][[*Returns the largest representable value of the target integer type 
 (or the most negative value if the argument to the function was less than zero).]]]
 [[user_error][Returns the result of `boost::math::policies::user_rounding_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+            [link math_toolkit.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -127,7 +127,7 @@ with the *default action for each error shown in bold*:
 [[errno_on_error][Sets `::errno` to `EDOM` and returns the closest approximation found.]]
 [[ignore_error][Returns the closest approximation found.]]
 [[user_error][Returns the result of `boost::math::policies::user_evaluation_error`: 
-            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+            [link math_toolkit.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -137,7 +137,7 @@ with the *default action for each error shown in bold*:
 [[errno_on_error][Sets `::errno` to `EDOM` and returns the same value as `ignore_error`.]]
 [[ignore_error][[*Returns a default result that depends on the function where the error occurred.]]]
 [[user_error][Returns the result of `boost::math::policies::user_indeterminate_result_error`:
-            [link math_toolkit.policy.pol_tutorial.user_def_err_pol 
+            [link math_toolkit.pol_tutorial.user_def_err_pol 
             this function must be defined by the user].]]
 ]
 
@@ -162,21 +162,21 @@ only the first detected will be reported in the throw message.
 [heading Finding More Information]
 
 There are some pre-processor macro defines that can be used to
-[link math_toolkit.policy.pol_ref.policy_defaults
-change the policy defaults].  See also the [link math_toolkit.policy 
+[link math_toolkit.pol_ref.policy_defaults
+change the policy defaults].  See also the [link policy 
 policy section].
 
 An example is at the Policy tutorial in
-[link math_toolkit.policy.pol_tutorial.changing_policy_defaults 
+[link math_toolkit.pol_tutorial.changing_policy_defaults 
 Changing the Policy Defaults].
 
 Full source code of this typical example of passing a 'bad' argument
 (negative degrees of freedom) to Student's t distribution 
-is [link math_toolkit.dist.stat_tut.weg.error_eg in the error handling example].
+is [link math_toolkit.stat_tut.weg.error_eg in the error handling example].
 
 The various kind of errors are described in more detail below.
 
-[heading [#domain_error]Domain Errors]
+[heading:domain_error Domain Errors]
 
 When a special function is passed an argument that is outside the range
 of values for which that function is defined, then the function returns
@@ -224,7 +224,7 @@ For example if `Message` contains a "%1%" then it is replaced by the value of
 `Val` to the full precision of T, where as "%.3g" would contain the value of
 `Val` to 3 digits.  See the __format documentation for more details.
 
-[heading [#pole_error]Evaluation at a pole]
+[heading:pole_error Evaluation at a pole]
 
 When a special function is passed an argument that is at a pole
 without a well defined residual value, then the function returns
@@ -251,7 +251,7 @@ For example if `Message` contains a "%1%" then it is replaced by the value of
 `val` to the full precision of T, where as "%.3g" would contain the value of
 `val` to 3 digits.  See the __format documentation for more details.
 
-[heading [#overflow_error]Numeric Overflow]
+[heading:overflow_error Numeric Overflow]
 
 When the result of a special function is too large to fit in the argument
 floating-point type, then the function returns the result of:
@@ -270,7 +270,7 @@ is used, then returns `std::numeric_limits<T>::infinity()`.
 In this situation if the type `T` doesn't support infinities,
 the maximum value for the type is returned.
 
-[heading [#underflow_error]Numeric Underflow]
+[heading:underflow_error Numeric Underflow]
 
 If the result of a special function is known to be non-zero, but the
 calculated result underflows to zero, then the function returns the result of:
@@ -287,7 +287,7 @@ The default version of this function returns zero.
 But with another policy, like `throw_on_error`, 
 throws an `std::underflow_error` C++ exception.  
 
-[heading [#denorm_error]Denormalisation Errors]
+[heading:denorm_error Denormalisation Errors]
 
 If the result of a special function is a denormalised value /z/ then the function
 returns the result of:
@@ -304,7 +304,7 @@ The default version of this function returns /z/.
 But with another policy, like `throw_on_error` 
 throws an `std::underflow_error` C++ exception.
 
-[heading [#evaluation_error]Evaluation Errors]
+[heading:evaluation_error Evaluation Errors]
 
 When a special function calculates a result that is known to be erroneous,
 or where the result is incalculable then it calls:
@@ -329,7 +329,7 @@ For example if `Message` contains a "%1%" then it is replaced by the value of
 `val` to the full precision of T, where as "%.3g" would contain the value of
 `val` to 3 digits.  See the __format documentation for more details.
 
-[heading [#indeterminate_result_error]Indeterminate Result Errors]
+[heading:indeterminate_result_error Indeterminate Result Errors]
 
 When the result of a special function is indeterminate for the value that was
 passed to it, then the function returns the result of:
@@ -350,7 +350,7 @@ undefined or indeterminate, but there is none the less a convention for what
 the result should be: for example the C99 standard specifies that the result
 of 0[super 0] is 1, even though the result is actually mathematically indeterminate.
 
-[heading [#rounding_error]Rounding Errors]
+[heading:rounding_error Rounding Errors]
 
 When one of the rounding functions __round, __trunc or __modf is
 called with an argument that has no integer representation, or
@@ -376,7 +376,7 @@ For example if `Message` contains a "%1%" then it is replaced by the value of
 `val` to the full precision of T, where as "%.3g" would contain the value of
 `val` to 3 digits.  See the __format documentation for more details.
 
-[heading [#checked_narrowing_cast]Errors from typecasts]
+[heading:checked_narrowing_cast Errors from typecasts]
 
 Many special functions evaluate their results at a higher precision
 than their arguments in order to ensure full machine precision in 
@@ -389,8 +389,8 @@ the result to the narrower result type.  The function:
    T checked_narrowing_cast(U const& val, const char* function);
    
 Is used to perform these conversions, and will call the error handlers
-listed above on [link overflow_error overflow], 
-[link underflow_error underflow] or [link denorm_error denormalisation].
+listed above on [link math_toolkit.error_handling.overflow_error overflow], 
+[link math_toolkit.error_handling.underflow_error underflow] or [link math_toolkit.error_handling.denorm_error denormalisation].
 
 [endsect][/section:error_handling Error Handling]
 

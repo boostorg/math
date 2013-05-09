@@ -133,7 +133,7 @@ want to be 95% sure that the true value is [*greater than] some value,
    p``[sub min]`` = binomial_distribution<RealType>::find_lower_bound_on_p(
                        n, k, 0.05);
 
-[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
+[link math_toolkit.stat_tut.weg.binom_eg.binom_conf See worked example.]
 
 There are currently two possible values available for the /method/ 
 optional parameter: /clopper_pearson_exact_interval/ 
@@ -213,7 +213,7 @@ want to be 95% sure that the true value is [*less than] some value,
    p``[sub max]`` = binomial_distribution<RealType>::find_upper_bound_on_p(
                        n, k, 0.05);
                        
-[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
+[link math_toolkit.stat_tut.weg.binom_eg.binom_conf See worked example.]
 
 [note
 In order to obtain a two sided bound on the success fraction, you
@@ -227,7 +227,7 @@ then you pass [alpha]/2 to these functions.
 So for example a two sided 95% confidence interval would be obtained
 by passing [alpha] = 0.025 to each of the functions.
 
-[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_conf See worked example.]
+[link math_toolkit.stat_tut.weg.binom_eg.binom_conf See worked example.]
 ]
 
 
@@ -280,11 +280,11 @@ Returns the largest number of trials we can conduct and still be 95% certain
 of not observing any events that occur with one in a million frequency.
 This is typically used in failure analysis.
 
-[link math_toolkit.dist.stat_tut.weg.binom_eg.binom_size_eg See Worked Example.]
+[link math_toolkit.stat_tut.weg.binom_eg.binom_size_eg See Worked Example.]
 
 [h4 Non-member Accessors]
 
-All the [link math_toolkit.dist.dist_ref.nmp usual non-member accessor functions]
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
 that are generic to all distributions are supported: __usual_accessors.
 
 The domain for the random variable /k/ is `0 <= k <= N`, otherwise a 
@@ -328,7 +328,7 @@ the context of this distribution:
 
 [h4 Examples]
 
-Various [link math_toolkit.dist.stat_tut.weg.binom_eg worked examples] 
+Various [link math_toolkit.stat_tut.weg.binom_eg worked examples] 
 are available illustrating the use of the binomial distribution.
 
 [h4 Accuracy]
@@ -374,7 +374,7 @@ There are also various special cases: refer to the code for details. ]]
 [[quantile][Since the cdf is non-linear in variate /k/ none of the inverse
             incomplete beta functions can be used here.  Instead the quantile
             is found numerically using a derivative free method 
-            ([link math_toolkit.toolkit.internals1.roots2 TOMS Algorithm 748]).]]
+            ([link math_toolkit.internals1.roots2 TOMS Algorithm 748]).]]
 [[quantile from the complement][Found numerically as above.]]
 [[mean][ `p * n` ]]
 [[variance][ `p * n * (1-p)` ]]

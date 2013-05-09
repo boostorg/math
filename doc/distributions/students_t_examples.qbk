@@ -759,13 +759,13 @@ we used in the single sample cases previously discussed.
 
 That means we can:
 
-* [link math_toolkit.dist.stat_tut.weg.st_eg.tut_mean_intervals Calculate confidence intervals of the mean].
+* [link math_toolkit.stat_tut.weg.st_eg.tut_mean_intervals Calculate confidence intervals of the mean].
 If the endpoints of the interval differ in sign then we are unable to reject
 the null-hypothesis that there is no change.
-* [link math_toolkit.dist.stat_tut.weg.st_eg.tut_mean_test Test whether the true mean is zero]. If the
+* [link math_toolkit.stat_tut.weg.st_eg.tut_mean_test Test whether the true mean is zero]. If the
 result is consistent with a true mean of zero, then we are unable to reject the
 null-hypothesis that there is no change.
-* [link math_toolkit.dist.stat_tut.weg.st_eg.tut_mean_size Calculate how many pairs of readings we would need
+* [link math_toolkit.stat_tut.weg.st_eg.tut_mean_size Calculate how many pairs of readings we would need
 in order to obtain a significant result].
 
 [endsect]

@@ -11,7 +11,7 @@
 [/Unicode Latin extended http://www.unicode.org/charts/U0080.pdf]
 
 [/ Also some miscellaneous math characters added to this list - see the end.]
-[/ For others see also math_symbols.qbk]
+[/ For others see also math_toolkit.symbols.qbk]
 
 [/ To use, enclose the template name in square brackets, for example: [pi]]
 

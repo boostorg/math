@@ -73,7 +73,7 @@ this operation is a division by 0 (it equals to 1/0).
 * In case of null base and null exponent, an __indeterminate_result_error
 occurs since the result of this operation is indeterminate.
 Those errors follow the
-[link math_toolkit.main_overview.error_handling 
+[link math_toolkit.error_handling 
 general policies of error handling in Boost.Math].
 
 The default overflow error policy is `throw_on_error`. A call like `pow<-2>(0)` 
