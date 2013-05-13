@@ -219,6 +219,7 @@ code factoring and eases maintainence.
 
 [section History]
 
+* 13 May 2013 Moved into main Boost.Math Quickbook documentation.
 * 17 Dec 2005: Converted documentation to Quickbook Format.
 * 2 Jul 2002: Compile-time and run-time items separated to new headers.
 * 7 Nov 2001: Initial version
@@ -235,4 +236,12 @@ pool library. The code had updates by Helmut Zeisel.
 [endsect]
 
 [endmathpart]
+
+[/
+Copyright 2005, 2013 Daryle Walker.
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt).
+]
+
 
