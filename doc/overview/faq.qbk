@@ -1,4 +1,4 @@
-[section:faq Frequently Asked Questions FAQ]
+[section:main_faq Frequently Asked Questions FAQ]
 
 # ['I'm a FORTRAN/NAG/SPSS/SAS/Cephes/MathCad/R user
 and I don't see where the functions like dnorm(mean, sd) are in Boost.Math?] [br]

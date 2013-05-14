@@ -1,4 +1,4 @@
-[section:implementation Additional Implementation Notes]
+[section:sf_implementation Additional Implementation Notes]
 
 The majority of the implementation notes are included with the documentation
 of each function or distribution.  The notes here are of a more general nature,
@@ -638,7 +638,7 @@ project of Jacob Voytko (whose work so far,
 considerably enhanced and now reasonably mature and usable, by Paul A. Bristow,
 is at .\boost-sandbox\SOC\2007\visualization).
 
-[endsect] [/section:implementation Implementation Notes]
+[endsect] [/section:sf_implementation Implementation Notes]
 
 [/
   Copyright 2006, 2007, 2010 John Maddock and Paul A. Bristow.

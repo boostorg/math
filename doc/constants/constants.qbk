@@ -2,7 +2,7 @@
 
 [mathpart constants..Mathematical Constants]
 
-[section:intro Introduction]
+[section:constants_intro Introduction]
 
 Boost.Math provides a collection of mathematical constants.
 
@@ -493,7 +493,7 @@ The result of an expanded macro for Pi is shown below.
 
 [endsect] [/section:new_const Defining New Constants]
 
-[section:faq FAQs]
+[section:constants_faq FAQs]
 
 [h4 Why are ['these] Constants Chosen?]
 It is, of course, impossible to please everyone with a list like this.

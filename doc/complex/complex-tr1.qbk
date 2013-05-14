@@ -10,7 +10,7 @@ The following complex number algorithms are the inverses of trigonometric functi
 present in the C++ standard.  Equivalents to these functions are part of the C99 standard, and
 are part of the [tr1].
 
-[section:implementation Implementation and Accuracy]
+[section:complex_implementation Implementation and Accuracy]
 
 Although there are deceptively simple formulae available for all of these functions, a naive
 implementation that used these formulae would fail catastrophically for some input
@@ -129,7 +129,7 @@ __formula [$../../images/atanh.png]
 
 [endsect]
 
-[section History]
+[section:complex_history History]
 
 * 2005/12/17: Added support for platforms with no meaningful numeric_limits<>::infinity().
 * 2005/12/01: Initial version, added as part of the TR1 library.

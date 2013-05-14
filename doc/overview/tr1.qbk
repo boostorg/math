@@ -191,7 +191,7 @@ quick reference guide for these functions].
    
 [h4 Supported TR1 Functions]
 
-See also the [link math_toolkit.tr1 
+See also the [link math_toolkit.main_tr1 
 quick reference guide for these functions].
 
    namespace boost{ namespace math{ namespace tr1{ extern "C"{

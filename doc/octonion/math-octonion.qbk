@@ -13,7 +13,7 @@
 
 [mathpart octonions Octonions]
 
-[section:overview Overview]
+[section:oct_overview Overview]
 
 Octonions, like [@../../quaternion/html/index.html quaternions], are a relative of complex numbers.
 
@@ -44,14 +44,14 @@ since quite a long time ago).
 
 [endsect]
 
-[section:header Header File]
+[section:oct_header Header File]
 
 The interface and implementation are both supplied by the header file
 [@../../../../boost/math/octonion.hpp octonion.hpp].
 
 [endsect]
 
-[section:synopsis Synopsis]
+[section:oct_synopsis Synopsis]
 
    namespace boost{ namespace math{
 
@@ -62,62 +62,62 @@ The interface and implementation are both supplied by the header file
 
    // operators
 
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_addition_operators operator +]`` (T const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_addition_operators operator +]`` (octonion<T> const & lhs, T const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_addition_operators operator +]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_addition_operators operator +]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_addition_operators operator +]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_addition_operators operator +]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_addition_operators operator +]`` (octonion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_addition_operators operator +]`` (T const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_addition_operators operator +]`` (octonion<T> const & lhs, T const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_addition_operators operator +]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_addition_operators operator +]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_addition_operators operator +]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_addition_operators operator +]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_addition_operators operator +]`` (octonion<T> const & lhs, octonion<T> const & rhs);
 
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_subtraction_operators operator -]`` (T const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_subtraction_operators operator -]`` (octonion<T> const & lhs, T const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_subtraction_operators operator -]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_subtraction_operators operator -]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_subtraction_operators operator -]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_subtraction_operators operator -]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_subtraction_operators operator -]`` (octonion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_subtraction_operators operator -]`` (T const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_subtraction_operators operator -]`` (octonion<T> const & lhs, T const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_subtraction_operators operator -]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_subtraction_operators operator -]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_subtraction_operators operator -]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_subtraction_operators operator -]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_subtraction_operators operator -]`` (octonion<T> const & lhs, octonion<T> const & rhs);
 
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_multiplication_operators operator *]`` (T const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_multiplication_operators operator *]`` (octonion<T> const & lhs, T const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_multiplication_operators operator *]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_multiplication_operators operator *]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_multiplication_operators operator *]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_multiplication_operators operator *]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_multiplication_operators operator *]`` (octonion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_multiplication_operators operator *]`` (T const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_multiplication_operators operator *]`` (octonion<T> const & lhs, T const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_multiplication_operators operator *]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_multiplication_operators operator *]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_multiplication_operators operator *]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_multiplication_operators operator *]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_multiplication_operators operator *]`` (octonion<T> const & lhs, octonion<T> const & rhs);
 
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_division_operators operator /]`` (T const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_division_operators operator /]`` (octonion<T> const & lhs, T const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_division_operators operator /]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_division_operators operator /]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_division_operators operator /]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_division_operators operator /]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.binary_division_operators operator /]`` (octonion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_division_operators operator /]`` (T const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_division_operators operator /]`` (octonion<T> const & lhs, T const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_division_operators operator /]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_division_operators operator /]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_division_operators operator /]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_division_operators operator /]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.binary_division_operators operator /]`` (octonion<T> const & lhs, octonion<T> const & rhs);
 
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.unary_plus_and_minus_operators operator +]`` (octonion<T> const & o);
-   template<typename T> octonion<T> ``[link math_toolkit.non_mem0.unary_plus_and_minus_operators operator -]`` (octonion<T> const & o);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.unary_plus_and_minus_operators operator +]`` (octonion<T> const & o);
+   template<typename T> octonion<T> ``[link math_toolkit.oct_non_mem.unary_plus_and_minus_operators operator -]`` (octonion<T> const & o);
 
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_equality_operators operator ==]`` (T const & lhs, octonion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_equality_operators operator ==]`` (octonion<T> const & lhs, T const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_equality_operators operator ==]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_equality_operators operator ==]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_equality_operators operator ==]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_equality_operators operator ==]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_equality_operators operator ==]`` (octonion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_equality_operators operator ==]`` (T const & lhs, octonion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_equality_operators operator ==]`` (octonion<T> const & lhs, T const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_equality_operators operator ==]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_equality_operators operator ==]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_equality_operators operator ==]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_equality_operators operator ==]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_equality_operators operator ==]`` (octonion<T> const & lhs, octonion<T> const & rhs);
 
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_inequality_operators operator !=]`` (T const & lhs, octonion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_inequality_operators operator !=]`` (octonion<T> const & lhs, T const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_inequality_operators operator !=]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_inequality_operators operator !=]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_inequality_operators operator !=]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_inequality_operators operator !=]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem0.binary_inequality_operators operator !=]`` (octonion<T> const & lhs, octonion<T> const & rhs);
-
-   template<typename T, typename charT, class traits>
-   ::std::basic_istream<charT,traits> & ``[link math_toolkit.non_mem0.stream_extractor operator >>]`` (::std::basic_istream<charT,traits> & is, octonion<T> & o);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_inequality_operators operator !=]`` (T const & lhs, octonion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_inequality_operators operator !=]`` (octonion<T> const & lhs, T const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_inequality_operators operator !=]`` (::std::complex<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_inequality_operators operator !=]`` (octonion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_inequality_operators operator !=]`` (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_inequality_operators operator !=]`` (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.oct_non_mem.binary_inequality_operators operator !=]`` (octonion<T> const & lhs, octonion<T> const & rhs);
 
    template<typename T, typename charT, class traits>
-   ::std::basic_ostream<charT,traits> & ``[link math_toolkit.non_mem0.stream_inserter operator <<]`` (::std::basic_ostream<charT,traits> & os, octonion<T> const & o);
+   ::std::basic_istream<charT,traits> & ``[link math_toolkit.oct_non_mem.stream_extractor operator >>]`` (::std::basic_istream<charT,traits> & is, octonion<T> & o);
+
+   template<typename T, typename charT, class traits>
+   ::std::basic_ostream<charT,traits> & ``[link math_toolkit.oct_non_mem.stream_inserter operator <<]`` (::std::basic_ostream<charT,traits> & os, octonion<T> const & o);
 
    // values
 
@@ -160,62 +160,62 @@ The interface and implementation are both supplied by the header file
    public:
       typedef T value_type;
 
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(T const & requested_a = T(), T const & requested_b = T(), T const & requested_c = T(), T const & requested_d = T(), T const & requested_e = T(), T const & requested_f = T(), T const & requested_g = T(), T const & requested_h = T());
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(::std::complex<T> const & z0, ::std::complex<T> const & z1 = ::std::complex<T>(), ::std::complex<T> const & z2 = ::std::complex<T>(), ::std::complex<T> const & z3 = ::std::complex<T>());
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(::boost::math::quaternion<T> const & q0, ::boost::math::quaternion<T> const & q1 = ::boost::math::quaternion<T>());
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(T const & requested_a = T(), T const & requested_b = T(), T const & requested_c = T(), T const & requested_d = T(), T const & requested_e = T(), T const & requested_f = T(), T const & requested_g = T(), T const & requested_h = T());
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(::std::complex<T> const & z0, ::std::complex<T> const & z1 = ::std::complex<T>(), ::std::complex<T> const & z2 = ::std::complex<T>(), ::std::complex<T> const & z3 = ::std::complex<T>());
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(::boost::math::quaternion<T> const & q0, ::boost::math::quaternion<T> const & q1 = ::boost::math::quaternion<T>());
       template<typename X>
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(octonion<X> const & a_recopier);
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(octonion<X> const & a_recopier);
 
-      T                             ``[link math_toolkit.mem_fun0.real_and_unreal_parts real]``() const;
-      octonion<T>                   ``[link math_toolkit.mem_fun0.real_and_unreal_parts unreal]``() const;
+      T                             ``[link math_toolkit.oct_mem_fun.real_and_unreal_parts real]``() const;
+      octonion<T>                   ``[link math_toolkit.oct_mem_fun.real_and_unreal_parts unreal]``() const;
 
-      T                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_1]``() const;
-      T                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_2]``() const;
-      T                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_3]``() const;
-      T                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_4]``() const;
-      T                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_5]``() const;
-      T                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_6]``() const;
-      T                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_7]``() const;
-      T                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_8]``() const;
+      T                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_1]``() const;
+      T                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_2]``() const;
+      T                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_3]``() const;
+      T                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_4]``() const;
+      T                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_5]``() const;
+      T                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_6]``() const;
+      T                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_7]``() const;
+      T                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_8]``() const;
 
-      ::std::complex<T>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_1]``() const;
-      ::std::complex<T>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_2]``() const;
-      ::std::complex<T>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_3]``() const;
-      ::std::complex<T>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_4]``() const;
+      ::std::complex<T>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_1]``() const;
+      ::std::complex<T>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_2]``() const;
+      ::std::complex<T>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_3]``() const;
+      ::std::complex<T>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_4]``() const;
 
-      ::boost::math::quaternion<T>  ``[link math_toolkit.mem_fun0.individual_quaternion_components H_component_1]``() const;
-      ::boost::math::quaternion<T>  ``[link math_toolkit.mem_fun0.individual_quaternion_components H_component_2]``() const;
+      ::boost::math::quaternion<T>  ``[link math_toolkit.oct_mem_fun.individual_quaternion_components H_component_1]``() const;
+      ::boost::math::quaternion<T>  ``[link math_toolkit.oct_mem_fun.individual_quaternion_components H_component_2]``() const;
 
-      octonion<T> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (octonion<T> const  & a_affecter);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (octonion<T> const  & a_affecter);
       template<typename X>
-      octonion<T> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (octonion<X> const  & a_affecter);
-      octonion<T> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (T const  & a_affecter);
-      octonion<T> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (::std::complex<T> const & a_affecter);
-      octonion<T> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (::boost::math::quaternion<T> const & a_affecter);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (octonion<X> const  & a_affecter);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (T const  & a_affecter);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (::std::complex<T> const & a_affecter);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (::boost::math::quaternion<T> const & a_affecter);
 
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (T const & rhs);
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (::std::complex<T> const & rhs);
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (::boost::math::quaternion<T> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (T const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (::std::complex<T> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (::boost::math::quaternion<T> const & rhs);
       template<typename X>
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (octonion<X> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (octonion<X> const & rhs);
 
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (T const & rhs);
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (::std::complex<T> const & rhs);
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (::boost::math::quaternion<T> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (T const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (::std::complex<T> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (::boost::math::quaternion<T> const & rhs);
       template<typename X>
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (octonion<X> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (octonion<X> const & rhs);
 
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (T const & rhs);
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (::std::complex<T> const & rhs);
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (::boost::math::quaternion<T> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (T const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (::std::complex<T> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (::boost::math::quaternion<T> const & rhs);
       template<typename X>
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (octonion<X> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (octonion<X> const & rhs);
 
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (T const & rhs);
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (::std::complex<T> const & rhs);
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (::boost::math::quaternion<T> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (T const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (::std::complex<T> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (::boost::math::quaternion<T> const & rhs);
       template<typename X>
-      octonion<T> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (octonion<X> const & rhs);
+      octonion<T> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (octonion<X> const & rhs);
    };
 
    } } // namespaces
@@ -232,62 +232,62 @@ The interface and implementation are both supplied by the header file
    public:
       typedef float value_type;
 
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(float const & requested_a = 0.0f, float const & requested_b = 0.0f, float const & requested_c = 0.0f, float const & requested_d = 0.0f, float const & requested_e = 0.0f, float const & requested_f = 0.0f, float const & requested_g = 0.0f, float const & requested_h = 0.0f);
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(::std::complex<float> const & z0, ::std::complex<float> const & z1 = ::std::complex<float>(), ::std::complex<float> const & z2 = ::std::complex<float>(), ::std::complex<float> const & z3 = ::std::complex<float>());
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(::boost::math::quaternion<float> const & q0, ::boost::math::quaternion<float> const & q1 = ::boost::math::quaternion<float>());
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(octonion<double> const & a_recopier);
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(octonion<long double> const & a_recopier);
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(float const & requested_a = 0.0f, float const & requested_b = 0.0f, float const & requested_c = 0.0f, float const & requested_d = 0.0f, float const & requested_e = 0.0f, float const & requested_f = 0.0f, float const & requested_g = 0.0f, float const & requested_h = 0.0f);
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(::std::complex<float> const & z0, ::std::complex<float> const & z1 = ::std::complex<float>(), ::std::complex<float> const & z2 = ::std::complex<float>(), ::std::complex<float> const & z3 = ::std::complex<float>());
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(::boost::math::quaternion<float> const & q0, ::boost::math::quaternion<float> const & q1 = ::boost::math::quaternion<float>());
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(octonion<double> const & a_recopier);
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(octonion<long double> const & a_recopier);
 
-      float                             ``[link math_toolkit.mem_fun0.real_and_unreal_parts real]``() const;
-      octonion<float>                   ``[link math_toolkit.mem_fun0.real_and_unreal_parts unreal]``() const;
+      float                             ``[link math_toolkit.oct_mem_fun.real_and_unreal_parts real]``() const;
+      octonion<float>                   ``[link math_toolkit.oct_mem_fun.real_and_unreal_parts unreal]``() const;
 
-      float                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_1]``() const;
-      float                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_2]``() const;
-      float                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_3]``() const;
-      float                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_4]``() const;
-      float                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_5]``() const;
-      float                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_6]``() const;
-      float                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_7]``() const;
-      float                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_8]``() const;
+      float                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_1]``() const;
+      float                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_2]``() const;
+      float                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_3]``() const;
+      float                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_4]``() const;
+      float                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_5]``() const;
+      float                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_6]``() const;
+      float                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_7]``() const;
+      float                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_8]``() const;
 
-      ::std::complex<float>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_1]``() const;
-      ::std::complex<float>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_2]``() const;
-      ::std::complex<float>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_3]``() const;
-      ::std::complex<float>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_4]``() const;
+      ::std::complex<float>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_1]``() const;
+      ::std::complex<float>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_2]``() const;
+      ::std::complex<float>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_3]``() const;
+      ::std::complex<float>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_4]``() const;
 
-      ::boost::math::quaternion<float>  ``[link math_toolkit.mem_fun0.individual_quaternion_components H_component_1]``() const;
-      ::boost::math::quaternion<float>  ``[link math_toolkit.mem_fun0.individual_quaternion_components H_component_2]``() const;
+      ::boost::math::quaternion<float>  ``[link math_toolkit.oct_mem_fun.individual_quaternion_components H_component_1]``() const;
+      ::boost::math::quaternion<float>  ``[link math_toolkit.oct_mem_fun.individual_quaternion_components H_component_2]``() const;
 
-      octonion<float> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (octonion<float> const  & a_affecter);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (octonion<float> const  & a_affecter);
       template<typename X>
-      octonion<float> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (octonion<X> const  & a_affecter);
-      octonion<float> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (float const  & a_affecter);
-      octonion<float> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (::std::complex<float> const & a_affecter);
-      octonion<float> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (::boost::math::quaternion<float> const & a_affecter);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (octonion<X> const  & a_affecter);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (float const  & a_affecter);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (::std::complex<float> const & a_affecter);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (::boost::math::quaternion<float> const & a_affecter);
 
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (float const & rhs);
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (::std::complex<float> const & rhs);
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (::boost::math::quaternion<float> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (float const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (::std::complex<float> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (::boost::math::quaternion<float> const & rhs);
       template<typename X>
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (octonion<X> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (octonion<X> const & rhs);
 
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (float const & rhs);
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (::std::complex<float> const & rhs);
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (::boost::math::quaternion<float> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (float const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (::std::complex<float> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (::boost::math::quaternion<float> const & rhs);
       template<typename X>
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (octonion<X> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (octonion<X> const & rhs);
 
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (float const & rhs);
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (::std::complex<float> const & rhs);
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (::boost::math::quaternion<float> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (float const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (::std::complex<float> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (::boost::math::quaternion<float> const & rhs);
       template<typename X>
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (octonion<X> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (octonion<X> const & rhs);
 
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (float const & rhs);
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (::std::complex<float> const & rhs);
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (::boost::math::quaternion<float> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (float const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (::std::complex<float> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (::boost::math::quaternion<float> const & rhs);
       template<typename X>
-      octonion<float> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (octonion<X> const & rhs);
+      octonion<float> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (octonion<X> const & rhs);
    };
 
 [#math_octonion_double]
@@ -298,62 +298,62 @@ The interface and implementation are both supplied by the header file
    public:
       typedef double value_type;
 
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(double const & requested_a = 0.0, double const & requested_b = 0.0, double const & requested_c = 0.0, double const & requested_d = 0.0, double const & requested_e = 0.0, double const & requested_f = 0.0, double const & requested_g = 0.0, double const & requested_h = 0.0);
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(::std::complex<double> const & z0, ::std::complex<double> const & z1 = ::std::complex<double>(), ::std::complex<double> const & z2 = ::std::complex<double>(), ::std::complex<double> const & z3 = ::std::complex<double>());
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(::boost::math::quaternion<double> const & q0, ::boost::math::quaternion<double> const & q1 = ::boost::math::quaternion<double>());
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(octonion<float> const & a_recopier);
-      explicit  ``[link math_toolkit.mem_fun0.constructors octonion]``(octonion<long double> const & a_recopier);
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(double const & requested_a = 0.0, double const & requested_b = 0.0, double const & requested_c = 0.0, double const & requested_d = 0.0, double const & requested_e = 0.0, double const & requested_f = 0.0, double const & requested_g = 0.0, double const & requested_h = 0.0);
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(::std::complex<double> const & z0, ::std::complex<double> const & z1 = ::std::complex<double>(), ::std::complex<double> const & z2 = ::std::complex<double>(), ::std::complex<double> const & z3 = ::std::complex<double>());
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(::boost::math::quaternion<double> const & q0, ::boost::math::quaternion<double> const & q1 = ::boost::math::quaternion<double>());
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(octonion<float> const & a_recopier);
+      explicit  ``[link math_toolkit.oct_mem_fun.constructors octonion]``(octonion<long double> const & a_recopier);
 
-      double                             ``[link math_toolkit.mem_fun0.real_and_unreal_parts real]``() const;
-      octonion<double>                   ``[link math_toolkit.mem_fun0.real_and_unreal_parts unreal]``() const;
+      double                             ``[link math_toolkit.oct_mem_fun.real_and_unreal_parts real]``() const;
+      octonion<double>                   ``[link math_toolkit.oct_mem_fun.real_and_unreal_parts unreal]``() const;
 
-      double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_1]``() const;
-      double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_2]``() const;
-      double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_3]``() const;
-      double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_4]``() const;
-      double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_5]``() const;
-      double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_6]``() const;
-      double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_7]``() const;
-      double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_8]``() const;
+      double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_1]``() const;
+      double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_2]``() const;
+      double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_3]``() const;
+      double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_4]``() const;
+      double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_5]``() const;
+      double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_6]``() const;
+      double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_7]``() const;
+      double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_8]``() const;
 
-      ::std::complex<double>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_1]``() const;
-      ::std::complex<double>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_2]``() const;
-      ::std::complex<double>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_3]``() const;
-      ::std::complex<double>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_4]``() const;
+      ::std::complex<double>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_1]``() const;
+      ::std::complex<double>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_2]``() const;
+      ::std::complex<double>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_3]``() const;
+      ::std::complex<double>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_4]``() const;
 
-      ::boost::math::quaternion<double>  ``[link math_toolkit.mem_fun0.individual_quaternion_components H_component_1]``() const;
-      ::boost::math::quaternion<double>  ``[link math_toolkit.mem_fun0.individual_quaternion_components H_component_2]``() const;
+      ::boost::math::quaternion<double>  ``[link math_toolkit.oct_mem_fun.individual_quaternion_components H_component_1]``() const;
+      ::boost::math::quaternion<double>  ``[link math_toolkit.oct_mem_fun.individual_quaternion_components H_component_2]``() const;
 
-      octonion<double> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (octonion<double> const  & a_affecter);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (octonion<double> const  & a_affecter);
       template<typename X>
-      octonion<double> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (octonion<X> const  & a_affecter);
-      octonion<double> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (double const  & a_affecter);
-      octonion<double> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (::std::complex<double> const & a_affecter);
-      octonion<double> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (::boost::math::quaternion<double> const & a_affecter);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (octonion<X> const  & a_affecter);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (double const  & a_affecter);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (::std::complex<double> const & a_affecter);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (::boost::math::quaternion<double> const & a_affecter);
 
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (double const & rhs);
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (::std::complex<double> const & rhs);
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (::boost::math::quaternion<double> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (double const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (::std::complex<double> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (::boost::math::quaternion<double> const & rhs);
       template<typename X>
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (octonion<X> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (octonion<X> const & rhs);
 
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (double const & rhs);
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (::std::complex<double> const & rhs);
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (::boost::math::quaternion<double> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (double const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (::std::complex<double> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (::boost::math::quaternion<double> const & rhs);
       template<typename X>
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (octonion<X> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (octonion<X> const & rhs);
 
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (double const & rhs);
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (::std::complex<double> const & rhs);
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (::boost::math::quaternion<double> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (double const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (::std::complex<double> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (::boost::math::quaternion<double> const & rhs);
       template<typename X>
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (octonion<X> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (octonion<X> const & rhs);
 
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (double const & rhs);
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (::std::complex<double> const & rhs);
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (::boost::math::quaternion<double> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (double const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (::std::complex<double> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (::boost::math::quaternion<double> const & rhs);
       template<typename X>
-      octonion<double> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (octonion<X> const & rhs);
+      octonion<double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (octonion<X> const & rhs);
    };
 
 [#math_octonion_long_double]
@@ -364,62 +364,62 @@ The interface and implementation are both supplied by the header file
    public:
       typedef long double value_type;
 
-      explicit   ``[link math_toolkit.mem_fun0.constructors octonion]``(long double const & requested_a = 0.0L, long double const & requested_b = 0.0L, long double const & requested_c = 0.0L, long double const & requested_d = 0.0L, long double const & requested_e = 0.0L, long double const & requested_f = 0.0L, long double const & requested_g = 0.0L, long double const & requested_h = 0.0L);
-      explicit   ``[link math_toolkit.mem_fun0.constructors octonion]``( ::std::complex<long double> const & z0, ::std::complex<long double> const & z1 = ::std::complex<long double>(), ::std::complex<long double> const & z2 = ::std::complex<long double>(), ::std::complex<long double> const & z3 = ::std::complex<long double>());
-      explicit   ``[link math_toolkit.mem_fun0.constructors octonion]``( ::boost::math::quaternion<long double> const & q0, ::boost::math::quaternion<long double> const & z1 = ::boost::math::quaternion<long double>());
-      explicit   ``[link math_toolkit.mem_fun0.constructors octonion]``(octonion<float> const & a_recopier);
-      explicit   ``[link math_toolkit.mem_fun0.constructors octonion]``(octonion<double> const & a_recopier);
+      explicit   ``[link math_toolkit.oct_mem_fun.constructors octonion]``(long double const & requested_a = 0.0L, long double const & requested_b = 0.0L, long double const & requested_c = 0.0L, long double const & requested_d = 0.0L, long double const & requested_e = 0.0L, long double const & requested_f = 0.0L, long double const & requested_g = 0.0L, long double const & requested_h = 0.0L);
+      explicit   ``[link math_toolkit.oct_mem_fun.constructors octonion]``( ::std::complex<long double> const & z0, ::std::complex<long double> const & z1 = ::std::complex<long double>(), ::std::complex<long double> const & z2 = ::std::complex<long double>(), ::std::complex<long double> const & z3 = ::std::complex<long double>());
+      explicit   ``[link math_toolkit.oct_mem_fun.constructors octonion]``( ::boost::math::quaternion<long double> const & q0, ::boost::math::quaternion<long double> const & z1 = ::boost::math::quaternion<long double>());
+      explicit   ``[link math_toolkit.oct_mem_fun.constructors octonion]``(octonion<float> const & a_recopier);
+      explicit   ``[link math_toolkit.oct_mem_fun.constructors octonion]``(octonion<double> const & a_recopier);
 
-      long double                             ``[link math_toolkit.mem_fun0.real_and_unreal_parts real]``() const;
-      octonion<long double>                   ``[link math_toolkit.mem_fun0.real_and_unreal_parts unreal]``() const;
+      long double                             ``[link math_toolkit.oct_mem_fun.real_and_unreal_parts real]``() const;
+      octonion<long double>                   ``[link math_toolkit.oct_mem_fun.real_and_unreal_parts unreal]``() const;
 
-      long double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_1]``() const;
-      long double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_2]``() const;
-      long double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_3]``() const;
-      long double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_4]``() const;
-      long double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_5]``() const;
-      long double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_6]``() const;
-      long double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_7]``() const;
-      long double                             ``[link math_toolkit.mem_fun0.individual_real_components R_component_8]``() const;
+      long double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_1]``() const;
+      long double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_2]``() const;
+      long double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_3]``() const;
+      long double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_4]``() const;
+      long double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_5]``() const;
+      long double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_6]``() const;
+      long double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_7]``() const;
+      long double                             ``[link math_toolkit.oct_mem_fun.individual_real_components R_component_8]``() const;
 
-      ::std::complex<long double>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_1]``() const;
-      ::std::complex<long double>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_2]``() const;
-      ::std::complex<long double>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_3]``() const;
-      ::std::complex<long double>             ``[link math_toolkit.mem_fun0.individual_complex_components C_component_4]``() const;
+      ::std::complex<long double>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_1]``() const;
+      ::std::complex<long double>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_2]``() const;
+      ::std::complex<long double>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_3]``() const;
+      ::std::complex<long double>             ``[link math_toolkit.oct_mem_fun.individual_complex_components C_component_4]``() const;
 
-      ::boost::math::quaternion<long double>  ``[link math_toolkit.mem_fun0.individual_quaternion_components H_component_1]``() const;
-      ::boost::math::quaternion<long double>  ``[link math_toolkit.mem_fun0.individual_quaternion_components H_component_2]``() const;
+      ::boost::math::quaternion<long double>  ``[link math_toolkit.oct_mem_fun.individual_quaternion_components H_component_1]``() const;
+      ::boost::math::quaternion<long double>  ``[link math_toolkit.oct_mem_fun.individual_quaternion_components H_component_2]``() const;
 
-      octonion<long double> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (octonion<long double> const  & a_affecter);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (octonion<long double> const  & a_affecter);
       template<typename X>
-      octonion<long double> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (octonion<X> const  & a_affecter);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (long double const  & a_affecter);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (::std::complex<long double> const & a_affecter);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.assignment_operators operator =]`` (::boost::math::quaternion<long double> const & a_affecter);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (octonion<X> const  & a_affecter);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (long double const  & a_affecter);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (::std::complex<long double> const & a_affecter);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.assignment_operators operator =]`` (::boost::math::quaternion<long double> const & a_affecter);
 
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (long double const & rhs);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (::std::complex<long double> const & rhs);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (::boost::math::quaternion<long double> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (long double const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (::std::complex<long double> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (::boost::math::quaternion<long double> const & rhs);
       template<typename X>
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator +=]`` (octonion<X> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator +=]`` (octonion<X> const & rhs);
 
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (long double const & rhs);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (::std::complex<long double> const & rhs);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (::boost::math::quaternion<long double> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (long double const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (::std::complex<long double> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (::boost::math::quaternion<long double> const & rhs);
       template<typename X>
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator -=]`` (octonion<X> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator -=]`` (octonion<X> const & rhs);
 
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (long double const & rhs);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (::std::complex<long double> const & rhs);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (::boost::math::quaternion<long double> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (long double const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (::std::complex<long double> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (::boost::math::quaternion<long double> const & rhs);
       template<typename X>
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator *=]`` (octonion<X> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator *=]`` (octonion<X> const & rhs);
 
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (long double const & rhs);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (::std::complex<long double> const & rhs);
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (::boost::math::quaternion<long double> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (long double const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (::std::complex<long double> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (::boost::math::quaternion<long double> const & rhs);
       template<typename X>
-      octonion<long double> & ``[link math_toolkit.mem_fun0.other_member_operators operator /=]`` (octonion<X> const & rhs);
+      octonion<long double> & ``[link math_toolkit.oct_mem_fun.other_member_operators operator /=]`` (octonion<X> const & rhs);
    };
 
    } } // namespaces
@@ -450,7 +450,7 @@ These provide easy acces to the type the template is built upon.
 
 [endsect]
 
-[section:mem_fun Octonion Member Functions]
+[section:oct_mem_fun Octonion Member Functions]
 
 [h3 Constructors]
 
@@ -624,7 +624,7 @@ remember to group any two factors using parenthesis.
 
 [endsect]
 
-[section:non_mem Octonion Non-Member Operators]
+[section:oct_non_mem Octonion Non-Member Operators]
 
 [h4 Unary Plus and Minus Operators]
 
@@ -924,7 +924,7 @@ Computes the n-th power of the octonion q.
 
 [endsect]
 
-[section:tests Test Program]
+[section:oct_tests Test Program]
 
 The [@../../octonion/octonion_test.cpp octonion_test.cpp]
 test program tests octonions specialisations for float, double and long double
@@ -951,7 +951,7 @@ History section. Thank you to all who contributed to the discussion about this l
 
 [endsect]
 
-[section:history History]
+[section:oct_history History]
 
 * 1.5.9 - 13/5/2013:  Incorporated into Boost.Math.
 * 1.5.8 - 17/12/2005: Converted documentation to Quickbook Format.
@@ -972,7 +972,7 @@ History section. Thank you to all who contributed to the discussion about this l
 
 [endsect]
 
-[section:todo To Do]
+[section:oct_todo To Do]
 
 * Improve testing.
 * Rewrite input operatore using Spirit (creates a dependency).

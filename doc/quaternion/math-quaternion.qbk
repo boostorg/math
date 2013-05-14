@@ -11,7 +11,7 @@
 
 [mathpart quaternions Quaternions]
 
-[section:overview Overview]
+[section:quat_overview Overview]
 
 Quaternions are a relative of complex numbers.
 
@@ -50,14 +50,14 @@ a square root, do not.
 
 [endsect]
 
-[section:header Header File]
+[section:quat_header Header File]
 
 The interface and implementation are both supplied by the header file
 [@../../../../boost/math/quaternion.hpp quaternion.hpp].
 
 [endsect]
 
-[section:synopsis Synopsis]
+[section:quat_synopsis Synopsis]
 
    namespace boost{ namespace math{
 
@@ -67,50 +67,50 @@ The interface and implementation are both supplied by the header file
    template<>           class ``[link math_quaternion_long_double quaternion<long double>]``;
 
    // operators
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_addition_operators operator +]`` (T const & lhs, quaternion<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_addition_operators operator +]`` (quaternion<T> const & lhs, T const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_addition_operators operator +]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_addition_operators operator +]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_addition_operators operator +]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_addition_operators operator +]`` (T const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_addition_operators operator +]`` (quaternion<T> const & lhs, T const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_addition_operators operator +]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_addition_operators operator +]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_addition_operators operator +]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
 
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_subtraction_operators operator -]`` (T const & lhs, quaternion<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_subtraction_operators operator -]`` (quaternion<T> const & lhs, T const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_subtraction_operators operator -]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_subtraction_operators operator -]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_subtraction_operators operator -]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_subtraction_operators operator -]`` (T const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_subtraction_operators operator -]`` (quaternion<T> const & lhs, T const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_subtraction_operators operator -]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_subtraction_operators operator -]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_subtraction_operators operator -]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
 
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_multiplication_operators operator *]`` (T const & lhs, quaternion<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_multiplication_operators operator *]`` (quaternion<T> const & lhs, T const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_multiplication_operators operator *]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_multiplication_operators operator *]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_multiplication_operators operator *]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_multiplication_operators operator *]`` (T const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_multiplication_operators operator *]`` (quaternion<T> const & lhs, T const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_multiplication_operators operator *]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_multiplication_operators operator *]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_multiplication_operators operator *]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
 
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_division_operators operator /]`` (T const & lhs, quaternion<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_division_operators operator /]`` (quaternion<T> const & lhs, T const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_division_operators operator /]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_division_operators operator /]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.binary_division_operators operator /]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_division_operators operator /]`` (T const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_division_operators operator /]`` (quaternion<T> const & lhs, T const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_division_operators operator /]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_division_operators operator /]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.binary_division_operators operator /]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
 
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.unary_plus operator +]`` (quaternion<T> const & q);
-   template<typename T> quaternion<T> ``[link math_toolkit.non_mem.unary_minus operator -]`` (quaternion<T> const & q);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.unary_plus operator +]`` (quaternion<T> const & q);
+   template<typename T> quaternion<T> ``[link math_toolkit.quat_non_mem.unary_minus operator -]`` (quaternion<T> const & q);
 
-   template<typename T> bool ``[link math_toolkit.non_mem.equality_operators operator ==]`` (T const & lhs, quaternion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem.equality_operators operator ==]`` (quaternion<T> const & lhs, T const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem.equality_operators operator ==]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem.equality_operators operator ==]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem.equality_operators operator ==]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.quat_non_mem.equality_operators operator ==]`` (T const & lhs, quaternion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.quat_non_mem.equality_operators operator ==]`` (quaternion<T> const & lhs, T const & rhs);
+   template<typename T> bool ``[link math_toolkit.quat_non_mem.equality_operators operator ==]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.quat_non_mem.equality_operators operator ==]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.quat_non_mem.equality_operators operator ==]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
 
-   template<typename T> bool ``[link math_toolkit.non_mem.inequality_operators operator !=]`` (T const & lhs, quaternion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem.inequality_operators operator !=]`` (quaternion<T> const & lhs, T const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem.inequality_operators operator !=]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem.inequality_operators operator !=]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
-   template<typename T> bool ``[link math_toolkit.non_mem.inequality_operators operator !=]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
-
-   template<typename T, typename charT, class traits>
-   ::std::basic_istream<charT,traits>& ``[link math_toolkit.non_mem.stream_extractor operator >>]`` (::std::basic_istream<charT,traits> & is, quaternion<T> & q);
+   template<typename T> bool ``[link math_toolkit.quat_non_mem.inequality_operators operator !=]`` (T const & lhs, quaternion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.quat_non_mem.inequality_operators operator !=]`` (quaternion<T> const & lhs, T const & rhs);
+   template<typename T> bool ``[link math_toolkit.quat_non_mem.inequality_operators operator !=]`` (::std::complex<T> const & lhs, quaternion<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.quat_non_mem.inequality_operators operator !=]`` (quaternion<T> const & lhs, ::std::complex<T> const & rhs);
+   template<typename T> bool ``[link math_toolkit.quat_non_mem.inequality_operators operator !=]`` (quaternion<T> const & lhs, quaternion<T> const & rhs);
 
    template<typename T, typename charT, class traits>
-   ::std::basic_ostream<charT,traits>& operator ``[link math_toolkit.non_mem.stream_inserter operator <<]`` (::std::basic_ostream<charT,traits> & os, quaternion<T> const & q);
+   ::std::basic_istream<charT,traits>& ``[link math_toolkit.quat_non_mem.stream_extractor operator >>]`` (::std::basic_istream<charT,traits> & is, quaternion<T> & q);
+
+   template<typename T, typename charT, class traits>
+   ::std::basic_ostream<charT,traits>& operator ``[link math_toolkit.quat_non_mem.stream_inserter operator <<]`` (::std::basic_ostream<charT,traits> & os, quaternion<T> const & q);
 
    // values
    template<typename T> T              ``[link math_toolkit.value_op.real_and_unreal real]``(quaternion<T> const & q);
@@ -154,45 +154,45 @@ The interface and implementation are both supplied by the header file
 
       typedef T ``[link math_toolkit.mem_typedef value_type]``;
 
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(T const & requested_a = T(), T const & requested_b = T(), T const & requested_c = T(), T const & requested_d = T());
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(::std::complex<T> const & z0, ::std::complex<T> const & z1 = ::std::complex<T>());
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(T const & requested_a = T(), T const & requested_b = T(), T const & requested_c = T(), T const & requested_d = T());
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(::std::complex<T> const & z0, ::std::complex<T> const & z1 = ::std::complex<T>());
       template<typename X>
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(quaternion<X> const & a_recopier);
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(quaternion<X> const & a_recopier);
 
-      T                  ``[link math_toolkit.mem_fun.real_and_unreal_parts real]``() const;
-      quaternion<T>      ``[link math_toolkit.mem_fun.real_and_unreal_parts unreal]``() const;
-      T                  ``[link math_toolkit.mem_fun.individual_real_components R_component_1]``() const;
-      T                  ``[link math_toolkit.mem_fun.individual_real_components R_component_2]``() const;
-      T                  ``[link math_toolkit.mem_fun.individual_real_components R_component_3]``() const;
-      T                  ``[link math_toolkit.mem_fun.individual_real_components R_component_4]``() const;
-      ::std::complex<T>  ``[link math_toolkit.mem_fun.individual_complex_components C_component_1]``() const;
-      ::std::complex<T>  ``[link math_toolkit.mem_fun.individual_complex_components C_component_2]``() const;
+      T                  ``[link math_toolkit.quat_mem_fun.real_and_unreal_parts real]``() const;
+      quaternion<T>      ``[link math_toolkit.quat_mem_fun.real_and_unreal_parts unreal]``() const;
+      T                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_1]``() const;
+      T                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_2]``() const;
+      T                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_3]``() const;
+      T                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_4]``() const;
+      ::std::complex<T>  ``[link math_toolkit.quat_mem_fun.individual_complex_components C_component_1]``() const;
+      ::std::complex<T>  ``[link math_toolkit.quat_mem_fun.individual_complex_components C_component_2]``() const;
 
-      quaternion<T>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(quaternion<T> const  & a_affecter);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(quaternion<T> const  & a_affecter);
       template<typename X>
-      quaternion<T>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(quaternion<X> const  & a_affecter);
-      quaternion<T>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(T const  & a_affecter);
-      quaternion<T>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(::std::complex<T> const & a_affecter);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(quaternion<X> const  & a_affecter);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(T const  & a_affecter);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(::std::complex<T> const & a_affecter);
 
-      quaternion<T>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(T const & rhs);
-      quaternion<T>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(::std::complex<T> const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(T const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(::std::complex<T> const & rhs);
       template<typename X>
-      quaternion<T>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(quaternion<X> const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(quaternion<X> const & rhs);
 
-      quaternion<T>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(T const & rhs);
-      quaternion<T>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(::std::complex<T> const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(T const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(::std::complex<T> const & rhs);
       template<typename X>
-      quaternion<T>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(quaternion<X> const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(quaternion<X> const & rhs);
 
-      quaternion<T>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(T const & rhs);
-      quaternion<T>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(::std::complex<T> const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(T const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(::std::complex<T> const & rhs);
       template<typename X>
-      quaternion<T>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(quaternion<X> const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(quaternion<X> const & rhs);
 
-      quaternion<T>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(T const & rhs);
-      quaternion<T>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(::std::complex<T> const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(T const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(::std::complex<T> const & rhs);
       template<typename X>
-      quaternion<T>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(quaternion<X> const & rhs);
+      quaternion<T>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(quaternion<X> const & rhs);
    };
 
    } // namespace math
@@ -210,45 +210,45 @@ The interface and implementation are both supplied by the header file
    public:
       typedef float ``[link math_toolkit.mem_typedef value_type]``;
 
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(float const & requested_a = 0.0f, float const & requested_b = 0.0f, float const & requested_c = 0.0f, float const & requested_d = 0.0f);
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(::std::complex<float> const & z0, ::std::complex<float> const & z1 = ::std::complex<float>());
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(quaternion<double> const & a_recopier);
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(quaternion<long double> const & a_recopier);
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(float const & requested_a = 0.0f, float const & requested_b = 0.0f, float const & requested_c = 0.0f, float const & requested_d = 0.0f);
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(::std::complex<float> const & z0, ::std::complex<float> const & z1 = ::std::complex<float>());
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(quaternion<double> const & a_recopier);
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(quaternion<long double> const & a_recopier);
 
-      float                  ``[link math_toolkit.mem_fun.real_and_unreal_parts real]``() const;
-      quaternion<float>      ``[link math_toolkit.mem_fun.real_and_unreal_parts unreal]``() const;
-      float                  ``[link math_toolkit.mem_fun.individual_real_components R_component_1]``() const;
-      float                  ``[link math_toolkit.mem_fun.individual_real_components R_component_2]``() const;
-      float                  ``[link math_toolkit.mem_fun.individual_real_components R_component_3]``() const;
-      float                  ``[link math_toolkit.mem_fun.individual_real_components R_component_4]``() const;
-      ::std::complex<float>  ``[link math_toolkit.mem_fun.individual_complex_components C_component_1]``() const;
-      ::std::complex<float>  ``[link math_toolkit.mem_fun.individual_complex_components C_component_2]``() const;
+      float                  ``[link math_toolkit.quat_mem_fun.real_and_unreal_parts real]``() const;
+      quaternion<float>      ``[link math_toolkit.quat_mem_fun.real_and_unreal_parts unreal]``() const;
+      float                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_1]``() const;
+      float                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_2]``() const;
+      float                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_3]``() const;
+      float                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_4]``() const;
+      ::std::complex<float>  ``[link math_toolkit.quat_mem_fun.individual_complex_components C_component_1]``() const;
+      ::std::complex<float>  ``[link math_toolkit.quat_mem_fun.individual_complex_components C_component_2]``() const;
 
-      quaternion<float>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(quaternion<float> const  & a_affecter);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(quaternion<float> const  & a_affecter);
       template<typename X>
-      quaternion<float>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(quaternion<X> const  & a_affecter);
-      quaternion<float>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(float const  & a_affecter);
-      quaternion<float>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(::std::complex<float> const & a_affecter);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(quaternion<X> const  & a_affecter);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(float const  & a_affecter);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(::std::complex<float> const & a_affecter);
 
-      quaternion<float>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(float const & rhs);
-      quaternion<float>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(::std::complex<float> const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(float const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(::std::complex<float> const & rhs);
       template<typename X>
-      quaternion<float>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(quaternion<X> const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(quaternion<X> const & rhs);
 
-      quaternion<float>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(float const & rhs);
-      quaternion<float>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(::std::complex<float> const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(float const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(::std::complex<float> const & rhs);
       template<typename X>
-      quaternion<float>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(quaternion<X> const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(quaternion<X> const & rhs);
 
-      quaternion<float>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(float const & rhs);
-      quaternion<float>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(::std::complex<float> const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(float const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(::std::complex<float> const & rhs);
       template<typename X>
-      quaternion<float>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(quaternion<X> const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(quaternion<X> const & rhs);
 
-      quaternion<float>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(float const & rhs);
-      quaternion<float>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(::std::complex<float> const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(float const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(::std::complex<float> const & rhs);
       template<typename X>
-      quaternion<float>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(quaternion<X> const & rhs);
+      quaternion<float>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(quaternion<X> const & rhs);
    };
 
 [#math_quaternion_double]
@@ -259,45 +259,45 @@ The interface and implementation are both supplied by the header file
    public:
       typedef double ``[link math_toolkit.mem_typedef value_type]``;
 
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(double const & requested_a = 0.0, double const & requested_b = 0.0, double const & requested_c = 0.0, double const & requested_d = 0.0);
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(::std::complex<double> const & z0, ::std::complex<double> const & z1 = ::std::complex<double>());
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(quaternion<float> const & a_recopier);
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(quaternion<long double> const & a_recopier);
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(double const & requested_a = 0.0, double const & requested_b = 0.0, double const & requested_c = 0.0, double const & requested_d = 0.0);
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(::std::complex<double> const & z0, ::std::complex<double> const & z1 = ::std::complex<double>());
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(quaternion<float> const & a_recopier);
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(quaternion<long double> const & a_recopier);
 
-      double                  ``[link math_toolkit.mem_fun.real_and_unreal_parts real]``() const;
-      quaternion<double>      ``[link math_toolkit.mem_fun.real_and_unreal_parts unreal]``() const;
-      double                  ``[link math_toolkit.mem_fun.individual_real_components R_component_1]``() const;
-      double                  ``[link math_toolkit.mem_fun.individual_real_components R_component_2]``() const;
-      double                  ``[link math_toolkit.mem_fun.individual_real_components R_component_3]``() const;
-      double                  ``[link math_toolkit.mem_fun.individual_real_components R_component_4]``() const;
-      ::std::complex<double>  ``[link math_toolkit.mem_fun.individual_complex_components C_component_1]``() const;
-      ::std::complex<double>  ``[link math_toolkit.mem_fun.individual_complex_components C_component_2]``() const;
+      double                  ``[link math_toolkit.quat_mem_fun.real_and_unreal_parts real]``() const;
+      quaternion<double>      ``[link math_toolkit.quat_mem_fun.real_and_unreal_parts unreal]``() const;
+      double                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_1]``() const;
+      double                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_2]``() const;
+      double                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_3]``() const;
+      double                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_4]``() const;
+      ::std::complex<double>  ``[link math_toolkit.quat_mem_fun.individual_complex_components C_component_1]``() const;
+      ::std::complex<double>  ``[link math_toolkit.quat_mem_fun.individual_complex_components C_component_2]``() const;
 
-      quaternion<double>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(quaternion<double> const  & a_affecter);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(quaternion<double> const  & a_affecter);
       template<typename X>
-      quaternion<double>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(quaternion<X> const  & a_affecter);
-      quaternion<double>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(double const  & a_affecter);
-      quaternion<double>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(::std::complex<double> const & a_affecter);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(quaternion<X> const  & a_affecter);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(double const  & a_affecter);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(::std::complex<double> const & a_affecter);
 
-      quaternion<double>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(double const & rhs);
-      quaternion<double>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(::std::complex<double> const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(double const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(::std::complex<double> const & rhs);
       template<typename X>
-      quaternion<double>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(quaternion<X> const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(quaternion<X> const & rhs);
 
-      quaternion<double>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(double const & rhs);
-      quaternion<double>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(::std::complex<double> const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(double const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(::std::complex<double> const & rhs);
       template<typename X>
-      quaternion<double>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(quaternion<X> const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(quaternion<X> const & rhs);
 
-      quaternion<double>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(double const & rhs);
-      quaternion<double>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(::std::complex<double> const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(double const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(::std::complex<double> const & rhs);
       template<typename X>
-      quaternion<double>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(quaternion<X> const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(quaternion<X> const & rhs);
 
-      quaternion<double>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(double const & rhs);
-      quaternion<double>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(::std::complex<double> const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(double const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(::std::complex<double> const & rhs);
       template<typename X>
-      quaternion<double>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(quaternion<X> const & rhs);
+      quaternion<double>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(quaternion<X> const & rhs);
    };
 
 [#math_quaternion_long_double]
@@ -308,45 +308,45 @@ The interface and implementation are both supplied by the header file
    public:
       typedef long double ``[link math_toolkit.mem_typedef value_type]``;
 
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(long double const & requested_a = 0.0L, long double const & requested_b = 0.0L, long double const & requested_c = 0.0L, long double const & requested_d = 0.0L);
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(::std::complex<long double> const & z0, ::std::complex<long double> const & z1 = ::std::complex<long double>());
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(quaternion<float> const & a_recopier);
-      explicit ``[link math_toolkit.mem_fun.constructors quaternion]``(quaternion<double> const & a_recopier);
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(long double const & requested_a = 0.0L, long double const & requested_b = 0.0L, long double const & requested_c = 0.0L, long double const & requested_d = 0.0L);
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(::std::complex<long double> const & z0, ::std::complex<long double> const & z1 = ::std::complex<long double>());
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(quaternion<float> const & a_recopier);
+      explicit ``[link math_toolkit.quat_mem_fun.constructors quaternion]``(quaternion<double> const & a_recopier);
 
-      long double                  ``[link math_toolkit.mem_fun.real_and_unreal_parts real]``() const;
-      quaternion<long double>      ``[link math_toolkit.mem_fun.real_and_unreal_parts unreal]``() const;
-      long double                  ``[link math_toolkit.mem_fun.individual_real_components R_component_1]``() const;
-      long double                  ``[link math_toolkit.mem_fun.individual_real_components R_component_2]``() const;
-      long double                  ``[link math_toolkit.mem_fun.individual_real_components R_component_3]``() const;
-      long double                  ``[link math_toolkit.mem_fun.individual_real_components R_component_4]``() const;
-      ::std::complex<long double>  ``[link math_toolkit.mem_fun.individual_complex_components C_component_1]``() const;
-      ::std::complex<long double>  ``[link math_toolkit.mem_fun.individual_complex_components C_component_2]``() const;
+      long double                  ``[link math_toolkit.quat_mem_fun.real_and_unreal_parts real]``() const;
+      quaternion<long double>      ``[link math_toolkit.quat_mem_fun.real_and_unreal_parts unreal]``() const;
+      long double                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_1]``() const;
+      long double                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_2]``() const;
+      long double                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_3]``() const;
+      long double                  ``[link math_toolkit.quat_mem_fun.individual_real_components R_component_4]``() const;
+      ::std::complex<long double>  ``[link math_toolkit.quat_mem_fun.individual_complex_components C_component_1]``() const;
+      ::std::complex<long double>  ``[link math_toolkit.quat_mem_fun.individual_complex_components C_component_2]``() const;
 
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(quaternion<long double> const  & a_affecter);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(quaternion<long double> const  & a_affecter);
       template<typename X>
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(quaternion<X> const  & a_affecter);
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(long double const  & a_affecter);
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.assignment_operators operator = ]``(::std::complex<long double> const & a_affecter);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(quaternion<X> const  & a_affecter);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(long double const  & a_affecter);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.assignment_operators operator = ]``(::std::complex<long double> const & a_affecter);
 
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(long double const & rhs);
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(::std::complex<long double> const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(long double const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(::std::complex<long double> const & rhs);
       template<typename X>
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.addition_operators operator += ]``(quaternion<X> const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.addition_operators operator += ]``(quaternion<X> const & rhs);
 
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(long double const & rhs);
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(::std::complex<long double> const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(long double const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(::std::complex<long double> const & rhs);
       template<typename X>
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.subtraction_operators operator -= ]``(quaternion<X> const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.subtraction_operators operator -= ]``(quaternion<X> const & rhs);
 
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(long double const & rhs);
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(::std::complex<long double> const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(long double const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(::std::complex<long double> const & rhs);
       template<typename X>
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.multiplication_operators operator *= ]``(quaternion<X> const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.multiplication_operators operator *= ]``(quaternion<X> const & rhs);
 
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(long double const & rhs);
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(::std::complex<long double> const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(long double const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(::std::complex<long double> const & rhs);
       template<typename X>
-      quaternion<long double>&     ``[link math_toolkit.mem_fun.division_operators operator /= ]``(quaternion<X> const & rhs);
+      quaternion<long double>&     ``[link math_toolkit.quat_mem_fun.division_operators operator /= ]``(quaternion<X> const & rhs);
    };
 
    } // namespace math
@@ -378,7 +378,7 @@ These provide easy acces to the type the template is built upon.
 
 [endsect]
 
-[section:mem_fun Quaternion Member Functions]
+[section:quat_mem_fun Quaternion Member Functions]
 [h3 Constructors]
 
 Template version:
@@ -521,7 +521,7 @@ which the specialized forms do not, so as to insure exception safety.
 For the unspecialized form, the base type's assignment operators must not throw.
 
 [endsect]
-[section:non_mem Quaternion Non-Member Operators]
+[section:quat_non_mem Quaternion Non-Member Operators]
 
 [h4 Unary Plus]
 
@@ -836,7 +836,7 @@ Computes the n-th power of the quaternion q.
 
 [endsect]
 
-[section:tests Test Program]
+[section:quat_tests Test Program]
 
 The [@../../quaternion/quaternion_test.cpp quaternion_test.cpp]
 test program tests quaternions specializations for float, double and long double
@@ -874,7 +874,7 @@ Thank you to all who contributed to the discution about this library.
 
 [endsect]
 
-[section:history History]
+[section:quat_history History]
 
 * 1.5.9 - 13/5/2013:  Incorporated into Boost.Math.
 * 1.5.8 - 17/12/2005: Converted documentation to Quickbook Format.
@@ -894,7 +894,7 @@ Thank you to all who contributed to the discution about this library.
 * 1.0.0 - 10/08/1999: first public version.
 
 [endsect]
-[section:todo To Do]
+[section:quat_todo To Do]
 
 * Improve testing.
 * Rewrite input operatore using Spirit (creates a dependency).

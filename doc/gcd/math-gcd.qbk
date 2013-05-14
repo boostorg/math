@@ -186,7 +186,7 @@ is beyond the range of `static_gcd_type`.
 
 [endsect]
 
-[section:header Header <boost/math/common_factor.hpp>]
+[section:gcd_header Header <boost/math/common_factor.hpp>]
 
 This header simply includes the headers
 [@../../../boost/math/common_factor_ct.hpp <boost/math/common_factor_ct.hpp>]
@@ -217,7 +217,7 @@ code factoring and eases maintainence.
 
 [endsect]
 
-[section History]
+[section:gcd_history History]
 
 * 13 May 2013 Moved into main Boost.Math Quickbook documentation.
 * 17 Dec 2005: Converted documentation to Quickbook Format.
@@ -226,7 +226,7 @@ code factoring and eases maintainence.
 
 [endsect]
 
-[section Credits]
+[section:gcd_credits Credits]
 
 The author of the Boost compilation of GCD and LCM computations is
 Daryle Walker. The code was prompted by existing code hiding in the

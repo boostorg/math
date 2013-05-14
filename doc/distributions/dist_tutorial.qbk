@@ -216,7 +216,7 @@ Mathematically, the functions may make sense with an (+ or -) infinite value,
 but except for a few special cases (in the Normal and Cauchy distributions)
 this implementation limits random variates to finite values from the `max`
 to `min` for the `RealType`.
-(See [link math_toolkit.implementation0.handling_of_floating_point_infin
+(See [link math_toolkit.sf_implementation.handling_of_floating_point_infin
 Handling of Floating-Point Infinity] for rationale).
 
 

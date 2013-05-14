@@ -1,5 +1,5 @@
 
-[section:bessel Bessel Functions of the First and Second Kinds]
+[section:bessel_first Bessel Functions of the First and Second Kinds]
 
 [h4 Synopsis]
 
@@ -277,7 +277,7 @@ without backward recurrence.
 
 [endsect]
 
-[section:bessel Finding Zeros of Bessel Functions of the First and Second Kinds]
+[section:bessel_root Finding Zeros of Bessel Functions of the First and Second Kinds]
 
 [h4 Synopsis]
 

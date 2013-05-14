@@ -38,7 +38,7 @@ To use these facets
   #include <boost\math\special_functions\nonfinite_num_facets.hpp>
 
 
-[section:intro Introduction]
+[section:facets_intro Introduction]
 
 [h5 The Problem]
 
