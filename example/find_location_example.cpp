@@ -133,7 +133,7 @@ although it is not required, as the various examples below show.
   l = find_location<normal>(z, p, sd, policy<domain_error<ignore_error> >());
 /*`
 If we want to use a probability that is the 
-[link complements complement of our probability],
+[link math_toolkit.stat_tut.overview.complements complement of our probability],
 we should not even think of writing `find_location<normal>(z, 1 - p, sd)`,
 but, [link why_complements to avoid loss of accuracy], use the complement version.
 */

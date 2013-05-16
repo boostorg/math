@@ -108,7 +108,7 @@ it is in fact false):
 [[20][0.0961][0.158][0.232][0.315][0.402][0.489][0.572][0.648][0.716][0.775]]
 ]
 
-See [@../../../example/nc_chi_sq_example.cpp nc_chi_sq_example.cpp] for the full C++ source code.
+See [@../../example/nc_chi_sq_example.cpp nc_chi_sq_example.cpp] for the full C++ source code.
 
 */
 

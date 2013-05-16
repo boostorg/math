@@ -345,13 +345,13 @@ Deciles 1 to 6
 //[discrete_quantile_real
 /*`
 Quantiles values are controlled by the
-[link math_toolkit.policy.pol_ref.discrete_quant_ref discrete quantile policy]
+[link math_toolkit.pol_ref.discrete_quant_ref discrete quantile policy]
 chosen.
 The default is `integer_round_outwards`,
 so the lower quantile is rounded down, and the upper quantile is rounded up.
 
 But we might believe that the real values tell us a little more - see
-[link math_toolkit.policy.pol_tutorial.understand_dis_quant Understanding Discrete Quantile Policy].
+[link math_toolkit.pol_tutorial.understand_dis_quant Understanding Discrete Quantile Policy].
 
 We could control the policy for *all* distributions by
 

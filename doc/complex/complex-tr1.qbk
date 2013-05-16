@@ -1,36 +1,16 @@
-[article Complex Number TR1 Algorithms
-    [quickbook 1.4]
-    [copyright 2005 John Maddock]
-    [purpose Complex number arithmetic]
-    [license
-        Distributed under the Boost Software License, Version 1.0.
-        (See accompanying file LICENSE_1_0.txt or copy at
-        [@http://www.boost.org/LICENSE_1_0.txt http://www.boost.org/LICENSE_1_0.txt])
-    ]
-    [authors [Maddock, John]]
-    [category math]
-    [last-revision $Date: 2006-12-29 11:08:32 +0000 (Fri, 29 Dec 2006) $]
-]
-
-
 [def __effects [*Effects: ]]
 [def __formula [*Formula: ]]
 [def __exm1 '''<code>e<superscript>x</superscript> - 1</code>''']
 [def __ex '''<code>e<superscript>x</superscript></code>''']
 [def __te '''2&#x03B5;''']
-[template tr1[] [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf Technical Report on C++ Library Extensions]]
 
-This manual is also available in 
-[@http://sourceforge.net/projects/boost/files/boost-docs/ 
-printer friendly PDF format].
-
-[section:inverse_complex Complex Number Inverse Trigonometric Functions]
+[mathpart inverse_complex..Complex Number Functions]
 
 The following complex number algorithms are the inverses of trigonometric functions currently
 present in the C++ standard.  Equivalents to these functions are part of the C99 standard, and
 are part of the [tr1].
 
-[section:implementation Implementation and Accuracy]
+[section:complex_implementation Implementation and Accuracy]
 
 Although there are deceptively simple formulae available for all of these functions, a naive
 implementation that used these formulae would fail catastrophically for some input
@@ -41,11 +21,12 @@ Vol. 23, No. 3, September 1997.  This means that the functions are well defined 
 complex number range, and produce accurate values even at the extremes of that range, where as a naive
 formula would cause overflow or underflow to occur during the calculation, even though the result is  
 actually a representable value.  The maximum theoretical relative error for all of these functions 
-is less than 9.5E for every machine-representable point in the complex plane.  Please refer to 
+is less than 9.5[epsilon] for every machine-representable point in the complex plane.  Please refer to 
 comments in the header files themselves and to the above mentioned paper for more information
 on the implementation methodology.
 
 [endsect]
+
 [section:asin asin]
 
 [h4 Header:]
@@ -59,7 +40,7 @@ on the implementation methodology.
    
 __effects returns the inverse sine of the complex number z.
 
-__formula [$../../images/asin.png]
+__formula [$../images/asin.png]
 
 [endsect]
 
@@ -76,7 +57,7 @@ __formula [$../../images/asin.png]
    
 __effects returns the inverse cosine of the complex number z.
 
-__formula [$../../images/acos.png]
+__formula [$../images/acos.png]
 
 [endsect]
 
@@ -93,7 +74,7 @@ __formula [$../../images/acos.png]
    
 __effects returns the inverse tangent of the complex number z.
 
-__formula [$../../images/atan.png]
+__formula [$../images/atan.png]
 
 [endsect]
 
@@ -110,7 +91,7 @@ __formula [$../../images/atan.png]
    
 __effects returns the inverse hyperbolic sine of the complex number z.
 
-__formula [$../../images/asinh.png]
+__formula [$../images/asinh.png]
 
 [endsect]
 
@@ -127,7 +108,7 @@ __formula [$../../images/asinh.png]
    
 __effects returns the inverse hyperbolic cosine of the complex number z.
 
-__formula [$../../images/acosh.png]
+__formula [$../images/acosh.png]
 
 [endsect]
 
@@ -144,11 +125,11 @@ __formula [$../../images/acosh.png]
    
 __effects returns the inverse hyperbolic tangent of the complex number z.
 
-__formula [$../../images/atanh.png]
+__formula [$../images/atanh.png]
 
 [endsect]
 
-[section History]
+[section:complex_history History]
 
 * 2005/12/17: Added support for platforms with no meaningful numeric_limits<>::infinity().
 * 2005/12/01: Initial version, added as part of the TR1 library.
@@ -156,7 +137,7 @@ __formula [$../../images/atanh.png]
 
 [endsect]
 
-[endsect]
+[endmathpart]
 
 
 

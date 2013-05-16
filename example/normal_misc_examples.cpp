@@ -354,7 +354,7 @@ Fraction of packs >= 2.9 with a mean of 3 and standard deviation of 0.06 is 0.95
 Now we are getting really close, but to do the job properly,
 we could use root finding method, for example the tools provided, and used elsewhere,
 in the Math Toolkit, see
-[link math_toolkit.toolkit.internals1.roots2  Root Finding Without Derivatives].
+[link math_toolkit.internals1.roots2  Root Finding Without Derivatives].
 
 But in this normal distribution case, we could be even smarter and make a direct calculation.
 */

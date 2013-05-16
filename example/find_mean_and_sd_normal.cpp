@@ -117,7 +117,7 @@ cout << "Setting the packer to " << nominal_mean << " will mean that "
 
 /*`
 This calculation is generalized as the free function called
-[link math_toolkit.dist.dist_ref.dist_algorithms find_location].
+[link math_toolkit.dist_ref.dist_algorithms find_location].
 
 To use this we will need to
 */
@@ -205,9 +205,9 @@ are not too wide, typically about + and - 10% for hundreds of observations.
 For other applications, where it is more difficult or expensive to make many observations,
 the confidence intervals are depressingly wide.
 
-See [link math_toolkit.dist.stat_tut.weg.cs_eg.chi_sq_intervals Confidence Intervals on the standard deviation]
+See [link math_toolkit.stat_tut.weg.cs_eg.chi_sq_intervals Confidence Intervals on the standard deviation]
 for a worked example
-[@../../../example/chi_square_std_dev_test.cpp chi_square_std_dev_test.cpp]
+[@../../example/chi_square_std_dev_test.cpp chi_square_std_dev_test.cpp]
 of estimating these intervals.
 
 
@@ -262,7 +262,7 @@ cout <<"Fraction of packs >= " << minimum_weight << " with a mean of " << mean
 Now we are getting really close, but to do the job properly,
 we might need to use root finding method, for example the tools provided,
 and used elsewhere, in the Math Toolkit, see
-[link math_toolkit.toolkit.internals1.roots2  Root Finding Without Derivatives].
+[link math_toolkit.internals1.roots2  Root Finding Without Derivatives].
 
 But in this (normal) distribution case, we can and should be even smarter
 and make a direct calculation.
