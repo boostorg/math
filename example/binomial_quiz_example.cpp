@@ -148,7 +148,7 @@ it is tempting to use ``1 - cdf(quiz, 10)`` to get the probability of > 10
 [pre
 Probability of getting > 10 right (to pass) is 0.000285239
 ]
-But this should be resisted in favor of using the complement function. [link why_complements Why complements?]
+But this should be resisted in favor of using the __complements function (see __why_complements).
 */
   cout << "Probability of getting > 10 right (to pass) is " << cdf(complement(quiz, 10)) << endl;
 /*`
@@ -344,14 +344,11 @@ Deciles 1 to 6
 
 //[discrete_quantile_real
 /*`
-Quantiles values are controlled by the
-[link math_toolkit.pol_ref.discrete_quant_ref discrete quantile policy]
-chosen.
+Quantiles values are controlled by the __understand_dis_quant  quantile policy chosen.
 The default is `integer_round_outwards`,
 so the lower quantile is rounded down, and the upper quantile is rounded up.
 
-But we might believe that the real values tell us a little more - see
-[link math_toolkit.pol_tutorial.understand_dis_quant Understanding Discrete Quantile Policy].
+But we might believe that the real values tell us a little more - see __math_discrete.
 
 We could control the policy for *all* distributions by
 
