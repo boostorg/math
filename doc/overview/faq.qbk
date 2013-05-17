@@ -12,8 +12,9 @@ For example, `normal my_norm(0, 1);  pdf(my_norm, 2.0);` [br]
 #I'm a user of [@http://support.sas.com/rnd/app/da/new/probabilityfunctions.html New SAS Functions for Computing Probabilities]. [br]
 You will find the interface more familar, but to be able to select a distribution (perhaps using a string)
 see the Extras/Future Directions section,
-and /boost/libs/math/dot_net_example/boost_math.cpp for an example that is used to create a C# utility
-(that you might also find useful): see [@http://sourceforge.net/projects/distexplorer/ Statistical Distribution Explorer] [br].
+and /boost/libs/math/dot_net_example/boost_math.cpp for an example that is used to create a C# (C sharp) utility
+(that you might also find useful):
+see [@http://sourceforge.net/projects/distexplorer/ Statistical Distribution Explorer].[br]
 # ['I'm allegic to reading manuals and prefer to learn from examples.][br]
 Fear not - you are not alone! Many examples are available for functions and distributions.
 Some are referenced directly from the text.  Others can be found at \boost_latest_release\libs\math\example.
@@ -33,7 +34,7 @@ They are all available (if defined for the parameters with which you constructed
 # ['I am a C programmer.  Can I user Boost.Math with C?][br]
 Yes you can, including all the special functions, and TR1 functions like isnan.
 They appear as C functions, by being declared as "extern C".
-# ['I am a C# (Basic? F# FORTRAN?  Other CLI?) programmer.  Can I use Boost.Math with C#?] [br]
+# ['I am a C# (Basic? F# FORTRAN?  Other CLI?) programmer.  Can I use Boost.Math with C#? (or ...)?] [br]
 Yes you can, including all the special functions, and TR1 functions like isnan.
 But you [*must build the Boost.Math as a dynamic library (.dll) and compile with the /CLI option].
 See the boost/math/dot_net_example folder which contains an example that
@@ -69,8 +70,8 @@ You can also change the promotion policy, but accuracy might be much reduced.
 # ['I seem to get somewhat different results compared to other programs.  Why?]
 We hope Boost.Math to be more accurate: our priority is accuracy (over speed).
 See the section on accuracy. But for evaluations that require iterations
-there are parameters which can change the required accuracy.  You might be able to
-squeeze a little more accuracy at the cost of runtime.
+there are parameters which can change the required accuracy (see __policy_section).
+You might be able to squeeze a little more (or less) accuracy at the cost of runtime.
 # ['Will my program run more slowly compared to other math functions and statistical libraries?]
 Probably, thought not always, and not by too much:  our priority is accuracy.
 For most functions, making sure you have the latest compiler version with all optimisations switched on is the key to speed.

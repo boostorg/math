@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Find mean and standard deviation example</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../find_eg.html" title="Find Location and Scale Examples">
 <link rel="prev" href="find_scale_eg.html" title="Find Scale (Standard Deviation) Example">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="find_scale_eg.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../find_eg.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../nag_library.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section  math_toolkit_stat_tut_weg_find_eg_find_mean_and_sd_eg">
+<div class="section math_toolkit_stat_tut_weg_find_eg_find_mean_and_sd_eg">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.stat_tut.weg.find_eg.find_mean_and_sd_eg"></a><a class="link" href="find_mean_and_sd_eg.html" title="Find mean and standard deviation example">Find
           mean and standard deviation example</a>
@@ -130,7 +130,7 @@
 <span class="comment">// Setting the packer to 3.06449 will mean that fraction of packs &gt;= 2.9 is 0.95</span>
 </pre>
 <p>
-            This calculation is generalized as the free function called <a class="link" href="../../../dist_ref/dist_algorithms.html" title="Distribution Algorithms">find_location</a>.
+            This calculation is generalized as the free function called <code class="computeroutput"><span class="identifier">find_location</span></code>, see <a class="link" href="../../../dist_ref/dist_algorithms.html" title="Distribution Algorithms">algorithms</a>.
           </p>
 <p>
             To use this we will need to
@@ -310,8 +310,8 @@
 <p>
             Now we are getting really close, but to do the job properly, we might
             need to use root finding method, for example the tools provided, and
-            used elsewhere, in the Math Toolkit, see <a class="link" href="../../../internals1/roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748">Root
-            Finding Without Derivatives</a>.
+            used elsewhere, in the Math Toolkit, see <a class="link" href="../../../internals1/roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748">root-finding
+            without derivatives</a>
           </p>
 <p>
             But in this (normal) distribution case, we can and should be even smarter
@@ -332,7 +332,7 @@
 <p>
             Rearranging, we can directly calculate the required standard deviation:
           </p>
-<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">N01</span><span class="special">;</span> <span class="comment">// standard normal distribution with meamn zero and unit standard deviation.</span>
+<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">N01</span><span class="special">;</span> <span class="comment">// standard normal distribution with mean zero and unit standard deviation.</span>
 <span class="identifier">p</span> <span class="special">=</span> <span class="number">0.05</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">qp</span> <span class="special">=</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">N01</span><span class="special">,</span> <span class="identifier">p</span><span class="special">);</span>
 <span class="keyword">double</span> <span class="identifier">sd95</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">minimum_weight</span> <span class="special">-</span> <span class="identifier">mean</span><span class="special">)</span> <span class="special">/</span> <span class="identifier">qp</span><span class="special">;</span>
@@ -386,9 +386,10 @@
 <span class="comment">// find_scale&lt;normal&gt;(minimum_weight, under_fraction, packs.mean()); 0.0607957</span>
 </pre>
 <p>
-            But notice that using '1 - over_fraction' - will lead to a <a class="link" href="../../overview/complements.html#why_complements">loss
-            of accuracy, especially if over_fraction was close to unity.</a> In
-            this (very common) case, we should instead use the <a class="link" href="../../overview/complements.html" title="Complements are supported too - and when to use them">complements</a>,
+            But notice that using '1 - over_fraction' - will lead to a loss of accuracy,
+            especially if over_fraction was close to unity. (See <a class="link" href="../../overview/complements.html#why_complements">why
+            complements?</a>). In this (very common) case, we should instead use
+            the <a class="link" href="../../overview/complements.html" title="Complements are supported too - and when to use them">complements</a>,
             giving the most accurate result.
           </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">ssc</span> <span class="special">=</span> <span class="identifier">find_scale</span><span class="special">&lt;</span><span class="identifier">normal</span><span class="special">&gt;(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">minimum_weight</span><span class="special">,</span> <span class="identifier">over_fraction</span><span class="special">,</span> <span class="identifier">packs</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()));</span>

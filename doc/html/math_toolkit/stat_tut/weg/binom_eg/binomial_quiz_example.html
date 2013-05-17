@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Binomial Quiz Example</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../binom_eg.html" title="Binomial Distribution Examples">
 <link rel="prev" href="binomial_coinflip_example.html" title="Binomial Coin-Flipping Example">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="binomial_coinflip_example.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../binom_eg.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="binom_conf.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section  math_toolkit_stat_tut_weg_binom_eg_binomial_quiz_example">
+<div class="section math_toolkit_stat_tut_weg_binom_eg_binomial_quiz_example">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.stat_tut.weg.binom_eg.binomial_quiz_example"></a><a class="link" href="binomial_quiz_example.html" title="Binomial Quiz Example">Binomial
           Quiz Example</a>
@@ -159,8 +159,8 @@ Probability of getting exactly all 16 answers right by chance is 2.32831e-010
 <pre class="programlisting">Probability of getting &gt; 10 right (to pass) is 0.000285239
 </pre>
 <p>
-            But this should be resisted in favor of using the complement function.
-            <a class="link" href="../../overview/complements.html#why_complements">Why complements?</a>
+            But this should be resisted in favor of using the <a class="link" href="../../overview/complements.html" title="Complements are supported too - and when to use them">complements</a>
+            function (see <a class="link" href="../../overview/complements.html#why_complements">why complements?</a>).
           </p>
 <pre class="programlisting"><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability of getting &gt; 10 right (to pass) is "</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">quiz</span><span class="special">,</span> <span class="number">10</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 </pre>
@@ -361,15 +361,13 @@ Deciles 1 to 6
 2 to 98% 0 to 8
 </pre>
 <p>
-            Quantiles values are controlled by the <a class="link" href="../../../pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">discrete
-            quantile policy</a> chosen. The default is <code class="computeroutput"><span class="identifier">integer_round_outwards</span></code>,
-            so the lower quantile is rounded down, and the upper quantile is rounded
-            up.
+            Quantiles values are controlled by the <a class="link" href="../../../pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">understanding
+            discrete quantiles</a> quantile policy chosen. The default is <code class="computeroutput"><span class="identifier">integer_round_outwards</span></code>, so the lower
+            quantile is rounded down, and the upper quantile is rounded up.
           </p>
 <p>
             But we might believe that the real values tell us a little more - see
-            <a class="link" href="../../../pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
-            Discrete Quantile Policy</a>.
+            <a class="link" href="../../../pol_ref/discrete_quant_ref.html" title="Discrete Quantile Policies">discrete functions</a>.
           </p>
 <p>
             We could control the policy for <span class="bold"><strong>all</strong></span>

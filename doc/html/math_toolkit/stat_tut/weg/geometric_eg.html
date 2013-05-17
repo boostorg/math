@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Geometric Distribution Examples</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit">
 <link rel="up" href="../weg.html" title="Worked Examples">
 <link rel="prev" href="binom_eg/binom_size_eg.html" title="Estimating Sample Sizes for a Binomial Distribution.">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="binom_eg/binom_size_eg.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../weg.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="neg_binom_eg.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section  math_toolkit_stat_tut_weg_geometric_eg">
+<div class="section math_toolkit_stat_tut_weg_geometric_eg">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="math_toolkit.stat_tut.weg.geometric_eg"></a><a class="link" href="geometric_eg.html" title="Geometric Distribution Examples">Geometric Distribution
         Examples</a>
@@ -53,7 +53,7 @@
         </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">geometric</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
   <span class="comment">// for geometric_distribution</span>
-  <span class="keyword">using</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">geometric_distribution</span><span class="special">;</span> <span class="comment">// </span>
+  <span class="keyword">using</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">geometric_distribution</span><span class="special">;</span> <span class="comment">//</span>
   <span class="keyword">using</span> <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">geometric</span><span class="special">;</span> <span class="comment">// typedef provides default type is double.</span>
   <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">pdf</span><span class="special">;</span> <span class="comment">// Probability mass function.</span>
   <span class="keyword">using</span>  <span class="special">::</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">;</span> <span class="comment">// Cumulative density function.</span>
@@ -162,8 +162,11 @@
 <p>
           Note that the value returned is not an integer: if you want an integer
           result you should use either floor, round or ceil functions, or use the
-          policies mechanism. See <a class="link" href="../../pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">Understanding
-          Quantiles of Discrete Distributions</a>
+          policies mechanism.
+        </p>
+<p>
+          See <a class="link" href="../../pol_tutorial/understand_dis_quant.html" title="Understanding Quantiles of Discrete Distributions">understanding
+          discrete quantiles</a>.
         </p>
 <p>
           The geometric distribution is related to the negative binomial &#8192;&#8192; <code class="computeroutput"><span class="identifier">negative_binomial_distribution</span><span class="special">(</span><span class="identifier">RealType</span> <span class="identifier">r</span><span class="special">,</span> <span class="identifier">RealType</span>
@@ -207,7 +210,7 @@
 <span class="preprocessor">#endif</span>
   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Show all potentially significant decimal digits std::numeric_limits&lt;double&gt;::max_digits10 = "</span>
     <span class="special">&lt;&lt;</span> <span class="identifier">max_digits10</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-  <span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">max_digits10</span><span class="special">);</span> <span class="comment">// </span>
+  <span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">max_digits10</span><span class="special">);</span> <span class="comment">//</span>
 
     <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">cdf</span><span class="special">(</span><span class="identifier">g05</span><span class="special">,</span> <span class="number">0.0001</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span> <span class="comment">// returns 0.5000346561579232, not exact 0.5.</span>
 </pre>

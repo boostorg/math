@@ -124,7 +124,7 @@ will all work with that type, and that's about it.  If you want to use the distr
 functions then you will need to provide your own wrapper header that:
 
 * Provides std::numeric_limits<__float128> support.
-* Provides overloads of the standard library math function for type __float128 and which forward to the libquadmath equivalents.
+* Provides overloads of the standard library math function for type `__float128`and which forward to the libquadmath equivalents.
 
 Ultimately these facilities should be provided by GCC and libstdc++.
 

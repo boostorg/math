@@ -36,21 +36,21 @@
 [include uniform.qbk]
 [include weibull.qbk]
 
-[endsect][/section:dists Distributions]
+[endsect] [/section:dists Distributions]
 
 [include dist_algorithms.qbk]
 
-[endsect][/section:dist_ref Statistical Distributions and Functions Reference]
+[endsect] [/section:dist_ref Statistical Distributions and Functions Reference]
 
 
 [section:future Extras/Future Directions]
 
-[h4 Adding Additional Location and Scale Parameters] 
+[h4 Adding Additional Location and Scale Parameters]
 
 In some modelling applications we require a distribution
 with a specific location and scale:
 often this equates to a specific mean and standard deviation, although for many
-distributions the relationship between these properties and the location and 
+distributions the relationship between these properties and the location and
 scale parameters are non-trivial. See
 [@http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm]
 for more information.
@@ -61,7 +61,7 @@ The obvious way to handle this is via an adapter template:
   class scaled_distribution
   {
      scaled_distribution(
-       const Dist dist, 
+       const Dist dist,
        typename Dist::value_type location,
        typename Dist::value_type scale = 0);
   };
@@ -81,20 +81,20 @@ that conforms to the conceptual requirements of a distribution:
       template <class Distribution>
       any_distribution(const Distribution& d);
    };
-   
+
    // Get the cdf of the underlying distribution:
    template <class RealType>
    RealType cdf(const any_distribution<RealType>& d, RealType x);
    // etc....
-   
-Such a class would facilitate the writing of non-template code that can 
+
+Such a class would facilitate the writing of non-template code that can
 function with any distribution type.
 
 The [@http://sourceforge.net/projects/distexplorer/ Statistical Distribution Explorer]
 utility for Windows is a usage example.
 
 It's not clear yet whether there is a compelling use case though.
-Possibly tests for goodness of fit might 
+Possibly tests for goodness of fit might
 provide such a use case: this needs more investigation.
 
 [h4 Higher Level Hypothesis Tests]

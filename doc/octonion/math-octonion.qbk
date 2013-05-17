@@ -30,7 +30,7 @@ is that [*the multiplication is not only not commutative, is now not even
 associative] (i.e. there are octonions ['[^x]], ['[^y]] and ['[^z]] such that __oct_not_equal).
 A way of remembering things is by using the following multiplication table:
 
-[$../../../octonion/graphics/octonion_blurb17.jpeg]
+[$../../octonion/graphics/octonion_blurb17.jpeg]
 
 Octonions (and their kin) are described in far more details in this other
 [@../../quaternion/TQE.pdf document]

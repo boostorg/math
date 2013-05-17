@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Frequently Asked Questions FAQ</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit">
 <link rel="up" href="../overview.html" title="Chapter&#160;1.&#160;Overview">
 <link rel="prev" href="overview_tr1.html" title="C99 and C++ TR1 C-style Functions">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="overview_tr1.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../overview.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="contact.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section  math_toolkit_main_faq">
+<div class="section math_toolkit_main_faq">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="math_toolkit.main_faq"></a><a class="link" href="main_faq.html" title="Frequently Asked Questions FAQ">Frequently Asked Questions FAQ</a>
 </h2></div></div></div>
@@ -45,9 +45,9 @@
           SAS Functions for Computing Probabilities</a>. <br> You will find
           the interface more familar, but to be able to select a distribution (perhaps
           using a string) see the Extras/Future Directions section, and /boost/libs/math/dot_net_example/boost_math.cpp
-          for an example that is used to create a C# utility (that you might also
-          find useful): see <a href="http://sourceforge.net/projects/distexplorer/" target="_top">Statistical
-          Distribution Explorer</a> <br> .
+          for an example that is used to create a C# (C sharp) utility (that you
+          might also find useful): see <a href="http://sourceforge.net/projects/distexplorer/" target="_top">Statistical
+          Distribution Explorer</a>.<br>
         </li>
 <li class="listitem">
           <span class="emphasis"><em>I'm allegic to reading manuals and prefer to learn from examples.</em></span><br>
@@ -91,12 +91,11 @@
         </li>
 <li class="listitem">
           <span class="emphasis"><em>I am a C# (Basic? F# FORTRAN? Other CLI?) programmer. Can I use
-          Boost.Math with C#?</em></span> <br> Yes you can, including all the special
-          functions, and TR1 functions like isnan. But you <span class="bold"><strong>must
-          build the Boost.Math as a dynamic library (.dll) and compile with the /CLI
-          option</strong></span>. See the boost/math/dot_net_example folder which contains
-          an example that builds a simple statistical distribution app with a GUI.
-          See <a href="http://sourceforge.net/projects/distexplorer/" target="_top">Statistical
+          Boost.Math with C#? (or ...)?</em></span> <br> Yes you can, including
+          all the special functions, and TR1 functions like isnan. But you <span class="bold"><strong>must build the Boost.Math as a dynamic library (.dll) and compile
+          with the /CLI option</strong></span>. See the boost/math/dot_net_example folder
+          which contains an example that builds a simple statistical distribution
+          app with a GUI. See <a href="http://sourceforge.net/projects/distexplorer/" target="_top">Statistical
           Distribution Explorer</a> <br>
         </li>
 <li class="listitem">
@@ -160,8 +159,8 @@
           Why?</em></span> We hope Boost.Math to be more accurate: our priority is
           accuracy (over speed). See the section on accuracy. But for evaluations
           that require iterations there are parameters which can change the required
-          accuracy. You might be able to squeeze a little more accuracy at the cost
-          of runtime.
+          accuracy (see <a class="link" href="../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>). You might be able
+          to squeeze a little more (or less) accuracy at the cost of runtime.
         </li>
 <li class="listitem">
           <span class="emphasis"><em>Will my program run more slowly compared to other math functions

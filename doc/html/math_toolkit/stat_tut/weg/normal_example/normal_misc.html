@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Some Miscellaneous Examples of the Normal (Gaussian) Distribution</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../../index.html" title="Math Toolkit">
 <link rel="up" href="../normal_example.html" title="Normal Distribution Examples">
 <link rel="prev" href="../normal_example.html" title="Normal Distribution Examples">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="../normal_example.html"><img src="../../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../normal_example.html"><img src="../../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../inverse_chi_squared_eg.html"><img src="../../../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section  math_toolkit_stat_tut_weg_normal_example_normal_misc">
+<div class="section math_toolkit_stat_tut_weg_normal_example_normal_misc">
 <div class="titlepage"><div><div><h5 class="title">
 <a name="math_toolkit.stat_tut.weg.normal_example.normal_misc"></a><a class="link" href="normal_misc.html" title="Some Miscellaneous Examples of the Normal (Gaussian) Distribution">Some
           Miscellaneous Examples of the Normal (Gaussian) Distribution</a>
@@ -61,7 +61,7 @@
 <p>
             Let's start by printing some traditional tables.
           </p>
-<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">step</span> <span class="special">=</span> <span class="number">1.</span><span class="special">;</span> <span class="comment">// in z </span>
+<pre class="programlisting"><span class="keyword">double</span> <span class="identifier">step</span> <span class="special">=</span> <span class="number">1.</span><span class="special">;</span> <span class="comment">// in z</span>
 <span class="keyword">double</span> <span class="identifier">range</span> <span class="special">=</span> <span class="number">4</span><span class="special">;</span> <span class="comment">// min and max z = -range to +range.</span>
 <span class="keyword">int</span> <span class="identifier">precision</span> <span class="special">=</span> <span class="number">17</span><span class="special">;</span> <span class="comment">// traditional tables are only computed to much lower precision.</span>
 <span class="comment">// but std::numeric_limits&lt;double&gt;::max_digits10; on new Standard Libraries gives</span>
@@ -91,7 +91,7 @@
             And the area under the normal curve from -&#8734; up to z, the cumulative distribution
             function (cdf).
           </p>
-<pre class="programlisting"><span class="comment">// For a standard normal distribution </span>
+<pre class="programlisting"><span class="comment">// For a standard normal distribution</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Standard normal mean = "</span><span class="special">&lt;&lt;</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">mean</span><span class="special">()</span>
   <span class="special">&lt;&lt;</span> <span class="string">", standard deviation = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">standard_deviation</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Integral (area under the curve) from - infinity up to z "</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
@@ -166,7 +166,7 @@
 <span class="keyword">for</span> <span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">)/</span><span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">alpha</span><span class="special">[</span><span class="number">0</span><span class="special">]);</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span>
 <span class="special">{</span>
   <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">15</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">15</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]</span> <span class="special">/</span><span class="number">2</span> <span class="special">&lt;&lt;</span> <span class="identifier">setw</span><span class="special">(</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">quantile</span><span class="special">(</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span>  <span class="identifier">alpha</span><span class="special">[</span><span class="identifier">i</span><span class="special">]/</span><span class="number">2</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
-  <span class="comment">// Use quantile(complement(s, alpha[i]/2)) to avoid potential loss of accuracy from quantile(s,  1 - alpha[i]/2) </span>
+  <span class="comment">// Use quantile(complement(s, alpha[i]/2)) to avoid potential loss of accuracy from quantile(s,  1 - alpha[i]/2)</span>
 <span class="special">}</span>
 <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
 </pre>
@@ -433,14 +433,14 @@ Fraction 3 standard deviations within either side of mean is 0.997300203936740
 <p>
             Now we are getting really close, but to do the job properly, we could
             use root finding method, for example the tools provided, and used elsewhere,
-            in the Math Toolkit, see <a class="link" href="../../../internals1/roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748">Root
-            Finding Without Derivatives</a>.
+            in the Math Toolkit, see <a class="link" href="../../../internals1/roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748">root-finding
+            without derivatives</a>.
           </p>
 <p>
             But in this normal distribution case, we could be even smarter and make
             a direct calculation.
           </p>
-<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">s</span><span class="special">;</span> <span class="comment">// For standard normal distribution, </span>
+<pre class="programlisting"><span class="identifier">normal</span> <span class="identifier">s</span><span class="special">;</span> <span class="comment">// For standard normal distribution,</span>
 <span class="keyword">double</span> <span class="identifier">sd</span> <span class="special">=</span> <span class="number">0.1</span><span class="special">;</span>
 <span class="keyword">double</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">2.9</span><span class="special">;</span> <span class="comment">// Our required limit.</span>
 <span class="comment">// then probability p = N((x - mean) / sd)</span>
