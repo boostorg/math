@@ -3,7 +3,7 @@
 
 [section:what_is_a_policy So Just What is a Policy Anyway?]
 
-A policy is a compile-time mechanism for customising the behaviour of a 
+A policy is a compile-time mechanism for customising the behaviour of a
 special function, or a statistical distribution.  With Policies you can
 control:
 
@@ -19,8 +19,8 @@ Some of these policies could arguably be runtime variables, but then we couldn't
 use compile-time dispatch internally to select the best evaluation method
 for the given policies.
 
-For this reason a Policy is a /type/: in fact it's an instance of the 
-class template `boost::math::policies::policy<>`.  This class is just a 
+For this reason a Policy is a /type/: in fact it's an instance of the
+class template `boost::math::policies::policy<>`.  This class is just a
 compile-time-container of user-selected policies (sometimes called a type-list):
 
    using namespace boost::math::policies;
@@ -30,7 +30,7 @@ compile-time-container of user-selected policies (sometimes called a type-list):
    //
    typedef policy<domain_error<errno_on_error>, promote_double<false> > mypolicy;
 
-[endsect][/section:what_is_a_policy So Just What is a Policy Anyway?]
+[endsect] [/section:what_is_a_policy So Just What is a Policy Anyway?]
 
 [section:policy_tut_defaults Policies Have Sensible Defaults]
 
@@ -51,7 +51,7 @@ if these work OK for you then you can stop reading now!]
 [[Promotion of float to double][Does occur by default - gives full float precision results.]]
 [[Promotion of double to long double][Does occur by default if long double offers
    more precision than double.]]
-[[Precision of Approximation Used][By default uses an approximation that 
+[[Precision of Approximation Used][By default uses an approximation that
    will result in the lowest level of error for the type of the result.]]
 [[Behaviour of Discrete Quantiles]
    [
@@ -64,13 +64,13 @@ if these work OK for you then you can stop reading now!]
    the requested coverage will be present in the tails.
 
 This behaviour can be changed so that the quantile functions are rounded
-   differently, or even return a real-valued result using 
+   differently, or even return a real-valued result using
    [link math_toolkit.pol_overview Policies].  It is strongly
-   recommended that you read the tutorial 
+   recommended that you read the tutorial
    [link math_toolkit.pol_tutorial.understand_dis_quant
    Understanding Quantiles of Discrete Distributions] before
    using the quantile function on a discrete distribution.  The
-   [link math_toolkit.pol_ref.discrete_quant_ref reference docs] 
+   [link math_toolkit.pol_ref.discrete_quant_ref reference docs]
    describe how to change the rounding policy
    for these distributions.
 ]]
@@ -95,7 +95,7 @@ then `mypolicy` defines a policy where only the overflow error handling and
 
 The details follow later, but basically policies can be set by either:
 
-* Defining some macros that change the default behaviour: [*this is the 
+* Defining some macros that change the default behaviour: [*this is the
    recommended method for setting installation-wide policies].
 * By instantiating a distribution object with an explicit policy:
    this is mainly reserved for ad hoc policy changes.
@@ -108,7 +108,7 @@ basis].
 
 The following sections introduce these methods in more detail.
 
-[endsect][/section:policy_usage So How are Policies Used Anyway?]
+[endsect] [/section:policy_usage So How are Policies Used Anyway?]
 
 [section:changing_policy_defaults Changing the Policy Defaults]
 
@@ -131,7 +131,7 @@ that may mean that the equivalent definitions in source code:
 
 ``#define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error``
-  
+
 *may be ignored*.
 
 The compiler command line shows:
@@ -144,7 +144,7 @@ There is however a very important caveat to this:
 
 [important
 [*['Default policies changed by setting configuration macros must be changed
-uniformly in every translation unit in the program.]] 
+uniformly in every translation unit in the program.]]
 
 Failure to follow this rule may result in violations of the "One
 Definition Rule (ODR)" and result in unpredictable program behaviour.]
@@ -170,7 +170,7 @@ translation unit only: ['don't say that you weren't warned!]
 
 [error_handling_example]
 
-[endsect][/section:changing_policy_defaults Changing the Policy Defaults]
+[endsect] [/section:changing_policy_defaults Changing the Policy Defaults]
 
 [section:ad_hoc_dist_policies Setting Policies for Distributions on an Ad Hoc Basis]
 
@@ -180,14 +180,14 @@ real type (float, double ...) and policy (how to handle exceptional events),
 both with sensible defaults, for example:
 
    namespace boost{ namespace math{
-   
+
    template <class RealType = double, class Policy = policies::policy<> >
    class fisher_f_distribution;
-   
+
    typedef fisher_f_distribution<> fisher_f;
-   
+
    }}
-   
+
 This policy gets used by all the accessor functions that accept
 a distribution as an argument, and forwarded to all the functions called
 by these.  So if you use the shorthand-typedef for the distribution, then you get
@@ -214,15 +214,15 @@ All of the special functions in this library come in two overloaded forms,
 one with a final "policy" parameter, and one without.  For example:
 
    namespace boost{ namespace math{
-   
+
    template <class RealType, class Policy>
    RealType tgamma(RealType, const Policy&);
-   
+
    template <class RealType>
    RealType tgamma(RealType);
-   
+
    }} // namespaces
-   
+
 Normally, the second version is just a forwarding wrapper to the first
 like this:
 
@@ -245,7 +245,7 @@ throw an exception:
 
 which outputs:
 
-[pre 
+[pre
 Result of tgamma(30000) is: 1.#INF
 errno = 34
 Result of tgamma(-10) is: 1.#QNAN
@@ -261,11 +261,11 @@ to be used once only:
 
 [policy_eg_2]
 
-[endsect][/section:ad_hoc_sf_policies Changing the Policy on an Ad Hoc Basis for the Special Functions]
+[endsect] [/section:ad_hoc_sf_policies Changing the Policy on an Ad Hoc Basis for the Special Functions]
 
 [section:namespace_policies Setting Policies at Namespace or Translation Unit Scope]
 
-Sometimes what you want to do is just change a set of policies within 
+Sometimes what you want to do is just change a set of policies within
 the current scope: *the one thing you should not do in this situation
 is use the configuration macros*, as this can lead to "One Definition
 Rule" violations.  Instead this library provides a pair of macros
@@ -274,16 +274,16 @@ especially for this purpose.
 Let's consider the special functions first: we can declare a set of
 forwarding functions that all use a specific policy using the
 macro BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(['Policy]).  This
-macro should be used either inside a unique namespace set aside for the 
+macro should be used either inside a unique namespace set aside for the
 purpose (for example, a C namespace for a C-style policy),
 or an unnamed namespace if you just want the functions
-visible in global scope for the current file only.  
+visible in global scope for the current file only.
 
 [import ../../example/policy_eg_4.cpp]
 
 [policy_eg_4]
 
-The same mechanism works well at file scope as well, by using an unnamed 
+The same mechanism works well at file scope as well, by using an unnamed
 namespace, we can ensure that these declarations don't conflict with any
 alternate policies present in other translation units:
 
@@ -296,12 +296,12 @@ the macro BOOST_MATH_DECLARE_DISTRIBUTIONS accepts two parameters: the
 floating point type to use, and the policy type to apply.  For example:
 
    BOOST_MATH_DECLARE_DISTRIBUTIONS(double, mypolicy)
-   
+
 Results a set of typedefs being defined like this:
 
    typedef boost::math::normal_distribution<double, mypolicy> normal;
-   
-The name of each typedef is the same as the name of the distribution 
+
+The name of each typedef is the same as the name of the distribution
 class template, but without the "_distribution" suffix.
 
 [import ../../example/policy_eg_6.cpp]
@@ -315,7 +315,7 @@ BOOST_MATH_DECLARE_DISTRIBUTIONS and BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS
 and distributions of the same name.
 ]
 
-As before, the same mechanism works well at file scope as well: by using an unnamed 
+As before, the same mechanism works well at file scope as well: by using an unnamed
 namespace, we can ensure that these declarations don't conflict with any
 alternate policies present in other translation units:
 
@@ -335,18 +335,18 @@ alternate policies present in other translation units:
 
 [policy_eg_9]
 
-[endsect][/section:user_def_err_pol Calling User Defined Error Handlers]
+[endsect] [/section:user_def_err_pol Calling User Defined Error Handlers]
 
 [section:understand_dis_quant Understanding Quantiles of Discrete Distributions]
 
-Discrete distributions present us with a problem when calculating the 
+Discrete distributions present us with a problem when calculating the
 quantile: we are starting from a continuous real-valued variable - the
 probability - but the result (the value of the random variable)
 should really be discrete.
 
 Consider for example a Binomial distribution, with a sample size of
 50, and a success fraction of 0.5.  There are a variety of ways
-we can plot a discrete distribution, but if we plot the PDF 
+we can plot a discrete distribution, but if we plot the PDF
 as a step-function then it looks something like this:
 
 [$../graphs/binomial_pdf.png]
@@ -358,7 +358,7 @@ what we see:
 [$../graphs/binomial_quantile_1.png]
 
 As can be seen there is no random variable that corresponds to
-a probability of exactly 0.05, so we're left with two choices as 
+a probability of exactly 0.05, so we're left with two choices as
 shown in the figure:
 
 * We could round the result down to 18.
@@ -366,7 +366,7 @@ shown in the figure:
 
 In fact there's actually a third choice as well: we could "pretend" that the
 distribution was continuous and return a real valued result: in this case we
-would calculate a result of approximately 18.701 (this accurately 
+would calculate a result of approximately 18.701 (this accurately
 reflects the fact that the result is nearer to 19 than 18).
 
 By using policies we can offer any of the above as options, but that
@@ -386,7 +386,7 @@ then we can reject our null-hypothesis with 90% confidence."]
 So there is a genuine benefit to calculating an integer result
 as well as it being "the right thing to do" from a philosophical
 point of view.  What's more if someone asks for a quantile at 0.05,
-then we can normally assume that they are asking for 
+then we can normally assume that they are asking for
 ['[*at least] 95% of the probability to the right of the value chosen,
 and [*no more than] 5% of the probability to the left of the value chosen.]
 
@@ -397,7 +397,7 @@ The converse applies to upper-quantiles: If the probability is greater than
 probability is to the left of the value returned, and [*no more than] 1 - the
 requested probability is to the right of the value returned.]
 
-Likewise for two-sided intervals, we would round lower quantiles down, 
+Likewise for two-sided intervals, we would round lower quantiles down,
 and upper quantiles up.  This ensures that we have ['at least the requested
 probability in the central region] and ['no more than 1 minus the requested
 probability in the tail areas.]
@@ -412,12 +412,12 @@ for the 0.05 and 0.95 quantiles with the results ['rounded outwards] so that
 So far so good, but there is in fact a trap waiting for the unwary here:
 
    quantile(binomial(50, 0.5), 0.05);
-   
+
 returns 18 as the result, which is what we would expect from the graph above,
 and indeed there is no x greater than 18 for which:
 
    cdf(binomial(50, 0.5), x) <= 0.05;
-   
+
 However:
 
    quantile(binomial(50, 0.5), 0.95);
@@ -425,17 +425,17 @@ However:
 returns 31, and indeed while there is no x less than 31 for which:
 
    cdf(binomial(50, 0.5), x) >= 0.95;
-   
+
 We might naively expect that for this symmetrical distribution the result
 would be 32 (since 32 = 50 - 18), but we need to remember that the cdf of
-the binomial is /inclusive/ of the random variable.  So while the left tail 
+the binomial is /inclusive/ of the random variable.  So while the left tail
 area /includes/ the quantile returned, the right tail area always excludes
 an upper quantile value: since that "belongs" to the central area.
 
 Look at the graph above to see what's going on here: the lower quantile
 of 18 belongs to the left tail, so any value <= 18 is in the left tail.
 The upper quantile of 31 on the other hand belongs to the central area,
-so the tail area actually starts at 32, so any value > 31 is in the 
+so the tail area actually starts at 32, so any value > 31 is in the
 right tail.
 
 Therefore if U and L are the upper and lower quantiles respectively, then
@@ -443,13 +443,13 @@ a random variable X is in the tail area - where we would reject the null
 hypothesis if:
 
    X <= L || X > U
-   
+
 And the a variable X is inside the central region if:
 
    L < X <= U
-   
+
 The moral here is to ['always be very careful with your comparisons
-when dealing with a discrete distribution], and if in doubt, 
+when dealing with a discrete distribution], and if in doubt,
 ['base your comparisons on CDF's instead].
 
 [heading Other Rounding Policies are Available]
@@ -461,18 +461,18 @@ to know that other rounding options are available:
 
 [[integer_round_outwards]
    [This is the default policy as described above: lower quantiles
-   are rounded down (probability < 0.5), and upper quantiles 
+   are rounded down (probability < 0.5), and upper quantiles
    (probability > 0.5) are rounded up.
-   
+
    This gives /no more than/ the requested probability
    in the tails, and /at least/ the requested probability
    in the central area.]]
 [[integer_round_inwards]
    [This is the exact opposite of the default policy:
    lower quantiles
-   are rounded up (probability < 0.5), 
+   are rounded up (probability < 0.5),
    and upper quantiles (probability > 0.5) are rounded down.
-   
+
    This gives /at least/ the requested probability
    in the tails, and /no more than/ the requested probability
    in the central area.]]
@@ -480,7 +480,7 @@ to know that other rounding options are available:
    no matter whether it is an upper or lower quantile]]
 [[integer_round_up][This policy will always round the result up
    no matter whether it is an upper or lower quantile]]
-[[integer_round_nearest][This policy will always round the result 
+[[integer_round_nearest][This policy will always round the result
    to the nearest integer
    no matter whether it is an upper or lower quantile]]
 [[real][This policy will return a real valued result
@@ -496,11 +496,11 @@ to know that other rounding options are available:
 
 [endsect]
 
-[endsect][/section:pol_Tutorial Policy Tutorial]
+[endsect] [/section:pol_Tutorial Policy Tutorial]
 
 
 [/ math.qbk
-  Copyright 2007 John Maddock and Paul A. Bristow.
+  Copyright 2007, 2013 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
