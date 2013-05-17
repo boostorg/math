@@ -63,7 +63,7 @@ and we need some std library iostream, of course.
   using std::cout; using std::endl;
   using std::noshowpoint; using std::fixed; using std::right; using std::left;
 #include <iomanip>
-  using std::setprecision; using std::setw; 
+  using std::setprecision; using std::setw;
 
 #include <limits>
   using std::numeric_limits;
@@ -71,13 +71,13 @@ and we need some std library iostream, of course.
 
 int main()
 {
-  cout <<"Selling candy bars - using the negative binomial distribution." 
+  cout <<"Selling candy bars - using the negative binomial distribution."
     << "\nby Dr. Diane Evans,"
     "\nProfessor of Mathematics at Rose-Hulman Institute of Technology,"
     << "\nsee http://en.wikipedia.org/wiki/Negative_binomial_distribution\n"
     << endl;
   cout << endl;
-  cout.precision(5); 
+  cout.precision(5);
   // None of the values calculated have a useful accuracy as great this, but
   // INF shows wrongly with < 5 !
   // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=240227
@@ -122,7 +122,7 @@ To confirm, display the success_fraction & successes parameters of the distribut
 
     int all_houses = 30; // The number of houses on the estate.
 
-    cout << "With a success rate of " << nb.success_fraction() 
+    cout << "With a success rate of " << nb.success_fraction()
       << ", he might expect, on average,\n"
         "to need to visit about " << success_fraction * all_houses
         << " houses in order to sell all " << nb.successes() << " bars. " << endl;
@@ -131,14 +131,13 @@ To confirm, display the success_fraction & successes parameters of the distribut
 Pat has a sales per house success rate of 0.4.
 Therefore he would, on average, sell 40 bars after trying 100 houses.
 With a success rate of 0.4, he might expect, on average,
-to need to visit about 12 houses in order to sell all 5 bars. 
+to need to visit about 12 houses in order to sell all 5 bars.
 ]
 
 The random variable of interest is the number of houses
 that must be visited to sell five candy bars,
 so we substitute k = n - 5 into a negative_binomial(5, 0.4)
-and obtain the [link math_toolkit.dist_ref.nmp.pdf probability mass (density) function (pdf or pmf)]
-of the distribution of houses visited.
+and obtain the __pdf of the distribution of houses visited.
 Obviously, the best possible case is that Pat makes sales on all the first five houses.
 
 We calculate this using the pdf function:
@@ -182,7 +181,7 @@ pdf(sales_quota) + pdf(6) + pdf(7) + pdf(8) = 0.17367
 ]
 
 Or, usually better, by using the negative binomial *cumulative* distribution function.
-*/    
+*/
     cout << "\nProbability of selling his quota of " << sales_quota
       << " bars\non or before the " << 8 << "th house is "
       << cdf(nb, 8 - sales_quota) << endl;
@@ -222,14 +221,14 @@ on or before the 12th house is 0.56182
 ]
 Finally consider the risk of Pat not selling his quota of 5 bars
 even after visiting all the houses.
-Calculate the probability that he /will/ sell on 
+Calculate the probability that he /will/ sell on
 or before the last house:
 Calculate the probability that he would sell all his quota on the very last house.
 */
     cout << "Probability that Pat finishes on the " << all_houses
       << " house is " << pdf(nb, all_houses - sales_quota) << endl;
 /*`
-Probability of selling his quota of 5 bars on the 30th house is 
+Probability of selling his quota of 5 bars on the 30th house is
 [pre
 Probability that Pat finishes on the 30 house is 0.00069145
 ]
@@ -237,7 +236,7 @@ when he'd be very unlucky indeed!
 
 What is the probability that Pat exhausts all 30 houses in the neighborhood,
 and *still* doesn't sell the required 5 candy bars?
-*/  
+*/
     cout << "\nProbability of selling his quota of " << sales_quota
       << " bars\non or before the " << all_houses << "th house is "
       << cdf(nb, all_houses - sales_quota) << endl;
@@ -252,10 +251,9 @@ on or before the 30th house is 0.99849
 But using this expression may cause serious inaccuracy,
 so it would be much better to use the complement of the cdf:
 So the risk of failing even at, or after, the 31th (non-existent) houses is 1 - this probability,
-  ``1 - cdf(nb, all_houses - sales_quota)`` 
-But using this expression may cause serious inaccuracy. 
-So it would be much better to use the complement of the cdf.
-[link why_complements Why complements?]
+  ``1 - cdf(nb, all_houses - sales_quota)``
+But using this expression may cause serious inaccuracy.
+So it would be much better to use the __complement of the cdf (see __why_complements).
 */
     cout << "\nProbability of failing to sell his quota of " << sales_quota
       << " bars\neven after visiting all " << all_houses << " houses is "
@@ -268,7 +266,7 @@ even after visiting all 30 houses is 0.0015101
 We can also use the quantile (percentile), the inverse of the cdf, to
 predict which house Pat will finish on.  So for the 8th house:
 */
- double p = cdf(nb, (8 - sales_quota)); 
+ double p = cdf(nb, (8 - sales_quota));
  cout << "Probability of meeting sales quota on or before 8th house is "<< p << endl;
 /*`
 [pre
@@ -317,7 +315,7 @@ the result can be an 'unreal' fractional house.
 If the opposite is true, we don't want to assume any confidence, then this is tantamount
 to assuming that all the first sales_quota trials will be successful sales.
 */
-    cout << "If confidence of meeting quota is zero\n(we assume all houses are successful sales)" 
+    cout << "If confidence of meeting quota is zero\n(we assume all houses are successful sales)"
       ", then finishing house is " << sales_quota << endl;
 /*`
 [pre
@@ -381,31 +379,31 @@ Finally, we can tabulate the probability for the last sale being exactly on each
 /*`
 [pre
 House for 5 th (last) sale.  Probability (%)
-5                               0.01024 
-6                               0.04096 
+5                               0.01024
+6                               0.04096
 7                               0.096256
-8                               0.17367 
-9                               0.26657 
-10                              0.3669  
-11                              0.46723 
-12                              0.56182 
-13                              0.64696 
-14                              0.72074 
-15                              0.78272 
-16                              0.83343 
-17                              0.874   
-18                              0.90583 
-19                              0.93039 
-20                              0.94905 
-21                              0.96304 
-22                              0.97342 
-23                              0.98103 
-24                              0.98655 
-25                              0.99053 
-26                              0.99337 
-27                              0.99539 
-28                              0.99681 
-29                              0.9978  
+8                               0.17367
+9                               0.26657
+10                              0.3669
+11                              0.46723
+12                              0.56182
+13                              0.64696
+14                              0.72074
+15                              0.78272
+16                              0.83343
+17                              0.874
+18                              0.90583
+19                              0.93039
+20                              0.94905
+21                              0.96304
+22                              0.97342
+23                              0.98103
+24                              0.98655
+25                              0.99053
+26                              0.99337
+27                              0.99539
+28                              0.99681
+29                              0.9978
 30                              0.99849
 ]
 
@@ -441,12 +439,12 @@ see http://en.wikipedia.org/wiki/Negative_binomial_distribution
 Pat has a sales per house success rate of 0.4.
 Therefore he would, on average, sell 40 bars after trying 100 houses.
 With a success rate of 0.4, he might expect, on average,
-to need to visit about 12 houses in order to sell all 5 bars. 
+to need to visit about 12 houses in order to sell all 5 bars.
 Probability that Pat finishes on the 5th house is 0.01024
 Probability that Pat finishes on the 6th house is 0.03072
 Probability that Pat finishes on the 7th house is 0.055296
 Probability that Pat finishes on the 8th house is 0.077414
-Probability that Pat finishes on or before the 8th house is sum 
+Probability that Pat finishes on or before the 8th house is sum
 pdf(sales_quota) + pdf(6) + pdf(7) + pdf(8) = 0.17367
 Probability of selling his quota of 5 bars
 on or before the 8th house is 0.17367
@@ -485,32 +483,32 @@ If confidence of meeting quota is 0.99, then finishing house is 24.8
 If confidence of meeting quota is 0.999, then finishing house is 31.1
 If confidence of meeting quota is 1, then finishing house is 1.#J
 House for 5th (last) sale.  Probability (%)
-5                               0.01024 
-6                               0.04096 
+5                               0.01024
+6                               0.04096
 7                               0.096256
-8                               0.17367 
-9                               0.26657 
-10                              0.3669  
-11                              0.46723 
-12                              0.56182 
-13                              0.64696 
-14                              0.72074 
-15                              0.78272 
-16                              0.83343 
-17                              0.874   
-18                              0.90583 
-19                              0.93039 
-20                              0.94905 
-21                              0.96304 
-22                              0.97342 
-23                              0.98103 
-24                              0.98655 
-25                              0.99053 
-26                              0.99337 
-27                              0.99539 
-28                              0.99681 
-29                              0.9978  
-30                              0.99849 
+8                               0.17367
+9                               0.26657
+10                              0.3669
+11                              0.46723
+12                              0.56182
+13                              0.64696
+14                              0.72074
+15                              0.78272
+16                              0.83343
+17                              0.874
+18                              0.90583
+19                              0.93039
+20                              0.94905
+21                              0.96304
+22                              0.97342
+23                              0.98103
+24                              0.98655
+25                              0.99053
+26                              0.99337
+27                              0.99539
+28                              0.99681
+29                              0.9978
+30                              0.99849
 
 */
 

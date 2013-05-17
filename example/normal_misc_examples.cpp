@@ -36,8 +36,8 @@ int main()
   {
     { // Traditional tables and values.
 /*`Let's start by printing some traditional tables.
-*/      
-      double step = 1.; // in z 
+*/
+      double step = 1.; // in z
       double range = 4; // min and max z = -range to +range.
       int precision = 17; // traditional tables are only computed to much lower precision.
       // but std::numeric_limits<double>::max_digits10; on new Standard Libraries gives
@@ -57,28 +57,28 @@ int main()
       cout.precision(5);
       for (double z = -range; z < range + step; z += step)
       {
-        cout << left << setprecision(3) << setw(6) << z << " " 
+        cout << left << setprecision(3) << setw(6) << z << " "
           << setprecision(precision) << setw(12) << pdf(s, z) << endl;
       }
       cout.precision(6); // default
       /*`And the area under the normal curve from -[infin] up to z,
       the cumulative distribution function (cdf).
 */
-      // For a standard normal distribution 
+      // For a standard normal distribution
       cout << "Standard normal mean = "<< s.mean()
         << ", standard deviation = " << s.standard_deviation() << endl;
       cout << "Integral (area under the curve) from - infinity up to z " << endl;
       cout << "  z " "      cdf " << endl;
       for (double z = -range; z < range + step; z += step)
       {
-        cout << left << setprecision(3) << setw(6) << z << " " 
+        cout << left << setprecision(3) << setw(6) << z << " "
           << setprecision(precision) << setw(12) << cdf(s, z) << endl;
       }
       cout.precision(6); // default
 
 /*`And all this you can do with a nanoscopic amount of work compared to
 the team of *human computers* toiling with Milton Abramovitz and Irene Stegen
-at the US National Bureau of Standards (now [@http://www.nist.gov NIST]). 
+at the US National Bureau of Standards (now [@http://www.nist.gov NIST]).
 Starting in 1938, their "Handbook of Mathematical Functions with Formulas, Graphs and Mathematical Tables",
 was eventually published in 1964, and has been reprinted numerous times since.
 (A major replacement is planned at [@http://dlmf.nist.gov Digital Library of Mathematical Functions]).
@@ -86,7 +86,7 @@ was eventually published in 1964, and has been reprinted numerous times since.
 Pretty-printing a traditional 2-dimensional table is left as an exercise for the student,
 but why bother now that the Math Toolkit lets you write
 */
-    double z = 2.; 
+    double z = 2.;
     cout << "Area for z = " << z << " is " << cdf(s, z) << endl; // to get the area for z.
 /*`
 Correspondingly, we can obtain the traditional 'critical' values for significance levels.
@@ -111,7 +111,7 @@ This will not be some nice neat number like 0.05, but we can easily calculate it
 */
     double alpha1 = cdf(s, -1) * 2; // 0.3173105078629142
     cout << setprecision(17) << "Significance level for z == 1 is " << alpha1 << endl;
-/*`    
+/*`
     and place in our array of favorite alpha values.
 */
     double alpha[] = {0.3173105078629142, // z for 1 standard deviation.
@@ -127,7 +127,7 @@ that the true occurrence frequency lies *inside* the calculated interval.
     for (int i = 0; i < sizeof(alpha)/sizeof(alpha[0]); ++i)
     {
       cout << setw(15) << alpha[i] << setw(15) << alpha[i] /2 << setw(10) << quantile(complement(s,  alpha[i]/2)) << endl;
-      // Use quantile(complement(s, alpha[i]/2)) to avoid potential loss of accuracy from quantile(s,  1 - alpha[i]/2) 
+      // Use quantile(complement(s, alpha[i]/2)) to avoid potential loss of accuracy from quantile(s,  1 - alpha[i]/2)
     }
     cout << endl;
 
@@ -181,7 +181,7 @@ We could of course get some really accurate values for these
 [@http://en.wikipedia.org/wiki/Confidence_interval confidence intervals]
 by using cout.precision(15);
 
-[pre 
+[pre
 Fraction 1 standard deviation within either side of mean is 0.682689492137086
 Fraction 2 standard deviations within either side of mean is 0.954499736103642
 Fraction 3 standard deviations within either side of mean is 0.997300203936740
@@ -209,7 +209,7 @@ we construct a normal distribution called /bulbs/ with these values:
 */
     double mean_life = 1100.;
     double life_standard_deviation = 100.;
-    normal bulbs(mean_life, life_standard_deviation); 
+    normal bulbs(mean_life, life_standard_deviation);
     double expected_life = 1000.;
 
 /*`The we can use the Cumulative distribution function to predict fractions
@@ -224,7 +224,7 @@ we construct a normal distribution called /bulbs/ with these values:
     cout << "Fraction of bulbs that will last between "
       << min_life << " and " << max_life << " is "
       << cdf(bulbs, max_life)  // P(X <= 1200)
-       - cdf(bulbs, min_life) << endl; // P(X <= 900) 
+       - cdf(bulbs, min_life) << endl; // P(X <= 900)
 /*`
 [note Real-life failures are often very ab-normal,
 with a significant number that 'dead-on-arrival' or suffer failure very early in their life:
@@ -232,15 +232,15 @@ the lifetime of the survivors of 'early mortality' may be well described by the 
 */
 //] [/normal_bulbs_example1 Quickbook end]
   }
-  { 
+  {
     // K. Krishnamoorthy, Handbook of Statistical Distributions with Applications,
-    // ISBN 1 58488 635 8, page 125, Example 10.3.6  
+    // ISBN 1 58488 635 8, page 125, Example 10.3.6
 
 //[normal_bulbs_example3
 /*`Weekly demand for 5 lb sacks of onions at a store is normally distributed with mean 140 sacks and standard deviation 10.
 */
   double mean = 140.; // sacks per week.
-  double standard_deviation = 10; 
+  double standard_deviation = 10;
   normal sacks(mean, standard_deviation);
 
   double stock = 160.; // per week.
@@ -260,13 +260,13 @@ So we should be able to say what stock level will meet demand 95% of the weeks.
 //] [/normal_bulbs_example3 Quickbook end]
   }
   { // K. Krishnamoorthy, Handbook of Statistical Distributions with Applications,
-    // ISBN 1 58488 635 8, page 125, Example 10.3.7 
+    // ISBN 1 58488 635 8, page 125, Example 10.3.7
 
 //[normal_bulbs_example4
 
-/*`A machine is set to pack 3 kg of ground beef per pack.  
+/*`A machine is set to pack 3 kg of ground beef per pack.
 Over a long period of time it is found that the average packed was 3 kg
-with a standard deviation of 0.1 kg.  
+with a standard deviation of 0.1 kg.
 Assuming the packing is normally distributed,
 we can find the fraction (or %) of packages that weigh more than 3.1 kg.
 */
@@ -280,7 +280,7 @@ cout << "Percentage of packs > " << max_weight << " is "
 << cdf(complement(packs, max_weight)) << endl; // P(X > 3.1)
 
 double under_weight = 2.9;
-cout <<"fraction of packs <= " << under_weight << " with a mean of " << mean 
+cout <<"fraction of packs <= " << under_weight << " with a mean of " << mean
   << " is " << cdf(complement(packs, under_weight)) << endl;
 // fraction of packs <= 2.9 with a mean of 3 is 0.841345
 // This is 0.84 - more than the target 0.95
@@ -289,7 +289,7 @@ cout <<"fraction of packs <= " << under_weight << " with a mean of " << mean
 double over_mean = 3.0664;
 normal xpacks(over_mean, standard_deviation);
 cout << "fraction of packs >= " << under_weight
-<< " with a mean of " << xpacks.mean() 
+<< " with a mean of " << xpacks.mean()
   << " is " << cdf(complement(xpacks, under_weight)) << endl;
 // fraction of packs >= 2.9 with a mean of 3.06449 is 0.950005
 double under_fraction = 0.05;  // so 95% are above the minimum weight mean - sd = 2.9
@@ -299,7 +299,7 @@ double nominal_mean = mean + offset;
 
 normal nominal_packs(nominal_mean, standard_deviation);
 cout << "Setting the packer to " << nominal_mean << " will mean that "
-  << "fraction of packs >= " << under_weight 
+  << "fraction of packs >= " << under_weight
   << " is " << cdf(complement(nominal_packs, under_weight)) << endl;
 
 /*`
@@ -315,7 +315,7 @@ we need to get the 5% quantile to be located at the under_weight limit, 2.9
 */
 double p = 0.05; // wanted p th quantile.
 cout << "Quantile of " << p << " = " << quantile(packs, p)
-  << ", mean = " << packs.mean() << ", sd = " << packs.standard_deviation() << endl; // 
+  << ", mean = " << packs.mean() << ", sd = " << packs.standard_deviation() << endl; //
 /*`
 Quantile of 0.05 = 2.83551, mean = 3, sd = 0.1
 
@@ -325,14 +325,14 @@ So we know that the standard deviation is going to have to be smaller.
 
 Let's start by guessing that it (now 0.1) needs to be halved, to a standard deviation of 0.05
 */
-normal pack05(mean, 0.05); 
-cout << "Quantile of " << p << " = " << quantile(pack05, p) 
+normal pack05(mean, 0.05);
+cout << "Quantile of " << p << " = " << quantile(pack05, p)
   << ", mean = " << pack05.mean() << ", sd = " << pack05.standard_deviation() << endl;
 
-cout <<"Fraction of packs >= " << under_weight << " with a mean of " << mean 
+cout <<"Fraction of packs >= " << under_weight << " with a mean of " << mean
   << " and standard deviation of " << pack05.standard_deviation()
   << " is " << cdf(complement(pack05, under_weight)) << endl;
-// 
+//
 /*`
 Fraction of packs >= 2.9 with a mean of 3 and standard deviation of 0.05 is 0.9772
 
@@ -341,11 +341,11 @@ so the standard deviation could be a tiny bit more. So we could do some
 more guessing to get closer, say by increasing to 0.06
 */
 
-normal pack06(mean, 0.06); 
-cout << "Quantile of " << p << " = " << quantile(pack06, p) 
+normal pack06(mean, 0.06);
+cout << "Quantile of " << p << " = " << quantile(pack06, p)
   << ", mean = " << pack06.mean() << ", sd = " << pack06.standard_deviation() << endl;
 
-cout <<"Fraction of packs >= " << under_weight << " with a mean of " << mean 
+cout <<"Fraction of packs >= " << under_weight << " with a mean of " << mean
   << " and standard deviation of " << pack06.standard_deviation()
   << " is " << cdf(complement(pack06, under_weight)) << endl;
 /*`
@@ -353,13 +353,12 @@ Fraction of packs >= 2.9 with a mean of 3 and standard deviation of 0.06 is 0.95
 
 Now we are getting really close, but to do the job properly,
 we could use root finding method, for example the tools provided, and used elsewhere,
-in the Math Toolkit, see
-[link math_toolkit.internals1.roots2  Root Finding Without Derivatives].
+in the Math Toolkit, see __root_finding_without_derivatives.
 
 But in this normal distribution case, we could be even smarter and make a direct calculation.
 */
 
-normal s; // For standard normal distribution, 
+normal s; // For standard normal distribution,
 double sd = 0.1;
 double x = 2.9; // Our required limit.
 // then probability p = N((x - mean) / sd)
@@ -373,11 +372,11 @@ cout << "prob = " << prob << ", quantile(p) " << qp << endl; // p = 0.241971, qu
 // Rearranging, we can directly calculate the required standard deviation:
 double sd95 = abs((x - mean)) / qp;
 
-cout << "If we want the "<< p << " th quantile to be located at "  
+cout << "If we want the "<< p << " th quantile to be located at "
   << x << ", would need a standard deviation of " << sd95 << endl;
 
 normal pack95(mean, sd95);  // Distribution of the 'ideal better' packer.
-cout <<"Fraction of packs >= " << under_weight << " with a mean of " << mean 
+cout <<"Fraction of packs >= " << under_weight << " with a mean of " << mean
   << " and standard deviation of " << pack95.standard_deviation()
   << " is " << cdf(complement(pack95, under_weight)) << endl;
 
@@ -398,16 +397,16 @@ especially if based on a few measurements.
     // ISBN 1 58488 635 8, page 125, example 10.3.8
 //[normal_bulbs_example5
 /*`A bolt is usable if between 3.9 and 4.1 long.
-From a large batch of bolts, a sample of 50 show a 
+From a large batch of bolts, a sample of 50 show a
 mean length of 3.95 with standard deviation 0.1.
 Assuming a normal distribution, what proportion is usable?
-The true sample mean is unknown, 
+The true sample mean is unknown,
 but we can use the sample mean and standard deviation to find approximate solutions.
 */
 
     normal bolts(3.95, 0.1);
     double top = 4.1;
-    double bottom = 3.9; 
+    double bottom = 3.9;
 
 cout << "Fraction long enough [ P(X <= " << top << ") ] is " << cdf(bolts, top) << endl;
 cout << "Fraction too short [ P(X <= " << bottom << ") ] is " << cdf(bolts, bottom) << endl;
@@ -419,13 +418,13 @@ cout << "Fraction too long [ P(X > " << top << ") ] is "
   << cdf(complement(bolts, top)) << endl;
 
 cout << "95% of bolts are shorter than " << quantile(bolts, 0.95) << endl;
- 
+
 //] [/normal_bulbs_example5 Quickbook end]
   }
   }
   catch(const std::exception& e)
-  { // Always useful to include try & catch blocks because default policies 
-    // are to throw exceptions on arguments that cause errors like underflow, overflow. 
+  { // Always useful to include try & catch blocks because default policies
+    // are to throw exceptions on arguments that cause errors like underflow, overflow.
     // Lacking try & catch blocks, the program will abort without a message below,
     // which may give some helpful clues as to the cause of the exception.
     std::cout <<
@@ -442,7 +441,7 @@ Output is:
 Autorun "i:\boost-06-05-03-1300\libs\math\test\Math_test\debug\normal_misc_examples.exe"
 Example: Normal distribution, Miscellaneous Applications.Standard normal distribution, mean = 0, standard deviation = 1
 Probability distribution function values
-  z       pdf 
+  z       pdf
 -4     0.00013383022576488537
 -3     0.0044318484119380075
 -2     0.053990966513188063
@@ -453,13 +452,13 @@ Probability distribution function values
 3      0.0044318484119380075
 4      0.00013383022576488537
 Standard normal mean = 0, standard deviation = 1
-Integral (area under the curve) from - infinity up to z 
-  z       cdf 
+Integral (area under the curve) from - infinity up to z
+  z       cdf
 -4     3.1671241833119979e-005
 -3     0.0013498980316300959
 -2     0.022750131948179219
 -1     0.1586552539314571
-0      0.5         
+0      0.5
 1      0.84134474606854293
 2      0.97724986805182079
 3      0.9986501019683699
@@ -469,15 +468,15 @@ Area for z = 2 is 0.97725
 95% of area has a z between 1.95996 and -1.95996
 Significance level for z == 1 is 0.3173105078629142
 level of significance (alpha)
-2-sided       1 -sided          z(alpha) 
-0.3173         0.1587         1         
-0.2            0.1            1.282     
-0.1            0.05           1.645     
-0.05           0.025          1.96      
-0.01           0.005          2.576     
-0.001          0.0005         3.291     
-0.0001         5e-005         3.891     
-1e-005         5e-006         4.417     
+2-sided       1 -sided          z(alpha)
+0.3173         0.1587         1
+0.2            0.1            1.282
+0.1            0.05           1.645
+0.05           0.025          1.96
+0.01           0.005          2.576
+0.001          0.0005         3.291
+0.0001         5e-005         3.891
+1e-005         5e-006         4.417
 cdf(s, s.standard_deviation()) = 0.841
 cdf(complement(s, s.standard_deviation())) = 0.159
 Fraction 1 standard deviation within either side of mean is 0.683
