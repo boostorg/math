@@ -33,7 +33,7 @@ First we need some includes to access the normal distribution
   using std::exception;
 
 //] //[/root_find1]
-  
+
 int main()
 {
   cout << "Example: Normal distribution, root finding.";
@@ -42,9 +42,9 @@ int main()
 
 //[root_find2
 
-/*`A machine is set to pack 3 kg of ground beef per pack.  
+/*`A machine is set to pack 3 kg of ground beef per pack.
 Over a long period of time it is found that the average packed was 3 kg
-with a standard deviation of 0.1 kg.  
+with a standard deviation of 0.1 kg.
 Assuming the packing is normally distributed,
 we can find the fraction (or %) of packages that weigh more than 3.1 kg.
 */
@@ -58,7 +58,7 @@ cout << "Percentage of packs > " << max_weight << " is "
 << cdf(complement(packs, max_weight)) << endl; // P(X > 3.1)
 
 double under_weight = 2.9;
-cout <<"fraction of packs <= " << under_weight << " with a mean of " << mean 
+cout <<"fraction of packs <= " << under_weight << " with a mean of " << mean
   << " is " << cdf(complement(packs, under_weight)) << endl;
 // fraction of packs <= 2.9 with a mean of 3 is 0.841345
 // This is 0.84 - more than the target 0.95
@@ -67,7 +67,7 @@ cout <<"fraction of packs <= " << under_weight << " with a mean of " << mean
 double over_mean = 3.0664;
 normal xpacks(over_mean, standard_deviation);
 cout << "fraction of packs >= " << under_weight
-<< " with a mean of " << xpacks.mean() 
+<< " with a mean of " << xpacks.mean()
   << " is " << cdf(complement(xpacks, under_weight)) << endl;
 // fraction of packs >= 2.9 with a mean of 3.06449 is 0.950005
 double under_fraction = 0.05;  // so 95% are above the minimum weight mean - sd = 2.9
@@ -77,7 +77,7 @@ double nominal_mean = mean + offset;
 
 normal nominal_packs(nominal_mean, standard_deviation);
 cout << "Setting the packer to " << nominal_mean << " will mean that "
-  << "fraction of packs >= " << under_weight 
+  << "fraction of packs >= " << under_weight
   << " is " << cdf(complement(nominal_packs, under_weight)) << endl;
 
 /*`
@@ -93,7 +93,7 @@ we need to get the 5% quantile to be located at the under_weight limit, 2.9
 */
 double p = 0.05; // wanted p th quantile.
 cout << "Quantile of " << p << " = " << quantile(packs, p)
-  << ", mean = " << packs.mean() << ", sd = " << packs.standard_deviation() << endl; // 
+  << ", mean = " << packs.mean() << ", sd = " << packs.standard_deviation() << endl; //
 /*`
 Quantile of 0.05 = 2.83551, mean = 3, sd = 0.1
 
@@ -103,14 +103,14 @@ So we know that the standard deviation is going to have to be smaller.
 
 Let's start by guessing that it (now 0.1) needs to be halved, to a standard deviation of 0.05
 */
-normal pack05(mean, 0.05); 
-cout << "Quantile of " << p << " = " << quantile(pack05, p) 
+normal pack05(mean, 0.05);
+cout << "Quantile of " << p << " = " << quantile(pack05, p)
   << ", mean = " << pack05.mean() << ", sd = " << pack05.standard_deviation() << endl;
 
-cout <<"Fraction of packs >= " << under_weight << " with a mean of " << mean 
+cout <<"Fraction of packs >= " << under_weight << " with a mean of " << mean
   << " and standard deviation of " << pack05.standard_deviation()
   << " is " << cdf(complement(pack05, under_weight)) << endl;
-// 
+//
 /*`
 Fraction of packs >= 2.9 with a mean of 3 and standard deviation of 0.05 is 0.9772
 
@@ -119,11 +119,11 @@ so the standard deviation could be a tiny bit more. So we could do some
 more guessing to get closer, say by increasing to 0.06
 */
 
-normal pack06(mean, 0.06); 
-cout << "Quantile of " << p << " = " << quantile(pack06, p) 
+normal pack06(mean, 0.06);
+cout << "Quantile of " << p << " = " << quantile(pack06, p)
   << ", mean = " << pack06.mean() << ", sd = " << pack06.standard_deviation() << endl;
 
-cout <<"Fraction of packs >= " << under_weight << " with a mean of " << mean 
+cout <<"Fraction of packs >= " << under_weight << " with a mean of " << mean
   << " and standard deviation of " << pack06.standard_deviation()
   << " is " << cdf(complement(pack06, under_weight)) << endl;
 /*`
@@ -131,8 +131,7 @@ Fraction of packs >= 2.9 with a mean of 3 and standard deviation of 0.06 is 0.95
 
 Now we are getting really close, but to do the job properly,
 we could use root finding method, for example the tools provided, and used elsewhere,
-in the Math Toolkit, see
-[link math_toolkit.internals1.roots2  Root Finding Without Derivatives].
+in the Math Toolkit, see __root_finding_without_derivatives.
 
 But in this normal distribution case, we could be even smarter and make a direct calculation.
 */
@@ -140,8 +139,8 @@ But in this normal distribution case, we could be even smarter and make a direct
 
   }
   catch(const std::exception& e)
-  { // Always useful to include try & catch blocks because default policies 
-    // are to throw exceptions on arguments that cause errors like underflow, overflow. 
+  { // Always useful to include try & catch blocks because default policies
+    // are to throw exceptions on arguments that cause errors like underflow, overflow.
     // Lacking try & catch blocks, the program will abort without a message below,
     // which may give some helpful clues as to the cause of the exception.
     std::cout <<

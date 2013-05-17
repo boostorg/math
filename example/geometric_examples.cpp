@@ -8,7 +8,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // This file is written to be included from a Quickbook .qbk document.
-// It can still be compiled by the C++ compiler, and run. 
+// It can still be compiled by the C++ compiler, and run.
 // Any output can also be added here as comment or included or pasted in elsewhere.
 // Caution: this file contains Quickbook markup as well as code
 // and comments: don't change any of the special comment markups!
@@ -17,7 +17,7 @@
 
 //[geometric_eg1_1
 /*`
-For this example, we will opt to #define two macros to control 
+For this example, we will opt to #define two macros to control
 the error and discrete handling policies.
 For this simple example, we want to avoid throwing
 an exception (the default policy) and just return infinity.
@@ -34,7 +34,7 @@ and we need some std library iostream, of course.
 */
 #include <boost/math/distributions/geometric.hpp>
   // for geometric_distribution
-  using ::boost::math::geometric_distribution; // 
+  using ::boost::math::geometric_distribution; //
   using ::boost::math::geometric; // typedef provides default type is double.
   using  ::boost::math::pdf; // Probability mass function.
   using  ::boost::math::cdf; // Cumulative density function.
@@ -52,7 +52,7 @@ and we need some std library iostream, of course.
   using std::cout; using std::endl;
   using std::noshowpoint; using std::fixed; using std::right; using std::left;
 #include <iomanip>
-  using std::setprecision; using std::setw; 
+  using std::setprecision; using std::setw;
 
 #include <limits>
   using std::numeric_limits;
@@ -81,7 +81,7 @@ to get the first success in /k/ Bernoulli trials.
 is one with only two possible outcomes, success of failure,
 and /p/ is the probability of success).
 
-Suppose an 'fair' 6-face dice is thrown repeatedly: 
+Suppose an 'fair' 6-face dice is thrown repeatedly:
 */
     double success_fraction = 1./6; // success_fraction (p) = 0.1666
     // (so failure_fraction is 1 - success_fraction = 5./6 = 1- 0.1666 = 0.8333)
@@ -119,7 +119,7 @@ we can use the Cumulative Distribution Function CDF.*/
 
 /*`If we allow many more (12) throws, the probability of getting our /three/ gets very high:*/
     cout << "cdf(g6, 12) = " << cdf(g6, 12) << endl; // 0.9065 or 90% probability.
-/*`If we want to be much more confident, say 99%, 
+/*`If we want to be much more confident, say 99%,
 we can estimate the number of throws to be this sure
 using the inverse or quantile.
 */
@@ -127,8 +127,8 @@ using the inverse or quantile.
 /*`Note that the value returned is not an integer:
 if you want an integer result you should use either floor, round or ceil functions,
 or use the policies mechanism.
-See [link math_toolkit.pol_tutorial.understand_dis_quant
-Understanding Quantiles of Discrete Distributions] 
+
+See __understand_dis_quant.
 
 The geometric distribution is related to the negative binomial
 __spaces `negative_binomial_distribution(RealType r, RealType p);` with parameter /r/ = 1.
@@ -159,13 +159,13 @@ So in Boost.Math the equivalent is
 
 #ifdef BOOST_NO_CXX11_NUMERIC_LIMITS
   int max_digits10 = 2 + (boost::math::policies::digits<double, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
-  cout << "BOOST_NO_CXX11_NUMERIC_LIMITS is defined" << endl; 
-#else 
+  cout << "BOOST_NO_CXX11_NUMERIC_LIMITS is defined" << endl;
+#else
   int max_digits10 = std::numeric_limits<double>::max_digits10;
 #endif
   cout << "Show all potentially significant decimal digits std::numeric_limits<double>::max_digits10 = "
-    << max_digits10 << endl; 
-  cout.precision(max_digits10); // 
+    << max_digits10 << endl;
+  cout.precision(max_digits10); //
 
     cout << cdf(g05, 0.0001) << endl; // returns 0.5000346561579232, not exact 0.5.
 /*`To get the R discrete behaviour, you simply need to round with,
@@ -186,7 +186,7 @@ A company knows from warranty claims that 2% of their products will be faulty,
 so the 'success_fraction' of finding a fault is 0.02.
 It wants to interview a purchaser of faulty products to assess their 'user experience'.
 
-To estimate how many customers they will probably need to contact 
+To estimate how many customers they will probably need to contact
 in order to find one who has suffered from the fault,
 we first construct a geometric distribution with probability 0.02,
 and then chose a confidence, say 80%, 95%, or 99% to finding a customer with a fault.
@@ -202,20 +202,20 @@ the probability of finding a customer with a fault obviously improves.)
     double c = 0.95; // 95% confidence.
     cout << " quantile(g, " << c << ") = " << quantile(g, c) << endl;
 
-    cout << "To be " << c * 100 
+    cout << "To be " << c * 100
       << "% confident of finding we customer with a fault, need to survey "
       <<  ceil(quantile(g, c)) << " customers." << endl; // 148
     c = 0.99; // Very confident.
-    cout << "To be " << c * 100 
+    cout << "To be " << c * 100
       << "% confident of finding we customer with a fault, need to survey "
       <<  ceil(quantile(g, c)) << " customers." << endl; // 227
     c = 0.80; // Only reasonably confident.
-    cout << "To be " << c * 100 
+    cout << "To be " << c * 100
       << "% confident of finding we customer with a fault, need to survey "
       <<  ceil(quantile(g, c)) << " customers." << endl; // 79
 
 /*`[h6 Basket Ball Shooters]
-According to Wikipedia, average pro basket ball players get 
+According to Wikipedia, average pro basket ball players get
 [@http://en.wikipedia.org/wiki/Free_throw free throws]
 in the baskets 70 to 80 % of the time,
 but some get as high as 95%, and others as low as 50%.
@@ -224,7 +224,7 @@ of failing to get a score only on the first or on the fifth shot?
 To start we will consider the average shooter, say 75%.
 So we construct a geometric distribution
 with success_fraction parameter 75/100 = 0.75.
-*/ 
+*/
     cout.precision(2);
     geometric gav(0.75); // Shooter averages 7.5 out of 10 in the basket.
 /*`What is probability of getting 1st try in the basket, that is with no failures? */
@@ -255,8 +255,8 @@ This is the best estimate we can make, but while it is the truth,
 it is not the whole truth,
 for it hides the big uncertainty when estimating from a single event.
 "One swallow doesn't make a summer."
-To show the magnitude of the uncertainty, the geometric 
-(or the negative binomial) distribution can be used. 
+To show the magnitude of the uncertainty, the geometric
+(or the negative binomial) distribution can be used.
 
 If we chose the popular 95% confidence in the limits, corresponding to an alpha of 0.05,
 because we are calculating a two-sided interval, we must divide alpha by two.
@@ -265,7 +265,7 @@ because we are calculating a two-sided interval, we must divide alpha by two.
     double k = 100; // So frequency of occurence is 1/100.
     cout << "Probability is failure is " << 1/k << endl;
     double t = geometric::find_lower_bound_on_p(k, alpha/2);
-    cout << "geometric::find_lower_bound_on_p(" << int(k) << ", " << alpha/2 << ") = " 
+    cout << "geometric::find_lower_bound_on_p(" << int(k) << ", " << alpha/2 << ") = "
       << t << endl; // 0.00025
     t = geometric::find_upper_bound_on_p(k, alpha/2);
     cout << "geometric::find_upper_bound_on_p(" << int(k) << ", " << alpha/2 << ") = "
@@ -302,8 +302,8 @@ even if you hope not to use it!
     // an overflow exception should never be thrown.
      std::cout << "\nMessage from thrown exception was:\n " << e.what() << std::endl;
 /*`
-For example, without a ignore domain error policy, 
-if we asked for ``pdf(g, -1)`` for example, 
+For example, without a ignore domain error policy,
+if we asked for ``pdf(g, -1)`` for example,
 we would get an unhelpful abort, but with a catch:
 [pre
 Message from thrown exception was:
@@ -321,7 +321,7 @@ Message from thrown exception was:
 Output is:
 
   Geometric distribution example
-  
+
   success fraction of a six-sided dice is 0.1667
   0.1667
   0.1667
@@ -350,7 +350,7 @@ Output is:
   geometric::find_upper_bound_on_p(100, 0.05) = 0.03
   geometric::find_lower_bound_on_p(100, 0.005) = 5e-005
   geometric::find_upper_bound_on_p(100, 0.005) = 0.052
-  
+
 */
 
 

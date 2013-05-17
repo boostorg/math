@@ -22,9 +22,9 @@
 /*`[h5 Using Boost.Multiprecision to generate a high-precision array of sin coefficents for use with FFT.]
 
 The Boost.Multiprecision library can be used for computations requiring precision
-exceeding that of standard built-in types such as float, double
-and long double. For extended-precision calculations, Boost.Multiprecision
-supplies a template data type called cpp_dec_float. The number of decimal
+exceeding that of standard built-in types such as `float`, `double`
+and `long double`. For extended-precision calculations, Boost.Multiprecision
+supplies a template data type called `cpp_dec_float`. The number of decimal
 digits of precision is fixed at compile-time via template parameter.
 
 To use these floating-point types and constants, we need some includes:
@@ -44,8 +44,8 @@ To use these floating-point types and constants, we need some includes:
 #include <fstream>
 
 /*`Define a text string which is a C++ comment with the program licence, copyright etc.
-You could of course, tailor this to your needs, including copyright claim.
-There are versions of `array` provided by Boost/array in boost::array or
+You could of course, tailor this to your needs, including your copyright claim.
+There are versions of `array` provided by Boost.Array in `boost::array` or
 the C++11 std::array, but since not all platforms provide C++11 support,
 this program provides the Boost version as fallback.
 */
@@ -69,8 +69,8 @@ static const char* prolog =
 
 using boost::multiprecision::cpp_dec_float_50;
 using boost::math::constants::pi;
-// VS 2010 (wrongly) requires these at file scope, not local scope in main.
-// This program also requires -std=c++11 option to compile using Clang and GCC.
+// VS 2010 (wrongly) requires these at file scope, not local scope in `main`.
+// This program also requires `-std=c++11` option to compile using Clang and GCC.
 
 int main()
 {
@@ -174,7 +174,7 @@ Now output all the sine table, to a file of your chosen name.
       fout << "  " << sin_values[i];
       if (i == sin_values.size()-1)
       { // next is last value.
-        fout << "\n}};\n"; // 2nd } needed for some GCC compiler versions.
+        fout << "\n}};\n"; // 2nd } needed for some earlier GCC compiler versions.
         break;
       }
       else
@@ -188,7 +188,7 @@ Now output all the sine table, to a file of your chosen name.
     std::cout << "Close file " << sines_name << " for output OK." << std::endl;
 
   }
-//`The output file generated can be seen at [@..\\sines.hpp]
+//`The output file generated can be seen at [@../../example/sines.hpp]
 //] [/fft_sines_table_example_1]
 
   return EXIT_SUCCESS;

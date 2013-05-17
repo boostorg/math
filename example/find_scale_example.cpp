@@ -21,7 +21,7 @@ the algorithms to find scale (and some std output of course).
 #include <boost/math/distributions/normal.hpp> // for normal_distribution
   using boost::math::normal; // typedef provides default type is double.
 #include <boost/math/distributions/find_scale.hpp>
-  using boost::math::find_scale; 
+  using boost::math::find_scale;
   using boost::math::complement; // Needed if you want to use the complement version.
   using boost::math::policies::policy; // Needed to specify the error handling policy.
 
@@ -55,7 +55,7 @@ so that only fraction p (here 0.001 or 0.1%) are below a certain chosen limit
 
   cout << "Normal distribution with mean = " << N01.location()  // aka N01.mean()
     << ", standard deviation " << N01.scale() // aka N01.standard_deviation()
-    << ", has " << "fraction <= " << z 
+    << ", has " << "fraction <= " << z
     << ", p = "  << cdf(N01, z) << endl;
   cout << "Normal distribution with mean = " << N01.location()
     << ", standard deviation " << N01.scale()
@@ -83,15 +83,15 @@ Then we can check that we have achieved our objective
 by constructing a new distribution
 with the new standard deviation (but same zero mean):
 */
-  normal np001pc(N01.location(), s); 
+  normal np001pc(N01.location(), s);
 /*`
 And re-calculating the fraction below (and above) our chosen limit.
 */
-  cout << "Normal distribution with mean = " << l 
-    << " has " << "fraction <= " << z 
+  cout << "Normal distribution with mean = " << l
+    << " has " << "fraction <= " << z
     << ", p = "  << cdf(np001pc, z) << endl;
-  cout << "Normal distribution with mean = " << l 
-    << " has " << "fraction > " << z 
+  cout << "Normal distribution with mean = " << l
+    << " has " << "fraction > " << z
     << ", p = "  << cdf(complement(np001pc, z)) << endl;
 /*`
 [pre
@@ -101,7 +101,7 @@ Normal distribution with mean = 0 has fraction > -2, p = 0.999
 
 [h4 Controlling how Errors from find_scale are handled]
 We can also control the policy for handling various errors.
-For example, we can define a new (possibly unwise) 
+For example, we can define a new (possibly unwise)
 policy to ignore domain errors ('bad' arguments).
 
 Unless we are using the boost::math namespace, we will need:
@@ -127,16 +127,16 @@ although it is not required, as the various examples below show.
 /*`
 If we want to express a probability, say 0.999, that is a complement, `1 - p`
 we should not even think of writing `find_scale<normal>(z, 1 - p, l)`,
-but [link why_complements instead], use the __complements version.
+but use the __complements version (see __why_complements).
 */
   z = -2.;
   double q = 0.999; // = 1 - p; // complement of 0.001.
   sd = find_scale<normal>(complement(z, q, l));
 
   normal np95pc(l, sd); // Same standard_deviation (scale) but with mean(scale) shifted
-  cout << "Normal distribution with mean = " << l << " has " 
+  cout << "Normal distribution with mean = " << l << " has "
     << "fraction <= " << z << " = "  << cdf(np95pc, z) << endl;
-  cout << "Normal distribution with mean = " << l << " has " 
+  cout << "Normal distribution with mean = " << l << " has "
     << "fraction > " << z << " = "  << cdf(complement(np95pc, z)) << endl;
 
 /*`
@@ -154,8 +154,8 @@ the (impossible) negative scale is quietly returned.
 //] [/find_scale2]
   }
   catch(const std::exception& e)
-  { // Always useful to include try & catch blocks because default policies 
-    // are to throw exceptions on arguments that cause errors like underflow, overflow. 
+  { // Always useful to include try & catch blocks because default policies
+    // are to throw exceptions on arguments that cause errors like underflow, overflow.
     // Lacking try & catch blocks, the program will abort without a message below,
     // which may give some helpful clues as to the cause of the exception.
     std::cout <<

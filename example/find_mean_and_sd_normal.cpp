@@ -116,8 +116,8 @@ cout << "Setting the packer to " << nominal_mean << " will mean that "
 // Setting the packer to 3.06449 will mean that fraction of packs >= 2.9 is 0.95
 
 /*`
-This calculation is generalized as the free function called
-[link math_toolkit.dist_ref.dist_algorithms find_location].
+This calculation is generalized as the free function called `find_location`,
+see __algorithms.
 
 To use this we will need to
 */
@@ -261,8 +261,7 @@ cout <<"Fraction of packs >= " << minimum_weight << " with a mean of " << mean
 /*`
 Now we are getting really close, but to do the job properly,
 we might need to use root finding method, for example the tools provided,
-and used elsewhere, in the Math Toolkit, see
-[link math_toolkit.internals1.roots2  Root Finding Without Derivatives].
+and used elsewhere, in the Math Toolkit, see __root_finding_without_derivatives
 
 But in this (normal) distribution case, we can and should be even smarter
 and make a direct calculation.
@@ -278,7 +277,7 @@ ensuring that 0.95 (95%) of packs are above the minimum weight.
 
 Rearranging, we can directly calculate the required standard deviation:
 */
-normal N01; // standard normal distribution with meamn zero and unit standard deviation.
+normal N01; // standard normal distribution with mean zero and unit standard deviation.
 p = 0.05;
 double qp = quantile(N01, p);
 double sd95 = (minimum_weight - mean) / qp;
@@ -328,7 +327,7 @@ cout << "find_scale<normal>(minimum_weight, under_fraction, packs.mean()); " << 
 // find_scale<normal>(minimum_weight, under_fraction, packs.mean()); 0.0607957
 
 /*`But notice that using '1 - over_fraction' - will lead to a
-[link why_complements loss of accuracy, especially if over_fraction was close to unity.]
+loss of accuracy, especially if over_fraction was close to unity. (See __why_complements).
 In this (very common) case, we should instead use the __complements,
 giving the most accurate result.
 */
