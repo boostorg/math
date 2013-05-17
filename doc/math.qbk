@@ -93,6 +93,7 @@ and use the function's name as the link text.]
 [def __zero_error [link math_toolkit.relative_error.zero_error effectively zero error]]
 [def __relative_error [link math_toolkit.relative_error relative zero error]]
 [def __root_finding_with_derivatives [link math_toolkit.internals1.roots root-finding with derivatives]]
+[def __root_finding_without_derivatives [link math_toolkit.internals1.roots2 root-finding without derivatives]]
 
 [/gammas]
 [def __lgamma [link math_toolkit.sf_gamma.lgamma lgamma]]
@@ -254,6 +255,8 @@ and use the function's name as the link text.]
 [def __chf [link math_toolkit.dist_ref.nmp.chf Cumulative Hazard Function]]
 [def __range [link math_toolkit.dist_ref.nmp.range range]]
 [def __support [link math_toolkit.dist_ref.nmp.support support]]
+[def __algorithms [link math_toolkit.dist_ref.dist_algorithms algorithms]]
+
 
 [/ distribution def names end in distrib to avoid clashes]
 [def __beta_distrib [link math_toolkit.dist_ref.dists.beta_dist Beta Distribution]]
@@ -291,9 +294,12 @@ and use the function's name as the link text.]
 [def __policy_class [link math_toolkit.pol_ref.pol_ref_ref policies::policy<>]]
 [def __math_undefined [link math_toolkit.pol_ref.assert_undefined mathematically undefined function]]
 [def __policy_ref [link math_toolkit.pol_ref policy reference]]
-[def __math_discrete [link math_toolkit.pol_ref.discrete_quant_ref discrete functions]]
+[def __policy_tutorial [link math_toolkit.pol_tutorial policy tutorial]]
+[def __policy_defaults [link math_toolkit.pol_tutorial.policy_tut_defaults policy defaults]]
 [def __error_policy [link math_toolkit.pol_ref.error_handling_policies error handling policies]]
 [def __changing_policy_defaults [link math_toolkit.pol_ref.policy_defaults changing policies defaults]]
+[def __math_discrete [link math_toolkit.pol_ref.discrete_quant_ref discrete functions]]
+[def __understand_dis_quant [link math_toolkit.pol_tutorial.understand_dis_quant understanding discrete quantiles]]
 [def __user_error_handling [link math_toolkit.pol_tutorial.user_def_err_pol user error handling]]
 [def __promotion_policy [link math_toolkit.pol_ref.internal_promotion internal promotion policy]]
 [def __precision_policy [link math_toolkit.pol_ref.precision_pol precision policy]]
@@ -575,7 +581,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [endmathpart]
 
 [/ math.qbk
-  Copyright 2008, 2010, 2012 John Maddock and Paul A. Bristow.
+  Copyright 2008, 2010, 2012, 2013 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
