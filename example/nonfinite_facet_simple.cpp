@@ -24,7 +24,7 @@ this example shows how to create a C99 non-finite locale,
 and imbue input and output streams with the non_finite_num put and get facets.
 This allow output and input of infinity and NaN in a Standard portable way,
 This permits 'loop-back' of output back into input (and portably across different system too).
-This is particularly useful when used with Boost.Seralization so that non-finite NaNs and infinity
+This is particularly useful when used with Boost.Serialization so that non-finite NaNs and infinity
 values in text and xml archives can be handled correctly and portably.
 
 */
@@ -89,14 +89,15 @@ int main ()
 
   // Output the nonfinite values using the current (default C) locale.
   // The default representations differ from system to system,
-  // for example, using Microsoft compilers, 1.#INF, -1.#INF, and 1.#QNAN.
+  // for example, using Microsoft compilers, 1.#INF, -1.#INF, and 1.#QNAN,
+  // Linux "inf", "-inf", "nan"
   cout << "Using C locale" << endl;
   cout << "+std::numeric_limits<double>::infinity() = " << plus_infinity << endl;
   cout << "-std::numeric_limits<double>::infinity() = " << minus_infinity << endl;
   cout << "+std::numeric_limits<double>::quiet_NaN () = " << NaN << endl;
 
   // Display negated NaN.
-  cout << "negated NaN " << negated_NaN << endl; // "-1.IND"
+  cout << "negated NaN " << negated_NaN << endl; // "-1.IND" or "-nan".
   
   // Create a new output locale, and add the nonfinite_num_put facet
   std::locale C99_out_locale (default_locale, new boost::math::nonfinite_num_put<char>);
@@ -106,14 +107,15 @@ int main ()
   // Or for the same effect more concisely:
   cout.imbue (locale(locale(), new boost::math::nonfinite_num_put<char>));
 
-  // Output using the new locale
+  // Output using the new locale:
   cout << "Using C99_out_locale " << endl;
   cout << "+std::numeric_limits<double>::infinity() = " << plus_infinity << endl;
   cout << "-std::numeric_limits<double>::infinity() = " << minus_infinity << endl;
   cout << "+std::numeric_limits<double>::quiet_NaN () = " << NaN << endl;
+  // Expect "inf", "-inf", "nan".
 
   // Display negated NaN.
-  cout << "negated NaN " << negated_NaN << endl; // -nan
+  cout << "negated NaN " << negated_NaN << endl; // Expect "-nan".
 
   // Create a string with the expected C99 representation of plus infinity.
   std::string inf = "inf";
@@ -126,7 +128,7 @@ int main ()
     // and read "inf" from the stringstream:
     iss >> infinity; 
 
-    // This will not work on all platforms!
+    // This will not work on all platforms!  (Intel-Linux-13.0.1 fails EXIT STATUS: 139)
     if (! iss)
     { // Reading infinity went wrong!
       std::cerr << "C locale input format error!" << std::endl;

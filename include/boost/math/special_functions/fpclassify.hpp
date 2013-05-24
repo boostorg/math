@@ -94,6 +94,11 @@ namespace boost{
 //
 namespace math_detail{
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4800)
+#endif
+
 template <class T>
 inline bool is_nan_helper(T t, const boost::true_type&)
 {
@@ -106,6 +111,10 @@ inline bool is_nan_helper(T t, const boost::true_type&)
    return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == (int)FP_NAN);
 #endif
 }
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 template <class T>
 inline bool is_nan_helper(T, const boost::false_type&)
