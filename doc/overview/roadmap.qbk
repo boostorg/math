@@ -8,7 +8,7 @@ All bug reports including closed ones can be viewed
 
 [h4 Boost-1.54]
 
-* Major reorganization to incorporate other Boost.Math like Integer Utilities LCD, GCM, quaternions and octonions.
+* Major reorganization to incorporate other Boost.Math like Integer Utilities Integer Utilities (Greatest Common Divisor and Least Common Multiple), quaternions and octonions.
 Making new chapter headings.
 * Added many references to Boost.Multiprecision and `cpp_dec_float_50` as an example of a User-defined Type (UDT).
 * Added Clang to list of supported compilers.
