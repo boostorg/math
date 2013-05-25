@@ -13,7 +13,7 @@ Making new chapter headings.
 * Added many references to Boost.Multiprecision and `cpp_dec_float_50` as an example of a User-defined Type (UDT).
 * Added Clang to list of supported compilers.
 * Fixed constants to use a thread-safe cache of computed values when used at arbitrary precision.
-* Added finding zeros of Bessel functions `cyl_bessel_j_zero`, `cyl_neumann_zero`, `air_ai_zeros` and `air_bi_zeros`(by Christopher Kormanyos).
+* Added finding zeros of Bessel functions `cyl_bessel_j_zero`, `cyl_neumann_zero`, `airy_ai_zero` and `airy_bi_zero`(by Christopher Kormanyos).
 * More accuracy improvements to the Bessel J and Y functions from Rocco Romeo.
 * Fixed nasty cyclic dependency bug that caused some headers to not compile [@https://svn.boost.org/trac/boost/ticket/7999 #7999].
 * Fixed bug in __tgamma that caused spurious overflow for arguments between 142.5 and 143.
