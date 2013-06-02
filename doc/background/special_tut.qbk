@@ -1,0 +1,167 @@
+[section:special_tut Tutorial: How to Write a New Special Function]
+
+In this section we'll provide a "recipe" for adding a new special function to this library to make life easier for
+future authors wishing to contribute.  We'll assume the function returns a single floating point result, and takes
+two floating point arguments.  For the sake of exposistion we'll give the function the name "my_special".
+
+Normally the implementation of such a function is split into two layers - a public user layer, and an internal
+implementation layer that does the actual work.  The implementation layer is declared inside a "detail" namespace
+and has a simple signature:
+
+   namespace boost{ namespace math{ namespace detail{
+
+   template <class T, class Policy>
+   T my_special_imp(const T& a, const T&b, const Policy& pol)
+   {
+      /* Implementation goes here */
+   }
+
+   }}} // namespaces
+
+We'll come back to what can go inside the implementation later, but first lets look at the user layer.
+This consists of two overloads of the function, with and without a __Policy argument:
+
+   namespace boost{ namespace math{
+
+   template <class T, class U>
+   typename tools::promote_args<T, U>::type my_special(const T& a, const U& b);
+
+   template <class T, class U, class Policy>
+   typename tools::promote_args<T, U>::type my_special(const T& a, const U& b, const Policy& pol);
+
+   }} // namespaces
+
+Note how each argument has a different template type - this allows for mixed type arguments - the return
+type is computed from a traits class and is the "common type" of all the arguments after any integer
+arguments have been promoted to type `double`.
+
+The implementation of the non-policy overload is trivial:
+
+   namespace boost{ namespace math{
+
+   template <class T, class U>
+   inline typename tools::promote_args<T, U>::type my_special(const T& a, const U& b)
+   {
+      // Simply forward with a default policy:
+      return my_special(a, b, policies::policy<>();
+   }
+
+   }} // namespaces
+
+The implementation of the other overload is somewhat more complex, as there's some meta-programming to do,
+but from a runtime perspective is still a one-line forwarding function.  Here it is with comments explaining
+what each line does:
+
+   namespace boost{ namespace math{
+
+   template <class T, class U, class Policy>
+   inline typename tools::promote_args<T, U>::type my_special(const T& a, const U& b, const Policy& pol)
+   {
+      //
+      // We've found some standard library functions to misbehave if any FPU exception flags
+      // are set prior to their call, this code will clear those flags, then reset them
+      // on exit:
+      //
+      BOOST_FPU_EXCEPTION_GUARD
+      //
+      // The type of the result - the common type of T and U after
+      // any integer types have been promoted to double:
+      //
+      typedef typename tools::promote_args<T, U>::type result_type;
+      //
+      // The type used for the calculation.  This may be a wider type than
+      // the result in order to ensure full precision:
+      //
+      typedef typename policies::evaluation<result_type, Policy>::type value_type;
+      //
+      // The type of the policy to forward to the actual implementation.
+      // We disable promotion of float and double as that's [possibly]
+      // happened already in the line above.  Also reset to the default
+      // any policies we don't use (reduces code bloat if we're called
+      // multiple times with differing policies we don't actually use).
+      // Also normalise the type, again to reduce code bloat in case we're
+      // called multiple times with functionally identical policies that happen
+      // to be different types.
+      //
+      typedef typename policies::normalise<
+         Policy, 
+         policies::promote_float<false>, 
+         policies::promote_double<false>, 
+         policies::discrete_quantile<>,
+         policies::assert_undefined<> >::type forwarding_policy;
+      //
+      // Whew.  Now we can make the actual call to the implementation.
+      // Arguments are explicitly cast to the evaluation type, and the result
+      // passed through checked_narrowing_cast which handles things like overflow
+      // according to the policy passed:
+      //
+      return policies::checked_narrowing_cast<result_type, forwarding_policy>(
+            detail::my_special_imp(
+                  static_cast<value_type>(a), 
+                  static_cast<value_type>(x), 
+                  forwarding_policy()), 
+            "boost::math::my_special<%1%>(%1%, %1%)");
+   }
+
+   }} // namespaces
+
+We're now almost there, we just need to flesh out the details of the implementation layer:
+
+   namespace boost{ namespace math{ namespace detail{
+
+   template <class T, class Policy>
+   T my_special_imp(const T& a, const T&b, const Policy& pol)
+   {
+      /* Implementation goes here */
+   }
+
+   }}} // namespaces
+
+The following guidelines indicate what (other than basic arithmetic) can go in the implementation:
+
+* Error conditions (for example bad arguments) should be handled by calling one of the
+[link math_toolkit.error_handling.finding_more_information policy based error handlers].
+* Calls to standard library functions should be made unqualified (this allows argument
+dependent lookup to find standard library functions for user-defined floating point
+types such as those from Boost.Multiprecision).  In addition the macro `BOOST_MATH_STD_USING`
+should appear at the start of the function (note no semi-colon afterwards!) so that
+all the math functions in `namespace std` are visible in the current scope.
+* Calls to other special functions should be made as fully qualified calls, and include the
+policy parameter as the last argument, for example `boost::math::tgamma(a, pol)`.
+* Where possible, evaluation of series, continued fractions, polynomials, or root
+finding should use one of the [link toolkit boiler plate functions].  In any case, after
+any iterative method, you should verify that the number of iterations did not exceed the
+maximum specified in the __Policy type, and if it did terminate as a result of exceeding the
+maximum, then the appropriate error handler should be called (see existing code for examples).
+* Numeric constants such as [pi] etc should be obtained via a call to the [link toolkit.constants appropriate function],
+for example: `constants::pi<T>()`.
+* Where tables of coefficients are used (for example for rational approximations), care should be taken
+to ensure these are initialized at program startup to ensure thread safety when using user-defined number types.
+See for example the use of `erf_initializer` in boost/math/special_functions/erf.hpp.
+
+Here are some other useful internal functions:
+
+[table
+[[function][Meaning]]
+[[`policies::digits<T, Policy>()`][Returns number of binary digits in T (possible overridden by the policy).]]
+[[`policies::get_max_series_iterations<Policy>()`][Maximum number of iterations for series evaluation.]]
+[[`policies::get_max_root_iterations<Policy>()`][Maximum number of iterations for root finding.]]
+[[`polices::get_epsilon<T, Policy>()`][Epsilon for type T, possibly overridden by the Policy.]]
+[[`tools::digits<T>()`][Returns the number of binary digits in T.]]
+[[`tools::max_value<T>()`][Equivalent to `std::numeric_limits<T>::max()`]]
+[[`tools::min_value<T>()`][Equivalent to `std::numeric_limits<T>::min()`]]
+[[`tools::log_max_value<T>()`][Equivalent to the natural logarithm of `std::numeric_limits<T>::max()`]]
+[[`tools::log_min_value<T>()`][Equivalent to the natural logarithm of `std::numeric_limits<T>::min()`]]
+[[`tools::epsilon<T>()`][Equivalent to `std::numeric_limits<T>::epsilon()`.]]
+[[`tools::root_epsilon<T>()`][Equivalent to the square root of `std::numeric_limits<T>::epsilon()`.]]
+[[`tools::forth_root_epsilon<T>()`][Equivalent to the forth root of `std::numeric_limits<T>::epsilon()`.]]
+]
+
+[endsect]
+
+[/
+  Copyright 2013 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

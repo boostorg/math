@@ -553,6 +553,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [mathpart backgrounders Backgrounders]
 [include background/implementation.qbk]
+[include background/special_tut.qbk]
 [include background/error.qbk] [/relative error NOT handling]
 [include background/lanczos.qbk]
 [include background/remez.qbk]
