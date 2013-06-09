@@ -487,7 +487,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<64>&)
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.815696314790853893484e-8),
         };
       static const T Q[9] = {    
-         1,
+         BOOST_MATH_BIG_CONSTANT(T, 64, 1.0),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.525765665400123515036),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.10852641753657122787),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.0115669945375362045249),
@@ -516,7 +516,7 @@ T zeta_imp_prec(T s, T sc, const Policy&, const mpl::int_<64>&)
          BOOST_MATH_BIG_CONSTANT(T, 64, -0.145392555873022044329e-9),
       };
       static const T Q[10] = {    
-         1,
+         BOOST_MATH_BIG_CONSTANT(T, 64, 1.0),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.205135978585281988052),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.0192359357875879453602),
          BOOST_MATH_BIG_CONSTANT(T, 64, 0.00111496452029715514119),
