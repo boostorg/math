@@ -87,7 +87,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l *
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.324588649825948492091e-4))
       };
       static const T Q[] = {
-         static_cast<T>(0.1e1),
+         static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.1e1)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.196202987197795200688e1)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.148019669424231326694e1)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.541391432071720958364e0)),
@@ -198,7 +198,7 @@ T lgamma_small_imp(T z, T zm1, T zm2, const mpl::int_<64>&, const Policy& /* l *
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.431171342679297331241e-3))
          };
          static const T Q[] = {
-            static_cast<T>(0.1e1),
+            static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.1e1)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.150169356054485044494e1)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.846973248876495016101e0)),
             static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -0.220095151814995745555e0)),
