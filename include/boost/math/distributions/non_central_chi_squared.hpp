@@ -430,6 +430,13 @@ namespace boost
                Policy()))
                   return (RealType)r;
             //
+            // Special cases get short-circuited first:
+            //
+            if(p == 0)
+               return comp ? tools::max_value<RealType>() : 0;
+            if(p == 1)
+               return comp ? 0 : tools::max_value<RealType>();
+            //
             // This is Pearson's approximation to the quantile, see
             // Pearson, E. S. (1959) "Note on an approximation to the distribution of 
             // noncentral chi squared", Biometrika 46: 364.
@@ -451,19 +458,27 @@ namespace boost
                guess = b + c * quantile(chi_squared_distribution<value_type, forwarding_policy>(ff), p);
             }
             //
-            // Sometimes guess goes very small or negative - all we really know
-            // is that the answer is somewhere between 0 and 1 - searching for
-            // the result can take a long time in this case :-(
+            // Sometimes guess goes very small or negative, in that case we have
+            // to do something else for the initial guess, this approximation
+            // was provided in a private communication from Thomas Luu, PhD candidate, 
+            // University College London.  It's an asymptotic expansion for the
+            // quantile which usually gets us within an order of magnitude of the
+            // correct answer.
             //
-            if(guess < sqrt(tools::min_value<value_type>()))
-               guess = sqrt(tools::min_value<value_type>());
-
+            if(guess < 0.005)
+            {
+               value_type pp = comp ? 1 - p : p;
+               guess = pow(pow(value_type(2), (k / 2 - 1)) * exp(l / 2) * pp * k, 2 / k);
+               if(guess == 0)
+                  guess = tools::min_value<value_type>();
+            }
             value_type result = detail::generic_quantile(
                non_central_chi_squared_distribution<value_type, forwarding_policy>(k, l),
                p,
                guess,
                comp,
                function);
+
             return policies::checked_narrowing_cast<RealType, forwarding_policy>(
                result,
                function);
