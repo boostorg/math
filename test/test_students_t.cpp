@@ -354,6 +354,35 @@ void test_spots(RealType)
          static_cast<RealType>(1.42262528146180931868169289781115099L),    // t.
          tolerance);
 
+      if(boost::is_floating_point<RealType>::value)
+      {
+         BOOST_CHECK_CLOSE(boost::math::cdf(
+            students_t_distribution<RealType>(1e30f), 
+               boost::math::quantile(
+                  students_t_distribution<RealType>(1e30f), static_cast<RealType>(0.25f))), 
+            static_cast<RealType>(0.25f), tolerance);
+         BOOST_CHECK_CLOSE(boost::math::cdf(
+            students_t_distribution<RealType>(1e20f), 
+               boost::math::quantile(
+                  students_t_distribution<RealType>(1e20f), static_cast<RealType>(0.25f))), 
+            static_cast<RealType>(0.25f), tolerance);
+         BOOST_CHECK_CLOSE(boost::math::cdf(
+            students_t_distribution<RealType>(0x7FFFFFFF), 
+               boost::math::quantile(
+                  students_t_distribution<RealType>(0x7FFFFFFF), static_cast<RealType>(0.25f))), 
+            static_cast<RealType>(0.25f), tolerance);
+         BOOST_CHECK_CLOSE(boost::math::cdf(
+            students_t_distribution<RealType>(0x10000000), 
+               boost::math::quantile(
+                  students_t_distribution<RealType>(0x10000000), static_cast<RealType>(0.25f))), 
+            static_cast<RealType>(0.25f), tolerance);
+         BOOST_CHECK_CLOSE(boost::math::cdf(
+            students_t_distribution<RealType>(0x0fffffff), 
+               boost::math::quantile(
+                  students_t_distribution<RealType>(0x0fffffff), static_cast<RealType>(0.25f))), 
+            static_cast<RealType>(0.25f), tolerance);
+      }
+
   // Student's t pdf tests.
   // for PDF checks, use 100 eps tolerance expressed as a percent:
    tolerance = boost::math::tools::epsilon<RealType>() * 10000;

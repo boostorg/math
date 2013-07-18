@@ -372,7 +372,13 @@ T inverse_students_t(T df, T u, T v, const Policy& pol, bool* pexact = 0)
    else
    {
 calculate_real:
-      if(df < 3)
+      if(df > 0x10000000)
+      {
+         result = -boost::math::erfc_inv(2 * u, pol) * constants::root_two<T>();
+         if((pexact) && (df >= 1e20))
+            *pexact = true;
+      }
+      else if(df < 3)
       {
          //
          // Use a roughly linear scheme to choose between Shaw's
@@ -395,7 +401,7 @@ calculate_real:
          // where we use Shaw's tail series.
          // The crossover point is roughly exponential in -df:
          //
-         T crossover = ldexp(1.0f, iround(T(df / -0.654f), pol));
+         T crossover = ldexp(1.0f, iround(T(df / -0.654f), typename policies::normalise<Policy, policies::rounding_error<policies::ignore_error> >::type()));
          if(u > crossover)
          {
             result = boost::math::detail::inverse_students_t_hill(df, u, pol);
