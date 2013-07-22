@@ -468,7 +468,8 @@ namespace boost
             if(guess < 0.005)
             {
                value_type pp = comp ? 1 - p : p;
-               guess = pow(pow(value_type(2), (k / 2 - 1)) * exp(l / 2) * pp * k, 2 / k);
+               //guess = pow(pow(value_type(2), (k / 2 - 1)) * exp(l / 2) * pp * k, 2 / k);
+               guess = pow(pow(value_type(2), (k / 2 - 1)) * exp(l / 2) * pp * k * boost::math::tgamma(k / 2, forwarding_policy()), (2 / k));
                if(guess == 0)
                   guess = tools::min_value<value_type>();
             }
