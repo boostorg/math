@@ -36,6 +36,7 @@ project
        <toolset>msvc:<cxxflags>/wd4189 # local variable is initialized but not referenced
 	   <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
       <toolset>msvc-7.1:<pch>off
+      <toolset>gcc-mingw:<pch>off
       <toolset>borland:<runtime-link>static
       # <toolset>msvc:<cxxflags>/wd4506 has no effect?
       # suppress xstring(237) : warning C4506: no definition for inline function

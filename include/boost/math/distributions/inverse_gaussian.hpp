@@ -286,7 +286,7 @@ namespace detail
       // Define the distribution, using gamma_nooverflow:
       typedef gamma_distribution<RealType, no_overthrow_policy> gamma_nooverflow;
 
-      gamma_distribution<RealType, no_overthrow_policy> g(static_cast<RealType>(0.5), static_cast<RealType>(1.));
+      gamma_nooverflow g(static_cast<RealType>(0.5), static_cast<RealType>(1.));
 
       // gamma_nooverflow g(static_cast<RealType>(0.5), static_cast<RealType>(1.));
       // R qgamma(0.2, 0.5, 1)  0.0320923

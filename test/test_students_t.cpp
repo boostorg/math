@@ -367,19 +367,19 @@ void test_spots(RealType)
                   students_t_distribution<RealType>(1e20f), static_cast<RealType>(0.25f))), 
             static_cast<RealType>(0.25f), tolerance);
          BOOST_CHECK_CLOSE(boost::math::cdf(
-            students_t_distribution<RealType>(0x7FFFFFFF), 
+            students_t_distribution<RealType>(static_cast<RealType>(0x7FFFFFFF)), 
                boost::math::quantile(
-                  students_t_distribution<RealType>(0x7FFFFFFF), static_cast<RealType>(0.25f))), 
+                  students_t_distribution<RealType>(static_cast<RealType>(0x7FFFFFFF)), static_cast<RealType>(0.25f))), 
             static_cast<RealType>(0.25f), tolerance);
          BOOST_CHECK_CLOSE(boost::math::cdf(
-            students_t_distribution<RealType>(0x10000000), 
+            students_t_distribution<RealType>(static_cast<RealType>(0x10000000)), 
                boost::math::quantile(
-                  students_t_distribution<RealType>(0x10000000), static_cast<RealType>(0.25f))), 
+                  students_t_distribution<RealType>(static_cast<RealType>(0x10000000)), static_cast<RealType>(0.25f))), 
             static_cast<RealType>(0.25f), tolerance);
          BOOST_CHECK_CLOSE(boost::math::cdf(
-            students_t_distribution<RealType>(0x0fffffff), 
+            students_t_distribution<RealType>(static_cast<RealType>(0x0fffffff)), 
                boost::math::quantile(
-                  students_t_distribution<RealType>(0x0fffffff), static_cast<RealType>(0.25f))), 
+                  students_t_distribution<RealType>(static_cast<RealType>(0x0fffffff)), static_cast<RealType>(0.25f))), 
             static_cast<RealType>(0.25f), tolerance);
       }
 

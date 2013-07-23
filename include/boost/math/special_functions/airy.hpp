@@ -348,7 +348,7 @@ inline T airy_ai_zero(unsigned m, const Policy& pol)
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Airy return type must be a floating-point type.");
-   return policies::checked_narrowing_cast<T, Policy>(detail::airy_ai_zero_imp<T>(m, pol), "boost::math::airy_ai_zero<%1%>(unsigned)");
+   return policies::checked_narrowing_cast<T, Policy>(detail::airy_ai_zero_imp<value_type>(m, forwarding_policy()), "boost::math::airy_ai_zero<%1%>(unsigned)");
 }
 
 template <class T>
@@ -396,7 +396,7 @@ inline T airy_bi_zero(unsigned m, const Policy& pol)
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Airy return type must be a floating-point type.");
-   return policies::checked_narrowing_cast<T, Policy>(detail::airy_bi_zero_imp<T>(m, pol), "boost::math::airy_bi_zero<%1%>(unsigned)");
+   return policies::checked_narrowing_cast<T, Policy>(detail::airy_bi_zero_imp<value_type>(m, forwarding_policy()), "boost::math::airy_bi_zero<%1%>(unsigned)");
 }
 
 template <typename T>
