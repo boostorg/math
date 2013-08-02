@@ -453,6 +453,7 @@ run test_laplace.cpp ../../test/build//boost_unit_test_framework ;
 run test_inv_hyp.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework ;
 run test_logistic_dist.cpp ../../test/build//boost_unit_test_framework ;
 run test_lognormal.cpp ../../test/build//boost_unit_test_framework ;
 run test_minima.cpp pch ../../test/build//boost_unit_test_framework ;
