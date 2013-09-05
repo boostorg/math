@@ -416,15 +416,14 @@ calculate_real:
 }
 
 template <class T, class Policy>
-inline T find_ibeta_inv_from_t_dist(T a, T p, T q, T* py, const Policy& pol)
+inline T find_ibeta_inv_from_t_dist(T a, T p, T /*q*/, T* py, const Policy& pol)
 {
-   T u = (p > q) ? T(0.5f - q) / T(2) : T(p / 2);
-   T v = 1 - u; // u < 0.5 so no cancellation error
+   T u = p / 2;
+   T v = 1 - u;
    T df = a * 2;
    T t = boost::math::detail::inverse_students_t(df, u, v, pol);
-   T x = df / (df + t * t);
    *py = t * t / (df + t * t);
-   return x;
+   return df / (df + t * t);
 }
 
 template <class T, class Policy>
