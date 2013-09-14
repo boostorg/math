@@ -24,14 +24,14 @@ namespace boost { namespace math {
       typedef RealType value_type;
       typedef Policy policy_type;
       
-      logistic_distribution(RealType location=0, RealType scale=1) // Constructor.
-        : m_location(location), m_scale(scale) 
+      logistic_distribution(RealType l_location=0, RealType l_scale=1) // Constructor.
+        : m_location(l_location), m_scale(l_scale) 
       {
         static const char* function = "boost::math::logistic_distribution<%1%>::logistic_distribution";
         
         RealType result;
-        detail::check_scale(function, scale, &result, Policy());
-        detail::check_location(function, location, &result, Policy());
+        detail::check_scale(function, l_scale, &result, Policy());
+        detail::check_location(function, l_location, &result, Policy());
       }
       // Accessor functions.
       RealType scale()const

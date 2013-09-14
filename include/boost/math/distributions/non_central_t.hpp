@@ -449,8 +449,8 @@ namespace boost
             BOOST_MATH_STD_USING
             if ((boost::math::isinf)(n))
             { // Infinite degrees of freedom, so use normal distribution located at delta.
-               normal_distribution<T, Policy> n(delta, 1); 
-               return pdf(n, t);
+               normal_distribution<T, Policy> norm(delta, 1); 
+               return pdf(norm, t);
             }
             //
             // Otherwise, for t < 0 we have to use the reflection formula:

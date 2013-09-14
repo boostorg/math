@@ -96,7 +96,7 @@ inline RealType pdf(const students_t_distribution<RealType, Policy>& dist, const
    if ((boost::math::isinf)(x))
    { // +infinity.
      normal_distribution<RealType, Policy> n(0, 1); 
-     RealType result = pdf(n, x);
+     result = pdf(n, x);
      return result;
    }
    RealType limit = policies::get_epsilon<RealType, Policy>();

@@ -149,6 +149,7 @@ void test_beta(T, const char* name)
 template <class T>
 void test_spots(T)
 {
+   BOOST_MATH_STD_USING
    //
    // basic sanity checks, tolerance is 100 epsilon expressed as a percentage:
    //
@@ -187,19 +188,19 @@ void test_spots(T)
       ::boost::math::ibeta_inv(
          static_cast<T>(40),
          static_cast<T>(0.5),
-         1 - ldexp(T(1), -30)),
+         static_cast<T>(1 - ldexp(T(1), -30))),
       static_cast<T>(0.99999999999999999998286262026583217516676792408012252456039L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta_inv(
          static_cast<T>(0.5),
          static_cast<T>(40),
-         ldexp(T(1), -30)),
+         static_cast<T>(ldexp(T(1), -30))),
       static_cast<T>(1.713737973416782483323207591987747543960774485649459249e-20L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta_inv(
          static_cast<T>(0.5),
          static_cast<T>(0.75),
-         ldexp(T(1), -30)),
+         static_cast<T>(ldexp(T(1), -30))),
       static_cast<T>(1.245132488513853853809715434621955746959615015005382639e-18L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta_inv(

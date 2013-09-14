@@ -337,7 +337,7 @@ inline typename tools::promote_args<T>::type airy_bi_prime(T x)
 }
 
 template <class T, class Policy>
-inline T airy_ai_zero(unsigned m, const Policy& pol)
+inline T airy_ai_zero(unsigned m, const Policy& /*pol*/)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename policies::evaluation<T, Policy>::type value_type;
@@ -385,7 +385,7 @@ inline OutputIterator airy_ai_zero(
 }
 
 template <class T, class Policy>
-inline T airy_bi_zero(unsigned m, const Policy& pol)
+inline T airy_bi_zero(unsigned m, const Policy& /*pol*/)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename policies::evaluation<T, Policy>::type value_type;
