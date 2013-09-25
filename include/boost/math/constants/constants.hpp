@@ -139,7 +139,7 @@ namespace boost{ namespace math
          return p;
       }
 
-      template <class T, const T& (*F)(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
+      template <class T, const T& (*F)()>
       struct constant_initializer
       {
          static void force_instantiate()
@@ -158,7 +158,7 @@ namespace boost{ namespace math
          static const initializer init;
       };
 
-      template <class T, const T& (*F)(BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
+      template <class T, const T& (*F)()>
       typename constant_initializer<T, F>::initializer const constant_initializer<T, F>::init;
 
       template <class T, int N, const T& (*F)(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(mpl::int_<N>) BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(T))>
