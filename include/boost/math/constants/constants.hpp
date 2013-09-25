@@ -151,11 +151,7 @@ namespace boost{ namespace math
          {
             initializer()
             {
-               F(
-      #ifdef BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
-                  0
-      #endif
-                  );
+               F();
             }
             void force_instantiate()const{}
          };
@@ -177,11 +173,7 @@ namespace boost{ namespace math
          {
             initializer()
             {
-               F(
-      #ifdef BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
-                  mpl::int_<N>() , 0
-      #endif
-                  );
+               F();
             }
             void force_instantiate()const{}
          };
