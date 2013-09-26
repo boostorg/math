@@ -525,7 +525,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
    //
    // Select calculation method for the initial estimate:
    //
-   if((b == 0.5f) && (a >= 0.5f))
+   if((b == 0.5f) && (a >= 0.5f) && (p != 1))
    {
       //
       // We have a Student's T distribution:
