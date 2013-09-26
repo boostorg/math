@@ -327,13 +327,13 @@ void test_spots(T)
       ::boost::math::ibeta(
          static_cast<T>(0.5f),
          static_cast<T>(0.5f),
-         static_cast<T>(0.825)),
+         static_cast<T>(0.825L)),
       static_cast<T>(0.725231121519469565327291851560156562956885802608457839260161L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibetac(
          static_cast<T>(0.5f),
          static_cast<T>(0.5f),
-         static_cast<T>(0.825)),
+         static_cast<T>(0.825L)),
       static_cast<T>(0.274768878480530434672708148439843437043114197391542160739838L), tolerance);
    //
    // Second argument is 1 is a special case, see http://functions.wolfram.com/GammaBetaErf/BetaRegularized/03/01/01/
@@ -342,25 +342,25 @@ void test_spots(T)
       ::boost::math::ibeta(
          static_cast<T>(0.5f),
          static_cast<T>(1),
-         static_cast<T>(0.825)),
+         static_cast<T>(0.825L)),
       static_cast<T>(0.908295106229247499626759842915458109758420750043003849691665L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibetac(
          static_cast<T>(0.5f),
          static_cast<T>(1),
-         static_cast<T>(0.825)),
+         static_cast<T>(0.825L)),
       static_cast<T>(0.091704893770752500373240157084541890241579249956996150308334L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibeta(
          static_cast<T>(30),
          static_cast<T>(1),
-         static_cast<T>(0.825)),
+         static_cast<T>(0.825L)),
       static_cast<T>(0.003116150729395132012981654047222541793435357905008020740211L), tolerance);
    BOOST_CHECK_CLOSE(
       ::boost::math::ibetac(
          static_cast<T>(30),
          static_cast<T>(1),
-         static_cast<T>(0.825)),
+         static_cast<T>(0.825L)),
       static_cast<T>(0.996883849270604867987018345952777458206564642094991979259788L), tolerance);
 }
 
