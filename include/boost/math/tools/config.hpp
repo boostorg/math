@@ -109,7 +109,7 @@
 #  define BOOST_MATH_NO_NATIVE_LONG_DOUBLE_FP_CLASSIFY
 #endif
 
-#if defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
 
 #  include "boost/type.hpp"
 #  include "boost/non_type.hpp"
@@ -143,7 +143,7 @@
 #  define BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)
 
 
-#endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+#endif // __SUNPRO_CC
 
 #if (defined(__SUNPRO_CC) || defined(__hppa) || defined(__GNUC__)) && !defined(BOOST_MATH_SMALL_CONSTANT)
 // Sun's compiler emits a hard error if a constant underflows,
