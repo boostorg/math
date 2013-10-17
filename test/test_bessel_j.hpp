@@ -262,6 +262,13 @@ void test_bessel(T, const char* name)
     do_test_sph_bessel_j<T>(sph_bessel_data, name, "Bessel j: Random Data");
 
     //
+    // Some special cases:
+    //
+    BOOST_CHECK_EQUAL(boost::math::sph_bessel(0, T(0)), T(1));
+    BOOST_CHECK_EQUAL(boost::math::sph_bessel(1, T(0)), T(0));
+    BOOST_CHECK_EQUAL(boost::math::sph_bessel(100000, T(0)), T(0));
+
+    //
     // Special cases that are errors:
     //
     BOOST_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(0)), std::domain_error);
