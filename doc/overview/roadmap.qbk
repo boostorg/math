@@ -20,6 +20,7 @@ All bug reports including closed ones can be viewed
 * Improve consistency of argument reduction in the elliptic integrals [@https://svn.boost.org/trac/boost/ticket/9104 #9104].
 * Fix bug in inverse incomplete beta that results in cancellation errors when the beta function is really an arcsine or Student's T distribution.
 * Fix issue in Bessel I and K function continued fractions that causes spurious over/underflow.
+* Add improvement to non-central chi squared distribution quantile due to Thomas Luu.
 
 [h4 Boost-1.54]
 
