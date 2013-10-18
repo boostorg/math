@@ -50,11 +50,8 @@ struct sph_bessel_j_small_z_series_term
       mult = x / 2;
       if(v + 3 > max_factorial<T>::value)
       {
-         // term = v * log(mult) - boost::math::lgamma(v+1+T(0.5f), Policy());
-         // term = exp(term);
-         // Denominator increases faster than numerator each time v increases by one,
-         // so if tgamma would overflow then the result is necessarily zero.
-         term = 0;
+         term = v * log(mult) - boost::math::lgamma(v+1+T(0.5f), Policy());
+         term = exp(term);
       }
       else
          term = pow(mult, T(v)) / boost::math::tgamma(v+1+T(0.5f), Policy());
