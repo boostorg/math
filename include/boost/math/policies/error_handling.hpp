@@ -87,7 +87,11 @@ void raise_error(const char* function, const char* message)
        message = "Cause unknown";
 
   std::string msg("Error in function ");
+#ifndef BOOST_NO_RTTI
   msg += (boost::format(function) % typeid(T).name()).str();
+#else
+  msg += function;
+#endif
   msg += ": ";
   msg += message;
 
@@ -104,7 +108,11 @@ void raise_error(const char* function, const char* message, const T& val)
      message = "Cause unknown: error caused by bad argument with value %1%";
 
   std::string msg("Error in function ");
+#ifndef BOOST_NO_RTTI
   msg += (boost::format(function) % typeid(T).name()).str();
+#else
+  msg += function;
+#endif
   msg += ": ";
   msg += message;
 
