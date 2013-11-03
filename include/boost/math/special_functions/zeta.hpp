@@ -866,9 +866,10 @@ template <class T, class Policy, class Tag>
 T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
 {
    BOOST_MATH_STD_USING
+   static const char* function = "boost::math::zeta<%1%>";
    if(sc == 0)
       return policies::raise_pole_error<T>(
-         "boost::math::zeta<%1%>", 
+         function, 
          "Evaluation of zeta function at pole %1%", 
          s, pol);
    T result;
@@ -883,10 +884,25 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
          result = 0;
       else
       {
-         result = boost::math::sin_pi(0.5f * sc, pol)
-            * 2 * pow(2 * constants::pi<T>(), -s) 
-            * boost::math::tgamma(s, pol) 
-            * zeta_imp(s, sc, pol, tag);
+         if(s > max_factorial<T>::value)
+         {
+            T mult = boost::math::sin_pi(0.5f * sc, pol) * 2 * zeta_imp(s, sc, pol, tag);
+            result = boost::math::lgamma(s, pol);
+            result -= s * log(2 * constants::pi<T>());
+            if(result > tools::log_max_value<T>())
+               return sign(mult) * policies::raise_overflow_error<T>(function, 0, pol);
+            result = exp(result);
+            if(tools::max_value<T>() / fabs(mult) < result)
+               return boost::math::sign(mult) * policies::raise_overflow_error<T>(function, 0, pol);
+            result *= mult;
+         }
+         else
+         {
+            result = boost::math::sin_pi(0.5f * sc, pol)
+               * 2 * pow(2 * constants::pi<T>(), -s) 
+               * boost::math::tgamma(s, pol) 
+               * zeta_imp(s, sc, pol, tag);
+         }
       }
    }
    else

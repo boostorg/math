@@ -5,7 +5,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/zeta.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -150,5 +150,28 @@ void test_spots(T, const char* t)
    BOOST_CHECK_CLOSE(::boost::math::zeta(-ldexp(static_cast<T>(1), -32)), static_cast<T>(-0.499999999786042949889995597926798240562852438685508646794693L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::zeta(-ldexp(static_cast<T>(1), -33)), static_cast<T>(-0.499999999893021474931402198791408471637626205588681812641711L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::zeta(-ldexp(static_cast<T>(1), -34)), static_cast<T>(-0.499999999946510737462302199352114463422268928922372277519378L), tolerance);
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127 4756)
+#endif
+   //
+   // Very large negative values need special handling in our code, test them here, due to a bug report by Rocco Romeo:
+   //
+   BOOST_CHECK_EQUAL(::boost::math::zeta(static_cast<T>(-200)), static_cast<T>(0));
+   if(std::numeric_limits<T>::max_exponent >= 1024)
+   {
+      BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(-171)), static_cast<T>(1.28194898634822427378088228065956967928127061276520385040051e172L), tolerance * 10);
+      BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(-171.5)), static_cast<T>(4.73930233055054501360661283732419615206017226423071857829425e172L), tolerance * 1000);
+      BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(-172.5)), static_cast<T>(-1.30113885243175165293156588942160456456090687128236657847674e174L), tolerance * 100);
+      BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(-173)), static_cast<T>(-9.66241211085609184243169684777934860657838245104636064505158e174L), tolerance * 100);
+   }
+   if(std::numeric_limits<T>::has_infinity)
+   {
+      BOOST_CHECK_EQUAL(::boost::math::zeta(-10007, boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>())), std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(::boost::math::zeta(-10009, boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>())), -std::numeric_limits<T>::infinity());
+   }
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 }
 

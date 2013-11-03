@@ -356,7 +356,7 @@ T digamma_imp(T x, const Tag* t, const Policy& pol)
    //
    // Check for negative arguments and use reflection:
    //
-   if(x < 0)
+   if(x <= -1)
    {
       // Reflect:
       x = 1 - x;
@@ -376,6 +376,8 @@ T digamma_imp(T x, const Tag* t, const Policy& pol)
       }
       result = constants::pi<T>() / tan(constants::pi<T>() * remainder);
    }
+   if(x == 0)
+      return policies::raise_pole_error<T>("boost::math::digamma<%1%>(%1%)", 0, x, pol);
    //
    // If we're above the lower-limit for the
    // asymptotic expansion then use it:
@@ -397,9 +399,9 @@ T digamma_imp(T x, const Tag* t, const Policy& pol)
       //
       // If x < 1 use recurrance to shift to > 1:
       //
-      if(x < 1)
+      while(x < 1)
       {
-         result = -1/x;
+         result -= 1/x;
          x += 1;
       }
       result += digamma_imp_1_2(x, t);

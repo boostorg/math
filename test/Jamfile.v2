@@ -648,7 +648,7 @@ run test_toms748_solve.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_triangular.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_uniform.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_weibull.cpp ../../test/build//boost_unit_test_framework ;
-run test_zeta.cpp test_instances//test_instances ../../test/build//boost_unit_test_framework pch_light ;
+run test_zeta.cpp ../../test/build//boost_unit_test_framework pch ;
 
 run test_policy.cpp ../../test/build//boost_unit_test_framework ;
 run test_policy_2.cpp ../../test/build//boost_unit_test_framework ;
