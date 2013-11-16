@@ -160,7 +160,7 @@ void test_spots(T, const char* t)
    BOOST_CHECK_EQUAL(::boost::math::zeta(static_cast<T>(-200)), static_cast<T>(0));
    if(std::numeric_limits<T>::max_exponent >= 1024)
    {
-      BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(-171)), static_cast<T>(1.28194898634822427378088228065956967928127061276520385040051e172L), tolerance * 10);
+      BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(-171)), static_cast<T>(1.28194898634822427378088228065956967928127061276520385040051e172L), tolerance * 200);
       BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(-171.5)), static_cast<T>(4.73930233055054501360661283732419615206017226423071857829425e172L), tolerance * 1000);
       BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(-172.5)), static_cast<T>(-1.30113885243175165293156588942160456456090687128236657847674e174L), tolerance * 100);
       BOOST_CHECK_CLOSE(::boost::math::zeta(static_cast<T>(-173)), static_cast<T>(-9.66241211085609184243169684777934860657838245104636064505158e174L), tolerance * 100);

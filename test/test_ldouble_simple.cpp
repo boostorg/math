@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK_EQUAL((boost::math::changesign)(1.0L), -1.0L);
    BOOST_CHECK_EQUAL((boost::math::changesign)(-1.0L), 1.0L);
 
-   BOOST_CHECK_EQUAL((boost::math::fpclassify)(1.0L), FP_NORMAL);
+   BOOST_CHECK_EQUAL((boost::math::fpclassify)(1.0L), (int)FP_NORMAL);
    BOOST_CHECK_EQUAL((boost::math::isnan)(1.0L), false);
    BOOST_CHECK_EQUAL((boost::math::isinf)(1.0L), false);
    BOOST_CHECK_EQUAL((boost::math::isnormal)(1.0L), true);
