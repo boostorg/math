@@ -25,7 +25,7 @@ inline T cyl_bessel_j_derivative_imp(T v, T x, const Policy& pol)
    // Prevent complex result:
    //
    if (x < 0 && floor(v) != v)
-      return policies::raise_domain_error<T>(
+      return boost::math::policies::raise_domain_error<T>(
          function,
          "Got x = %1%, but function requires x >= 0", x, pol);
    //
@@ -39,7 +39,7 @@ inline T cyl_bessel_j_derivative_imp(T v, T x, const Policy& pol)
          return -0.5;
       else if (floor(v) == v || v > 1)
          return 0;
-      else return policies::raise_domain_error<T>(
+      else return boost::math::policies::raise_domain_error<T>(
          function,
          "Got x = %1%, but function is indeterminate for this order", x, pol);
    }
@@ -47,13 +47,11 @@ inline T cyl_bessel_j_derivative_imp(T v, T x, const Policy& pol)
    // Special case for v == 0:
    //
    if (v == 0)
-   {
-      return -cyl_bessel_j_imp<T>(1, x, Tag(), pol);
-   }
+      return -boost::math::detail::cyl_bessel_j_imp<T>(1, x, Tag(), pol);
    //
    // Default case:
    //
-   return (cyl_bessel_j_imp(v-1, x, Tag(), pol) - cyl_bessel_j_imp(v+1, x, Tag(), pol)) / 2;
+   return (boost::math::detail::cyl_bessel_j_imp(v-1, x, Tag(), pol) - boost::math::detail::cyl_bessel_j_imp(v+1, x, Tag(), pol)) / 2;
 }
 
 template <class T, class Policy>
@@ -64,28 +62,26 @@ inline T sph_bessel_j_derivative_imp(unsigned v, T x, const Policy& pol)
    // Prevent complex result:
    //
    if (x < 0)
-      return policies::raise_domain_error<T>(
+      return boost::math::policies::raise_domain_error<T>(
          function,
          "Got x = %1%, but function requires x >= 0.", x, pol);
    //
    // Special case for v == 0:
    //
    if (v == 0)
-   {
-      return (x == 0) ? policies::raise_overflow_error<T>(function, 0, pol)
-         : -sph_bessel_j_imp<T>(1, x, pol);
-   }
+      return (x == 0) ? boost::math::policies::raise_overflow_error<T>(function, 0, pol)
+         : -boost::math::detail::sph_bessel_j_imp<T>(1, x, pol);
    //
    // Special case for x == 0 and v > 0:
    //
    if (x == 0)
-      return policies::raise_domain_error<T>(
+      return boost::math::policies::raise_domain_error<T>(
          function,
          "Got x = %1%, but function is indeterminate for this order", x, pol);
    //
    // Default case:
    //
-   return (v / x) * sph_bessel_j_imp(v, x, pol) - sph_bessel_j_imp(v+1, x, pol);
+   return (v / x) * boost::math::detail::sph_bessel_j_imp(v, x, pol) - boost::math::detail::sph_bessel_j_imp(v+1, x, pol);
 }
 
 template <class T, class Policy>
@@ -97,7 +93,7 @@ inline T cyl_bessel_i_derivative_imp(T v, T x, const Policy& pol)
    // Prevent complex result:
    //
    if (x < 0 && floor(v) != v)
-      return policies::raise_domain_error<T>(
+      return boost::math::policies::raise_domain_error<T>(
          function,
          "Got x = %1%, but function requires x >= 0", x, pol);
    //
@@ -109,7 +105,7 @@ inline T cyl_bessel_i_derivative_imp(T v, T x, const Policy& pol)
          return 0.5;
       else if (floor(v) == v || v > 1)
          return 0;
-      else return policies::raise_domain_error<T>(
+      else return boost::math::policies::raise_domain_error<T>(
          function,
          "Got x = %1%, but function is indeterminate for this order", x, pol);
    }
@@ -117,13 +113,11 @@ inline T cyl_bessel_i_derivative_imp(T v, T x, const Policy& pol)
    // Special case for v == 0:
    //
    if (v == 0)
-   {
-      return cyl_bessel_i_imp<T>(1, x, pol);
-   }
+      return boost::math::detail::cyl_bessel_i_imp<T>(1, x, pol);
    //
    // Default case:
    //
-   return (cyl_bessel_i_imp(v-1, x, pol) + cyl_bessel_i_imp(v+1, x, pol)) / 2;
+   return (boost::math::detail::cyl_bessel_i_imp(v-1, x, pol) + boost::math::detail::cyl_bessel_i_imp(v+1, x, pol)) / 2;
 }
 
 template <class Tag, class T, class Policy>
@@ -133,20 +127,18 @@ inline T cyl_bessel_k_derivative_imp(T v, T x, const Policy& pol)
    // Prevent complex and indeterminate results:
    //
    if (x <= 0)
-      return policies::raise_domain_error<T>(
+      return boost::math::policies::raise_domain_error<T>(
          "boost::math::cyl_bessel_k_derivative<%1%>(%1%,%1%)",
          "Got x = %1%, but function requires x > 0", x, pol);
    //
    // Special case for v == 0:
    //
    if (v == 0)
-   {
-      return -cyl_bessel_k_imp<T>(1, x, Tag(), pol);
-   }
+      return -boost::math::detail::cyl_bessel_k_imp<T>(1, x, Tag(), pol);
    //
    // Default case:
    //
-   return (cyl_bessel_k_imp(v-1, x, Tag(), pol) + cyl_bessel_k_imp(v+1, x, Tag(), pol)) / -2;
+   return (boost::math::detail::cyl_bessel_k_imp(v-1, x, Tag(), pol) + boost::math::detail::cyl_bessel_k_imp(v+1, x, Tag(), pol)) / -2;
 }
 
 template <class Tag, class T, class Policy>
@@ -156,20 +148,18 @@ inline T cyl_neumann_derivative_imp(T v, T x, const Policy& pol)
    // Prevent complex and indeterminate results:
    //
    if (x <= 0)
-      return policies::raise_domain_error<T>(
+      return boost::math::policies::raise_domain_error<T>(
          "boost::math::cyl_neumann_derivative<%1%>(%1%,%1%)",
          "Got x = %1%, but function requires x > 0", x, pol);
    //
    // Special case for v == 0:
    //
    if (v == 0)
-   {
-      return -cyl_neumann_imp<T>(1, x, Tag(), pol);
-   }
+      return -boost::math::detail::cyl_neumann_imp<T>(1, x, Tag(), pol);
    //
    // Default case:
    //
-   return (cyl_neumann_imp(v-1, x, Tag(), pol) - cyl_neumann_imp(v+1, x, Tag(), pol)) / 2;
+   return (boost::math::detail::cyl_neumann_imp(v-1, x, Tag(), pol) - boost::math::detail::cyl_neumann_imp(v+1, x, Tag(), pol)) / 2;
 }
 
 template <class T, class Policy>
@@ -179,20 +169,18 @@ inline T sph_neumann_derivative_imp(unsigned v, T x, const Policy& pol)
    // Prevent complex and indeterminate result:
    //
    if (x <= 0)
-      return policies::raise_domain_error<T>(
+      return boost::math::policies::raise_domain_error<T>(
          "boost::math::sph_neumann_derivative<%1%>(%1%,%1%)",
          "Got x = %1%, but function requires x > 0.", x, pol);
    //
    // Special case for v == 0:
    //
    if (v == 0)
-   {
-      return -sph_neumann_imp<T>(1, x, pol);
-   }
+      return -boost::math::detail::sph_neumann_imp<T>(1, x, pol);
    //
    // Default case:
    //
-   return (v / x) * sph_neumann_imp(v, x, pol) - sph_neumann_imp(v+1, x, pol);
+   return (v / x) * boost::math::detail::sph_neumann_imp(v, x, pol) - boost::math::detail::sph_neumann_imp(v+1, x, pol);
 }
 
 } // namespace detail
