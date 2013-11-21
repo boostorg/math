@@ -11,6 +11,7 @@
 #endif
 
 #include <boost/math/special_functions/bessel.hpp>
+#include <boost/math/special_functions/detail/bessel_jy_derivatives_asym.hpp>
 
 namespace boost{ namespace math{
 
@@ -43,6 +44,11 @@ inline T cyl_bessel_j_derivative_imp(T v, T x, const Policy& pol)
          function,
          "Got x = %1%, but function is indeterminate for this order", x, pol);
    }
+   //
+   // Special case for large x: use asymptotic expansion:
+   //
+   if (boost::math::detail::asymptotic_bessel_derivative_large_x_limit(v, x))
+	   return boost::math::detail::asymptotic_bessel_j_derivative_large_x_2(v, x);
    //
    // Special case for v == 0:
    //
@@ -151,6 +157,11 @@ inline T cyl_neumann_derivative_imp(T v, T x, const Policy& pol)
       return boost::math::policies::raise_domain_error<T>(
          "boost::math::cyl_neumann_derivative<%1%>(%1%,%1%)",
          "Got x = %1%, but function requires x > 0", x, pol);
+   //
+   // Special case for large x: use asymptotic expansion:
+   //
+   if (boost::math::detail::asymptotic_bessel_derivative_large_x_limit(v, x))
+	   return boost::math::detail::asymptotic_bessel_y_derivative_large_x_2(v, x);
    //
    // Special case for v == 0:
    //
