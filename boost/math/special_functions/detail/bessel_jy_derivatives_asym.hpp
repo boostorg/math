@@ -30,7 +30,8 @@ inline T asymptotic_bessel_derivative_amplitude(T v, T x)
 
    s -= (mu - 3) / (2 * txq);
    s -= (mu - 1) * (mu - 45) / (txq * txq * 8);
-   s -= 3 * (mu - 1) * (mu - 45) * (mu - 9) * (mu - 175) / (txq * txq * 48);
+   s -= 3 * (mu - 1) * (mu - 9) * (mu - 175) / (txq * txq * 48);
+   s -= 15 * (mu - 1) * (mu - 9) * (mu - 25) * (mu - 441) / (txq * txq * 384);
 
    return sqrt(s * 2 / (boost::math::constants::pi<T>() * x));
 }
