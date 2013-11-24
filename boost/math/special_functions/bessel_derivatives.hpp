@@ -1,4 +1,4 @@
-//  Copyright
+//  Copyright (c) 2013 Anton Bikineev
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -59,7 +59,7 @@ inline T cyl_bessel_j_derivative_imp(T v, T x, const Policy& pol)
       if (floor(v) == v && v < 0)
       {
          v = -v;
-         if (boost::math::itrunc(v, pol) & 1)
+         if (itrunc(v, pol) & 1)
             inversed = true;
       }
       T r = boost::math::detail::bessel_j_derivative_small_z_series(v, x, pol);
