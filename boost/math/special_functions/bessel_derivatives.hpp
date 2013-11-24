@@ -12,6 +12,7 @@
 
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/detail/bessel_jy_derivatives_asym.hpp>
+#include <boost/math/special_functions/detail/bessel_jy_derivatives_series.hpp>
 
 namespace boost{ namespace math{
 
@@ -48,7 +49,22 @@ inline T cyl_bessel_j_derivative_imp(T v, T x, const Policy& pol)
    // Special case for large x: use asymptotic expansion:
    //
    if (boost::math::detail::asymptotic_bessel_derivative_large_x_limit(v, x))
-	   return boost::math::detail::asymptotic_bessel_j_derivative_large_x_2(v, x);
+      return boost::math::detail::asymptotic_bessel_j_derivative_large_x_2(v, x);
+   //
+   // Special case for small x: use Taylor series:
+   //
+   if ((abs(x) < 5) || (abs(v) > x * x / 4))
+   {
+      bool inversed = false;
+      if (floor(v) == v && v < 0)
+      {
+         v = -v;
+         if (boost::math::itrunc(v, pol) & 1)
+            inversed = true;
+      }
+      T r = boost::math::detail::bessel_j_derivative_small_z_series(v, x, pol);
+      return inversed ? -r : r;
+   }
    //
    // Special case for v == 0:
    //
@@ -161,7 +177,16 @@ inline T cyl_neumann_derivative_imp(T v, T x, const Policy& pol)
    // Special case for large x: use asymptotic expansion:
    //
    if (boost::math::detail::asymptotic_bessel_derivative_large_x_limit(v, x))
-	   return boost::math::detail::asymptotic_bessel_y_derivative_large_x_2(v, x);
+      return boost::math::detail::asymptotic_bessel_y_derivative_large_x_2(v, x);
+   //
+   // Special case for small x: use Taylor series:
+   //
+   if (floor(v) != v)
+   {
+      T eps = boost::math::policies::get_epsilon<T, Policy>();
+      if ((log(eps / 2) > v * log((x/2) * (x/2) / v)) || x < eps)
+         return boost::math::detail::bessel_y_derivative_small_z_series(v, x, pol);
+   }
    //
    // Special case for v == 0:
    //

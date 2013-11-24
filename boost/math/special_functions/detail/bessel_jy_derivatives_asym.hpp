@@ -20,7 +20,7 @@ namespace boost{ namespace math{ namespace detail{
 template <class T>
 inline T asymptotic_bessel_derivative_amplitude(T v, T x)
 {
-   // Calculate the amplitude for J'(v,x) and I'(v,x) for large x.
+   // Calculate the amplitude for J'(v,x) and I'(v,x)
    // for large x: see A&S 9.2.30.
    BOOST_MATH_STD_USING
    T s = 1;
