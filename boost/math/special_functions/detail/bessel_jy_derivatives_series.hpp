@@ -31,7 +31,7 @@ struct bessel_j_derivative_small_z_series_term
       T r = term * (v + 2 * N);
       ++N;
       term *= mult / (N * (N + v));
-      return r;
+      return r == 0 ? operator()() : r;
    }
 private:
    unsigned N;
