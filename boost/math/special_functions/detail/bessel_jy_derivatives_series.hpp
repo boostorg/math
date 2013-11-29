@@ -92,7 +92,7 @@ struct bessel_y_derivative_small_z_series_term_a
       T r = term * (-v + 2 * N);
       ++N;
       term *= mult / (N * (N - v));
-      return r;
+      return r == 0 ? operator()() : r;
    }
 private:
    unsigned N;
@@ -120,7 +120,7 @@ struct bessel_y_derivative_small_z_series_term_b
       T r = term * (v + 2 * N);
       ++N;
       term *= mult / (N * (N + v));
-      return r;
+      return r == 0 ? operator()() : r;
    }
 private:
    unsigned N;
