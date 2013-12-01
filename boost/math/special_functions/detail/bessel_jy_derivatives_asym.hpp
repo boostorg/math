@@ -24,12 +24,12 @@ inline T asymptotic_bessel_derivative_amplitude(T v, T x)
    // for large x: see A&S 9.2.30.
    BOOST_MATH_STD_USING
    T s = 1;
-   T mu = 4 * v * v;
+   const T mu = 4 * v * v;
    T txq = 2 * x;
    txq *= txq;
 
    s -= (mu - 3) / (2 * txq);
-   s -= (mu - 1) * (mu - 45) / (txq * txq * 8);
+   s -= ((mu - 1) * (mu - 45)) / (txq * txq * 8);
 
    return sqrt(s * 2 / (boost::math::constants::pi<T>() * x));
 }
@@ -41,16 +41,18 @@ inline T asymptotic_bessel_derivative_phase_mx(T v, T x)
    // See A&S 9.2.31.
    // Note that the result returned is the phase less (x - PI(v/2 - 1/4))
    // which we'll factor in later when we calculate the sines/cosines of the result:
-   T mu = 4 * v * v;
+   const T mu = 4 * v * v;
+   const T mu2 = mu * mu;
+   const T mu3 = mu2 * mu;
    T denom = 4 * x;
    T denom_mult = denom * denom;
 
    T s = 0;
    s += (mu + 3) / (2 * denom);
    denom *= denom_mult;
-   s += (mu * mu + 46 * mu - 63) / (6 * denom);
+   s += (mu2 + (46 * mu) - 63) / (6 * denom);
    denom *= denom_mult;
-   s += (mu * mu * mu + 185 * mu * mu - 2053 * mu + 1899) / (5 * denom);
+   s += (mu3 + (185 * mu2) - (2053 * mu) + 1899) / (5 * denom);
    return s;
 }
 
@@ -60,8 +62,8 @@ inline T asymptotic_bessel_y_derivative_large_x_2(T v, T x)
    // See A&S 9.2.20.
    BOOST_MATH_STD_USING
    // Get the phase and amplitude:
-   T ampl = asymptotic_bessel_derivative_amplitude(v, x);
-   T phase = asymptotic_bessel_derivative_phase_mx(v, x);
+   const T ampl = asymptotic_bessel_derivative_amplitude(v, x);
+   const T phase = asymptotic_bessel_derivative_phase_mx(v, x);
    BOOST_MATH_INSTRUMENT_VARIABLE(ampl);
    BOOST_MATH_INSTRUMENT_VARIABLE(phase);
    //
@@ -70,11 +72,11 @@ inline T asymptotic_bessel_y_derivative_large_x_2(T v, T x)
    // the x - PI(v/2 - 1/4) term not added to the
    // phase when we calculated it.
    //
-   T cx = cos(x);
-   T sx = sin(x);
-   T ci = cos_pi(v / 2 - 0.25f);
-   T si = sin_pi(v / 2 - 0.25f);
-   T sin_phase = sin(phase) * (cx * ci + sx * si) + cos(phase) * (sx * ci - cx * si);
+   const T cx = cos(x);
+   const T sx = sin(x);
+   const T ci = cos_pi(v / 2 - 0.25f);
+   const T si = sin_pi(v / 2 - 0.25f);
+   const T sin_phase = sin(phase) * (cx * ci + sx * si) + cos(phase) * (sx * ci - cx * si);
    BOOST_MATH_INSTRUMENT_CODE(sin(phase));
    BOOST_MATH_INSTRUMENT_CODE(cos(x));
    BOOST_MATH_INSTRUMENT_CODE(cos(phase));
@@ -88,8 +90,8 @@ inline T asymptotic_bessel_j_derivative_large_x_2(T v, T x)
    // See A&S 9.2.20.
    BOOST_MATH_STD_USING
    // Get the phase and amplitude:
-   T ampl = asymptotic_bessel_derivative_amplitude(v, x);
-   T phase = asymptotic_bessel_derivative_phase_mx(v, x);
+   const T ampl = asymptotic_bessel_derivative_amplitude(v, x);
+   const T phase = asymptotic_bessel_derivative_phase_mx(v, x);
    BOOST_MATH_INSTRUMENT_VARIABLE(ampl);
    BOOST_MATH_INSTRUMENT_VARIABLE(phase);
    //
@@ -102,11 +104,11 @@ inline T asymptotic_bessel_j_derivative_large_x_2(T v, T x)
    BOOST_MATH_INSTRUMENT_CODE(cos(x));
    BOOST_MATH_INSTRUMENT_CODE(sin(phase));
    BOOST_MATH_INSTRUMENT_CODE(sin(x));
-   T cx = cos(x);
-   T sx = sin(x);
-   T ci = cos_pi(v / 2 - 0.25f);
-   T si = sin_pi(v / 2 - 0.25f);
-   T sin_phase = cos(phase) * (cx * ci + sx * si) - sin(phase) * (sx * ci - cx * si);
+   const T cx = cos(x);
+   const T sx = sin(x);
+   const T ci = cos_pi(v / 2 - 0.25f);
+   const T si = sin_pi(v / 2 - 0.25f);
+   const T sin_phase = cos(phase) * (cx * ci + sx * si) - sin(phase) * (sx * ci - cx * si);
    BOOST_MATH_INSTRUMENT_VARIABLE(sin_phase);
    return sin_phase * ampl;
 }
