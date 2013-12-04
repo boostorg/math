@@ -13,6 +13,7 @@
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/detail/bessel_jy_derivatives_asym.hpp>
 #include <boost/math/special_functions/detail/bessel_jy_derivatives_series.hpp>
+#include <boost/math/special_functions/detail/bessel_derivatives_linear.hpp>
 
 namespace boost{ namespace math{
 
@@ -73,7 +74,7 @@ inline T cyl_bessel_j_derivative_imp(T v, T x, const Policy& pol)
    //
    // Default case:
    //
-   return (boost::math::detail::cyl_bessel_j_imp<T>(v-1, x, Tag(), pol) - boost::math::detail::cyl_bessel_j_imp<T>(v+1, x, Tag(), pol)) / 2;
+   return boost::math::detail::bessel_j_derivative_linear(v, x, Tag(), pol);
 }
 
 template <class T, class Policy>
@@ -103,7 +104,7 @@ inline T sph_bessel_j_derivative_imp(unsigned v, T x, const Policy& pol)
    //
    // Default case:
    //
-   return (v / x) * boost::math::detail::sph_bessel_j_imp<T>(v, x, pol) - boost::math::detail::sph_bessel_j_imp<T>(v+1, x, pol);
+   return boost::math::detail::sph_bessel_j_derivative_linear(v, x, pol);
 }
 
 template <class T, class Policy>
@@ -139,7 +140,7 @@ inline T cyl_bessel_i_derivative_imp(T v, T x, const Policy& pol)
    //
    // Default case:
    //
-   return (boost::math::detail::cyl_bessel_i_imp<T>(v-1, x, pol) + boost::math::detail::cyl_bessel_i_imp<T>(v+1, x, pol)) / 2;
+   return boost::math::detail::bessel_i_derivative_linear(v, x, pol);
 }
 
 template <class Tag, class T, class Policy>
@@ -160,7 +161,7 @@ inline T cyl_bessel_k_derivative_imp(T v, T x, const Policy& pol)
    //
    // Default case:
    //
-   return (boost::math::detail::cyl_bessel_k_imp<T>(v-1, x, Tag(), pol) + boost::math::detail::cyl_bessel_k_imp<T>(v+1, x, Tag(), pol)) / -2;
+   return boost::math::detail::bessel_k_derivative_linear(v, x, Tag(), pol);
 }
 
 template <class Tag, class T, class Policy>
@@ -195,7 +196,7 @@ inline T cyl_neumann_derivative_imp(T v, T x, const Policy& pol)
    //
    // Default case:
    //
-   return (boost::math::detail::cyl_neumann_imp<T>(v-1, x, Tag(), pol) - boost::math::detail::cyl_neumann_imp<T>(v+1, x, Tag(), pol)) / 2;
+   return boost::math::detail::bessel_y_derivative_linear(v, x, Tag(), pol);
 }
 
 template <class T, class Policy>
@@ -216,7 +217,7 @@ inline T sph_neumann_derivative_imp(unsigned v, T x, const Policy& pol)
    //
    // Default case:
    //
-   return (v / x) * boost::math::detail::sph_neumann_imp<T>(v, x, pol) - boost::math::detail::sph_neumann_imp<T>(v+1, x, pol);
+   return boost::math::detail::sph_neumann_derivative_linear(v, x, pol);
 }
 
 } // namespace detail
