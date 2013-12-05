@@ -55,7 +55,7 @@ inline T bessel_j_derivative_small_z_series(T v, T x, const Policy& pol)
    }
    else
    {
-      prefix = (v - 1) * log(x / 2) - log(2) - boost::math::lgamma(v+1, pol);
+      prefix = (v - 1) * log(x / 2) - constants::ln_two<T>() - boost::math::lgamma(v+1, pol);
       prefix = exp(prefix);
    }
    if (0 == prefix)
@@ -165,7 +165,7 @@ inline T bessel_y_derivative_small_z_series(T v, T x, const Policy& pol)
    else
    {
       gam = boost::math::lgamma(v, pol);
-      p = (v + 1) * p + log(2);
+      p = (v + 1) * p + constants::ln_two<T>();
       prefix = gam - log(boost::math::constants::pi<T>()) - p;
       if (boost::math::tools::log_max_value<T>() < prefix)
       {
@@ -197,7 +197,7 @@ inline T bessel_y_derivative_small_z_series(T v, T x, const Policy& pol)
    else
    {
       int sgn;
-      prefix = boost::math::lgamma(-v, &sgn, pol) + (v - 1) * log(x / 2) - log(2);
+      prefix = boost::math::lgamma(-v, &sgn, pol) + (v - 1) * log(x / 2) - constants::ln_two<T>();
       prefix = exp(prefix) * sgn / boost::math::constants::pi<T>();
    }
    bessel_y_derivative_small_z_series_term_b<T, Policy> s2(v, x);
