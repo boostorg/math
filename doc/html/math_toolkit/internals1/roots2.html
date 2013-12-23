@@ -4,7 +4,7 @@
 <title>Root Finding Without Derivatives: Bisection, Bracket and TOMS748</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="../../index.html" title="Math Toolkit">
+<link rel="home" href="../../index.html" title="Math Toolkit 1.8.3">
 <link rel="up" href="../internals1.html" title="Utilities &amp; internals">
 <link rel="prev" href="roots.html" title="Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schroeder">
 <link rel="next" href="minima.html" title="Locating Function Minima: Brent's algorithm">
@@ -237,7 +237,8 @@
 <dt><span class="term">max_iter</span></dt>
 <dd><p>
               The maximum number of invocations of <span class="emphasis"><em>f(x)</em></span> to make
-              while searching for the root.
+              while searching for the root. On exist this is set to actual number
+              of invocations performed.
             </p></dd>
 </dl>
 </div>
@@ -345,7 +346,7 @@
 <dt><span class="term">max_iter</span></dt>
 <dd><p>
               The maximum number of function invocations to perform in the search
-              for the root.
+              for the root. On exit is set to the actual number of invocations performed.
             </p></dd>
 </dl>
 </div>

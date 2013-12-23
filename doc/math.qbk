@@ -9,6 +9,7 @@
     ]
     [authors [Bristow, Paul A.], [Holin, Hubert], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang] ]
     [/last-revision $Date$]
+    [version 1.8.3]
 ]
 
 [template mathpart[id title]
