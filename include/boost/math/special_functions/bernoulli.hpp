@@ -55,14 +55,6 @@ OutputIterator bernoulli_number_imp(OutputIterator out, std::size_t start, std::
 
 } // namespace detail
 
-template<class T>
-inline T unchecked_bernoulli_b2n(std::size_t n)
-{
-   typedef mpl::int_<detail::bernoulli_imp_variant<T>::value> tag_type;
-
-   return detail::unchecked_bernoulli_imp<T>(n, tag_type());
-}
-
 template <class T, class Policy>
 inline T bernoulli_b2n(const int i, const Policy &pol)
 {

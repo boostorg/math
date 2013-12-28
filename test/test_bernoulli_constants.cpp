@@ -157,6 +157,10 @@ void test(const char* name)
       {
          BOOST_CHECK_CLOSE_FRACTION(b2n, data[i - 1], tol);
       }
+      if(i <= boost::math::max_bernoulli_b2n<T>::value)
+      {
+         BOOST_CHECK_EQUAL(b2n, boost::math::unchecked_bernoulli_b2n<T>(i));
+      }
    }
    //
    // Test consistency of array interface:

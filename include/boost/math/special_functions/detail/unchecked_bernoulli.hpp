@@ -640,6 +640,13 @@ inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<3>& )
 
 } // namespace detail
 
+template<class T>
+inline T unchecked_bernoulli_b2n(std::size_t n)
+{
+   typedef mpl::int_<detail::bernoulli_imp_variant<T>::value> tag_type;
+
+   return detail::unchecked_bernoulli_imp<T>(n, tag_type());
+}
 
 }} // namespaces
 
