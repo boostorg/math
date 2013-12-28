@@ -850,18 +850,18 @@ OutputIterator bernoulli_number_imp(OutputIterator out, std::size_t start, std::
    //
    // Get the counter and see if we need to calculate more constants:
    //
-   if(static_cast<std::size_t>(counter.load(boost::memory_order_consume)) < start + n)
+   if(static_cast<std::size_t>(counter.load(std::memory_order_consume)) < start + n)
    {
       boost::detail::lightweight_mutex::scoped_lock l(m);
 
-      if(static_cast<std::size_t>(counter.load(boost::memory_order_consume)) < start + n)
+      if(static_cast<std::size_t>(counter.load(std::memory_order_consume)) < start + n)
       {
          if(start + n >= bn.size())
          {
             std::size_t new_size = (std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50));
             tangent_numbers_series<T>(bn, new_size, pol, &overflow_limit);
          }
-         counter.store(bn.size(), boost::memory_order_release);
+         counter.store(bn.size(), std::memory_order_release);
       }
    }
 
