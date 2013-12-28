@@ -154,9 +154,16 @@ T airy_bi_prime_imp(T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-T airy_ai_zero_imp(unsigned m, const Policy& pol)
+T airy_ai_zero_imp(int m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
+
+   // Handle cases when a negative zero (negative rank) is requested.
+   if(m < 0)
+   {
+      return policies::raise_domain_error<T>("boost::math::airy_ai_zero<%1%>(%1%, int)",
+                                             "Requested the %1%'th zero, but the rank must be 1 or more !", m, pol);
+   }
 
    // Handle case when the zero'th zero is requested.
    if(m == 0U)
@@ -180,10 +187,10 @@ T airy_ai_zero_imp(unsigned m, const Policy& pol)
    // Use a dynamic tolerance because the roots get closer the higher m gets.
    T tolerance;
 
-   if     (m <=   10U) { tolerance = T(0.3F); }
-   else if(m <=  100U) { tolerance = T(0.1F); }
-   else if(m <= 1000U) { tolerance = T(0.05F); }
-   else                { tolerance = T(1) / sqrt(T(m)); }
+   if     (m <=   10) { tolerance = T(0.3F); }
+   else if(m <=  100) { tolerance = T(0.1F); }
+   else if(m <= 1000) { tolerance = T(0.05F); }
+   else               { tolerance = T(1) / sqrt(T(m)); }
 
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T am =
@@ -201,9 +208,16 @@ T airy_ai_zero_imp(unsigned m, const Policy& pol)
 }
 
 template <class T, class Policy>
-T airy_bi_zero_imp(unsigned m, const Policy& pol)
+T airy_bi_zero_imp(int m, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names, needed for log, sqrt.
+
+   // Handle cases when a negative zero (negative rank) is requested.
+   if(m < 0)
+   {
+      return policies::raise_domain_error<T>("boost::math::airy_bi_zero<%1%>(%1%, int)",
+                                             "Requested the %1%'th zero, but the rank must 1 or more !", m, pol);
+   }
 
    // Handle case when the zero'th zero is requested.
    if(m == 0U)
@@ -226,10 +240,10 @@ T airy_bi_zero_imp(unsigned m, const Policy& pol)
    // Use a dynamic tolerance because the roots get closer the higher m gets.
    T tolerance;
 
-   if     (m <=   10U) { tolerance = T(0.3F); }
-   else if(m <=  100U) { tolerance = T(0.1F); }
-   else if(m <= 1000U) { tolerance = T(0.05F); }
-   else                { tolerance = T(1) / sqrt(T(m)); }
+   if     (m <=   10) { tolerance = T(0.3F); }
+   else if(m <=  100) { tolerance = T(0.1F); }
+   else if(m <= 1000) { tolerance = T(0.05F); }
+   else               { tolerance = T(1) / sqrt(T(m)); }
 
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
    const T bm =
@@ -337,7 +351,7 @@ inline typename tools::promote_args<T>::type airy_bi_prime(T x)
 }
 
 template <class T, class Policy>
-inline T airy_ai_zero(unsigned m, const Policy& /*pol*/)
+inline T airy_ai_zero(int m, const Policy& /*pol*/)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename policies::evaluation<T, Policy>::type value_type;
@@ -352,14 +366,14 @@ inline T airy_ai_zero(unsigned m, const Policy& /*pol*/)
 }
 
 template <class T>
-inline T airy_ai_zero(unsigned m)
+inline T airy_ai_zero(int m)
 {
    return airy_ai_zero<T>(m, policies::policy<>());
 }
 
 template <class T, class OutputIterator, class Policy>
 inline OutputIterator airy_ai_zero(
-                         unsigned start_index,
+                         int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it,
                          const Policy& pol)
@@ -367,7 +381,7 @@ inline OutputIterator airy_ai_zero(
    typedef T result_type;
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy return type must be a floating-point type.");
 
-   for(unsigned i = 0; i < number_of_zeros; ++i)
+   for(unsigned i = 0; i < static_cast<int>(number_of_zeros); ++i)
    {
       *out_it = boost::math::airy_ai_zero<result_type>(start_index + i, pol);
       ++out_it;
@@ -377,7 +391,7 @@ inline OutputIterator airy_ai_zero(
 
 template <class T, class OutputIterator>
 inline OutputIterator airy_ai_zero(
-                         unsigned start_index,
+                         int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it)
 {
@@ -385,7 +399,7 @@ inline OutputIterator airy_ai_zero(
 }
 
 template <class T, class Policy>
-inline T airy_bi_zero(unsigned m, const Policy& /*pol*/)
+inline T airy_bi_zero(int m, const Policy& /*pol*/)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename policies::evaluation<T, Policy>::type value_type;
@@ -407,7 +421,7 @@ inline T airy_bi_zero(unsigned m)
 
 template <class T, class OutputIterator, class Policy>
 inline OutputIterator airy_bi_zero(
-                         unsigned start_index,
+                         int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it,
                          const Policy& pol)
@@ -415,7 +429,7 @@ inline OutputIterator airy_bi_zero(
    typedef T result_type;
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy return type must be a floating-point type.");
 
-   for(unsigned i = 0; i < number_of_zeros; ++i)
+   for(int i = 0; i < static_cast<int>(number_of_zeros); ++i)
    {
       *out_it = boost::math::airy_bi_zero<result_type>(start_index + i, pol);
       ++out_it;
@@ -425,7 +439,7 @@ inline OutputIterator airy_bi_zero(
 
 template <class T, class OutputIterator>
 inline OutputIterator airy_bi_zero(
-                         unsigned start_index,
+                         int start_index,
                          unsigned number_of_zeros,
                          OutputIterator out_it)
 {

@@ -693,7 +693,7 @@ inline OutputIterator cyl_bessel_j_zero(T v,
                               const Policy& pol)
 {
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
-   for(unsigned i = 0; i < number_of_zeros; ++i)
+   for(int i = 0; i < static_cast<int>(number_of_zeros); ++i)
    {
       *out_it = boost::math::cyl_bessel_j_zero(v, start_index + i, pol);
       ++out_it;
@@ -741,7 +741,7 @@ inline OutputIterator cyl_neumann_zero(T v,
                              const Policy& pol)
 {
    BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Order must be a floating-point type.");
-   for(unsigned i = 0; i < number_of_zeros; ++i)
+   for(int i = 0; i < static_cast<int>(number_of_zeros); ++i)
    {
       *out_it = boost::math::cyl_neumann_zero(v, start_index + i, pol);
       ++out_it;
