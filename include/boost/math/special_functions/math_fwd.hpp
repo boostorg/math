@@ -920,6 +920,22 @@ namespace boost
    template <class T>
    typename tools::promote_args<T>::type float_advance(const T& val, int distance);
 
+   template<class T>
+   T unchecked_bernoulli_b2n(std::size_t n);
+   template <class T, class Policy>
+   T bernoulli_b2n(const int i, const Policy &pol);
+   template <class T>
+   T bernoulli_b2n(const int i);
+   template <class T, class OutputIterator, class Policy>
+   OutputIterator bernoulli_b2n(int start_index,
+                                       unsigned number_of_bernoullis_b2n,
+                                       OutputIterator out_it,
+                                       const Policy& pol);
+   template <class T, class OutputIterator>
+   OutputIterator bernoulli_b2n(int start_index,
+                                       unsigned number_of_bernoullis_b2n,
+                                       OutputIterator out_it);
+
     } // namespace math
 } // namespace boost
 
@@ -1397,6 +1413,13 @@ template <class OutputIterator, class T>\
    template <class T, class OutputIterator>\
    OutputIterator airy_bi_zero(int start_index, unsigned number_of_zeros, OutputIterator out_it)\
    { return boost::math::airy_bi_zero<T>(start_index, number_of_zeros, out_it, Policy()); }\
+   \
+   template <class T>\
+   T bernoulli_b2n(const int i)\
+   { return boost::math::bernoulli_b2n<T>(i, Policy()); }\
+   template <class T, class OutputIterator>\
+   OutputIterator bernoulli_b2n(int start_index, unsigned number_of_bernoullis_b2n, OutputIterator out_it)\
+   { return boost::math::bernoulli_b2n<T>(start_index, number_of_bernoullis_b2n, out_it, Policy()); }\
    \
 
 
