@@ -27,7 +27,7 @@ OutputIterator bernoulli_number_imp(OutputIterator out, std::size_t start, std::
       ++out;
    }
    
-   for(std::size_t i = (std::max)(max_bernoulli_b2n<T>::value + 1, start); i < start + n; ++i)
+   for(std::size_t i = (std::max)(static_cast<std::size_t>(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
    {
       // We must overflow:
       *out = (i & 1 ? 1 : -1) * policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(n)", 0, pol);

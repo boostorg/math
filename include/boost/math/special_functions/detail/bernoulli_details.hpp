@@ -14,7 +14,7 @@
 
 #ifndef BOOST_NO_CXX11_HDR_ATOMIC
 #  include <atomic>
-
+#  define BOOST_MATH_ATOMIC_NS std
 #if ATOMIC_INT_LOCK_FREE == 2
 typedef std::atomic<int> atomic_counter_type;
 #elif ATOMIC_SHORT_LOCK_FREE == 2
@@ -34,6 +34,7 @@ typedef std::atomic<long long> atomic_counter_type;
 //
 #define BOOST_ATOMIC_NO_LIB
 #include <boost/atomic.hpp>
+#  define BOOST_MATH_ATOMIC_NS boost
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -339,7 +340,7 @@ public:
    {
       static const std::size_t min_overflow_index = possible_overflow_index<T>();
 
-      container_type::size_type old_size = bn.size();
+      typename container_type::size_type old_size = bn.size();
 
       tangent(m);
       bn.resize(m);
@@ -454,7 +455,7 @@ public:
          }
       }
 
-      for(std::size_t i = (std::max)(max_bernoulli_b2n<T>::value + 1, start); i < start + n; ++i)
+      for(std::size_t i = (std::max)(static_cast<std::size_t>(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
       {
          *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli<%1%>(std::size_t)", 0, pol) : bn[i];
          ++out;
