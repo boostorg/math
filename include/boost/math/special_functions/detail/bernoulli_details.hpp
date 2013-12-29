@@ -14,7 +14,7 @@
 
 #ifndef BOOST_NO_CXX11_HDR_ATOMIC
 #  include <atomic>
-#  define BOOST_MATH_ATOMIC_NS std
+
 #if ATOMIC_INT_LOCK_FREE == 2
 typedef std::atomic<int> atomic_counter_type;
 #elif ATOMIC_SHORT_LOCK_FREE == 2
@@ -33,8 +33,7 @@ typedef std::atomic<long long> atomic_counter_type;
 // not need to link against a separate library:
 //
 #define BOOST_ATOMIC_NO_LIB
-#  include <boost/atomic.hpp>
-#  define BOOST_MATH_ATOMIC_NS boost
+#include <boost/atomic.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 

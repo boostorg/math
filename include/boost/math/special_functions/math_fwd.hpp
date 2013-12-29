@@ -701,35 +701,35 @@ namespace boost
    typename tools::promote_args<T>::type airy_bi_prime(T x);
 
    template <class T>
-   T airy_ai_zero(unsigned m);
+   T airy_ai_zero(int m);
    template <class T, class Policy>
-   T airy_ai_zero(unsigned m, const Policy&);
+   T airy_ai_zero(int m, const Policy&);
 
    template <class OutputIterator>
    OutputIterator airy_ai_zero(
-                     unsigned start_index,
+                     int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it);
    template <class OutputIterator, class Policy>
    OutputIterator airy_ai_zero(
-                     unsigned start_index,
+                     int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it,
                      const Policy&);
 
    template <class T>
-   T airy_bi_zero(unsigned m);
+   T airy_bi_zero(int m);
    template <class T, class Policy>
-   T airy_bi_zero(unsigned m, const Policy&);
+   T airy_bi_zero(int m, const Policy&);
 
    template <class OutputIterator>
    OutputIterator airy_bi_zero(
-                     unsigned start_index,
+                     int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it);
    template <class OutputIterator, class Policy>
    OutputIterator airy_bi_zero(
-                     unsigned start_index,
+                     int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it,
                      const Policy&);
