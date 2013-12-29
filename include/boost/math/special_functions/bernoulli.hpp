@@ -60,7 +60,7 @@ inline T bernoulli_b2n(const int i, const Policy &pol)
 {
    typedef mpl::int_<detail::bernoulli_imp_variant<T>::value> tag_type;
    if(i < 0)
-      policies::raise_domain_error<T>("boost::math::bernoulli<%1%>", "Index should be >= 0 but got %1%", T(i), pol);
+      return policies::raise_domain_error<T>("boost::math::bernoulli<%1%>", "Index should be >= 0 but got %1%", T(i), pol);
 
    T result;
    boost::math::detail::bernoulli_number_imp<T>(&result, static_cast<std::size_t>(i), 1u, pol, tag_type());
@@ -81,7 +81,10 @@ inline OutputIterator bernoulli_b2n(int start_index,
 {
    typedef mpl::int_<detail::bernoulli_imp_variant<T>::value> tag_type;
    if(start_index < 0)
-      policies::raise_domain_error<T>("boost::math::bernoulli<%1%>", "Index should be >= 0 but got %1%", T(start_index), pol);
+   {
+      *out_it = policies::raise_domain_error<T>("boost::math::bernoulli<%1%>", "Index should be >= 0 but got %1%", T(start_index), pol);
+      return ++out_it;
+   }
 
    return boost::math::detail::bernoulli_number_imp<T>(out_it, start_index, number_of_bernoullis_b2n, pol, tag_type());
 }
@@ -92,6 +95,46 @@ inline OutputIterator bernoulli_b2n(int start_index,
                                     OutputIterator out_it)
 {
    return boost::math::bernoulli_b2n<T, OutputIterator>(start_index, number_of_bernoullis_b2n, out_it, policies::policy<>());
+}
+
+template <class T, class Policy>
+inline T tangent_t2n(const int i, const Policy &pol)
+{
+   if(i < 0)
+      return policies::raise_domain_error<T>("boost::math::tangent_t2n<%1%>", "Index should be >= 0 but got %1%", T(i), pol);
+
+   T result;
+   boost::math::detail::get_bernoulli_numbers_cache<T, Policy>().copy_tangent_numbers(&result, i, 1, pol);
+   return result;
+}
+
+template <class T>
+inline T tangent_t2n(const int i)
+{
+   return boost::math::tangent_t2n<T>(i, policies::policy<>());
+}
+
+template <class T, class OutputIterator, class Policy>
+inline OutputIterator tangent_t2n(int start_index,
+                                    unsigned number_of_tangent_t2n,
+                                    OutputIterator out_it,
+                                    const Policy& pol)
+{
+   if(start_index < 0)
+   {
+      *out_it = policies::raise_domain_error<T>("boost::math::tangent_t2n<%1%>", "Index should be >= 0 but got %1%", T(start_index), pol);
+      return ++out_it;
+   }
+
+   return boost::math::detail::get_bernoulli_numbers_cache<T, Policy>().copy_tangent_numbers(out_it, start_index, number_of_tangent_t2n, pol);
+}
+
+template <class T, class OutputIterator>
+inline OutputIterator tangent_t2n(int start_index,
+                                    unsigned number_of_tangent_t2n,
+                                    OutputIterator out_it)
+{
+   return boost::math::tangent_t2n<T, OutputIterator>(start_index, number_of_tangent_t2n, out_it, policies::policy<>());
 }
 
 } } // namespace boost::math

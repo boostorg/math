@@ -935,6 +935,19 @@ namespace boost
    OutputIterator bernoulli_b2n(int start_index,
                                        unsigned number_of_bernoullis_b2n,
                                        OutputIterator out_it);
+   template <class T, class Policy>
+   T tangent_t2n(const int i, const Policy &pol);
+   template <class T>
+   T tangent_t2n(const int i);
+   template <class T, class OutputIterator, class Policy>
+   OutputIterator tangent_t2n(int start_index,
+                                       unsigned number_of_bernoullis_b2n,
+                                       OutputIterator out_it,
+                                       const Policy& pol);
+   template <class T, class OutputIterator>
+   OutputIterator tangent_t2n(int start_index,
+                                       unsigned number_of_bernoullis_b2n,
+                                       OutputIterator out_it);
 
     } // namespace math
 } // namespace boost

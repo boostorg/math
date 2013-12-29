@@ -135,6 +135,7 @@ void test(const char* name)
    for(unsigned i = 1; i <= 100; ++i)
    {
       T b2n = boost::math::bernoulli_b2n<T>(i);
+      T t2n = boost::math::tangent_t2n<T>(i);
       if((boost::math::isinf)(b2n))
       {
          if(!(boost::math::isinf)(data[i - 1]))
@@ -161,6 +162,14 @@ void test(const char* name)
       {
          BOOST_CHECK_EQUAL(b2n, boost::math::unchecked_bernoulli_b2n<T>(i));
       }
+      if((boost::math::isfinite)(t2n) && (t2n < boost::math::tools::max_value<T>()))
+      {
+         T p = ldexp(T(1), 2 * i);
+         int s = i & 1 ? 1 : -1;
+         p = t2n / (s * p * (p - 1));
+         p *= 2 * i;
+         BOOST_CHECK_CLOSE_FRACTION(p, b2n, tol);
+      }
    }
    //
    // Test consistency of array interface:
@@ -171,6 +180,13 @@ void test(const char* name)
    for(unsigned i = 0; i < boost::math::max_bernoulli_b2n<T>::value + 20; ++i)
    {
       BOOST_CHECK_EQUAL(bn[i], boost::math::bernoulli_b2n<T>(i));
+   }
+
+   boost::math::tangent_t2n<T>(0, boost::math::max_bernoulli_b2n<T>::value + 20, bn);
+
+   for(unsigned i = 0; i < boost::math::max_bernoulli_b2n<T>::value + 20; ++i)
+   {
+      BOOST_CHECK_EQUAL(bn[i], boost::math::tangent_t2n<T>(i));
    }
 }
 
