@@ -188,6 +188,12 @@ void test(const char* name)
    {
       BOOST_CHECK_EQUAL(bn[i], boost::math::tangent_t2n<T>(i));
    }
+   //
+   // Some spot tests for things that should throw exceptions:
+   //
+   static unsigned overflow_index = boost::is_same<T, boost::math::concepts::real_concept>::value ?
+      boost::math::max_bernoulli_b2n<long double>::value + 5 : boost::math::max_bernoulli_b2n<T>::value + 5;
+   BOOST_CHECK_THROW(boost::math::bernoulli_b2n<T>(overflow_index, boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::throw_on_error>())), std::overflow_error);
 }
 
 void test_real_concept_extra()

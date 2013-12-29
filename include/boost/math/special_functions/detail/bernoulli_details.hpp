@@ -372,7 +372,7 @@ public:
          //
          b  = b / (power_two * tangent_scale_factor<T>());
          b /= (power_two - 1);
-         bool overflow_check = (i >= min_overflow_index) && (tools::max_value<T>() / bn[i] < b);
+         bool overflow_check = (i >= min_overflow_index) && (tools::max_value<T>() / tn[i] < b);
          if(overflow_check)
          {
             m_overflow_limit = i;
