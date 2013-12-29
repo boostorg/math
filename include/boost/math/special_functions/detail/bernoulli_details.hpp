@@ -158,7 +158,7 @@ std::size_t possible_overflow_index()
    // We use binary search to determine a good approximation for an index that might overflow.
    // This code is called ONCE ONLY for each T at program startup.
 
-   std::size_t upper_limit = 100000;
+   std::size_t upper_limit = (std::min)(static_cast<std::size_t>(boost::math::itrunc(tools::log_max_value<T>() / (2 * constants::ln_two<T>()) - 2)), static_cast<std::size_t>(10000u));
    std::size_t lower_limit = 1;
 
    if(bernouli_impl_index_might_overflow<T>(upper_limit * 2) == 0)
@@ -190,6 +190,7 @@ std::size_t possible_overflow_index()
 template <class T>
 inline typename enable_if_c<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::radix == 2), T>::type tangent_scale_factor()
 {
+   BOOST_MATH_STD_USING
    return ldexp(T(1), std::numeric_limits<T>::min_exponent + 5);
 }
 template <class T>
@@ -212,7 +213,9 @@ struct bernoulli_initializer
          // initialize our dymanic table:
          //
          boost::math::bernoulli_b2n<T>(2, Policy());
-         boost::math::bernoulli_b2n<T>(max_bernoulli_b2n<T>::value + 1, Policy());
+         try{
+            boost::math::bernoulli_b2n<T>(max_bernoulli_b2n<T>::value + 1, Policy());
+         } catch(const std::overflow_error&){}
          boost::math::tangent_t2n<T>(2, Policy());
       }
       void force_instantiate()const{}
@@ -245,7 +248,7 @@ struct fixed_vector : private std::allocator<T>
    typedef const T* const_iterator;
    fixed_vector() : m_used(0)
    { 
-      std::size_t overflow_limit = 100 + possible_overflow_index<T>();
+      std::size_t overflow_limit = 100 + 3 * possible_overflow_index<T>();
       m_capacity = (std::min)(overflow_limit, static_cast<std::size_t>(100000u));
       m_data = this->allocate(m_capacity); 
    }
@@ -294,6 +297,8 @@ public:
       static const std::size_t min_overflow_index = possible_overflow_index<T>();
       tn.resize(m, T(0U));
 
+      BOOST_MATH_INSTRUMENT_VARIABLE(min_overflow_index);
+
       std::size_t prev_size = m_intermediates.size();
       m_intermediates.resize(m, T(0U));
 
@@ -302,6 +307,8 @@ public:
          m_intermediates[1] = tangent_scale_factor<T>() /*T(1U)*/;
          tn[0U] = T(0U);
          tn[1U] = tangent_scale_factor<T>()/* T(1U)*/;
+         BOOST_MATH_INSTRUMENT_VARIABLE(tn[0]);
+         BOOST_MATH_INSTRUMENT_VARIABLE(tn[1]);
       }
 
       for(std::size_t i = std::max<size_t>(2, prev_size); i < m; i++)
@@ -333,6 +340,8 @@ public:
          if(overflow_check)
             break; // already filled the tn...
          tn[i] = m_intermediates[i];
+         BOOST_MATH_INSTRUMENT_VARIABLE(i);
+         BOOST_MATH_INSTRUMENT_VARIABLE(tn[i]);
       }
    }
 
