@@ -1434,6 +1434,13 @@ template <class OutputIterator, class T>\
    OutputIterator bernoulli_b2n(int start_index, unsigned number_of_bernoullis_b2n, OutputIterator out_it)\
    { return boost::math::bernoulli_b2n<T>(start_index, number_of_bernoullis_b2n, out_it, Policy()); }\
    \
+   template <class T>\
+   T tangent_t2n(const int i)\
+   { return boost::math::tangent_t2n<T>(i, Policy()); }\
+   template <class T, class OutputIterator>\
+   OutputIterator tangent_t2n(int start_index, unsigned number_of_bernoullis_b2n, OutputIterator out_it)\
+   { return boost::math::tangent_t2n<T>(start_index, number_of_bernoullis_b2n, out_it, Policy()); }\
+   \
 
 
 
