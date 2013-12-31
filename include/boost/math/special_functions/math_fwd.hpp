@@ -921,32 +921,32 @@ namespace boost
    typename tools::promote_args<T>::type float_advance(const T& val, int distance);
 
    template<class T>
-   T unchecked_bernoulli_b2n(std::size_t n);
+   T unchecked_bernoulli_b2n(const std::size_t n);
    template <class T, class Policy>
    T bernoulli_b2n(const int i, const Policy &pol);
    template <class T>
    T bernoulli_b2n(const int i);
    template <class T, class OutputIterator, class Policy>
-   OutputIterator bernoulli_b2n(int start_index,
-                                       unsigned number_of_bernoullis_b2n,
+   OutputIterator bernoulli_b2n(const int start_index,
+                                       const unsigned number_of_bernoullis_b2n,
                                        OutputIterator out_it,
                                        const Policy& pol);
    template <class T, class OutputIterator>
-   OutputIterator bernoulli_b2n(int start_index,
-                                       unsigned number_of_bernoullis_b2n,
+   OutputIterator bernoulli_b2n(const int start_index,
+                                       const unsigned number_of_bernoullis_b2n,
                                        OutputIterator out_it);
    template <class T, class Policy>
    T tangent_t2n(const int i, const Policy &pol);
    template <class T>
    T tangent_t2n(const int i);
    template <class T, class OutputIterator, class Policy>
-   OutputIterator tangent_t2n(int start_index,
-                                       unsigned number_of_bernoullis_b2n,
+   OutputIterator tangent_t2n(const int start_index,
+                                       const unsigned number_of_bernoullis_b2n,
                                        OutputIterator out_it,
                                        const Policy& pol);
    template <class T, class OutputIterator>
-   OutputIterator tangent_t2n(int start_index,
-                                       unsigned number_of_bernoullis_b2n,
+   OutputIterator tangent_t2n(const int start_index,
+                                       const unsigned number_of_bernoullis_b2n,
                                        OutputIterator out_it);
 
     } // namespace math

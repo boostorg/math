@@ -414,7 +414,7 @@ inline T airy_bi_zero(int m, const Policy& /*pol*/)
 }
 
 template <typename T>
-inline T airy_bi_zero(unsigned m)
+inline T airy_bi_zero(int m)
 {
    return airy_bi_zero<T>(m, policies::policy<>());
 }

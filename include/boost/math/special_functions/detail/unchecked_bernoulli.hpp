@@ -47,6 +47,12 @@ struct max_bernoulli_index<3>
    BOOST_STATIC_CONSTANT(unsigned, value = 1156);
 };
 
+template <>
+struct max_bernoulli_index<4>
+{
+   BOOST_STATIC_CONSTANT(unsigned, value = 11);
+};
+
 template <class T>
 struct bernoulli_imp_variant
 {
@@ -64,7 +70,7 @@ struct bernoulli_imp_variant
             (std::numeric_limits<T>::max_exponent == 16384)
             && (std::numeric_limits<T>::radix == 2)
             && (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits)
-            && (boost::is_convertible<long double, T>::value) ? 3 : 0
+            && (boost::is_convertible<long double, T>::value) ? 3 : (!is_convertible<boost::int64_t, T>::value ? 4 : 0)
          )
       );
 };
@@ -638,10 +644,51 @@ inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<3>& )
    return bernoulli_data[n];
 }
 
+template <class T>
+inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<4>& )
+{
+   //
+   // Special case added for multiprecision types that have no conversion from long long,
+   // there are very few such types, but mpfr_class is one.
+   //
+   static const boost::array<boost::int32_t, 1 + max_bernoulli_b2n<T>::value> numerators =
+   {{
+      boost::int32_t(            +1LL),
+      boost::int32_t(            +1LL),
+      boost::int32_t(            -1LL),
+      boost::int32_t(            +1LL),
+      boost::int32_t(            -1LL),
+      boost::int32_t(            +5LL),
+      boost::int32_t(          -691LL),
+      boost::int32_t(            +7LL),
+      boost::int32_t(         -3617LL),
+      boost::int32_t(        +43867LL),
+      boost::int32_t(       -174611LL),
+      boost::int32_t(       +854513LL),
+   }};
+
+   static const boost::array<boost::int32_t, 1 + max_bernoulli_b2n<T>::value> denominators =
+   {{
+      boost::int32_t(      1LL),
+      boost::int32_t(      6LL),
+      boost::int32_t(     30LL),
+      boost::int32_t(     42LL),
+      boost::int32_t(     30LL),
+      boost::int32_t(     66LL),
+      boost::int32_t(   2730LL),
+      boost::int32_t(      6LL),
+      boost::int32_t(    510LL),
+      boost::int32_t(    798LL),
+      boost::int32_t(    330LL),
+      boost::int32_t(    138LL),
+   }};
+   return T(numerators[n]) / T(denominators[n]);
+}
+
 } // namespace detail
 
 template<class T>
-inline T unchecked_bernoulli_b2n(std::size_t n)
+inline T unchecked_bernoulli_b2n(const std::size_t n)
 {
    typedef mpl::int_<detail::bernoulli_imp_variant<T>::value> tag_type;
 

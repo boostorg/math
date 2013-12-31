@@ -124,6 +124,7 @@ inline bool bernouli_impl_index_does_overflow(std::size_t n)
 template<class T>
 bool bernouli_impl_index_might_overflow(std::size_t n)
 {
+   BOOST_MATH_STD_USING
    if(bernouli_impl_index_does_overflow<T>(n))
    {
       // If the index *does* overflow, then it also *might* overflow.
@@ -345,8 +346,9 @@ public:
       }
    }
 
-   void tangent_numbers_series(const std::size_t m, const Policy &pol)
+   void tangent_numbers_series(const std::size_t m)
    {
+      BOOST_MATH_STD_USING
       static const std::size_t min_overflow_index = possible_overflow_index<T>();
 
       typename container_type::size_type old_size = bn.size();
@@ -417,7 +419,7 @@ public:
       if(start + n >= bn.size())
       {
          std::size_t new_size = (std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50));
-         tangent_numbers_series(new_size, pol);
+         tangent_numbers_series(new_size);
       }
 
       for(std::size_t i = (std::max)(max_bernoulli_b2n<T>::value + 1, start); i < start + n; ++i)
@@ -433,7 +435,7 @@ public:
       if(start + n >= bn.size())
       {
          std::size_t new_size = (std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50));
-         tangent_numbers_series(new_size, pol);
+         tangent_numbers_series(new_size);
       }
 
       for(std::size_t i = (std::max)(max_bernoulli_b2n<T>::value + 1, start); i < start + n; ++i)
@@ -458,7 +460,7 @@ public:
             if(start + n >= bn.size())
             {
                std::size_t new_size = (std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50));
-               tangent_numbers_series(new_size, pol);
+               tangent_numbers_series(new_size);
             }
             m_counter.store(bn.size(), BOOST_MATH_ATOMIC_NS::memory_order_release);
          }
@@ -494,7 +496,7 @@ public:
       if(start + n >= bn.size())
       {
          std::size_t new_size = (std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50));
-         tangent_numbers_series(new_size, pol);
+         tangent_numbers_series(new_size);
       }
 
       for(std::size_t i = start; i < start + n; ++i)
@@ -518,7 +520,7 @@ public:
       if(start + n >= bn.size())
       {
          std::size_t new_size = (std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50));
-         tangent_numbers_series(new_size, pol);
+         tangent_numbers_series(new_size);
       }
 
       for(std::size_t i = start; i < start + n; ++i)
@@ -551,7 +553,7 @@ public:
             if(start + n >= bn.size())
             {
                std::size_t new_size = (std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50));
-               tangent_numbers_series(new_size, pol);
+               tangent_numbers_series(new_size);
             }
             m_counter.store(bn.size(), BOOST_MATH_ATOMIC_NS::memory_order_release);
          }

@@ -15,6 +15,7 @@
 //#include <pch_light.hpp> // commented out during testing.
 
 //#include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/airy.hpp>
 
@@ -834,8 +835,8 @@ Calculated using cpp_dec_float_50
     // BOOST_CHECK_EQUAL(airy_ai_zero<RealType>(-1), 0); //  warning C4245: 'argument' : conversion from 'int' to 'unsigned int', signed/unsigned mismatch
   }
 
-  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<unsigned>::max()), -static_cast<RealType>(7426781.75639318326103L), tolerance);
-  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>(std::numeric_limits<int>::max()), -static_cast<RealType>(4678579.33301973093739L), tolerance);
+  BOOST_CHECK_THROW(airy_ai_zero<RealType>(-1), std::domain_error);
+  BOOST_CHECK_CLOSE_FRACTION(airy_ai_zero<RealType>((std::numeric_limits<boost::int32_t>::max)()), -static_cast<RealType>(4678579.33301973093739L), tolerance);
 
   // Can't abuse with infinity because won't compile - no conversion.
   //if (std::numeric_limits<RealType>::has_infinity)
@@ -902,8 +903,8 @@ Calculated using cpp_dec_float_50
     // check airy_bi_zero<RealType>(-1) == 0 has failed [-7.42678e+006 != 0]
   }
 
-  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<unsigned>::max()), -7426781.75581678913522, tolerance * 300);
-  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>(std::numeric_limits<int>::max()), -4678579.33229351984573, tolerance * 300);
+  BOOST_CHECK_THROW(airy_bi_zero<RealType>(-1), std::domain_error);
+  BOOST_CHECK_CLOSE_FRACTION(airy_bi_zero<RealType>((std::numeric_limits<boost::int32_t>::max)()), -static_cast<RealType>(4678579.33229351984573L), tolerance * 300);
 
   // Can't abuse with infinity because won't compile - no conversion.
   //if (std::numeric_limits<RealType>::has_infinity)
@@ -978,7 +979,3 @@ BOOST_AUTO_TEST_CASE(test_main)
       "to pass.</note>" << std::cout;
 #endif
 }
-
-
-
-

@@ -74,8 +74,8 @@ inline T bernoulli_b2n(const int i)
 }
 
 template <class T, class OutputIterator, class Policy>
-inline OutputIterator bernoulli_b2n(int start_index,
-                                    unsigned number_of_bernoullis_b2n,
+inline OutputIterator bernoulli_b2n(const int start_index,
+                                    const unsigned number_of_bernoullis_b2n,
                                     OutputIterator out_it,
                                     const Policy& pol)
 {
@@ -90,8 +90,8 @@ inline OutputIterator bernoulli_b2n(int start_index,
 }
 
 template <class T, class OutputIterator>
-inline OutputIterator bernoulli_b2n(int start_index,
-                                    unsigned number_of_bernoullis_b2n,
+inline OutputIterator bernoulli_b2n(const int start_index,
+                                    const unsigned number_of_bernoullis_b2n,
                                     OutputIterator out_it)
 {
    return boost::math::bernoulli_b2n<T, OutputIterator>(start_index, number_of_bernoullis_b2n, out_it, policies::policy<>());
@@ -115,8 +115,8 @@ inline T tangent_t2n(const int i)
 }
 
 template <class T, class OutputIterator, class Policy>
-inline OutputIterator tangent_t2n(int start_index,
-                                    unsigned number_of_tangent_t2n,
+inline OutputIterator tangent_t2n(const int start_index,
+                                    const unsigned number_of_tangent_t2n,
                                     OutputIterator out_it,
                                     const Policy& pol)
 {
@@ -130,8 +130,8 @@ inline OutputIterator tangent_t2n(int start_index,
 }
 
 template <class T, class OutputIterator>
-inline OutputIterator tangent_t2n(int start_index,
-                                    unsigned number_of_tangent_t2n,
+inline OutputIterator tangent_t2n(const int start_index,
+                                    const unsigned number_of_tangent_t2n,
                                     OutputIterator out_it)
 {
    return boost::math::tangent_t2n<T, OutputIterator>(start_index, number_of_tangent_t2n, out_it, policies::policy<>());
