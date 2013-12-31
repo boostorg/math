@@ -156,10 +156,26 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
       static const char* function = "boost::math::tgamma<%1%>(%1%)";
       if(floor(x) == x)
          return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", x, pol);
+
+      if(x <= -20)
+      {
+         result = gamma_imp_bernoulli(T(-x), pol) * sinpx(x);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
+            return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+         result = -boost::math::constants::pi<T>() / result;
+         if(result == 0)
+            return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
+         if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
+            return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         return result;
+      }
+
       while(x<0)
       {
-    result/=x;
-    x+=1;
+        result/=x;
+        x+=1;
       }
   }
 
@@ -226,10 +242,10 @@ T lgamma_imp_bernoulli(T z, const Policy& pol)
 
   if(z<min_arg_for_recursion)
   {
-  T temp=gamma_imp_bernoulli(z,pol);
-  if(temp < 0)
-    temp=-1*temp;
-  return log(temp);
+    T temp=gamma_imp_bernoulli(z,pol);
+    if(temp < 0)
+      temp=-1*temp;
+    return log(temp);
   }
 
   T xx(z);
