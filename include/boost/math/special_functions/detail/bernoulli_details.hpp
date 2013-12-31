@@ -124,33 +124,28 @@ inline bool bernouli_impl_index_does_overflow(std::size_t n)
 template<class T>
 bool bernouli_impl_index_might_overflow(std::size_t n)
 {
-   BOOST_MATH_STD_USING
    if(bernouli_impl_index_does_overflow<T>(n))
    {
       // If the index *does* overflow, then it also *might* overflow.
       return true;
    }
 
-   // Here, we use an asymptotic expansion of |Bn| from Luschny
-   // to estimate if a given index n for Bn *might* overflow.
-   static const T log_of_four_pi = log(boost::math::constants::two_pi<T>() * 2);
-   static const T two_pi_e       = boost::math::constants::two_pi<T>() * boost::math::constants::e<T>();
-   const float nf = static_cast<float>(n);
-   const T nx (nf);
+   BOOST_MATH_STD_USING
+
+   // Luschny LogB3(n) formula.
+
+   const T nx (n);
    const T nx2(nx * nx);
-   const T n_log_term     = (nx + boost::math::constants::half<T>()) * log(nx / two_pi_e);
 
-   const T approximate_log_of_bn =   log_of_four_pi
-      + n_log_term
-      + boost::math::constants::half<T>()
-      + (T(1) / (nx * 12))
-      - (T(1) / (nx2 * nx * 360))
-      + (T(1) / (nx2 * nx2 * nx * 1260))
-      + (n * boost::math::constants::ln_two<T>())
-      - log(nx)
-      + log(ldexp(T(1), (int)n) - 1);
+   const T t_one(1);
 
-   return approximate_log_of_bn * 1.1 > boost::math::tools::log_max_value<T>();
+   const T approximate_log_of_bernoulli_bn
+      =   ((boost::math::constants::half<T>() + nx) * log(nx))
+        + ((boost::math::constants::half<T>() - nx) * log(boost::math::constants::pi<T>()))
+        + (((T(3) / 2) - nx) * boost::math::constants::ln_two<T>())
+        + ((nx * (T(2) - (nx2 * 7) * (t_one + ((nx2 * 30) * ((nx2 * 12) - t_one))))) / (((nx2 * nx2) * nx2) * 2520));
+
+   return ((approximate_log_of_bernoulli_bn * 1.1F) > boost::math::tools::log_max_value<T>());
 }
 
 template<class T>
