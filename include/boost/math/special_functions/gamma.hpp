@@ -114,34 +114,8 @@ T sinpx(T z)
 template<class T>
 std::size_t highest_bernoulli_index()
 {
-    // Find the high index n for Bn to produce the desired precision in Stirling's calculation.
-    // TBD: This max-index is easy to template when considering a generic tgamma.
-    return static_cast<std::size_t>(18.0 + (0.6 * static_cast<double>(std::numeric_limits<T>::digits10)));
-}
-
-template<class T>
-const T& zero()
-{
-    static T z0(0);
-    return z0;
-}
-
-template<class T>
-const T& bernoulli_table(const boost::uint32_t n)
-{
-   static std::vector<T> bernoulli_b2n_data;
-
-   std::size_t previous_size=bernoulli_b2n_data.size();
-
-   if(highest_bernoulli_index<T>() > previous_size)
-   {
-       bernoulli_b2n_data.resize(highest_bernoulli_index<T>());
-       boost::math::bernoulli_b2n<T>(int(previous_size),
-                                     unsigned(highest_bernoulli_index<T>() - previous_size),
-                                     bernoulli_b2n_data.begin() + previous_size);
-   }
-
-   return ((n < bernoulli_b2n_data.size()) ? bernoulli_b2n_data[n] : zero<T>());
+   // Find the high index n for Bn to produce the desired precision in Stirling's calculation.
+   return static_cast<std::size_t>(18.0F + (0.6F * static_cast<float>(std::numeric_limits<T>::digits10)));
 }
 
 template <class T, class Policy>
@@ -188,30 +162,40 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
 
   // Scale the argument up and use downward recursion later for the final result.
 
-  static const T min_arg_for_recursion(float(std::numeric_limits<T>::digits10 * 1.7F));
+  const T min_arg_for_recursion(float(std::numeric_limits<T>::digits10 * 1.7F));
 
   const T n_recur = ((xx < min_arg_for_recursion) ? (boost::math::lltrunc(min_arg_for_recursion - xx) + 1)
-                                                        : T(0));
+                                                  : T(0));
   if(n_recur != static_cast<boost::int32_t>(0))
   {
     xx += n_recur;
   }
 
+  const std::size_t number_of_bernoullis_b2n = highest_bernoulli_index<T>() + 20;
+
+  std::vector<T> bernoulli_table(number_of_bernoullis_b2n);
+
+  boost::math::bernoulli_b2n<T>(0,
+                                static_cast<unsigned>(number_of_bernoullis_b2n),
+                                bernoulli_table.begin());
+
         T one_over_x_pow_two_n_minus_one = 1 / xx;
   const T one_over_x2                    = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
-        T sum                            = (bernoulli_table<T>(1) / static_cast<boost::int32_t>(2)) * one_over_x_pow_two_n_minus_one;
+        T sum                            = (bernoulli_table[1U] / 2) * one_over_x_pow_two_n_minus_one;
 
   // Perform the Bernoulli series expansion of Stirling's approximation.
-  for(boost::int32_t n2 = static_cast<boost::int32_t>(4); n2 < static_cast<boost::int32_t>(highest_bernoulli_index<T>()); n2 += static_cast<boost::int32_t>(2))
+  for(std::size_t n = 2U; n < bernoulli_table.size(); ++n)
   {
     one_over_x_pow_two_n_minus_one *= one_over_x2;
 
-    const T term = (bernoulli_table<T>(static_cast<boost::uint32_t>(n2 / 2)) * one_over_x_pow_two_n_minus_one) / static_cast<boost::int32_t>(n2 * (n2 - static_cast<boost::int32_t>(1)));
+    const std::size_t n2 = n * 2U;
+
+    const T term = (bernoulli_table[n] * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
 
     sum += term;
   }
 
-  static const T half_ln_two_pi = log(boost::math::constants::two_pi<T>()) / static_cast<boost::int32_t>(2);
+  const T half_ln_two_pi = log(boost::math::constants::two_pi<T>()) / 2;
 
   const T log_gamma_value = ((((xx - boost::math::constants::half<T>()) * log(xx)) - xx) + half_ln_two_pi) + sum;
 
@@ -223,7 +207,7 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
     // We need to divide by every x+k in the range [x, x+n_recur), we save
     // division by x till last, as we may have x < 1 which could cause
     // spurious overflow if we divided by that first.
-    for(boost::int32_t k = static_cast<boost::int32_t>(1); k < n_recur; k++)
+    for(int k = 1; k < n_recur; k++)
     {
       gamma_value /= (original_x + k);
     }
@@ -1379,7 +1363,7 @@ inline typename tools::promote_args<T>::type
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
+   typedef typename lanczos::undefined_lanczos evaluation_type;
    typedef typename policies::normalise<
       Policy,
       policies::promote_float<false>,
