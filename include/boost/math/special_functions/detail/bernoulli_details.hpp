@@ -245,8 +245,8 @@ struct fixed_vector : private std::allocator<T>
    fixed_vector() : m_used(0)
    { 
       std::size_t overflow_limit = 100 + 3 * possible_overflow_index<T>();
-      m_capacity = (std::min)(overflow_limit, static_cast<std::size_t>(100000u));
-      m_data = this->allocate(m_capacity); 
+      m_capacity = static_cast<size_type>((std::min)(overflow_limit, static_cast<std::size_t>(100000u)));
+      m_data = this->allocate(m_capacity);
    }
    ~fixed_vector()
    {
@@ -291,7 +291,7 @@ public:
    void tangent(std::size_t m)
    {
       static const std::size_t min_overflow_index = possible_overflow_index<T>();
-      tn.resize(m, T(0U));
+      tn.resize(static_cast<container_type::size_type>(m), T(0U));
 
       BOOST_MATH_INSTRUMENT_VARIABLE(min_overflow_index);
 
@@ -335,7 +335,7 @@ public:
          }
          if(overflow_check)
             break; // already filled the tn...
-         tn[i] = m_intermediates[i];
+         tn[static_cast<container_type::size_type>(i)] = m_intermediates[i];
          BOOST_MATH_INSTRUMENT_VARIABLE(i);
          BOOST_MATH_INSTRUMENT_VARIABLE(tn[i]);
       }
@@ -349,7 +349,7 @@ public:
       typename container_type::size_type old_size = bn.size();
 
       tangent(m);
-      bn.resize(m);
+      bn.resize(static_cast<container_type::size_type>(m));
 
       if(!old_size)
       {
@@ -369,28 +369,28 @@ public:
          //
          b  = b / (power_two * tangent_scale_factor<T>());
          b /= (power_two - 1);
-         bool overflow_check = (i >= min_overflow_index) && (tools::max_value<T>() / tn[i] < b);
+         bool overflow_check = (i >= min_overflow_index) && (tools::max_value<T>() / tn[static_cast<container_type::size_type>(i)] < b);
          if(overflow_check)
          {
             m_overflow_limit = i;
             while(i < m)
             {
                b = std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : tools::max_value<T>();
-               bn[i] = ((i % 2) ? b : -b);
+               bn[static_cast<container_type::size_type>(i)] = ((i % 2) ? b : -b);
                ++i;
             }
             break;
          }
          else
          {
-            b *= tn[i];
+            b *= tn[static_cast<container_type::size_type>(i)];
          }
 
          power_two = ldexp(power_two, 2);
 
          const bool b_neg = i % 2 == 0;
 
-         bn[i] = ((!b_neg) ? b : -b);
+         bn[static_cast<container_type::size_type>(i)] = ((!b_neg) ? b : -b);
       }
    }
 
@@ -463,7 +463,7 @@ public:
 
       for(std::size_t i = (std::max)(static_cast<std::size_t>(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
       {
-         *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli<%1%>(std::size_t)", 0, pol) : bn[i];
+         *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli<%1%>(std::size_t)", 0, pol) : bn[static_cast<container_type::size_type>(i)];
          ++out;
       }
 
@@ -560,10 +560,10 @@ public:
             *out = policies::raise_overflow_error<T>("boost::math::bernoulli<%1%>(std::size_t)", 0, pol);
          else
          {
-            if(tools::max_value<T>() * tangent_scale_factor<T>() < tn[i])
+            if(tools::max_value<T>() * tangent_scale_factor<T>() < tn[static_cast<container_type::size_type>(i)])
                *out = policies::raise_overflow_error<T>("boost::math::bernoulli<%1%>(std::size_t)", 0, pol);
             else
-               *out = tn[i] / tangent_scale_factor<T>();
+               *out = tn[static_cast<container_type::size_type>(i)] / tangent_scale_factor<T>();
          }
          ++out;
       }

@@ -115,18 +115,18 @@ template<class T>
 std::size_t highest_bernoulli_index()
 {
    // Find the high index n for Bn to produce the desired precision in Stirling's calculation.
-   return static_cast<std::size_t>(18.0F + (0.6F * static_cast<float>(std::numeric_limits<T>::digits10)));
+   return static_cast<std::size_t>(18.0F + (0.65F * static_cast<float>(std::numeric_limits<T>::digits10)));
 }
 
 template <class T, class Policy>
 T gamma_imp_bernoulli(T x, const Policy& pol)
 {
-  T result = 1;
+   T result = 1;
 
-  //the following handling of negative arguments modelled after the handling in function
- //T gamma_imp(T z, const Policy& pol, const Lanczos& l)
-  if(x<=0)
-  {
+   //the following handling of negative arguments modelled after the handling in function
+   //T gamma_imp(T z, const Policy& pol, const Lanczos& l)
+   if(x <= 0)
+   {
       static const char* function = "boost::math::tgamma<%1%>(%1%)";
       if(floor(x) == x)
          return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", x, pol);
@@ -146,77 +146,86 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
          return result;
       }
 
-      while(x<0)
+      while(x < 0)
       {
-        result/=x;
-        x+=1;
+         result /= x;
+
+         x += 1;
       }
-  }
+   }
 
-  // Make a local, unsigned copy of the input argument.
+   // Make a local, unsigned copy of the input argument.
 
-  T xx(x);
+   T xx(x);
+   T original_x(xx);
 
-// The value of xx will be changed below, so we want an original version
-  T original_x=xx;
+   // Scale the argument up and use downward recursion later for the final result.
 
-  // Scale the argument up and use downward recursion later for the final result.
+   const T min_arg_for_recursion(static_cast<float>(std::numeric_limits<T>::digits10) * 1.7F);
 
-  const T min_arg_for_recursion(float(std::numeric_limits<T>::digits10 * 1.7F));
+   int n_recur;
 
-  const T n_recur = ((xx < min_arg_for_recursion) ? (boost::math::lltrunc(min_arg_for_recursion - xx) + 1)
-                                                  : T(0));
-  if(n_recur != static_cast<boost::int32_t>(0))
-  {
-    xx += n_recur;
-  }
+   if(xx < min_arg_for_recursion)
+   {
+      n_recur = boost::math::ltrunc(min_arg_for_recursion - xx) + 1;
+   }
+   else
+   {
+      n_recur = 0;
+   }
 
-  const std::size_t number_of_bernoullis_b2n = highest_bernoulli_index<T>() + 20;
+   if(n_recur != 0)
+   {
+     xx += n_recur;
+   }
 
-  std::vector<T> bernoulli_table(number_of_bernoullis_b2n);
+   const std::size_t number_of_bernoullis_b2n = highest_bernoulli_index<T>();
 
-  boost::math::bernoulli_b2n<T>(0,
-                                static_cast<unsigned>(number_of_bernoullis_b2n),
-                                bernoulli_table.begin());
+   std::vector<T> bernoulli_table(number_of_bernoullis_b2n);
 
-        T one_over_x_pow_two_n_minus_one = 1 / xx;
-  const T one_over_x2                    = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
-        T sum                            = (bernoulli_table[1U] / 2) * one_over_x_pow_two_n_minus_one;
+   boost::math::bernoulli_b2n<T>(0,
+                                 static_cast<unsigned>(number_of_bernoullis_b2n),
+                                 bernoulli_table.begin());
 
-  // Perform the Bernoulli series expansion of Stirling's approximation.
-  for(std::size_t n = 2U; n < bernoulli_table.size(); ++n)
-  {
-    one_over_x_pow_two_n_minus_one *= one_over_x2;
+         T one_over_x_pow_two_n_minus_one = 1 / xx;
+   const T one_over_x2                    = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
+         T sum                            = (bernoulli_table[1U] / 2) * one_over_x_pow_two_n_minus_one;
 
-    const std::size_t n2 = n * 2U;
+   // Perform the Bernoulli series expansion of Stirling's approximation.
+   for(std::size_t n = 2U; n < bernoulli_table.size(); ++n)
+   {
+      one_over_x_pow_two_n_minus_one *= one_over_x2;
 
-    const T term = (bernoulli_table[n] * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
+      const std::size_t n2 = n * 2U;
 
-    sum += term;
-  }
+      const T term = (bernoulli_table[n] * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
 
-  const T half_ln_two_pi = log(boost::math::constants::two_pi<T>()) / 2;
+      sum += term;
+   }
 
-  const T log_gamma_value = ((((xx - boost::math::constants::half<T>()) * log(xx)) - xx) + half_ln_two_pi) + sum;
+   const T half_ln_two_pi = log(boost::math::constants::two_pi<T>()) / 2;
 
-  T gamma_value = exp(log_gamma_value);
+   const T log_gamma_value = ((((xx - boost::math::constants::half<T>()) * log(xx)) - xx) + half_ln_two_pi) + sum;
 
-  // Rescale the result using downward recursion if necessary.
-  if(n_recur)
-  {
-    // We need to divide by every x+k in the range [x, x+n_recur), we save
-    // division by x till last, as we may have x < 1 which could cause
-    // spurious overflow if we divided by that first.
-    for(int k = 1; k < n_recur; k++)
-    {
-      gamma_value /= (original_x + k);
-    }
+   T gamma_value = exp(log_gamma_value);
 
-    gamma_value/= original_x;
-  }
-  // Return the result, accounting for possible negative arguments.
-  //return ((!b_neg) ? gamma_value : -boost::math::constants::pi<T>() / (original_x * gamma_value * sin(boost::math::constants::pi<T>() * original_x)));
- return result*gamma_value;
+   // Rescale the result using downward recursion if necessary.
+   if(n_recur != 0)
+   {
+      // We need to divide by every x+k in the range [x, x+n_recur), we save
+      // division by x till last, as we may have x < 1 which could cause
+      // spurious overflow if we divided by that first.
+      for(int k = 1; k < n_recur; k++)
+      {
+         gamma_value /= (original_x + k);
+      }
+
+      gamma_value /= original_x;
+   }
+
+   // Return the result, accounting for possible negative arguments.
+
+   return result * gamma_value;
 }
 
 template<class T, class Policy>
