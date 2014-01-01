@@ -85,43 +85,6 @@ struct bernoulli_overflow_variant
 };
 
 template<class T>
-inline bool bernouli_impl_index_does_overflow(std::size_t, const mpl::int_<0>&)
-{
-   return false;  // We have no idea, perform a runtime check
-}
-
-// There are certain cases for which the index n, when trying
-// to compute Bn, is known to overflow. In particular, when
-// using 32-bit float and 64-bit double (IEEE 754 conformant),
-// overflow will occur if the index exceeds the amount allowed
-// in the tables of Bn.
-template<class T>
-inline bool bernouli_impl_index_does_overflow(std::size_t n, const mpl::int_<1>&)
-{
-   // This corresponds to 4-byte float, IEEE 745 conformant.
-   return n >= max_bernoulli_index<1>::value * 2;
-}
-template<class T>
-inline bool bernouli_impl_index_does_overflow(std::size_t n, const mpl::int_<2>&)
-{
-   // This corresponds to 8-byte float, IEEE 745 conformant.
-   return n >= max_bernoulli_index<2>::value * 2;
-}
-template<class T>
-inline bool bernouli_impl_index_does_overflow(std::size_t n, const mpl::int_<3>&)
-{
-   // This corresponds to 16-byte float, IEEE 745 conformant.
-   return n >= max_bernoulli_index<3>::value * 2;
-}
-
-template<class T>
-inline bool bernouli_impl_index_does_overflow(std::size_t n)
-{
-   typedef mpl::int_<bernoulli_overflow_variant<T>::value> tag_type;
-   return bernouli_impl_index_does_overflow<T>(n, tag_type());
-}
-
-template<class T>
 T bernouli_impl_index_might_overflow_function(const T& nx)
 {
    BOOST_MATH_STD_USING
@@ -150,8 +113,10 @@ T bernouli_impl_index_might_overflow_tolerance(const T& min_value, const T& max_
 }
 
 template<class T>
-inline std::size_t bernouli_impl_index_might_overflow()
+inline std::size_t bernouli_impl_index_might_overflow(const mpl::int_<0>&)
 {
+   // We have no idea, perform a runtime check
+
    BOOST_MATH_STD_USING
 
    // Find the index of B2n that will overflow the numeric type.
@@ -190,6 +155,38 @@ inline std::size_t bernouli_impl_index_might_overflow()
    // is approximately 8,389,000.
 
    return index_might_overflow_conservative_value;
+}
+
+// There are certain cases for which the index n, when trying
+// to compute Bn, is known to overflow. In particular, when
+// using IEEE 754 conformant 32-bit float, 64-bit double,
+// or 128-bit quad, overflow will occur if the index exceeds
+// the amount allowed in the tables of Bn.
+template<class T>
+inline std::size_t bernouli_impl_index_might_overflow(const mpl::int_<1>&)
+{
+   // This corresponds to 4-byte float, IEEE 745 conformant.
+   return max_bernoulli_index<1>::value;
+}
+template<class T>
+inline std::size_t bernouli_impl_index_might_overflow(const mpl::int_<2>&)
+{
+   // This corresponds to 8-byte float, IEEE 745 conformant.
+   return max_bernoulli_index<2>::value;
+}
+template<class T>
+inline std::size_t bernouli_impl_index_might_overflow(const mpl::int_<3>&)
+{
+   // This corresponds to 16-byte float, IEEE 745 conformant.
+   return max_bernoulli_index<3>::value;
+}
+
+template<class T>
+inline std::size_t bernouli_impl_index_might_overflow()
+{
+   typedef mpl::int_<bernoulli_overflow_variant<T>::value> tag_type;
+
+   return bernouli_impl_index_might_overflow<T>(tag_type());
 }
 
 template<class T>
