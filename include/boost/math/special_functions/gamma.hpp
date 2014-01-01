@@ -115,52 +115,25 @@ template<class T>
 std::size_t highest_bernoulli_index()
 {
    // Find the high index n for Bn to produce the desired precision in Stirling's calculation.
-   return static_cast<std::size_t>(18.0F + (0.65F * static_cast<float>(std::numeric_limits<T>::digits10)));
+   return static_cast<std::size_t>(18.0F + (0.6F * static_cast<float>(std::numeric_limits<T>::digits10)));
 }
 
 template <class T, class Policy>
 T gamma_imp_bernoulli(T x, const Policy& pol)
 {
-   T result = 1;
+   BOOST_MATH_STD_USING
 
-   //the following handling of negative arguments modelled after the handling in function
-   //T gamma_imp(T z, const Policy& pol, const Lanczos& l)
-   if(x <= 0)
+   const bool b_neg = (x < 0);
+
+   if(b_neg)
    {
-      static const char* function = "boost::math::tgamma<%1%>(%1%)";
-      if(floor(x) == x)
-         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", x, pol);
-
-      if(x <= -20)
-      {
-         result = gamma_imp_bernoulli(T(-x), pol) * sinpx(x);
-         BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
-            return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
-         result = -boost::math::constants::pi<T>() / result;
-         if(result == 0)
-            return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-         if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
-            return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
-         BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         return result;
-      }
-
-      while(x < 0)
-      {
-         result /= x;
-
-         x += 1;
-      }
+      // TBD: Restore error handling.
    }
 
    // Make a local, unsigned copy of the input argument.
-
-   T xx(x);
-   T original_x(xx);
+   T xx((!b_neg) ? x : -x);
 
    // Scale the argument up and use downward recursion later for the final result.
-
    const T min_arg_for_recursion(static_cast<float>(std::numeric_limits<T>::digits10) * 1.7F);
 
    int n_recur;
@@ -168,15 +141,12 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
    if(xx < min_arg_for_recursion)
    {
       n_recur = boost::math::ltrunc(min_arg_for_recursion - xx) + 1;
+
+      xx += n_recur;
    }
    else
    {
       n_recur = 0;
-   }
-
-   if(n_recur != 0)
-   {
-     xx += n_recur;
    }
 
    const std::size_t number_of_bernoullis_b2n = highest_bernoulli_index<T>();
@@ -184,7 +154,7 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
    std::vector<T> bernoulli_table(number_of_bernoullis_b2n);
 
    boost::math::bernoulli_b2n<T>(0,
-                                 static_cast<unsigned>(number_of_bernoullis_b2n),
+                                 static_cast<unsigned>(bernoulli_table.size()),
                                  bernoulli_table.begin());
 
          T one_over_x_pow_two_n_minus_one = 1 / xx;
@@ -210,22 +180,15 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
    T gamma_value = exp(log_gamma_value);
 
    // Rescale the result using downward recursion if necessary.
-   if(n_recur != 0)
+   // Rescale the result using downward recursion if necessary.
+   for(int k = 0; k < n_recur; ++k)
    {
-      // We need to divide by every x+k in the range [x, x+n_recur), we save
-      // division by x till last, as we may have x < 1 which could cause
-      // spurious overflow if we divided by that first.
-      for(int k = 1; k < n_recur; k++)
-      {
-         gamma_value /= (original_x + k);
-      }
-
-      gamma_value /= original_x;
+      xx -= 1;
+      gamma_value /= xx;
    }
 
    // Return the result, accounting for possible negative arguments.
-
-   return result * gamma_value;
+   return ((!b_neg) ? gamma_value : -boost::math::constants::pi<T>() / (xx * gamma_value * sin(boost::math::constants::pi<T>() * xx)));
 }
 
 template<class T, class Policy>
