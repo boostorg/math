@@ -122,19 +122,12 @@ inline bool bernouli_impl_index_does_overflow(std::size_t n)
 }
 
 template<class T>
-bool bernouli_impl_index_might_overflow(std::size_t n)
+T bernouli_impl_index_might_overflow_function(const T& nx)
 {
    BOOST_MATH_STD_USING
 
-   if(bernouli_impl_index_does_overflow<T>(n))
-   {
-      // If the index *does* overflow, then it also *might* overflow.
-      return true;
-   }
-
    // Luschny LogB3(n) formula.
 
-   const T nx (n);
    const T nx2(nx * nx);
 
    const T t_one(1);
@@ -145,38 +138,70 @@ bool bernouli_impl_index_might_overflow(std::size_t n)
         + (((T(3) / 2) - nx) * boost::math::constants::ln_two<T>())
         + ((nx * (T(2) - (nx2 * 7) * (t_one + ((nx2 * 30) * ((nx2 * 12) - t_one))))) / (((nx2 * nx2) * nx2) * 2520));
 
-   return ((approximate_log_of_bernoulli_bn * 1.1F) > boost::math::tools::log_max_value<T>());
+   return (approximate_log_of_bernoulli_bn - boost::math::tools::log_max_value<T>());
+}
+
+template<class T>
+T bernouli_impl_index_might_overflow_tolerance(const T& min_value, const T& max_value)
+{
+   BOOST_MATH_STD_USING
+
+   return abs(max_value - min_value) < T(0.9F);
+}
+
+template<class T>
+inline std::size_t bernouli_impl_index_might_overflow()
+{
+   BOOST_MATH_STD_USING
+
+   // Find the index of B2n that will overflow the numeric type.
+   // Use Luschny's order-3 approximation of the logarithm of
+   // Bernoulli numbers in combination with a root-finding tool
+   // from boost::math::tools for this.
+
+   boost::uintmax_t number_of_iterations = 128U;
+
+   const std::pair<T, T> index_might_overflow_root =
+      boost::math::tools::toms748_solve(bernouli_impl_index_might_overflow_function<T>,
+                                        T(20),
+                                        T((std::numeric_limits<std::size_t>::max)()),
+                                        bernouli_impl_index_might_overflow_tolerance<T>,
+                                        number_of_iterations);
+
+   // Compute the index that might overflow by averaging the bracketed
+   // values in the root pair.
+   const T index_might_overflow_value = (index_might_overflow_root.first + index_might_overflow_root.second) / 2;
+
+   // Determine a conservative estimate of the size_t integral value
+   // of the index that might. Do this by evaluating the binary exponent
+   // of the index that might overflow expressed as a floating-point number.
+   int p2;
+   frexp(index_might_overflow_value, &p2);
+
+   // Armed with the binary exponent, we left shift by an amount
+   // one less than this binary exponent such that the value of
+   // the index that might overflow is guessed conservatively.
+
+   const std::size_t index_might_overflow_conservative_value = static_cast<std::size_t>(static_cast<std::size_t>(1U) << (p2 - 1));
+
+   // Example: A floating-point numeric type with a 32-bit signed
+   // exponent overflows at an index of approximately 11,513,000.
+   // The result of the conservative value for the overflow index
+   // is approximately 8,389,000.
+
+   return index_might_overflow_conservative_value;
 }
 
 template<class T>
 std::size_t possible_overflow_index()
 {
-   // We use binary search to determine a good approximation for an index that might overflow.
+   // We use binary search to determine a good approximation for
+   // an index that might overflow.
    // This code is called ONCE ONLY for each T at program startup.
 
-   std::size_t upper_limit = (std::min)(static_cast<std::size_t>(boost::math::itrunc(tools::log_max_value<T>() / (2 * constants::ln_two<T>()) - 2)), static_cast<std::size_t>(10000u));
-   std::size_t lower_limit = 1;
+   const std::size_t the_possible_overflow_index = bernouli_impl_index_might_overflow<T>();
 
-   if(bernouli_impl_index_might_overflow<T>(upper_limit * 2) == 0)
-   {
-      return upper_limit;
-   }
-
-   while(upper_limit > (lower_limit + 4))
-   {
-      const std::size_t mid = (upper_limit + lower_limit) / 2;
-
-      if(bernouli_impl_index_might_overflow<T>(mid * 2) == 0)
-      {
-         lower_limit = mid;
-      }
-      else
-      {
-         upper_limit = mid;
-      }
-   }
-
-   return lower_limit;
+   return the_possible_overflow_index;
 }
 //
 // The tangent numbers grow larger much more rapidly than the Bernoulli numbers do....
