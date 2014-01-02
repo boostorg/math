@@ -123,17 +123,74 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
-   const bool b_neg = (x < 0);
+   const bool b_neg = (x <= 0);
 
-   if(b_neg)
-   {
-      // TBD: Restore error handling.
-   }
+   bool is_near_a_negative_integer;
 
    // Make a local, unsigned copy of the input argument.
    T xx((!b_neg) ? x : -x);
 
-   // Scale the argument up and use downward recursion later for the final result.
+   if(b_neg)
+   {
+      // Use special handling for zero or negative arguments. Here, we need to
+      // provide special analysis at zero, in the neighborhood of negative integer
+      // values, and at negative integer values.
+
+      static const char* function = "boost::math::tgamma<%1%>(%1%)";
+
+      // Check if the argument of tgamma is zero.
+      // TBD: Use numeric_limits if is_specialized.
+      const bool is_at_zero = (xx == 0);
+
+      if(is_at_zero)
+         return policies::raise_domain_error<T>(function, "Evaluation of tgamma at zero %1%.", x, pol);
+
+      // Check if the argument of tgamma is a negative integer.
+      const T floor_of_xx(floor(xx));
+      const T ceil_of_xx (ceil (xx));
+
+      const bool is_at_a_negative_integer = ((floor_of_xx == xx) || (ceil_of_xx == xx));
+
+      if(is_at_a_negative_integer)
+         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", x, pol);
+
+      // Check if the argument of tgamma is *near* a negative integer.
+      const T one_hundredth(0.01F);
+
+      is_near_a_negative_integer = (   (abs(floor_of_xx - xx) < one_hundredth)
+                                    || (abs(ceil_of_xx  - xx) < one_hundredth));
+
+      if(xx > 20)
+      {
+         // Check for some potential overflows for large, negative argument.
+
+         T preliminary_result = gamma_imp_bernoulli(xx, pol) * sinpx(x);
+
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
+
+         const bool result_is_too_large_to_represent = (   (abs(preliminary_result) < 1)
+                                                        && ((tools::max_value<T>() * abs(preliminary_result)) < boost::math::constants::pi<T>()));
+
+         if(result_is_too_large_to_represent)
+            return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+
+         preliminary_result = -boost::math::constants::pi<T>() / preliminary_result;
+         BOOST_MATH_INSTRUMENT_VARIABLE(preliminary_result);
+
+         if(preliminary_result == 0)
+            return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
+
+         if((boost::math::fpclassify)(preliminary_result) == static_cast<int>(FP_SUBNORMAL))
+            return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", preliminary_result, pol);
+      }
+   }
+   else
+   {
+      is_near_a_negative_integer = false;
+   }
+
+   // Scale the argument up for the calculation of lgamma,
+   // and use downward recursion later for the final result.
    const T min_arg_for_recursion(static_cast<float>(std::numeric_limits<T>::digits10) * 1.7F);
 
    int n_recur;
@@ -188,7 +245,17 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
    }
 
    // Return the result, accounting for possible negative arguments.
-   return ((!b_neg) ? gamma_value : -boost::math::constants::pi<T>() / (xx * gamma_value * sin(boost::math::constants::pi<T>() * xx)));
+   if((!b_neg))
+   {
+      return gamma_value;
+   }
+   else
+   {
+     const T sin_pi_xx = (is_near_a_negative_integer ? sinpx(xx)
+                                                     : sin(boost::math::constants::pi<T>() * xx));
+
+      return -boost::math::constants::pi<T>() / (xx * gamma_value * sin_pi_xx);
+   }
 }
 
 template<class T, class Policy>
