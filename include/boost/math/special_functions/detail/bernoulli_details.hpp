@@ -85,103 +85,120 @@ struct bernoulli_overflow_variant
 };
 
 template<class T>
-inline bool bernouli_impl_index_does_overflow(std::size_t, const mpl::int_<0>&)
+T bernouli_impl_index_might_overflow_function(const T& nx)
 {
-   return false;  // We have no idea, perform a runtime check
+   BOOST_MATH_STD_USING
+
+   // Luschny LogB3(n) formula.
+
+   const T nx2(nx * nx);
+
+   const T t_one(1);
+
+   const T approximate_log_of_bernoulli_bn
+      =   ((boost::math::constants::half<T>() + nx) * log(nx))
+        + ((boost::math::constants::half<T>() - nx) * log(boost::math::constants::pi<T>()))
+        + (((T(3) / 2) - nx) * boost::math::constants::ln_two<T>())
+        + ((nx * (T(2) - (nx2 * 7) * (t_one + ((nx2 * 30) * ((nx2 * 12) - t_one))))) / (((nx2 * nx2) * nx2) * 2520));
+
+   return (approximate_log_of_bernoulli_bn - boost::math::tools::log_max_value<T>());
+}
+
+template<class T>
+T bernouli_impl_index_might_overflow_tolerance(const T& min_value, const T& max_value)
+{
+   BOOST_MATH_STD_USING
+
+   return abs(max_value - min_value) < T(0.9F);
+}
+
+template<class T>
+inline std::size_t bernouli_impl_index_might_overflow(const mpl::int_<0>&)
+{
+   // We have no idea, perform a runtime check
+
+   BOOST_MATH_STD_USING
+
+   // Find the index of B2n that will overflow the numeric type.
+   // Use Luschny's order-3 approximation of the logarithm of
+   // Bernoulli numbers in combination with a root-finding tool
+   // from boost::math::tools for this.
+
+   boost::uintmax_t number_of_iterations = 128U;
+
+   const std::pair<T, T> index_might_overflow_root =
+      boost::math::tools::toms748_solve(bernouli_impl_index_might_overflow_function<T>,
+                                        T(20),
+                                        T((std::numeric_limits<std::size_t>::max)()),
+                                        bernouli_impl_index_might_overflow_tolerance<T>,
+                                        number_of_iterations);
+
+   // Compute the index that might overflow by averaging the bracketed
+   // values in the root pair.
+   const T index_might_overflow_value = (index_might_overflow_root.first + index_might_overflow_root.second) / 2;
+
+   // Determine a conservative estimate of the size_t integral value
+   // of the index that might. Do this by evaluating the binary exponent
+   // of the index that might overflow expressed as a floating-point number.
+   int p2;
+   frexp(index_might_overflow_value, &p2);
+
+   // Armed with the binary exponent, we left shift by an amount
+   // one less than this binary exponent such that the value of
+   // the index that might overflow is guessed conservatively.
+
+   const std::size_t index_might_overflow_conservative_value = static_cast<std::size_t>(static_cast<std::size_t>(1U) << (p2 - 1));
+
+   // Example: A floating-point numeric type with a 32-bit signed
+   // exponent overflows at an index of approximately 11,513,000.
+   // The result of the conservative value for the overflow index
+   // is approximately 8,389,000.
+
+   return index_might_overflow_conservative_value;
 }
 
 // There are certain cases for which the index n, when trying
 // to compute Bn, is known to overflow. In particular, when
-// using 32-bit float and 64-bit double (IEEE 754 conformant),
-// overflow will occur if the index exceeds the amount allowed
-// in the tables of Bn.
+// using IEEE 754 conformant 32-bit float, 64-bit double,
+// or 128-bit quad, overflow will occur if the index exceeds
+// the amount allowed in the tables of Bn.
 template<class T>
-inline bool bernouli_impl_index_does_overflow(std::size_t n, const mpl::int_<1>&)
+inline std::size_t bernouli_impl_index_might_overflow(const mpl::int_<1>&)
 {
    // This corresponds to 4-byte float, IEEE 745 conformant.
-   return n >= max_bernoulli_index<1>::value * 2;
+   return max_bernoulli_index<1>::value;
 }
 template<class T>
-inline bool bernouli_impl_index_does_overflow(std::size_t n, const mpl::int_<2>&)
+inline std::size_t bernouli_impl_index_might_overflow(const mpl::int_<2>&)
 {
    // This corresponds to 8-byte float, IEEE 745 conformant.
-   return n >= max_bernoulli_index<2>::value * 2;
+   return max_bernoulli_index<2>::value;
 }
 template<class T>
-inline bool bernouli_impl_index_does_overflow(std::size_t n, const mpl::int_<3>&)
+inline std::size_t bernouli_impl_index_might_overflow(const mpl::int_<3>&)
 {
    // This corresponds to 16-byte float, IEEE 745 conformant.
-   return n >= max_bernoulli_index<3>::value * 2;
+   return max_bernoulli_index<3>::value;
 }
 
 template<class T>
-inline bool bernouli_impl_index_does_overflow(std::size_t n)
+inline std::size_t bernouli_impl_index_might_overflow()
 {
    typedef mpl::int_<bernoulli_overflow_variant<T>::value> tag_type;
-   return bernouli_impl_index_does_overflow<T>(n, tag_type());
-}
 
-template<class T>
-bool bernouli_impl_index_might_overflow(std::size_t n)
-{
-   BOOST_MATH_STD_USING
-   if(bernouli_impl_index_does_overflow<T>(n))
-   {
-      // If the index *does* overflow, then it also *might* overflow.
-      return true;
-   }
-
-   // Here, we use an asymptotic expansion of |Bn| from Luschny
-   // to estimate if a given index n for Bn *might* overflow.
-   static const T log_of_four_pi = log(boost::math::constants::two_pi<T>() * 2);
-   static const T two_pi_e       = boost::math::constants::two_pi<T>() * boost::math::constants::e<T>();
-   const float nf = static_cast<float>(n);
-   const T nx (nf);
-   const T nx2(nx * nx);
-   const T n_log_term     = (nx + boost::math::constants::half<T>()) * log(nx / two_pi_e);
-
-   const T approximate_log_of_bn =   log_of_four_pi
-      + n_log_term
-      + boost::math::constants::half<T>()
-      + (T(1) / (nx * 12))
-      - (T(1) / (nx2 * nx * 360))
-      + (T(1) / (nx2 * nx2 * nx * 1260))
-      + (n * boost::math::constants::ln_two<T>())
-      - log(nx)
-      + log(ldexp(T(1), (int)n) - 1);
-
-   return approximate_log_of_bn * 1.1 > boost::math::tools::log_max_value<T>();
+   return bernouli_impl_index_might_overflow<T>(tag_type());
 }
 
 template<class T>
 std::size_t possible_overflow_index()
 {
-   // We use binary search to determine a good approximation for an index that might overflow.
+   // We use binary search to determine a good approximation for
+   // an index that might overflow.
    // This code is called ONCE ONLY for each T at program startup.
 
-   std::size_t upper_limit = (std::min)(static_cast<std::size_t>(boost::math::itrunc(tools::log_max_value<T>() / (2 * constants::ln_two<T>()) - 2)), static_cast<std::size_t>(10000u));
-   std::size_t lower_limit = 1;
+   const std::size_t the_possible_overflow_index = bernouli_impl_index_might_overflow<T>();
 
-   if(bernouli_impl_index_might_overflow<T>(upper_limit * 2) == 0)
-   {
-      return upper_limit;
-   }
-
-   while(upper_limit > (lower_limit + 4))
-   {
-      const int mid = (upper_limit + lower_limit) / 2;
-
-      if(bernouli_impl_index_might_overflow<T>(mid * 2) == 0)
-      {
-         lower_limit = mid;
-      }
-      else
-      {
-         upper_limit = mid;
-      }
-   }
-
-   return lower_limit;
+   return the_possible_overflow_index;
 }
 //
 // The tangent numbers grow larger much more rapidly than the Bernoulli numbers do....
@@ -248,10 +265,10 @@ struct fixed_vector : private std::allocator<T>
    typedef T* iterator;
    typedef const T* const_iterator;
    fixed_vector() : m_used(0)
-   { 
+   {
       std::size_t overflow_limit = 100 + 3 * possible_overflow_index<T>();
-      m_capacity = (std::min)(overflow_limit, static_cast<std::size_t>(100000u));
-      m_data = this->allocate(m_capacity); 
+      m_capacity = static_cast<size_type>((std::min)(overflow_limit, static_cast<std::size_t>(100000u)));
+      m_data = this->allocate(m_capacity);
    }
    ~fixed_vector()
    {
@@ -296,7 +313,7 @@ public:
    void tangent(std::size_t m)
    {
       static const std::size_t min_overflow_index = possible_overflow_index<T>();
-      tn.resize(m, T(0U));
+      tn.resize(static_cast<container_type::size_type>(m), T(0U));
 
       BOOST_MATH_INSTRUMENT_VARIABLE(min_overflow_index);
 
@@ -340,7 +357,7 @@ public:
          }
          if(overflow_check)
             break; // already filled the tn...
-         tn[i] = m_intermediates[i];
+         tn[static_cast<container_type::size_type>(i)] = m_intermediates[i];
          BOOST_MATH_INSTRUMENT_VARIABLE(i);
          BOOST_MATH_INSTRUMENT_VARIABLE(tn[i]);
       }
@@ -354,7 +371,7 @@ public:
       typename container_type::size_type old_size = bn.size();
 
       tangent(m);
-      bn.resize(m);
+      bn.resize(static_cast<container_type::size_type>(m));
 
       if(!old_size)
       {
@@ -374,28 +391,28 @@ public:
          //
          b  = b / (power_two * tangent_scale_factor<T>());
          b /= (power_two - 1);
-         bool overflow_check = (i >= min_overflow_index) && (tools::max_value<T>() / tn[i] < b);
+         bool overflow_check = (i >= min_overflow_index) && (tools::max_value<T>() / tn[static_cast<container_type::size_type>(i)] < b);
          if(overflow_check)
          {
             m_overflow_limit = i;
             while(i < m)
             {
                b = std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : tools::max_value<T>();
-               bn[i] = ((i % 2) ? b : -b);
+               bn[static_cast<container_type::size_type>(i)] = ((i % 2U) ? b : -b);
                ++i;
             }
             break;
          }
          else
          {
-            b *= tn[i];
+            b *= tn[static_cast<container_type::size_type>(i)];
          }
 
          power_two = ldexp(power_two, 2);
 
          const bool b_neg = i % 2 == 0;
 
-         bn[i] = ((!b_neg) ? b : -b);
+         bn[static_cast<container_type::size_type>(i)] = ((!b_neg) ? b : -b);
       }
    }
 
@@ -468,7 +485,7 @@ public:
 
       for(std::size_t i = (std::max)(static_cast<std::size_t>(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
       {
-         *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli<%1%>(std::size_t)", 0, pol) : bn[i];
+         *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli<%1%>(std::size_t)", 0, pol) : bn[static_cast<container_type::size_type>(i)];
          ++out;
       }
 
@@ -565,10 +582,10 @@ public:
             *out = policies::raise_overflow_error<T>("boost::math::bernoulli<%1%>(std::size_t)", 0, pol);
          else
          {
-            if(tools::max_value<T>() * tangent_scale_factor<T>() < tn[i])
+            if(tools::max_value<T>() * tangent_scale_factor<T>() < tn[static_cast<container_type::size_type>(i)])
                *out = policies::raise_overflow_error<T>("boost::math::bernoulli<%1%>(std::size_t)", 0, pol);
             else
-               *out = tn[i] / tangent_scale_factor<T>();
+               *out = tn[static_cast<container_type::size_type>(i)] / tangent_scale_factor<T>();
          }
          ++out;
       }
