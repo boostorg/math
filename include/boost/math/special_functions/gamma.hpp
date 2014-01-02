@@ -1,6 +1,8 @@
 
-//  Copyright John Maddock 2006-7.
-//  Copyright Paul A. Bristow 2007.
+//  Copyright John Maddock 2006-7, 2013-14.
+//  Copyright Paul A. Bristow 2007, 2013-14.
+//  Copyright Nikhar Agrawal 2013-14
+//  Copyright Christopher Kormanyos 2013-14
 
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
@@ -353,9 +355,9 @@ T minimum_argument_for_bernoulli_recursion()
    return T(static_cast<float>(std::numeric_limits<T>::digits10) * 1.7F);
 }
 
-// Forward declaration of the lgamma implementation.
+// Forward declaration of the lgamma_imp template specialization.
 template <class T, class Policy>
-T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&);
+T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sign = 0);
 
 template <class T, class Policy>
 T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
@@ -464,16 +466,26 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    }
    else
    {
-      const T sin_pi_zz = (is_near_a_negative_integer ? sinpx(zz)
-                                                      : sin(boost::math::constants::pi<T>() * zz));
+      T zz_sin_pi_zz;
 
-      return -boost::math::constants::pi<T>() / (zz * gamma_value * sin_pi_zz);
+      if(is_near_a_negative_integer)
+      {
+         zz_sin_pi_zz = sinpx(zz);
+      }
+      else
+      {
+         zz_sin_pi_zz = zz * sin(boost::math::constants::pi<T>() * zz);
+      }
+
+      return -boost::math::constants::pi<T>() / (gamma_value * zz_sin_pi_zz);
    }
 }
 
 template <class T, class Policy>
-T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
+T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int*)
 {
+   BOOST_MATH_STD_USING
+
    const T min_arg_for_recursion = minimum_argument_for_bernoulli_recursion<T>();
 
    const bool b_neg = (z <= 0);
@@ -481,42 +493,83 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    // Make a local, unsigned copy of the input argument.
    T zz((!b_neg) ? z : -z);
 
+   bool is_near_a_negative_integer;
+
+   if(b_neg)
+   {
+      // Check if the argument of tgamma is a negative integer.
+      const T floor_of_zz(floor(zz));
+      const T ceil_of_zz (ceil (zz));
+
+      // Check if the argument of lgamma is *near* a negative integer.
+      const T one_hundredth(0.01F);
+
+      is_near_a_negative_integer = (   (abs(floor_of_zz - zz) < one_hundredth)
+                                    || (abs(ceil_of_zz  - zz) < one_hundredth));
+   }
+   else
+   {
+     is_near_a_negative_integer = false;
+   }
+
+   T log_gamma_value;
+
    if(zz < min_arg_for_recursion)
    {
-      const T gamma_value = gamma_imp(zz, pol, lanczos::undefined_lanczos());
-
-      return log((gamma_value < 0) ? -gamma_value : gamma_value);
+      log_gamma_value = log(abs(gamma_imp(zz, pol, lanczos::undefined_lanczos())));
    }
-
-   const std::size_t number_of_bernoullis_b2n = highest_bernoulli_index<T>();
-
-   std::vector<T> bernoulli_table(number_of_bernoullis_b2n);
-
-   boost::math::bernoulli_b2n<T>(0,
-                                 static_cast<unsigned>(bernoulli_table.size()),
-                                 bernoulli_table.begin());
-
-         T one_over_x_pow_two_n_minus_one = 1 / zz;
-   const T one_over_x2                    = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
-         T sum                            = (bernoulli_table[1U] / 2) * one_over_x_pow_two_n_minus_one;
-
-   // Perform the Bernoulli series expansion of Stirling's approximation.
-   for(std::size_t n = 2U; n < bernoulli_table.size(); ++n)
+   else
    {
-      one_over_x_pow_two_n_minus_one *= one_over_x2;
+      const std::size_t number_of_bernoullis_b2n = highest_bernoulli_index<T>();
 
-      const std::size_t n2 = n * 2U;
+      std::vector<T> bernoulli_table(number_of_bernoullis_b2n);
 
-      const T term = (bernoulli_table[n] * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
+      boost::math::bernoulli_b2n<T>(0,
+                                    static_cast<unsigned>(bernoulli_table.size()),
+                                    bernoulli_table.begin());
 
-      sum += term;
+            T one_over_x_pow_two_n_minus_one = 1 / zz;
+      const T one_over_x2                    = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
+            T sum                            = (bernoulli_table[1U] / 2) * one_over_x_pow_two_n_minus_one;
+
+      // Perform the Bernoulli series expansion of Stirling's approximation.
+      for(std::size_t n = 2U; n < bernoulli_table.size(); ++n)
+      {
+         one_over_x_pow_two_n_minus_one *= one_over_x2;
+
+         const std::size_t n2 = n * 2U;
+
+         const T term = (bernoulli_table[n] * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
+
+         sum += term;
+      }
+
+      const T half_ln_two_pi = log(boost::math::constants::two_pi<T>()) / 2;
+
+      log_gamma_value = ((((zz - boost::math::constants::half<T>()) * log(zz)) - zz) + half_ln_two_pi) + sum;
    }
 
-   const T half_ln_two_pi = log(boost::math::constants::two_pi<T>()) / 2;
+   if((!b_neg))
+   {
+      return log_gamma_value;
+   }
+   else
+   {
+      T gamma_value = exp(log_gamma_value);
 
-   const T log_gamma_value = ((((zz - boost::math::constants::half<T>()) * log(zz)) - zz) + half_ln_two_pi) + sum;
+      T zz_sin_pi_zz;
 
-   return log_gamma_value;
+      if(is_near_a_negative_integer)
+      {
+         zz_sin_pi_zz = sinpx(zz);
+      }
+      else
+      {
+         zz_sin_pi_zz = zz * sin(boost::math::constants::pi<T>() * zz);
+      }
+
+      return log(abs(-boost::math::constants::pi<T>() / (gamma_value * zz_sin_pi_zz)));
+   }
 }
 
 //
@@ -1386,7 +1439,7 @@ inline typename tools::promote_args<T>::type
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   typedef typename lanczos::undefined_lanczos evaluation_type;
+   typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
       Policy, 
       policies::promote_float<false>, 
