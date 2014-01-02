@@ -18,12 +18,16 @@
 #  define BOOST_MATH_ATOMIC_NS std
 #if ATOMIC_INT_LOCK_FREE == 2
 typedef std::atomic<int> atomic_counter_type;
+typedef int atomic_integer_type;
 #elif ATOMIC_SHORT_LOCK_FREE == 2
 typedef std::atomic<short> atomic_counter_type;
+typedef short atomic_integer_type;
 #elif ATOMIC_LONG_LOCK_FREE == 2
 typedef std::atomic<long> atomic_counter_type;
+typedef long atomic_integer_type;
 #elif ATOMIC_LLONG_LOCK_FREE == 2
 typedef std::atomic<long long> atomic_counter_type;
+typedef long long atomic_integer_type;
 #else
 #  define BOOST_MATH_NO_ATOMIC_INT
 #endif
@@ -44,12 +48,16 @@ namespace boost{ namespace math{ namespace detail{
 //
 #if BOOST_ATOMIC_INT_LOCK_FREE == 2
 typedef boost::atomic<int> atomic_counter_type;
+typedef int atomic_integer_type;
 #elif BOOST_ATOMIC_SHORT_LOCK_FREE == 2
 typedef boost::atomic<short> atomic_counter_type;
+typedef short atomic_integer_type;
 #elif BOOST_ATOMIC_LONG_LOCK_FREE == 2
 typedef boost::atomic<long> atomic_counter_type;
+typedef long atomic_integer_type;
 #elif BOOST_ATOMIC_LLONG_LOCK_FREE == 2
 typedef boost::atomic<long long> atomic_counter_type;
+typedef long long atomic_integer_type;
 #else
 #  define BOOST_MATH_NO_ATOMIC_INT
 #endif
@@ -61,7 +69,43 @@ typedef boost::atomic<long long> atomic_counter_type;
 #endif // BOOST_HAS_THREADS
 
 namespace boost{ namespace math{ namespace detail{
+//
+// Asymptotic expansion for B2n due to
+// Luschny LogB3 formula (http://www.luschny.de/math/primes/bernincl.html)
+//
+template <class T, class Policy>
+T b2n_asymptotic(int n)
+{
+   BOOST_MATH_STD_USING
+   const T nx = static_cast<T>(n);
+   const T nx2(nx * nx);
 
+   const T approximate_log_of_bernoulli_bn = 
+        ((boost::math::constants::half<T>() + nx) * log(nx))
+        + ((boost::math::constants::half<T>() - nx) * log(boost::math::constants::pi<T>()))
+        + (((T(3) / 2) - nx) * boost::math::constants::ln_two<T>())
+        + ((nx * (T(2) - (nx2 * 7) * (1 + ((nx2 * 30) * ((nx2 * 12) - 1))))) / (((nx2 * nx2) * nx2) * 2520));
+   return ((n / 2) & 1 ? 1 : -1) * (approximate_log_of_bernoulli_bn > tools::log_max_value<T>() 
+      ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, Policy())
+      : exp(approximate_log_of_bernoulli_bn));
+}
+
+template <class T, class Policy>
+T t2n_asymptotic(int n)
+{
+   BOOST_MATH_STD_USING
+   // Just get B2n and convert to a Tangent number:
+   T t2n = fabs(b2n_asymptotic<T, Policy>(2 * n)) / (2 * n);
+   T p2 = ldexp(T(1), n);
+   if(tools::max_value<T>() / p2 < t2n)
+      return policies::raise_overflow_error<T>("boost::math::tangent_t2n<%1%>(std::size_t)", 0, Policy());
+   t2n *= p2;
+   p2 -= 1;
+   if(tools::max_value<T>() / p2 < t2n)
+      return policies::raise_overflow_error<T>("boost::math::tangent_t2n<%1%>(std::size_t)", 0, Policy());
+   t2n *= p2;
+   return t2n;
+}
 //
 // We need to know the approximate value of /n/ which will
 // cause bernoulli_b2n<T>(n) to return infinity - this allows
@@ -72,7 +116,10 @@ namespace boost{ namespace math{ namespace detail{
 // to find the limit, and since we're dealing with the log of the Bernoulli numbers
 // we need only perform the calculation at double precision and not with T
 // (which may be a multiprecision type).  The limit returned is within 1 of the true
-// limit for all the types tested.
+// limit for all the types tested.  Note that although the code below is basically
+// the same as b2n_asymptotic above, it has been recast as a continuous real-valued 
+// function as this makes the root finding go smoother/faster.  It also omits the
+// sign of the Bernoulli number.
 //
 struct max_bernoulli_root_functor
 {
@@ -86,10 +133,10 @@ struct max_bernoulli_root_functor
       const double nx2(n * n);
 
       const double approximate_log_of_bernoulli_bn
-         =   (boost::math::constants::half<double>() + n) * log(n)
-           + (boost::math::constants::half<double>() - n) * log(boost::math::constants::pi<double>())
-           + (double(3) / 2 - n) * boost::math::constants::ln_two<double>()
-           - (n * (1 - 1 / (nx2 * 12) * (1 - 1 / (nx2 * 30) * (1 - 2 / (nx2 * 7)))));
+         =   ((boost::math::constants::half<double>() + n) * log(n))
+           + ((boost::math::constants::half<double>() - n) * log(boost::math::constants::pi<double>()))
+           + (((double(3) / 2) - n) * boost::math::constants::ln_two<double>())
+           + ((n * (2 - (nx2 * 7) * (1 + ((nx2 * 30) * ((nx2 * 12) - 1))))) / (((nx2 * nx2) * nx2) * 2520));
 
       return approximate_log_of_bernoulli_bn - target;
    }
@@ -123,39 +170,6 @@ std::size_t b2n_overflow_limit()
    return lim;
 }
 
-template <class T, class Policy>
-T b2n_asymptotic(int n)
-{
-   BOOST_MATH_STD_USING
-   const T nx = static_cast<T>(n);
-   const T nx2(nx * nx);
-
-   const T approximate_log_of_bernoulli_bn
-      =   (boost::math::constants::half<T>() + nx) * log(nx)
-         + (boost::math::constants::half<T>() - nx) * log(boost::math::constants::pi<T>())
-         + (T(3) / 2 - nx) * boost::math::constants::ln_two<T>()
-         - (nx * (1 - 1 / (nx2 * 12) * (1 - 1 / (nx2 * 30) * (1 - 2 / (nx2 * 7)))));
-   return (n & 1 ? 1 : -1) * approximate_log_of_bernoulli_bn > tools::log_max_value<T>() 
-      ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, Policy())
-      : exp(approximate_log_of_bernoulli_bn);
-}
-
-template <class T, class Policy>
-T t2n_asymptotic(int n)
-{
-   BOOST_MATH_STD_USING
-   // Just get B2n and convert to a Tangent number:
-   T t2n = fabs(b2n_asymptotic<T, Policy>(n)) / (2 * n);
-   T p2 = ldexp(T(1), n);
-   if(tools::max_value<T>() / p2 < t2n)
-      return policies::raise_overflow_error<T>("boost::math::tangent_t2n<%1%>(std::size_t)", 0, Policy());
-   t2n *= p2;
-   p2 -= 1;
-   if(tools::max_value<T>() / p2 < t2n)
-      return policies::raise_overflow_error<T>("boost::math::tangent_t2n<%1%>(std::size_t)", 0, Policy());
-   t2n *= p2;
-   return t2n;
-}
 //
 // The tangent numbers grow larger much more rapidly than the Bernoulli numbers do....
 // so to compute the Bernoulli numbers from the tangent numbers, we need to avoid spurious
@@ -367,7 +381,7 @@ public:
 
          power_two = ldexp(power_two, 2);
 
-         const bool b_neg = ((i % 2U) == 0);
+         const bool b_neg = i % 2 == 0;
 
          bn[static_cast<typename container_type::size_type>(i)] = ((!b_neg) ? b : -b);
       }
@@ -394,13 +408,13 @@ public:
          {
             out = copy_bernoulli_numbers(out, start, bn.capacity() - start, pol);
             n -= bn.capacity() - start;
-            start = bn.capacity();
+            start = static_cast<std::size_t>(bn.capacity());
          }
          if(start < b2n_overflow_limit<T, Policy>() + 2u)
          {
             for(; n; ++start, --n)
             {
-               *out = b2n_asymptotic<T, Policy>(static_cast<int>(start));
+               *out = b2n_asymptotic<T, Policy>(static_cast<typename container_type::size_type>(start * 2U));
                ++out;
             }
          }
@@ -461,7 +475,7 @@ public:
                std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
                tangent_numbers_series(new_size);
             }
-            m_counter.store(bn.size(), BOOST_MATH_ATOMIC_NS::memory_order_release);
+            m_counter.store(static_cast<atomic_integer_type>(bn.size()), BOOST_MATH_ATOMIC_NS::memory_order_release);
          }
       }
 
@@ -497,13 +511,13 @@ public:
          {
             out = copy_tangent_numbers(out, start, bn.capacity() - start, pol);
             n -= bn.capacity() - start;
-            start = bn.capacity();
+            start = static_cast<std::size_t>(bn.capacity());
          }
          if(start < b2n_overflow_limit<T, Policy>() + 2u)
          {
             for(; n; ++start, --n)
             {
-               *out = t2n_asymptotic<T, Policy>(static_cast<int>(start));
+               *out = t2n_asymptotic<T, Policy>(static_cast<typename container_type::size_type>(start));
                ++out;
             }
          }
@@ -580,7 +594,7 @@ public:
                std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
                tangent_numbers_series(new_size);
             }
-            m_counter.store(bn.size(), BOOST_MATH_ATOMIC_NS::memory_order_release);
+            m_counter.store(static_cast<atomic_integer_type>(bn.size()), BOOST_MATH_ATOMIC_NS::memory_order_release);
          }
       }
 
