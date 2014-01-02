@@ -18,12 +18,16 @@
 #  define BOOST_MATH_ATOMIC_NS std
 #if ATOMIC_INT_LOCK_FREE == 2
 typedef std::atomic<int> atomic_counter_type;
+typedef int atomic_integer_type;
 #elif ATOMIC_SHORT_LOCK_FREE == 2
 typedef std::atomic<short> atomic_counter_type;
+typedef short atomic_integer_type;
 #elif ATOMIC_LONG_LOCK_FREE == 2
 typedef std::atomic<long> atomic_counter_type;
+typedef long atomic_integer_type;
 #elif ATOMIC_LLONG_LOCK_FREE == 2
 typedef std::atomic<long long> atomic_counter_type;
+typedef long long atomic_integer_type;
 #else
 #  define BOOST_MATH_NO_ATOMIC_INT
 #endif
@@ -44,12 +48,16 @@ namespace boost{ namespace math{ namespace detail{
 //
 #if BOOST_ATOMIC_INT_LOCK_FREE == 2
 typedef boost::atomic<int> atomic_counter_type;
+typedef int atomic_integer_type;
 #elif BOOST_ATOMIC_SHORT_LOCK_FREE == 2
 typedef boost::atomic<short> atomic_counter_type;
+typedef short atomic_integer_type;
 #elif BOOST_ATOMIC_LONG_LOCK_FREE == 2
 typedef boost::atomic<long> atomic_counter_type;
+typedef long atomic_integer_type;
 #elif BOOST_ATOMIC_LLONG_LOCK_FREE == 2
 typedef boost::atomic<long long> atomic_counter_type;
+typedef long long atomic_integer_type;
 #else
 #  define BOOST_MATH_NO_ATOMIC_INT
 #endif
@@ -400,7 +408,7 @@ public:
          {
             out = copy_bernoulli_numbers(out, start, bn.capacity() - start, pol);
             n -= bn.capacity() - start;
-            start = bn.capacity();
+            start = static_cast<std::size_t>(bn.capacity());
          }
          if(start < b2n_overflow_limit<T, Policy>() + 2u)
          {
@@ -467,7 +475,7 @@ public:
                std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
                tangent_numbers_series(new_size);
             }
-            m_counter.store(bn.size(), BOOST_MATH_ATOMIC_NS::memory_order_release);
+            m_counter.store(static_cast<atomic_integer_type>(bn.size()), BOOST_MATH_ATOMIC_NS::memory_order_release);
          }
       }
 
@@ -503,7 +511,7 @@ public:
          {
             out = copy_tangent_numbers(out, start, bn.capacity() - start, pol);
             n -= bn.capacity() - start;
-            start = bn.capacity();
+            start = static_cast<std::size_t>(bn.capacity());
          }
          if(start < b2n_overflow_limit<T, Policy>() + 2u)
          {
@@ -586,7 +594,7 @@ public:
                std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
                tangent_numbers_series(new_size);
             }
-            m_counter.store(bn.size(), BOOST_MATH_ATOMIC_NS::memory_order_release);
+            m_counter.store(static_cast<atomic_integer_type>(bn.size()), BOOST_MATH_ATOMIC_NS::memory_order_release);
          }
       }
 
