@@ -1,3 +1,4 @@
+
 //  Copyright John Maddock 2006-7.
 //  Copyright Paul A. Bristow 2007.
 
@@ -419,20 +420,20 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = 0)
       typedef typename policies::precision<T, Policy>::type precision_type;
       typedef typename mpl::if_<
          mpl::and_<
-            mpl::less_equal<precision_type, mpl::int_<64> >,
-            mpl::greater<precision_type, mpl::int_<0> >
+            mpl::less_equal<precision_type, mpl::int_<64> >, 
+            mpl::greater<precision_type, mpl::int_<0> > 
          >,
          mpl::int_<64>,
          typename mpl::if_<
             mpl::and_<
                mpl::less_equal<precision_type, mpl::int_<113> >,
-               mpl::greater<precision_type, mpl::int_<0> >
+               mpl::greater<precision_type, mpl::int_<0> > 
             >,
             mpl::int_<113>, mpl::int_<0> >::type
           >::type tag_type;
       result = lgamma_small_imp<T>(z, T(z - 1), T(z - 2), tag_type(), pol, l);
    }
-   else if((z >= 3) && (z < 100))
+   else if((z >= 3) && (z < 100) && (std::numeric_limits<T>::max_exponent >= 1024))
    {
       // taking the log of tgamma reduces the error, no danger of overflow here:
       result = log(gamma_imp(z, pol, l));
@@ -572,7 +573,7 @@ T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& l)
       else
       {
          // Use expm1 on lgamma:
-         result = boost::math::expm1(-boost::math::log1p(dz, pol)
+         result = boost::math::expm1(-boost::math::log1p(dz, pol) 
             + lgamma_small_imp<T>(dz+2, dz + 1, dz, tag_type(), pol, l));
          BOOST_MATH_INSTRUMENT_CODE(result);
       }
@@ -611,7 +612,7 @@ inline T tgammap1m1_imp(T dz, Policy const& pol,
    //
    // Test the level of cancellation error observed: we loose one bit
    // for each power of 2 the result is less than 1.  If we would get
-   // more bits from our most precise lgamma rational approximation,
+   // more bits from our most precise lgamma rational approximation, 
    // then use that instead:
    //
    BOOST_MATH_INSTRUMENT_CODE((dz > -0.5));
@@ -928,7 +929,7 @@ T finite_half_gamma_q(T a, T x, T* p_derivative, const Policy& pol)
 // Main incomplete gamma entry point, handles all four incomplete gamma's:
 //
 template <class T, class Policy>
-T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
+T gamma_incomplete_imp(T a, T x, bool normalised, bool invert, 
                        const Policy& pol, T* p_derivative)
 {
    static const char* function = "boost::math::gamma_p<%1%>(%1%, %1%)";
@@ -959,7 +960,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
    }
 
    int eval_method;
-
+   
    if(is_int && (x > 0.6))
    {
       // calculate Q via finite sum:
@@ -1026,7 +1027,7 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
          }
          else if(policies::digits<T, Policy>() <= 64)
          {
-            // Note in this zone we can't use Temme's expansion for
+            // Note in this zone we can't use Temme's expansion for 
             // types longer than an 80-bit real:
             // it would require too many terms in the polynomials.
             if(sigma < 0.4)
@@ -1395,7 +1396,7 @@ T gamma_p_derivative_imp(T a, T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    tgamma(T z, const Policy& /* pol */, const mpl::true_)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1403,9 +1404,9 @@ inline typename tools::promote_args<T>::type
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename lanczos::undefined_lanczos evaluation_type;
    typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::gamma_imp(static_cast<value_type>(z), forwarding_policy(), evaluation_type()), "boost::math::tgamma<%1%>(%1%)");
@@ -1465,14 +1466,14 @@ struct lgamma_initializer
          typedef typename policies::precision<T, Policy>::type precision_type;
          typedef typename mpl::if_<
             mpl::and_<
-               mpl::less_equal<precision_type, mpl::int_<64> >,
-               mpl::greater<precision_type, mpl::int_<0> >
+               mpl::less_equal<precision_type, mpl::int_<64> >, 
+               mpl::greater<precision_type, mpl::int_<0> > 
             >,
             mpl::int_<64>,
             typename mpl::if_<
                mpl::and_<
                   mpl::less_equal<precision_type, mpl::int_<113> >,
-                  mpl::greater<precision_type, mpl::int_<0> >
+                  mpl::greater<precision_type, mpl::int_<0> > 
                >,
                mpl::int_<113>, mpl::int_<0> >::type
              >::type tag_type;
@@ -1515,9 +1516,9 @@ inline typename tools::promote_args<T1, T2>::type
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    // typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
@@ -1540,14 +1541,14 @@ inline typename tools::promote_args<T1, T2>::type
 } // namespace detail
 
 template <class T>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    tgamma(T z)
 {
    return tgamma(z, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    lgamma(T z, int* sign, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1555,9 +1556,9 @@ inline typename tools::promote_args<T>::type
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
@@ -1567,28 +1568,28 @@ inline typename tools::promote_args<T>::type
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    lgamma(T z, int* sign)
 {
    return lgamma(z, sign, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    lgamma(T x, const Policy& pol)
 {
    return ::boost::math::lgamma(x, 0, pol);
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    lgamma(T x)
 {
    return ::boost::math::lgamma(x, 0, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    tgamma1pm1(T z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1596,9 +1597,9 @@ inline typename tools::promote_args<T>::type
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
@@ -1606,7 +1607,7 @@ inline typename tools::promote_args<T>::type
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type
+inline typename tools::promote_args<T>::type 
    tgamma1pm1(T z)
 {
    return tgamma1pm1(z, policies::policy<>());
@@ -1620,7 +1621,7 @@ inline typename tools::promote_args<T1, T2>::type
    tgamma(T1 a, T2 z)
 {
    //
-   // Type T2 could be a policy object, or a value, select the
+   // Type T2 could be a policy object, or a value, select the 
    // right overload based on T2:
    //
    typedef typename policies::is_policy<T2>::type maybe_policy;
@@ -1644,9 +1645,9 @@ inline typename tools::promote_args<T1, T2>::type
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    // typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
@@ -1675,9 +1676,9 @@ inline typename tools::promote_args<T1, T2>::type
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    // typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
@@ -1706,9 +1707,9 @@ inline typename tools::promote_args<T1, T2>::type
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    // typedef typename lanczos::lanczos<value_type, Policy>::type evaluation_type;
    typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
@@ -1728,67 +1729,67 @@ inline typename tools::promote_args<T1, T2>::type
 
 // ratios of gamma functions:
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline typename tools::promote_args<T1, T2>::type 
    tgamma_delta_ratio(T1 z, T2 delta, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(z), static_cast<value_type>(delta), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline typename tools::promote_args<T1, T2>::type 
    tgamma_delta_ratio(T1 z, T2 delta)
 {
    return tgamma_delta_ratio(z, delta, policies::policy<>());
 }
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline typename tools::promote_args<T1, T2>::type 
    tgamma_ratio(T1 a, T2 b, const Policy&)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline typename tools::promote_args<T1, T2>::type 
    tgamma_ratio(T1 a, T2 b)
 {
    return tgamma_ratio(a, b, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline typename tools::promote_args<T1, T2>::type 
    gamma_p_derivative(T1 a, T2 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
    typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
+      Policy, 
+      policies::promote_float<false>, 
+      policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::gamma_p_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), forwarding_policy()), "boost::math::gamma_p_derivative<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline typename tools::promote_args<T1, T2>::type 
    gamma_p_derivative(T1 a, T2 x)
 {
    return gamma_p_derivative(a, x, policies::policy<>());
