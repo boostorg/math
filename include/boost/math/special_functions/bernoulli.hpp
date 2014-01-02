@@ -60,7 +60,7 @@ inline T bernoulli_b2n(const int i, const Policy &pol)
 {
    typedef mpl::int_<detail::bernoulli_imp_variant<T>::value> tag_type;
    if(i < 0)
-      return policies::raise_domain_error<T>("boost::math::bernoulli<%1%>", "Index should be >= 0 but got %1%", T(i), pol);
+      return policies::raise_domain_error<T>("boost::math::bernoulli_b2n<%1%>", "Index should be >= 0 but got %1%", T(i), pol);
 
    T result;
    boost::math::detail::bernoulli_number_imp<T>(&result, static_cast<std::size_t>(i), 1u, pol, tag_type());
@@ -82,7 +82,7 @@ inline OutputIterator bernoulli_b2n(const int start_index,
    typedef mpl::int_<detail::bernoulli_imp_variant<T>::value> tag_type;
    if(start_index < 0)
    {
-      *out_it = policies::raise_domain_error<T>("boost::math::bernoulli<%1%>", "Index should be >= 0 but got %1%", T(start_index), pol);
+      *out_it = policies::raise_domain_error<T>("boost::math::bernoulli_b2n<%1%>", "Index should be >= 0 but got %1%", T(start_index), pol);
       return ++out_it;
    }
 
