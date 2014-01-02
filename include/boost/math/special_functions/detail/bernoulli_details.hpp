@@ -417,7 +417,7 @@ public:
       //
       if(start + n >= bn.size())
       {
-         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), bn.capacity());
+         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
          tangent_numbers_series(new_size);
       }
 
@@ -433,7 +433,7 @@ public:
       boost::detail::lightweight_mutex::scoped_lock l(m_mutex);
       if(start + n >= bn.size())
       {
-         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), bn.capacity());
+         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
          tangent_numbers_series(new_size);
       }
 
@@ -458,7 +458,7 @@ public:
          {
             if(start + n >= bn.size())
             {
-               std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), bn.capacity());
+               std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
                tangent_numbers_series(new_size);
             }
             m_counter.store(bn.size(), BOOST_MATH_ATOMIC_NS::memory_order_release);
@@ -520,7 +520,7 @@ public:
       //
       if(start + n >= bn.size())
       {
-         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), bn.capacity());
+         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
          tangent_numbers_series(new_size);
       }
 
@@ -544,7 +544,7 @@ public:
       boost::detail::lightweight_mutex::scoped_lock l(m_mutex);
       if(start + n >= bn.size())
       {
-         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), bn.capacity());
+         std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
          tangent_numbers_series(new_size);
       }
 
@@ -577,7 +577,7 @@ public:
          {
             if(start + n >= bn.size())
             {
-               std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), bn.capacity());
+               std::size_t new_size = (std::min)((std::max)((std::max)(start + n, std::size_t(bn.size() + 20)), std::size_t(50)), std::size_t(bn.capacity()));
                tangent_numbers_series(new_size);
             }
             m_counter.store(bn.size(), BOOST_MATH_ATOMIC_NS::memory_order_release);
