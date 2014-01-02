@@ -237,7 +237,6 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
    T gamma_value = exp(log_gamma_value);
 
    // Rescale the result using downward recursion if necessary.
-   // Rescale the result using downward recursion if necessary.
    for(int k = 0; k < n_recur; ++k)
    {
       xx -= 1;
@@ -251,8 +250,8 @@ T gamma_imp_bernoulli(T x, const Policy& pol)
    }
    else
    {
-     const T sin_pi_xx = (is_near_a_negative_integer ? sinpx(xx)
-                                                     : sin(boost::math::constants::pi<T>() * xx));
+      const T sin_pi_xx = (is_near_a_negative_integer ? sinpx(xx)
+                                                      : sin(boost::math::constants::pi<T>() * xx));
 
       return -boost::math::constants::pi<T>() / (xx * gamma_value * sin_pi_xx);
    }
@@ -532,7 +531,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 template <class T, class Policy>
 T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int*)
 {
-  return lgamma_imp_bernoulli(z,pol);
+  return lgamma_imp_bernoulli(z, pol);
 }
 
 //
