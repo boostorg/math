@@ -328,7 +328,7 @@ public:
       typename container_type::size_type old_size = bn.size();
 
       tangent(m);
-      bn.resize(m);
+      bn.resize(static_cast<typename container_type::size_type>(m));
 
       if(!old_size)
       {
@@ -355,7 +355,7 @@ public:
             while(i < m)
             {
                b = std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : tools::max_value<T>();
-               bn[i] = ((i % 2) ? b : -b);
+               bn[static_cast<typename container_type::size_type>(i)] = ((i % 2U) ? b : -b);
                ++i;
             }
             break;
@@ -367,9 +367,9 @@ public:
 
          power_two = ldexp(power_two, 2);
 
-         const bool b_neg = i % 2 == 0;
+         const bool b_neg = ((i % 2U) == 0);
 
-         bn[i] = ((!b_neg) ? b : -b);
+         bn[static_cast<typename container_type::size_type>(i)] = ((!b_neg) ? b : -b);
       }
    }
 
@@ -400,7 +400,7 @@ public:
          {
             for(; n; ++start, --n)
             {
-               *out = b2n_asymptotic<T, Policy>(start);
+               *out = b2n_asymptotic<T, Policy>(static_cast<int>(start));
                ++out;
             }
          }
@@ -467,7 +467,7 @@ public:
 
       for(std::size_t i = (std::max)(static_cast<std::size_t>(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
       {
-         *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, pol) : bn[i];
+         *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, pol) : bn[static_cast<typename container_type::size_type>(i)];
          ++out;
       }
 
@@ -503,7 +503,7 @@ public:
          {
             for(; n; ++start, --n)
             {
-               *out = t2n_asymptotic<T, Policy>(start);
+               *out = t2n_asymptotic<T, Policy>(static_cast<int>(start));
                ++out;
             }
          }
