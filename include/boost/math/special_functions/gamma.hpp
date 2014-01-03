@@ -447,21 +447,13 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
       }
 
       // Check if the argument of tgamma is *near* a negative integer.
-      const T one_over_ten_thousand(0.0001F);
+      const T one_over_ten_thousand(1.0E-04F);
 
       const bool is_near_a_negative_integer = (   (abs(floor_of_zz - zz) < one_over_ten_thousand)
                                                || (abs(ceil_of_zz  - zz) < one_over_ten_thousand));
 
-      T zz_sin_pi_zz;
-
-      if(is_near_a_negative_integer)
-      {
-         zz_sin_pi_zz = sinpx(zz);
-      }
-      else
-      {
-         zz_sin_pi_zz = zz * sin(boost::math::constants::pi<T>() * zz);
-      }
+      const T zz_sin_pi_zz = ((!is_near_a_negative_integer) ? zz * sin(boost::math::constants::pi<T>() * zz)
+                                                            : sinpx(zz));
 
       gamma_value = -boost::math::constants::pi<T>() / (gamma_value * zz_sin_pi_zz);
    }
@@ -494,14 +486,21 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int*)
 
    if(zz < min_arg_for_recursion)
    {
+      // Here we simply take the logarithm of tgamma(). This is somewhat
+      // inefficient, but simple. The rationale is that the argument here
+      // is relatively small and overflow is not expected to be likely.
       log_gamma_value = log(abs(gamma_imp(zz, pol, lanczos::undefined_lanczos())));
    }
    else
    {
+      // Here, we are preparing for Stirling's approximation using
+      // Bernoulli numbers.
+
       const std::size_t number_of_bernoullis_b2n = highest_bernoulli_index<T>();
 
       std::vector<T> bernoulli_table(number_of_bernoullis_b2n);
 
+      // Get a table of Bernoulli numbers.
       boost::math::bernoulli_b2n<T>(0,
                                     static_cast<unsigned>(bernoulli_table.size()),
                                     bernoulli_table.begin());
@@ -541,50 +540,18 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int*)
       if(is_at_a_negative_integer)
          return policies::raise_pole_error<T>(function, "Evaluation of lgamma at a negative integer %1%.", z, pol);
 
-      if(zz > 20)
-      {
-         // Check for some potential overflows for large, negative argument.
-
-         T preliminary_result = gamma_imp(zz, pol, lanczos::undefined_lanczos()) * sinpx(z);
-
-         BOOST_MATH_INSTRUMENT_VARIABLE(result);
-
-         const bool result_is_too_large_to_represent = (   (abs(preliminary_result) < 1)
-                                                        && ((tools::max_value<T>() * abs(preliminary_result)) < boost::math::constants::pi<T>()));
-
-         if(result_is_too_large_to_represent)
-            return policies::raise_overflow_error<T>(function, "Result of lgamma is too large to represent.", pol);
-
-         preliminary_result = -boost::math::constants::pi<T>() / preliminary_result;
-         BOOST_MATH_INSTRUMENT_VARIABLE(preliminary_result);
-
-         if(preliminary_result == 0)
-            return policies::raise_underflow_error<T>(function, "Result of lgamma is too small to represent.", pol);
-
-         if((boost::math::fpclassify)(preliminary_result) == static_cast<int>(FP_SUBNORMAL))
-            return policies::raise_denorm_error<T>(function, "Result of lgamma is denormalized.", preliminary_result, pol);
-      }
-
       // Check if the argument of tgamma is *near* a negative integer.
-      const T one_over_ten_thousand(0.0001F);
+      const T one_over_ten_thousand(1.0E-04F);
 
       const bool is_near_a_negative_integer = (   (abs(floor_of_zz - zz) < one_over_ten_thousand)
                                                || (abs(ceil_of_zz  - zz) < one_over_ten_thousand));
 
-      T gamma_value = exp(log_gamma_value);
+      const T zz_sin_pi_zz = ((!is_near_a_negative_integer) ? zz * sin(boost::math::constants::pi<T>() * zz)
+                                                            : sinpx(zz));
 
-      T zz_sin_pi_zz;
-
-      if(is_near_a_negative_integer)
-      {
-         zz_sin_pi_zz = sinpx(zz);
-      }
-      else
-      {
-         zz_sin_pi_zz = zz * sin(boost::math::constants::pi<T>() * zz);
-      }
-
-      log_gamma_value = log(abs(-boost::math::constants::pi<T>() / (gamma_value * zz_sin_pi_zz)));
+      log_gamma_value =   log(boost::math::constants::pi<T>())
+                        - log_gamma_value
+                        - log(abs(zz_sin_pi_zz));
    }
 
    return log_gamma_value;
