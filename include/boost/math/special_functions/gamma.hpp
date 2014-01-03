@@ -410,16 +410,16 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    // Return the result, accounting for possible negative arguments.
    if(b_neg)
    {
-      // Provide special error analysis at zero, in the neighborhood
-      // of a negative integer, and exactly equal a negative integer.
+      // Provide special error analysis for:
+      // * arguments exactly equal to zero
+      // * arguments in the neighborhood of a negative integer
+      // * arguments exactly equal to a negative integer.
 
       // Check if the argument of tgamma is a negative integer.
       const bool is_at_a_negative_integer = (floor(zz) == zz);
 
       if(is_at_a_negative_integer)
          return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
-
-      // Check for some potential overflows for large, negative argument.
 
       gamma_value *= sinpx(z);
 
@@ -445,7 +445,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 }
 
 template <class T, class Policy>
-T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int*)
+T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sign)
 {
    BOOST_MATH_STD_USING
 
@@ -500,10 +500,12 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int*)
       log_gamma_value = ((((zz - boost::math::constants::half<T>()) * log(zz)) - zz) + half_ln_two_pi) + sum;
    }
 
+   int sign_of_result = 1;
+
    if(b_neg)
    {
-      // Provide special error analysis at zero, in the neighborhood
-      // of a negative integer, and exactly equal a negative integer.
+      // Provide special error analysis if the argument is exactly
+      // equal to a negative integer.
 
       // Check if the argument of tgamma is a negative integer.
       const bool is_at_a_negative_integer = (floor(zz) == zz);
@@ -511,10 +513,20 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int*)
       if(is_at_a_negative_integer)
          return policies::raise_pole_error<T>(function, "Evaluation of lgamma at a negative integer %1%.", z, pol);
 
-      log_gamma_value =   log(boost::math::constants::pi<T>())
-                        - log_gamma_value
-                        - log(abs(sinpx(zz)));
+      const T zz_sin_pi_zz = sinpx(zz);
+
+      if(zz_sin_pi_zz < 0) { }
+      else
+      {
+         sign_of_result = -sign_of_result;
+      }
+
+      log_gamma_value = - log_gamma_value
+                        + log(boost::math::constants::pi<T>())
+                        - log(abs(zz_sin_pi_zz));
    }
+
+   if(sign != static_cast<int*>(0U)) { *sign = sign_of_result; }
 
    return log_gamma_value;
 }
