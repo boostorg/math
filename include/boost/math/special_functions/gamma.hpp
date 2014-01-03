@@ -366,8 +366,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 
    static const char* function = "boost::math::tgamma<%1%>(%1%)";
 
-   // Check if the argument of tgamma is zero.
-   // TBD: Should we code out the use of numeric_limits and (min)() if it is_specialized?
+   // Check if the argument of tgamma is identically zero.
    const bool is_at_zero = (z == 0);
 
    if(is_at_zero)
@@ -411,7 +410,6 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    if(b_neg)
    {
       // Provide special error analysis for:
-      // * arguments exactly equal to zero
       // * arguments in the neighborhood of a negative integer
       // * arguments exactly equal to a negative integer.
 
@@ -451,8 +449,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
 
    static const char* function = "boost::math::lgamma<%1%>(%1%)";
 
-   // Check if the argument of tgamma is zero.
-   // TBD: Should we code out the use of numeric_limits and (min)() if it is_specialized?
+   // Check if the argument of lgamma is identically zero.
    const bool is_at_zero = (z == 0);
 
    if(is_at_zero)
@@ -488,7 +485,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       {
          one_over_x_pow_two_n_minus_one *= one_over_x2;
 
-         const std::size_t n2 = n * 2U;
+         const std::size_t n2 = static_cast<std::size_t>(n * 2U);
 
          const T term = (boost::math::bernoulli_b2n<T>(static_cast<int>(n)) * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
 
