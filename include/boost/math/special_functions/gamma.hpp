@@ -493,8 +493,8 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
          if((n >= 8U) && (abs(term) < target_epsilon_to_break_loop))
          {
             // We have reached the desired precision in Stirling's expansion.
-            // Adding additional terms in this divergent asymptotic expansion
-            // will not improve the result.
+            // Adding additional terms to the sum of this divergent asymptotic
+            // expansion will not improve the result.
 
             // Break from the loop.
             break;
@@ -503,6 +503,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
          sum += term;
       }
 
+      // Complete Stirling's approximation.
       const T half_ln_two_pi = log(boost::math::constants::two_pi<T>()) / 2;
 
       log_gamma_value = ((((zz - boost::math::constants::half<T>()) * log(zz)) - zz) + half_ln_two_pi) + sum;
@@ -515,7 +516,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       // Provide special error analysis if the argument is exactly
       // equal to a negative integer.
 
-      // Check if the argument of tgamma is a negative integer.
+      // Check if the argument of lgamma is a negative integer.
       const bool is_at_a_negative_integer = (floor(zz) == zz);
 
       if(is_at_a_negative_integer)
