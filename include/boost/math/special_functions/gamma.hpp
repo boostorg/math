@@ -480,6 +480,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
             T one_over_x_pow_two_n_minus_one = 1 / zz;
       const T one_over_x2                    = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
             T sum                            = (boost::math::bernoulli_b2n<T>(1) / 2) * one_over_x_pow_two_n_minus_one;
+      const T target_epsilon_to_break_loop   = sum * pow(T(0.1F), static_cast<int>(static_cast<float>(std::numeric_limits<T>::digits10) * 1.15F));
 
       for(std::size_t n = 2U; n < number_of_bernoullis_b2n; ++n)
       {
@@ -488,6 +489,16 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
          const std::size_t n2 = static_cast<std::size_t>(n * 2U);
 
          const T term = (boost::math::bernoulli_b2n<T>(static_cast<int>(n)) * one_over_x_pow_two_n_minus_one) / (n2 * (n2 - 1U));
+
+         if((n >= 8U) && (abs(term) < target_epsilon_to_break_loop))
+         {
+            // We have reached the desired precision in Stirling's expansion.
+            // Adding additional terms in this divergent asymptotic expansion
+            // will not improve the result.
+
+            // Break from the loop.
+            break;
+         }
 
          sum += term;
       }
