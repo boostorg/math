@@ -184,8 +184,8 @@ inline T cyl_neumann_derivative_imp(T v, T x, const Policy& pol)
    //
    if (floor(v) != v)
    {
-      T eps = boost::math::policies::get_epsilon<T, Policy>();
-      if ((log(eps / 2) > v * log((x/2) * (x/2) / v)) || x < eps)
+      const T eps = boost::math::policies::get_epsilon<T, Policy>();
+      if (log(eps / 2) > v * log((x/2) * (x/2) / v))
          return boost::math::detail::bessel_y_derivative_small_z_series(v, x, pol);
    }
    //
