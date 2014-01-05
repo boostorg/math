@@ -345,14 +345,22 @@ inline T lower_gamma_series(T a, T z, const Policy& pol, T init_value = 0)
 template<class T>
 std::size_t highest_bernoulli_index()
 {
+   const float digits10_of_type = (std::numeric_limits<T>::is_specialized
+                                      ? static_cast<float>(std::numeric_limits<T>::digits10)
+                                      : static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
+
    // Find the high index n for Bn to produce the desired precision in Stirling's calculation.
-   return static_cast<std::size_t>(18.0F + (0.6F * static_cast<float>(std::numeric_limits<T>::digits10)));
+   return static_cast<std::size_t>(18.0F + (0.6F * digits10_of_type));
 }
 
 template<class T>
 T minimum_argument_for_bernoulli_recursion()
 {
-   return T(static_cast<float>(std::numeric_limits<T>::digits10) * 1.7F);
+   const float digits10_of_type = (std::numeric_limits<T>::is_specialized
+                                      ? static_cast<float>(std::numeric_limits<T>::digits10)
+                                      : static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
+
+   return T(digits10_of_type * 1.7F);
 }
 
 // Forward declaration of the lgamma_imp template specialization.
@@ -480,7 +488,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
             T one_over_x_pow_two_n_minus_one = 1 / zz;
       const T one_over_x2                    = one_over_x_pow_two_n_minus_one * one_over_x_pow_two_n_minus_one;
             T sum                            = (boost::math::bernoulli_b2n<T>(1) / 2) * one_over_x_pow_two_n_minus_one;
-      const T target_epsilon_to_break_loop   = sum * pow(T(0.1F), static_cast<int>(static_cast<float>(std::numeric_limits<T>::digits10) * 1.15F));
+      const T target_epsilon_to_break_loop   = (sum * boost::math::tools::epsilon<T>()) * T(1.0E-10F);
 
       for(std::size_t n = 2U; n < number_of_bernoullis_b2n; ++n)
       {
