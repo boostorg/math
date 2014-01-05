@@ -382,6 +382,13 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 
    const bool b_neg = (z < 0);
 
+   // Special case handling of small factorials:
+
+   if(!b_neg && (floor(z) == z) && (z < boost::math::max_factorial<T>::value))
+   {
+      return boost::math::unchecked_factorial<T>(itrunc(z) - 1);
+   }
+
    // Make a local, unsigned copy of the input argument.
    T zz((!b_neg) ? z : -z);
 
