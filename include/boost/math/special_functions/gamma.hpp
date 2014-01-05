@@ -522,9 +522,12 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       if(is_at_a_negative_integer)
          return policies::raise_pole_error<T>(function, "Evaluation of lgamma at a negative integer %1%.", z, pol);
 
-      const T zz_sin_pi_zz = sinpx(zz);
+      T t = sinpx(z);
 
-      if(zz_sin_pi_zz < 0) { }
+      if(t < 0)
+      {
+         t = -t;
+      }
       else
       {
          sign_of_result = -sign_of_result;
@@ -532,7 +535,7 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
 
       log_gamma_value = - log_gamma_value
                         + log(boost::math::constants::pi<T>())
-                        - log(abs(zz_sin_pi_zz));
+                        - log(t);
    }
 
    if(sign != static_cast<int*>(0U)) { *sign = sign_of_result; }
