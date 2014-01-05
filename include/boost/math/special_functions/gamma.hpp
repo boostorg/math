@@ -382,9 +382,10 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 
    const bool b_neg = (z < 0);
 
-   // Special case handling of small factorials:
+   const bool floor_of_z_is_equal_to_z = (floor(z) == z);
 
-   if(!b_neg && (floor(z) == z) && (z < boost::math::max_factorial<T>::value))
+   // Special case handling of small factorials:
+   if((!b_neg) && floor_of_z_is_equal_to_z && (z < boost::math::max_factorial<T>::value))
    {
       return boost::math::unchecked_factorial<T>(itrunc(z) - 1);
    }
@@ -400,7 +401,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 
    if(zz < min_arg_for_recursion)
    {
-      n_recur = boost::math::ltrunc(min_arg_for_recursion - zz) + 1;
+      n_recur = boost::math::itrunc(min_arg_for_recursion - zz) + 1;
 
       zz += n_recur;
    }
@@ -428,10 +429,8 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
       // * arguments in the neighborhood of a negative integer
       // * arguments exactly equal to a negative integer.
 
-      // Check if the argument of tgamma is a negative integer.
-      const bool is_at_a_negative_integer = (floor(zz) == zz);
-
-      if(is_at_a_negative_integer)
+      // Check if the argument of tgamma is exactly equal to a negative integer.
+      if(floor_of_z_is_equal_to_z)
          return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
 
       gamma_value *= sinpx(z);
@@ -471,6 +470,14 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       return policies::raise_domain_error<T>(function, "Evaluation of lgamma at zero %1%.", z, pol);
 
    const bool b_neg = (z < 0);
+
+   const bool floor_of_z_is_equal_to_z = (floor(z) == z);
+
+   // Special case handling of small factorials:
+   if((!b_neg) && floor_of_z_is_equal_to_z && (z < boost::math::max_factorial<T>::value))
+   {
+      return log(boost::math::unchecked_factorial<T>(itrunc(z) - 1));
+   }
 
    // Make a local, unsigned copy of the input argument.
    T zz((!b_neg) ? z : -z);
@@ -531,10 +538,8 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
       // Provide special error analysis if the argument is exactly
       // equal to a negative integer.
 
-      // Check if the argument of lgamma is a negative integer.
-      const bool is_at_a_negative_integer = (floor(zz) == zz);
-
-      if(is_at_a_negative_integer)
+      // Check if the argument of lgamma is exactly equal to a negative integer.
+      if(floor_of_z_is_equal_to_z)
          return policies::raise_pole_error<T>(function, "Evaluation of lgamma at a negative integer %1%.", z, pol);
 
       T t = sinpx(z);
