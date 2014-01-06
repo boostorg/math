@@ -190,6 +190,8 @@ void test_spots(T)
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
+   // An extra fudge factor for real_concept which has a less accurate tgamma:
+   T tolerance_tgamma_extra = std::numeric_limits<T>::is_specialized ? 1 : 4;
 
    int sign = 1;
    BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(3.5), &sign), static_cast<T>(1.2009736023470742248160218814507129957702389154682L), tolerance);
@@ -198,7 +200,7 @@ void test_spots(T)
    BOOST_CHECK(sign == 1);
    BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(-0.125), &sign), static_cast<T>(2.1653002489051702517540619481440174064962195287626L), tolerance);
    BOOST_CHECK(sign == -1);
-   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(-3.125), &sign), static_cast<T>(0.1543111276840418242676072830970532952413339012367L), tolerance);
+   BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(-3.125), &sign), static_cast<T>(0.1543111276840418242676072830970532952413339012367L), tolerance * tolerance_tgamma_extra);
    BOOST_CHECK(sign == 1);
    BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(-53249.0/1024), &sign), static_cast<T>(-149.43323093420259741100038126078721302600128285894L), tolerance);
    BOOST_CHECK(sign == -1);
