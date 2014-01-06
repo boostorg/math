@@ -191,7 +191,7 @@ void test_spots(T)
 #pragma warning(pop)
 #endif
    // An extra fudge factor for real_concept which has a less accurate tgamma:
-   T tolerance_tgamma_extra = std::numeric_limits<T>::is_specialized ? 1 : 4;
+   T tolerance_tgamma_extra = std::numeric_limits<T>::is_specialized ? 1 : 10;
 
    int sign = 1;
    BOOST_CHECK_CLOSE(::boost::math::lgamma(static_cast<T>(3.5), &sign), static_cast<T>(1.2009736023470742248160218814507129957702389154682L), tolerance);

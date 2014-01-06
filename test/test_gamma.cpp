@@ -131,14 +131,14 @@ void expected_results()
       "linux",                       // platform
       "real_concept",                // test type(s)
       "factorials",                  // test data group
-      "boost::math::tgamma", 220, 70);  // test function
+      "boost::math::tgamma", 400, 100);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       "linux",                       // platform
       "real_concept",                // test type(s)
       "near (0|-55)",                // test data group
-      "boost::math::(t|l)gamma", 130, 80);  // test function
+      "boost::math::(t|l)gamma", 200, 100);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -285,7 +285,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "near.*",                      // test data group
-      "boost::math::lgamma", 15000000, 10000000);  // test function
+      "boost::math::lgamma", 40000000, 10000000);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
