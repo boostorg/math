@@ -389,6 +389,9 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    {
       return boost::math::unchecked_factorial<T>(itrunc(z) - 1);
    }
+   // Special case for ultra-small z:
+   if(!b_neg && (z < tools::epsilon<T>()))
+      return 1 / z;
 
    // Make a local, unsigned copy of the input argument.
    T zz((!b_neg) ? z : -z);
@@ -412,14 +415,26 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 
    const T log_gamma_value = lgamma_imp(zz, pol, lanczos::undefined_lanczos());
 
+   if(log_gamma_value > tools::log_max_value<T>())
+      return policies::raise_overflow_error<T>(function, 0, pol);
+
    T gamma_value = exp(log_gamma_value);
 
    // Rescale the result using downward recursion if necessary.
-   for(int k = 0; k < n_recur; ++k)
+   if(n_recur)
    {
-      zz -= 1;
-
-      gamma_value /= zz;
+      // The order of divides is important, if we keep subtracting 1 from zz
+      // we DO NOT get back to z (cancellation error).  Further if z < epsilon
+      // we would end up dividing by zero.  Also in order to prevent spurious
+      // overflow with the first division, we must save dividing by |z| till last,
+      // so the optimal order of divides is z+1, z+2, z+3...z+n_recur-1,z.
+      zz = fabs(z) + 1;
+      for(int k = 1; k < n_recur; ++k)
+      {
+         gamma_value /= zz;
+         zz += 1;
+      }
+      gamma_value /= fabs(z);
    }
 
    // Return the result, accounting for possible negative arguments.
