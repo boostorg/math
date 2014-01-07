@@ -1,0 +1,127 @@
+[section:bernoulli_numbers Bernoulli Numbers]
+
+[@https://en.wikipedia.org/wiki/Bernoulli_number Bernoulli numbers]
+ are a sequence of rational numbers useful for the Taylor series expansion,
+Euler-Maclaurin formula, and the Riemann zeta function.
+
+Bernoulli numbers are used in evaluation of some Boost.Math functions,
+including the __tgamma, __lgamma and polygamma functions.
+
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/bernoulli.hpp>
+``
+
+  namespace boost { namespace math {
+
+  template <class T>
+  T bernoulli_b2n(const int i);  // Single Bernoulli number (default policy).
+
+  template <class T, class Policy>
+  T bernoulli_b2n(const int i, const Policy &pol);
+
+  template <class T, class OutputIterator> // Multiple Bernoulli numbers.
+  OutputIterator bernoulli_b2n(int start_index,
+                                      unsigned number_of_bernoullis_b2n,
+                                      OutputIterator out_it);
+
+  template <class T, class OutputIterator, class Policy>
+  OutputIterator bernoulli_b2n(int start_index,
+                                      unsigned number_of_bernoullis_b2n,
+                                      OutputIterator out_it,
+                                      const Policy& pol);
+  }} // namespaces
+
+[h4 Description]
+
+  template <class T>
+  T bernoulli_b2n(const int i);
+
+  template <class T, class Policy>
+  T bernoulli_b2n(const int i, const Policy &pol);
+
+Returns the (2 * i)[super th] Bernoulli number.
+
+The final __Policy argument is optional and can be used to control the behaviour of the function:
+how it handles errors, what level of precision to use etc.
+
+Refer to the __policy_section for more details.
+
+[h4 Usage]
+
+[import ../../example/bernoulli_example.cpp]
+[bernoulli_example_1]
+[bernoulli_output_1]
+
+[h4 Multiple Bernoulli Numbers]
+
+Two versions of the Bernoulli number function are provided to compute multiple numbers
+(one with default policy and the other allowing user-policy).
+
+These return a series of Bernoulli numbers:
+
+  Bernoulli(2*start_index),
+  Bernoulli(2*(start_index+1))
+  ...
+  Bernoulli(2*(number_of_bernoullis_b2n-1))
+
+[h4 Usage]
+
+[bernoulli_example_2]
+[bernoulli_output_2]
+[bernoulli_example_3]
+[bernoulli_output_3]
+
+[h4 Accuracy]
+
+The function usually returns values within one ULP (unit in the last place) for the floating-point type.
+
+The highest Bernoulli number that can be computed using 64-bit `double` before overflow is
+73 * 2 = 146 with value +5.29967764248499e+194
+and this is expected value obtained by round-to-nearest
+from the 50 decimal digit value +5.29967764248499239300942910043247266228490E194L.
+
+Overflow for 64-bit `double` occurs at Bernoulli number 74 * 2 = 148.
+
+
+[h4 Implementation]
+
+The implementation details are in [@../../include/math/special_functions/detail/bernoulli_b2n.hpp /bernoulli_b2n.hpp].
+
+For `i <= max_bernoulli_index<T>::value` this is implemented by table lookup;
+for larger values of `i`, this is implemented by the Tangent Numbers algorithm as described in the paper:
+Fast Computation of Bernoulli, Tangent and Secant Numbers, Richard P. Brent and David Harvey,
+[@http://arxiv.org/pdf/1108.0286v3.pdf] (2011).
+
+[@http://mathworld.wolfram.com/TangentNumber.html Tangent (or Zag) numbers]
+(an even alternating permutation number) are defined
+and their generating function is also given therein.
+
+ [/@http://mathworld.wolfram.com/images/equations/TangentNumber/Inline15.gif]
+
+The relation of Tangent numbers with Bernoulli numbers  ['B[sub i]]
+is given by Brent and Harvey's equation 14:
+
+__spaces[equation tangent_numbers]
+
+Their relation with Bernoulli numbers ['B[sub i]] are defined by
+
+if i > 0 and i is even then
+__spaces[equation bernoulli_numbers] [br]
+elseif i == 0 then  ['B[sub i]] = 1 [br]
+elseif i == 1 then  ['B[sub i]] = -1/2 [br]
+elseif i < 0 or i is odd then ['B[sub i]] = 0
+
+
+[/@http://s7.postimg.org/mygi2kror/bernoulli_1.png]
+
+[endsect] [/section:bernoulli_numbers Bernoulli Numbers]
+
+[/
+  Copyright 2013, 2014 Nikhar Agrawal, Christopher Kormanyos, John Maddock, Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
