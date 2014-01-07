@@ -142,9 +142,13 @@ void test_bessel(T, const char* name)
     static const boost::array<boost::array<T, 3>, 5> iv_derivative_large_data = {{
         {{ SC_(-1), static_cast<T>(ldexp(0.5, -512)), SC_(0.5) }},
         {{ SC_(1),  static_cast<T>(ldexp(0.5, -512)), SC_(0.5) }},
-        {{ SC_(-1.125), static_cast<T>(ldexp(0.5, -512)), SC_(4.0715272050947359203430409041001937149343363573066460226173390878707e327) }},
         {{ SC_(1.125),  static_cast<T>(ldexp(0.5, -512)), SC_(2.42025162605150606399395900489934587657244145536315936432966315563638e-20) }},
         {{ SC_(0.5), static_cast<T>(ldexp(0.5, -683)), SC_(3.5741154998461284276309443770923823816821202344841143399486401387635e102) }},
+#if LDBL_MAX_10_EXP > 326
+        {{ SC_(-1.125), static_cast<T>(ldexp(0.5, -512)), SC_(4.0715272050947359203430409041001937149343363573066460226173390878707e327) }},
+#else
+        {{ SC_(-1.125), static_cast<T>(ldexp(0.5, -400)), SC_(9.2176109325125492442218016833983080399738569000864e255) }},
+#endif
     }};
 
     do_test_cyl_bessel_i_derivative<T>(i0_derivative_data, name, "Bessel I'0: Mathworld Data");

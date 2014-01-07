@@ -139,9 +139,15 @@ void test_bessel(T, const char* name)
     static const boost::array<boost::array<T, 3>, 5> kv_derivative_large_data = {{
         {{ SC_(-0.5), static_cast<T>(ldexp(0.5, -512)), SC_(-2.75176667129887692508287667455879592490037256500173136025362e231) }},
         {{ SC_(0.5),  static_cast<T>(ldexp(0.5, -512)), SC_(-2.75176667129887692508287667455879592490037256500173136025362e231) }},
+#if LDBL_MAX_10_EXP > 328
         {{ SC_(-1.125), static_cast<T>(ldexp(0.5, -512)), SC_(-1.67123513518264734700327664054002130440723e328) }},
         {{ SC_(1.125),  static_cast<T>(ldexp(0.5, -512)), SC_(-1.67123513518264734700327664054002130440723e328) }},
         {{ SC_(0.5),  static_cast<T>(ldexp(0.5, -683)), SC_(-4.5061484409559214227217449664854025793393e308) }},
+#else
+        {{ SC_(-1.125), static_cast<T>(ldexp(0.5, -350)), SC_(-3.9215842539903519062996833257258316112890347787982e224) }},
+        {{ SC_(1.125),  static_cast<T>(ldexp(0.5, -350)), SC_(-3.9215842539903519062996833257258316112890347787982e224) }},
+        {{ SC_(0.5),  static_cast<T>(ldexp(0.5, -350)), SC_(-1.9468059277417079996118877126104369699856564652520e158) }},
+#endif
     }};
 
     do_test_cyl_bessel_k_derivative<T>(k0_derivative_data, name, "Bessel K'0: Mathworld Data");

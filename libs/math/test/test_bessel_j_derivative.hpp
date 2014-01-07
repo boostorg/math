@@ -221,7 +221,11 @@ void test_bessel_derivative(T, const char* name)
     }};
     do_test_cyl_bessel_j_derivative<T>(jv_data, name, "Bessel J': Mathworld Data");
     static const boost::array<boost::array<T, 3>, 4> jv_large_data = {{
+#if LDBL_MAX_10_EXP > 308
 	{{ SC_(-0.5), static_cast<T>(std::ldexp(0.5, -683)), SC_(-2.8687031947358902542073388638943588627056993e308) }},
+#else
+	{{ SC_(-0.5), static_cast<T>(std::ldexp(0.5, -450)), SC_(-1.7688953183288445554095310240218576026580197125814e203) }},
+#endif
 	{{ SC_(256), SC_(512), SC_(0.032286467266411904239327492993951594201583145) }},
 	{{ SC_(-256), SC_(8), SC_(4.6974301387555891979202431551474684165419e-352) }},
 	{{ SC_(-2.5), SC_(4), SC_(-0.3580070651681080294136741901878543615958139) }},
