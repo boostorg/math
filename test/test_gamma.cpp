@@ -131,14 +131,14 @@ void expected_results()
       "linux",                       // platform
       "real_concept",                // test type(s)
       "factorials",                  // test data group
-      "boost::math::tgamma", 220, 70);  // test function
+      "boost::math::tgamma", 400, 100);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       "linux",                       // platform
       "real_concept",                // test type(s)
       "near (0|-55)",                // test data group
-      "boost::math::(t|l)gamma", 130, 80);  // test function
+      "boost::math::(t|l)gamma", 200, 100);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -264,28 +264,28 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       "factorials",                  // test data group
-      "boost::math::tgamma", 70, 25);  // test function
+      "boost::math::tgamma", 400, 100);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       "factorials",                  // test data group
-      "boost::math::lgamma", 40, 4);  // test function
+      "boost::math::lgamma", 200, 20);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       "near.*",                      // test data group
-      "boost::math::tgamma", 80, 60);  // test function
+      "boost::math::tgamma", 300, 100);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       "near.*",                      // test data group
-      "boost::math::lgamma", 10000000, 10000000);  // test function
+      "boost::math::lgamma", 40000000, 10000000);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
