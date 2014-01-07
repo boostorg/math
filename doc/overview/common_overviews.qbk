@@ -205,7 +205,7 @@ regression tests: cd into boost-root/libs/math/test and do a:
    bjam mytoolset
 
 where "mytoolset" is the name of the
-[@http://www.boost.org/doc/libs/1_55_0/doc/html/bbv2.html Boost.Build]
+[@http://www.boost.org/doc/html/bbv2.html Boost.Build]
 toolset used for your
 compiler.  The chances are that [*many of the accuracy tests will fail
 at this stage] - don't panic - the default acceptable error tolerances
