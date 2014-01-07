@@ -115,7 +115,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*",               // test data group
-      "boost::math::tgamma_ratio[^|]*", 150, 50);                 // test function
+      "boost::math::tgamma_ratio[^|]*", 250, 150);                 // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,
