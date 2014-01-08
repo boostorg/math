@@ -389,12 +389,17 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    {
       return boost::math::unchecked_factorial<T>(itrunc(z) - 1);
    }
-   // Special case for ultra-small z:
-   if(!b_neg && (z < tools::epsilon<T>()))
-      return 1 / z;
 
    // Make a local, unsigned copy of the input argument.
    T zz((!b_neg) ? z : -z);
+
+   // Special case for ultra-small z:
+   if(zz < tools::cbrt_epsilon<T>())
+   {
+      const T inverse_tgamma_series = z * (1 + (z * boost::math::constants::euler<T>()));
+
+      return 1 / inverse_tgamma_series;
+   }
 
    // Scale the argument up for the calculation of lgamma,
    // and use downward recursion later for the final result.
