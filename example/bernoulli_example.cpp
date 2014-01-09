@@ -1,4 +1,4 @@
-//  Copyright Paul A. Bristow 2013.
+//  Copyright Paul A. Bristow 2014.
 //  Copyright Nakhar Agrawal 2013.
 //  Copyright John Maddock 2013.
 //  Copyright Christopher Kormanyos 2013.
@@ -33,16 +33,16 @@
 
 int main()
 {
+//[bernoulli_example_1
   try
   { // It is always wise to use try'n'catch blocks around Boost.Math function
     // so that informative error messages will be displayed.
 
-//[bernoulli_example_1
 
   /*`A simple example computes the value of `Bernoulli(2)` where the return type
 is `double`.
 
-[hint All odd Bernoulli numbers (> 1) are zero, so the parameter value 2 computes B[sub 4]. ]
+[tip All odd Bernoulli numbers (> 1) are zero, so the parameter value 2 computes B[sub 4]. ]
 
 */
   std::cout
@@ -81,12 +81,23 @@ and also obtain much higher precision.
   }
 //] //[/bernoulli_example_2]
 
+  }
+  catch (std::exception ex)
+  {
+    std::cout << "Thrown Exception caught: " << ex.what() << std::endl;
+  }
+
+
 
 //[bernoulli_example_3    
   /*`Of course, for any floating-point type, there is a maximum Bernoulli number than can be computed
   before it overflows the exponent.
-  If we try to compute too high a Bernoulli number, an exception will be thrown,
+  If we try to compute too high a Bernoulli number then an __overflow_error will be raised: the default
+  behaviour for which is to throw a `std::overflow_error` exception.
   */
+  try
+  {
+
     std::cout
     << std::setprecision(std::numeric_limits<float>::digits10)
     << "Bernoulli number " << 33 * 2 <<std::endl;
