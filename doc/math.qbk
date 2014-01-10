@@ -1,13 +1,13 @@
 [book Math Toolkit
     [quickbook 1.6]
-    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013 Paul A. Bristow, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Johan Råde, Gautam Sewani, Benjamin Sobotta, Thijs van den Berg, Daryle Walker and Xiaogang Zhang]
+    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013 Paul A. Bristow, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Johan Råde, Gautam Sewani, Benjamin Sobotta, Thijs van den Berg, Daryle Walker, Xiaogang Zhang and Nikhar Agrawal]
     [/purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Bristow, Paul A.], [Holin, Hubert], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang] ]
+    [authors [Bristow, Paul A.], [Holin, Hubert], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang], [Agrawal, Nikhar]]
     [/last-revision $Date$]
     [version 1.8.3]
 ]
@@ -148,6 +148,9 @@ and use the function's name as the link text.]
 [def __ellint_1  [link math_toolkit.ellint.ellint_1 ellint_1]]
 [def __ellint_2  [link math_toolkit.ellint.ellint_2 ellint_2]]
 [def __ellint_3  [link math_toolkit.ellint.ellint_3 ellint_3]]
+
+[/ Bernoulli functions and numbers]
+[def __bernoulli_numbers  [link math_toolkit.bernoulli.bernoulli_numbers bernoulli_numbers]]
 
 [/Bessel functions]
 [def __cyl_bessel_j  [link math_toolkit.bessel.bessel_first cyl_bessel_j]]
@@ -385,6 +388,7 @@ using the quantile function on the [NAME] distribution.  The
 describe how to change the rounding policy
 for these distributions.
 ] [/ caution]
+
 ] [/ template discrete_quantile_warning]
 
 [block '''<bookinfo><releaseinfo>'''
@@ -443,6 +447,8 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [endsect] [/section:sf_gamma Gamma Functions]
 
 [include sf/factorials.qbk]
+
+[include sf/bernoulli_numbers.qbk]
 
 [section:sf_beta Beta Functions]
 [include sf/beta.qbk]
@@ -583,7 +589,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [endmathpart]
 
 [/ math.qbk
-  Copyright 2008, 2010, 2012, 2013 John Maddock and Paul A. Bristow.
+  Copyright 2008, 2010, 2012, 2013, 2014 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

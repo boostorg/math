@@ -70,7 +70,7 @@ You can see the full list of available constants at [link math_toolkit.constants
 
 Some examples of using constants are at [@../../example/constants_eg1.cpp constants_eg1].
 
-[endsect]
+[endsect] [/section:non_templ Use in non-template code]
 
 [section:templ Use in template code]
 
@@ -379,10 +379,12 @@ This section lists the mathematical constants, their use(s) (and sometimes ratio
 ] [/table]
 
 
-[note Integer values are *not included* in this list of math constants, however interesting,
+[note Integer values are [*not included] in this list of math constants, however interesting,
 because they can be so easily and exactly constructed, even for UDT, for example: `static_cast<cpp_float>(42)`.]
 
 [tip If you know the approximate value of the constant, you can search for the value to find Boost.Math chosen name in this table.]
+[tip Bernoulli numbers are available at __bernoulli_numbers.]
+[tip Factorials are available at __factorial.]
 
 [endsect]  [/section:constants The constants]
 
