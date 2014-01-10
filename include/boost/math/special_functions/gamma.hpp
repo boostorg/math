@@ -396,7 +396,12 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
    // Special case for ultra-small z:
    if(zz < tools::cbrt_epsilon<T>())
    {
-      const T inverse_tgamma_series = z * (1 + (z * boost::math::constants::euler<T>()));
+      const T a0(1);
+      const T a1(boost::math::constants::euler<T>());
+      const T six_euler_squared((boost::math::constants::euler<T>() * boost::math::constants::euler<T>()) * 6);
+      const T a2((six_euler_squared -  boost::math::constants::pi_sqr<T>()) / 12);
+
+      const T inverse_tgamma_series = z * ((a2 * z + a1) * z + a0);
 
       return 1 / inverse_tgamma_series;
    }

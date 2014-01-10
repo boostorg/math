@@ -17,6 +17,7 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/math/policies/policy.hpp>
+#include <boost/math/special_functions/cbrt.hpp>
 
 // These two are for LDBL_MAN_DIG:
 #include <limits.h>
@@ -306,8 +307,8 @@ inline T cbrt_epsilon_imp(const T*, const mpl::int_<113>&)
 template <class T, class Tag>
 inline T cbrt_epsilon_imp(const T*, const Tag&)
 {
-   BOOST_MATH_STD_USING
-   static const T cbrt_eps = pow(tools::epsilon<T>(), T(1) / 3);
+   using boost::math::cbrt;
+   static const T cbrt_eps = cbrt(tools::epsilon<T>());
    return cbrt_eps;
 }
 
