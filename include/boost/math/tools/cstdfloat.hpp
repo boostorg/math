@@ -21,10 +21,11 @@
   // This is the beginning of the preamble.
 
   // In this preamble, the preprocessor is used to query certain
-  // preprocessor definitions from <float.h>. With these queries,
-  // an attempt is made to automatically detect the presence of
-  // built-in floating-point types having specified widths,
-  // and these are also thought to be conformant with IEEE-754.
+  // preprocessor definitions from <float.h>. Based on the results
+  // of these queries, an attempt is made to automatically detect
+  // the presence of built-in floating-point types having specified
+  // widths. These are *thought* to be conformant with IEEE-754,
+  // whereby an unequivocal test based on numeric_limits follows below.
 
   #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH  0
 
@@ -196,40 +197,40 @@
   typedef BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE  boost_float32_t;
   typedef boost_float32_t boost_float_fast32_t;
   typedef boost_float32_t boost_float_least32_t;
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float32_t>::is_iec559    == true);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float32_t>::radix        ==    2);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float32_t>::digits       ==   24);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float32_t>::max_exponent ==  128);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::is_iec559    == true);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::radix        ==    2);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::digits       ==   24);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::max_exponent ==  128);
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE == 1)
   typedef BOOST_CSTDFLOAT_FLOAT64_NATIVE_TYPE  boost_float64_t;
   typedef boost_float64_t boost_float_fast64_t;
   typedef boost_float64_t boost_float_least64_t;
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float64_t>::is_iec559    == true);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float64_t>::radix        ==    2);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float64_t>::digits       ==   53);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float64_t>::max_exponent == 1024);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::is_iec559    == true);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::radix        ==    2);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::digits       ==   53);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::max_exponent == 1024);
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 1)
   typedef BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE  boost_float80_t;
   typedef boost_float80_t boost_float_fast80_t;
   typedef boost_float80_t boost_float_least80_t;
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float80_t>::is_iec559    ==  true);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float80_t>::radix        ==     2);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float80_t>::digits       ==    63);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float80_t>::max_exponent == 16384);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::is_iec559    ==  true);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::radix        ==     2);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::digits       ==    63);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::max_exponent == 16384);
   #endif
 
-  #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_NATIVE_TYPE == 1)
-  typedef BOOST_CSTDFLOAT_FLOAT128_NATIVE_NATIVE_TYPE boost_float128_t;
+  #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 1)
+  typedef BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE boost_float128_t;
   typedef boost_float128_t boost_float_fast128_t;
   typedef boost_float128_t boost_float_least128_t;
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float128_t>::is_iec559    ==  true);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float128_t>::radix        ==     2);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float128_t>::digits       ==   113);
-  BOOST_STATIC_ASSERT(std::numeric_limits<::boost_float128_t>::max_exponent == 16384);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::is_iec559    ==  true);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::radix        ==     2);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::digits       ==   113);
+  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::max_exponent == 16384);
   #endif
 
   // The following section contains the first group of macros that
