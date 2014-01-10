@@ -30,26 +30,22 @@
 //SC_(-7.0921568627450980392156862745098039215686), 
 //SC_(54.9711779448621553884711779448621553884711), 
 
-
 int main()
 {
+  //[bernoulli_example_1
+
+/*`A simple example computes the value of `Bernoulli(2)` where the return type is `double`.
+
+
+*/ 
   try
-  { // It is always wise to use try'n'catch blocks around Boost.Math function
-    // so that informative error messages will be displayed.
-
-//[bernoulli_example_1
-
-  /*`A simple example computes the value of `Bernoulli(2)` where the return type
-is `double`.
-
-[hint All odd Bernoulli numbers (> 1) are zero, so the parameter value 2 computes B[sub 4]. ]
-
-*/
+  { // It is always wise to use try'n'catch blocks around Boost.Math functions
+    // so that any informative error messages can be displayed in the catch block.
   std::cout
     << std::setprecision(std::numeric_limits<double>::digits10)
     << boost::math::bernoulli_b2n<double>(2) << std::endl;
 
-/*` So B[sub 4] == -1/30 == -0.0333333333333333 
+/*`So B[sub 4] == -1/30 == -0.0333333333333333 
 
 If we use Boost.Multiprecision and its 50 decimal digit floating-point type `cpp_dec_float_50`,
 we can calculate the value of much larger numbers like `Bernoulli(100)`
@@ -65,7 +61,7 @@ and also obtain much higher precision.
 //[bernoulli_example_2
 /*`We can compute and save all the float-precision Bernoulli numbers from one call.
 */
-  std::vector<float> bn; // Space for all the 32-bit `float` precision Bernoulli numbers.
+  std::vector<float> bn; // Space for 32-bit `float` precision Bernoulli numbers.
 
   // Start with Bernoulli number 0.
   boost::math::bernoulli_b2n<float>(0, 32, std::back_inserter(bn)); // Fill vector with even Bernoulli numbers.
@@ -80,22 +76,24 @@ and also obtain much higher precision.
 //] //[/bernoulli_example_2]
 
   }
-  catch(const std::exception&)
+  catch(const std::exception& ex)
   {
+     std::cout << "Thrown Exception caught: " << ex.what() << std::endl;
   }
 
 
 //[bernoulli_example_3    
-  /*`Of course, for any floating-point type, there is a maximum Bernoulli number than can be computed
+/*`Of course, for any floating-point type, there is a maximum Bernoulli number that can be computed
   before it overflows the exponent.
-  If we try to compute too high a Bernoulli number, an exception will be thrown,
-  */
-  try{
+  By default policy, if we try to compute too high a Bernoulli number, an exception will be thrown.
+*/
+  try
+  {
     std::cout
     << std::setprecision(std::numeric_limits<float>::digits10)
     << "Bernoulli number " << 33 * 2 <<std::endl;
 
-     std::cout << boost::math::bernoulli_b2n<float>(33) << std::endl;
+    std::cout << boost::math::bernoulli_b2n<float>(33) << std::endl;
   }
   catch (std::exception ex)
   {
@@ -103,10 +101,45 @@ and also obtain much higher precision.
   }
 
 /*`
-and (provided 'try'n'catch' blocks are used) we will get a helpful error message.
+and we will get a helpful error message (provided try'n'catch blocks are used).
 */
 
 //] //[/bernoulli_example_3]
+
+//[bernoulli_example_4
+/*`Users can determine from `max_bernoulli_b2n<>::value`
+the largest Bernoulli number you can evaluate for any type 
+(or safely pass to `unchecked_bernoulli_b2n<>`).
+
+For example:
+*/
+   std::cout << "boost::math::max_bernoulli_b2n<float>::value = "  << boost::math::max_bernoulli_b2n<float>::value << std::endl;
+   std::cout << "Maximum Bernoulli number using float is " << boost::math::bernoulli_b2n<float>( boost::math::max_bernoulli_b2n<float>::value) << std::endl;
+   std::cout << "boost::math::max_bernoulli_b2n<double>::value = "  << boost::math::max_bernoulli_b2n<double>::value << std::endl;
+   std::cout << "Maximum Bernoulli number using double is " << boost::math::bernoulli_b2n<double>( boost::math::max_bernoulli_b2n<double>::value) << std::endl;
+  //] //[/bernoulli_example_4]
+
+//[tangent_example_1
+
+/*`We can compute and save a few Tangent numbers.
+*/
+  std::vector<float> tn; // Space for some `float` precision Tangent numbers.
+
+  // Start with Bernoulli number 0.
+  boost::math::tangent_t2n<float>(1, 6, std::back_inserter(tn)); // Fill vector with even Tangent numbers.
+
+  for(size_t i = 0; i < tn.size(); i++)
+  { // Show vector of even Tangent numbers, showing all significant decimal digits.
+      std::cout << std::setprecision(std::numeric_limits<float>::digits10)
+          << " "
+          << tn[i];
+  }
+  std::cout << std::endl;
+
+//] [/tangent_example_1]
+
+// 1, 2, 16, 272, 7936, 353792, 22368256, 1903757312 
+
 
 
 } // int main()
@@ -116,7 +149,6 @@ and (provided 'try'n'catch' blocks are used) we will get a helpful error message
 //[bernoulli_output_1
   -3.6470772645191354362138308865549944904868234686191e+215
 //] //[/bernoulli_output_1]
-
 
 //[bernoulli_output_2
 
@@ -156,8 +188,22 @@ and (provided 'try'n'catch' blocks are used) we will get a helpful error message
 
 //[bernoulli_output_3
  Bernoulli number 66
- Thrown Exception caught: Error in function boost::math::bernoulli_b2n<float>(n): Overflow evaluating function at 33
+ Thrown Exception caught: Error in function boost::math::bernoulli_b2n<float>(n):
+ Overflow evaluating function at 33
 //] //[/bernoulli_output_3]
+//[bernoulli_output_4
+  boost::math::max_bernoulli_b2n<float>::value = 32
+  Maximum Bernoulli number using float is -2.0938e+038
+  boost::math::max_bernoulli_b2n<double>::value = 129
+  Maximum Bernoulli number using double is 1.33528e+306
+//] //[/bernoulli_output_4]
+
+  
+//[tangent_output_1
+   1 2 16 272 7936 353792
+//] [/tangent_output_1]
+
+
 
 */
 
