@@ -34,7 +34,8 @@ int main()
 {
   //[bernoulli_example_1
 
-/*`A simple example computes the value of `Bernoulli(2)` where the return type is `double`.
+/*`A simple example computes the value of B[sub 4] where the return type is `double`,
+note that the argument to bernoulli_b2n is ['2] not ['4] since it computes B[sub 2N].
 
 
 */ 
@@ -48,7 +49,7 @@ int main()
 /*`So B[sub 4] == -1/30 == -0.0333333333333333 
 
 If we use Boost.Multiprecision and its 50 decimal digit floating-point type `cpp_dec_float_50`,
-we can calculate the value of much larger numbers like `Bernoulli(100)`
+we can calculate the value of much larger numbers like B[sub 200]
 and also obtain much higher precision.
 */
 
@@ -107,11 +108,7 @@ and we will get a helpful error message (provided try'n'catch blocks are used).
 //] //[/bernoulli_example_3]
 
 //[bernoulli_example_4
-/*`Users can determine from `max_bernoulli_b2n<>::value`
-the largest Bernoulli number you can evaluate for any type 
-(or safely pass to `unchecked_bernoulli_b2n<>`).
-
-For example:
+/*For example:
 */
    std::cout << "boost::math::max_bernoulli_b2n<float>::value = "  << boost::math::max_bernoulli_b2n<float>::value << std::endl;
    std::cout << "Maximum Bernoulli number using float is " << boost::math::bernoulli_b2n<float>( boost::math::max_bernoulli_b2n<float>::value) << std::endl;
