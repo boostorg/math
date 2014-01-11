@@ -27,6 +27,8 @@
   // widths. These are *thought* to be conformant with IEEE-754,
   // whereby an unequivocal test based on numeric_limits follows below.
 
+  // First, we will pre-load some preprocessor definitions with
+  // dummy values.
   #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH  0
 
   #define BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  0
@@ -44,7 +46,7 @@
   #define BOOST_FLOAT80_C(x)  (x ## F)
   #define BOOST_FLOAT128_C(x) (x ## F)
 
-  #if (!defined(FLT_RADIX) && (FLT_RADIX != 2))
+  #if (!defined(FLT_RADIX) || ((defined(FLT_RADIX) && (FLT_RADIX != 2))))
     #error The compiler does not support radix-2 floating-point types for <cstdfloat>.
   #endif
 
@@ -181,7 +183,7 @@
   // This is the end of the preamble and the beginning of the type definitions.
 
   // Here, we define the floating-point typedefs having specified widths
-  // based on the proeprocessor analysis from the preamble above.
+  // based on the preprocessor analysis from the preamble above.
 
   // These type definitions are defined in the global namespace,
   // and the corresponding types are prefixed with "_boost".
@@ -194,113 +196,112 @@
   // using compile-time assertion.
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 1)
-  typedef BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE  boost_float32_t;
-  typedef boost_float32_t boost_float_fast32_t;
-  typedef boost_float32_t boost_float_least32_t;
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::is_iec559    == true);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::radix        ==    2);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::digits       ==   24);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::max_exponent ==  128);
+    typedef BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE  boost_float32_t;
+    typedef boost_float32_t boost_float_fast32_t;
+    typedef boost_float32_t boost_float_least32_t;
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::is_iec559    == true);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::radix        ==    2);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::digits       ==   24);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float32_t>::max_exponent ==  128);
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE == 1)
-  typedef BOOST_CSTDFLOAT_FLOAT64_NATIVE_TYPE  boost_float64_t;
-  typedef boost_float64_t boost_float_fast64_t;
-  typedef boost_float64_t boost_float_least64_t;
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::is_iec559    == true);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::radix        ==    2);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::digits       ==   53);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::max_exponent == 1024);
+    typedef BOOST_CSTDFLOAT_FLOAT64_NATIVE_TYPE  boost_float64_t;
+    typedef boost_float64_t boost_float_fast64_t;
+    typedef boost_float64_t boost_float_least64_t;
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::is_iec559    == true);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::radix        ==    2);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::digits       ==   53);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float64_t>::max_exponent == 1024);
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 1)
-  typedef BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE  boost_float80_t;
-  typedef boost_float80_t boost_float_fast80_t;
-  typedef boost_float80_t boost_float_least80_t;
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::is_iec559    ==  true);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::radix        ==     2);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::digits       ==    63);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::max_exponent == 16384);
+    typedef BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE  boost_float80_t;
+    typedef boost_float80_t boost_float_fast80_t;
+    typedef boost_float80_t boost_float_least80_t;
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::is_iec559    ==  true);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::radix        ==     2);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::digits       ==    63);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float80_t>::max_exponent == 16384);
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 1)
-  typedef BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE boost_float128_t;
-  typedef boost_float128_t boost_float_fast128_t;
-  typedef boost_float128_t boost_float_least128_t;
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::is_iec559    ==  true);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::radix        ==     2);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::digits       ==   113);
-  BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::max_exponent == 16384);
+    typedef BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE boost_float128_t;
+    typedef boost_float128_t boost_float_fast128_t;
+    typedef boost_float128_t boost_float_least128_t;
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::is_iec559    ==  true);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::radix        ==     2);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::digits       ==   113);
+    BOOST_STATIC_ASSERT(std::numeric_limits< ::boost_float128_t>::max_exponent == 16384);
   #endif
 
   // The following section contains the first group of macros that
   // are used for initializing floating-point literal values.
-  // The types of all three forms (fixed-width, least-width, and fast-width)
-  // in precisions of 32, 64, 80, 128 are handled.
+  // The types of the three forms (fixed-width, least-width, and fast-width)
+  // in bit-counts of 32, 64, 80, 128 are handled.
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 1)
-  #define BOOST_FLOAT_32_MIN       BOOST_FLOAT32_C(1.175494351e-38)
-  #define BOOST_FLOAT_FAST32_MIN   BOOST_FLOAT_32_MIN
-  #define BOOST_FLOAT_LEAST32_MIN  BOOST_FLOAT_32_MIN
-  #define BOOST_FLOAT_32_MAX       BOOST_FLOAT32_C(3.402823466e+38)
-  #define BOOST_FLOAT_FAST32_MAX   BOOST_FLOAT_32_MAX
-  #define BOOST_FLOAT_LEAST32_MAX  BOOST_FLOAT_32_MAX
+    #define BOOST_FLOAT_32_MIN       BOOST_FLOAT32_C(1.175494351e-38)
+    #define BOOST_FLOAT_FAST32_MIN   BOOST_FLOAT_32_MIN
+    #define BOOST_FLOAT_LEAST32_MIN  BOOST_FLOAT_32_MIN
+    #define BOOST_FLOAT_32_MAX       BOOST_FLOAT32_C(3.402823466e+38)
+    #define BOOST_FLOAT_FAST32_MAX   BOOST_FLOAT_32_MAX
+    #define BOOST_FLOAT_LEAST32_MAX  BOOST_FLOAT_32_MAX
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE == 1)
-  #define BOOST_FLOAT_64_MIN       BOOST_FLOAT64_C(2.2250738585072014e-308)
-  #define BOOST_FLOAT_FAST64_MIN   BOOST_FLOAT_64_MIN
-  #define BOOST_FLOAT_LEAST64_MIN  BOOST_FLOAT_64_MIN
-  #define BOOST_FLOAT_64_MAX       BOOST_FLOAT64_C(1.7976931348623158e+308)
-  #define BOOST_FLOAT_FAST64_MAX   BOOST_FLOAT_64_MAX
-  #define BOOST_FLOAT_LEAST64_MAX  BOOST_FLOAT_64_MAX
+    #define BOOST_FLOAT_64_MIN       BOOST_FLOAT64_C(2.2250738585072014e-308)
+    #define BOOST_FLOAT_FAST64_MIN   BOOST_FLOAT_64_MIN
+    #define BOOST_FLOAT_LEAST64_MIN  BOOST_FLOAT_64_MIN
+    #define BOOST_FLOAT_64_MAX       BOOST_FLOAT64_C(1.7976931348623158e+308)
+    #define BOOST_FLOAT_FAST64_MAX   BOOST_FLOAT_64_MAX
+    #define BOOST_FLOAT_LEAST64_MAX  BOOST_FLOAT_64_MAX
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 1)
-  #define BOOST_FLOAT_80_MIN       BOOST_FLOAT80_C(3.3621031431120935062627E-4932)
-  #define BOOST_FLOAT_FAST80_MIN   BOOST_FLOAT_80_MIN
-  #define BOOST_FLOAT_LEAST80_MIN  BOOST_FLOAT_80_MIN
-  #define BOOST_FLOAT_80_MAX       BOOST_FLOAT80_C(1.1897314953572317650213E+4932)
-  #define BOOST_FLOAT_FAST80_MAX   BOOST_FLOAT_80_MAX
-  #define BOOST_FLOAT_LEAST80_MAX  BOOST_FLOAT_80_MAX
+    #define BOOST_FLOAT_80_MIN       BOOST_FLOAT80_C(3.3621031431120935062627E-4932)
+    #define BOOST_FLOAT_FAST80_MIN   BOOST_FLOAT_80_MIN
+    #define BOOST_FLOAT_LEAST80_MIN  BOOST_FLOAT_80_MIN
+    #define BOOST_FLOAT_80_MAX       BOOST_FLOAT80_C(1.1897314953572317650213E+4932)
+    #define BOOST_FLOAT_FAST80_MAX   BOOST_FLOAT_80_MAX
+    #define BOOST_FLOAT_LEAST80_MAX  BOOST_FLOAT_80_MAX
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 1)
-  #define BOOST_FLOAT_128_MIN       BOOST_FLOAT128_C(3.362103143112093506262677817321752603E-4932)
-  #define BOOST_FLOAT_FAST128_MIN   BOOST_FLOAT_128_MIN
-  #define BOOST_FLOAT_LEAST128_MIN  BOOST_FLOAT_128_MIN
-  #define BOOST_FLOAT_128_MAX       BOOST_FLOAT128_C(1.189731495357231765085759326628007016E+4932)
-  #define BOOST_FLOAT_FAST128_MAX   BOOST_FLOAT_128_MAX
-  #define BOOST_FLOAT_LEAST128_MAX  BOOST_FLOAT_128_MAX
+    #define BOOST_FLOAT_128_MIN       BOOST_FLOAT128_C(3.362103143112093506262677817321752603E-4932)
+    #define BOOST_FLOAT_FAST128_MIN   BOOST_FLOAT_128_MIN
+    #define BOOST_FLOAT_LEAST128_MIN  BOOST_FLOAT_128_MIN
+    #define BOOST_FLOAT_128_MAX       BOOST_FLOAT128_C(1.189731495357231765085759326628007016E+4932)
+    #define BOOST_FLOAT_FAST128_MAX   BOOST_FLOAT_128_MAX
+    #define BOOST_FLOAT_LEAST128_MAX  BOOST_FLOAT_128_MAX
   #endif
 
   // The following section contains the second group of macros that
   // are used for initializing floating-point literal values.
-  // floating-point typedefs having specified widths.
   // The types of the max-form are handled.
 
   #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 32)
-  typedef boost_float32_t     boost_floatmax_t;
-  #define BOOST_FLOATMAX_C(x) BOOST_FLOAT32_C(x)
-  #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_32_MIN
-  #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_32_MAX
+    typedef boost_float32_t     boost_floatmax_t;
+    #define BOOST_FLOATMAX_C(x) BOOST_FLOAT32_C(x)
+    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_32_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_32_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 64)
-  typedef boost_float64_t     boost_floatmax_t;
-  #define BOOST_FLOATMAX_C(x) BOOST_FLOAT64_C(x)
-  #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_64_MIN
-  #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_64_MAX
+    typedef boost_float64_t     boost_floatmax_t;
+    #define BOOST_FLOATMAX_C(x) BOOST_FLOAT64_C(x)
+    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_64_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_64_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 80)
-  typedef boost_float80_t     boost_floatmax_t;
-  #define BOOST_FLOATMAX_C(x) BOOST_FLOAT80_C(x)
-  #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_80_MIN
-  #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_80_MAX
+    typedef boost_float80_t     boost_floatmax_t;
+    #define BOOST_FLOATMAX_C(x) BOOST_FLOAT80_C(x)
+    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_80_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_80_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 128)
-  typedef boost_float128_t    boost_floatmax_t;
-  #define BOOST_FLOATMAX_C(x) BOOST_FLOAT128_C(x)
-  #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_128_MIN
-  #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_128_MAX
+    typedef boost_float128_t    boost_floatmax_t;
+    #define BOOST_FLOATMAX_C(x) BOOST_FLOAT128_C(x)
+    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_128_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_128_MAX
   #else
-  #error The maximum available floating-point width for cstdfloat is undefined.
+    #error The maximum available floating-point width for cstdfloat is undefined.
   #endif
 
   // Here, we define floating-point typedefs having specified widths
@@ -308,30 +309,31 @@
   namespace boost
   {
     #if(BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 1)
-    typedef ::boost_float32_t       float32_t;
-    typedef ::boost_float_fast32_t  float_fast32_t;
-    typedef ::boost_float_least32_t float_least32_t;
+      typedef ::boost_float32_t       float32_t;
+      typedef ::boost_float_fast32_t  float_fast32_t;
+      typedef ::boost_float_least32_t float_least32_t;
     #endif
 
     #if(BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE == 1)
-    typedef ::boost_float64_t       float64_t;
-    typedef ::boost_float_fast64_t  float_fast64_t;
-    typedef ::boost_float_least64_t float_least64_t;
+      typedef ::boost_float64_t       float64_t;
+      typedef ::boost_float_fast64_t  float_fast64_t;
+      typedef ::boost_float_least64_t float_least64_t;
     #endif
 
     #if(BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 1)
-    typedef ::boost_float80_t       float80_t;
-    typedef ::boost_float_fast80_t  float_fast80_t;
-    typedef ::boost_float_least80_t float_least80_t;
+      typedef ::boost_float80_t       float80_t;
+      typedef ::boost_float_fast80_t  float_fast80_t;
+      typedef ::boost_float_least80_t float_least80_t;
     #endif
 
     #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 1)
-    typedef ::boost_float128_t       float128_t;
-    typedef ::boost_float_fast128_t  float_fast128_t;
-    typedef ::boost_float_least128_t float_least128_t;
+      typedef ::boost_float128_t       float128_t;
+      typedef ::boost_float_fast128_t  float_fast128_t;
+      typedef ::boost_float_least128_t float_least128_t;
     #endif
 
     typedef ::boost_floatmax_t floatmax_t;
   }
+  // namespace boost
 
 #endif // _BOOST_CSTDFLOAT_2014_01_09_HPP_
