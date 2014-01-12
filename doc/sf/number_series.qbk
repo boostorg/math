@@ -229,6 +229,37 @@ refer to the __bernoulli_numbers documentation for details.
 
 [endsect] [/section:tangent_numbers Tangent Numbers]
 
+[section:primes Prime Numbers]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/prime.hpp>
+``
+
+  namespace boost { namespace math {
+
+  template <class Policy>
+  boost::uint32_t prime(unsigned n, const Policy& pol);
+
+  boost::uint32_t prime(unsigned n);
+
+  static const unsigned max_prime = 10000;
+
+  }} // namespaces
+
+[h4 Description]
+
+The function `prime` provides fast table lookup to the first 10000 prime numbers (starting from 2
+as the zeroth prime: as 1 isn't terribly useful in practice).  There are two function signatures
+one of which takes an optional __Policy as the second parameter to control error handling.
+
+The constant `max_prime` is the largest value you can pass to `prime` without incurring an error.
+
+Passing a value greater than `max_prime` results in a __domain_error being raised.
+
+[endsect] [/section:primes]
+
 [endsect] [/Number Series]
 
 [/
