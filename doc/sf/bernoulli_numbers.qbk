@@ -1,3 +1,5 @@
+[section:number_series Number Series]
+
 [section:bernoulli_numbers Bernoulli Numbers]
 
 [@https://en.wikipedia.org/wiki/Bernoulli_number Bernoulli numbers]
@@ -170,12 +172,19 @@ stored in our cache, an asymptotic expansion [@http://www.luschny.de/math/primes
 also called a zag function.  See also
 [@http://mathworld.wolfram.com/TangentNumber.html Tangent number].
 
-From the number, An, of alternating permutations of the set {1, ..., n},
-the numbers A2n+1 with odd indices are called tangent numbers or zag numbers.
 The first few values are 1, 2, 16, 272, 7936, 353792, 22368256, 1903757312 ...
 (sequence [@http://oeis.org/A000182 A000182 in OEIS]).
 They are called tangent numbers because they appear as
-numerators in the Maclaurin series of tan x.
+numerators in the Maclaurin series of `tan(x)`.
+
+[*Important:] there are two competing definitions of Tangent numbers in common use 
+(depending on whether you take the even or odd numbered values as non-zero), we use:
+
+[equation tangent_number_def]
+
+Which gives:
+
+[equation tangent_number_def2]
 
 Tangent numbers are used in the computation of Bernoulli numbers,
 but are also made available here.
@@ -211,9 +220,16 @@ but are also made available here.
 The output is:
 [tangent_output_1]
 
-The source of this example is at [../../example/bernoulli_example.cpp bernoulli_example.cpp]
+The source of this example is at [@../../example/bernoulli_example.cpp bernoulli_example.cpp]
+
+[h4 Implementation]
+
+Tangent numbers are calculated as intermediates in the calculation of the __bernoulli_numbers:
+refer to the __bernoulli_numbers documentation for details.
 
 [endsect] [/section:tangent_numbers Tangent Numbers]
+
+[endsect] [/Number Series]
 
 [/
   Copyright 2013, 2014 Nikhar Agrawal, Christopher Kormanyos, John Maddock, Paul A. Bristow.

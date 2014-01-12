@@ -150,7 +150,7 @@ and use the function's name as the link text.]
 [def __ellint_3  [link math_toolkit.ellint.ellint_3 ellint_3]]
 
 [/ Bernoulli functions and numbers]
-[def __bernoulli_numbers  [link math_toolkit.bernoulli.bernoulli_numbers bernoulli_numbers]]
+[def __bernoulli_numbers  [link math_toolkit.bernoulli.bernoulli_numbers Bernoulli numbers]]
 
 [/Bessel functions]
 [def __cyl_bessel_j  [link math_toolkit.bessel.bessel_first cyl_bessel_j]]
