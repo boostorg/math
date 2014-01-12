@@ -74,8 +74,9 @@ inline T asymptotic_bessel_y_derivative_large_x_2(T v, T x)
    //
    const T cx = cos(x);
    const T sx = sin(x);
-   const T ci = cos_pi(v / 2 - 0.25f);
-   const T si = sin_pi(v / 2 - 0.25f);
+   const T vd2shifted = (v / 2) - 0.25f;
+   const T ci = cos_pi(vd2shifted);
+   const T si = sin_pi(vd2shifted);
    const T sin_phase = sin(phase) * (cx * ci + sx * si) + cos(phase) * (sx * ci - cx * si);
    BOOST_MATH_INSTRUMENT_CODE(sin(phase));
    BOOST_MATH_INSTRUMENT_CODE(cos(x));
@@ -106,8 +107,9 @@ inline T asymptotic_bessel_j_derivative_large_x_2(T v, T x)
    BOOST_MATH_INSTRUMENT_CODE(sin(x));
    const T cx = cos(x);
    const T sx = sin(x);
-   const T ci = cos_pi(v / 2 - 0.25f);
-   const T si = sin_pi(v / 2 - 0.25f);
+   const T vd2shifted = (v / 2) - 0.25f;
+   const T ci = cos_pi(vd2shifted);
+   const T si = sin_pi(vd2shifted);
    const T sin_phase = cos(phase) * (cx * ci + sx * si) - sin(phase) * (sx * ci - cx * si);
    BOOST_MATH_INSTRUMENT_VARIABLE(sin_phase);
    return sin_phase * ampl;
