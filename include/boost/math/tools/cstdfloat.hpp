@@ -13,6 +13,7 @@
   #include <float.h>
   #include <limits>
   #include <boost/static_assert.hpp>
+  #include <boost/math/tools/config.hpp>
 
   // <cstdfloat.hpp> implements floating-point typedefs having
   // specified widths, as described in N3626 (proposed for C++14).
@@ -173,6 +174,20 @@
     #endif
   #endif
 
+  // Check if __float128 from GCC's libquadmath is supported.
+  // Here, we use the BOOST_MATH_USE_FLOAT128 pre-processor
+  // definition from boost/math/tools/config.hpp.
+  #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128)
+    #undef  BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE
+    #define BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE __float128
+    #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
+    #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 128
+    #undef  BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
+    #define BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE  1
+    #undef  BOOST_FLOAT128_C
+    #define BOOST_FLOAT128_C(x)  (x ## Q)
+  #endif
+
   // This is the end of the preamble. Now we use the results
   // of the queries in the preamble.
 
@@ -180,6 +195,22 @@
        && (BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  == 0) \
        && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  == 0) \
        && (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0))
+
+    #undef BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
+
+    #undef BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_FLOAT64_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE
+    #undef BOOST_FLOAT32_C
+    #undef BOOST_FLOAT64_C
+    #undef BOOST_FLOAT80_C
+    #undef BOOST_FLOAT128_C
+
     #error The compiler does not support any of the required floating-point types for <cstdfloat>.
   #endif
 
@@ -228,18 +259,42 @@
   // are used for initializing floating-point literal values.
   // The types of the max-form are handled.
 
+  // In addition, unused pre-processor definitions previously
+  // initialized with dummy values are herewith un-defined.
+
   #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 32)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT32_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_32_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_32_MAX
+
+    #undef BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_FLOAT64_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE
+    #undef BOOST_FLOAT64_C
+    #undef BOOST_FLOAT80_C
+    #undef BOOST_FLOAT128_C
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 64)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT64_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_64_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_64_MAX
+
+    #undef BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE
+    #undef BOOST_FLOAT80_C
+    #undef BOOST_FLOAT128_C
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 80)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT80_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_80_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_80_MAX
+
+    #undef BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE
+    #undef BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE
+    #undef BOOST_FLOAT80_C
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 128)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT128_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_128_MIN
@@ -304,11 +359,11 @@
       BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::max_exponent == 16384);
     #endif
 
-    #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 32)
+    #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  32)
       typedef float32_t  floatmax_t;
-    #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 64)
+    #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  64)
       typedef float64_t  floatmax_t;
-    #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 80)
+    #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  80)
       typedef float80_t  floatmax_t;
     #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 128)
       typedef float128_t floatmax_t;
