@@ -29,10 +29,10 @@
   // whereby an unequivocal test based on numeric_limits follows below.
 
   // In addition, macros that are used for initializing floating-point
-  // literal values and minimum and maximum values are defined.
+  // literal values and some basic min/max values are defined.
 
-  // First, we will pre-load the maximum available width
-  // preprocessor definition with a dummy value.
+  // First, we will pre-load certain preprocessor definitions
+  // with a dummy value.
 
   #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH  0
 
@@ -41,6 +41,7 @@
   #define BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  0
   #define BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE 0
 
+  // Ensure that the compiler has a radix-2 floating-point representation.
   #if (!defined(FLT_RADIX) || ((defined(FLT_RADIX) && (FLT_RADIX != 2))))
     #error The compiler does not support radix-2 floating-point types required for <cstdfloat.hpp>.
   #endif
@@ -183,8 +184,9 @@
   #endif
 
   // This is the end of the preamble. Now we use the results
-  // of the queries in the preamble.
+  // of the queries that have been obtained in the preamble.
 
+  // Ensure that the compiler has any suitable floating-point type whatsoever.
   #if (   (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  == 0) \
        && (BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  == 0) \
        && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  == 0) \
@@ -192,10 +194,8 @@
     #error The compiler does not support any of the floating-point types required for <cstdfloat.hpp>.
   #endif
 
-  // The following section contains the first group of macros that
-  // are used for initializing floating-point literal values.
-  // The types of the three forms (fixed-width, least-width, and fast-width)
-  // in bit-counts of 32, 64, 80, 128 are handled.
+  // The following section contains the various min/max macros
+  // for the *leastN and *fastN types.
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 1)
     #define BOOST_FLOAT_FAST32_MIN   BOOST_FLOAT_32_MIN
@@ -225,12 +225,11 @@
     #define BOOST_FLOAT_LEAST128_MAX  BOOST_FLOAT_128_MAX
   #endif
 
-  // The following section contains the second group of macros that
-  // are used for initializing floating-point literal values.
-  // The types of the max-form are handled.
+  // The following section contains the various min/max macros
+  // for the *floatmax types.
 
-  // In addition, all unused pre-processor definitions previously
-  // initialized with dummy values are herewith un-defined.
+  // In addition, all unused pre-processor definitions are
+  // herewith un-defined.
 
   #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 32)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT32_C(x)
