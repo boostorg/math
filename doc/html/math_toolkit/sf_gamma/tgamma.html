@@ -390,15 +390,13 @@
       </h5>
 <p>
         The generic version of the <code class="computeroutput"><span class="identifier">tgamma</span></code>
-        function is implemented by combining the series and continued fraction representations
-        for the incomplete gamma function:
+        function is implemented Sterling's approximation for lgamma for large z:
       </p>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/gamm2.png"></span>
+        <span class="inlinemediaobject"><img src="../../../equations/gamma6.png"></span>
       </p>
 <p>
-        where <span class="emphasis"><em>l</em></span> is an arbitrary integration limit: choosing
-        <code class="literal">l = max(10, a)</code> seems to work fairly well.
+        Downward recursion is then used for small values of z.
       </p>
 <p>
         For types of known precision the <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
