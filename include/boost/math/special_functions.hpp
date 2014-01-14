@@ -16,6 +16,7 @@
 #include <boost/math/special_functions/acosh.hpp>
 #include <boost/math/special_functions/asinh.hpp>
 #include <boost/math/special_functions/atanh.hpp>
+#include <boost/math/special_functions/bernoulli.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/special_functions/binomial.hpp>

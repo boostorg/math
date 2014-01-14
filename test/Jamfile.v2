@@ -89,6 +89,7 @@ run test_bessel_i.cpp test_instances//test_instances pch_light ../../test/build/
 run test_bessel_k.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_beta.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_airy_zeros.cpp ../../test/build//boost_unit_test_framework ;
+run test_bernoulli_constants.cpp ../../test/build//boost_unit_test_framework ;
 run test_beta_dist.cpp ../../test/build//boost_unit_test_framework ;
 run test_binomial.cpp  ../../test/build//boost_unit_test_framework
         : # command line
@@ -742,6 +743,7 @@ run  compile_test/dist_uniform_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/dist_weibull_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/distribution_concept_check.cpp ;
 run  compile_test/sf_beta_incl_test.cpp compile_test/main.cpp ;
+run  compile_test/sf_bernoulli_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/sf_bessel_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/sf_binomial_incl_test.cpp compile_test/main.cpp ;
 run  compile_test/sf_cbrt_incl_test.cpp compile_test/main.cpp ;

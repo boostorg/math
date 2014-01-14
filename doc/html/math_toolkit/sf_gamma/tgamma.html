@@ -390,15 +390,14 @@
       </h5>
 <p>
         The generic version of the <code class="computeroutput"><span class="identifier">tgamma</span></code>
-        function is implemented by combining the series and continued fraction representations
-        for the incomplete gamma function:
+        function is implemented Sterling's approximation for lgamma for large z:
       </p>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/gamm2.png"></span>
+        <span class="inlinemediaobject"><img src="../../../equations/gamma6.png"></span>
       </p>
 <p>
-        where <span class="emphasis"><em>l</em></span> is an arbitrary integration limit: choosing
-        <code class="literal">l = max(10, a)</code> seems to work fairly well.
+        Following exponentiation, downward recursion is then used for small values
+        of z.
       </p>
 <p>
         For types of known precision the <a class="link" href="../lanczos.html" title="The Lanczos Approximation">Lanczos
@@ -425,12 +424,12 @@
         <span class="inlinemediaobject"><img src="../../../equations/gamm5.png"></span>
       </p>
 <p>
-        is used. Particular care has to be taken to evaluate the <code class="computeroutput"><span class="identifier">z</span>
-        <span class="special">*</span> <span class="identifier">sin</span><span class="special">([</span><span class="identifier">pi</span><span class="special">][</span><span class="identifier">space</span><span class="special">]</span> <span class="special">*</span> <span class="identifier">z</span><span class="special">)</span></code>
-        part: a special routine is used to reduce z prior to multiplying by &#960; &#160; to ensure
-        that the result in is the range [0, &#960;/2]. Without this an excessive amount
-        of error occurs in this region (which is hard enough already, as the rate
-        of change near a negative pole is <span class="emphasis"><em>exceptionally</em></span> high).
+        is used. Particular care has to be taken to evaluate the <code class="literal">z * sin(&#960; &#160; *
+        z)</code> part: a special routine is used to reduce z prior to multiplying
+        by &#960; &#160; to ensure that the result in is the range [0, &#960;/2]. Without this an excessive
+        amount of error occurs in this region (which is hard enough already, as the
+        rate of change near a negative pole is <span class="emphasis"><em>exceptionally</em></span>
+        high).
       </p>
 <p>
         Finally if the argument is a small integer then table lookup of the factorial
@@ -456,7 +455,7 @@
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 Paul A. Bristow, Christopher Kormanyos,
       Hubert Holin, Bruno Lalande, John Maddock, Johan R&#229;de, Gautam Sewani, Benjamin
-      Sobotta, Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+      Sobotta, Thijs van den Berg, Daryle Walker, Xiaogang Zhang and Nikhar Agrawal<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

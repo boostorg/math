@@ -321,6 +321,13 @@ void instantiate(RealType)
    boost::math::float_next(v1);
    boost::math::float_prior(v1);
    boost::math::float_distance(v1, v1);
+
+   boost::math::unchecked_bernoulli_b2n<RealType>(i);
+   boost::math::bernoulli_b2n<RealType>(i);
+   boost::math::bernoulli_b2n<RealType>(i, i, &v1);
+   boost::math::tangent_t2n<RealType>(i);
+   boost::math::tangent_t2n<RealType>(i, i, &v1);
+
 #endif
 #ifdef TEST_GROUP_9
    //
@@ -643,6 +650,11 @@ void instantiate(RealType)
    boost::math::float_next(v1, pol);
    boost::math::float_prior(v1, pol);
    boost::math::float_distance(v1, v1, pol);
+
+   boost::math::bernoulli_b2n<RealType>(i, pol);
+   boost::math::bernoulli_b2n<RealType>(i, i, &v1, pol);
+   boost::math::tangent_t2n<RealType>(i, pol);
+   boost::math::tangent_t2n<RealType>(i, i, &v1, pol);
 #endif
 #ifdef TEST_GROUP_6
    //

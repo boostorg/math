@@ -355,17 +355,18 @@
         <span class="phrase"><a name="math_toolkit.sf_gamma.lgamma.implementation"></a></span><a class="link" href="lgamma.html#math_toolkit.sf_gamma.lgamma.implementation">Implementation</a>
       </h5>
 <p>
-        The generic version of this function is implemented by combining the series
-        and continued fraction representations for the incomplete gamma function:
+        The generic version of this function is implemented using Sterling's approximation
+        for large arguments:
       </p>
 <p>
-        <span class="inlinemediaobject"><img src="../../../equations/lgamm2.png"></span>
+        <span class="inlinemediaobject"><img src="../../../equations/gamma6.png"></span>
       </p>
 <p>
-        where <span class="emphasis"><em>l</em></span> is an arbitrary integration limit: choosing
-        <code class="literal">l = max(10, a)</code> seems to work fairly well. For negative
-        <span class="emphasis"><em>z</em></span> the logarithm version of the reflection formula is
-        used:
+        For small arguments, the logarithm of tgamma is used.
+      </p>
+<p>
+        For negative <span class="emphasis"><em>z</em></span> the logarithm version of the reflection
+        formula is used:
       </p>
 <p>
         <span class="inlinemediaobject"><img src="../../../equations/lgamm3.png"></span>
@@ -463,7 +464,7 @@
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright &#169; 2006-2010, 2012, 2013 Paul A. Bristow, Christopher Kormanyos,
       Hubert Holin, Bruno Lalande, John Maddock, Johan R&#229;de, Gautam Sewani, Benjamin
-      Sobotta, Thijs van den Berg, Daryle Walker and Xiaogang Zhang<p>
+      Sobotta, Thijs van den Berg, Daryle Walker, Xiaogang Zhang and Nikhar Agrawal<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>

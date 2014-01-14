@@ -701,35 +701,35 @@ namespace boost
    typename tools::promote_args<T>::type airy_bi_prime(T x);
 
    template <class T>
-   T airy_ai_zero(unsigned m);
+   T airy_ai_zero(int m);
    template <class T, class Policy>
-   T airy_ai_zero(unsigned m, const Policy&);
+   T airy_ai_zero(int m, const Policy&);
 
    template <class OutputIterator>
    OutputIterator airy_ai_zero(
-                     unsigned start_index,
+                     int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it);
    template <class OutputIterator, class Policy>
    OutputIterator airy_ai_zero(
-                     unsigned start_index,
+                     int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it,
                      const Policy&);
 
    template <class T>
-   T airy_bi_zero(unsigned m);
+   T airy_bi_zero(int m);
    template <class T, class Policy>
-   T airy_bi_zero(unsigned m, const Policy&);
+   T airy_bi_zero(int m, const Policy&);
 
    template <class OutputIterator>
    OutputIterator airy_bi_zero(
-                     unsigned start_index,
+                     int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it);
    template <class OutputIterator, class Policy>
    OutputIterator airy_bi_zero(
-                     unsigned start_index,
+                     int start_index,
                      unsigned number_of_zeros,
                      OutputIterator out_it,
                      const Policy&);
@@ -919,6 +919,35 @@ namespace boost
    typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol);
    template <class T>
    typename tools::promote_args<T>::type float_advance(const T& val, int distance);
+
+   template<class T>
+   T unchecked_bernoulli_b2n(const std::size_t n);
+   template <class T, class Policy>
+   T bernoulli_b2n(const int i, const Policy &pol);
+   template <class T>
+   T bernoulli_b2n(const int i);
+   template <class T, class OutputIterator, class Policy>
+   OutputIterator bernoulli_b2n(const int start_index,
+                                       const unsigned number_of_bernoullis_b2n,
+                                       OutputIterator out_it,
+                                       const Policy& pol);
+   template <class T, class OutputIterator>
+   OutputIterator bernoulli_b2n(const int start_index,
+                                       const unsigned number_of_bernoullis_b2n,
+                                       OutputIterator out_it);
+   template <class T, class Policy>
+   T tangent_t2n(const int i, const Policy &pol);
+   template <class T>
+   T tangent_t2n(const int i);
+   template <class T, class OutputIterator, class Policy>
+   OutputIterator tangent_t2n(const int start_index,
+                                       const unsigned number_of_bernoullis_b2n,
+                                       OutputIterator out_it,
+                                       const Policy& pol);
+   template <class T, class OutputIterator>
+   OutputIterator tangent_t2n(const int start_index,
+                                       const unsigned number_of_bernoullis_b2n,
+                                       OutputIterator out_it);
 
     } // namespace math
 } // namespace boost
@@ -1397,6 +1426,20 @@ template <class OutputIterator, class T>\
    template <class T, class OutputIterator>\
    OutputIterator airy_bi_zero(int start_index, unsigned number_of_zeros, OutputIterator out_it)\
    { return boost::math::airy_bi_zero<T>(start_index, number_of_zeros, out_it, Policy()); }\
+   \
+   template <class T>\
+   T bernoulli_b2n(const int i)\
+   { return boost::math::bernoulli_b2n<T>(i, Policy()); }\
+   template <class T, class OutputIterator>\
+   OutputIterator bernoulli_b2n(int start_index, unsigned number_of_bernoullis_b2n, OutputIterator out_it)\
+   { return boost::math::bernoulli_b2n<T>(start_index, number_of_bernoullis_b2n, out_it, Policy()); }\
+   \
+   template <class T>\
+   T tangent_t2n(const int i)\
+   { return boost::math::tangent_t2n<T>(i, Policy()); }\
+   template <class T, class OutputIterator>\
+   OutputIterator tangent_t2n(int start_index, unsigned number_of_bernoullis_b2n, OutputIterator out_it)\
+   { return boost::math::tangent_t2n<T>(start_index, number_of_bernoullis_b2n, out_it, Policy()); }\
    \
 
 

@@ -249,6 +249,31 @@ template <class T>
 inline T raise_overflow_error(
            const char* ,
            const char* ,
+           const T&,
+           const  ::boost::math::policies::overflow_error< ::boost::math::policies::ignore_error>&)
+{
+   // This may or may not do the right thing, but the user asked for the error
+   // to be ignored so here we go anyway:
+   return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+}
+
+template <class T>
+inline T raise_overflow_error(
+           const char* ,
+           const char* ,
+           const  ::boost::math::policies::overflow_error< ::boost::math::policies::errno_on_error>&)
+{
+   errno = ERANGE;
+   // This may or may not do the right thing, but the user asked for the error
+   // to be silent so here we go anyway:
+   return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+}
+
+template <class T>
+inline T raise_overflow_error(
+           const char* ,
+           const char* ,
+           const T&,
            const  ::boost::math::policies::overflow_error< ::boost::math::policies::errno_on_error>&)
 {
    errno = ERANGE;
@@ -266,6 +291,23 @@ inline T raise_overflow_error(
    return user_overflow_error(function, message, std::numeric_limits<T>::infinity());
 }
 
+template <class T>
+inline T raise_overflow_error(
+           const char* function,
+           const char* message,
+           const T& val,
+           const  ::boost::math::policies::overflow_error< ::boost::math::policies::user_error>&)
+{
+   std::string fmsg("Error in function ");
+#ifndef BOOST_NO_RTTI
+   fmsg += (boost::format(function) % typeid(T).name()).str();
+#else
+   fmsg += function;
+#endif
+   int prec = 2 + (boost::math::policies::digits<T, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
+   std::string msg = do_format(boost::format(message), boost::io::group(std::setprecision(prec), val));
+   return user_overflow_error(fmsg.c_str(), msg.c_str(), std::numeric_limits<T>::infinity());
+}
 
 template <class T>
 inline T raise_underflow_error(
