@@ -157,7 +157,7 @@ for lgamma for large z:
 
 [equation gamma6]
 
-Downward recursion is then used for small values of z.
+Following exponentiation, downward recursion is then used for small values of z.
 
 For types of known precision the __lanczos is used, a traits class 
 `boost::math::lanczos::lanczos_traits` maps type T to an appropriate
@@ -175,7 +175,7 @@ For z < -20 the reflection formula:
 
 [equation gamm5]
 
-is used.  Particular care has to be taken to evaluate the `z * sin([pi][space] * z)` part: 
+is used.  Particular care has to be taken to evaluate the [^ z * sin([pi][space] * z)] part: 
 a special routine is used to reduce z prior to multiplying by [pi][space] to ensure that the
 result in is the range [0, [pi]/2]. Without this an excessive amount of error occurs
 in this region (which is hard enough already, as the rate of change near a negative pole

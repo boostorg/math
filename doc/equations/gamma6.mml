@@ -13,7 +13,7 @@
      </mrow>
      <mo stretchy="false">)</mo>
     </mrow>
-    <mo stretchy="false">∼</mo>
+    <mo stretchy="false">≈</mo>
     <mrow>
      <mo stretchy="false">(</mo>
      <mrow>
@@ -112,6 +112,6 @@
     </mrow>
    </mrow>
   </mrow>
-  <annotation encoding="StarMath 5.0">ln %GAMMA (z) sim (z - 1 over 2)ln(z) - z + {1 over 2}ln(2 %pi) + sum from{k=1} to{infinity} {B_{2k}  over {2k(2k-1) z^{2k-1}}}</annotation>
+  <annotation encoding="StarMath 5.0">ln %GAMMA (z) approx (z - 1 over 2)ln(z) - z + {1 over 2}ln(2 %pi) + sum from{k=1} to{infinity} {B_{2k}  over {2k(2k-1) z^{2k-1}}}</annotation>
  </semantics>
 </math>

@@ -31,7 +31,7 @@ including the __tgamma, __lgamma and polygamma functions.
 
 Both return the (2 * n)[super th] Bernoulli number B[sub 2n].
 
-Note that since all odd numbered Bernoulli numbers are zero (apart from B[sub 1] which is [plusminus][frac12])
+Note that since all odd numbered Bernoulli numbers are zero (apart from B[sub 1] which is -[frac12])
 the interface will only return the even numbered Bernoulli numbers.
 
 This function uses fast table lookup for low-indexed Bernoulli numbers, while larger values are calculated
