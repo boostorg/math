@@ -36,6 +36,8 @@
 
   #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH  0
 
+  #define BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  0
+  #define BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE  0
   #define BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  0
   #define BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  0
   #define BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  0
@@ -46,9 +48,27 @@
     #error The compiler does not support radix-2 floating-point types required for <cstdfloat.hpp>.
   #endif
 
-  // Check if built-in float is equivalent to float32_t, float64_t, float80_t, or float128_t.
+  // Check if built-in float is equivalent to float16_t, float24_t, float32_t, float64_t, float80_t, or float128_t.
   #if(defined(FLT_MANT_DIG) && defined(FLT_MAX_EXP))
-    #if  ((FLT_MANT_DIG == 24) && (FLT_MAX_EXP == 128) && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 0))
+    #if  ((FLT_MANT_DIG == 11) && (FLT_MAX_EXP == 16) && (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE == 0))
+      #define BOOST_CSTDFLOAT_FLOAT16_NATIVE_TYPE float
+      #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
+      #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 16
+      #undef  BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE
+      #define BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  1
+      #define BOOST_FLOAT16_C(x)  (x ## F)
+      #define BOOST_FLOAT_16_MIN  FLT_MIN
+      #define BOOST_FLOAT_16_MAX  FLT_MAX
+    #elif((FLT_MANT_DIG == 16) && (FLT_MAX_EXP == 64) && (BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 0))
+      #define BOOST_CSTDFLOAT_FLOAT24_NATIVE_TYPE float
+      #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
+      #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 24
+      #undef  BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE
+      #define BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE  1
+      #define BOOST_FLOAT24_C(x)  (x ## F)
+      #define BOOST_FLOAT_24_MIN  FLT_MIN
+      #define BOOST_FLOAT_24_MAX  FLT_MAX
+    #elif((FLT_MANT_DIG == 24) && (FLT_MAX_EXP == 128) && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE float
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
       #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 32
@@ -87,9 +107,27 @@
     #endif
   #endif
 
-  // Check if built-in double is equivalent to float32_t, float64_t, float80_t, or float128_t.
+  // Check if built-in double is equivalent to float16_t, float24_t, float32_t, float64_t, float80_t, or float128_t.
   #if(defined(DBL_MANT_DIG) && defined(DBL_MAX_EXP))
-    #if  ((DBL_MANT_DIG == 24) && (DBL_MAX_EXP == 128) && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 0))
+    #if  ((DBL_MANT_DIG == 11) && (DBL_MAX_EXP == 16) && (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE == 0))
+      #define BOOST_CSTDFLOAT_FLOAT16_NATIVE_TYPE double
+      #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
+      #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 16
+      #undef  BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE
+      #define BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  1
+      #define BOOST_FLOAT16_C(x)  (x)
+      #define BOOST_FLOAT_16_MIN  DBL_MIN
+      #define BOOST_FLOAT_16_MAX  DBL_MAX
+    #elif((DBL_MANT_DIG == 16) && (DBL_MAX_EXP == 64) && (BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 0))
+      #define BOOST_CSTDFLOAT_FLOAT24_NATIVE_TYPE double
+      #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
+      #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 24
+      #undef  BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE
+      #define BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE  1
+      #define BOOST_FLOAT24_C(x)  (x)
+      #define BOOST_FLOAT_24_MIN  DBL_MIN
+      #define BOOST_FLOAT_24_MAX  DBL_MAX
+    #elif((DBL_MANT_DIG == 24) && (DBL_MAX_EXP == 128) && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
       #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 32
@@ -128,9 +166,27 @@
     #endif
   #endif
 
-  // Check if built-in long double is equivalent to float32_t, float64_t, float80_t, or float128_t.
+  // Check if built-in long double is equivalent to float16_t, float24_t, float32_t, float64_t, float80_t, or float128_t.
   #if(defined(LDBL_MANT_DIG) && defined(LDBL_MAX_EXP))
-    #if  ((LDBL_MANT_DIG == 24) && (LDBL_MAX_EXP == 128) && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 0))
+    #if  ((LDBL_MANT_DIG == 11) && (LDBL_MAX_EXP == 16) && (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE == 0))
+      #define BOOST_CSTDFLOAT_FLOAT16_NATIVE_TYPE long double
+      #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
+      #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 16
+      #undef  BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE
+      #define BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  1
+      #define BOOST_FLOAT16_C(x)  (x ## L)
+      #define BOOST_FLOAT_16_MIN  LDBL_MIN
+      #define BOOST_FLOAT_16_MAX  LDBL_MAX
+    #elif((LDBL_MANT_DIG == 16) && (LDBL_MAX_EXP == 64) && (BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 0))
+      #define BOOST_CSTDFLOAT_FLOAT24_NATIVE_TYPE long double
+      #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
+      #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 24
+      #undef  BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE
+      #define BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE  1
+      #define BOOST_FLOAT24_C(x)  (x ## L)
+      #define BOOST_FLOAT_24_MIN  LDBL_MIN
+      #define BOOST_FLOAT_24_MAX  LDBL_MAX
+    #elif((LDBL_MANT_DIG == 24) && (LDBL_MAX_EXP == 128) && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE long double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
       #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 32
@@ -187,7 +243,9 @@
   // of the queries that have been obtained in the preamble.
 
   // Ensure that the compiler has any suitable floating-point type whatsoever.
-  #if (   (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  == 0) \
+  #if (   (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  == 0) \
+       && (BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE  == 0) \
+       && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  == 0) \
        && (BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  == 0) \
        && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  == 0) \
        && (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0))
@@ -196,6 +254,20 @@
 
   // The following section contains the various min/max macros
   // for the *leastN and *fastN types.
+
+  #if(BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE == 1)
+    #define BOOST_FLOAT_FAST16_MIN   BOOST_FLOAT_16_MIN
+    #define BOOST_FLOAT_LEAST16_MIN  BOOST_FLOAT_16_MIN
+    #define BOOST_FLOAT_FAST16_MAX   BOOST_FLOAT_16_MAX
+    #define BOOST_FLOAT_LEAST16_MAX  BOOST_FLOAT_16_MAX
+  #endif
+
+  #if(BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 1)
+    #define BOOST_FLOAT_FAST24_MIN   BOOST_FLOAT_24_MIN
+    #define BOOST_FLOAT_LEAST24_MIN  BOOST_FLOAT_24_MIN
+    #define BOOST_FLOAT_FAST24_MAX   BOOST_FLOAT_24_MAX
+    #define BOOST_FLOAT_LEAST24_MAX  BOOST_FLOAT_24_MAX
+  #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 1)
     #define BOOST_FLOAT_FAST32_MIN   BOOST_FLOAT_32_MIN
@@ -228,36 +300,26 @@
   // The following section contains the various min/max macros
   // for the *floatmax types.
 
-  // In addition, all unused pre-processor definitions are
-  // herewith un-defined.
-
-  #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 32)
+  #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 16)
+    #define BOOST_FLOATMAX_C(x) BOOST_FLOAT16_C(x)
+    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_16_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_16_MAX
+  #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 24)
+    #define BOOST_FLOATMAX_C(x) BOOST_FLOAT24_C(x)
+    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_24_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_24_MAX
+  #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 32)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT32_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_32_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_32_MAX
-
-    #undef BOOST_CSTDFLOAT_FLOAT64_NATIVE_TYPE
-    #undef BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE
-    #undef BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE
-    #undef BOOST_FLOAT64_C
-    #undef BOOST_FLOAT80_C
-    #undef BOOST_FLOAT128_C
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 64)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT64_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_64_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_64_MAX
-
-    #undef BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE
-    #undef BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE
-    #undef BOOST_FLOAT80_C
-    #undef BOOST_FLOAT128_C
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 80)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT80_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_80_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_80_MAX
-
-    #undef BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE
-    #undef BOOST_FLOAT128_C
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 128)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT128_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_128_MIN
@@ -278,6 +340,28 @@
 
   namespace boost
   {
+    #if(BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE == 1)
+      typedef BOOST_CSTDFLOAT_FLOAT16_NATIVE_TYPE float16_t;
+      typedef float16_t float_fast16_t;
+      typedef float16_t float_least16_t;
+
+      BOOST_STATIC_ASSERT(std::numeric_limits<float16_t>::is_iec559    == true);
+      BOOST_STATIC_ASSERT(std::numeric_limits<float16_t>::radix        ==    2);
+      BOOST_STATIC_ASSERT(std::numeric_limits<float16_t>::digits       ==   11);
+      BOOST_STATIC_ASSERT(std::numeric_limits<float16_t>::max_exponent ==   16);
+    #endif
+
+    #if(BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 1)
+      typedef BOOST_CSTDFLOAT_FLOAT24_NATIVE_TYPE float24_t;
+      typedef float24_t float_fast24_t;
+      typedef float24_t float_least24_t;
+
+      BOOST_STATIC_ASSERT(std::numeric_limits<float24_t>::is_iec559    == true);
+      BOOST_STATIC_ASSERT(std::numeric_limits<float24_t>::radix        ==    2);
+      BOOST_STATIC_ASSERT(std::numeric_limits<float24_t>::digits       ==   16);
+      BOOST_STATIC_ASSERT(std::numeric_limits<float24_t>::max_exponent ==   64);
+    #endif
+
     #if(BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 1)
       typedef BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE float32_t;
       typedef float32_t float_fast32_t;
@@ -322,7 +406,11 @@
       BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::max_exponent == 16384);
     #endif
 
-    #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  32)
+    #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  16)
+      typedef float16_t  floatmax_t;
+    #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  24)
+      typedef float24_t  floatmax_t;
+    #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  32)
       typedef float32_t  floatmax_t;
     #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  64)
       typedef float64_t  floatmax_t;
