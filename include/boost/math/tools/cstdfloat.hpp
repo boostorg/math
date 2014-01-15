@@ -59,7 +59,7 @@
       #define BOOST_FLOAT16_C(x)  (x ## F)
       #define BOOST_FLOAT_16_MIN  FLT_MIN
       #define BOOST_FLOAT_16_MAX  FLT_MAX
-    #elif((FLT_MANT_DIG == 16) && (FLT_MAX_EXP == 64) && (BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 0))
+    #elif((FLT_MANT_DIG == 17) && (FLT_MAX_EXP == 64) && (BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT24_NATIVE_TYPE float
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
       #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 24
@@ -118,7 +118,7 @@
       #define BOOST_FLOAT16_C(x)  (x)
       #define BOOST_FLOAT_16_MIN  DBL_MIN
       #define BOOST_FLOAT_16_MAX  DBL_MAX
-    #elif((DBL_MANT_DIG == 16) && (DBL_MAX_EXP == 64) && (BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 0))
+    #elif((DBL_MANT_DIG == 17) && (DBL_MAX_EXP == 64) && (BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT24_NATIVE_TYPE double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
       #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 24
@@ -177,7 +177,7 @@
       #define BOOST_FLOAT16_C(x)  (x ## L)
       #define BOOST_FLOAT_16_MIN  LDBL_MIN
       #define BOOST_FLOAT_16_MAX  LDBL_MAX
-    #elif((LDBL_MANT_DIG == 16) && (LDBL_MAX_EXP == 64) && (BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 0))
+    #elif((LDBL_MANT_DIG == 17) && (LDBL_MAX_EXP == 64) && (BOOST_CSTDFLOAT_HAS_FLOAT24_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT24_NATIVE_TYPE long double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
       #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 24
@@ -358,7 +358,7 @@
 
       BOOST_STATIC_ASSERT(std::numeric_limits<float24_t>::is_iec559    == true);
       BOOST_STATIC_ASSERT(std::numeric_limits<float24_t>::radix        ==    2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float24_t>::digits       ==   16);
+      BOOST_STATIC_ASSERT(std::numeric_limits<float24_t>::digits       ==   17);
       BOOST_STATIC_ASSERT(std::numeric_limits<float24_t>::max_exponent ==   64);
     #endif
 
