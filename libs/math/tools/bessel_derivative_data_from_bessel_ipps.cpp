@@ -94,7 +94,7 @@ std::string parseValue(std::string::iterator& iter)
 
    auto value = std::string{};
 
-   while (!isdigit(*iter))
+   while (!isdigit(*iter) && *iter != '-')
       ++iter;
    while (isdigit(*iter) || *iter == '.' || *iter == 'e' || *iter == '-' || *iter == '+')
    {
