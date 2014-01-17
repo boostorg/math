@@ -49,16 +49,20 @@ T bessel_k_derivative_bare(T v, T x)
 template <class T>
 T sph_bessel_j_derivative_bare(T v, T x)
 {
-   if((v < 1) || (floor(v) != v))
+   if((v < 0) || (floor(v) != v))
       throw std::domain_error("");
+   if(v == 0)
+      return -boost::math::sph_bessel(1, x);
    return boost::math::sph_bessel(itrunc(v-1), x) - ((v + 1) / x) * boost::math::sph_bessel(itrunc(v), x);
 }
 
 template <class T>
 T sph_bessel_y_derivative_bare(T v, T x)
 {
-   if((v < 1) || (floor(v) != v))
+   if((v < 0) || (floor(v) != v))
       throw std::domain_error("");
+   if(v == 0)
+      return -boost::math::sph_neumann(1, x);
    return boost::math::sph_neumann(itrunc(v-1), x) - ((v + 1) / x) * boost::math::sph_neumann(itrunc(v), x);
 }
 
