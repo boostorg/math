@@ -182,7 +182,7 @@ inline T cyl_neumann_derivative_imp(T v, T x, const Policy& pol)
    //
    // Special case for small x: use Taylor series:
    //
-   if (floor(v) != v)
+   if (v > 0 && floor(v) != v)
    {
       const T eps = boost::math::policies::get_epsilon<T, Policy>();
       if (log(eps / 2) > v * log((x * x) / (v * 4)))
