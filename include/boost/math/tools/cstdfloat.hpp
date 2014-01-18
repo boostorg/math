@@ -418,6 +418,8 @@
       typedef float80_t  floatmax_t;
     #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 128)
       typedef float128_t floatmax_t;
+    #else
+      #error The maximum available floating-point width for <cstdfloat.hpp> is undefined.
     #endif
   }
   // namespace boost
