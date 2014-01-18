@@ -32,10 +32,27 @@ support for a 128-bit floating-point type is not mandated by either
 the C standard or C++ standard.
 
 The following code uses <boost/cstdfloat.hpp> in combination with
-<boost/math/special_functions.hpp> to compute the Jahnke-Emden-Lambda
-function.
+<boost/math/special_functions.hpp> to compute a simplified
+version of the Jahnke-Emden-Lambda function. Here, we use
+a floating-point type with exactly 64 bits (i.e., float64_t).
+If we were to use, for instance, built-in double,
+then there would be no guarantee that the code would
+behave identically on all platforms, with float64_t from
+<boost/cstdfloat.hpp>, however, there is. Here, we know that
+this code is portable and uses a floating-point type
+with approximately 15 decimal digits of precision.
 
-TBD: code...
+#include <cmath>
+#include <boost/cstdfloat.hpp>
+#include <boost/math/special_functions.hpp>
+
+boost::float64_t jahnke_emden_lambda(boost::float64_t v, boost::float64_t x)
+{
+  const boost::float64_t gamma_v_plus_one = boost::math::tgamma(v + 1);
+  const boost::float64_t x_half_pow_v     = std::pow(x /2, v);
+
+  return gamma_v_plus_one * boost::math::cyl_bessel_j(x, v) / x_half_pow_v;
+}
 
 See cstdfloat_test.cpp for a more detailed test program.
 
