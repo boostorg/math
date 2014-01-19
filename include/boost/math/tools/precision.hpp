@@ -17,6 +17,7 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/math/policies/policy.hpp>
+#include <boost/math/special_functions/cbrt.hpp>
 
 // These two are for LDBL_MAN_DIG:
 #include <limits.h>
@@ -280,6 +281,38 @@ inline T root_epsilon_imp(const T*, const Tag&)
 }
 
 template <class T>
+inline T cbrt_epsilon_imp(const mpl::int_<24>&)
+{
+   return static_cast<T>(0.0049215666011518482998719164346805794944150447839903L);
+}
+
+template <class T>
+inline T cbrt_epsilon_imp(const T*, const mpl::int_<53>&)
+{
+   return static_cast<T>(6.05545445239333906078989272793696693569753008995e-6L);
+}
+
+template <class T>
+inline T cbrt_epsilon_imp(const T*, const mpl::int_<64>&)
+{
+   return static_cast<T>(4.76837158203125e-7L);
+}
+
+template <class T>
+inline T cbrt_epsilon_imp(const T*, const mpl::int_<113>&)
+{
+   return static_cast<T>(5.7749313854154005630396773604745549542403508090496e-12L);
+}
+
+template <class T, class Tag>
+inline T cbrt_epsilon_imp(const T*, const Tag&)
+{
+   using boost::math::cbrt;
+   static const T cbrt_eps = cbrt(tools::epsilon<T>());
+   return cbrt_eps;
+}
+
+template <class T>
 inline T forth_root_epsilon_imp(const T*, const mpl::int_<24>&)
 {
    return static_cast<T>(0.018581361171917516667460937040007436176452688944747L);
@@ -318,6 +351,13 @@ inline T root_epsilon()
 {
    typedef mpl::int_< (::std::numeric_limits<T>::radix == 2) ? std::numeric_limits<T>::digits : 0> tag_type;
    return detail::root_epsilon_imp(static_cast<T const*>(0), tag_type());
+}
+
+template <class T>
+inline T cbrt_epsilon()
+{
+   typedef mpl::int_< (::std::numeric_limits<T>::radix == 2) ? std::numeric_limits<T>::digits : 0> tag_type;
+   return detail::cbrt_epsilon_imp(static_cast<T const*>(0), tag_type());
 }
 
 template <class T>
