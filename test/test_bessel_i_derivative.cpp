@@ -94,7 +94,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*I'v.*Mathworld.*",          // test data group
-      ".*", 3000, 1000);             // test function
+      ".*", 4000, 2000);             // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -115,7 +115,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*I'v.*Mathworld.*",          // test data group
-      ".*", 3000, 1000);             // test function
+      ".*", 4000, 2000);             // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
