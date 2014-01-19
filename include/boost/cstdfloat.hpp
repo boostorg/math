@@ -197,8 +197,9 @@
     #endif
   #endif
 
-  // Check if __float128 from GCC's libquadmath or ICC's /Qlong-double
-  // flag is supported.
+  // Check if __float128 from GCC's libquadmath or if (potentially)
+  // ICC's /Qlong-double flag is supported.
+  // TODO: Should we allow BOOST_MATH_USE_FLOAT128 for ICC?
   // Here, we use the BOOST_MATH_USE_FLOAT128 pre-processor
   // definition from <boost/math/tools/config.hpp>.
   #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128)
@@ -353,10 +354,13 @@
       typedef float128_t float_fast128_t;
       typedef float128_t float_least128_t;
 
+      // TODO: Is it sensible (in any way) to supply a specialization of numeric_limits for GCC's __float128?
+      #if !defined(BOOST_MATH_USE_FLOAT128)
       BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::is_iec559    ==  true);
       BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::radix        ==     2);
       BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::digits       ==   113);
       BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::max_exponent == 16384);
+      #endif
     #endif
 
     #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  16)
