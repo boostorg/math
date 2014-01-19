@@ -87,6 +87,10 @@ run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build/
 run test_bessel_y.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_i.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_k.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_bessel_j_derivative.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_bessel_y_derivative.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_bessel_i_derivative.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_bessel_k_derivative.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_beta.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_airy_zeros.cpp ../../test/build//boost_unit_test_framework ;
 run test_bernoulli_constants.cpp ../../test/build//boost_unit_test_framework ;
