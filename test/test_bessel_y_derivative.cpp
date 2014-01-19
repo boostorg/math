@@ -193,14 +193,14 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*(Y'[nv]|y').*Random.*",           // test data group
-      ".*", 2000, 2000);             // test function
+      ".*", 40000, 3000);             // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*(Y'[nv]|y').*Random.*",           // test data group
-      ".*", 1500, 1000);               // test function
+      ".*", 40000, 3000);               // test function
    //
    // Fallback for sun has to go after the general cases above:
    //
@@ -220,7 +220,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 80, 40);                 // test function
+      ".*", 700, 300);                 // test function
    //
    // One set of float tests has inexact input values, so there is a slight error:
    //
