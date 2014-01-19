@@ -580,39 +580,63 @@ namespace boost
    // Bessel functions:
    template <class T1, class T2, class Policy>
    typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j(T1 v, T2 x, const Policy& pol);
+   template <class T1, class T2, class Policy>
+   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j_derivative(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
    typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j(T1 v, T2 x);
+   template <class T1, class T2>
+   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j_derivative(T1 v, T2 x);
 
    template <class T, class Policy>
    typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel(unsigned v, T x, const Policy& pol);
+   template <class T, class Policy>
+   typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel_derivative(unsigned v, T x, const Policy& pol);
 
    template <class T>
    typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel(unsigned v, T x);
+   template <class T>
+   typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel_derivative(unsigned v, T x);
 
    template <class T1, class T2, class Policy>
    typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i(T1 v, T2 x, const Policy& pol);
+   template <class T1, class T2, class Policy>
+   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i_derivative(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
    typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i(T1 v, T2 x);
+   template <class T1, class T2>
+   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i_derivative(T1 v, T2 x);
 
    template <class T1, class T2, class Policy>
    typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k(T1 v, T2 x, const Policy& pol);
+   template <class T1, class T2, class Policy>
+   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k_derivative(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
    typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k(T1 v, T2 x);
+   template <class T1, class T2>
+   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k_derivative(T1 v, T2 x);
 
    template <class T1, class T2, class Policy>
    typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann(T1 v, T2 x, const Policy& pol);
+   template <class T1, class T2, class Policy>
+   typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann_derivative(T1 v, T2 x, const Policy& pol);
 
    template <class T1, class T2>
    typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann(T1 v, T2 x);
+   template <class T1, class T2>
+   typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann_derivative(T1 v, T2 x);
 
    template <class T, class Policy>
    typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann(unsigned v, T x, const Policy& pol);
+   template <class T, class Policy>
+   typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann_derivative(unsigned v, T x, const Policy& pol);
 
    template <class T>
    typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann(unsigned v, T x);
+   template <class T>
+   typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann_derivative(unsigned v, T x);
 
    template <class T, class Policy>
    typename detail::bessel_traits<T, T, Policy>::result_type cyl_bessel_j_zero(T v, int m, const Policy& pol);
@@ -1223,9 +1247,17 @@ namespace boost
    inline typename boost::math::detail::bessel_traits<T1, T2, Policy >::result_type cyl_bessel_j(T1 v, T2 x)\
    { return boost::math::cyl_bessel_j(v, x, Policy()); }\
 \
+   template <class T1, class T2>\
+   inline typename boost::math::detail::bessel_traits<T1, T2, Policy >::result_type cyl_bessel_j_derivative(T1 v, T2 x)\
+   { return boost::math::cyl_bessel_j_derivative(v, x, Policy()); }\
+\
    template <class T>\
    inline typename boost::math::detail::bessel_traits<T, T, Policy >::result_type sph_bessel(unsigned v, T x)\
    { return boost::math::sph_bessel(v, x, Policy()); }\
+\
+   template <class T>\
+   inline typename boost::math::detail::bessel_traits<T, T, Policy >::result_type sph_bessel_derivative(unsigned v, T x)\
+   { return boost::math::sph_bessel_derivative(v, x, Policy()); }\
 \
    template <class T1, class T2>\
    inline typename boost::math::detail::bessel_traits<T1, T2, Policy >::result_type \
@@ -1233,15 +1265,31 @@ namespace boost
 \
    template <class T1, class T2>\
    inline typename boost::math::detail::bessel_traits<T1, T2, Policy >::result_type \
+   cyl_bessel_i_derivative(T1 v, T2 x) { return boost::math::cyl_bessel_i_derivative(v, x, Policy()); }\
+\
+   template <class T1, class T2>\
+   inline typename boost::math::detail::bessel_traits<T1, T2, Policy >::result_type \
    cyl_bessel_k(T1 v, T2 x) { return boost::math::cyl_bessel_k(v, x, Policy()); }\
+\
+   template <class T1, class T2>\
+   inline typename boost::math::detail::bessel_traits<T1, T2, Policy >::result_type \
+   cyl_bessel_k_derivative(T1 v, T2 x) { return boost::math::cyl_bessel_k_derivative(v, x, Policy()); }\
 \
    template <class T1, class T2>\
    inline typename boost::math::detail::bessel_traits<T1, T2, Policy >::result_type \
    cyl_neumann(T1 v, T2 x){ return boost::math::cyl_neumann(v, x, Policy()); }\
 \
+   template <class T1, class T2>\
+   inline typename boost::math::detail::bessel_traits<T1, T2, Policy >::result_type \
+   cyl_neumann_derivative(T1 v, T2 x){ return boost::math::cyl_neumann_derivative(v, x, Policy()); }\
+\
    template <class T>\
    inline typename boost::math::detail::bessel_traits<T, T, Policy >::result_type \
    sph_neumann(unsigned v, T x){ return boost::math::sph_neumann(v, x, Policy()); }\
+\
+   template <class T>\
+   inline typename boost::math::detail::bessel_traits<T, T, Policy >::result_type \
+   sph_neumann_derivative(unsigned v, T x){ return boost::math::sph_neumann_derivative(v, x, Policy()); }\
 \
    template <class T>\
    inline typename boost::math::detail::bessel_traits<T, T, Policy >::result_type cyl_bessel_j_zero(T v, int m)\
