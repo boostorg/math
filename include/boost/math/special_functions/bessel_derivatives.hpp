@@ -167,6 +167,7 @@ inline T cyl_bessel_k_derivative_imp(T v, T x, const Policy& pol)
 template <class Tag, class T, class Policy>
 inline T cyl_neumann_derivative_imp(T v, T x, const Policy& pol)
 {
+   BOOST_MATH_STD_USING
    //
    // Prevent complex and indeterminate results:
    //
