@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+ <semantics>
+  <mrow>
+   <msub>
+    <mo stretchy="false">ξ</mo>
+    <mi>v</mi>
+   </msub>
+   <mrow>
+    <mo stretchy="false">(</mo>
+    <mrow>
+     <mi>x</mi>
+    </mrow>
+    <mo stretchy="false">)</mo>
+   </mrow>
+  </mrow>
+  <annotation encoding="StarMath 5.0">%xi_v(x)</annotation>
+ </semantics>
+</math>
