@@ -20,9 +20,9 @@ namespace boost{ namespace math{
 namespace detail{
 
 template <class Tag, class T, class Policy>
-inline T cyl_bessel_j_derivative_imp(T v, T x, const Policy& pol)
+inline T cyl_bessel_j_prime_imp(T v, T x, const Policy& pol)
 {
-   static const char* const function = "boost::math::cyl_bessel_j_derivative<%1%>(%1%,%1%)";
+   static const char* const function = "boost::math::cyl_bessel_j_prime<%1%>(%1%,%1%)";
    BOOST_MATH_STD_USING
    //
    // Prevent complex result:
@@ -78,9 +78,9 @@ inline T cyl_bessel_j_derivative_imp(T v, T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline T sph_bessel_j_derivative_imp(unsigned v, T x, const Policy& pol)
+inline T sph_bessel_j_prime_imp(unsigned v, T x, const Policy& pol)
 {
-   static const char* const function = "boost::math::sph_bessel_derivative<%1%>(%1%,%1%)";
+   static const char* const function = "boost::math::sph_bessel_prime<%1%>(%1%,%1%)";
    //
    // Prevent complex result:
    //
@@ -108,9 +108,9 @@ inline T sph_bessel_j_derivative_imp(unsigned v, T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline T cyl_bessel_i_derivative_imp(T v, T x, const Policy& pol)
+inline T cyl_bessel_i_prime_imp(T v, T x, const Policy& pol)
 {
-   static const char* const function = "boost::math::cyl_bessel_i_derivative<%1%>(%1%,%1%)";
+   static const char* const function = "boost::math::cyl_bessel_i_prime<%1%>(%1%,%1%)";
    BOOST_MATH_STD_USING
    //
    // Prevent complex result:
@@ -144,14 +144,14 @@ inline T cyl_bessel_i_derivative_imp(T v, T x, const Policy& pol)
 }
 
 template <class Tag, class T, class Policy>
-inline T cyl_bessel_k_derivative_imp(T v, T x, const Policy& pol)
+inline T cyl_bessel_k_prime_imp(T v, T x, const Policy& pol)
 {
    //
    // Prevent complex and indeterminate results:
    //
    if (x <= 0)
       return boost::math::policies::raise_domain_error<T>(
-         "boost::math::cyl_bessel_k_derivative<%1%>(%1%,%1%)",
+         "boost::math::cyl_bessel_k_prime<%1%>(%1%,%1%)",
          "Got x = %1%, but function requires x > 0", x, pol);
    //
    // Special case for v == 0:
@@ -165,7 +165,7 @@ inline T cyl_bessel_k_derivative_imp(T v, T x, const Policy& pol)
 }
 
 template <class Tag, class T, class Policy>
-inline T cyl_neumann_derivative_imp(T v, T x, const Policy& pol)
+inline T cyl_neumann_prime_imp(T v, T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
@@ -173,7 +173,7 @@ inline T cyl_neumann_derivative_imp(T v, T x, const Policy& pol)
    //
    if (x <= 0)
       return boost::math::policies::raise_domain_error<T>(
-         "boost::math::cyl_neumann_derivative<%1%>(%1%,%1%)",
+         "boost::math::cyl_neumann_prime<%1%>(%1%,%1%)",
          "Got x = %1%, but function requires x > 0", x, pol);
    //
    // Special case for large x: use asymptotic expansion:
@@ -201,14 +201,14 @@ inline T cyl_neumann_derivative_imp(T v, T x, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline T sph_neumann_derivative_imp(unsigned v, T x, const Policy& pol)
+inline T sph_neumann_prime_imp(unsigned v, T x, const Policy& pol)
 {
    //
    // Prevent complex and indeterminate result:
    //
    if (x <= 0)
       return boost::math::policies::raise_domain_error<T>(
-         "boost::math::sph_neumann_derivative<%1%>(%1%,%1%)",
+         "boost::math::sph_neumann_prime<%1%>(%1%,%1%)",
          "Got x = %1%, but function requires x > 0.", x, pol);
    //
    // Special case for v == 0:
@@ -224,7 +224,7 @@ inline T sph_neumann_derivative_imp(unsigned v, T x, const Policy& pol)
 } // namespace detail
 
 template <class T1, class T2, class Policy>
-inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j_derivative(T1 v, T2 x, const Policy& /* pol */)
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j_prime(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
@@ -236,17 +236,17 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_j_
       policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_derivative_imp<tag_type, value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_j_derivative<%1%,%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_j_prime_imp<tag_type, value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_j_prime<%1%,%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
-inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j_derivative(T1 v, T2 x)
+inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_j_prime(T1 v, T2 x)
 {
-   return cyl_bessel_j_derivative(v, x, policies::policy<>());
+   return cyl_bessel_j_prime(v, x, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel_derivative(unsigned v, T x, const Policy& /* pol */)
+inline typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel_prime(unsigned v, T x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
@@ -257,17 +257,17 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type sph_bessel_deri
       policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_bessel_j_derivative_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::sph_bessel_j_derivative<%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_bessel_j_prime_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::sph_bessel_j_prime<%1%>(%1%,%1%)");
 }
 
 template <class T>
-inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel_derivative(unsigned v, T x)
+inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_bessel_prime(unsigned v, T x)
 {
-   return sph_bessel_derivative(v, x, policies::policy<>());
+   return sph_bessel_prime(v, x, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i_derivative(T1 v, T2 x, const Policy& /* pol */)
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i_prime(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
@@ -278,39 +278,17 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_i_
       policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_i_derivative_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_i_derivative<%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_i_prime_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_i_prime<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
-inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i_derivative(T1 v, T2 x)
+inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_i_prime(T1 v, T2 x)
 {
-   return cyl_bessel_i_derivative(v, x, policies::policy<>());
+   return cyl_bessel_i_prime(v, x, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k_derivative(T1 v, T2 x, const Policy& /* pol */)
-{
-   BOOST_FPU_EXCEPTION_GUARD
-   typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
-   typedef typename detail::bessel_traits<T1, T2, Policy>::optimisation_tag tag_type;
-   typedef typename policies::evaluation<result_type, Policy>::type value_type;
-   typedef typename policies::normalise<
-      Policy,
-      policies::promote_float<false>,
-      policies::promote_double<false>,
-      policies::discrete_quantile<>,
-      policies::assert_undefined<> >::type forwarding_policy;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_k_derivative_imp<tag_type, value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_k_derivative<%1%,%1%>(%1%,%1%)");
-}
-
-template <class T1, class T2>
-inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k_derivative(T1 v, T2 x)
-{
-   return cyl_bessel_k_derivative(v, x, policies::policy<>());
-}
-
-template <class T1, class T2, class Policy>
-inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann_derivative(T1 v, T2 x, const Policy& /* pol */)
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_bessel_k_prime(T1 v, T2 x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
@@ -322,17 +300,39 @@ inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann_d
       policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_derivative_imp<tag_type, value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_neumann_derivative<%1%,%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_bessel_k_prime_imp<tag_type, value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_bessel_k_prime<%1%,%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
-inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann_derivative(T1 v, T2 x)
+inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_bessel_k_prime(T1 v, T2 x)
 {
-   return cyl_neumann_derivative(v, x, policies::policy<>());
+   return cyl_bessel_k_prime(v, x, policies::policy<>());
+}
+
+template <class T1, class T2, class Policy>
+inline typename detail::bessel_traits<T1, T2, Policy>::result_type cyl_neumann_prime(T1 v, T2 x, const Policy& /* pol */)
+{
+   BOOST_FPU_EXCEPTION_GUARD
+   typedef typename detail::bessel_traits<T1, T2, Policy>::result_type result_type;
+   typedef typename detail::bessel_traits<T1, T2, Policy>::optimisation_tag tag_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::cyl_neumann_prime_imp<tag_type, value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::cyl_neumann_prime<%1%,%1%>(%1%,%1%)");
+}
+
+template <class T1, class T2>
+inline typename detail::bessel_traits<T1, T2, policies::policy<> >::result_type cyl_neumann_prime(T1 v, T2 x)
+{
+   return cyl_neumann_prime(v, x, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann_derivative(unsigned v, T x, const Policy& /* pol */)
+inline typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann_prime(unsigned v, T x, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
    typedef typename detail::bessel_traits<T, T, Policy>::result_type result_type;
@@ -343,13 +343,13 @@ inline typename detail::bessel_traits<T, T, Policy>::result_type sph_neumann_der
       policies::promote_double<false>,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_neumann_derivative_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::sph_neumann_derivative<%1%>(%1%,%1%)");
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::sph_neumann_prime_imp<value_type>(v, static_cast<value_type>(x), forwarding_policy()), "boost::math::sph_neumann_prime<%1%>(%1%,%1%)");
 }
 
 template <class T>
-inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann_derivative(unsigned v, T x)
+inline typename detail::bessel_traits<T, T, policies::policy<> >::result_type sph_neumann_prime(unsigned v, T x)
 {
-   return sph_neumann_derivative(v, x, policies::policy<>());
+   return sph_neumann_prime(v, x, policies::policy<>());
 }
 
 } // namespace math

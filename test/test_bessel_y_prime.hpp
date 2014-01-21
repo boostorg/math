@@ -24,15 +24,15 @@
 #endif
 
 template <class Real, class T>
-void do_test_cyl_neumann_y_derivative(const T& data, const char* type_name, const char* test_name)
+void do_test_cyl_neumann_y_prime(const T& data, const char* type_name, const char* test_name)
 {
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   pg funcp = boost::math::cyl_neumann_derivative<value_type, value_type>;
+   pg funcp = boost::math::cyl_neumann_prime<value_type, value_type>;
 #else
-   pg funcp = boost::math::cyl_neumann_derivative;
+   pg funcp = boost::math::cyl_neumann_prime;
 #endif
 
    boost::math::tools::test_result<value_type> result;
@@ -48,26 +48,26 @@ void do_test_cyl_neumann_y_derivative(const T& data, const char* type_name, cons
       data, 
       bind_func<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_neumann_derivative", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_neumann_prime", test_name);
    std::cout << std::endl;
 }
 
 template <class T>
-T cyl_neumann_derivative_int_wrapper(T v, T x)
+T cyl_neumann_prime_int_wrapper(T v, T x)
 {
-   return static_cast<T>(boost::math::cyl_neumann_derivative(boost::math::itrunc(v), x));
+   return static_cast<T>(boost::math::cyl_neumann_prime(boost::math::itrunc(v), x));
 }
 
 template <class Real, class T>
-void do_test_cyl_neumann_y_derivative_int(const T& data, const char* type_name, const char* test_name)
+void do_test_cyl_neumann_y_prime_int(const T& data, const char* type_name, const char* test_name)
 {
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   pg funcp = cyl_neumann_derivative_int_wrapper<value_type>;
+   pg funcp = cyl_neumann_prime_int_wrapper<value_type>;
 #else
-   pg funcp = cyl_neumann_derivative_int_wrapper;
+   pg funcp = cyl_neumann_prime_int_wrapper;
 #endif
 
    boost::math::tools::test_result<value_type> result;
@@ -82,20 +82,20 @@ void do_test_cyl_neumann_y_derivative_int(const T& data, const char* type_name, 
       data, 
       bind_func<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_neumann_derivative", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_neumann_prime", test_name);
    std::cout << std::endl;
 }
 
 template <class Real, class T>
-void do_test_sph_neumann_y_derivative(const T& data, const char* type_name, const char* test_name)
+void do_test_sph_neumann_y_prime(const T& data, const char* type_name, const char* test_name)
 {
    typedef Real                   value_type;
 
    typedef value_type (*pg)(unsigned, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   pg funcp = boost::math::sph_neumann_derivative<value_type>;
+   pg funcp = boost::math::sph_neumann_prime<value_type>;
 #else
-   pg funcp = boost::math::sph_neumann_derivative;
+   pg funcp = boost::math::sph_neumann_prime;
 #endif
 
    boost::math::tools::test_result<value_type> result;
@@ -110,12 +110,12 @@ void do_test_sph_neumann_y_derivative(const T& data, const char* type_name, cons
       data, 
       bind_func_int1<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::sph_neumann_derivative", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::sph_neumann_prime", test_name);
    std::cout << std::endl;
 }
 
 template <class T>
-void test_bessel_derivative(T, const char* name)
+void test_bessel_prime(T, const char* name)
 {
    //
    // The actual test data is rather verbose, so it's in a separate file
@@ -124,7 +124,7 @@ void test_bessel_derivative(T, const char* name)
    // three items, input value a, input value b and Y'(a, b):
    // 
     // function values calculated on wolframalpha.com
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 9> y0_derivative_data = {{
+    static const boost::array<boost::array<typename table_type<T>::type, 3>, 9> y0_prime_data = {{
         {{ SC_(0), SC_(1), SC_(0.7812128213002887165471500000479648205499063907164) }},
         {{ SC_(0), SC_(2), SC_(0.1070324315409375468883707722774766366874808982351) }},
         {{ SC_(0), SC_(4), SC_(-0.397925710557100005253979972450791852271189181623) }},
@@ -135,7 +135,7 @@ void test_bessel_derivative(T, const char* name)
         {{ SC_(0), SC_(1e+03), SC_(0.0247843312923517789148623560971412909386318548649) }},
         {{ SC_(0), SC_(1e+05), SC_(-0.00171921035008825630099494523539897102954509505) }}
     }};
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 9> y1_derivative_data = {{
+    static const boost::array<boost::array<typename table_type<T>::type, 3>, 9> y1_prime_data = {{
         {{ SC_(1), SC_(1), SC_(0.8694697855159656745300767660714799833777239138071) }},
         {{ SC_(1), SC_(2), SC_(0.5638918884202138930407919788658961916118796762034) }},
         {{ SC_(1), SC_(4), SC_(-0.116422166964339993217130127559851181308289885304) }},
@@ -146,7 +146,7 @@ void test_bessel_derivative(T, const char* name)
         {{ SC_(1), SC_(1e+03), SC_(0.004740702308915165178688123821762396300797636752) }},
         {{ SC_(1), SC_(1e+05), SC_(0.00184674896676156322177773107486310726913857253) }}
     }};
-    static const boost::array<boost::array<typename table_type<T>::type, 3>, 10> yn_derivative_data = {{
+    static const boost::array<boost::array<typename table_type<T>::type, 3>, 10> yn_prime_data = {{
         {{ SC_(2), SC_(1e-20), SC_(2.546479089470325372302140213960229792551354331847e60) }},
         {{ SC_(5), SC_(10), SC_(-0.21265103571277493482623417349611996600573875672875) }},
         {{ SC_(-5), SC_(1e+06), SC_(0.00072596421871030053058120610033601018452750251) }},
@@ -158,7 +158,7 @@ void test_bessel_derivative(T, const char* name)
         {{ SC_(-1e+03), SC_(7e+02), SC_(1.9243675144213106227065036295645482241938721428442e77) }},
         {{ SC_(-25), SC_(8), SC_(-1.0191840913424144032043561764980932223038174827996e9) }}
     }};
-    static const boost::array<boost::array<T, 3>, 11> yv_derivative_data = {{
+    static const boost::array<boost::array<T, 3>, 11> yv_prime_data = {{
         {{ SC_(0.5), T(1) / (1024*1024), SC_(4.283610118295381639304989276580713877375759e8) }},
         {{ SC_(5.5), SC_(3.125), SC_(3.46903134947470280592767672475643312107258) }},
         {{ SC_(-5.5), SC_(3.125), SC_(-0.04142495199637659623440832639970224440469) }},
@@ -171,7 +171,7 @@ void test_bessel_derivative(T, const char* name)
         {{ SC_(8.5), boost::math::constants::pi<T>() * 4, SC_(0.014516314554743677558496402742690038592727861) }},
         {{ SC_(-8.5), boost::math::constants::pi<T>() * 4, SC_(-0.194590144622675911618596506265006877277073804) }},
     }};
-    static const boost::array<boost::array<T, 3>, 7> yv_derivative_large_data = {{
+    static const boost::array<boost::array<T, 3>, 7> yv_prime_large_data = {{
 #if LDBL_MAX_10_EXP > 326
         {{ SC_(0.5), static_cast<T>(std::ldexp(0.5, -683)), SC_(2.868703194735890254207338863894358862705699335892099e308) }},
 #else
@@ -185,24 +185,24 @@ void test_bessel_derivative(T, const char* name)
         {{ SC_(10.0), static_cast<T>(std::ldexp(1.0, -53)), SC_(3.74455823365114672304576809031094538692683400e184) }},
     }};
 
-    do_test_cyl_neumann_y_derivative<T>(y0_derivative_data, name, "Y'0: Mathworld Data");
-    do_test_cyl_neumann_y_derivative<T>(y1_derivative_data, name, "Y'1: Mathworld Data");
-    do_test_cyl_neumann_y_derivative<T>(yn_derivative_data, name, "Y'n: Mathworld Data");
-    do_test_cyl_neumann_y_derivative_int<T>(y0_derivative_data, name, "Y'0: Mathworld Data (Integer Version)");
-    do_test_cyl_neumann_y_derivative_int<T>(y1_derivative_data, name, "Y'1: Mathworld Data (Integer Version)");
-    do_test_cyl_neumann_y_derivative_int<T>(yn_derivative_data, name, "Y'n: Mathworld Data (Integer Version)");
-    do_test_cyl_neumann_y_derivative<T>(yv_derivative_data, name, "Y'v: Mathworld Data");
-    if(yv_derivative_large_data[0][1] != 0)
-      do_test_cyl_neumann_y_derivative<T>(yv_derivative_large_data, name, "Y'v: Mathworld Data (large values)");
+    do_test_cyl_neumann_y_prime<T>(y0_prime_data, name, "Y'0: Mathworld Data");
+    do_test_cyl_neumann_y_prime<T>(y1_prime_data, name, "Y'1: Mathworld Data");
+    do_test_cyl_neumann_y_prime<T>(yn_prime_data, name, "Y'n: Mathworld Data");
+    do_test_cyl_neumann_y_prime_int<T>(y0_prime_data, name, "Y'0: Mathworld Data (Integer Version)");
+    do_test_cyl_neumann_y_prime_int<T>(y1_prime_data, name, "Y'1: Mathworld Data (Integer Version)");
+    do_test_cyl_neumann_y_prime_int<T>(yn_prime_data, name, "Y'n: Mathworld Data (Integer Version)");
+    do_test_cyl_neumann_y_prime<T>(yv_prime_data, name, "Y'v: Mathworld Data");
+    if(yv_prime_large_data[0][1] != 0)
+      do_test_cyl_neumann_y_prime<T>(yv_prime_large_data, name, "Y'v: Mathworld Data (large values)");
 
-#include "bessel_y01_derivative_data.ipp"
-    do_test_cyl_neumann_y_derivative<T>(bessel_y01_derivative_data, name, "Y'0 and Y'1: Random Data");
-#include "bessel_yn_derivative_data.ipp"
-    do_test_cyl_neumann_y_derivative<T>(bessel_yn_derivative_data, name, "Y'n: Random Data");
-#include "bessel_yv_derivative_data.ipp"
-    do_test_cyl_neumann_y_derivative<T>(bessel_yv_derivative_data, name, "Y'v: Random Data");
+#include "bessel_y01_prime_data.ipp"
+    do_test_cyl_neumann_y_prime<T>(bessel_y01_prime_data, name, "Y'0 and Y'1: Random Data");
+#include "bessel_yn_prime_data.ipp"
+    do_test_cyl_neumann_y_prime<T>(bessel_yn_prime_data, name, "Y'n: Random Data");
+#include "bessel_yv_prime_data.ipp"
+    do_test_cyl_neumann_y_prime<T>(bessel_yv_prime_data, name, "Y'v: Random Data");
 
-#include "sph_neumann_derivative_data.ipp"
-    do_test_sph_neumann_y_derivative<T>(sph_neumann_derivative_data, name, "y': Random Data");
+#include "sph_neumann_prime_data.ipp"
+    do_test_sph_neumann_y_prime<T>(sph_neumann_prime_data, name, "y': Random Data");
 }
 

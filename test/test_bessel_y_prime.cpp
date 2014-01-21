@@ -5,7 +5,7 @@
 
 #include "pch_light.hpp"
 
-#include "test_bessel_y_derivative.hpp"
+#include "test_bessel_y_prime.hpp"
 
 //
 // DESCRIPTION:
@@ -248,13 +248,13 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_MATH_CONTROL_FP;
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
-   test_bessel_derivative(0.1F, "float");
+   test_bessel_prime(0.1F, "float");
 #endif
-   test_bessel_derivative(0.1, "double");
+   test_bessel_prime(0.1, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   test_bessel_derivative(0.1L, "long double");
+   test_bessel_prime(0.1L, "long double");
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
-   test_bessel_derivative(boost::math::concepts::real_concept(0.1), "real_concept");
+   test_bessel_prime(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 #else
    std::cout << "<note>The long double tests have been disabled on this platform "

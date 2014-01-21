@@ -4,13 +4,19 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "pch_light.hpp"
-#include "test_bessel_i_derivative.hpp"
+
+#ifdef _MSC_VER
+#  pragma warning(disable : 4756) // overflow in constant arithmetic
+// Constants are too big for float case, but this doesn't matter for test.
+#endif
+
+#include "test_bessel_k_prime.hpp"
 
 //
 // DESCRIPTION:
 // ~~~~~~~~~~~~
 //
-// This file tests the bessel I functions derivatives.  There are two sets of tests, spot
+// This file tests the bessel K functions derivatives.  There are two sets of tests, spot
 // tests which compare our results with selected values computed
 // using the online special function calculator at 
 // functions.wolfram.com, while the bulk of the accuracy tests
@@ -39,18 +45,22 @@ void expected_results()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
-      largest_type = "(long\\s+)?double";
+      largest_type = "(long\\s+)?double|real_concept";
    }
    else
    {
-      largest_type = "long double";
+      largest_type = "long double|real_concept";
    }
 #else
-   largest_type = "(long\\s+)?double";
+   largest_type = "(long\\s+)?double|real_concept";
 #endif
-
    //
-   // Mac OS has higher error rates, why?
+   // On MacOS X cyl_bessel_k has much higher error levels than
+   // expected: given that the implementation is basically
+   // just a continued fraction evaluation combined with
+   // exponentiation, we conclude that exp and pow are less
+   // accurate on this platform, especially when the result 
+   // is outside the range of a double.
    //
    add_expected_result(
       ".*",                          // compiler
@@ -58,78 +68,29 @@ void expected_results()
       "Mac OS",                      // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 400, 200);               // test function
-   //
-   // G++ on Linux, results vary a bit by processor type,
-   // on Itanium results are *much* better than listed here,
-   // but x86 appears to have much less accurate std::pow
-   // that throws off the results for tgamma(long double)
-   // which then impacts on the Bessel functions:
-   //
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      "linux",                       // platform
-      largest_type,                  // test type(s)
-      ".*Random.*",                  // test data group
-      ".*", 500, 200);               // test function
+      ".*", 4000, 1300);             // test function
 
    add_expected_result(
-      "GNU.*",                       // compiler
+      "GNU.*",                          // compiler
       ".*",                          // stdlib
-      "Win32.*",                     // platform
+      "Win32.*",                          // platform
       largest_type,                  // test type(s)
-      ".*Random.*",                  // test data group
-      ".*", 500, 200);               // test function
-   add_expected_result(
-      "GNU.*",                       // compiler
-      ".*",                          // stdlib
-      "Win32.*",                     // platform
-      largest_type,                  // test type(s)
-      ".*",                          // test data group
-      ".*", 40, 25);                 // test function
+      ".*large.*",                   // test data group
+      ".*", 250, 100);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
-      ".*I'v.*Mathworld.*",          // test data group
-      ".*", 4000, 2000);             // test function
+      ".*large.*",                   // test data group
+      ".*", 100, 50);                // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 40, 25);                 // test function
-   //
-   // Set error rates a little higher for real_concept - 
-   // now that we use a series approximation for small z
-   // that relies on tgamma the error rates are a little
-   // higher only when a Lanczos approximation is not available.
-   // All other types are unaffected.
-   //
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "real_concept",                // test type(s)
-      ".*I'v.*Mathworld.*",          // test data group
-      ".*", 4000, 2000);             // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "real_concept",                // test type(s)
-      ".*",                          // test data group
-      ".*", 500, 200);               // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "double",                      // test type(s)
-      ".*",                          // test data group
-      ".*", 2, 1);                   // test function
+      ".*", 35, 15);                 // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.

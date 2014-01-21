@@ -3,43 +3,43 @@
 
 [h4 Synopsis]
 
-`#include <boost/math/special_functions/bessel_derivatives.hpp>`
+`#include <boost/math/special_functions/bessel_prime.hpp>`
 
    template <class T1, class T2>
-   ``__sf_result`` cyl_bessel_j_derivative(T1 v, T2 x);
+   ``__sf_result`` cyl_bessel_j_prime(T1 v, T2 x);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` cyl_bessel_j_derivative(T1 v, T2 x, const ``__Policy``&);
+   ``__sf_result`` cyl_bessel_j_prime(T1 v, T2 x, const ``__Policy``&);
 
    template <class T1, class T2>
-   ``__sf_result`` cyl_neumann_derivative(T1 v, T2 x);
+   ``__sf_result`` cyl_neumann_prime(T1 v, T2 x);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` cyl_neumann_derivative(T1 v, T2 x, const ``__Policy``&);
+   ``__sf_result`` cyl_neumann_prime(T1 v, T2 x, const ``__Policy``&);
 
    template <class T1, class T2>
-   ``__sf_result`` cyl_bessel_i_derivative(T1 v, T2 x);
+   ``__sf_result`` cyl_bessel_i_prime(T1 v, T2 x);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` cyl_bessel_i_derivative(T1 v, T2 x, const ``__Policy``&);
+   ``__sf_result`` cyl_bessel_i_prime(T1 v, T2 x, const ``__Policy``&);
 
    template <class T1, class T2>
-   ``__sf_result`` cyl_bessel_k_derivative(T1 v, T2 x);
+   ``__sf_result`` cyl_bessel_k_prime(T1 v, T2 x);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` cyl_bessel_k_derivative(T1 v, T2 x, const ``__Policy``&);
+   ``__sf_result`` cyl_bessel_k_prime(T1 v, T2 x, const ``__Policy``&);
 
    template <class T1, class T2>
-   ``__sf_result`` sph_bessel_derivative(T1 v, T2 x);
+   ``__sf_result`` sph_bessel_prime(T1 v, T2 x);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` sph_bessel_derivative(T1 v, T2 x, const ``__Policy``&);
+   ``__sf_result`` sph_bessel_prime(T1 v, T2 x, const ``__Policy``&);
 
    template <class T1, class T2>
-   ``__sf_result`` sph_neumann_derivative(T1 v, T2 x);
+   ``__sf_result`` sph_neumann_prime(T1 v, T2 x);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` sph_neumann_derivative(T1 v, T2 x, const ``__Policy``&);
+   ``__sf_result`` sph_neumann_prime(T1 v, T2 x, const ``__Policy``&);
 
 
 [h4 Description]

@@ -22,23 +22,23 @@
 #endif
 
 template <class T>
-T cyl_bessel_i_derivative_int_wrapper(T v, T x)
+T cyl_bessel_i_prime_int_wrapper(T v, T x)
 {
    return static_cast<T>(
-      boost::math::cyl_bessel_i_derivative(
+      boost::math::cyl_bessel_i_prime(
       boost::math::itrunc(v), x));
 }
 
 template <class Real, class T>
-void do_test_cyl_bessel_i_derivative(const T& data, const char* type_name, const char* test_name)
+void do_test_cyl_bessel_i_prime(const T& data, const char* type_name, const char* test_name)
 {
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   pg funcp = boost::math::cyl_bessel_i_derivative<value_type, value_type>;
+   pg funcp = boost::math::cyl_bessel_i_prime<value_type, value_type>;
 #else
-   pg funcp = boost::math::cyl_bessel_i_derivative;
+   pg funcp = boost::math::cyl_bessel_i_prime;
 #endif
 
    boost::math::tools::test_result<value_type> result;
@@ -47,26 +47,26 @@ void do_test_cyl_bessel_i_derivative(const T& data, const char* type_name, const
       << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 
    //
-   // test cyl_bessel_i_derivative against data:
+   // test cyl_bessel_i_prime against data:
    //
    result = boost::math::tools::test_hetero<Real>(
       data, 
       bind_func<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_i_derivative", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_i_prime", test_name);
    std::cout << std::endl;
 }
 
 template <class Real, class T>
-void do_test_cyl_bessel_i_derivative_int(const T& data, const char* type_name, const char* test_name)
+void do_test_cyl_bessel_i_prime_int(const T& data, const char* type_name, const char* test_name)
 {
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   pg funcp = cyl_bessel_i_derivative_int_wrapper<value_type>;
+   pg funcp = cyl_bessel_i_prime_int_wrapper<value_type>;
 #else
-   pg funcp = cyl_bessel_i_derivative_int_wrapper;
+   pg funcp = cyl_bessel_i_prime_int_wrapper;
 #endif
 
    boost::math::tools::test_result<value_type> result;
@@ -75,13 +75,13 @@ void do_test_cyl_bessel_i_derivative_int(const T& data, const char* type_name, c
       << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 
    //
-   // test cyl_bessel_i_derivative against data:
+   // test cyl_bessel_i_prime against data:
    //
    result = boost::math::tools::test_hetero<Real>(
       data, 
       bind_func<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_i_derivative", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_i_prime", test_name);
    std::cout << std::endl;
 }
 
@@ -89,7 +89,7 @@ template <class T>
 void test_bessel(T, const char* name)
 {
     // function values calculated on wolframalpha.com
-    static const boost::array<boost::array<T, 3>, 10> i0_derivative_data = {{
+    static const boost::array<boost::array<T, 3>, 10> i0_prime_data = {{
         {{ SC_(0), SC_(0), SC_(0) }},
         {{ SC_(0), SC_(1), SC_(0.565159103992485027207696027609863307328899621621) }},
         {{ SC_(0), SC_(-2), SC_(-1.590636854637329063382254424999666247954478159496) }},
@@ -101,7 +101,7 @@ void test_bessel(T, const char* name)
         {{ SC_(0), SC_(100), SC_(1.068369390338162481206145763224295265446122844056e42) }},
         {{ SC_(0), SC_(200), SC_(2.034581549332062703427427977139069503896611616811e85) }},
     }};
-    static const boost::array<boost::array<T, 3>, 10> i1_derivative_data = {{
+    static const boost::array<boost::array<T, 3>, 10> i1_prime_data = {{
         {{ SC_(1), SC_(0), SC_(0.5) }},
         {{ SC_(1), SC_(1), SC_(0.700906773759523308390548597604854230278770689734) }},
         {{ SC_(1), SC_(-2), SC_(1.484266875017402735746077228311700229308602023038) }},
@@ -113,7 +113,7 @@ void test_bessel(T, const char* name)
         {{ SC_(1), SC_(100), SC_(1.063068013227692198707659399971251708633941964885e42) }},
         {{ SC_(1), SC_(200), SC_(2.029514265663064306024535986893764274813192678064e85) }},
     }};
-    static const boost::array<boost::array<T, 3>, 11> in_derivative_data = {{
+    static const boost::array<boost::array<T, 3>, 11> in_prime_data = {{
         {{ SC_(-2), SC_(0), SC_(0) }},
         {{ SC_(2), T(SC_(1))/(1024*1024), SC_(2.38418579101598640072416185021877537269848820467704e-7) }},
         {{ SC_(5), SC_(10), SC_(837.8963945578616177877239800250165373153505679130) }},
@@ -126,7 +126,7 @@ void test_bessel(T, const char* name)
         {{ SC_(-100), SC_(-200), SC_(-4.8578174816088978115191937982677942557681326349558e74) }},
         {{ SC_(10), SC_(1e-100), SC_(2.6911444554673721340388007054673721340e-909) }},
     }};
-    static const boost::array<boost::array<T, 3>, 10> iv_derivative_data = {{
+    static const boost::array<boost::array<T, 3>, 10> iv_prime_data = {{
         {{ SC_(2.25), T(1)/(1024*1024), SC_(5.5296993766970839641084373853875345330202883e-9) }},
         {{ SC_(5.5), SC_(3.125), SC_(0.11607917746126037030394881599790144677553715606) }},
         {{ T(-5) + T(1)/1024, SC_(2.125), SC_(0.0001131925559871199041270456478317398625046249903864372470342210384462922281) }},
@@ -138,7 +138,7 @@ void test_bessel(T, const char* name)
         {{ T(144794)/1024, SC_(200), SC_(2.7358895637426974377937620224627094172800852276956e64) }},
         {{ T(-144794)/1024, SC_(100), SC_(3575.11008700037933897402396449269857968451879323) }},
     }};
-    static const boost::array<boost::array<T, 3>, 5> iv_derivative_large_data = {{
+    static const boost::array<boost::array<T, 3>, 5> iv_prime_large_data = {{
         {{ SC_(-1), static_cast<T>(ldexp(0.5, -512)), SC_(0.5) }},
         {{ SC_(1),  static_cast<T>(ldexp(0.5, -512)), SC_(0.5) }},
         {{ SC_(1.125),  static_cast<T>(ldexp(0.5, -512)), SC_(2.42025162605150606399395900489934587657244145536315936432966315563638e-20) }},
@@ -150,22 +150,22 @@ void test_bessel(T, const char* name)
 #endif
     }};
 
-    do_test_cyl_bessel_i_derivative<T>(i0_derivative_data, name, "Bessel I'0: Mathworld Data");
-    do_test_cyl_bessel_i_derivative<T>(i1_derivative_data, name, "Bessel I'1: Mathworld Data");
-    do_test_cyl_bessel_i_derivative<T>(in_derivative_data, name, "Bessel I'n: Mathworld Data");
+    do_test_cyl_bessel_i_prime<T>(i0_prime_data, name, "Bessel I'0: Mathworld Data");
+    do_test_cyl_bessel_i_prime<T>(i1_prime_data, name, "Bessel I'1: Mathworld Data");
+    do_test_cyl_bessel_i_prime<T>(in_prime_data, name, "Bessel I'n: Mathworld Data");
 
-    do_test_cyl_bessel_i_derivative_int<T>(i0_derivative_data, name, "Bessel I'0: Mathworld Data (Integer Version)");
-    do_test_cyl_bessel_i_derivative_int<T>(i1_derivative_data, name, "Bessel I'1: Mathworld Data (Integer Version)");
-    do_test_cyl_bessel_i_derivative_int<T>(in_derivative_data, name, "Bessel I'n: Mathworld Data (Integer Version)");
+    do_test_cyl_bessel_i_prime_int<T>(i0_prime_data, name, "Bessel I'0: Mathworld Data (Integer Version)");
+    do_test_cyl_bessel_i_prime_int<T>(i1_prime_data, name, "Bessel I'1: Mathworld Data (Integer Version)");
+    do_test_cyl_bessel_i_prime_int<T>(in_prime_data, name, "Bessel I'n: Mathworld Data (Integer Version)");
 
-    do_test_cyl_bessel_i_derivative<T>(iv_derivative_data, name, "Bessel I'v: Mathworld Data");
+    do_test_cyl_bessel_i_prime<T>(iv_prime_data, name, "Bessel I'v: Mathworld Data");
 
-#include "bessel_i_derivative_int_data.ipp"
-    do_test_cyl_bessel_i_derivative<T>(bessel_i_derivative_int_data, name, "Bessel I'n: Random Data");
-#include "bessel_i_derivative_data.ipp"
-    do_test_cyl_bessel_i_derivative<T>(bessel_i_derivative_data, name, "Bessel I'v: Random Data");
+#include "bessel_i_prime_int_data.ipp"
+    do_test_cyl_bessel_i_prime<T>(bessel_i_prime_int_data, name, "Bessel I'n: Random Data");
+#include "bessel_i_prime_data.ipp"
+    do_test_cyl_bessel_i_prime<T>(bessel_i_prime_data, name, "Bessel I'v: Random Data");
 
     if(0 != static_cast<T>(ldexp(0.5, -700)))
-      do_test_cyl_bessel_i_derivative<T>(iv_derivative_large_data, name, "Bessel I'v: Mathworld Data (large values)");
+      do_test_cyl_bessel_i_prime<T>(iv_prime_large_data, name, "Bessel I'v: Mathworld Data (large values)");
 }
 
