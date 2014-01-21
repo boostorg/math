@@ -70,19 +70,9 @@ for more information.
 
 [h4 Implementation]
 
-If:
+In the general case, the derivatives are calculated using the relations:
 
 [equation bessel_derivatives1]
-
-is the underlying Bessel function, then:
-
-The cyclic Bessel functions of the first and second kinds are computed using the relation:
-
-[equation bessel_derivatives2]
-
-And the spherical Bessel functions are computed using the relation:
-
-[equation bessel_derivatives3]
 
 There are also a number of special cases, for large x we have:
 
