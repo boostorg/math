@@ -8,6 +8,10 @@
 
 #  boost-no-inspect
 
+# This builds a standalone version of the cstdfloat docs
+# using the same cstdfloat.qbk called from cstdfloat_header.qbk
+# The full math only uses cstdfloat.qbk.
+
 import modules ;
 
 path-constant images_location : html ;
@@ -26,7 +30,11 @@ boostbook standalone
    
    # General settings
    # =================
+   # Path for links to Boost folder, for example: boost_1_55_0 or boost-trunk, relative to folder /doc/html. 
    <xsl:param>boost.root=../../../../..
+   # Path for libraries index:
+	 <xsl:param>boost.libraries=../../../../../../libs/libraries.htm
+
 
 		# Or a local custom stylesheet:
 		#<xsl:param>html.stylesheet=boostbook.css
@@ -96,7 +104,6 @@ boostbook standalone
 			<format>pdf:<xsl:param>index.on.type=1
     ;
     
-    install pdfinstall : standalone/<format>pdf : <location>. <install-type>PDF <name>cstdfloat.pdf ;
-explicit pdfinstall ;
-
+    
+install pdf-install : standalone : <install-type>PDF <location>. <name>cstdfloat.pdf ;
 

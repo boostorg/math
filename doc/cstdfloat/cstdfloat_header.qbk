@@ -1,4 +1,4 @@
-[book Standardized Floating-Point typedefs for C and C++
+[article Standardized Floating-Point typedefs for C and C++
     [quickbook 1.6]
     [copyright 2014  Christopher Kormanyos, John Maddock, Paul A. Bristow]
     [license
@@ -17,13 +17,7 @@
 
 [note A printer-friendly PDF version of this manual is also available.]
 
-[template mathpart[id title]
-[block '''<chapter id="'''[id]'''"><title>'''[title]'''</title>''']]
-[template endmathpart[]
-[block '''</chapter>''']]
-
 [include cstdfloat.qbk]
-
 
 [/ cstdfloat_header.qbk
   Copyright 2014 Christopher Kormanyos, John Maddock and Paul A. Bristow.

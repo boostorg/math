@@ -1,4 +1,5 @@
-[mathpart cstdfloat..Fixed-width floating-point types]
+
+[/cstdfloat.qbk  Specified-width floating-point typedefs]
 
 [def __IEEE754  [@http://en.wikipedia.org/wiki/IEEE_floating_point IEEE_floating_point]]
 [def __N3626  [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3626.pdf N3626]]
@@ -7,9 +8,10 @@
 [section:overview Overview]
 
 The header `<boost/cstdfloat.hpp>` provides [*optional]
-standardized floating-point `typedef`s having specified widths.
+standardized floating-point `typedef`s having [*specified widths].
 These are useful for writing portable code because they
 should behave identically on all platforms.
+These `typedef`s are the floating-point analog of specified-width integers in `<cstdint>`.
 All `typedef`s are in `namespace boost`.
 
 The `typedef`s include `float16_t, float32_t, float64_t, float80_t, float128_t`,
@@ -27,22 +29,22 @@ proposed for a new C++14 standard header `<cstdfloat>` and
 __N1703 proposed for a new C language standard header `<stdfloat.h>`.
 
 The 128-bit floating-point type, of great interest in scientific and
-numeric programming, is not required in the boost header,
+numeric programming, is not required in the Boost header,
 and may not be supplied for all platforms/compilers, because compiler
 support for a 128-bit floating-point type is not mandated by either
 the C standard or the C++ standard.
 
 The following code uses `<boost/cstdfloat.hpp>` in combination with
 `<boost/math/special_functions.hpp>` to compute a simplified
-version of the Jahnke-Emden-Lambda function. Here, we use
-a floating-point type with exactly 64 bits (i.e., `float64_t`).
+version of the Jahnke-Emden-Lambda function. Here, we specify
+a floating-point type with [*exactly 64 bits] (i.e., `float64_t`).
 If we were to use, for instance, built-in `double`,
 then there would be no guarantee that the code would
 behave identically on all platforms. With `float64_t` from
 `<boost/cstdfloat.hpp>`, however, it is very likely to be identical.
 
 Using `float64_t`, we know that
-this code is portable and uses a floating-point type
+this code is as portable as possible and uses a floating-point type
 with approximately 15 decimal digits of precision.
 
   #include <cmath>
@@ -140,7 +142,7 @@ then `float_least32_t` and `float_least64_t` will also be supported, etc.
 
 [section:fastest_typdefs Fastest minimum-width floating-point `typedef`s]
 
-The typedef `float_fast#_t`, with # replaced by the width, designates
+The `typedef float_fast#_t`, with # replaced by the width, designates
 the [*fastest] floating-point type with a width of at least # bits.
 
 There is no absolute guarantee that these types are the fastest for all purposes.
@@ -181,10 +183,6 @@ For example:
   static const boost::float128_t euler = BOOST_FLOAT128_C(0.57721566490153286060651209008240243104216);
 
 [endsect] [/section:macros Floating-Point Constant Macros]
-
-[endmathpart] [/mathpart cstdfloat..Fixed-width floating-point types]
-
-
 
 [/ cstdfloat.qbk
   Copyright 2014 Christopher Kormanyos, John Maddock and Paul A. Bristow.
