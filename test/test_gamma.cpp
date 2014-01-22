@@ -138,7 +138,7 @@ void expected_results()
       "linux",                       // platform
       "real_concept",                // test type(s)
       "near (0|-55)",                // test data group
-      "boost::math::(t|l)gamma", 200, 100);  // test function
+      "boost::math::(t|l)gamma", 300, 150);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
