@@ -7,7 +7,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// <cstdfloat.hpp> implements floating-point typedefs having
+// <boost/cstdfloat.hpp> implements floating-point typedefs having
 // specified widths, as described in N3626 (proposed for C++14).
 // See: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3626.pdf
 
@@ -44,10 +44,10 @@
 
   // Ensure that the compiler has a radix-2 floating-point representation.
   #if (!defined(FLT_RADIX) || ((defined(FLT_RADIX) && (FLT_RADIX != 2))))
-    #error The compiler does not support radix-2 floating-point types required for <cstdfloat.hpp>.
+    #error The compiler does not support radix-2 floating-point types required for <boost/cstdfloat.hpp>.
   #endif
 
-  // Check if built-in float is equivalent to float16_t, float24_t, float32_t, float64_t, float80_t, or float128_t.
+  // Check if built-in float is equivalent to float16_t, float32_t, float64_t, float80_t, or float128_t.
   #if(defined(FLT_MANT_DIG) && defined(FLT_MAX_EXP))
     #if  ((FLT_MANT_DIG == 11) && (FLT_MAX_EXP == 16) && (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT16_NATIVE_TYPE float
@@ -97,7 +97,7 @@
     #endif
   #endif
 
-  // Check if built-in double is equivalent to float16_t, float24_t, float32_t, float64_t, float80_t, or float128_t.
+  // Check if built-in double is equivalent to float16_t, float32_t, float64_t, float80_t, or float128_t.
   #if(defined(DBL_MANT_DIG) && defined(DBL_MAX_EXP))
     #if  ((DBL_MANT_DIG == 11) && (DBL_MAX_EXP == 16) && (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT16_NATIVE_TYPE double
@@ -147,7 +147,7 @@
     #endif
   #endif
 
-  // Check if built-in long double is equivalent to float16_t, float24_t, float32_t, float64_t, float80_t, or float128_t.
+  // Check if built-in long double is equivalent to float16_t, float32_t, float64_t, float80_t, or float128_t.
   #if(defined(LDBL_MANT_DIG) && defined(LDBL_MAX_EXP))
     #if  ((LDBL_MANT_DIG == 11) && (LDBL_MAX_EXP == 16) && (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT16_NATIVE_TYPE long double
@@ -222,7 +222,7 @@
        && (BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  == 0) \
        && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  == 0) \
        && (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0))
-    #error The compiler does not support any of the floating-point types required for <cstdfloat.hpp>.
+    #error The compiler does not support any of the floating-point types required for <boost/cstdfloat.hpp>.
   #endif
 
   // The following section contains the various min/max macros
@@ -290,7 +290,7 @@
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_128_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_128_MAX
   #else
-    #error The maximum available floating-point width for <cstdfloat.hpp> is undefined.
+    #error The maximum available floating-point width for <boost/cstdfloat.hpp> is undefined.
   #endif
 
   // Here, we define the floating-point typedefs having specified widths.
@@ -354,7 +354,9 @@
       typedef float128_t float_fast128_t;
       typedef float128_t float_least128_t;
 
-      // TODO: Is it sensible (in any way) to supply a specialization of numeric_limits for GCC's __float128?
+      // Here, we decide that it is not sensible to use or to provide (in any way)
+      // a specialization of numeric_limits for the compiler-specific type __float128.
+      // Users must provide their own mechanism for this.
       #if !defined(BOOST_MATH_USE_FLOAT128)
       BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::is_iec559    ==  true);
       BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::radix        ==     2);
@@ -374,7 +376,7 @@
     #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 128)
       typedef float128_t floatmax_t;
     #else
-      #error The maximum available floating-point width for <cstdfloat.hpp> is undefined.
+      #error The maximum available floating-point width for <boost/cstdfloat.hpp> is undefined.
     #endif
   }
   // namespace boost
