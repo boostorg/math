@@ -150,7 +150,7 @@ void expected_results()
       "Mac OS",                          // platform
       largest_type,                      // test type(s)
       "Bessel JN'.*",              // test data group
-      ".*", 40000, 20000);         // test function
+      ".*", 60000, 20000);         // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -173,7 +173,7 @@ void expected_results()
       "linux",                          // platform
       largest_type,                      // test type(s)
       ".*J':.*",              // test data group
-      ".*", 40000, 30000);         // test function
+      ".*", 60000, 30000);         // test function
 
 
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

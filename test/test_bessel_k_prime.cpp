@@ -83,7 +83,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*large.*",                   // test data group
-      ".*", 100, 50);                // test function
+      ".*", 100, 75);                // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
