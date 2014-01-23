@@ -74,6 +74,12 @@ An unequivocal test regarding conformance with __IEEE754 (IEC599) based on
 [@ http://en.cppreference.com/w/cpp/types/numeric_limits/is_iec559 `std::numeric_limits<>::is_iec559`]
 is performed with `BOOST_STATIC_ASSERT`.
 
+In addition, this implementation `<boost/cstdfloat.hpp>`
+supports an 80-bit floating-point `typedef` if this can be detected
+and if the underlying type conforms with
+[@http://en.wikipedia.org/wiki/Extended_precision IEEE-754 precision extension]
+(if`std::numeric_limits<>::is_iec559` is true for this type).
+
 The header `<boost/cstdfloat.hpp>` makes the standardized floating-point
 `typedef`s safely available in `namespace boost` without placing any names
 in `namespace std`. The intention is to complement rather than compete
@@ -93,6 +99,14 @@ For example, if a compiler does not have an underlying floating-point
 type with 128 bits (highly sought-after in scientific and numeric programming),
 then `float128_t` and its corresponding least and fast types are not
 provided by `<boost/cstdfloat.hpp`>.]
+
+[warning If `<boost/cstdfloat.hpp>` uses a compiler-specific non-standardized type
+[*not] derived from `float, double,` or `long double`) for one or more
+of its floating-point `typedef`s, then there is no guarantee that
+specializations of `numeric_limits<>` will be available for these types.
+Specializations of `numeric_limits<>` will only be available for these
+types if the compiler itself supports corresponding specializations
+for the underlying type(s).]
 
 [warning
 As an implementation artifact, certain C macro names from `<float.h>`
@@ -123,8 +137,7 @@ The absence of `float128_t` is indicated by the macro `BOOST_NO_FLOAT128_T`.
 
 [endsect] [/section:exact_typdefs Exact-Width Floating-Point `typedef`s]
 
-
-[section:fastest_typdefs Fastest minimum-width floating-point `typedef`s]
+[section:minimum_typdefs Minimum-width floating-point `typedef`s]
 
 The `typedef float_least#_t`, with # replaced by the width, designates a
 floating-point type with a [*width of at least # bits], such that no
@@ -138,12 +151,12 @@ exact-width floating-point types on a given platform.
 For example, if a platform supports `float32_t` and `float64_t`,
 then `float_least32_t` and `float_least64_t` will also be supported, etc.
 
-[endsect] [/section:fastest_typdefs Fastest minimum-width floating-point `typedef`s]
+[endsect] [/section:minimum_typdefs Minimum-width floating-point `typedef`s]
 
-[section:fastest_typdefs Fastest minimum-width floating-point `typedef`s]
+[section:fastest_typdefs Fastest floating-point `typedef`s]
 
 The `typedef float_fast#_t`, with # replaced by the width, designates
-the [*fastest] floating-point type with a width of at least # bits.
+the [*fastest] floating-point type with a [*width of at least # bits].
 
 There is no absolute guarantee that these types are the fastest for all purposes.
 In any case, however, they satisfy the precision and width requirements.
@@ -154,7 +167,7 @@ exact-width floating-point types on a given platform.
 For example, if a platform supports `float32_t` and `float64_t`,
 then `float_fast32_t` and `float_fast64_t` will also be supported, etc.
 
-[endsect] [/section:fastest_typdefs Fastest minimum-width floating-point `typedef`s]
+[endsect] [/section:fastest_typdefs Fastest floating-point `typedef`s]
 
 [section:greatest_typdefs Greatest-width floating-point typedef]
 
@@ -168,9 +181,11 @@ The greatest-width typedef is provided for all platforms.
 [section:macros Floating-Point Constant Macros]
 
 All macros of the type `BOOST_FLOAT16_C, BOOST_FLOAT32_C, BOOST_FLOAT64_C,
-BOOST_FLOAT128_C, BOOST_FLOATMAX_C` are always defined after inclusion of
-`<boost/cstdfloat.hpp>`. These allow floating-point constants of at
-least the specified width to be declared.
+BOOST_FLOAT80_C, BOOST_FLOAT128_C, BOOST_FLOATMAX_C`
+are always defined after inclusion of
+`<boost/cstdfloat.hpp>`.
+
+These allow floating-point [*constants of at least the specified width] to be declared.
 
 For example:
 
