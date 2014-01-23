@@ -137,7 +137,7 @@ errno = 33
 <span class="comment">// 'double boost::math::tgamma&lt;int&gt;(T)' and</span>
 <span class="comment">// 'double 'anonymous-namespace'::tgamma&lt;int&gt;(RT)'.</span>
 
-<span class="keyword">namespace</span>
+<span class="keyword">namespace</span> <span class="identifier">mymath</span>
 <span class="special">{</span> <span class="comment">// unnamed</span>
 
 <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
@@ -152,7 +152,7 @@ errno = 33
 <span class="identifier">BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS</span><span class="special">(</span><span class="identifier">c_policy</span><span class="special">)</span>
 </pre>
 <p>
-        So that when we call <code class="computeroutput"><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code>,
+        So that when we call <code class="computeroutput"><span class="identifier">mymath</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code>,
         we really end up calling <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span>
         <span class="identifier">anonymous</span><span class="special">-</span><span class="keyword">namespace</span><span class="special">::</span><span class="identifier">c_policy</span><span class="special">())</span></code>.
       </p>
@@ -162,11 +162,11 @@ errno = 33
 <span class="special">{</span>
    <span class="identifier">errno</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(30000) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(</span><span class="number">30000</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">mymath</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(</span><span class="number">30000</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
       <span class="comment">// tgamma in unnamed namespace in this translation unit (file) only.</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Result of tgamma(-10) is: "</span>
-      <span class="special">&lt;&lt;</span> <span class="identifier">tgamma</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
+      <span class="special">&lt;&lt;</span> <span class="identifier">mymath</span><span class="special">::</span><span class="identifier">tgamma</span><span class="special">(-</span><span class="number">10</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"errno = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">errno</span> <span class="special">&lt;&lt;</span> <span class="identifier">endl</span><span class="special">;</span>
    <span class="comment">// Default tgamma policy would throw an exception, and abort.</span>
 <span class="special">}</span>
