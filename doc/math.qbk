@@ -512,6 +512,10 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include fp_utilities/float_next.qbk]
 [endmathpart]
 
+[mathpart cstdfloat..Specified-width floating-point typedefs]
+[include cstdfloat/cstdfloat.qbk]
+[endmathpart] [/mathpart cstdfloat..Fixed-width floating-point types]
+
 [mathpart extern_c TR1 and C99 external "C" Functions]
 [section:main_tr1 C99 and TR1 C Functions Overview]
 [tr1_overview]
