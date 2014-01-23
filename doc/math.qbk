@@ -1,13 +1,13 @@
 [book Math Toolkit
     [quickbook 1.6]
-    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013 Paul A. Bristow, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Johan Råde, Gautam Sewani, Benjamin Sobotta, Thijs van den Berg, Daryle Walker, Xiaogang Zhang and Nikhar Agrawal]
+    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Johan Råde, Gautam Sewani, Benjamin Sobotta, Thijs van den Berg, Daryle Walker and Xiaogang Zhang]
     [/purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Bristow, Paul A.], [Holin, Hubert], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang], [Agrawal, Nikhar]]
+    [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
     [version 1.9.0]
 ]
@@ -159,6 +159,13 @@ and use the function's name as the link text.]
 [def __cyl_bessel_k  [link math_toolkit.bessel.mbessel cyl_bessel_k]]
 [def __sph_bessel  [link math_toolkit.bessel.sph_bessel sph_bessel]]
 [def __sph_neumann  [link math_toolkit.bessel.sph_bessel sph_neumann]]
+
+[def __cyl_bessel_j_prime  [link math_toolkit.bessel.bessel_derivatives cyl_bessel_j_prime]]
+[def __cyl_neumann_prime  [link math_toolkit.bessel.bessel_derivatives cyl_neumann_prime]]
+[def __cyl_bessel_i_prime  [link math_toolkit.bessel.bessel_derivatives cyl_bessel_i_prime]]
+[def __cyl_bessel_k_prime  [link math_toolkit.bessel.bessel_derivatives cyl_bessel_k_prime]]
+[def __sph_bessel_prime  [link math_toolkit.bessel.bessel_derivatives sph_bessel_prime]]
+[def __sph_neumann_prime  [link math_toolkit.bessel.bessel_derivatives sph_neumann_prime]]
 
 [/Hankel Functions]
 [def __cyl_hankel_1  [link math_toolkit.hankel.cyl_hankel cyl_hankel_1]]
