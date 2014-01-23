@@ -72,7 +72,7 @@ void expected_results()
       "linux",                       // platform
       largest_type,                  // test type(s)
       ".*Random.*",                  // test data group
-      ".*", 500, 200);               // test function
+      ".*", 600, 200);               // test function
 
    add_expected_result(
       "GNU.*",                       // compiler
@@ -122,7 +122,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*",                          // test data group
-      ".*", 500, 200);               // test function
+      ".*", 600, 200);               // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

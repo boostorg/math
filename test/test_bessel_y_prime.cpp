@@ -112,7 +112,7 @@ void expected_results()
          "linux",                          // platform
          largest_type,                  // test type(s)
          ".*Y'v.*Random.*",              // test data group
-         ".*", 200000, 200000);         // test function
+         ".*", 400000, 200000);         // test function
       add_expected_result(
          ".*",                          // compiler
          ".*",                          // stdlib
@@ -181,7 +181,7 @@ void expected_results()
          ".*",                          // platform
          "double",                      // test type(s)
          ".*Y'v.*",              // test data group
-         ".*", 80, 70);         // test function
+         ".*", 200, 70);         // test function
    }
 #endif
    //
