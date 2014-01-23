@@ -6,9 +6,12 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
-[h4 Math-1.8.3]
+[h4 Math-1.9.0]
 
 * Changed version number to new Boost.Math specific version now that we're in the modular Boost world.
+* Added __bernoulli_numbers, changed arbitrary precision __tgamma/__lgamma to use Sterling's approximation (from Nikhar Agrawal).
+* Added first derivatives of the Bessel functions: __cyl_bessel_j_prime, __cyl_neumann_prime, __cyl_bessel_i_prime, __cyl_bessel_k_prime, __sph_bessel_prime and __sph_neumann_prime (from Anton Bikineev).
+* Fixed buggy Student's t example code, along with docs for testing sample means for equivalence.
 * Documented `max_iter` parameter in root finding code better, see [@https://svn.boost.org/trac/boost/ticket/9225 #9225].
 * Add option to explicitly enable/disable use of __float128 in constants code, see [@https://svn.boost.org/trac/boost/ticket/9240 #9240].
 * Cleaned up handling of negative values in Bessel I0 and I1 code (removed dead code), see [@https://svn.boost.org/trac/boost/ticket/9512 #9512].
