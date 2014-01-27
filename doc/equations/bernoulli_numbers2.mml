@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0"?>
 <math xmlns="http://www.w3.org/1998/Math/MathML">
- <semantics>
-  <mrow>
-   <mtable>
+ <mrow>
+    <mtable columnalign="right center left">
     <mtr>
      <mtd>
       <mrow>
@@ -223,8 +221,4 @@
     </mtr>
    </mtable>
   </mrow>
-  <annotation encoding="StarMath 5.0">matrix {ln(B_n) # &quot;=&quot; # ({1} over {2} + n)ln(n) + ({1} over {2} - n)ln(%pi%) + ({3} over {2} - n)ln(2) - R(n)
-##
-R(n) # &quot;=&quot; # n(1 - {1} over 12 (1 - 1 over 30 (1 - 2 over 7 n^{-2})n^{-2})n^{-2}) }</annotation>
- </semantics>
 </math>

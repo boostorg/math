@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0"?>
 <math xmlns="http://www.w3.org/1998/Math/MathML">
- <semantics>
-  <mrow>
-   <mtable>
+ <mrow>
+    <mtable columnalign="right center left">
     <mtr>
      <mtd>
       <mrow>
        <mi>J</mi>
        <msub>
-        <mi>&apos;</mi>
+        <mi>'</mi>
         <mi>v</mi>
        </msub>
        <mrow>
@@ -45,7 +43,7 @@
       <mrow>
        <mi>Y</mi>
        <msub>
-        <mi>&apos;</mi>
+        <mi>'</mi>
         <mi>v</mi>
        </msub>
        <mrow>
@@ -369,12 +367,4 @@
     </mtr>
    </mtable>
   </mrow>
-  <annotation encoding="StarMath 5.0">matrix{
-alignr J&apos;_v(x) # &quot;=&quot; # alignl N_v cos %phi_v ##
-alignr Y&apos;_v(x) # &quot;=&quot; # alignl N_v sin %phi_v ##
-alignr N^2_v # {} approx {} # alignl {2 over {%pi x}} left lbrace 1 - {1 over 2} {%mu - 3} over {alignc (2x)^2} - {1 over 8} {(%mu-1)(%mu-45)} over {alignc {(2x)^4}} right rbrace ##
-{alignr %phi_v} # {}approx{} # {alignl x - (1 over 2 v - 1 over 4)%pi + {alignc %mu + 3} over {alignc 2(4x)} + {%mu^2+46 %mu-63} over {alignc 6(4x)^3} + {%mu^3 + 185 %mu^2 - 2053 %mu + 1899} over {alignc 5(4x)^5}} ##
-{alignr %mu} # {}={} # {alignl 4v^2}
-} </annotation>
- </semantics>
 </math>

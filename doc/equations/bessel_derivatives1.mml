@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0"?>
 <math xmlns="http://www.w3.org/1998/Math/MathML">
- <semantics>
-  <mrow>
-   <mtable>
+ <mrow>
+    <mtable columnalign="right center left">
     <mtr>
      <mtd>
       <mrow>
        <mi>J</mi>
        <msub>
-        <mi>&apos;</mi>
+        <mi>'</mi>
         <mi>v</mi>
        </msub>
        <mrow>
@@ -83,7 +81,7 @@
        <mrow>
         <mi>Y</mi>
         <msub>
-         <mi>&apos;</mi>
+         <mi>'</mi>
          <mi>v</mi>
         </msub>
         <mrow>
@@ -158,7 +156,7 @@
        <mrow>
         <mi>I</mi>
         <msub>
-         <mi>&apos;</mi>
+         <mi>'</mi>
          <mi>v</mi>
         </msub>
         <mrow>
@@ -233,7 +231,7 @@
        <mrow>
         <mi>K</mi>
         <msub>
-         <mi>&apos;</mi>
+         <mi>'</mi>
          <mi>v</mi>
         </msub>
         <mrow>
@@ -311,7 +309,7 @@
        <mrow>
         <mi>j</mi>
         <msub>
-         <mi>&apos;</mi>
+         <mi>'</mi>
          <mi>n</mi>
         </msub>
        </mrow>
@@ -378,7 +376,7 @@
        <mrow>
         <mi>y</mi>
         <msub>
-         <mi>&apos;</mi>
+         <mi>'</mi>
          <mi>n</mi>
         </msub>
        </mrow>
@@ -441,13 +439,4 @@
     </mtr>
    </mtable>
   </mrow>
-  <annotation encoding="StarMath 5.0">matrix {
-J&apos;_v(x) # {} = {} #{J_{v-1}(x) - J_{v+1}(x)} over 2 ##
-{Y&apos;_v(x)} # {}={} # {Y_{v-1}(x) - Y_{v+1}(x)} over 2 ##
-{I&apos;_v(x)} # {}={} # {I_{v-1}(x) + I_{v+1}(x)} over 2 ##
-{K&apos;_v(x)} # {}={} # {K_{v-1}(x) + K_{v+1}(x)} over -2 ##
-{j&apos;_n} # {}={} # {left(n over x right) j_n(x) - j_{n+1}(x)} ##
-{y&apos;_n} # {}={} # {left(n over x right) y_n(x) - y_{n+1}(x)}
-}</annotation>
- </semantics>
 </math>

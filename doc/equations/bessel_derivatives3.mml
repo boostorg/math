@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0"?>
 <math xmlns="http://www.w3.org/1998/Math/MathML">
- <semantics>
-  <mrow>
+ <mrow>
    <mo stretchy="false">ξ</mo>
    <msub>
-    <mi>&apos;</mi>
+    <mi>'</mi>
     <mi>v</mi>
    </msub>
    <mrow>
@@ -68,6 +66,4 @@
     <mo stretchy="false">)</mo>
    </mrow>
   </mrow>
-  <annotation encoding="StarMath 5.0">%xi&apos;_v(x) = {1 over 2} (%xi_{v-1}(x) - %xi_{v+1}(x))</annotation>
- </semantics>
 </math>
