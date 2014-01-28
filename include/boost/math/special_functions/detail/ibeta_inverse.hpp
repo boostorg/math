@@ -538,7 +538,7 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
          if(a > 1)
          {
             x = pow(p, 1 / a);
-            y = -expm1(log(p) / a);
+            y = -boost::math::expm1(log(p) / a, pol);
          }
          else
          {
@@ -548,8 +548,8 @@ T ibeta_inv_imp(T a, T b, T p, T q, const Policy& pol, T* py)
       }
       else
       {
-         x = exp(log1p(-q) / a);
-         y = -expm1(log1p(-q) / a);
+         x = exp(boost::math::log1p(-q, pol) / a);
+         y = -boost::math::expm1(boost::math::log1p(-q, pol) / a, pol);
       }
       if(invert)
          std::swap(x, y);
