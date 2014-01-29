@@ -175,14 +175,13 @@ T airy_ai_zero_imp(int m, const Policy& pol)
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m);
 
-   // Select the maximum allowed iterations, being at least 24.
-   boost::uintmax_t number_of_iterations = (std::max)(24, int(std::numeric_limits<T>::digits10));
+   // Select the maximum allowed iterations based on the number
+   // of decimal digits in the numeric type T, being at least 12.
+   const int my_digits10 = static_cast<int>(static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
 
-   // Select the desired number of binary digits of precision.
-   // Account for the radix of number representations having non-two radix!
-   const int my_digits2 = int(float(std::numeric_limits<T>::digits)
-                              * (  log(float(std::numeric_limits<T>::radix))
-                                 / log(2.0F)));
+   const boost::uintmax_t iterations_allowed = static_cast<boost::uintmax_t>((std::max)(12, my_digits10 * 2));
+
+   boost::uintmax_t iterations_used = iterations_allowed;
 
    // Use a dynamic tolerance because the roots get closer the higher m gets.
    T tolerance;
@@ -199,10 +198,10 @@ T airy_ai_zero_imp(int m, const Policy& pol)
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
-         my_digits2,
-         number_of_iterations);
+         boost::math::tools::digits<T>(),
+         iterations_used);
 
-   static_cast<void>(number_of_iterations);
+   static_cast<void>(iterations_used);
 
    return am;
 }
@@ -228,14 +227,13 @@ T airy_bi_zero_imp(int m, const Policy& pol)
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m);
 
-   // Select the maximum allowed iterations, being at least 24.
-   boost::uintmax_t number_of_iterations = (std::max)(24, int(std::numeric_limits<T>::digits10));
+   // Select the maximum allowed iterations based on the number
+   // of decimal digits in the numeric type T, being at least 12.
+   const int my_digits10 = static_cast<int>(static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
 
-   // Select the desired number of binary digits of precision.
-   // Account for the radix of number representations having non-two radix!
-   const int my_digits2 = int(float(std::numeric_limits<T>::digits)
-                              * (  log(float(std::numeric_limits<T>::radix))
-                                 / log(2.0F)));
+   const boost::uintmax_t iterations_allowed = static_cast<boost::uintmax_t>((std::max)(12, my_digits10 * 2));
+
+   boost::uintmax_t iterations_used = iterations_allowed;
 
    // Use a dynamic tolerance because the roots get closer the higher m gets.
    T tolerance;
@@ -252,10 +250,10 @@ T airy_bi_zero_imp(int m, const Policy& pol)
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
-         my_digits2,
-         number_of_iterations);
+         boost::math::tools::digits<T>(),
+         iterations_used);
 
-   static_cast<void>(number_of_iterations);
+   static_cast<void>(iterations_used);
 
    return bm;
 }
