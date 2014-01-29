@@ -177,7 +177,7 @@ T airy_ai_zero_imp(int m, const Policy& pol)
 
    // Select the maximum allowed iterations based on the number
    // of decimal digits in the numeric type T, being at least 12.
-   const int my_digits10 = static_cast<int>(static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
+   const int my_digits10 = static_cast<int>(static_cast<float>(policies::digits<T, Policy>() * 0.301F));
 
    const boost::uintmax_t iterations_allowed = static_cast<boost::uintmax_t>((std::max)(12, my_digits10 * 2));
 
@@ -198,7 +198,7 @@ T airy_ai_zero_imp(int m, const Policy& pol)
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
-         boost::math::tools::digits<T>(),
+         policies::digits<T, Policy>(),
          iterations_used);
 
    static_cast<void>(iterations_used);
@@ -229,7 +229,7 @@ T airy_bi_zero_imp(int m, const Policy& pol)
 
    // Select the maximum allowed iterations based on the number
    // of decimal digits in the numeric type T, being at least 12.
-   const int my_digits10 = static_cast<int>(static_cast<float>(boost::math::tools::digits<T>() * 0.301F));
+   const int my_digits10 = static_cast<int>(static_cast<float>(policies::digits<T, Policy>() * 0.301F));
 
    const boost::uintmax_t iterations_allowed = static_cast<boost::uintmax_t>((std::max)(12, my_digits10 * 2));
 
@@ -250,7 +250,7 @@ T airy_bi_zero_imp(int m, const Policy& pol)
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
-         boost::math::tools::digits<T>(),
+         policies::digits<T, Policy>(),
          iterations_used);
 
    static_cast<void>(iterations_used);

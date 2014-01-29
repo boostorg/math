@@ -423,10 +423,6 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
    // Select the maximum allowed iterations from the policy.
    boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
 
-   // Select the desired number of binary digits of precision.
-   // Account for the radix of number representations having non-two radix!
-   const int my_digits2 = policies::digits<T, Policy>();
-
    const T delta_lo = ((guess_root > 0.2F) ? T(0.2) : T(guess_root / 2U));
 
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
@@ -436,7 +432,7 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
          guess_root,
          T(guess_root - delta_lo),
          T(guess_root + 0.2F),
-         my_digits2,
+         policies::digits<T, Policy>(),
          number_of_iterations);
 
    if(number_of_iterations >= policies::get_max_root_iterations<Policy>())
@@ -506,10 +502,6 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
    // Select the maximum allowed iterations from the policy.
    boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
 
-   // Select the desired number of binary digits of precision.
-   // Account for the radix of number representations having non-two radix!
-   const int my_digits2 = policies::digits<T, Policy>();
-
    const T delta_lo = ((guess_root > 0.2F) ? T(0.2) : T(guess_root / 2U));
 
    // Perform the root-finding using Newton-Raphson iteration from Boost.Math.
@@ -519,7 +511,7 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
          guess_root,
          T(guess_root - delta_lo),
          T(guess_root + 0.2F),
-         my_digits2,
+         policies::digits<T, Policy>(),
          number_of_iterations);
 
    if(number_of_iterations >= policies::get_max_root_iterations<Policy>())
