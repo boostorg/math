@@ -7,6 +7,7 @@
 #ifndef BOOST_MATH_AIRY_HPP
 #define BOOST_MATH_AIRY_HPP
 
+#include <limits>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/cbrt.hpp>
 #include <boost/math/special_functions/detail/airy_ai_bi_zero.hpp>
@@ -359,7 +360,12 @@ inline T airy_ai_zero(int m, const Policy& /*pol*/)
       policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Airy return type must be a floating-point type.");
+
+   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+                           || (   true  == std::numeric_limits<T>::is_specialized
+                               && false == std::numeric_limits<T>::is_integer),
+                           "Airy value type must be a floating-point type.");
+
    return policies::checked_narrowing_cast<T, Policy>(detail::airy_ai_zero_imp<value_type>(m, forwarding_policy()), "boost::math::airy_ai_zero<%1%>(unsigned)");
 }
 
@@ -377,7 +383,11 @@ inline OutputIterator airy_ai_zero(
                          const Policy& pol)
 {
    typedef T result_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy return type must be a floating-point type.");
+
+   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+                           || (   true  == std::numeric_limits<T>::is_specialized
+                               && false == std::numeric_limits<T>::is_integer),
+                           "Airy value type must be a floating-point type.");
 
    for(unsigned i = 0; i < static_cast<int>(number_of_zeros); ++i)
    {
@@ -407,7 +417,12 @@ inline T airy_bi_zero(int m, const Policy& /*pol*/)
       policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Airy return type must be a floating-point type.");
+
+   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+                           || (   true  == std::numeric_limits<T>::is_specialized
+                               && false == std::numeric_limits<T>::is_integer),
+                           "Airy value type must be a floating-point type.");
+
    return policies::checked_narrowing_cast<T, Policy>(detail::airy_bi_zero_imp<value_type>(m, forwarding_policy()), "boost::math::airy_bi_zero<%1%>(unsigned)");
 }
 
@@ -425,7 +440,11 @@ inline OutputIterator airy_bi_zero(
                          const Policy& pol)
 {
    typedef T result_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy return type must be a floating-point type.");
+
+   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+                           || (   true  == std::numeric_limits<T>::is_specialized
+                               && false == std::numeric_limits<T>::is_integer),
+                           "Airy value type must be a floating-point type.");
 
    for(int i = 0; i < static_cast<int>(number_of_zeros); ++i)
    {
