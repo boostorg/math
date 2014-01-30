@@ -345,7 +345,7 @@
 
       BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::is_iec559    ==  true);
       BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::radix        ==     2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::digits       ==    63);
+      BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::digits       ==    64);
       BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::max_exponent == 16384);
     #endif
 
