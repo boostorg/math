@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0"?>
 <math xmlns="http://www.w3.org/1998/Math/MathML">
- <semantics>
-  <mrow>
+ <mrow>
    <mi>ln</mi>
    <mo stretchy="false">Γ</mo>
    <mrow>
@@ -112,6 +110,4 @@
     </mrow>
    </mrow>
   </mrow>
-  <annotation encoding="StarMath 5.0">ln %GAMMA (z) approx (z - 1 over 2)ln(z) - z + {1 over 2}ln(2 %pi) + sum from{k=1} to{infinity} {B_{2k}  over {2k(2k-1) z^{2k-1}}}</annotation>
- </semantics>
 </math>

@@ -76,7 +76,7 @@
       #define BOOST_FLOAT64_C(x)  (x ## F)
       #define BOOST_FLOAT_64_MIN  FLT_MIN
       #define BOOST_FLOAT_64_MAX  FLT_MAX
-    #elif((FLT_MANT_DIG == 63) && (FLT_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 0))
+    #elif((FLT_MANT_DIG == 64) && (FLT_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE float
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
       #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 80
@@ -126,7 +126,7 @@
       #define BOOST_FLOAT64_C(x)  (x)
       #define BOOST_FLOAT_64_MIN  DBL_MIN
       #define BOOST_FLOAT_64_MAX  DBL_MAX
-    #elif((DBL_MANT_DIG == 63) && (DBL_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 0))
+    #elif((DBL_MANT_DIG == 64) && (DBL_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
       #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 80
@@ -176,7 +176,7 @@
       #define BOOST_FLOAT64_C(x)  (x ## L)
       #define BOOST_FLOAT_64_MIN  LDBL_MIN
       #define BOOST_FLOAT_64_MAX  LDBL_MAX
-    #elif((LDBL_MANT_DIG == 63) && (LDBL_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 0))
+    #elif((LDBL_MANT_DIG == 64) && (LDBL_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE long double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
       #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 80
@@ -345,7 +345,7 @@
 
       BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::is_iec559    ==  true);
       BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::radix        ==     2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::digits       ==    63);
+      BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::digits       ==    64);
       BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::max_exponent == 16384);
     #endif
 

@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0"?>
 <math xmlns="http://www.w3.org/1998/Math/MathML">
- <semantics>
-  <mrow>
-   <mtable>
+ <mrow>
+    <mtable columnalign="right center left">
     <mtr>
      <mtd>
       <mrow>
        <mi>J</mi>
        <msub>
-        <mi>&apos;</mi>
+        <mi>'</mi>
         <mi>v</mi>
        </msub>
        <mrow>
@@ -130,7 +128,7 @@
        <mrow>
         <mi>Y</mi>
         <msub>
-         <mi>&apos;</mi>
+         <mi>'</mi>
          <mi>v</mi>
         </msub>
         <mrow>
@@ -395,8 +393,4 @@
     </mtr>
    </mtable>
   </mrow>
-  <annotation encoding="StarMath 5.0">matrix { alignr J&apos;_v(z) # {}={} # alignl z^{v-1} over {alignc 2^v} sum from{k=0} to{infinity} {alignc {left (- {z^2 over 4} right)^k (v + 2k)} over {k! %GAMMA (1+k+v)}  }##
-{alignr Y&apos;_v(x)} # {}={} # alignl {alignc -{ {%GAMMA(-v) cos(v %pi)} over %pi} times {z^{v-1} over 2^v} times sum from{k=0} to{infinity} {{left(-{z^2 over 4} right)^k (v + 2k)} over {(v+1)_k k!}} - {%GAMMA(v)} over %pi times {2^v over {z^{v+1}}}times sum from{k=0} to{infinity} {{left(-{z^2 over 4} right)^k (2k - v)} over {(1-v)_k k!}}    }
-}</annotation>
- </semantics>
 </math>

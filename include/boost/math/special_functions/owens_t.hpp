@@ -144,8 +144,8 @@ namespace boost
          }
 
          // compute the value of Owen's T function with method T1 from the reference paper
-         template<typename RealType>
-         inline RealType owens_t_T1(const RealType h, const RealType a, const unsigned short m)
+         template<typename RealType, typename Policy>
+         inline RealType owens_t_T1(const RealType h, const RealType a, const unsigned short m, const Policy& pol)
          {
             BOOST_MATH_STD_USING
             using namespace boost::math::constants;
@@ -157,7 +157,7 @@ namespace boost
             unsigned short j=1;
             RealType jj = 1;
             RealType aj = a * one_div_two_pi<RealType>();
-            RealType dj = expm1( hs );
+            RealType dj = boost::math::expm1( hs, pol);
             RealType gj = hs*dhs;
 
             RealType val = atan( a ) * one_div_two_pi<RealType>();
@@ -795,7 +795,7 @@ namespace boost
             switch( meth[icode] )
             {
             case 1: // T1
-               val = owens_t_T1(h,a,m);
+               val = owens_t_T1(h,a,m,pol);
                break;
             case 2: // T2
                typedef typename policies::precision<RealType, Policy>::type precision_type;

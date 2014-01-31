@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0"?>
 <math xmlns="http://www.w3.org/1998/Math/MathML">
- <semantics>
-  <mrow>
+ <mrow>
    <mrow>
     <msub>
      <mi>T</mi>
@@ -33,7 +31,7 @@
        </mrow>
        <mo stretchy="false">)</mo>
       </mrow>
-      <mfenced open="∣" close="∣">
+      <mfenced open="&#x2223;" close="&#x2223;">
        <mrow>
         <msub>
          <mi>B</mi>
@@ -50,6 +48,4 @@
     </mfrac>
    </mrow>
   </mrow>
-  <annotation encoding="StarMath 5.0">T_n = {2^{2n}(2^{2n} - 1) left lline B_{2n} right rline } over {2n}</annotation>
- </semantics>
 </math>

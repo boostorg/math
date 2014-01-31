@@ -971,9 +971,9 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
       }
       T p;
       if(y < 0.5)
-         p = invert ? T(-expm1(a * log1p(-y))) : T(exp(a * log1p(-y)));
+         p = invert ? T(-boost::math::expm1(a * boost::math::log1p(-y, pol), pol)) : T(exp(a * boost::math::log1p(-y, pol)));
       else
-         p = invert ? T(-powm1(x, a)) : T(pow(x, a));
+         p = invert ? T(-boost::math::powm1(x, a, pol)) : T(pow(x, a));
       if(!normalised)
          p /= a;
       return p;
