@@ -84,10 +84,6 @@
   {
     BOOST_MATH_STD_USING
 
-    // calculate a high bernoulli number upfront to make use of cache
-    unsigned int bernoulli_index = 100;
-    boost::math::bernoulli_b2n<T>(bernoulli_index);
-
     T z(x);
     T log_z(log(z));
     T one_over_2z= T(1) / (2 * z);
@@ -95,19 +91,7 @@
 
     for(int two_k = 2; two_k < max_iteration<T>::value; two_k += 2)
     {
-      if(two_k/2 > static_cast<boost::int32_t>(bernoulli_index))
-      {
-        try
-        {
-          int temp = static_cast<int>(bernoulli_index * 1.5F);
-          boost::math::bernoulli_b2n<T>(temp);
-          bernoulli_index = temp;
-        }
-        catch(...)
-        {
-          break;
-        }
-      }
+
 
       T term(1);
       T one_over_two_k       = T(1) / two_k;
@@ -156,11 +140,7 @@
      if(n == 0)
      {
        return digamma_atinfinityplus(n, x, pol);
-    }
-
-     //TODO try calculating for bernoulli_index= max_iteration, if error then set bernoulli_index=100
-     unsigned int bernoulli_index = 100;
-     boost::math::bernoulli_b2n<T>(bernoulli_index);
+     }
 
      const bool b_negate = ((n % 2) == 0);
 
@@ -180,20 +160,6 @@
      // Perform the Bernoulli series expansion.
      for(int two_k = 4; two_k < max_iteration<T>::value; two_k += 2)
      {
-       if((two_k / 2) > static_cast<int>(bernoulli_index))
-       {
-         try
-         {
-           //TODO the multiplication factor should depend upon T, small precision, smaller multiplication factor
-           int temp = static_cast<int>(bernoulli_index * 2.0F);
-           boost::math::bernoulli_b2n<T>(temp);
-           bernoulli_index = temp;
-         }
-         catch(...)
-         {
-           break;
-         }
-       }
 
        one_over_x_pow_two_k_plus_n *= one_over_z2;
        two_k_plus_n_minus_one_fact *= ++two_k_plus_n_minus_one;
