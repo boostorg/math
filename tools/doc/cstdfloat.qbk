@@ -106,7 +106,7 @@ with approximately 15 decimal digits of precision.
   boost::float64_t jahnke_emden_lambda(boost::float64_t v, boost::float64_t x)
   {
     const boost::float64_t gamma_v_plus_one = boost::math::tgamma(v + 1);
-    const boost::float64_t x_half_pow_v     = std::pow(x /2, v);
+    const boost::float64_t x_half_pow_v     = std::pow(x / 2, v);
 
     return gamma_v_plus_one * boost::math::cyl_bessel_j(x, v) / x_half_pow_v;
   }
@@ -158,14 +158,14 @@ Use `std::numeric_limits<>` for floating-point ranges, etc. instead.]
 
 The `typedef float#_t`, with # replaced by the width, designates a
 floating-point type of exactly # bits. For example `float32_t` denotes
-a single-precision floating-point type with with approximately
-7 decimal digits of precision (equivalent to binary16 in __IEEE754).
+a single-precision floating-point type with approximately
+7 decimal digits of precision (equivalent to binary32 in __IEEE754).
 
-Floating-point types in C and C++ are specified to be allowed to have
-(optionally) implementation-specific widths and formats.
-However, if a platform supports underlying
-floating-point types (conformant with __IEEE754) with widths of
-16, 32, 64, 128 bits, or any combination thereof,
+Floating-point types specified in C and C++ are allowed to have
+implementation-specific widths and formats.
+However, if a platform supports underlying floating-point types
+(conformant with __IEEE754) with widths of 16, 32, 64, 128 bits,
+or any combination thereof,
 then `<boost/cstdfloat.hpp>` does provide the corresponding `typedef`s
 `float16_t, float32_t, float64_t, float128_t,`
 their corresponding least and fast types,
