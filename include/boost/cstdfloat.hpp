@@ -202,7 +202,7 @@
   // TODO: Should we allow BOOST_MATH_USE_FLOAT128 for ICC?
   // Here, we use the BOOST_MATH_USE_FLOAT128 pre-processor
   // definition from <boost/math/tools/config.hpp>.
-  #if (0) && (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128)
+  #if (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128) && defined(FLT128_MIN) && defined(FLT128_MAX) && defined(FLT128_EPSILON) && defined(FLT128_MANT_DIG)
     #define BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE __float128
     #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
     #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 128
@@ -211,16 +211,177 @@
     #define BOOST_FLOAT128_C(x)  (x ## Q)
     #define BOOST_FLOAT_128_MIN  FLT128_MIN
     #define BOOST_FLOAT_128_MAX  FLT128_MAX
+
+    #if !defined(BOOST_CSTDFLOAT_NO_GCC_FLOAT128_LIMITS)
+    // For __float128, implement a specialization of std::numeric_limits<>.
+    namespace std
+    {
+      template<>
+      class numeric_limits< ::__float128 >
+      {
+      public:
+        BOOST_STATIC_CONSTEXPR bool                  is_specialized    = true;
+        static                 ::__float128 (min) () BOOST_NOEXCEPT    { return BOOST_FLOAT_128_MIN; }
+        static                 ::__float128 (max) () BOOST_NOEXCEPT    { return BOOST_FLOAT_128_MAX; }
+        static                 ::__float128 lowest() BOOST_NOEXCEPT    { return -(max)(); }
+        BOOST_STATIC_CONSTEXPR int                   digits            = 113;
+        BOOST_STATIC_CONSTEXPR int                   digits10          = 34;
+        BOOST_STATIC_CONSTEXPR int                   max_digits10      = 36;
+        BOOST_STATIC_CONSTEXPR bool                  is_signed         = true;
+        BOOST_STATIC_CONSTEXPR bool                  is_integer        = false;
+        BOOST_STATIC_CONSTEXPR bool                  is_exact          = false;
+        BOOST_STATIC_CONSTEXPR int                   radix             = 2;
+        static                 ::__float128          epsilon    ()     { return FLT128_EPSILON; }
+        static                 ::__float128          round_error()     { return BOOST_FLOAT128_C(0.5); }
+        BOOST_STATIC_CONSTEXPR int                   min_exponent      = -16381;
+        BOOST_STATIC_CONSTEXPR int                   min_exponent10    = static_cast<int>((min_exponent * 301L) / 1000L);
+        BOOST_STATIC_CONSTEXPR int                   max_exponent      = +16384;
+        BOOST_STATIC_CONSTEXPR int                   max_exponent10    = static_cast<int>((max_exponent * 301L) / 1000L);
+        BOOST_STATIC_CONSTEXPR bool                  has_infinity      = true;
+        BOOST_STATIC_CONSTEXPR bool                  has_quiet_NaN     = true;
+        BOOST_STATIC_CONSTEXPR bool                  has_signaling_NaN = false;
+        BOOST_STATIC_CONSTEXPR float_denorm_style    has_denorm        = denorm_absent;
+        BOOST_STATIC_CONSTEXPR bool                  has_denorm_loss   = false;
+        static                 ::__float128          infinity     ()   { return BOOST_FLOAT128_C(1.0) / BOOST_FLOAT128_C(0.0); }
+        static                 ::__float128          quiet_NaN    ()   { return ::sqrtq(BOOST_FLOAT128_C(-1.0)); }
+        static                 ::__float128          signaling_NaN()   { return BOOST_FLOAT128_C(0.0); }
+        static                 ::__float128          denorm_min   ()   { return BOOST_FLOAT128_C(0.0); }
+        BOOST_STATIC_CONSTEXPR bool                  is_iec559         = true;
+        BOOST_STATIC_CONSTEXPR bool                  is_bounded        = false;
+        BOOST_STATIC_CONSTEXPR bool                  is_modulo         = false;
+        BOOST_STATIC_CONSTEXPR bool                  traps             = false;
+        BOOST_STATIC_CONSTEXPR bool                  tinyness_before   = false;
+        BOOST_STATIC_CONSTEXPR float_round_style     round_style       = round_to_nearest;
+      };
+    }
+    #endif
+
+    #if !defined(BOOST_CSTDFLOAT_NO_GCC_FLOAT128_CMATH)
+
+      // For __float128, implement <math.h> functions in the global namespace.
+
+      inline   ::__float128 ldexp (::__float128 x, int n)             { return ::ldexpq (x, n); }
+      inline   ::__float128 frexp (::__float128 x, int* pn)           { return ::frexpq (x, pn); }
+      inline   ::__float128 fabs  (::__float128 x)                    { return ::fabsq  (x); }
+      inline   ::__float128 floor (::__float128 x)                    { return ::floorq (x); }
+      inline   ::__float128 ceil  (::__float128 x)                    { return ::ceilq  (x); }
+      inline   ::__float128 sqrt  (::__float128 x)                    { return ::sqrtq  (x); }
+      inline   ::__float128 trunc (::__float128 x)                    { return ::truncq (x); }
+      inline   ::__float128 exp   (::__float128 x)                    { return ::expq   (x); }
+      inline   ::__float128 pow   (::__float128 x, ::__float128 a )   { return ::powq   (x, a); }
+      inline   ::__float128 log   (::__float128 x)                    { return ::logq   (x); }
+      inline   ::__float128 log10 (::__float128 x)                    { return ::log10q (x); }
+      inline   ::__float128 sin   (::__float128 x)                    { return ::sinq   (x); }
+      inline   ::__float128 cos   (::__float128 x)                    { return ::cosq   (x); }
+      inline   ::__float128 tan   (::__float128 x)                    { return ::tanq   (x); }
+      inline   ::__float128 asin  (::__float128 x)                    { return ::asinq  (x); }
+      inline   ::__float128 acos  (::__float128 x)                    { return ::acosq  (x); }
+      inline   ::__float128 atan  (::__float128 x)                    { return ::atanq  (x); }
+      inline   ::__float128 sinh  (::__float128 x)                    { return ::sinhq  (x); }
+      inline   ::__float128 cosh  (::__float128 x)                    { return ::coshq  (x); }
+      inline   ::__float128 tanh  (::__float128 x)                    { return ::tanhq  (x); }
+      inline   ::__float128 fmod  (::__float128 a, ::__float128 b )   { return ::fmodq  (a, b); }
+      inline   ::__float128 atan2 (::__float128 y, ::__float128 x )   { return ::atan2q (y, x); }
+      inline   ::__float128 lgamma(::__float128 x)                    { return ::lgammaq(x); }
+      inline   ::__float128 tgamma(::__float128 x)                    { return ::tgammaq(x); }
+
+      BOOST_MATH_STD_USING
+
+      namespace std
+      {
+        // For __float128, implement <cmath> functions in the std namespace.
+        inline ::__float128 ldexp (::__float128 x, int n)             { return ::ldexp (x, n); }
+        inline ::__float128 frexp (::__float128 x, int* pn)           { return ::frexp (x, pn); }
+        inline ::__float128 fabs  (::__float128 x)                    { return ::fabs  (x); }
+        inline ::__float128 floor (::__float128 x)                    { return ::floor (x); }
+        inline ::__float128 ceil  (::__float128 x)                    { return ::ceil  (x); }
+        inline ::__float128 sqrt  (::__float128 x)                    { return ::sqrt  (x); }
+        inline ::__float128 trunc (::__float128 x)                    { return ::trunc (x); }
+        inline ::__float128 exp   (::__float128 x)                    { return ::exp   (x); }
+        inline ::__float128 pow   (::__float128 x, ::__float128 a )   { return ::pow   (x, a); }
+        inline ::__float128 log   (::__float128 x)                    { return ::log   (x); }
+        inline ::__float128 log10 (::__float128 x)                    { return ::log10 (x); }
+        inline ::__float128 sin   (::__float128 x)                    { return ::sin   (x); }
+        inline ::__float128 cos   (::__float128 x)                    { return ::cos   (x); }
+        inline ::__float128 tan   (::__float128 x)                    { return ::tan   (x); }
+        inline ::__float128 asin  (::__float128 x)                    { return ::asin  (x); }
+        inline ::__float128 acos  (::__float128 x)                    { return ::acos  (x); }
+        inline ::__float128 atan  (::__float128 x)                    { return ::atan  (x); }
+        inline ::__float128 sinh  (::__float128 x)                    { return ::sinh  (x); }
+        inline ::__float128 cosh  (::__float128 x)                    { return ::cosh  (x); }
+        inline ::__float128 tanh  (::__float128 x)                    { return ::tanh  (x); }
+        inline ::__float128 fmod  (::__float128 a, ::__float128 b )   { return ::fmod  (a, b); }
+        inline ::__float128 atan2 (::__float128 y, ::__float128 x )   { return ::atan2 (y, x); }
+        inline ::__float128 lgamma(::__float128 x )                   { return ::lgamma(x); }
+        inline ::__float128 tgamma(::__float128 x )                   { return ::tgamma(x); }
+      }
+    #endif
+
+    #if !defined(BOOST_CSTDFLOAT_NO_GCC_FLOAT128_IOSTREAM)
+      // For __float128, implement I/O stream operations.
+
+      #include <algorithm>
+      #include <cstddef>
+      #include <ostream>
+
+      inline std::ostream& operator<< (std::ostream& os, const ::__float128& x)
+      {
+        char my_buffer[100];
+
+        BOOST_STATIC_ASSERT(static_cast<int>(sizeof(my_buffer)) - 16 >= 36);
+
+        const int my_prec   = static_cast<int>(os.precision());
+        const int my_digits = (std::min)(((my_prec == 0) ? 36 : my_prec),
+                                         static_cast<int>(sizeof(my_buffer)) - 16);
+
+        const std::ios_base::fmtflags my_flags  = os.flags();
+
+        char my_format_string[8U];
+
+        std::size_t my_format_string_index = 0U;
+
+        my_format_string[my_format_string_index] = '%';
+        ++my_format_string_index;
+
+        if(my_flags & std::ios_base::showpos)    { my_format_string[my_format_string_index] = '+'; ++my_format_string_index; }
+        if(my_flags & std::ios_base::showpoint)  { my_format_string[my_format_string_index] = '#'; ++my_format_string_index; }
+
+        my_format_string[my_format_string_index + 0U] = '.';
+        my_format_string[my_format_string_index + 1U] = '*';
+        my_format_string[my_format_string_index + 2U] = 'Q';
+
+        my_format_string_index += 3U;
+
+        char the_notation_char;
+
+        if     (my_flags & std::ios_base::scientific) { the_notation_char = 'e'; }
+        else if(my_flags & std::ios_base::fixed)      { the_notation_char = 'f'; }
+        else                                          { the_notation_char = 'g'; }
+
+        my_format_string[my_format_string_index + 0U] = the_notation_char;
+        my_format_string[my_format_string_index + 1U] = 0;
+
+        const int v = ::quadmath_snprintf(my_buffer,
+                                          static_cast<int>(sizeof(my_buffer)),
+                                          my_format_string,
+                                          my_digits,
+                                          x);
+
+        static_cast<void>(v);
+
+        return (os << my_buffer);
+      }
+    #endif
   #endif
 
   // This is the end of the preamble. Now we use the results
   // of the queries that have been obtained in the preamble.
 
-  // Ensure that the compiler has any suitable floating-point type whatsoever.
-  #if (   (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  == 0) \
-       && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  == 0) \
-       && (BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  == 0) \
-       && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  == 0) \
+  // Make sure that the compiler has any floating-point type whatsoever.
+  #if (   (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  == 0)  \
+       && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  == 0)  \
+       && (BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  == 0)  \
+       && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  == 0)  \
        && (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0))
     #error The compiler does not support any of the floating-point types required for <boost/cstdfloat.hpp>.
   #endif
@@ -307,74 +468,69 @@
   {
     #if(BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE == 1)
       typedef BOOST_CSTDFLOAT_FLOAT16_NATIVE_TYPE float16_t;
-      typedef float16_t float_fast16_t;
-      typedef float16_t float_least16_t;
+      typedef boost::float16_t float_fast16_t;
+      typedef boost::float16_t float_least16_t;
 
-      BOOST_STATIC_ASSERT(std::numeric_limits<float16_t>::is_iec559    == true);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float16_t>::radix        ==    2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float16_t>::digits       ==   11);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float16_t>::max_exponent ==   16);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float16_t>::is_iec559    == true);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float16_t>::radix        ==    2);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float16_t>::digits       ==   11);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float16_t>::max_exponent ==   16);
     #endif
 
     #if(BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 1)
       typedef BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE float32_t;
-      typedef float32_t float_fast32_t;
-      typedef float32_t float_least32_t;
+      typedef boost::float32_t float_fast32_t;
+      typedef boost::float32_t float_least32_t;
 
-      BOOST_STATIC_ASSERT(std::numeric_limits<float32_t>::is_iec559    == true);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float32_t>::radix        ==    2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float32_t>::digits       ==   24);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float32_t>::max_exponent ==  128);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float32_t>::is_iec559    == true);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float32_t>::radix        ==    2);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float32_t>::digits       ==   24);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float32_t>::max_exponent ==  128);
     #endif
 
     #if(BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE == 1)
       typedef BOOST_CSTDFLOAT_FLOAT64_NATIVE_TYPE float64_t;
-      typedef float64_t float_fast64_t;
-      typedef float64_t float_least64_t;
+      typedef boost::float64_t float_fast64_t;
+      typedef boost::float64_t float_least64_t;
 
-      BOOST_STATIC_ASSERT(std::numeric_limits<float64_t>::is_iec559    == true);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float64_t>::radix        ==    2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float64_t>::digits       ==   53);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float64_t>::max_exponent == 1024);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float64_t>::is_iec559    == true);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float64_t>::radix        ==    2);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float64_t>::digits       ==   53);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float64_t>::max_exponent == 1024);
     #endif
 
     #if(BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 1)
       typedef BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE float80_t;
-      typedef float80_t float_fast80_t;
-      typedef float80_t float_least80_t;
+      typedef boost::float80_t float_fast80_t;
+      typedef boost::float80_t float_least80_t;
 
-      BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::is_iec559    ==  true);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::radix        ==     2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::digits       ==    64);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float80_t>::max_exponent == 16384);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float80_t>::is_iec559    ==  true);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float80_t>::radix        ==     2);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float80_t>::digits       ==    64);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float80_t>::max_exponent == 16384);
     #endif
 
     #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 1)
       typedef BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE float128_t;
-      typedef float128_t float_fast128_t;
-      typedef float128_t float_least128_t;
+      typedef boost::float128_t float_fast128_t;
+      typedef boost::float128_t float_least128_t;
 
-      // Here, we decide that it is not sensible to use or to provide (in any way)
-      // a specialization of numeric_limits for the compiler-specific type __float128.
-      // Users must provide their own mechanism for this.
-      #if !defined(BOOST_MATH_USE_FLOAT128)
-      BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::is_iec559    ==  true);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::radix        ==     2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::digits       ==   113);
-      BOOST_STATIC_ASSERT(std::numeric_limits<float128_t>::max_exponent == 16384);
-      #endif
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::is_iec559    ==  true);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::radix        ==     2);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::digits       ==   113);
+      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::max_exponent == 16384);
     #endif
 
     #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  16)
-      typedef float16_t  floatmax_t;
+      typedef boost::float16_t  floatmax_t;
     #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  32)
-      typedef float32_t  floatmax_t;
+      typedef boost::float32_t  floatmax_t;
     #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  64)
-      typedef float64_t  floatmax_t;
+      typedef boost::float64_t  floatmax_t;
     #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH ==  80)
-      typedef float80_t  floatmax_t;
+      typedef boost::float80_t  floatmax_t;
     #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 128)
-      typedef float128_t floatmax_t;
+      typedef boost::float128_t floatmax_t;
     #else
       #error The maximum available floating-point width for <boost/cstdfloat.hpp> is undefined.
     #endif
