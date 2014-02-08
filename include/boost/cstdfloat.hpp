@@ -16,6 +16,8 @@
 
   #include <float.h>
   #include <limits>
+  #include <exception>
+  #include <boost/throw_exception.hpp>
   #include <boost/static_assert.hpp>
   #include <boost/math/tools/config.hpp>
 
@@ -264,8 +266,10 @@
 
     #if !defined(BOOST_CSTDFLOAT_NO_GCC_FLOAT128_CMATH)
 
-      // For __float128, implement <math.h> functions in the boost::cstdfloat
-      // namespace and subsequently *use* these in the global namespace.
+      // For __float128, implement <math.h> functions in boost::cstdfloat::detail.
+      // Subsequently *use* these in the global namespace.
+
+      // Begin with some forward function declarations.
 
       // Forward declaration of quad string print function.
       extern "C" int quadmath_snprintf(char *str, size_t size, const char *format, ...);
@@ -296,7 +300,8 @@
       extern "C" ::__float128 lgammaq(::__float128);
       extern "C" ::__float128 tgammaq(::__float128);
 
-      namespace boost { namespace cstdfloat {
+      // Put the __float128 <math.h> functions in boost::cstdfloat.
+      namespace boost { namespace cstdfloat { namespace detail {
       inline   ::__float128 ldexp (::__float128 x, int n)             { return ::ldexpq (x, n); }
       inline   ::__float128 frexp (::__float128 x, int* pn)           { return ::frexpq (x, pn); }
       inline   ::__float128 fabs  (::__float128 x)                    { return ::fabsq  (x); }
@@ -321,60 +326,60 @@
       inline   ::__float128 atan2 (::__float128 y, ::__float128 x )   { return ::atan2q (y, x); }
       inline   ::__float128 lgamma(::__float128 x)                    { return ::lgammaq(x); }
       inline   ::__float128 tgamma(::__float128 x)                    { return ::tgammaq(x); }
-      } }
+      } } }  // boost::cstdfloat::detail
 
-      using boost::cstdfloat::ldexp;
-      using boost::cstdfloat::frexp;
-      using boost::cstdfloat::fabs;
-      using boost::cstdfloat::floor;
-      using boost::cstdfloat::ceil;
-      using boost::cstdfloat::sqrt;
-      using boost::cstdfloat::trunc;
-      using boost::cstdfloat::exp;
-      using boost::cstdfloat::pow;
-      using boost::cstdfloat::log;
-      using boost::cstdfloat::log10;
-      using boost::cstdfloat::sin;
-      using boost::cstdfloat::cos;
-      using boost::cstdfloat::tan;
-      using boost::cstdfloat::asin;
-      using boost::cstdfloat::acos;
-      using boost::cstdfloat::atan;
-      using boost::cstdfloat::sinh;
-      using boost::cstdfloat::cosh;
-      using boost::cstdfloat::tanh;
-      using boost::cstdfloat::fmod;
-      using boost::cstdfloat::atan2;
-      using boost::cstdfloat::lgamma;
-      using boost::cstdfloat::tgamma;
+      using boost::cstdfloat::detail::ldexp;
+      using boost::cstdfloat::detail::frexp;
+      using boost::cstdfloat::detail::fabs;
+      using boost::cstdfloat::detail::floor;
+      using boost::cstdfloat::detail::ceil;
+      using boost::cstdfloat::detail::sqrt;
+      using boost::cstdfloat::detail::trunc;
+      using boost::cstdfloat::detail::exp;
+      using boost::cstdfloat::detail::pow;
+      using boost::cstdfloat::detail::log;
+      using boost::cstdfloat::detail::log10;
+      using boost::cstdfloat::detail::sin;
+      using boost::cstdfloat::detail::cos;
+      using boost::cstdfloat::detail::tan;
+      using boost::cstdfloat::detail::asin;
+      using boost::cstdfloat::detail::acos;
+      using boost::cstdfloat::detail::atan;
+      using boost::cstdfloat::detail::sinh;
+      using boost::cstdfloat::detail::cosh;
+      using boost::cstdfloat::detail::tanh;
+      using boost::cstdfloat::detail::fmod;
+      using boost::cstdfloat::detail::atan2;
+      using boost::cstdfloat::detail::lgamma;
+      using boost::cstdfloat::detail::tgamma;
 
+      // For __float128, implement <cmath> functions in the std namespace.
       namespace std
       {
-        // For __float128, implement <cmath> functions in the std namespace.
-        inline ::__float128 ldexp (::__float128 x, int n)             { return ::ldexp (x, n); }
-        inline ::__float128 frexp (::__float128 x, int* pn)           { return ::frexp (x, pn); }
-        inline ::__float128 fabs  (::__float128 x)                    { return ::fabs  (x); }
-        inline ::__float128 floor (::__float128 x)                    { return ::floor (x); }
-        inline ::__float128 ceil  (::__float128 x)                    { return ::ceil  (x); }
-        inline ::__float128 sqrt  (::__float128 x)                    { return ::sqrt  (x); }
-        inline ::__float128 trunc (::__float128 x)                    { return ::trunc (x); }
-        inline ::__float128 exp   (::__float128 x)                    { return ::exp   (x); }
-        inline ::__float128 pow   (::__float128 x, ::__float128 a )   { return ::pow   (x, a); }
-        inline ::__float128 log   (::__float128 x)                    { return ::log   (x); }
-        inline ::__float128 log10 (::__float128 x)                    { return ::log10 (x); }
-        inline ::__float128 sin   (::__float128 x)                    { return ::sin   (x); }
-        inline ::__float128 cos   (::__float128 x)                    { return ::cos   (x); }
-        inline ::__float128 tan   (::__float128 x)                    { return ::tan   (x); }
-        inline ::__float128 asin  (::__float128 x)                    { return ::asin  (x); }
-        inline ::__float128 acos  (::__float128 x)                    { return ::acos  (x); }
-        inline ::__float128 atan  (::__float128 x)                    { return ::atan  (x); }
-        inline ::__float128 sinh  (::__float128 x)                    { return ::sinh  (x); }
-        inline ::__float128 cosh  (::__float128 x)                    { return ::cosh  (x); }
-        inline ::__float128 tanh  (::__float128 x)                    { return ::tanh  (x); }
-        inline ::__float128 fmod  (::__float128 a, ::__float128 b )   { return ::fmod  (a, b); }
-        inline ::__float128 atan2 (::__float128 y, ::__float128 x )   { return ::atan2 (y, x); }
-        inline ::__float128 lgamma(::__float128 x )                   { return ::lgamma(x); }
-        inline ::__float128 tgamma(::__float128 x )                   { return ::tgamma(x); }
+        inline ::__float128 ldexp (::__float128 x, int n)             { return boost::cstdfloat::detail::ldexp (x, n); }
+        inline ::__float128 frexp (::__float128 x, int* pn)           { return boost::cstdfloat::detail::frexp (x, pn); }
+        inline ::__float128 fabs  (::__float128 x)                    { return boost::cstdfloat::detail::fabs  (x); }
+        inline ::__float128 floor (::__float128 x)                    { return boost::cstdfloat::detail::floor (x); }
+        inline ::__float128 ceil  (::__float128 x)                    { return boost::cstdfloat::detail::ceil  (x); }
+        inline ::__float128 sqrt  (::__float128 x)                    { return boost::cstdfloat::detail::sqrt  (x); }
+        inline ::__float128 trunc (::__float128 x)                    { return boost::cstdfloat::detail::trunc (x); }
+        inline ::__float128 exp   (::__float128 x)                    { return boost::cstdfloat::detail::exp   (x); }
+        inline ::__float128 pow   (::__float128 x, ::__float128 a )   { return boost::cstdfloat::detail::pow   (x, a); }
+        inline ::__float128 log   (::__float128 x)                    { return boost::cstdfloat::detail::log   (x); }
+        inline ::__float128 log10 (::__float128 x)                    { return boost::cstdfloat::detail::log10 (x); }
+        inline ::__float128 sin   (::__float128 x)                    { return boost::cstdfloat::detail::sin   (x); }
+        inline ::__float128 cos   (::__float128 x)                    { return boost::cstdfloat::detail::cos   (x); }
+        inline ::__float128 tan   (::__float128 x)                    { return boost::cstdfloat::detail::tan   (x); }
+        inline ::__float128 asin  (::__float128 x)                    { return boost::cstdfloat::detail::asin  (x); }
+        inline ::__float128 acos  (::__float128 x)                    { return boost::cstdfloat::detail::acos  (x); }
+        inline ::__float128 atan  (::__float128 x)                    { return boost::cstdfloat::detail::atan  (x); }
+        inline ::__float128 sinh  (::__float128 x)                    { return boost::cstdfloat::detail::sinh  (x); }
+        inline ::__float128 cosh  (::__float128 x)                    { return boost::cstdfloat::detail::cosh  (x); }
+        inline ::__float128 tanh  (::__float128 x)                    { return boost::cstdfloat::detail::tanh  (x); }
+        inline ::__float128 fmod  (::__float128 a, ::__float128 b )   { return boost::cstdfloat::detail::fmod  (a, b); }
+        inline ::__float128 atan2 (::__float128 y, ::__float128 x )   { return boost::cstdfloat::detail::atan2 (y, x); }
+        inline ::__float128 lgamma(::__float128 x )                   { return boost::cstdfloat::detail::lgamma(x); }
+        inline ::__float128 tgamma(::__float128 x )                   { return boost::cstdfloat::detail::tgamma(x); }
       }
     #endif
 
@@ -388,13 +393,10 @@
 
       inline std::ostream& operator<< (std::ostream& os, const ::__float128& x)
       {
-        char my_buffer[100];
-
-        BOOST_STATIC_ASSERT(static_cast<int>(sizeof(my_buffer)) - 16 >= 36);
+        char my_buffer[128U];
 
         const int my_prec   = static_cast<int>(os.precision());
-        const int my_digits = (std::min)(((my_prec == 0) ? 36 : my_prec),
-                                         static_cast<int>(sizeof(my_buffer)) - 16);
+        const int my_digits = ((my_prec == 0) ? 36 : my_prec);
 
         const std::ios_base::fmtflags my_flags  = os.flags();
 
@@ -429,9 +431,44 @@
                                           my_digits,
                                           x);
 
-        static_cast<void>(v);
+        if(v < 0) { BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed.")); }
 
-        return (os << my_buffer);
+        if(v >= static_cast<int>(sizeof(my_buffer) - 1U))
+        {
+          // Evidently there is a really long floating-point string here.
+          // So we finally have to resort to dynamic memory allocation.
+          char* my_buffer2 = static_cast<char*>(0U);
+
+          try
+          {
+            my_buffer2 = new char[v + 3];
+          }
+          catch(const std::bad_alloc&)
+          {
+            BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed while allocating memory."));
+          }
+
+          const int v2 = ::quadmath_snprintf(my_buffer2,
+                                             v + 3,
+                                             my_format_string,
+                                             my_digits,
+                                             x);
+
+          if(v2 >= v + 3)
+          {
+            BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed."));
+          }
+
+          os << my_buffer2;
+
+          delete [] my_buffer2;
+
+          return os;
+        }
+        else
+        {
+          return (os << my_buffer);
+        }
       }
     #endif
   #endif
