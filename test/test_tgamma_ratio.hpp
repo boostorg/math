@@ -10,7 +10,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/tools/test.hpp>
 #include <boost/array.hpp>
@@ -136,19 +136,19 @@ void test_spots(T, const char*)
       BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(193.25), ldexp(T(1), -525)), T(1.2040790040958522422697601672703926839178050326148e+199L), 3 * tol);
       BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(193.25), T(194.75)), T(0.00037151765099653237632823607820104961270831942138159L), 3 * tol);
    }
-   BOOST_CHECK_THROW(boost::math::tgamma_ratio(0, 2), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::tgamma_ratio(2, 0), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::tgamma_ratio(-1, 2), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::tgamma_ratio(2, -1), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(0), T(2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), T(0)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(-1), T(2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), T(-1)), std::domain_error);
    if(std::numeric_limits<T>::has_denorm && (std::numeric_limits<T>::max_exponent == std::numeric_limits<long double>::max_exponent))
    {
-      BOOST_CHECK_THROW(boost::math::tgamma_ratio(std::numeric_limits<T>::denorm_min(), 2), std::domain_error);
-      BOOST_CHECK_THROW(boost::math::tgamma_ratio(2, std::numeric_limits<T>::denorm_min()), std::domain_error);
+      BOOST_CHECK_THROW(boost::math::tgamma_ratio(std::numeric_limits<T>::denorm_min(), T(2)), std::domain_error);
+      BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), std::numeric_limits<T>::denorm_min()), std::domain_error);
    }
    if(std::numeric_limits<T>::has_infinity)
    {
-      BOOST_CHECK_THROW(boost::math::tgamma_ratio(std::numeric_limits<T>::infinity(), 2), std::domain_error);
-      BOOST_CHECK_THROW(boost::math::tgamma_ratio(2, std::numeric_limits<T>::infinity()), std::domain_error);
+      BOOST_CHECK_THROW(boost::math::tgamma_ratio(std::numeric_limits<T>::infinity(), T(2)), std::domain_error);
+      BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), std::numeric_limits<T>::infinity()), std::domain_error);
    }
 #ifdef _MSC_VER
 # pragma warning(pop)
