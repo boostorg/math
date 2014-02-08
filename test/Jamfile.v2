@@ -490,7 +490,7 @@ run test_negative_binomial.cpp ../../test/build//boost_unit_test_framework
           <define>TEST_REAL_CONCEPT
           <toolset>intel:<pch>off
         : test_negative_binomial_real_concept ;
-run test_next.cpp pch pch ../../test/build//boost_unit_test_framework ;
+run test_next.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_nc_chi_squared.cpp  pch ../../test/build//boost_unit_test_framework
         : # command line
         : # input files
@@ -648,12 +648,12 @@ run test_spherical_harmonic.cpp test_instances//test_instances pch_light ../../t
 run test_students_t.cpp ../../test/build//boost_unit_test_framework ;
 run test_sign.cpp ../../test/build//boost_unit_test_framework ;
 run test_skew_normal.cpp ../../test/build//boost_unit_test_framework ;
-run test_tgamma_ratio.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_tgamma_ratio.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_toms748_solve.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_triangular.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_uniform.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_weibull.cpp ../../test/build//boost_unit_test_framework ;
-run test_zeta.cpp ../../test/build//boost_unit_test_framework pch ;
+run test_zeta.cpp ../../test/build//boost_unit_test_framework test_instances//test_instances pch_light ;
 
 run test_policy.cpp ../../test/build//boost_unit_test_framework ;
 run test_policy_2.cpp ../../test/build//boost_unit_test_framework ;
