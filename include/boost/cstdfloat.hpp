@@ -202,18 +202,24 @@
   // TODO: Should we allow BOOST_MATH_USE_FLOAT128 for ICC?
   // Here, we use the BOOST_MATH_USE_FLOAT128 pre-processor
   // definition from <boost/math/tools/config.hpp>.
-  #if (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128) && defined(FLT128_MIN) && defined(FLT128_MAX) && defined(FLT128_EPSILON) && defined(FLT128_MANT_DIG)
+  #if (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128) /*&& defined(FLT128_MIN) && defined(FLT128_MAX) && defined(FLT128_EPSILON) && defined(FLT128_MANT_DIG)*/
     #define BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE __float128
     #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
     #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 128
     #undef  BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
     #define BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE  1
+    #define BOOST_CSTDFLOAT_FLOAT128_MIN  3.36210314311209350626267781732175260e-4932Q
+    #define BOOST_CSTDFLOAT_FLOAT128_MAX  1.18973149535723176508575932662800702e+4932Q
+    #define BOOST_CSTDFLOAT_FLOAT128_EPS  1.92592994438723585305597794258492732e-0034Q
     #define BOOST_FLOAT128_C(x)  (x ## Q)
-    #define BOOST_FLOAT_128_MIN  FLT128_MIN
-    #define BOOST_FLOAT_128_MAX  FLT128_MAX
 
     #if !defined(BOOST_CSTDFLOAT_NO_GCC_FLOAT128_LIMITS)
+
     // For __float128, implement a specialization of std::numeric_limits<>.
+
+    // Forward declaration of quad square root function.
+    extern "C" ::__float128 sqrtq(::__float128);
+
     namespace std
     {
       template<>
@@ -221,8 +227,8 @@
       {
       public:
         BOOST_STATIC_CONSTEXPR bool                  is_specialized    = true;
-        static                 ::__float128 (min) () BOOST_NOEXCEPT    { return BOOST_FLOAT_128_MIN; }
-        static                 ::__float128 (max) () BOOST_NOEXCEPT    { return BOOST_FLOAT_128_MAX; }
+        static                 ::__float128 (min) () BOOST_NOEXCEPT    { return BOOST_CSTDFLOAT_FLOAT128_MIN; }
+        static                 ::__float128 (max) () BOOST_NOEXCEPT    { return BOOST_CSTDFLOAT_FLOAT128_MAX; }
         static                 ::__float128 lowest() BOOST_NOEXCEPT    { return -(max)(); }
         BOOST_STATIC_CONSTEXPR int                   digits            = 113;
         BOOST_STATIC_CONSTEXPR int                   digits10          = 34;
@@ -231,7 +237,7 @@
         BOOST_STATIC_CONSTEXPR bool                  is_integer        = false;
         BOOST_STATIC_CONSTEXPR bool                  is_exact          = false;
         BOOST_STATIC_CONSTEXPR int                   radix             = 2;
-        static                 ::__float128          epsilon    ()     { return FLT128_EPSILON; }
+        static                 ::__float128          epsilon    ()     { return BOOST_CSTDFLOAT_FLOAT128_EPS; }
         static                 ::__float128          round_error()     { return BOOST_FLOAT128_C(0.5); }
         BOOST_STATIC_CONSTEXPR int                   min_exponent      = -16381;
         BOOST_STATIC_CONSTEXPR int                   min_exponent10    = static_cast<int>((min_exponent * 301L) / 1000L);
@@ -258,8 +264,39 @@
 
     #if !defined(BOOST_CSTDFLOAT_NO_GCC_FLOAT128_CMATH)
 
-      // For __float128, implement <math.h> functions in the global namespace.
+      // For __float128, implement <math.h> functions in the boost::cstdfloat
+      // namespace and subsequently *use* these in the global namespace.
 
+      // Forward declaration of quad string print function.
+      extern "C" int quadmath_snprintf(char *str, size_t size, const char *format, ...);
+
+      // Forward declarations of quad elementary functions.
+      extern "C" ::__float128 ldexpq (::__float128, int);
+      extern "C" ::__float128 frexpq (::__float128, int*);
+      extern "C" ::__float128 fabsq  (::__float128);
+      extern "C" ::__float128 floorq (::__float128);
+      extern "C" ::__float128 ceilq  (::__float128);
+      extern "C" ::__float128 sqrtq  (::__float128);
+      extern "C" ::__float128 truncq (::__float128);
+      extern "C" ::__float128 expq   (::__float128);
+      extern "C" ::__float128 powq   (::__float128, ::__float128);
+      extern "C" ::__float128 logq   (::__float128);
+      extern "C" ::__float128 log10q (::__float128);
+      extern "C" ::__float128 sinq   (::__float128);
+      extern "C" ::__float128 cosq   (::__float128);
+      extern "C" ::__float128 tanq   (::__float128);
+      extern "C" ::__float128 asinq  (::__float128);
+      extern "C" ::__float128 acosq  (::__float128);
+      extern "C" ::__float128 atanq  (::__float128);
+      extern "C" ::__float128 sinhq  (::__float128);
+      extern "C" ::__float128 coshq  (::__float128);
+      extern "C" ::__float128 tanhq  (::__float128);
+      extern "C" ::__float128 fmodq  (::__float128, ::__float128);
+      extern "C" ::__float128 atan2q (::__float128, ::__float128);
+      extern "C" ::__float128 lgammaq(::__float128);
+      extern "C" ::__float128 tgammaq(::__float128);
+
+      namespace boost { namespace cstdfloat {
       inline   ::__float128 ldexp (::__float128 x, int n)             { return ::ldexpq (x, n); }
       inline   ::__float128 frexp (::__float128 x, int* pn)           { return ::frexpq (x, pn); }
       inline   ::__float128 fabs  (::__float128 x)                    { return ::fabsq  (x); }
@@ -284,8 +321,32 @@
       inline   ::__float128 atan2 (::__float128 y, ::__float128 x )   { return ::atan2q (y, x); }
       inline   ::__float128 lgamma(::__float128 x)                    { return ::lgammaq(x); }
       inline   ::__float128 tgamma(::__float128 x)                    { return ::tgammaq(x); }
+      } }
 
-      BOOST_MATH_STD_USING
+      using boost::cstdfloat::ldexp;
+      using boost::cstdfloat::frexp;
+      using boost::cstdfloat::fabs;
+      using boost::cstdfloat::floor;
+      using boost::cstdfloat::ceil;
+      using boost::cstdfloat::sqrt;
+      using boost::cstdfloat::trunc;
+      using boost::cstdfloat::exp;
+      using boost::cstdfloat::pow;
+      using boost::cstdfloat::log;
+      using boost::cstdfloat::log10;
+      using boost::cstdfloat::sin;
+      using boost::cstdfloat::cos;
+      using boost::cstdfloat::tan;
+      using boost::cstdfloat::asin;
+      using boost::cstdfloat::acos;
+      using boost::cstdfloat::atan;
+      using boost::cstdfloat::sinh;
+      using boost::cstdfloat::cosh;
+      using boost::cstdfloat::tanh;
+      using boost::cstdfloat::fmod;
+      using boost::cstdfloat::atan2;
+      using boost::cstdfloat::lgamma;
+      using boost::cstdfloat::tgamma;
 
       namespace std
       {
@@ -318,6 +379,7 @@
     #endif
 
     #if !defined(BOOST_CSTDFLOAT_NO_GCC_FLOAT128_IOSTREAM)
+
       // For __float128, implement I/O stream operations.
 
       #include <algorithm>
