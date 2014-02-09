@@ -205,7 +205,7 @@
   // TODO: Should we allow BOOST_MATH_USE_FLOAT128 for ICC?
   // Here, we use the BOOST_MATH_USE_FLOAT128 pre-processor
   // definition from <boost/math/tools/config.hpp>.
-  #if (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128)
+  #if (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_GCC_FLOAT128_SUPPORT)
 
     namespace boost { namespace cstdfloat { namespace detail {
     #if defined(BOOST_INTEL)
@@ -265,7 +265,7 @@
       #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA tgammaq
 
     #else
-      #error "Sorry compiler is neither GCC, nor Intel, don't know how to configure this header."
+      #error "Sorry compiler is neither GCC, nor Intel, don't know how to configure <boost/cstdfloat.hpp>."
     #endif
     } } } // boost::cstdfloat::detail
 
@@ -283,7 +283,7 @@
 
     // For float_internal128_t, implement a specialization of std::numeric_limits<>.
 
-    // Forward declaration of quadruple-precisdion square root function.
+    // Forward declaration of quadruple-precision square root function.
     extern "C" boost::cstdfloat::detail::float_internal128_t sqrtq(boost::cstdfloat::detail::float_internal128_t);
 
     namespace std
@@ -330,16 +330,17 @@
 
     #if !defined(BOOST_CSTDFLOAT_NO_GCC_FLOAT128_CMATH)
 
-      // For float_internal128_t, implement <math.h> functions in the namespace
-      // boost::cstdfloat::detail. Subsequently *use* these in the global namespace.
+      // Implement quadruple-precision <math.h> functions in the namespace
+      // boost::cstdfloat::detail. Subsequently *use* these in the global
+      // namespace.
 
       // Begin with some forward function declarations.
 
-      // Forward declaration of quad string print function.
+      // Forward declarations of quadruple-precision string functions.
       extern "C" int quadmath_snprintf(char *str, size_t size, const char *format, ...);
       extern "C" boost::cstdfloat::detail::float_internal128_t strtoflt128(const char*, char **);
 
-      // Forward declarations of quad elementary functions.
+      // Forward declarations of quadruple-precision elementary functions.
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LDEXP (boost::cstdfloat::detail::float_internal128_t, int);
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FREXP (boost::cstdfloat::detail::float_internal128_t, int*);
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FABS  (boost::cstdfloat::detail::float_internal128_t);
@@ -365,7 +366,7 @@
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LGAMMA(boost::cstdfloat::detail::float_internal128_t);
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TGAMMA(boost::cstdfloat::detail::float_internal128_t);
 
-      // Put the float_internal128_t <math.h> functions in the namespace
+      // Put the quadruple-precision <math.h> functions in the namespace
       // boost::cstdfloat::detail.
 
       namespace boost { namespace cstdfloat { namespace detail {
@@ -445,7 +446,7 @@
       using boost::cstdfloat::detail::lgamma;
       using boost::cstdfloat::detail::tgamma;
 
-      // For float_internal128_t, implement <cmath> functions in the std namespace.
+      // Implement quadruple-precision <cmath> functions in the std namespace.
       namespace std
       {
         inline boost::cstdfloat::detail::float_internal128_t ldexp (boost::cstdfloat::detail::float_internal128_t x, int n)                                           { return boost::cstdfloat::detail::ldexp (x, n); }
@@ -477,7 +478,7 @@
 
     #if !defined(BOOST_CSTDFLOAT_NO_GCC_FLOAT128_IOSTREAM)
 
-      // For float_internal128_t, implement I/O stream operations.
+      // Implement quadruple-precision I/O stream operations.
 
       #include <istream>
       #include <ostream>
@@ -487,7 +488,7 @@
       {
         #if defined(__GNUC__)
 
-        char my_buffer[128U];
+        char my_buffer[64U];
 
         const int my_prec   = static_cast<int>(os.precision());
         const int my_digits = ((my_prec == 0) ? 36 : my_prec);
@@ -529,8 +530,10 @@
 
         if(v >= static_cast<int>(sizeof(my_buffer) - 1U))
         {
-          // Evidently there is a really long floating-point string here.
-          // So we finally have to resort to dynamic memory allocation.
+          // Evidently there is a really long floating-point string here,
+          // such as a small decimal representation. So we have to use
+          // dynamic memory allocation.
+
           char* my_buffer2 = static_cast<char*>(0U);
 
           try
