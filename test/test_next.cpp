@@ -87,7 +87,7 @@ void test_values(const T& val, const char* name)
    test_value(-boost::math::tools::epsilon<T>(), name);
    test_value(boost::math::tools::min_value<T>(), name);
    test_value(-boost::math::tools::min_value<T>(), name);
-   if(std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present))
+   if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present) && ((std::numeric_limits<T>::min)() / 2 != 0))
    {
       test_value(z, name);
       test_value(-z, name);
@@ -96,7 +96,7 @@ void test_values(const T& val, const char* name)
    test_value(-one, name);
    test_value(two, name);
    test_value(-two, name);
-   if(std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present))
+   if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present) && ((std::numeric_limits<T>::min)() / 2 != 0))
    {
       test_value(std::numeric_limits<T>::denorm_min(), name);
       test_value(-std::numeric_limits<T>::denorm_min(), name);
