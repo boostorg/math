@@ -389,7 +389,7 @@ inline OutputIterator airy_ai_zero(
                                && false == std::numeric_limits<T>::is_integer),
                            "Airy value type must be a floating-point type.");
 
-   for(unsigned i = 0; i < static_cast<int>(number_of_zeros); ++i)
+   for(unsigned i = 0; i < number_of_zeros; ++i)
    {
       *out_it = boost::math::airy_ai_zero<result_type>(start_index + i, pol);
       ++out_it;
@@ -446,7 +446,7 @@ inline OutputIterator airy_bi_zero(
                                && false == std::numeric_limits<T>::is_integer),
                            "Airy value type must be a floating-point type.");
 
-   for(int i = 0; i < static_cast<int>(number_of_zeros); ++i)
+   for(unsigned i = 0; i < number_of_zeros; ++i)
    {
       *out_it = boost::math::airy_bi_zero<result_type>(start_index + i, pol);
       ++out_it;
