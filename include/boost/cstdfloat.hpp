@@ -200,16 +200,16 @@
     #endif
   #endif
 
-  // Check if float_internal128_t from GCC's libquadmath or if
-  // ICC's /Qlong-double flag is supported. Here, we use the
-  // BOOST_MATH_USE_FLOAT128 pre-processor definition from
-  // <boost/math/tools/config.hpp> to query for libquadmath.
-  // If libquadmath is, quadruple-precision math is based on
-  // GCC's __float128 or ICC's _Quad.
+  // Check if float_internal128_t is supported (i.e., __float128 from
+  // GCC's quadmath or _Quad from ICC's /Qlong-double flag).
+  // Here, we use the BOOST_MATH_USE_FLOAT128 pre-processor definition
+  // from <boost/math/tools/config.hpp> to query for libquadmath.
 
-  // What then follows are some rather long sections that optionally
-  // implements various parts of the C++ standard library for float128_t.
-  // Thise include <limits>, <cmath>, I/O stream support, and <complex>.
+  // What now follows are some rather long sections, each one of which
+  // optionally implements part of the C++ standard library for float128_t.
+  // These parts of the C++ standard library include <limits>, <cmath>,
+  // I/O stream support, and <complex> for boost::float128_t.
+
   #if (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 
     namespace boost { namespace cstdfloat { namespace detail {
@@ -223,8 +223,8 @@
       #define BOOST_CSTDFLOAT_FLOAT128_CEIL   __ceilq
       #define BOOST_CSTDFLOAT_FLOAT128_SQRT   __sqrtq
       #define BOOST_CSTDFLOAT_FLOAT128_TRUNC  __truncq
-      #define BOOST_CSTDFLOAT_FLOAT128_EXP    __expq_patch
       #define BOOST_CSTDFLOAT_FLOAT128_POW    __powq
+      #define BOOST_CSTDFLOAT_FLOAT128_EXP    __expq_patch
       #define BOOST_CSTDFLOAT_FLOAT128_LOG    __logq
       #define BOOST_CSTDFLOAT_FLOAT128_LOG10  __log10q
       #define BOOST_CSTDFLOAT_FLOAT128_SIN    __sinq
@@ -251,8 +251,8 @@
       #define BOOST_CSTDFLOAT_FLOAT128_CEIL   ceilq
       #define BOOST_CSTDFLOAT_FLOAT128_SQRT   sqrtq
       #define BOOST_CSTDFLOAT_FLOAT128_TRUNC  truncq
-      #define BOOST_CSTDFLOAT_FLOAT128_EXP    expq_patch
       #define BOOST_CSTDFLOAT_FLOAT128_POW    powq
+      #define BOOST_CSTDFLOAT_FLOAT128_EXP    expq_patch
       #define BOOST_CSTDFLOAT_FLOAT128_LOG    logq
       #define BOOST_CSTDFLOAT_FLOAT128_LOG10  log10q
       #define BOOST_CSTDFLOAT_FLOAT128_SIN    sinq
@@ -270,7 +270,7 @@
       #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA tgammaq
 
     #else
-      #error "Sorry compiler is neither GCC, nor Intel, don't know how to configure <boost/cstdfloat.hpp>."
+      #error "Sorry, the compiler is neither GCC, nor Intel, I don't know how to configure <boost/cstdfloat.hpp>."
     #endif
     } } } // boost::cstdfloat::detail
 
@@ -339,7 +339,7 @@
 
       // Implement quadruple-precision <math.h> functions in the namespace
       // boost::cstdfloat::detail. Subsequently *use* these in the global
-      // namespace.
+      // namespace and in the std namespace.
 
       // Begin with some forward function declarations.
 
@@ -358,6 +358,8 @@
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_POW   (boost::cstdfloat::detail::float_internal128_t, boost::cstdfloat::detail::float_internal128_t) throw();
       inline     boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP   (boost::cstdfloat::detail::float_internal128_t x)
       {
+        // Patch the expq() function for a subset of broken GCC compilers
+        // like GCC 4.7, 4.8 on MinGW.
         typedef boost::cstdfloat::detail::float_internal128_t float_type;
 
         // Use an order-36 polynomial approximation of the exponential function
@@ -373,6 +375,7 @@
         //         x^23, x^24, x^25, x^26, x^27, x^28, x^29, x^30, x^31, x^32,
         //         x^33, x^34, x^35, x^36}, x]
 
+        // Scale the argument x to the range (-ln2 < x < ln2).
         BOOST_CONSTEXPR_OR_CONST float_type one_over_ln2 = float_type(BOOST_FLOAT128_C(1.44269504088896340735992468100189213742664595415299));
         const float_type x_over_ln2   = x * one_over_ln2;
 
@@ -382,8 +385,10 @@
         else if(x > +1) { n = static_cast<boost::int_fast32_t>(BOOST_CSTDFLOAT_FLOAT128_FLOOR(x_over_ln2)); }
         else            { n = static_cast<boost::int_fast32_t>(0); }
 
+        // Here, alpha is the scaled argument.
         const float_type alpha = x - (n * float_type(BOOST_FLOAT128_C(0.693147180559945309417232121458176568075500134360255)));
 
+        // Compute the polynomial approximation of the scaled-argument exponential function.
         const float_type sum =
           ((((((((((((((((((((((((((((((((((((  float_type(BOOST_FLOAT128_C(2.69291698127774166063293705964720493864630783729857438187365E-42))  * alpha
                                               + float_type(BOOST_FLOAT128_C(9.70937085471487654794114679403710456028986572118859594614033E-41))) * alpha
@@ -423,6 +428,7 @@
                                               + float_type(BOOST_FLOAT128_C(0.99999999999999999999999999999999999999999999999999999999995)))     * alpha
                                               + float_type(BOOST_FLOAT128_C(1.0)));
 
+        // Rescale the result and return it.
         return sum * BOOST_CSTDFLOAT_FLOAT128_POW(float_type(2), float_type(n));
       }
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LOG   (boost::cstdfloat::detail::float_internal128_t) throw();
@@ -435,16 +441,22 @@
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATAN  (boost::cstdfloat::detail::float_internal128_t) throw();
       inline     boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SINH  (boost::cstdfloat::detail::float_internal128_t x)
       {
+        // Patch the sinhq() function for a subset of broken GCC compilers
+        // like GCC 4.7, 4.8 on MinGW.
         const boost::cstdfloat::detail::float_internal128_t ex = BOOST_CSTDFLOAT_FLOAT128_EXP(x);
         return (ex - (1 / ex)) / 2;
       }
       inline     boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COSH  (boost::cstdfloat::detail::float_internal128_t x)
       {
+        // Patch the coshq() function for a subset of broken GCC compilers
+        // like GCC 4.7, 4.8 on MinGW.
         const boost::cstdfloat::detail::float_internal128_t ex = BOOST_CSTDFLOAT_FLOAT128_EXP(x);
         return (ex + (1 / ex)) / 2;
       }
       inline     boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TANH  (boost::cstdfloat::detail::float_internal128_t x)
       {
+        // Patch the tanhq() function for a subset of broken GCC compilers
+        // like GCC 4.7, 4.8 on MinGW.
         return BOOST_CSTDFLOAT_FLOAT128_SINH(x) / BOOST_CSTDFLOAT_FLOAT128_COSH(x);
       }
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FMOD  (boost::cstdfloat::detail::float_internal128_t, boost::cstdfloat::detail::float_internal128_t) throw();
@@ -452,7 +464,7 @@
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LGAMMA(boost::cstdfloat::detail::float_internal128_t) throw();
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TGAMMA(boost::cstdfloat::detail::float_internal128_t) throw();
 
-      // Put the quadruple-precision <math.h> functions in the namespace
+      // Define the quadruple-precision <math.h> functions in the namespace
       // boost::cstdfloat::detail.
 
       namespace boost { namespace cstdfloat { namespace detail {
@@ -463,8 +475,8 @@
       inline   boost::cstdfloat::detail::float_internal128_t ceil  (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_CEIL  (x); }
       inline   boost::cstdfloat::detail::float_internal128_t sqrt  (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT  (x); }
       inline   boost::cstdfloat::detail::float_internal128_t trunc (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_TRUNC (x); }
-      inline   boost::cstdfloat::detail::float_internal128_t exp   (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_EXP   (x); }
       inline   boost::cstdfloat::detail::float_internal128_t pow   (boost::cstdfloat::detail::float_internal128_t x, boost::cstdfloat::detail::float_internal128_t a) { return ::BOOST_CSTDFLOAT_FLOAT128_POW   (x, a); }
+      inline   boost::cstdfloat::detail::float_internal128_t exp   (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_EXP   (x); }
       inline   boost::cstdfloat::detail::float_internal128_t log   (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_LOG   (x); }
       inline   boost::cstdfloat::detail::float_internal128_t log10 (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_LOG10 (x); }
       inline   boost::cstdfloat::detail::float_internal128_t sin   (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_SIN   (x); }
@@ -482,6 +494,7 @@
       inline   boost::cstdfloat::detail::float_internal128_t tgamma(boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_TGAMMA(x); }
       } } }  // boost::cstdfloat::detail
 
+      // Now *use* the quadruple-precision <math.h> functions in the global namespace.
       using boost::cstdfloat::detail::ldexp;
       using boost::cstdfloat::detail::frexp;
       using boost::cstdfloat::detail::fabs;
@@ -489,8 +502,8 @@
       using boost::cstdfloat::detail::ceil;
       using boost::cstdfloat::detail::sqrt;
       using boost::cstdfloat::detail::trunc;
-      using boost::cstdfloat::detail::exp;
       using boost::cstdfloat::detail::pow;
+      using boost::cstdfloat::detail::exp;
       using boost::cstdfloat::detail::log;
       using boost::cstdfloat::detail::log10;
       using boost::cstdfloat::detail::sin;
@@ -507,7 +520,7 @@
       using boost::cstdfloat::detail::lgamma;
       using boost::cstdfloat::detail::tgamma;
 
-      // Implement quadruple-precision <cmath> functions in the std namespace.
+      // Now *use* the quadruple-precision <math.h> functions in the std namespace.
       namespace std
       {
         using boost::cstdfloat::detail::ldexp;
@@ -517,8 +530,8 @@
         using boost::cstdfloat::detail::ceil;
         using boost::cstdfloat::detail::sqrt;
         using boost::cstdfloat::detail::trunc;
-        using boost::cstdfloat::detail::exp;
         using boost::cstdfloat::detail::pow;
+        using boost::cstdfloat::detail::exp;
         using boost::cstdfloat::detail::log;
         using boost::cstdfloat::detail::log10;
         using boost::cstdfloat::detail::sin;
@@ -627,19 +640,20 @@
               BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed."));
             }
 
-            ostr << my_buffer2;
+            static_cast<void>(ostr << my_buffer2);
 
             delete [] my_buffer2;
           }
           else
           {
-            ostr << my_buffer;
+            static_cast<void>(ostr << my_buffer);
           }
 
           return (os << ostr.str());
         }
 
-        inline std::istream& operator>>(std::istream& is, boost::cstdfloat::detail::float_internal128_t& x)
+        template<typename char_type, class traits_type>
+        inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, boost::cstdfloat::detail::float_internal128_t& x)
         {
           std::string str;
 
@@ -652,6 +666,8 @@
           if(static_cast<std::ptrdiff_t>(p_end - str.c_str()) != static_cast<std::ptrdiff_t>(str.length()))
           {
             BOOST_THROW_EXCEPTION(std::runtime_error("Unable to interpret input string as a boost::float128_t"));
+
+            is.setstate(ios_base::failbit);
           }
 
           return is;
@@ -665,6 +681,8 @@
       // used in Boost.Multiprecision by John Maddock and Christopher Kormanyos.
       // This methodology has been slightly modified here for boost::float128_t.
 
+      #include <cstring>
+      #include <cctype>
       #include <boost/lexical_cast.hpp>
 
       namespace boost { namespace cstdfloat { namespace detail {
@@ -852,13 +870,38 @@
       }
 
       template<class float_type, class type_a> inline void eval_convert_to(type_a* pa,    const float_type& cb)                        { *pa  = static_cast<type_a>(cb); }
+      template<class float_type, class type_a> inline void eval_add       (float_type& b, const type_a& a)                             { b   += a; }
       template<class float_type, class type_a> inline void eval_subtract  (float_type& b, const type_a& a)                             { b   -= a; }
       template<class float_type, class type_a> inline void eval_multiply  (float_type& b, const type_a& a)                             { b   *= a; }
       template<class float_type>               inline void eval_multiply  (float_type& b, const float_type& cb, const float_type& cb2) { b    = (cb * cb2); }
       template<class float_type, class type_a> inline void eval_divide    (float_type& b, const type_a& a)                             { b   /= a; }
       template<class float_type>               inline void eval_log10     (float_type& b, const float_type& cb)                        { b    = std::log10(cb); }
       template<class float_type>               inline void eval_floor     (float_type& b, const float_type& cb)                        { b    = std::floor(cb); }
-      template<class float_type>               inline void eval_pow       (float_type& b, const float_type& cb, const float_type& cb2) { b    = std::pow(cb, cb2); }
+
+      template<class float_type, class type_n> inline float_type pown(const float_type& cb, const type_n p)
+      {
+        if     (p <  static_cast<type_n>(0)) { return 1 / pown(cb, static_cast<type_n>(-p)); }
+        else if(p == static_cast<type_n>(0)) { return float_type(1); }
+        else if(p == static_cast<type_n>(1)) { return  cb; }
+        else if(p == static_cast<type_n>(2)) { return  cb * cb; }
+        else if(p == static_cast<type_n>(3)) { return (cb * cb) * cb; }
+        else
+        {
+          float_type value = cb;
+
+          type_n n;
+
+          for(n = static_cast<type_n>(1); n <= static_cast<type_n>(p / 2); n *= 2)
+          {
+            value *= value;
+          }
+
+          const type_n p_minus_n = static_cast<type_n>(p - n);
+
+          // Call the function recursively for computing the remaining power of n.
+          return ((p_minus_n == static_cast<type_n>(0)) ? value : (value * pown(cb, p_minus_n)));
+        }
+      }
 
       inline void round_string_up_at(std::string& s, int pos, int& expon)
       {
@@ -927,11 +970,7 @@
         else
         {
           // Start by figuring out the base-10 exponent.
-
-          if(isneg)
-          {
-            x = -x;
-          }
+          if(isneg) { x = -x; }
 
           float_type t;
           float_type ten = 10;
@@ -944,9 +983,8 @@
           {
             int e = -expon / 2;
 
-            float_type t2;
+            const float_type t2 = pown(ten, e);
 
-            eval_pow(t2, ten, float_type(e));
             eval_multiply(t, t2, x);
             eval_multiply(t, t2);
 
@@ -957,7 +995,7 @@
           }
           else
           {
-            eval_pow     (t, ten, float_type(-expon));
+            t = pown(ten, -expon);
             eval_multiply(t, x);
           }
 
@@ -1057,133 +1095,162 @@
         return result;
       }
 
-/*
-template <class Backend>
-void convert_from_string(Backend& b, const char* p)
-{
-   using default_ops::eval_multiply;
-   using default_ops::eval_add;
-   using default_ops::eval_pow;
-   using default_ops::eval_divide;
+      template <class float_type>
+      bool convert_from_string(float_type& value, const char* p)
+      {
+        value = 0;
 
-   typedef typename mpl::front<typename Backend::unsigned_types>::type ui_type;
-   b = ui_type(0);
-   if(!p || (*p == 0))
-      return;
+        if((p == static_cast<const char*>(0U)) || (*p == static_cast<char>(0)))
+        {
+          return;
+        }
 
-   bool is_neg = false;
-   bool is_neg_expon = false;
-   static const ui_type ten = ui_type(10);
-   typename Backend::exponent_type expon = 0;
-   int digits_seen = 0;
-   typedef std::numeric_limits<number<Backend, et_off> > limits;
-   static const int max_digits = limits::is_specialized ? limits::max_digits10 + 1 : INT_MAX;
+        bool is_neg       = false;
+        bool is_neg_expon = false;
 
-   if(*p == '+') ++p;
-   else if(*p == '-')
-   {
-      is_neg = true;
-      ++p;
-   }
-   if((std::strcmp(p, "nan") == 0) || (std::strcmp(p, "NaN") == 0) || (std::strcmp(p, "NAN") == 0))
-   {
-      eval_divide(b, ui_type(0));
-      if(is_neg)
-         b.negate();
-      return;
-   }
-   if((std::strcmp(p, "inf") == 0) || (std::strcmp(p, "Inf") == 0) || (std::strcmp(p, "INF") == 0))
-   {
-      b = ui_type(1);
-      eval_divide(b, ui_type(0));
-      if(is_neg)
-         b.negate();
-      return;
-   }
-   //
-   // Grab all the leading digits before the decimal point:
-   //
-   while(std::isdigit(*p))
-   {
-      eval_multiply(b, ten);
-      eval_add(b, ui_type(*p - '0'));
-      ++p;
-      ++digits_seen;
-   }
-   if(*p == '.')
-   {
-      //
-      // Grab everything after the point, stop when we've seen
-      // enough digits, even if there are actually more available:
-      //
-      ++p;
-      while(std::isdigit(*p))
-      {
-         eval_multiply(b, ten);
-         eval_add(b, ui_type(*p - '0'));
-         ++p;
-         --expon;
-         if(++digits_seen > max_digits)
-            break;
-      }
-      while(std::isdigit(*p))
-         ++p;
-   }
-   //
-   // Parse the exponent:
-   //
-   if((*p == 'e') || (*p == 'E'))
-   {
-      ++p;
-      if(*p == '+') ++p;
-      else if(*p == '-')
-      {
-         is_neg_expon = true;
-         ++p;
-      }
-      typename Backend::exponent_type e2 = 0;
-      while(std::isdigit(*p))
-      {
-         e2 *= 10;
-         e2 += (*p - '0');
-         ++p;
-      }
-      if(is_neg_expon)
-         e2 = -e2;
-      expon += e2;
-   }
-   if(expon)
-   {
-      // Scale by 10^expon, note that 10^expon can be
-      // outside the range of our number type, even though the
-      // result is within range, if that looks likely, then split
-      // the calculation in two:
-      Backend t;
-      t = ten;
-      if(expon > limits::min_exponent10 + 2)
-      {
-         eval_pow(t, t, expon);
-         eval_multiply(b, t);
-      }
-      else
-      {
-         eval_pow(t, t, expon + digits_seen + 1);
-         eval_multiply(b, t);
-         t = ten;
-         eval_pow(t, t, -digits_seen - 1);
-         eval_multiply(b, t);
-      }
-   }
-   if(is_neg)
-      b.negate();
-   if(*p)
-   {
-      // Unexpected input in string:
-      BOOST_THROW_EXCEPTION(std::runtime_error("Unexpected characters in string being interpreted as a float128."));
-   }
-}
-*/
+        const int ten = 10;
 
+        int expon       = 0;
+        int digits_seen = 0;
+
+        const int max_digits = (std::numeric_limits<float_type>::is_specialized ? (std::numeric_limits<float_type>::max_digits10 + 1) : 128);
+
+        if(*p == static_cast<char>('+'))
+        {
+          ++p;
+        }
+        else if(*p == static_cast<char>('-'))
+        {
+          is_neg = true;
+          ++p;
+        }
+
+        const bool isnan = ((std::strcmp(p, "nan") == 0) || (std::strcmp(p, "NaN") == 0) || (std::strcmp(p, "NAN") == 0));
+
+        if(isnan)
+        {
+          eval_divide(value, 0);
+
+          if(is_neg)
+          {
+            value = -value;
+          }
+
+          return true;
+        }
+
+        const bool isinf = ((std::strcmp(p, "inf") == 0) || (std::strcmp(p, "Inf") == 0) || (std::strcmp(p, "INF") == 0));
+
+        if(isinf)
+        {
+          value = 1;
+          eval_divide(value, 0);
+
+          if(is_neg)
+          {
+            value = -value;
+          }
+
+          return true;
+        }
+
+        // Grab all the leading digits before the decimal point.
+        while(std::isdigit(*p))
+        {
+          eval_multiply(value, ten);
+          eval_add(value, static_cast<int>(*p - '0'));
+          ++p;
+          ++digits_seen;
+        }
+
+        if(*p == static_cast<char>('.'))
+        {
+          // Grab everything after the point, stop when we've seen
+          // enough digits, even if there are actually more available.
+
+          ++p;
+
+          while(std::isdigit(*p))
+          {
+            eval_multiply(value, ten);
+            eval_add(value, static_cast<int>(*p - '0'));
+            ++p;
+            --expon;
+
+            if(++digits_seen > max_digits)
+            {
+              break;
+            }
+          }
+
+          while(std::isdigit(*p))
+          {
+            ++p;
+          }
+        }
+
+        // Parse the exponent.
+        if((*p == static_cast<char>('e')) || (*p == static_cast<char>('E')))
+        {
+          ++p;
+
+          if(*p == static_cast<char>('+'))
+          {
+            ++p;
+          }
+          else if(*p == static_cast<char>('-'))
+          {
+            is_neg_expon = true;
+            ++p;
+          }
+
+          int e2 = 0;
+
+          while(std::isdigit(*p))
+          {
+            e2 *= 10;
+            e2 += (*p - '0');
+            ++p;
+          }
+
+          if(is_neg_expon)
+          {
+            e2 = -e2;
+          }
+
+          expon += e2;
+        }
+
+        if(expon)
+        {
+          // Scale by 10^expon. Note that 10^expon can be outside the range
+          // of our number type, even though the result is within range.
+          // If that looks likely, then split the calculation in two parts.
+          float_type t;
+          t = ten;
+
+          if(expon > (std::numeric_limits<float_type>::min_exponent10 + 2))
+          {
+            t = pown(t, expon);
+            eval_multiply(value, t);
+          }
+          else
+          {
+            t = pown(t, (expon + digits_seen + 1));
+            eval_multiply(value, t);
+            t = ten;
+            t = pown(t, (-digits_seen - 1));
+            eval_multiply(value, t);
+          }
+        }
+
+        if(is_neg)
+        {
+          value = -value;
+        }
+
+        return (*p == static_cast<char>(0));
+      }
       } } } // boost::cstdfloat::detail
 
       namespace std
@@ -1197,12 +1264,34 @@ void convert_from_string(Backend& b, const char* p)
                                                                               os.precision(),
                                                                               os.flags());
 
-          return (os << str);
+          std::basic_ostringstream<char_type, traits_type> ostr;
+          ostr.flags(os.flags());
+          ostr.imbue(os.getloc());
+          ostr.precision(os.precision());
+
+          static_cast<void>(ostr << str);
+
+          return (os << ostr.str());
         }
 
-        inline std::istream& operator>>(std::istream& is, boost::cstdfloat::detail::float_internal128_t& x)
+        template<typename char_type, class traits_type>
+        inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, boost::cstdfloat::detail::float_internal128_t& x)
         {
-          BOOST_THROW_EXCEPTION(std::runtime_error("<boost/cstdfloat.hpp> does not yet support input stream operation for ICC quadruple-precision type"));
+          std::string str;
+
+          is >> str;
+
+          const bool conversion_is_ok = boost::cstdfloat::detail::convert_from_string(x, str.c_str());
+
+          if(false == conversion_is_ok)
+          {
+            BOOST_THROW_EXCEPTION(std::runtime_error("Unable to interpret input string as a boost::float128_t"));
+
+            is.putback(str);
+
+            is.setstate(ios_base::failbit);
+          }
+
           return is;
         }
       }
@@ -1218,7 +1307,7 @@ void convert_from_string(Backend& b, const char* p)
     // Implement a specialization of std::complex<> for quadruple-precision.
     namespace std
     {
-      // Forward template function definitions.
+      // Forward template function declarations.
       #if defined(BOOST_NO_CXX11_CONSTEXPR)
       template<> boost::cstdfloat::detail::float_internal128_t& real<boost::cstdfloat::detail::float_internal128_t>(complex<boost::cstdfloat::detail::float_internal128_t>&);
       template<> boost::cstdfloat::detail::float_internal128_t& imag<boost::cstdfloat::detail::float_internal128_t>(complex<boost::cstdfloat::detail::float_internal128_t>&);
@@ -1354,7 +1443,7 @@ void convert_from_string(Backend& b, const char* p)
         {
           const value_type re_x(x.re);
           const value_type im_x(x.im);
-          const value_type one_over_denom = value_type(1) / std::sqrt((re_x * re_x) + (im_x * im_x));
+          const value_type one_over_denom = 1 / std::sqrt((re_x * re_x) + (im_x * im_x));
           const value_type tmp_re = ((re * re_x) + (im * im_x)) * one_over_denom;
           const value_type tmp_im = ((im * re_x) - (re * im_x)) * one_over_denom;
           re = tmp_re;
@@ -1407,30 +1496,42 @@ void convert_from_string(Backend& b, const char* p)
       template<> BOOST_CONSTEXPR boost::cstdfloat::detail::float_internal128_t imag<boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return x.imag(); }
       #endif
       template<> boost::cstdfloat::detail::float_internal128_t abs <boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return std::sqrt((real(x) * real(x)) + (imag(x) * imag(x))); }
-      template<> boost::cstdfloat::detail::float_internal128_t arg <boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>& x);
+      template<> boost::cstdfloat::detail::float_internal128_t arg <boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return std::atan2(x.imag(), x.real()); }
       template<> boost::cstdfloat::detail::float_internal128_t norm<boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return (real(x) * real(x)) + (imag(x) * imag(x)); }
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> conj (const complex<boost::cstdfloat::detail::float_internal128_t>& x);
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> conj (const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return complex<boost::cstdfloat::detail::float_internal128_t>(x.real(), -x.imag()); }
       #if !defined(BOOST_NO_CXX11_CONSTEXPR)
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> proj (const complex<boost::cstdfloat::detail::float_internal128_t>& x);
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> proj (const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        const boost::cstdfloat::detail::float_internal128_t two_over_denom = BOOST_FLOAT128_C(2.0) / (std::norm(x) + 1);
+
+        return complex<boost::cstdfloat::detail::float_internal128_t>(x.real() * two_over_denom,
+                                                                      x.imag() * two_over_denom);
+      }
       #endif
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> polar(const boost::cstdfloat::detail::float_internal128_t& x, const boost::cstdfloat::detail::float_internal128_t&);
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> polar(const boost::cstdfloat::detail::float_internal128_t& rho,
+                                                                              const boost::cstdfloat::detail::float_internal128_t& theta)      { return complex<boost::cstdfloat::detail::float_internal128_t>(rho * std::cos(theta), rho * std::sin(theta)); }
 
       // Global add, sub, mul, div.
       template<> complex<boost::cstdfloat::detail::float_internal128_t> operator+(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u.real() + v.real(), u.imag() + v.imag()); }
       template<> complex<boost::cstdfloat::detail::float_internal128_t> operator-(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u.real() - v.real(), u.imag() - v.imag()); }
+
       template<> complex<boost::cstdfloat::detail::float_internal128_t> operator*(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v)
       {
         const typename complex<boost::cstdfloat::detail::float_internal128_t>::value_type ur = u.real();
         const typename complex<boost::cstdfloat::detail::float_internal128_t>::value_type ui = u.imag();
         const typename complex<boost::cstdfloat::detail::float_internal128_t>::value_type vr = v.real();
         const typename complex<boost::cstdfloat::detail::float_internal128_t>::value_type vi = v.imag();
+
         return complex<boost::cstdfloat::detail::float_internal128_t>((ur * vr) - (ui * vi), (ur * vi) + (ui * vr));
       }
+
       template<> inline complex<boost::cstdfloat::detail::float_internal128_t> operator/(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v)
       {
-        const boost::cstdfloat::detail::float_internal128_t one_over_denom = BOOST_FLOAT128_C(1.0) / std::norm(v);
+        const boost::cstdfloat::detail::float_internal128_t one_over_denom = 1 / std::norm(v);
         const boost::cstdfloat::detail::float_internal128_t tmp_re = ((u.real() * v.real()) + (u.imag() * v.imag())) * one_over_denom;
         const boost::cstdfloat::detail::float_internal128_t tmp_im = ((u.imag() * v.real()) - (u.real() * v.imag())) * one_over_denom;
+
         return complex<boost::cstdfloat::detail::float_internal128_t>(tmp_re, tmp_im);
       }
 
@@ -1488,6 +1589,7 @@ void convert_from_string(Backend& b, const char* p)
         const boost::cstdfloat::detail::float_internal128_t cos_x  = std::cos (x.real());
         const boost::cstdfloat::detail::float_internal128_t sinh_y = std::sinh(x.imag());
         const boost::cstdfloat::detail::float_internal128_t cosh_y = std::cosh(x.imag());
+
         return complex<boost::cstdfloat::detail::float_internal128_t>(sin_x * cosh_y, cos_x * sinh_y);
       }
 
@@ -1497,6 +1599,7 @@ void convert_from_string(Backend& b, const char* p)
         const boost::cstdfloat::detail::float_internal128_t cos_x  = std::cos (x.real());
         const boost::cstdfloat::detail::float_internal128_t sinh_y = std::sinh(x.imag());
         const boost::cstdfloat::detail::float_internal128_t cosh_y = std::cosh(x.imag());
+
         return complex<boost::cstdfloat::detail::float_internal128_t>(cos_x * cosh_y, -(sin_x * sinh_y));
       }
 
@@ -1504,6 +1607,103 @@ void convert_from_string(Backend& b, const char* p)
       {
         return std::sin(x) / std::cos(x);
       }
+
+      #if !defined(BOOST_NO_CXX11_CONSTEXPR)
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> asin(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        return -boost::cstdfloat::detail::iz_helper__x(std::log(boost::cstdfloat::detail::iz_helper__x(x) + std::sqrt(BOOST_FLOAT128_C(1.0) - (x * x))));
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> acos(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        return BOOST_FLOAT128_C(1.57079632679489661923132169163975144209858469968755) - std::asin(x);
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> atan(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        const complex<boost::cstdfloat::detail::float_internal128_t> izz = boost::cstdfloat::detail::iz_helper__x(x);
+
+        return boost::cstdfloat::detail::iz_helper__x(std::log(BOOST_FLOAT128_C(1.0) - izz) - std::log(BOOST_FLOAT128_C(1.0) + izz)) / BOOST_FLOAT128_C(2.0);
+      }
+      #endif
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> exp(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        return std::polar(std::exp(x.real()), x.imag());
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> log(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        return complex<boost::cstdfloat::detail::float_internal128_t>(std::log(std::norm(x)) / 2, std::atan2(x.imag(), x.real()));
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> log10(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        return std::log(x) / BOOST_FLOAT128_C(2.30258509299404568401799145468436420760110148862877);
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> pow(const complex<boost::cstdfloat::detail::float_internal128_t>& x,
+                                                                            const boost::cstdfloat::detail::float_internal128_t& a)
+      {
+        std::exp(a * std::log(x));
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> pow(const complex<boost::cstdfloat::detail::float_internal128_t>& x,
+                                                                            const complex<boost::cstdfloat::detail::float_internal128_t>& a)
+      {
+        std::exp(a * std::log(x));
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> pow(const boost::cstdfloat::detail::float_internal128_t& x,
+                                                                            const complex<boost::cstdfloat::detail::float_internal128_t>& a)
+      {
+        std::exp(a * std::log(x));
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> sinh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        const boost::cstdfloat::detail::float_internal128_t sin_y  = std::sin (x.imag());
+        const boost::cstdfloat::detail::float_internal128_t cos_y  = std::cos (x.imag());
+        const boost::cstdfloat::detail::float_internal128_t sinh_x = std::sinh(x.real());
+        const boost::cstdfloat::detail::float_internal128_t cosh_x = std::cosh(x.real());
+
+        return complex<boost::cstdfloat::detail::float_internal128_t>(cos_y * sinh_x, cosh_x * sin_y);
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> cosh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        const boost::cstdfloat::detail::float_internal128_t sin_y  = std::sin (x.imag());
+        const boost::cstdfloat::detail::float_internal128_t cos_y  = std::cos (x.imag());
+        const boost::cstdfloat::detail::float_internal128_t sinh_x = std::sinh(x.real());
+        const boost::cstdfloat::detail::float_internal128_t cosh_x = std::cosh(x.real());
+
+        return complex<boost::cstdfloat::detail::float_internal128_t>(cos_y * cosh_x, sin_y * sinh_x);
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> tanh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        return std::sinh(x) / std::cosh(x);
+      }
+
+      #if !defined(BOOST_NO_CXX11_CONSTEXPR)
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> asinh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        return std::log(x + std::sqrt((x * x) + BOOST_FLOAT128_C(1.0)));
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> acosh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        const complex<boost::cstdfloat::detail::float_internal128_t> zp(x.real() + 1, x.imag());
+        const complex<boost::cstdfloat::detail::float_internal128_t> zm(x.real() - 1, x.imag());
+
+        return std::log(x + (zp * std::sqrt(zm / zp)));
+      }
+
+      template<> complex<boost::cstdfloat::detail::float_internal128_t> atanh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      {
+        return (std::log(BOOST_FLOAT128_C(1.0) + x) - std::log(BOOST_FLOAT128_C(1.0) - x)) / BOOST_FLOAT128_C(2.0);
+      }
+      #endif
 
       template<class char_type, class traits_type>
       inline std::basic_ostream<char_type, traits_type>& operator<< (std::basic_ostream<char_type, traits_type>& os, const std::complex<boost::cstdfloat::detail::float_internal128_t>&);
@@ -1572,7 +1772,8 @@ void convert_from_string(Backend& b, const char* p)
   #define BOOST_NO_FLOAT128_T
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 1)
-    #undef BOOST_NO_FLOAT128_T
+    #undef  BOOST_NO_FLOAT128_T
+
     #define BOOST_FLOAT_FAST128_MIN   BOOST_FLOAT_128_MIN
     #define BOOST_FLOAT_LEAST128_MIN  BOOST_FLOAT_128_MIN
     #define BOOST_FLOAT_FAST128_MAX   BOOST_FLOAT_128_MAX
@@ -1586,22 +1787,32 @@ void convert_from_string(Backend& b, const char* p)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT16_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_16_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_16_MAX
+    #undef  BOOST_FLOAT_16_MIN
+    #undef  BOOST_FLOAT_16_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 32)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT32_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_32_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_32_MAX
+    #undef  BOOST_FLOAT_32_MIN
+    #undef  BOOST_FLOAT_32_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 64)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT64_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_64_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_64_MAX
+    #undef  BOOST_FLOAT_64_MIN
+    #undef  BOOST_FLOAT_64_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 80)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT80_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_80_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_80_MAX
+    #undef  BOOST_FLOAT_80_MIN
+    #undef  BOOST_FLOAT_80_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 128)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT128_C(x)
     #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_128_MIN
     #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_128_MAX
+    #undef  BOOST_FLOAT_128_MIN
+    #undef  BOOST_FLOAT_128_MAX
   #else
     #error The maximum available floating-point width for <boost/cstdfloat.hpp> is undefined.
   #endif
@@ -1675,10 +1886,16 @@ void convert_from_string(Backend& b, const char* p)
       typedef boost::float128_t float_fast128_t;
       typedef boost::float128_t float_least128_t;
 
+      #if defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT) && defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS)
+      // This configuration does not support std::numeric_limits<boost::float128_t>.
+      // So we can not query the values of std::numeric_limits<boost::float128_t>
+      // with static assertions.
+      #else
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::is_iec559    ==  true);
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::radix        ==     2);
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::digits       ==   113);
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::max_exponent == 16384);
+      #endif
 
       #undef BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
     #endif
