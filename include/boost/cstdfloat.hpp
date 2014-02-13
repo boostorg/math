@@ -471,6 +471,7 @@
       inline   boost::cstdfloat::detail::float_internal128_t ldexp (boost::cstdfloat::detail::float_internal128_t x, int n)                                           { return ::BOOST_CSTDFLOAT_FLOAT128_LDEXP (x, n); }
       inline   boost::cstdfloat::detail::float_internal128_t frexp (boost::cstdfloat::detail::float_internal128_t x, int* pn)                                         { return ::BOOST_CSTDFLOAT_FLOAT128_FREXP (x, pn); }
       inline   boost::cstdfloat::detail::float_internal128_t fabs  (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_FABS  (x); }
+      inline   boost::cstdfloat::detail::float_internal128_t abs   (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_FABS  (x); }
       inline   boost::cstdfloat::detail::float_internal128_t floor (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_FLOOR (x); }
       inline   boost::cstdfloat::detail::float_internal128_t ceil  (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_CEIL  (x); }
       inline   boost::cstdfloat::detail::float_internal128_t sqrt  (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT  (x); }
@@ -498,6 +499,7 @@
       using boost::cstdfloat::detail::ldexp;
       using boost::cstdfloat::detail::frexp;
       using boost::cstdfloat::detail::fabs;
+      using boost::cstdfloat::detail::abs;
       using boost::cstdfloat::detail::floor;
       using boost::cstdfloat::detail::ceil;
       using boost::cstdfloat::detail::sqrt;
@@ -526,6 +528,7 @@
         using boost::cstdfloat::detail::ldexp;
         using boost::cstdfloat::detail::frexp;
         using boost::cstdfloat::detail::fabs;
+        using boost::cstdfloat::detail::abs;
         using boost::cstdfloat::detail::floor;
         using boost::cstdfloat::detail::ceil;
         using boost::cstdfloat::detail::sqrt;
