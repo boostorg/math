@@ -315,6 +315,12 @@ inline typename Dist::value_type round_to_floor(const Dist& d, typename Dist::va
 
    return result;
 }
+
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+
 template <class Dist>
 inline typename Dist::value_type round_to_ceil(const Dist& d, typename Dist::value_type result, typename Dist::value_type p, bool c)
 {
@@ -343,6 +349,10 @@ inline typename Dist::value_type round_to_ceil(const Dist& d, typename Dist::val
 
    return result;
 }
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 //
 // Now finally are the public API functions.
 // There is one overload for each policy,
