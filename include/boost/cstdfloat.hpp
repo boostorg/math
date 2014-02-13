@@ -348,8 +348,7 @@
       #include <boost/cstdint.hpp>
 
       // Implement quadruple-precision <math.h> functions in the namespace
-      // boost::cstdfloat::detail. Subsequently *use* these in the global
-      // namespace and in the std namespace.
+      // boost::cstdfloat::detail. Subsequently *use* in the std namespace.
 
       // Begin with some forward function declarations.
 
@@ -504,33 +503,6 @@
       inline   boost::cstdfloat::detail::float_internal128_t lgamma(boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_LGAMMA(x); }
       inline   boost::cstdfloat::detail::float_internal128_t tgamma(boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_TGAMMA(x); }
       } } }  // boost::cstdfloat::detail
-
-      // Now *use* the quadruple-precision <math.h> functions in the global namespace.
-      using boost::cstdfloat::detail::ldexp;
-      using boost::cstdfloat::detail::frexp;
-      using boost::cstdfloat::detail::fabs;
-      using boost::cstdfloat::detail::abs;
-      using boost::cstdfloat::detail::floor;
-      using boost::cstdfloat::detail::ceil;
-      using boost::cstdfloat::detail::sqrt;
-      using boost::cstdfloat::detail::trunc;
-      using boost::cstdfloat::detail::pow;
-      using boost::cstdfloat::detail::exp;
-      using boost::cstdfloat::detail::log;
-      using boost::cstdfloat::detail::log10;
-      using boost::cstdfloat::detail::sin;
-      using boost::cstdfloat::detail::cos;
-      using boost::cstdfloat::detail::tan;
-      using boost::cstdfloat::detail::asin;
-      using boost::cstdfloat::detail::acos;
-      using boost::cstdfloat::detail::atan;
-      using boost::cstdfloat::detail::sinh;
-      using boost::cstdfloat::detail::cosh;
-      using boost::cstdfloat::detail::tanh;
-      using boost::cstdfloat::detail::fmod;
-      using boost::cstdfloat::detail::atan2;
-      using boost::cstdfloat::detail::lgamma;
-      using boost::cstdfloat::detail::tgamma;
 
       // Now *use* the quadruple-precision <math.h> functions in the std namespace.
       namespace std
@@ -1326,7 +1298,7 @@
 
     // Implement a specialization of std::complex<> for quadruple-precision.
     #include <complex>
-    #include <boost/math/constants/constants.hpp>
+//    #include <boost/math/constants/constants.hpp>
 
     #define BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE boost::cstdfloat::detail::float_internal128_t
 
@@ -1704,7 +1676,8 @@
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> acos(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return boost::math::constants::half_pi<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>() - std::asin(x);
+//        return boost::math::constants::half_pi<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>() - std::asin(x);
+        return BOOST_FLOAT128_C(1.57079632679489661923132169163975144209858469968755) - std::asin(x);
       }
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> atan(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
@@ -1732,7 +1705,8 @@
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> log10(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return std::log(x) / boost::math::constants::ln_ten<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>();
+//        return std::log(x) / boost::math::constants::ln_ten<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>();
+        return std::log(x) / BOOST_FLOAT128_C(2.30258509299404568401799145468436420760110148862877);
       }
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x,
