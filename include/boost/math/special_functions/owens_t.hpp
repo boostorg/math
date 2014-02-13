@@ -26,6 +26,11 @@
 
 #include <stdexcept>
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+
 namespace boost
 {
    namespace math
@@ -1056,6 +1061,10 @@ namespace boost
 
    } // namespace math
 } // namespace boost
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 #endif
 // EOF
