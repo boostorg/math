@@ -29,10 +29,12 @@
   // of these queries, an attempt is made to automatically detect
   // the presence of built-in floating-point types having specified
   // widths. These are *thought* to be conformant with IEEE-754,
-  // whereby an unequivocal test based on numeric_limits follows below.
+  // whereby an unequivocal test based on std::numeric_limits<>
+  // follows below.
 
-  // In addition, macros that are used for initializing floating-point
-  // literal values and some basic min/max values are defined.
+  // In addition, various macros that are used for initializing
+  // floating-point literal values having specified widths and
+  // some basic min/max values are defined.
 
   // First, we will pre-load certain preprocessor definitions
   // with a dummy value.
@@ -47,7 +49,7 @@
 
   // Ensure that the compiler has a radix-2 floating-point representation.
   #if (!defined(FLT_RADIX) || ((defined(FLT_RADIX) && (FLT_RADIX != 2))))
-    #error The compiler does not support radix-2 floating-point types required for <boost/cstdfloat.hpp>.
+    #error The compiler does not support any radix-2 floating-point types required for <boost/cstdfloat.hpp>.
   #endif
 
   // Check if built-in float is equivalent to float16_t, float32_t, float64_t, float80_t, or float128_t.
@@ -200,15 +202,23 @@
     #endif
   #endif
 
-  // Check if float_internal128_t is supported (i.e., __float128 from
-  // GCC's quadmath or _Quad from ICC's /Qlong-double flag).
-  // Here, we use the BOOST_MATH_USE_FLOAT128 pre-processor definition
-  // from <boost/math/tools/config.hpp> to query for libquadmath.
+  // Check if quadruple-precision is supported. Here, we are checking
+  // for the presence of __float128 from GCC's quadmath.h or _Quad
+  // from ICC's /Qlong-double flag). To query these, we use the
+  // BOOST_MATH_USE_FLOAT128 pre-processor definition from
+  // <boost/math/tools/config.hpp>.
 
-  // What now follows are some rather long sections, each one of which
-  // optionally implements part of the C++ standard library for float128_t.
+  // What subsequently follows the queries for quadruple-precision are some
+  // rather long sections of code, each one of which optionally implements
+  // part of the C++ standard library for boost::float128_t.
+  
   // These parts of the C++ standard library include <limits>, <cmath>,
   // I/O stream support, and <complex> for boost::float128_t.
+
+  // The section for I/O stream support for the ICC compiler is particularly
+  // long, because these functions must be painstakingly synthesized from
+  // manually-written routines (ICC does not support I/O stream operations
+  // for its _Quad type).
 
   #if (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 
@@ -331,7 +341,7 @@
         BOOST_STATIC_CONSTEXPR float_round_style                              round_style              = round_to_nearest;
       };
     }
-    #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS (i.e., has libquadmath <limits> support)
+    #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS (i.e., the user would like to have libquadmath <limits> support)
 
     #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
 
@@ -548,7 +558,7 @@
         using boost::cstdfloat::detail::lgamma;
         using boost::cstdfloat::detail::tgamma;
       }
-    #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH (i.e., has libquadmath <cmath> support)
+    #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH (i.e., the user would like to have libquadmath <cmath> support)
 
     #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM)
 
@@ -586,8 +596,8 @@
           my_format_string[my_format_string_index] = '%';
           ++my_format_string_index;
 
-          if(my_flags & std::ios_base::showpos)    { my_format_string[my_format_string_index] = '+'; ++my_format_string_index; }
-          if(my_flags & std::ios_base::showpoint)  { my_format_string[my_format_string_index] = '#'; ++my_format_string_index; }
+          if(my_flags & std::ios_base::showpos)   { my_format_string[my_format_string_index] = '+'; ++my_format_string_index; }
+          if(my_flags & std::ios_base::showpoint) { my_format_string[my_format_string_index] = '#'; ++my_format_string_index; }
 
           my_format_string[my_format_string_index + 0U] = '.';
           my_format_string[my_format_string_index + 1U] = '*';
@@ -610,13 +620,14 @@
                                             my_digits,
                                             x);
 
-          if(v < 0) { BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed.")); }
+          if(v < 0) { BOOST_THROW_EXCEPTION(std::runtime_error("Formatting of boost::float128_t failed internally in quadmath_snprintf().")); }
 
           if(v >= static_cast<int>(sizeof(my_buffer) - 1U))
           {
             // Evidently there is a really long floating-point string here,
-            // such as a small decimal representation. So we have to use
-            // dynamic memory allocation.
+            // such as a small decimal representation in non-scientific notation.
+            // So we have to use dynamic memory allocation for the output
+            // string buffer.
 
             char* my_buffer2 = static_cast<char*>(0U);
 
@@ -657,7 +668,7 @@
         {
           std::string str;
 
-          is >> str;
+          static_cast<void>(is >> str);
 
           char* p_end;
 
@@ -665,9 +676,14 @@
 
           if(static_cast<std::ptrdiff_t>(p_end - str.c_str()) != static_cast<std::ptrdiff_t>(str.length()))
           {
-            BOOST_THROW_EXCEPTION(std::runtime_error("Unable to interpret input string as a boost::float128_t"));
+            for(std::string::const_reverse_iterator it = str.rbegin(); it != str.rend(); ++it)
+            {
+              static_cast<void>(is.putback(*it));
+            }
 
             is.setstate(ios_base::failbit);
+
+            BOOST_THROW_EXCEPTION(std::runtime_error("Unable to interpret input string as a boost::float128_t"));
           }
 
           return is;
@@ -1108,12 +1124,12 @@
         bool is_neg       = false;
         bool is_neg_expon = false;
 
-        const int ten = 10;
+        BOOST_CONSTEXPR_OR_CONST int ten = 10;
 
         int expon       = 0;
         int digits_seen = 0;
 
-        const int max_digits = (std::numeric_limits<float_type>::is_specialized ? (std::numeric_limits<float_type>::max_digits10 + 1) : 128);
+        BOOST_CONSTEXPR_OR_CONST int max_digits = std::numeric_limits<float_type>::max_digits10 + 1;
 
         if(*p == static_cast<char>('+'))
         {
@@ -1279,17 +1295,20 @@
         {
           std::string str;
 
-          is >> str;
+          static_cast<void>(is >> str);
 
           const bool conversion_is_ok = boost::cstdfloat::detail::convert_from_string(x, str.c_str());
 
           if(false == conversion_is_ok)
           {
-            BOOST_THROW_EXCEPTION(std::runtime_error("Unable to interpret input string as a boost::float128_t"));
-
-            is.putback(str);
+            for(std::string::const_reverse_iterator it = str.rbegin(); it != str.rend(); ++it)
+            {
+              static_cast<void>(is.putback(*it));
+            }
 
             is.setstate(ios_base::failbit);
+
+            BOOST_THROW_EXCEPTION(std::runtime_error("Unable to interpret input string as a boost::float128_t"));
           }
 
           return is;
@@ -1298,65 +1317,33 @@
 
       #endif // Use __GNUC__ or BOOST_INTEL libquadmath
 
-    #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM (i.e., has libquadmath I/O stream support)
+    #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM (i.e., the user would like to have libquadmath I/O stream support)
 
     #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_COMPLEX)
 
+    // Implement a specialization of std::complex<> for quadruple-precision.
     #include <complex>
+    #include <boost/math/constants/constants.hpp>
+
+    #define BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE boost::cstdfloat::detail::float_internal128_t
 
     // Implement a specialization of std::complex<> for quadruple-precision.
     namespace std
     {
-      // Forward template function declarations.
-      #if defined(BOOST_NO_CXX11_CONSTEXPR)
-      template<> boost::cstdfloat::detail::float_internal128_t& real<boost::cstdfloat::detail::float_internal128_t>(complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> boost::cstdfloat::detail::float_internal128_t& imag<boost::cstdfloat::detail::float_internal128_t>(complex<boost::cstdfloat::detail::float_internal128_t>&);
-      #else
-      template<> BOOST_CONSTEXPR boost::cstdfloat::detail::float_internal128_t real<boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> BOOST_CONSTEXPR boost::cstdfloat::detail::float_internal128_t imag<boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      #endif
-      template<> boost::cstdfloat::detail::float_internal128_t abs <boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> boost::cstdfloat::detail::float_internal128_t arg <boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> boost::cstdfloat::detail::float_internal128_t norm<boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>&);
-
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> sqrt (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> sin  (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> cos  (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> tan  (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      #if !defined(BOOST_NO_CXX11_CONSTEXPR)
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> asin (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> acos (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> atan (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      #endif
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> exp  (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> log  (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> log10(const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> pow  (const complex<boost::cstdfloat::detail::float_internal128_t>&, const boost::cstdfloat::detail::float_internal128_t&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> pow  (const complex<boost::cstdfloat::detail::float_internal128_t>&, const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> pow  (const boost::cstdfloat::detail::float_internal128_t&, const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> sinh (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> cosh (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> tanh (const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      #if !defined(BOOST_NO_CXX11_CONSTEXPR)
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> asinh(const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> acosh(const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> atanh(const complex<boost::cstdfloat::detail::float_internal128_t>&);
-      #endif
-
       template<>
-      class complex<boost::cstdfloat::detail::float_internal128_t>
+      class complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>
       {
       public:
-        typedef boost::cstdfloat::detail::float_internal128_t value_type;
+        typedef BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE value_type;
 
         #if defined(BOOST_NO_CXX11_CONSTEXPR)
 
-        complex(const complex<value_type>& z) : re(z.re),
-                                                im(z.im) { }
+        complex(const complex<value_type>& z) : re(z.real()),
+                                                im(z.imag()) { }
 
-        complex(value_type Re = BOOST_FLOAT128_C(0.0),
-                value_type Im = BOOST_FLOAT128_C(0.0)) : re(Re),
-                                                         im(Im) { }
+        complex(value_type r = value_type(),
+                value_type i = value_type()) : re(r),
+                                               im(i) { }
 
         explicit complex(const complex<float>&);
         explicit complex(const complex<double>&);
@@ -1369,12 +1356,12 @@
 
         #else
 
-        BOOST_CONSTEXPR complex(const complex<value_type>& z) : re(z.re),
-                                                                im(z.im) { }
+        BOOST_CONSTEXPR complex(const complex<value_type>& z) : re(z.real()),
+                                                                im(z.imag()) { }
 
-        BOOST_CONSTEXPR complex(value_type Re = BOOST_FLOAT128_C(0.0),
-                                value_type Im = BOOST_FLOAT128_C(0.0)) : re(Re),
-                                                                         im(Im) { }
+        BOOST_CONSTEXPR complex(value_type r = value_type(),
+                                value_type i = value_type()) : re(r),
+                                                               im(i) { }
 
         explicit BOOST_CONSTEXPR complex(const complex<float>&);
         explicit BOOST_CONSTEXPR complex(const complex<double>&);
@@ -1404,6 +1391,7 @@
         {
           re *= v;
           im *= v;
+
           return *this;
         }
 
@@ -1411,6 +1399,7 @@
         {
           re /= v;
           im /= v;
+
           return *this;
         }
 
@@ -1418,70 +1407,137 @@
         {
           re += value_type(x.re);
           im += value_type(x.im);
+
           return *this;
         }
 
-        template<typename X> complex<value_type>& operator-=(const complex<X>& x)
+        template<class X> complex<value_type>& operator-=(const complex<X>& x)
         {
           re -= value_type(x.re);
           im -= value_type(x.im);
+
           return *this;
         }
 
-        template<typename X> complex<value_type>& operator*=(const complex<X>& x)
+        template<class X> complex<value_type>& operator*=(const complex<X>& x)
         {
           const value_type re_x(x.re);
           const value_type im_x(x.im);
           const value_type tmp_re((re * re_x) - (im * im_x));
           const value_type tmp_im((re * im_x) + (im * re_x));
+
           re = tmp_re;
           im = tmp_im;
+
           return *this;
         }
 
-        template<typename X> complex<value_type>& operator/=(const complex<X>& x)
+        template<class X> complex<value_type>& operator/=(const complex<X>& x)
         {
+          using std::sqrt;
+
           const value_type re_x(x.re);
           const value_type im_x(x.im);
-          const value_type one_over_denom = 1 / std::sqrt((re_x * re_x) + (im_x * im_x));
+
+          const value_type one_over_denom = 1 / sqrt((re_x * re_x) + (im_x * im_x));
+
           const value_type tmp_re = ((re * re_x) + (im * im_x)) * one_over_denom;
           const value_type tmp_im = ((im * re_x) - (re * im_x)) * one_over_denom;
+
           re = tmp_re;
           im = tmp_im;
+
           return *this;
         }
 
-        template<typename X>
+        template<class X>
         complex<value_type>& operator=(const complex<X>& z)
         {
           re = z.real();
           im = z.imag();
+
           return *this;
         }
 
-        complex<value_type>& operator=(const value_type& v) { re = v; im = value_type(0); return *this; }
+        complex<value_type>& operator=(const value_type& v)
+        {
+          re = v;
+          im = value_type(0);
+
+          return *this;
+        }
 
       private:
         value_type re;
         value_type im;
       };
 
+      // Constructors from built-in floating-point types.
       #if defined(BOOST_NO_CXX11_CONSTEXPR)
-      complex<boost::cstdfloat::detail::float_internal128_t>::complex(const complex<float>&        f) : re(boost::cstdfloat::detail::float_internal128_t( f.real())), im(boost::cstdfloat::detail::float_internal128_t( f.imag())) { }
-      complex<boost::cstdfloat::detail::float_internal128_t>::complex(const complex<double>&       d) : re(boost::cstdfloat::detail::float_internal128_t( d.real())), im(boost::cstdfloat::detail::float_internal128_t( d.imag())) { }
-      complex<boost::cstdfloat::detail::float_internal128_t>::complex(const complex<long double>& ld) : re(boost::cstdfloat::detail::float_internal128_t(ld.real())), im(boost::cstdfloat::detail::float_internal128_t(ld.imag())) { }
+      complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<float>&        f) : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( f.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( f.imag())) { }
+      complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<double>&       d) : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( d.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( d.imag())) { }
+      complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<long double>& ld) : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(ld.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(ld.imag())) { }
       #else
-      BOOST_CONSTEXPR complex<boost::cstdfloat::detail::float_internal128_t>::complex(const complex<float>&        f) : re(boost::cstdfloat::detail::float_internal128_t( f.real())), im(boost::cstdfloat::detail::float_internal128_t( f.imag())) { }
-      BOOST_CONSTEXPR complex<boost::cstdfloat::detail::float_internal128_t>::complex(const complex<double>&       d) : re(boost::cstdfloat::detail::float_internal128_t( d.real())), im(boost::cstdfloat::detail::float_internal128_t( d.imag())) { }
-      BOOST_CONSTEXPR complex<boost::cstdfloat::detail::float_internal128_t>::complex(const complex<long double>& ld) : re(boost::cstdfloat::detail::float_internal128_t(ld.real())), im(boost::cstdfloat::detail::float_internal128_t(ld.imag())) { }
+      BOOST_CONSTEXPR complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<float>&        f) : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( f.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( f.imag())) { }
+      BOOST_CONSTEXPR complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<double>&       d) : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( d.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( d.imag())) { }
+      BOOST_CONSTEXPR complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<long double>& ld) : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(ld.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(ld.imag())) { }
       #endif
+
+      // Forward template function declarations.
+      #if defined(BOOST_NO_CXX11_CONSTEXPR)
+      inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& real(complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& imag(complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      #else
+      inline BOOST_CONSTEXPR BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE real(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline BOOST_CONSTEXPR BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE imag(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      #endif
+      inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE abs (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE arg (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE norm(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> conj (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      #if !defined(BOOST_NO_CXX11_FULL_COMPLEX_TRANSCENDENTALS)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> proj (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      #endif
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> polar(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE&,
+                                                                        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE&);
+
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> sqrt (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> sin  (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> cos  (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> tan  (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      #if !defined(BOOST_NO_CXX11_FULL_COMPLEX_TRANSCENDENTALS)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> asin (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> acos (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> atan (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      #endif
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> exp  (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> log  (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> log10(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow  (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow  (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow  (const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE&, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> sinh (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> cosh (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> tanh (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      #if !defined(BOOST_NO_CXX11_FULL_COMPLEX_TRANSCENDENTALS)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> asinh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> acosh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> atanh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+      #endif
+
+      template<class char_type, class traits_type>
+      inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>&, const std::complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
+
+      template<class char_type, class traits_type>
+      inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>&, std::complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
     } // namespace std
 
     namespace boost { namespace cstdfloat { namespace detail {
-    template<class T> std::complex<T> iz_helper__x(const std::complex<T>& x)
+    template<class float_type> std::complex<float_type> iz_helper__x(const std::complex<float_type>& x)
     {
-      const T tmp_r = x.real();
-      return std::complex<T>(-x.imag(), tmp_r);
+      const float_type tmp_r = x.real();
+      return std::complex<float_type>(-x.imag(), tmp_r);
     }
     } } } // boost::cstdfloat::detail
 
@@ -1489,227 +1545,271 @@
     {
       // 26.4.7, specific values.
       #if defined(BOOST_NO_CXX11_CONSTEXPR)
-      template<> boost::cstdfloat::detail::float_internal128_t& real<boost::cstdfloat::detail::float_internal128_t>(complex<boost::cstdfloat::detail::float_internal128_t>& x) { return x.real(); }
-      template<> boost::cstdfloat::detail::float_internal128_t& imag<boost::cstdfloat::detail::float_internal128_t>(complex<boost::cstdfloat::detail::float_internal128_t>& x) { return x.imag(); }
+      inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& real(complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x) { return x.real(); }
+      inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& imag(complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x) { return x.imag(); }
       #else
-      template<> BOOST_CONSTEXPR boost::cstdfloat::detail::float_internal128_t real<boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return x.real(); }
-      template<> BOOST_CONSTEXPR boost::cstdfloat::detail::float_internal128_t imag<boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return x.imag(); }
+      inline BOOST_CONSTEXPR BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE real(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x) { return x.real(); }
+      inline BOOST_CONSTEXPR BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE imag(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x) { return x.imag(); }
       #endif
-      template<> boost::cstdfloat::detail::float_internal128_t abs <boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return std::sqrt((real(x) * real(x)) + (imag(x) * imag(x))); }
-      template<> boost::cstdfloat::detail::float_internal128_t arg <boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return std::atan2(x.imag(), x.real()); }
-      template<> boost::cstdfloat::detail::float_internal128_t norm<boost::cstdfloat::detail::float_internal128_t>(const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return (real(x) * real(x)) + (imag(x) * imag(x)); }
+      inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE abs (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x) { using std::sqrt;  return sqrt ((real(x) * real(x)) + (imag(x) * imag(x))); }
+      inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE arg (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x) { using std::atan2; return atan2(x.imag(), x.real()); }
+      inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE norm(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x) { return (real(x) * real(x)) + (imag(x) * imag(x)); }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> conj (const complex<boost::cstdfloat::detail::float_internal128_t>& x) { return complex<boost::cstdfloat::detail::float_internal128_t>(x.real(), -x.imag()); }
-      #if !defined(BOOST_NO_CXX11_CONSTEXPR)
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> proj (const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> conj (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(x.real(), -x.imag()); }
+      #if !defined(BOOST_NO_CXX11_FULL_COMPLEX_TRANSCENDENTALS)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> proj (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        const boost::cstdfloat::detail::float_internal128_t two_over_denom = BOOST_FLOAT128_C(2.0) / (std::norm(x) + 1);
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE two_over_denom = BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(2) / (std::norm(x) + 1);
 
-        return complex<boost::cstdfloat::detail::float_internal128_t>(x.real() * two_over_denom,
-                                                                      x.imag() * two_over_denom);
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(x.real() * two_over_denom, x.imag() * two_over_denom);
       }
       #endif
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> polar(const boost::cstdfloat::detail::float_internal128_t& rho,
-                                                                              const boost::cstdfloat::detail::float_internal128_t& theta)      { return complex<boost::cstdfloat::detail::float_internal128_t>(rho * std::cos(theta), rho * std::sin(theta)); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> polar(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& rho,
+                                                                        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& theta)
+      {
+        using std::sin;
+        using std::cos;
+
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(rho * cos(theta), rho * sin(theta));
+      }
 
       // Global add, sub, mul, div.
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator+(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u.real() + v.real(), u.imag() + v.imag()); }
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator-(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u.real() - v.real(), u.imag() - v.imag()); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator+(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u.real() + v.real(), u.imag() + v.imag()); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator-(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u.real() - v.real(), u.imag() - v.imag()); }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator*(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator*(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v)
       {
-        const typename complex<boost::cstdfloat::detail::float_internal128_t>::value_type ur = u.real();
-        const typename complex<boost::cstdfloat::detail::float_internal128_t>::value_type ui = u.imag();
-        const typename complex<boost::cstdfloat::detail::float_internal128_t>::value_type vr = v.real();
-        const typename complex<boost::cstdfloat::detail::float_internal128_t>::value_type vi = v.imag();
+        const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::value_type ur = u.real();
+        const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::value_type ui = u.imag();
+        const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::value_type vr = v.real();
+        const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::value_type vi = v.imag();
 
-        return complex<boost::cstdfloat::detail::float_internal128_t>((ur * vr) - (ui * vi), (ur * vi) + (ui * vr));
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>((ur * vr) - (ui * vi), (ur * vi) + (ui * vr));
       }
 
-      template<> inline complex<boost::cstdfloat::detail::float_internal128_t> operator/(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator/(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v)
       {
-        const boost::cstdfloat::detail::float_internal128_t one_over_denom = 1 / std::norm(v);
-        const boost::cstdfloat::detail::float_internal128_t tmp_re = ((u.real() * v.real()) + (u.imag() * v.imag())) * one_over_denom;
-        const boost::cstdfloat::detail::float_internal128_t tmp_im = ((u.imag() * v.real()) - (u.real() * v.imag())) * one_over_denom;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE one_over_denom = 1 / std::norm(v);
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE tmp_re = ((u.real() * v.real()) + (u.imag() * v.imag())) * one_over_denom;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE tmp_im = ((u.imag() * v.real()) - (u.real() * v.imag())) * one_over_denom;
 
-        return complex<boost::cstdfloat::detail::float_internal128_t>(tmp_re, tmp_im);
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(tmp_re, tmp_im);
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator+(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const boost::cstdfloat::detail::float_internal128_t& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u.real() + v, u.imag()); }
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator-(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const boost::cstdfloat::detail::float_internal128_t& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u.real() - v, u.imag()); }
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator*(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const boost::cstdfloat::detail::float_internal128_t& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u.real() * v, u.imag() * v); }
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator/(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const boost::cstdfloat::detail::float_internal128_t& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u.real() / v, u.imag() / v); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator+(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u.real() + v, u.imag()); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator-(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u.real() - v, u.imag()); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator*(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u.real() * v, u.imag() * v); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator/(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u.real() / v, u.imag() / v); }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator+(const boost::cstdfloat::detail::float_internal128_t& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u + v.real(), v.imag()); }
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator-(const boost::cstdfloat::detail::float_internal128_t& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u - v.real(), -v.imag()); }
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator*(const boost::cstdfloat::detail::float_internal128_t& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return complex<boost::cstdfloat::detail::float_internal128_t>(u * v.real(), u * v.imag()); }
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator/(const boost::cstdfloat::detail::float_internal128_t& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { const boost::cstdfloat::detail::float_internal128_t v_norm = norm(v); return complex<boost::cstdfloat::detail::float_internal128_t>((u * v.real()) / v_norm, (-u * v.imag()) / v_norm); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator+(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u + v.real(), v.imag()); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator-(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u - v.real(), -v.imag()); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator*(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u * v.real(), u * v.imag()); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator/(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE v_norm = norm(v); return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>((u * v.real()) / v_norm, (-u * v.imag()) / v_norm); }
 
       // Unary plus / minus.
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator+(const complex<boost::cstdfloat::detail::float_internal128_t>& u) { return u; }
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> operator-(const complex<boost::cstdfloat::detail::float_internal128_t>& u) { return complex<boost::cstdfloat::detail::float_internal128_t>(-u.real(), -u.imag()); }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator+(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u) { return u; }
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator-(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(-u.real(), -u.imag()); }
 
       // Equality and inequality.
-      template<> BOOST_CONSTEXPR bool operator==(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return ((u.real() == v.real()) && (u.imag() == v.imag())); }
-      template<> BOOST_CONSTEXPR bool operator!=(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return ((u.real() != v.real()) || (u.imag() != v.imag())); }
+      #if defined(BOOST_NO_CXX11_CONSTEXPR)
+      inline bool operator==(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return ((u.real() == v.real()) && (u.imag() == v.imag())); }
+      inline bool operator!=(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return ((u.real() != v.real()) || (u.imag() != v.imag())); }
 
-      template<> BOOST_CONSTEXPR bool operator==(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const boost::cstdfloat::detail::float_internal128_t& v) { return ((u.real() == v) && (u.imag() == BOOST_FLOAT128_C(0.0))); }
-      template<> BOOST_CONSTEXPR bool operator!=(const complex<boost::cstdfloat::detail::float_internal128_t>& u, const boost::cstdfloat::detail::float_internal128_t& v) { return ((u.real() != v) || (u.imag() != BOOST_FLOAT128_C(0.0))); }
+      inline bool operator==(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return ((u.real() == v) && (u.imag() == BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
+      inline bool operator!=(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return ((u.real() != v) || (u.imag() != BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
 
-      template<> BOOST_CONSTEXPR bool operator==(const boost::cstdfloat::detail::float_internal128_t& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return ((u == v.real()) && (v.imag() == BOOST_FLOAT128_C(0.0))); }
-      template<> BOOST_CONSTEXPR bool operator!=(const boost::cstdfloat::detail::float_internal128_t& u, const complex<boost::cstdfloat::detail::float_internal128_t>& v) { return ((u != v.real()) || (v.imag() != BOOST_FLOAT128_C(0.0))); }
+      inline bool operator==(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return ((u == v.real()) && (v.imag() == BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
+      inline bool operator!=(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return ((u != v.real()) || (v.imag() != BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
+      #else
+      inline BOOST_CONSTEXPR bool operator==(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return ((u.real() == v.real()) && (u.imag() == v.imag())); }
+      inline BOOST_CONSTEXPR bool operator!=(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return ((u.real() != v.real()) || (u.imag() != v.imag())); }
+
+      inline BOOST_CONSTEXPR bool operator==(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return ((u.real() == v) && (u.imag() == BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
+      inline BOOST_CONSTEXPR bool operator!=(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return ((u.real() != v) || (u.imag() != BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
+
+      inline BOOST_CONSTEXPR bool operator==(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return ((u == v.real()) && (v.imag() == BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
+      inline BOOST_CONSTEXPR bool operator!=(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return ((u != v.real()) || (v.imag() != BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
+      #endif
 
       // 26.4.8, transcendentals
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> sqrt(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> sqrt(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
+        using std::fabs;
+        using std::sqrt;
+
         // sqrt(*this) = (s, I / 2s) for R >= 0
         // (|I| / 2s, +-s) for R < 0
         // where s = sqrt{ [ |R| + sqrt(R^2 + I^2) ] / 2 },
         // and the +- sign is the same as the sign of I.
 
-        const boost::cstdfloat::detail::float_internal128_t zr = x.real();
-        const boost::cstdfloat::detail::float_internal128_t s  = std::sqrt((std::fabs(zr) + std::abs(x)) / 2);
-        const boost::cstdfloat::detail::float_internal128_t zi = x.imag();
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE zr = x.real();
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE s  = sqrt((fabs(zr) + std::abs(x)) / 2);
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE zi = x.imag();
 
         if(zr >= 0)
         {
-          return complex<boost::cstdfloat::detail::float_internal128_t>(s, (zi / s) / 2);
+          return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(s, zi / (s * 2));
         }
         else
         {
-          const bool imag_is_pos = (zi >= 0);
+          const bool imag_is_neg = (zi < 0);
 
-          return complex<boost::cstdfloat::detail::float_internal128_t>((std::fabs(zi) / s) / 2, (imag_is_pos ? s : -s));
+          return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(fabs(zi) / (s * 2), (imag_is_neg ? -s : s));
         }
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> sin(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> sin(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        const boost::cstdfloat::detail::float_internal128_t sin_x  = std::sin (x.real());
-        const boost::cstdfloat::detail::float_internal128_t cos_x  = std::cos (x.real());
-        const boost::cstdfloat::detail::float_internal128_t sinh_y = std::sinh(x.imag());
-        const boost::cstdfloat::detail::float_internal128_t cosh_y = std::cosh(x.imag());
+        using std::sin;
+        using std::cos;
+        using std::sinh;
+        using std::cosh;
 
-        return complex<boost::cstdfloat::detail::float_internal128_t>(sin_x * cosh_y, cos_x * sinh_y);
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sin_x  = sin (x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cos_x  = cos (x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_y = sinh(x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_y = cosh(x.imag());
+
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(sin_x * cosh_y, cos_x * sinh_y);
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> cos(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> cos(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        const boost::cstdfloat::detail::float_internal128_t sin_x  = std::sin (x.real());
-        const boost::cstdfloat::detail::float_internal128_t cos_x  = std::cos (x.real());
-        const boost::cstdfloat::detail::float_internal128_t sinh_y = std::sinh(x.imag());
-        const boost::cstdfloat::detail::float_internal128_t cosh_y = std::cosh(x.imag());
+        using std::sin;
+        using std::cos;
+        using std::sinh;
+        using std::cosh;
 
-        return complex<boost::cstdfloat::detail::float_internal128_t>(cos_x * cosh_y, -(sin_x * sinh_y));
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sin_x  = sin (x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cos_x  = cos (x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_y = sinh(x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_y = cosh(x.imag());
+
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(cos_x * cosh_y, -(sin_x * sinh_y));
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> tan(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> tan(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
         return std::sin(x) / std::cos(x);
       }
 
-      #if !defined(BOOST_NO_CXX11_CONSTEXPR)
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> asin(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      #if !defined(BOOST_NO_CXX11_FULL_COMPLEX_TRANSCENDENTALS)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> asin(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return -boost::cstdfloat::detail::iz_helper__x(std::log(boost::cstdfloat::detail::iz_helper__x(x) + std::sqrt(BOOST_FLOAT128_C(1.0) - (x * x))));
+        return -boost::cstdfloat::detail::iz_helper__x(std::log(boost::cstdfloat::detail::iz_helper__x(x) + std::sqrt(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - (x * x))));
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> acos(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> acos(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return BOOST_FLOAT128_C(1.57079632679489661923132169163975144209858469968755) - std::asin(x);
+        return boost::math::constants::half_pi<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>() - std::asin(x);
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> atan(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> atan(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        const complex<boost::cstdfloat::detail::float_internal128_t> izz = boost::cstdfloat::detail::iz_helper__x(x);
+        const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> izz = boost::cstdfloat::detail::iz_helper__x(x);
 
-        return boost::cstdfloat::detail::iz_helper__x(std::log(BOOST_FLOAT128_C(1.0) - izz) - std::log(BOOST_FLOAT128_C(1.0) + izz)) / BOOST_FLOAT128_C(2.0);
+        return boost::cstdfloat::detail::iz_helper__x(std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - izz) - std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) + izz)) / 2;
       }
       #endif
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> exp(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> exp(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return std::polar(std::exp(x.real()), x.imag());
+        using std::exp;
+
+        return std::polar(exp(x.real()), x.imag());
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> log(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> log(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return complex<boost::cstdfloat::detail::float_internal128_t>(std::log(std::norm(x)) / 2, std::atan2(x.imag(), x.real()));
+        using std::atan2;
+        using std::log;
+
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(log(std::norm(x)) / 2, atan2(x.imag(), x.real()));
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> log10(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> log10(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return std::log(x) / BOOST_FLOAT128_C(2.30258509299404568401799145468436420760110148862877);
+        return std::log(x) / boost::math::constants::ln_ten<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>();
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> pow(const complex<boost::cstdfloat::detail::float_internal128_t>& x,
-                                                                            const boost::cstdfloat::detail::float_internal128_t& a)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x,
+                                                      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& a)
       {
         std::exp(a * std::log(x));
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> pow(const complex<boost::cstdfloat::detail::float_internal128_t>& x,
-                                                                            const complex<boost::cstdfloat::detail::float_internal128_t>& a)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x,
+                                                      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& a)
       {
         std::exp(a * std::log(x));
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> pow(const boost::cstdfloat::detail::float_internal128_t& x,
-                                                                            const complex<boost::cstdfloat::detail::float_internal128_t>& a)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& x,
+                                                      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& a)
       {
         std::exp(a * std::log(x));
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> sinh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> sinh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        const boost::cstdfloat::detail::float_internal128_t sin_y  = std::sin (x.imag());
-        const boost::cstdfloat::detail::float_internal128_t cos_y  = std::cos (x.imag());
-        const boost::cstdfloat::detail::float_internal128_t sinh_x = std::sinh(x.real());
-        const boost::cstdfloat::detail::float_internal128_t cosh_x = std::cosh(x.real());
+        using std::sin;
+        using std::cos;
+        using std::sinh;
+        using std::cosh;
 
-        return complex<boost::cstdfloat::detail::float_internal128_t>(cos_y * sinh_x, cosh_x * sin_y);
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sin_y  = sin (x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cos_y  = cos (x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_x = sinh(x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_x = cosh(x.real());
+
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(cos_y * sinh_x, cosh_x * sin_y);
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> cosh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> cosh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        const boost::cstdfloat::detail::float_internal128_t sin_y  = std::sin (x.imag());
-        const boost::cstdfloat::detail::float_internal128_t cos_y  = std::cos (x.imag());
-        const boost::cstdfloat::detail::float_internal128_t sinh_x = std::sinh(x.real());
-        const boost::cstdfloat::detail::float_internal128_t cosh_x = std::cosh(x.real());
+        using std::sin;
+        using std::cos;
+        using std::sinh;
+        using std::cosh;
 
-        return complex<boost::cstdfloat::detail::float_internal128_t>(cos_y * cosh_x, sin_y * sinh_x);
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sin_y  = sin (x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cos_y  = cos (x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_x = sinh(x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_x = cosh(x.real());
+
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(cos_y * cosh_x, sin_y * sinh_x);
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> tanh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> tanh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return std::sinh(x) / std::cosh(x);
+        const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> ex_plus  = std::exp(x);
+        const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> ex_minus = 1 / ex_plus;
+
+        return (ex_plus - ex_minus) / (ex_plus + ex_minus);
       }
 
-      #if !defined(BOOST_NO_CXX11_CONSTEXPR)
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> asinh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      #if !defined(BOOST_NO_CXX11_FULL_COMPLEX_TRANSCENDENTALS)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> asinh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return std::log(x + std::sqrt((x * x) + BOOST_FLOAT128_C(1.0)));
+        return std::log(x + std::sqrt((x * x) + BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1)));
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> acosh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> acosh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        const complex<boost::cstdfloat::detail::float_internal128_t> zp(x.real() + 1, x.imag());
-        const complex<boost::cstdfloat::detail::float_internal128_t> zm(x.real() - 1, x.imag());
+        const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> zp(x.real() + 1, x.imag());
+        const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> zm(x.real() - 1, x.imag());
 
         return std::log(x + (zp * std::sqrt(zm / zp)));
       }
 
-      template<> complex<boost::cstdfloat::detail::float_internal128_t> atanh(const complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> atanh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return (std::log(BOOST_FLOAT128_C(1.0) + x) - std::log(BOOST_FLOAT128_C(1.0) - x)) / BOOST_FLOAT128_C(2.0);
+        return (std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) + x) - std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - x)) / 2.0;
       }
       #endif
 
       template<class char_type, class traits_type>
-      inline std::basic_ostream<char_type, traits_type>& operator<< (std::basic_ostream<char_type, traits_type>& os, const std::complex<boost::cstdfloat::detail::float_internal128_t>&);
-
-      template<class char_type, class traits_type>
-      inline std::basic_ostream<char_type, traits_type>& operator<< (std::basic_ostream<char_type, traits_type>& os, const std::complex<boost::cstdfloat::detail::float_internal128_t>& x)
+      inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>& os, const std::complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
         std::basic_ostringstream<char_type, traits_type> ostr;
         ostr.flags(os.flags());
@@ -1720,16 +1820,66 @@
 
         return (os << ostr.str());
       }
+
+      template<class char_type, class traits_type>
+      inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, std::complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
+      {
+        BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE rx;
+        BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE ix;
+
+        char_type the_char;
+
+        static_cast<void>(is >> the_char);
+
+        if(the_char == static_cast<char_type>('('))
+        {
+          static_cast<void>(is >> rx >> the_char);
+
+          if(the_char == static_cast<char_type>(','))
+          {
+            static_cast<void>(is >> ix >> the_char);
+
+            if(the_char == static_cast<char_type>(')'))
+            {
+              x = complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(rx, ix);
+            }
+            else
+            {
+              is.setstate(ios_base::failbit);
+            }
+          }
+          else if(the_char == static_cast<char_type>(')'))
+          {
+            x = rx;
+          }
+          else
+          {
+            is.setstate(ios_base::failbit);
+          }
+        }
+        else
+        {
+          static_cast<void>(is.putback(the_char));
+
+          static_cast<void>(is >> rx);
+
+          x = rx;
+        }
+
+        return is;
+      }
     } // namespace std
 
-    #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_COMPLEX (i.e., has libquadmath complex support)
+    #undef BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE
 
-  #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., has libquadmath support)
+    #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_COMPLEX (i.e., the user would like to have libquadmath complex support)
+
+  #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)
 
   // This is the end of the preamble. Now we use the results
   // of the queries that have been obtained in the preamble.
 
-  // Make sure that the compiler has any floating-point type whatsoever.
+  // Make sure that the compiler has any floating-point type(s) whatsoever.
   #if (   (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  == 0)  \
        && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  == 0)  \
        && (BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  == 0)  \
