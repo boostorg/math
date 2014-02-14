@@ -298,7 +298,7 @@
 
     // Implement a specialization of std::numeric_limits<> for quadruple-precision.
 
-    // Forward declaration of quadruple-precision square root function.
+    // Forward declaration of the quadruple-precision square root function.
     extern "C" boost::cstdfloat::detail::float_internal128_t sqrtq(boost::cstdfloat::detail::float_internal128_t) throw();
 
     namespace std
@@ -330,7 +330,7 @@
         BOOST_STATIC_CONSTEXPR float_denorm_style                             has_denorm               = denorm_absent;
         BOOST_STATIC_CONSTEXPR bool                                           has_denorm_loss          = false;
         static                 boost::cstdfloat::detail::float_internal128_t  infinity     ()          { return BOOST_FLOAT128_C(1.0) / BOOST_FLOAT128_C(0.0); }
-        static                 boost::cstdfloat::detail::float_internal128_t  quiet_NaN    ()          { return ::sqrtq(BOOST_FLOAT128_C(-1.0)); }
+        static                 boost::cstdfloat::detail::float_internal128_t  quiet_NaN    ()          { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT(BOOST_FLOAT128_C(-1.0)); }
         static                 boost::cstdfloat::detail::float_internal128_t  signaling_NaN()          { return BOOST_FLOAT128_C(0.0); }
         static                 boost::cstdfloat::detail::float_internal128_t  denorm_min   ()          { return BOOST_FLOAT128_C(0.0); }
         BOOST_STATIC_CONSTEXPR bool                                           is_iec559                = true;
@@ -347,14 +347,11 @@
 
       #include <boost/cstdint.hpp>
 
-      // Implement quadruple-precision <math.h> functions in the namespace
-      // boost::cstdfloat::detail. Subsequently *use* in the std namespace.
+      // Implement quadruple-precision <cmath> functions in the namespace
+      // boost::cstdfloat::detail. Subsequently inject these into the
+      // std namespace via *using* directive.
 
       // Begin with some forward function declarations.
-
-      // Forward declarations of quadruple-precision string functions.
-      extern "C" int quadmath_snprintf(char *str, size_t size, const char *format, ...) throw();
-      extern "C" boost::cstdfloat::detail::float_internal128_t strtoflt128(const char*, char **) throw();
 
       // Forward declarations of quadruple-precision elementary functions.
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LDEXP (boost::cstdfloat::detail::float_internal128_t, int)  throw();
@@ -375,7 +372,9 @@
         // in the range of (-ln2 < x < ln2). Scale the argument to this range
         // and multiply the result by 2^n accordingly.
 
-        // Generate the polynomial coefficients with Mathematica(R).
+        // Derive the polynomial coefficients with Mathematica(R) by generating
+        // a table of high-precision values in the range of (-ln2 < x < ln2)
+        // and subsequently applying the *Fit* function.
 
         // Table[{x, Exp[x] - 1}, {x, -Log[2], Log[2], 1/180}]
         // N[%, 120]
@@ -473,7 +472,7 @@
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LGAMMA(boost::cstdfloat::detail::float_internal128_t) throw();
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TGAMMA(boost::cstdfloat::detail::float_internal128_t) throw();
 
-      // Define the quadruple-precision <math.h> functions in the namespace
+      // Define the quadruple-precision <cmath> functions in the namespace
       // boost::cstdfloat::detail.
 
       namespace boost { namespace cstdfloat { namespace detail {
@@ -504,7 +503,7 @@
       inline   boost::cstdfloat::detail::float_internal128_t tgamma(boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_TGAMMA(x); }
       } } }  // boost::cstdfloat::detail
 
-      // Now *use* the quadruple-precision <math.h> functions in the std namespace.
+      // Now inject the quadruple-precision <cmath> functions into the std namespace.
       namespace std
       {
         using boost::cstdfloat::detail::ldexp;
@@ -533,6 +532,7 @@
         using boost::cstdfloat::detail::lgamma;
         using boost::cstdfloat::detail::tgamma;
       }
+
     #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH (i.e., the user would like to have libquadmath <cmath> support)
 
     #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM)
@@ -546,6 +546,10 @@
 
       #if defined(__GNUC__)
 //      #if 0
+
+      // Forward declarations of quadruple-precision string functions.
+      extern "C" int quadmath_snprintf(char *str, size_t size, const char *format, ...) throw();
+      extern "C" boost::cstdfloat::detail::float_internal128_t strtoflt128(const char*, char **) throw();
 
       namespace std
       {
@@ -745,7 +749,7 @@
 
         if(!fixed && !scientific && !showpoint)
         {
-          // Suppress trailing zeros:
+          // Suppress trailing zeros.
           typename string_type::iterator pos = str.end();
 
           while(pos != str.begin() && *--pos == '0') { ; }
@@ -1298,7 +1302,7 @@
 
     // Implement a specialization of std::complex<> for quadruple-precision.
     #include <complex>
-//    #include <boost/math/constants/constants.hpp>
+    #include <boost/math/constants/constants.hpp>
 
     #define BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE boost::cstdfloat::detail::float_internal128_t
 
@@ -1398,6 +1402,7 @@
         {
           const value_type re_x(x.re);
           const value_type im_x(x.im);
+
           const value_type tmp_re((re * re_x) - (im * im_x));
           const value_type tmp_im((re * im_x) + (im * re_x));
 
@@ -1508,6 +1513,7 @@
       inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>&, std::complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
     } // namespace std
 
+    // Here is a simple helper function.
     namespace boost { namespace cstdfloat { namespace detail {
     template<class float_type> std::complex<float_type> iz_helper__x(const std::complex<float_type>& x)
     {
@@ -1518,7 +1524,7 @@
 
     namespace std
     {
-      // 26.4.7, specific values.
+      // ISO/IEC 14882:2011, Section 26.4.7, specific values.
       #if defined(BOOST_NO_CXX11_CONSTEXPR)
       inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& real(complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x) { return x.real(); }
       inline BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& imag(complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x) { return x.imag(); }
@@ -1606,7 +1612,7 @@
       inline BOOST_CONSTEXPR bool operator!=(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return ((u != v.real()) || (v.imag() != BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
       #endif
 
-      // 26.4.8, transcendentals
+      // ISO/IEC 14882:2011, Section 26.4.8, transcendentals.
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> sqrt(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
         using std::fabs;
@@ -1676,8 +1682,7 @@
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> acos(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-//        return boost::math::constants::half_pi<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>() - std::asin(x);
-        return BOOST_FLOAT128_C(1.57079632679489661923132169163975144209858469968755) - std::asin(x);
+        return boost::math::constants::half_pi<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>() - std::asin(x);
       }
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> atan(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
@@ -1705,8 +1710,7 @@
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> log10(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-//        return std::log(x) / boost::math::constants::ln_ten<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>();
-        return std::log(x) / BOOST_FLOAT128_C(2.30258509299404568401799145468436420760110148862877);
+        return std::log(x) / boost::math::constants::ln_ten<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>();
       }
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x,
@@ -1853,8 +1857,10 @@
 
   #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)
 
-  // This is the end of the preamble. Now we use the results
-  // of the queries that have been obtained in the preamble.
+  // This is the end of the preamble, and the end of the C++ support
+  // sections for quadruple-precision. Now we use the results
+  // of the queries that have been obtained in the preamble
+  // for the final type definitions in the namespace boost.
 
   // Make sure that the compiler has any floating-point type(s) whatsoever.
   #if (   (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  == 0)  \
@@ -1944,8 +1950,8 @@
     #error The maximum available floating-point width for <boost/cstdfloat.hpp> is undefined.
   #endif
 
-  // Here, we define the floating-point typedefs having specified widths.
-  // The types are defined in the namespace boost.
+  // And finally..., we define the floating-point typedefs having
+  // specified widths. The types are defined in the namespace boost.
 
   // For simplicity, the least and fast types are type defined identically
   // as the corresponding fixed-width type. This behavior can, however,
