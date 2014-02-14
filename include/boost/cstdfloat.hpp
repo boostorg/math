@@ -61,8 +61,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  1
       #define BOOST_FLOAT16_C(x)  (x ## F)
-      #define BOOST_FLOAT_16_MIN  FLT_MIN
-      #define BOOST_FLOAT_16_MAX  FLT_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_16_MIN  FLT_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_16_MAX  FLT_MAX
     #elif((FLT_MANT_DIG == 24) && (FLT_MAX_EXP == 128) && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE float
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -70,8 +70,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  1
       #define BOOST_FLOAT32_C(x)  (x ## F)
-      #define BOOST_FLOAT_32_MIN  FLT_MIN
-      #define BOOST_FLOAT_32_MAX  FLT_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_32_MIN  FLT_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_32_MAX  FLT_MAX
     #elif((FLT_MANT_DIG == 53) && (FLT_MAX_EXP == 1024) && (BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT64_NATIVE_TYPE float
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -79,8 +79,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  1
       #define BOOST_FLOAT64_C(x)  (x ## F)
-      #define BOOST_FLOAT_64_MIN  FLT_MIN
-      #define BOOST_FLOAT_64_MAX  FLT_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_64_MIN  FLT_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_64_MAX  FLT_MAX
     #elif((FLT_MANT_DIG == 64) && (FLT_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE float
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -88,8 +88,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  1
       #define BOOST_FLOAT80_C(x)  (x ## F)
-      #define BOOST_FLOAT_80_MIN  FLT_MIN
-      #define BOOST_FLOAT_80_MAX  FLT_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_80_MIN  FLT_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_80_MAX  FLT_MAX
     #elif((FLT_MANT_DIG == 113) && (FLT_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE float
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -97,8 +97,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE  1
       #define BOOST_FLOAT128_C(x)  (x ## F)
-      #define BOOST_FLOAT_128_MIN  FLT_MIN
-      #define BOOST_FLOAT_128_MAX  FLT_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_128_MIN  FLT_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_128_MAX  FLT_MAX
     #endif
   #endif
 
@@ -111,8 +111,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  1
       #define BOOST_FLOAT16_C(x)  (x)
-      #define BOOST_FLOAT_16_MIN  DBL_MIN
-      #define BOOST_FLOAT_16_MAX  DBL_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_16_MIN  DBL_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_16_MAX  DBL_MAX
     #elif((DBL_MANT_DIG == 24) && (DBL_MAX_EXP == 128) && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -120,8 +120,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  1
       #define BOOST_FLOAT32_C(x)  (x)
-      #define BOOST_FLOAT_32_MIN  DBL_MIN
-      #define BOOST_FLOAT_32_MAX  DBL_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_32_MIN  DBL_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_32_MAX  DBL_MAX
     #elif((DBL_MANT_DIG == 53) && (DBL_MAX_EXP == 1024) && (BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT64_NATIVE_TYPE double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -129,8 +129,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  1
       #define BOOST_FLOAT64_C(x)  (x)
-      #define BOOST_FLOAT_64_MIN  DBL_MIN
-      #define BOOST_FLOAT_64_MAX  DBL_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_64_MIN  DBL_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_64_MAX  DBL_MAX
     #elif((DBL_MANT_DIG == 64) && (DBL_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -138,8 +138,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  1
       #define BOOST_FLOAT80_C(x)  (x)
-      #define BOOST_FLOAT_80_MIN  DBL_MIN
-      #define BOOST_FLOAT_80_MAX  DBL_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_80_MIN  DBL_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_80_MAX  DBL_MAX
     #elif((DBL_MANT_DIG == 113) && (DBL_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -147,8 +147,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE  1
       #define BOOST_FLOAT128_C(x)  (x)
-      #define BOOST_FLOAT_128_MIN  DBL_MIN
-      #define BOOST_FLOAT_128_MAX  DBL_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_128_MIN  DBL_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_128_MAX  DBL_MAX
     #endif
   #endif
 
@@ -161,8 +161,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  1
       #define BOOST_FLOAT16_C(x)  (x ## L)
-      #define BOOST_FLOAT_16_MIN  LDBL_MIN
-      #define BOOST_FLOAT_16_MAX  LDBL_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_16_MIN  LDBL_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_16_MAX  LDBL_MAX
     #elif((LDBL_MANT_DIG == 24) && (LDBL_MAX_EXP == 128) && (BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT32_NATIVE_TYPE long double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -170,8 +170,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE  1
       #define BOOST_FLOAT32_C(x)  (x ## L)
-      #define BOOST_FLOAT_32_MIN  LDBL_MIN
-      #define BOOST_FLOAT_32_MAX  LDBL_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_32_MIN  LDBL_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_32_MAX  LDBL_MAX
     #elif((LDBL_MANT_DIG == 53) && (LDBL_MAX_EXP == 1024) && (BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT64_NATIVE_TYPE long double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -179,8 +179,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE  1
       #define BOOST_FLOAT64_C(x)  (x ## L)
-      #define BOOST_FLOAT_64_MIN  LDBL_MIN
-      #define BOOST_FLOAT_64_MAX  LDBL_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_64_MIN  LDBL_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_64_MAX  LDBL_MAX
     #elif((LDBL_MANT_DIG == 64) && (LDBL_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT80_NATIVE_TYPE long double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -188,8 +188,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE  1
       #define BOOST_FLOAT80_C(x)  (x ## L)
-      #define BOOST_FLOAT_80_MIN  LDBL_MIN
-      #define BOOST_FLOAT_80_MAX  LDBL_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_80_MIN  LDBL_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_80_MAX  LDBL_MAX
     #elif((LDBL_MANT_DIG == 113) && (LDBL_MAX_EXP == 16384) && (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0))
       #define BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE long double
       #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
@@ -197,8 +197,8 @@
       #undef  BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
       #define BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE  1
       #define BOOST_FLOAT128_C(x)  (x ## L)
-      #define BOOST_FLOAT_128_MIN  LDBL_MIN
-      #define BOOST_FLOAT_128_MAX  LDBL_MAX
+      #define BOOST_CSTDFLOAT_FLOAT_128_MIN  LDBL_MIN
+      #define BOOST_CSTDFLOAT_FLOAT_128_MAX  LDBL_MAX
     #endif
   #endif
 
@@ -233,8 +233,8 @@
       #define BOOST_CSTDFLOAT_FLOAT128_CEIL   __ceilq
       #define BOOST_CSTDFLOAT_FLOAT128_SQRT   __sqrtq
       #define BOOST_CSTDFLOAT_FLOAT128_TRUNC  __truncq
-      #define BOOST_CSTDFLOAT_FLOAT128_POW    __powq
       #define BOOST_CSTDFLOAT_FLOAT128_EXP    __expq_patch
+      #define BOOST_CSTDFLOAT_FLOAT128_POW    __powq
       #define BOOST_CSTDFLOAT_FLOAT128_LOG    __logq
       #define BOOST_CSTDFLOAT_FLOAT128_LOG10  __log10q
       #define BOOST_CSTDFLOAT_FLOAT128_SIN    __sinq
@@ -261,8 +261,8 @@
       #define BOOST_CSTDFLOAT_FLOAT128_CEIL   ceilq
       #define BOOST_CSTDFLOAT_FLOAT128_SQRT   sqrtq
       #define BOOST_CSTDFLOAT_FLOAT128_TRUNC  truncq
-      #define BOOST_CSTDFLOAT_FLOAT128_POW    powq
       #define BOOST_CSTDFLOAT_FLOAT128_EXP    expq_patch
+      #define BOOST_CSTDFLOAT_FLOAT128_POW    powq
       #define BOOST_CSTDFLOAT_FLOAT128_LOG    logq
       #define BOOST_CSTDFLOAT_FLOAT128_LOG10  log10q
       #define BOOST_CSTDFLOAT_FLOAT128_SIN    sinq
@@ -282,6 +282,33 @@
     #else
       #error "Sorry, the compiler is neither GCC, nor Intel, I don't know how to configure <boost/cstdfloat.hpp>."
     #endif
+
+    // Here is a helper function used for raising a value of a given
+    // floating-point type to a power having an integer type.
+    template<class float_type, class type_n> inline float_type pown(const float_type& cb, const type_n p)
+    {
+      if     (p <  static_cast<type_n>(0)) { return 1 / pown(cb, static_cast<type_n>(-p)); }
+      else if(p == static_cast<type_n>(0)) { return float_type(1); }
+      else if(p == static_cast<type_n>(1)) { return  cb; }
+      else if(p == static_cast<type_n>(2)) { return  cb * cb; }
+      else if(p == static_cast<type_n>(3)) { return (cb * cb) * cb; }
+      else
+      {
+        float_type value = cb;
+
+        type_n n;
+
+        for(n = static_cast<type_n>(1); n <= static_cast<type_n>(p / 2); n *= 2)
+        {
+          value *= value;
+        }
+
+        const type_n p_minus_n = static_cast<type_n>(p - n);
+
+        // Call the function recursively for computing the remaining power of n.
+        return ((p_minus_n == static_cast<type_n>(0)) ? value : (value * pown(cb, p_minus_n)));
+      }
+    }
     } } } // boost::cstdfloat::detail
 
     #define BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE boost::cstdfloat::detail::float_internal128_t
@@ -361,7 +388,6 @@
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_CEIL  (boost::cstdfloat::detail::float_internal128_t) throw();
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SQRT  (boost::cstdfloat::detail::float_internal128_t) throw();
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TRUNC (boost::cstdfloat::detail::float_internal128_t) throw();
-      extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_POW   (boost::cstdfloat::detail::float_internal128_t, boost::cstdfloat::detail::float_internal128_t) throw();
       inline     boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP   (boost::cstdfloat::detail::float_internal128_t x)
       {
         // Patch the expq() function for a subset of broken GCC compilers
@@ -437,8 +463,9 @@
                                               + float_type(BOOST_FLOAT128_C(1.0)));
 
         // Rescale the result and return it.
-        return sum * BOOST_CSTDFLOAT_FLOAT128_POW(float_type(2), float_type(n));
+        return sum * boost::cstdfloat::detail::pown(float_type(2), n);
       }
+      extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_POW   (boost::cstdfloat::detail::float_internal128_t, boost::cstdfloat::detail::float_internal128_t) throw();
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LOG   (boost::cstdfloat::detail::float_internal128_t) throw();
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LOG10 (boost::cstdfloat::detail::float_internal128_t) throw();
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SIN   (boost::cstdfloat::detail::float_internal128_t) throw();
@@ -451,21 +478,23 @@
       {
         // Patch the sinhq() function for a subset of broken GCC compilers
         // like GCC 4.7, 4.8 on MinGW.
-        const boost::cstdfloat::detail::float_internal128_t ex = BOOST_CSTDFLOAT_FLOAT128_EXP(x);
-        return (ex - (1 / ex)) / 2;
+        const boost::cstdfloat::detail::float_internal128_t ex = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
+        return (ex - (boost::cstdfloat::detail::float_internal128_t(1) / ex)) / 2;
       }
       inline     boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COSH  (boost::cstdfloat::detail::float_internal128_t x)
       {
         // Patch the coshq() function for a subset of broken GCC compilers
         // like GCC 4.7, 4.8 on MinGW.
-        const boost::cstdfloat::detail::float_internal128_t ex = BOOST_CSTDFLOAT_FLOAT128_EXP(x);
-        return (ex + (1 / ex)) / 2;
+        const boost::cstdfloat::detail::float_internal128_t ex = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
+        return (ex + (boost::cstdfloat::detail::float_internal128_t(1) / ex)) / 2;
       }
       inline     boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TANH  (boost::cstdfloat::detail::float_internal128_t x)
       {
         // Patch the tanhq() function for a subset of broken GCC compilers
         // like GCC 4.7, 4.8 on MinGW.
-        return BOOST_CSTDFLOAT_FLOAT128_SINH(x) / BOOST_CSTDFLOAT_FLOAT128_COSH(x);
+        const boost::cstdfloat::detail::float_internal128_t ex_plus  = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
+        const boost::cstdfloat::detail::float_internal128_t ex_minus = (boost::cstdfloat::detail::float_internal128_t(1) / ex_plus);
+        return (ex_plus - ex_minus) / (ex_plus + ex_minus);
       }
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FMOD  (boost::cstdfloat::detail::float_internal128_t, boost::cstdfloat::detail::float_internal128_t) throw();
       extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATAN2 (boost::cstdfloat::detail::float_internal128_t, boost::cstdfloat::detail::float_internal128_t) throw();
@@ -484,8 +513,8 @@
       inline   boost::cstdfloat::detail::float_internal128_t ceil  (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_CEIL  (x); }
       inline   boost::cstdfloat::detail::float_internal128_t sqrt  (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT  (x); }
       inline   boost::cstdfloat::detail::float_internal128_t trunc (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_TRUNC (x); }
-      inline   boost::cstdfloat::detail::float_internal128_t pow   (boost::cstdfloat::detail::float_internal128_t x, boost::cstdfloat::detail::float_internal128_t a) { return ::BOOST_CSTDFLOAT_FLOAT128_POW   (x, a); }
       inline   boost::cstdfloat::detail::float_internal128_t exp   (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_EXP   (x); }
+      inline   boost::cstdfloat::detail::float_internal128_t pow   (boost::cstdfloat::detail::float_internal128_t x, boost::cstdfloat::detail::float_internal128_t a) { return ::BOOST_CSTDFLOAT_FLOAT128_POW   (x, a); }
       inline   boost::cstdfloat::detail::float_internal128_t log   (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_LOG   (x); }
       inline   boost::cstdfloat::detail::float_internal128_t log10 (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_LOG10 (x); }
       inline   boost::cstdfloat::detail::float_internal128_t sin   (boost::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_SIN   (x); }
@@ -514,8 +543,8 @@
         using boost::cstdfloat::detail::ceil;
         using boost::cstdfloat::detail::sqrt;
         using boost::cstdfloat::detail::trunc;
-        using boost::cstdfloat::detail::pow;
         using boost::cstdfloat::detail::exp;
+        using boost::cstdfloat::detail::pow;
         using boost::cstdfloat::detail::log;
         using boost::cstdfloat::detail::log10;
         using boost::cstdfloat::detail::sin;
@@ -872,31 +901,6 @@
       template<class float_type, class type_a> inline void eval_divide    (float_type& b, const type_a& a)                             { b   /= a; }
       template<class float_type>               inline void eval_log10     (float_type& b, const float_type& cb)                        { b    = std::log10(cb); }
       template<class float_type>               inline void eval_floor     (float_type& b, const float_type& cb)                        { b    = std::floor(cb); }
-
-      template<class float_type, class type_n> inline float_type pown(const float_type& cb, const type_n p)
-      {
-        if     (p <  static_cast<type_n>(0)) { return 1 / pown(cb, static_cast<type_n>(-p)); }
-        else if(p == static_cast<type_n>(0)) { return float_type(1); }
-        else if(p == static_cast<type_n>(1)) { return  cb; }
-        else if(p == static_cast<type_n>(2)) { return  cb * cb; }
-        else if(p == static_cast<type_n>(3)) { return (cb * cb) * cb; }
-        else
-        {
-          float_type value = cb;
-
-          type_n n;
-
-          for(n = static_cast<type_n>(1); n <= static_cast<type_n>(p / 2); n *= 2)
-          {
-            value *= value;
-          }
-
-          const type_n p_minus_n = static_cast<type_n>(p - n);
-
-          // Call the function recursively for computing the remaining power of n.
-          return ((p_minus_n == static_cast<type_n>(0)) ? value : (value * pown(cb, p_minus_n)));
-        }
-      }
 
       inline void round_string_up_at(std::string& s, int pos, int& expon)
       {
@@ -1382,7 +1386,8 @@
           return *this;
         }
 
-        template<typename X> complex<value_type>& operator+=(const complex<X>& x)
+        template<typename X>
+        complex<value_type>& operator+=(const complex<X>& x)
         {
           re += value_type(x.re);
           im += value_type(x.im);
@@ -1390,7 +1395,8 @@
           return *this;
         }
 
-        template<class X> complex<value_type>& operator-=(const complex<X>& x)
+        template<class X>
+        complex<value_type>& operator-=(const complex<X>& x)
         {
           re -= value_type(x.re);
           im -= value_type(x.im);
@@ -1398,7 +1404,8 @@
           return *this;
         }
 
-        template<class X> complex<value_type>& operator*=(const complex<X>& x)
+        template<class X>
+        complex<value_type>& operator*=(const complex<X>& x)
         {
           const value_type re_x(x.re);
           const value_type im_x(x.im);
@@ -1412,17 +1419,18 @@
           return *this;
         }
 
-        template<class X> complex<value_type>& operator/=(const complex<X>& x)
+        template<class X>
+        complex<value_type>& operator/=(const complex<X>& x)
         {
           using std::sqrt;
 
           const value_type re_x(x.re);
           const value_type im_x(x.im);
 
-          const value_type one_over_denom = 1 / sqrt((re_x * re_x) + (im_x * im_x));
+          const value_type the_norm = sqrt((re_x * re_x) + (im_x * im_x));
 
-          const value_type tmp_re = ((re * re_x) + (im * im_x)) * one_over_denom;
-          const value_type tmp_im = ((im * re_x) - (re * im_x)) * one_over_denom;
+          const value_type tmp_re = ((re * re_x) + (im * im_x)) / the_norm;
+          const value_type tmp_im = ((im * re_x) - (re * im_x)) / the_norm;
 
           re = tmp_re;
           im = tmp_im;
@@ -1431,17 +1439,17 @@
         }
 
         template<class X>
-        complex<value_type>& operator=(const complex<X>& z)
+        complex<value_type>& operator=(const complex<X>& x)
         {
-          re = z.real();
-          im = z.imag();
+          re = x.real();
+          im = x.imag();
 
           return *this;
         }
 
-        complex<value_type>& operator=(const value_type& v)
+        complex<value_type>& operator=(const value_type& x)
         {
-          re = v;
+          re = x;
           im = value_type(0);
 
           return *this;
@@ -1570,11 +1578,10 @@
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator/(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v)
       {
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE one_over_denom = 1 / std::norm(v);
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE tmp_re = ((u.real() * v.real()) + (u.imag() * v.imag())) * one_over_denom;
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE tmp_im = ((u.imag() * v.real()) - (u.real() * v.imag())) * one_over_denom;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE the_norm = std::norm(v);
 
-        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(tmp_re, tmp_im);
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(((u.real() * v.real()) + (u.imag() * v.imag())) / the_norm,
+                                                                    ((u.imag() * v.real()) - (u.real() * v.imag())) / the_norm);
       }
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator+(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u.real() + v, u.imag()); }
@@ -1618,24 +1625,32 @@
         using std::fabs;
         using std::sqrt;
 
-        // sqrt(*this) = (s, I / 2s) for R >= 0
-        // (|I| / 2s, +-s) for R < 0
-        // where s = sqrt{ [ |R| + sqrt(R^2 + I^2) ] / 2 },
-        // and the +- sign is the same as the sign of I.
+        // sqrt(x) for (x in C) =
+        //  (s       , xi / 2s) : for xr > 0,
+        //  (|xi| / 2s, +-s)    : for xr < 0,
+        //  (sqrt(xi), sqrt(xi) : for xr = 0,
+        // where s = sqrt{ [ |xr| + sqrt(xr^2 + xi^2) ] / 2 },
+        // and the +- sign is the same as the sign of xi.
 
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE zr = x.real();
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE s  = sqrt((fabs(zr) + std::abs(x)) / 2);
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE zi = x.imag();
-
-        if(zr >= 0)
+        if(x.real() > 0)
         {
-          return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(s, zi / (s * 2));
+          const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE s = sqrt((fabs(x.real()) + std::abs(x)) / 2);
+
+          return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(s, x.imag() / (s * 2));
+        }
+        else if(x.real() < 0)
+        {
+          const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE s = sqrt((fabs(x.real()) + std::abs(x)) / 2);
+
+          const bool imag_is_neg = (x.imag() < 0);
+
+          return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(fabs(x.imag()) / (s * 2), (imag_is_neg ? -s : s));
         }
         else
         {
-          const bool imag_is_neg = (zi < 0);
+          const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sqrt_xi_half = sqrt(x.imag() / 2);
 
-          return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(fabs(zi) / (s * 2), (imag_is_neg ? -s : s));
+          return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(sqrt_xi_half, sqrt_xi_half);
         }
       }
 
@@ -1643,13 +1658,14 @@
       {
         using std::sin;
         using std::cos;
-        using std::sinh;
-        using std::cosh;
+        using std::exp;
 
         const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sin_x  = sin (x.real());
         const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cos_x  = cos (x.real());
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_y = sinh(x.imag());
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_y = cosh(x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE exp_yp = exp (x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE exp_ym = BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) / exp_yp;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_y = (exp_yp - exp_ym) / 2;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_y = (exp_yp + exp_ym) / 2;
 
         return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(sin_x * cosh_y, cos_x * sinh_y);
       }
@@ -1658,20 +1674,37 @@
       {
         using std::sin;
         using std::cos;
-        using std::sinh;
-        using std::cosh;
+        using std::exp;
 
         const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sin_x  = sin (x.real());
         const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cos_x  = cos (x.real());
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_y = sinh(x.imag());
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_y = cosh(x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE exp_yp = exp (x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE exp_ym = BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) / exp_yp;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_y = (exp_yp - exp_ym) / 2;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_y = (exp_yp + exp_ym) / 2;
 
         return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(cos_x * cosh_y, -(sin_x * sinh_y));
       }
 
       inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> tan(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
       {
-        return std::sin(x) / std::cos(x);
+        using std::sin;
+        using std::cos;
+        using std::exp;
+
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sin_x  = sin (x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cos_x  = cos (x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE exp_yp = exp (x.imag());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE exp_ym = BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) / exp_yp;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_y = (exp_yp - exp_ym) / 2;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_y = (exp_yp + exp_ym) / 2;
+
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE a =   sin_x * cosh_y;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE b =   cos_x * sinh_y;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE c =   cos_x * cosh_y;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE d = -(sin_x * sinh_y);
+
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>((a * c) + (b * d), (b * c) - (a * d)) / ((c * c) + (d * d));
       }
 
       #if !defined(BOOST_NO_CXX11_FULL_COMPLEX_TRANSCENDENTALS)
@@ -1735,13 +1768,14 @@
       {
         using std::sin;
         using std::cos;
-        using std::sinh;
-        using std::cosh;
+        using std::exp;
 
         const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sin_y  = sin (x.imag());
         const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cos_y  = cos (x.imag());
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_x = sinh(x.real());
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_x = cosh(x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE exp_xp = exp (x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE exp_xm = BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) / exp_xp;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_x = (exp_xp - exp_xm) / 2;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_x = (exp_xp + exp_xm) / 2;
 
         return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(cos_y * sinh_x, cosh_x * sin_y);
       }
@@ -1750,13 +1784,14 @@
       {
         using std::sin;
         using std::cos;
-        using std::sinh;
-        using std::cosh;
+        using std::exp;
 
         const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sin_y  = sin (x.imag());
         const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cos_y  = cos (x.imag());
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_x = sinh(x.real());
-        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_x = cosh(x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE exp_xp = exp (x.real());
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE exp_xm = BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) / exp_xp;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_x = (exp_xp - exp_xm) / 2;
+        const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_x = (exp_xp + exp_xm) / 2;
 
         return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(cos_y * cosh_x, sin_y * sinh_x);
       }
@@ -1797,7 +1832,11 @@
         ostr.imbue(os.getloc());
         ostr.precision(os.precision());
 
-        ostr << '(' << x.real() << ',' << x.imag() << ')';
+        ostr << char_type('(')
+             << x.real()
+             << char_type(',')
+             << x.imag()
+             << char_type(')');
 
         return (os << ostr.str());
       }
@@ -1857,10 +1896,13 @@
 
   #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)
 
-  // This is the end of the preamble, and the end of the C++ support
-  // sections for quadruple-precision. Now we use the results
-  // of the queries that have been obtained in the preamble
-  // for the final type definitions in the namespace boost.
+  // This is the end of the preamble, and also the end of the
+  // sections providing support for the C++ standard library
+  // for quadruple-precision.
+
+  // Now we use the results of the queries that have been obtained
+  // in the preamble (far above) for the final type definitions in
+  // the namespace boost.
 
   // Make sure that the compiler has any floating-point type(s) whatsoever.
   #if (   (BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE  == 0)  \
@@ -1875,31 +1917,31 @@
   // for the *leastN and *fastN types.
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE == 1)
-    #define BOOST_FLOAT_FAST16_MIN   BOOST_FLOAT_16_MIN
-    #define BOOST_FLOAT_LEAST16_MIN  BOOST_FLOAT_16_MIN
-    #define BOOST_FLOAT_FAST16_MAX   BOOST_FLOAT_16_MAX
-    #define BOOST_FLOAT_LEAST16_MAX  BOOST_FLOAT_16_MAX
+    #define BOOST_FLOAT_FAST16_MIN   BOOST_CSTDFLOAT_FLOAT_16_MIN
+    #define BOOST_FLOAT_LEAST16_MIN  BOOST_CSTDFLOAT_FLOAT_16_MIN
+    #define BOOST_FLOAT_FAST16_MAX   BOOST_CSTDFLOAT_FLOAT_16_MAX
+    #define BOOST_FLOAT_LEAST16_MAX  BOOST_CSTDFLOAT_FLOAT_16_MAX
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE == 1)
-    #define BOOST_FLOAT_FAST32_MIN   BOOST_FLOAT_32_MIN
-    #define BOOST_FLOAT_LEAST32_MIN  BOOST_FLOAT_32_MIN
-    #define BOOST_FLOAT_FAST32_MAX   BOOST_FLOAT_32_MAX
-    #define BOOST_FLOAT_LEAST32_MAX  BOOST_FLOAT_32_MAX
+    #define BOOST_FLOAT_FAST32_MIN   BOOST_CSTDFLOAT_FLOAT_32_MIN
+    #define BOOST_FLOAT_LEAST32_MIN  BOOST_CSTDFLOAT_FLOAT_32_MIN
+    #define BOOST_FLOAT_FAST32_MAX   BOOST_CSTDFLOAT_FLOAT_32_MAX
+    #define BOOST_FLOAT_LEAST32_MAX  BOOST_CSTDFLOAT_FLOAT_32_MAX
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE == 1)
-    #define BOOST_FLOAT_FAST64_MIN   BOOST_FLOAT_64_MIN
-    #define BOOST_FLOAT_LEAST64_MIN  BOOST_FLOAT_64_MIN
-    #define BOOST_FLOAT_FAST64_MAX   BOOST_FLOAT_64_MAX
-    #define BOOST_FLOAT_LEAST64_MAX  BOOST_FLOAT_64_MAX
+    #define BOOST_FLOAT_FAST64_MIN   BOOST_CSTDFLOAT_FLOAT_64_MIN
+    #define BOOST_FLOAT_LEAST64_MIN  BOOST_CSTDFLOAT_FLOAT_64_MIN
+    #define BOOST_FLOAT_FAST64_MAX   BOOST_CSTDFLOAT_FLOAT_64_MAX
+    #define BOOST_FLOAT_LEAST64_MAX  BOOST_CSTDFLOAT_FLOAT_64_MAX
   #endif
 
   #if(BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE == 1)
-    #define BOOST_FLOAT_FAST80_MIN   BOOST_FLOAT_80_MIN
-    #define BOOST_FLOAT_LEAST80_MIN  BOOST_FLOAT_80_MIN
-    #define BOOST_FLOAT_FAST80_MAX   BOOST_FLOAT_80_MAX
-    #define BOOST_FLOAT_LEAST80_MAX  BOOST_FLOAT_80_MAX
+    #define BOOST_FLOAT_FAST80_MIN   BOOST_CSTDFLOAT_FLOAT_80_MIN
+    #define BOOST_FLOAT_LEAST80_MIN  BOOST_CSTDFLOAT_FLOAT_80_MIN
+    #define BOOST_FLOAT_FAST80_MAX   BOOST_CSTDFLOAT_FLOAT_80_MAX
+    #define BOOST_FLOAT_LEAST80_MAX  BOOST_CSTDFLOAT_FLOAT_80_MAX
   #endif
 
   #define BOOST_NO_FLOAT128_T
@@ -1907,10 +1949,10 @@
   #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 1)
     #undef  BOOST_NO_FLOAT128_T
 
-    #define BOOST_FLOAT_FAST128_MIN   BOOST_FLOAT_128_MIN
-    #define BOOST_FLOAT_LEAST128_MIN  BOOST_FLOAT_128_MIN
-    #define BOOST_FLOAT_FAST128_MAX   BOOST_FLOAT_128_MAX
-    #define BOOST_FLOAT_LEAST128_MAX  BOOST_FLOAT_128_MAX
+    #define BOOST_FLOAT_FAST128_MIN   BOOST_CSTDFLOAT_FLOAT_128_MIN
+    #define BOOST_FLOAT_LEAST128_MIN  BOOST_CSTDFLOAT_FLOAT_128_MIN
+    #define BOOST_FLOAT_FAST128_MAX   BOOST_CSTDFLOAT_FLOAT_128_MAX
+    #define BOOST_FLOAT_LEAST128_MAX  BOOST_CSTDFLOAT_FLOAT_128_MAX
   #endif
 
   // The following section contains the various min/max macros
@@ -1918,34 +1960,24 @@
 
   #if  (BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 16)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT16_C(x)
-    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_16_MIN
-    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_16_MAX
-    #undef  BOOST_FLOAT_16_MIN
-    #undef  BOOST_FLOAT_16_MAX
+    #define BOOST_FLOATMAX_MIN  BOOST_CSTDFLOAT_FLOAT_16_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_CSTDFLOAT_FLOAT_16_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 32)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT32_C(x)
-    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_32_MIN
-    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_32_MAX
-    #undef  BOOST_FLOAT_32_MIN
-    #undef  BOOST_FLOAT_32_MAX
+    #define BOOST_FLOATMAX_MIN  BOOST_CSTDFLOAT_FLOAT_32_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_CSTDFLOAT_FLOAT_32_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 64)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT64_C(x)
-    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_64_MIN
-    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_64_MAX
-    #undef  BOOST_FLOAT_64_MIN
-    #undef  BOOST_FLOAT_64_MAX
+    #define BOOST_FLOATMAX_MIN  BOOST_CSTDFLOAT_FLOAT_64_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_CSTDFLOAT_FLOAT_64_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 80)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT80_C(x)
-    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_80_MIN
-    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_80_MAX
-    #undef  BOOST_FLOAT_80_MIN
-    #undef  BOOST_FLOAT_80_MAX
+    #define BOOST_FLOATMAX_MIN  BOOST_CSTDFLOAT_FLOAT_80_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_CSTDFLOAT_FLOAT_80_MAX
   #elif(BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH == 128)
     #define BOOST_FLOATMAX_C(x) BOOST_FLOAT128_C(x)
-    #define BOOST_FLOATMAX_MIN  BOOST_FLOAT_128_MIN
-    #define BOOST_FLOATMAX_MAX  BOOST_FLOAT_128_MAX
-    #undef  BOOST_FLOAT_128_MIN
-    #undef  BOOST_FLOAT_128_MAX
+    #define BOOST_FLOATMAX_MIN  BOOST_CSTDFLOAT_FLOAT_128_MIN
+    #define BOOST_FLOATMAX_MAX  BOOST_CSTDFLOAT_FLOAT_128_MAX
   #else
     #error The maximum available floating-point width for <boost/cstdfloat.hpp> is undefined.
   #endif
@@ -1972,6 +2004,8 @@
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float16_t>::digits       ==   11);
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float16_t>::max_exponent ==   16);
 
+      #undef BOOST_CSTDFLOAT_FLOAT_16_MIN
+      #undef BOOST_CSTDFLOAT_FLOAT_16_MAX
       #undef BOOST_CSTDFLOAT_HAS_FLOAT16_NATIVE_TYPE
     #endif
 
@@ -1985,6 +2019,8 @@
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float32_t>::digits       ==   24);
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float32_t>::max_exponent ==  128);
 
+      #undef BOOST_CSTDFLOAT_FLOAT_32_MIN
+      #undef BOOST_CSTDFLOAT_FLOAT_32_MAX
       #undef BOOST_CSTDFLOAT_HAS_FLOAT32_NATIVE_TYPE
     #endif
 
@@ -1998,6 +2034,8 @@
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float64_t>::digits       ==   53);
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float64_t>::max_exponent == 1024);
 
+      #undef BOOST_CSTDFLOAT_FLOAT_64_MIN
+      #undef BOOST_CSTDFLOAT_FLOAT_64_MAX
       #undef BOOST_CSTDFLOAT_HAS_FLOAT64_NATIVE_TYPE
     #endif
 
@@ -2011,6 +2049,8 @@
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float80_t>::digits       ==    64);
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float80_t>::max_exponent == 16384);
 
+      #undef BOOST_CSTDFLOAT_FLOAT_80_MIN
+      #undef BOOST_CSTDFLOAT_FLOAT_80_MAX
       #undef BOOST_CSTDFLOAT_HAS_FLOAT80_NATIVE_TYPE
     #endif
 
@@ -2030,6 +2070,8 @@
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::max_exponent == 16384);
       #endif
 
+      #undef BOOST_CSTDFLOAT_FLOAT_128_MIN
+      #undef BOOST_CSTDFLOAT_FLOAT_128_MAX
       #undef BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
     #endif
 
