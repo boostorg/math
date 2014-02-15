@@ -76,14 +76,14 @@ void expected_results()
       "Win32.*",                          // platform
       "real_concept",                // test type(s)
       "factorials",                  // test data group
-      "boost::math::tgamma", 250, 100);  // test function
+      "boost::math::tgamma", 400, 200);  // test function
    add_expected_result(
       "GNU.*",                          // compiler
       ".*",                          // stdlib
       "Win32.*",                          // platform
       "real_concept",                // test type(s)
       "near.*",                      // test data group
-      "boost::math::tgamma", 200, 60);  // test function
+      "boost::math::tgamma", 200, 100);  // test function
    //
    // G++ on Linux, result vary a bit by processor type,
    // on Itanium results are *much* better than listed here,

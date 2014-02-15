@@ -136,7 +136,7 @@ void expected_results()
          "Win32.*",                          // platform
          largest_type,                  // test type(s)
          ".*Y'v.*Random.*",              // test data group
-         ".*", 200000, 200000);         // test function
+         ".*", 400000, 300000);         // test function
       add_expected_result(
          "GNU.*",                          // compiler
          ".*",                          // stdlib

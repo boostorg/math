@@ -232,7 +232,7 @@ void expected_results()
          ".*",                          // platform
          largest_type,                  // test type(s)
          ".*(JN'|j').*|.*Tricky.*",       // test data group
-         ".*", 33000, 20000);               // test function
+         ".*", 60000, 40000);               // test function
    }
 #endif
    add_expected_result(
