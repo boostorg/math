@@ -49,48 +49,50 @@
 // the functionality of <cmath>, I/O stream operations, and <complex>
 // functions for boost::float128_t.
 
-#define TEST_CSTDFLOAT_SANITY_CHECK(the_digits)                                                 \
-void test_cstdfloat_sanity_check_##the_digits##_func()                                          \
-{                                                                                               \
-  typedef boost::float##the_digits##_t float_type;                                              \
-                                                                                                \
-  BOOST_CONSTEXPR_OR_CONST int my_digits10 = std::numeric_limits<float_type>::digits10;         \
-                                                                                                \
-  {                                                                                             \
-    BOOST_CONSTEXPR_OR_CONST float_type x = BOOST_FLOAT##the_digits##_C(1.0) / 3;               \
-    std::stringstream ss;                                                                       \
-    ss << std::setprecision(my_digits10)                                                        \
-       << x;                                                                                    \
-    std::string str = "0.";                                                                     \
-    str += std::string(std::string::size_type(my_digits10), char('3'));                         \
-    BOOST_CHECK_EQUAL( ss.str(), str );                                                         \
-  }                                                                                             \
-  {                                                                                             \
-    BOOST_CONSTEXPR_OR_CONST float_type x = BOOST_FLOAT##the_digits##_C(2.0) / 3;               \
-    std::stringstream ss;                                                                       \
-    ss << std::setprecision(my_digits10)                                                        \
-       << x;                                                                                    \
-    std::string str = "0.";                                                                     \
-    str += std::string(std::string::size_type(my_digits10 - 1), char('6'));                     \
-    str += "7";                                                                                 \
-    BOOST_CHECK_EQUAL( ss.str(), str );                                                         \
-  }                                                                                             \
-  {                                                                                             \
-    BOOST_CONSTEXPR_OR_CONST float_type x = BOOST_FLOAT##the_digits##_C(1.0) / 0;               \
-    const bool the_inf_test = (   std::numeric_limits<float_type>::has_infinity                 \
-                               && (x == std::numeric_limits<float_type>::infinity()));          \
-    BOOST_CHECK_EQUAL( the_inf_test, true );                                                    \
-  }                                                                                             \
-  {                                                                                             \
-    using std::sqrt;                                                                            \
-    BOOST_CONSTEXPR_OR_CONST float_type x = sqrt(BOOST_FLOAT##the_digits##_C(-1.0));            \
-    const bool the_nan_test = (std::numeric_limits<float_type>::has_quiet_NaN && (x != x));     \
-    BOOST_CHECK_EQUAL( the_nan_test, true );                                                    \
-  }                                                                                             \
+#define TEST_CSTDFLOAT_SANITY_CHECK(the_digits)                                                         \
+void sanity_check_##the_digits##_func()                                                                 \
+{                                                                                                       \
+  typedef boost::float##the_digits##_t float_type;                                                      \
+                                                                                                        \
+  BOOST_CONSTEXPR_OR_CONST int my_digits10 = std::numeric_limits<float_type>::digits10;                 \
+                                                                                                        \
+  {                                                                                                     \
+    BOOST_CONSTEXPR_OR_CONST float_type x = BOOST_FLOAT##the_digits##_C(1.0) / 3;                       \
+    std::stringstream ss;                                                                               \
+    ss << std::setprecision(my_digits10)                                                                \
+       << x;                                                                                            \
+    std::string str = "0.";                                                                             \
+    str += std::string(std::string::size_type(my_digits10), char('3'));                                 \
+    BOOST_CHECK_EQUAL( ss.str(), str );                                                                 \
+  }                                                                                                     \
+  {                                                                                                     \
+    BOOST_CONSTEXPR_OR_CONST float_type x = BOOST_FLOAT##the_digits##_C(2.0) / 3;                       \
+    std::stringstream ss;                                                                               \
+    ss << std::setprecision(my_digits10)                                                                \
+       << x;                                                                                            \
+    std::string str = "0.";                                                                             \
+    str += std::string(std::string::size_type(my_digits10 - 1), char('6'));                             \
+    str += "7";                                                                                         \
+    BOOST_CHECK_EQUAL( ss.str(), str );                                                                 \
+  }                                                                                                     \
+  {                                                                                                     \
+    BOOST_CONSTEXPR_OR_CONST float_type x = BOOST_FLOAT##the_digits##_C(1.0) / test_cstdfloat::zero;    \
+    const bool the_inf_test = (   std::numeric_limits<float_type>::has_infinity                         \
+                               && (x == std::numeric_limits<float_type>::infinity()));                  \
+    BOOST_CHECK_EQUAL( the_inf_test, true );                                                            \
+  }                                                                                                     \
+  {                                                                                                     \
+    using std::sqrt;                                                                                    \
+    BOOST_CONSTEXPR_OR_CONST float_type x = sqrt(BOOST_FLOAT##the_digits##_C(-1.0));                    \
+    const bool the_nan_test = (std::numeric_limits<float_type>::has_quiet_NaN && (x != x));             \
+    BOOST_CHECK_EQUAL( the_nan_test, true );                                                            \
+  }                                                                                                     \
 }
 
 namespace test_cstdfloat
 {
+  int zero;
+
   #if defined(BOOST_FLOATMAX_C)
   BOOST_CONSTEXPR_OR_CONST int has_floatmax_t = 1;
   #else
@@ -124,6 +126,8 @@ namespace test_cstdfloat
 
 BOOST_AUTO_TEST_CASE(test_main)
 {
+  test_cstdfloat::zero = 0;
+
   // Perform basic sanity checks that verify both the existence of the proper
   // floating-point literal macros as well as the correct digit handling
   // for a given floating-point typedef having specified width.
