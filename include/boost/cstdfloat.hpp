@@ -373,6 +373,7 @@
     #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
 
       #include <boost/cstdint.hpp>
+      #include <boost/math/constants/constants.hpp>
 
       // Implement quadruple-precision <cmath> functions in the namespace
       // boost::cstdfloat::detail. Subsequently inject these into the
@@ -419,8 +420,17 @@
         else if(x > +1) { n = static_cast<boost::int_fast32_t>(BOOST_CSTDFLOAT_FLOAT128_FLOOR(x_over_ln2)); }
         else            { n = static_cast<boost::int_fast32_t>(0); }
 
+        // Check if the argument is very near an integer.
+        const boost::int_fast32_t nn = ((n < static_cast<boost::int_fast32_t>(0)) ? -n : n);
+
+        if(BOOST_CSTDFLOAT_FLOAT128_FABS(x - n) < float_type(BOOST_CSTDFLOAT_FLOAT128_EPS * nn))
+        {
+          // Return e**n for arguments very near an integer.
+          return boost::cstdfloat::detail::pown(boost::math::constants::e<float_type>(), n);
+        }
+
         // Here, alpha is the scaled argument.
-        const float_type alpha = x - (n * float_type(BOOST_FLOAT128_C(0.693147180559945309417232121458176568075500134360255)));
+        const float_type alpha = x - (n * boost::math::constants::ln_two<float_type>());
 
         // Compute the polynomial approximation of the scaled-argument exponential function.
         const float_type sum =
@@ -460,7 +470,7 @@
                                               + float_type(BOOST_FLOAT128_C(0.16666666666666666666666666666666666666666666666666666669048)))     * alpha
                                               + float_type(BOOST_FLOAT128_C(0.50000000000000000000000000000000000000000000000000000000006)))     * alpha
                                               + float_type(BOOST_FLOAT128_C(0.99999999999999999999999999999999999999999999999999999999995)))     * alpha
-                                              + float_type(BOOST_FLOAT128_C(1.0)));
+                                              + float_type(1));
 
         // Rescale the result and return it.
         return sum * boost::cstdfloat::detail::pown(float_type(2), n);

@@ -29,19 +29,25 @@
 // DESCRIPTION:
 // ~~~~~~~~~~~~
 //
-// This file tests the implements floating-point typedefs having
-// specified widths, as described in N3626 (proposed for C++14).
-
-// Spot tests of boost::float32_t and boost::float64_t, and where available
-// boost::float80_t and boost::float128_t. Check the formal behavior of
-// the types. Also check selected values of <cmath> and <complex> functions
-// for boost::float128_t.
+// This file tests the implementation of floating-point typedefs having
+// specified widths, as implemented in <boost/cstdfloat.hpp> and described
+// in N3626 (proposed for C++14).
 
 // For more information on <boost/cstdfloat.hpp> and the corresponding
-// proposal, see "Floating-Point Typedefs Having Specified Widths".
-// as described in N3626 (proposed for C++14).
-// See: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3626.pdf
+// proposal of "Floating-Point Typedefs Having Specified Widths",
+// see: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3626.pdf
 
+// The tests:
+//
+// Perform sanity checks on boost::float16_t, boost::float32_t,
+// boost::float64_t, boost::float80_t, and boost::float128_t when
+// these types are available. In the sanity checks, we verify the
+// formal behavior of the types and the macros for creating literal
+// floating-point constants.
+//
+// An extended check is included for boost::float128_t. This checks
+// the functionality of <cmath>, I/O stream operations, and <complex>
+// functions for boost::float128_t.
 
 #define TEST_CSTDFLOAT_SANITY_CHECK(the_digits)                                                 \
 void test_cstdfloat_sanity_check_##the_digits##_func()                                          \
@@ -71,17 +77,26 @@ void test_cstdfloat_sanity_check_##the_digits##_func()                          
   }                                                                                             \
   {                                                                                             \
     BOOST_CONSTEXPR_OR_CONST float_type x = BOOST_FLOAT##the_digits##_C(1.0) / 0;               \
-    BOOST_CHECK_EQUAL( x, std::numeric_limits<float_type>::infinity );                          \
+    const bool the_inf_test = (   std::numeric_limits<float_type>::has_infinity                 \
+                               && (x == std::numeric_limits<float_type>::infinity()));          \
+    BOOST_CHECK_EQUAL( the_inf_test, true );                                                    \
   }                                                                                             \
   {                                                                                             \
     using std::sqrt;                                                                            \
-    BOOST_CONSTEXPR_OR_CONST float_type x = sqrt(BOOST_FLOAT##the_digits##_C(-1.0);             \
-    BOOST_CHECK_EQUAL( bool(x == x), false );                                                   \
+    BOOST_CONSTEXPR_OR_CONST float_type x = sqrt(BOOST_FLOAT##the_digits##_C(-1.0));            \
+    const bool the_nan_test = (std::numeric_limits<float_type>::has_quiet_NaN && (x != x));     \
+    BOOST_CHECK_EQUAL( the_nan_test, true );                                                    \
   }                                                                                             \
 }
 
 namespace test_cstdfloat
 {
+  #if defined(BOOST_FLOATMAX_C)
+  BOOST_CONSTEXPR_OR_CONST int has_floatmax_t = 1;
+  #else
+  BOOST_CONSTEXPR_OR_CONST int has_floatmax_t = 0;
+  #endif
+
   #if defined(BOOST_FLOAT16_C)
   TEST_CSTDFLOAT_SANITY_CHECK(16)
   #endif
@@ -100,26 +115,19 @@ namespace test_cstdfloat
 
   #if defined(BOOST_FLOAT128_C)
   TEST_CSTDFLOAT_SANITY_CHECK(128)
-  #endif
 
-  #if defined(BOOST_FLOAT128_C)
   void extend_check_128_func()
   {
   }
-  #endif
-
-  #if defined(BOOST_FLOATMAX_C)
-  BOOST_CONSTEXPR_OR_CONST int has_floatmax_t = 1;
-  #else
-  BOOST_CONSTEXPR_OR_CONST int has_floatmax_t = 0;
-  #endif
+  #endif // defined (BOOST_FLOAT128_C)
 }
 
 BOOST_AUTO_TEST_CASE(test_main)
 {
   // Perform basic sanity checks that verify both the existence of the proper
-  // macros as well as the correct digit handling for a given floating-point
-  // typedef having specified width.
+  // floating-point literal macros as well as the correct digit handling
+  // for a given floating-point typedef having specified width.
+
   BOOST_CHECK_EQUAL( test_cstdfloat::has_floatmax_t, 1 );
 
   #if defined(BOOST_FLOAT16_C)
@@ -140,11 +148,9 @@ BOOST_AUTO_TEST_CASE(test_main)
 
   #if defined(BOOST_FLOAT128_C)
   test_cstdfloat::sanity_check_128_func();
-  #endif
 
-  // Perform an extended check of boost::float128_t including a variety
-  // of functions from the C++ standard library.
-  #if defined(BOOST_FLOAT128_C)
+  // Perform an extended check of boost::float128_t including
+  // a variety of functions from the C++ standard library.
   test_cstdfloat::extend_check_128_func();
-  #endif
+  #endif // defined (BOOST_FLOAT128_C)
 }
