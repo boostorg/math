@@ -217,6 +217,18 @@
 // intel too don't support __float128 yet :-(
 //
 #  define BOOST_MATH_USE_FLOAT128
+
+#  if defined(BOOST_INTEL) && defined(BOOST_INTEL_CXX_VERSION) && (BOOST_INTEL_CXX_VERSION >= 1310) && defined(__GNUC__)
+#    if (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6))
+#      define BOOST_MATH_FLOAT128_TYPE __float128
+#    endif
+#  elif defined(__GNUC__)
+#      define BOOST_MATH_FLOAT128_TYPE __float128
+#  endif
+
+#  ifndef BOOST_MATH_FLOAT128_TYPE
+#      define BOOST_MATH_FLOAT128_TYPE _Quad
+#  endif
 #endif
 //
 // Check for WinCE with no iostream support:

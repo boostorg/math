@@ -78,6 +78,27 @@ inline std::string do_format(Formatter f, const Group& g)
    return (f % g).str();
 }
 
+template <class T>
+inline const char* name_of()
+{
+#ifndef BOOST_NO_RTTI
+   return typeid(T).name();
+#else
+   return "unknown";
+#endif
+}
+template <> inline const char* name_of<float>(){ return "float"; }
+template <> inline const char* name_of<double>(){ return "double"; }
+template <> inline const char* name_of<long double>(){ return "long double"; }
+
+#ifdef BOOST_MATH_USE_FLOAT128
+template <>
+inline const char* name_of<BOOST_MATH_FLOAT128_TYPE>()
+{
+   return "__float128";
+}
+#endif
+
 template <class E, class T>
 void raise_error(const char* function, const char* message)
 {
@@ -88,7 +109,7 @@ void raise_error(const char* function, const char* message)
 
   std::string msg("Error in function ");
 #ifndef BOOST_NO_RTTI
-  msg += (boost::format(function) % typeid(T).name()).str();
+  msg += (boost::format(function) % boost::math::policies::detail::name_of<T>()).str();
 #else
   msg += function;
 #endif
@@ -109,7 +130,7 @@ void raise_error(const char* function, const char* message, const T& val)
 
   std::string msg("Error in function ");
 #ifndef BOOST_NO_RTTI
-  msg += (boost::format(function) % typeid(T).name()).str();
+  msg += (boost::format(function) % boost::math::policies::detail::name_of<T>()).str();
 #else
   msg += function;
 #endif
@@ -300,7 +321,7 @@ inline T raise_overflow_error(
 {
    std::string fmsg("Error in function ");
 #ifndef BOOST_NO_RTTI
-   fmsg += (boost::format(function) % typeid(T).name()).str();
+   fmsg += (boost::format(function) % boost::math::policies::detail::name_of<T>()).str();
 #else
    fmsg += function;
 #endif

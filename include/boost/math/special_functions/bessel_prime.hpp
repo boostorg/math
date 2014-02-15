@@ -64,7 +64,7 @@ inline T cyl_bessel_j_prime_imp(T v, T x, const Policy& pol)
             inversed = true;
       }
       T r = boost::math::detail::bessel_j_derivative_small_z_series(v, x, pol);
-      return inversed ? -r : r;
+      return inversed ? T(-r) : r;
    }
    //
    // Special case for v == 0:
@@ -93,7 +93,7 @@ inline T sph_bessel_j_prime_imp(unsigned v, T x, const Policy& pol)
    //
    if (v == 0)
       return (x == 0) ? boost::math::policies::raise_overflow_error<T>(function, 0, pol)
-         : -boost::math::detail::sph_bessel_j_imp<T>(1, x, pol);
+         : static_cast<T>(-boost::math::detail::sph_bessel_j_imp<T>(1, x, pol));
    //
    // Special case for x == 0 and v > 0:
    //
