@@ -308,12 +308,12 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_MATH_CONTROL_FP;
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
-   test_spots(0.0F);
+   test_spots(0.0F, "float");
 #endif
-   test_spots(0.0);
+   test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   test_spots(0.0L);
-   test_spots(boost::math::concepts::real_concept(0.1));
+   test_spots(0.0L, "long double");
+   test_spots(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS

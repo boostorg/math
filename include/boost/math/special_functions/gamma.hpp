@@ -164,7 +164,9 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
    }
    else if (z < tools::root_epsilon<T>())
    {
-	   return 1 / z - constants::euler<T>();
+      if (z < 1 / tools::max_value<T>())
+         result = policies::raise_overflow_error<T>(function, 0, pol);
+	   result *= 1 / z - constants::euler<T>();
    }
    else
    {
@@ -242,7 +244,10 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = 0)
    {
 	   if (0 == z)
 		   return policies::raise_pole_error<T>(function, "Evaluation of lgamma at %1%.", z, pol);
-	   result = log(fabs(1 / z - constants::euler<T>()));
+      if (fabs(z) < 1 / tools::max_value<T>())
+         result = -log(z);
+      else
+	      result = log(fabs(1 / z - constants::euler<T>()));
 	   if (z < 0)
 		sresult = -1;
    }
