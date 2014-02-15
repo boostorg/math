@@ -92,7 +92,7 @@ T erf_inv_imp(const T& p, const T& q, const Policy&, const boost::mpl::int_<64>*
          BOOST_MATH_BIG_CONSTANT(T, 64, -3.67192254707729348546)
       };
       static const T Q[] = {    
-         BOOST_MATH_BIG_CONSTANT(T, 64, 1),
+         BOOST_MATH_BIG_CONSTANT(T, 64, 1.0),
          BOOST_MATH_BIG_CONSTANT(T, 64, 6.24264124854247537712),
          BOOST_MATH_BIG_CONSTANT(T, 64, 3.9713437953343869095),
          BOOST_MATH_BIG_CONSTANT(T, 64, -28.6608180499800029974),
@@ -176,7 +176,7 @@ T erf_inv_imp(const T& p, const T& q, const Policy&, const boost::mpl::int_<64>*
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.266339227425782031962e-11)
          };
          static const T Q[] = {    
-            BOOST_MATH_BIG_CONSTANT(T, 64, 1),
+            BOOST_MATH_BIG_CONSTANT(T, 64, 1.0),
             BOOST_MATH_BIG_CONSTANT(T, 64, 1.3653349817554063097),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.762059164553623404043),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.220091105764131249824),
@@ -204,7 +204,7 @@ T erf_inv_imp(const T& p, const T& q, const Policy&, const boost::mpl::int_<64>*
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.99055709973310326855e-16)
          };
          static const T Q[] = {    
-            BOOST_MATH_BIG_CONSTANT(T, 64, 1),
+            BOOST_MATH_BIG_CONSTANT(T, 64, 1.0),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.591429344886417493481),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.138151865749083321638),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.0160746087093676504695),
@@ -231,7 +231,7 @@ T erf_inv_imp(const T& p, const T& q, const Policy&, const boost::mpl::int_<64>*
             BOOST_MATH_BIG_CONSTANT(T, 64, -0.116765012397184275695e-17)
          };
          static const T Q[] = {    
-            BOOST_MATH_BIG_CONSTANT(T, 64, 1),
+            BOOST_MATH_BIG_CONSTANT(T, 64, 1.0),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.207123112214422517181),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.0169410838120975906478),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.000690538265622684595676),
@@ -258,7 +258,7 @@ T erf_inv_imp(const T& p, const T& q, const Policy&, const boost::mpl::int_<64>*
             BOOST_MATH_BIG_CONSTANT(T, 64, -0.348890393399948882918e-21)
          };
          static const T Q[] = {    
-            BOOST_MATH_BIG_CONSTANT(T, 64, 1),
+            BOOST_MATH_BIG_CONSTANT(T, 64, 1.0),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.0845746234001899436914),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.00282092984726264681981),
             BOOST_MATH_BIG_CONSTANT(T, 64, 0.468292921940894236786e-4),
