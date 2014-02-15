@@ -170,8 +170,8 @@ void test_spots(T, const char* t)
    }
    if(std::numeric_limits<T>::has_infinity)
    {
-      BOOST_CHECK_EQUAL(::boost::math::zeta(static_cast<T>(-10007), boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>())), std::numeric_limits<T>::infinity());
-      BOOST_CHECK_EQUAL(::boost::math::zeta(static_cast<T>(-10009), boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>())), -std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(::boost::math::zeta(static_cast<T>(-10007)), std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(::boost::math::zeta(static_cast<T>(-10009)), -std::numeric_limits<T>::infinity());
    }
 #ifdef BOOST_MSVC
 #pragma warning(pop)
