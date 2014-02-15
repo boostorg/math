@@ -87,7 +87,7 @@ void expected_results()
       "Win32.*",                     // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 40, 25);                 // test function
+      ".*", 3500, 1000);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

@@ -92,7 +92,7 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*",                          // test data group
-      ".*", 90, 30);                 // test function
+      ".*", 90, 50);                 // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
