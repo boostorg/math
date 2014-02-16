@@ -7,14 +7,12 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// <boost/cstdfloat.hpp> implements floating-point typedefs having
-// specified widths, as described in N3626 (proposed for C++14).
-// See: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3626.pdf
+// Implement quadruple-precision <cmath> support.
 
 #ifndef _BOOST_CSTDFLOAT_CMATH_2014_02_15_HPP_
   #define _BOOST_CSTDFLOAT_CMATH_2014_02_15_HPP_
 
-  #include <boost/detail/cstdfloat_basic.hpp>
+  #include <boost/detail/cstdfloat_types.hpp>
 
   #if !defined(BOOST_NO_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 

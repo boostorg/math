@@ -7,12 +7,10 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// <boost/cstdfloat.hpp> implements floating-point typedefs having
-// specified widths, as described in N3626 (proposed for C++14).
-// See: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3626.pdf
+// Implement the basic parts of floating-point typedefs having specified widths.
 
-#ifndef _BOOST_CSTDFLOAT_BASE_TYPES_2014_01_09_HPP_
-  #define _BOOST_CSTDFLOAT_BASE_TYPES_2014_01_09_HPP_
+#ifndef _BOOST_CSTDFLOAT_TYPES_2014_01_09_HPP_
+  #define _BOOST_CSTDFLOAT_TYPES_2014_01_09_HPP_
 
   #include <float.h>
   #include <boost/static_assert.hpp>
@@ -227,64 +225,6 @@
     #define BOOST_CSTDFLOAT_FLOAT128_EPS  1.92592994438723585305597794258492732e-0034Q
     #define BOOST_FLOAT128_C(x)  (x ## Q)
 
-    #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS)
-
-    #include <limits>
-
-    // Define the name of the global quadruple-precision function to be used for
-    // calculating quiet_NaN() in the specialization of std::numeric_limits<>.
-    #if defined(BOOST_INTEL)
-      #define BOOST_CSTDFLOAT_FLOAT128_SQRT   __sqrtq
-    #elif defined(__GNUC__)
-      #define BOOST_CSTDFLOAT_FLOAT128_SQRT   sqrtq
-    #endif
-
-    // Forward declaration of the quadruple-precision square root function.
-    extern "C" boost::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SQRT(boost::cstdfloat::detail::float_internal128_t) throw();
-
-    namespace std
-    {
-      template<>
-      class numeric_limits<boost::cstdfloat::detail::float_internal128_t>
-      {
-      public:
-        BOOST_STATIC_CONSTEXPR bool                                           is_specialized           = true;
-        static                 boost::cstdfloat::detail::float_internal128_t  (min) () BOOST_NOEXCEPT  { return BOOST_CSTDFLOAT_FLOAT128_MIN; }
-        static                 boost::cstdfloat::detail::float_internal128_t  (max) () BOOST_NOEXCEPT  { return BOOST_CSTDFLOAT_FLOAT128_MAX; }
-        static                 boost::cstdfloat::detail::float_internal128_t  lowest() BOOST_NOEXCEPT  { return -(max)(); }
-        BOOST_STATIC_CONSTEXPR int                                            digits                   = 113;
-        BOOST_STATIC_CONSTEXPR int                                            digits10                 = 34;
-        BOOST_STATIC_CONSTEXPR int                                            max_digits10             = 36;
-        BOOST_STATIC_CONSTEXPR bool                                           is_signed                = true;
-        BOOST_STATIC_CONSTEXPR bool                                           is_integer               = false;
-        BOOST_STATIC_CONSTEXPR bool                                           is_exact                 = false;
-        BOOST_STATIC_CONSTEXPR int                                            radix                    = 2;
-        static                 boost::cstdfloat::detail::float_internal128_t  epsilon    ()            { return BOOST_CSTDFLOAT_FLOAT128_EPS; }
-        static                 boost::cstdfloat::detail::float_internal128_t  round_error()            { return BOOST_FLOAT128_C(0.5); }
-        BOOST_STATIC_CONSTEXPR int                                            min_exponent             = -16381;
-        BOOST_STATIC_CONSTEXPR int                                            min_exponent10           = static_cast<int>((min_exponent * 301L) / 1000L);
-        BOOST_STATIC_CONSTEXPR int                                            max_exponent             = +16384;
-        BOOST_STATIC_CONSTEXPR int                                            max_exponent10           = static_cast<int>((max_exponent * 301L) / 1000L);
-        BOOST_STATIC_CONSTEXPR bool                                           has_infinity             = true;
-        BOOST_STATIC_CONSTEXPR bool                                           has_quiet_NaN            = true;
-        BOOST_STATIC_CONSTEXPR bool                                           has_signaling_NaN        = false;
-        BOOST_STATIC_CONSTEXPR float_denorm_style                             has_denorm               = denorm_absent;
-        BOOST_STATIC_CONSTEXPR bool                                           has_denorm_loss          = false;
-        static                 boost::cstdfloat::detail::float_internal128_t  infinity     ()          { return BOOST_FLOAT128_C(1.0) / BOOST_FLOAT128_C(0.0); }
-        static                 boost::cstdfloat::detail::float_internal128_t  quiet_NaN    ()          { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT(BOOST_FLOAT128_C(-1.0)); }
-        static                 boost::cstdfloat::detail::float_internal128_t  signaling_NaN()          { return BOOST_FLOAT128_C(0.0); }
-        static                 boost::cstdfloat::detail::float_internal128_t  denorm_min   ()          { return BOOST_FLOAT128_C(0.0); }
-        BOOST_STATIC_CONSTEXPR bool                                           is_iec559                = true;
-        BOOST_STATIC_CONSTEXPR bool                                           is_bounded               = false;
-        BOOST_STATIC_CONSTEXPR bool                                           is_modulo                = false;
-        BOOST_STATIC_CONSTEXPR bool                                           traps                    = false;
-        BOOST_STATIC_CONSTEXPR bool                                           tinyness_before          = false;
-        BOOST_STATIC_CONSTEXPR float_round_style                              round_style              = round_to_nearest;
-      };
-    } // namespace std
-
-    #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS (i.e., the user would like to have libquadmath limits)
-
   #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)
 
   // This is the end of the preamble, and also the end of the
@@ -446,10 +386,10 @@
       typedef boost::float128_t float_fast128_t;
       typedef boost::float128_t float_least128_t;
 
-      #if !defined(BOOST_NO_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT) && defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS)
-      // This configuration does not support std::numeric_limits<boost::float128_t>.
-      // So we can not query the values of std::numeric_limits<boost::float128_t>
-      // with static assertions.
+      #if !defined(BOOST_NO_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
+      // This configuration does not *yet* support std::numeric_limits<boost::float128_t>.
+      // Support for std::numeric_limits<boost::float128_t> is added in the detail
+      // file <boost/detail/cstdfloat_limits.hpp>.
       #else
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::is_iec559    ==  true);
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::radix        ==     2);
@@ -484,38 +424,5 @@
     #undef BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
   }
   // namespace boost
-
-  #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM)
-  #include <boost/detail/cstdfloat_iostream.hpp>
-  #endif
-
-  namespace boost { namespace cstdfloat { namespace detail {
-  // Here is a helper function used for raising a value of a given
-  // floating-point type to a power having an integer type.
-  template<class float_type, class type_n> inline float_type pown(const float_type& cb, const type_n p)
-  {
-    if     (p <  static_cast<type_n>(0)) { return 1 / pown(cb, static_cast<type_n>(-p)); }
-    else if(p == static_cast<type_n>(0)) { return float_type(1); }
-    else if(p == static_cast<type_n>(1)) { return  cb; }
-    else if(p == static_cast<type_n>(2)) { return  cb * cb; }
-    else if(p == static_cast<type_n>(3)) { return (cb * cb) * cb; }
-    else
-    {
-      float_type value = cb;
-
-      type_n n;
-
-      for(n = static_cast<type_n>(1); n <= static_cast<type_n>(p / 2); n *= 2)
-      {
-        value *= value;
-      }
-
-      const type_n p_minus_n = static_cast<type_n>(p - n);
-
-      // Call the function recursively for computing the remaining power of n.
-      return ((p_minus_n == static_cast<type_n>(0)) ? value : (value * pown(cb, p_minus_n)));
-    }
-  }
-  } } } // boost::cstdfloat::detail
 
 #endif // _BOOST_CSTDFLOAT_BASE_TYPES_2014_01_09_HPP_

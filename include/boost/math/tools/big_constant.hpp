@@ -12,7 +12,7 @@
 #include <boost/lexical_cast.hpp>
 #endif
 #include <boost/type_traits/is_convertible.hpp>
-#include <boost/cstdfloat.hpp>
+#include <boost/detail/cstdfloat_types.hpp>
 
 namespace boost{ namespace math{ 
 
