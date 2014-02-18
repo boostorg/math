@@ -167,6 +167,7 @@ void test_gamma(T, const char* name)
 template <class T>
 void test_spots(T)
 {
+   BOOST_MATH_STD_USING
    //
    // basic sanity checks, tolerance is 50 epsilon expressed as a percentage:
    //
