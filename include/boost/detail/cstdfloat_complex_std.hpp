@@ -190,17 +190,16 @@
     };
 
     // Constructors from built-in floating-point types.
-    complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<float>&        f) : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( f.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( f.imag())) { }
-    complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<double>&       d) : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( d.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( d.imag())) { }
+    complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<float>& f)        : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( f.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( f.imag())) { }
+    complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<double>& d)       : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( d.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( d.imag())) { }
     complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<long double>& ld) : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(ld.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(ld.imag())) { }
   } // namespace std
 
-  // Here is a simple helper function.
   namespace boost { namespace cstdfloat { namespace detail {
-  template<class float_type> std::complex<float_type> iz_helper__x(const std::complex<float_type>& x)
+  template<class float_type> std::complex<float_type> multiply_by_i(const std::complex<float_type>& x)
   {
-    const float_type tmp_r = x.real();
-    return std::complex<float_type>(-x.imag(), tmp_r);
+    // Multiply complex x times I, and return the result.
+    return std::complex<float_type>(-x.imag(), x.real());
   }
   } } } // boost::cstdfloat::detail
 
@@ -218,9 +217,10 @@
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> proj (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
-      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE two_over_denom = BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(2) / (std::norm(x) + 1);
+      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE the_norm_plus_one = (std::norm(x) + 1);
 
-      return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(x.real() * two_over_denom, x.imag() * two_over_denom);
+      return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>((x.real() * 2) / the_norm_plus_one,
+                                                                  (x.imag() * 2) / the_norm_plus_one);
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> polar(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& rho,
@@ -238,12 +238,8 @@
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator*(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v)
     {
-      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::value_type ur = u.real();
-      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::value_type ui = u.imag();
-      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::value_type vr = v.real();
-      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::value_type vi = v.imag();
-
-      return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>((ur * vr) - (ui * vi), (ur * vi) + (ui * vr));
+      return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>((u.real() * v.real()) - (u.imag() * v.imag()),
+                                                                  (u.real() * v.imag()) + (u.imag() * v.real()));
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator/(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v)
@@ -259,8 +255,8 @@
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator*(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u.real() * v, u.imag() * v); }
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator/(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& u, const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u.real() / v, u.imag() / v); }
 
-    inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator+(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u + v.real(), v.imag()); }
-    inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator-(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u - v.real(), -v.imag()); }
+    inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator+(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u + v.real(),     v.imag()); }
+    inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator-(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u - v.real(),    -v.imag()); }
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator*(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(u * v.real(), u * v.imag()); }
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> operator/(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& u, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& v) { const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE v_norm = norm(v); return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>((u * v.real()) / v_norm, (-u * v.imag()) / v_norm); }
 
@@ -272,6 +268,9 @@
     inline bool operator==(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& y) { return ((x.real() == y.real()) && (x.imag() == y.imag())); }
     inline bool operator==(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x, const         BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE&  y) { return ((x.real() == y)        && (x.imag() == BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
     inline bool operator==(const         BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE&  x, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& y) { return ((x        == y.real()) && (y.imag() == BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
+    inline bool operator!=(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& y) { return ((x.real() != y.real()) || (x.imag() != y.imag())); }
+    inline bool operator!=(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x, const         BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE&  y) { return ((x.real() != y)        || (x.imag() != BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
+    inline bool operator!=(const         BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE&  x, const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& y) { return ((x        != y.real()) || (y.imag() != BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(0))); }
 
     // ISO/IEC 14882:2011, Section 26.4.8, transcendentals.
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> sqrt(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
@@ -363,7 +362,7 @@
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> asin(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
-      return -boost::cstdfloat::detail::iz_helper__x(std::log(boost::cstdfloat::detail::iz_helper__x(x) + std::sqrt(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - (x * x))));
+      return -boost::cstdfloat::detail::multiply_by_i(std::log(boost::cstdfloat::detail::multiply_by_i(x) + std::sqrt(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - (x * x))));
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> acos(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
@@ -373,9 +372,9 @@
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> atan(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
-      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> izz = boost::cstdfloat::detail::iz_helper__x(x);
+      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> izz = boost::cstdfloat::detail::multiply_by_i(x);
 
-      return boost::cstdfloat::detail::iz_helper__x(std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - izz) - std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) + izz)) / 2;
+      return boost::cstdfloat::detail::multiply_by_i(std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - izz) - std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) + izz)) / 2;
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> exp(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
