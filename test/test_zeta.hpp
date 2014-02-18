@@ -5,7 +5,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/math/special_functions/zeta.hpp>
+#include <boost/math/special_functions/math_fwd.hpp>
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -170,8 +170,8 @@ void test_spots(T, const char* t)
    }
    if(std::numeric_limits<T>::has_infinity)
    {
-      BOOST_CHECK_EQUAL(::boost::math::zeta(-10007, boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>())), std::numeric_limits<T>::infinity());
-      BOOST_CHECK_EQUAL(::boost::math::zeta(-10009, boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>())), -std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(::boost::math::zeta(static_cast<T>(-10007)), std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(::boost::math::zeta(static_cast<T>(-10009)), -std::numeric_limits<T>::infinity());
    }
 #ifdef BOOST_MSVC
 #pragma warning(pop)

@@ -32,7 +32,7 @@ inline T get_smallest_value(mpl::true_ const&)
    // when using the SSE2 registers in DAZ or FTZ mode.
    //
    static const T m = std::numeric_limits<T>::denorm_min();
-   return ((tools::min_value<T>() - m) == tools::min_value<T>()) ? tools::min_value<T>() : m;
+   return ((tools::min_value<T>() / 2) == 0) ? tools::min_value<T>() : m;
 }
 
 template <class T>

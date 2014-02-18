@@ -162,6 +162,12 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
       result *= unchecked_factorial<T>(itrunc(z, pol) - 1);
       BOOST_MATH_INSTRUMENT_VARIABLE(result);
    }
+   else if (z < tools::root_epsilon<T>())
+   {
+      if (z < 1 / tools::max_value<T>())
+         result = policies::raise_overflow_error<T>(function, 0, pol);
+	   result *= 1 / z - constants::euler<T>();
+   }
    else
    {
       result *= Lanczos::lanczos_sum(z);
@@ -216,7 +222,7 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = 0)
 
    T result = 0;
    int sresult = 1;
-   if(z <= 0)
+   if(z <= -tools::root_epsilon<T>())
    {
       // reflection formula:
       if(floor(z) == z)
@@ -233,6 +239,17 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = 0)
          sresult = -sresult;
       }
       result = log(boost::math::constants::pi<T>()) - lgamma_imp(z, pol, l) - log(t);
+   }
+   else if (z < tools::root_epsilon<T>())
+   {
+	   if (0 == z)
+		   return policies::raise_pole_error<T>(function, "Evaluation of lgamma at %1%.", z, pol);
+      if (fabs(z) < 1 / tools::max_value<T>())
+         result = -log(fabs(z));
+      else
+	      result = log(fabs(1 / z - constants::euler<T>()));
+	   if (z < 0)
+		sresult = -1;
    }
    else if(z < 15)
    {
@@ -511,12 +528,28 @@ T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&, int* sig
 
    T log_gamma_value;
 
-   if(zz < min_arg_for_recursion)
+   if (zz < min_arg_for_recursion)
    {
-      // Here we simply take the logarithm of tgamma(). This is somewhat
-      // inefficient, but simple. The rationale is that the argument here
-      // is relatively small and overflow is not expected to be likely.
-      log_gamma_value = log(abs(gamma_imp(zz, pol, lanczos::undefined_lanczos())));
+	   // Here we simply take the logarithm of tgamma(). This is somewhat
+	   // inefficient, but simple. The rationale is that the argument here
+	   // is relatively small and overflow is not expected to be likely.
+      if (z > -tools::root_epsilon<T>())
+      {
+         // Reflection formula may fail if z is very close to zero, let the series
+         // expansion for tgamma close to zero do the work:
+         log_gamma_value = log(abs(gamma_imp(z, pol, lanczos::undefined_lanczos())));
+         if (sign)
+         {
+             *sign = z < 0 ? -1 : 1;
+         }
+         return log_gamma_value;
+      }
+	   else
+      {
+         // No issue with spurious overflow in reflection formula, 
+         // just fall through to regular code:
+         log_gamma_value = log(abs(gamma_imp(zz, pol, lanczos::undefined_lanczos())));
+      }
    }
    else
    {

@@ -203,7 +203,7 @@ void expected_results()
       "Win32[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*medium[^|]*",               // test data group
-      "[^|]*", 700, 200);               // test function
+      "[^|]*", 1000, 200);               // test function
    add_expected_result(
       "GNU[^|]*",                          // compiler
       "[^|]*",                          // stdlib
