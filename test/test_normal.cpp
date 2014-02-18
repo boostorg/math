@@ -15,7 +15,7 @@
 // From MathWorld--A Wolfram Web Resource.
 // http://mathworld.wolfram.com/NormalDistribution.html
 
-#include <pch.hpp> // include directory /libs/math/src/tr1/ is needed.
+//#include <pch.hpp> // include directory /libs/math/src/tr1/ is needed.
 
 #ifdef _MSC_VER
 #  pragma warning (disable: 4127) // conditional expression is constant
@@ -94,7 +94,7 @@ void test_spots(RealType)
    BOOST_CHECK_THROW(boost::math::normal_distribution<RealType> nbad1(0, 0), std::domain_error); // zero sd
    BOOST_CHECK_THROW(boost::math::normal_distribution<RealType> nbad1(0, -1), std::domain_error); // negative sd
 
-  // Tests on extreme values of random variate x, if has numeric_limit infinity etc.
+  // Tests on extreme values of random variate x, if has std::numeric_limits infinity etc.
     normal_distribution<RealType> N01;
   if(std::numeric_limits<RealType>::has_infinity)
   {
