@@ -139,7 +139,7 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
          result = gamma_imp(T(-z), pol, l) * sinpx(z);
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
          if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
-            return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+            return -boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
          result = -boost::math::constants::pi<T>() / result;
          if(result == 0)
             return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
@@ -180,13 +180,13 @@ T gamma_imp(T z, const Policy& pol, const Lanczos& l)
          // we're going to overflow unless this is done with care:
          BOOST_MATH_INSTRUMENT_VARIABLE(zgh);
          if(lzgh * z / 2 > tools::log_max_value<T>())
-            return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+            return boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
          T hp = pow(zgh, (z / 2) - T(0.25));
          BOOST_MATH_INSTRUMENT_VARIABLE(hp);
          result *= hp / exp(zgh);
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
          if(tools::max_value<T>() / hp < result)
-            return policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+            return boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
          result *= hp;
          BOOST_MATH_INSTRUMENT_VARIABLE(result);
       }
