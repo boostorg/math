@@ -6,11 +6,6 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
-[h4 Math-1.10.0]
-
-[@https://svn.boost.org/trac/boost/ticket/9672 #9672 PDF and CDF of a Laplace distribution throwing domain_error]
-Random variate can now be infinite.
-
 [h4 Math-1.9.0]
 
 * Changed version number to new Boost.Math specific version now that we're in the modular Boost world.
@@ -21,6 +16,8 @@ Random variate can now be infinite.
 * Add option to explicitly enable/disable use of __float128 in constants code, see [@https://svn.boost.org/trac/boost/ticket/9240 #9240].
 * Cleaned up handling of negative values in Bessel I0 and I1 code (removed dead code), see [@https://svn.boost.org/trac/boost/ticket/9512 #9512].
 * Fixed handling of very small values passed to __tgamma and __lgamma so they don't generate spurious overflows (thanks to Rocco Romeo).
+* [@https://svn.boost.org/trac/boost/ticket/9672 #9672 PDF and CDF of a Laplace distribution throwing domain_error]
+Random variate can now be infinite.
 
 [h4 Boost-1.55]
 
