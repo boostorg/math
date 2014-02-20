@@ -289,10 +289,10 @@
       using std::fabs;
       using std::sqrt;
 
-      // sqrt(x) for (x in C) =
-      //  (s       , xi / 2s) : for xr > 0,
-      //  (|xi| / 2s, +-s)    : for xr < 0,
-      //  (sqrt(xi), sqrt(xi) : for xr = 0,
+      // Compute sqrt(x) for x in C:
+      // sqrt(x) = (s       , xi / 2s) : for xr > 0,
+      //           (|xi| / 2s, +-s)    : for xr < 0,
+      //           (sqrt(xi), sqrt(xi) : for xr = 0,
       // where s = sqrt{ [ |xr| + sqrt(xr^2 + xi^2) ] / 2 },
       // and the +- sign is the same as the sign of xi.
 
@@ -363,12 +363,8 @@
       const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE sinh_y = (exp_yp - exp_ym) / 2;
       const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE cosh_y = (exp_yp + exp_ym) / 2;
 
-      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE a =   sin_x * cosh_y;
-      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE b =   cos_x * sinh_y;
-      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE c =   cos_x * cosh_y;
-      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE d = -(sin_x * sinh_y);
-
-      return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>((a * c) + (b * d), (b * c) - (a * d)) / ((c * c) + (d * d));
+      return (  complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(sin_x * cosh_y,  cos_x * sinh_y)
+              / complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(cos_x * cosh_y, -sin_x * sinh_y));
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> asin(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
@@ -406,6 +402,32 @@
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> log10(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
       return std::log(x) / boost::math::constants::ln_ten<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>();
+    }
+
+    inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x,
+                                                                    int p)
+    {
+      if     (p <  0) { return BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) / std::pow(x, -p); }
+      else if(p == 0) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1)); }
+      else if(p == 1) { return  x; }
+      else if(p == 2) { return  x * x; }
+      else if(p == 3) { return (x * x) * x; }
+      else
+      {
+        complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> value(x);
+
+        int n;
+
+        for(n = 1; n <= p / 2; n *= 2)
+        {
+          value *= value;
+        }
+
+        const int p_minus_n = p - n;
+
+        // Call the function recursively for computing the remaining power of n.
+        return ((p_minus_n == 0) ? value : (value * pow(x, p_minus_n)));
+      }
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x,
@@ -461,7 +483,7 @@
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> tanh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
       const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> ex_plus  = std::exp(x);
-      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> ex_minus = 1 / ex_plus;
+      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> ex_minus = BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) / ex_plus;
 
       return (ex_plus - ex_minus) / (ex_plus + ex_minus);
     }
@@ -473,8 +495,10 @@
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> acosh(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
-      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> zp(x.real() + 1, x.imag());
-      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> zm(x.real() - 1, x.imag());
+      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE my_one(1);
+
+      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> zp(x.real() + my_one, x.imag());
+      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> zm(x.real() - my_one, x.imag());
 
       return std::log(x + (zp * std::sqrt(zm / zp)));
     }
@@ -488,15 +512,16 @@
     inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>& os, const std::complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
       std::basic_ostringstream<char_type, traits_type> ostr;
+
       ostr.flags(os.flags());
       ostr.imbue(os.getloc());
       ostr.precision(os.precision());
 
       ostr << char_type('(')
-            << x.real()
-            << char_type(',')
-            << x.imag()
-            << char_type(')');
+           << x.real()
+           << char_type(',')
+           << x.imag()
+           << char_type(')');
 
       return (os << ostr.str());
     }
