@@ -180,9 +180,9 @@
     const bool showpoint  = ((f & std::ios_base::showpoint)  == std::ios_base::showpoint);
     const bool showpos    = ((f & std::ios_base::showpos)    == std::ios_base::showpos);
 
-    const bool neg = str.size() && (str[0] == '-');
+    const bool b_neg = ((str.size() != 0U) && (str[0] == '-'));
 
-    if(neg)
+    if(b_neg)
     {
       str.erase(0, 1);
     }
@@ -219,7 +219,8 @@
           }
         }
       }
-      if(neg)
+
+      if(b_neg)
       {
         str.insert(0U, 1U, '-');
       }
@@ -272,7 +273,7 @@
     {
       if((1 + my_exp) > static_cast<int>(str.size()))
       {
-        // Just pad out the end with zeros:
+        // Just pad out the end with zeros.
         str.append(static_cast<size_type>((1 + my_exp) - static_cast<int>(str.size())), '0');
 
         if(showpoint || fixed)
@@ -338,7 +339,7 @@
       str.append(e);
     }
 
-    if(neg)
+    if(b_neg)
     {
       str.insert(0U, 1U, '-');
     }

@@ -7,7 +7,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// Implement the basic parts of floating-point typedefs having specified widths.
+// Implement quadruple-precision std::numeric_limits<> support.
 
 #ifndef _BOOST_CSTDFLOAT_LIMITS_2014_01_09_HPP_
   #define _BOOST_CSTDFLOAT_LIMITS_2014_01_09_HPP_

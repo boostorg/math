@@ -7,6 +7,8 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
+// Implement quadruple-precision (and extended) support for <complex>.
+
 #ifndef _BOOST_CSTDFLOAT_COMPLEX_2014_02_15_HPP_
   #define _BOOST_CSTDFLOAT_COMPLEX_2014_02_15_HPP_
 
