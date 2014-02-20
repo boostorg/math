@@ -667,7 +667,8 @@ inline bool check_overflow(T val, R* result, const char* function, const Policy&
    BOOST_MATH_STD_USING
    if(fabs(val) > tools::max_value<R>())
    {
-      *result = static_cast<R>(boost::math::policies::detail::raise_overflow_error<R>(function, 0, pol));
+      boost::math::policies::detail::raise_overflow_error<R>(function, 0, pol);
+      *result = static_cast<R>(val);
       return true;
    }
    return false;

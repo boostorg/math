@@ -274,5 +274,11 @@ void test_spots(T)
    BOOST_CHECK(sign == -1);
    BOOST_CHECK_CLOSE(::boost::math::lgamma(-4 / boost::math::tools::max_value<T>(), &sign), log(boost::math::tools::max_value<T>() / 4), tolerance);
    BOOST_CHECK(sign == -1);
+
+   if (std::numeric_limits<T>::has_denorm && std::numeric_limits<T>::has_infinity && (boost::math::isinf)(1 / std::numeric_limits<T>::denorm_min()))
+   {
+      BOOST_CHECK_EQUAL(boost::math::tgamma(-std::numeric_limits<T>::denorm_min()), -std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::tgamma(std::numeric_limits<T>::denorm_min()), std::numeric_limits<T>::infinity());
+   }
 }
 
