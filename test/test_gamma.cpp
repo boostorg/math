@@ -76,7 +76,7 @@ void expected_results()
       "Win32.*",                          // platform
       "real_concept",                // test type(s)
       "factorials",                  // test data group
-      "boost::math::tgamma", 400, 200);  // test function
+      "boost::math::tgamma", 600, 200);  // test function
    add_expected_result(
       "GNU.*",                          // compiler
       ".*",                          // stdlib
