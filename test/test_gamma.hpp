@@ -329,5 +329,11 @@ void test_spots(T, const char* name)
       BOOST_CHECK_CLOSE(::boost::math::lgamma(-4 - ldexp(static_cast<T>(1), -55), &sign), log(static_cast<T>(1.50119987579016527057843048200831672241827850458884790004313e15L)), tolerance * extra_tol);
       BOOST_CHECK(sign == -1);
    }
+
+   if (std::numeric_limits<T>::has_denorm && std::numeric_limits<T>::has_infinity && (boost::math::isinf)(1 / std::numeric_limits<T>::denorm_min()))
+   {
+      BOOST_CHECK_EQUAL(boost::math::tgamma(-std::numeric_limits<T>::denorm_min()), -std::numeric_limits<T>::infinity());
+      BOOST_CHECK_EQUAL(boost::math::tgamma(std::numeric_limits<T>::denorm_min()), std::numeric_limits<T>::infinity());
+   }
 }
 
