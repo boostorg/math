@@ -299,7 +299,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*medium[^|]*",               // test data group
-      "[^|]*", 1000, 200);                // test function
+      "[^|]*", 1500, 400);                // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
