@@ -20,9 +20,9 @@
   #include <boost/detail/cstdfloat_limits.hpp>
   #endif
 
-  namespace boost { namespace cstdfloat { namespace detail {
   // Here is a helper function used for raising a value of a given
-  // floating-point type to a power having an integer type.
+  // floating-point type to the power of n, where n has integral type.
+  namespace boost { namespace cstdfloat { namespace detail {
   template<class float_type, class type_n> inline float_type pown(const float_type& cb, const type_n p)
   {
     if     (p <  static_cast<type_n>(0)) { return 1 / pown(cb, static_cast<type_n>(-p)); }
@@ -49,11 +49,11 @@
   }
   } } } // boost::cstdfloat::detail
 
-  #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM)
-  #include <boost/detail/cstdfloat_iostream.hpp>
-  #endif
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
   #include <boost/detail/cstdfloat_cmath.hpp>
+  #endif
+  #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM)
+  #include <boost/detail/cstdfloat_iostream.hpp>
   #endif
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_COMPLEX)
   #include <boost/detail/cstdfloat_complex.hpp>

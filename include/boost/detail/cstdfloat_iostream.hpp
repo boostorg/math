@@ -25,6 +25,7 @@
   #include <boost/static_assert.hpp>
   #include <boost/throw_exception.hpp>
 
+//  #if (0)
   #if defined(__GNUC__)
 
   // Forward declarations of quadruple-precision string functions.
@@ -149,6 +150,7 @@
     }
   }
 
+//  #elif defined(__GNUC__)
   #elif defined(BOOST_INTEL)
 
   // The section for I/O stream support for the ICC compiler is particularly
@@ -390,10 +392,12 @@
                                 std::streamsize digits,
                                 const std::ios_base::fmtflags f)
   {
-    const bool iszero = (std::fabs(x) < (std::numeric_limits<float_type>::min)());
     const bool isneg  = (x < 0);
+    const bool iszero = ((!isneg) ? bool(+x < (std::numeric_limits<float_type>::min)())
+                                  : bool(-x < (std::numeric_limits<float_type>::min)()));
     const bool isnan  = (x != x);
-    const bool isinf  = (std::fabs(x) > (std::numeric_limits<float_type>::max)());
+    const bool isinf  = ((!isneg) ? bool(+x > (std::numeric_limits<float_type>::max)())
+                                  : bool(-x > (std::numeric_limits<float_type>::max)()));
 
     int expon = 0;
 
@@ -438,7 +442,7 @@
       {
         int e = -expon / 2;
 
-        const float_type t2 = pown(ten, e);
+        const float_type t2 = boost::cstdfloat::detail::pown(ten, e);
 
         eval_multiply(t, t2, x);
         eval_multiply(t, t2);
@@ -450,7 +454,7 @@
       }
       else
       {
-        t = pown(ten, -expon);
+        t = boost::cstdfloat::detail::pown(ten, -expon);
         eval_multiply(t, x);
       }
 
@@ -686,15 +690,15 @@
 
       if(expon > (std::numeric_limits<float_type>::min_exponent10 + 2))
       {
-        t = pown(t, expon);
+        t = boost::cstdfloat::detail::pown(t, expon);
         eval_multiply(value, t);
       }
       else
       {
-        t = pown(t, (expon + digits_seen + 1));
+        t = boost::cstdfloat::detail::pown(t, (expon + digits_seen + 1));
         eval_multiply(value, t);
         t = ten;
-        t = pown(t, (-digits_seen - 1));
+        t = boost::cstdfloat::detail::pown(t, (-digits_seen - 1));
         eval_multiply(value, t);
       }
     }
