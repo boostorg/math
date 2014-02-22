@@ -14,6 +14,10 @@
 
   #include <boost/detail/cstdfloat_types.hpp>
 
+  #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
+  #error You can not use <boost/detail/cstdfloat_iostream.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
+  #endif
+
   #if !defined(BOOST_NO_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 
   #include <cstddef>
@@ -30,12 +34,12 @@
 
   // Forward declarations of quadruple-precision string functions.
   extern "C" int quadmath_snprintf(char *str, size_t size, const char *format, ...) throw();
-  extern "C" boost::cstdfloat::detail::float_internal128_t strtoflt128(const char*, char **) throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t strtoflt128(const char*, char **) throw();
 
   namespace std
   {
     template<typename char_type, class traits_type>
-    inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>& os, const boost::cstdfloat::detail::float_internal128_t& x)
+    inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>& os, const boost::math::cstdfloat::detail::float_internal128_t& x)
     {
       std::basic_ostringstream<char_type, traits_type> ostr;
       ostr.flags(os.flags());
@@ -124,7 +128,7 @@
     }
 
     template<typename char_type, class traits_type>
-    inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, boost::cstdfloat::detail::float_internal128_t& x)
+    inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, boost::math::cstdfloat::detail::float_internal128_t& x)
     {
       std::string str;
 
@@ -166,7 +170,7 @@
   #include <cctype>
   #include <boost/lexical_cast.hpp>
 
-  namespace boost { namespace cstdfloat { namespace detail {
+  namespace boost { namespace math { namespace cstdfloat { namespace detail {
 
   template<class string_type>
   void format_float_string(string_type& str,
@@ -442,7 +446,7 @@
       {
         int e = -expon / 2;
 
-        const float_type t2 = boost::cstdfloat::detail::pown(ten, e);
+        const float_type t2 = boost::math::cstdfloat::detail::pown(ten, e);
 
         eval_multiply(t, t2, x);
         eval_multiply(t, t2);
@@ -454,7 +458,7 @@
       }
       else
       {
-        t = boost::cstdfloat::detail::pown(ten, -expon);
+        t = boost::math::cstdfloat::detail::pown(ten, -expon);
         eval_multiply(t, x);
       }
 
@@ -690,15 +694,15 @@
 
       if(expon > (std::numeric_limits<float_type>::min_exponent10 + 2))
       {
-        t = boost::cstdfloat::detail::pown(t, expon);
+        t = boost::math::cstdfloat::detail::pown(t, expon);
         eval_multiply(value, t);
       }
       else
       {
-        t = boost::cstdfloat::detail::pown(t, (expon + digits_seen + 1));
+        t = boost::math::cstdfloat::detail::pown(t, (expon + digits_seen + 1));
         eval_multiply(value, t);
         t = ten;
-        t = boost::cstdfloat::detail::pown(t, (-digits_seen - 1));
+        t = boost::math::cstdfloat::detail::pown(t, (-digits_seen - 1));
         eval_multiply(value, t);
       }
     }
@@ -710,18 +714,18 @@
 
     return (*p == static_cast<char>(0));
   }
-  } } } // boost::cstdfloat::detail
+  } } } } // boost::math::cstdfloat::detail
 
   namespace std
   {
     template<typename char_type, class traits_type>
-    inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>& os, const boost::cstdfloat::detail::float_internal128_t& x)
+    inline std::basic_ostream<char_type, traits_type>& operator<<(std::basic_ostream<char_type, traits_type>& os, const boost::math::cstdfloat::detail::float_internal128_t& x)
     {
-      boost::cstdfloat::detail::float_internal128_t non_const_x = x;
+      boost::math::cstdfloat::detail::float_internal128_t non_const_x = x;
 
-      const std::string str = boost::cstdfloat::detail::convert_to_string(non_const_x,
-                                                                          os.precision(),
-                                                                          os.flags());
+      const std::string str = boost::math::cstdfloat::detail::convert_to_string(non_const_x,
+                                                                                os.precision(),
+                                                                                os.flags());
 
       std::basic_ostringstream<char_type, traits_type> ostr;
       ostr.flags(os.flags());
@@ -734,13 +738,13 @@
     }
 
     template<typename char_type, class traits_type>
-    inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, boost::cstdfloat::detail::float_internal128_t& x)
+    inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>& is, boost::math::cstdfloat::detail::float_internal128_t& x)
     {
       std::string str;
 
       static_cast<void>(is >> str);
 
-      const bool conversion_is_ok = boost::cstdfloat::detail::convert_from_string(x, str.c_str());
+      const bool conversion_is_ok = boost::math::cstdfloat::detail::convert_from_string(x, str.c_str());
 
       if(false == conversion_is_ok)
       {
@@ -757,6 +761,7 @@
       return is;
     }
   }
+
   #endif // Use __GNUC__ or BOOST_INTEL libquadmath
 
   #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)

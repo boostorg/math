@@ -15,19 +15,21 @@
   #include <boost/detail/cstdfloat_cmath.hpp>
   #include <boost/detail/cstdfloat_iostream.hpp>
 
-  #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM)
-  #error Quadruple-precision complex support in <boost/cstdfloat.hpp> is incompatible with BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM
+  #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS)
+  #error You can not use <boost/detail/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS defined.
   #endif
-
   #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
-  #error Quadruple-precision complex support in <boost/cstdfloat.hpp> is incompatible with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH
+  #error You can not use <boost/detail/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
+  #endif
+  #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM)
+  #error You can not use <boost/detail/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM defined.
   #endif
 
   #if !defined(BOOST_NO_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 
   #include <boost/detail/cstdfloat_cmath.hpp>
 
-  #define BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE boost::cstdfloat::detail::float_internal128_t
+  #define BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE boost::math::cstdfloat::detail::float_internal128_t
 
   #include <boost/detail/cstdfloat_complex_std.hpp>
 

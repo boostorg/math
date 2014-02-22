@@ -205,7 +205,7 @@
   #if (BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 0) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 
     // Specify the underlying name of the internal 128-bit floating-point type definition.
-    namespace boost { namespace cstdfloat { namespace detail {
+    namespace boost { namespace math { namespace cstdfloat { namespace detail {
     #if defined(BOOST_INTEL)
       typedef _Quad      float_internal128_t;
     #elif defined(__GNUC__)
@@ -213,9 +213,9 @@
     #else
       #error "Sorry, the compiler is neither GCC, nor Intel, I don't know how to configure <boost/cstdfloat.hpp>."
     #endif
-    } } } // namespace boost::cstdfloat::detail
+    } } } } // boost::math::cstdfloat::detail
 
-    #define BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE boost::cstdfloat::detail::float_internal128_t
+    #define BOOST_CSTDFLOAT_FLOAT128_NATIVE_TYPE boost::math::cstdfloat::detail::float_internal128_t
     #undef  BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH
     #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 128
     #undef  BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE

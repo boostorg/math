@@ -78,7 +78,7 @@
     template<class char_type, class traits_type>
     inline std::basic_istream<char_type, traits_type>& operator>>(std::basic_istream<char_type, traits_type>&, std::complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>&);
 
-    // Template specialization of the complex class (or struct).
+    // Template specialization of the complex class.
     template<>
     class complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>
     {
@@ -200,19 +200,19 @@
         value_type im;
     };
 
-    // Constructors from built-in floating-point types.
+    // Constructors from built-in complex representation of floating-point types.
     complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<float>& f)        : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( f.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( f.imag())) { }
     complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<double>& d)       : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( d.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE( d.imag())) { }
     complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::complex(const complex<long double>& ld) : re(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(ld.real())), im(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(ld.imag())) { }
   } // namespace std
 
-  namespace boost { namespace cstdfloat { namespace detail {
+  namespace boost { namespace math { namespace cstdfloat { namespace detail {
   template<class float_type> std::complex<float_type> multiply_by_i(const std::complex<float_type>& x)
   {
-    // Multiply complex x times I, and return the result.
+    // Multiply x (in C) by I (the imaginary component), and return the result.
     return std::complex<float_type>(-x.imag(), x.real());
   }
-  } } } // boost::cstdfloat::detail
+  } } } } // boost::math::cstdfloat::detail
 
   namespace std
   {
@@ -228,7 +228,7 @@
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> proj (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
-      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE the_norm_plus_one = (std::norm(x) + 1);
+      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE the_norm_plus_one = (std::norm(x) + BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1));
 
       return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>((x.real() * 2) / the_norm_plus_one,
                                                                   (x.imag() * 2) / the_norm_plus_one);
@@ -369,7 +369,7 @@
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> asin(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
-      return -boost::cstdfloat::detail::multiply_by_i(std::log(boost::cstdfloat::detail::multiply_by_i(x) + std::sqrt(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - (x * x))));
+      return -boost::math::cstdfloat::detail::multiply_by_i(std::log(boost::math::cstdfloat::detail::multiply_by_i(x) + std::sqrt(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - (x * x))));
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> acos(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
@@ -379,9 +379,9 @@
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> atan(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
-      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> izz = boost::cstdfloat::detail::multiply_by_i(x);
+      const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> izz = boost::math::cstdfloat::detail::multiply_by_i(x);
 
-      return boost::cstdfloat::detail::multiply_by_i(std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - izz) - std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) + izz)) / 2;
+      return boost::math::cstdfloat::detail::multiply_by_i(std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) - izz) - std::log(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) + izz)) / 2;
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> exp(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
@@ -407,26 +407,83 @@
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> pow(const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x,
                                                                     int p)
     {
-      if     (p <  0) { return BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) / std::pow(x, -p); }
-      else if(p == 0) { return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1)); }
-      else if(p == 1) { return  x; }
-      else if(p == 2) { return  x * x; }
-      else if(p == 3) { return (x * x) * x; }
+      const bool re_isneg  = (x.real() < 0);
+      const bool re_isnan  = (x.real() != x.real());
+      const bool re_isinf  = ((!re_isneg) ? bool(+x.real() > (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::max)())
+                                          : bool(-x.real() > (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::max)()));
+
+      const bool im_isneg  = (x.imag() < 0);
+      const bool im_isnan  = (x.imag() != x.imag());
+      const bool im_isinf  = ((!im_isneg) ? bool(+x.imag() > (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::max)())
+                                          : bool(-x.imag() > (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::max)()));
+
+      if(re_isnan || im_isnan) { return x; }
+
+      if(re_isinf || im_isinf)
+      {
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::quiet_NaN(),
+                                                                    std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::quiet_NaN());
+      }
+
+      if(p < 0)
+      {
+        if(std::abs(x) < (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::min)())
+        {
+          return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::infinity(),
+                                                                      std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::infinity());
+        }
+        else
+        {
+          return BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1) / std::pow(x, -p);
+        }
+      }
+
+      if(p == 0)
+      {
+        return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1));
+      }
       else
       {
-        complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> value(x);
+        if(p == 1) { return x; }
 
-        int n;
-
-        for(n = 1; n <= p / 2; n *= 2)
+        if(std::abs(x) > (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::max)())
         {
-          value *= value;
+          const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE re = (re_isneg ? -std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::infinity()
+                                                                           : +std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::infinity());
+
+          const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE im = (im_isneg ? -std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::infinity()
+                                                                           : +std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::infinity());
+
+          return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(re, im);
         }
 
-        const int p_minus_n = p - n;
+        if     (p == 2) { return  (x * x); }
+        else if(p == 3) { return ((x * x) * x); }
+        else if(p == 4) { const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> x2 = (x * x); return (x2 * x2); }
+        else
+        {
+          int p2(p);
 
-        // Call the function recursively for computing the remaining power of n.
-        return ((p_minus_n == 0) ? value : (value * pow(x, p_minus_n)));
+          // The variable xn stores the binary powers of x.
+          complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> result = x;
+          complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> xn     = x;
+
+          while((p2 /= 2) != 0)
+          {
+            // Square xn for each binary power.
+            xn *= xn;
+
+            const bool has_binary_power = ((p2 % 2) != 0);
+
+            if(has_binary_power)
+            {
+              // Multiply the result with each binary power contained in the exponent.
+              result *= xn;
+            }
+          }
+
+          return result;
+        }
       }
     }
 

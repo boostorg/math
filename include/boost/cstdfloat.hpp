@@ -32,6 +32,9 @@
   #endif
 
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_COMPLEX)
+    #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS)
+    #error You can not use <boost/detail/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS defined.
+    #endif
     #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
     #error You can not use <boost/detail/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
     #endif
