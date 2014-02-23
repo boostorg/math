@@ -20,7 +20,6 @@
   #include <cmath>
   #include <stdexcept>
   #include <boost/cstdint.hpp>
-  #include <boost/math/constants/constants.hpp>
   #include <boost/static_assert.hpp>
   #include <boost/throw_exception.hpp>
 
@@ -209,11 +208,11 @@
     if(BOOST_CSTDFLOAT_FLOAT128_FABS(x - n) < float_type(BOOST_CSTDFLOAT_FLOAT128_EPS * nn))
     {
       // Return e^n for arguments very near an integer.
-      return boost::math::cstdfloat::detail::pown(boost::math::constants::e<float_type>(), n);
+      return boost::math::cstdfloat::detail::pown(BOOST_FLOAT128_C(2.71828182845904523536028747135266249775724709369996), n);
     }
 
     // Compute the scaled argument alpha.
-    const float_type alpha = x - (n * boost::math::constants::ln_two<float_type>());
+    const float_type alpha = x - (n * BOOST_FLOAT128_C(0.693147180559945309417232121458176568075500134360255));
 
     // Compute the polynomial approximation of exp(alpha).
     const float_type sum =
