@@ -124,10 +124,13 @@
     #define BOOST_CSTDFLOAT_FLOAT128_SINH   __sinhq_patch
     #define BOOST_CSTDFLOAT_FLOAT128_COSH   __coshq_patch
     #define BOOST_CSTDFLOAT_FLOAT128_TANH   __tanhq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_ASINH  __asinhq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_ACOSH  __acoshq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_ATANH  __atanhq_patch
     #define BOOST_CSTDFLOAT_FLOAT128_FMOD   __fmodq
     #define BOOST_CSTDFLOAT_FLOAT128_ATAN2  __atan2q
     #define BOOST_CSTDFLOAT_FLOAT128_LGAMMA __lgammaq
-    #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA __tgammaq
+    #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA __tgammaq_patch
   #elif defined(__GNUC__)
     #define BOOST_CSTDFLOAT_FLOAT128_LDEXP  ldexpq
     #define BOOST_CSTDFLOAT_FLOAT128_FREXP  frexpq
@@ -151,10 +154,13 @@
     #define BOOST_CSTDFLOAT_FLOAT128_SINH   sinhq_patch
     #define BOOST_CSTDFLOAT_FLOAT128_COSH   coshq_patch
     #define BOOST_CSTDFLOAT_FLOAT128_TANH   tanhq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_ASINH  asinhq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_ACOSH  acoshq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_ATANH  atanhq_patch
     #define BOOST_CSTDFLOAT_FLOAT128_FMOD   fmodq
     #define BOOST_CSTDFLOAT_FLOAT128_ATAN2  atan2q
     #define BOOST_CSTDFLOAT_FLOAT128_LGAMMA lgammaq
-    #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA tgammaq
+    #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA tgammaq_patch
   #endif
 
   // Implement quadruple-precision <cmath> functions in the namespace
@@ -288,39 +294,74 @@
     const boost::math::cstdfloat::detail::float_internal128_t ex_minus = (boost::math::cstdfloat::detail::float_internal128_t(1) / ex_plus);
     return (ex_plus - ex_minus) / (ex_plus + ex_minus);
   }
+  inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ASINH(boost::math::cstdfloat::detail::float_internal128_t x) throw()
+  {
+    // Patch the asinh() function since quadmath does not have it.
+    return ::BOOST_CSTDFLOAT_FLOAT128_LOG(x + ::BOOST_CSTDFLOAT_FLOAT128_SQRT((x * x) + boost::math::cstdfloat::detail::float_internal128_t(1)));
+  }
+  inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ACOSH(boost::math::cstdfloat::detail::float_internal128_t x) throw()
+  {
+    // Patch the acosh() function since quadmath does not have it.
+    const boost::math::cstdfloat::detail::float_internal128_t zp(x + boost::math::cstdfloat::detail::float_internal128_t(1));
+    const boost::math::cstdfloat::detail::float_internal128_t zm(x - boost::math::cstdfloat::detail::float_internal128_t(1));
+
+    return ::BOOST_CSTDFLOAT_FLOAT128_LOG(x + (zp * ::BOOST_CSTDFLOAT_FLOAT128_SQRT(zm / zp)));
+  }
+  inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATANH(boost::math::cstdfloat::detail::float_internal128_t x) throw()
+  {
+    // Patch the atanh() function since quadmath does not have it.
+    return (  ::BOOST_CSTDFLOAT_FLOAT128_LOG(boost::math::cstdfloat::detail::float_internal128_t(1) + x)
+            - ::BOOST_CSTDFLOAT_FLOAT128_LOG(boost::math::cstdfloat::detail::float_internal128_t(1) - x)) / 2;
+  }
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FMOD  (boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) throw();
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATAN2 (boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) throw();
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LGAMMA(boost::math::cstdfloat::detail::float_internal128_t) throw();
-  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TGAMMA(boost::math::cstdfloat::detail::float_internal128_t) throw();
+  inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TGAMMA(boost::math::cstdfloat::detail::float_internal128_t x) throw()
+  {
+    // Patch the tgammaq() function for a subset of broken GCC compilers
+    // like GCC 4.7, 4.8 on MinGW.
+    if(x > 0)
+    {
+      return ::BOOST_CSTDFLOAT_FLOAT128_EXP(::BOOST_CSTDFLOAT_FLOAT128_LGAMMA(x));
+    }
+    else
+    {
+      // TBD: LogGamma[x] for x < 0.
+      return boost::math::cstdfloat::detail::float_internal128_t(0);
+    }
+  }
 
   // Define the quadruple-precision <cmath> functions in the namespace boost::math::cstdfloat::detail.
 
   namespace boost { namespace math { namespace cstdfloat { namespace detail {
-  inline   boost::math::cstdfloat::detail::float_internal128_t ldexp (boost::math::cstdfloat::detail::float_internal128_t x, int n)                                           { return ::BOOST_CSTDFLOAT_FLOAT128_LDEXP (x, n); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t frexp (boost::math::cstdfloat::detail::float_internal128_t x, int* pn)                                         { return ::BOOST_CSTDFLOAT_FLOAT128_FREXP (x, pn); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t fabs  (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_FABS  (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t abs   (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_FABS  (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t floor (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_FLOOR (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t ceil  (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_CEIL  (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t sqrt  (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT  (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t trunc (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_TRUNC (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t exp   (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_EXP   (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t ldexp (boost::math::cstdfloat::detail::float_internal128_t x, int n)                                                 { return ::BOOST_CSTDFLOAT_FLOAT128_LDEXP (x, n); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t frexp (boost::math::cstdfloat::detail::float_internal128_t x, int* pn)                                               { return ::BOOST_CSTDFLOAT_FLOAT128_FREXP (x, pn); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t fabs  (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_FABS  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t abs   (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_FABS  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t floor (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_FLOOR (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t ceil  (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_CEIL  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t sqrt  (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_SQRT  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t trunc (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_TRUNC (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t exp   (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_EXP   (x); }
   inline   boost::math::cstdfloat::detail::float_internal128_t pow   (boost::math::cstdfloat::detail::float_internal128_t x, boost::math::cstdfloat::detail::float_internal128_t a) { return ::BOOST_CSTDFLOAT_FLOAT128_POW   (x, a); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t log   (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_LOG   (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t log10 (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_LOG10 (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t sin   (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_SIN   (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t cos   (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_COS   (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t tan   (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_TAN   (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t asin  (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_ASIN  (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t acos  (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_ACOS  (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t atan  (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_ATAN  (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t sinh  (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_SINH  (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t cosh  (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_COSH  (x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t tanh  (boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_TANH  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t log   (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_LOG   (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t log10 (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_LOG10 (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t sin   (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_SIN   (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t cos   (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_COS   (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t tan   (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_TAN   (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t asin  (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_ASIN  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t acos  (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_ACOS  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t atan  (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_ATAN  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t sinh  (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_SINH  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t cosh  (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_COSH  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t tanh  (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_TANH  (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t asinh (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_ASINH (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t acosh (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_ACOSH (x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t atanh (boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_ATANH (x); }
   inline   boost::math::cstdfloat::detail::float_internal128_t fmod  (boost::math::cstdfloat::detail::float_internal128_t a, boost::math::cstdfloat::detail::float_internal128_t b) { return ::BOOST_CSTDFLOAT_FLOAT128_FMOD  (a, b); }
   inline   boost::math::cstdfloat::detail::float_internal128_t atan2 (boost::math::cstdfloat::detail::float_internal128_t y, boost::math::cstdfloat::detail::float_internal128_t x) { return ::BOOST_CSTDFLOAT_FLOAT128_ATAN2 (y, x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t lgamma(boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_LGAMMA(x); }
-  inline   boost::math::cstdfloat::detail::float_internal128_t tgamma(boost::math::cstdfloat::detail::float_internal128_t x)                                                  { return ::BOOST_CSTDFLOAT_FLOAT128_TGAMMA(x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t lgamma(boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_LGAMMA(x); }
+  inline   boost::math::cstdfloat::detail::float_internal128_t tgamma(boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_TGAMMA(x); }
   } } } } // boost::math::cstdfloat::detail
 
   // Now inject the quadruple-precision <cmath> functions into the std namespace.
@@ -347,6 +388,9 @@
     using boost::math::cstdfloat::detail::sinh;
     using boost::math::cstdfloat::detail::cosh;
     using boost::math::cstdfloat::detail::tanh;
+    using boost::math::cstdfloat::detail::asinh;
+    using boost::math::cstdfloat::detail::acosh;
+    using boost::math::cstdfloat::detail::atanh;
     using boost::math::cstdfloat::detail::fmod;
     using boost::math::cstdfloat::detail::atan2;
     using boost::math::cstdfloat::detail::lgamma;
@@ -373,6 +417,9 @@
   #undef BOOST_CSTDFLOAT_FLOAT128_SINH
   #undef BOOST_CSTDFLOAT_FLOAT128_COSH
   #undef BOOST_CSTDFLOAT_FLOAT128_TANH
+  #undef BOOST_CSTDFLOAT_FLOAT128_ASINH
+  #undef BOOST_CSTDFLOAT_FLOAT128_ACOSH
+  #undef BOOST_CSTDFLOAT_FLOAT128_ATANH
   #undef BOOST_CSTDFLOAT_FLOAT128_FMOD
   #undef BOOST_CSTDFLOAT_FLOAT128_ATAN2
   #undef BOOST_CSTDFLOAT_FLOAT128_LGAMMA
