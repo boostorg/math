@@ -13,7 +13,7 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
-#include <boost/detail/cstdfloat_types.hpp>
+#include <boost/math/cstdfloat/cstdfloat_types.hpp>
 
 #ifdef _MSC_VER
 #  pragma warning(disable : 4127) // conditional expression is constant.

@@ -12,10 +12,12 @@
 #ifndef _BOOST_CSTDFLOAT_IOSTREAM_2014_02_15_HPP_
   #define _BOOST_CSTDFLOAT_IOSTREAM_2014_02_15_HPP_
 
-  #include <boost/detail/cstdfloat_types.hpp>
+  #include <boost/math/cstdfloat/cstdfloat_types.hpp>
+  #include <boost/math/cstdfloat/cstdfloat_limits.hpp>
+  #include <boost/math/cstdfloat/cstdfloat_cmath.hpp>
 
   #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
-  #error You can not use <boost/detail/cstdfloat_iostream.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
+  #error You can not use <boost/math/cstdfloat/cstdfloat_iostream.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
   #endif
 
   #if !defined(BOOST_NO_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)

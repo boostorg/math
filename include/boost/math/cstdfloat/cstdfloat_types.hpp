@@ -389,7 +389,7 @@
       #if !defined(BOOST_NO_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
       // This configuration does not *yet* support std::numeric_limits<boost::float128_t>.
       // Support for std::numeric_limits<boost::float128_t> is added in the detail
-      // file <boost/detail/cstdfloat_limits.hpp>.
+      // file <boost/math/cstdfloat/cstdfloat_limits.hpp>.
       #else
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::is_iec559    ==  true);
       BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::radix        ==     2);

@@ -12,7 +12,8 @@
 #ifndef _BOOST_CSTDFLOAT_CMATH_2014_02_15_HPP_
   #define _BOOST_CSTDFLOAT_CMATH_2014_02_15_HPP_
 
-  #include <boost/detail/cstdfloat_types.hpp>
+  #include <boost/math/cstdfloat/cstdfloat_types.hpp>
+  #include <boost/math/cstdfloat/cstdfloat_limits.hpp>
 
   #if !defined(BOOST_NO_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 

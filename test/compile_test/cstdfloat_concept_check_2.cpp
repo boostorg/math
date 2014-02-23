@@ -7,7 +7,7 @@
 
 #include "poison.hpp"
 
-#include <boost/detail/cstdfloat_types.hpp>
+#include <boost/math/cstdfloat/cstdfloat_types.hpp>
 #include <boost/math/concepts/distributions.hpp>
 
 #include "instantiate.hpp"

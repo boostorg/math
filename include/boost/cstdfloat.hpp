@@ -14,34 +14,34 @@
 #ifndef _BOOST_CSTDFLOAT_2014_01_09_HPP_
   #define _BOOST_CSTDFLOAT_2014_01_09_HPP_
 
-  #include <boost/detail/cstdfloat_types.hpp>
+  #include <boost/math/cstdfloat/cstdfloat_types.hpp>
 
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS)
-    #include <boost/detail/cstdfloat_limits.hpp>
+    #include <boost/math/cstdfloat/cstdfloat_limits.hpp>
   #endif
 
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
-    #include <boost/detail/cstdfloat_cmath.hpp>
+    #include <boost/math/cstdfloat/cstdfloat_cmath.hpp>
   #endif
 
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM)
     #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
-    #error You can not use <boost/detail/cstdfloat_iostream.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
+    #error You can not use <boost/math/cstdfloat/cstdfloat_iostream.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
     #endif
-    #include <boost/detail/cstdfloat_iostream.hpp>
+    #include <boost/math/cstdfloat/cstdfloat_iostream.hpp>
   #endif
 
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_COMPLEX)
     #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS)
-    #error You can not use <boost/detail/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS defined.
+    #error You can not use <boost/math/cstdfloat/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS defined.
     #endif
     #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
-    #error You can not use <boost/detail/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
+    #error You can not use <boost/math/cstdfloat/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
     #endif
     #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM)
-    #error You can not use <boost/detail/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM defined.
+    #error You can not use <boost/math/cstdfloat/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM defined.
     #endif
-    #include <boost/detail/cstdfloat_complex.hpp>
+    #include <boost/math/cstdfloat/cstdfloat_complex.hpp>
   #endif
 
 #endif // _BOOST_CSTDFLOAT_2014_01_09_HPP_
