@@ -332,14 +332,62 @@
   {
     // Patch the tgammaq() function for a subset of broken GCC compilers
     // like GCC 4.7, 4.8 on MinGW.
-    if(x > 0)
+    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+
+    if(x > float_type(0))
     {
       return ::BOOST_CSTDFLOAT_FLOAT128_EXP(::BOOST_CSTDFLOAT_FLOAT128_LGAMMA(x));
     }
+    else if(x < float_type(0))
+    {
+      // For x < 0, compute tgamma(-x) and use the reflection formula.
+      const float_type positive_x          = -x;
+            float_type gamma_value         = ::BOOST_CSTDFLOAT_FLOAT128_TGAMMA(positive_x);
+      const float_type floor_of_positive_x = ::BOOST_CSTDFLOAT_FLOAT128_FLOOR (positive_x);
+
+      // Take the reflection checks (slightly adapted) from <boost/math/gamma.hpp>.
+      const bool floor_of_z_is_equal_to_z = (positive_x == ::BOOST_CSTDFLOAT_FLOAT128_FLOOR(positive_x));
+
+      BOOST_CONSTEXPR_OR_CONST float_type my_pi = BOOST_FLOAT128_C(3.14159265358979323846264338327950288419716939937511);
+
+      const float_type sin_of_px = ::BOOST_CSTDFLOAT_FLOAT128_SIN(my_pi * x);
+
+      if(floor_of_z_is_equal_to_z)
+      {
+        const bool is_odd = ((boost::int32_t(floor_of_positive_x) % boost::int32_t(2)) != boost::int32_t(0));
+
+        return (is_odd ? -std::numeric_limits<float_type>::infinity()
+                       : +std::numeric_limits<float_type>::infinity());
+      }
+
+      gamma_value *= (x * sin_of_px);
+
+      const bool result_is_too_large_to_represent = (   (::BOOST_CSTDFLOAT_FLOAT128_FABS(gamma_value) < float_type(1))
+                                                     && (((std::numeric_limits<float_type>::max)() * ::BOOST_CSTDFLOAT_FLOAT128_FABS(gamma_value)) < my_pi));
+
+      if(result_is_too_large_to_represent)
+      {
+        const bool is_odd = ((boost::int32_t(floor_of_positive_x) % boost::int32_t(2)) != boost::int32_t(0));
+
+        return (is_odd ? -std::numeric_limits<float_type>::infinity()
+                       : +std::numeric_limits<float_type>::infinity());
+      }
+
+      gamma_value = -my_pi / gamma_value;
+
+      if((gamma_value > float_type(0)) || (gamma_value < float_type(0)))
+      {
+        return gamma_value;
+      }
+      else
+      {
+        return float_type(0);
+      }
+    }
     else
     {
-      // TBD: LogGamma[x] for x < 0.
-      return boost::math::cstdfloat::detail::float_internal128_t(0);
+      // Gamma of zero is complex infinity. Return NaN here.
+      return std::numeric_limits<float_type>::quiet_NaN();
     }
   }
 
