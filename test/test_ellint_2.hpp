@@ -74,6 +74,7 @@ void do_test_ellint_e1(T& data, const char* type_name, const char* test)
 template <typename T>
 void test_spots(T, const char* type_name)
 {
+    BOOST_MATH_STD_USING
     // Function values calculated on http://functions.wolfram.com/
     // Note that Mathematica's EllipticE accepts k^2 as the second parameter.
     static const boost::array<boost::array<T, 3>, 10> data1 = {{

@@ -42,7 +42,6 @@ void test(T t, const char* p)
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
-   using namespace boost::multiprecision;
    expected_results();
    //
    // Test at:
