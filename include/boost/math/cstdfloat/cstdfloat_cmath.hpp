@@ -204,9 +204,14 @@
 
     boost::int_fast32_t n;
 
-    if     (x < -1) { n = static_cast<boost::int_fast32_t>(BOOST_CSTDFLOAT_FLOAT128_CEIL (x_over_ln2)); }
-    else if(x > +1) { n = static_cast<boost::int_fast32_t>(BOOST_CSTDFLOAT_FLOAT128_FLOOR(x_over_ln2)); }
-    else            { n = static_cast<boost::int_fast32_t>(0); }
+    if((x < BOOST_FLOAT128_C(-1.0)) || (x > BOOST_FLOAT128_C(1.0)))
+    {
+      n = static_cast<boost::int_fast32_t>(::BOOST_CSTDFLOAT_FLOAT128_FLOOR(x_over_ln2));
+    }
+    else
+    {
+      n = static_cast<boost::int_fast32_t>(0);
+    }
 
     // Check if the argument is very near an integer.
     const boost::int_fast32_t nn = ((n < static_cast<boost::int_fast32_t>(0)) ? -n : n);
