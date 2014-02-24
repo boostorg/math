@@ -815,7 +815,7 @@ struct precision
 #ifdef BOOST_MATH_USE_FLOAT128
 
 template <class Policy>
-struct precision<__float128, Policy>
+struct precision<BOOST_MATH_FLOAT128_TYPE, Policy>
 {
    typedef mpl::int_<113> type;
 };

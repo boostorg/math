@@ -857,9 +857,24 @@ run zztest_max_digits10.cpp ;
 
 build-project ../example ;
 
+rule get_float128_tests 
+{
+     local result ;
+     for local source in [ glob float128/*.cpp ]
+     {
+         result += [ run $(source)
+            /boost/test//boost_unit_test_framework/<link>static 
+            /boost/regex//boost_regex/<link>static 
+           : # command line
+           : # input files
+           : # requirements
+            [ check-target-builds ../config//has_intel_quad "Intel _Quad datatype support" : <cxxflags>-Qoption,cpp,--extended_float_type <define>BOOST_MATH_USE_FLOAT128 ] 
+            [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
+            <define>BOOST_ALL_NO_LIB 
+           : $(source:B)_floatmax_t ] ;
+     }
+     return $(result) ;     
+}
 
-
-
-
-
-
+test-suite float128_tests : [ get_float128_tests ] ;
+explicit float128_tests ;

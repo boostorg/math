@@ -84,7 +84,7 @@ namespace boost{ namespace math
                mpl::int_<construct_from_long_double>,
 #ifdef BOOST_MATH_USE_FLOAT128
                typename mpl::if_<
-                  mpl::and_<boost::is_convertible<__float128, Real>, mpl::bool_< t1::value <= t5::value>, mpl::bool_<0 != t1::value> >,
+               mpl::and_<boost::is_convertible<BOOST_MATH_FLOAT128_TYPE, Real>, mpl::bool_< t1::value <= t5::value>, mpl::bool_<0 != t1::value> >,
                   mpl::int_<construct_from_float128>,
                   typename mpl::if_<
                      mpl::and_<mpl::bool_< t1::value <= max_string_digits>, mpl::bool_<0 != t1::value> >,

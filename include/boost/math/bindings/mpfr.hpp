@@ -184,7 +184,7 @@ inline long long lltrunc(__gmp_expr<T,U> const& x, const Policy& pol)
 namespace boost{ 
 
 #ifdef BOOST_MATH_USE_FLOAT128
-   template<> struct is_convertible<boost::floatmax_t, mpfr_class> : public boost::integral_constant<bool, false>{};
+   template<> struct is_convertible<BOOST_MATH_FLOAT128_TYPE, mpfr_class> : public boost::integral_constant<bool, false>{};
 #endif
    template<> struct is_convertible<long long, mpfr_class> : public boost::integral_constant<bool, false>{};
 

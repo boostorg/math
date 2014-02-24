@@ -68,7 +68,7 @@ public:
    std_real_concept(double c) : m_value(c){}
    std_real_concept(long double c) : m_value(c){}
 #ifdef BOOST_MATH_USE_FLOAT128
-   std_real_concept(__float128 c) : m_value(c){}
+   std_real_concept(BOOST_MATH_FLOAT128_TYPE c) : m_value(c){}
 #endif
 
    // Assignment:
