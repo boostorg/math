@@ -74,11 +74,11 @@
       else if(p == static_cast<integer_type>(4)) { const float_type x2 = (x * x); return (x2 * x2); }
       else
       {
-        integer_type p2(p);
-
         // The variable xn stores the binary powers of x.
-        float_type result = x;
-        float_type xn     = x;
+        float_type result(((p % integer_type(2)) != integer_type(0)) ? x : float_type(1));
+        float_type xn    (x);
+
+        integer_type p2 = p;
 
         while(integer_type(p2 /= 2) != integer_type(0))
         {
@@ -181,7 +181,6 @@
   {
     // Patch the expq() function for a subset of broken GCC compilers
     // like GCC 4.7, 4.8 on MinGW.
-    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
 
     // Use an order-36 polynomial approximation of the exponential function
     // in the range of (-ln2 < x < ln2). Scale the argument to this range
@@ -197,6 +196,8 @@
     //         x^13, x^14, x^15, x^16, x^17, x^18, x^19, x^20, x^21, x^22,
     //         x^23, x^24, x^25, x^26, x^27, x^28, x^29, x^30, x^31, x^32,
     //         x^33, x^34, x^35, x^36}, x]
+
+    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
 
     // Scale the argument x to the range (-ln2 < x < ln2).
     BOOST_CONSTEXPR_OR_CONST float_type one_over_ln2 = float_type(BOOST_FLOAT128_C(1.44269504088896340735992468100189213742664595415299));
@@ -214,12 +215,12 @@
     }
 
     // Check if the argument is very near an integer.
-    const boost::int_fast32_t nn = ((n < static_cast<boost::int_fast32_t>(0)) ? -n : n);
+    const float_type floor_of_x = ::BOOST_CSTDFLOAT_FLOAT128_FLOOR(x);
 
-    if(BOOST_CSTDFLOAT_FLOAT128_FABS(x - n) < float_type(BOOST_CSTDFLOAT_FLOAT128_EPS * nn))
+    if(::BOOST_CSTDFLOAT_FLOAT128_FABS(x - floor_of_x) < float_type(BOOST_CSTDFLOAT_FLOAT128_EPS))
     {
       // Return e^n for arguments very near an integer.
-      return boost::math::cstdfloat::detail::pown(BOOST_FLOAT128_C(2.71828182845904523536028747135266249775724709369996), n);
+      return boost::math::cstdfloat::detail::pown(BOOST_FLOAT128_C(2.71828182845904523536028747135266249775724709369996), static_cast<boost::int_fast32_t>(floor_of_x));
     }
 
     // Compute the scaled argument alpha.
@@ -281,42 +282,48 @@
   {
     // Patch the sinhq() function for a subset of broken GCC compilers
     // like GCC 4.7, 4.8 on MinGW.
-    const boost::math::cstdfloat::detail::float_internal128_t ex = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
-    return (ex - (boost::math::cstdfloat::detail::float_internal128_t(1) / ex)) / 2;
+    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+    const float_type ex = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
+    return (ex - (float_type(1) / ex)) / 2;
   }
   inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COSH  (boost::math::cstdfloat::detail::float_internal128_t x)
   {
     // Patch the coshq() function for a subset of broken GCC compilers
     // like GCC 4.7, 4.8 on MinGW.
-    const boost::math::cstdfloat::detail::float_internal128_t ex = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
-    return (ex + (boost::math::cstdfloat::detail::float_internal128_t(1) / ex)) / 2;
+    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+    const float_type ex = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
+    return (ex + (float_type(1) / ex)) / 2;
   }
   inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TANH  (boost::math::cstdfloat::detail::float_internal128_t x)
   {
     // Patch the tanhq() function for a subset of broken GCC compilers
     // like GCC 4.7, 4.8 on MinGW.
-    const boost::math::cstdfloat::detail::float_internal128_t ex_plus  = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
-    const boost::math::cstdfloat::detail::float_internal128_t ex_minus = (boost::math::cstdfloat::detail::float_internal128_t(1) / ex_plus);
+    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+    const float_type ex_plus  = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
+    const float_type ex_minus = (float_type(1) / ex_plus);
     return (ex_plus - ex_minus) / (ex_plus + ex_minus);
   }
   inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ASINH(boost::math::cstdfloat::detail::float_internal128_t x) throw()
   {
     // Patch the asinh() function since quadmath does not have it.
-    return ::BOOST_CSTDFLOAT_FLOAT128_LOG(x + ::BOOST_CSTDFLOAT_FLOAT128_SQRT((x * x) + boost::math::cstdfloat::detail::float_internal128_t(1)));
+    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+    return ::BOOST_CSTDFLOAT_FLOAT128_LOG(x + ::BOOST_CSTDFLOAT_FLOAT128_SQRT((x * x) + float_type(1)));
   }
   inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ACOSH(boost::math::cstdfloat::detail::float_internal128_t x) throw()
   {
     // Patch the acosh() function since quadmath does not have it.
-    const boost::math::cstdfloat::detail::float_internal128_t zp(x + boost::math::cstdfloat::detail::float_internal128_t(1));
-    const boost::math::cstdfloat::detail::float_internal128_t zm(x - boost::math::cstdfloat::detail::float_internal128_t(1));
+    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+    const float_type zp(x + float_type(1));
+    const float_type zm(x - float_type(1));
 
     return ::BOOST_CSTDFLOAT_FLOAT128_LOG(x + (zp * ::BOOST_CSTDFLOAT_FLOAT128_SQRT(zm / zp)));
   }
   inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATANH(boost::math::cstdfloat::detail::float_internal128_t x) throw()
   {
     // Patch the atanh() function since quadmath does not have it.
-    return (  ::BOOST_CSTDFLOAT_FLOAT128_LOG(boost::math::cstdfloat::detail::float_internal128_t(1) + x)
-            - ::BOOST_CSTDFLOAT_FLOAT128_LOG(boost::math::cstdfloat::detail::float_internal128_t(1) - x)) / 2;
+    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+    return (  ::BOOST_CSTDFLOAT_FLOAT128_LOG(float_type(1) + x)
+            - ::BOOST_CSTDFLOAT_FLOAT128_LOG(float_type(1) - x)) / 2;
   }
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FMOD  (boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) throw();
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATAN2 (boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) throw();
