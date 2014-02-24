@@ -350,8 +350,6 @@
 
       BOOST_CONSTEXPR_OR_CONST float_type my_pi = BOOST_FLOAT128_C(3.14159265358979323846264338327950288419716939937511);
 
-      const float_type sin_of_px = ::BOOST_CSTDFLOAT_FLOAT128_SIN(my_pi * x);
-
       if(floor_of_z_is_equal_to_z)
       {
         const bool is_odd = ((boost::int32_t(floor_of_positive_x) % boost::int32_t(2)) != boost::int32_t(0));
@@ -360,7 +358,9 @@
                        : +std::numeric_limits<float_type>::infinity());
       }
 
-      gamma_value *= (x * sin_of_px);
+      const float_type sinpx_value = x * ::BOOST_CSTDFLOAT_FLOAT128_SIN(my_pi * x);
+
+      gamma_value *= sinpx_value;
 
       const bool result_is_too_large_to_represent = (   (::BOOST_CSTDFLOAT_FLOAT128_FABS(gamma_value) < float_type(1))
                                                      && (((std::numeric_limits<float_type>::max)() * ::BOOST_CSTDFLOAT_FLOAT128_FABS(gamma_value)) < my_pi));
