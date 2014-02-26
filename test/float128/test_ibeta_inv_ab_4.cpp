@@ -10,7 +10,7 @@
 #define TEST_DATA 4
 #define FULL_TEST
 
-#include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/beta.hpp>
 #include "libs/math/test/test_ibeta_inv_ab.hpp"
 
 void expected_results()

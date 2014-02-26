@@ -5,9 +5,8 @@
 
 #define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 
+#include <boost/cstdfloat.hpp>
 #include "poison.hpp"
-
-#include <boost/math/cstdfloat/cstdfloat_types.hpp>
 #include <boost/math/concepts/distributions.hpp>
 
 #include "instantiate.hpp"
