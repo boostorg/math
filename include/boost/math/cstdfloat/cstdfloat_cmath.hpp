@@ -23,12 +23,12 @@
   #include <boost/static_assert.hpp>
   #include <boost/throw_exception.hpp>
 
-#if defined(_WIN32) && defined(__GNUC__)
-// Several versions of Mingw and probably cygwin too have broken
-// libquadmath implementations that segfault as soon as you call
-// expq or any function that depends on it.
-#  define BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
-#endif
+  #if defined(_WIN32) && defined(__GNUC__)
+    // Several versions of Mingw and probably cygwin too have broken
+    // libquadmath implementations that segfault as soon as you call
+    // expq or any function that depends on it.
+    #define BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
+  #endif
 
   // Here is a helper function used for raising the value of a given
   // floating-point type to the power of n, where n has integral type.
@@ -160,24 +160,24 @@
     #define BOOST_CSTDFLOAT_FLOAT128_FMOD   fmodq
     #define BOOST_CSTDFLOAT_FLOAT128_ATAN2  atan2q
     #define BOOST_CSTDFLOAT_FLOAT128_LGAMMA lgammaq
-    #ifndef BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
-       #define BOOST_CSTDFLOAT_FLOAT128_EXP    expq
-       #define BOOST_CSTDFLOAT_FLOAT128_SINH   sinhq
-       #define BOOST_CSTDFLOAT_FLOAT128_COSH   coshq
-       #define BOOST_CSTDFLOAT_FLOAT128_TANH   tanhq
-       #define BOOST_CSTDFLOAT_FLOAT128_ASINH  asinhq
-       #define BOOST_CSTDFLOAT_FLOAT128_ACOSH  acoshq
-       #define BOOST_CSTDFLOAT_FLOAT128_ATANH  atanhq
-       #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA tgammaq
+    #if !defined(BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS)
+    #define BOOST_CSTDFLOAT_FLOAT128_EXP    expq
+    #define BOOST_CSTDFLOAT_FLOAT128_SINH   sinhq
+    #define BOOST_CSTDFLOAT_FLOAT128_COSH   coshq
+    #define BOOST_CSTDFLOAT_FLOAT128_TANH   tanhq
+    #define BOOST_CSTDFLOAT_FLOAT128_ASINH  asinhq
+    #define BOOST_CSTDFLOAT_FLOAT128_ACOSH  acoshq
+    #define BOOST_CSTDFLOAT_FLOAT128_ATANH  atanhq
+    #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA tgammaq
     #else // BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
-       #define BOOST_CSTDFLOAT_FLOAT128_EXP    expq_patch
-       #define BOOST_CSTDFLOAT_FLOAT128_SINH   sinhq_patch
-       #define BOOST_CSTDFLOAT_FLOAT128_COSH   coshq_patch
-       #define BOOST_CSTDFLOAT_FLOAT128_TANH   tanhq_patch
-       #define BOOST_CSTDFLOAT_FLOAT128_ASINH  asinhq_patch
-       #define BOOST_CSTDFLOAT_FLOAT128_ACOSH  acoshq_patch
-       #define BOOST_CSTDFLOAT_FLOAT128_ATANH  atanhq_patch
-       #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA tgammaq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_EXP    expq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_SINH   sinhq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_COSH   coshq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_TANH   tanhq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_ASINH  asinhq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_ACOSH  acoshq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_ATANH  atanhq_patch
+    #define BOOST_CSTDFLOAT_FLOAT128_TGAMMA tgammaq_patch
     #endif // BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
   #endif 
 
@@ -185,9 +185,9 @@
   // boost::math::cstdfloat::detail. Subsequently inject these into the
   // std namespace via *using* directive.
 
-  // Begin with some forward function declarations.
+  // Begin with some forward function declarations. Also implement patches
+  // for compilers that have broken float128 exponential functions.
 
-  // Forward declarations of quadruple-precision elementary functions.
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LDEXP (boost::math::cstdfloat::detail::float_internal128_t, int)  throw();
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FREXP (boost::math::cstdfloat::detail::float_internal128_t, int*) throw();
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FABS  (boost::math::cstdfloat::detail::float_internal128_t) throw();
@@ -207,16 +207,20 @@
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_FMOD  (boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) throw();
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATAN2 (boost::math::cstdfloat::detail::float_internal128_t, boost::math::cstdfloat::detail::float_internal128_t) throw();
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_LGAMMA(boost::math::cstdfloat::detail::float_internal128_t) throw();
-#ifndef BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
-  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP   (boost::math::cstdfloat::detail::float_internal128_t x)throw();
-  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SINH  (boost::math::cstdfloat::detail::float_internal128_t x)throw();
-  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COSH  (boost::math::cstdfloat::detail::float_internal128_t x)throw();
-  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TANH  (boost::math::cstdfloat::detail::float_internal128_t x)throw();
-  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ASINH(boost::math::cstdfloat::detail::float_internal128_t x) throw();
-  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ACOSH(boost::math::cstdfloat::detail::float_internal128_t x) throw();
-  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATANH(boost::math::cstdfloat::detail::float_internal128_t x) throw();
+
+  #if !defined(BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS)
+
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP   (boost::math::cstdfloat::detail::float_internal128_t x) throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SINH  (boost::math::cstdfloat::detail::float_internal128_t x) throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COSH  (boost::math::cstdfloat::detail::float_internal128_t x) throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TANH  (boost::math::cstdfloat::detail::float_internal128_t x) throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ASINH (boost::math::cstdfloat::detail::float_internal128_t x) throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ACOSH (boost::math::cstdfloat::detail::float_internal128_t x) throw();
+  extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_ATANH (boost::math::cstdfloat::detail::float_internal128_t x) throw();
   extern "C" boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_TGAMMA(boost::math::cstdfloat::detail::float_internal128_t x) throw();
-#else // BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
+
+  #else // BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
+
   inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP   (boost::math::cstdfloat::detail::float_internal128_t x)
   {
     // Patch the expq() function for a subset of broken GCC compilers
@@ -418,7 +422,8 @@
       return std::numeric_limits<float_type>::quiet_NaN();
     }
   }
-#endif // BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
+  #endif // BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
+
   // Define the quadruple-precision <cmath> functions in the namespace boost::math::cstdfloat::detail.
 
   namespace boost { namespace math { namespace cstdfloat { namespace detail {

@@ -14,16 +14,20 @@
 #ifndef _BOOST_CSTDFLOAT_2014_01_09_HPP_
   #define _BOOST_CSTDFLOAT_2014_01_09_HPP_
 
+  // Include the floating-point type definitions.
   #include <boost/math/cstdfloat/cstdfloat_types.hpp>
 
+  // Support a specialization of std::numeric_limits<> for the wrapped quadmath library (if available).
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS)
     #include <boost/math/cstdfloat/cstdfloat_limits.hpp>
   #endif
 
+  // Support <cmath> functions for the wrapped quadmath library (if available).
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
     #include <boost/math/cstdfloat/cstdfloat_cmath.hpp>
   #endif
 
+  // Support I/O stream operations for the wrapped quadmath library (if available).
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM)
     #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH)
     #error You can not use <boost/math/cstdfloat/cstdfloat_iostream.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_CMATH defined.
@@ -31,6 +35,7 @@
     #include <boost/math/cstdfloat/cstdfloat_iostream.hpp>
   #endif
 
+  // Support a specialization of std::complex<> for the wrapped quadmath library (if available).
   #if !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_COMPLEX)
     #if defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS)
     #error You can not use <boost/math/cstdfloat/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_LIMITS defined.
@@ -42,6 +47,12 @@
     #error You can not use <boost/math/cstdfloat/cstdfloat_complex.hpp> with BOOST_CSTDFLOAT_NO_LIBQUADMATH_IOSTREAM defined.
     #endif
     #include <boost/math/cstdfloat/cstdfloat_complex.hpp>
+  #endif
+
+
+  // Undefine BOOST_NO_FLOAT128_T because this constant is not meant for public use.
+  #if defined(BOOST_NO_FLOAT128_T)
+  #undef BOOST_NO_FLOAT128_T
   #endif
 
 #endif // _BOOST_CSTDFLOAT_2014_01_09_HPP_
