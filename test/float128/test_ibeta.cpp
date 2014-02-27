@@ -35,7 +35,7 @@ void expected_results()
       "[^|]*",                          // platform
       ".*",                             // test type(s)
       "(?i).*large.*",                  // test data group
-      ".*", 5000, 500);                 // test function
+      ".*", 150000, 5000);                 // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
