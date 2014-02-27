@@ -13,6 +13,7 @@
   #define _BOOST_CSTDFLOAT_TYPES_2014_01_09_HPP_
 
   #include <float.h>
+  #include <limits>
   #include <boost/static_assert.hpp>
   #include <boost/math/tools/config.hpp>
 
