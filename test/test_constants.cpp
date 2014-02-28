@@ -179,7 +179,7 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE_FRACTION(1 / sqrt(3.14159265358979323846264338327950288419716939937510L), one_div_root_pi<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(1 / sqrt(2 * 3.14159265358979323846264338327950288419716939937510L), one_div_root_two_pi<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(sqrt(1. / 3.14159265358979323846264338327950288419716939937510L), root_one_div_pi<RealType>(), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(3.14159265358979323846264338327950288419716939937510L - 3.L, pi_minus_three<RealType>(), tolerance * 2 ); // tolerance * 2 because of cancellation loss.
+   BOOST_CHECK_CLOSE_FRACTION(3.14159265358979323846264338327950288419716939937510L - 3.L, pi_minus_three<RealType>(), tolerance * 4 ); // tolerance * 2 because of cancellation loss.
    BOOST_CHECK_CLOSE_FRACTION(4.L - 3.14159265358979323846264338327950288419716939937510L, four_minus_pi<RealType>(), tolerance );
    //  BOOST_CHECK_CLOSE_FRACTION(pow((4 - 3.14159265358979323846264338327950288419716939937510L), 1.5L), pow23_four_minus_pi<RealType>(), tolerance); See above.
    //
@@ -557,7 +557,7 @@ void test_long_double_spots()
    BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(1 / sqrt(3.14159265358979323846264338327950288419716939937510L)), one_div_root_pi, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(1 / sqrt(2 * 3.14159265358979323846264338327950288419716939937510L)), one_div_root_two_pi, tolerance);
    BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(sqrt(1. / 3.14159265358979323846264338327950288419716939937510L)), root_one_div_pi, tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(3.14159265358979323846264338327950288419716939937510L - 3.L), pi_minus_three, tolerance * 2 ); // tolerance * 2 because of cancellation loss.
+   BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(3.14159265358979323846264338327950288419716939937510L - 3.L), pi_minus_three, tolerance * 4 ); // tolerance * 2 because of cancellation loss.
    BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(4.L - 3.14159265358979323846264338327950288419716939937510L), four_minus_pi, tolerance );
    //  BOOST_CHECK_CLOSE_FRACTION(static_cast<long double>(pow((4 - 3.14159265358979323846264338327950288419716939937510L), 1.5L)), pow23_four_minus_pi, tolerance); See above.
    //
@@ -689,7 +689,7 @@ void test_real_concept_policy(const Policy&)
    BOOST_CHECK_CLOSE_FRACTION(1 / sqrt(3.14159265358979323846264338327950288419716939937510L), (one_div_root_pi<real_concept, Policy>)(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(1 / sqrt(2 * 3.14159265358979323846264338327950288419716939937510L), (one_div_root_two_pi<real_concept, Policy>)(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(sqrt(1. / 3.14159265358979323846264338327950288419716939937510L), (root_one_div_pi<real_concept, Policy>)(), tolerance);
-   BOOST_CHECK_CLOSE_FRACTION(3.14159265358979323846264338327950288419716939937510L - 3.L, (pi_minus_three<real_concept, Policy>)(), tolerance * 2 ); // tolerance * 2 because of cancellation loss.
+   BOOST_CHECK_CLOSE_FRACTION(3.14159265358979323846264338327950288419716939937510L - 3.L, (pi_minus_three<real_concept, Policy>)(), tolerance * 4 ); // tolerance * 2 because of cancellation loss.
    BOOST_CHECK_CLOSE_FRACTION(4.L - 3.14159265358979323846264338327950288419716939937510L, (four_minus_pi<real_concept, Policy>)(), tolerance );
    //  BOOST_CHECK_CLOSE_FRACTION(pow((4 - 3.14159265358979323846264338327950288419716939937510L), 1.5L), (pow23_four_minus_pi<real_concept, Policy>)(), tolerance); See above.
    //
