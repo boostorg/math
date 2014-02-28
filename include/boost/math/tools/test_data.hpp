@@ -25,7 +25,13 @@
 #include <boost/type_traits/is_floating_point.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/integral_constant.hpp>
+#ifndef BOOST_NO_CXX11_HDR_RANDOM
+#include <random>
+namespace random_ns = std;
+#else
 #include <boost/tr1/random.hpp>
+namespace random_ns = std::tr1;
+#endif
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/real_cast.hpp>
 
@@ -359,13 +365,12 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
          BOOST_ASSERT(arg1.n1 > 0);
          typedef float random_type;
 
-         std::tr1::mt19937 rnd;
-         std::tr1::uniform_real<random_type> ur_a(real_cast<random_type>(arg1.z1), real_cast<random_type>(arg1.z2));
-         std::tr1::variate_generator<std::tr1::mt19937, std::tr1::uniform_real<random_type> > gen(rnd, ur_a);
+         random_ns::mt19937 rnd;
+         random_ns::uniform_real<random_type> ur_a(real_cast<random_type>(arg1.z1), real_cast<random_type>(arg1.z2));
 
          for(int i = 0; i < arg1.n1; ++i)
          {
-            random_type r = gen();
+            random_type r = ur_a(rnd);
             points.insert(truncate_to_float(r));
          }
      }
@@ -392,13 +397,12 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
             ::boost::is_floating_point<T>,
             T, long double>::type power_type;
 
-         std::tr1::mt19937 rnd;
-         std::tr1::uniform_real<random_type> ur_a(1.0, 2.0);
-         std::tr1::variate_generator<std::tr1::mt19937, std::tr1::uniform_real<random_type> > gen(rnd, ur_a);
+         random_ns::mt19937 rnd;
+         random_ns::uniform_real<random_type> ur_a(1.0, 2.0);
 
          for(int power = arg1.n1; power <= arg1.n2; ++power)
          {
-            random_type r = gen();
+            random_type r = ur_a(rnd);
             power_type p = ldexp(static_cast<power_type>(r), power);
             points.insert(truncate_to_float(real_cast<float>(arg1.z1 + p)));
          }
