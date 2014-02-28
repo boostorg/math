@@ -472,7 +472,7 @@ T gamma_imp(T z, const Policy& pol, const lanczos::undefined_lanczos&)
 
       gamma_value *= sinpx(z);
 
-      BOOST_MATH_INSTRUMENT_VARIABLE(result);
+      BOOST_MATH_INSTRUMENT_VARIABLE(gamma_value);
 
       const bool result_is_too_large_to_represent = (   (abs(gamma_value) < 1)
                                                      && ((tools::max_value<T>() * abs(gamma_value)) < boost::math::constants::pi<T>()));
