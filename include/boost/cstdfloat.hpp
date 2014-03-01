@@ -51,8 +51,8 @@
 
 
   // Undefine BOOST_NO_FLOAT128_T because this constant is not meant for public use.
-  #if defined(BOOST_NO_FLOAT128_T)
-  #undef BOOST_NO_FLOAT128_T
+  #if defined(BOOST_CSTDFLOAT_HAS_INTERNAL_FLOAT128_T)
+  #undef BOOST_CSTDFLOAT_HAS_INTERNAL_FLOAT128_T
   #endif
 
 #endif // _BOOST_CSTDFLOAT_2014_01_09_HPP_

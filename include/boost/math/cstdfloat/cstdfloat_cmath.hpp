@@ -15,7 +15,7 @@
   #include <boost/math/cstdfloat/cstdfloat_types.hpp>
   #include <boost/math/cstdfloat/cstdfloat_limits.hpp>
 
-  #if !defined(BOOST_NO_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
+  #if defined(BOOST_CSTDFLOAT_HAS_INTERNAL_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
 
   #include <cmath>
   #include <stdexcept>
@@ -108,6 +108,7 @@
 
   } } } } // boost::math::cstdfloat::detail
 
+  // We will now define preprocessor symbols representing quadruple-precision <cmath> functions.
   #if defined(BOOST_INTEL)
     #define BOOST_CSTDFLOAT_FLOAT128_LDEXP  __ldexpq
     #define BOOST_CSTDFLOAT_FLOAT128_FREXP  __frexpq
@@ -413,6 +414,7 @@
       }
       else
       {
+        // The value of gamma is too small to represent. Return 0.0 here.
         return float_type(0);
       }
     }
@@ -458,7 +460,8 @@
   inline   boost::math::cstdfloat::detail::float_internal128_t tgamma(boost::math::cstdfloat::detail::float_internal128_t x)                                                        { return ::BOOST_CSTDFLOAT_FLOAT128_TGAMMA(x); }
   } } } } // boost::math::cstdfloat::detail
 
-  // Now inject the quadruple-precision <cmath> functions into the std namespace.
+  // We will now inject the quadruple-precision <cmath> functions
+  // into the std namespace. This is done via *using* directive.
   namespace std
   {
     using boost::math::cstdfloat::detail::ldexp;
@@ -490,6 +493,9 @@
     using boost::math::cstdfloat::detail::lgamma;
     using boost::math::cstdfloat::detail::tgamma;
   } // namespace std
+
+  // We will now remove the preprocessor symbols representing quadruple-precision <cmath>
+  // functions from the preprocessor.
 
   #undef BOOST_CSTDFLOAT_FLOAT128_LDEXP
   #undef BOOST_CSTDFLOAT_FLOAT128_FREXP

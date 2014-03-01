@@ -221,10 +221,10 @@
     #define BOOST_CSTDFLOAT_MAXIMUM_AVAILABLE_WIDTH 128
     #undef  BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE
     #define BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE  1
+    #define BOOST_FLOAT128_C(x)  (x ## Q)
     #define BOOST_CSTDFLOAT_FLOAT128_MIN  3.36210314311209350626267781732175260e-4932Q
     #define BOOST_CSTDFLOAT_FLOAT128_MAX  1.18973149535723176508575932662800702e+4932Q
     #define BOOST_CSTDFLOAT_FLOAT128_EPS  1.92592994438723585305597794258492732e-0034Q
-    #define BOOST_FLOAT128_C(x)  (x ## Q)
 
   #endif // Not BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT (i.e., the user would like to have libquadmath support)
 
@@ -276,10 +276,8 @@
     #define BOOST_FLOAT_LEAST80_MAX  BOOST_CSTDFLOAT_FLOAT_80_MAX
   #endif
 
-  #define BOOST_NO_FLOAT128_T
-
   #if(BOOST_CSTDFLOAT_HAS_FLOAT128_NATIVE_TYPE == 1)
-    #undef  BOOST_NO_FLOAT128_T
+    #define BOOST_CSTDFLOAT_HAS_INTERNAL_FLOAT128_T
 
     #define BOOST_FLOAT_FAST128_MIN   BOOST_CSTDFLOAT_FLOAT_128_MIN
     #define BOOST_FLOAT_LEAST128_MIN  BOOST_CSTDFLOAT_FLOAT_128_MIN
@@ -318,8 +316,8 @@
   // specified widths. The types are defined in the namespace boost.
 
   // For simplicity, the least and fast types are type defined identically
-  // as the corresponding fixed-width type. This behavior can, however,
-  // be modified in order to be optimized for a given compiler implementation.
+  // as the corresponding fixed-width type. This behavior may, however,
+  // be modified when being optimized for a given compiler implementation.
 
   // In addition, a clear assessment of IEEE-754 comformance is carried out
   // using compile-time assertion.
@@ -331,10 +329,10 @@
       typedef boost::float16_t float_fast16_t;
       typedef boost::float16_t float_least16_t;
 
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float16_t>::is_iec559    == true);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float16_t>::radix        ==    2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float16_t>::digits       ==   11);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float16_t>::max_exponent ==   16);
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float16_t>::is_iec559    == true, "boost::float16_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float16_t>::radix        ==    2, "boost::float16_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float16_t>::digits       ==   11, "boost::float16_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float16_t>::max_exponent ==   16, "boost::float16_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
 
       #undef BOOST_CSTDFLOAT_FLOAT_16_MIN
       #undef BOOST_CSTDFLOAT_FLOAT_16_MAX
@@ -345,10 +343,10 @@
       typedef boost::float32_t float_fast32_t;
       typedef boost::float32_t float_least32_t;
 
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float32_t>::is_iec559    == true);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float32_t>::radix        ==    2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float32_t>::digits       ==   24);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float32_t>::max_exponent ==  128);
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float32_t>::is_iec559    == true, "boost::float32_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float32_t>::radix        ==    2, "boost::float32_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float32_t>::digits       ==   24, "boost::float32_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float32_t>::max_exponent ==  128, "boost::float32_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
 
       #undef BOOST_CSTDFLOAT_FLOAT_32_MIN
       #undef BOOST_CSTDFLOAT_FLOAT_32_MAX
@@ -359,10 +357,10 @@
       typedef boost::float64_t float_fast64_t;
       typedef boost::float64_t float_least64_t;
 
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float64_t>::is_iec559    == true);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float64_t>::radix        ==    2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float64_t>::digits       ==   53);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float64_t>::max_exponent == 1024);
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float64_t>::is_iec559    == true, "boost::float64_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float64_t>::radix        ==    2, "boost::float64_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float64_t>::digits       ==   53, "boost::float64_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float64_t>::max_exponent == 1024, "boost::float64_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
 
       #undef BOOST_CSTDFLOAT_FLOAT_64_MIN
       #undef BOOST_CSTDFLOAT_FLOAT_64_MAX
@@ -373,10 +371,10 @@
       typedef boost::float80_t float_fast80_t;
       typedef boost::float80_t float_least80_t;
 
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float80_t>::is_iec559    ==  true);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float80_t>::radix        ==     2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float80_t>::digits       ==    64);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float80_t>::max_exponent == 16384);
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float80_t>::is_iec559    ==  true, "boost::float80_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float80_t>::radix        ==     2, "boost::float80_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float80_t>::digits       ==    64, "boost::float80_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float80_t>::max_exponent == 16384, "boost::float80_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
 
       #undef BOOST_CSTDFLOAT_FLOAT_80_MIN
       #undef BOOST_CSTDFLOAT_FLOAT_80_MAX
@@ -387,15 +385,15 @@
       typedef boost::float128_t float_fast128_t;
       typedef boost::float128_t float_least128_t;
 
-      #if !defined(BOOST_NO_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
+      #if defined(BOOST_CSTDFLOAT_HAS_INTERNAL_FLOAT128_T) && defined(BOOST_MATH_USE_FLOAT128) && !defined(BOOST_CSTDFLOAT_NO_LIBQUADMATH_SUPPORT)
       // This configuration does not *yet* support std::numeric_limits<boost::float128_t>.
       // Support for std::numeric_limits<boost::float128_t> is added in the detail
       // file <boost/math/cstdfloat/cstdfloat_limits.hpp>.
       #else
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::is_iec559    ==  true);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::radix        ==     2);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::digits       ==   113);
-      BOOST_STATIC_ASSERT(std::numeric_limits<boost::float128_t>::max_exponent == 16384);
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float128_t>::is_iec559    ==  true, "boost::float128_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float128_t>::radix        ==     2, "boost::float128_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float128_t>::digits       ==   113, "boost::float128_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<boost::float128_t>::max_exponent == 16384, "boost::float128_t has been detected in <boost/cstdfloat>, but verification with std::numeric_limits fails");
       #endif
 
       #undef BOOST_CSTDFLOAT_FLOAT_128_MIN
