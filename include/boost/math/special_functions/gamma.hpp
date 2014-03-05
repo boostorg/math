@@ -782,7 +782,7 @@ T full_igamma_prefix(T a, T z, const Policy& pol)
    // rather than before it...
    //
    if((boost::math::fpclassify)(prefix) == (int)FP_INFINITE)
-      policies::raise_overflow_error<T>("boost::math::detail::full_igamma_prefix<%1%>(%1%, %1%)", "Result of incomplete gamma function is too large to represent.", pol);
+      return policies::raise_overflow_error<T>("boost::math::detail::full_igamma_prefix<%1%>(%1%, %1%)", "Result of incomplete gamma function is too large to represent.", pol);
 
    return prefix;
 }
@@ -1020,9 +1020,9 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
 {
    static const char* function = "boost::math::gamma_p<%1%>(%1%, %1%)";
    if(a <= 0)
-      policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
+      return policies::raise_domain_error<T>(function, "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
    if(x < 0)
-      policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
+      return policies::raise_domain_error<T>(function, "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
 
    BOOST_MATH_STD_USING
 
@@ -1334,9 +1334,9 @@ T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
    BOOST_MATH_STD_USING
 
    if(z <= 0)
-      policies::raise_domain_error<T>("boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got a=%1%).", z, pol);
+      return policies::raise_domain_error<T>("boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got a=%1%).", z, pol);
    if(z+delta <= 0)
-      policies::raise_domain_error<T>("boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got b=%1%).", z+delta, pol);
+      return policies::raise_domain_error<T>("boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got b=%1%).", z+delta, pol);
 
    if(floor(delta) == delta)
    {
@@ -1391,9 +1391,9 @@ T tgamma_ratio_imp(T x, T y, const Policy& pol)
    BOOST_MATH_STD_USING
 
    if((x <= tools::min_value<T>()) || (boost::math::isinf)(x))
-      policies::raise_domain_error<T>("boost::math::tgamma_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got a=%1%).", x, pol);
+      return policies::raise_domain_error<T>("boost::math::tgamma_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got a=%1%).", x, pol);
    if((y <= tools::min_value<T>()) || (boost::math::isinf)(y))
-      policies::raise_domain_error<T>("boost::math::tgamma_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got b=%1%).", y, pol);
+      return policies::raise_domain_error<T>("boost::math::tgamma_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got b=%1%).", y, pol);
 
    if((x < max_factorial<T>::value) && (y < max_factorial<T>::value))
    {
@@ -1454,9 +1454,9 @@ T gamma_p_derivative_imp(T a, T x, const Policy& pol)
    // Usual error checks first:
    //
    if(a <= 0)
-      policies::raise_domain_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
+      return policies::raise_domain_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", "Argument a to the incomplete gamma function must be greater than zero (got a=%1%).", a, pol);
    if(x < 0)
-      policies::raise_domain_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
+      return policies::raise_domain_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", "Argument x to the incomplete gamma function must be >= 0 (got x=%1%).", x, pol);
    //
    // Now special cases:
    //

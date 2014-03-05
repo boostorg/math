@@ -215,7 +215,7 @@ typename Dist::value_type
          while(((boost::math::sign)(fb) == (boost::math::sign)(fa)) && (a != b))
          {
             if(count == 0)
-               policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, policy_type());
+               return policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, policy_type());
             a = b;
             fa = fb;
             b *= multiplier;
@@ -242,7 +242,7 @@ typename Dist::value_type
                return 0;
             }
             if(count == 0)
-               policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, policy_type());
+               return policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, policy_type());
             b = a;
             fb = fa;
             a /= multiplier;

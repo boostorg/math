@@ -378,7 +378,7 @@ typename tools::promote_args<T>::type erfc_inv(T z, const Policy& pol)
    //
    static const char* function = "boost::math::erfc_inv<%1%>(%1%, %1%)";
    if((z < 0) || (z > 2))
-      policies::raise_domain_error<result_type>(function, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z, pol);
+      return policies::raise_domain_error<result_type>(function, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z, pol);
    if(z == 0)
       return policies::raise_overflow_error<result_type>(function, 0, pol);
    if(z == 2)
@@ -442,7 +442,7 @@ typename tools::promote_args<T>::type erf_inv(T z, const Policy& pol)
    //
    static const char* function = "boost::math::erf_inv<%1%>(%1%, %1%)";
    if((z < -1) || (z > 1))
-      policies::raise_domain_error<result_type>(function, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z, pol);
+      return policies::raise_domain_error<result_type>(function, "Argument outside range [-1, 1] in inverse erf function (got p=%1%).", z, pol);
    if(z == 1)
       return policies::raise_overflow_error<result_type>(function, 0, pol);
    if(z == -1)

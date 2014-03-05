@@ -286,8 +286,11 @@ namespace boost { namespace math {
             reflect = true;
             v = -v;                             // v is non-negative from here
          }
-         if(v > static_cast<T>((std::numeric_limits<int>::max)()))
-            policies::raise_evaluation_error<T>(function, "Order of Bessel function is too large to evaluate: got %1%", v, pol);
+         if (v > static_cast<T>((std::numeric_limits<int>::max)()))
+         {
+            *J = *Y = policies::raise_evaluation_error<T>(function, "Order of Bessel function is too large to evaluate: got %1%", v, pol);
+            return 1;
+         }
          n = iround(v, pol);
          u = v - n;                              // -1/2 <= u < 1/2
 

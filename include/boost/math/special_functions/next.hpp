@@ -456,7 +456,7 @@ T float_advance_imp(T val, int distance, const Policy& pol)
       limit_distance = float_distance(val, limit);
       if(distance && (limit_distance == 0))
       {
-         policies::raise_evaluation_error<T>(function, "Internal logic failed while trying to increment floating point value %1%: most likely your FPU is in non-IEEE conforming mode.", val, pol);
+         return policies::raise_evaluation_error<T>(function, "Internal logic failed while trying to increment floating point value %1%: most likely your FPU is in non-IEEE conforming mode.", val, pol);
       }
    }
    if((0.5f == frexp(val, &expon)) && (distance < 0))

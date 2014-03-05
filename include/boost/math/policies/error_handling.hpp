@@ -760,6 +760,20 @@ inline void check_root_iterations(const char* function, boost::uintmax_t max_ite
 
 } //namespace policies
 
+namespace detail{
+
+//
+// Simple helper function to assist in returning a pair from a single value,
+// that value usually comes from one of the error handlers above:
+//
+template <class T>
+std::pair<T, T> pair_from_single(const T& val)
+{
+   return std::make_pair(val, val);
+}
+
+}
+
 #ifdef BOOST_MSVC
 #  pragma warning(pop)
 #endif

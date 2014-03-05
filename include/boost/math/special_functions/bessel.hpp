@@ -438,7 +438,7 @@ inline T cyl_bessel_j_zero_imp(T v, int m, const Policy& pol)
 
    if(number_of_iterations >= policies::get_max_root_iterations<Policy>())
    {
-      policies::raise_evaluation_error<T>(function, "Unable to locate root in a reasonable time:"
+      return policies::raise_evaluation_error<T>(function, "Unable to locate root in a reasonable time:"
          "  Current best guess is %1%", jvm, Policy());
    }
 
@@ -517,7 +517,7 @@ inline T cyl_neumann_zero_imp(T v, int m, const Policy& pol)
 
    if(number_of_iterations >= policies::get_max_root_iterations<Policy>())
    {
-      policies::raise_evaluation_error<T>(function, "Unable to locate root in a reasonable time:"
+      return policies::raise_evaluation_error<T>(function, "Unable to locate root in a reasonable time:"
          "  Current best guess is %1%", yvm, Policy());
    }
 
