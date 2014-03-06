@@ -1,4 +1,5 @@
 [article Standardized Floating-Point typedefs for C and C++
+   [id float_t]
     [quickbook 1.6]
     [copyright 2014  Christopher Kormanyos, John Maddock, Paul A. Bristow]
     [license
