@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>History and What's New</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 1.9.0">
 <link rel="up" href="../overview.html" title="Chapter&#160;1.&#160;Overview">
 <link rel="prev" href="building.html" title="If and How to Build a Boost.Math Library, and its Examples and Tests">
@@ -70,6 +70,11 @@
 <li class="listitem">
           Cleaned up handling of negative values in Bessel I0 and I1 code (removed
           dead code), see <a href="https://svn.boost.org/trac/boost/ticket/9512" target="_top">#9512</a>.
+        </li>
+<li class="listitem">
+          Fixed handling of very small values passed to <a class="link" href="sf_gamma/tgamma.html" title="Gamma">tgamma</a>
+          and <a class="link" href="sf_gamma/lgamma.html" title="Log Gamma">lgamma</a> so they
+          don't generate spurious overflows (thanks to Rocco Romeo).
         </li>
 </ul></div>
 <h5>
@@ -583,7 +588,7 @@ by switching to use the Students t distribution (or Normal distribution
 <li class="listitem">
           <span class="bold"><strong>Breaking change:</strong></span> Changed default behaviour
           for domain, pole and overflow errors to throw an exception (based on review
-          feedback), this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
+          feedback), this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
         </li>
 <li class="listitem">
           <span class="bold"><strong>Breaking change:</strong></span> Changed exception thrown
@@ -592,7 +597,7 @@ by switching to use the Students t distribution (or Normal distribution
 <li class="listitem">
           <span class="bold"><strong>Breaking change:</strong></span> Changed discrete quantiles
           to return an integer result: this is anything up to 20 times faster than
-          finding the true root, this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
+          finding the true root, this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
         </li>
 <li class="listitem">
           Polynomial/rational function evaluation is now customisable and hopefully
