@@ -325,15 +325,25 @@
 
     boost::int_fast32_t n;
 
-    if(   (x < BOOST_FLOAT128_C(-0.693147180559945309417232121458176568075500134360255))
-       || (x > BOOST_FLOAT128_C(+0.693147180559945309417232121458176568075500134360255))
-      )
+    if(x != x)
     {
+      // The argument is NaN.
+      return std::numeric_limits<float_type>::quiet_NaN();
+    }
+    else if(::BOOST_CSTDFLOAT_FLOAT128_FABS(x) > BOOST_FLOAT128_C(+0.693147180559945309417232121458176568075500134360255))
+    {
+      // The absolute value of the argument exceeds ln2.
       n = static_cast<boost::int_fast32_t>(::BOOST_CSTDFLOAT_FLOAT128_FLOOR(x_over_ln2));
+    }
+    else if(::BOOST_CSTDFLOAT_FLOAT128_FABS(x) < BOOST_FLOAT128_C(+0.693147180559945309417232121458176568075500134360255))
+    {
+      // The absolute value of the argument is less than ln2.
+      n = static_cast<boost::int_fast32_t>(0);
     }
     else
     {
-      n = static_cast<boost::int_fast32_t>(0);
+      // The absolute value of the argument is exactly equal to ln2 (in the sense of floating-point equality).
+      return float_type(2);
     }
 
     // Check if the argument is very near an integer.
@@ -348,11 +358,12 @@
     // Compute the scaled argument alpha.
     const float_type alpha = x - (n * BOOST_FLOAT128_C(0.693147180559945309417232121458176568075500134360255));
 
-    // Compute the polynomial approximation of expm1(alpha) and add 1 to the result.
-    const float_type result = ::BOOST_CSTDFLOAT_FLOAT128_EXPM1(alpha) + float_type(1);
+    // Compute the polynomial approximation of expm1(alpha) and add to it
+    // in order to obtain the scaled result.
+    const float_type scaled_result = ::BOOST_CSTDFLOAT_FLOAT128_EXPM1(alpha) + float_type(1);
 
     // Rescale the result and return it.
-    return result * boost::math::cstdfloat::detail::pown(float_type(2), n);
+    return scaled_result * boost::math::cstdfloat::detail::pown(float_type(2), n);
   }
   inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SINH  (boost::math::cstdfloat::detail::float_internal128_t x)
   {
@@ -360,7 +371,7 @@
     // like GCC 4.7, 4.8 on MinGW.
     typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
 
-    // Here we use the following:
+    // Here, we use the following:
     // Set: ex  = exp(x)
     // Set: em1 = expm1(x)
     // Then
