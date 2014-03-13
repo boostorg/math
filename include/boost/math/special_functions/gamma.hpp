@@ -1284,8 +1284,11 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos&
    {
       result = pow(zgh / (zgh + delta), z - constants::half<T>());
    }
-   result *= pow(constants::e<T>() / (zgh + delta), delta);
+   // Split the calculation up to avoid spurious overflow:
    result *= Lanczos::lanczos_sum(z) / Lanczos::lanczos_sum(T(z + delta));
+   T p = pow(constants::e<T>() / (zgh + delta), delta / 2);
+   result *= p;
+   result *= p;
    return result;
 }
 //
@@ -1333,10 +1336,11 @@ T tgamma_delta_ratio_imp(T z, T delta, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
-   if(z <= 0)
-      return policies::raise_domain_error<T>("boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got a=%1%).", z, pol);
-   if(z+delta <= 0)
-      return policies::raise_domain_error<T>("boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got b=%1%).", z+delta, pol);
+   if((z <= 0) || (z + delta <= 0))
+   {
+      // This isn't very sofisticated, or accurate, but it does work:
+      return boost::math::tgamma(z, pol) / boost::math::tgamma(z + delta, pol);
+   }
 
    if(floor(delta) == delta)
    {

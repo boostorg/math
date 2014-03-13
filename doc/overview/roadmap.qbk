@@ -18,6 +18,7 @@ All bug reports including closed ones can be viewed
 * Fixed handling of very small values passed to __tgamma and __lgamma so they don't generate spurious overflows (thanks to Rocco Romeo).
 * [@https://svn.boost.org/trac/boost/ticket/9672 #9672 PDF and CDF of a Laplace distribution throwing domain_error]
 Random variate can now be infinite.
+* Fixed several corner cases in __rising_factorial, __falling_factorial and __tgamma_delta_ratio with thanks to Rocco Romeo.
 
 [h4 Boost-1.55]
 
