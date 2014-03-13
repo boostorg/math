@@ -120,6 +120,7 @@
     #endif
     #define BOOST_CSTDFLOAT_FLOAT128_TRUNC  __truncq
     #define BOOST_CSTDFLOAT_FLOAT128_EXP    __expq
+    #define BOOST_CSTDFLOAT_FLOAT128_EXPM1  __expm1q
     #define BOOST_CSTDFLOAT_FLOAT128_POW    __powq
     #define BOOST_CSTDFLOAT_FLOAT128_LOG    __logq
     #define BOOST_CSTDFLOAT_FLOAT128_LOG10  __log10q
@@ -163,6 +164,7 @@
     #define BOOST_CSTDFLOAT_FLOAT128_LGAMMA lgammaq
     #if !defined(BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS)
     #define BOOST_CSTDFLOAT_FLOAT128_EXP    expq
+    #define BOOST_CSTDFLOAT_FLOAT128_EXPM1  expm1q_internal
     #define BOOST_CSTDFLOAT_FLOAT128_SINH   sinhq
     #define BOOST_CSTDFLOAT_FLOAT128_COSH   coshq
     #define BOOST_CSTDFLOAT_FLOAT128_TANH   tanhq
@@ -222,6 +224,79 @@
 
   #else // BOOST_CSTDFLOAT_BROKEN_FLOAT128_MATH_FUNCTIONS
 
+  // Forward declaration of the patched exponent function, exp(x).
+  inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP   (boost::math::cstdfloat::detail::float_internal128_t x);
+
+  inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXPM1 (boost::math::cstdfloat::detail::float_internal128_t x)
+  {
+    // Compute exp(x) - 1 for x small.
+
+    // Use an order-36 polynomial approximation of the exponential function
+    // in the range of (-ln2 < x < ln2). Scale the argument to this range
+    // and subsequently multiply the result by 2^n accordingly.
+
+    // Derive the polynomial coefficients with Mathematica(R) by generating
+    // a table of high-precision values of exp(x) in the range (-ln2 < x < ln2)
+    // and subsequently applying the built-in *Fit* function.
+
+    // Table[{x, Exp[x] - 1}, {x, -Log[2], Log[2], 1/180}]
+    // N[%, 120]
+    // Fit[%, {x, x^2, x^3, x^4, x^5, x^6, x^7, x^8, x^9, x^10, x^11, x^12,
+    //         x^13, x^14, x^15, x^16, x^17, x^18, x^19, x^20, x^21, x^22,
+    //         x^23, x^24, x^25, x^26, x^27, x^28, x^29, x^30, x^31, x^32,
+    //         x^33, x^34, x^35, x^36}, x]
+
+    typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+
+    float_type sum;
+
+    if(x > BOOST_FLOAT128_C(0.693147180559945309417232121458176568075500134360255))
+    {
+      sum = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x) - float_type(1);
+    }
+    else
+    {
+      // Compute the polynomial approximation of exp(alpha).
+      sum = ((((((((((((((((((((((((((((((((((((  float_type(BOOST_FLOAT128_C(2.69291698127774166063293705964720493864630783729857438187365E-42))  * x
+                                                + float_type(BOOST_FLOAT128_C(9.70937085471487654794114679403710456028986572118859594614033E-41))) * x
+                                                + float_type(BOOST_FLOAT128_C(3.38715585158055097155585505318085512156885389014410753080500E-39))) * x
+                                                + float_type(BOOST_FLOAT128_C(1.15162718532861050809222658798662695267019717760563645440433E-37))) * x
+                                                + float_type(BOOST_FLOAT128_C(3.80039074689434663295873584133017767349635602413675471702393E-36))) * x
+                                                + float_type(BOOST_FLOAT128_C(1.21612504934087520075905434734158045947460467096773246215239E-34))) * x
+                                                + float_type(BOOST_FLOAT128_C(3.76998762883139753126119821241037824830069851253295480396224E-33))) * x
+                                                + float_type(BOOST_FLOAT128_C(1.13099628863830344684998293828608215735777107850991029729440E-31))) * x
+                                                + float_type(BOOST_FLOAT128_C(3.27988923706982293204067897468714277771890104022419696770352E-30))) * x
+                                                + float_type(BOOST_FLOAT128_C(9.18368986379558482800593745627556950089950023355628325088207E-29))) * x
+                                                + float_type(BOOST_FLOAT128_C(2.47959626322479746949155352659617642905315302382639380521497E-27))) * x
+                                                + float_type(BOOST_FLOAT128_C(6.44695028438447337900255966737803112935639344283098705091949E-26))) * x
+                                                + float_type(BOOST_FLOAT128_C(1.61173757109611834904452725462599961406036904573072897122957E-24))) * x
+                                                + float_type(BOOST_FLOAT128_C(3.86817017063068403772269360016918092488847584660382953555804E-23))) * x
+                                                + float_type(BOOST_FLOAT128_C(8.89679139245057328674891109315654704307721758924206107351744E-22))) * x
+                                                + float_type(BOOST_FLOAT128_C(1.95729410633912612308475595397946731738088422488032228717097E-20))) * x
+                                                + float_type(BOOST_FLOAT128_C(4.11031762331216485847799061511674191805055663711439605760231E-19))) * x
+                                                + float_type(BOOST_FLOAT128_C(8.22063524662432971695598123977873600603370758794431071426640E-18))) * x
+                                                + float_type(BOOST_FLOAT128_C(1.56192069685862264622163643500633782667263448653185159383285E-16))) * x
+                                                + float_type(BOOST_FLOAT128_C(2.81145725434552076319894558300988749849555291507956994126835E-15))) * x
+                                                + float_type(BOOST_FLOAT128_C(4.77947733238738529743820749111754320727153728139716409114011E-14))) * x
+                                                + float_type(BOOST_FLOAT128_C(7.64716373181981647590113198578807092707697416852226691068627E-13))) * x
+                                                + float_type(BOOST_FLOAT128_C(1.14707455977297247138516979786821056670509688396295740818677E-11))) * x
+                                                + float_type(BOOST_FLOAT128_C(1.60590438368216145993923771701549479323291461578567184216302E-10))) * x
+                                                + float_type(BOOST_FLOAT128_C(2.08767569878680989792100903212014323125428376052986408239620E-09))) * x
+                                                + float_type(BOOST_FLOAT128_C(2.50521083854417187750521083854417187750523408006206780016659E-08))) * x
+                                                + float_type(BOOST_FLOAT128_C(2.75573192239858906525573192239858906525573195144226062684604E-07))) * x
+                                                + float_type(BOOST_FLOAT128_C(2.75573192239858906525573192239858906525573191310049321957902E-06))) * x
+                                                + float_type(BOOST_FLOAT128_C(0.00002480158730158730158730158730158730158730158730149317774)))     * x
+                                                + float_type(BOOST_FLOAT128_C(0.00019841269841269841269841269841269841269841269841293575920)))     * x
+                                                + float_type(BOOST_FLOAT128_C(0.00138888888888888888888888888888888888888888888888889071045)))     * x
+                                                + float_type(BOOST_FLOAT128_C(0.00833333333333333333333333333333333333333333333333332986595)))     * x
+                                                + float_type(BOOST_FLOAT128_C(0.04166666666666666666666666666666666666666666666666666664876)))     * x
+                                                + float_type(BOOST_FLOAT128_C(0.16666666666666666666666666666666666666666666666666666669048)))     * x
+                                                + float_type(BOOST_FLOAT128_C(0.50000000000000000000000000000000000000000000000000000000006)))     * x
+                                                + float_type(BOOST_FLOAT128_C(0.99999999999999999999999999999999999999999999999999999999995)))     * x);
+    }
+
+    return sum;
+  }
   inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_EXP   (boost::math::cstdfloat::detail::float_internal128_t x)
   {
     // Patch the expq() function for a subset of broken GCC compilers
@@ -250,13 +325,25 @@
 
     boost::int_fast32_t n;
 
-    if((x < BOOST_FLOAT128_C(-1.0)) || (x > BOOST_FLOAT128_C(1.0)))
+    if(x != x)
     {
+      // The argument is NaN.
+      return std::numeric_limits<float_type>::quiet_NaN();
+    }
+    else if(::BOOST_CSTDFLOAT_FLOAT128_FABS(x) > BOOST_FLOAT128_C(+0.693147180559945309417232121458176568075500134360255))
+    {
+      // The absolute value of the argument exceeds ln2.
       n = static_cast<boost::int_fast32_t>(::BOOST_CSTDFLOAT_FLOAT128_FLOOR(x_over_ln2));
+    }
+    else if(::BOOST_CSTDFLOAT_FLOAT128_FABS(x) < BOOST_FLOAT128_C(+0.693147180559945309417232121458176568075500134360255))
+    {
+      // The absolute value of the argument is less than ln2.
+      n = static_cast<boost::int_fast32_t>(0);
     }
     else
     {
-      n = static_cast<boost::int_fast32_t>(0);
+      // The absolute value of the argument is exactly equal to ln2 (in the sense of floating-point equality).
+      return float_type(2);
     }
 
     // Check if the argument is very near an integer.
@@ -271,56 +358,38 @@
     // Compute the scaled argument alpha.
     const float_type alpha = x - (n * BOOST_FLOAT128_C(0.693147180559945309417232121458176568075500134360255));
 
-    // Compute the polynomial approximation of exp(alpha).
-    const float_type sum =
-      ((((((((((((((((((((((((((((((((((((  float_type(BOOST_FLOAT128_C(2.69291698127774166063293705964720493864630783729857438187365E-42))  * alpha
-                                          + float_type(BOOST_FLOAT128_C(9.70937085471487654794114679403710456028986572118859594614033E-41))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(3.38715585158055097155585505318085512156885389014410753080500E-39))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(1.15162718532861050809222658798662695267019717760563645440433E-37))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(3.80039074689434663295873584133017767349635602413675471702393E-36))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(1.21612504934087520075905434734158045947460467096773246215239E-34))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(3.76998762883139753126119821241037824830069851253295480396224E-33))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(1.13099628863830344684998293828608215735777107850991029729440E-31))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(3.27988923706982293204067897468714277771890104022419696770352E-30))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(9.18368986379558482800593745627556950089950023355628325088207E-29))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(2.47959626322479746949155352659617642905315302382639380521497E-27))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(6.44695028438447337900255966737803112935639344283098705091949E-26))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(1.61173757109611834904452725462599961406036904573072897122957E-24))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(3.86817017063068403772269360016918092488847584660382953555804E-23))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(8.89679139245057328674891109315654704307721758924206107351744E-22))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(1.95729410633912612308475595397946731738088422488032228717097E-20))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(4.11031762331216485847799061511674191805055663711439605760231E-19))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(8.22063524662432971695598123977873600603370758794431071426640E-18))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(1.56192069685862264622163643500633782667263448653185159383285E-16))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(2.81145725434552076319894558300988749849555291507956994126835E-15))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(4.77947733238738529743820749111754320727153728139716409114011E-14))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(7.64716373181981647590113198578807092707697416852226691068627E-13))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(1.14707455977297247138516979786821056670509688396295740818677E-11))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(1.60590438368216145993923771701549479323291461578567184216302E-10))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(2.08767569878680989792100903212014323125428376052986408239620E-09))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(2.50521083854417187750521083854417187750523408006206780016659E-08))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(2.75573192239858906525573192239858906525573195144226062684604E-07))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(2.75573192239858906525573192239858906525573191310049321957902E-06))) * alpha
-                                          + float_type(BOOST_FLOAT128_C(0.00002480158730158730158730158730158730158730158730149317774)))     * alpha
-                                          + float_type(BOOST_FLOAT128_C(0.00019841269841269841269841269841269841269841269841293575920)))     * alpha
-                                          + float_type(BOOST_FLOAT128_C(0.00138888888888888888888888888888888888888888888888889071045)))     * alpha
-                                          + float_type(BOOST_FLOAT128_C(0.00833333333333333333333333333333333333333333333333332986595)))     * alpha
-                                          + float_type(BOOST_FLOAT128_C(0.04166666666666666666666666666666666666666666666666666664876)))     * alpha
-                                          + float_type(BOOST_FLOAT128_C(0.16666666666666666666666666666666666666666666666666666669048)))     * alpha
-                                          + float_type(BOOST_FLOAT128_C(0.50000000000000000000000000000000000000000000000000000000006)))     * alpha
-                                          + float_type(BOOST_FLOAT128_C(0.99999999999999999999999999999999999999999999999999999999995)))     * alpha
-                                          + float_type(1));
+    // Compute the polynomial approximation of expm1(alpha) and add to it
+    // in order to obtain the scaled result.
+    const float_type scaled_result = ::BOOST_CSTDFLOAT_FLOAT128_EXPM1(alpha) + float_type(1);
 
     // Rescale the result and return it.
-    return sum * boost::math::cstdfloat::detail::pown(float_type(2), n);
+    return scaled_result * boost::math::cstdfloat::detail::pown(float_type(2), n);
   }
   inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_SINH  (boost::math::cstdfloat::detail::float_internal128_t x)
   {
     // Patch the sinhq() function for a subset of broken GCC compilers
     // like GCC 4.7, 4.8 on MinGW.
     typedef boost::math::cstdfloat::detail::float_internal128_t float_type;
+
+    // Here, we use the following:
+    // Set: ex  = exp(x)
+    // Set: em1 = expm1(x)
+    // Then
+    // sinh(x) = (ex - 1/ex) / 2         ; for |x| >= 1
+    // sinh(x) = (2em1 + em1^2) / (2ex)  ; for |x| < 1
+
     const float_type ex = ::BOOST_CSTDFLOAT_FLOAT128_EXP(x);
-    return (ex - (float_type(1) / ex)) / 2;
+
+    if(::BOOST_CSTDFLOAT_FLOAT128_FABS(x) < float_type(+1))
+    {
+      const float_type em1 = ::BOOST_CSTDFLOAT_FLOAT128_EXPM1(x);
+
+      return ((em1 * 2) + (em1 * em1)) / (ex * 2);
+    }
+    else
+    {
+      return (ex - (float_type(1) / ex)) / 2;
+    }
   }
   inline     boost::math::cstdfloat::detail::float_internal128_t BOOST_CSTDFLOAT_FLOAT128_COSH  (boost::math::cstdfloat::detail::float_internal128_t x)
   {
@@ -505,6 +574,7 @@
   #undef BOOST_CSTDFLOAT_FLOAT128_SQRT
   #undef BOOST_CSTDFLOAT_FLOAT128_TRUNC
   #undef BOOST_CSTDFLOAT_FLOAT128_EXP
+  #undef BOOST_CSTDFLOAT_FLOAT128_EXPM1
   #undef BOOST_CSTDFLOAT_FLOAT128_POW
   #undef BOOST_CSTDFLOAT_FLOAT128_LOG
   #undef BOOST_CSTDFLOAT_FLOAT128_LOG10
