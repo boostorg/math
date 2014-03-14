@@ -127,7 +127,7 @@ void test_spots(T, const char*)
    // A few special spot tests:
    //
    BOOST_MATH_STD_USING
-   T tol = boost::math::tools::epsilon<T>() * 20;
+      T tol = boost::math::tools::epsilon<T>() * 20;
    if(std::numeric_limits<T>::max_exponent > 200)
    {
       BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -500), T(180.25)), T(8.0113754557649679470816892372669519037339812035512e-178L), 3 * tol);
@@ -150,8 +150,17 @@ void test_spots(T, const char*)
       BOOST_CHECK_THROW(boost::math::tgamma_ratio(std::numeric_limits<T>::infinity(), T(2)), std::domain_error);
       BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), std::numeric_limits<T>::infinity()), std::domain_error);
    }
-#ifdef _MSC_VER
-# pragma warning(pop)
-#endif
+   //
+   // Some bug cases from Rocco Romeo:
+   //
+   if(std::numeric_limits<T>::min_exponent < -1020)
+   {
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -1020), T(100)), T(1.20390418056093374068585549133304106854441830616070800417660e151L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -1020), T(150)), T(2.94980580122226729924781231239336413648584663386992050529324e46L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -1020), T(180)), T(1.00669209319561468911303652019446665496398881230516805140750e-20L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -1020), T(220)), T(1.08230263539550701700187215488533416834407799907721731317227e-112L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -1020), T(260)), T(7.62689807594728483940172477902929825624752380292252137809206e-208L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -1020), T(290)), T(5.40206998243175672775582485422795773284966068149812072521290e-281L), tol);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_delta_ratio(ldexp(T(1), -1020), ldexp(T(1), -1020)), T(2), tol);
+   }
 }
-

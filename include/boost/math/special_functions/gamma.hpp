@@ -1271,9 +1271,32 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
 // Ratios of two gamma functions:
 //
 template <class T, class Policy, class Lanczos>
-T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos&)
+T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos& l)
 {
    BOOST_MATH_STD_USING
+   if(z < tools::epsilon<T>())
+   {
+      //
+      // We get spurious numeric overflow unless we're very careful, this
+      // can occur either inside Lanczos::lanczos_sum(z) or in the
+      // final combination of terms, to avoid this, split the product up
+      // into 2 (or 3) parts:
+      //
+      // G(z) / G(L) = 1 / (z * G(L)) ; z < eps, L = z + delta = delta
+      //    z * G(L) = z * G(lim) * (G(L)/G(lim)) ; lim = largest factorial
+      //
+      if(boost::math::max_factorial<T>::value < delta)
+      {
+         T ratio = tgamma_delta_ratio_imp_lanczos(delta, T(boost::math::max_factorial<T>::value - delta), pol, l);
+         ratio *= z;
+         ratio *= boost::math::unchecked_factorial<T>(boost::math::max_factorial<T>::value - 1);
+         return 1 / ratio;
+      }
+      else
+      {
+         return 1 / (z * boost::math::tgamma(z + delta, pol));
+      }
+   }
    T zgh = z + Lanczos::g() - constants::half<T>();
    T result;
    if(fabs(delta) < 10)
@@ -1286,9 +1309,7 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos&
    }
    // Split the calculation up to avoid spurious overflow:
    result *= Lanczos::lanczos_sum(z) / Lanczos::lanczos_sum(T(z + delta));
-   T p = pow(constants::e<T>() / (zgh + delta), delta / 2);
-   result *= p;
-   result *= p;
+   result *= pow(constants::e<T>() / (zgh + delta), delta);
    return result;
 }
 //
