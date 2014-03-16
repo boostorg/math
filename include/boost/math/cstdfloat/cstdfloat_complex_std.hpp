@@ -228,10 +228,16 @@
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> proj (const complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>& x)
     {
-      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE the_norm_plus_one = (std::norm(x) + BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE(1));
-
-      return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>((x.real() * 2) / the_norm_plus_one,
-                                                                  (x.imag() * 2) / the_norm_plus_one);
+      const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE m = (std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::max)();
+      if ((x.real() > m)
+        || (x.real() < -m)
+        || (x.imag() > m)
+        || (x.imag() < -m))
+      {
+        // We have an infinity, return a normalized infinity, respecting the sign of the imaginary part:
+         return complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>(std::numeric_limits<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE>::infinity(), x.imag() < 0 ? -0 : 0);
+      }
+      return x;
     }
 
     inline complex<BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE> polar(const BOOST_CSTDFLOAT_EXTENDED_COMPLEX_FLOAT_TYPE& rho,

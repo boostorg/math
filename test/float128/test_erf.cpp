@@ -20,39 +20,9 @@ void expected_results()
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
-      ".*gmp_float<18>.*",           // test type(s)
-      "Erf Function:.*",             // test data group
-      "boost::math::erfc?", 2200, 1500);// test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      ".*gmp_float<18>.*",           // test type(s)
-      "Inverse Erf.*",               // test data group
-      "boost::math::erfc?_inv", 2200, 1500);  // test function
-#ifdef BOOST_INTEL
-      add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      "float128",                          // test type(s)
-      "Erf Function:.*",             // test data group
-      "boost::math::erfc?", 15000, 1000); // test function
-#endif
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      ".*cpp_bin_float.*",           // test type(s)
-      "Erf Function:.*",             // test data group
-      "boost::math::erfc?", 3000, 1000); // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
       ".*",                          // test type(s)
       "Erf Function:.*",             // test data group
-      "boost::math::erfc?", 300, 200); // test function
+      "boost::math::erfc?", 2500, 1000); // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

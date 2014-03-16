@@ -42,7 +42,7 @@ void expected_results()
       ".*",                          // platform
       ".*",                          // test type(s)
       ".*",                          // test data group
-      "boost::math::tgamma", 4, 3);  // test function
+      "boost::math::tgamma", 40, 20);  // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
