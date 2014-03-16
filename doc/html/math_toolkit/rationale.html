@@ -38,25 +38,25 @@
       is performed with <code class="computeroutput"><span class="identifier">BOOST_STATIC_ASSERT</span></code>.
     </p>
 <p>
-      In addition, this implementation <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+      In addition, this Boost implementation <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
       supports an 80-bit floating-point <code class="computeroutput"><span class="keyword">typedef</span></code>
-      if this can be detected and if the underlying type conforms with <a href="http://en.wikipedia.org/wiki/Extended_precision" target="_top">IEEE-754
-      precision extension</a> (if<code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;::</span><span class="identifier">is_iec559</span></code>
-      is true for this type).
+      if it can be detected, and a 128-bit floating-point <code class="computeroutput"><span class="keyword">typedef</span></code>
+      if it can be detected, provided that the underlying types conform with <a href="http://en.wikipedia.org/wiki/Extended_precision" target="_top">IEEE-754 precision extension</a>
+      (if<code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;::</span><span class="identifier">is_iec559</span></code> is true for this type).
     </p>
 <p>
       The header <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
       makes the standardized floating-point <code class="computeroutput"><span class="keyword">typedef</span></code>s
       safely available in <code class="computeroutput"><span class="keyword">namespace</span> <span class="identifier">boost</span></code> without placing any names in <code class="computeroutput"><span class="keyword">namespace</span> <span class="identifier">std</span></code>.
       The intention is to complement rather than compete with a potential future
-      C++ Standard Library that may contain these <code class="computeroutput"><span class="keyword">typedef</span></code>s.
-      Should some future C++ standard include <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">stdfloat</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code> and
+      C/C++ Standard Library that may contain these <code class="computeroutput"><span class="keyword">typedef</span></code>s.
+      Should some future C/C++ standard include <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">stdfloat</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span></code> and
       <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cstdfloat</span><span class="special">&gt;</span></code>, then <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
       will continue to function, but will become redundant and may be safely deprecated.
     </p>
 <p>
       Because <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
-      is a boost header, its name conforms to the boost header naming conventions,
+      is a Boost header, its name conforms to the boost header naming conventions,
       not the C++ Standard Library header naming conventions.
     </p>
 <div class="note"><table border="0" summary="Note">
@@ -65,12 +65,12 @@
 <th align="left">Note</th>
 </tr>
 <tr><td align="left" valign="top"><p>
-        &lt;boost/cstdfloat.hpp&gt; <span class="bold"><strong>cannot synthesize or create
-        a <code class="computeroutput"><span class="keyword">typedef</span></code> if the underlying
-        type is not provided by the compiler</strong></span>. For example, if a compiler
-        does not have an underlying floating-point type with 128 bits (highly sought-after
-        in scientific and numeric programming), then <code class="computeroutput"><span class="identifier">float128_t</span></code>
-        and its corresponding least and fast types are not provided by <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span></code>&gt;.
+        <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        <span class="bold"><strong>cannot synthesize or create a <code class="computeroutput"><span class="keyword">typedef</span></code>
+        if the underlying type is not provided by the compiler</strong></span>. For example,
+        if a compiler does not have an underlying floating-point type with 128 bits
+        (highly sought-after in scientific and numeric programming), then <code class="computeroutput"><span class="identifier">float128_t</span></code> and its corresponding least
+        and fast types are not provided by <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span></code>&gt;.
       </p></td></tr>
 </table></div>
 <div class="warning"><table border="0" summary="Warning">
@@ -80,7 +80,7 @@
 </tr>
 <tr><td align="left" valign="top"><p>
         If <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
-        uses a compiler-specific non-standardized type <span class="bold"><strong>not</strong></span>
+        uses a compiler-specific non-standardized type (<span class="bold"><strong>not</strong></span>
         derived from <code class="computeroutput"><span class="keyword">float</span><span class="special">,</span>
         <span class="keyword">double</span><span class="special">,</span></code>
         or <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>)
@@ -103,6 +103,36 @@
         interface. Use <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;</span></code>
         for floating-point ranges, etc. instead.
       </p></td></tr>
+</table></div>
+<div class="tip"><table border="0" summary="Tip">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../doc/src/images/tip.png"></td>
+<th align="left">Tip</th>
+</tr>
+<tr><td align="left" valign="top">
+<p>
+        For best results, <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        should be <code class="computeroutput"><span class="preprocessor">#include</span></code>d before
+        other headers like <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cmath</span><span class="special">&gt;</span></code>.
+      </p>
+<p>
+        In addition to detecting and type defining built-in types such as <code class="computeroutput"><span class="keyword">float</span></code>, <code class="computeroutput"><span class="keyword">double</span></code>,
+        and <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code>,
+        <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">castfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        may also detect compiler-specific floating-point type(s) and subsequently
+        type define these to floating-point types having specified widths in <code class="computeroutput"><span class="keyword">namespace</span> <span class="identifier">boost</span></code>.
+        When this occurs, and <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">castfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        type defines such a non-built-in type to one of<code class="computeroutput"> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">float16_t</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">float32_t</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">float80_t</span><span class="special">,</span> <span class="keyword">or</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">float128_t</span></code>,
+        it might lead to ambiguous symbols for certain <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cmath</span><span class="special">&gt;</span></code>
+        functions in <code class="computeroutput"><span class="keyword">namespace</span> <span class="identifier">std</span></code>.
+        See implementation for more details.
+      </p>
+<p>
+        For this reason, making <code class="computeroutput"><span class="preprocessor">#include</span>
+        <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+        the <span class="bold"><strong>first include</strong></span> is usually best.
+      </p>
+</td></tr>
 </table></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
