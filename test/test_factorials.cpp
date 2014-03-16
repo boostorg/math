@@ -189,6 +189,14 @@ void test_spots(T)
    BOOST_CHECK_EQUAL(::boost::math::rising_factorial(static_cast<T>(-2), 2), static_cast<T>(2));
    BOOST_CHECK_EQUAL(::boost::math::rising_factorial(static_cast<T>(-4), 3), static_cast<T>(-24));
    BOOST_CHECK_CLOSE(::boost::math::rising_factorial(static_cast<T>(-4), -3), static_cast<T>(-0.00476190476190476190476190476190476190476190476190476190476), tolerance);
+   if(ldexp(T(1), -150) != 0)
+   {
+      BOOST_CHECK_CLOSE(::boost::math::rising_factorial(ldexp(T(1), -150), 0), static_cast<T>(1), tolerance);
+      BOOST_CHECK_CLOSE(::boost::math::rising_factorial(ldexp(T(1), -150), -1), static_cast<T>(-1.00000000000000000000000000000000000000000000070064923216241L), tolerance);
+      BOOST_CHECK_CLOSE(::boost::math::rising_factorial(ldexp(T(1), -150), -2), static_cast<T>(0.500000000000000000000000000000000000000000000525486924121806L), tolerance);
+      BOOST_CHECK_CLOSE(::boost::math::rising_factorial(ldexp(T(1), -150), -25), static_cast<T>(-6.44695028438447339619485321920468720529890442766578870603544e-26L), tolerance);
+      BOOST_CHECK_CLOSE(::boost::math::rising_factorial(ldexp(T(1), -150), -40), static_cast<T>(1.22561743912838584942353998493975692372556196815242899727910e-48), tolerance);
+   }
 
    //
    // Falling factorials:

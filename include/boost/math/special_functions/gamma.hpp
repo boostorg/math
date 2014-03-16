@@ -1415,10 +1415,17 @@ T tgamma_ratio_imp(T x, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
-   if((x <= tools::min_value<T>()) || (boost::math::isinf)(x))
+   if((x <= 0) || (boost::math::isinf)(x))
       return policies::raise_domain_error<T>("boost::math::tgamma_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got a=%1%).", x, pol);
-   if((y <= tools::min_value<T>()) || (boost::math::isinf)(y))
+   if((y <= 0) || (boost::math::isinf)(y))
       return policies::raise_domain_error<T>("boost::math::tgamma_ratio<%1%>(%1%, %1%)", "Gamma function ratios only implemented for positive arguments (got b=%1%).", y, pol);
+
+   if(x <= tools::min_value<T>())
+   {
+      // Special case for denorms...Ugh.
+      T shift = ldexp(T(1), tools::digits<T>());
+      return shift * tgamma_ratio_imp(T(x * shift), y, pol);
+   }
 
    if((x < max_factorial<T>::value) && (y < max_factorial<T>::value))
    {

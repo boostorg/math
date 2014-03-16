@@ -140,11 +140,6 @@ void test_spots(T, const char*)
    BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), T(0)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(-1), T(2)), std::domain_error);
    BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), T(-1)), std::domain_error);
-   if(std::numeric_limits<T>::has_denorm && (std::numeric_limits<T>::max_exponent == std::numeric_limits<long double>::max_exponent))
-   {
-      BOOST_CHECK_THROW(boost::math::tgamma_ratio(std::numeric_limits<T>::denorm_min(), T(2)), std::domain_error);
-      BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), std::numeric_limits<T>::denorm_min()), std::domain_error);
-   }
    if(std::numeric_limits<T>::has_infinity)
    {
       BOOST_CHECK_THROW(boost::math::tgamma_ratio(std::numeric_limits<T>::infinity(), T(2)), std::domain_error);
@@ -162,5 +157,13 @@ void test_spots(T, const char*)
       BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -1020), T(260)), T(7.62689807594728483940172477902929825624752380292252137809206e-208L), tol);
       BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -1020), T(290)), T(5.40206998243175672775582485422795773284966068149812072521290e-281L), tol);
       BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_delta_ratio(ldexp(T(1), -1020), ldexp(T(1), -1020)), T(2), tol);
+      if(0 != ldexp(T(1), -1074))
+      {
+         // This is denorm_min at double precision:
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -1074), T(200)), T(5.13282785052619891359455729012257583893128137483081369056357e-50L), tol * 30);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(200), ldexp(T(1), -1074)), T(1.94824379293682687942882944294875087145333536754699303593931e49L), tol);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_delta_ratio(ldexp(T(1), -1074), T(200)), T(5.13282785052619891359455729012257583893128137483081369056357e-50L), tol * 30);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_delta_ratio(T(200), ldexp(T(1), -1074)), T(1), tol);
+      }
    }
 }
