@@ -436,6 +436,20 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [endmathpart] [/section:main_overview Overview]
 
+[mathpart utils Floating Point Utilities]
+[include fp_utilities/rounding_func.qbk]
+[include fp_utilities/fpclassify.qbk]
+[include fp_utilities/sign.qbk]
+[include fp_utilities/fp_facets.qbk]
+[include fp_utilities/float_next.qbk]
+[endmathpart]
+
+[mathpart cstdfloat..Specified-width floating-point typedefs]
+[include cstdfloat/cstdfloat.qbk]
+[endmathpart] [/mathpart cstdfloat..Fixed-width floating-point types]
+
+[include constants/constants.qbk]
+
 [mathpart dist Statistical Distributions and Functions]
 [include distributions/dist_tutorial.qbk]
 [include distributions/dist_reference.qbk] [/includes all individual distribution.qbk files]
@@ -512,18 +526,6 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [endmathpart] [/section:special Special Functions]
 
-[mathpart utils Floating Point Utilities]
-[include fp_utilities/rounding_func.qbk]
-[include fp_utilities/fpclassify.qbk]
-[include fp_utilities/sign.qbk]
-[include fp_utilities/fp_facets.qbk]
-[include fp_utilities/float_next.qbk]
-[endmathpart]
-
-[mathpart cstdfloat..Specified-width floating-point typedefs]
-[include cstdfloat/cstdfloat.qbk]
-[endmathpart] [/mathpart cstdfloat..Fixed-width floating-point types]
-
 [mathpart extern_c TR1 and C99 external "C" Functions]
 [section:main_tr1 C99 and TR1 C Functions Overview]
 [tr1_overview]
@@ -532,7 +534,6 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include tr1/tr1_ref.qbk]
 [endmathpart]
 
-[include constants/constants.qbk]
 
 [include complex/complex-tr1.qbk]
 [include quaternion/math-quaternion.qbk]
