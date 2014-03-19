@@ -127,7 +127,7 @@ void test_spots(T, const char*)
    // A few special spot tests:
    //
    BOOST_MATH_STD_USING
-      T tol = boost::math::tools::epsilon<T>() * 20;
+   T tol = boost::math::tools::epsilon<T>() * 20;
    if(std::numeric_limits<T>::max_exponent > 200)
    {
       BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(ldexp(T(1), -500), T(180.25)), T(8.0113754557649679470816892372669519037339812035512e-178L), 3 * tol);
