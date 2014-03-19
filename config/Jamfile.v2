@@ -25,6 +25,7 @@ obj has_gcc_visibility : has_gcc_visibility.cpp :
 obj has_e_float : has_e_float.cpp : <include>$(e_float_path) ;
 exe has_float128 : has_float128.cpp quadmath ;
 exe has_intel_quad : has_intel_quad.cpp : <cxxflags>-Qoption,cpp,--extended_float_type ;
+obj has_128bit_floatmax_t : has_128bit_floatmax_t.cpp ;
 
 explicit has_long_double_support ;
 explicit has_mpfr_class ;
@@ -35,3 +36,4 @@ explicit has_gcc_visibility ;
 explicit has_e_float ;
 explicit has_float128 ;
 explicit has_intel_quad ;
+explicit has_128bit_floatmax_t ;

@@ -870,6 +870,7 @@ rule get_float128_tests
            : # requirements
             [ check-target-builds ../config//has_intel_quad "Intel _Quad datatype support" : <cxxflags>-Qoption,cpp,--extended_float_type <define>BOOST_MATH_USE_FLOAT128 ] 
             [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]
+            [ check-target-builds ../config//has_128bit_floatmax_t "128-bit floatmax_t" : : <build>no ] 
             <define>BOOST_ALL_NO_LIB 
            : $(source:B)_floatmax_t ] ;
      }
@@ -877,4 +878,3 @@ rule get_float128_tests
 }
 
 test-suite float128_tests : [ get_float128_tests ] ;
-explicit float128_tests ;
