@@ -789,6 +789,12 @@ run  compile_test/sf_sqrt1pm1_incl_test.cpp compile_test_main ;
 run  compile_test/sf_trunc_incl_test.cpp compile_test_main ;
 run  compile_test/sf_zeta_incl_test.cpp compile_test_main ;
 run  compile_test/std_real_concept_check.cpp ;
+run  compile_test/cstdfloat_concept_check_1.cpp 
+   : : : [ check-target-builds ../config//has_intel_quad "Intel _Quad datatype support" : <cxxflags>-Qoption,cpp,--extended_float_type ] 
+         [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ;
+run  compile_test/cstdfloat_concept_check_2.cpp ;
+run  compile_test/cstdfloat_concept_check_3.cpp ;
+run  compile_test/cstdfloat_concept_check_4.cpp ;
 run  compile_test/sf_airy_incl_test.cpp compile_test_main ;
 run  compile_test/sf_hankel_incl_test.cpp compile_test_main ;
 run  compile_test/sf_jacobi_incl_test.cpp compile_test_main ;
@@ -835,10 +841,10 @@ run test_signed_zero.cpp ../../test/build//boost_unit_test_framework ;
   
 run complex_test.cpp ../../test/build//boost_unit_test_framework ;
 
-compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj ;
-compile multiprc_concept_check_2.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj ;
-compile multiprc_concept_check_3.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj ;
-compile multiprc_concept_check_4.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj ;
+compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ;
+compile multiprc_concept_check_2.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ;
+compile multiprc_concept_check_3.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ;
+compile multiprc_concept_check_4.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ;
 compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] <debug-symbols>off ;
 compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off ;
 compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off ;
@@ -851,9 +857,24 @@ run zztest_max_digits10.cpp ;
 
 build-project ../example ;
 
+rule get_float128_tests 
+{
+     local result ;
+     for local source in [ glob float128/*.cpp ]
+     {
+         result += [ run $(source)
+            /boost/test//boost_unit_test_framework/<link>static 
+            /boost/regex//boost_regex/<link>static 
+           : # command line
+           : # input files
+           : # requirements
+            [ check-target-builds ../config//has_intel_quad "Intel _Quad datatype support" : <cxxflags>-Qoption,cpp,--extended_float_type <define>BOOST_MATH_USE_FLOAT128 ] 
+            [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]
+            <define>BOOST_ALL_NO_LIB 
+           : $(source:B)_floatmax_t ] ;
+     }
+     return $(result) ;     
+}
 
-
-
-
-
-
+test-suite float128_tests : [ get_float128_tests ] ;
+explicit float128_tests ;

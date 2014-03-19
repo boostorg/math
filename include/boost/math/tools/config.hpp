@@ -148,7 +148,7 @@
 #if (defined(__SUNPRO_CC) || defined(__hppa) || defined(__GNUC__)) && !defined(BOOST_MATH_SMALL_CONSTANT)
 // Sun's compiler emits a hard error if a constant underflows,
 // as does aCC on PA-RISC, while gcc issues a large number of warnings:
-#  define BOOST_MATH_SMALL_CONSTANT(x) 0
+#  define BOOST_MATH_SMALL_CONSTANT(x) 0.0
 #else
 #  define BOOST_MATH_SMALL_CONSTANT(x) x
 #endif
@@ -211,12 +211,26 @@
 // Test whether to support __float128:
 //
 #if defined(_GLIBCXX_USE_FLOAT128) && defined(BOOST_GCC) && !defined(__STRICT_ANSI__) \
-   && !defined(BOOST_MATH_DISABLE_FLOAT128) && !defined(BOOST_MATH_USE_FLOAT128)
+   && !defined(BOOST_MATH_DISABLE_FLOAT128) || defined(BOOST_MATH_USE_FLOAT128)
 //
 // Only enable this when the compiler really is GCC as clang and probably 
 // intel too don't support __float128 yet :-(
 //
+#ifndef BOOST_MATH_USE_FLOAT128
 #  define BOOST_MATH_USE_FLOAT128
+#endif
+
+#  if defined(BOOST_INTEL) && defined(BOOST_INTEL_CXX_VERSION) && (BOOST_INTEL_CXX_VERSION >= 1310) && defined(__GNUC__)
+#    if (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6))
+#      define BOOST_MATH_FLOAT128_TYPE __float128
+#    endif
+#  elif defined(__GNUC__)
+#      define BOOST_MATH_FLOAT128_TYPE __float128
+#  endif
+
+#  ifndef BOOST_MATH_FLOAT128_TYPE
+#      define BOOST_MATH_FLOAT128_TYPE _Quad
+#  endif
 #endif
 //
 // Check for WinCE with no iostream support:

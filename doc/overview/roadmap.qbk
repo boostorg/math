@@ -19,6 +19,9 @@ All bug reports including closed ones can be viewed
 * [@https://svn.boost.org/trac/boost/ticket/9672 #9672 PDF and CDF of a Laplace distribution throwing domain_error]
 Random variate can now be infinite.
 * Fixed several corner cases in __rising_factorial, __falling_factorial and __tgamma_delta_ratio with thanks to Rocco Romeo.
+* Fixed several corner cases in __rising_factorial, __falling_factorial and __tgamma_delta_ratio (thanks to Rocco Romeo).
+* Removed constant `pow23_four_minus_pi ` whose value did not match the name (and was unused by Boost.Math), see
+[@https://svn.boost.org/trac/boost/ticket/9712 #9712].
 
 [h4 Boost-1.55]
 
