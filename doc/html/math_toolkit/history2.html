@@ -5,8 +5,8 @@
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="../index.html" title="Math Toolkit 1.9.0">
-<link rel="up" href="../status.html" title="Chapter&#160;16.&#160;Library Status">
-<link rel="prev" href="../status.html" title="Chapter&#160;16.&#160;Library Status">
+<link rel="up" href="../status.html" title="Chapter&#160;17.&#160;Library Status">
+<link rel="prev" href="../status.html" title="Chapter&#160;17.&#160;Library Status">
 <link rel="next" href="issues.html" title="Known Issues, and TODO List">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -70,6 +70,33 @@
 <li class="listitem">
           Cleaned up handling of negative values in Bessel I0 and I1 code (removed
           dead code), see <a href="https://svn.boost.org/trac/boost/ticket/9512" target="_top">#9512</a>.
+        </li>
+<li class="listitem">
+          Fixed handling of very small values passed to <a class="link" href="sf_gamma/tgamma.html" title="Gamma">tgamma</a>
+          and <a class="link" href="sf_gamma/lgamma.html" title="Log Gamma">lgamma</a> so they
+          don't generate spurious overflows (thanks to Rocco Romeo).
+        </li>
+<li class="listitem">
+          <a href="https://svn.boost.org/trac/boost/ticket/9672" target="_top">#9672 PDF and
+          CDF of a Laplace distribution throwing domain_error</a> Random variate
+          can now be infinite.
+        </li>
+<li class="listitem">
+          Fixed several corner cases in <a class="link" href="factorials/sf_rising_factorial.html" title="Rising Factorial">rising_factorial</a>,
+          <a class="link" href="factorials/sf_falling_factorial.html" title="Falling Factorial">falling_factorial</a>
+          and <a class="link" href="sf_gamma/gamma_ratios.html" title="Ratios of Gamma Functions">tgamma_delta_ratio</a>
+          with thanks to Rocco Romeo.
+        </li>
+<li class="listitem">
+          Fixed several corner cases in <a class="link" href="factorials/sf_rising_factorial.html" title="Rising Factorial">rising_factorial</a>,
+          <a class="link" href="factorials/sf_falling_factorial.html" title="Falling Factorial">falling_factorial</a>
+          and <a class="link" href="sf_gamma/gamma_ratios.html" title="Ratios of Gamma Functions">tgamma_delta_ratio</a>
+          (thanks to Rocco Romeo).
+        </li>
+<li class="listitem">
+          Removed constant <code class="computeroutput"><span class="identifier">pow23_four_minus_pi</span>
+          </code> whose value did not match the name (and was unused by Boost.Math),
+          see <a href="https://svn.boost.org/trac/boost/ticket/9712" target="_top">#9712</a>.
         </li>
 </ul></div>
 <h5>
@@ -583,7 +610,7 @@ by switching to use the Students t distribution (or Normal distribution
 <li class="listitem">
           <span class="bold"><strong>Breaking change:</strong></span> Changed default behaviour
           for domain, pole and overflow errors to throw an exception (based on review
-          feedback), this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
+          feedback), this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
         </li>
 <li class="listitem">
           <span class="bold"><strong>Breaking change:</strong></span> Changed exception thrown
@@ -592,7 +619,7 @@ by switching to use the Students t distribution (or Normal distribution
 <li class="listitem">
           <span class="bold"><strong>Breaking change:</strong></span> Changed discrete quantiles
           to return an integer result: this is anything up to 20 times faster than
-          finding the true root, this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;13.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
+          finding the true root, this behaviour can be customised using <a class="link" href="../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>'s.
         </li>
 <li class="listitem">
           Polynomial/rational function evaluation is now customisable and hopefully
