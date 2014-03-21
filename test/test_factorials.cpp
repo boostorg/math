@@ -23,8 +23,9 @@
 #include <boost/math/tools/test.hpp>
 
 #include <iostream>
-  using std::cout;
-  using std::endl;
+#include <iomanip>
+using std::cout;
+using std::endl;
 
 template <class T>
 T naive_falling_factorial(T x, unsigned n)

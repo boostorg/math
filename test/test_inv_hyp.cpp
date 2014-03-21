@@ -22,6 +22,8 @@
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
+#include <iostream>
+#include <iomanip>
 //
 // DESCRIPTION:
 // ~~~~~~~~~~~~

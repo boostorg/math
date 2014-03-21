@@ -34,6 +34,7 @@
 #include "test_out_of_range.hpp"
 
 #include <iostream>
+#include <iomanip>
    using std::cout;
    using std::endl;
    using std::setprecision;
