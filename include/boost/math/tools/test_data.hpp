@@ -29,8 +29,8 @@
 #include <random>
 namespace random_ns = std;
 #else
-#include <boost/tr1/random.hpp>
-namespace random_ns = std::tr1;
+#include <boost/random.hpp>
+namespace random_ns = boost::random;
 #endif
 #include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/real_cast.hpp>
@@ -366,7 +366,7 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
          typedef float random_type;
 
          random_ns::mt19937 rnd;
-         random_ns::uniform_real<random_type> ur_a(real_cast<random_type>(arg1.z1), real_cast<random_type>(arg1.z2));
+         random_ns::uniform_real_distribution<random_type> ur_a(real_cast<random_type>(arg1.z1), real_cast<random_type>(arg1.z2));
 
          for(int i = 0; i < arg1.n1; ++i)
          {
@@ -398,7 +398,7 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
             T, long double>::type power_type;
 
          random_ns::mt19937 rnd;
-         random_ns::uniform_real<random_type> ur_a(1.0, 2.0);
+         random_ns::uniform_real_distribution<random_type> ur_a(1.0, 2.0);
 
          for(int power = arg1.n1; power <= arg1.n2; ++power)
          {
