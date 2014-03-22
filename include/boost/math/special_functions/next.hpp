@@ -15,8 +15,13 @@
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 
-#ifdef BOOST_MSVC
 #include <float.h>
+
+#if !defined(_CRAYC) && !defined(__CUDACC__) && (!defined(__GNUC__) || (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 3)))
+#if (defined(_M_IX86_FP) && (_M_IX86_FP >= 2)) || defined(__SSE2__)
+#include "xmmintrin.h"
+#define BOOST_MATH_CHECK_SSE2
+#endif
 #endif
 
 namespace boost{ namespace math{
@@ -32,7 +37,11 @@ inline T get_smallest_value(mpl::true_ const&)
    // when using the SSE2 registers in DAZ or FTZ mode.
    //
    static const T m = std::numeric_limits<T>::denorm_min();
+#ifdef BOOST_MATH_CHECK_SSE2
+   return (_mm_getcsr() & (_MM_FLUSH_ZERO_ON | 0x40)) ? tools::min_value<T>() : m;;
+#else
    return ((tools::min_value<T>() / 2) == 0) ? tools::min_value<T>() : m;
+#endif
 }
 
 template <class T>

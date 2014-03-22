@@ -98,14 +98,20 @@ void test_values(const T& val, const char* name)
    test_value(-one, name);
    test_value(two, name);
    test_value(-two, name);
-   if (std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present) && ((std::numeric_limits<T>::min)() / 2 != 0))
+#if defined(TEST_SSE2)
+   if((_mm_getcsr() & (_MM_FLUSH_ZERO_ON | 0x40)) == 0)
    {
-      test_value(std::numeric_limits<T>::denorm_min(), name);
-      test_value(-std::numeric_limits<T>::denorm_min(), name);
-      test_value(2 * std::numeric_limits<T>::denorm_min(), name);
-      test_value(-2 * std::numeric_limits<T>::denorm_min(), name);
+#endif
+      if(std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present) && ((std::numeric_limits<T>::min)() / 2 != 0))
+      {
+         test_value(std::numeric_limits<T>::denorm_min(), name);
+         test_value(-std::numeric_limits<T>::denorm_min(), name);
+         test_value(2 * std::numeric_limits<T>::denorm_min(), name);
+         test_value(-2 * std::numeric_limits<T>::denorm_min(), name);
+      }
+#if defined(TEST_SSE2)
    }
-
+#endif
    static const int primes[] = {
       11,     13,     17,     19,     23,     29, 
       31,     37,     41,     43,     47,     53,     59,     61,     67,     71, 
