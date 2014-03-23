@@ -174,6 +174,8 @@ BOOST_AUTO_TEST_CASE( test_main )
 #  pragma message "Compiling SSE2 test code"
 #endif
 
+   int mmx_flags = _mm_getcsr(); // We'll restore these later.
+
 #ifdef _WIN32
    // These tests fail pretty badly on Linux x64, especially with Intel-12.1
    _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
@@ -189,6 +191,9 @@ BOOST_AUTO_TEST_CASE( test_main )
    std::cout << "SSE2 control word is: " << std::hex << _mm_getcsr() << std::endl;
    test_values(1.0f, "float");
    test_values(1.0, "double");
+
+   // Restore the MMX flags:
+   _mm_setcsr(mmx_flags);
 #endif
    
 }
