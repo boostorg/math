@@ -203,7 +203,7 @@ void expected_results()
       "Win32[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*medium[^|]*",               // test data group
-      "[^|]*", 700, 200);               // test function
+      "[^|]*", 1000, 200);               // test function
    add_expected_result(
       "GNU[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -299,14 +299,14 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*medium[^|]*",               // test data group
-      "[^|]*", 200, 50);                // test function
+      "[^|]*", 1500, 400);                // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*small[^|]*",                // test data group
-      ".*", 20, 10);                  // test function
+      ".*", 100, 20);                  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -320,7 +320,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "[^|]*integer[^|]*",              // test data group
-      ".*", 40, 10);                    // test function
+      ".*", 200, 40);                    // test function
 
    //
    // Finish off by printing out the compiler/stdlib/platform names,

@@ -546,7 +546,9 @@ struct select_native<long double>
    && !defined(__DECCXX)\
    && !defined(__osf__) \
    && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)\
-   && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)
+   && !defined(__FAST_MATH__)\
+   && !defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY)\
+   && !defined(BOOST_INTEL)
 #  define BOOST_MATH_USE_STD_FPCLASSIFY
 #endif
 
