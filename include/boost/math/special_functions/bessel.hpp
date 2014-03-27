@@ -16,6 +16,7 @@
 #endif
 
 #include <limits>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/bessel_jy.hpp>
 #include <boost/math/special_functions/detail/bessel_jn.hpp>
 #include <boost/math/special_functions/detail/bessel_yn.hpp>

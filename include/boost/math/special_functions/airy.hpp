@@ -8,6 +8,7 @@
 #define BOOST_MATH_AIRY_HPP
 
 #include <limits>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/cbrt.hpp>
 #include <boost/math/special_functions/detail/airy_ai_bi_zero.hpp>

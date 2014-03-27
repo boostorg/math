@@ -10,8 +10,8 @@
 #pragma once
 #endif
 
-#include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/detail/unchecked_factorial.hpp>
 #include <boost/array.hpp>
 #ifdef BOOST_MSVC
