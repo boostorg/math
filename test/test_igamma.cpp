@@ -105,7 +105,7 @@ void expected_results()
       "Mac OS",                          // platform
       largest_type,                     // test type(s)
       "[^|]*small[^|]*",               // test data group
-      "[^|]*", 40, 15);                 // test function
+      "[^|]*", 80, 40);                 // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
