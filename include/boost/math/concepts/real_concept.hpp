@@ -433,6 +433,27 @@ inline long double real_cast<long double, concepts::real_concept>(concepts::real
 
 #endif
 
+//
+// Workaround for Clang on Mac OS which throws in lexical_cast if you try to convert
+// a long string with lots of digits to a long double:
+//
+#if defined(_LIBCPP_VERSION) && defined(__APPLE__)
+
+namespace constants{
+
+   template <class Real, class Policy>
+   struct construction_traits;
+
+   template <class Policy>
+   struct construction_traits<concepts::real_concept, Policy>
+   {
+      typedef mpl::int_<3> type;
+   };
+
+}
+
+#endif
+
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
 //
 // For some strange reason ADL sometimes fails to find the
