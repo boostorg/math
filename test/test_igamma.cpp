@@ -126,7 +126,7 @@ void expected_results()
       "Mac OS",                          // platform
       "real_concept",                     // test type(s)
       "[^|]*small[^|]*",               // test data group
-      "[^|]*", 40, 15);                 // test function
+      "[^|]*", 75, 15);                 // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
