@@ -316,10 +316,19 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
 template <class charT, class traits>
 inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, traits>& is, std_real_concept& a)
 {
+#if defined(__SGI_STL_PORT) || defined(_RWSTD_VER) || defined(__LIBCOMO__) || defined(_LIBCPP_VERSION)
+   std::string s;
+   std_real_concept_base_type d;
+   is >> s;
+   std::sscanf(s.c_str(), "%Lf", &d);
+   a = d;
+   return is;
+#else
    std_real_concept_base_type v;
    is >> v;
    a = v;
    return is;
+#endif
 }
 
 } // namespace concepts
