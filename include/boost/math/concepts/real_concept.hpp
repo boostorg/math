@@ -307,7 +307,7 @@ inline std::basic_istream<charT, traits>& operator>>(std::basic_istream<charT, t
    is >> v;
    a = v;
    return is;
-#elif defined(__SGI_STL_PORT) || defined(_RWSTD_VER) || defined(__LIBCOMO__)
+#elif defined(__SGI_STL_PORT) || defined(_RWSTD_VER) || defined(__LIBCOMO__) || defined(_LIBCPP_VERSION)
    std::string s;
    real_concept_base_type d;
    is >> s;
@@ -430,27 +430,6 @@ inline long double real_cast<long double, concepts::real_concept>(concepts::real
 }
 
 } // STLPort
-
-#endif
-
-//
-// Workaround for Clang on Mac OS which throws in lexical_cast if you try to convert
-// a long string with lots of digits to a long double:
-//
-#if defined(_LIBCPP_VERSION) && defined(__APPLE__)
-
-namespace constants{
-
-   template <class Real, class Policy>
-   struct construction_traits;
-
-   template <class Policy>
-   struct construction_traits<concepts::real_concept, Policy>
-   {
-      typedef mpl::int_<3> type;
-   };
-
-}
 
 #endif
 
