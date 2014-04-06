@@ -58,7 +58,7 @@ void expected_results()
       "Mac OS",                      // platform
       largest_type,                  // test type(s)
       ".*",                          // test data group
-      ".*", 400, 200);               // test function
+      ".*", 3500, 1500);               // test function
    //
    // G++ on Linux, results vary a bit by processor type,
    // on Itanium results are *much* better than listed here,

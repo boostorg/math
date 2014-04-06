@@ -16,6 +16,7 @@
 #  pragma once
 #endif
 
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/config/no_tr1/cmath.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/expm1.hpp>

@@ -10,6 +10,7 @@
 #pragma once
 #endif
 
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/big_constant.hpp>

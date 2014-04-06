@@ -157,7 +157,7 @@ void expected_results()
       "Mac OS",                          // platform
       largest_type,                      // test type(s)
       "Bessel J':.*",              // test data group
-      ".*", 50000, 20000);         // test function
+      ".*", 60000, 20000);         // test function
 
 
 

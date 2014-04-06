@@ -101,7 +101,7 @@ void expected_results()
       "Mac OS",                          // platform
       "long double|real_concept",        // test type(s)
       ".*Y'[0].*",           // test data group
-      ".*", 1200, 1000);               // test function
+      ".*", 1500, 1000);               // test function
 
    //
    // Linux:

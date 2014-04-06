@@ -24,6 +24,7 @@
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#include <boost/utility/declval.hpp>
 
 
 namespace boost{ namespace math
@@ -53,6 +54,29 @@ namespace boost{ namespace math
       construct_from_float128 = 5,
       // Must be the largest value above:
       construct_max = construct_from_float128
+   };
+
+   //
+   // Traits class determines how to convert from string based on whether T has a constructor
+   // from const char* or not:
+   //
+   template <int N>
+   struct dummy_size{};
+
+   template <class T>
+   struct is_explicitly_convertible_from_string
+   {
+#ifndef BOOST_NO_SFINAE_EXPR
+      template<typename S1, typename T1>
+      static type_traits::yes_type selector(dummy_size<sizeof(static_cast<T1>(declval<S1>()))>*);
+
+      template<typename S1, typename T1>
+      static type_traits::no_type selector(...);
+
+      static const bool value = sizeof(selector<const char*, T>(0)) == sizeof(type_traits::yes_type);
+#else
+      static const bool value = false;
+#endif
    };
 
    //
@@ -193,14 +217,15 @@ namespace boost{ namespace math
 #  define BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x)
 #endif
 
-   #define BOOST_DEFINE_MATH_CONSTANT(name, x, y)\
+#define BOOST_DEFINE_MATH_CONSTANT(name, x, y)\
    namespace detail{\
    template <class T> struct BOOST_JOIN(constant_, name){\
    private:\
    /* The default implementations come next: */ \
    static inline const T& get_from_string()\
    {\
-      static const T result = convert_from_string<T>(y, boost::is_convertible<const char*, T>());\
+      typedef mpl::bool_<boost::is_convertible<const char*, T>::value || boost::math::constants::is_explicitly_convertible_from_string<T>::value> tag_type;\
+      static const T result(convert_from_string<T>(y, tag_type()));\
       return result;\
    }\
    /* This one is for very high precision that is none the less known at compile time: */ \
