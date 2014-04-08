@@ -564,7 +564,7 @@ T expint_i_imp(T z, const Policy& pol, const mpl::int_<53>& tag)
       result *= t;
       if(fabs(t) < 0.1)
       {
-         result += boost::math::log1p(t / r);
+         result += boost::math::log1p(t / r, pol);
       }
       else
       {
@@ -781,7 +781,7 @@ T expint_i_imp(T z, const Policy& pol, const mpl::int_<64>& tag)
       result *= t;
       if(fabs(t) < 0.1)
       {
-         result += boost::math::log1p(t / r);
+         result += boost::math::log1p(t / r, pol);
       }
       else
       {
@@ -963,8 +963,8 @@ T expint_i_imp(T z, const Policy& pol, const mpl::int_<64>& tag)
    return result;
 }
 
-template <class T>
-void expint_i_imp_113a(T& result, const T& z)
+template <class T, class Policy>
+void expint_i_imp_113a(T& result, const T& z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    // Maximum Deviation Found:                     1.230e-36
@@ -1023,7 +1023,7 @@ void expint_i_imp_113a(T& result, const T& z)
    result *= t;
    if(fabs(t) < 0.1)
    {
-      result += boost::math::log1p(t / r);
+      result += boost::math::log1p(t / r, pol);
    }
    else
    {
@@ -1384,7 +1384,7 @@ T expint_i_imp(T z, const Policy& pol, const mpl::int_<113>& tag)
 
    if(z <= 6)
    {
-      expint_i_imp_113a(result, z);
+      expint_i_imp_113a(result, z, pol);
    }
    else if (z <= 10)
    {
