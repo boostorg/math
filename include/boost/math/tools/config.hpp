@@ -298,6 +298,20 @@ void suppress_unused_variable_warning(const T&)
 {
 }
 
+namespace detail{
+
+template <class T>
+struct is_integer_for_rounding
+{
+   static const bool value = boost::is_integral<T>::value
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+      || (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::is_integer)
+#endif
+      ;
+};
+
+}
+
 }} // namespace boost namespace math
 
 #ifdef __GLIBC_PREREQ
