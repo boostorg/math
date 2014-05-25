@@ -302,7 +302,7 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
       
       if(0 == f0)
          break;
-      if((f1 == 0) && (f2 == 0))
+      if(f1 == 0)
       {
          // Oops zero derivative!!!
 #ifdef BOOST_MATH_INSTRUMENT
