@@ -13,6 +13,7 @@
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/detail/workaround.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <algorithm>  // for min and max
 #include <boost/config/no_tr1/cmath.hpp>
 #include <climits>
