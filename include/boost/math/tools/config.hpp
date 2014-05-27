@@ -21,6 +21,9 @@
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
 #  include <math.h>
 #endif
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#  include <limits>
+#endif
 
 #include <boost/math/tools/user.hpp>
 
