@@ -13,12 +13,16 @@
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/detail/workaround.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <algorithm>  // for min and max
 #include <boost/config/no_tr1/cmath.hpp>
 #include <climits>
 #include <cfloat>
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
 #  include <math.h>
+#endif
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#  include <limits>
 #endif
 
 #include <boost/math/tools/user.hpp>
