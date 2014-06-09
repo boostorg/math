@@ -48,6 +48,7 @@ project
       <define>BOOST_ALL_NO_LIB=1
       <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
+      <include>../include_private
       <include>$(ntl-path)/include
       <include>$(e_float_path)
       <include>$(gmp_path) <include>$(gmp_path)/mpfr <include>$(gmp_path)/gmpfrxx <include>$(gmp_path)/mpfrc++
