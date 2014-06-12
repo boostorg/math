@@ -229,7 +229,7 @@ either construct from a decimal digit string or calculate on the fly depending u
 
 [h5 Custom Specializing a constant]
 
-In addition, for user-defined types that need special handling, it's possible to \[partially-\] specialize
+In addition, for user-defined types that need special handling, it's possible to partially-specialize
 the internal structure used by each constant.  For example, suppose we're using the C++ wrapper around MPFR
 `mpfr_class`: this has its own representation of Pi which we may well wish to use in place of the above
 mechanism.  We can achieve this by specialising the class template `boost::math::constants::detail::constant_pi`:
