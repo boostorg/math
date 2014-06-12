@@ -13,9 +13,15 @@ maintenance into `libs/math/include_private`.  The headers effected are `boost/m
 `boost/math/tools/remez.hpp`, `boost/math/constants/generate.hpp`, `boost/math/tools/solve.hpp`,
 `boost/math/tools/test.hpp`.
 You can continue to use these headers by adding `libs/math/include_private` to your compiler's include path.
-
-[h4 Math-1.9.2]
-
+* [*Breaking change]: A number of distributions and special functions were returning the maximum finite value
+rather than raising an __overflow_error, this has now been fixed, which means these functions now behave as
+documented.  However, since the default behavior on raising an __overflow_error is to throw a `std::overflow_error`
+exception, applications which have come to reply rely on these functions not throwing may experience exceptions
+where they did not before.  The special functions involved are __gamma_p_inva, __gamma_q_inva, 
+__ibeta_inva, __ibetac_inva, __ibeta_invb, __ibetac_invb, __gamma_p_inv, __gamma_q_inv.  The distributions
+involved are __pareto_distrib, __beta_distrib, __geometric_distrib, __negative_binomial_distrib,
+__binomial_distrib, __chi_squared_distrib, __gamma_distrib, __inverse_chi_squared_distrib, 
+__inverse_gamma_distrib.  See [@https://svn.boost.org/trac/boost/ticket/10111 #10111].
 * Fix __round and __trunc functions so they can be used with integer arguments, see [@https://svn.boost.org/trac/boost/ticket/10066 #10066].
 * Fix Halley iteration to handle zero derivative (with non-zero second derivative), see [@https://svn.boost.org/trac/boost/ticket/10046 #10046].
 
