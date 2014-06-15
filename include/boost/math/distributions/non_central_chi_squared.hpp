@@ -433,9 +433,9 @@ namespace boost
             // Special cases get short-circuited first:
             //
             if(p == 0)
-               return comp ? tools::max_value<RealType>() : 0;
+               return comp ? policies::raise_overflow_error<RealType>(function, 0, Policy()) : 0;
             if(p == 1)
-               return comp ? 0 : tools::max_value<RealType>();
+               return comp ? 0 : policies::raise_overflow_error<RealType>(function, 0, Policy());
             //
             // This is Pearson's approximation to the quantile, see
             // Pearson, E. S. (1959) "Note on an approximation to the distribution of 

@@ -13,12 +13,16 @@
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp> // for boost::uintmax_t
 #include <boost/detail/workaround.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <algorithm>  // for min and max
 #include <boost/config/no_tr1/cmath.hpp>
 #include <climits>
 #include <cfloat>
 #if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
 #  include <math.h>
+#endif
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#  include <limits>
 #endif
 
 #include <boost/math/tools/user.hpp>
@@ -296,6 +300,20 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
 template <class T>
 void suppress_unused_variable_warning(const T&)
 {
+}
+
+namespace detail{
+
+template <class T>
+struct is_integer_for_rounding
+{
+   static const bool value = boost::is_integral<T>::value
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+      || (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::is_integer)
+#endif
+      ;
+};
+
 }
 
 }} // namespace boost namespace math

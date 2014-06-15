@@ -24,6 +24,11 @@
 
 namespace boost{ namespace math{
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable:4127) // conditional expression is constant
+#endif
+
 template <class RealType = double, class Policy = policies::policy<> >
 class laplace_distribution
 {
@@ -327,6 +332,10 @@ inline RealType kurtosis_excess(const laplace_distribution<RealType, Policy>& /*
 {
    return 3;
 }
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 } // namespace math
 } // namespace boost

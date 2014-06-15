@@ -254,10 +254,11 @@
       </h6>
 <p>
         In addition, for user-defined types that need special handling, it's possible
-        to [partially-] specialize the internal structure used by each constant.
-        For example, suppose we're using the C++ wrapper around MPFR <code class="computeroutput"><span class="identifier">mpfr_class</span></code>: this has its own representation
-        of Pi which we may well wish to use in place of the above mechanism. We can
-        achieve this by specialising the class template <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">detail</span><span class="special">::</span><span class="identifier">constant_pi</span></code>:
+        to partially-specialize the internal structure used by each constant. For
+        example, suppose we're using the C++ wrapper around MPFR <code class="computeroutput"><span class="identifier">mpfr_class</span></code>:
+        this has its own representation of Pi which we may well wish to use in place
+        of the above mechanism. We can achieve this by specialising the class template
+        <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">detail</span><span class="special">::</span><span class="identifier">constant_pi</span></code>:
       </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">constants</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">detail</span><span class="special">{</span>
 

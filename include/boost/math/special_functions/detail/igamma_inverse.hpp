@@ -400,7 +400,7 @@ T gamma_p_inv_imp(T a, T p, const Policy& pol)
    if((p < 0) || (p > 1))
       return policies::raise_domain_error<T>(function, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse (got p=%1%).", p, pol);
    if(p == 1)
-      return tools::max_value<T>();
+      return policies::raise_overflow_error<T>(function, 0, Policy());
    if(p == 0)
       return 0;
    bool has_10_digits;
@@ -460,7 +460,7 @@ T gamma_q_inv_imp(T a, T q, const Policy& pol)
    if((q < 0) || (q > 1))
       return policies::raise_domain_error<T>(function, "Probabilty must be in the range [0,1] in the incomplete gamma function inverse (got q=%1%).", q, pol);
    if(q == 0)
-      return tools::max_value<T>();
+      return policies::raise_overflow_error<T>(function, 0, Policy());
    if(q == 1)
       return 0;
    bool has_10_digits;

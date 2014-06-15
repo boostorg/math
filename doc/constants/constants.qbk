@@ -229,7 +229,7 @@ either construct from a decimal digit string or calculate on the fly depending u
 
 [h5 Custom Specializing a constant]
 
-In addition, for user-defined types that need special handling, it's possible to \[partially-\] specialize
+In addition, for user-defined types that need special handling, it's possible to partially-specialize
 the internal structure used by each constant.  For example, suppose we're using the C++ wrapper around MPFR
 `mpfr_class`: this has its own representation of Pi which we may well wish to use in place of the above
 mechanism.  We can achieve this by specialising the class template `boost::math::constants::detail::constant_pi`:
@@ -462,7 +462,11 @@ The default is to use `NTL::RR` unless you define an alternate macro, for exampl
 3. It is necessary to link to the Boost.Regex library,
 and probably to your chosen arbitrary precision type library.
 
-4. The complete program to generate the constant `half_pi` using function `calculate_half_pi` is then:
+4. You need to add `libs\math\include_private` to your compiler's include path as the needed
+header is not installed in the usual places by default (this avoids a cyclic dependency between 
+the Math and Multiprecision library's headers).
+
+5. The complete program to generate the constant `half_pi` using function `calculate_half_pi` is then:
 
    #define USE_CPP_FLOAT // If required.
    #include <boost/math/constants/generate.hpp>
