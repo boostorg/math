@@ -283,7 +283,7 @@ class hyperexponential_distribution
     }
 
     public: template <typename ProbRangeT, typename RateRangeT>
-            hyperexponential_distribution(ProbRangeT prob_range, RateRangeT rate_range)
+            hyperexponential_distribution(ProbRangeT const& prob_range, RateRangeT const& rate_range)
     : probs_(boost::begin(prob_range), boost::end(prob_range)),
       rates_(boost::begin(rate_range), boost::end(rate_range))
     {
