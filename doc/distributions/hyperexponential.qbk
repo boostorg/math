@@ -1,0 +1,84 @@
+[section:hyperexponential_dist Hyperexponential Distribution]
+
+``#include <boost/math/distributions/hyperexponential.hpp>``
+
+   namespace boost{ namespace math{
+
+   template <typename RealTypr = double,
+             typename ``__Policy``   = ``__policy_class`` >
+   class hyperexponential_distribution;
+
+   typedef hyperexponential_distribution<> hyperexponential;
+
+   template <typename RealType, typename ``__Policy``>
+   class hyperexponential_distribution
+   {
+   public:
+      typedef RealType value_type;
+      typedef Policy   policy_type;
+
+      // Constructors:
+      template <typename ProbIterT, typename RateIterT>
+      hyperexponential_distribution(ProbIterT prob_first, ProbIterT prob_last, RateIterT rate_first, RateIterT rate_last);
+      template <typename ProbRangeT, typename RateRangeT>
+      hyperexponential_distribution(ProbRangeT const& prob_range, RateRangeT const& rate_range);
+
+      // Accessors:
+      std::size_t num_phases() const;
+      std::vector<RealType> probabilities() const;
+      std::vector<RealType> rates() const;
+   };
+
+   }} // namespaces
+
+The class type `hyperexponential_distribution` represents a [@http://en.wikipedia.org/wiki/Hyperexponential_distribution hyperexponential distribution].
+
+A k-phase hyperexponential distribution is a [@http://en.wikipedia.org/wiki/Continuous_probability_distribution continuous probability distribution] obtained as a mixture of k [@http://en.wikipedia.org/wiki/Exponential_distribution exponential distributions].
+It is also referred to as mixed exponential distribution or parallel k-phase exponential distribution.
+
+A k-phase hyperexponential distribution can be interpreted as the service time distribution of k servers in parallel where the i-th server has service rate r[sub i] and is chosen with probability p[sub i].
+Indeed, it is frequency used in [@http://en.wikipedia.org/wiki/Queueing_theory queueing theory] to model a queueing station with k servers in parallel.
+Also, it can be used to approximate [@http://en.wikipedia.org/wiki/Long_tail long-tail probability distributions] (Feldmann et al.,1998).
+
+A k-phase hyperexponential distribution is characterized by two paramters, namely a /phase probability vector/ p=(p[sub 1],...,p[sub k]) and a /rate vector/ r=(r[sub 1],...,r[sub k]).
+
+The [@http://en.wikipedia.org/wiki/Probability_density_function probability density function] for value x in a hyperexponential distribution is given by:
+
+f(x;(p[sub 1],...,p[sub k]),(r[sub 1],...,r[sub k])) = [Sigma][sub i=1][super k] p[sub i]r[sub i]exp(-r[sub i]x)
+
+where exp(x) is the [@http://en.wikipedia.org/wiki/Exponential_function exponential function].
+
+[h4 Member Functions]
+
+*TODO*
+
+[h4 Non-member Accessor Functions]
+
+*TODO*
+
+[h4 Accuracy]
+
+*TODO*
+
+[h4 Implementation]
+
+*TODO*
+
+[h4 References]
+
+* H.T. Papadopolous, C. Heavey and J. Browne, /Queueing Theory in Manufacturing Systems Analysis and Design/, Chapman & Hall/CRC, 1993, p. 35.
+
+* Wolfram Mathematica, /Hyperexponential Distribution/, Online: [@http://reference.wolfram.com/language/ref/HyperexponentialDistribution.html], 2014.
+
+* Wikipedia, /Hyperexponential Distribution/, Online: [@http://en.wikipedia.org/wiki/Hyperexponential_distribution], 2014
+
+*  A. Feldmann and W. Whitt, /Fitting mixtures of exponentials to long-tail distributions to analyze network performance models/, Performance Evaluation 31(3-4):245, doi:10.1016/S0166-5316(97)00003-5, 1998.
+
+[endsect][/section:hyperexponential_dist hyperexponential]
+
+[/ hyperexponential.qbk
+  Copyright 2014 Marco Guazzone (marco.guazzone@gmail.com)
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
