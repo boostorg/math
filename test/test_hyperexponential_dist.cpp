@@ -56,7 +56,7 @@ RealT make_tolerance()
     }
 */
 
-    const RealT tol = 1e-3;
+    const RealT tol = 1e-4;
 
     //std::cout << "[" << __func__ << "] Tolerance: " << tol << "%" << std::endl;
 
