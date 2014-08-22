@@ -68,12 +68,12 @@ template <typename T>
 bool iszero(T x)
 {
 #ifdef FP_ZERO
-    return boost::math::fpclassify(x) == FP_ZERO;
+    return (boost::math::fpclassify)(x) == FP_ZERO;
     // Alternatively, we could use std::fpclassify (but this is available from ISO C99)
     //return std::fpclassify(x) == FP_ZERO;
 #else
-    return = ((x < 0) ? bool(-x < (std::numeric_limits<T>::min)())
-                      : bool(+x < (std::numeric_limits<T>::min)()));
+    return ((x < 0) ? bool(-x < (std::numeric_limits<T>::min)())
+                    : bool(+x < (std::numeric_limits<T>::min)()));
 #endif // FP_ZERO
 }
 
@@ -112,7 +112,7 @@ bool check_probabilities(char const* function, std::vector<RealT> const& probabi
     {
         if (probabilities[i] < 0
             || probabilities[i] > 1
-            || !boost::math::isfinite(probabilities[i]))
+            || !(boost::math::isfinite)(probabilities[i]))
         {
             *presult = policies::raise_domain_error<RealT>(function,
                                                            "The elements of parameter \"probabilities\" must be >= 0 and <= 1, but at least one of them was: %1%.",
@@ -142,7 +142,7 @@ bool check_rates(char const* function, std::vector<RealT> const& rates, RealT* p
     for (std::size_t i = 0; i < n; ++i)
     {
         if (rates[i] <= 0
-            || !boost::math::isfinite(rates[i]))
+            || !(boost::math::isfinite)(rates[i]))
         {
             *presult = policies::raise_domain_error<RealT>(function,
                                                            "The elements of parameter \"rates\" must be > 0, but at least one of them is: %1%.",
@@ -173,7 +173,7 @@ bool check_dist(char const* function, std::vector<RealT> const& probabilities, s
 template <typename RealT, typename PolicyT>
 bool check_x(char const* function, RealT x, RealT* presult, PolicyT const& pol)
 {
-    if (x < 0 || boost::math::isnan(x))
+    if (x < 0 || (boost::math::isnan)(x))
     {
         *presult = policies::raise_domain_error<RealT>(function, "The random variable must be >= 0, but is: %1%.", x, pol);
         return false;
@@ -184,7 +184,7 @@ bool check_x(char const* function, RealT x, RealT* presult, PolicyT const& pol)
 template <typename RealT, typename PolicyT>
 bool check_probability(char const* function, RealT p, RealT* presult, PolicyT const& pol)
 {
-    if (p < 0 || p > 1 || boost::math::isnan(p))
+    if (p < 0 || p > 1 || (boost::math::isnan)(p))
     {
         *presult = policies::raise_domain_error<RealT>(function, "The probability be >= 0 and <= 1, but is: %1%.", p, pol);
         return false;
@@ -470,7 +470,7 @@ RealT variance(hyperexponential_distribution<RealT, PolicyT> const& dist)
         result += probs[i]/(rates[i]*rates[i]);
     }
 
-    const RealT mean = mean(dist);
+    const RealT mean = boost::math::mean(dist);
 
     result = 2.0*result-mean*mean;
 
