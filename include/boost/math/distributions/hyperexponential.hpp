@@ -551,7 +551,7 @@ RealT kurtosis_excess(hyperexponential_distribution<RealT,PolicyT> const& dist)
 }
 
 template <typename RealT, typename PolicyT>
-RealT mode(hyperexponential_distribution<RealT,PolicyT> const& dist)
+RealT mode(hyperexponential_distribution<RealT,PolicyT> const& /*dist*/)
 {
     return 0;
 }
