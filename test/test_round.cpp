@@ -123,6 +123,86 @@ void check_modf_result(T a, T fract, U ipart)
 }
 
 template <class T>
+void test_round_number(T arg)
+{
+   BOOST_MATH_STD_USING
+#ifdef BOOST_HAS_LONG_LONG
+   using boost::math::llround;  using boost::math::lltrunc;
+#endif
+
+   T r = round(arg);
+   check_within_half(arg, r);
+   r = trunc(arg);
+   check_trunc_result(arg, r);
+   T frac = modf(arg, &r);
+   check_modf_result(arg, frac, r);
+
+   if(abs(r) < (std::numeric_limits<int>::max)())
+   {
+      int i = iround(arg);
+      check_within_half(arg, i);
+      i = itrunc(arg);
+      check_trunc_result(arg, i);
+      r = modf(arg, &i);
+      check_modf_result(arg, r, i);
+   }
+   if(std::numeric_limits<T>::digits >= std::numeric_limits<int>::digits)
+   {
+      int si = iround(static_cast<T>((std::numeric_limits<int>::max)()));
+      check_within_half(static_cast<T>((std::numeric_limits<int>::max)()), si);
+      si = iround(static_cast<T>((std::numeric_limits<int>::min)()));
+      check_within_half(static_cast<T>((std::numeric_limits<int>::min)()), si);
+      si = itrunc(static_cast<T>((std::numeric_limits<int>::max)()));
+      check_trunc_result(static_cast<T>((std::numeric_limits<int>::max)()), si);
+      si = itrunc(static_cast<T>((std::numeric_limits<int>::min)()));
+      check_trunc_result(static_cast<T>((std::numeric_limits<int>::min)()), si);
+   }
+   if(abs(r) < (std::numeric_limits<long>::max)())
+   {
+      long l = lround(arg);
+      check_within_half(arg, l);
+      l = ltrunc(arg);
+      check_trunc_result(arg, l);
+      r = modf(arg, &l);
+      check_modf_result(arg, r, l);
+   }
+   if(std::numeric_limits<T>::digits >= std::numeric_limits<long>::digits)
+   {
+      long k = lround(static_cast<T>((std::numeric_limits<long>::max)()));
+      check_within_half(static_cast<T>((std::numeric_limits<long>::max)()), k);
+      k = lround(static_cast<T>((std::numeric_limits<long>::min)()));
+      check_within_half(static_cast<T>((std::numeric_limits<long>::min)()), k);
+      k = ltrunc(static_cast<T>((std::numeric_limits<long>::max)()));
+      check_trunc_result(static_cast<T>((std::numeric_limits<long>::max)()), k);
+      k = ltrunc(static_cast<T>((std::numeric_limits<long>::min)()));
+      check_trunc_result(static_cast<T>((std::numeric_limits<long>::min)()), k);
+   }
+
+#ifdef BOOST_HAS_LONG_LONG
+   if(abs(r) < (std::numeric_limits<boost::long_long_type>::max)())
+   {
+      boost::long_long_type ll = llround(arg);
+      check_within_half(arg, ll);
+      ll = lltrunc(arg);
+      check_trunc_result(arg, ll);
+      r = modf(arg, &ll);
+      check_modf_result(arg, r, ll);
+   }
+   if(std::numeric_limits<T>::digits >= std::numeric_limits<boost::long_long_type>::digits)
+   {
+      boost::long_long_type j = llround(static_cast<T>((std::numeric_limits<boost::long_long_type>::max)()));
+      check_within_half(static_cast<T>((std::numeric_limits<boost::long_long_type>::max)()), j);
+      j = llround(static_cast<T>((std::numeric_limits<boost::long_long_type>::min)()));
+      check_within_half(static_cast<T>((std::numeric_limits<boost::long_long_type>::min)()), j);
+      j = lltrunc(static_cast<T>((std::numeric_limits<boost::long_long_type>::max)()));
+      check_trunc_result(static_cast<T>((std::numeric_limits<boost::long_long_type>::max)()), j);
+      j = lltrunc(static_cast<T>((std::numeric_limits<boost::long_long_type>::min)()));
+      check_trunc_result(static_cast<T>((std::numeric_limits<boost::long_long_type>::min)()), j);
+   }
+#endif
+}
+
+template <class T>
 void test_round(T, const char* name )
 {
    BOOST_MATH_STD_USING
@@ -135,76 +215,7 @@ void test_round(T, const char* name )
    for(int i = 0; i < 1000; ++i)
    {
       T arg = get_random<T>();
-      T r = round(arg);
-      check_within_half(arg, r);
-      r = trunc(arg);
-      check_trunc_result(arg, r);
-      T frac = modf(arg, &r);
-      check_modf_result(arg, frac, r);
-
-      if(abs(r) < (std::numeric_limits<int>::max)())
-      {
-         int i = iround(arg);
-         check_within_half(arg, i);
-         i = itrunc(arg);
-         check_trunc_result(arg, i);
-         r = modf(arg, &i);
-         check_modf_result(arg, r, i);
-      }
-      if(std::numeric_limits<T>::digits >= std::numeric_limits<int>::digits)
-      {
-         int si = iround(static_cast<T>((std::numeric_limits<int>::max)()));
-         check_within_half(static_cast<T>((std::numeric_limits<int>::max)()), si);
-         si = iround(static_cast<T>((std::numeric_limits<int>::min)()));
-         check_within_half(static_cast<T>((std::numeric_limits<int>::min)()), si);
-         si = itrunc(static_cast<T>((std::numeric_limits<int>::max)()));
-         check_trunc_result(static_cast<T>((std::numeric_limits<int>::max)()), si);
-         si = itrunc(static_cast<T>((std::numeric_limits<int>::min)()));
-         check_trunc_result(static_cast<T>((std::numeric_limits<int>::min)()), si);
-      }
-      if(abs(r) < (std::numeric_limits<long>::max)())
-      {
-         long l = lround(arg);
-         check_within_half(arg, l);
-         l = ltrunc(arg);
-         check_trunc_result(arg, l);
-         r = modf(arg, &l);
-         check_modf_result(arg, r, l);
-      }
-      if(std::numeric_limits<T>::digits >= std::numeric_limits<long>::digits)
-      {
-         long k = lround(static_cast<T>((std::numeric_limits<long>::max)()));
-         check_within_half(static_cast<T>((std::numeric_limits<long>::max)()), k);
-         k = lround(static_cast<T>((std::numeric_limits<long>::min)()));
-         check_within_half(static_cast<T>((std::numeric_limits<long>::min)()), k);
-         k = ltrunc(static_cast<T>((std::numeric_limits<long>::max)()));
-         check_trunc_result(static_cast<T>((std::numeric_limits<long>::max)()), k);
-         k = ltrunc(static_cast<T>((std::numeric_limits<long>::min)()));
-         check_trunc_result(static_cast<T>((std::numeric_limits<long>::min)()), k);
-      }
-
-#ifdef BOOST_HAS_LONG_LONG
-      if(abs(r) < (std::numeric_limits<boost::long_long_type>::max)())
-      {
-         boost::long_long_type ll = llround(arg);
-         check_within_half(arg, ll);
-         ll = lltrunc(arg);
-         check_trunc_result(arg, ll);
-         r = modf(arg, &ll);
-         check_modf_result(arg, r, ll);
-      }
-      if(std::numeric_limits<T>::digits >= std::numeric_limits<boost::long_long_type>::digits)
-      {
-         boost::long_long_type j = llround(static_cast<T>((std::numeric_limits<boost::long_long_type>::max)()));
-         check_within_half(static_cast<T>((std::numeric_limits<boost::long_long_type>::max)()), j);
-         j = llround(static_cast<T>((std::numeric_limits<boost::long_long_type>::min)()));
-         check_within_half(static_cast<T>((std::numeric_limits<boost::long_long_type>::min)()), j);
-         j = lltrunc(static_cast<T>((std::numeric_limits<boost::long_long_type>::max)()));
-         check_trunc_result(static_cast<T>((std::numeric_limits<boost::long_long_type>::max)()), j);
-         j = lltrunc(static_cast<T>((std::numeric_limits<boost::long_long_type>::min)()));
-         check_trunc_result(static_cast<T>((std::numeric_limits<boost::long_long_type>::min)()), j);
-      }
-#endif
+      test_round_number<T>(arg);
    }
    //
    // Finish off by testing the error handlers:
