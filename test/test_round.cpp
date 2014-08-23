@@ -371,10 +371,66 @@ BOOST_AUTO_TEST_CASE( test_main )
       "not available at all, or because they are too inaccurate for these tests "
       "to pass.</note>" << std::cout;
 #endif
-   
+
+   // test rounding of direct predecessor/successor of 0.5/-0.5 for float and double
+   test_round_number(-0.4999999701976776123046875f);
+   BOOST_CHECK_EQUAL(boost::math::round(-0.4999999701976776123046875f), 0.0f);
+
+   test_round_number(0.4999999701976776123046875f);
+   BOOST_CHECK_EQUAL(boost::math::round(0.4999999701976776123046875f), 0.0f);
+
+   BOOST_CHECK_EQUAL(boost::math::round(-0.499999999999999944488848768742172978818416595458984375), 0.0);
+   test_round_number(-0.499999999999999944488848768742172978818416595458984375);
+
+   BOOST_CHECK_EQUAL(boost::math::round(0.499999999999999944488848768742172978818416595458984375), 0.0);
+   test_round_number(0.499999999999999944488848768742172978818416595458984375);
+
+   // test rounding of integer numbers on the edge of the float/double mantissa width
+   BOOST_CHECK_EQUAL(boost::math::round(-16777215.0f), -16777215.0f);
+   test_round_number(-16777215.0f);
+
+   BOOST_CHECK_EQUAL(boost::math::round(-16777213.0f), -16777213.0f);
+   test_round_number(-16777213.0f);
+
+   BOOST_CHECK_EQUAL(boost::math::round(-8388611.0f), -8388611.0f);
+   test_round_number(-8388611.0f);
+
+   BOOST_CHECK_EQUAL(boost::math::round(-8388609.0f), -8388609.0f);
+   test_round_number(-8388609.0f);
+
+   BOOST_CHECK_EQUAL(boost::math::round(8388609.0f), 8388609.0f);
+   test_round_number(8388609.0f);
+
+   BOOST_CHECK_EQUAL(boost::math::round(8388611.0f), 8388611.0f);
+   test_round_number(8388611.0f);
+
+   BOOST_CHECK_EQUAL(boost::math::round(16777213.0f), 16777213.0f);
+   test_round_number(16777213.0f);
+
+   BOOST_CHECK_EQUAL(boost::math::round(16777215.0f), 16777215.0f);
+   test_round_number(16777215.0f);
+
+   BOOST_CHECK_EQUAL(boost::math::round(-9007199254740993.0), -9007199254740993.0);
+   test_round_number(-9007199254740993.0);
+
+   BOOST_CHECK_EQUAL(boost::math::round(-9007199254740991.0), -9007199254740991.0);
+   test_round_number(-9007199254740991.0);
+
+   BOOST_CHECK_EQUAL(boost::math::round(-4503599627370499.0), -4503599627370499.0);
+   test_round_number(-4503599627370499.0);
+
+   BOOST_CHECK_EQUAL(boost::math::round(-4503599627370497.0), -4503599627370497.0);
+   test_round_number(-4503599627370497.0);
+
+   BOOST_CHECK_EQUAL(boost::math::round(4503599627370497.0), 4503599627370497.0);
+   test_round_number(4503599627370497.0);
+
+   BOOST_CHECK_EQUAL(boost::math::round(4503599627370499.0), 4503599627370499.0);
+   test_round_number(4503599627370499.0);
+
+   BOOST_CHECK_EQUAL(boost::math::round(9007199254740991.0), 9007199254740991.0);
+   test_round_number(9007199254740991.0);
+
+   BOOST_CHECK_EQUAL(boost::math::round(9007199254740993.0), 9007199254740993.0);
+   test_round_number(9007199254740993.0);
 }
-
-
-
-
-
