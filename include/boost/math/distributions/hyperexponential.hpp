@@ -274,6 +274,8 @@ class hyperexponential_distribution
     : probs_(prob_first, prob_last),
       rates_(rate_first, rate_last)
     {
+        hyperexp_detail::normalize(probs_);
+
         RealT err;
         hyperexp_detail::check_dist("boost::math::hyperexponential_distribution<%1%>::hyperexponential_distribution",
                                     probs_,
