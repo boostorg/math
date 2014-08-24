@@ -289,8 +289,6 @@ class hyperexponential_distribution
     : probs_(boost::begin(prob_range), boost::end(prob_range)),
       rates_(boost::begin(rate_range), boost::end(rate_range))
     {
-        assert(probs_.size() == rates_.size());
-
         hyperexp_detail::normalize(probs_);
 
         RealT err;
