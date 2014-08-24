@@ -360,10 +360,11 @@ RealT pdf(hyperexponential_distribution<RealT, PolicyT> const& dist, RealT const
 
     for (std::size_t i = 0; i < n; ++i)
     {
-        //const exponential_distribution<RealT,PolicyT> exp(rates[i]);
+        //result += probs[i]*rates[i]*std::exp(-rates[i]*x);
 
-        //result += probs[i]*pdf(exp, x);
-        result += probs[i]*rates[i]*std::exp(-rates[i]*x);
+        const exponential_distribution<RealT,PolicyT> exp(rates[i]);
+
+        result += probs[i]*pdf(exp, x);
     }
 
     return result;
