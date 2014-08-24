@@ -20,7 +20,11 @@
 #include <iostream>
 #include <vector>
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 typedef boost::mpl::list<float, double, long double, boost::math::concepts::real_concept> test_types;
+#else
+typedef boost::mpl::list<float, double> test_types;
+#endif
 
 template <typename RealT>
 RealT make_tolerance()
