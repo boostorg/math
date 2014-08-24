@@ -33,6 +33,10 @@
 #include <utility>
 #include <vector>
 
+#ifdef BOOST_MSVC
+#pragma warning (push)
+#pragma warning(disable:4127) // conditional expression is constant
+#endif
 
 namespace boost { namespace math {
 
@@ -483,7 +487,7 @@ template <typename RealT, typename PolicyT>
 RealT skewness(hyperexponential_distribution<RealT,PolicyT> const& dist)
 {
     // (6(\sum_{i=1}^n\frac{p_i}{\lambda_i^3}) - (3(2(\sum_{i=1}^n\frac{p_i}{\lambda_i^2) - (\sum_{i=1}^n\frac{p_i}{\lambda_i})^2) + (\sum_{i=1}^n\frac{p_i}{\lambda_i})^2)(\sum_{i=1}^n\frac{p_i}{\lambda_i}))/((\sum_{i=1}^n\frac{p_i}{\lambda_i^2})-(\sum_{i=1}^n\frac{p_i}{\lambda_i})^2)^(3/2)
-
+    BOOST_MATH_STD_USING
     const std::size_t n = dist.num_phases();
     const std::vector<RealT> probs = dist.probabilities();
     const std::vector<RealT> rates = dist.rates();
@@ -508,7 +512,7 @@ RealT skewness(hyperexponential_distribution<RealT,PolicyT> const& dist)
     const RealT num = (6.0*s3 - (3.0*(2.0*s2 - s1s1) + s1s1)*s1);
     const RealT den = (2.0*s2 - s1s1);
 
-    return num/std::pow(den, 1.5);
+    return num / pow(den, static_cast<RealT>(1.5));
 }
 
 template <typename RealT, typename PolicyT>
@@ -560,6 +564,9 @@ RealT mode(hyperexponential_distribution<RealT,PolicyT> const& /*dist*/)
 
 }} // namespace boost::math
 
+#ifdef BOOST_MSVC
+#pragma warning (pop)
+#endif
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to
 // keep compilers that support two-phase lookup happy.
