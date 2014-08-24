@@ -56,7 +56,7 @@ RealT make_tolerance()
     }
 */
 
-    const RealT tol = 1e-4;
+   const RealT tol = boost::math::tools::epsilon<RealT>() * 100 * 100;
 
     //std::cout << "[" << __func__ << "] Tolerance: " << tol << "%" << std::endl;
 

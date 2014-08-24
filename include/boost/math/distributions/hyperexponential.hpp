@@ -157,11 +157,12 @@ bool check_rates(char const* function, std::vector<RealT> const& rates, RealT* p
 template <typename RealT, typename PolicyT>
 bool check_dist(char const* function, std::vector<RealT> const& probabilities, std::vector<RealT> const& rates, RealT* presult, PolicyT const& pol)
 {
+    BOOST_MATH_STD_USING
     if (probabilities.size() != rates.size())
     {
         *presult = policies::raise_domain_error<RealT>(function,
                                                        "The parameters \"probabilities\" and \"rates\" must have the same length, but their size differ by: %1%.",
-                                                       std::abs(static_cast<RealT>(probabilities.size())-static_cast<RealT>(rates.size())),
+                                                       fabs(static_cast<RealT>(probabilities.size())-static_cast<RealT>(rates.size())),
                                                        pol);
         return false;
     }
@@ -347,6 +348,7 @@ std::pair<RealT,RealT> support(hyperexponential_distribution<RealT,PolicyT> cons
 template <typename RealT, typename PolicyT>
 RealT pdf(hyperexponential_distribution<RealT, PolicyT> const& dist, RealT const& x)
 {
+    BOOST_MATH_STD_USING
     RealT result = 0;
 
     if (!hyperexp_detail::check_x("boost::math::pdf(const boost::math::hyperexponential_distribution<%1%>&, %1%)", x, &result, PolicyT()))
@@ -363,7 +365,7 @@ RealT pdf(hyperexponential_distribution<RealT, PolicyT> const& dist, RealT const
         //const exponential_distribution<RealT,PolicyT> exp(rates[i]);
 
         //result += probs[i]*pdf(exp, x);
-        result += probs[i]*rates[i]*std::exp(-rates[i]*x);
+        result += probs[i]*rates[i]*exp(-rates[i]*x);
     }
 
     return result;
