@@ -20,6 +20,7 @@
 #include <iostream>
 #include <vector>
 
+typedef boost::mpl::list<float, double, long double, boost::math::concepts::real_concept> test_types;
 
 template <typename RealT>
 RealT make_tolerance()
@@ -55,39 +56,44 @@ RealT make_tolerance()
         tol *= 20; // real_concept special functions are less accurate
     }
 */
-
-   const RealT tol = boost::math::tools::epsilon<RealT>() * 100 * 100;
+   // Current test data is limited to double precision:
+   const RealT tol = (std::max)(static_cast<RealT>(boost::math::tools::epsilon<double>()), boost::math::tools::epsilon<RealT>()) * 100 * 100;
 
     //std::cout << "[" << __func__ << "] Tolerance: " << tol << "%" << std::endl;
 
     return tol;
 }
 
-template <typename RealT>
-void test_range()
+BOOST_AUTO_TEST_CASE_TEMPLATE(range, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
-    const std::size_t n = sizeof(probs)/sizeof(RealT);
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
+    const std::size_t n = sizeof(probs) / sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
     std::pair<RealT,RealT> res;
     res = boost::math::range(dist);
 
-    BOOST_CHECK_CLOSE( res.first, 0, tol );
-    BOOST_CHECK_EQUAL( res.second, std::numeric_limits<RealT>::infinity() );
+    BOOST_CHECK_CLOSE( res.first, static_cast<RealT>(0), tol );
+    if(std::numeric_limits<RealT>::has_infinity)
+    {
+       BOOST_CHECK_EQUAL(res.second, std::numeric_limits<RealT>::infinity());
+    }
+    else
+    {
+       BOOST_CHECK_EQUAL(res.second, boost::math::tools::max_value<RealT>());
+    }
 }
 
-template <typename RealT>
-void test_support()
+BOOST_AUTO_TEST_CASE_TEMPLATE(support, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1), static_cast<RealT>(1.5L) };
     const std::size_t n = sizeof(probs)/sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
@@ -99,13 +105,12 @@ void test_support()
     BOOST_CHECK_CLOSE( res.second, boost::math::tools::max_value<RealT>(), tol );
 }
 
-template <typename RealT>
-void test_pdf()
+BOOST_AUTO_TEST_CASE_TEMPLATE(pdf, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1), static_cast<RealT>(1.5) };
     const std::size_t n = sizeof(probs)/sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
@@ -118,13 +123,12 @@ void test_pdf()
     BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(4)), static_cast<RealT>(0.02088728412278129), tol );
 }
 
-template <typename RealT>
-void test_cdf()
+BOOST_AUTO_TEST_CASE_TEMPLATE(cdf, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
     const std::size_t n = sizeof(probs)/sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
@@ -138,13 +142,12 @@ void test_cdf()
 }
 
 
-template <typename RealT>
-void test_quantile()
+BOOST_AUTO_TEST_CASE_TEMPLATE(quantile, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
     const std::size_t n = sizeof(probs)/sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
@@ -157,13 +160,12 @@ void test_quantile()
     BOOST_CHECK_CLOSE( boost::math::quantile(dist, static_cast<RealT>(0.966198875597724)), static_cast<RealT>(3.9999999999999964), tol );
 }
 
-template <typename RealT>
-void test_ccdf()
+BOOST_AUTO_TEST_CASE_TEMPLATE(ccdf, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
     const std::size_t n = sizeof(probs)/sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
@@ -177,14 +179,13 @@ void test_ccdf()
 }
 
 
-template <typename RealT>
-void test_cquantile()
+BOOST_AUTO_TEST_CASE_TEMPLATE(cquantile, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
-    const std::size_t n = sizeof(probs)/sizeof(RealT);
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
+    const std::size_t n = sizeof(probs) / sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
@@ -196,14 +197,13 @@ void test_cquantile()
     BOOST_CHECK_CLOSE( boost::math::quantile(boost::math::complement(dist, static_cast<RealT>(0.03380112440227598))), static_cast<RealT>(3.9999999999999964), tol );
 }
 
-template <typename RealT>
-void test_mean()
+BOOST_AUTO_TEST_CASE_TEMPLATE(mean, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
-    const std::size_t n = sizeof(probs)/sizeof(RealT);
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
+    const std::size_t n = sizeof(probs) / sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
@@ -211,14 +211,13 @@ void test_mean()
     BOOST_CHECK_CLOSE( boost::math::mean(dist), static_cast<RealT>(1.0333333333333332), tol );
 }
 
-template <typename RealT>
-void test_variance()
+BOOST_AUTO_TEST_CASE_TEMPLATE(variance, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
-    const std::size_t n = sizeof(probs)/sizeof(RealT);
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
+    const std::size_t n = sizeof(probs) / sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
@@ -226,14 +225,13 @@ void test_variance()
     BOOST_CHECK_CLOSE( boost::math::variance(dist), static_cast<RealT>(1.5766666666666673), tol );
 }
 
-template <typename RealT>
-void test_kurtosis()
+BOOST_AUTO_TEST_CASE_TEMPLATE(kurtosis, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
-    const std::size_t n = sizeof(probs)/sizeof(RealT);
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
+    const std::size_t n = sizeof(probs) / sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
@@ -242,14 +240,13 @@ void test_kurtosis()
     BOOST_CHECK_CLOSE( boost::math::kurtosis_excess(dist), static_cast<RealT>(19.75073861680871)-static_cast<RealT>(3), tol );
 }
 
-template <typename RealT>
-void test_skewness()
+BOOST_AUTO_TEST_CASE_TEMPLATE(skewness, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
-    const std::size_t n = sizeof(probs)/sizeof(RealT);
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
+    const std::size_t n = sizeof(probs) / sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
@@ -257,91 +254,16 @@ void test_skewness()
     BOOST_CHECK_CLOSE( boost::math::skewness(dist), static_cast<RealT>(3.181138744996378), tol );
 }
 
-template <typename RealT>
-void test_mode()
+BOOST_AUTO_TEST_CASE_TEMPLATE(mode, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-    const RealT probs[] = {0.2, 0.3, 0.5};
-    const RealT rates[] = {0.5, 1.0, 1.5};
-    const std::size_t n = sizeof(probs)/sizeof(RealT);
+    const RealT probs[] = { static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L) };
+    const RealT rates[] = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
+    const std::size_t n = sizeof(probs) / sizeof(RealT);
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
     BOOST_CHECK_CLOSE( boost::math::mode(dist), static_cast<RealT>(0), tol );
-}
-
-
-BOOST_AUTO_TEST_CASE( range )
-{
-    test_range<float>();
-    test_range<double>();
-    //test_range<boost::math::concepts::real_concept>();
-}
-
-BOOST_AUTO_TEST_CASE( support )
-{
-    test_support<float>();
-    test_support<double>();
-}
-
-BOOST_AUTO_TEST_CASE( pdf )
-{
-    test_pdf<float>();
-    test_pdf<double>();
-}
-
-BOOST_AUTO_TEST_CASE( cdf )
-{
-    test_cdf<float>();
-    test_cdf<double>();
-}
-
-BOOST_AUTO_TEST_CASE( quantile )
-{
-    test_quantile<float>();
-    test_quantile<double>();
-}
-
-BOOST_AUTO_TEST_CASE( ccdf )
-{
-    test_ccdf<float>();
-    test_ccdf<double>();
-}
-
-BOOST_AUTO_TEST_CASE( cquantile )
-{
-    test_cquantile<float>();
-    test_cquantile<double>();
-}
-
-BOOST_AUTO_TEST_CASE( mean )
-{
-    test_mean<float>();
-    test_mean<double>();
-}
-
-BOOST_AUTO_TEST_CASE( variance )
-{
-    test_variance<float>();
-    test_variance<double>();
-}
-
-BOOST_AUTO_TEST_CASE( kurtosis )
-{
-    test_kurtosis<float>();
-    test_kurtosis<double>();
-}
-
-BOOST_AUTO_TEST_CASE( skewness )
-{
-    test_skewness<float>();
-    test_skewness<double>();
-}
-
-BOOST_AUTO_TEST_CASE( mode )
-{
-    test_mode<float>();
-    test_mode<double>();
 }
 

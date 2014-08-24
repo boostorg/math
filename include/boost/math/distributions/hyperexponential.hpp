@@ -478,7 +478,7 @@ RealT variance(hyperexponential_distribution<RealT, PolicyT> const& dist)
 
     const RealT mean = boost::math::mean(dist);
 
-    result = 2.0*result-mean*mean;
+    result = 2*result-mean*mean;
 
     return result;
 }
@@ -509,8 +509,8 @@ RealT skewness(hyperexponential_distribution<RealT,PolicyT> const& dist)
 
     const RealT s1s1 = s1*s1;
 
-    const RealT num = (6.0*s3 - (3.0*(2.0*s2 - s1s1) + s1s1)*s1);
-    const RealT den = (2.0*s2 - s1s1);
+    const RealT num = (6*s3 - (3*(2*s2 - s1s1) + s1s1)*s1);
+    const RealT den = (2*s2 - s1s1);
 
     return num / pow(den, static_cast<RealT>(1.5));
 }
@@ -544,8 +544,8 @@ RealT kurtosis(hyperexponential_distribution<RealT,PolicyT> const& dist)
 
     const RealT s1s1 = s1*s1;
 
-    const RealT num = (24.0*s4 - 24.0*s3*s1 + 3.0*(2.0*(2.0*s2 - s1s1) + s1s1)*s1s1);
-    const RealT den = (2.0*s2 - s1s1);
+    const RealT num = (24*s4 - 24*s3*s1 + 3*(2*(2*s2 - s1s1) + s1s1)*s1s1);
+    const RealT den = (2*s2 - s1s1);
 
     return num/(den*den);
 }
