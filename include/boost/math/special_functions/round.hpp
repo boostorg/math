@@ -26,7 +26,10 @@ inline typename tools::promote_args<T>::type round(const T& v, const Policy& pol
       typedef typename tools::promote_args<T>::type result_type;
    if(!(boost::math::isfinite)(v))
       return policies::raise_rounding_error("boost::math::round<%1%>(%1%)", 0, static_cast<result_type>(v), static_cast<result_type>(v), pol);
-
+   //
+   // The logic here is rather convoluted, but avoids a number of traps,
+   // see discussion here https://github.com/boostorg/math/pull/8
+   //
    if (-0.5 < v && v < 0.5)
    {
       // special case to avoid rounding error on the direct
