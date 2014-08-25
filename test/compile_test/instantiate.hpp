@@ -66,6 +66,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<gamma_distribution<RealType> > >();
    function_requires<DistributionConcept<geometric_distribution<RealType> > >();
    function_requires<DistributionConcept<hypergeometric_distribution<RealType> > >();
+   function_requires<DistributionConcept<hyperexponential_distribution<RealType> > >();
    function_requires<DistributionConcept<inverse_chi_squared_distribution<RealType> > >();
    function_requires<DistributionConcept<inverse_gamma_distribution<RealType> > >();
    function_requires<DistributionConcept<inverse_gaussian_distribution<RealType> > >();

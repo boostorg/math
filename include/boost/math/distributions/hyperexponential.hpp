@@ -33,6 +33,10 @@
 #include <utility>
 #include <vector>
 
+#ifdef BOOST_MSVC
+#pragma warning (push)
+#pragma warning(disable:4127) // conditional expression is constant
+#endif
 
 namespace boost { namespace math {
 
@@ -157,11 +161,12 @@ bool check_rates(char const* function, std::vector<RealT> const& rates, RealT* p
 template <typename RealT, typename PolicyT>
 bool check_dist(char const* function, std::vector<RealT> const& probabilities, std::vector<RealT> const& rates, RealT* presult, PolicyT const& pol)
 {
+    BOOST_MATH_STD_USING
     if (probabilities.size() != rates.size())
     {
         *presult = policies::raise_domain_error<RealT>(function,
                                                        "The parameters \"probabilities\" and \"rates\" must have the same length, but their size differ by: %1%.",
-                                                       std::abs(static_cast<RealT>(probabilities.size())-static_cast<RealT>(rates.size())),
+                                                       fabs(static_cast<RealT>(probabilities.size())-static_cast<RealT>(rates.size())),
                                                        pol);
         return false;
     }
@@ -274,8 +279,6 @@ class hyperexponential_distribution
     : probs_(prob_first, prob_last),
       rates_(rate_first, rate_last)
     {
-        hyperexp_detail::normalize(probs_);
-
         RealT err;
         hyperexp_detail::check_dist("boost::math::hyperexponential_distribution<%1%>::hyperexponential_distribution",
                                     probs_,
@@ -289,6 +292,8 @@ class hyperexponential_distribution
     : probs_(boost::begin(prob_range), boost::end(prob_range)),
       rates_(boost::begin(rate_range), boost::end(rate_range))
     {
+        assert(probs_.size() == rates_.size());
+
         hyperexp_detail::normalize(probs_);
 
         RealT err;
@@ -347,6 +352,7 @@ std::pair<RealT,RealT> support(hyperexponential_distribution<RealT,PolicyT> cons
 template <typename RealT, typename PolicyT>
 RealT pdf(hyperexponential_distribution<RealT, PolicyT> const& dist, RealT const& x)
 {
+    BOOST_MATH_STD_USING
     RealT result = 0;
 
     if (!hyperexp_detail::check_x("boost::math::pdf(const boost::math::hyperexponential_distribution<%1%>&, %1%)", x, &result, PolicyT()))
@@ -360,11 +366,10 @@ RealT pdf(hyperexponential_distribution<RealT, PolicyT> const& dist, RealT const
 
     for (std::size_t i = 0; i < n; ++i)
     {
-        //result += probs[i]*rates[i]*std::exp(-rates[i]*x);
+        //const exponential_distribution<RealT,PolicyT> exp(rates[i]);
 
-        const exponential_distribution<RealT,PolicyT> exp(rates[i]);
-
-        result += probs[i]*pdf(exp, x);
+        //result += probs[i]*pdf(exp, x);
+        result += probs[i]*rates[i]*exp(-rates[i]*x);
     }
 
     return result;
@@ -473,7 +478,7 @@ RealT variance(hyperexponential_distribution<RealT, PolicyT> const& dist)
 
     const RealT mean = boost::math::mean(dist);
 
-    result = 2.0*result-mean*mean;
+    result = 2*result-mean*mean;
 
     return result;
 }
@@ -482,7 +487,7 @@ template <typename RealT, typename PolicyT>
 RealT skewness(hyperexponential_distribution<RealT,PolicyT> const& dist)
 {
     // (6(\sum_{i=1}^n\frac{p_i}{\lambda_i^3}) - (3(2(\sum_{i=1}^n\frac{p_i}{\lambda_i^2) - (\sum_{i=1}^n\frac{p_i}{\lambda_i})^2) + (\sum_{i=1}^n\frac{p_i}{\lambda_i})^2)(\sum_{i=1}^n\frac{p_i}{\lambda_i}))/((\sum_{i=1}^n\frac{p_i}{\lambda_i^2})-(\sum_{i=1}^n\frac{p_i}{\lambda_i})^2)^(3/2)
-
+    BOOST_MATH_STD_USING
     const std::size_t n = dist.num_phases();
     const std::vector<RealT> probs = dist.probabilities();
     const std::vector<RealT> rates = dist.rates();
@@ -504,10 +509,10 @@ RealT skewness(hyperexponential_distribution<RealT,PolicyT> const& dist)
 
     const RealT s1s1 = s1*s1;
 
-    const RealT num = (6.0*s3 - (3.0*(2.0*s2 - s1s1) + s1s1)*s1);
-    const RealT den = (2.0*s2 - s1s1);
+    const RealT num = (6*s3 - (3*(2*s2 - s1s1) + s1s1)*s1);
+    const RealT den = (2*s2 - s1s1);
 
-    return num/std::pow(den, 1.5);
+    return num / pow(den, static_cast<RealT>(1.5));
 }
 
 template <typename RealT, typename PolicyT>
@@ -539,8 +544,8 @@ RealT kurtosis(hyperexponential_distribution<RealT,PolicyT> const& dist)
 
     const RealT s1s1 = s1*s1;
 
-    const RealT num = (24.0*s4 - 24.0*s3*s1 + 3.0*(2.0*(2.0*s2 - s1s1) + s1s1)*s1s1);
-    const RealT den = (2.0*s2 - s1s1);
+    const RealT num = (24*s4 - 24*s3*s1 + 3*(2*(2*s2 - s1s1) + s1s1)*s1s1);
+    const RealT den = (2*s2 - s1s1);
 
     return num/(den*den);
 }
@@ -559,6 +564,9 @@ RealT mode(hyperexponential_distribution<RealT,PolicyT> const& /*dist*/)
 
 }} // namespace boost::math
 
+#ifdef BOOST_MSVC
+#pragma warning (pop)
+#endif
 // This include must be at the end, *after* the accessors
 // for this distribution have been defined, in order to
 // keep compilers that support two-phase lookup happy.
