@@ -10,6 +10,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/round.hpp>
+#include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/special_functions/modf.hpp>
 #include <boost/math/special_functions/sign.hpp>
@@ -356,6 +357,35 @@ void test_round(T, const char* name )
    BOOST_CHECK_EQUAL(lltrunc(big, pol), (std::numeric_limits<long long>::max)());
    BOOST_CHECK_EQUAL(lltrunc(-big, pol), (std::numeric_limits<long long>::min)());
 #endif
+
+   //
+   // Special cases that we know can go bad:
+   //
+   T half = 0.5f;
+   half = boost::math::float_prior(half);
+   test_round_number(half);
+   half = -0.5f;
+   half = boost::math::float_next(half);
+   test_round_number(half);
+
+   if(std::numeric_limits<T>::is_specialized)
+   {
+      //
+      // Odd and even integer values:
+      //
+      T val;
+      for(int i = 2; i < std::numeric_limits<T>::max_exponent; ++i)
+      {
+         val = ldexp(T(1), i);
+         test_round_number(val);
+         ++val;
+         test_round_number(val);
+         val = -val;
+         test_round_number(val);
+         ++val;
+         test_round_number(val);
+      }
+   }
 }
 
 BOOST_AUTO_TEST_CASE( test_main )
