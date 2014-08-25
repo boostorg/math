@@ -119,12 +119,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(pdf, RealT, test_types)
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
-    // Mathematica: Table[PDF[HyperexponentialDistribution[{0.2, 0.3, 0.5}, {.5, 1.0, 1.5}], x], {x, 0, 4}]
+    // Mathematica: Table[N[PDF[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}], x], 35], {x, 0, 4}]
     BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(0)), static_cast<RealT>(1.15), tol );
-    BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(1)), static_cast<RealT>(0.3383645184340184), tol );
-    BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(2)), static_cast<RealT>(0.11472883036402601), tol );
-    BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(3)), static_cast<RealT>(0.04558088392888389), tol );
-    BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(4)), static_cast<RealT>(0.02088728412278129), tol );
+    BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(1)), static_cast<RealT>(0.33836451843401841053899743762056570L), tol );
+    BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(2)), static_cast<RealT>(0.11472883036402599696225903724543774L), tol );
+    BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(3)), static_cast<RealT>(0.045580883928883895659238122486617681L), tol );
+    BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(4)), static_cast<RealT>(0.020887284122781292094799231452333314L), tol );
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(cdf, RealT, test_types)
@@ -137,12 +137,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(cdf, RealT, test_types)
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
-    // Mathematica: Table[CDF[HyperexponentialDistribution[{0.2, 0.3, 0.5}, {.5, 1.0, 1.5}], x], {x, 0, 4}]
+    // Mathematica: Table[N[CDF[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}], x], 35], {x, 0, 4}]
     BOOST_CHECK_CLOSE( boost::math::cdf(dist, static_cast<RealT>(0)), static_cast<RealT>(0), tol );
-    BOOST_CHECK_CLOSE( boost::math::cdf(dist, static_cast<RealT>(1)), static_cast<RealT>(0.6567649556318257), tol );
-    BOOST_CHECK_CLOSE( boost::math::cdf(dist, static_cast<RealT>(2)), static_cast<RealT>(0.8609299926107957), tol );
-    BOOST_CHECK_CLOSE( boost::math::cdf(dist, static_cast<RealT>(3)), static_cast<RealT>(0.9348833491908337), tol );
-    BOOST_CHECK_CLOSE( boost::math::cdf(dist, static_cast<RealT>(4)), static_cast<RealT>(0.966198875597724), tol );
+    BOOST_CHECK_CLOSE( boost::math::cdf(dist, static_cast<RealT>(1)), static_cast<RealT>(0.65676495563182570433394272657131939L), tol );
+    BOOST_CHECK_CLOSE( boost::math::cdf(dist, static_cast<RealT>(2)), static_cast<RealT>(0.86092999261079575662302418965093162L), tol );
+    BOOST_CHECK_CLOSE( boost::math::cdf(dist, static_cast<RealT>(3)), static_cast<RealT>(0.93488334919083369807146961400871370L), tol );
+    BOOST_CHECK_CLOSE( boost::math::cdf(dist, static_cast<RealT>(4)), static_cast<RealT>(0.96619887559772402832156211090812241L), tol );
 }
 
 
@@ -156,12 +156,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(quantile, RealT, test_types)
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
-    // Mathematica: Table[Quantile[HyperexponentialDistribution[{0.2, 0.3, 0.5}, {.5, 1.0, 1.5}], p], {p, {0, 0.6567649556318257, 0.8609299926107957, 0.9348833491908337, 0.966198875597724}}]
+    // Mathematica: Table[N[Quantile[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}], p], 35], {p, {0.`35, 0.6567649556318257043339427265713193884067872189124925936717`35, 0.8609299926107957566230241896509316171726985139265620607067`35, 0.9348833491908336980714696140087136988562861627183715044229`35, 0.9661988755977240283215621109081224127091468307592751727719`35}}]
     BOOST_CHECK_CLOSE( boost::math::quantile(dist, static_cast<RealT>(0)), static_cast<RealT>(0), tol );
-    BOOST_CHECK_CLOSE( boost::math::quantile(dist, static_cast<RealT>(0.6567649556318257)), static_cast<RealT>(1.0000000000000036), tol );
-    BOOST_CHECK_CLOSE( boost::math::quantile(dist, static_cast<RealT>(0.8609299926107957)), static_cast<RealT>(1.9999999999999947), tol );
-    BOOST_CHECK_CLOSE( boost::math::quantile(dist, static_cast<RealT>(0.9348833491908337)), static_cast<RealT>(3), tol );
-    BOOST_CHECK_CLOSE( boost::math::quantile(dist, static_cast<RealT>(0.966198875597724)), static_cast<RealT>(3.9999999999999964), tol );
+    BOOST_CHECK_CLOSE( boost::math::quantile(dist, static_cast<RealT>(0.65676495563182570433394272657131939L)), static_cast<RealT>(1), tol );
+    BOOST_CHECK_CLOSE( boost::math::quantile(dist, static_cast<RealT>(0.86092999261079575662302418965093162L)), static_cast<RealT>(2), tol );
+    BOOST_CHECK_CLOSE( boost::math::quantile(dist, static_cast<RealT>(0.93488334919083369807146961400871370L)), static_cast<RealT>(3), tol );
+    BOOST_CHECK_CLOSE( boost::math::quantile(dist, static_cast<RealT>(0.96619887559772402832156211090812241L)), static_cast<RealT>(4), tol );
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(ccdf, RealT, test_types)
@@ -174,12 +174,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(ccdf, RealT, test_types)
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
-    // Mathematica: Table[SurvivalFunction[HyperexponentialDistribution[{0.2, 0.3, 0.5}, {.5, 1.0, 1.5}], x], {x, 0, 4}]
+    // Mathematica: Table[N[SurvivalFunction[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}], x], 35], {x, 0, 4}]
     BOOST_CHECK_CLOSE( boost::math::cdf(boost::math::complement(dist, static_cast<RealT>(0))), static_cast<RealT>(1), tol );
-    BOOST_CHECK_CLOSE( boost::math::cdf(boost::math::complement(dist, static_cast<RealT>(1))), static_cast<RealT>(0.3432350443681743), tol );
-    BOOST_CHECK_CLOSE( boost::math::cdf(boost::math::complement(dist, static_cast<RealT>(2))), static_cast<RealT>(0.13907000738920425), tol );
-    BOOST_CHECK_CLOSE( boost::math::cdf(boost::math::complement(dist, static_cast<RealT>(3))), static_cast<RealT>(0.0651166508091663), tol );
-    BOOST_CHECK_CLOSE( boost::math::cdf(boost::math::complement(dist, static_cast<RealT>(4))), static_cast<RealT>(0.03380112440227598), tol );
+    BOOST_CHECK_CLOSE( boost::math::cdf(boost::math::complement(dist, static_cast<RealT>(1))), static_cast<RealT>(0.34323504436817429566605727342868061L), tol );
+    BOOST_CHECK_CLOSE( boost::math::cdf(boost::math::complement(dist, static_cast<RealT>(2))), static_cast<RealT>(0.13907000738920424337697581034906838L), tol );
+    BOOST_CHECK_CLOSE( boost::math::cdf(boost::math::complement(dist, static_cast<RealT>(3))), static_cast<RealT>(0.065116650809166301928530385991286301L), tol );
+    BOOST_CHECK_CLOSE( boost::math::cdf(boost::math::complement(dist, static_cast<RealT>(4))), static_cast<RealT>(0.033801124402275971678437889091877587L), tol );
 }
 
 
@@ -193,12 +193,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(cquantile, RealT, test_types)
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
-    // Mathematica: Table[SurvivalFunction[HyperexponentialDistribution[{0.2, 0.3, 0.5}, {.5, 1.0, 1.5}], p], {p, {1., 0.3432350443681743, 0.13907000738920425, 0.0651166508091663, 0.03380112440227598}}]
+    // Mathematica: Table[N[InverseSurvivalFunction[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}], p], 35], {p, {1.`35, 0.3432350443681742956660572734286806115932127810875074063283`35, 0.1390700073892042433769758103490683828273014860734379392933`35, 0.0651166508091663019285303859912863011437138372816284955771`35, 0.0338011244022759716784378890918775872908531692407248272281`35}}]
     BOOST_CHECK_CLOSE( boost::math::quantile(boost::math::complement(dist, static_cast<RealT>(1))), static_cast<RealT>(0), tol );
-    BOOST_CHECK_CLOSE( boost::math::quantile(boost::math::complement(dist, static_cast<RealT>(0.3432350443681743))), static_cast<RealT>(1.0000000000000036), tol );
-    BOOST_CHECK_CLOSE( boost::math::quantile(boost::math::complement(dist, static_cast<RealT>(0.13907000738920425))), static_cast<RealT>(1.9999999999999947), tol );
-    BOOST_CHECK_CLOSE( boost::math::quantile(boost::math::complement(dist, static_cast<RealT>(0.0651166508091663))), static_cast<RealT>(3), tol );
-    BOOST_CHECK_CLOSE( boost::math::quantile(boost::math::complement(dist, static_cast<RealT>(0.03380112440227598))), static_cast<RealT>(3.9999999999999964), tol );
+    BOOST_CHECK_CLOSE( boost::math::quantile(boost::math::complement(dist, static_cast<RealT>(0.34323504436817429566605727342868061L))), static_cast<RealT>(1), tol );
+    BOOST_CHECK_CLOSE( boost::math::quantile(boost::math::complement(dist, static_cast<RealT>(0.13907000738920424337697581034906838L))), static_cast<RealT>(2), tol );
+    BOOST_CHECK_CLOSE( boost::math::quantile(boost::math::complement(dist, static_cast<RealT>(0.065116650809166301928530385991286301L))), static_cast<RealT>(3), tol );
+    BOOST_CHECK_CLOSE( boost::math::quantile(boost::math::complement(dist, static_cast<RealT>(0.033801124402275971678437889091877587L))), static_cast<RealT>(4), tol );
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(mean, RealT, test_types)
@@ -211,8 +211,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(mean, RealT, test_types)
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
-    // Mathematica: Mean[HyperexponentialDistribution[{0.2, 0.3, 0.5}, {.5, 1.0, 1.5}]]
-    BOOST_CHECK_CLOSE( boost::math::mean(dist), static_cast<RealT>(1.0333333333333332), tol );
+    // Mathematica: N[Mean[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}]], 35]
+    BOOST_CHECK_CLOSE( boost::math::mean(dist), static_cast<RealT>(1.0333333333333333333333333333333333L), tol );
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(variance, RealT, test_types)
@@ -225,8 +225,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(variance, RealT, test_types)
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
-    // Mathematica: Mean[HyperexponentialDistribution[{0.2, 0.3, 0.5}, {.5, 1.0, 1.5}]]
-    BOOST_CHECK_CLOSE( boost::math::variance(dist), static_cast<RealT>(1.5766666666666673), tol );
+    // Mathematica: N[Variance[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}]], 35]
+    BOOST_CHECK_CLOSE( boost::math::variance(dist), static_cast<RealT>(1.5766666666666666666666666666666667L), tol );
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(kurtosis, RealT, test_types)
@@ -239,9 +239,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(kurtosis, RealT, test_types)
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
-    // Mathematica: Kurtosis[HyperexponentialDistribution[{0.2, 0.3, 0.5}, {.5, 1.0, 1.5}]]
-    BOOST_CHECK_CLOSE( boost::math::kurtosis(dist), static_cast<RealT>(19.75073861680871), tol );
-    BOOST_CHECK_CLOSE( boost::math::kurtosis_excess(dist), static_cast<RealT>(19.75073861680871)-static_cast<RealT>(3), tol );
+    // Mathematica: N[Kurtosis[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}]], 35]
+    BOOST_CHECK_CLOSE( boost::math::kurtosis(dist), static_cast<RealT>(19.750738616808728416968743435138046L), tol );
+    // Mathematica: N[Kurtosis[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}] - 3.`35], 35]
+    BOOST_CHECK_CLOSE( boost::math::kurtosis_excess(dist), static_cast<RealT>(16.750738616808728416968743435138046L), tol );
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(skewness, RealT, test_types)
@@ -254,8 +255,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(skewness, RealT, test_types)
 
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
-    // Mathematica: Skewness[HyperexponentialDistribution[{0.2, 0.3, 0.5}, {.5, 1.0, 1.5}]]
-    BOOST_CHECK_CLOSE( boost::math::skewness(dist), static_cast<RealT>(3.181138744996378), tol );
+    // Mathematica: N[Skewness[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}]], 35]
+    BOOST_CHECK_CLOSE( boost::math::skewness(dist), static_cast<RealT>(3.1811387449963809211146099116375685L), tol );
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(mode, RealT, test_types)
