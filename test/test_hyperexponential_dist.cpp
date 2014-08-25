@@ -237,3 +237,46 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(mode, RealT, test_types)
     BOOST_CHECK_CLOSE( boost::math::mode(dist), static_cast<RealT>(0), tol );
 }
 
+template <class T>
+void f(T t)
+{
+   std::cout << typeid(t).name() << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE(construct)
+{
+   boost::array<double, 3> da1 = { { 0.5, 1, 1.5 } };
+   boost::array<double, 3> da2 = { { 0.25, 0.5, 0.25 } };
+   std::vector<double> v1(da1.begin(), da1.end());
+   std::vector<double> v2(da2.begin(), da2.end());
+
+   std::vector<double> result_v;
+   boost::math::hyperexponential he1(v2, v1);
+   result_v = he1.rates();
+   BOOST_CHECK_EQUAL_COLLECTIONS(v1.begin(), v1.end(), result_v.begin(), result_v.end());
+   result_v = he1.probabilities();
+   BOOST_CHECK_EQUAL_COLLECTIONS(v2.begin(), v2.end(), result_v.begin(), result_v.end());
+
+   boost::math::hyperexponential he2(da2, da1);
+   result_v = he2.rates();
+   BOOST_CHECK_EQUAL_COLLECTIONS(v1.begin(), v1.end(), result_v.begin(), result_v.end());
+   result_v = he2.probabilities();
+   BOOST_CHECK_EQUAL_COLLECTIONS(v2.begin(), v2.end(), result_v.begin(), result_v.end());
+
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+   std::initializer_list<double> il = { 0.25, 0.5, 0.25 };
+   std::initializer_list<double> il2 = { 0.5, 1, 1.5 };
+   boost::math::hyperexponential he3(il, il2);
+   result_v = he3.rates();
+   BOOST_CHECK_EQUAL_COLLECTIONS(v1.begin(), v1.end(), result_v.begin(), result_v.end());
+   result_v = he3.probabilities();
+   BOOST_CHECK_EQUAL_COLLECTIONS(v2.begin(), v2.end(), result_v.begin(), result_v.end());
+
+   boost::math::hyperexponential he4({ 0.25, 0.5, 0.25 }, { 0.5, 1.0, 1.5 });
+   result_v = he4.rates();
+   BOOST_CHECK_EQUAL_COLLECTIONS(v1.begin(), v1.end(), result_v.begin(), result_v.end());
+   result_v = he4.probabilities();
+   BOOST_CHECK_EQUAL_COLLECTIONS(v2.begin(), v2.end(), result_v.begin(), result_v.end());
+#endif
+}
+

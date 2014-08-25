@@ -33,6 +33,10 @@
 #include <utility>
 #include <vector>
 
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+#include <initializer_list>
+#endif
+
 #ifdef BOOST_MSVC
 #pragma warning (push)
 #pragma warning(disable:4127) // conditional expression is constant
@@ -304,6 +308,24 @@ class hyperexponential_distribution
                                     PolicyT());
     }
 
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+    template <typename ArgT>
+         hyperexponential_distribution(const std::initializer_list<ArgT>& l1, const std::initializer_list<ArgT>& l2)
+    : probs_(l1.begin(), l1.end()),
+      rates_(l2.begin(), l2.end())
+    {
+        assert(probs_.size() == rates_.size());
+
+        hyperexp_detail::normalize(probs_);
+
+        RealT err;
+        hyperexp_detail::check_dist("boost::math::hyperexponential_distribution<%1%>::hyperexponential_distribution",
+                                    probs_,
+                                    rates_,
+                                    &err,
+                                    PolicyT());
+    }
+#endif
     public: std::vector<RealT> probabilities() const
     {
         return probs_;
