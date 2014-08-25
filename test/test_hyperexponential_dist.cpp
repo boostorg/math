@@ -29,43 +29,8 @@ typedef boost::mpl::list<float, double> test_types;
 template <typename RealT>
 RealT make_tolerance()
 {
-    // We must use a low precision since it seems the involved computations are very challenging from the numerical point of view.
-    // Indeed, both Octave 3.6.4, MATLAB 2012a and Mathematica 10 provides different results.
-    // E.g.:
-    //  x = [0 1 2 3 4]
-    //  p = [0.2 0.3 0.5]
-    //  r = [0.5 1.0 1.5]
-    //  PDF(x)
-    //    - MATLAB:      1.033333333333333,  0.335636985323608,  0.135792553231720,   0.061039382459897,   0.028790027125382
-    //    - Octave:      1.0333333333333332, 0.3356369853236084, 0.1357925532317197,  0.0610393824598966,  0.0287900271253818
-    //    - Mathematica: 1.15,               0.3383645184340184, 0.11472883036402601, 0.04558088392888389, 0.02088728412278129
-    //
-    //  (Tested under Fedora Linux 20 x86_64 running on Intel(R) Core(TM) i7-3540M)
-    //
-
-/*
-    RealT tol = std::max(boost::math::tools::epsilon<RealT>(),
-                         static_cast<RealT>(boost::math::tools::epsilon<double>()*5)*150);
-
-    // At float precision we need to up the tolerance, since 
-    // the input values are rounded off to inexact quantities
-    // the results get thrown off by a noticeable amount.
-
-    if (boost::math::tools::digits<RealT>() < 50)
-    {
-        tol *= 50;
-    }
-    if (boost::is_floating_point<RealT>::value != 1)
-    {
-        tol *= 20; // real_concept special functions are less accurate
-    }
-*/
-   // Current test data is limited to double precision:
-   const RealT tol = (std::max)(static_cast<RealT>(boost::math::tools::epsilon<double>()), boost::math::tools::epsilon<RealT>()) * 100 * 100;
-
-    //std::cout << "[" << __func__ << "] Tolerance: " << tol << "%" << std::endl;
-
-    return tol;
+    // Tolerance is 100eps expressed as a persentage (as required by Boost.Build):
+    return boost::math::tools::epsilon<RealT>() * 100 * 100;;
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(range, RealT, test_types)
@@ -120,7 +85,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(pdf, RealT, test_types)
     boost::math::hyperexponential_distribution<RealT> dist(probs, probs+n, rates, rates+n);
 
     // Mathematica: Table[N[PDF[HyperexponentialDistribution[{1/5, 3/10, 1/2}, {1/2, 1, 3/2}], x], 35], {x, 0, 4}]
-    BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(0)), static_cast<RealT>(1.15), tol );
+    BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(0)), static_cast<RealT>(1.15L), tol );
     BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(1)), static_cast<RealT>(0.33836451843401841053899743762056570L), tol );
     BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(2)), static_cast<RealT>(0.11472883036402599696225903724543774L), tol );
     BOOST_CHECK_CLOSE( boost::math::pdf(dist, static_cast<RealT>(3)), static_cast<RealT>(0.045580883928883895659238122486617681L), tol );
