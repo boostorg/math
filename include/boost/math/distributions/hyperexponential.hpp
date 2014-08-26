@@ -81,32 +81,6 @@ bool iszero(T x)
 #endif // FP_ZERO
 }
 
-/*
-template <typename RealT, typename PolicyT>
-class quantile_functor
-{
-    public: quantile_functor(hyperexponential_distribution<RealT,PolicyT> const& dist, RealT const& p, bool complement)
-    : dist_(dist),
-      p_(p),
-      comp_(complement)
-    {
-    }
-
-    public: boost::math::tuple<RealT,RealT> operator()(RealT const& x)
-    {
-        const RealT c = comp_ ? boost::math::cdf(boost::math::complement(dist_, x)) : boost::math::cdf(dist_, x);
-        const RealT fx = c - p_;  // Difference (cdf - value) to minimize.
-        const RealT dx = comp_ ? -boost::math::pdf(dist_, x) : boost::math::pdf(dist_, x); // pdf is 1st derivative.
-        // return both function evaluation difference f(x) and 1st derivative f'(x).
-        return boost::math::make_tuple(fx, dx);
-    }
-
-    private: const hyperexponential_distribution<RealT,PolicyT> dist_;
-    private: const RealT p_;
-    private: const bool comp_;
-}; // quantile_functor
-*/
-
 template <typename RealT, typename PolicyT>
 bool check_probabilities(char const* function, std::vector<RealT> const& probabilities, RealT* presult, PolicyT const& pol)
 {
@@ -470,7 +444,6 @@ RealT variance(hyperexponential_distribution<RealT, PolicyT> const& dist)
     const std::vector<RealT> probs = dist.probabilities();
     const std::vector<RealT> rates = dist.rates();
 
-    // 2(\sum_{i=1}^n \frac{p_i}{\lambda_i^2})-(\sum_{i=1}^n \frac{p_i}{\lambda_i})^2
     for (std::size_t i = 0; i < n; ++i)
     {
         result += probs[i]/(rates[i]*rates[i]);
@@ -486,7 +459,6 @@ RealT variance(hyperexponential_distribution<RealT, PolicyT> const& dist)
 template <typename RealT, typename PolicyT>
 RealT skewness(hyperexponential_distribution<RealT,PolicyT> const& dist)
 {
-    // (6(\sum_{i=1}^n\frac{p_i}{\lambda_i^3}) - (3(2(\sum_{i=1}^n\frac{p_i}{\lambda_i^2) - (\sum_{i=1}^n\frac{p_i}{\lambda_i})^2) + (\sum_{i=1}^n\frac{p_i}{\lambda_i})^2)(\sum_{i=1}^n\frac{p_i}{\lambda_i}))/((\sum_{i=1}^n\frac{p_i}{\lambda_i^2})-(\sum_{i=1}^n\frac{p_i}{\lambda_i})^2)^(3/2)
     BOOST_MATH_STD_USING
     const std::size_t n = dist.num_phases();
     const std::vector<RealT> probs = dist.probabilities();
@@ -518,8 +490,6 @@ RealT skewness(hyperexponential_distribution<RealT,PolicyT> const& dist)
 template <typename RealT, typename PolicyT>
 RealT kurtosis(hyperexponential_distribution<RealT,PolicyT> const& dist)
 {
-    // (24(\sum_{i=1}^n\frac{p_i}{\lambda_i^4})-24(\sum_{i=1}^n\frac{p_i}{\lambda_i^3})(\sum_{i=1}^n\frac{p_i}{\lambda_i})+3(2(2(\sum_{i=1}^n\frac{p_i}{\lambda_i^2})-(\sum_{i=1}^n\frac{p_i}{\lambda_i})^2) + (\sum_{i=1}^n\frac{p_i}{\lambda_i})^2)(\sum_{i=1}^n\frac{p_i}{\lambda_i})^2)/((\sum_{i=1}^n\frac{p_i}{\lambda_i^2})-(\sum_{i=1}^n\frac{p_i}{\lambda_i})^2)^2
-
     const std::size_t n = dist.num_phases();
     const std::vector<RealT> probs = dist.probabilities();
     const std::vector<RealT> rates = dist.rates();
