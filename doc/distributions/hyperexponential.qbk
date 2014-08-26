@@ -33,46 +33,140 @@
 
 The class type `hyperexponential_distribution` represents a [@http://en.wikipedia.org/wiki/Hyperexponential_distribution hyperexponential distribution].
 
-A k-phase hyperexponential distribution is a [@http://en.wikipedia.org/wiki/Continuous_probability_distribution continuous probability distribution] obtained as a mixture of k [@http://en.wikipedia.org/wiki/Exponential_distribution exponential distributions].
-It is also referred to as mixed exponential distribution or parallel k-phase exponential distribution.
+A /k/-phase hyperexponential distribution is a [@http://en.wikipedia.org/wiki/Continuous_probability_distribution continuous probability distribution] obtained as a mixture of /k/ __exp_distrib.
+It is also referred to as /mixed exponential distribution/ or parallel /k-phase exponential distribution/.
 
-A k-phase hyperexponential distribution can be interpreted as the service time distribution of k servers in parallel where the i-th server has service rate r[sub i] and is chosen with probability p[sub i].
-Indeed, it is frequency used in [@http://en.wikipedia.org/wiki/Queueing_theory queueing theory] to model a queueing station with k servers in parallel.
+A /k/-phase hyperexponential distribution is characterized by two parameters, namely a /phase probability vector/ ['[*[alpha]]=([alpha][sub 1],...,[alpha][sub k])] and a /rate vector/ ['[*[lambda]]=([lambda][sub 1],...,[lambda][sub k])].
+
+The [@http://en.wikipedia.org/wiki/Probability_density_function probability density function] for random variate /x/ in a hyperexponential distribution is given by:
+
+[equation hyperexponential_pdf]
+
+The following graph illustrates the PDF of the hyperexponential distribution with five different parameters, namely:
+
+# ['[*[alpha]]=(1.0)] and ['[*[lambda]]=(1.0)] (which degenerates to a simple exponential distribution),
+# ['[*[alpha]]=(0.1,0.9)] and ['[*[lambda]]=(0.5,1.5)],
+# ['[*[alpha]]=(0.9,0.1)] and ['[*[lambda]]=(0.5,1.5)],
+# ['[*[alpha]]=(0.2,0.3,0.5)] and ['[*[lambda]]=(0.5,1.0,1.5)],
+# ['[*[alpha]]=(0.5,0.3,0.2)] and ['[*[lambda]]=(0.5,1.0,1.5)].
+
+[graph hyperexponential_pdf]
+
+[h4 Applications]
+
+A /k/-phase hyperexponential distribution is frequently used in [@http://en.wikipedia.org/wiki/Queueing_theory queueing theory] to model the service time distribution of a queueing station with /k/ servers in parallel where the /i/-th server is chosen with probability ['[alpha][sub i]] and its service time distribution is an exponential distribution with rate ['[lambda][sub i]] (Papadopolous et al.,1993).
+
 Also, it can be used to approximate [@http://en.wikipedia.org/wiki/Long_tail long-tail probability distributions] (Feldmann et al.,1998).
 
-A k-phase hyperexponential distribution is characterized by two paramters, namely a /phase probability vector/ p=(p[sub 1],...,p[sub k]) and a /rate vector/ r=(r[sub 1],...,r[sub k]).
 
-The [@http://en.wikipedia.org/wiki/Probability_density_function probability density function] for value x in a hyperexponential distribution is given by:
+[h4 Related distributions]
 
-f(x;(p[sub 1],...,p[sub k]),(r[sub 1],...,r[sub k])) = [Sigma][sub i=1][super k] p[sub i]r[sub i]exp(-r[sub i]x)
+When the number of phases /k/ is equal to `1`, the hyperexponential distribution is simply an __exp_distrib.
 
-where exp(x) is the [@http://en.wikipedia.org/wiki/Exponential_function exponential function].
 
 [h4 Member Functions]
 
-*TODO*
+[h5 Constructors]
+
+      template <typename ProbIterT, typename RateIterT>
+      hyperexponential_distribution(ProbIterT prob_first, ProbIterT prob_last, RateIterT rate_first, RateIterT rate_last);
+
+Constructs a hyperexponential distribution with /phase probability vector/ parameter given by the range defined by \[`prob_first`, `prob_last`) iterator pair, and /rate vector/ parameter given by the range defined by the \[`rate_first`, `rate_last`) iterator pair.
+
+[h6 Parameters]
+
+* `prob_first`, `prob_last`: the range of non-negative real elements representing the phase probabilities; if elements don't sum to `1`, they are normalized.
+* `rate_first`, `rate_last`: the range of positive elements representing the rates.
+
+[h6 Type Requirements]
+
+[itemized_list [ `ProbIterT`, `RateIterT`: must meet the requirements of the [@http://en.cppreference.com/w/cpp/concept/InputIterator InputIterator] concept.]]
+
+
+      template <typename ProbRangeT, typename RateRangeT>
+      hyperexponential_distribution(ProbRangeT const& prob_range, RateRangeT const& rate_range);
+
+Constructs a hyperexponential distribution with /phase probability vector/ parameter given by the range defined by `prob_range`, and /rate vector/ parameter given by the range defined by `rate_range`.
+
+[h6 Parameters]
+
+* `prob_range`: the range of non-negative real elements representing the phase probabilities; if elements don't sum to `1`, they are normalized.
+* `rate_range`: the range of positive real elements representing the rates.
+
+[h6 Type Requirements]
+
+* `ProbRangeT`, `RateRangeT`: must meet the requirements of the [link range.concepts Range] concept.
+
+
+[h5 Accessors]
+
+      std::size_t num_phases() const;
+
+Gets the number of phases of this distribution.
+
+[h6 Return Value] An non-negative integer number representing the number of phases of this distribution.
+
+
+      std::vector<RealType> probabilities() const;
+
+Gets the /phase probability vector/ parameter of this distribution.
+
+[h6 Return Value] A vector of non-negative real numbers representing the /phase probability vector/ parameter of this distribution.
+
+
+      std::vector<RealType> rates() const;
+
+Gets the /rate vector/ parameter of this distribution.
+
+[h6 Return Value] A vector of positive real numbers representing the /rate vector/ parameter of this distribution.
+
 
 [h4 Non-member Accessor Functions]
 
-*TODO*
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all distributions are supported: __usual_accessors.
+
+The formulae for calculating these are shown in the table below.
+
 
 [h4 Accuracy]
 
-*TODO*
+The hyperexponential distribution is implemented in terms of the __exp_distrib and as such should have very small errors.
+
 
 [h4 Implementation]
 
-*TODO*
+In the following table:
+
+* ['[*[alpha]]=([alpha][sub 1],...,[alpha][sub k])] is the /phase probability vector/ parameter of the /k/-phase hyperexponential distribution,
+* ['[*[lambda]]=([lambda][sub 1],...,[lambda][sub k])] is the /rate vector/ parameter of the /k/-phase hyperexponential distribution,
+* /x/ is the random variate.
+
+[table
+[[Function][Implementation Notes]]
+[[support][['x] [isin] \[0,[infin])]]
+[[pdf][[equation hyperexponential_pdf]]]
+[[cdf][[equation hyperexponential_cdf]]]
+[[cdf complement][[equation hyperexponential_ccdf]]]
+[[quantile][No closed form available. Computed numerically.]]
+[[quantile from the complement][No closed form available. Computed numerically.]]
+[[mean][[equation hyperexponential_mean]]]
+[[variance][[equation hyperexponential_variance]]]
+[[mode][`0`]]
+[[skewness][[equation hyperexponential_skewness]]]
+[[kurtosis][[equation hyperexponential_kurtosis]]]
+[[kurtosis excess][kurtosis `- 3`]]
+]
+
 
 [h4 References]
+
+*  A. Feldmann and W. Whitt, /Fitting mixtures of exponentials to long-tail distributions to analyze network performance models/, Performance Evaluation 31(3-4):245, doi:10.1016/S0166-5316(97)00003-5, 1998.
 
 * H.T. Papadopolous, C. Heavey and J. Browne, /Queueing Theory in Manufacturing Systems Analysis and Design/, Chapman & Hall/CRC, 1993, p. 35.
 
 * Wolfram Mathematica, /Hyperexponential Distribution/, Online: [@http://reference.wolfram.com/language/ref/HyperexponentialDistribution.html], 2014.
 
 * Wikipedia, /Hyperexponential Distribution/, Online: [@http://en.wikipedia.org/wiki/Hyperexponential_distribution], 2014
-
-*  A. Feldmann and W. Whitt, /Fitting mixtures of exponentials to long-tail distributions to analyze network performance models/, Performance Evaluation 31(3-4):245, doi:10.1016/S0166-5316(97)00003-5, 1998.
 
 [endsect][/section:hyperexponential_dist hyperexponential]
 
