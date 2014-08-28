@@ -251,6 +251,18 @@ class hyperexponential_distribution
     public: typedef PolicyT policy_type;
 
 
+    public: hyperexponential_distribution()
+    : probs_(1, 1),
+      rates_(1, 1)
+    {
+        RealT err;
+        hyperexp_detail::check_dist("boost::math::hyperexponential_distribution<%1%>::hyperexponential_distribution",
+                                    probs_,
+                                    rates_,
+                                    &err,
+                                    PolicyT());
+    }
+
     public: template <typename ProbIterT, typename RateIterT>
             hyperexponential_distribution(ProbIterT prob_first, ProbIterT prob_last,
                                           RateIterT rate_first, RateIterT rate_last)
@@ -300,6 +312,41 @@ class hyperexponential_distribution
                                     PolicyT());
     }
 #endif
+
+    public: template <typename RateIterT>
+            hyperexponential_distribution(std::size_t n, RateIterT rate_first, RateIterT rate_last)
+    : probs_(n, 1), // will be normalized below
+      rates_(rate_first, rate_last)
+    {
+        assert(probs_.size() == rates_.size());
+
+        hyperexp_detail::normalize(probs_);
+
+        RealT err;
+        hyperexp_detail::check_dist("boost::math::hyperexponential_distribution<%1%>::hyperexponential_distribution",
+                                    probs_,
+                                    rates_,
+                                    &err,
+                                    PolicyT());
+    }
+
+    public: template <typename RateRangeT>
+            hyperexponential_distribution(std::size_t n, RateRangeT const& rate_range)
+    : probs_(n, 1), // will be normalized below
+      rates_(boost::begin(rate_range), boost::end(rate_range))
+    {
+        assert(probs_.size() == rates_.size());
+
+        hyperexp_detail::normalize(probs_);
+
+        RealT err;
+        hyperexp_detail::check_dist("boost::math::hyperexponential_distribution<%1%>::hyperexponential_distribution",
+                                    probs_,
+                                    rates_,
+                                    &err,
+                                    PolicyT());
+    }
+
     public: std::vector<RealT> probabilities() const
     {
         return probs_;
