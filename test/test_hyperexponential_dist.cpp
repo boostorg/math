@@ -42,7 +42,7 @@ template <typename RealT>
 RealT make_tolerance()
 {
     // Tolerance is 100eps expressed as a persentage (as required by Boost.Build):
-    return boost::math::tools::epsilon<RealT>() * 100 * 100;;
+    return boost::math::tools::epsilon<RealT>() * 100 * 100;
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(klass, RealT, test_types)
@@ -62,28 +62,33 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(klass, RealT, test_types)
     BOOST_CHECK_EQUAL(dist_it.num_phases(), n);
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_it.probabilities(), std::vector<RealT>(probs, probs+n), tol);
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_it.rates(), std::vector<RealT>(rates, rates+n), tol);
-
+    
     boost::math::hyperexponential_distribution<RealT> dist_r(probs, rates);
     BOOST_CHECK_EQUAL(dist_r.num_phases(), n);
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_r.probabilities(), std::vector<RealT>(probs, probs+n), tol);
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_r.rates(), std::vector<RealT>(rates, rates+n), tol);
-
+    
 #ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
     boost::math::hyperexponential_distribution<RealT> dist_il = {{static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L)}, {static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L)}};
     BOOST_CHECK_EQUAL(dist_il.num_phases(), n);
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_il.probabilities(), std::vector<RealT>(probs, probs+n), tol);
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_il.rates(), std::vector<RealT>(rates, rates+n), tol);
+
+    boost::math::hyperexponential_distribution<RealT> dist_n_r = { static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L) };
+    BOOST_CHECK_EQUAL(dist_n_r.num_phases(), n);
+    BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_n_r.probabilities(), std::vector<RealT>(n, static_cast<RealT>(1.0L / 3.0L)), tol);
+    BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_n_r.rates(), std::vector<RealT>(rates, rates + n), tol);
 #endif // BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 
-    boost::math::hyperexponential_distribution<RealT> dist_n_it(n, rates, rates+n);
+    boost::math::hyperexponential_distribution<RealT> dist_n_it(rates, rates+n);
     BOOST_CHECK_EQUAL(dist_n_it.num_phases(), n);
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_n_it.probabilities(), std::vector<RealT>(n, static_cast<RealT>(1.0L/3.0L)), tol);
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_n_it.rates(), std::vector<RealT>(rates, rates+n), tol);
 
-    boost::math::hyperexponential_distribution<RealT> dist_n_r(n, rates);
-    BOOST_CHECK_EQUAL(dist_n_r.num_phases(), n);
-    BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_n_r.probabilities(), std::vector<RealT>(n, static_cast<RealT>(1.0L/3.0L)), tol);
-    BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_n_r.rates(), std::vector<RealT>(rates, rates+n), tol);
+    boost::math::hyperexponential_distribution<RealT> dist_n_r2(rates);
+    BOOST_CHECK_EQUAL(dist_n_r2.num_phases(), n);
+    BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_n_r2.probabilities(), std::vector<RealT>(n, static_cast<RealT>(1.0L/3.0L)), tol);
+    BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_n_r2.rates(), std::vector<RealT>(rates, rates+n), tol);
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(range, RealT, test_types)
