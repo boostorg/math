@@ -16,7 +16,7 @@
 #define BOOST_MATH_DISTRIBUTIONS_HYPEREXPONENTIAL_HPP
 
 
-#include <numeric>
+#include <boost/config.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/detail/common_error_handling.hpp>
 #include <boost/math/distributions/exponential.hpp>
@@ -32,6 +32,7 @@
 #include <cstddef>
 //#include <iostream>
 #include <limits>
+#include <numeric>
 #include <utility>
 #include <vector>
 
@@ -321,10 +322,10 @@ class hyperexponential_distribution
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
       // Initializer list constructor: allows for construction from array literals:
-      template <typename ArgT>
-      hyperexponential_distribution(const std::initializer_list<ArgT>& l1, const std::initializer_list<ArgT>& l2)
-         : probs_(l1.begin(), l1.end()),
-         rates_(l2.begin(), l2.end())
+      public: template <typename ArgT>
+      		  hyperexponential_distribution(std::initializer_list<ArgT> l1, std::initializer_list<ArgT> l2)
+	  : probs_(l1.begin(), l1.end()),
+	    rates_(l2.begin(), l2.end())
       {
          assert(probs_.size() == rates_.size());
 
@@ -337,10 +338,11 @@ class hyperexponential_distribution
             &err,
             PolicyT());
       }
-      template <typename ArgT>
-      hyperexponential_distribution(const std::initializer_list<ArgT>& l1)
-         : probs_(l1.size(), 1),
-         rates_(l1.begin(), l1.end())
+
+      public: template <typename ArgT>
+      		  hyperexponential_distribution(std::initializer_list<ArgT> l1)
+	  : probs_(l1.size(), 1),
+	    rates_(l1.begin(), l1.end())
       {
          assert(probs_.size() == rates_.size());
 
@@ -353,7 +355,8 @@ class hyperexponential_distribution
             &err,
             PolicyT());
       }
-#endif
+#endif // !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+
     // Single argument constructor: argument must be a range.
     public: template <typename RateRangeT>
     hyperexponential_distribution(RateRangeT const& rate_range)
