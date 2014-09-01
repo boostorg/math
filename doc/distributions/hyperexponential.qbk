@@ -6,7 +6,7 @@
 
    namespace boost{ namespace math{
 
-   template <typename RealTypr = double,
+   template <typename RealType = double,
              typename ``__Policy``   = ``__policy_class`` >
    class hyperexponential_distribution;
 
@@ -234,10 +234,6 @@ defined by `l2`.
 if elements don't sum to `1`, they are normalized.
 * `l2`: the brace-init-list of positive real elements representing the rates.
 
-[h5 Type Requirements]
-
-[itemized_list [`ArgT`: must be a numeric type.]]
-
 [h5 Example]
 
 [hyperexponential_snip6]
@@ -255,10 +251,6 @@ Constructs a hyperexponential distribution with /rate vector/ parameter given by
 
 * `l1`: the brace-init-list of non-negative real elements representing the phase probabilities; if 
 elements don't sum to `1`, they are normalized.
-
-[h5 Type Requirements]
-
-* `ArgT`: must be a numeric type.
 
 [h5 Example]
    
