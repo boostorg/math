@@ -33,10 +33,8 @@
       template <typename RateRangeT>
       hyperexponential_distribution(RateRangeT const& rate_range);
     #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
-      template <typename ArgT>
-      hyperexponential_distribution(std::initializer_list<ArgT> l1, std::initializer_list<ArgT> l2);
-      template <typename ArgT>
-      hyperexponential_distribution(std::initializer_list<ArgT> l1);
+      hyperexponential_distribution(std::initializer_list<RealType> l1, std::initializer_list<RealType> l2);
+      hyperexponential_distribution(std::initializer_list<RealType> l1);
     #endif
 
       // Accessors:
@@ -255,8 +253,7 @@ native C++ array, standard library containers, and a `std::pair` of iterators.]]
 
 [h5 Construction from Initializer lists]
 
-      template <typename ArgT>
-      hyperexponential_distribution(std::initializer_list<ArgT> l1, std::initializer_list<ArgT> l2);
+      hyperexponential_distribution(std::initializer_list<RealType> l1, std::initializer_list<RealType> l2);
 
 Constructs a hyperexponential distribution with /phase probability vector/ parameter 
 given by the [@http://en.cppreference.com/w/cpp/language/list_initialization brace-init-list] defined by `l1`, 
@@ -279,8 +276,7 @@ if elements don't sum to `1`, they are normalized.
 
 [h5 Construction from a single initializer list (all phase probabilies equal)]
 
-      template <typename ArgT>
-      hyperexponential_distribution(std::initializer_list<ArgT> l1);
+      hyperexponential_distribution(std::initializer_list<RealType> l1);
 
 Constructs a hyperexponential distribution with /rate vector/ parameter given by the 
 [@http://en.cppreference.com/w/cpp/language/list_initialization brace-init-list] defined by `l1`, and 

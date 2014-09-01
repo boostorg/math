@@ -329,8 +329,7 @@ class hyperexponential_distribution
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
       // Initializer list constructor: allows for construction from array literals:
-      public: template <typename ArgT>
-              hyperexponential_distribution(std::initializer_list<ArgT> l1, std::initializer_list<ArgT> l2)
+public: hyperexponential_distribution(std::initializer_list<RealT> l1, std::initializer_list<RealT> l2)
       : probs_(l1.begin(), l1.end()),
         rates_(l2.begin(), l2.end())
       {
@@ -346,8 +345,7 @@ class hyperexponential_distribution
             PolicyT());
       }
 
-      public: template <typename ArgT>
-              hyperexponential_distribution(std::initializer_list<ArgT> l1)
+public: hyperexponential_distribution(std::initializer_list<RealT> l1)
       : probs_(l1.size(), 1),
         rates_(l1.begin(), l1.end())
       {
