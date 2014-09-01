@@ -24,13 +24,11 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/math/tools/roots.hpp>
-//#include <boost/math/tools/tuple.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/size.hpp>
 #include <boost/type_traits/has_pre_increment.hpp>
 #include <cstddef>
-//#include <iostream>
 #include <iterator>
 #include <limits>
 #include <numeric>
@@ -38,13 +36,14 @@
 #include <vector>
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
-#include <initializer_list>
+# include <initializer_list>
 #endif
 
-#ifdef BOOST_MSVC
-#pragma warning (push)
-#pragma warning(disable:4127) // conditional expression is constant
-#endif
+#ifdef _MSC_VER
+# pragma warning (push)
+# pragma warning(disable:4127) // conditional expression is constant
+# pragma warning(disable:4389) // '==' : signed/unsigned mismatch in test_tools
+#endif // _MSC_VER
 
 namespace boost { namespace math {
 
