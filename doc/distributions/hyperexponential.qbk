@@ -25,11 +25,11 @@
       template <typename ProbRangeT, typename RateRangeT>
       hyperexponential_distribution(ProbRangeT const& prob_range,
                                     RateRangeT const& rate_range,
-                                    typename boost::disable_if_c<boost::has_pre_increment<ProbRangeT>::value || boost::has_pre_increment<RateRangeT>::value>::type* = 0);
+                                    typename boost::disable_if<``['implementation-details]``>::type* = 0);
       template <typename RateIterT, typename RateIterT2>
       hyperexponential_distribution(RateIterT const& rate_first,
                                     RateIterT2 const& rate_last,
-                                    typename boost::enable_if_c<boost::has_pre_increment<RateIterT>::value || boost::has_pre_increment<RateIterT2>::value>::type* = 0);
+                                    typename boost::enable_if<``['implementation-details]``>::type* = 0);
       template <typename RateRangeT>
       hyperexponential_distribution(RateRangeT const& rate_range);
     #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
@@ -130,18 +130,22 @@ The resulting output is:
 
 [h4 Member Functions]
 
-[h5 Constructors]
+[h5 Default Constructor]
 
       hyperexponential_distribution();
 
 Constructs a /1/-phase hyperexponential distribution (i.e., an exponential distribution) with rate `1`.
 
 
+[h5 Constructor from Iterators]
+
       template <typename ProbIterT, typename RateIterT>
       hyperexponential_distribution(ProbIterT prob_first, ProbIterT prob_last,
                                     RateIterT rate_first, RateIterT rate_last);
 
-Constructs a hyperexponential distribution with /phase probability vector/ parameter given by the range defined by \[`prob_first`, `prob_last`) iterator pair, and /rate vector/ parameter given by the range defined by the \[`rate_first`, `rate_last`) iterator pair.
+Constructs a hyperexponential distribution with /phase probability vector/ parameter given 
+by the range defined by \[`prob_first`, `prob_last`) iterator pair, and /rate vector/ parameter 
+given by the range defined by the \[`rate_first`, `rate_last`) iterator pair.
 
 [h6 Parameters]
 
@@ -152,13 +156,25 @@ Constructs a hyperexponential distribution with /phase probability vector/ param
 
 [itemized_list [`ProbIterT`, `RateIterT`: must meet the requirements of the [@http://en.cppreference.com/w/cpp/concept/InputIterator InputIterator] concept.]]
 
+[h6 Example]
 
-      template <typename ProbRangeT, typename RateRangeT>
-      hyperexponential_distribution(ProbRangeT const& prob_range,
-                                    RateRangeT const& rate_range,
-                                    typename boost::disable_if_c<boost::has_pre_increment<ProbRangeT>::value || boost::has_pre_increment<RateRangeT>::value>::type* = 0);
+   std::array<double, 3> phase_prob = { 0.5, 0.5 };
+   std::array<double, 3> rates      = { 1.0 / 10, 1.0 / 12 };
 
-Constructs a hyperexponential distribution with /phase probability vector/ parameter given by the range defined by `prob_range`, and /rate vector/ parameter given by the range defined by `rate_range`.
+   hyperexponential he(phase_prob.begin(), phase_prob.end(), rates.begin(), rates.end());
+
+[h5 Construction from Ranges/Containers]
+
+   template <typename ProbRangeT, typename RateRangeT>
+   hyperexponential_distribution(ProbRangeT const& prob_range,
+                                 RateRangeT const& rate_range,
+                                 typename boost::disable_if<``['implementation-details]``>::type* = 0);
+
+Constructs a hyperexponential distribution with /phase probability vector/ parameter 
+given by the range defined by `prob_range`, and /rate vector/ parameter given by the range defined by `rate_range`.
+
+[note The final `disable_if` parameter is an implementation detail that differentiates between this two argument constructor
+and the iterator-based two argument constructor described below.]
 
 [h6 Parameters]
 
@@ -167,16 +183,34 @@ Constructs a hyperexponential distribution with /phase probability vector/ param
 
 [h6 Type Requirements]
 
-[itemized_list [`ProbRangeT`, `RateRangeT`: must meet the requirements of the [link range.concepts Range] concept.]]
+[itemized_list [`ProbRangeT`, `RateRangeT`: must meet the requirements of the [link range.concepts Range] concept:
+that includes native C++ arrays, standard library containers, or a std::pair or iterators.]]
 
+[h6 Examples]
+
+   std::array<double, 3> phase_prob = { 0.5, 0.5 };
+   std::array<double, 3> rates      = { 1.0 / 10, 1.0 / 12 };
+
+   hyperexponential he1(phase_prob, rates);    // construct from standard library container
+
+   double phase_probs2[] = { 0.5, 0.5 };
+   double rates2[]       = { 1.0 / 10, 1.0 / 12 };
+
+   hyperexponential he2(phase_probs2, rates2);  // construct from native C++ array
+   
+[h5 Construction with from iterators with equal phase probablities]
 
       template <typename RateIterT, typename RateIterT2>
       hyperexponential_distribution(RateIterT const& rate_first,
                                     RateIterT2 const& rate_last,
-                                    typename boost::enable_if_c<boost::has_pre_increment<RateIterT>::value || boost::has_pre_increment<RateIterT2>::value>::type* = 0);
+                                    typename boost::enable_if<``['implementation-details]``>::type* = 0);
 
-Constructs a hyperexponential distribution with /rate vector/ parameter given by the range defined by the \[`rate_first`, `rate_last`) iterator pair, and /phase probability vector/ set to the equal phase probabilities (i.e., to a vector of the same length `n` of the /rate vector/ and with each element set to `1.0/n`).
+Constructs a hyperexponential distribution with /rate vector/ parameter given by the range defined by the 
+\[`rate_first`, `rate_last`) iterator pair, and /phase probability vector/ set to the equal phase 
+probabilities (i.e., to a vector of the same length `n` of the /rate vector/ and with each element set to `1.0/n`).
 
+[note The final `disable_if` parameter is an implementation detail that differentiates between this two argument constructor
+and the iterator-based two argument constructor described below.]
 [h6 Parameters]
 
 * `rate_first`, `rate_last`: the range of positive elements representing the rates.
@@ -185,11 +219,22 @@ Constructs a hyperexponential distribution with /rate vector/ parameter given by
 
 [itemized_list [`RateIterT`, `RateIterT2`: must meet the requirements of the [@http://en.cppreference.com/w/cpp/concept/InputIterator InputIterator] concept.]]
 
+[h6 example]
+
+   std::array<double, 3> rates = { 1.0 / 10, 1.0 / 12 };
+
+   hyperexponential he(rates.begin(), rates.end());
+
+   assert(he.probabilities()[0] == 0.5); // All phase probabilities must be equal
+
+[h5 Construction from a single range (all phase probabilities equal)]
 
       template <typename RateRangeT>
       hyperexponential_distribution(RateRangeT const& rate_range);
 
-Constructs a hyperexponential distribution with /rate vector/ parameter given by the range defined by `rate_range`, and /phase probability vector/ set to the equal phase probabilities (i.e., to a vector of the same length `n` of the /rate vector/ and with each element set to `1.0/n`).
+Constructs a hyperexponential distribution with /rate vector/ parameter given by the range defined by `rate_range`, 
+and /phase probability vector/ set to the equal phase probabilities (i.e., to a vector of the same length 
+`n` of the /rate vector/ and with each element set to `1.0/n`).
 
 [h6 Parameters]
 
@@ -197,37 +242,65 @@ Constructs a hyperexponential distribution with /rate vector/ parameter given by
 
 [h6 Type Requirements]
 
-[itemized_list [`RateRangeT`: must meet the requirements of the [link range.concepts Range] concept.]]
+[itemized_list [`RateRangeT`: must meet the requirements of the [link range.concepts Range] concept: this includes
+native C++ array, standard library containers, and a `std::pair` of iterators.]]
 
+[h6 Examples]
+
+   std::array<double, 3> rates = { 1.0 / 10, 1.0 / 12 };
+
+   hyperexponential he(rates);
+
+   assert(he.probabilities()[0] == 0.5); // All phase probabilities must be equal
+
+[h5 Construction from Initializer lists]
 
       template <typename ArgT>
       hyperexponential_distribution(std::initializer_list<ArgT> l1, std::initializer_list<ArgT> l2);
 
-Constructs a hyperexponential distribution with /phase probability vector/ parameter given by the [@http://en.cppreference.com/w/cpp/language/list_initialization brace-init-list] defined by `l1`, and /rate vector/ parameter given by the [@http://en.cppreference.com/w/cpp/language/list_initialization brace-init-list] defined by `l2`.
+Constructs a hyperexponential distribution with /phase probability vector/ parameter 
+given by the [@http://en.cppreference.com/w/cpp/language/list_initialization brace-init-list] defined by `l1`, 
+and /rate vector/ parameter given by the [@http://en.cppreference.com/w/cpp/language/list_initialization brace-init-list] 
+defined by `l2`.
 
 [h6 Parameters]
 
-* `l1`: the brace-init-list of non-negative real elements representing the phase probabilities; if elements don't sum to `1`, they are normalized.
+* `l1`: the brace-init-list of non-negative real elements representing the phase probabilities; 
+if elements don't sum to `1`, they are normalized.
 * `l2`: the brace-init-list of positive real elements representing the rates.
 
 [h6 Type Requirements]
 
 [itemized_list [`ArgT`: must be a numeric type.]]
 
+[h6 Example]
+
+   hyperexponential he = {{ 0.5, 0.5 }, { 1.0 / 10, 1.2 / 12 }};
+
+[h5 Construction from a single initializer list (all phase probabilies equal)]
 
       template <typename ArgT>
       hyperexponential_distribution(std::initializer_list<ArgT> l1);
 
-Constructs a hyperexponential distribution with /rate vector/ parameter given by the [@http://en.cppreference.com/w/cpp/language/list_initialization brace-init-list] defined by `l1`, and /phase probability vector/ set to the equal phase probabilities (i.e., to a vector of the same length `n` of the /rate vector/ and with each element set to `1.0/n`).
+Constructs a hyperexponential distribution with /rate vector/ parameter given by the 
+[@http://en.cppreference.com/w/cpp/language/list_initialization brace-init-list] defined by `l1`, and 
+/phase probability vector/ set to the equal phase probabilities (i.e., to a vector of the same length 
+`n` of the /rate vector/ and with each element set to `1.0/n`).
 
 [h6 Parameters]
 
-* `l1`: the brace-init-list of non-negative real elements representing the phase probabilities; if elements don't sum to `1`, they are normalized.
+* `l1`: the brace-init-list of non-negative real elements representing the phase probabilities; if 
+elements don't sum to `1`, they are normalized.
 
 [h6 Type Requirements]
 
 * `ArgT`: must be a numeric type.
 
+[h6 Example]
+   
+   hyperexponential he = { 1.0 / 10, 1.0 / 12 };
+
+   assert(he.probabilities()[0] == 0.5);
 
 [h5 Accessors]
 
