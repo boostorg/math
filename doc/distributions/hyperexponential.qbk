@@ -68,7 +68,7 @@ The following graph illustrates the PDF of the hyperexponential distribution wit
 
 [graph hyperexponential_pdf]
 
-[h4 Applications]
+[h3 Applications]
 
 A /k/-phase hyperexponential distribution is frequently used in [@http://en.wikipedia.org/wiki/Queueing_theory queueing theory] to model the distribution of the superposition of /k/ independent events, like, for instance, the  service time distribution of a queueing station with /k/ servers in parallel where the /i/-th server is chosen with probability ['[alpha][sub i]] and its service time distribution is an exponential distribution with rate ['[lambda][sub i]] (Allen,1990; Papadopolous et al.,1993; Trivedi,2002).
 
@@ -92,12 +92,12 @@ It has been observed that to the window can arrive three types of customers:
 - customer C3 (e.g., regular customer):
 ]
 
-[h4 Related distributions]
+[h3 Related distributions]
 
 * When the number of phases /k/ is equal to `1`, the hyperexponential distribution is simply an __exp_distrib.
 * When the /k/ rates are all equal to ['[lambda]], the hyperexponential distribution is simple an __exp_distrib with rate ['[lambda]].
 
-[h4 Examples]
+[h3 Examples]
 
 Suppose a customer is buying an appliance and is choosing at random between an appliance with average lifetime of 10 years and an appliance with average lifetime of 12 years.
 Assuming the lifetime of this appliance follows an exponential distribution, the lifetime distribution of the purchased appliance can be modeled as a hyperexponential distribution with
@@ -113,16 +113,16 @@ The resulting output is:
     Probability that the appliance will work for more than 15 years: 0.254817
 
 
-[h4 Member Functions]
+[h3 Member Functions]
 
-[h5 Default Constructor]
+[h4 Default Constructor]
 
       hyperexponential_distribution();
 
 Constructs a /1/-phase hyperexponential distribution (i.e., an exponential distribution) with rate `1`.
 
 
-[h5 Constructor from Iterators]
+[h4 Constructor from Iterators]
 
       template <typename ProbIterT, typename RateIterT>
       hyperexponential_distribution(ProbIterT prob_first, ProbIterT prob_last,
@@ -132,20 +132,20 @@ Constructs a hyperexponential distribution with /phase probability vector/ param
 by the range defined by \[`prob_first`, `prob_last`) iterator pair, and /rate vector/ parameter 
 given by the range defined by the \[`rate_first`, `rate_last`) iterator pair.
 
-[h6 Parameters]
+[h5 Parameters]
 
 * `prob_first`, `prob_last`: the range of non-negative real elements representing the phase probabilities; if elements don't sum to `1`, they are normalized.
 * `rate_first`, `rate_last`: the range of positive elements representing the rates.
 
-[h6 Type Requirements]
+[h5 Type Requirements]
 
 [itemized_list [`ProbIterT`, `RateIterT`: must meet the requirements of the [@http://en.cppreference.com/w/cpp/concept/InputIterator InputIterator] concept.]]
 
-[h6 Example]
+[h5 Example]
 
 [hyperexponential_snip2]
 
-[h5 Construction from Ranges/Containers]
+[h4 Construction from Ranges/Containers]
 
    template <typename ProbRangeT, typename RateRangeT>
    hyperexponential_distribution(ProbRangeT const& prob_range,
@@ -158,21 +158,21 @@ given by the range defined by `prob_range`, and /rate vector/ parameter given by
 [note The final `disable_if` parameter is an implementation detail that differentiates between this two argument constructor
 and the iterator-based two argument constructor described below.]
 
-[h6 Parameters]
+[h5 Parameters]
 
 * `prob_range`: the range of non-negative real elements representing the phase probabilities; if elements don't sum to `1`, they are normalized.
 * `rate_range`: the range of positive real elements representing the rates.
 
-[h6 Type Requirements]
+[h5 Type Requirements]
 
 [itemized_list [`ProbRangeT`, `RateRangeT`: must meet the requirements of the [@http://www.boost.org/doc/libs/release/libs/range/doc/html/range/concepts.html Range] concept:
 that includes native C++ arrays, standard library containers, or a std::pair or iterators.]]
 
-[h6 Examples]
+[h5 Examples]
 
 [hyperexponential_snip3]
    
-[h5 Construction with from iterators with equal phase probablities]
+[h4 Construction with from iterators with equal phase probablities]
 
       template <typename RateIterT, typename RateIterT2>
       hyperexponential_distribution(RateIterT const& rate_first,
@@ -185,19 +185,19 @@ probabilities (i.e., to a vector of the same length `n` of the /rate vector/ and
 
 [note The final `disable_if` parameter is an implementation detail that differentiates between this two argument constructor
 and the iterator-based two argument constructor described below.]
-[h6 Parameters]
+[h5 Parameters]
 
 * `rate_first`, `rate_last`: the range of positive elements representing the rates.
 
-[h6 Type Requirements]
+[h5 Type Requirements]
 
 [itemized_list [`RateIterT`, `RateIterT2`: must meet the requirements of the [@http://en.cppreference.com/w/cpp/concept/InputIterator InputIterator] concept.]]
 
-[h6 example]
+[h5 example]
 
 [hyperexponential_snip4]
 
-[h5 Construction from a single range (all phase probabilities equal)]
+[h4 Construction from a single range (all phase probabilities equal)]
 
       template <typename RateRangeT>
       hyperexponential_distribution(RateRangeT const& rate_range);
@@ -206,20 +206,20 @@ Constructs a hyperexponential distribution with /rate vector/ parameter given by
 and /phase probability vector/ set to the equal phase probabilities (i.e., to a vector of the same length 
 `n` of the /rate vector/ and with each element set to `1.0/n`).
 
-[h6 Parameters]
+[h5 Parameters]
 
 * `rate_range`: the range of positive real elements representing the rates.
 
-[h6 Type Requirements]
+[h5 Type Requirements]
 
 [itemized_list [`RateRangeT`: must meet the requirements of the [@http://www.boost.org/doc/libs/release/libs/range/doc/html/range/concepts.html Range] concept: this includes
 native C++ array, standard library containers, and a `std::pair` of iterators.]]
 
-[h6 Examples]
+[h5 Examples]
 
 [hyperexponential_snip5]
 
-[h5 Construction from Initializer lists]
+[h4 Construction from Initializer lists]
 
       hyperexponential_distribution(std::initializer_list<RealType> l1, std::initializer_list<RealType> l2);
 
@@ -228,21 +228,21 @@ given by the [@http://en.cppreference.com/w/cpp/language/list_initialization bra
 and /rate vector/ parameter given by the [@http://en.cppreference.com/w/cpp/language/list_initialization brace-init-list] 
 defined by `l2`.
 
-[h6 Parameters]
+[h5 Parameters]
 
 * `l1`: the brace-init-list of non-negative real elements representing the phase probabilities; 
 if elements don't sum to `1`, they are normalized.
 * `l2`: the brace-init-list of positive real elements representing the rates.
 
-[h6 Type Requirements]
+[h5 Type Requirements]
 
 [itemized_list [`ArgT`: must be a numeric type.]]
 
-[h6 Example]
+[h5 Example]
 
 [hyperexponential_snip6]
 
-[h5 Construction from a single initializer list (all phase probabilies equal)]
+[h4 Construction from a single initializer list (all phase probabilies equal)]
 
       hyperexponential_distribution(std::initializer_list<RealType> l1);
 
@@ -251,55 +251,55 @@ Constructs a hyperexponential distribution with /rate vector/ parameter given by
 /phase probability vector/ set to the equal phase probabilities (i.e., to a vector of the same length 
 `n` of the /rate vector/ and with each element set to `1.0/n`).
 
-[h6 Parameters]
+[h5 Parameters]
 
 * `l1`: the brace-init-list of non-negative real elements representing the phase probabilities; if 
 elements don't sum to `1`, they are normalized.
 
-[h6 Type Requirements]
+[h5 Type Requirements]
 
 * `ArgT`: must be a numeric type.
 
-[h6 Example]
+[h5 Example]
    
 [hyperexponential_snip7]
 
-[h5 Accessors]
+[h4 Accessors]
 
       std::size_t num_phases() const;
 
 Gets the number of phases of this distribution.
 
-[h6 Return Value] An non-negative integer number representing the number of phases of this distribution.
+[h5 Return Value] An non-negative integer number representing the number of phases of this distribution.
 
 
       std::vector<RealType> probabilities() const;
 
 Gets the /phase probability vector/ parameter of this distribution.
 
-[h6 Return Value] A vector of non-negative real numbers representing the /phase probability vector/ parameter of this distribution.
+[h5 Return Value] A vector of non-negative real numbers representing the /phase probability vector/ parameter of this distribution.
 
 
       std::vector<RealType> rates() const;
 
 Gets the /rate vector/ parameter of this distribution.
 
-[h6 Return Value] A vector of positive real numbers representing the /rate vector/ parameter of this distribution.
+[h5 Return Value] A vector of positive real numbers representing the /rate vector/ parameter of this distribution.
 
 
-[h4 Non-member Accessor Functions]
+[h3 Non-member Accessor Functions]
 
 All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions] that are generic to all distributions are supported: __usual_accessors.
 
 The formulae for calculating these are shown in the table below.
 
 
-[h4 Accuracy]
+[h3 Accuracy]
 
 The hyperexponential distribution is implemented in terms of the __exp_distrib and as such should have very small errors.
 
 
-[h4 Implementation]
+[h3 Implementation]
 
 In the following table:
 
@@ -324,7 +324,7 @@ In the following table:
 ]
 
 
-[h4 References]
+[h3 References]
 
 * A.O. Allen, /Probability, Statistics, and Queuing Theory with Computer Science Applications, Second Edition/, Academic Press, 1990.
 
