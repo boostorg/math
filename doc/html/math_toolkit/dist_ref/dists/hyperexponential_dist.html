@@ -44,10 +44,26 @@
    <span class="keyword">typedef</span> <span class="identifier">Policy</span>   <span class="identifier">policy_type</span><span class="special">;</span>
 
    <span class="comment">// Constructors:</span>
+   <span class="identifier">hyperexponential_distribution</span><span class="special">();</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ProbIterT</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">RateIterT</span><span class="special">&gt;</span>
-   <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">ProbIterT</span> <span class="identifier">prob_first</span><span class="special">,</span> <span class="identifier">ProbIterT</span> <span class="identifier">prob_last</span><span class="special">,</span> <span class="identifier">RateIterT</span> <span class="identifier">rate_first</span><span class="special">,</span> <span class="identifier">RateIterT</span> <span class="identifier">rate_last</span><span class="special">);</span>
+   <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">ProbIterT</span> <span class="identifier">prob_first</span><span class="special">,</span> <span class="identifier">ProbIterT</span> <span class="identifier">prob_last</span><span class="special">,</span>
+                                 <span class="identifier">RateIterT</span> <span class="identifier">rate_first</span><span class="special">,</span> <span class="identifier">RateIterT</span> <span class="identifier">rate_last</span><span class="special">);</span>
    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ProbRangeT</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">RateRangeT</span><span class="special">&gt;</span>
-   <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">ProbRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">prob_range</span><span class="special">,</span> <span class="identifier">RateRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_range</span><span class="special">);</span>
+   <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">ProbRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">prob_range</span><span class="special">,</span>
+                                 <span class="identifier">RateRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_range</span><span class="special">,</span>
+                                 <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">disable_if_c</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_pre_increment</span><span class="special">&lt;</span><span class="identifier">ProbRangeT</span><span class="special">&gt;::</span><span class="identifier">value</span> <span class="special">||</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_pre_increment</span><span class="special">&lt;</span><span class="identifier">RateRangeT</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RateIterT</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">RateIterT2</span><span class="special">&gt;</span>
+   <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">RateIterT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_first</span><span class="special">,</span>
+                                 <span class="identifier">RateIterT2</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_last</span><span class="special">,</span>
+                                 <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">enable_if_c</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_pre_increment</span><span class="special">&lt;</span><span class="identifier">RateIterT</span><span class="special">&gt;::</span><span class="identifier">value</span> <span class="special">||</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_pre_increment</span><span class="special">&lt;</span><span class="identifier">RateIterT2</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RateRangeT</span><span class="special">&gt;</span>
+   <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">RateRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_range</span><span class="special">);</span>
+ <span class="preprocessor">#if</span> <span class="special">!</span><span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_NO_CXX11_HDR_INITIALIZER_LIST</span><span class="special">)</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ArgT</span><span class="special">&gt;</span>
+   <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">initializer_list</span><span class="special">&lt;</span><span class="identifier">ArgT</span><span class="special">&gt;</span> <span class="identifier">l1</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">initializer_list</span><span class="special">&lt;</span><span class="identifier">ArgT</span><span class="special">&gt;</span> <span class="identifier">l2</span><span class="special">);</span>
+   <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ArgT</span><span class="special">&gt;</span>
+   <span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">initializer_list</span><span class="special">&lt;</span><span class="identifier">ArgT</span><span class="special">&gt;</span> <span class="identifier">l1</span><span class="special">);</span>
+ <span class="preprocessor">#endif</span>
 
    <span class="comment">// Accessors:</span>
    <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">num_phases</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -119,36 +135,105 @@
 <p>
           A <span class="emphasis"><em>k</em></span>-phase hyperexponential distribution is frequently
           used in <a href="http://en.wikipedia.org/wiki/Queueing_theory" target="_top">queueing
-          theory</a> to model the service time distribution of a queueing station
-          with <span class="emphasis"><em>k</em></span> servers in parallel where the <span class="emphasis"><em>i</em></span>-th
-          server is chosen with probability <span class="emphasis"><em>&#945;<sub>i</sub></em></span> and its service
-          time distribution is an exponential distribution with rate <span class="emphasis"><em>&#955;<sub>i</sub></em></span>
-          (Papadopolous et al.,1993).
+          theory</a> to model the distribution of the superposition of <span class="emphasis"><em>k</em></span>
+          independent events, like, for instance, the service time distribution of
+          a queueing station with <span class="emphasis"><em>k</em></span> servers in parallel where
+          the <span class="emphasis"><em>i</em></span>-th server is chosen with probability <span class="emphasis"><em>&#945;<sub>i</sub></em></span>
+          and its service time distribution is an exponential distribution with rate
+          <span class="emphasis"><em>&#955;<sub>i</sub></em></span> (Allen,1990; Papadopolous et al.,1993; Trivedi,2002).
         </p>
 <p>
-          Also, it can be used to approximate <a href="http://en.wikipedia.org/wiki/Long_tail" target="_top">long-tail
-          probability distributions</a> (Feldmann et al.,1998).
+          For instance, CPUs service-time distribution in a computing system has
+          often been observed to possess such a distribution (Rosin,1965). Also,
+          the arrival of different types of customer to a single queueing station
+          is often modeled as a hyperexponential distribution (Papadopolous et al.,1993).
+          Similarly, if a product manufactured in several parallel assemply lines
+          and the outputs are merged, the failure density of the overall product
+          is likely to be hyperexponential (Trivedi,2002).
+        </p>
+<p>
+          Finally, since the hyperexponential distribution exhibits a high Coefficient
+          of Variation (CoV), that is a CoV &gt; 1, it is especially suited to fit
+          empirical data with large CoV (Feitelson,2014) and to approximate <a href="http://en.wikipedia.org/wiki/Long_tail" target="_top">long-tail probability distributions</a>
+          (Feldmann et al.,1998).
         </p>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h1"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.related_distributions"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.related_distributions">Related
           distributions</a>
         </h5>
-<p>
-          When the number of phases <span class="emphasis"><em>k</em></span> is equal to <code class="computeroutput"><span class="number">1</span></code>, the hyperexponential distribution is simply
-          an <a class="link" href="exp_dist.html" title="Exponential Distribution">Exponential Distribution</a>.
-        </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+              When the number of phases <span class="emphasis"><em>k</em></span> is equal to <code class="computeroutput"><span class="number">1</span></code>, the hyperexponential distribution
+              is simply an <a class="link" href="exp_dist.html" title="Exponential Distribution">Exponential
+              Distribution</a>.
+            </li>
+<li class="listitem">
+              When the <span class="emphasis"><em>k</em></span> rates are all equal to <span class="emphasis"><em>&#955;</em></span>,
+              the hyperexponential distribution is simple an <a class="link" href="exp_dist.html" title="Exponential Distribution">Exponential
+              Distribution</a> with rate <span class="emphasis"><em>&#955;</em></span>.
+            </li>
+</ul></div>
 <h5>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h2"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.examples"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.examples">Examples</a>
+        </h5>
+<p>
+          Suppose a customer is buying an appliance and is choosing at random between
+          an appliance with average lifetime of 10 years and an appliance with average
+          lifetime of 12 years. Assuming the lifetime of this appliance follows an
+          exponential distribution, the lifetime distribution of the purchased appliance
+          can be modeled as a hyperexponential distribution with phase probability
+          vector <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(1/2,1/2)</em></span>
+          and rate vector <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span>=(1/10,1/12)</em></span>
+          (Wolfram,2014).
+        </p>
+<p>
+          In the rest of this section, we provide a possible C++ implementation for
+          computing the average lifetime and the probability that the appliance will
+          work for more than 15 years.
+        </p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+    <span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">rates</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">1.0</span><span class="special">/</span><span class="number">10.0</span><span class="special">,</span> <span class="number">1.0</span><span class="special">/</span><span class="number">12.0</span><span class="special">};</span>
+
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span> <span class="identifier">he</span><span class="special">(</span><span class="identifier">rates</span><span class="special">);</span>
+
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Average lifetime: "</span>
+              <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">mean</span><span class="special">(</span><span class="identifier">he</span><span class="special">)</span>
+              <span class="special">&lt;&lt;</span> <span class="string">" years"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Probability that the appliance will work for more than 15 years: "</span>
+              <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">he</span><span class="special">),</span> <span class="number">15.0</span><span class="special">)</span>
+              <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+          The resulting output is:
+        </p>
+<pre class="programlisting"><span class="identifier">Average</span> <span class="identifier">lifetime</span><span class="special">:</span> <span class="number">11</span> <span class="identifier">years</span>
+<span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">the</span> <span class="identifier">appliance</span> <span class="identifier">will</span> <span class="identifier">work</span> <span class="keyword">for</span> <span class="identifier">more</span> <span class="identifier">than</span> <span class="number">15</span> <span class="identifier">years</span><span class="special">:</span> <span class="number">0.254817</span>
+</pre>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h3"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.member_functions"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.member_functions">Member
           Functions</a>
         </h5>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h3"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h4"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.constructors"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.constructors">Constructors</a>
         </h6>
+<pre class="programlisting"><span class="identifier">hyperexponential_distribution</span><span class="special">();</span>
+</pre>
+<p>
+          Constructs a <span class="emphasis"><em>1</em></span>-phase hyperexponential distribution
+          (i.e., an exponential distribution) with rate <code class="computeroutput"><span class="number">1</span></code>.
+        </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ProbIterT</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">RateIterT</span><span class="special">&gt;</span>
-<span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">ProbIterT</span> <span class="identifier">prob_first</span><span class="special">,</span> <span class="identifier">ProbIterT</span> <span class="identifier">prob_last</span><span class="special">,</span> <span class="identifier">RateIterT</span> <span class="identifier">rate_first</span><span class="special">,</span> <span class="identifier">RateIterT</span> <span class="identifier">rate_last</span><span class="special">);</span>
+<span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">ProbIterT</span> <span class="identifier">prob_first</span><span class="special">,</span> <span class="identifier">ProbIterT</span> <span class="identifier">prob_last</span><span class="special">,</span>
+                              <span class="identifier">RateIterT</span> <span class="identifier">rate_first</span><span class="special">,</span> <span class="identifier">RateIterT</span> <span class="identifier">rate_last</span><span class="special">);</span>
 </pre>
 <p>
           Constructs a hyperexponential distribution with <span class="emphasis"><em>phase probability
@@ -158,7 +243,7 @@
           <code class="computeroutput"><span class="identifier">rate_last</span></code>) iterator pair.
         </p>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h4"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h5"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters">Parameters</a>
         </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -173,7 +258,7 @@
             </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h5"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h6"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements">Type
           Requirements</a>
         </h5>
@@ -183,7 +268,9 @@
               concept.
             </li></ul></div>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ProbRangeT</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">RateRangeT</span><span class="special">&gt;</span>
-<span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">ProbRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">prob_range</span><span class="special">,</span> <span class="identifier">RateRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_range</span><span class="special">);</span>
+<span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">ProbRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">prob_range</span><span class="special">,</span>
+                              <span class="identifier">RateRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_range</span><span class="special">,</span>
+                              <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">disable_if_c</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_pre_increment</span><span class="special">&lt;</span><span class="identifier">ProbRangeT</span><span class="special">&gt;::</span><span class="identifier">value</span> <span class="special">||</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_pre_increment</span><span class="special">&lt;</span><span class="identifier">RateRangeT</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
 </pre>
 <p>
           Constructs a hyperexponential distribution with <span class="emphasis"><em>phase probability
@@ -191,7 +278,7 @@
           parameter given by the range defined by <code class="computeroutput"><span class="identifier">rate_range</span></code>.
         </p>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h6"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h7"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters0"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters0">Parameters</a>
         </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -207,7 +294,7 @@
             </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h7"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h8"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements0"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements0">Type
           Requirements</a>
         </h5>
@@ -215,8 +302,132 @@
               <code class="computeroutput"><span class="identifier">ProbRangeT</span></code>, <code class="computeroutput"><span class="identifier">RateRangeT</span></code>: must meet the requirements
               of the <a class="link" href="../../../">Range</a> concept.
             </li></ul></div>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RateIterT</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">RateIterT2</span><span class="special">&gt;</span>
+<span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">RateIterT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_first</span><span class="special">,</span>
+                              <span class="identifier">RateIterT2</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_last</span><span class="special">,</span>
+                              <span class="keyword">typename</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">enable_if_c</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_pre_increment</span><span class="special">&lt;</span><span class="identifier">RateIterT</span><span class="special">&gt;::</span><span class="identifier">value</span> <span class="special">||</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">has_pre_increment</span><span class="special">&lt;</span><span class="identifier">RateIterT2</span><span class="special">&gt;::</span><span class="identifier">value</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">*</span> <span class="special">=</span> <span class="number">0</span><span class="special">);</span>
+</pre>
+<p>
+          Constructs a hyperexponential distribution with <span class="emphasis"><em>rate vector</em></span>
+          parameter given by the range defined by the [<code class="computeroutput"><span class="identifier">rate_first</span></code>,
+          <code class="computeroutput"><span class="identifier">rate_last</span></code>) iterator pair,
+          and <span class="emphasis"><em>phase probability vector</em></span> set to the equal phase
+          probabilities (i.e., to a vector of the same length <code class="computeroutput"><span class="identifier">n</span></code>
+          of the <span class="emphasis"><em>rate vector</em></span> and with each element set to <code class="computeroutput"><span class="number">1.0</span><span class="special">/</span><span class="identifier">n</span></code>).
+        </p>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h9"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters1"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters1">Parameters</a>
+        </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+              <code class="computeroutput"><span class="identifier">rate_first</span></code>, <code class="computeroutput"><span class="identifier">rate_last</span></code>: the range of positive
+              elements representing the rates.
+            </li></ul></div>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h10"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements1"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements1">Type
+          Requirements</a>
+        </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+              <code class="computeroutput"><span class="identifier">RateIterT</span></code>, <code class="computeroutput"><span class="identifier">RateIterT2</span></code>: must meet the requirements
+              of the <a href="http://en.cppreference.com/w/cpp/concept/InputIterator" target="_top">InputIterator</a>
+              concept.
+            </li></ul></div>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RateRangeT</span><span class="special">&gt;</span>
+<span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">RateRangeT</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rate_range</span><span class="special">);</span>
+</pre>
+<p>
+          Constructs a hyperexponential distribution with <span class="emphasis"><em>rate vector</em></span>
+          parameter given by the range defined by <code class="computeroutput"><span class="identifier">rate_range</span></code>,
+          and <span class="emphasis"><em>phase probability vector</em></span> set to the equal phase
+          probabilities (i.e., to a vector of the same length <code class="computeroutput"><span class="identifier">n</span></code>
+          of the <span class="emphasis"><em>rate vector</em></span> and with each element set to <code class="computeroutput"><span class="number">1.0</span><span class="special">/</span><span class="identifier">n</span></code>).
+        </p>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h11"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters2"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters2">Parameters</a>
+        </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+              <code class="computeroutput"><span class="identifier">rate_range</span></code>: the range
+              of positive real elements representing the rates.
+            </li></ul></div>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h12"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements2"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements2">Type
+          Requirements</a>
+        </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+              <code class="computeroutput"><span class="identifier">RateRangeT</span></code>: must meet
+              the requirements of the <a class="link" href="../../../">Range</a>
+              concept.
+            </li></ul></div>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ArgT</span><span class="special">&gt;</span>
+<span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">initializer_list</span><span class="special">&lt;</span><span class="identifier">ArgT</span><span class="special">&gt;</span> <span class="identifier">l1</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">initializer_list</span><span class="special">&lt;</span><span class="identifier">ArgT</span><span class="special">&gt;</span> <span class="identifier">l2</span><span class="special">);</span>
+</pre>
+<p>
+          Constructs a hyperexponential distribution with <span class="emphasis"><em>phase probability
+          vector</em></span> parameter given by the <a href="http://en.cppreference.com/w/cpp/language/list_initialization" target="_top">brace-init-list</a>
+          defined by <code class="computeroutput"><span class="identifier">l1</span></code>, and <span class="emphasis"><em>rate
+          vector</em></span> parameter given by the <a href="http://en.cppreference.com/w/cpp/language/list_initialization" target="_top">brace-init-list</a>
+          defined by <code class="computeroutput"><span class="identifier">l2</span></code>.
+        </p>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h13"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters3"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters3">Parameters</a>
+        </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+              <code class="computeroutput"><span class="identifier">l1</span></code>: the brace-init-list
+              of non-negative real elements representing the phase probabilities;
+              if elements don't sum to <code class="computeroutput"><span class="number">1</span></code>,
+              they are normalized.
+            </li>
+<li class="listitem">
+              <code class="computeroutput"><span class="identifier">l2</span></code>: the brace-init-list
+              of positive real elements representing the rates.
+            </li>
+</ul></div>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h14"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements3"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements3">Type
+          Requirements</a>
+        </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+              <code class="computeroutput"><span class="identifier">ArgT</span></code>: must be a numeric
+              type.
+            </li></ul></div>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">ArgT</span><span class="special">&gt;</span>
+<span class="identifier">hyperexponential_distribution</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">initializer_list</span><span class="special">&lt;</span><span class="identifier">ArgT</span><span class="special">&gt;</span> <span class="identifier">l1</span><span class="special">);</span>
+</pre>
+<p>
+          Constructs a hyperexponential distribution with <span class="emphasis"><em>rate vector</em></span>
+          parameter given by the <a href="http://en.cppreference.com/w/cpp/language/list_initialization" target="_top">brace-init-list</a>
+          defined by <code class="computeroutput"><span class="identifier">l1</span></code>, and <span class="emphasis"><em>phase
+          probability vector</em></span> set to the equal phase probabilities (i.e.,
+          to a vector of the same length <code class="computeroutput"><span class="identifier">n</span></code>
+          of the <span class="emphasis"><em>rate vector</em></span> and with each element set to <code class="computeroutput"><span class="number">1.0</span><span class="special">/</span><span class="identifier">n</span></code>).
+        </p>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h15"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters4"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters4">Parameters</a>
+        </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+              <code class="computeroutput"><span class="identifier">l1</span></code>: the brace-init-list
+              of non-negative real elements representing the phase probabilities;
+              if elements don't sum to <code class="computeroutput"><span class="number">1</span></code>,
+              they are normalized.
+            </li></ul></div>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h16"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements4"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements4">Type
+          Requirements</a>
+        </h5>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+              <code class="computeroutput"><span class="identifier">ArgT</span></code>: must be a numeric
+              type.
+            </li></ul></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h8"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h17"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.accessors"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.accessors">Accessors</a>
         </h6>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">num_phases</span><span class="special">()</span> <span class="keyword">const</span><span class="special">;</span>
@@ -225,7 +436,7 @@
           Gets the number of phases of this distribution.
         </p>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h9"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h18"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.return_value"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.return_value">Return
           Value</a>
         </h5>
@@ -240,7 +451,7 @@
           distribution.
         </p>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h10"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h19"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.return_value0"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.return_value0">Return
           Value</a>
         </h5>
@@ -254,7 +465,7 @@
           Gets the <span class="emphasis"><em>rate vector</em></span> parameter of this distribution.
         </p>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h11"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h20"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.return_value1"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.return_value1">Return
           Value</a>
         </h5>
@@ -263,7 +474,7 @@
           parameter of this distribution.
         </p>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h12"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h21"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.non_member_accessor_functions"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.non_member_accessor_functions">Non-member
           Accessor Functions</a>
         </h5>
@@ -283,7 +494,7 @@
           The formulae for calculating these are shown in the table below.
         </p>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h13"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h22"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.accuracy"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.accuracy">Accuracy</a>
         </h5>
 <p>
@@ -291,7 +502,7 @@
           and as such should have very small errors.
         </p>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h14"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h23"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.implementation"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.implementation">Implementation</a>
         </h5>
 <p>
@@ -477,10 +688,19 @@
 </tbody>
 </table></div>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h15"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h24"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.references"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.references">References</a>
         </h5>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+              A.O. Allen, <span class="emphasis"><em>Probability, Statistics, and Queuing Theory with
+              Computer Science Applications, Second Edition</em></span>, Academic
+              Press, 1990.
+            </li>
+<li class="listitem">
+              D.G. Feitelson, <span class="emphasis"><em>Workload Modeling for Computer Systems Performance
+              Evaluation</em></span>, Cambridge University Press, 2014
+            </li>
 <li class="listitem">
               A. Feldmann and W. Whitt, <span class="emphasis"><em>Fitting mixtures of exponentials
               to long-tail distributions to analyze network performance models</em></span>,
@@ -491,6 +711,15 @@
               H.T. Papadopolous, C. Heavey and J. Browne, <span class="emphasis"><em>Queueing Theory
               in Manufacturing Systems Analysis and Design</em></span>, Chapman &amp;
               Hall/CRC, 1993, p. 35.
+            </li>
+<li class="listitem">
+              R.F. Rosin, <span class="emphasis"><em>Determining a computing center environment</em></span>,
+              Communications of the ACM 8(7):463-468, 1965.
+            </li>
+<li class="listitem">
+              K.S. Trivedi, <span class="emphasis"><em>Probability and Statistics with Reliability,
+              Queueing, and Computer Science Applications</em></span>, John Wiley
+              &amp; Sons, Inc., 2002.
             </li>
 <li class="listitem">
               Wolfram Mathematica, <span class="emphasis"><em>Hyperexponential Distribution</em></span>,
