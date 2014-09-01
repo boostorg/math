@@ -1,6 +1,7 @@
 [section:hyperexponential_dist Hyperexponential Distribution]
 
 [import ../../example/hyperexponential_snips.cpp]
+[import ../../example/hyperexponential_more_snips.cpp]
 
 ``#include <boost/math/distributions/hyperexponential.hpp>``
 
@@ -76,9 +77,9 @@ For instance, CPUs service-time distribution in a computing system has often bee
 Also, the arrival of different types of customer to a single queueing station is often modeled as a hyperexponential distribution (Papadopolous et al.,1993).
 Similarly, if a product manufactured in several parallel assemply lines and the outputs are merged, the failure density of the overall product is likely to be hyperexponential (Trivedi,2002).
 
-Finally, since the hyperexponential distribution exhibits a high Coefficient of Variation (CoV), that is a CoV > 1, it is especially suited to fit empirical data with large CoV (Feitelson,2014) and to approximate [@http://en.wikipedia.org/wiki/Long_tail long-tail probability distributions] (Feldmann et al.,1998).
+Finally, since the hyperexponential distribution exhibits a high Coefficient of Variation (CoV), that is a CoV > 1, it is especially suited to fit empirical data with large CoV (Feitelson,2014; Wolski et al.,2013) and to approximate [@http://en.wikipedia.org/wiki/Long_tail long-tail probability distributions] (Feldmann et al.,1998).
 
-[/
+[/ Another possible example (work in progress):
 For instance, suppose that at the airport the company Foobar Airlines has a help desk with 3 different windows (servers) such that window A is for regional flights, window B is for international flights and window C is general customer care.
 From previous studies, it has been observed that each window is able to serve requests with the following timings:
 - window W1: 20 minutes, on average,
@@ -99,6 +100,8 @@ It has been observed that to the window can arrive three types of customers:
 
 [h3 Examples]
 
+[h4 Lifetime of Appliances]
+
 Suppose a customer is buying an appliance and is choosing at random between an appliance with average lifetime of 10 years and an appliance with average lifetime of 12 years.
 Assuming the lifetime of this appliance follows an exponential distribution, the lifetime distribution of the purchased appliance can be modeled as a hyperexponential distribution with
 phase probability vector ['[*[alpha]]=(1/2,1/2)] and rate vector ['[*[lambda]]=(1/10,1/12)] (Wolfram,2014).
@@ -111,6 +114,96 @@ The resulting output is:
 
     Average lifetime: 11 years
     Probability that the appliance will work for more than 15 years: 0.254817
+
+
+[h4 Workloads of Private Cloud Computing Systems]
+
+[@http://en.wikipedia.org/wiki/Cloud_computing Cloud computing] has become a popular metaphor for dynamic and secure self-service access to computational and storage capabilities.
+In (Wolski et al.,2013), the authors analyze and model workloads gathered from enterprise-operated commercial [@http://en.wikipedia.org/wiki/Cloud_computing#Private_cloud private clouds] and show that 3-phase hyperexponential distributions (fitted using the [@http://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm Expectation Maximization algorithm]) capture workload attributes accurately.
+
+In this type of computing system, user requests consist in demanding the provisioning of one or more [@http://en.wikipedia.org/wiki/Virtual_machine Virtual Machines] (VMs).
+In particular, in (Wolski et al.,2013) the workload experienced by each cloud system is a function of four distributions, one for each of the following workload attributes:
+* /Request Interarrival Time/: the amount of time until the next request,
+* /VM Lifetime/: the time duration over which a VM is provisioned to a physical machine,
+* /Request Size/: the number of VMs in the request, and
+* /Core Count/: the CPU core count requested for each VM.
+The authors assume that all VMs in a request have the same core count, but request sizes and core counts can vary from request to request.
+Moreover, all VMs within a request are assumed to have the same lifetime.
+Given these assumptions, the authors build a statistical model for the request interarrival time and VM lifetime attributes by fitting their respective data to a 3-phase hyperexponential distribution.
+
+In the following table, we show the sample mean and standard deviation (SD), in seconds, of the request interarrival time and of the VM lifetime distributions of the three datasets collected by authors:
+
+[table
+[[Dataset][Mean Request Interarrival Time (SD)][Mean Multi-core VM Lifetime (SD)][Mean Single-core VM Lifetime (SD)]]
+[[DS1][2202.1 (2.2e+04)][257173 (4.6e+05)][28754.4 (1.6e+05)]]
+[[DS2][41285.7 (1.1e+05)][144669.0 (7.9e+05)][599815.0 (1.7e+06)]]
+[[DS3][11238.8 (3.0e+04)][30739.2 (1.6e+05)][44447.8 (2.2e+05)]]
+]
+
+Whereas in the following table we show the hyperexponential distribution parameters resulting from the fit:
+
+[table
+[[Dataset][Request Interarrival Time][Multi-core VM Lifetime][Single-core VM Lifetime]]
+[[DS1][['[*[alpha]]=(0.34561,0.08648,0.56791), [*[lambda]]=(0.008,0.00005,0.02894)]][['[*[alpha]]=(0.24667,0.37948,0.37385), [*[lambda]]=(0.00004,0.000002,0.00059)]][['[*[alpha]]=(0.09325,0.22251,0.68424), [*[lambda]]=(0.000003,0.00109,0.00109)]]]
+[[DS2][['[*[alpha]]=(0.38881,0.18227,0.42892), [*[lambda]]=(0.000006,0.05228,0.00081)]][['[*[alpha]]=(0.42093,0.43960,0.13947), [*[lambda]]=(0.00186,0.00008,0.0000008)]][['[*[alpha]]=(0.44885,0.30675,0.2444), [*[lambda]]=(0.00143,0.00005,0.0000004)]]]
+[[DS3][['[*[alpha]]=(0.39442,0.24644,0.35914), [*[lambda]]=(0.00030,0.00003,0.00257)]][['[*[alpha]]=(0.37621,0.14838,0.47541), [*[lambda]]=(0.00498,0.000005,0.00022)]][['[*[alpha]]=(0.34131,0.12544,0.53325), [*[lambda]]=(0.000297,0.000003,0.00410)]]]
+]
+
+In the rest of this section, we provide a possible C++ implementation for computing some statistical properties of the fitted distributions for each of the analyzed dataset.
+
+[hyperexponential_more_snip1]
+
+The resulting output is:
+
+    ### DS1
+    * Fitted Request Interarrival Time
+     - Mean (SD): 2181.24 (8093.68) seconds.
+     - 99th Percentile: 43146.6 seconds.
+     - Probability that a VM will arrive within 30 minutes: 0.839079
+     - Probability that a VM will arrive after 1 hour: 0.0916349
+    * Fitted Multi-core VM Lifetime
+     - Mean (SD): 196540 (389130) seconds.
+     - 99th Percentile: 1.81811e+06 seconds.
+     - Probability that a VM will last for less than 1 month: 0.997873
+     - Probability that a VM will last for more than 3 months: 6.68407e-08
+    * Fitted Single-core VM Lifetime
+     - Mean (SD): 31915.2 (140375) seconds.
+     - 99th Percentile: 744233 seconds.
+     - Probability that a VM will last for less than 1 month: 0.999961
+     - Probability that a VM will last for more than 3 months: 6.8933e-12
+    ### DS2
+    * Fitted Request Interarrival Time
+     - Mean (SD): 65334.7 (131656) seconds.
+     - 99th Percentile: 610084 seconds.
+     - Probability that a VM will arrive within 30 minutes: 0.515556
+     - Probability that a VM will arrive after 1 hour: 0.403728
+    * Fitted Multi-core VM Lifetime
+     - Mean (SD): 180059 (635264) seconds.
+     - 99th Percentile: 3.29408e+06 seconds.
+     - Probability that a VM will last for less than 1 month: 0.982464
+     - Probability that a VM will last for more than 3 months: 0.000277218
+    * Fitted Single-core VM Lifetime
+     - Mean (SD): 617449 (1.63524e+06) seconds.
+     - 99th Percentile: 7.99055e+06 seconds.
+     - Probability that a VM will last for less than 1 month: 0.913339
+     - Probability that a VM will last for more than 3 months: 0.0108961
+    ### DS3
+    * Fitted Request Interarrival Time
+     - Mean (SD): 9669.14 (21518) seconds.
+     - 99th Percentile: 106818 seconds.
+     - Probability that a VM will arrive within 30 minutes: 0.53315
+     - Probability that a VM will arrive after 1 hour: 0.355189
+    * Fitted Multi-core VM Lifetime
+     - Mean (SD): 31912.5 (104267) seconds.
+     - 99th Percentile: 539438 seconds.
+     - Probability that a VM will last for less than 1 month: 1
+     - Probability that a VM will last for more than 3 months: 1.93199e-18
+    * Fitted Single-core VM Lifetime
+     - Mean (SD): 43092.6 (161327) seconds.
+     - 99th Percentile: 843081 seconds.
+     - Probability that a VM will last for less than 1 month: 0.999947
+     - Probability that a VM will last for more than 3 months: 9.27287e-12
+
 
 
 [h3 Member Functions]
@@ -330,9 +423,11 @@ In the following table:
 
 * K.S. Trivedi, /Probability and Statistics with Reliability, Queueing, and Computer Science Applications/, John Wiley & Sons, Inc., 2002.
 
-* Wolfram Mathematica, /Hyperexponential Distribution/, Online: [@http://reference.wolfram.com/language/ref/HyperexponentialDistribution.html], 2014.
-
 * Wikipedia, /Hyperexponential Distribution/, Online: [@http://en.wikipedia.org/wiki/Hyperexponential_distribution], 2014
+
+* R. Wolski and J. Brevik, /Using Parametric Models to Represent Private Cloud Workloads/, IEEE TSC, PrePrint, DOI: [@http://doi.ieeecomputersociety.org/10.1109/TSC.2013.48 10.1109/TSC.2013.48], 2013.
+
+* Wolfram Mathematica, /Hyperexponential Distribution/, Online: [@http://reference.wolfram.com/language/ref/HyperexponentialDistribution.html], 2014.
 
 [endsect][/section:hyperexponential_dist hyperexponential]
 
