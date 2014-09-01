@@ -1,5 +1,7 @@
 [section:hyperexponential_dist Hyperexponential Distribution]
 
+[import ../../example/hyperexponential_snips.cpp]
+
 ``#include <boost/math/distributions/hyperexponential.hpp>``
 
    namespace boost{ namespace math{
@@ -103,22 +105,7 @@ phase probability vector ['[*[alpha]]=(1/2,1/2)] and rate vector ['[*[lambda]]=(
 
 In the rest of this section, we provide a possible C++ implementation for computing the average lifetime and the probability that the appliance will work for more than 15 years.
 
-    #include <boost/math/distributions.hpp>
-    #include <iostream>
-
-    int main()
-    {
-        const double rates[] = {1.0/10.0, 1.0/12.0};
-
-        boost::math::hyperexponential he(rates);
-
-        std::cout << "Average lifetime: "
-                  << boost::math::mean(he)
-                  << " years" << std::endl;
-        std::cout << "Probability that the appliance will work for more than 15 years: "
-                  << boost::math::cdf(boost::math::complement(he), 15.0)
-                  << std::endl;
-    }
+[hyperexponential_snip1]
 
 The resulting output is:
 
@@ -156,10 +143,7 @@ given by the range defined by the \[`rate_first`, `rate_last`) iterator pair.
 
 [h6 Example]
 
-   std::array<double, 3> phase_prob = { 0.5, 0.5 };
-   std::array<double, 3> rates      = { 1.0 / 10, 1.0 / 12 };
-
-   hyperexponential he(phase_prob.begin(), phase_prob.end(), rates.begin(), rates.end());
+[hyperexponential_snip2]
 
 [h5 Construction from Ranges/Containers]
 
@@ -181,20 +165,12 @@ and the iterator-based two argument constructor described below.]
 
 [h6 Type Requirements]
 
-[itemized_list [`ProbRangeT`, `RateRangeT`: must meet the requirements of the [link range.concepts Range] concept:
+[itemized_list [`ProbRangeT`, `RateRangeT`: must meet the requirements of the [@http://www.boost.org/doc/libs/release/libs/range/doc/html/range/concepts.html Range] concept:
 that includes native C++ arrays, standard library containers, or a std::pair or iterators.]]
 
 [h6 Examples]
 
-   std::array<double, 3> phase_prob = { 0.5, 0.5 };
-   std::array<double, 3> rates      = { 1.0 / 10, 1.0 / 12 };
-
-   hyperexponential he1(phase_prob, rates);    // construct from standard library container
-
-   double phase_probs2[] = { 0.5, 0.5 };
-   double rates2[]       = { 1.0 / 10, 1.0 / 12 };
-
-   hyperexponential he2(phase_probs2, rates2);  // construct from native C++ array
+[hyperexponential_snip3]
    
 [h5 Construction with from iterators with equal phase probablities]
 
@@ -219,11 +195,7 @@ and the iterator-based two argument constructor described below.]
 
 [h6 example]
 
-   std::array<double, 3> rates = { 1.0 / 10, 1.0 / 12 };
-
-   hyperexponential he(rates.begin(), rates.end());
-
-   assert(he.probabilities()[0] == 0.5); // All phase probabilities must be equal
+[hyperexponential_snip4]
 
 [h5 Construction from a single range (all phase probabilities equal)]
 
@@ -240,16 +212,12 @@ and /phase probability vector/ set to the equal phase probabilities (i.e., to a 
 
 [h6 Type Requirements]
 
-[itemized_list [`RateRangeT`: must meet the requirements of the [link range.concepts Range] concept: this includes
+[itemized_list [`RateRangeT`: must meet the requirements of the [@http://www.boost.org/doc/libs/release/libs/range/doc/html/range/concepts.html Range] concept: this includes
 native C++ array, standard library containers, and a `std::pair` of iterators.]]
 
 [h6 Examples]
 
-   std::array<double, 3> rates = { 1.0 / 10, 1.0 / 12 };
-
-   hyperexponential he(rates);
-
-   assert(he.probabilities()[0] == 0.5); // All phase probabilities must be equal
+[hyperexponential_snip5]
 
 [h5 Construction from Initializer lists]
 
@@ -272,7 +240,7 @@ if elements don't sum to `1`, they are normalized.
 
 [h6 Example]
 
-   hyperexponential he = {{ 0.5, 0.5 }, { 1.0 / 10, 1.2 / 12 }};
+[hyperexponential_snip6]
 
 [h5 Construction from a single initializer list (all phase probabilies equal)]
 
@@ -294,9 +262,7 @@ elements don't sum to `1`, they are normalized.
 
 [h6 Example]
    
-   hyperexponential he = { 1.0 / 10, 1.0 / 12 };
-
-   assert(he.probabilities()[0] == 0.5);
+[hyperexponential_snip7]
 
 [h5 Accessors]
 
