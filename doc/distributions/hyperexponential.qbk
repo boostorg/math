@@ -206,9 +206,8 @@ The resulting output is:
      - Probability that a VM will last for less than 1 month: 0.999947
      - Probability that a VM will last for more than 3 months: 9.27287e-12
 
-Please note that the above results differ from the ones shown in Tables III, V, and VII of (Wolski et al.,2013).
-We carefully double-checked them with Wolfram Mathematica 10, which confirmed our results.
-See the Accuracy Section for a general discussion on accuracy issues.
+[note The above results differ from the ones shown in Tables III, V, and VII of (Wolski et al.,2013).
+We carefully double-checked them with Wolfram Mathematica 10, which confirmed our results.]
 
 
 [h3 Member Functions]
@@ -387,43 +386,6 @@ The formulae for calculating these are shown in the table below.
 [h3 Accuracy]
 
 The hyperexponential distribution is implemented in terms of the __exp_distrib and as such should have very small errors.
-
-It is worth noting that we experienced some difference with the results obtained with a own-made implementation of the hyperexponential distribution for MATLAB and Octave:
-    [pre
-        function p = hyperexppdf(x, probs, rates)
-        %HYPEREXPPDF Hyperexponential probability density function
-
-        p = [];
-        for i=1:length(x)
-            p = [p; probs'*exppdf(x(i), rates)];
-        end
-
-
-        function [p] = hyperexpcdf(x, probs, rates)
-        %HYPEREXPCDF Hyperexponential cumulative distribution function
-
-        p = [];
-        for i=1:length(x)
-            p = [p; probs'*expcdf(x(i), rates)];
-        end
-    ]
-
-Despite this, our results fully matches the ones obtained with Wolfram Mathematica 10, that (unlike MATLAB and Octave) natively provides functions for the hyperexponential distribution (Wolfram,2014).
-
-For instance, given a hyperexponential distribution characterized by the following parameters:
-
-* ['[*[alpha]] = (0.2,0.3,0.5)]
-* ['[*[lambda]] = (0.5,1.0,1.5)]
-
-under Fedora Linux 20 x86_64 (running on an Intel(R) Core(TM) i7-3540M) with GNU GCC 4.8.3, we obtained the following results:
-
-[table
-[[Implementation][pdf(0)][pdf(1)][pdf(2)][pdf(3)][pdf(4)]]
-[[MATLAB][1.033333333333333][0.335636985323608][0.135792553231720][0.061039382459897][0.028790027125382]]
-[[Octave][1.0333333333333332][0.3356369853236084][0.1357925532317197][0.0610393824598966][0.0287900271253818]]
-[[Mathematica][1.15][0.3383645184340184][0.11472883036402601][0.04558088392888389][0.02088728412278129]]
-[[Boost][1.15][0.3383645184340184][0.114728830364026][0.04558088392888389][0.02088728412278129]]
-]
 
 
 [h3 Implementation]
