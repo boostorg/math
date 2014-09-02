@@ -186,6 +186,14 @@ run test_ellint_2.cpp test_instances//test_instances pch_light ../../test/build/
 run test_ellint_3.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_erf.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_error_handling.cpp ../../test/build//boost_unit_test_framework ;
+run test_error_handling.cpp ../../test/build//boost_unit_test_framework
+        : # command line
+        : # input files
+        : # requirements
+            <rtti>off
+            <define>BOOST_NO_RTTI
+            <define>BOOST_NO_TYPEID
+        : test_error_handling_no_rtti ;
 run test_expint.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_exponential_dist.cpp ../../test/build//boost_unit_test_framework ;
 run test_extreme_value.cpp ../../test/build//boost_unit_test_framework ;

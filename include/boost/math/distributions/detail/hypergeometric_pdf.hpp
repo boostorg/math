@@ -58,7 +58,7 @@ T hypergeometric_pdf_lanczos_imp(T /*dummy*/, unsigned x, unsigned r, unsigned n
    BOOST_MATH_INSTRUMENT_VARIABLE(r);
    BOOST_MATH_INSTRUMENT_VARIABLE(n);
    BOOST_MATH_INSTRUMENT_VARIABLE(N);
-   BOOST_MATH_INSTRUMENT_VARIABLE(typeid(Lanczos).name());
+   BOOST_MATH_INSTRUMENT_VARIABLE(typeindex::type_id<Lanczos>().pretty_name());
 
    T bases[9] = {
       T(n) + static_cast<T>(Lanczos::g()) + 0.5f,

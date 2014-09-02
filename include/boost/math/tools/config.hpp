@@ -376,7 +376,7 @@ namespace boost{ namespace math{
 
 #  include <iostream>
 #  include <iomanip>
-#  include <typeinfo>
+#  include <boost/type_index.hpp>
 
 #  define BOOST_MATH_INSTRUMENT_CODE(x) \
       std::cout << std::setprecision(35) << __FILE__ << ":" << __LINE__ << " " << x << std::endl;

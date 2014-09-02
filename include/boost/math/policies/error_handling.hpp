@@ -19,6 +19,7 @@
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/tools/precision.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/type_index.hpp>
 #ifdef BOOST_MSVC
 #  pragma warning(push) // Quiet warnings in boost/format.hpp
 #  pragma warning(disable: 4996) // _SCL_SECURE_NO_DEPRECATE
@@ -79,21 +80,14 @@ inline std::string do_format(Formatter f, const Group& g)
 }
 
 template <class T>
-inline const char* name_of()
+inline const std::string name_of()
 {
-#ifndef BOOST_NO_RTTI
-   return typeid(T).name();
-#else
-   return "unknown";
-#endif
+   return typeindex::type_id<T>().pretty_name();
 }
-template <> inline const char* name_of<float>(){ return "float"; }
-template <> inline const char* name_of<double>(){ return "double"; }
-template <> inline const char* name_of<long double>(){ return "long double"; }
 
 #ifdef BOOST_MATH_USE_FLOAT128
 template <>
-inline const char* name_of<BOOST_MATH_FLOAT128_TYPE>()
+inline const std::string name_of<BOOST_MATH_FLOAT128_TYPE>()
 {
    return "__float128";
 }
@@ -108,11 +102,7 @@ void raise_error(const char* function, const char* message)
        message = "Cause unknown";
 
   std::string msg("Error in function ");
-#ifndef BOOST_NO_RTTI
   msg += (boost::format(function) % boost::math::policies::detail::name_of<T>()).str();
-#else
-  msg += function;
-#endif
   msg += ": ";
   msg += message;
 
@@ -129,11 +119,7 @@ void raise_error(const char* function, const char* message, const T& val)
      message = "Cause unknown: error caused by bad argument with value %1%";
 
   std::string msg("Error in function ");
-#ifndef BOOST_NO_RTTI
   msg += (boost::format(function) % boost::math::policies::detail::name_of<T>()).str();
-#else
-  msg += function;
-#endif
   msg += ": ";
   msg += message;
 

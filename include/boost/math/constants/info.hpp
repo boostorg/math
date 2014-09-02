@@ -22,7 +22,7 @@ namespace boost{ namespace math{ namespace constants{
       template <class T>
       const char* nameof(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T))
       {
-         return typeid(T).name();
+         return typeindex::type_id<T>().pretty_name();
       }
       template <>
       const char* nameof<float>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(float))

@@ -1052,9 +1052,9 @@ inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   BOOST_MATH_INSTRUMENT_CODE("result_type = " << typeid(result_type).name());
-   BOOST_MATH_INSTRUMENT_CODE("value_type = " << typeid(value_type).name());
-   BOOST_MATH_INSTRUMENT_CODE("precision_type = " << typeid(precision_type).name());
+   BOOST_MATH_INSTRUMENT_CODE("result_type = " << typeindex::type_id<result_type>().pretty_name());
+   BOOST_MATH_INSTRUMENT_CODE("value_type = " << typeindex::type_id<value_type>().pretty_name());
+   BOOST_MATH_INSTRUMENT_CODE("precision_type = " << typeindex::type_id<precision_type>().pretty_name());
 
    typedef typename mpl::if_<
       mpl::less_equal<precision_type, mpl::int_<0> >,
@@ -1074,7 +1074,7 @@ inline typename tools::promote_args<T>::type erf(T z, const Policy& /* pol */)
       >::type
    >::type tag_type;
 
-   BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeid(tag_type).name());
+   BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeindex::type_id<tag_type>().pretty_name());
 
    detail::erf_initializer<value_type, forwarding_policy, tag_type>::force_instantiate(); // Force constants to be initialized before main
 
@@ -1098,9 +1098,9 @@ inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
 
-   BOOST_MATH_INSTRUMENT_CODE("result_type = " << typeid(result_type).name());
-   BOOST_MATH_INSTRUMENT_CODE("value_type = " << typeid(value_type).name());
-   BOOST_MATH_INSTRUMENT_CODE("precision_type = " << typeid(precision_type).name());
+   BOOST_MATH_INSTRUMENT_CODE("result_type = " << typeindex::type_id<result_type>().pretty_name());
+   BOOST_MATH_INSTRUMENT_CODE("value_type = " << typeindex::type_id<value_type>().pretty_name());
+   BOOST_MATH_INSTRUMENT_CODE("precision_type = " << typeindex::type_id<precision_type>().pretty_name());
 
    typedef typename mpl::if_<
       mpl::less_equal<precision_type, mpl::int_<0> >,
@@ -1120,7 +1120,7 @@ inline typename tools::promote_args<T>::type erfc(T z, const Policy& /* pol */)
       >::type
    >::type tag_type;
 
-   BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeid(tag_type).name());
+   BOOST_MATH_INSTRUMENT_CODE("tag_type = " << typeindex::type_id<tag_type>().pretty_name());
 
    detail::erf_initializer<value_type, forwarding_policy, tag_type>::force_instantiate(); // Force constants to be initialized before main
 
