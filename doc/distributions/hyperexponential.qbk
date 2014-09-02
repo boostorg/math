@@ -123,10 +123,12 @@ In (Wolski et al.,2013), the authors analyze and model workloads gathered from e
 
 In this type of computing system, user requests consist in demanding the provisioning of one or more [@http://en.wikipedia.org/wiki/Virtual_machine Virtual Machines] (VMs).
 In particular, in (Wolski et al.,2013) the workload experienced by each cloud system is a function of four distributions, one for each of the following workload attributes:
+
 * /Request Interarrival Time/: the amount of time until the next request,
 * /VM Lifetime/: the time duration over which a VM is provisioned to a physical machine,
 * /Request Size/: the number of VMs in the request, and
 * /Core Count/: the CPU core count requested for each VM.
+
 The authors assume that all VMs in a request have the same core count, but request sizes and core counts can vary from request to request.
 Moreover, all VMs within a request are assumed to have the same lifetime.
 Given these assumptions, the authors build a statistical model for the request interarrival time and VM lifetime attributes by fitting their respective data to a 3-phase hyperexponential distribution.
