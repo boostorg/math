@@ -30,7 +30,7 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">/</span><span class="identifier">hyperexponential</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></pre>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealTypr</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
           <span class="keyword">typename</span> <a class="link" href="../../../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">hyperexponential_distribution</span><span class="special">;</span>
 
@@ -152,8 +152,9 @@
 <p>
           Finally, since the hyperexponential distribution exhibits a high Coefficient
           of Variation (CoV), that is a CoV &gt; 1, it is especially suited to fit
-          empirical data with large CoV (Feitelson,2014) and to approximate <a href="http://en.wikipedia.org/wiki/Long_tail" target="_top">long-tail probability distributions</a>
-          (Feldmann et al.,1998).
+          empirical data with large CoV (Feitelson,2014; Wolski et al.,2013) and
+          to approximate <a href="http://en.wikipedia.org/wiki/Long_tail" target="_top">long-tail
+          probability distributions</a> (Feldmann et al.,1998).
         </p>
 <h4>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h1"></a>
@@ -176,6 +177,11 @@
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h2"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.examples"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.examples">Examples</a>
         </h4>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h3"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.lifetime_of_appliances"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.lifetime_of_appliances">Lifetime
+          of Appliances</a>
+        </h5>
 <p>
           Suppose a customer is buying an appliance and is choosing at random between
           an appliance with average lifetime of 10 years and an appliance with average
@@ -213,13 +219,481 @@
 <pre class="programlisting"><span class="identifier">Average</span> <span class="identifier">lifetime</span><span class="special">:</span> <span class="number">11</span> <span class="identifier">years</span>
 <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">the</span> <span class="identifier">appliance</span> <span class="identifier">will</span> <span class="identifier">work</span> <span class="keyword">for</span> <span class="identifier">more</span> <span class="identifier">than</span> <span class="number">15</span> <span class="identifier">years</span><span class="special">:</span> <span class="number">0.254817</span>
 </pre>
+<h5>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h4"></a>
+          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.workloads_of_private_cloud_compu"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.workloads_of_private_cloud_compu">Workloads
+          of Private Cloud Computing Systems</a>
+        </h5>
+<p>
+          <a href="http://en.wikipedia.org/wiki/Cloud_computing" target="_top">Cloud computing</a>
+          has become a popular metaphor for dynamic and secure self-service access
+          to computational and storage capabilities. In (Wolski et al.,2013), the
+          authors analyze and model workloads gathered from enterprise-operated commercial
+          <a href="http://en.wikipedia.org/wiki/Cloud_computing#Private_cloud" target="_top">private
+          clouds</a> and show that 3-phase hyperexponential distributions (fitted
+          using the <a href="http://en.wikipedia.org/wiki/Expectation%E2%80%93maximization_algorithm" target="_top">Expectation
+          Maximization algorithm</a>) capture workload attributes accurately.
+        </p>
+<p>
+          In this type of computing system, user requests consist in demanding the
+          provisioning of one or more <a href="http://en.wikipedia.org/wiki/Virtual_machine" target="_top">Virtual
+          Machines</a> (VMs). In particular, in (Wolski et al.,2013) the workload
+          experienced by each cloud system is a function of four distributions, one
+          for each of the following workload attributes:
+        </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+              <span class="emphasis"><em>Request Interarrival Time</em></span>: the amount of time
+              until the next request,
+            </li>
+<li class="listitem">
+              <span class="emphasis"><em>VM Lifetime</em></span>: the time duration over which a VM
+              is provisioned to a physical machine,
+            </li>
+<li class="listitem">
+              <span class="emphasis"><em>Request Size</em></span>: the number of VMs in the request,
+              and
+            </li>
+<li class="listitem">
+              <span class="emphasis"><em>Core Count</em></span>: the CPU core count requested for each
+              VM.
+            </li>
+</ul></div>
+<p>
+          The authors assume that all VMs in a request have the same core count,
+          but request sizes and core counts can vary from request to request. Moreover,
+          all VMs within a request are assumed to have the same lifetime. Given these
+          assumptions, the authors build a statistical model for the request interarrival
+          time and VM lifetime attributes by fitting their respective data to a 3-phase
+          hyperexponential distribution.
+        </p>
+<p>
+          In the following table, we show the sample mean and standard deviation
+          (SD), in seconds, of the request interarrival time and of the VM lifetime
+          distributions of the three datasets collected by authors:
+        </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+                  <p>
+                    Dataset
+                  </p>
+                </th>
+<th>
+                  <p>
+                    Mean Request Interarrival Time (SD)
+                  </p>
+                </th>
+<th>
+                  <p>
+                    Mean Multi-core VM Lifetime (SD)
+                  </p>
+                </th>
+<th>
+                  <p>
+                    Mean Single-core VM Lifetime (SD)
+                  </p>
+                </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+                  <p>
+                    DS1
+                  </p>
+                </td>
+<td>
+                  <p>
+                    2202.1 (2.2e+04)
+                  </p>
+                </td>
+<td>
+                  <p>
+                    257173 (4.6e+05)
+                  </p>
+                </td>
+<td>
+                  <p>
+                    28754.4 (1.6e+05)
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    DS2
+                  </p>
+                </td>
+<td>
+                  <p>
+                    41285.7 (1.1e+05)
+                  </p>
+                </td>
+<td>
+                  <p>
+                    144669.0 (7.9e+05)
+                  </p>
+                </td>
+<td>
+                  <p>
+                    599815.0 (1.7e+06)
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    DS3
+                  </p>
+                </td>
+<td>
+                  <p>
+                    11238.8 (3.0e+04)
+                  </p>
+                </td>
+<td>
+                  <p>
+                    30739.2 (1.6e+05)
+                  </p>
+                </td>
+<td>
+                  <p>
+                    44447.8 (2.2e+05)
+                  </p>
+                </td>
+</tr>
+</tbody>
+</table></div>
+<p>
+          Whereas in the following table we show the hyperexponential distribution
+          parameters resulting from the fit:
+        </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+                  <p>
+                    Dataset
+                  </p>
+                </th>
+<th>
+                  <p>
+                    Request Interarrival Time
+                  </p>
+                </th>
+<th>
+                  <p>
+                    Multi-core VM Lifetime
+                  </p>
+                </th>
+<th>
+                  <p>
+                    Single-core VM Lifetime
+                  </p>
+                </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+                  <p>
+                    DS1
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.34561,0.08648,0.56791),
+                    <span class="bold"><strong>&#955;</strong></span>=(0.008,0.00005,0.02894)</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.24667,0.37948,0.37385),
+                    <span class="bold"><strong>&#955;</strong></span>=(0.00004,0.000002,0.00059)</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.09325,0.22251,0.68424),
+                    <span class="bold"><strong>&#955;</strong></span>=(0.000003,0.00109,0.00109)</em></span>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    DS2
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.38881,0.18227,0.42892),
+                    <span class="bold"><strong>&#955;</strong></span>=(0.000006,0.05228,0.00081)</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.42093,0.43960,0.13947),
+                    <span class="bold"><strong>&#955;</strong></span>=(0.00186,0.00008,0.0000008)</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.44885,0.30675,0.2444),
+                    <span class="bold"><strong>&#955;</strong></span>=(0.00143,0.00005,0.0000004)</em></span>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    DS3
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.39442,0.24644,0.35914),
+                    <span class="bold"><strong>&#955;</strong></span>=(0.00030,0.00003,0.00257)</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.37621,0.14838,0.47541),
+                    <span class="bold"><strong>&#955;</strong></span>=(0.00498,0.000005,0.00022)</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span>=(0.34131,0.12544,0.53325),
+                    <span class="bold"><strong>&#955;</strong></span>=(0.000297,0.000003,0.00410)</em></span>
+                  </p>
+                </td>
+</tr>
+</tbody>
+</table></div>
+<p>
+          In the rest of this section, we provide a possible C++ implementation for
+          computing some statistical properties of the fitted distributions for each
+          of the analyzed dataset.
+        </p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">distributions</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">string</span><span class="special">&gt;</span>
+
+<span class="keyword">struct</span> <span class="identifier">ds_info</span>
+<span class="special">{</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">name</span><span class="special">;</span>
+	<span class="keyword">double</span> <span class="identifier">iat_sample_mean</span><span class="special">;</span>
+	<span class="keyword">double</span> <span class="identifier">iat_sample_sd</span><span class="special">;</span>
+	<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span> <span class="identifier">iat_he</span><span class="special">;</span>
+	<span class="keyword">double</span> <span class="identifier">multi_lt_sample_mean</span><span class="special">;</span>
+	<span class="keyword">double</span> <span class="identifier">multi_lt_sample_sd</span><span class="special">;</span>
+	<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span> <span class="identifier">multi_lt_he</span><span class="special">;</span>
+	<span class="keyword">double</span> <span class="identifier">single_lt_sample_mean</span><span class="special">;</span>
+	<span class="keyword">double</span> <span class="identifier">single_lt_sample_sd</span><span class="special">;</span>
+	<span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span> <span class="identifier">single_lt_he</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="comment">// DS1 dataset</span>
+<span class="identifier">ds_info</span> <span class="identifier">make_ds1</span><span class="special">()</span>
+<span class="special">{</span>
+	<span class="identifier">ds_info</span> <span class="identifier">ds</span><span class="special">;</span>
+
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">name</span> <span class="special">=</span> <span class="string">"DS1"</span><span class="special">;</span>
+
+	<span class="comment">// VM interarrival time distribution</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">iat_fit_probs</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.34561</span><span class="special">,</span><span class="number">0.08648</span><span class="special">,</span><span class="number">0.56791</span><span class="special">};</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">iat_fit_rates</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.0008</span><span class="special">,</span><span class="number">0.00005</span><span class="special">,</span><span class="number">0.02894</span><span class="special">};</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_sample_mean</span> <span class="special">=</span> <span class="number">2202.1</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_sample_sd</span> <span class="special">=</span> <span class="number">2.2e+4</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_he</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span><span class="special">(</span><span class="identifier">iat_fit_probs</span><span class="special">,</span> <span class="identifier">iat_fit_rates</span><span class="special">);</span>
+
+	<span class="comment">// Multi-core VM lifetime distribution</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">multi_lt_fit_probs</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.24667</span><span class="special">,</span><span class="number">0.37948</span><span class="special">,</span><span class="number">0.37385</span><span class="special">};</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">multi_lt_fit_rates</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.00004</span><span class="special">,</span><span class="number">0.000002</span><span class="special">,</span><span class="number">0.00059</span><span class="special">};</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_sample_mean</span> <span class="special">=</span> <span class="number">257173</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_sample_sd</span> <span class="special">=</span> <span class="number">4.6e+5</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_he</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span><span class="special">(</span><span class="identifier">multi_lt_fit_probs</span><span class="special">,</span> <span class="identifier">multi_lt_fit_rates</span><span class="special">);</span>
+
+	<span class="comment">// Single-core VM lifetime distribution</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">single_lt_fit_probs</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.09325</span><span class="special">,</span><span class="number">0.22251</span><span class="special">,</span><span class="number">0.68424</span><span class="special">};</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">single_lt_fit_rates</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.000003</span><span class="special">,</span><span class="number">0.00109</span><span class="special">,</span><span class="number">0.00109</span><span class="special">};</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_sample_mean</span> <span class="special">=</span> <span class="number">28754.4</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_sample_sd</span> <span class="special">=</span> <span class="number">1.6e+5</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_he</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span><span class="special">(</span><span class="identifier">single_lt_fit_probs</span><span class="special">,</span> <span class="identifier">single_lt_fit_rates</span><span class="special">);</span>
+
+	<span class="keyword">return</span> <span class="identifier">ds</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="comment">// DS2 dataset</span>
+<span class="identifier">ds_info</span> <span class="identifier">make_ds2</span><span class="special">()</span>
+<span class="special">{</span>
+	<span class="identifier">ds_info</span> <span class="identifier">ds</span><span class="special">;</span>
+
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">name</span> <span class="special">=</span> <span class="string">"DS2"</span><span class="special">;</span>
+
+	<span class="comment">// VM interarrival time distribution</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">iat_fit_probs</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.38881</span><span class="special">,</span><span class="number">0.18227</span><span class="special">,</span><span class="number">0.42892</span><span class="special">};</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">iat_fit_rates</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.000006</span><span class="special">,</span><span class="number">0.05228</span><span class="special">,</span><span class="number">0.00081</span><span class="special">};</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_sample_mean</span> <span class="special">=</span> <span class="number">41285.7</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_sample_sd</span> <span class="special">=</span> <span class="number">1.1e+05</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_he</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span><span class="special">(</span><span class="identifier">iat_fit_probs</span><span class="special">,</span> <span class="identifier">iat_fit_rates</span><span class="special">);</span>
+
+	<span class="comment">// Multi-core VM lifetime distribution</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">multi_lt_fit_probs</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.42093</span><span class="special">,</span><span class="number">0.43960</span><span class="special">,</span><span class="number">0.13947</span><span class="special">};</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">multi_lt_fit_rates</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.00186</span><span class="special">,</span><span class="number">0.00008</span><span class="special">,</span><span class="number">0.0000008</span><span class="special">};</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_sample_mean</span> <span class="special">=</span> <span class="number">144669.0</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_sample_sd</span> <span class="special">=</span> <span class="number">7.9e+05</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_he</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span><span class="special">(</span><span class="identifier">multi_lt_fit_probs</span><span class="special">,</span> <span class="identifier">multi_lt_fit_rates</span><span class="special">);</span>
+
+	<span class="comment">// Single-core VM lifetime distribution</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">single_lt_fit_probs</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.44885</span><span class="special">,</span><span class="number">0.30675</span><span class="special">,</span><span class="number">0.2444</span><span class="special">};</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">single_lt_fit_rates</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.00143</span><span class="special">,</span><span class="number">0.00005</span><span class="special">,</span><span class="number">0.0000004</span><span class="special">};</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_sample_mean</span> <span class="special">=</span> <span class="number">599815.0</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_sample_sd</span> <span class="special">=</span> <span class="number">1.7e+06</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_he</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span><span class="special">(</span><span class="identifier">single_lt_fit_probs</span><span class="special">,</span> <span class="identifier">single_lt_fit_rates</span><span class="special">);</span>
+
+	<span class="keyword">return</span> <span class="identifier">ds</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="comment">// DS3 dataset</span>
+<span class="identifier">ds_info</span> <span class="identifier">make_ds3</span><span class="special">()</span>
+<span class="special">{</span>
+	<span class="identifier">ds_info</span> <span class="identifier">ds</span><span class="special">;</span>
+
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">name</span> <span class="special">=</span> <span class="string">"DS3"</span><span class="special">;</span>
+
+	<span class="comment">// VM interarrival time distribution</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">iat_fit_probs</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.39442</span><span class="special">,</span><span class="number">0.24644</span><span class="special">,</span><span class="number">0.35914</span><span class="special">};</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">iat_fit_rates</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.00030</span><span class="special">,</span><span class="number">0.00003</span><span class="special">,</span><span class="number">0.00257</span><span class="special">};</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_sample_mean</span> <span class="special">=</span> <span class="number">11238.8</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_sample_sd</span> <span class="special">=</span> <span class="number">3.0e+04</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_he</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span><span class="special">(</span><span class="identifier">iat_fit_probs</span><span class="special">,</span> <span class="identifier">iat_fit_rates</span><span class="special">);</span>
+
+	<span class="comment">// Multi-core VM lifetime distribution</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">multi_lt_fit_probs</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.37621</span><span class="special">,</span><span class="number">0.14838</span><span class="special">,</span><span class="number">0.47541</span><span class="special">};</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">multi_lt_fit_rates</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.00498</span><span class="special">,</span><span class="number">0.000005</span><span class="special">,</span><span class="number">0.00022</span><span class="special">};</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_sample_mean</span> <span class="special">=</span> <span class="number">30739.2</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_sample_sd</span> <span class="special">=</span> <span class="number">1.6e+05</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_he</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span><span class="special">(</span><span class="identifier">multi_lt_fit_probs</span><span class="special">,</span> <span class="identifier">multi_lt_fit_rates</span><span class="special">);</span>
+
+	<span class="comment">// Single-core VM lifetime distribution</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">single_lt_fit_probs</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.34131</span><span class="special">,</span><span class="number">0.12544</span><span class="special">,</span><span class="number">0.53325</span><span class="special">};</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">single_lt_fit_rates</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">0.000297</span><span class="special">,</span><span class="number">0.000003</span><span class="special">,</span><span class="number">0.00410</span><span class="special">};</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_sample_mean</span> <span class="special">=</span> <span class="number">44447.8</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_sample_sd</span> <span class="special">=</span> <span class="number">2.2e+05</span><span class="special">;</span>
+	<span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_he</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">hyperexponential</span><span class="special">(</span><span class="identifier">single_lt_fit_probs</span><span class="special">,</span> <span class="identifier">single_lt_fit_rates</span><span class="special">);</span>
+
+	<span class="keyword">return</span> <span class="identifier">ds</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="keyword">void</span> <span class="identifier">print_fitted</span><span class="special">(</span><span class="identifier">ds_info</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">ds</span><span class="special">)</span>
+<span class="special">{</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">secs_in_a_hour</span> <span class="special">=</span> <span class="number">3600</span><span class="special">;</span>
+	<span class="keyword">const</span> <span class="keyword">double</span> <span class="identifier">secs_in_a_month</span> <span class="special">=</span> <span class="number">30</span><span class="special">*</span><span class="number">24</span><span class="special">*</span><span class="identifier">secs_in_a_hour</span><span class="special">;</span>
+
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"### "</span> <span class="special">&lt;&lt;</span> <span class="identifier">ds</span><span class="special">.</span><span class="identifier">name</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"* Fitted Request Interarrival Time"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - Mean (SD): "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">mean</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_he</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">" ("</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">standard_deviation</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_he</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">") seconds."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - 99th Percentile: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_he</span><span class="special">,</span> <span class="number">0.99</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">" seconds."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - Probability that a VM will arrive within 30 minutes: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_he</span><span class="special">,</span> <span class="identifier">secs_in_a_hour</span><span class="special">/</span><span class="number">2.0</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - Probability that a VM will arrive after 1 hour: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">iat_he</span><span class="special">,</span> <span class="identifier">secs_in_a_hour</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"* Fitted Multi-core VM Lifetime"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - Mean (SD): "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">mean</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_he</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">" ("</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">standard_deviation</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_he</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">") seconds."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - 99th Percentile: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_he</span><span class="special">,</span> <span class="number">0.99</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">" seconds."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - Probability that a VM will last for less than 1 month: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_he</span><span class="special">,</span> <span class="identifier">secs_in_a_month</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - Probability that a VM will last for more than 3 months: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">multi_lt_he</span><span class="special">,</span> <span class="number">3.0</span><span class="special">*</span><span class="identifier">secs_in_a_month</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"* Fitted Single-core VM Lifetime"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - Mean (SD): "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">mean</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_he</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">" ("</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">standard_deviation</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_he</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">") seconds."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - 99th Percentile: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quantile</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_he</span><span class="special">,</span> <span class="number">0.99</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">" seconds."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - Probability that a VM will last for less than 1 month: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_he</span><span class="special">,</span> <span class="identifier">secs_in_a_month</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+	<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">" - Probability that a VM will last for more than 3 months: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cdf</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">complement</span><span class="special">(</span><span class="identifier">ds</span><span class="special">.</span><span class="identifier">single_lt_he</span><span class="special">,</span> <span class="number">3.0</span><span class="special">*</span><span class="identifier">secs_in_a_month</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+	<span class="identifier">print_fitted</span><span class="special">(</span><span class="identifier">make_ds1</span><span class="special">());</span>
+
+	<span class="identifier">print_fitted</span><span class="special">(</span><span class="identifier">make_ds2</span><span class="special">());</span>
+
+	<span class="identifier">print_fitted</span><span class="special">(</span><span class="identifier">make_ds3</span><span class="special">());</span>
+<span class="special">}</span>
+</pre>
+<p>
+          The resulting output is:
+        </p>
+<pre class="programlisting"><span class="special">###</span> <span class="identifier">DS1</span>
+<span class="special">*</span> <span class="identifier">Fitted</span> <span class="identifier">Request</span> <span class="identifier">Interarrival</span> <span class="identifier">Time</span>
+ <span class="special">-</span> <span class="identifier">Mean</span> <span class="special">(</span><span class="identifier">SD</span><span class="special">):</span> <span class="number">2181.24</span> <span class="special">(</span><span class="number">8093.68</span><span class="special">)</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="number">99</span><span class="identifier">th</span> <span class="identifier">Percentile</span><span class="special">:</span> <span class="number">43146.6</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">arrive</span> <span class="identifier">within</span> <span class="number">30</span> <span class="identifier">minutes</span><span class="special">:</span> <span class="number">0.839079</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">arrive</span> <span class="identifier">after</span> <span class="number">1</span> <span class="identifier">hour</span><span class="special">:</span> <span class="number">0.0916349</span>
+<span class="special">*</span> <span class="identifier">Fitted</span> <span class="identifier">Multi</span><span class="special">-</span><span class="identifier">core</span> <span class="identifier">VM</span> <span class="identifier">Lifetime</span>
+ <span class="special">-</span> <span class="identifier">Mean</span> <span class="special">(</span><span class="identifier">SD</span><span class="special">):</span> <span class="number">196540</span> <span class="special">(</span><span class="number">389130</span><span class="special">)</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="number">99</span><span class="identifier">th</span> <span class="identifier">Percentile</span><span class="special">:</span> <span class="number">1.81811e+06</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">less</span> <span class="identifier">than</span> <span class="number">1</span> <span class="identifier">month</span><span class="special">:</span> <span class="number">0.997873</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">more</span> <span class="identifier">than</span> <span class="number">3</span> <span class="identifier">months</span><span class="special">:</span> <span class="number">6.68407e-08</span>
+<span class="special">*</span> <span class="identifier">Fitted</span> <span class="identifier">Single</span><span class="special">-</span><span class="identifier">core</span> <span class="identifier">VM</span> <span class="identifier">Lifetime</span>
+ <span class="special">-</span> <span class="identifier">Mean</span> <span class="special">(</span><span class="identifier">SD</span><span class="special">):</span> <span class="number">31915.2</span> <span class="special">(</span><span class="number">140375</span><span class="special">)</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="number">99</span><span class="identifier">th</span> <span class="identifier">Percentile</span><span class="special">:</span> <span class="number">744233</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">less</span> <span class="identifier">than</span> <span class="number">1</span> <span class="identifier">month</span><span class="special">:</span> <span class="number">0.999961</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">more</span> <span class="identifier">than</span> <span class="number">3</span> <span class="identifier">months</span><span class="special">:</span> <span class="number">6.8933e-12</span>
+<span class="special">###</span> <span class="identifier">DS2</span>
+<span class="special">*</span> <span class="identifier">Fitted</span> <span class="identifier">Request</span> <span class="identifier">Interarrival</span> <span class="identifier">Time</span>
+ <span class="special">-</span> <span class="identifier">Mean</span> <span class="special">(</span><span class="identifier">SD</span><span class="special">):</span> <span class="number">65334.7</span> <span class="special">(</span><span class="number">131656</span><span class="special">)</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="number">99</span><span class="identifier">th</span> <span class="identifier">Percentile</span><span class="special">:</span> <span class="number">610084</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">arrive</span> <span class="identifier">within</span> <span class="number">30</span> <span class="identifier">minutes</span><span class="special">:</span> <span class="number">0.515556</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">arrive</span> <span class="identifier">after</span> <span class="number">1</span> <span class="identifier">hour</span><span class="special">:</span> <span class="number">0.403728</span>
+<span class="special">*</span> <span class="identifier">Fitted</span> <span class="identifier">Multi</span><span class="special">-</span><span class="identifier">core</span> <span class="identifier">VM</span> <span class="identifier">Lifetime</span>
+ <span class="special">-</span> <span class="identifier">Mean</span> <span class="special">(</span><span class="identifier">SD</span><span class="special">):</span> <span class="number">180059</span> <span class="special">(</span><span class="number">635264</span><span class="special">)</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="number">99</span><span class="identifier">th</span> <span class="identifier">Percentile</span><span class="special">:</span> <span class="number">3.29408e+06</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">less</span> <span class="identifier">than</span> <span class="number">1</span> <span class="identifier">month</span><span class="special">:</span> <span class="number">0.982464</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">more</span> <span class="identifier">than</span> <span class="number">3</span> <span class="identifier">months</span><span class="special">:</span> <span class="number">0.000277218</span>
+<span class="special">*</span> <span class="identifier">Fitted</span> <span class="identifier">Single</span><span class="special">-</span><span class="identifier">core</span> <span class="identifier">VM</span> <span class="identifier">Lifetime</span>
+ <span class="special">-</span> <span class="identifier">Mean</span> <span class="special">(</span><span class="identifier">SD</span><span class="special">):</span> <span class="number">617449</span> <span class="special">(</span><span class="number">1.63524e+06</span><span class="special">)</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="number">99</span><span class="identifier">th</span> <span class="identifier">Percentile</span><span class="special">:</span> <span class="number">7.99055e+06</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">less</span> <span class="identifier">than</span> <span class="number">1</span> <span class="identifier">month</span><span class="special">:</span> <span class="number">0.913339</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">more</span> <span class="identifier">than</span> <span class="number">3</span> <span class="identifier">months</span><span class="special">:</span> <span class="number">0.0108961</span>
+<span class="special">###</span> <span class="identifier">DS3</span>
+<span class="special">*</span> <span class="identifier">Fitted</span> <span class="identifier">Request</span> <span class="identifier">Interarrival</span> <span class="identifier">Time</span>
+ <span class="special">-</span> <span class="identifier">Mean</span> <span class="special">(</span><span class="identifier">SD</span><span class="special">):</span> <span class="number">9669.14</span> <span class="special">(</span><span class="number">21518</span><span class="special">)</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="number">99</span><span class="identifier">th</span> <span class="identifier">Percentile</span><span class="special">:</span> <span class="number">106818</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">arrive</span> <span class="identifier">within</span> <span class="number">30</span> <span class="identifier">minutes</span><span class="special">:</span> <span class="number">0.53315</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">arrive</span> <span class="identifier">after</span> <span class="number">1</span> <span class="identifier">hour</span><span class="special">:</span> <span class="number">0.355189</span>
+<span class="special">*</span> <span class="identifier">Fitted</span> <span class="identifier">Multi</span><span class="special">-</span><span class="identifier">core</span> <span class="identifier">VM</span> <span class="identifier">Lifetime</span>
+ <span class="special">-</span> <span class="identifier">Mean</span> <span class="special">(</span><span class="identifier">SD</span><span class="special">):</span> <span class="number">31912.5</span> <span class="special">(</span><span class="number">104267</span><span class="special">)</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="number">99</span><span class="identifier">th</span> <span class="identifier">Percentile</span><span class="special">:</span> <span class="number">539438</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">less</span> <span class="identifier">than</span> <span class="number">1</span> <span class="identifier">month</span><span class="special">:</span> <span class="number">1</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">more</span> <span class="identifier">than</span> <span class="number">3</span> <span class="identifier">months</span><span class="special">:</span> <span class="number">1.93199e-18</span>
+<span class="special">*</span> <span class="identifier">Fitted</span> <span class="identifier">Single</span><span class="special">-</span><span class="identifier">core</span> <span class="identifier">VM</span> <span class="identifier">Lifetime</span>
+ <span class="special">-</span> <span class="identifier">Mean</span> <span class="special">(</span><span class="identifier">SD</span><span class="special">):</span> <span class="number">43092.6</span> <span class="special">(</span><span class="number">161327</span><span class="special">)</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="number">99</span><span class="identifier">th</span> <span class="identifier">Percentile</span><span class="special">:</span> <span class="number">843081</span> <span class="identifier">seconds</span><span class="special">.</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">less</span> <span class="identifier">than</span> <span class="number">1</span> <span class="identifier">month</span><span class="special">:</span> <span class="number">0.999947</span>
+ <span class="special">-</span> <span class="identifier">Probability</span> <span class="identifier">that</span> <span class="identifier">a</span> <span class="identifier">VM</span> <span class="identifier">will</span> <span class="identifier">last</span> <span class="keyword">for</span> <span class="identifier">more</span> <span class="identifier">than</span> <span class="number">3</span> <span class="identifier">months</span><span class="special">:</span> <span class="number">9.27287e-12</span>
+</pre>
+<p>
+          Please note that the above results differ from the ones shown in Tables
+          III, V, and VII of (Wolski et al.,2013). We carefully double-checked them
+          with Wolfram Mathematica 10, which confirmed our results. See the Accuracy
+          Section for a general discussion on accuracy issues.
+        </p>
 <h4>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h3"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h5"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.member_functions"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.member_functions">Member
           Functions</a>
         </h4>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h4"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h6"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.default_constructor"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.default_constructor">Default
           Constructor</a>
         </h5>
@@ -230,7 +704,7 @@
           (i.e., an exponential distribution) with rate <code class="computeroutput"><span class="number">1</span></code>.
         </p>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h5"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h7"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.constructor_from_iterators"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.constructor_from_iterators">Constructor
           from Iterators</a>
         </h5>
@@ -246,7 +720,7 @@
           <code class="computeroutput"><span class="identifier">rate_last</span></code>) iterator pair.
         </p>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h6"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h8"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters">Parameters</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -261,7 +735,7 @@
             </li>
 </ul></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h7"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h9"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements">Type
           Requirements</a>
         </h6>
@@ -271,7 +745,7 @@
               concept.
             </li></ul></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h8"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h10"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.example"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.example">Example</a>
         </h6>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">2</span><span class="special">&gt;</span> <span class="identifier">phase_prob</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.5</span> <span class="special">};</span>
@@ -280,7 +754,7 @@
 <span class="identifier">hyperexponential</span> <span class="identifier">he</span><span class="special">(</span><span class="identifier">phase_prob</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">phase_prob</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">rates</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">rates</span><span class="special">.</span><span class="identifier">end</span><span class="special">());</span>
 </pre>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h9"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h11"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.construction_from_ranges_contain"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.construction_from_ranges_contain">Construction
           from Ranges/Containers</a>
         </h5>
@@ -307,7 +781,7 @@
           </p></td></tr>
 </table></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h10"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h12"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters0"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters0">Parameters</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -323,7 +797,7 @@
             </li>
 </ul></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h11"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h13"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements0"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements0">Type
           Requirements</a>
         </h6>
@@ -334,7 +808,7 @@
               or a std::pair or iterators.
             </li></ul></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h12"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h14"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.examples0"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.examples0">Examples</a>
         </h6>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">2</span><span class="special">&gt;</span> <span class="identifier">phase_prob</span> <span class="special">=</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.5</span> <span class="special">};</span>
@@ -348,7 +822,7 @@
 <span class="identifier">hyperexponential</span> <span class="identifier">he2</span><span class="special">(</span><span class="identifier">phase_probs2</span><span class="special">,</span> <span class="identifier">rates2</span><span class="special">);</span>  <span class="comment">// construct from native C++ array</span>
 </pre>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h13"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h15"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.construction_with_from_iterators"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.construction_with_from_iterators">Construction
           with from iterators with equal phase probablities</a>
         </h5>
@@ -378,7 +852,7 @@
           </p></td></tr>
 </table></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h14"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h16"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters1"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters1">Parameters</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -386,7 +860,7 @@
               elements representing the rates.
             </li></ul></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h15"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h17"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements1"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements1">Type
           Requirements</a>
         </h6>
@@ -396,7 +870,7 @@
               concept.
             </li></ul></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h16"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h18"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.example0"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.example0">example</a>
         </h6>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">2</span><span class="special">&gt;</span> <span class="identifier">rates</span> <span class="special">=</span> <span class="special">{</span> <span class="number">1.0</span> <span class="special">/</span> <span class="number">10</span><span class="special">,</span> <span class="number">1.0</span> <span class="special">/</span> <span class="number">12</span> <span class="special">};</span>
@@ -406,7 +880,7 @@
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// All phase probabilities must be equal</span>
 </pre>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h17"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h19"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.construction_from_a_single_range"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.construction_from_a_single_range">Construction
           from a single range (all phase probabilities equal)</a>
         </h5>
@@ -421,7 +895,7 @@
           of the <span class="emphasis"><em>rate vector</em></span> and with each element set to <code class="computeroutput"><span class="number">1.0</span><span class="special">/</span><span class="identifier">n</span></code>).
         </p>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h18"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h20"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters2"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters2">Parameters</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -429,7 +903,7 @@
               of positive real elements representing the rates.
             </li></ul></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h19"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h21"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements2"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements2">Type
           Requirements</a>
         </h6>
@@ -440,7 +914,7 @@
               and a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code> of iterators.
             </li></ul></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h20"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h22"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.examples1"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.examples1">Examples</a>
         </h6>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">array</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="number">2</span><span class="special">&gt;</span> <span class="identifier">rates</span> <span class="special">=</span> <span class="special">{</span> <span class="number">1.0</span> <span class="special">/</span> <span class="number">10</span><span class="special">,</span> <span class="number">1.0</span> <span class="special">/</span> <span class="number">12</span> <span class="special">};</span>
@@ -450,7 +924,7 @@
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">he</span><span class="special">.</span><span class="identifier">probabilities</span><span class="special">()[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">0.5</span><span class="special">);</span> <span class="comment">// All phase probabilities must be equal</span>
 </pre>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h21"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h23"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.construction_from_initializer_li"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.construction_from_initializer_li">Construction
           from Initializer lists</a>
         </h5>
@@ -464,7 +938,7 @@
           defined by <code class="computeroutput"><span class="identifier">l2</span></code>.
         </p>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h22"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h24"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters3"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters3">Parameters</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -480,22 +954,13 @@
             </li>
 </ul></div>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h23"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements3"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements3">Type
-          Requirements</a>
-        </h6>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
-              <code class="computeroutput"><span class="identifier">ArgT</span></code>: must be a numeric
-              type.
-            </li></ul></div>
-<h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h24"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h25"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.example1"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.example1">Example</a>
         </h6>
 <pre class="programlisting"><span class="identifier">hyperexponential</span> <span class="identifier">he</span> <span class="special">=</span> <span class="special">{</span> <span class="special">{</span> <span class="number">0.5</span><span class="special">,</span> <span class="number">0.5</span> <span class="special">},</span> <span class="special">{</span> <span class="number">1.0</span> <span class="special">/</span> <span class="number">10</span><span class="special">,</span> <span class="number">1.2</span> <span class="special">/</span> <span class="number">12</span> <span class="special">}</span> <span class="special">};</span>
 </pre>
 <h5>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h25"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h26"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.construction_from_a_single_initi"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.construction_from_a_single_initi">Construction
           from a single initializer list (all phase probabilies equal)</a>
         </h5>
@@ -510,7 +975,7 @@
           of the <span class="emphasis"><em>rate vector</em></span> and with each element set to <code class="computeroutput"><span class="number">1.0</span><span class="special">/</span><span class="identifier">n</span></code>).
         </p>
 <h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h26"></a>
+<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h27"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.parameters4"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.parameters4">Parameters</a>
         </h6>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -518,15 +983,6 @@
               of non-negative real elements representing the phase probabilities;
               if elements don't sum to <code class="computeroutput"><span class="number">1</span></code>,
               they are normalized.
-            </li></ul></div>
-<h6>
-<a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h27"></a>
-          <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements4"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.type_requirements4">Type
-          Requirements</a>
-        </h6>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
-              <code class="computeroutput"><span class="identifier">ArgT</span></code>: must be a numeric
-              type.
             </li></ul></div>
 <h6>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h28"></a>
@@ -611,6 +1067,221 @@
           The hyperexponential distribution is implemented in terms of the <a class="link" href="exp_dist.html" title="Exponential Distribution">Exponential Distribution</a>
           and as such should have very small errors.
         </p>
+<p>
+          It is worth noting that we experienced some difference with the results
+          obtained with a own-made implementation of the hyperexponential distribution
+          for MATLAB and Octave:
+        </p>
+<pre class="programlisting">        function p = hyperexppdf(x, probs, rates)
+        %HYPEREXPPDF Hyperexponential probability density function
+
+        p = [];
+        for i=1:length(x)
+            p = [p; probs'*exppdf(x(i), rates)];
+        end
+
+
+        function [p] = hyperexpcdf(x, probs, rates)
+        %HYPEREXPCDF Hyperexponential cumulative distribution function
+
+        p = [];
+        for i=1:length(x)
+            p = [p; probs'*expcdf(x(i), rates)];
+        end
+    </pre>
+<p>
+          Despite this, our results fully matches the ones obtained with Wolfram
+          Mathematica 10, that (unlike MATLAB and Octave) natively provides functions
+          for the hyperexponential distribution (Wolfram,2014).
+        </p>
+<p>
+          For instance, given a hyperexponential distribution characterized by the
+          following parameters:
+        </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+              <span class="emphasis"><em><span class="bold"><strong>&#945;</strong></span> = (0.2,0.3,0.5)</em></span>
+            </li>
+<li class="listitem">
+              <span class="emphasis"><em><span class="bold"><strong>&#955;</strong></span> = (0.5,1.0,1.5)</em></span>
+            </li>
+</ul></div>
+<p>
+          under Fedora Linux 20 x86_64 (running on an Intel(R) Core(TM) i7-3540M)
+          with GNU GCC 4.8.3, we obtained the following results:
+        </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+                  <p>
+                    Implementation
+                  </p>
+                </th>
+<th>
+                  <p>
+                    pdf(0)
+                  </p>
+                </th>
+<th>
+                  <p>
+                    pdf(1)
+                  </p>
+                </th>
+<th>
+                  <p>
+                    pdf(2)
+                  </p>
+                </th>
+<th>
+                  <p>
+                    pdf(3)
+                  </p>
+                </th>
+<th>
+                  <p>
+                    pdf(4)
+                  </p>
+                </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+                  <p>
+                    MATLAB
+                  </p>
+                </td>
+<td>
+                  <p>
+                    1.033333333333333
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.335636985323608
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.135792553231720
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.061039382459897
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.028790027125382
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Octave
+                  </p>
+                </td>
+<td>
+                  <p>
+                    1.0333333333333332
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.3356369853236084
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.1357925532317197
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.0610393824598966
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.0287900271253818
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Mathematica
+                  </p>
+                </td>
+<td>
+                  <p>
+                    1.15
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.3383645184340184
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.11472883036402601
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.04558088392888389
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.02088728412278129
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    Boost
+                  </p>
+                </td>
+<td>
+                  <p>
+                    1.15
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.3383645184340184
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.114728830364026
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.04558088392888389
+                  </p>
+                </td>
+<td>
+                  <p>
+                    0.02088728412278129
+                  </p>
+                </td>
+</tr>
+</tbody>
+</table></div>
 <h4>
 <a name="math_toolkit.dist_ref.dists.hyperexponential_dist.h35"></a>
           <span class="phrase"><a name="math_toolkit.dist_ref.dists.hyperexponential_dist.implementation"></a></span><a class="link" href="hyperexponential_dist.html#math_toolkit.dist_ref.dists.hyperexponential_dist.implementation">Implementation</a>
@@ -832,14 +1503,19 @@
               &amp; Sons, Inc., 2002.
             </li>
 <li class="listitem">
-              Wolfram Mathematica, <span class="emphasis"><em>Hyperexponential Distribution</em></span>,
-              Online: <a href="http://reference.wolfram.com/language/ref/HyperexponentialDistribution.html" target="_top">http://reference.wolfram.com/language/ref/HyperexponentialDistribution.html</a>,
-              2014.
-            </li>
-<li class="listitem">
               Wikipedia, <span class="emphasis"><em>Hyperexponential Distribution</em></span>, Online:
               <a href="http://en.wikipedia.org/wiki/Hyperexponential_distribution" target="_top">http://en.wikipedia.org/wiki/Hyperexponential_distribution</a>,
               2014
+            </li>
+<li class="listitem">
+              R. Wolski and J. Brevik, <span class="emphasis"><em>Using Parametric Models to Represent
+              Private Cloud Workloads</em></span>, IEEE TSC, PrePrint, DOI: <a href="http://doi.ieeecomputersociety.org/10.1109/TSC.2013.48" target="_top">10.1109/TSC.2013.48</a>,
+              2013.
+            </li>
+<li class="listitem">
+              Wolfram Mathematica, <span class="emphasis"><em>Hyperexponential Distribution</em></span>,
+              Online: <a href="http://reference.wolfram.com/language/ref/HyperexponentialDistribution.html" target="_top">http://reference.wolfram.com/language/ref/HyperexponentialDistribution.html</a>,
+              2014.
             </li>
 </ul></div>
 </div>
