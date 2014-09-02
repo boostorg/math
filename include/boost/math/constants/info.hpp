@@ -13,7 +13,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <iostream>
 #include <iomanip>
-#include <typeinfo>
+#include <boost/type_index.hpp>
 
 namespace boost{ namespace math{ namespace constants{
 
@@ -24,22 +24,6 @@ namespace boost{ namespace math{ namespace constants{
       {
          return typeindex::type_id<T>().pretty_name();
       }
-      template <>
-      const char* nameof<float>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
-      {
-         return "float";
-      }
-      template <>
-      const char* nameof<double>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
-      {
-         return "double";
-      }
-      template <>
-      const char* nameof<long double>(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(long double))
-      {
-         return "long double";
-      }
-
    }
 
 template <class T, class Policy>

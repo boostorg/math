@@ -212,7 +212,8 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = 0)
    static bool b = false;
    if(!b)
    {
-      std::cout << "lgamma_imp called with " << typeindex::type_id<z).name() << " " << typeid(l>().pretty_name() << std::endl;
+      std::cout << "lgamma_imp called with " << typeindex::type_id<z>().pretty_name()
+                << " " << typeindex::type_id<l>().pretty_name() << std::endl;
       b = true;
    }
 #endif

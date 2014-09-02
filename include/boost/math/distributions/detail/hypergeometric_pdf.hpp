@@ -16,10 +16,6 @@
 #include <boost/math/special_functions/prime.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
-#ifdef BOOST_MATH_INSTRUMENT
-#include <typeinfo>
-#endif
-
 namespace boost{ namespace math{ namespace detail{
 
 template <class T, class Func>
