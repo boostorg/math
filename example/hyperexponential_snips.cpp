@@ -53,6 +53,7 @@ int main()
 
    {
    //[hyperexponential_snip3
+   // We could be using any standard library container here... vector, deque, array, list etc:
    std::array<double, 2> phase_prob = { 0.5, 0.5 };
    std::array<double, 2> rates      = { 1.0 / 10, 1.0 / 12 };
 
@@ -66,6 +67,7 @@ int main()
    }
    {
    //[hyperexponential_snip4
+   // We could be using any standard library container here... vector, deque, array, list etc:
    std::array<double, 2> rates = { 1.0 / 10, 1.0 / 12 };
 
    hyperexponential he(rates.begin(), rates.end());
@@ -86,7 +88,7 @@ int main()
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
    {
    //[hyperexponential_snip6
-   hyperexponential he = { { 0.5, 0.5 }, { 1.0 / 10, 1.2 / 12 } };
+   hyperexponential he = { { 0.5, 0.5 }, { 1.0 / 10, 1.0 / 12 } };
    //]
    }
    {

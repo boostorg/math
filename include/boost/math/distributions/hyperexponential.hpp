@@ -65,32 +65,22 @@ template <typename T>
 void normalize(std::vector<T>& v)
 {
     const T sum = std::accumulate(v.begin(), v.end(), static_cast<T>(0));
-
-    const typename std::vector<T>::iterator end = v.end();
+    T final_sum = 0;
+    const typename std::vector<T>::iterator end = --v.end();
     for (typename std::vector<T>::iterator it = v.begin();
          it != end;
          ++it)
     {
         *it /= sum;
+        final_sum += *it;
     }
-}
-
-template <typename T>
-bool iszero(T x)
-{
-#ifdef FP_ZERO
-    return (boost::math::fpclassify)(x) == FP_ZERO;
-    // Alternatively, we could use std::fpclassify (but this is available from ISO C99)
-    //return std::fpclassify(x) == FP_ZERO;
-#else
-    return ((x < 0) ? bool(-x < (std::numeric_limits<T>::min)())
-                    : bool(+x < (std::numeric_limits<T>::min)()));
-#endif // FP_ZERO
+    *end = 1 - final_sum;  // avoids round off errors, ensures the probs really do sum to 1.
 }
 
 template <typename RealT, typename PolicyT>
 bool check_probabilities(char const* function, std::vector<RealT> const& probabilities, RealT* presult, PolicyT const& pol)
 {
+    BOOST_MATH_STD_USING
     const std::size_t n = probabilities.size();
     RealT sum = 0;
     for (std::size_t i = 0; i < n; ++i)
@@ -108,7 +98,11 @@ bool check_probabilities(char const* function, std::vector<RealT> const& probabi
         sum += probabilities[i];
     }
 
-    if (!iszero(sum-RealT(1)))
+    //
+    // We try to keep phase probabilities correctly normalized in the distribution constructors,
+    // however in practice we have to allow for a very slight divergence from a sum of exactly 1:
+    //
+    if (fabs(sum - 1) > tools::epsilon<RealT>() * 2)
     {
         *presult = policies::raise_domain_error<RealT>(function,
                                                        "The elements of parameter \"probabilities\" must sum to 1, but their sum is: %1%.",
@@ -226,7 +220,7 @@ RealT quantile_impl(hyperexponential_distribution<RealT, PolicyT> const& dist, R
         }
     }
 
-    // Fast return in case the Hyper-Exponential is essentially and Exponential
+    // Fast return in case the Hyper-Exponential is essentially an Exponential
     if (n == 1)
     {
         return guess;
@@ -273,6 +267,7 @@ class hyperexponential_distribution
     : probs_(prob_first, prob_last),
       rates_(rate_first, rate_last)
     {
+        hyperexp_detail::normalize(probs_);
         RealT err;
         hyperexp_detail::check_dist("boost::math::hyperexponential_distribution<%1%>::hyperexponential_distribution",
                                     probs_,
@@ -291,8 +286,6 @@ class hyperexponential_distribution
     : probs_(boost::begin(prob_range), boost::end(prob_range)),
       rates_(boost::begin(rate_range), boost::end(rate_range))
     {
-        assert(probs_.size() == rates_.size());
-
         hyperexp_detail::normalize(probs_);
 
         RealT err;
@@ -314,8 +307,6 @@ class hyperexponential_distribution
     : probs_(std::distance(rate_first, rate_last), 1), // will be normalized below
       rates_(rate_first, rate_last)
     {
-        assert(probs_.size() == rates_.size());
-
         hyperexp_detail::normalize(probs_);
 
         RealT err;
@@ -332,8 +323,6 @@ public: hyperexponential_distribution(std::initializer_list<RealT> l1, std::init
       : probs_(l1.begin(), l1.end()),
         rates_(l2.begin(), l2.end())
       {
-         assert(probs_.size() == rates_.size());
-
          hyperexp_detail::normalize(probs_);
 
          RealT err;
@@ -348,8 +337,6 @@ public: hyperexponential_distribution(std::initializer_list<RealT> l1)
       : probs_(l1.size(), 1),
         rates_(l1.begin(), l1.end())
       {
-         assert(probs_.size() == rates_.size());
-
          hyperexp_detail::normalize(probs_);
 
          RealT err;
@@ -367,8 +354,6 @@ public: hyperexponential_distribution(std::initializer_list<RealT> l1)
     : probs_(boost::size(rate_range), 1), // will be normalized below
       rates_(boost::begin(rate_range), boost::end(rate_range))
     {
-        assert(probs_.size() == rates_.size());
-
         hyperexp_detail::normalize(probs_);
 
         RealT err;
