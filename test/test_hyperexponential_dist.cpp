@@ -369,3 +369,19 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(special_cases, RealT, test_types)
     BOOST_CHECK_CLOSE(boost::math::quantile(hexp2, static_cast<RealT>(0.75L)), boost::math::quantile(exp2, static_cast<RealT>(0.75L)), tol);
     BOOST_CHECK_CLOSE(boost::math::mode(hexp2), boost::math::mode(exp2), tol);
 }
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(error_cases, RealT, test_types)
+{
+   typedef boost::math::hyperexponential_distribution<RealT> dist_t;
+   boost::array<RealT, 2> probs = { { 1, 2 } };
+   boost::array<RealT, 3> probs2 = { { 1, 2, 3 } };
+   boost::array<RealT, 3> rates = { { 1, 2, 3 } };
+   BOOST_CHECK_THROW(dist_t(probs.begin(), probs.end(), rates.begin(), rates.end()), std::domain_error);
+   BOOST_CHECK_THROW(dist_t(probs, rates), std::domain_error);
+   rates[1] = 0;
+   BOOST_CHECK_THROW(dist_t(probs2, rates), std::domain_error);
+   rates[1] = -1;
+   BOOST_CHECK_THROW(dist_t(probs2, rates), std::domain_error);
+   BOOST_CHECK_THROW(dist_t(probs.begin(), probs.begin(), rates.begin(), rates.begin()), std::domain_error);
+   BOOST_CHECK_THROW(dist_t(rates.begin(), rates.begin()), std::domain_error);
+}
