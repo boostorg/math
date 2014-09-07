@@ -155,56 +155,56 @@ In the rest of this section, we provide a possible C++ implementation for comput
 
 [hyperexponential_more_snip1]
 
-The resulting output is:
+The resulting output (with floating-point precision set to 2) is:
 
     ### DS1
     * Fitted Request Interarrival Time
-     - Mean (SD): 2181.24 (8093.68) seconds.
-     - 99th Percentile: 43146.6 seconds.
-     - Probability that a VM will arrive within 30 minutes: 0.839079
-     - Probability that a VM will arrive after 1 hour: 0.0916349
+     - Mean (SD): 2.2e+03 (8.1e+03) seconds.
+     - 99th Percentile: 4.3e+04 seconds.
+     - Probability that a VM will arrive within 30 minutes: 0.84
+     - Probability that a VM will arrive after 1 hour: 0.092
     * Fitted Multi-core VM Lifetime
-     - Mean (SD): 196540 (389130) seconds.
-     - 99th Percentile: 1.81811e+06 seconds.
-     - Probability that a VM will last for less than 1 month: 0.997873
-     - Probability that a VM will last for more than 3 months: 6.68407e-08
+     - Mean (SD): 2e+05 (3.9e+05) seconds.
+     - 99th Percentile: 1.8e+06 seconds.
+     - Probability that a VM will last for less than 1 month: 1
+     - Probability that a VM will last for more than 3 months: 6.7e-08
     * Fitted Single-core VM Lifetime
-     - Mean (SD): 31915.2 (140375) seconds.
-     - 99th Percentile: 744233 seconds.
-     - Probability that a VM will last for less than 1 month: 0.999961
-     - Probability that a VM will last for more than 3 months: 6.8933e-12
+     - Mean (SD): 3.2e+04 (1.4e+05) seconds.
+     - 99th Percentile: 7.4e+05 seconds.
+     - Probability that a VM will last for less than 1 month: 1
+     - Probability that a VM will last for more than 3 months: 6.9e-12
     ### DS2
     * Fitted Request Interarrival Time
-     - Mean (SD): 65334.7 (131656) seconds.
-     - 99th Percentile: 610084 seconds.
-     - Probability that a VM will arrive within 30 minutes: 0.515556
-     - Probability that a VM will arrive after 1 hour: 0.403728
+     - Mean (SD): 6.5e+04 (1.3e+05) seconds.
+     - 99th Percentile: 6.1e+05 seconds.
+     - Probability that a VM will arrive within 30 minutes: 0.52
+     - Probability that a VM will arrive after 1 hour: 0.4
     * Fitted Multi-core VM Lifetime
-     - Mean (SD): 180059 (635264) seconds.
-     - 99th Percentile: 3.29408e+06 seconds.
-     - Probability that a VM will last for less than 1 month: 0.982464
-     - Probability that a VM will last for more than 3 months: 0.000277218
+     - Mean (SD): 1.8e+05 (6.4e+05) seconds.
+     - 99th Percentile: 3.3e+06 seconds.
+     - Probability that a VM will last for less than 1 month: 0.98
+     - Probability that a VM will last for more than 3 months: 0.00028
     * Fitted Single-core VM Lifetime
-     - Mean (SD): 617449 (1.63524e+06) seconds.
-     - 99th Percentile: 7.99055e+06 seconds.
-     - Probability that a VM will last for less than 1 month: 0.913339
-     - Probability that a VM will last for more than 3 months: 0.0108961
+     - Mean (SD): 6.2e+05 (1.6e+06) seconds.
+     - 99th Percentile: 8e+06 seconds.
+     - Probability that a VM will last for less than 1 month: 0.91
+     - Probability that a VM will last for more than 3 months: 0.011
     ### DS3
     * Fitted Request Interarrival Time
-     - Mean (SD): 9669.14 (21518) seconds.
-     - 99th Percentile: 106818 seconds.
-     - Probability that a VM will arrive within 30 minutes: 0.53315
-     - Probability that a VM will arrive after 1 hour: 0.355189
+     - Mean (SD): 9.7e+03 (2.2e+04) seconds.
+     - 99th Percentile: 1.1e+05 seconds.
+     - Probability that a VM will arrive within 30 minutes: 0.53
+     - Probability that a VM will arrive after 1 hour: 0.36
     * Fitted Multi-core VM Lifetime
-     - Mean (SD): 31912.5 (104267) seconds.
-     - 99th Percentile: 539438 seconds.
+     - Mean (SD): 3.2e+04 (1e+05) seconds.
+     - 99th Percentile: 5.4e+05 seconds.
      - Probability that a VM will last for less than 1 month: 1
-     - Probability that a VM will last for more than 3 months: 1.93199e-18
+     - Probability that a VM will last for more than 3 months: 1.9e-18
     * Fitted Single-core VM Lifetime
-     - Mean (SD): 43092.6 (161327) seconds.
-     - 99th Percentile: 843081 seconds.
-     - Probability that a VM will last for less than 1 month: 0.999947
-     - Probability that a VM will last for more than 3 months: 9.27287e-12
+     - Mean (SD): 4.3e+04 (1.6e+05) seconds.
+     - 99th Percentile: 8.4e+05 seconds.
+     - Probability that a VM will last for less than 1 month: 1
+     - Probability that a VM will last for more than 3 months: 9.3e-12
 
 [note The above results differ from the ones shown in Tables III, V, and VII of (Wolski et al.,2013).
 We carefully double-checked them with Wolfram Mathematica 10, which confirmed our results.]
