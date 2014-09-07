@@ -62,12 +62,36 @@ The [@http://en.wikipedia.org/wiki/Probability_density_function probability dens
 The following graph illustrates the PDF of the hyperexponential distribution with five different parameters, namely:
 
 # ['[*[alpha]]=(1.0)] and ['[*[lambda]]=(1.0)] (which degenerates to a simple exponential distribution),
-# ['[*[alpha]]=(0.1,0.9)] and ['[*[lambda]]=(0.5,1.5)],
-# ['[*[alpha]]=(0.9,0.1)] and ['[*[lambda]]=(0.5,1.5)],
-# ['[*[alpha]]=(0.2,0.3,0.5)] and ['[*[lambda]]=(0.5,1.0,1.5)],
-# ['[*[alpha]]=(0.5,0.3,0.2)] and ['[*[lambda]]=(0.5,1.0,1.5)].
+# ['[*[alpha]]=(0.1, 0.9)] and ['[*[lambda]]=(0.5, 1.5)],
+# ['[*[alpha]]=(0.9, 0.1)] and ['[*[lambda]]=(0.5, 1.5)],
+# ['[*[alpha]]=(0.2, 0.3, 0.5)] and ['[*[lambda]]=(0.5, 1.0, 1.5)],
+# ['[*[alpha]]=(0.5, 0.3, 0.2)] and ['[*[lambda]]=(0.5, 1.0, 1.5)].
 
 [graph hyperexponential_pdf]
+
+Also, the following graph illustrates the PDF of the hyperexponential distribution (solid lines) where only the /phase probability vector/ changes together with the PDF of the two limiting exponential distributions (dashed lines):
+
+# ['[*[alpha]]=(0.1, 0.9)] and ['[*[lambda]]=(0.5, 1.5)],
+# ['[*[alpha]]=(0.6, 0.4)] and ['[*[lambda]]=(0.5, 1.5)],
+# ['[*[alpha]]=(0.9, 0.1)] and ['[*[lambda]]=(0.5, 1.5)],
+# Exponential distribution with parameter ['[lambda]=0.5],
+# Exponential distribution with parameter ['[lambda]=1.5].
+
+As expected, as the first element ['[alpha][sub 1]] of the /phase probability vector/ approaches to /1/ (or, equivalently, ['[alpha][sub 2]] approaches to /0/), the resulting hyperexponential distribution nears the exponential distribution with parameter ['[lambda]=0.5].
+Conversely, as the first element ['[alpha][sub 2]] of the /phase probability vector/ approaches to /1/ (or, equivalently, ['[alpha][sub 1]] approaches to /0/), the resulting hyperexponential distribution nears the exponential distribution with parameter ['[lambda]=1.5].
+
+[graph hyperexponential_pdf_samerate]
+
+Finally, the following graph compares the PDF of the hyperexponential distribution with different number of phases but with the same mean value equal to /2/:
+
+# ['[*[alpha]]=(1.0)] and ['[*[lambda]]=(2.0)] (which degenerates to a simple exponential distribution),
+# ['[*[alpha]]=(0.5, 0.5)] and ['[*[lambda]]=(0.3, 1.5)],
+# ['[*[alpha]]=(1.0/3.0, 1.0/3.0, 1.0/3.0)] and ['[*[lambda]]=(0.2, 1.5, 3.0)],
+
+[graph hyperexponential_pdf_samemean]
+
+As can be noted, even if the three distributions have the same mean value, the two hyperexponential distributions have a /longer/ tail with respect to the one of the exponential distribution.
+Indeed, the hyperexponential distribution has a larger variability than the exponential distribution, thus resulting in a [@http://en.wikipedia.org/wiki/Coefficient_of_variation Coefficient of Variation] greater than /1/ (as opposed to the one of the exponential distribution which is exactly /1/).
 
 [h3 Applications]
 
