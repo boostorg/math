@@ -364,12 +364,12 @@ public: hyperexponential_distribution(std::initializer_list<RealT> l1)
                                     PolicyT());
     }
 
-    public: std::vector<RealT> probabilities() const
+    public: std::vector<RealT> const& probabilities() const
     {
         return probs_;
     }
 
-    public: std::vector<RealT> rates() const
+    public: std::vector<RealT> const& rates() const
     {
         return rates_;
     }

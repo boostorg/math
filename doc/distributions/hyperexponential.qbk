@@ -362,14 +362,14 @@ Gets the number of phases of this distribution.
 [h5 Return Value] An non-negative integer number representing the number of phases of this distribution.
 
 
-      std::vector<RealType> probabilities() const;
+      std::vector<RealType> const& probabilities() const;
 
 Gets the /phase probability vector/ parameter of this distribution.
 
 [h5 Return Value] A vector of non-negative real numbers representing the /phase probability vector/ parameter of this distribution.
 
 
-      std::vector<RealType> rates() const;
+      std::vector<RealType> const& rates() const;
 
 Gets the /rate vector/ parameter of this distribution.
 
