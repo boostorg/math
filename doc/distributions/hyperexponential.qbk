@@ -366,6 +366,8 @@ Gets the number of phases of this distribution.
 
 Gets the /phase probability vector/ parameter of this distribution.
 
+[note The returned probabilities are the normalized versione of the ones passed at construction time.]
+
 [h5 Return Value] A vector of non-negative real numbers representing the /phase probability vector/ parameter of this distribution.
 
 
