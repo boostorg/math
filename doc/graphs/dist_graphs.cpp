@@ -700,6 +700,6 @@ int main()
        const double rates3[] = {0.2,1.5,3.0};
        hyperexponential_plotter3.add(boost::math::hyperexponential_distribution<>(probs2_2,rates2_2), "&#x3B1=(1.0/3.0,1.0/3.0,1.0/3.0), &#x3BB=(0.2,1.5,3.0)");
    }
-   hyperexponential_plotter3.plot("Exponential vs. Hyperexponential Distribution PDF", "hyperexponential_pdf_samemean.svg");
+   hyperexponential_plotter3.plot("Hyperexponential Distribution PDF (Different Number of Phases, Same Mean)", "hyperexponential_pdf_samemean.svg");
 
 } // int main()
