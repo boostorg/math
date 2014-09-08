@@ -62,12 +62,36 @@ The [@http://en.wikipedia.org/wiki/Probability_density_function probability dens
 The following graph illustrates the PDF of the hyperexponential distribution with five different parameters, namely:
 
 # ['[*[alpha]]=(1.0)] and ['[*[lambda]]=(1.0)] (which degenerates to a simple exponential distribution),
-# ['[*[alpha]]=(0.1,0.9)] and ['[*[lambda]]=(0.5,1.5)],
-# ['[*[alpha]]=(0.9,0.1)] and ['[*[lambda]]=(0.5,1.5)],
-# ['[*[alpha]]=(0.2,0.3,0.5)] and ['[*[lambda]]=(0.5,1.0,1.5)],
-# ['[*[alpha]]=(0.5,0.3,0.2)] and ['[*[lambda]]=(0.5,1.0,1.5)].
+# ['[*[alpha]]=(0.1, 0.9)] and ['[*[lambda]]=(0.5, 1.5)],
+# ['[*[alpha]]=(0.9, 0.1)] and ['[*[lambda]]=(0.5, 1.5)],
+# ['[*[alpha]]=(0.2, 0.3, 0.5)] and ['[*[lambda]]=(0.5, 1.0, 1.5)],
+# ['[*[alpha]]=(0.5, 0.3, 0.2)] and ['[*[lambda]]=(0.5, 1.0, 1.5)].
 
 [graph hyperexponential_pdf]
+
+Also, the following graph illustrates the PDF of the hyperexponential distribution (solid lines) where only the /phase probability vector/ changes together with the PDF of the two limiting exponential distributions (dashed lines):
+
+# ['[*[alpha]]=(0.1, 0.9)] and ['[*[lambda]]=(0.5, 1.5)],
+# ['[*[alpha]]=(0.6, 0.4)] and ['[*[lambda]]=(0.5, 1.5)],
+# ['[*[alpha]]=(0.9, 0.1)] and ['[*[lambda]]=(0.5, 1.5)],
+# Exponential distribution with parameter ['[lambda]=0.5],
+# Exponential distribution with parameter ['[lambda]=1.5].
+
+As expected, as the first element ['[alpha][sub 1]] of the /phase probability vector/ approaches to /1/ (or, equivalently, ['[alpha][sub 2]] approaches to /0/), the resulting hyperexponential distribution nears the exponential distribution with parameter ['[lambda]=0.5].
+Conversely, as the first element ['[alpha][sub 2]] of the /phase probability vector/ approaches to /1/ (or, equivalently, ['[alpha][sub 1]] approaches to /0/), the resulting hyperexponential distribution nears the exponential distribution with parameter ['[lambda]=1.5].
+
+[graph hyperexponential_pdf_samerate]
+
+Finally, the following graph compares the PDF of the hyperexponential distribution with different number of phases but with the same mean value equal to /2/:
+
+# ['[*[alpha]]=(1.0)] and ['[*[lambda]]=(2.0)] (which degenerates to a simple exponential distribution),
+# ['[*[alpha]]=(0.5, 0.5)] and ['[*[lambda]]=(0.3, 1.5)],
+# ['[*[alpha]]=(1.0/3.0, 1.0/3.0, 1.0/3.0)] and ['[*[lambda]]=(0.2, 1.5, 3.0)],
+
+[graph hyperexponential_pdf_samemean]
+
+As can be noted, even if the three distributions have the same mean value, the two hyperexponential distributions have a /longer/ tail with respect to the one of the exponential distribution.
+Indeed, the hyperexponential distribution has a larger variability than the exponential distribution, thus resulting in a [@http://en.wikipedia.org/wiki/Coefficient_of_variation Coefficient of Variation] greater than /1/ (as opposed to the one of the exponential distribution which is exactly /1/).
 
 [h3 Applications]
 
@@ -155,56 +179,56 @@ In the rest of this section, we provide a possible C++ implementation for comput
 
 [hyperexponential_more_snip1]
 
-The resulting output is:
+The resulting output (with floating-point precision set to 2) is:
 
     ### DS1
     * Fitted Request Interarrival Time
-     - Mean (SD): 2181.24 (8093.68) seconds.
-     - 99th Percentile: 43146.6 seconds.
-     - Probability that a VM will arrive within 30 minutes: 0.839079
-     - Probability that a VM will arrive after 1 hour: 0.0916349
+     - Mean (SD): 2.2e+03 (8.1e+03) seconds.
+     - 99th Percentile: 4.3e+04 seconds.
+     - Probability that a VM will arrive within 30 minutes: 0.84
+     - Probability that a VM will arrive after 1 hour: 0.092
     * Fitted Multi-core VM Lifetime
-     - Mean (SD): 196540 (389130) seconds.
-     - 99th Percentile: 1.81811e+06 seconds.
-     - Probability that a VM will last for less than 1 month: 0.997873
-     - Probability that a VM will last for more than 3 months: 6.68407e-08
+     - Mean (SD): 2e+05 (3.9e+05) seconds.
+     - 99th Percentile: 1.8e+06 seconds.
+     - Probability that a VM will last for less than 1 month: 1
+     - Probability that a VM will last for more than 3 months: 6.7e-08
     * Fitted Single-core VM Lifetime
-     - Mean (SD): 31915.2 (140375) seconds.
-     - 99th Percentile: 744233 seconds.
-     - Probability that a VM will last for less than 1 month: 0.999961
-     - Probability that a VM will last for more than 3 months: 6.8933e-12
+     - Mean (SD): 3.2e+04 (1.4e+05) seconds.
+     - 99th Percentile: 7.4e+05 seconds.
+     - Probability that a VM will last for less than 1 month: 1
+     - Probability that a VM will last for more than 3 months: 6.9e-12
     ### DS2
     * Fitted Request Interarrival Time
-     - Mean (SD): 65334.7 (131656) seconds.
-     - 99th Percentile: 610084 seconds.
-     - Probability that a VM will arrive within 30 minutes: 0.515556
-     - Probability that a VM will arrive after 1 hour: 0.403728
+     - Mean (SD): 6.5e+04 (1.3e+05) seconds.
+     - 99th Percentile: 6.1e+05 seconds.
+     - Probability that a VM will arrive within 30 minutes: 0.52
+     - Probability that a VM will arrive after 1 hour: 0.4
     * Fitted Multi-core VM Lifetime
-     - Mean (SD): 180059 (635264) seconds.
-     - 99th Percentile: 3.29408e+06 seconds.
-     - Probability that a VM will last for less than 1 month: 0.982464
-     - Probability that a VM will last for more than 3 months: 0.000277218
+     - Mean (SD): 1.8e+05 (6.4e+05) seconds.
+     - 99th Percentile: 3.3e+06 seconds.
+     - Probability that a VM will last for less than 1 month: 0.98
+     - Probability that a VM will last for more than 3 months: 0.00028
     * Fitted Single-core VM Lifetime
-     - Mean (SD): 617449 (1.63524e+06) seconds.
-     - 99th Percentile: 7.99055e+06 seconds.
-     - Probability that a VM will last for less than 1 month: 0.913339
-     - Probability that a VM will last for more than 3 months: 0.0108961
+     - Mean (SD): 6.2e+05 (1.6e+06) seconds.
+     - 99th Percentile: 8e+06 seconds.
+     - Probability that a VM will last for less than 1 month: 0.91
+     - Probability that a VM will last for more than 3 months: 0.011
     ### DS3
     * Fitted Request Interarrival Time
-     - Mean (SD): 9669.14 (21518) seconds.
-     - 99th Percentile: 106818 seconds.
-     - Probability that a VM will arrive within 30 minutes: 0.53315
-     - Probability that a VM will arrive after 1 hour: 0.355189
+     - Mean (SD): 9.7e+03 (2.2e+04) seconds.
+     - 99th Percentile: 1.1e+05 seconds.
+     - Probability that a VM will arrive within 30 minutes: 0.53
+     - Probability that a VM will arrive after 1 hour: 0.36
     * Fitted Multi-core VM Lifetime
-     - Mean (SD): 31912.5 (104267) seconds.
-     - 99th Percentile: 539438 seconds.
+     - Mean (SD): 3.2e+04 (1e+05) seconds.
+     - 99th Percentile: 5.4e+05 seconds.
      - Probability that a VM will last for less than 1 month: 1
-     - Probability that a VM will last for more than 3 months: 1.93199e-18
+     - Probability that a VM will last for more than 3 months: 1.9e-18
     * Fitted Single-core VM Lifetime
-     - Mean (SD): 43092.6 (161327) seconds.
-     - 99th Percentile: 843081 seconds.
-     - Probability that a VM will last for less than 1 month: 0.999947
-     - Probability that a VM will last for more than 3 months: 9.27287e-12
+     - Mean (SD): 4.3e+04 (1.6e+05) seconds.
+     - 99th Percentile: 8.4e+05 seconds.
+     - Probability that a VM will last for less than 1 month: 1
+     - Probability that a VM will last for more than 3 months: 9.3e-12
 
 [note The above results differ from the ones shown in Tables III, V, and VII of (Wolski et al.,2013).
 We carefully double-checked them with Wolfram Mathematica 10, which confirmed our results.]
@@ -362,14 +386,16 @@ Gets the number of phases of this distribution.
 [h5 Return Value] An non-negative integer number representing the number of phases of this distribution.
 
 
-      std::vector<RealType> probabilities() const;
+      std::vector<RealType> const& probabilities() const;
 
 Gets the /phase probability vector/ parameter of this distribution.
+
+[note The returned probabilities are the normalized versione of the ones passed at construction time.]
 
 [h5 Return Value] A vector of non-negative real numbers representing the /phase probability vector/ parameter of this distribution.
 
 
-      std::vector<RealType> rates() const;
+      std::vector<RealType> const& rates() const;
 
 Gets the /rate vector/ parameter of this distribution.
 
