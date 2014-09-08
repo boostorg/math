@@ -46,6 +46,9 @@ template <class RealType, class Policy>
 class geometric_distribution;
 
 template <class RealType, class Policy>
+class hyperexponential_distribution;
+
+template <class RealType, class Policy>
 class hypergeometric_distribution;
 
 template <class RealType, class Policy>

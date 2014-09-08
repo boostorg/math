@@ -211,6 +211,7 @@ run test_gamma_dist.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_geometric.cpp ../../test/build//boost_unit_test_framework ;
 run test_hankel.cpp ../../test/build//boost_unit_test_framework ;
 run test_hermite.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_hyperexponential_dist.cpp ../../test/build//boost_unit_test_framework ;
 run test_hypergeometric_dist.cpp ../../test/build//boost_unit_test_framework
         : # command line
         : # input files
@@ -746,6 +747,7 @@ run  compile_test/dist_fisher_f_incl_test.cpp compile_test_main ;
 run  compile_test/dist_gamma_incl_test.cpp compile_test_main ;
 run  compile_test/dist_inv_gamma_incl_test.cpp compile_test_main ;
 run  compile_test/dist_inv_chi_sq_incl_test.cpp compile_test_main ;
+run  compile_test/dist_hyperexponential_incl_test.cpp compile_test_main ;
 run  compile_test/dist_hypergeo_incl_test.cpp compile_test_main ;
 run  compile_test/dist_laplace_incl_test.cpp compile_test_main ;
 run  compile_test/dist_logistic_incl_test.cpp compile_test_main ;
