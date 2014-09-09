@@ -305,7 +305,8 @@ Constructs a hyperexponential distribution with /rate vector/ parameter given by
 probabilities (i.e., to a vector of the same length `n` of the /rate vector/ and with each element set to `1.0/n`).
 
 [note The final `disable_if` parameter is an implementation detail that differentiates between this two argument constructor
-and the iterator-based two argument constructor described below.]
+and the range-based two argument constructor described above.]
+
 [h5 Parameters]
 
 * `rate_first`, `rate_last`: the range of positive elements representing the rates.
