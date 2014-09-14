@@ -1030,6 +1030,47 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
 
    T result = 0; // Just to avoid warning C4701: potentially uninitialized local variable 'result' used
 
+   if(a >= max_factorial<T>::value && !normalised)
+   {
+      //
+      // When we're computing the non-normalized incomplete gamma
+      // and a is large the result is rather hard to compute unless
+      // we use logs.  There are really two options - if x is a long
+      // way from a in value then we can reliably use methods 2 and 4
+      // below in logarithmic form and go straight to the result.
+      // Otherwise we let the regularized gamma take the strain
+      // (the result is unlikely to unerflow in the central region anyway)
+      // and combine with lgamma in the hopes that we get a finite result.
+      //
+      if(invert && (a * 4 < x))
+      {
+         // This is method 4 below, done in logs:
+         result = a * log(x) - x;
+         if(p_derivative)
+            *p_derivative = exp(result);
+         result += log(upper_gamma_fraction(a, x, policies::get_epsilon<T, Policy>()));
+      }
+      else if(!invert && (a > 4 * x))
+      {
+         // This is method 2 below, done in logs:
+         result = a * log(x) - x;
+         if(p_derivative)
+            *p_derivative = exp(result);
+         T init_value = 0;
+         result += log(detail::lower_gamma_series(a, x, pol, init_value) / a);
+      }
+      else
+      {
+         result = gamma_incomplete_imp(a, x, true, invert, pol, p_derivative);
+         if(result == 0)
+            return policies::raise_evaluation_error<T>(function, "Obtained %1% for the incomplete gamma function, but in truth we don't really know what the answer is...", result, pol);
+         result = log(result) + boost::math::lgamma(a, pol);
+      }
+      if(result > tools::log_max_value<T>())
+         return policies::raise_overflow_error<T>(function, 0, pol);
+      return exp(result);
+   }
+
    BOOST_ASSERT((p_derivative == 0) || (normalised == true));
 
    bool is_int, is_half_int;
@@ -1058,6 +1099,10 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       // calculate Q via finite sum for half integer a:
       invert = !invert;
       eval_method = 1;
+   }
+   else if((x < tools::root_epsilon<T>()) && (a > 1))
+   {
+      eval_method = 6;
    }
    else if(x < 0.5)
    {
@@ -1240,6 +1285,13 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
          if(p_derivative)
             *p_derivative = regularised_gamma_prefix(a, x, pol, lanczos_type());
          break;
+      }
+   case 6:
+      {
+         // x is so small that P is necessarily very small too,
+         // use http://functions.wolfram.com/GammaBetaErf/GammaRegularized/06/01/05/01/01/
+         result = !normalised ? pow(x, a) / (a) : pow(x, a) / boost::math::tgamma(a + 1, pol);
+         result *= 1 - a * x / (a + 1);
       }
    }
 
