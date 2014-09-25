@@ -228,6 +228,10 @@ void test_spots(T)
 
       BOOST_CHECK_CLOSE(::boost::math::tgamma_lower(static_cast<T>(185), static_cast<T>(1)), static_cast<T>(0.001999286058955490074702037576083582139834300307968257924836L), tolerance);
       BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(185), static_cast<T>(1500)), static_cast<T>(1.037189524841404054867100938934493979112615962865368623e-67L), tolerance * 10);
+
+      BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(36), ldexp(static_cast<T>(1), -26)), static_cast<T>(1.03331479663861449296666513375232000000e40L), tolerance * 10);
+      BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(50.5), ldexp(static_cast<T>(1), -17)), static_cast<T>(4.2904629123519598109157551960589377e63L), tolerance * 10);
+      BOOST_CHECK_CLOSE(::boost::math::tgamma(static_cast<T>(164.5), static_cast<T>(0.125)), static_cast<T>(2.5649307433687542701168405519538910e292L), tolerance * 10);
    }
 }
 

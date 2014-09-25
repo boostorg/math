@@ -1217,13 +1217,39 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
             *p_derivative = result;
          if(result != 0)
          {
+            //
+            // If we're going to be inverting the result then we can
+            // reduce the number of series evaluations by quite
+            // a few iterations if we set an initial value for the
+            // series sum based on what we'll end up subtracting it from
+            // at the end.
+            // Have to be careful though that this optimization doesn't 
+            // lead to spurious numberic overflow.  Note that the
+            // scary/expensive overflow checks below are more often
+            // than not bypassed in practice for "sensible" input
+            // values:
+            //
             T init_value = 0;
+            bool optimised_invert = false;
             if(invert)
             {
-               init_value = -a * (normalised ? 1 : boost::math::tgamma(a, pol)) / result;
+               init_value = (normalised ? 1 : boost::math::tgamma(a, pol));
+               if(normalised || (result >= 1) || (tools::max_value<T>() * result > init_value))
+               {
+                  init_value /= result;
+                  if(normalised || (a < 1) || (tools::max_value<T>() / a > init_value))
+                  {
+                     init_value *= -a;
+                     optimised_invert = true;
+                  }
+                  else
+                     init_value = 0;
+               }
+               else
+                  init_value = 0;
             }
             result *= detail::lower_gamma_series(a, x, pol, init_value) / a;
-            if(invert)
+            if(optimised_invert)
             {
                invert = false;
                result = -result;
