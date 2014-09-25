@@ -57,12 +57,12 @@ int main()
    std::array<double, 2> phase_prob = { 0.5, 0.5 };
    std::array<double, 2> rates      = { 1.0 / 10, 1.0 / 12 };
 
-   hyperexponential he1(phase_prob, rates);    // construct from standard library container
+   hyperexponential he1(phase_prob, rates);    // Construct from standard library container.
 
    double phase_probs2[] = { 0.5, 0.5 };
    double rates2[]       = { 1.0 / 10, 1.0 / 12 };
 
-   hyperexponential he2(phase_probs2, rates2);  // construct from native C++ array
+   hyperexponential he2(phase_probs2, rates2);  // Construct from native C++ array.
    //]
    }
    {
@@ -72,7 +72,7 @@ int main()
 
    hyperexponential he(rates.begin(), rates.end());
 
-   assert(he.probabilities()[0] == 0.5); // All phase probabilities must be equal
+   assert(he.probabilities()[0] == 0.5); // Phase probabilities will be equal and normalised to unity.
    //]
    }
    {
@@ -81,7 +81,7 @@ int main()
 
    hyperexponential he(rates);
 
-   assert(he.probabilities()[0] == 0.5); // All phase probabilities must be equal
+   assert(he.probabilities()[0] == 0.5); // Phase probabilities will be equal and normalised to unity.
    //]
    }
 #endif
