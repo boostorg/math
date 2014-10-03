@@ -1,0 +1,252 @@
+[section:arcine_dist Arcsine Distribution]
+
+``#include <boost/math/distributions/arcsine.hpp>``
+
+   namespace boost{ namespace math{
+
+    template <class RealType = double,
+              class ``__Policy``   = ``__policy_class`` >
+   class arcsine_distribution;
+
+   typedef arcsine_distribution<double> arcsine; // double precision standard arcsine distribution (0,1).
+
+   template <class RealType, class ``__Policy``>
+   class arcsine_distribution
+   {
+   public:
+      typedef RealType  value_type;
+      typedef Policy    policy_type;
+      // Constructor from two range parameters, x_min and x_max:
+      arcsine_distribution(RealType x_min, RealType x_max);
+
+      // Range Parameter accessors:
+      RealType x_min() const;
+      RealType x_max() const;
+   };
+   }} // namespaces
+
+The class type `arcsine_distribution` represents a
+[@http://en.wikipedia.org/wiki/arcsine_distribution arcsine ]
+[@http://en.wikipedia.org/wiki/Probability_distribution probability distribution function].
+
+The [@http://reference.wolfram.com/language/ref/ArcSinDistribution.html arcsine distribution]
+is implemented as a generalized version with support from x_min to x_max providing the 'standard arcsine distribution' as default with x_min = 0 and x_max = 1.
+
+[note arcsine distribution is generalized to include any bounded support a <= x <= b by Wolfram and Wikipedia,
+but also using location and scale parameters by
+Virtual Laboratories in Probability and Statistics http://www.math.uah.edu/stat/index.html
+http://www.math.uah.edu/stat/special/Arcsine.html
+The end-point version is simpler and more obvious, so we implement that.
+If desired, [@http://en.wikipedia.org/wiki/arcsine_distribution arcsine ]
+outlines how the __beta_distrib can be used to add a shape factor.]
+
+[@http://www.wolframalpha.com/input/?i=+N%5BpDF%5Barcsinedistribution%5B0%2C+1%5D%2C+0.5%5D%2C+50%5D Wlfram Alpha arcsinedistribution]
+provides, for example
+
+   N[pDF[arcsinedistribution[0, 1], 0.5], 50]  0.63661977236758134307553505349005744813783858296183
+
+See also:
+
+How the arcsine distribution is used for
+
+The [@http://en.wikipedia.org/wiki/Probability_density_function probability density function PDF]
+for the [@http://en.wikipedia.org/wiki/arcsine_distribution arcsine distribution]
+defined on the interval \[0,1\] is given by:
+
+[graph arcsine_pdf]
+
+The Probability density functions (PDF) of generalized arcsine distributions are symmetric U-shaped curves, centered on ['(x_max - x_min)/2].
+
+If random variate ['x] is ['x_min] or  ['x_max], then the PDF is infinity.
+If random variate ['x] is ['x_min] then the CDF is zero.
+If random variate ['x] is ['x_max] then the CDF is unity.
+
+[note All PDF and CDF functions suffer from [@http://en.wikipedia.org/wiki/Loss_of_significance loss of significance or cancellation error]
+for values of ['x] close to ['x_max].  For example, for a standard [0, 0] arcsine distribution ['as], the pdf is symmetric about random variate ['x = 0.5]
+so that [pdf(as, 0.01) == pdf(as, 0.99)].  But as ['x] nears unity, there is increasing loss of significance.]
+
+ [h4 Member Functions]
+
+[h5 Constructor]
+
+   arcsine_distribution(RealType alpha, RealType arcsine);
+
+Constructs a arcsine distribution with range parameters ['x_min] and ['x_max].
+
+Requires ['x_min < x_min] ,otherwise __domain_error is called.
+
+For example:
+
+   arcsine_distribution<> myarcsine(-2, 4);
+
+Constructs an arcsine distribution with  ['x_min = -2] and ['x_max = 4].
+
+Default values of  ['x_min = 0] and ['x_max = 1] and a ` typedef arcsine_distribution<double> arcsine;`  mean that
+
+  arcsine as;
+
+constructs a 'standard' arcsine distribution.
+
+[h5 Parameter Accessors]
+
+   RealType x_min() const;
+
+Returns the parameter ['x_min] from which this distribution was constructed.
+
+   RealType x_max() const;
+
+Returns the parameter ['x_max]  from which this distribution was constructed.
+
+So, for example:
+
+   arcsine_distribution<> as(2, 5);
+   assert(as.x_min() == 2.);  // as.x_min() returns 2
+   assert(as.x_max() == 5.);   // as.x_max()  returns 5
+
+[h4 Parameter Estimators]
+
+Two pairs of parameter estimators are provided.
+
+One estimates either [alpha] __space or [arcsine] __space
+from presumed-known mean and variance.
+
+The other pair estimates either [alpha] __space or [arcsine] __space from
+the cdf and x.
+
+It is also possible to estimate [alpha] __space and  [arcsine] __space from
+'known' mode & quantile.  For example, calculators are provided by the
+[@http://www.ausvet.com.au/pprev/content.php?page=PPscript
+Pooled Prevalence Calculator] and
+[@http://www.epi.ucdavis.edu/diagnostictests/arcsinebuster.html Beta Buster]
+but this is not yet implemented here.
+
+      static RealType find_alpha(
+        RealType mean, // Expected value of mean.
+        RealType variance); // Expected value of variance.
+
+Returns the unique value of [alpha][space] that corresponds to a
+arcsine distribution with mean /mean/ and variance /variance/.
+
+      static RealType find_arcsine(
+        RealType mean, // Expected value of mean.
+        RealType variance); // Expected value of variance.
+
+Returns the unique value of [arcsine][space] that corresponds to a
+arcsine distribution with mean /mean/ and variance /variance/.
+
+      static RealType find_alpha(
+        RealType arcsine, // from arcsine.
+        RealType x, //  x.
+        RealType probability); // probability cdf
+
+Returns the value of [alpha][space] that gives:
+`cdf(arcsine_distribution<RealType>(alpha, arcsine), x) == probability`.
+
+      static RealType find_arcsine(
+        RealType alpha, // alpha.
+        RealType x, // probability x.
+        RealType probability); // probability cdf.
+
+Returns the value of [arcsine][space] that gives:
+`cdf(arcsine_distribution<RealType>(alpha, arcsine), x) == probability`.
+
+[h4 Non-member Accessor Functions]
+
+All the [link math_toolkit.dist_ref.nmp usual non-member accessor functions]
+that are generic to all distributions are supported: __usual_accessors.
+
+The formulae for calculating these are shown in the table below, and at
+[@http://mathworld.wolfram.com/BetaDistribution.html Wolfram Mathworld].
+
+[h4 Applications]
+
+The arcsine distribution can be used to model events constrained
+to take place within an interval defined by a minimum and maximum value:
+so it is used in project management systems.
+
+It is also widely used in [@http://en.wikipedia.org/wiki/Bayesian_inference Bayesian statistical inference].
+
+[h4 Related distributions]
+
+The arcsine distribution with both [alpha]  __space and [arcsine] = 1 follows a
+[@http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29 uniform distribution].
+
+The [@http://en.wikipedia.org/wiki/Triangular_distribution triangular]
+is used when less precise information is available.
+
+The [@http://en.wikipedia.org/wiki/Binomial_distribution binomial distribution]
+is closely related when [alpha]  __space and [arcsine]  __space are integers.
+
+With integer values of [alpha]  __space and [arcsine]  __space the distribution B(i, j) is
+that of the j-th highest of a sample of i + j + 1 independent random variables
+uniformly distributed between 0 and 1.
+The cumulative probability from 0 to x is thus
+the probability that the j-th highest value is less than x.
+Or it is the probability that that at least i of the random variables are less than x,
+a probability given by summing over the __binomial_distrib
+with its p parameter set to x.
+
+[h4 Accuracy]
+
+This distribution is implemented using the
+[link math_toolkit.sf_arcsine.arcsine_function arcsine functions] __arcsine and
+[link math_toolkit.sf_arcsine.iarcsine_function incomplete arcsine functions] __iarcsine and __iarcsinec;
+please refer to these functions for information on accuracy.
+
+[h4 Implementation]
+
+In the following table /a/ and /b/ are the parameters [alpha][space] and [arcsine],
+/x/ is the random variable, /p/ is the probability and /q = 1-p/.
+
+[table
+[[Function][Implementation Notes]]
+[[pdf]
+   [f(x;[alpha],[arcsine]) = x[super[alpha] - 1] (1 - x)[super[arcsine] -1] / B([alpha], [arcsine])
+
+    Implemented using __iarcsine_derivative(a, b, x).]]
+
+[[cdf][Using the incomplete arcsine function __iarcsine(a, b, x)]]
+[[cdf complement][__iarcsinec(a, b, x)]]
+[[quantile][Using the inverse incomplete arcsine function __iarcsine_inv(a, b, p)]]
+[[quantile from the complement][__iarcsinec_inv(a, b, q)]]
+[[mean][`a/(a+b)`]]
+[[variance][`a * b / (a+b)^2 * (a + b + 1)`]]
+[[mode][`(a-1) / (a + b - 2)`]]
+[[skewness][`2 (b-a) sqrt(a+b+1)/(a+b+2) * sqrt(a * b)`]]
+[[kurtosis excess][ [equation arcsine_dist_kurtosis]  ]]
+[[kurtosis][`kurtosis + 3`]]
+[[parameter estimation][ ]]
+[[alpha
+
+   from mean and variance][`mean * (( (mean * (1 - mean)) / variance)- 1)`]]
+[[arcsine
+
+  from mean and variance][`(1 - mean) * (((mean * (1 - mean)) /variance)-1)`]]
+[[The member functions `find_alpha` and `find_arcsine`
+
+  from cdf and probability x
+
+  and *either* `alpha` or `arcsine`]
+      [Implemented in terms of the inverse incomplete arcsine functions
+
+__iarcsine_inva, and __iarcsine_invb respectively.]]
+[[`find_alpha`][`iarcsine_inva(arcsine, x, probability)`]]
+[[`find_arcsine`][`iarcsine_invb(alpha, x, probability)`]]
+]
+
+[h4 References]
+
+[@http://en.wikipedia.org/wiki/Beta_distribution Wikipedia Beta distribution]
+
+[@http://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm NIST Exploratory Data Analysis]
+
+[@http://mathworld.wolfram.com/BetaDistribution.html Wolfram MathWorld]
+
+[endsect][/section:arcsine_dist arcsine]
+
+[/ arcsine.qbk
+  Copyright 2006 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
