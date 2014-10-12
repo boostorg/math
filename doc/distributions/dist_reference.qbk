@@ -14,6 +14,7 @@
 [include fisher.qbk]
 [include gamma.qbk]
 [include geometric.qbk]
+[include hyperexponential.qbk]
 [include hypergeometric.qbk]
 [include inverse_chi_squared.qbk]
 [include inverse_gamma.qbk]

@@ -6,6 +6,15 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
+[h4 Math-2.1.0 (boost-1.56.0)]
+
+* Added __hyperexponential_distrib.
+* Fix some spurious overflows in the incomplete gamma functions (with thanks to Rocco Romeo).
+* Fix bug in derivative of incomplete beta when a = b = 0.5 - this also effects several non-central distributions,
+see [@https://svn.boost.org/trac/boost/ticket/10480 10480].
+* Fixed some corner cases in __round.
+* Don't support 80-bit floats in cstdfloat.hpp if standard library support is broken.
+
 [h4 Math-2.0.0 (Boost-1.56.0)]
 
 * [*Breaking change]: moved a number of non-core headers that are predominantly used for internal
