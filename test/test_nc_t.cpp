@@ -37,6 +37,7 @@
 #include "test_out_of_range.hpp"
 
 #include <iostream>
+#include <iomanip>
 using std::cout;
 using std::endl;
 #include <limits>
@@ -362,6 +363,16 @@ void test_spots(RealType)
       static_cast<RealType>(40),   // T
       static_cast<RealType>(0.179292265426085),       // Probability of result (CDF), P
       static_cast<RealType>(1-0.179292265426085),           // Q = 1 - P
+      tolerance);
+
+   // From https://svn.boost.org/trac/boost/ticket/10480.
+   // Test value from Mathematica N[CDF[NoncentralStudentTDistribution[2, 4], 5], 35]:
+   test_spot(
+      static_cast<RealType>(2),   // degrees of freedom
+      static_cast<RealType>(4),   // non centrality
+      static_cast<RealType>(5),   // T
+      static_cast<RealType>(0.53202069866995310466912357978934321L),       // Probability of result (CDF), P
+      static_cast<RealType>(1 - 0.53202069866995310466912357978934321L),           // Q = 1 - P
       tolerance);
 
    /* This test fails

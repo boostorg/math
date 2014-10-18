@@ -10,6 +10,7 @@
 #pragma once
 #endif
 
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -286,7 +287,7 @@ T digamma_imp_1_2(T x, const mpl::int_<53>*)
       BOOST_MATH_BIG_CONSTANT(T, 53, -0.0020713321167745952)
    };
    static const T Q[] = {    
-      BOOST_MATH_BIG_CONSTANT(T, 53, 1),
+      BOOST_MATH_BIG_CONSTANT(T, 53, 1.0),
       BOOST_MATH_BIG_CONSTANT(T, 53, 2.0767117023730469),
       BOOST_MATH_BIG_CONSTANT(T, 53, 1.4606242909763515),
       BOOST_MATH_BIG_CONSTANT(T, 53, 0.43593529692665969),

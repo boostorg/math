@@ -7,6 +7,8 @@
 #ifndef BOOST_MATH_AIRY_HPP
 #define BOOST_MATH_AIRY_HPP
 
+#include <limits>
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/cbrt.hpp>
 #include <boost/math/special_functions/detail/airy_ai_bi_zero.hpp>
@@ -175,14 +177,13 @@ T airy_ai_zero_imp(int m, const Policy& pol)
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::airy_zero::airy_ai_zero_detail::initial_guess<T>(m);
 
-   // Select the maximum allowed iterations, being at least 24.
-   boost::uintmax_t number_of_iterations = (std::max)(24, int(std::numeric_limits<T>::digits10));
+   // Select the maximum allowed iterations based on the number
+   // of decimal digits in the numeric type T, being at least 12.
+   const int my_digits10 = static_cast<int>(static_cast<float>(policies::digits<T, Policy>() * 0.301F));
 
-   // Select the desired number of binary digits of precision.
-   // Account for the radix of number representations having non-two radix!
-   const int my_digits2 = int(float(std::numeric_limits<T>::digits)
-                              * (  log(float(std::numeric_limits<T>::radix))
-                                 / log(2.0F)));
+   const boost::uintmax_t iterations_allowed = static_cast<boost::uintmax_t>((std::max)(12, my_digits10 * 2));
+
+   boost::uintmax_t iterations_used = iterations_allowed;
 
    // Use a dynamic tolerance because the roots get closer the higher m gets.
    T tolerance;
@@ -199,10 +200,10 @@ T airy_ai_zero_imp(int m, const Policy& pol)
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
-         my_digits2,
-         number_of_iterations);
+         policies::digits<T, Policy>(),
+         iterations_used);
 
-   static_cast<void>(number_of_iterations);
+   static_cast<void>(iterations_used);
 
    return am;
 }
@@ -228,14 +229,13 @@ T airy_bi_zero_imp(int m, const Policy& pol)
    // Set up the initial guess for the upcoming root-finding.
    const T guess_root = boost::math::detail::airy_zero::airy_bi_zero_detail::initial_guess<T>(m);
 
-   // Select the maximum allowed iterations, being at least 24.
-   boost::uintmax_t number_of_iterations = (std::max)(24, int(std::numeric_limits<T>::digits10));
+   // Select the maximum allowed iterations based on the number
+   // of decimal digits in the numeric type T, being at least 12.
+   const int my_digits10 = static_cast<int>(static_cast<float>(policies::digits<T, Policy>() * 0.301F));
 
-   // Select the desired number of binary digits of precision.
-   // Account for the radix of number representations having non-two radix!
-   const int my_digits2 = int(float(std::numeric_limits<T>::digits)
-                              * (  log(float(std::numeric_limits<T>::radix))
-                                 / log(2.0F)));
+   const boost::uintmax_t iterations_allowed = static_cast<boost::uintmax_t>((std::max)(12, my_digits10 * 2));
+
+   boost::uintmax_t iterations_used = iterations_allowed;
 
    // Use a dynamic tolerance because the roots get closer the higher m gets.
    T tolerance;
@@ -252,10 +252,10 @@ T airy_bi_zero_imp(int m, const Policy& pol)
          guess_root,
          T(guess_root - tolerance),
          T(guess_root + tolerance),
-         my_digits2,
-         number_of_iterations);
+         policies::digits<T, Policy>(),
+         iterations_used);
 
-   static_cast<void>(number_of_iterations);
+   static_cast<void>(iterations_used);
 
    return bm;
 }
@@ -361,7 +361,12 @@ inline T airy_ai_zero(int m, const Policy& /*pol*/)
       policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Airy return type must be a floating-point type.");
+
+   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+                           || (   true  == std::numeric_limits<T>::is_specialized
+                               && false == std::numeric_limits<T>::is_integer),
+                           "Airy value type must be a floating-point type.");
+
    return policies::checked_narrowing_cast<T, Policy>(detail::airy_ai_zero_imp<value_type>(m, forwarding_policy()), "boost::math::airy_ai_zero<%1%>(unsigned)");
 }
 
@@ -379,9 +384,13 @@ inline OutputIterator airy_ai_zero(
                          const Policy& pol)
 {
    typedef T result_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy return type must be a floating-point type.");
 
-   for(unsigned i = 0; i < static_cast<int>(number_of_zeros); ++i)
+   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+                           || (   true  == std::numeric_limits<T>::is_specialized
+                               && false == std::numeric_limits<T>::is_integer),
+                           "Airy value type must be a floating-point type.");
+
+   for(unsigned i = 0; i < number_of_zeros; ++i)
    {
       *out_it = boost::math::airy_ai_zero<result_type>(start_index + i, pol);
       ++out_it;
@@ -409,7 +418,12 @@ inline T airy_bi_zero(int m, const Policy& /*pol*/)
       policies::promote_double<false>, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<T>::is_integer, "Airy return type must be a floating-point type.");
+
+   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+                           || (   true  == std::numeric_limits<T>::is_specialized
+                               && false == std::numeric_limits<T>::is_integer),
+                           "Airy value type must be a floating-point type.");
+
    return policies::checked_narrowing_cast<T, Policy>(detail::airy_bi_zero_imp<value_type>(m, forwarding_policy()), "boost::math::airy_bi_zero<%1%>(unsigned)");
 }
 
@@ -427,9 +441,13 @@ inline OutputIterator airy_bi_zero(
                          const Policy& pol)
 {
    typedef T result_type;
-   BOOST_STATIC_ASSERT_MSG(false == std::numeric_limits<result_type>::is_integer, "Airy return type must be a floating-point type.");
 
-   for(int i = 0; i < static_cast<int>(number_of_zeros); ++i)
+   BOOST_STATIC_ASSERT_MSG(    false == std::numeric_limits<T>::is_specialized
+                           || (   true  == std::numeric_limits<T>::is_specialized
+                               && false == std::numeric_limits<T>::is_integer),
+                           "Airy value type must be a floating-point type.");
+
+   for(unsigned i = 0; i < number_of_zeros; ++i)
    {
       *out_it = boost::math::airy_bi_zero<result_type>(start_index + i, pol);
       ++out_it;

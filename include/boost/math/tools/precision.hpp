@@ -157,11 +157,19 @@ inline T epsilon(const mpl::true_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
    return std::numeric_limits<T>::epsilon();
 }
 
-#if (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
+#if defined(__GNUC__) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
 template <>
 inline long double epsilon<long double>(const mpl::true_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(long double))
 {
-   // numeric_limits on Darwin tells lies here.
+   // numeric_limits on Darwin (and elsewhere) tells lies here:
+   // the issue is that long double on a few platforms is
+   // really a "double double" which has a non-contiguous
+   // mantissa: 53 bits followed by an unspecified number of
+   // zero bits, followed by 53 more bits.  Thus the apparent
+   // precision of the type varies depending where it's been.
+   // Set epsilon to the value that a 106 bit fixed mantissa
+   // type would have, as that will give us sensible behaviour everywhere.
+   //
    // This static assert fails for some unknown reason, so
    // disabled for now...
    // BOOST_STATIC_ASSERT(std::numeric_limits<long double>::digits == 106);

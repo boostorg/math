@@ -215,7 +215,7 @@ typename Dist::value_type
          while(((boost::math::sign)(fb) == (boost::math::sign)(fa)) && (a != b))
          {
             if(count == 0)
-               policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, policy_type());
+               return policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", b, policy_type());
             a = b;
             fa = fb;
             b *= multiplier;
@@ -242,7 +242,7 @@ typename Dist::value_type
                return 0;
             }
             if(count == 0)
-               policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, policy_type());
+               return policies::raise_evaluation_error(function, "Unable to bracket root, last nearest value was %1%", a, policy_type());
             b = a;
             fb = fa;
             a /= multiplier;
@@ -305,7 +305,7 @@ inline typename Dist::value_type round_to_floor(const Dist& d, typename Dist::va
       cc = result - 1;
       if(cc < support(d).first)
          break;
-      typename Dist::value_type pp = c ? cdf(complement(d, cc)) : cdf(d, cc);
+      pp = c ? cdf(complement(d, cc)) : cdf(d, cc);
       if(pp == p)
          result = cc;
       else if(c ? pp > p : pp < p)
@@ -315,6 +315,12 @@ inline typename Dist::value_type round_to_floor(const Dist& d, typename Dist::va
 
    return result;
 }
+
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+
 template <class Dist>
 inline typename Dist::value_type round_to_ceil(const Dist& d, typename Dist::value_type result, typename Dist::value_type p, bool c)
 {
@@ -333,7 +339,7 @@ inline typename Dist::value_type round_to_ceil(const Dist& d, typename Dist::val
       cc = result + 1;
       if(cc > support(d).second)
          break;
-      typename Dist::value_type pp = c ? cdf(complement(d, cc)) : cdf(d, cc);
+      pp = c ? cdf(complement(d, cc)) : cdf(d, cc);
       if(pp == p)
          result = cc;
       else if(c ? pp < p : pp > p)
@@ -343,6 +349,10 @@ inline typename Dist::value_type round_to_ceil(const Dist& d, typename Dist::val
 
    return result;
 }
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 //
 // Now finally are the public API functions.
 // There is one overload for each policy,

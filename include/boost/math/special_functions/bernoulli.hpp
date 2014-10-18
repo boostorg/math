@@ -11,6 +11,7 @@
 #ifndef _BOOST_BERNOULLI_B2N_2013_05_30_HPP_
 #define _BOOST_BERNOULLI_B2N_2013_05_30_HPP_
 
+#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/detail/unchecked_bernoulli.hpp>
 #include <boost/math/special_functions/detail/bernoulli_details.hpp>
 

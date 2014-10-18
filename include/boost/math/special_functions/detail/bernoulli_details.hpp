@@ -9,6 +9,7 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/lightweight_mutex.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/math/tools/toms748_solve.hpp>
 
 #ifdef BOOST_HAS_THREADS
@@ -87,7 +88,7 @@ T b2n_asymptotic(int n)
         + ((nx * (T(2) - (nx2 * 7) * (1 + ((nx2 * 30) * ((nx2 * 12) - 1))))) / (((nx2 * nx2) * nx2) * 2520));
    return ((n / 2) & 1 ? 1 : -1) * (approximate_log_of_bernoulli_bn > tools::log_max_value<T>() 
       ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, nx, Policy())
-      : exp(approximate_log_of_bernoulli_bn));
+      : static_cast<T>(exp(approximate_log_of_bernoulli_bn)));
 }
 
 template <class T, class Policy>
@@ -369,7 +370,7 @@ public:
             while(i < m)
             {
                b = std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : tools::max_value<T>();
-               bn[static_cast<typename container_type::size_type>(i)] = ((i % 2U) ? b : -b);
+               bn[static_cast<typename container_type::size_type>(i)] = ((i % 2U) ? b : T(-b));
                ++i;
             }
             break;
@@ -383,7 +384,7 @@ public:
 
          const bool b_neg = i % 2 == 0;
 
-         bn[static_cast<typename container_type::size_type>(i)] = ((!b_neg) ? b : -b);
+         bn[static_cast<typename container_type::size_type>(i)] = ((!b_neg) ? b : T(-b));
       }
    }
 

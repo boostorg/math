@@ -653,4 +653,53 @@ int main()
    hypergeometric_plotter2.add(boost::math::hypergeometric_distribution<>(450, 50, 500), "N=500, r=50, n=450");
    hypergeometric_plotter2.plot("Hypergeometric Distribution PDF", "hypergeometric_pdf_2.svg");
 
+   distribution_plotter<boost::math::hyperexponential_distribution<> >
+      hyperexponential_plotter;
+   {
+       const double probs1_1[] = {1.0};
+       const double rates1_1[] = {1.0};
+       hyperexponential_plotter.add(boost::math::hyperexponential_distribution<>(probs1_1,rates1_1), "&#x3B1=(1.0), &#x3BB=(1.0)");
+       const double probs2_1[] = {0.1,0.9};
+       const double rates2_1[] = {0.5,1.5};
+       hyperexponential_plotter.add(boost::math::hyperexponential_distribution<>(probs2_1,rates2_1), "&#x3B1=(0.1,0.9), &#x3BB=(0.5,1.5)");
+       const double probs2_2[] = {0.9,0.1};
+       const double rates2_2[] = {0.5,1.5};
+       hyperexponential_plotter.add(boost::math::hyperexponential_distribution<>(probs2_2,rates2_2), "&#x3B1=(0.9,0.1), &#x3BB=(0.5,1.5)");
+       const double probs3_1[] = {0.2,0.3,0.5};
+       const double rates3_1[] = {0.5,1.0,1.5};
+       hyperexponential_plotter.add(boost::math::hyperexponential_distribution<>(probs3_1,rates3_1), "&#x3B1=(0.2,0.3,0.5), &#x3BB=(0.5,1.0,1.5)");
+       const double probs3_2[] = {0.5,0.3,0.2};
+       const double rates3_2[] = {0.5,1.0,1.5};
+       hyperexponential_plotter.add(boost::math::hyperexponential_distribution<>(probs3_1,rates3_1), "&#x3B1=(0.5,0.3,0.2), &#x3BB=(0.5,1.0,1.5)");
+   }
+   hyperexponential_plotter.plot("Hyperexponential Distribution PDF", "hyperexponential_pdf.svg");
+
+   distribution_plotter<boost::math::hyperexponential_distribution<> >
+      hyperexponential_plotter2;
+   {
+       const double rates[] = {0.5,1.5};
+       const double probs1[] = {0.1,0.9};
+       hyperexponential_plotter2.add(boost::math::hyperexponential_distribution<>(probs1,rates), "&#x3B1=(0.1,0.9), &#x3BB=(0.5,1.5)");
+       const double probs2[] = {0.6,0.4};
+       hyperexponential_plotter2.add(boost::math::hyperexponential_distribution<>(probs2,rates), "&#x3B1=(0.6,0.4), &#x3BB=(0.5,1.5)");
+       const double probs3[] = {0.9,0.1};
+       hyperexponential_plotter2.add(boost::math::hyperexponential_distribution<>(probs3,rates), "&#x3B1=(0.9,0.1), &#x3BB=(0.5,1.5)");
+   }
+   hyperexponential_plotter2.plot("Hyperexponential Distribution PDF (Different Probabilities, Same Rates)", "hyperexponential_pdf_samerate.svg");
+
+   distribution_plotter<boost::math::hyperexponential_distribution<> >
+      hyperexponential_plotter3;
+   {
+       const double probs1[] = {1.0};
+       const double rates1[] = {2.0};
+       hyperexponential_plotter3.add(boost::math::hyperexponential_distribution<>(probs1,rates1), "&#x3B1=(1.0), &#x3BB=(2.0)");
+       const double probs2[] = {0.5,0.5};
+       const double rates2[] = {0.3,1.5};
+       hyperexponential_plotter3.add(boost::math::hyperexponential_distribution<>(probs2_1,rates2_1), "&#x3B1=(0.5,0.5), &#x3BB=(0.3,1.5)");
+       const double probs3[] = {1.0/3.0,1.0/3.0,1.0/3.0};
+       const double rates3[] = {0.2,1.5,3.0};
+       hyperexponential_plotter3.add(boost::math::hyperexponential_distribution<>(probs2_2,rates2_2), "&#x3B1=(1.0/3.0,1.0/3.0,1.0/3.0), &#x3BB=(0.2,1.5,3.0)");
+   }
+   hyperexponential_plotter3.plot("Hyperexponential Distribution PDF (Different Number of Phases, Same Mean)", "hyperexponential_pdf_samemean.svg");
+
 } // int main()
