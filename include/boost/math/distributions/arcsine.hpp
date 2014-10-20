@@ -89,10 +89,16 @@ namespace boost
       { // Check x_min < x_max
         if (x_min >= x_max)
         {
+          std::string msg = "x_max argument is %1%, but must be > x_min = " + lexical_cast<std::string>(x_min) + "!";
           *result = policies::raise_domain_error<RealType>(
             function,
-            "x_max argument is %1%, but must be > x_min !", x_max, pol);
-            //  "x_max argument is %1%, but must be > x_min %2!", x_max, x_min, pol); would be better.  TODO
+            msg.c_str(), x_max, pol);
+           // "x_max argument is %1%, but must be > x_min !", x_max, pol);
+            //  "x_max argument is %1%, but must be > x_min %2!", x_max, x_min, pol); would be better.  TODO? 
+          // But would require replication of all helpers functions in /policies/error_handling.hpp for two values,
+          // as well as two value versions of raise_error, raise_domain_error and do_format ...
+
+
           return false;
         }
         return true;
@@ -123,11 +129,13 @@ namespace boost
         }
         if ((x < x_min) || (x > x_max))
         {
+          // std::cout << x_min << ' ' << x << x_max << std::endl;
           *result = policies::raise_domain_error<RealType>(
             function,
             "x argument is %1%, but must be x_min < x < x_max !", x, pol);
-          // For example
-          // Error in function boost::math::pdf(arcsine_distribution<double> const&, double) : x argument is - 1.01, but must be x_min < x < x_max !
+          // For example:
+          // Error in function boost::math::pdf(arcsine_distribution<double> const&, double) : x argument is -1.01, but must be x_min < x < x_max !
+          // TODO Perhaps show values of x_min and x_max?
           return false;
         }
         return true;
@@ -155,33 +163,7 @@ namespace boost
           && check_prob(function, p, result, pol);
       } // bool check_dist_and_prob
 
-      // Not relevant?
-      //template <class RealType, class Policy>
-      //inline bool check_mean(const char* function, const RealType& mean, RealType* result, const Policy& pol)
-      //{
-      //  if (!(boost::math::isfinite)(mean) || (mean <= 0))
-      //  {
-      //    *result = policies::raise_domain_error<RealType>(
-      //      function,
-      //      "mean argument is %1%, but must be > 0 !", mean, pol);
-      //    return false;
-      //  }
-      //  return true;
-      //} // bool check_mean
-      //template <class RealType, class Policy>
-      //inline bool check_variance(const char* function, const RealType& variance, RealType* result, const Policy& pol)
-      //{
-      //  if (!(boost::math::isfinite)(variance) || (variance <= 0))
-      //  {
-      //    *result = policies::raise_domain_error<RealType>(
-      //      function,
-      //      "variance argument is %1%, but must be > 0 !", variance, pol);
-      //    return false;
-      //  }
-      //  return true;
-      //} // bool check_variance
     } // namespace arcsine_detail
-
 
     template <class RealType = double, class Policy = policies::policy<> >
     class arcsine_distribution
@@ -206,102 +188,10 @@ namespace boost
         return m_x_min;
       }
       RealType x_max() const
-      { 
+      {
         return m_x_max;
       }
 
- /*     // Estimation of the alpha & beta parameters.
-      // http://en.wikipedia.org/wiki/arcsine_distribution
-      // gives formulae in section on parameter estimation.
-      // Also NIST EDA page 3 & 4 give the same.
-      // http://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm
-      // http://www.epi.ucdavis.edu/diagnostictests/betabuster.html
-
-      static RealType find_alpha(
-        RealType mean, // Expected value of mean.
-        RealType variance) // Expected value of variance.
-      {
-        static const char* function = "boost::math::arcsine_distribution<%1%>::find_alpha";
-        RealType result = 0; // of error checks.
-        if (false ==
-          (
-          arcsine_detail::check_mean(function, mean, &result, Policy())
-          && arcsine_detail::check_variance(function, variance, &result, Policy())
-          )
-          )
-        {
-          return result;
-        }
-        return mean * (((mean * (1 - mean)) / variance) - 1);
-      } // RealType find_alpha
-
-      static RealType find_beta(
-        RealType mean, // Expected value of mean.
-        RealType variance) // Expected value of variance.
-      {
-        static const char* function = "boost::math::arcsine_distribution<%1%>::find_beta";
-        RealType result = 0; // of error checks.
-        if (false ==
-          (
-          arcsine_detail::check_mean(function, mean, &result, Policy())
-          &&
-          arcsine_detail::check_variance(function, variance, &result, Policy())
-          )
-          )
-        {
-          return result;
-        }
-        return (1 - mean) * (((mean * (1 - mean)) / variance) - 1);
-      } //  RealType find_beta
-
-      // Estimate alpha & beta from either alpha or beta, and x and probability.
-      // Uses for these parameter estimators are unclear.
-
-      static RealType find_alpha(
-        RealType beta, // from beta.
-        RealType x, //  x.
-        RealType probability) // cdf
-      {
-        static const char* function = "boost::math::arcsine_distribution<%1%>::find_alpha";
-        RealType result = 0; // of error checks.
-        if (false ==
-          (
-          arcsine_detail::check_prob(function, probability, &result, Policy())
-          &&
-          arcsine_detail::check_x_max(function, beta, &result, Policy())
-          &&
-          arcsine_detail::check_x(function, x, &result, Policy())
-          )
-          )
-        {
-          return result;
-        }
-        return ibeta_inva(beta, x, probability, Policy());
-      } // RealType find_alpha(beta, a, probability)
-
-      static RealType find_beta(
-        // ibeta_invb(T b, T x, T p); (alpha, x, cdf,)
-        RealType alpha, // alpha.
-        RealType x, // probability x.
-        RealType probability) // probability cdf.
-      {
-        static const char* function = "boost::math::arcsine_distribution<%1%>::find_beta";
-        RealType result = 0; // of error checks.
-        if (false ==
-          (
-          arcsine_detail::check_prob(function, probability, &result, Policy())
-          &&
-          arcsine_detail::check_x_min(function, alpha, &result, Policy())
-          &&
-          arcsine_detail::check_x(function, x, &result, Policy())
-          )
-          )
-        {
-          return result;
-        }
-        return ibeta_invb(alpha, x, probability, Policy());
-      } //  RealType find_beta(alpha, x, probability)
-*/
     private:
       RealType m_x_min; // Two x min and x max parameters of the arcsine distribution.
       RealType m_x_max;
@@ -312,14 +202,14 @@ namespace boost
 
 
     template <class RealType, class Policy>
-    inline const std::pair<RealType, RealType> range(const arcsine_distribution<RealType, Policy>&  dist )
+    inline const std::pair<RealType, RealType> range(const arcsine_distribution<RealType, Policy>&  dist)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
       return std::pair<RealType, RealType>(static_cast<RealType>(dist.x_min()), static_cast<RealType>(dist.x_max()));
     }
 
     template <class RealType, class Policy>
-    inline const std::pair<RealType, RealType> support(const arcsine_distribution<RealType, Policy>&  dist )
+    inline const std::pair<RealType, RealType> support(const arcsine_distribution<RealType, Policy>&  dist)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
 
@@ -342,17 +232,12 @@ namespace boost
 
     template <class RealType, class Policy>
     inline RealType mode(const arcsine_distribution<RealType, Policy>& dist)
-    { // ????  says " x in a, b"  but no value of x available???  Others mode is not defined.
-      // static const char* function = "boost::math::mode(arcsine_distribution<%1%> const&)";
-
-      // Copoed from cauchy - what does this do?  doesn't compile
-      //typedef typename Policy::assert_undefined_type assert_type;
-      //BOOST_STATIC_ASSERT(assert_type::value == 0);
-
+    { //There are always [*two] values for the mode, at ['x_min] and at ['x_max], default 0 and 1,
+      // so instead we raise the exception domain_error.
       return policies::raise_domain_error<RealType>(
         "boost::math::mode(arcsine_distribution<%1%>&)",
-        "The arcsine distribution does not have a mode: "
-        "the only possible return value is %1%.",
+        "The arcsine distribution has two modes at x_min and x_max: "
+        "so the return value is %1%.",
         std::numeric_limits<RealType>::quiet_NaN(), Policy());
     } // mode
 
@@ -360,7 +245,7 @@ namespace boost
     inline RealType median(const arcsine_distribution<RealType, Policy>& dist)
     { // Median of arcsine distribution (a + b) / 2 == mean.
       return  (dist.x_min() + dist.x_max()) / 2;
-    } 
+    }
 
     //  Or be provided by the derived accessor as quantile(0.5).
 
@@ -387,25 +272,30 @@ namespace boost
     inline RealType pdf(const arcsine_distribution<RealType, Policy>& dist, const RealType& xx)
     { // Probability Density/Mass Function arcsine.
       BOOST_FPU_EXCEPTION_GUARD
-      BOOST_MATH_STD_USING // For ADL of std functions.
+        BOOST_MATH_STD_USING // For ADL of std functions.
 
-      static const char* function = "boost::math::pdf(arcsine_distribution<%1%> const&, %1%)";
+        static const char* function = "boost::math::pdf(arcsine_distribution<%1%> const&, %1%)";
 
-      RealType a = dist.x_min();
-      RealType b = dist.x_max();
+      RealType lo = dist.x_min();
+      RealType hi = dist.x_max();
       RealType x = xx;
+
+      //if ((x < lo) || (x > hi))
+      //{
+      // std::cout << lo << ' ' << x << ' ' << hi << std::endl;
+      //}
 
       // Argument checks:
       RealType result = 0;
       if (false == arcsine_detail::check_dist_and_x(
         function,
-        a, b, x,
+        lo, hi, x,
         &result, Policy()))
       {
         return result;
       }
       using boost::math::constants::pi;
-      result = static_cast<RealType>(1) / (pi<RealType>() * sqrt((x - a) * (b - x)));
+      result = static_cast<RealType>(1) / (pi<RealType>() * sqrt((x - lo) * (hi - x)));
       return result;
     } // pdf
 
@@ -470,11 +360,12 @@ namespace boost
       {
         return 1;
       }
-      x = 1 - x;
       using boost::math::constants::pi;
-      result = static_cast<RealType>(2) * asin(sqrt((x - x_min) / (x_max - x_min))) / pi<RealType>();
+      // Naive version x = 1 - x;
+      // result = static_cast<RealType>(2) * asin(sqrt((x - x_min) / (x_max - x_min))) / pi<RealType>();
+      // is less accurate, so use acos instead of asin for complement.
+      result = static_cast<RealType>(2) * acos(sqrt((x - x_min) / (x_max - x_min))) / pi<RealType>();
       return result;
-
     } // arcine ccdf
 
     template <class RealType, class Policy>
@@ -488,7 +379,6 @@ namespace boost
       // will be less than or equal to that value
       // is whatever probability you supplied as an argument.
 
-      using boost::math::constants::pi;
       using boost::math::constants::half_pi;
 
       static const char* function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
@@ -513,28 +403,9 @@ namespace boost
         return 1;
       }
 
-      // https://github.com/johnmyleswhite/DistributionNotes/blob/master/Arcsine.md
-      // gives this formula for quantile for arcsine (-1, +1)  (Note: NOT the more common standard 0,1)
-      // $$ 2 \sin(\frac{\pi}{2}p)^{2} - 1 $$ 
-      // 2 * sin(p * pi/2) ^2 -1
-      // 
-      // Devroye, IX.7 Non-Standard Distributions
-      // http://librarum.org/book/8134/494
-      // Doesn't shed light.
-
-
-
-      result = pi<RealType>();
-      result = half_pi<RealType>();
-
-      result = sin(half_pi<RealType>() * p);
-      result = result * result;
-
-      RealType x = (x_max - x_min) * result - x_min;
-
-
-//      result = 2 * result;
- //     result = result - 1;
+      RealType sin2hpip = sin(half_pi<RealType>() * p);
+      RealType sin2hpip2 = sin2hpip * sin2hpip;
+      result = -x_min * sin2hpip2 + x_min + x_max * sin2hpip2;
 
       return result;
     } // quantile
@@ -545,21 +416,19 @@ namespace boost
       // Return the number of expected x for a given
       // complement of the probability q.
 
-      using boost::math::constants::pi;
       using boost::math::constants::half_pi;
       static const char* function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
 
-      //
       // Error checks:
       RealType q = c.param;
       const arcsine_distribution<RealType, Policy>& dist = c.dist;
       RealType result = 0;
-      RealType a = dist.x_min();
-      RealType b = dist.x_max();
+      RealType x_min = dist.x_min();
+      RealType x_max = dist.x_max();
       if (false == arcsine_detail::check_dist_and_prob(
         function,
-        a,
-        b,
+        x_min,
+        x_max,
         q,
         &result, Policy()))
       {
@@ -574,14 +443,13 @@ namespace boost
       {
         return 1;
       }
-      RealType p = 1 - q;
-
-      result = pi<RealType>();
-      result = half_pi<RealType>();
-
-      result = sin(half_pi<RealType>() * p);
-      result = result * result;
-
+      // Naive RealType p = 1 - q; result = sin(half_pi<RealType>() * p); loses accuracy, so use a cos alternative instead.
+      //result = cos(half_pi<RealType>() * q); // for arcsine(0,1)
+      //result = result * result;
+      // For generalized arcsine:
+      RealType cos2hpip = cos(half_pi<RealType>() * q);
+      RealType cos2hpip2 = cos2hpip * cos2hpip;
+      result = -x_min * cos2hpip2 + x_min + x_max * cos2hpip2;
 
       return result;
     } // Quantile Complement
@@ -599,6 +467,3 @@ namespace boost
 #endif
 
 #endif // BOOST_MATH_DIST_ARCSINE_HPP
-
-
-

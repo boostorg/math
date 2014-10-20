@@ -267,6 +267,7 @@ public:
                .line_color(colors[color_index])
                .line_width(1.)
                .shape(none);
+
                //.bezier_on(true) // Bezier can't cope with badly behaved like uniform & triangular.
             ++color_index;
             color_index = color_index % (sizeof(colors)/sizeof(colors[0]));

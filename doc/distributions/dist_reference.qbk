@@ -4,6 +4,7 @@
 
 [section:dists Distributions]
 
+[include arcsine.qbk]
 [include bernoulli.qbk]
 [include beta.qbk]
 [include binomial.qbk]
@@ -129,7 +130,7 @@ opportunity to integrate the statistical tests with this framework at some later
   // Extract the result:
   double p = probability(acc);
 
-[endsect][/section:future Extras Future Directions]
+[endsect] [/section:future Extras Future Directions]
 
 [/ dist_reference.qbk
   Copyright 2006, 2010 John Maddock and Paul A. Bristow.
