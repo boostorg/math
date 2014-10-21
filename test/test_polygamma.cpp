@@ -5,7 +5,7 @@
 
 #include <pch_light.hpp>
 #include "test_polygamma.hpp"
-
+//#include <boost/cstdfloat.hpp>
 
 void expected_results()
 {
@@ -17,16 +17,30 @@ void expected_results()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if(boost::math::policies::digits<double, boost::math::policies::policy<> >() == boost::math::policies::digits<long double, boost::math::policies::policy<> >())
    {
-      largest_type = "(long\\s+)?double";
+      largest_type = "(long\\s+)?double|real_concept";
    }
    else
    {
-      largest_type = "long double";
+      largest_type = "long double|real_concept";
    }
 #else
-   largest_type = "(long\\s+)?double";
+   largest_type = "(long\\s+)?double|real_concept";
 #endif
 
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
+      ".*large arguments",           // test data group
+      ".*", 400, 200);               // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
+      ".*",                          // test data group
+      ".*", 20, 10);                 // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
@@ -40,11 +54,14 @@ BOOST_AUTO_TEST_CASE( test_main )
    expected_results();
    BOOST_MATH_CONTROL_FP;
 
-   //test_polygamma(0.0F, "float");
+   test_polygamma(0.0F, "float");
    test_polygamma(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_polygamma(0.0L, "long double");
-   //test_polygamma(boost::math::concepts::real_concept(0.1), "real_concept");
+   test_polygamma(boost::math::concepts::real_concept(0.1), "real_concept");
+#endif
+#ifdef BOOST_FLOAT128_C
+   //test_polygamma(BOOST_FLOAT128_C(0.0), "float128_t");
 #endif
 }
 

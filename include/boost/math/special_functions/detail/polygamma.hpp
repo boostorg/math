@@ -23,7 +23,9 @@
   #include <boost/static_assert.hpp>
   #include <boost/type_traits/is_convertible.hpp>
 
-  namespace boost { namespace math {
+  namespace boost { namespace math { namespace detail{
+
+#if 0
 
   template<class T, class Policy>
   T digamma_atinfinityplus(const int, const T &x, const Policy&)
@@ -66,7 +68,7 @@
       sum_base_10_exp = T(exponent_value) * 0.303F;
 
       long int order_check =  boost::math::ltrunc(term_base_10_exp) - boost::math::ltrunc(sum_base_10_exp);
-      long int tol         =  std::numeric_limits<T>::digits10;
+      long int tol         =  std::numeric_limits<T>::digits_base10;
 
 
       if((two_k > 24) && (order_check < -tol))
@@ -77,6 +79,7 @@
 
     return (log_z - one_over_2z) - sum;
   }
+#endif
 
   template<class T, class Policy>
   T polygamma_atinfinityplus(const int n, const T& x, const Policy& pol) // for large values of x such as for x> 400
@@ -154,9 +157,7 @@
         //
         if(k > policies::get_max_series_iterations<Policy>())
         {
-           policies::raise_evaluation_error(
-              "polygamma<%1%>(int, %1%)",
-              "Series did not converge, closest value was %1%", sum, pol);
+           policies::raise_evaluation_error("polygamma<%1%>(int, %1%)", "Series did not converge, closest value was %1%", sum, pol);
            break;
         }
      }
@@ -174,7 +175,7 @@
 
     // Use N = (0.4 * digits) + (4 * n) for target value for x:
     BOOST_MATH_STD_USING
-    const int d4d  = static_cast<boost::int32_t>(0.4F * std::numeric_limits<T>::digits10);
+    const int d4d  = static_cast<boost::int32_t>(0.4F * policies::digits_base10<T, Policy>());
     const int N4dn = static_cast<boost::int32_t>(d4d + (4 * n));
     const int N    = static_cast<boost::int32_t>((std::min)(N4dn, (std::numeric_limits<int>::max)()));
     const int m    = n;
@@ -201,7 +202,7 @@
   }
 
   template<class T, class Policy>
-  T polygamma_nearzero(const int n, const T& x, const Policy&)
+  T polygamma_nearzero(const int n, const T& x, const Policy& pol)
   {
     BOOST_MATH_STD_USING
     // not defined for digamma
@@ -224,9 +225,10 @@
           bool    b_neg_term     =  ((n % 2) == 0);
           T sum                  =  ((!b_neg_term) ? pg_kn : -pg_kn);
 
-    for(int k = 1; k < max_iteration<T>::value; k++)
+    for(unsigned k = 1;; k++)
     {
-      k_plus_n_fact   *= k_plus_n_plus_one++;
+      k_plus_n_fact   *= k_plus_n_plus_one;
+      k_plus_n_plus_one += 1;
       one_over_k_fact /= k;
       z_pow_k         *= x;
 
@@ -234,21 +236,7 @@
 
       const T term = (pg * z_pow_k) * one_over_k_fact;
 
-      T term_base_10_exp = ((term < 0) ? -term : term);
-      T sum_base_10_exp  = ((sum  < 0) ? -sum  : sum);
-
-      int exponent_value;
-
-      static_cast<void>(frexp(term_base_10_exp, &exponent_value));
-      term_base_10_exp = T(exponent_value) * 0.303F;
-
-      static_cast<void>(frexp(sum_base_10_exp, &exponent_value));
-      sum_base_10_exp = T(exponent_value) * 0.303F;
-
-      long int order_check =  boost::math::ltrunc(term_base_10_exp) - boost::math::ltrunc(sum_base_10_exp);
-      long int tol         =  std::numeric_limits<T>::digits10;
-
-      if((k > 12) && (order_check < -tol))
+      if(fabs(term / sum) < tools::epsilon<T>())
       {
         break;
       }
@@ -256,6 +244,12 @@
       b_neg_term = !b_neg_term;
 
       ((!b_neg_term) ? sum += term : sum -= term);
+
+      if(k > policies::get_max_series_iterations<Policy>())
+      {
+         policies::raise_evaluation_error("polygamma<%1%>(int, %1%)", "Series did not converge, closest value was %1%", sum, pol);
+         break;
+      }
     }
 
     return term0 + sum;
@@ -269,7 +263,7 @@
     {
       return polygamma_nearzero(n, x, pol);
     }
-    else if(x > 0.4F * std::numeric_limits<T>::digits10 + 4 * n)
+    else if(x > 0.4F * policies::digits_base10<T, Policy>() + 4 * n)
     {
       return polygamma_atinfinityplus(n, x, pol);
     }
