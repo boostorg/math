@@ -23,61 +23,7 @@
   #include <boost/static_assert.hpp>
   #include <boost/type_traits/is_convertible.hpp>
 
-  namespace boost { namespace math { namespace detail {
-
-  template<class T>
-  struct max_iteration
-  {
-    //TODO Derive a suitable formula based on the precision of T
-    static const int value=2500;
-  };
-
-  template<class T>
-  bool factorial_overflow(const int n)
-  {
-    // Use Stirling's approximation to check if n! would overflow when data type is T.
-    static const long int max_precision = std::numeric_limits<T>::max_exponent10;
-
-    T nn                   = T(n);
-    T log_n                = log(nn);
-    T n_log_n              = n * log_n;
-    T n_log_n_minus_n      = n_log_n - n;
-    T base_10              = n_log_n_minus_n/log(10);
-    long int base_10_ceil  = boost::math::ltrunc(base_10) + 1;
-
-    // Since nlogn - n < log(n!) by a small margin, we add 10 as safety measure.
-    return (((base_10_ceil + 10) > max_precision )? 1 : 0);
-  }
-
-  template<class T>
-  int possible_factorial_overflow_index()
-  {
-    // we use binary search to determine a good approximation for an index that might overflow
-
-    int upper_limit = max_iteration<T>::value;
-    int lower_limit = 8;
-
-    if(factorial_overflow<T>(upper_limit) == 0)
-    {
-      return upper_limit;
-    }
-
-    while(upper_limit > (lower_limit + 4))
-    {
-      const int mid = (upper_limit + lower_limit) / 2;
-
-      if(factorial_overflow<T>(mid) == 0)
-      {
-        lower_limit = mid;
-      }
-      else
-      {
-        upper_limit = mid;
-      }
-    }
-
-    return lower_limit;
-  }
+  namespace boost { namespace math {
 
   template<class T, class Policy>
   T digamma_atinfinityplus(const int, const T &x, const Policy&)
@@ -135,85 +81,104 @@
   template<class T, class Policy>
   T polygamma_atinfinityplus(const int n, const T& x, const Policy& pol) // for large values of x such as for x> 400
   {
+     // See http://functions.wolfram.com/GammaBetaErf/PolyGamma2/06/02/0001/
      BOOST_MATH_STD_USING
-
-     if(n == 0)
+     //
+     // sum       == current value of accumulated sum.
+     // term      == value of current term to be added to sum.
+     // part_term == value of current term excluding the Bernoulli number part
+     //
+     T term, sum, part_term;
+     T x_squared = x * x;
+     //
+     // Start by setting part_term to:
+     //
+     // (n-1)! / x^(n+1)
+     //
+     // which is common to both the first term of the series (with k = 1)
+     // and to the leading part.  
+     // We can then get to the leading term by:
+     //
+     // part_term * (n + 2 * x) / 2
+     //
+     // and to the first term in the series 
+     // (excluding the Bernoulli number) by:
+     //
+     // part_term n * (n + 1) / (2x)
+     //
+     // If either the factorial would overflow,
+     // or the power term underflows, this just gets set to 0 and then we
+     // know that we have to use logs for the initial terms:
+     //
+     part_term = ((n > boost::math::max_factorial<T>::value) && (n * n > tools::log_max_value<T>())) 
+        ? 0 : boost::math::factorial<T>(n - 1, pol) * pow(x, -n - 1);
+     if(part_term == 0)
      {
-       return digamma_atinfinityplus(n, x, pol);
+        // Either n is very large, or the power term underflows,
+        // set the initial values of part_term, term and sum via logs:
+        part_term = boost::math::lgamma(n, pol) - (n + 1) * log(x);
+        sum = exp(part_term + log(n + 2 * x) - boost::math::constants::ln_two<T>());
+        part_term += log(n * (n + 1)) - boost::math::constants::ln_two<T>() - log(x);
+        part_term = exp(part_term);
      }
-
-     const bool b_negate = ((n % 2) == 0);
-
-     const T n_minus_one_fact            = boost::math::factorial<T>(n - 1);
-     const T nn                          = T(n);
-     const T n_fact                      = n_minus_one_fact * nn;
-     const T one_over_z                  = T(1) / x;
-     const T one_over_z2                 = one_over_z * one_over_z;
-     const T one_over_z_pow_n            = T(1) / pow(x, n);
-           T one_over_x_pow_two_k_plus_n = one_over_z_pow_n * one_over_z2;
-           T two_k_plus_n_minus_one      = nn + T(1);
-           T two_k_plus_n_minus_one_fact = n_fact * (n + 1); //(n+3)! ?
-           T one_over_two_k_fact         = T(1) / 2;
-           T sum                         = (  (boost::math::bernoulli_b2n<T>(1) * two_k_plus_n_minus_one_fact)
-                                            * (one_over_two_k_fact * one_over_x_pow_two_k_plus_n));
-
-     // Perform the Bernoulli series expansion.
-     for(int two_k = 4; two_k < max_iteration<T>::value; two_k += 2)
+     else
      {
+        sum = part_term * (n + 2 * x) / 2;
+        part_term *= n * (n + 1) / 2;
+        part_term /= x;
+     }
+     //
+     // If the leading term is 0, so is the result:
+     //
+     if(sum == 0)
+        return sum;
 
-       one_over_x_pow_two_k_plus_n *= one_over_z2;
-       two_k_plus_n_minus_one_fact *= ++two_k_plus_n_minus_one;
-       two_k_plus_n_minus_one_fact *= ++two_k_plus_n_minus_one;
-       one_over_two_k_fact         /= static_cast<boost::int32_t>(two_k * static_cast<boost::int32_t>(two_k - static_cast<boost::int32_t>(1)));
-
-       const T term = (  (boost::math::bernoulli_b2n<T>(two_k/2) * two_k_plus_n_minus_one_fact)
-                       * (one_over_two_k_fact * one_over_x_pow_two_k_plus_n));
-
-        if(term == 0)
-        {
-          continue;
-        }
-
+     for(unsigned k = 1;;)
+     {
+        term = part_term * boost::math::bernoulli_b2n<T>(k, pol);
         sum += term;
-
-        T term_base_10_exp = ((term < 0) ? -term : term);
-        T sum_base_10_exp  = ((sum  < 0) ? -sum  : sum);
-
-        int exponent_value;
-
-        static_cast<void>(frexp(term_base_10_exp, &exponent_value));
-        term_base_10_exp = T(exponent_value) * 0.303F;
-
-        static_cast<void>(frexp(sum_base_10_exp, &exponent_value));
-        sum_base_10_exp = T(exponent_value) * 0.303F;
-
-        long int order_check =  boost::math::ltrunc(term_base_10_exp) - boost::math::ltrunc(sum_base_10_exp);
-        long int tol         =  std::numeric_limits<T>::digits10;
-
-        if((two_k > 24) && (order_check < -tol))
+        //
+        // Normal termination condition:
+        //
+        if(fabs(term / sum) < tools::epsilon<T>())
+           break;
+        //
+        // Increment our counter, and move part_term on to the next value:
+        //
+        ++k;
+        part_term *= (n + 2 * k - 2) * (n - 1 + 2 * k);
+        part_term /= (2 * k - 1) * 2 * k;
+        part_term /= x_squared;
+        //
+        // Emergency get out termination condition:
+        //
+        if(k > policies::get_max_series_iterations<Policy>())
         {
-          break;
+           policies::raise_evaluation_error(
+              "polygamma<%1%>(int, %1%)",
+              "Series did not converge, closest value was %1%", sum, pol);
+           break;
         }
      }
+     
+     if((n - 1) & 1)
+        sum = -sum;
 
-     sum += ((((n_minus_one_fact * (nn + (x * static_cast<boost::int32_t>(2)))) * one_over_z_pow_n) * one_over_z) / 2);
-
-     return ((!b_negate) ? sum : -sum);
+     return sum;
   }
 
   template<class T, class Policy>
-  T polygamma_attransitionplus(const int n, const T& x, const Policy&)
+  T polygamma_attransitionplus(const int n, const T& x, const Policy& pol)
   {
-    // this doesn't work for digamma either
+    // See: http://functions.wolfram.com/GammaBetaErf/PolyGamma2/16/01/01/0017/
 
-    // Use Euler-Maclaurin summation.
-
-    // Use N = (0.4 * digits) + (4 * n)
+    // Use N = (0.4 * digits) + (4 * n) for target value for x:
     BOOST_MATH_STD_USING
     const int d4d  = static_cast<boost::int32_t>(0.4F * std::numeric_limits<T>::digits10);
     const int N4dn = static_cast<boost::int32_t>(d4d + (4 * n));
     const int N    = static_cast<boost::int32_t>((std::min)(N4dn, (std::numeric_limits<int>::max)()));
     const int m    = n;
+    const int iter = N - itrunc(x);
 
     const int minus_m_minus_one = -m - 1;
 
@@ -221,69 +186,18 @@
     T sum0(0);
     T z_plus_k_pow_minus_m_minus_one(0);
 
-    for(int k = 1; k <= N; ++k)
+    // Forward recursion to larger x:
+    for(int k = 1; k <= iter; ++k)
     {
       z_plus_k_pow_minus_m_minus_one = pow(z, minus_m_minus_one);
       sum0 += z_plus_k_pow_minus_m_minus_one;
       ++z;
     }
+    sum0 *= boost::math::factorial<T>(n);
+    if((n - 1) & 1)
+       sum0 = -sum0;
 
-    const T one_over_z_plus_N_pow_minus_m           = pow(z, -m);
-    const T one_over_z_plus_N_pow_minus_m_minus_one = one_over_z_plus_N_pow_minus_m / z;
-
-    const T term0 = one_over_z_plus_N_pow_minus_m_minus_one / 2;
-    const T term1 = one_over_z_plus_N_pow_minus_m           / m;
-
-          T   sum1                                      = T(0);
-          T   one_over_two_k_fact                       = T(1) / 2;
-          int mk                                        = m + 1;
-          T   am                                        = T(mk);
-    const T   one_over_z_plus_N_squared                 = T(1) / (z * z);
-          T   one_over_z_plus_N_pow_minus_m_minus_two_k = one_over_z_plus_N_pow_minus_m * one_over_z_plus_N_squared;
-
-    for(int k = 1; k < max_iteration<T>::value; ++k)
-    {
-      const int two_k = 2 * k; // k << 1
-
-      const T term = ((boost::math::bernoulli_b2n<T>(two_k / 2) * am) * one_over_two_k_fact) * one_over_z_plus_N_pow_minus_m_minus_two_k;
-
-      T term_base_10_exp = ((term < 0) ? -term : term);
-      T sum_base_10_exp  = ((sum1 < 0) ? -sum1 : sum1);
-
-      int exponent_value;
-
-      static_cast<void>(frexp(term_base_10_exp, &exponent_value));
-      term_base_10_exp = T(exponent_value) * 0.303F;
-
-      static_cast<void>(frexp(sum_base_10_exp, &exponent_value));
-      sum_base_10_exp = T(exponent_value) * 0.303F;
-
-      long int order_check =  boost::math::ltrunc(term_base_10_exp) - boost::math::ltrunc(sum_base_10_exp);
-      long int tol         =  std::numeric_limits<T>::digits10;
-
-      if((two_k > 24) && (order_check < -tol))
-      {
-        break;
-      }
-
-      sum1 += term;
-
-      one_over_two_k_fact /= (two_k + 1);
-      one_over_two_k_fact /= (two_k + 2);
-
-      ++mk;
-      am *= mk;
-      ++mk;
-      am *= mk;
-
-      one_over_z_plus_N_pow_minus_m_minus_two_k *= one_over_z_plus_N_squared;
-    }
-
-    const T pg = (((sum0 + term0) + term1) + sum1) * factorial<T>(m);
-
-    const bool b_negate = ((m % 2) == 0);
-
-    return ((!b_negate) ? pg : -pg);
+    return sum0 + polygamma_atinfinityplus(n, z, pol);
   }
 
   template<class T, class Policy>
@@ -355,9 +269,9 @@
     {
       return polygamma_nearzero(n, x, pol);
     }
-    else if (x > 400.0F)
+    else if(x > 0.4F * std::numeric_limits<T>::digits10 + 4 * n)
     {
-      return polygamma_atinfinityplus(n, x, pol); //just a test return value
+      return polygamma_atinfinityplus(n, x, pol);
     }
     else
     {
