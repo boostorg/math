@@ -874,6 +874,34 @@ T zeta_imp(T s, T sc, const Policy& pol, const Tag& tag)
          "Evaluation of zeta function at pole %1%", 
          s, pol);
    T result;
+   //
+   // Start by seeing if we have a simple closed form:
+   //
+   if(floor(s) == s)
+   {
+      try
+      {
+         int v = itrunc(s);
+         if(v == s)
+         {
+            if(v < 0)
+            {
+               if(((-v) & 1) == 0)
+                  return 0;
+               int n = (-v + 1) / 2;
+               if(n <= boost::math::max_bernoulli_b2n<T>::value)
+                  return T((-v & 1) ? -1 : 1) * boost::math::unchecked_bernoulli_b2n<T>(n) / (1 - v);
+            }
+            else if(((v / 2) <= boost::math::max_bernoulli_b2n<T>::value) && ((v & 1) == 0) && (v <= boost::math::max_factorial<T>::value))
+            {
+               return T(((v / 2 - 1) & 1) ? -1 : 1) * ldexp(T(1), v - 1) * pow(constants::pi<T, Policy>(), v) *
+                  boost::math::unchecked_bernoulli_b2n<T>(v / 2) / boost::math::unchecked_factorial<T>(v);
+            }
+         }
+      }
+      catch(const boost::math::rounding_error&){} // Just fall through, s is too large to round
+   }
+
    if(fabs(s) < tools::root_epsilon<T>())
    {
       result = -0.5f - constants::log_root_two_pi<T, Policy>() * s;
