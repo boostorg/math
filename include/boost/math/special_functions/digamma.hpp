@@ -142,7 +142,8 @@ inline T digamma_imp_large(T x, const mpl::int_<24>*)
    return result;
 }
 //
-// Fully generic asymptotic expansion in terms of Bernoulli numbers:
+// Fully generic asymptotic expansion in terms of Bernoulli numbers, see:
+// http://functions.wolfram.com/06.14.06.0012.01
 //
 template <class T>
 struct digamma_series_func
@@ -158,7 +159,6 @@ public:
       T result = term * boost::math::bernoulli_b2n<T>(k) / (2 * k);
       term /= xx;
       ++k;
-      //T result_check = boost::math::bernoulli_b2n<T>(k) / (2 * k * pow(xx, T(k)));
       return result;
    }
    typedef T result_type;
@@ -488,9 +488,40 @@ T digamma_imp(T x, const mpl::int_<0>* t, const Policy& pol)
    // limit = 250 at 1000 bit precision.
    //
    T lim = 10 + (tools::digits<T>() - 50) * 240 / 950;
+   T two_x = ldexp(x, 1);
    if(x >= lim)
    {
       result += digamma_imp_large(x, pol, t);
+   }
+   else if(floor(x) == x)
+   {
+      //
+      // Special case for integer arguments, see
+      // http://functions.wolfram.com/06.14.03.0001.01
+      //
+      result = -constants::euler<T, Policy>();
+      T val = 1;
+      while(val < x)
+      {
+         result += 1 / val;
+         ++val;
+      }
+   }
+   else if(floor(two_x) == two_x)
+   {
+      //
+      // Special case for half integer arguments, see:
+      // http://functions.wolfram.com/06.14.03.0008.01
+      //
+      result = -2 * constants::ln_two<T, Policy>() - constants::euler<T, Policy>();
+      int n = itrunc(x);
+      if(n)
+      {
+         for(int k = 1; k < n; ++k)
+            result += 1 / T(k);
+         for(int k = n; k <= 2 * n - 1; ++k)
+            result += 2 / T(k);
+      }
    }
    else
    {

@@ -259,6 +259,10 @@
   template<class T, class Policy>
   inline T polygamma_imp(const int n, T x, const Policy &pol)
   {
+    if(n == 0)
+       return boost::math::digamma(x);
+    if(n < 0)
+       return policies::raise_domain_error<T>("boost::math::polygamma<%1%>(int, %1%)", "Order must be >= 0, but got %1%", n, pol);
     if(x < 0.5F)
     {
       return polygamma_nearzero(n, x, pol);
