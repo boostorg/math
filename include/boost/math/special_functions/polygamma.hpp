@@ -20,7 +20,7 @@
 
   
   template<class T, class Policy>
-  inline typename tools::promote_args<T>::type polygamma(const int n, T x, const Policy &pol)
+  inline typename tools::promote_args<T>::type polygamma(const int n, T x, const Policy &)
   {
      //
      // We've found some standard library functions to misbehave if any FPU exception flags
@@ -69,18 +69,6 @@
   inline typename tools::promote_args<T>::type polygamma(const int n, T x)
   {
       return boost::math::polygamma(n, x, policies::policy<>());
-  }
-
-  template<class T, class Policy>
-  inline T digamma(T x, const Policy &pol)
-  {
-      return boost::math::polygamma(0,x,pol);
-  }
-
-  template<class T>
-  inline T digamma(T x)
-  {
-      return boost::math::digamma(x,policies::policy<>());
   }
 
   template<class T, class Policy>
