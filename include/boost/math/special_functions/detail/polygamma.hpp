@@ -18,68 +18,16 @@
   #include <boost/math/special_functions/bernoulli.hpp>
   #include <boost/math/special_functions/trunc.hpp>
   #include <boost/math/special_functions/zeta.hpp>
+  #include <boost/math/special_functions/digamma.hpp>
+  #include <boost/math/special_functions/sin_pi.hpp>
+  #include <boost/math/special_functions/cos_pi.hpp>
+  #include <boost/math/special_functions/pow.hpp>
   #include <boost/mpl/if.hpp>
   #include <boost/mpl/int.hpp>
   #include <boost/static_assert.hpp>
   #include <boost/type_traits/is_convertible.hpp>
 
   namespace boost { namespace math { namespace detail{
-
-#if 0
-
-  template<class T, class Policy>
-  T digamma_atinfinityplus(const int, const T &x, const Policy&)
-  {
-    BOOST_MATH_STD_USING
-
-    T z(x);
-    T log_z(log(z));
-    T one_over_2z= T(1) / (2 * z);
-    T sum(0);
-
-    for(int two_k = 2; two_k < max_iteration<T>::value; two_k += 2)
-    {
-
-
-      T term(1);
-      T one_over_two_k       = T(1) / two_k;
-      T z_pow_two_k          = pow(z, static_cast<boost::int32_t>(two_k));
-      T one_over_z_pow_two_k = T(1) / z_pow_two_k;
-      T bernoulli_term       = boost::math::bernoulli_b2n<T>(two_k / 2);
-
-      term = (bernoulli_term * one_over_two_k) * one_over_z_pow_two_k;
-
-      if(term == 0)
-      {
-        continue;
-      }
-
-      sum += term;
-
-      T term_base_10_exp = ((term < 0) ? -term : term);
-      T sum_base_10_exp  = ((sum  < 0) ? -sum  : sum);
-
-      int exponent_value;
-
-      static_cast<void>(frexp(term_base_10_exp, &exponent_value));
-      term_base_10_exp = T(exponent_value) * 0.303F;
-
-      static_cast<void>(frexp(sum_base_10_exp, &exponent_value));
-      sum_base_10_exp = T(exponent_value) * 0.303F;
-
-      long int order_check =  boost::math::ltrunc(term_base_10_exp) - boost::math::ltrunc(sum_base_10_exp);
-      long int tol         =  std::numeric_limits<T>::digits_base10;
-
-
-      if((two_k > 24) && (order_check < -tol))
-      {
-        break;
-      }
-    }
-
-    return (log_z - one_over_2z) - sum;
-  }
-#endif
 
   template<class T, class Policy>
   T polygamma_atinfinityplus(const int n, const T& x, const Policy& pol) // for large values of x such as for x> 400
@@ -256,14 +204,120 @@
 
   }
 
+  template <class T, class Policy>
+  T poly_cot_pi(int n, T x, const Policy& pol)
+  {
+     // Return n'th derivative of cot(pi*x) at x:
+     T s = boost::math::sin_pi(x);
+     switch(n)
+     {
+     case 1:
+        return -constants::pi<T, Policy>() / (s * s);
+     case 2:
+     {
+        T c = boost::math::cos_pi(x);
+        return 2 * constants::pi<T, Policy>() * constants::pi<T, Policy>() * c / boost::math::pow<3>(s);
+     }
+     case 3:
+     {
+        T c = boost::math::cos_pi(2 * x);
+        return -2 * boost::math::pow<3>(constants::pi<T, Policy>()) * (c + 2) / boost::math::pow<4>(s);
+     }
+     case 4:
+     {
+        T c = boost::math::cos_pi(x);
+        T c2 = boost::math::cos_pi(2 * x);
+        return 4 * boost::math::pow<4>(constants::pi<T, Policy>()) * (c2 + 5) * c / boost::math::pow<5>(s);
+     }
+     case 5:
+     {
+        T c2 = boost::math::cos_pi(2 * x);
+        T c4 = boost::math::cos_pi(4 * x);
+        return -2 * boost::math::pow<5>(constants::pi<T, Policy>()) *(26 * c2 + c4 + 33) / boost::math::pow<6>(s);
+     }
+     case 6:
+     {
+        T c = boost::math::cos_pi(x);
+        T c2 = boost::math::cos_pi(2 * x);
+        T c4 = boost::math::cos_pi(4 * x);
+        return 4 * boost::math::pow<6>(constants::pi<T, Policy>()) * (56 * c2 + c4 + 123) * c / boost::math::pow<7>(s);
+     }
+     case 7:
+     {
+        T c2 = boost::math::cos_pi(2 * x);
+        T c4 = boost::math::cos_pi(4 * x);
+        T c6 = boost::math::cos_pi(6 * x);
+        return -2 * boost::math::pow<7>(constants::pi<T, Policy>()) * (1191 * c2 + 120 * c4 + c6 + 1208) / boost::math::pow<8>(s);
+     }
+     case 8:
+     {
+        T c = boost::math::cos_pi(x);
+        T c3 = boost::math::cos_pi(3 * x);
+        T c5 = boost::math::cos_pi(5 * x);
+        T c7 = boost::math::cos_pi(7 * x);
+        return 2 * boost::math::pow<8>(constants::pi<T, Policy>()) * (15619 * c + 4293 * c3 + 247 * c5 + c7) / boost::math::pow<9>(s);
+     }
+     case 9:
+     {
+        T c2 = boost::math::cos_pi(2 * x);
+        T c4 = boost::math::cos_pi(4 * x);
+        T c6 = boost::math::cos_pi(6 * x);
+        T c8 = boost::math::cos_pi(8 * x);
+        return -2 * boost::math::pow<9>(constants::pi<T, Policy>()) * (88234 * c2 + 14608 * c4 + 502 * c6 + c8 + 78095) / boost::math::pow<10>(s);
+     }
+     }
+     return policies::raise_domain_error<T>("boost::math::polygamma<%1%>(int, %1%)", "Derivative of cotangent not implemented at n = %1%", n, pol);
+  }
+
   template<class T, class Policy>
   inline T polygamma_imp(const int n, T x, const Policy &pol)
   {
+    BOOST_MATH_STD_USING
+    static const char* function = "boost::math::polygamma<%1%>(int, %1%)";
     if(n == 0)
        return boost::math::digamma(x);
     if(n < 0)
-       return policies::raise_domain_error<T>("boost::math::polygamma<%1%>(int, %1%)", "Order must be >= 0, but got %1%", n, pol);
-    if(x < 0.5F)
+       return policies::raise_domain_error<T>(function, "Order must be >= 0, but got %1%", n, pol);
+    if(x < 0)
+    {
+       if(floor(x) == x)
+       {
+          //
+          // Result is infinity if x is odd, and a pole error if x is even.
+          //
+          if(lltrunc(x) & 1)
+             return policies::raise_overflow_error<T>(function, 0, pol);
+          else
+             return policies::raise_pole_error<T>(function, "Evaluation at negative integer %1%", x, pol);
+       }
+       if(n < 10)
+       {
+          //
+          // We have tabulated the derivatives of cot(x) up to the 9th derivative, which
+          // allows us to use: http://functions.wolfram.com/06.15.16.0001.01
+          T z = 1 - x;
+          T result = polygamma_imp(n, z, pol) + constants::pi<T, Policy>() * poly_cot_pi(n, z, pol);
+          return n & 1 ? -result : result;
+       }
+       //
+       // Try http://functions.wolfram.com/06.15.16.0007.01
+       //
+       if(x <= -static_cast<int>(policies::get_max_series_iterations<Policy>()))
+          return policies::raise_evaluation_error<T>(function, "Argument is outside the bounds for which we can reasonably calculate polygamma (got x = %1%)", x, pol);
+       int m = boost::math::itrunc(ceil(-x));
+       T z = x + m;
+       T sum = 0;
+       for(int k = 1; k <= m; ++k)
+       {
+          sum += pow(z - k, -n - 1);
+       }
+       sum *= boost::math::factorial<T>(n);
+       if(n & 1)
+          sum = -sum;
+       return polygamma_imp(n, z, pol) - sum;
+    }
+
+    if(x < 0.125F)
     {
       return polygamma_nearzero(n, x, pol);
     }

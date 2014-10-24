@@ -167,6 +167,7 @@ public:
 template <class T, class Policy>
 inline T digamma_imp_large(T x, const Policy& pol, const mpl::int_<0>*)
 {
+   BOOST_MATH_STD_USING
    digamma_series_func<T> s(x);
    T result = log(x) - 1 / (2 * x);
    boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();

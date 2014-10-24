@@ -853,7 +853,7 @@ inline int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 template <class T, class Policy>
 inline int digits_base10(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))
 {
-   return boost::math::policies::digits<T, Policy>() * 1000L / 301;
+   return boost::math::policies::digits<T, Policy>() * 301 / 1000L;
 }
 
 template <class Policy>
