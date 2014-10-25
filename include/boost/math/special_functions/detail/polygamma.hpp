@@ -207,7 +207,23 @@
   template <class T, class Policy>
   T poly_cot_pi(int n, T x, const Policy& pol)
   {
-     // Return n'th derivative of cot(pi*x) at x:
+     // Return n'th derivative of cot(pi*x) at x, these are simply
+     // tabulated for up to n = 9, beyond that it is possible to
+     // calculate coefficients as follows:
+     //
+     // The general form of each derivative is:
+     //
+     // pi^n * SUM{k=0, n} C[k,n] * cos(k * pi * x) * csc^(n+1)(pi * x)
+     //
+     // With constant C[0,1] = -1 and all other C[k,n] = 0;
+     // Then for each k < n+1:
+     // C[|1 - k|, n+1]  += -(k + n + 2) * C[k, n] / 2;
+     // C[k + 1, n+1]    += -(n + 2 - k) * C[k, n] / 2;
+     //
+     // It's worth noting however, that as well as requiring quite a bit
+     // of storage space, this method has no better accuracy than recursion
+     // on x to x > 0 when computing polygamma :-(
+     //
      T s = boost::math::sin_pi(x);
      switch(n)
      {
