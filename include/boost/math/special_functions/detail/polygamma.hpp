@@ -62,7 +62,7 @@
      // know that we have to use logs for the initial terms:
      //
      part_term = ((n > boost::math::max_factorial<T>::value) && (n * n > tools::log_max_value<T>())) 
-        ? T(0) : boost::math::factorial<T>(n - 1, pol) * pow(x, -n - 1);
+        ? T(0) : static_cast<T>(boost::math::factorial<T>(n - 1, pol) * pow(x, -n - 1));
      if(part_term == 0)
      {
         // Either n is very large, or the power term underflows,
@@ -163,7 +163,7 @@
     const T n_fact               =  boost::math::factorial<T>(n);
     const T z_pow_n_plus_one     =  pow(x, n + 1);
     const T n_fact_over_pow_term =  n_fact / z_pow_n_plus_one;
-    const T term0                =  !b_negate ? n_fact_over_pow_term : -n_fact_over_pow_term;
+    const T term0                =  !b_negate ? n_fact_over_pow_term : T(-n_fact_over_pow_term);
 
           T one_over_k_fact      =  T(1);
           T z_pow_k              =  T(1);
@@ -171,7 +171,7 @@
           T k_plus_n_plus_one    =  T(n + 1);
     const T pg_kn                =  k_plus_n_fact * boost::math::zeta<T>(k_plus_n_plus_one);
           bool    b_neg_term     =  ((n % 2) == 0);
-          T sum                  =  ((!b_neg_term) ? pg_kn : -pg_kn);
+          T sum                  =  ((!b_neg_term) ? pg_kn : T(-pg_kn));
 
     for(unsigned k = 1;; k++)
     {
@@ -313,7 +313,7 @@
           // allows us to use: http://functions.wolfram.com/06.15.16.0001.01
           T z = 1 - x;
           T result = polygamma_imp(n, z, pol) + constants::pi<T, Policy>() * poly_cot_pi(n, z, pol);
-          return n & 1 ? -result : result;
+          return n & 1 ? T(-result) : result;
        }
        //
        // Try http://functions.wolfram.com/06.15.16.0007.01
