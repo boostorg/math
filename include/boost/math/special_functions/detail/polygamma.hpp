@@ -62,7 +62,7 @@
      // know that we have to use logs for the initial terms:
      //
      part_term = ((n > boost::math::max_factorial<T>::value) && (n * n > tools::log_max_value<T>())) 
-        ? 0 : boost::math::factorial<T>(n - 1, pol) * pow(x, -n - 1);
+        ? T(0) : boost::math::factorial<T>(n - 1, pol) * pow(x, -n - 1);
      if(part_term == 0)
      {
         // Either n is very large, or the power term underflows,
@@ -140,7 +140,7 @@
     {
       z_plus_k_pow_minus_m_minus_one = pow(z, minus_m_minus_one);
       sum0 += z_plus_k_pow_minus_m_minus_one;
-      ++z;
+      z += 1;
     }
     sum0 *= boost::math::factorial<T>(n);
     if((n - 1) & 1)
@@ -161,7 +161,7 @@
     const bool b_negate = (( n % 2 ) == 0 ) ;
 
     const T n_fact               =  boost::math::factorial<T>(n);
-    const T z_pow_n_plus_one     =  pow(x, static_cast<boost::int64_t>(n + 1));
+    const T z_pow_n_plus_one     =  pow(x, n + 1);
     const T n_fact_over_pow_term =  n_fact / z_pow_n_plus_one;
     const T term0                =  !b_negate ? n_fact_over_pow_term : -n_fact_over_pow_term;
 

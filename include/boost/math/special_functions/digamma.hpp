@@ -12,6 +12,7 @@
 
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/rational.hpp>
+#include <boost/math/tools/series.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -505,7 +506,7 @@ T digamma_imp(T x, const mpl::int_<0>* t, const Policy& pol)
       while(val < x)
       {
          result += 1 / val;
-         ++val;
+         val += 1;
       }
    }
    else if(floor(two_x) == two_x)

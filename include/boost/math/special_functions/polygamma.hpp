@@ -72,13 +72,13 @@
   }
 
   template<class T, class Policy>
-  inline T trigamma(T x, const Policy &pol)
+  inline typename tools::promote_args<T>::type trigamma(T x, const Policy &pol)
   {
       return boost::math::polygamma(1,x,pol);
   }
 
   template<class T>
-  inline T trigamma(T x)
+  inline typename tools::promote_args<T>::type trigamma(T x)
   {
       return boost::math::trigamma(x,policies::policy<>());
   }

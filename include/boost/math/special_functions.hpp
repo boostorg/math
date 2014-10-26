@@ -37,6 +37,7 @@
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/polygamma.hpp>
 #include <boost/math/special_functions/hermite.hpp>
 #include <boost/math/special_functions/hypot.hpp>
 #include <boost/math/special_functions/jacobi_elliptic.hpp>
