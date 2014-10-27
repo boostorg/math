@@ -1,4 +1,4 @@
-// boost\math\distributions\beta.hpp
+// boost\math\distributions\arcsine.hpp
 
 // Copyright John Maddock 2014.
 // Copyright Paul A. Bristow 2014.
@@ -9,8 +9,6 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // http://en.wikipedia.org/wiki/arcsine_distribution
-// http://www.itl.nist.gov/div898/handbook/eda/section3/eda366h.htm
-// http://mathworld.wolfram.com/BetaDistribution.html
 
 // The arcsine Distribution is a continuous probability distribution.
 // http://en.wikipedia.org/wiki/Arcsine_distribution
@@ -32,7 +30,6 @@
 #define BOOST_MATH_DIST_ARCSINE_HPP
 
 #include <boost/math/distributions/fwd.hpp>
-#include <boost/math/special_functions/beta.hpp> // for beta.
 #include <boost/math/distributions/complement.hpp> // complements.
 #include <boost/math/distributions/detail/common_error_handling.hpp> // error checks.
 #include <boost/math/constants/constants.hpp>
@@ -94,7 +91,7 @@ namespace boost
             function,
             msg.c_str(), x_max, pol);
            // "x_max argument is %1%, but must be > x_min !", x_max, pol);
-            //  "x_max argument is %1%, but must be > x_min %2!", x_max, x_min, pol); would be better.  TODO? 
+            //  "x_max argument is %1%, but must be > x_min %2!", x_max, x_min, pol); would be better.  TODO?
           // But would require replication of all helpers functions in /policies/error_handling.hpp for two values,
           // as well as two value versions of raise_error, raise_domain_error and do_format ...
 
@@ -231,7 +228,7 @@ namespace boost
     } // variance
 
     template <class RealType, class Policy>
-    inline RealType mode(const arcsine_distribution<RealType, Policy>& dist)
+    inline RealType mode(const arcsine_distribution<RealType, Policy>& /* dist */)
     { //There are always [*two] values for the mode, at ['x_min] and at ['x_max], default 0 and 1,
       // so instead we raise the exception domain_error.
       return policies::raise_domain_error<RealType>(
@@ -250,13 +247,13 @@ namespace boost
     //  Or be provided by the derived accessor as quantile(0.5).
 
     template <class RealType, class Policy>
-    inline RealType skewness(const arcsine_distribution<RealType, Policy>& dist)
+    inline RealType skewness(const arcsine_distribution<RealType, Policy>& /* dist */)
     {
       return 0;
     } // skewness
 
     template <class RealType, class Policy>
-    inline RealType kurtosis_excess(const arcsine_distribution<RealType, Policy>& dist)
+    inline RealType kurtosis_excess(const arcsine_distribution<RealType, Policy>& /* dist */)
     {
       RealType result = -3;
       return  result / 2;

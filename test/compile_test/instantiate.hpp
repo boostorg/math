@@ -55,6 +55,7 @@ void instantiate(RealType)
    using namespace boost::math;
    using namespace boost::math::concepts;
 #ifdef TEST_GROUP_1
+   function_requires<DistributionConcept<arcsine_distribution<RealType> > >();
    function_requires<DistributionConcept<bernoulli_distribution<RealType> > >();
    function_requires<DistributionConcept<beta_distribution<RealType> > >();
    function_requires<DistributionConcept<binomial_distribution<RealType> > >();
@@ -90,6 +91,7 @@ void instantiate(RealType)
 #endif
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
 #ifdef TEST_GROUP_2
+   function_requires<DistributionConcept<arcsine_distribution<RealType> > >();
    function_requires<DistributionConcept<bernoulli_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<beta_distribution<RealType, test_policy> > >();
    function_requires<DistributionConcept<binomial_distribution<RealType, test_policy> > >();
@@ -123,6 +125,7 @@ void instantiate(RealType)
    function_requires<DistributionConcept<weibull_distribution<RealType, test_policy> > >();
 #endif
 #ifdef TEST_GROUP_3
+   function_requires<DistributionConcept<dist_test::arcsine > >();
    function_requires<DistributionConcept<dist_test::bernoulli > >();
    function_requires<DistributionConcept<dist_test::beta > >();
    function_requires<DistributionConcept<dist_test::binomial > >();

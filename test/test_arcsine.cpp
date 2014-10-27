@@ -16,10 +16,12 @@
 #  pragma warning (disable : 4224) // Nonstandard extension used : formal parameter 'arg' was previously defined as a type.
 #endif
 
-#include <boost/math/concepts/real_concept.hpp> // for real_concept
+#include <boost/math/concepts/real_concept.hpp> // for real_concept.
 using ::boost::math::concepts::real_concept;
 
-#include <boost/math/distributions/arcsine.hpp> // for arcsine_distribution
+#include <pch.hpp> // include directory /libs/math/src/tr1/ is needed.
+
+#include <boost/math/distributions/arcsine.hpp> // for arcsine_distribution.
 using boost::math::arcsine_distribution;
 
 #include <boost/math/constants/constants.hpp>
@@ -42,7 +44,7 @@ using std::numeric_limits;
 template <class RealType>
 RealType informax()
 {
-  return ((std::numeric_limits<RealType>::has_infinity) ? 
+  return ((std::numeric_limits<RealType>::has_infinity) ?
      std::numeric_limits<RealType>::infinity() : boost::math::tools::max_value<RealType>());
 }
 
@@ -135,18 +137,18 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, 0.95), static_cast<RealType>(1.4605059227421865250256574657088244053723856445614L), 8 * std::numeric_limits<RealType>::epsilon()); // Less accurate.
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, 0.999995), static_cast<RealType>(142.35286456604168061345817902422241622116338936911L), 50000 * std::numeric_limits<RealType>::epsilon()); // Much less accurate.
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, 0.999999), static_cast<RealType>(318.31004533885312973989414360099118178698415543136L), 100000 * std::numeric_limits<RealType>::epsilon());// Even less accurate.
-    
+
     // Extreme x.
     if (std::numeric_limits<RealType>::has_infinity)
-    { // 
-      BOOST_CHECK_EQUAL(pdf(arcsine_01, 0), informax<RealType>()); // 
-      BOOST_CHECK_EQUAL(pdf(arcsine_01, 1), informax<RealType>()); // 
+    { //
+      BOOST_CHECK_EQUAL(pdf(arcsine_01, 0), informax<RealType>()); //
+      BOOST_CHECK_EQUAL(pdf(arcsine_01, 1), informax<RealType>()); //
     }
 
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, std::numeric_limits<RealType>::epsilon()),
-      1 /(sqrt(std::numeric_limits<RealType>::epsilon()) * boost::math::constants::pi<RealType>()), std::numeric_limits<RealType>::epsilon()); // 
+      1 /(sqrt(std::numeric_limits<RealType>::epsilon()) * boost::math::constants::pi<RealType>()), 2 * std::numeric_limits<RealType>::epsilon()); //
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, static_cast<RealType>(1) - std::numeric_limits<RealType>::epsilon()),
-      1 /(sqrt(std::numeric_limits<RealType>::epsilon()) * boost::math::constants::pi<RealType>()), std::numeric_limits<RealType>::epsilon()); // 
+      1 /(sqrt(std::numeric_limits<RealType>::epsilon()) * boost::math::constants::pi<RealType>()), 2 * std::numeric_limits<RealType>::epsilon()); //
 
     // CDF
     BOOST_CHECK_CLOSE_FRACTION(cdf(arcsine_01, 0.000001), static_cast<RealType>(0.00063661987847092448418377367957384866092127786060574L), std::numeric_limits<RealType>::epsilon());
@@ -156,11 +158,11 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(cdf(arcsine_01, 0.95), static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L), 2 * std::numeric_limits<RealType>::epsilon());
     // Values near unity should use the cdf complemented for better accuracy,
     BOOST_CHECK_CLOSE_FRACTION(cdf(arcsine_01, 0.999995), static_cast<RealType>(0.99857647372689207107026975735458746817981685254927L), 100 * std::numeric_limits<RealType>::epsilon()); // Less accurate.
-    BOOST_CHECK_CLOSE_FRACTION(cdf(arcsine_01, 0.999999), static_cast<RealType>(0.99936338012152907551581622632042615133907872213939L), 100 * std::numeric_limits<RealType>::epsilon()); // Less accurate.
+    BOOST_CHECK_CLOSE_FRACTION(cdf(arcsine_01, 0.999999), static_cast<RealType>(0.99936338012152907551581622632042615133907872213939L), 1000 * std::numeric_limits<RealType>::epsilon()); // Less accurate.
 
     //  Complement CDF
     BOOST_CHECK_CLOSE_FRACTION(cdf(complement(arcsine_01, 0.000001)), static_cast<RealType>(1 - 0.00063661987847092448418377367957384866092127786060574L), 2 * std::numeric_limits<RealType>::epsilon());
-    BOOST_CHECK_CLOSE_FRACTION(cdf(complement(arcsine_01, 0.000001)), static_cast<RealType>(0.99936338012152907551581622632043L), 2 * std::numeric_limits<RealType>::epsilon()); // 
+    BOOST_CHECK_CLOSE_FRACTION(cdf(complement(arcsine_01, 0.000001)), static_cast<RealType>(0.99936338012152907551581622632043L), 2 * std::numeric_limits<RealType>::epsilon()); //
     BOOST_CHECK_CLOSE_FRACTION(cdf(complement(arcsine_01, 0.05)), static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L), std::numeric_limits<RealType>::epsilon());
     BOOST_CHECK_CLOSE_FRACTION(cdf(complement(arcsine_01, 0.5)), static_cast<RealType>(0.5L), std::numeric_limits<RealType>::epsilon()); // Exact.
     // Some values near unity when complement is expected to be less accurate.
@@ -197,13 +199,13 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(quantile(arcsine_01, static_cast<RealType>(2) / 3), static_cast<RealType>(0.75L), std::numeric_limits<RealType>::epsilon());
 
     // Arcsine(-1, +1)    xmin = -1, x_max = +1  symmetric about zero.
-    arcsine_distribution<> as_m11(-1, +1);
+    arcsine_distribution<RealType> as_m11(-1, +1);
 
     BOOST_CHECK_EQUAL(as_m11.x_min(), -1); //
     BOOST_CHECK_EQUAL(as_m11.x_max(), +1);
     BOOST_CHECK_EQUAL(mean(as_m11), 0); //
-    BOOST_CHECK_EQUAL(median(as_m11), 0); // 
-    BOOST_CHECK_EQUAL(standard_deviation(as_m11), one_div_root_two<RealType>()); // 
+    BOOST_CHECK_EQUAL(median(as_m11), 0); //
+    BOOST_CHECK_EQUAL(standard_deviation(as_m11), one_div_root_two<RealType>()); //
 
     BOOST_CHECK_EQUAL(variance(as_m11), 0.5); // 1 - (-1) = 2 ^ 2 = 4 /8 = 0.5
     BOOST_CHECK_EQUAL(skewness(as_m11), 0); //
@@ -215,13 +217,13 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(pdf(as_m11, 0.95), static_cast<RealType>(1.0194074882503562519812229448639426942621591013381L), 2 * std::numeric_limits<RealType>::epsilon()); // Less accurate.
 
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m11, 0.05), static_cast<RealType>(0.51592213323666034437274347433261364289389772737836L), std::numeric_limits<RealType>::epsilon());
-    BOOST_CHECK_CLOSE_FRACTION(cdf(as_m11, 0.5), static_cast<RealType>(0.66666666666666666666666666666666666666666666666667L), std::numeric_limits<RealType>::epsilon());
+    BOOST_CHECK_CLOSE_FRACTION(cdf(as_m11, 0.5), static_cast<RealType>(0.66666666666666666666666666666666666666666666666667L), 2 * std::numeric_limits<RealType>::epsilon());
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m11, 0.95), static_cast<RealType>(0.89891737589574013042121018491729701360300248368629L), std::numeric_limits<RealType>::epsilon()); //  Not less accurate.
 
     // Quantile
-    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m11, static_cast<RealType>(1) / 3), -static_cast<RealType>(0.5L), 2 * std::numeric_limits<RealType>::epsilon()); // p = 1/3 x = -0.5 
-    BOOST_CHECK_SMALL(quantile(as_m11, static_cast<RealType>(0.5L)), 2 * std::numeric_limits<RealType>::epsilon());                             // p = 0.5, x = 0 
-    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m11, static_cast<RealType>(2) / 3), +static_cast<RealType>(0.5L), 4 * std::numeric_limits<RealType>::epsilon());     // p = 2/3, x = +0.5 
+    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m11, static_cast<RealType>(1) / 3), -static_cast<RealType>(0.5L), 2 * std::numeric_limits<RealType>::epsilon()); // p = 1/3 x = -0.5
+    BOOST_CHECK_SMALL(quantile(as_m11, static_cast<RealType>(0.5L)), 2 * std::numeric_limits<RealType>::epsilon());                             // p = 0.5, x = 0
+    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m11, static_cast<RealType>(2) / 3), +static_cast<RealType>(0.5L), 4 * std::numeric_limits<RealType>::epsilon());     // p = 2/3, x = +0.5
 
 
     // Arcsine(-2, -1) xmin = -2, x_max = -1  - Asymmetric both negative.
@@ -244,18 +246,18 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(cdf(as_m2m1, -1.95), static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L), 4 * std::numeric_limits<RealType>::epsilon()); //  Not less accurate.
 
     // Quantile
-    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L)), -static_cast<RealType>(1.05L), 2 * std::numeric_limits<RealType>::epsilon()); // 
-    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.5L)), -static_cast<RealType>(1.5L), 2 * std::numeric_limits<RealType>::epsilon());                             // 
-    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L)), -static_cast<RealType>(1.95L), 4 * std::numeric_limits<RealType>::epsilon());     // 
+    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L)), -static_cast<RealType>(1.05L), 2 * std::numeric_limits<RealType>::epsilon()); //
+    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.5L)), -static_cast<RealType>(1.5L), 2 * std::numeric_limits<RealType>::epsilon());                             //
+    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L)), -static_cast<RealType>(1.95L), 4 * std::numeric_limits<RealType>::epsilon());     //
 
-    BOOST_CHECK_CLOSE_FRACTION(quantile(complement(as_m2m1, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L))), -static_cast<RealType>(1.05L), 2 * std::numeric_limits<RealType>::epsilon()); // 
-    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.5L)), -static_cast<RealType>(1.5L), 2 * std::numeric_limits<RealType>::epsilon());                             // 
+    BOOST_CHECK_CLOSE_FRACTION(quantile(complement(as_m2m1, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L))), -static_cast<RealType>(1.05L), 2 * std::numeric_limits<RealType>::epsilon()); //
+    BOOST_CHECK_CLOSE_FRACTION(quantile(as_m2m1, static_cast<RealType>(0.5L)), -static_cast<RealType>(1.5L), 2 * std::numeric_limits<RealType>::epsilon());                             //
     BOOST_CHECK_CLOSE_FRACTION(quantile(complement(as_m2m1, static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L))), -static_cast<RealType>(1.95L), 4 * std::numeric_limits<RealType>::epsilon());
 
     // Tests that should throw:
     BOOST_CHECK_THROW(mode(arcsine_distribution<RealType>(static_cast<RealType>(0), static_cast<RealType>(1))), std::domain_error);
     // mode is undefined, and must throw domain_error!
- 
+
     BOOST_CHECK_THROW( // For various bad arguments.
       pdf(
       arcsine_distribution<RealType>(static_cast<RealType>(+1), static_cast<RealType>(-1)), // min_x > max_x
@@ -370,17 +372,17 @@ void test_spots(RealType)
     BOOST_CHECK_EQUAL(support(as).first, 0); //
     BOOST_CHECK_EQUAL(range(as).first, 0); //
     BOOST_CHECK_THROW(mode(as), std::domain_error); //  Two modes at x_min and x_max, so throw instead.
-   // BOOST_CHECK_THROW(arcsine_distribution<double>(+1, -1), std::domain_error); // min > max 
+   // BOOST_CHECK_THROW(arcsine_distribution<double>(+1, -1), std::domain_error); // min > max
 
      // (Parameter value, arbitrarily zero, only communicates the floating point type).
-  //  test_spots(0.0F); // Test float.
+    test_spots(0.0F); // Test float.
     test_spots(0.0); // Test double.
-    //#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-    //test_spots(0.0L); // Test long double.
-    //#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-    //test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
-    //#endif
-    //#endif
+    #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+      test_spots(0.0L); // Test long double.
+      #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+       test_spots(boost::math::concepts::real_concept(0.)); // Test real concept.
+      #endif
+    #endif
   /*    */
   } // BOOST_AUTO_TEST_CASE( test_main )
 
