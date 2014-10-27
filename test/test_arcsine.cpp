@@ -10,6 +10,8 @@
 
 // Tests for the arcsine Distribution.
 
+#include <pch.hpp> // include directory /libs/math/src/tr1/ is needed.
+
 #ifdef _MSC_VER
 #  pragma warning(disable: 4127) // Conditional expression is constant.
 #  pragma warning (disable : 4996) // POSIX name for this item is deprecated.
@@ -18,8 +20,6 @@
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept.
 using ::boost::math::concepts::real_concept;
-
-#include <pch.hpp> // include directory /libs/math/src/tr1/ is needed.
 
 #include <boost/math/distributions/arcsine.hpp> // for arcsine_distribution.
 using boost::math::arcsine_distribution;
@@ -227,7 +227,7 @@ void test_spots(RealType)
 
 
     // Arcsine(-2, -1) xmin = -2, x_max = -1  - Asymmetric both negative.
-    arcsine_distribution<> as_m2m1(-2, -1);
+    arcsine_distribution<RealType> as_m2m1(-2, -1);
 
     BOOST_CHECK_EQUAL(as_m2m1.x_min(), -2); //
     BOOST_CHECK_EQUAL(as_m2m1.x_max(), -1);
