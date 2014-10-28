@@ -1,4 +1,4 @@
-// boost\math\distributions\arcsine.hpp
+// boost/math/distributions/arcsine.hpp
 
 // Copyright John Maddock 2014.
 // Copyright Paul A. Bristow 2014.
