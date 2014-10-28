@@ -30,7 +30,7 @@
   namespace boost { namespace math { namespace detail{
 
   template<class T, class Policy>
-  T polygamma_atinfinityplus(const int n, const T& x, const Policy& pol) // for large values of x such as for x> 400
+  T polygamma_atinfinityplus(const int n, const T& x, const Policy& pol, const char* function) // for large values of x such as for x> 400
   {
      // See http://functions.wolfram.com/GammaBetaErf/PolyGamma2/06/02/0001/
      BOOST_MATH_STD_USING
@@ -105,7 +105,7 @@
         //
         if(k > policies::get_max_series_iterations<Policy>())
         {
-           policies::raise_evaluation_error("polygamma<%1%>(int, %1%)", "Series did not converge, closest value was %1%", sum, pol);
+           policies::raise_evaluation_error(function, "Series did not converge, closest value was %1%", sum, pol);
            break;
         }
      }
@@ -117,7 +117,7 @@
   }
 
   template<class T, class Policy>
-  T polygamma_attransitionplus(const int n, const T& x, const Policy& pol)
+  T polygamma_attransitionplus(const int n, const T& x, const Policy& pol, const char* function)
   {
     // See: http://functions.wolfram.com/GammaBetaErf/PolyGamma2/16/01/01/0017/
 
@@ -146,66 +146,88 @@
     if((n - 1) & 1)
        sum0 = -sum0;
 
-    return sum0 + polygamma_atinfinityplus(n, z, pol);
-  }
-
-  template<class T, class Policy>
-  T polygamma_nearzero(const int n, const T& x, const Policy& pol)
-  {
-    BOOST_MATH_STD_USING
-    // not defined for digamma
-
-    // Use a series expansion for x near zero which uses poly_gamma(m, 1) which,
-    // in turn, uses the Riemann zeta function for integer arguments.
-    // http://functions.wolfram.com/GammaBetaErf/PolyGamma2/06/01/03/01/02/
-    const bool b_negate = (( n % 2 ) == 0 ) ;
-
-    const T n_fact               =  boost::math::factorial<T>(n);
-    const T z_pow_n_plus_one     =  pow(x, n + 1);
-    const T n_fact_over_pow_term =  n_fact / z_pow_n_plus_one;
-    const T term0                =  !b_negate ? n_fact_over_pow_term : T(-n_fact_over_pow_term);
-
-          T one_over_k_fact      =  T(1);
-          T z_pow_k              =  T(1);
-          T k_plus_n_fact        =  boost::math::factorial<T>(n);
-          T k_plus_n_plus_one    =  T(n + 1);
-    const T pg_kn                =  k_plus_n_fact * boost::math::zeta<T>(k_plus_n_plus_one);
-          bool    b_neg_term     =  ((n % 2) == 0);
-          T sum                  =  ((!b_neg_term) ? pg_kn : T(-pg_kn));
-
-    for(unsigned k = 1;; k++)
-    {
-      k_plus_n_fact   *= k_plus_n_plus_one;
-      k_plus_n_plus_one += 1;
-      one_over_k_fact /= k;
-      z_pow_k         *= x;
-
-      const T pg = k_plus_n_fact * boost::math::zeta<T>(k_plus_n_plus_one);
-
-      const T term = (pg * z_pow_k) * one_over_k_fact;
-
-      if(fabs(term / sum) < tools::epsilon<T>())
-      {
-        break;
-      }
-
-      b_neg_term = !b_neg_term;
-
-      ((!b_neg_term) ? sum += term : sum -= term);
-
-      if(k > policies::get_max_series_iterations<Policy>())
-      {
-         policies::raise_evaluation_error("polygamma<%1%>(int, %1%)", "Series did not converge, closest value was %1%", sum, pol);
-         break;
-      }
-    }
-
-    return term0 + sum;
-
+    return sum0 + polygamma_atinfinityplus(n, z, pol, function);
   }
 
   template <class T, class Policy>
-  T poly_cot_pi(int n, T x, const Policy& pol)
+  T polygamma_nearzero(int n, T x, const Policy& pol, const char* function)
+  {
+     BOOST_MATH_STD_USING
+     //
+     // If we take this expansion for polygamma: http://functions.wolfram.com/06.15.06.0003.02
+     // and substitute in this expression for polygamma(n, 1): http://functions.wolfram.com/06.15.03.0009.01
+     // we get an alternating series for polygamma when x is small in terms of zeta functions of
+     // integer arguments (which are easy to evaluate, at least when the integer is even).
+     //
+     // In order to avoid spurious overflow, save the n! term for later, and rescale at the end:
+     //
+     T scale = boost::math::factorial<T>(n, pol);
+     //
+     // "factorial_part" contains everything except the zeta function
+     // evaluations in each term:
+     //
+     T factorial_part = 1;
+     //
+     // "prefix" is what we'll be adding the accumulated sum to, it will
+     // be n! / z^(n+1), but since we're scaling by n! it's just 
+     // 1 / z^(n+1) for now:
+     //
+     T prefix = pow(x, n + 1);
+     if(prefix == 0)
+        return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
+     prefix = 1 / prefix;
+     //
+     // Since this is an alternating sum we can accelerate convergence using
+     // Algorithm 1 from "Convergence Acceleration of Alternating Series",
+     // Henri Cohen, Fernando Rodriguez Villegas, and Don Zagier, 
+     // Experimental Mathematics, 1999.
+     // While in principle we can determine up front how many terms we will need,
+     // note that often the prefix term is so large that we need no terms at all,
+     // or else the series is divergent and we need rather more terms than expected.
+     // The latter case we try to weed out before this function gets called, but 
+     // just in case set the number of terms to an arbitrary high value, and then
+     // use the usual heurists to determine when to stop, these next variables
+     // correspond directly to those in Algorithm 1 of the above paper:
+     //
+     int nd = (int)std::min((boost::intmax_t)(boost::math::policies::digits_base10<T, Policy>() * 10), (boost::intmax_t)boost::math::policies::get_max_series_iterations<Policy>());
+     T d = pow(3 + sqrt(T(8)), nd);
+     d = (d + 1 / d) / 2;
+     T b = -1;
+     T c = -d;
+     T sum = 0;
+     for(int k = 0; k < nd;)
+     {
+        // Get the k'th term:
+        T term = factorial_part * boost::math::zeta(k + n + 1, pol);
+        // Series acceleration:
+        c = b - c;
+        sum = sum + c * term;
+        b = (k + nd) * (k - nd) * b / ((k + 0.5) * (k + 1));
+        // Termination condition:
+        if(fabs(c * term) < (sum + prefix * d) * boost::math::policies::get_epsilon<T, Policy>())
+           break;
+        //
+        // Move on k and factorial_part:
+        //
+        ++k;
+        factorial_part *= x * (n + k) / k;
+     }
+     //
+     // We need to add the sum to the prefix term and then
+     // multiply by the scale, at each stage checking for oveflow:
+     //
+     sum /= d;
+     if(boost::math::tools::max_value<T>() - sum < prefix)
+        return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
+     sum += prefix;
+     if(boost::math::tools::max_value<T>() / scale < sum)
+        return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
+     sum *= scale;
+     return n & 1 ? sum : -sum;
+  }
+
+  template <class T, class Policy>
+  T poly_cot_pi(int n, T x, const Policy& pol, const char* function)
   {
      // Return n'th derivative of cot(pi*x) at x, these are simply
      // tabulated for up to n = 9, beyond that it is possible to
@@ -282,7 +304,7 @@
         return -2 * boost::math::pow<9>(constants::pi<T, Policy>()) * (88234 * c2 + 14608 * c4 + 502 * c6 + c8 + 78095) / boost::math::pow<10>(s);
      }
      }
-     return policies::raise_domain_error<T>("boost::math::polygamma<%1%>(int, %1%)", "Derivative of cotangent not implemented at n = %1%", n, pol);
+     return policies::raise_domain_error<T>(function, "Derivative of cotangent not implemented at n = %1%", n, pol);
   }
 
   template<class T, class Policy>
@@ -312,7 +334,7 @@
           // We have tabulated the derivatives of cot(x) up to the 9th derivative, which
           // allows us to use: http://functions.wolfram.com/06.15.16.0001.01
           T z = 1 - x;
-          T result = polygamma_imp(n, z, pol) + constants::pi<T, Policy>() * poly_cot_pi(n, z, pol);
+          T result = polygamma_imp(n, z, pol) + constants::pi<T, Policy>() * poly_cot_pi(n, z, pol, function);
           return n & 1 ? T(-result) : result;
        }
        //
@@ -327,23 +349,31 @@
        {
           sum += pow(z - k, -n - 1);
        }
-       sum *= boost::math::factorial<T>(n);
+       sum *= boost::math::factorial<T>(n, pol);
        if(n & 1)
           sum = -sum;
        return polygamma_imp(n, z, pol) - sum;
     }
-
-    if(x < 0.125F)
+    //
+    // Limit for use of small-x-series is chosen
+    // so that the series doesn't go too divergent
+    // in the first few terms.  Ordinarily this
+    // would mean setting the limit to ~ 1 / n,
+    // but since the series is accelerated, we can
+    // tolerate a small amount of divergence:
+    //
+    T small_x_limit = std::min(T(5) / n, T(0.25f));
+    if(x < small_x_limit)
     {
-      return polygamma_nearzero(n, x, pol);
+      return polygamma_nearzero(n, x, pol, function);
     }
     else if(x > 0.4F * policies::digits_base10<T, Policy>() + 4 * n)
     {
-      return polygamma_atinfinityplus(n, x, pol);
+      return polygamma_atinfinityplus(n, x, pol, function);
     }
     else
     {
-      return polygamma_attransitionplus(n, x, pol);
+      return polygamma_attransitionplus(n, x, pol, function);
     }
   }
 
