@@ -177,6 +177,13 @@
         return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
      prefix = 1 / prefix;
      //
+     // First term in the series is necessarily < zeta(2) < 2, so
+     // ignore the sum if it will have no effect on the result anyway:
+     //
+     if(prefix > 2 / policies::get_epsilon<T, Policy>())
+        return ((n & 1) ? 1 : -1) * 
+         (tools::max_value<T>() / prefix < scale ? policies::raise_overflow_error<T>(function, 0, pol) : prefix * scale);
+     //
      // Since this is an alternating sum we can accelerate convergence using
      // Algorithm 1 from "Convergence Acceleration of Alternating Series",
      // Henri Cohen, Fernando Rodriguez Villegas, and Don Zagier, 
