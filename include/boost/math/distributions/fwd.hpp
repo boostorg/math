@@ -117,7 +117,7 @@ class weibull_distribution;
 }} // namespaces
 
 #define BOOST_MATH_DECLARE_DISTRIBUTIONS(Type, Policy)\
-   typedef boost::math::arcsine_distribution<Type, Policy> bernoulli;\
+   typedef boost::math::arcsine_distribution<Type, Policy> arcsine;\
    typedef boost::math::bernoulli_distribution<Type, Policy> bernoulli;\
    typedef boost::math::beta_distribution<Type, Policy> beta;\
    typedef boost::math::binomial_distribution<Type, Policy> binomial;\
