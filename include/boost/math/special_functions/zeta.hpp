@@ -16,6 +16,7 @@
 #include <boost/math/tools/big_constant.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>
 
 namespace boost{ namespace math{ namespace detail{

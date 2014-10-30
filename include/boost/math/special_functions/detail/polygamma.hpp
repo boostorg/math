@@ -369,7 +369,7 @@
     // but since the series is accelerated, we can
     // tolerate a small amount of divergence:
     //
-    T small_x_limit = std::min(T(5) / n, T(0.25f));
+    T small_x_limit = std::min(T(T(5) / n), T(0.25f));
     if(x < small_x_limit)
     {
       return polygamma_nearzero(n, x, pol, function);
