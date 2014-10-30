@@ -205,7 +205,7 @@
      for(int k = 0; k < nd;)
      {
         // Get the k'th term:
-        T term = factorial_part * boost::math::zeta(k + n + 1, pol);
+        T term = factorial_part * boost::math::zeta(T(k + n + 1), pol);
         // Series acceleration:
         c = b - c;
         sum = sum + c * term;
