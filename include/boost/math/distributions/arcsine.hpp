@@ -367,7 +367,9 @@ namespace boost
 
     template <class RealType, class Policy>
     inline RealType quantile(const arcsine_distribution<RealType, Policy>& dist, const RealType& p)
-    { // Quantile or Percent Point arcsine function or
+    { 
+      BOOST_MATH_STD_USING
+      // Quantile or Percent Point arcsine function or
       // Inverse Cumulative probability distribution function CDF.
       // Return x (0 <= x <= 1),
       // for a given probability p (0 <= p <= 1).
@@ -410,7 +412,9 @@ namespace boost
 
     template <class RealType, class Policy>
     inline RealType quantile(const complemented2_type<arcsine_distribution<RealType, Policy>, RealType>& c)
-    { // Complement Quantile or Percent Point arcsine function.
+    { 
+      BOOST_MATH_STD_USING 
+      // Complement Quantile or Percent Point arcsine function.
       // Return the number of expected x for a given
       // complement of the probability q.
       BOOST_MATH_STD_USING // For ADL of std functions.
