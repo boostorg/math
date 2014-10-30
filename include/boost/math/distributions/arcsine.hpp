@@ -269,9 +269,9 @@ namespace boost
     inline RealType pdf(const arcsine_distribution<RealType, Policy>& dist, const RealType& xx)
     { // Probability Density/Mass Function arcsine.
       BOOST_FPU_EXCEPTION_GUARD
-        BOOST_MATH_STD_USING // For ADL of std functions.
+      BOOST_MATH_STD_USING // For ADL of std functions.
 
-        static const char* function = "boost::math::pdf(arcsine_distribution<%1%> const&, %1%)";
+      static const char* function = "boost::math::pdf(arcsine_distribution<%1%> const&, %1%)";
 
       RealType lo = dist.x_min();
       RealType hi = dist.x_max();
@@ -375,6 +375,7 @@ namespace boost
       // and return a value such that the probability that a random variable x
       // will be less than or equal to that value
       // is whatever probability you supplied as an argument.
+      BOOST_MATH_STD_USING // For ADL of std functions.
 
       using boost::math::constants::half_pi;
 
@@ -412,6 +413,7 @@ namespace boost
     { // Complement Quantile or Percent Point arcsine function.
       // Return the number of expected x for a given
       // complement of the probability q.
+      BOOST_MATH_STD_USING // For ADL of std functions.
 
       using boost::math::constants::half_pi;
       static const char* function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
