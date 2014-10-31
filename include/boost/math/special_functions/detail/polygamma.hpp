@@ -69,7 +69,7 @@
         // set the initial values of part_term, term and sum via logs:
         part_term = boost::math::lgamma(n, pol) - (n + 1) * log(x);
         sum = exp(part_term + log(n + 2 * x) - boost::math::constants::ln_two<T>());
-        part_term += log(n * (n + 1)) - boost::math::constants::ln_two<T>() - log(x);
+        part_term += log(T(n) * (n + 1)) - boost::math::constants::ln_two<T>() - log(x);
         part_term = exp(part_term);
      }
      else
@@ -123,9 +123,8 @@
 
     // Use N = (0.4 * digits) + (4 * n) for target value for x:
     BOOST_MATH_STD_USING
-    const int d4d  = static_cast<boost::int32_t>(0.4F * policies::digits_base10<T, Policy>());
-    const int N4dn = static_cast<boost::int32_t>(d4d + (4 * n));
-    const int N    = static_cast<boost::int32_t>((std::min)(N4dn, (std::numeric_limits<int>::max)()));
+    const int d4d  = static_cast<int>(0.4F * policies::digits_base10<T, Policy>());
+    const int N = d4d + (4 * n);
     const int m    = n;
     const int iter = N - itrunc(x);
 
@@ -234,7 +233,7 @@
   }
 
   template <class T, class Policy>
-  T poly_cot_pi(int n, T x, const Policy& pol, const char* function)
+  T poly_cot_pi(int n, T x, T xc, const Policy& pol, const char* function)
   {
      // Return n'th derivative of cot(pi*x) at x, these are simply
      // tabulated for up to n = 9, beyond that it is possible to
@@ -253,7 +252,7 @@
      // of storage space, this method has no better accuracy than recursion
      // on x to x > 0 when computing polygamma :-(
      //
-     T s = boost::math::sin_pi(x);
+     T s = x < xc ? boost::math::sin_pi(x) : boost::math::sin_pi(xc);
      switch(n)
      {
      case 1:
@@ -482,7 +481,7 @@
           // We have tabulated the derivatives of cot(x) up to the 9th derivative, which
           // allows us to use: http://functions.wolfram.com/06.15.16.0001.01
           T z = 1 - x;
-          T result = polygamma_imp(n, z, pol) + constants::pi<T, Policy>() * poly_cot_pi(n, z, pol, function);
+          T result = polygamma_imp(n, z, pol) + constants::pi<T, Policy>() * poly_cot_pi(n, z, x, pol, function);
           return n & 1 ? T(-result) : result;
        }
        //
