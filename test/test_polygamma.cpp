@@ -39,6 +39,13 @@ void expected_results()
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
+      ".*negative.*",                // test data group
+      ".*", 1400, 500);               // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
       ".*",                          // test data group
       ".*", 20, 10);                 // test function
    //

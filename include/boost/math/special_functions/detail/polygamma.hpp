@@ -105,7 +105,7 @@
         //
         if(k > policies::get_max_series_iterations<Policy>())
         {
-           policies::raise_evaluation_error(function, "Series did not converge, closest value was %1%", sum, pol);
+           return policies::raise_evaluation_error(function, "Series did not converge, closest value was %1%", sum, pol);
            break;
         }
      }
@@ -310,6 +310,147 @@
         T c8 = boost::math::cos_pi(8 * x);
         return -2 * boost::math::pow<9>(constants::pi<T, Policy>()) * (88234 * c2 + 14608 * c4 + 502 * c6 + c8 + 78095) / boost::math::pow<10>(s);
      }
+     case 10:
+     {
+        T c = boost::math::cos_pi(x);
+        T c3 = boost::math::cos_pi(3 * x);
+        T c5 = boost::math::cos_pi(5 * x);
+        T c7 = boost::math::cos_pi(7 * x);
+        T c9 = boost::math::cos_pi(9 * x);
+        return 2 * boost::math::pow<10>(constants::pi<T, Policy>()) * (1310354 * c + 455192 * c3 + 47840 * c5 + 1013 * c7 + c9) / boost::math::pow<11>(s);
+     }
+     case 11:
+     {
+        T c2 = boost::math::cos_pi(2 * x);
+        T c4 = boost::math::cos_pi(4 * x);
+        T c6 = boost::math::cos_pi(6 * x);
+        T c8 = boost::math::cos_pi(8 * x);
+        T c10 = boost::math::cos_pi(10 * x);
+        return -2 * boost::math::pow<11>(constants::pi<T, Policy>()) * (7862124 + 9738114 * c2 + 2203488 * c4 + 152637 * c6 + 2036 * c8 + c10) / boost::math::pow<12>(s);
+     }
+     case 12:
+     {
+        T c = boost::math::cos_pi(x);
+        T c3 = boost::math::cos_pi(3 * x);
+        T c5 = boost::math::cos_pi(5 * x);
+        T c7 = boost::math::cos_pi(7 * x);
+        T c9 = boost::math::cos_pi(9 * x);
+        T c11 = boost::math::cos_pi(11 * x);
+        return 2 * boost::math::pow<12>(constants::pi<T, Policy>()) * (162512286 * c + 66318474 * c3 + 10187685 * c5 + 478271 * c7 + 4083 * c9 + c11) / boost::math::pow<13>(s);
+     }
+     case 13:
+     {
+        T c2 = boost::math::cos_pi(2 * x);
+        T c4 = boost::math::cos_pi(4 * x);
+        T c6 = boost::math::cos_pi(6 * x);
+        T c8 = boost::math::cos_pi(8 * x);
+        T c10 = boost::math::cos_pi(10 * x);
+        T c12 = boost::math::cos_pi(12 * x);
+        return -2 * boost::math::pow<13>(constants::pi<T, Policy>()) * (1137586002 + 1505621508 * c2 + 423281535 * c4 + 45533450 * c6 + 1479726 * c8 + 8178 * c10 + c12) / boost::math::pow<14>(s);
+     }
+     case 14:
+     {
+        T c = boost::math::cos_pi(x);
+        T c3 = boost::math::cos_pi(3 * x);
+        T c5 = boost::math::cos_pi(5 * x);
+        T c7 = boost::math::cos_pi(7 * x);
+        T c9 = boost::math::cos_pi(9 * x);
+        T c11 = boost::math::cos_pi(11 * x);
+        T c13 = boost::math::cos_pi(13 * x);
+        return 2 * boost::math::pow<14>(constants::pi<T, Policy>()) * (27971176092 * c + 12843262863 * c3 + 2571742175 * c5 + 198410786 * c7 + 4537314 * c9 + 16369 * c11 + c13) / boost::math::pow<15>(s);
+     }
+     case 15:
+     {
+        return -2 * boost::math::pow<15>(constants::pi<T, Policy>()) * 
+           (223769408736 + 311387598411 * boost::math::cos_pi(2 * x) 
+           + 102776998928 * boost::math::cos_pi(4 * x) 
+           + 15041229521 * boost::math::cos_pi(6 * x) 
+           + 848090912 * boost::math::cos_pi(8 * x) 
+           + 13824739 * boost::math::cos_pi(10 * x) 
+           + 32752 * boost::math::cos_pi(12 * x) 
+           + boost::math::cos_pi(14 * x)) / boost::math::pow<16>(s);
+     }
+     case 16:
+     {
+        return 2 * boost::math::pow<16>(constants::pi<T, Policy>()) * 
+           (6382798925475 * boost::math::cos_pi(x) 
+           + 3207483178157 * boost::math::cos_pi(3 * x) 
+           + 782115518299 * boost::math::cos_pi(5 * x) 
+           + 85383238549 * boost::math::cos_pi(7 * x) 
+           + 3572085255 * boost::math::cos_pi(9 * x) 
+           + 41932745 * boost::math::cos_pi(11 * x) 
+           + 65519 * boost::math::cos_pi(13 * x) 
+           + boost::math::cos_pi(15 * x)) / boost::math::pow<17>(s);
+     }
+     case 17:
+     {
+        return -2 * boost::math::pow<17>(constants::pi<T, Policy>()) *
+           (57445190329275 + 83137223185370 * boost::math::cos_pi(2 * x)
+           + 31055652948388 * boost::math::cos_pi(4 * x)
+           + 5717291972382 * boost::math::cos_pi(6 * x)
+           + 473353301060 * boost::math::cos_pi(8 * x)
+           + 14875399450 * boost::math::cos_pi(10 * x)
+           + 126781020 * boost::math::cos_pi(12 * x)
+           + 131054 * boost::math::cos_pi(14 * x)
+           + boost::math::cos_pi(16 * x)) / boost::math::pow<18>(s);
+     }
+     case 18:
+     {
+        return 2 * boost::math::pow<18>(constants::pi<T, Policy>()) * 
+           (1865385657780650 * boost::math::cos_pi(x)
+           + 1006709967915228 * boost::math::cos_pi(3 * x)
+           + 285997074307300 * boost::math::cos_pi(5 * x)
+           + 40457344748072 * boost::math::cos_pi(7 * x)
+           + 2575022097600 * boost::math::cos_pi(9 * x)
+           + 61403313100 * boost::math::cos_pi(11 * x)
+           + 382439924 * boost::math::cos_pi(13 * x)
+           + 262125 * boost::math::cos_pi(15 * x)
+           + boost::math::cos_pi(17 * x)) / boost::math::pow<19>(s);
+     }
+     case 19:
+     {
+        return -2 * boost::math::pow<19>(constants::pi<T, Policy>()) *
+           (18653856577806500 + 27862280567093358 * boost::math::cos_pi(2 * x)
+           + 11485644635009424 * boost::math::cos_pi(4 * x)
+           + 2527925001876036 * boost::math::cos_pi(6 * x)
+           + 278794377854832 * boost::math::cos_pi(8 * x)
+           + 13796160184500 * boost::math::cos_pi(10 * x)
+           + 251732291184 * boost::math::cos_pi(12 * x)
+           + 1151775897 * boost::math::cos_pi(14 * x)
+           + 524268 * boost::math::cos_pi(16 * x)
+           + boost::math::cos_pi(18 * x)) / boost::math::pow<20>(s);
+     }
+     case 20:
+     {
+        return 2 * boost::math::pow<20>(constants::pi<T, Policy>()) * 
+           (679562217794156938 * boost::math::cos_pi(x)
+           + 388588260723953310 * boost::math::cos_pi(3 * x)
+           + 124748182104463860 * boost::math::cos_pi(5 * x)
+           + 21598596303099900 * boost::math::cos_pi(7 * x)
+           + 1879708669896492 * boost::math::cos_pi(9 * x)
+           + 73008517581444 * boost::math::cos_pi(11 * x)
+           + 1026509354985 * boost::math::cos_pi(13 * x)
+           + 3464764515 * boost::math::cos_pi(15 * x)
+           + 1048555 * boost::math::cos_pi(17 * x)
+           + boost::math::cos_pi(19 * x)) / boost::math::pow<21>(s);
+     }
+     case 21:
+     {
+        return -2 * boost::math::pow<21>(constants::pi<T, Policy>()) *
+           (7475184395735726318 + 11458681306629009100 * boost::math::cos_pi(2 * x)
+           + 5119020713873609970 * boost::math::cos_pi(4 * x)
+           + 1300365805079109480 * boost::math::cos_pi(6 * x)
+           + 179385804170146680 * boost::math::cos_pi(8 * x)
+           + 12446388300682056 * boost::math::cos_pi(10 * x)
+           + 382493246941965 * boost::math::cos_pi(12 * x)
+           + 4168403181210 * boost::math::cos_pi(14 * x)
+           + 10414216090 * boost::math::cos_pi(16 * x)
+           + 2097130 * boost::math::cos_pi(18 * x)
+           + boost::math::cos_pi(20 * x)) / boost::math::pow<22>(s);
+     }
+
+        /*
+        */
      }
      return policies::raise_domain_error<T>(function, "Derivative of cotangent not implemented at n = %1%", n, pol);
   }
@@ -335,7 +476,7 @@
           else
              return policies::raise_pole_error<T>(function, "Evaluation at negative integer %1%", x, pol);
        }
-       if(n < 10)
+       if(n < 22)
        {
           //
           // We have tabulated the derivatives of cot(x) up to the 9th derivative, which
