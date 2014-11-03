@@ -35,7 +35,6 @@
 #include <boost/math/constants/constants.hpp>
 
 #include <boost/math/special_functions/fpclassify.hpp> // isnan.
-#include <boost/math/tools/roots.hpp> // for root finding.
 
 #if defined (BOOST_MSVC)
 #  pragma warning(push)
@@ -244,8 +243,6 @@ namespace boost
       return  (dist.x_min() + dist.x_max()) / 2;
     }
 
-    //  Or be provided by the derived accessor as quantile(0.5).
-
     template <class RealType, class Policy>
     inline RealType skewness(const arcsine_distribution<RealType, Policy>& /* dist */)
     {
@@ -276,11 +273,6 @@ namespace boost
       RealType lo = dist.x_min();
       RealType hi = dist.x_max();
       RealType x = xx;
-
-      //if ((x < lo) || (x > hi))
-      //{
-      // std::cout << lo << ' ' << x << ' ' << hi << std::endl;
-      //}
 
       // Argument checks:
       RealType result = 0;
@@ -368,7 +360,6 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType quantile(const arcsine_distribution<RealType, Policy>& dist, const RealType& p)
     { 
-      BOOST_MATH_STD_USING
       // Quantile or Percent Point arcsine function or
       // Inverse Cumulative probability distribution function CDF.
       // Return x (0 <= x <= 1),
@@ -413,7 +404,6 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType quantile(const complemented2_type<arcsine_distribution<RealType, Policy>, RealType>& c)
     { 
-      BOOST_MATH_STD_USING 
       // Complement Quantile or Percent Point arcsine function.
       // Return the number of expected x for a given
       // complement of the probability q.

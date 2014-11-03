@@ -140,6 +140,7 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, 0.000005), static_cast<RealType>(142.35286456604168061345817902422241622116338936911L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, 0.05), static_cast<RealType>(1.4605059227421865250256574657088244053723856445614L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, 0.5), static_cast<RealType>(0.63661977236758134307553505349005744813783858296183L), tolerance);
+    // Note loss of significance when x is near x_max.
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, 0.95), static_cast<RealType>(1.4605059227421865250256574657088244053723856445614L), 8 * tolerance); // Less accurate.
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, 0.999995), static_cast<RealType>(142.35286456604168061345817902422241622116338936911L), 50000 * tolerance); // Much less accurate.
     BOOST_CHECK_CLOSE_FRACTION(pdf(arcsine_01, 0.999999), static_cast<RealType>(318.31004533885312973989414360099118178698415543136L), 100000 * tolerance);// Even less accurate.
@@ -289,8 +290,6 @@ void test_spots(RealType)
       arcsine_distribution<RealType>(static_cast<RealType>(0), static_cast<RealType>(1)), // bad x > 1.
       static_cast<RealType>(999)), std::domain_error);
 
-
-
     // Checks on things that are errors.
 
     // Construction with 'bad' parameters.
@@ -312,7 +311,6 @@ void test_spots(RealType)
     BOOST_CHECK_THROW(quantile(boost::math::arcsine_distribution<RealType>(1, 1), -1), std::domain_error);
     BOOST_CHECK_THROW(quantile(boost::math::arcsine_distribution<RealType>(1, 1), 2), std::domain_error);
 
-
     // No longer allow any parameter to be NaN or inf, so all these tests should throw.
     if (std::numeric_limits<RealType>::has_quiet_NaN)
     {
@@ -323,7 +321,7 @@ void test_spots(RealType)
       BOOST_CHECK_THROW(arcsine_distribution<RealType> w(nan, 1), std::domain_error);
 
       arcsine_distribution<RealType> w(RealType(-1), RealType(+1));
-      // NaN parameters  to member functions should throw.
+      // NaN parameters to member functions should throw.
       BOOST_CHECK_THROW(pdf(w, +nan), std::domain_error); // x = NaN
       BOOST_CHECK_THROW(cdf(w, +nan), std::domain_error); // x = NaN
       BOOST_CHECK_THROW(cdf(complement(w, +nan)), std::domain_error); // x = + nan
@@ -394,8 +392,19 @@ void test_spots(RealType)
 
   /*
 
-  Output is:
+  Sample Output is:
 
+  1>  Running 1 test case...
+  1>  Platform: Win32
+  1>  Compiler: Microsoft Visual C++ version 12.0
+  1>  STL     : Dinkumware standard library version 610
+  1>  Boost   : 1.56.0
+  1>  tolerance = 2.38419e-007
+  1>  tolerance = 4.44089e-016
+  1>  tolerance = 4.44089e-016
+  1>  tolerance = 4.44089e-016
+  1>
+  1>  *** No errors detected
 
 
 
