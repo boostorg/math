@@ -475,6 +475,10 @@
      //
      // We'll have to compute the corefficients up to n:
      //
+#ifdef BOOST_HAS_THREADS
+     static boost::detail::lightweight_mutex m;
+     boost::detail::lightweight_mutex::scoped_lock l(m);
+#endif
      static std::vector<std::vector<T> > table(1, std::vector<T>(1, T(-1)));
 
      int index = n - 1;
@@ -533,11 +537,34 @@
      return exp(power_terms) * ((s < 0) && ((n + 1) & 1) ? -1 : 1) * boost::math::sign(sum);
   }
 
+  template <class T, class Policy>
+  struct polygamma_initializer
+  {
+     struct init
+     {
+        init()
+        {
+           // Forces initialization of our table of coefficients and mutex:
+           boost::math::polygamma(30, T(-2.5), Policy());
+        }
+        void force_instantiate()const{}
+     };
+     static const init initializer;
+     static void force_instantiate()
+     {
+        initializer.force_instantiate();
+     }
+  };
+
+  template <class T, class Policy>
+  const typename polygamma_initializer<T, Policy>::init polygamma_initializer<T, Policy>::initializer;
+  
   template<class T, class Policy>
   inline T polygamma_imp(const int n, T x, const Policy &pol)
   {
     BOOST_MATH_STD_USING
     static const char* function = "boost::math::polygamma<%1%>(int, %1%)";
+    polygamma_initializer<T, Policy>::initializer.force_instantiate();
     if(n == 0)
        return boost::math::digamma(x);
     if(n < 0)
