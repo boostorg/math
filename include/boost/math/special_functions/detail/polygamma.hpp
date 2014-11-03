@@ -134,14 +134,25 @@
     T sum0(0);
     T z_plus_k_pow_minus_m_minus_one(0);
 
-    // Forward recursion to larger x:
-    for(int k = 1; k <= iter; ++k)
+    // Forward recursion to larger x, need to check for overflow first though:
+    if(log(z + iter) * minus_m_minus_one > -tools::log_max_value<T>())
     {
-      z_plus_k_pow_minus_m_minus_one = pow(z, minus_m_minus_one);
-      sum0 += z_plus_k_pow_minus_m_minus_one;
-      z += 1;
+       for(int k = 1; k <= iter; ++k)
+       {
+          z_plus_k_pow_minus_m_minus_one = pow(z, minus_m_minus_one);
+          sum0 += z_plus_k_pow_minus_m_minus_one;
+          z += 1;
+       }
+       sum0 *= boost::math::factorial<T>(n);
     }
-    sum0 *= boost::math::factorial<T>(n);
+    {
+       for(int k = 1; k <= iter; ++k)
+       {
+          T log_term = log(z) * minus_m_minus_one + boost::math::lgamma<T>(n + 1, pol);
+          sum0 += exp(log_term);
+          z += 1;
+       }
+    }
     if((n - 1) & 1)
        sum0 = -sum0;
 
@@ -232,6 +243,18 @@
      return n & 1 ? sum : -sum;
   }
 
+  //
+  // Helper function which figures out which slot our coefficient is in
+  // given an angle multiplier for the cosine term of power:
+  //
+  template <class Table>
+  typename Table::value_type::reference dereference_table(Table& table, unsigned row, unsigned power)
+  {
+     return table[row][power / 2];
+  }
+
+
+
   template <class T, class Policy>
   T poly_cot_pi(int n, T x, T xc, const Policy& pol, const char* function)
   {
@@ -252,7 +275,7 @@
      // of storage space, this method has no better accuracy than recursion
      // on x to x > 0 when computing polygamma :-(
      //
-     T s = x < xc ? boost::math::sin_pi(x) : boost::math::sin_pi(xc);
+     T s = fabs(x) < fabs(xc) ? boost::math::sin_pi(x) : boost::math::sin_pi(xc);
      switch(n)
      {
      case 1:
@@ -447,11 +470,67 @@
            + 2097130 * boost::math::cos_pi(18 * x)
            + boost::math::cos_pi(20 * x)) / boost::math::pow<22>(s);
      }
-
-        /*
-        */
      }
-     return policies::raise_domain_error<T>(function, "Derivative of cotangent not implemented at n = %1%", n, pol);
+
+     //
+     // We'll have to compute the corefficients up to n:
+     //
+     static std::vector<std::vector<T> > table(1, std::vector<T>(1, T(-1)));
+
+     int index = n - 1;
+
+     if(index >= (int)table.size())
+     {
+        //
+        // We need to compute new coefficients for the cosine terms to the derivative.
+        // The following code follows immediately from differentiating
+        //
+        // C * cos(power * x) * csc^n(power * x)
+        //
+        for(int i = table.size(); i <= index; ++i)
+        {
+           table.push_back(std::vector<T>((i + 2) / 2, T(0)));
+           for(int power = (i & 1 ? 0 : 1); power < i; power += 2)
+           {
+              dereference_table(table, i, std::abs(1 - power)) += -(power + i + 1) * dereference_table(table, i - 1, power) / 2;
+              dereference_table(table, i, power + 1) += -(i + 1 - power) * dereference_table(table, i - 1, power) / 2;
+           }
+           //
+           // The coefficients as calculated above grow so large so fast that we scale them all
+           // by n!  And since current order = i+1 just divide each row by that as we create it:
+           //
+           for(unsigned j = 0; j < table[i].size(); ++j)
+              table[i][j] /= (i + 1);
+        }
+     }
+
+     T sum = 0;
+     int power = n & 1 ? 0 : 1;
+     //
+     // Compute the sum of the cosine terms:
+     //
+     for(unsigned j = 0; j < table[index].size(); ++j)
+     {
+        sum += table[index][j] * boost::math::cos_pi(x * power);
+        power += 2;
+     }
+     if(sum == 0)
+        return sum;
+     //
+     // The remaining terms are computed using logs since the powers and factorials
+     // get real large real quick:
+     //
+     T power_terms = n * log(boost::math::constants::pi<T>());
+     if(s == 0)
+        return sum * boost::math::policies::raise_overflow_error<T>(function, 0, pol);
+     power_terms -= log(fabs(s)) * (n + 1);
+     power_terms += boost::math::lgamma(T(n + 1));
+     power_terms += log(fabs(sum));
+
+     if(power_terms > boost::math::tools::log_max_value<T>())
+        return sum * boost::math::policies::raise_overflow_error<T>(function, 0, pol);
+
+     return exp(power_terms) * ((s < 0) && ((n + 1) & 1) ? -1 : 1) * boost::math::sign(sum);
   }
 
   template<class T, class Policy>
@@ -475,15 +554,16 @@
           else
              return policies::raise_pole_error<T>(function, "Evaluation at negative integer %1%", x, pol);
        }
-       if(n < 22)
-       {
+       //if(n < 22)
+       //{
           //
           // We have tabulated the derivatives of cot(x) up to the 9th derivative, which
           // allows us to use: http://functions.wolfram.com/06.15.16.0001.01
           T z = 1 - x;
           T result = polygamma_imp(n, z, pol) + constants::pi<T, Policy>() * poly_cot_pi(n, z, x, pol, function);
           return n & 1 ? T(-result) : result;
-       }
+       //}
+#if 0
        //
        // Try http://functions.wolfram.com/06.15.16.0007.01
        //
@@ -500,6 +580,7 @@
        if(n & 1)
           sum = -sum;
        return polygamma_imp(n, z, pol) - sum;
+#endif
     }
     //
     // Limit for use of small-x-series is chosen

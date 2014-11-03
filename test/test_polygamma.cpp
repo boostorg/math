@@ -46,6 +46,13 @@ void expected_results()
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
+      ".*bug cases.*",               // test data group
+      ".*", 100000, 50000);          // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
       ".*",                          // test data group
       ".*", 20, 10);                 // test function
    //
