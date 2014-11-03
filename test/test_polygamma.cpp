@@ -40,7 +40,18 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*negative.*",                // test data group
-      ".*", 1400, 500);               // test function
+      ".*", 4000, 1000);               // test function
+   if((std::numeric_limits<long double>::digits > std::numeric_limits<double>::digits)
+      && (std::numeric_limits<long double>::digits - std::numeric_limits<double>::digits < 20))
+   {
+      add_expected_result(
+         ".*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         "double",                      // test type(s)
+         ".*bug cases.*",               // test data group
+         ".*", 100, 30);                // test function
+   }
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
