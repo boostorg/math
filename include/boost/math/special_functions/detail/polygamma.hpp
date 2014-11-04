@@ -39,6 +39,16 @@
      // term      == value of current term to be added to sum.
      // part_term == value of current term excluding the Bernoulli number part
      //
+     if(n + x == x)
+     {
+        // x is crazy large, just concentrate on the first part of the expression and use logs:
+        if(n == 1) return 1 / x;
+        T nlx = n * log(x);
+        if((nlx < tools::log_max_value<T>()) && (n < max_factorial<T>::value))
+           return ((n & 1) ? 1 : -1) * boost::math::factorial<T>(n - 1) * pow(x, -n);
+        else
+         return ((n & 1) ? 1 : -1) * exp(boost::math::lgamma(T(n), pol) - n * log(x));
+     }
      T term, sum, part_term;
      T x_squared = x * x;
      //
