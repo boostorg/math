@@ -11,17 +11,23 @@
 #ifndef _BOOST_POLYGAMMA_2013_07_30_HPP_
   #define _BOOST_POLYGAMMA_2013_07_30_HPP_
 
-  #include <boost/array.hpp>
-  #include <boost/cstdint.hpp>
-  #include <boost/math/special_functions/factorials.hpp>
-  #include "detail/polygamma.hpp"
+#include <boost/math/special_functions/factorials.hpp>
+#include <boost/math/special_functions/detail/polygamma.hpp>
+#include <boost/math/special_functions/trigamma.hpp>
 
-  namespace boost { namespace math {
+namespace boost { namespace math {
 
   
   template<class T, class Policy>
-  inline typename tools::promote_args<T>::type polygamma(const int n, T x, const Policy &)
+  inline typename tools::promote_args<T>::type polygamma(const int n, T x, const Policy& pol)
   {
+     //
+     // Filter off special cases right at the start:
+     //
+     if(n == 0)
+        return boost::math::digamma(x, pol);
+     if(n == 1)
+        return boost::math::trigamma(x, pol);
      //
      // We've found some standard library functions to misbehave if any FPU exception flags
      // are set prior to their call, this code will clear those flags, then reset them
@@ -70,19 +76,6 @@
   {
       return boost::math::polygamma(n, x, policies::policy<>());
   }
-
-  template<class T, class Policy>
-  inline typename tools::promote_args<T>::type trigamma(T x, const Policy &pol)
-  {
-      return boost::math::polygamma(1,x,pol);
-  }
-
-  template<class T>
-  inline typename tools::promote_args<T>::type trigamma(T x)
-  {
-      return boost::math::trigamma(x,policies::policy<>());
-  }
-
 
 } } // namespace boost::math
 

@@ -6,8 +6,8 @@
 #include "setup.hpp"
 #include "table_type.hpp"
 
-#include <boost/math/special_functions/digamma.hpp>
-#include "libs/math/test/test_digamma.hpp"
+#include <boost/math/special_functions/trigamma.hpp>
+#include "libs/math/test/test_trigamma.hpp"
 
 void expected_results()
 {
@@ -20,15 +20,8 @@ void expected_results()
       ".*",                          // stdlib
       ".*",                          // platform
       ".*",                          // test type(s)
-      ".*negative.*",                // test data group
-      ".*", 400, 200);               // test function
-   add_expected_result(
-      ".*",                          // compiler
-      ".*",                          // stdlib
-      ".*",                          // platform
-      ".*",                          // test type(s)
       ".*",                          // test data group
-      ".*", 2, 2);                 // test function
+      ".*", 2, 2);                   // test function
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
@@ -40,7 +33,7 @@ void expected_results()
 template <class T>
 void test(T t, const char* p)
 {
-   test_digamma(t, p);
+   test_trigamma(t, p);
 }
 
 BOOST_AUTO_TEST_CASE( test_main )
