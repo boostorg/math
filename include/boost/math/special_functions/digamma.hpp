@@ -513,7 +513,7 @@ T digamma_imp(T x, const mpl::int_<0>* t, const Policy& pol)
    {
       //
       // Special case for half integer arguments, see:
-      // http://functions.wolfram.com/06.14.03.0008.01
+      // http://functions.wolfram.com/06.14.03.0007.01
       //
       result = -2 * constants::ln_two<T, Policy>() - constants::euler<T, Policy>();
       int n = itrunc(x);
