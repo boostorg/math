@@ -524,6 +524,7 @@ T digamma_imp(T x, const mpl::int_<0>* t, const Policy& pol)
          for(int k = n; k <= 2 * n - 1; ++k)
             result += 2 / T(k);
       }
+      return result;
    }
    else
    {
