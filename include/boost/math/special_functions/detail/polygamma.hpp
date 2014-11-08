@@ -595,33 +595,9 @@
           else
              return policies::raise_pole_error<T>(function, "Evaluation at negative integer %1%", x, pol);
        }
-       //if(n < 22)
-       //{
-          //
-          // We have tabulated the derivatives of cot(x) up to the 9th derivative, which
-          // allows us to use: http://functions.wolfram.com/06.15.16.0001.01
-          T z = 1 - x;
-          T result = polygamma_imp(n, z, pol) + constants::pi<T, Policy>() * poly_cot_pi(n, z, x, pol, function);
-          return n & 1 ? T(-result) : result;
-       //}
-#if 0
-       //
-       // Try http://functions.wolfram.com/06.15.16.0007.01
-       //
-       if(x <= -static_cast<int>(policies::get_max_series_iterations<Policy>()))
-          return policies::raise_evaluation_error<T>(function, "Argument is outside the bounds for which we can reasonably calculate polygamma (got x = %1%)", x, pol);
-       int m = boost::math::itrunc(ceil(-x));
-       T z = x + m;
-       T sum = 0;
-       for(int k = 1; k <= m; ++k)
-       {
-          sum += pow(z - k, -n - 1);
-       }
-       sum *= boost::math::factorial<T>(n, pol);
-       if(n & 1)
-          sum = -sum;
-       return polygamma_imp(n, z, pol) - sum;
-#endif
+       T z = 1 - x;
+       T result = polygamma_imp(n, z, pol) + constants::pi<T, Policy>() * poly_cot_pi(n, z, x, pol, function);
+       return n & 1 ? T(-result) : result;
     }
     //
     // Limit for use of small-x-series is chosen
