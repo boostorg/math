@@ -54,7 +54,12 @@
         <span class="inlinemediaobject"><img src="../../../equations/polygamma1.png"></span>
       </p>
 <p>
-        <span class="inlinemediaobject"><img src="../../../graphs/polygamma.png" align="middle"></span>
+        The following graphs illustrate the behaviour of the function for odd and
+        even order:
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../graphs/polygamma2.png" align="middle"></span>
+  <span class="inlinemediaobject"><img src="../../../graphs/polygamma3.png" align="middle"></span>
       </p>
 <p>
         The final <a class="link" href="../../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
@@ -217,7 +222,13 @@
       </p>
 <p>
         The coefficients of the cosine terms can be calculated iteratively starting
-        from <span class="emphasis"><em>C<sub>1,0</sub> = -1</em></span>: see polygamma.hpp for the full details.
+        from <span class="emphasis"><em>C<sub>1,0</sub> = -1</em></span> and then using
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/polygamma7.png"></span>
+      </p>
+<p>
+        to generate coefficients for n+1.
       </p>
 <p>
         Once x is positive then we have two methods available to us, for small x

@@ -23,7 +23,10 @@ derivative of the digamma function:
 
 [equation polygamma1]
 
-[graph polygamma]
+The following graphs illustrate the behaviour of the function for odd and even order:
+
+[graph polygamma2]
+[graph polygamma3]
 
 [optional_policy]
 
@@ -70,7 +73,11 @@ has the general form:
 [equation polygamma3]
 
 The coefficients of the cosine terms can be calculated iteratively starting
-from ['C[sub 1,0] = -1]: see polygamma.hpp for the full details.
+from ['C[sub 1,0] = -1] and then using
+
+[equation polygamma7]
+
+to generate coefficients for n+1.
 
 Once x is positive then we have two methods available to us, for small x
 we use the series expansion:
