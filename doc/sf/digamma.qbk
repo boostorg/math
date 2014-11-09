@@ -94,7 +94,7 @@ the series to truncated after a suitably small number of terms and evaluated
 as a polynomial in `1/(x*x)`.
 
 The arbitrary precision version of this function uses recurrence relations until
-x > BIG, and then evaluation via the asymtotic expansion above.  As special cases
+x > BIG, and then evaluation via the asymptotic expansion above.  As special cases
 integer and half integer arguments are handled via:
 
 [equation digamma4]

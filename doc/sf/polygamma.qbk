@@ -47,10 +47,10 @@ than the one shown will have __zero_error.
 [[113]           [Win64 Mingw GCC __float128]    [Peak=6.5 Mean=1][Peak=30 Mean=4] ]
 ]
 
-As shown above, error rates are generally very acceptible for moderately sized
+As shown above, error rates are generally very acceptable for moderately sized
 arguments.  Error rates generally increase with increasing /n/ - this is particularly true
 for negative /x/ and even /n/ - in this situation there is a root between each negative integer
-and cancellation errors incured in computing the result increase with increasing /n/.  By the time
+and cancellation errors incurred in computing the result increase with increasing /n/.  By the time
 /n=170/ the errors are so bad we can no longer even tell the sign of the result at `double` precision.
 It should also be noted that for large /n/ the function becomes increasingly badly behaved 
 when /x/ is negative and is very sensitive to slight changes in input.
@@ -103,7 +103,7 @@ to make x large enough for the asymptotic expansion to be used.
 [endsect][/section:polygamma The Polygamma Function]
 
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2014 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

@@ -249,7 +249,7 @@ int main()
    double (*f3)(double, double, double);
    double (*f4)(double, double, double, double);
    double max_val;
-#if 0
+
    f = boost::math::zeta;
    plot.add(f, find_end_point(f, 0.1, 40.0, false, 1.0), 10, "");
    plot.add(f, -20, find_end_point(f, -0.1, -40.0, false, 1.0), "");
@@ -402,7 +402,7 @@ int main()
    max_val = f(4);
    plot.clear();
    plot.add(f, find_end_point(f, 0.1, -max_val, true), 4, "");
-   plot.add(f, find_end_point(f, -0.1, -max_val, false), "");
+   plot.add(f, -3, find_end_point(f, -0.1, -max_val, false), "");
    plot.plot("Exponential Integral Ei", "expint_i.svg", "z", "expint(z)");
 
    f2u = boost::math::expint;
@@ -696,7 +696,7 @@ int main()
    plot.clear();
    plot.add(f, -20, 3, "");
    plot.plot("Bi'", "airy_bip.svg", "z", "airy_bi_prime(z)");
-#endif
+
    f = boost::math::trigamma;
    max_val = 30;
    plot.clear();

@@ -54,7 +54,7 @@ Testing is against Mathematica generated spot values to 35 digit precision.
 
 [h4 Implementation]
 
-The arbitary precision version of this function simply calls __polygamma.
+The arbitrary precision version of this function simply calls __polygamma.
 
 For built in fixed precision types, negative arguments are first made positive via:
 
@@ -76,7 +76,7 @@ and for large x of the form:
 [endsect][/section:digamma The Trigamma Function]
 
 [/ 
-  Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2014 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
