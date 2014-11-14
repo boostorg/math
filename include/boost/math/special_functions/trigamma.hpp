@@ -419,7 +419,7 @@ const typename trigamma_initializer<T, Policy>::init trigamma_initializer<T, Pol
 
 template <class T, class Policy>
 inline typename tools::promote_args<T>::type 
-   trigamma(T x, const Policy& pol)
+   trigamma(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -441,12 +441,19 @@ inline typename tools::promote_args<T>::type
       >::type
    >::type tag_type;
 
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
    // Force initialization of constants:
-   detail::trigamma_initializer<result_type, Policy>::force_instantiate();
+   detail::trigamma_initializer<value_type, forwarding_policy>::force_instantiate();
 
    return policies::checked_narrowing_cast<result_type, Policy>(detail::trigamma_imp(
       static_cast<value_type>(x),
-      static_cast<const tag_type*>(0), pol), "boost::math::trigamma<%1%>(%1%)");
+      static_cast<const tag_type*>(0), forwarding_policy()), "boost::math::trigamma<%1%>(%1%)");
 }
 
 template <class T>

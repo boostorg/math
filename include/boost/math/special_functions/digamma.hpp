@@ -524,7 +524,6 @@ T digamma_imp(T x, const mpl::int_<0>* t, const Policy& pol)
          for(int k = n; k <= 2 * n - 1; ++k)
             result += 2 / T(k);
       }
-      return result;
    }
    else
    {
@@ -575,7 +574,7 @@ const typename digamma_initializer<T, Policy>::init digamma_initializer<T, Polic
 
 template <class T, class Policy>
 inline typename tools::promote_args<T>::type 
-   digamma(T x, const Policy& pol)
+   digamma(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -601,12 +600,19 @@ inline typename tools::promote_args<T>::type
       >::type
    >::type tag_type;
 
+   typedef typename policies::normalise<
+      Policy,
+      policies::promote_float<false>,
+      policies::promote_double<false>,
+      policies::discrete_quantile<>,
+      policies::assert_undefined<> >::type forwarding_policy;
+
    // Force initialization of constants:
-   detail::digamma_initializer<result_type, Policy>::force_instantiate();
+   detail::digamma_initializer<value_type, forwarding_policy>::force_instantiate();
 
    return policies::checked_narrowing_cast<result_type, Policy>(detail::digamma_imp(
       static_cast<value_type>(x),
-      static_cast<const tag_type*>(0), pol), "boost::math::digamma<%1%>(%1%)");
+      static_cast<const tag_type*>(0), forwarding_policy()), "boost::math::digamma<%1%>(%1%)");
 }
 
 template <class T>
