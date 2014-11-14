@@ -49,8 +49,7 @@ than the one shown will have __zero_error.
 
 As shown above, error rates are generally very acceptable for moderately sized
 arguments.  Error rates generally increase with increasing /n/ - this is particularly true
-for negative /x/ and even /n/ - in this situation there is a root between each negative integer
-and cancellation errors incurred in computing the result increase with increasing /n/.  By the time
+for negative /x/.  Indeed by the time
 /n=170/ the errors are so bad we can no longer even tell the sign of the result at `double` precision.
 It should also be noted that for large /n/ the function becomes increasingly badly behaved 
 when /x/ is negative and is very sensitive to slight changes in input.
