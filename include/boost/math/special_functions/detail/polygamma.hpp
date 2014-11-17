@@ -497,6 +497,7 @@
 
      int index = n - 1;
 
+#if 0
      if(index >= (int)table.size())
      {
         //
@@ -522,8 +523,8 @@
         }
      }
 
-     T sum = 0;
      int power = n & 1 ? 0 : 1;
+     T sum = 0;
      //
      // Compute the sum of the cosine terms:
      //
@@ -532,6 +533,24 @@
         sum += table[index][j] * boost::math::cos_pi(x * power, pol);
         power += 2;
      }
+#else
+     if(index >= (int)table.size())
+     {
+        for(int i = (int)table.size() - 1; i < index; ++i)
+        {
+           int sin_order = i + 2;
+           table.push_back(std::vector<T>(i + 2, T(0)));
+           table[i + 1][1] -= sin_order * table[i][0] / (sin_order - 1);
+           for(int cos_order = 1; cos_order < i + 1; ++cos_order)
+           {
+              table[i + 1][cos_order + 1] += ((cos_order - sin_order) * table[i][cos_order]) / (sin_order - 1);
+              table[i + 1][cos_order - 1] += (-cos_order * table[i][cos_order]) / (sin_order - 1);
+           }
+        }
+
+     }
+     T sum = boost::math::tools::evaluate_polynomial(&table[index][0], boost::math::cos_pi(x, pol), n);
+#endif
      if(sum == 0)
         return sum;
      //
@@ -542,7 +561,7 @@
      if(s == 0)
         return sum * boost::math::policies::raise_overflow_error<T>(function, 0, pol);
      power_terms -= log(fabs(s)) * (n + 1);
-     power_terms += boost::math::lgamma(T(n + 1));
+     power_terms += boost::math::lgamma(T(n));
      power_terms += log(fabs(sum));
 
      if(power_terms > boost::math::tools::log_max_value<T>())
