@@ -497,43 +497,6 @@
 
      int index = n - 1;
 
-#if 0
-     if(index >= (int)table.size())
-     {
-        //
-        // We need to compute new coefficients for the cosine terms to the derivative.
-        // The following code follows immediately from differentiating
-        //
-        // C * cos(power * x) * csc^n(power * x)
-        //
-        for(int i = table.size(); i <= index; ++i)
-        {
-           table.push_back(std::vector<T>((i + 2) / 2, T(0)));
-           for(int power = (i & 1 ? 0 : 1); power < i; power += 2)
-           {
-              dereference_table(table, i, std::abs(1 - power)) += -(power + i + 1) * dereference_table(table, i - 1, power) / 2;
-              dereference_table(table, i, power + 1) += -(i + 1 - power) * dereference_table(table, i - 1, power) / 2;
-           }
-           //
-           // The coefficients as calculated above grow so large so fast that we scale them all
-           // by n!  And since current order = i+1 just divide each row by that as we create it:
-           //
-           for(unsigned j = 0; j < table[i].size(); ++j)
-              table[i][j] /= (i + 1);
-        }
-     }
-
-     int power = n & 1 ? 0 : 1;
-     T sum = 0;
-     //
-     // Compute the sum of the cosine terms:
-     //
-     for(unsigned j = 0; j < table[index].size(); ++j)
-     {
-        sum += table[index][j] * boost::math::cos_pi(x * power, pol);
-        power += 2;
-     }
-#else
      if(index >= (int)table.size())
      {
         for(int i = (int)table.size() - 1; i < index; ++i)
@@ -550,7 +513,6 @@
 
      }
      T sum = boost::math::tools::evaluate_polynomial(&table[index][0], boost::math::cos_pi(x, pol), n);
-#endif
      if(sum == 0)
         return sum;
      //
