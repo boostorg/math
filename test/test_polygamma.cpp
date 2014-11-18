@@ -40,7 +40,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*negative.*",                // test data group
-      ".*", 4000, 1000);               // test function
+      ".*", 800, 400);               // test function
    if((std::numeric_limits<long double>::digits > std::numeric_limits<double>::digits)
       && (std::numeric_limits<long double>::digits - std::numeric_limits<double>::digits < 20))
    {

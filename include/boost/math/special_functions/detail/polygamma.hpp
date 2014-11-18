@@ -299,189 +299,112 @@
      }
      case 3:
      {
-        T c = boost::math::cos_pi(2 * x, pol);
-        return -2 * boost::math::pow<3>(constants::pi<T, Policy>(), pol) * (c + 2) / boost::math::pow<4>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        int P[] = { -2, -4 };
+        return boost::math::pow<3>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<4>(s, pol);
      }
      case 4:
      {
         T c = boost::math::cos_pi(x, pol);
-        T c2 = boost::math::cos_pi(2 * x, pol);
-        return 4 * boost::math::pow<4>(constants::pi<T, Policy>(), pol) * (c2 + 5) * c / boost::math::pow<5>(s, pol);
+        int P[] = { 16, 8 };
+        return boost::math::pow<4>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<5>(s, pol);
      }
      case 5:
      {
-        T c2 = boost::math::cos_pi(2 * x, pol);
-        T c4 = boost::math::cos_pi(4 * x, pol);
-        return -2 * boost::math::pow<5>(constants::pi<T, Policy>(), pol) *(26 * c2 + c4 + 33) / boost::math::pow<6>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        int P[] = { -16, -88, -16 };
+        return boost::math::pow<5>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<6>(s, pol);
      }
      case 6:
      {
         T c = boost::math::cos_pi(x, pol);
-        T c2 = boost::math::cos_pi(2 * x, pol);
-        T c4 = boost::math::cos_pi(4 * x, pol);
-        return 4 * boost::math::pow<6>(constants::pi<T, Policy>(), pol) * (56 * c2 + c4 + 123) * c / boost::math::pow<7>(s, pol);
+        int P[] = { 272, 416, 32 };
+        return boost::math::pow<6>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<7>(s, pol);
      }
      case 7:
      {
-        T c2 = boost::math::cos_pi(2 * x, pol);
-        T c4 = boost::math::cos_pi(4 * x, pol);
-        T c6 = boost::math::cos_pi(6 * x, pol);
-        return -2 * boost::math::pow<7>(constants::pi<T, Policy>(), pol) * (1191 * c2 + 120 * c4 + c6 + 1208) / boost::math::pow<8>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        int P[] = { -272, -2880, -1824, -64 };
+        return boost::math::pow<7>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<8>(s, pol);
      }
      case 8:
      {
         T c = boost::math::cos_pi(x, pol);
-        T c3 = boost::math::cos_pi(3 * x, pol);
-        T c5 = boost::math::cos_pi(5 * x, pol);
-        T c7 = boost::math::cos_pi(7 * x, pol);
-        return 2 * boost::math::pow<8>(constants::pi<T, Policy>(), pol) * (15619 * c + 4293 * c3 + 247 * c5 + c7) / boost::math::pow<9>(s, pol);
+        int P[] = { 7936, 24576, 7680, 128 };
+        return boost::math::pow<8>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<9>(s, pol);
      }
      case 9:
      {
-        T c2 = boost::math::cos_pi(2 * x, pol);
-        T c4 = boost::math::cos_pi(4 * x, pol);
-        T c6 = boost::math::cos_pi(6 * x, pol);
-        T c8 = boost::math::cos_pi(8 * x, pol);
-        return -2 * boost::math::pow<9>(constants::pi<T, Policy>(), pol) * (88234 * c2 + 14608 * c4 + 502 * c6 + c8 + 78095) / boost::math::pow<10>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        int P[] = { -7936, -137216, -185856, -31616, -256 };
+        return boost::math::pow<9>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<10>(s, pol);
      }
      case 10:
      {
         T c = boost::math::cos_pi(x, pol);
-        T c3 = boost::math::cos_pi(3 * x, pol);
-        T c5 = boost::math::cos_pi(5 * x, pol);
-        T c7 = boost::math::cos_pi(7 * x, pol);
-        T c9 = boost::math::cos_pi(9 * x, pol);
-        return 2 * boost::math::pow<10>(constants::pi<T, Policy>(), pol) * (1310354 * c + 455192 * c3 + 47840 * c5 + 1013 * c7 + c9) / boost::math::pow<11>(s, pol);
+        int P[] = { 353792, 1841152, 1304832, 128512, 512 };
+        return boost::math::pow<10>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<11>(s, pol);
      }
      case 11:
      {
-        T c2 = boost::math::cos_pi(2 * x, pol);
-        T c4 = boost::math::cos_pi(4 * x, pol);
-        T c6 = boost::math::cos_pi(6 * x, pol);
-        T c8 = boost::math::cos_pi(8 * x, pol);
-        T c10 = boost::math::cos_pi(10 * x, pol);
-        return -2 * boost::math::pow<11>(constants::pi<T, Policy>(), pol) * (7862124 + 9738114 * c2 + 2203488 * c4 + 152637 * c6 + 2036 * c8 + c10) / boost::math::pow<12>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        int P[] = { -353792, -9061376, -21253376, -8728576, -518656, -1024};
+        return boost::math::pow<11>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<12>(s, pol);
      }
      case 12:
      {
         T c = boost::math::cos_pi(x, pol);
-        T c3 = boost::math::cos_pi(3 * x, pol);
-        T c5 = boost::math::cos_pi(5 * x, pol);
-        T c7 = boost::math::cos_pi(7 * x, pol);
-        T c9 = boost::math::cos_pi(9 * x, pol);
-        T c11 = boost::math::cos_pi(11 * x, pol);
-        return 2 * boost::math::pow<12>(constants::pi<T, Policy>(), pol) * (162512286 * c + 66318474 * c3 + 10187685 * c5 + 478271 * c7 + 4083 * c9 + c11) / boost::math::pow<13>(s, pol);
-     }
-     case 13:
-     {
-        T c2 = boost::math::cos_pi(2 * x, pol);
-        T c4 = boost::math::cos_pi(4 * x, pol);
-        T c6 = boost::math::cos_pi(6 * x, pol);
-        T c8 = boost::math::cos_pi(8 * x, pol);
-        T c10 = boost::math::cos_pi(10 * x, pol);
-        T c12 = boost::math::cos_pi(12 * x, pol);
-        return -2 * boost::math::pow<13>(constants::pi<T, Policy>(), pol) * (1137586002 + 1505621508 * c2 + 423281535 * c4 + 45533450 * c6 + 1479726 * c8 + 8178 * c10 + c12) / boost::math::pow<14>(s, pol);
+        int P[] = { 22368256, 175627264, 222398464, 56520704, 2084864, 2048 };
+        return boost::math::pow<12>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<13>(s, pol);
      }
 #ifndef BOOST_NO_LONG_LONG
+     case 13:
+     {
+        T c = boost::math::cos_pi(x, pol);
+        long long P[] = { -22368256LL, -795300864LL, -2868264960LL, -2174832640LL, -357888000LL, -8361984LL, -4096 };
+        return boost::math::pow<13>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<14>(s, pol);
+     }
      case 14:
      {
         T c = boost::math::cos_pi(x, pol);
-        T c3 = boost::math::cos_pi(3 * x, pol);
-        T c5 = boost::math::cos_pi(5 * x, pol);
-        T c7 = boost::math::cos_pi(7 * x, pol);
-        T c9 = boost::math::cos_pi(9 * x, pol);
-        T c11 = boost::math::cos_pi(11 * x, pol);
-        T c13 = boost::math::cos_pi(13 * x, pol);
-        return 2 * boost::math::pow<14>(constants::pi<T, Policy>(), pol) * (27971176092uLL * c + 12843262863uLL * c3 + 2571742175uLL * c5 + 198410786 * c7 + 4537314 * c9 + 16369 * c11 + c13) / boost::math::pow<15>(s, pol);
+        long long P[] = { 1903757312LL, 21016670208LL, 41731645440LL, 20261765120LL, 2230947840LL, 33497088LL, 8192 };
+        return boost::math::pow<14>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<15>(s, pol);
      }
      case 15:
      {
-        return -2 * boost::math::pow<15>(constants::pi<T, Policy>(), pol) *
-           (223769408736uLL + 311387598411uLL * boost::math::cos_pi(2 * x, pol)
-           + 102776998928uLL * boost::math::cos_pi(4 * x, pol)
-           + 15041229521uLL * boost::math::cos_pi(6 * x, pol)
-           + 848090912 * boost::math::cos_pi(8 * x, pol)
-           + 13824739 * boost::math::cos_pi(10 * x, pol)
-           + 32752 * boost::math::cos_pi(12 * x, pol)
-           + boost::math::cos_pi(14 * x, pol)) / boost::math::pow<16>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        long long P[] = { -1903757312LL, -89702612992LL, -460858269696LL, -559148810240LL, -182172651520LL, -13754155008LL, -134094848LL, -16384 };
+        return boost::math::pow<15>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<16>(s, pol);
      }
      case 16:
      {
-        return 2 * boost::math::pow<16>(constants::pi<T, Policy>(), pol) *
-           (6382798925475uLL * boost::math::cos_pi(x, pol)
-           + 3207483178157uLL * boost::math::cos_pi(3 * x, pol)
-           + 782115518299uLL * boost::math::cos_pi(5 * x, pol)
-           + 85383238549uLL * boost::math::cos_pi(7 * x, pol)
-           + 3572085255uLL * boost::math::cos_pi(9 * x, pol)
-           + 41932745 * boost::math::cos_pi(11 * x, pol)
-           + 65519 * boost::math::cos_pi(13 * x, pol)
-           + boost::math::cos_pi(15 * x, pol)) / boost::math::pow<17>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        long long P[] = { 209865342976LL, 3099269660672LL, 8885192097792LL, 7048869314560LL, 1594922762240LL, 84134068224LL, 536608768LL, 32768 };
+        return boost::math::pow<16>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<17>(s, pol);
      }
      case 17:
      {
-        return -2 * boost::math::pow<17>(constants::pi<T, Policy>(), pol) *
-           (57445190329275uLL + 83137223185370uLL * boost::math::cos_pi(2 * x, pol)
-           + 31055652948388uLL * boost::math::cos_pi(4 * x, pol)
-           + 5717291972382uLL * boost::math::cos_pi(6 * x, pol)
-           + 473353301060uLL * boost::math::cos_pi(8 * x, pol)
-           + 14875399450uLL * boost::math::cos_pi(10 * x, pol)
-           + 126781020 * boost::math::cos_pi(12 * x, pol)
-           + 131054 * boost::math::cos_pi(14 * x, pol)
-           + boost::math::cos_pi(16 * x, pol)) / boost::math::pow<18>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        long long P[] = { -209865342976LL, -12655654469632LL, -87815735738368LL, -155964390375424LL, -84842998005760LL, -13684856848384LL, -511780323328LL, -2146926592LL, -65536 };
+        return boost::math::pow<17>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<18>(s, pol);
      }
      case 18:
      {
-        return 2 * boost::math::pow<18>(constants::pi<T, Policy>(), pol) *
-           (1865385657780650uLL * boost::math::cos_pi(x, pol)
-           + 1006709967915228uLL * boost::math::cos_pi(3 * x, pol)
-           + 285997074307300uLL * boost::math::cos_pi(5 * x, pol)
-           + 40457344748072uLL * boost::math::cos_pi(7 * x, pol)
-           + 2575022097600uLL * boost::math::cos_pi(9 * x, pol)
-           + 61403313100uLL * boost::math::cos_pi(11 * x, pol)
-           + 382439924 * boost::math::cos_pi(13 * x, pol)
-           + 262125 * boost::math::cos_pi(15 * x, pol)
-           + boost::math::cos_pi(17 * x, pol)) / boost::math::pow<19>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        long long P[] = { 29088885112832LL, 553753414467584LL, 2165206642589696LL, 2550316668551168LL, 985278548541440LL, 115620218667008LL, 3100738912256LL, 8588754944LL, 131072 };
+        return boost::math::pow<18>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<19>(s, pol);
      }
      case 19:
      {
-        return -2 * boost::math::pow<19>(constants::pi<T, Policy>(), pol) *
-           (18653856577806500uLL + 27862280567093358uLL * boost::math::cos_pi(2 * x, pol)
-           + 11485644635009424uLL * boost::math::cos_pi(4 * x, pol)
-           + 2527925001876036uLL * boost::math::cos_pi(6 * x, pol)
-           + 278794377854832uLL * boost::math::cos_pi(8 * x, pol)
-           + 13796160184500uLL * boost::math::cos_pi(10 * x, pol)
-           + 251732291184uLL * boost::math::cos_pi(12 * x, pol)
-           + 1151775897uLL * boost::math::cos_pi(14 * x, pol)
-           + 524268 * boost::math::cos_pi(16 * x, pol)
-           + boost::math::cos_pi(18 * x, pol)) / boost::math::pow<20>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        long long P[] = { -29088885112832LL, -2184860175433728LL, -19686087844429824LL, -48165109676113920LL, -39471306959486976LL, -11124607890751488LL, -965271355195392LL, -18733264797696LL, -34357248000LL, -262144 };
+        return boost::math::pow<19>(constants::pi<T, Policy>(), pol) * tools::evaluate_even_polynomial(P, c) / boost::math::pow<20>(s, pol);
      }
      case 20:
      {
-        return 2 * boost::math::pow<20>(constants::pi<T, Policy>(), pol) *
-           (679562217794156938uLL * boost::math::cos_pi(x, pol)
-           + 388588260723953310uLL * boost::math::cos_pi(3 * x, pol)
-           + 124748182104463860uLL * boost::math::cos_pi(5 * x, pol)
-           + 21598596303099900uLL * boost::math::cos_pi(7 * x, pol)
-           + 1879708669896492uLL * boost::math::cos_pi(9 * x, pol)
-           + 73008517581444uLL * boost::math::cos_pi(11 * x, pol)
-           + 1026509354985uLL * boost::math::cos_pi(13 * x, pol)
-           + 3464764515uLL * boost::math::cos_pi(15 * x, pol)
-           + 1048555 * boost::math::cos_pi(17 * x, pol)
-           + boost::math::cos_pi(19 * x, pol)) / boost::math::pow<21>(s, pol);
-     }
-     case 21:
-     {
-        return -2 * boost::math::pow<21>(constants::pi<T, Policy>(), pol) *
-           (7475184395735726318uLL + 11458681306629009100uLL * boost::math::cos_pi(2 * x, pol)
-           + 5119020713873609970uLL * boost::math::cos_pi(4 * x, pol)
-           + 1300365805079109480uLL * boost::math::cos_pi(6 * x, pol)
-           + 179385804170146680uLL * boost::math::cos_pi(8 * x, pol)
-           + 12446388300682056uLL * boost::math::cos_pi(10 * x, pol)
-           + 382493246941965uLL * boost::math::cos_pi(12 * x, pol)
-           + 4168403181210uLL * boost::math::cos_pi(14 * x, pol)
-           + 10414216090uLL * boost::math::cos_pi(16 * x, pol)
-           + 2097130 * boost::math::cos_pi(18 * x, pol)
-           + boost::math::cos_pi(20 * x, pol)) / boost::math::pow<22>(s, pol);
+        T c = boost::math::cos_pi(x, pol);
+        long long P[] = { 4951498053124096LL, 118071834535526400LL, 603968063567560704LL, 990081991141490688LL, 584901762421358592LL, 122829335169859584LL, 7984436548730880LL, 112949304754176LL, 137433710592LL, 524288 };
+        return boost::math::pow<20>(constants::pi<T, Policy>(), pol) * c * tools::evaluate_even_polynomial(P, c) / boost::math::pow<21>(s, pol);
      }
 #endif
      }
