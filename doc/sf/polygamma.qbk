@@ -48,11 +48,8 @@ than the one shown will have __zero_error.
 ]
 
 As shown above, error rates are generally very acceptable for moderately sized
-arguments.  Error rates generally increase with increasing /n/ - this is particularly true
-for negative /x/.  Indeed by the time
-/n=170/ the errors are so bad we can no longer even tell the sign of the result at `double` precision.
-It should also be noted that for large /n/ the function becomes increasingly badly behaved 
-when /x/ is negative and is very sensitive to slight changes in input.
+arguments.  Error rates should stay low for exact inputs, however, please note that the
+function becomes exceptionally sensitive to small changes in input for large n and negative x.
 
 [*For these reasons results should be treated with extreme caution when /n/ is large and x negative].
 
@@ -77,6 +74,9 @@ from ['C[sub 1,0] = -1] and then using
 [equation polygamma7]
 
 to generate coefficients for n+1.
+
+Note that every other coefficient is zero, and therefore what we have are
+even or odd polynomials depending on whether n is even or odd.
 
 Once x is positive then we have two methods available to us, for small x
 we use the series expansion:

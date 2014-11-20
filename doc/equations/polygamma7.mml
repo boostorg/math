@@ -19,10 +19,13 @@
     <mfrac>
       <mrow>
         <mi>cos</mi>
+        <msup>
+          <mi/>
+          <mi>k</mi>
+        </msup>
         <mfenced>
           <mrow>
-            <mi>k</mi>
-            <mi>x</mi>
+            <mi>&#x03B8;</mi>
           </mrow>
         </mfenced>
       </mrow>
@@ -33,61 +36,14 @@
         </msup>
         <mfenced>
           <mrow>
-            <mi>x</mi>
+            <mi>&#x03B8;</mi>
           </mrow>
         </mfenced>
       </mrow>
     </mfrac>
     <mo>=</mo>
-    <mo>&#x2212;</mo>
     <mfrac>
       <mn>1</mn>
-      <mn>2</mn>
-    </mfrac>
-    <mfrac>
-      <mrow>
-        <mfenced>
-          <mrow>
-            <mi>k</mi>
-            <mo>+</mo>
-            <mi>n</mi>
-          </mrow>
-        </mfenced>
-        <mi>cos</mi>
-        <mfenced>
-          <mrow>
-            <mfenced>
-              <mrow>
-                <mi>k</mi>
-                <mo>&#x2212;</mo>
-                <mn>1</mn>
-              </mrow>
-            </mfenced>
-            <mi>x</mi>
-          </mrow>
-        </mfenced>
-        <mo>+</mo>
-        <mfenced>
-          <mrow>
-            <mi>n</mi>
-            <mo>&#x2212;</mo>
-            <mi>k</mi>
-          </mrow>
-        </mfenced>
-        <mi>cos</mi>
-        <mfenced>
-          <mrow>
-            <mfenced>
-              <mrow>
-                <mi>k</mi>
-                <mo>+</mo>
-                <mn>1</mn>
-              </mrow>
-            </mfenced>
-            <mi>x</mi>
-          </mrow>
-        </mfenced>
-      </mrow>
       <mrow>
         <msup>
           <mi>sin</mi>
@@ -99,11 +55,52 @@
         </msup>
         <mfenced>
           <mrow>
-            <mi>x</mi>
+            <mi>&#x03B8;</mi>
           </mrow>
         </mfenced>
       </mrow>
     </mfrac>
+    <mfenced>
+      <mrow>
+        <mrow>
+          <mfenced>
+            <mrow>
+              <mi>k</mi>
+              <mo>&#x2212;</mo>
+              <mi>n</mi>
+            </mrow>
+          </mfenced>
+          <msup>
+            <mi>cos</mi>
+            <mrow>
+              <mi>n</mi>
+              <mo>+</mo>
+              <mn>1</mn>
+            </mrow>
+          </msup>
+          <mfenced>
+            <mrow>
+              <mi>&#x03B8;</mi>
+            </mrow>
+          </mfenced>
+          <mo>&#x2212;</mo>
+          <mi>k</mi>
+          <msup>
+            <mi>cos</mi>
+            <mrow>
+              <mi>n</mi>
+              <mo>&#x2212;</mo>
+              <mn>1</mn>
+            </mrow>
+          </msup>
+          <mfenced>
+            <mrow>
+              <mi>&#x03B8;</mi>
+            </mrow>
+          </mfenced>
+        </mrow>
+      </mrow>
+    </mfenced>
   </mrow>
 </math>
 </body>

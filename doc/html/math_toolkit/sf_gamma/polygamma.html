@@ -181,13 +181,9 @@
 </table></div>
 <p>
         As shown above, error rates are generally very acceptable for moderately
-        sized arguments. Error rates generally increase with increasing <span class="emphasis"><em>n</em></span>
-        - this is particularly true for negative <span class="emphasis"><em>x</em></span>. Indeed by
-        the time <span class="emphasis"><em>n=170</em></span> the errors are so bad we can no longer
-        even tell the sign of the result at <code class="computeroutput"><span class="keyword">double</span></code>
-        precision. It should also be noted that for large <span class="emphasis"><em>n</em></span>
-        the function becomes increasingly badly behaved when <span class="emphasis"><em>x</em></span>
-        is negative and is very sensitive to slight changes in input.
+        sized arguments. Error rates should stay low for exact inputs, however, please
+        note that the function becomes exceptionally sensitive to small changes in
+        input for large n and negative x.
       </p>
 <p>
         <span class="bold"><strong>For these reasons results should be treated with extreme
@@ -226,6 +222,10 @@
       </p>
 <p>
         to generate coefficients for n+1.
+      </p>
+<p>
+        Note that every other coefficient is zero, and therefore what we have are
+        even or odd polynomials depending on whether n is even or odd.
       </p>
 <p>
         Once x is positive then we have two methods available to us, for small x
