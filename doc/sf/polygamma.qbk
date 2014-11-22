@@ -49,7 +49,9 @@ than the one shown will have __zero_error.
 
 As shown above, error rates are generally very acceptable for moderately sized
 arguments.  Error rates should stay low for exact inputs, however, please note that the
-function becomes exceptionally sensitive to small changes in input for large n and negative x.
+function becomes exceptionally sensitive to small changes in input for large n and negative x,
+indeed for cases where ['n!] would overflow, the function changes directly from -[infin] to
++[infin] somewhere between each negative integer - ['these cases are not handled correctly].
 
 [*For these reasons results should be treated with extreme caution when /n/ is large and x negative].
 
@@ -98,6 +100,12 @@ For x in-between the two extremes we use the relation:
 [equation polygamma6]
 
 to make x large enough for the asymptotic expansion to be used.
+
+There are also two special cases:
+
+[equation polygamma8]
+
+[equation polygamma9]
 
 [endsect][/section:polygamma The Polygamma Function]
 

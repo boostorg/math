@@ -183,7 +183,9 @@
         As shown above, error rates are generally very acceptable for moderately
         sized arguments. Error rates should stay low for exact inputs, however, please
         note that the function becomes exceptionally sensitive to small changes in
-        input for large n and negative x.
+        input for large n and negative x, indeed for cases where <span class="emphasis"><em>n!</em></span>
+        would overflow, the function changes directly from -&#8734; to +&#8734; somewhere between
+        each negative integer - <span class="emphasis"><em>these cases are not handled correctly</em></span>.
       </p>
 <p>
         <span class="bold"><strong>For these reasons results should be treated with extreme
@@ -256,6 +258,15 @@
       </p>
 <p>
         to make x large enough for the asymptotic expansion to be used.
+      </p>
+<p>
+        There are also two special cases:
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/polygamma8.png"></span>
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/polygamma9.png"></span>
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

@@ -426,8 +426,8 @@
            for(int column = 0; column <= max_columns; ++column)
            {
               int cos_order = 2 * column + offset;  // order of the cosine term in entry "column"
-              BOOST_ASSERT(column < table[i].size());
-              BOOST_ASSERT((cos_order + 1) / 2 < table[i + 1].size());
+              BOOST_ASSERT(column < (int)table[i].size());
+              BOOST_ASSERT((cos_order + 1) / 2 < (int)table[i + 1].size());
               table[i + 1][(cos_order + 1) / 2] += ((cos_order - sin_order) * table[i][column]) / (sin_order - 1);
               if(cos_order)
                 table[i + 1][(cos_order - 1) / 2] += (-cos_order * table[i][column]) / (sin_order - 1);
@@ -519,6 +519,18 @@
     else if(x > 0.4F * policies::digits_base10<T, Policy>() + 4 * n)
     {
       return polygamma_atinfinityplus(n, x, pol, function);
+    }
+    else if(x == 1)
+    {
+       return (n & 1 ? 1 : -1) * boost::math::factorial<T>(n, pol) * boost::math::zeta(T(n + 1), pol);
+    }
+    else if(x == 0.5f)
+    {
+       T result = (n & 1 ? 1 : -1) * boost::math::factorial<T>(n, pol) * boost::math::zeta(T(n + 1), pol);
+       if(fabs(result) >= ldexp(tools::max_value<T>(), -n - 1))
+          return boost::math::sign(result) * policies::raise_overflow_error<T>(function, 0, pol);
+       result *= ldexp(T(1), n + 1) - 1;
+       return result;
     }
     else
     {
