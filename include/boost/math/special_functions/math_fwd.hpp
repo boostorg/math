@@ -463,6 +463,20 @@ namespace boost
    template <class T, class Policy>
    typename tools::promote_args<T>::type digamma(T x, const Policy&);
 
+   // trigamma:
+   template <class T>
+   typename tools::promote_args<T>::type trigamma(T x);
+
+   template <class T, class Policy>
+   typename tools::promote_args<T>::type trigamma(T x, const Policy&);
+
+   // polygamma:
+   template <class T>
+   typename tools::promote_args<T>::type polygamma(int n, T x);
+
+   template <class T, class Policy>
+   typename tools::promote_args<T>::type polygamma(int n, T x, const Policy&);
+
    // Hypotenuse function sqrt(x ^ 2 + y ^ 2).
    template <class T1, class T2>
    typename tools::promote_args<T1, T2>::type
@@ -1205,6 +1219,12 @@ namespace boost
    template <class T>\
    inline typename boost::math::tools::promote_args<T>::type digamma(T x){ return boost::math::digamma(x, Policy()); }\
 \
+   template <class T>\
+   inline typename boost::math::tools::promote_args<T>::type trigamma(T x){ return boost::math::trigamma(x, Policy()); }\
+\
+   template <class T>\
+   inline typename boost::math::tools::promote_args<T>::type polygamma(int n, T x){ return boost::math::polygamma(n, x, Policy()); }\
+   \
    template <class T1, class T2>\
    inline typename boost::math::tools::promote_args<T1, T2>::type \
    hypot(T1 x, T2 y){ return boost::math::hypot(x, y, Policy()); }\
