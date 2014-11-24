@@ -71,7 +71,7 @@
      // or the power term underflows, this just gets set to 0 and then we
      // know that we have to use logs for the initial terms:
      //
-     part_term = ((n > boost::math::max_factorial<T>::value) && (n * n > tools::log_max_value<T>())) 
+     part_term = ((n > boost::math::max_factorial<T>::value) && (T(n) * n > tools::log_max_value<T>())) 
         ? T(0) : static_cast<T>(boost::math::factorial<T>(n - 1, pol) * pow(x, -n - 1));
      if(part_term == 0)
      {
@@ -136,6 +136,9 @@
     const int N = d4d + (4 * n);
     const int m    = n;
     const int iter = N - itrunc(x);
+
+    if(iter > policies::get_max_series_iterations<Policy>())
+       return policies::raise_evaluation_error<T>(function, ("Exceeded maximum series evaluations evaluating at n = " + boost::lexical_cast<std::string>(n) + " and x = %1%").c_str(), x, pol);
 
     const int minus_m_minus_one = -m - 1;
 
