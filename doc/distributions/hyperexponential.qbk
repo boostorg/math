@@ -108,7 +108,7 @@ A /k/-phase hyperexponential distribution is frequently used in [@http://en.wiki
 
 For instance, CPUs service-time distribution in a computing system has often been observed to possess such a distribution (Rosin,1965).
 Also, the arrival of different types of customer to a single queueing station is often modeled as a hyperexponential distribution (Papadopolous et al.,1993).
-Similarly, if a product manufactured in several parallel assemply lines and the outputs are merged, the failure density of the overall product is likely to be hyperexponential (Trivedi,2002).
+Similarly, if a product manufactured in several parallel assembly lines and the outputs are merged, the failure density of the overall product is likely to be hyperexponential (Trivedi,2002).
 
 Finally, since the hyperexponential distribution exhibits a high Coefficient of Variation (CoV), that is a CoV > 1, it is especially suited to fit empirical data with large CoV (Feitelson,2014; Wolski et al.,2013) and to approximate [@http://en.wikipedia.org/wiki/Long_tail long-tail probability distributions] (Feldmann et al.,1998).
 
@@ -286,7 +286,7 @@ given by the range defined by `prob_range`, and /rate vector/ parameter given by
 
 [note As an implementation detail, this constructor uses Boost's 
 [@http://www.boost.org/doc/libs/release/libs/core/doc/html/core/enable_if.html enable_if/disable_if mechanism] to 
-disambiguage between this and other 2-argument constructors.  Refer to the source code for more details.]
+disambiguate between this and other 2-argument constructors.  Refer to the source code for more details.]
 
 [h5 Parameters]
 
@@ -302,7 +302,7 @@ that includes native C++ arrays, standard library containers, or a std::pair or 
 
 [hyperexponential_snip3]
 
-[h4 Construction with rates-iterators (and all phase probablities equal)]
+[h4 Construction with rates-iterators (and all phase probabilities equal)]
 
       template <typename RateIterT, typename RateIterT2>
       hyperexponential_distribution(RateIterT const& rate_first,
@@ -314,7 +314,7 @@ probabilities (i.e., to a vector of the same length `n` of the /rate vector/ and
 
 [note As an implementation detail, this constructor uses Boost's 
 [@http://www.boost.org/doc/libs/release/libs/core/doc/html/core/enable_if.html enable_if/disable_if mechanism] to 
-disambiguage between this and other 2-argument constructors.  Refer to the source code for more details.]
+disambiguate between this and other 2-argument constructors.  Refer to the source code for more details.]
 
 [h5 Parameters]
 
