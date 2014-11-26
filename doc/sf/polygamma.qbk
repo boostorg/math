@@ -85,10 +85,7 @@ we use the series expansion:
 
 [equation polygamma4]
 
-Note that as this is an alternating series we can accelerate the series using
-Algorithm 1 from ['"Convergence Acceleration of Alternating Series",
-Henri Cohen, Fernando Rodriguez Villegas, and Don Zagier, Experimental Mathematics, 1999.]
-Also note that the evaluation of zeta functions at integer values is essentially a table lookup
+Note that the evaluation of zeta functions at integer values is essentially a table lookup
 as __zeta is optimized for those cases.
 
 For large x we use the asymptotic expansion:

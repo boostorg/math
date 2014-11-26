@@ -137,7 +137,7 @@
     const int m    = n;
     const int iter = N - itrunc(x);
 
-    if(iter > policies::get_max_series_iterations<Policy>())
+    if(iter > (int)policies::get_max_series_iterations<Policy>())
        return policies::raise_evaluation_error<T>(function, ("Exceeded maximum series evaluations evaluating at n = " + boost::lexical_cast<std::string>(n) + " and x = %1%").c_str(), x, pol);
 
     const int minus_m_minus_one = -m - 1;
@@ -207,49 +207,35 @@
         return ((n & 1) ? 1 : -1) * 
          (tools::max_value<T>() / prefix < scale ? policies::raise_overflow_error<T>(function, 0, pol) : prefix * scale);
      //
-     // Since this is an alternating sum we can accelerate convergence using
-     // Algorithm 1 from "Convergence Acceleration of Alternating Series",
-     // Henri Cohen, Fernando Rodriguez Villegas, and Don Zagier, 
-     // Experimental Mathematics, 1999.
-     // While in principle we can determine up front how many terms we will need,
-     // note that often the prefix term is so large that we need no terms at all,
-     // or else the series is divergent and we need rather more terms than expected.
-     // The latter case we try to weed out before this function gets called, but 
-     // just in case set the number of terms to an arbitrary high value, and then
-     // use the usual heurists to determine when to stop, these next variables
-     // correspond directly to those in Algorithm 1 of the above paper:
+     // As this is an alternating series we could accelerate it using 
+     // "Convergence Acceleration of Alternating Series",
+     // Henri Cohen, Fernando Rodriguez Villegas, and Don Zagier, Experimental Mathematics, 1999.
+     // In practice however, it appears not to make any difference to the number of terms
+     // required except in some edge cases which are filtered out anyway before we get here.
      //
-     int nd = (int)std::min((boost::intmax_t)(boost::math::policies::digits_base10<T, Policy>() * 10), (boost::intmax_t)boost::math::policies::get_max_series_iterations<Policy>());
-     T d = pow(3 + sqrt(T(8)), nd);
-     d = (d + 1 / d) / 2;
-     T b = -1;
-     T c = -d;
-     T sum = 0;
-     for(int k = 0; k < nd;)
+     T sum = prefix;
+     for(unsigned k = 0;;)
      {
         // Get the k'th term:
         T term = factorial_part * boost::math::zeta(T(k + n + 1), pol);
-        // Series acceleration:
-        c = b - c;
-        sum = sum + c * term;
-        b = (k + nd) * (k - nd) * b / ((k + 0.5f) * (k + 1));
+        sum += term;
         // Termination condition:
-        if(fabs(c * term) < (sum + prefix * d) * boost::math::policies::get_epsilon<T, Policy>())
+        if(fabs(term) < fabs(sum * boost::math::policies::get_epsilon<T, Policy>()))
            break;
         //
         // Move on k and factorial_part:
         //
         ++k;
-        factorial_part *= x * (n + k) / k;
+        factorial_part *= (-x * (n + k)) / k;
+        //
+        // Last chance exit:
+        //
+        if(k > policies::get_max_series_iterations<Policy>())
+           return policies::raise_evaluation_error<T>(function, "Series did not converge, best value is %1%", sum, pol);
      }
      //
-     // We need to add the sum to the prefix term and then
-     // multiply by the scale, at each stage checking for oveflow:
+     // We need to multiply by the scale, at each stage checking for oveflow:
      //
-     sum /= d;
-     if(boost::math::tools::max_value<T>() - sum < prefix)
-        return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
-     sum += prefix;
      if(boost::math::tools::max_value<T>() / scale < sum)
         return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
      sum *= scale;
@@ -511,8 +497,7 @@
     // so that the series doesn't go too divergent
     // in the first few terms.  Ordinarily this
     // would mean setting the limit to ~ 1 / n,
-    // but since the series is accelerated, we can
-    // tolerate a small amount of divergence:
+    // but we can tolerate a small amount of divergence:
     //
     T small_x_limit = std::min(T(T(5) / n), T(0.25f));
     if(x < small_x_limit)
