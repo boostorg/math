@@ -90,11 +90,10 @@ namespace boost
             function,
             msg.c_str(), x_max, pol);
            // "x_max argument is %1%, but must be > x_min !", x_max, pol);
-            //  "x_max argument is %1%, but must be > x_min %2!", x_max, x_min, pol); would be better.  TODO?
+            //  "x_max argument is %1%, but must be > x_min %2!", x_max, x_min, pol); would be better. 
           // But would require replication of all helpers functions in /policies/error_handling.hpp for two values,
           // as well as two value versions of raise_error, raise_domain_error and do_format ...
-
-
+          // so use slightly hacky lexical_cast to string instead.
           return false;
         }
         return true;
@@ -208,22 +207,44 @@ namespace boost
     inline const std::pair<RealType, RealType> support(const arcsine_distribution<RealType, Policy>&  dist)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
-
       return std::pair<RealType, RealType>(static_cast<RealType>(dist.x_min()), static_cast<RealType>(dist.x_max()));
     }
 
     template <class RealType, class Policy>
     inline RealType mean(const arcsine_distribution<RealType, Policy>& dist)
     { // Mean of arcsine distribution .
-      return  (dist.x_min() + dist.x_max()) / 2;
+      RealType result;
+      RealType x_min = dist.x_min();
+      RealType x_max = dist.x_max();
+
+      if (false == arcsine_detail::check_dist(
+        "boost::math::mean(arcsine_distribution<%1%> const&, %1% )",
+        x_min,
+        x_max,
+        &result, Policy())
+        )
+      {
+        return result;
+      }
+      return  (x_min + x_max) / 2;
     } // mean
 
     template <class RealType, class Policy>
     inline RealType variance(const arcsine_distribution<RealType, Policy>& dist)
     { // Variance of standard arcsine distribution = (1-0)/8 = 0.125.
-      RealType a = dist.x_min();
-      RealType b = dist.x_max();
-      return  (b - a) * (b - a) / 8;
+      RealType result;
+      RealType x_min = dist.x_min();
+      RealType x_max = dist.x_max();
+      if (false == arcsine_detail::check_dist(
+        "boost::math::variance(arcsine_distribution<%1%> const&, %1% )",
+        x_min,
+        x_max,
+        &result, Policy())
+        )
+      {
+        return result;
+      }
+      return  (x_max - x_min) * (x_max - x_min) / 8;
     } // variance
 
     template <class RealType, class Policy>
@@ -240,25 +261,77 @@ namespace boost
     template <class RealType, class Policy>
     inline RealType median(const arcsine_distribution<RealType, Policy>& dist)
     { // Median of arcsine distribution (a + b) / 2 == mean.
-      return  (dist.x_min() + dist.x_max()) / 2;
+      RealType x_min = dist.x_min();
+      RealType x_max = dist.x_max();
+      RealType result;
+      if (false == arcsine_detail::check_dist(
+        "boost::math::median(arcsine_distribution<%1%> const&, %1% )",
+        x_min,
+        x_max,
+        &result, Policy())
+        )
+      {
+        return result;
+      }
+      return  (x_min + x_max) / 2;
     }
 
     template <class RealType, class Policy>
-    inline RealType skewness(const arcsine_distribution<RealType, Policy>& /* dist */)
+    inline RealType skewness(const arcsine_distribution<RealType, Policy>& dist)
     {
+      RealType result;
+      RealType x_min = dist.x_min();
+      RealType x_max = dist.x_max();
+
+      if (false == arcsine_detail::check_dist(
+        "boost::math::skewness(arcsine_distribution<%1%> const&, %1% )",
+        x_min,
+        x_max,
+        &result, Policy())
+        )
+      {
+        return result;
+      }
       return 0;
     } // skewness
 
     template <class RealType, class Policy>
-    inline RealType kurtosis_excess(const arcsine_distribution<RealType, Policy>& /* dist */)
+    inline RealType kurtosis_excess(const arcsine_distribution<RealType, Policy>& dist)
     {
-      RealType result = -3;
+      RealType result;
+      RealType x_min = dist.x_min();
+      RealType x_max = dist.x_max();
+
+      if (false == arcsine_detail::check_dist(
+        "boost::math::kurtosis_excess(arcsine_distribution<%1%> const&, %1% )",
+        x_min,
+        x_max,
+        &result, Policy())
+        )
+      {
+        return result;
+      }
+      result = -3;
       return  result / 2;
     } // kurtosis_excess
 
     template <class RealType, class Policy>
     inline RealType kurtosis(const arcsine_distribution<RealType, Policy>& dist)
     {
+      RealType result;
+      RealType x_min = dist.x_min();
+      RealType x_max = dist.x_max();
+
+      if (false == arcsine_detail::check_dist(
+        "boost::math::kurtosis(arcsine_distribution<%1%> const&, %1% )",
+        x_min,
+        x_max,
+        &result, Policy())
+        )
+      {
+        return result;
+      }
+
       return 3 + kurtosis_excess(dist);
     } // kurtosis
 
@@ -275,7 +348,7 @@ namespace boost
       RealType x = xx;
 
       // Argument checks:
-      RealType result = 0;
+      RealType result = 0; 
       if (false == arcsine_detail::check_dist_and_x(
         function,
         lo, hi, x,

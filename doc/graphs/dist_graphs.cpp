@@ -101,7 +101,7 @@ public:
         double margin = 1e-2; // Margin of 1% (say) to get lowest off the 'end stop'.
          if((a != 0) && (fabs(a) > margin))
          {  
-            mod = a * (1 + (a > 0) ? margin : -margin)); 
+            mod = a * (1 + ((a > 0) ? margin : -margin)); 
          }
          else
          { // Case of mod near zero?

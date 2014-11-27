@@ -19,6 +19,7 @@
    public:
       typedef RealType  value_type;
       typedef Policy    policy_type;
+
       // Constructor from two range parameters, x_min and x_max:
       arcsine_distribution(RealType x_min, RealType x_max);
 
@@ -51,13 +52,11 @@ The [@http://en.wikipedia.org/wiki/Probability_density_function probability dens
 for the [@http://en.wikipedia.org/wiki/arcsine_distribution arcsine distribution]
 defined on the interval \[0,1\] is given by:
 
-[sixemspace] f(x; x_min, x_max) = 1 / [pi] [sqrt]((x - x_min) (x_max - x))
-
-[figspace] f(x; x_min, x_max) = 1 / [pi] [sqrt]((x - x_min) (x_max - x))
+[figspace] [figspace] f(x; x_min, x_max) = 1 /([pi][sdot][sqrt]((x - x_min)[sdot](x_max - x))
 
 For example, __WolframAlpha  arcsine distribution, from input of
 
-   N[pDF[arcsinedistribution[0, 1], 0.5], 50]
+   N[PDF[arcsinedistribution[0, 1], 0.5], 50]
 
 computes the PDF value
 
@@ -78,7 +77,7 @@ and some generalized examples with other ['x] ranges.
 
 The Cumulative Distribution Function CDF is defined as
 
-[sixemspace]   F(x) = 2 / [pi] arcsin (sqrt((x-x_min)(x_max - x)))
+[figspace]  [figspace]  F(x) = 2[sdot]arcsin([sqrt]((x-x_min)/(x_max - x))) / [pi]
 
 [graph arcsine_cdf]
 
@@ -121,7 +120,7 @@ that are generic to all distributions are supported: __usual_accessors.
 The formulae for calculating these are shown in the table below, and at
 [@http://mathworld.wolfram.com/arcsineDistribution.html Wolfram Mathworld].
 
-[note There are always [*two] values for the mode, at ['x_min] and at ['x_max], default 0 and 1,
+[note There are always [*two] values for the [*mode], at ['x_min] and at ['x_max], default 0 and 1,
 so instead we raise the exception __domain_error.
 At these extrema, the PDFs are infinite, and the CDFs zero or unity.]
 
@@ -151,14 +150,14 @@ and the PDF can be calculated thus:
 
 [arcsine_snip_2]
 
-From the plot of PDF, it is clear that  ['x] = 1/2 is the [*minimum] of the curve,
+From the plot of PDF, it is clear that  ['x] = [frac12] is the [*minimum] of the curve,
 so this is the [*least likely] scenario.
 (This is highly counter-intuitive, considering that fair tosses must [*eventually] become equal.
-It turns out that ['eventually] is not just very long, but infinite).
+It turns out that ['eventually] is not just very long, but [*infinite]!).
 
 The [*most likely] scenarios are towards the extrema where ['x] = 0 or ['x] = 1.
 
-If fraction of time is on the left is a 1/4,
+If fraction of time on the left is a [frac14],
 it is only slightly more likely because the curve is quite flat bottomed.
 
 [arcsine_snip_3]
@@ -173,7 +172,7 @@ We can easily compute this setting ['x] = 5./100 = 0.05
 
 Similarly, we can compute from a fraction of 0.05 /2 = 0.025
 (halved because we are considering both winners and losers)
-corresponding to 1 - 0.025 or 97.5% of the gamblers, (walkers, particles) on the [*same side] of the origin
+corresponding to 1 - 0.025 or 97.5% of the gamblers, (walkers, particles...) on the [*same side] of the origin
 
 [arcsine_snip_5]
 
@@ -197,7 +196,7 @@ and gamblers continue to provide proof.
 [*Moral]: if you in a losing patch, leave the game.
 (Because the odds to recover to a good patch are poor).
 
-[*Corollary]: Quit while you are ahead!
+[*Corollary]: Quit while you are ahead?
 
 A working example is at [@../../example/arcsine_example.cpp  arcsine_example.cpp]
 including sample output .
@@ -217,7 +216,7 @@ For example, for a standard [0, 1] arcsine distribution ['as], the pdf is symmet
 so that one would expect `pdf(as, 0.01) == pdf(as, 0.99)`.  But as ['x] nears unity, there is increasing
 [@http://en.wikipedia.org/wiki/Loss_of_significance loss of significance].
 To counteract this, the complement versions of CDF and quantile
-are implemented with alternative expressions using ['cos[super -1]] instead of ['asin[super -1]].
+are implemented with alternative expressions using ['cos[super -1]] instead of ['sin[super -1]].
 Users should see __why_complements for guidance on when to avoid loss of accuracy by using complements.
 
 [h4 Testing]
@@ -233,7 +232,7 @@ In the following table ['a] and ['b] are the parameters ['x_min][space] and ['x_
 
 [table
 [[Function][Implementation Notes]]
-[[support] [x [isin] \[x_min, x_max\], default x [isin] \[0, 1\] ]]
+[[support] [x [isin] \[a, b\], default x [isin] \[0, 1\] ]]
 [[pdf] [f(x; a, b) = 1/([pi][sdot][sqrt](x - a)[sdot](b - x))]]
 [[cdf] [F(x) = 2/[pi][sdot]sin[super-1]([sqrt](x - a) / (b - a) ) ]]
 [[cdf of complement] [2/([pi][sdot]cos[super-1]([sqrt](x - a) / (b - a)))]]
