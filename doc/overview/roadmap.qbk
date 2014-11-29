@@ -6,6 +6,10 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
+[h4 Math-2.2.0]
+
+* Added two new special functions - __trigamma and __polygamma.
+
 [h4 Math-2.1.0 (boost-1.57.0)]
 
 * Added __hyperexponential_distrib.
