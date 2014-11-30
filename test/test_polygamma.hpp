@@ -29,6 +29,10 @@
 #endif
 #endif
 
+#ifdef _MSC_VER
+#pragma warning(disable:4756) // overflow in constant arithmetic
+#endif
+
 template <class Real, class T>
 void do_test_polygamma(const T& data, const char* type_name, const char* test_name)
 {
@@ -188,6 +192,8 @@ void test_polygamma(T, const char* name)
       {{ SC_(35.0), SC_(0.1250000000), SC_(3.3532982327901451846973629635910627e72) }}, {{ SC_(35.0), SC_(0.06250000000), SC_(2.3043689989709229438987285737704404e83) }}, {{ SC_(35.0), SC_(0.03125000000), SC_(1.5835503181594194718369731136519624e94) }}, {{ SC_(35.0), SC_(0.01562500000), SC_(1.0882074924904162473416628106826351e105) }}, {{ SC_(35.0), SC_(0.007812500000), SC_(7.4781049464136054012151819362261716e115) }}, {{ SC_(35.0), SC_(0.003906250000), SC_(5.1389145889443628300269064119650184e126) }}, {{ SC_(35.0), SC_(0.001953125000), SC_(3.5314352154325314429637711743107931e137) }}, {{ SC_(35.0), SC_(0.0009765625000), SC_(2.4267838013160699267233738410387795e148) }}
    } };
    do_test_polygamma<T>(small_data, name, "Mathematica Data - small arguments");
+
+   using std::ldexp;
 
    boost::array<boost::array<value_type, 3>, 23> bug_cases = 
    { {
