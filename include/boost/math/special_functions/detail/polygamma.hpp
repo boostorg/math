@@ -85,7 +85,7 @@
      else
      {
         sum = part_term * (n + 2 * x) / 2;
-        part_term *= n * (n + 1) / 2;
+        part_term *= (T(n) * (n + 1)) / 2;
         part_term /= x;
      }
      //
@@ -107,7 +107,7 @@
         // Increment our counter, and move part_term on to the next value:
         //
         ++k;
-        part_term *= (n + 2 * k - 2) * (n - 1 + 2 * k);
+        part_term *= T(n + 2 * k - 2) * (n - 1 + 2 * k);
         part_term /= (2 * k - 1) * 2 * k;
         part_term /= x_squared;
         //
