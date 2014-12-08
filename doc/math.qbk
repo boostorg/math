@@ -270,8 +270,8 @@ and use the function's name as the link text.]
 [def __support [link math_toolkit.dist_ref.nmp.support support]]
 [def __algorithms [link math_toolkit.dist_ref.dist_algorithms algorithms]]
 
-
 [/ distribution def names end in distrib to avoid clashes]
+[def __arcsine_distrib [link math_toolkit.dist_ref.dists.arcsine_dist Arcsine Distribution]]
 [def __beta_distrib [link math_toolkit.dist_ref.dists.beta_dist Beta Distribution]]
 [def __binomial_distrib [link math_toolkit.dist_ref.dists.binomial_dist Binomial Distribution]]
 [def __cauchy_distrib [link math_toolkit.dist_ref.dists.cauchy_dist Cauchy Distribution]]
@@ -355,6 +355,7 @@ and use the function's name as the link text.]
 [def __e_float [@http://calgo.acm.org/910.zip e_float (TOMS Algorithm 910)]]
 [def __Abramowitz_Stegun M. Abramowitz and I. A. Stegun, Handbook of Mathematical Functions, NBS  (1964)]
 [def _DMLF [@http://dlmf.nist.gov/ NIST Digital Library of Mathematical Functions]]
+[def __epsilon [@http://en.wikipedia.org/wiki/Machine_epsilon machine epsilon]]
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
