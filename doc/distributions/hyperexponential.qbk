@@ -108,7 +108,7 @@ A /k/-phase hyperexponential distribution is frequently used in [@http://en.wiki
 
 For instance, CPUs service-time distribution in a computing system has often been observed to possess such a distribution (Rosin,1965).
 Also, the arrival of different types of customer to a single queueing station is often modeled as a hyperexponential distribution (Papadopolous et al.,1993).
-Similarly, if a product manufactured in several parallel assemply lines and the outputs are merged, the failure density of the overall product is likely to be hyperexponential (Trivedi,2002).
+Similarly, if a product manufactured in several parallel assembly lines and the outputs are merged, the failure density of the overall product is likely to be hyperexponential (Trivedi,2002).
 
 Finally, since the hyperexponential distribution exhibits a high Coefficient of Variation (CoV), that is a CoV > 1, it is especially suited to fit empirical data with large CoV (Feitelson,2014; Wolski et al.,2013) and to approximate [@http://en.wikipedia.org/wiki/Long_tail long-tail probability distributions] (Feldmann et al.,1998).
 
@@ -279,14 +279,14 @@ given by the range defined by the \[`rate_first`, `rate_last`) iterator pair.
 
    template <typename ProbRangeT, typename RateRangeT>
    hyperexponential_distribution(ProbRangeT const& prob_range,
-                                 RateRangeT const& rate_range,
-                                 typename boost::disable_if<``['implementation-details]``>::type* = 0);
+                                 RateRangeT const& rate_range);
 
 Constructs a hyperexponential distribution with /phase probability vector/ parameter
 given by the range defined by `prob_range`, and /rate vector/ parameter given by the range defined by `rate_range`.
 
-[note The final `disable_if` parameter is an implementation detail that differentiates between this two argument constructor
-and the iterator-based two argument constructor described below. This should [*not] be provided by the user.]
+[note As an implementation detail, this constructor uses Boost's 
+[@http://www.boost.org/doc/libs/release/libs/core/doc/html/core/enable_if.html enable_if/disable_if mechanism] to 
+disambiguate between this and other 2-argument constructors.  Refer to the source code for more details.]
 
 [h5 Parameters]
 
@@ -302,19 +302,19 @@ that includes native C++ arrays, standard library containers, or a std::pair or 
 
 [hyperexponential_snip3]
 
-[h4 Construction with rates-iterators (by default, all phase probablities will be equal)]
+[h4 Construction with rates-iterators (and all phase probabilities equal)]
 
       template <typename RateIterT, typename RateIterT2>
       hyperexponential_distribution(RateIterT const& rate_first,
-                                    RateIterT2 const& rate_last,
-                                    typename boost::enable_if<``['implementation-details]``>::type* = 0);
+                                    RateIterT2 const& rate_last);
 
 Constructs a hyperexponential distribution with /rate vector/ parameter given by the range defined by the
 \[`rate_first`, `rate_last`) iterator pair, and /phase probability vector/ set to the equal phase
 probabilities (i.e., to a vector of the same length `n` of the /rate vector/ and with each element set to `1.0/n`).
 
-[note The final `disable_if` parameter is an implementation detail that differentiates between this two argument constructor
-and the range-based two argument constructor described above. This should [*not] be provided by the user.]
+[note As an implementation detail, this constructor uses Boost's 
+[@http://www.boost.org/doc/libs/release/libs/core/doc/html/core/enable_if.html enable_if/disable_if mechanism] to 
+disambiguate between this and other 2-argument constructors.  Refer to the source code for more details.]
 
 [h5 Parameters]
 
@@ -328,7 +328,7 @@ and the range-based two argument constructor described above. This should [*not]
 
 [hyperexponential_snip4]
 
-[h4 Construction from a single range of rates (by default, all phase probabilities will be equal)]
+[h4 Construction from a single range of rates (all phase probabilities will be equal)]
 
       template <typename RateRangeT>
       hyperexponential_distribution(RateRangeT const& rate_range);
@@ -371,7 +371,7 @@ The number of elements of the phase probabilities list and the rates list must b
 
 [hyperexponential_snip6]
 
-[h4 Construction from a single initializer list (by default, all phase probabilities will be equal)]
+[h4 Construction from a single initializer list (all phase probabilities will be equal)]
 
       hyperexponential_distribution(std::initializer_list<RealType> l1);
 
@@ -412,8 +412,9 @@ Gets the /rate vector/ parameter of this distribution.
 
 [h5 Return Value] A vector of positive real numbers representing the /rate vector/ parameter of this distribution.
 
-[warning The return type of containers for rates and probabilities are currently a `std::vector` container but might change.
-Users will find that because the return type is not a reference, some code that might otherwise have been expected to work does not.
+[warning The return type of these functions is a vector-by-value.  This is deliberate as we wish to hide the actual container
+used internally which may be subject to future changes (for example to facilitate vectorization of the cdf code etc).
+Users should note that some code that might otherwise have been expected to work does not.
 For example, an attempt to output the (normalized) probabilities:
 
 ``
@@ -427,6 +428,14 @@ std::cout << he.probabilities()[0] << ' ' << he.probabilities()[1] << std::endl;
 ``
 
 outputs the expected values.
+
+In general if you want to access a member of the returned container, then assign to a variable first, and then access those 
+members:
+
+``
+std::vector<double> t = he.probabilities();
+std::copy(t.begin(), t.end(), std::ostream_iterator<double>(std::cout, " "));
+``
 ]
 
 [h3 Non-member Accessor Functions]

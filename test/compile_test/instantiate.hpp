@@ -169,6 +169,8 @@ void instantiate(RealType)
    boost::math::lgamma(v1);
    boost::math::lgamma(v1, &i);
    boost::math::digamma(v1);
+   boost::math::trigamma(v1);
+   boost::math::polygamma(i, v1);
    boost::math::tgamma_ratio(v1, v2);
    boost::math::tgamma_delta_ratio(v1, v2);
    boost::math::factorial<RealType>(i);
@@ -354,6 +356,8 @@ void instantiate(RealType)
    boost::math::lgamma(v1 * 1);
    boost::math::lgamma(v1 * 1, &i);
    boost::math::digamma(v1 * 1);
+   boost::math::trigamma(v1 * 1);
+   boost::math::polygamma(i, v1 * 1);
    boost::math::tgamma_ratio(v1 * 1, v2 + 0);
    boost::math::tgamma_delta_ratio(v1 * 1, v2 + 0);
    boost::math::factorial<RealType>(i);
@@ -528,6 +532,8 @@ void instantiate(RealType)
    boost::math::lgamma(v1, pol);
    boost::math::lgamma(v1, &i, pol);
    boost::math::digamma(v1, pol);
+   boost::math::trigamma(v1, pol);
+   boost::math::polygamma(i, v1, pol);
    boost::math::tgamma_ratio(v1, v2, pol);
    boost::math::tgamma_delta_ratio(v1, v2, pol);
    boost::math::factorial<RealType>(i, pol);
@@ -705,6 +711,8 @@ void instantiate(RealType)
    test::lgamma(v1);
    test::lgamma(v1, &i);
    test::digamma(v1);
+   test::trigamma(v1);
+   test::polygamma(i, v1);
    test::tgamma_ratio(v1, v2);
    test::tgamma_delta_ratio(v1, v2);
    test::factorial<RealType>(i);
@@ -896,6 +904,8 @@ void instantiate_mixed(RealType)
    boost::math::lgamma(i);
    boost::math::lgamma(i, &i);
    boost::math::digamma(i);
+   boost::math::trigamma(i);
+   boost::math::polygamma(i, i);
    boost::math::tgamma_ratio(i, l);
    boost::math::tgamma_ratio(fr, lr);
    boost::math::tgamma_delta_ratio(i, s);
@@ -1038,6 +1048,8 @@ void instantiate_mixed(RealType)
    boost::math::lgamma(i, pol);
    boost::math::lgamma(i, &i, pol);
    boost::math::digamma(i, pol);
+   boost::math::trigamma(i, pol);
+   boost::math::polygamma(i, i, pol);
    boost::math::tgamma_ratio(i, l, pol);
    boost::math::tgamma_ratio(fr, lr, pol);
    boost::math::tgamma_delta_ratio(i, s, pol);
@@ -1173,6 +1185,8 @@ void instantiate_mixed(RealType)
    test::lgamma(i);
    test::lgamma(i, &i);
    test::digamma(i);
+   test::trigamma(i);
+   test::polygamma(i, i);
    test::tgamma_ratio(i, l);
    test::tgamma_ratio(fr, lr);
    test::tgamma_delta_ratio(i, s);

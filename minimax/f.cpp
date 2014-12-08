@@ -323,6 +323,20 @@ boost::math::ntl::RR f(const boost::math::ntl::RR& x, int variant)
          // cbrt over [0.5, 1]
          return boost::math::cbrt(x);
       }
+   case 30:
+   {
+      // trigamma over [x,y]
+      boost::math::ntl::RR y = x;
+      y = sqrt(y);
+      return boost::math::trigamma(x) * (x * x);
+   }
+   case 31:
+   {
+      // trigamma over [x, INF]
+      if(x == 0) return 1;
+      boost::math::ntl::RR y = (x == 0) ? (std::numeric_limits<double>::max)() / 2 : 1/x;
+      return boost::math::trigamma(y) * y;
+   }
    }
    return 0;
 }

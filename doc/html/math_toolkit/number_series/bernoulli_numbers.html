@@ -3,8 +3,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Bernoulli Numbers</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
+<<<<<<< HEAD
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 1.9.0">
+=======
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.1.0">
+>>>>>>> develop
 <link rel="up" href="../number_series.html" title="Number Series">
 <link rel="prev" href="../number_series.html" title="Number Series">
 <link rel="next" href="tangent_numbers.html" title="Tangent Numbers">
@@ -135,7 +140,7 @@ and also obtain much
         <code class="computeroutput"><span class="identifier">unchecked_bernoulli_b2n</span></code> provides
         access to Bernoulli numbers <span class="bold"><strong>without any checks for
         overflow or invalid parameters</strong></span>. It is implemented as a direct
-        (and very fast) table lookup, and while not recomended for general use it
+        (and very fast) table lookup, and while not recommended for general use it
         can be useful inside inner loops where the ultimate performance is required,
         and error checking is moved outside the loop.
       </p>
@@ -153,7 +158,7 @@ and also obtain much
         types, it's the largest value for which the result can be represented as
         the ratio of two 64-bit integers, for example <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">max_bernoulli_b2n</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">multiprecision</span><span class="special">::</span><span class="identifier">cpp_dec_float_50</span><span class="special">&gt;::</span><span class="identifier">value</span></code>
         is just 17. Of course larger indexes can be passed to <code class="computeroutput"><span class="identifier">bernoulli_b2n</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">n</span><span class="special">)</span></code>, but
-        then then you loose fast table lookup (i.e. values may need to be calculated).
+        then you lose fast table lookup (i.e. values may need to be calculated).
       </p>
 <pre class="programlisting"><span class="comment">/*For example:
 */</span>
@@ -343,9 +348,9 @@ and also obtain much
 <p>
         Note that computed values are stored in a fixed-size table, access is thread
         safe via atomic operations (i.e. lock free programming), this imparts a much
-        lower overhead on access to cached values than might overwise be expected
+        lower overhead on access to cached values than might otherwise be expected
         - typically for multiprecision types the cost of thread synchronisation is
-        negligable, while for built in types this code is not normally executed anyway.
+        negligible, while for built in types this code is not normally executed anyway.
         For very large arguments which cannot be reasonably computed or stored in
         our cache, an asymptotic expansion <a href="http://www.luschny.de/math/primes/bernincl.html" target="_top">due
         to Luschny</a> is used:

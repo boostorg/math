@@ -604,6 +604,8 @@ run test_nc_t.cpp  pch ../../test/build//boost_unit_test_framework
 run test_normal.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_owens_t.cpp ../../test/build//boost_unit_test_framework ;
 run test_pareto.cpp ../../test/build//boost_unit_test_framework ;
+run test_polygamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_trigamma.cpp test_instances//test_instances ../../test/build//boost_unit_test_framework ;
 run test_poisson.cpp ../../test/build//boost_unit_test_framework
         : # command line
         : # input files
@@ -667,6 +669,7 @@ run test_skew_normal.cpp ../../test/build//boost_unit_test_framework ;
 run test_tgamma_ratio.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_toms748_solve.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_triangular.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_uniform.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_weibull.cpp ../../test/build//boost_unit_test_framework ;
 run test_zeta.cpp ../../test/build//boost_unit_test_framework test_instances//test_instances pch_light ;
@@ -773,6 +776,7 @@ run  compile_test/sf_binomial_incl_test.cpp compile_test_main ;
 run  compile_test/sf_cbrt_incl_test.cpp compile_test_main ;
 run  compile_test/sf_cos_pi_incl_test.cpp compile_test_main ;
 run  compile_test/sf_digamma_incl_test.cpp compile_test_main ;
+run  compile_test/sf_polygamma_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_1_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_2_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_3_incl_test.cpp compile_test_main ;

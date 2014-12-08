@@ -1,4 +1,4 @@
-//  Copyright John Maddock 2006, 2007, 2012.
+//  Copyright John Maddock 2006, 2007, 2012, 2014.
 //  Copyright Paul A. Bristow 2006, 2007, 2012
 
 //  Use, modification and distribution are subject to the
@@ -47,6 +47,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/owens_t.hpp>
+#include <boost/math/special_functions/polygamma.hpp>
 #include <boost/math/special_functions/powm1.hpp>
 #include <boost/math/special_functions/sign.hpp>
 #include <boost/math/special_functions/sin_pi.hpp>

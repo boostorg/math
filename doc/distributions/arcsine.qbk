@@ -50,7 +50,7 @@ outlines how the __beta_distrib can be used to add a shape factor.
 
 The [@http://en.wikipedia.org/wiki/Probability_density_function probability density function PDF]
 for the [@http://en.wikipedia.org/wiki/arcsine_distribution arcsine distribution]
-defined on the interval \[0,1\] is given by:
+defined on the interval \[['x_min, x_max]\] is given by:
 
 [figspace] [figspace] f(x; x_min, x_max) = 1 /([pi][sdot][sqrt]((x - x_min)[sdot](x_max - x))
 

@@ -11,7 +11,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/array.hpp>
-#include <boost/tr1/random.hpp>
+#include <boost/random.hpp>
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
@@ -150,8 +150,8 @@ void test_spots(T, const char* type_name)
 
    // Sanity/consistency checks from Numerical Computation of Real or Complex 
    // Elliptic Integrals, B. C. Carlson: http://arxiv.org/abs/math.CA/9409227
-   std::tr1::mt19937 ran;
-   std::tr1::uniform_real<float> ur(0, 1000);
+   boost::mt19937 ran;
+   boost::uniform_real<float> ur(0, 1000);
    T eps40 = 40 * tools::epsilon<T>();
 
    for(unsigned i = 0; i < 1000; ++i)

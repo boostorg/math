@@ -90,12 +90,12 @@ void test_ignore_policy(RealType)
 
     if (std::numeric_limits<RealType>::has_quiet_NaN)
     {
-      // PDF
-     if (std::numeric_limits<RealType>::has_infinity)
+      // Demonstrate output of PDF with infinity,
+      // but strin goutput from NaN is platform dependent, so can't use BOOST_CHECK.
+      if (std::numeric_limits<RealType>::has_infinity)
       {
-      //  pdf(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity());
-      //  std::cout << "arcsine(-1,+1) ignore error pdf (infinity) " << pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) << std::endl;
-        //  arcsine(-1,+1) ignore error pdf (infinity) 1.#QNAN
+        //std::cout << "pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) = " << pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) << std::endl;
+        //  Outputs:  pdf(ignore_error_arcsine(-1, +1), std::numeric_limits<RealType>::infinity()) = 1.#QNAN
       }
       BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(0, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
       BOOST_CHECK((boost::math::isnan)(pdf(ignore_error_arcsine(-1, 1), std::numeric_limits<RealType>::infinity()))); // x == infinity
@@ -110,9 +110,9 @@ void test_ignore_policy(RealType)
 
       if (std::numeric_limits<RealType>::has_infinity)
       {
-        BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(-std::numeric_limits<RealType>::infinity(), 0))));
-  //      std::cout << "arcsine(-inf,+1) mean " << mean(ignore_error_arcsine(-std::numeric_limits<RealType>::infinity())) << std::endl;
-        BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(std::numeric_limits<RealType>::infinity(), 0))));
+        //BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(-std::numeric_limits<RealType>::infinity(), 0))));
+        // std::cout << "arcsine(-inf,+1) mean " << mean(ignore_error_arcsine(-std::numeric_limits<RealType>::infinity())) << std::endl;
+        //BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(std::numeric_limits<RealType>::infinity(), 0))));
       }
       // Check error message is correct.
       try
@@ -176,10 +176,12 @@ void test_ignore_policy(RealType)
     try
     {
       typedef arcsine_distribution<RealType> signal_error_arcsine;
-     // std::cout << "mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon())) == " << std::endl;
-     // std::cout << mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon())) << std::endl;      // 5.96046e-008
-      //std::cout << "mean(ignore_error_arcsine(0, 0)) == " << std::endl;
-      //std::cout << mean(ignore_error_arcsine(0, 0)) << std::endl; // 1.#QNAN
+      //std::cout << "mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon())) == "
+      //  << mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon())) << std::endl;
+      //  mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon())) == 5.96046e-008
+      //std::cout << "mean(ignore_error_arcsine(0, 0)) == "
+      //  << mean(ignore_error_arcsine(0, 0)) << std::endl;
+      // mean(ignore_error_arcsine(0, 0)) == 1.#QNAN
     }
     catch (std::exception ex)
     {
@@ -296,7 +298,8 @@ void test_spots(RealType)
     BOOST_CHECK_THROW(mode(arcsine_01), std::domain_error); //  Two modes at x_min and x_max, so throw instead.
 
     // PDF
-    // N[PDF[arcsinedistribution[0, 1], 0.25], 50]
+    // pdf of x = 1/4 is same as reflected value at x = 3/4.
+    // N[PDF[arcsinedistribution[0, 1], 0.25], 50] 
     // N[PDF[arcsinedistribution[0, 1], 0.75], 50]
     // 0.73510519389572273268176866441729258852984864048885
 
@@ -346,9 +349,7 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(quantile(arcsine_01, static_cast<RealType>(0.25L)), static_cast<RealType>(0.14644660940672624L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(quantile(arcsine_01, static_cast<RealType>(0.5L)), 0.5, 2 * tolerance);  // probability = 0.5, x = 0.5
     BOOST_CHECK_CLOSE_FRACTION(quantile(arcsine_01, static_cast<RealType>(0.75L)), static_cast<RealType>(0.85355339059327373L), tolerance);
-
-
-
+    
     // N[CDF[arcsinedistribution[0, 1], 0.05], 50]  == 0.14356629312870627075094188477505571882161519989741
     BOOST_CHECK_CLOSE_FRACTION(quantile(arcsine_01, static_cast<RealType>(0.14356629312870627075094188477505571882161519989741L)), 0.05, tolerance);
 
@@ -359,7 +360,6 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(quantile(complement(arcsine_01, static_cast<RealType>(0.25L))), static_cast<RealType>(0.85355339059327376220042218105242451964241796884424L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(quantile(complement(arcsine_01, static_cast<RealType>(0.5L))), 0.5, 2 * tolerance);  // probability = 0.5, x = 0.5
     BOOST_CHECK_CLOSE_FRACTION(quantile(complement(arcsine_01, static_cast<RealType>(0.75L))), static_cast<RealType>(0.14644660940672623779957781894757548035758203115576L), 2 * tolerance); // Less accurate.
-
 
     // N[CDF[arcsinedistribution[0, 1], 0.25], 5
     // 0.33333333333333333333333333333333333333333333333333
