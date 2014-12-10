@@ -777,6 +777,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 
    test_float_spots(); // Test float_constants, like boost::math::float_constants::pi;
    test_double_spots(); // Test double_constants.
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_long_double_spots(); // Test long_double_constants.
 #ifdef BOOST_MATH_USE_FLOAT128
    test_float128();
@@ -787,7 +788,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_real_concept_policy(real_concept_policy_2()); // Increased precision forcing construction from string.
    test_real_concept_policy(real_concept_policy_3()); // Increased precision forcing caching of computed values.
    test_real_concept_policy(boost::math::policies::policy<>()); // Default.
-
+#endif
    // (Parameter value, arbitrarily zero, only communicates the floating-point type).
    test_spots(0.0F); // Test float.
    test_spots(0.0); // Test double.
