@@ -153,8 +153,8 @@ solve along with its derivatives are:
 
 [equation roots4]
 
-To begin with lets solve the problem using Newton-Raphson iterations, we'll
-begin by defining a function object (functor) that returns the evaluation
+To begin with let us solve the problem using Newton-Raphson iterations.
+We will begin by defining a function object (functor) that returns the evaluation
 of the function to solve, along with its first derivative  f'(x):
 
    template <class T>
@@ -266,7 +266,7 @@ Or to put it another way: ['nothing beats a really good initial guess!]
 [endsect] [/section:roots Root Finding With Derivatives]
 
 [/
-  Copyright 2006, 2010, 2012 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2010, 2012, 2014 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
