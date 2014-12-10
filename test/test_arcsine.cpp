@@ -234,12 +234,12 @@ void test_spot(
     } // if k
     if (x != 0)
     {
-      BOOST_CHECK_CLOSE_FRACTION(quantile(complement(anarcsine, Q)), x, tol);
+      BOOST_CHECK_CLOSE_FRACTION(quantile(complement(anarcsine, Q)), x, tol * 10);
     }
     else
     {  // Just check quantile is very small:
       if ((std::numeric_limits<RealType>::max_exponent <= std::numeric_limits<double>::max_exponent) && (boost::is_floating_point<RealType>::value))
-      {  // Limit where this is checked: if exponent range is very large we may
+      { // Limit where this is checked: if exponent range is very large we may
         // run out of iterations in our root finding algorithm.
         BOOST_CHECK(quantile(complement(anarcsine, Q)) < boost::math::tools::epsilon<RealType>() * 10);
       }
@@ -355,7 +355,7 @@ void test_spots(RealType)
 
     // Quantile of complement.
     // N[1-CDF[arcsinedistribution[0, 1], 0.05], 50] == 0.85643370687129372924905811522494428117838480010259
-    BOOST_CHECK_CLOSE_FRACTION(quantile(complement(arcsine_01, static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L))), 0.05, tolerance);
+    BOOST_CHECK_CLOSE_FRACTION(quantile(complement(arcsine_01, static_cast<RealType>(0.85643370687129372924905811522494428117838480010259L))), 0.05, tolerance * 2);
     // N[sin^2[0.75 * pi/2],50] == 0.85355339059327376220042218105242451964241796884424
     BOOST_CHECK_CLOSE_FRACTION(quantile(complement(arcsine_01, static_cast<RealType>(0.25L))), static_cast<RealType>(0.85355339059327376220042218105242451964241796884424L), tolerance);
     BOOST_CHECK_CLOSE_FRACTION(quantile(complement(arcsine_01, static_cast<RealType>(0.5L))), 0.5, 2 * tolerance);  // probability = 0.5, x = 0.5
@@ -374,7 +374,7 @@ void test_spots(RealType)
     BOOST_CHECK_EQUAL(as_m11.x_max(), +1);
     BOOST_CHECK_EQUAL(mean(as_m11), 0); //
     BOOST_CHECK_EQUAL(median(as_m11), 0); //
-    BOOST_CHECK_EQUAL(standard_deviation(as_m11), one_div_root_two<RealType>()); //
+    BOOST_CHECK_CLOSE_FRACTION(standard_deviation(as_m11), one_div_root_two<RealType>(),  tolerance * 2); //
 
     BOOST_CHECK_EQUAL(variance(as_m11), 0.5); // 1 - (-1) = 2 ^ 2 = 4 /8 = 0.5
     BOOST_CHECK_EQUAL(skewness(as_m11), 0); //
