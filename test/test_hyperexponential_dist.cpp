@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(klass, RealT, test_types)
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_r.probabilities(), std::vector<RealT>(probs, probs+n), tol);
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_r.rates(), std::vector<RealT>(rates, rates+n), tol);
     
-#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !(defined(BOOST_GCC_VERSION) && (BOOST_GCC_VERSION < 40500))
     boost::math::hyperexponential_distribution<RealT> dist_il = {{static_cast<RealT>(0.2L), static_cast<RealT>(0.3L), static_cast<RealT>(0.5L)}, {static_cast<RealT>(0.5L), static_cast<RealT>(1.0L), static_cast<RealT>(1.5L)}};
     BOOST_CHECK_EQUAL(dist_il.num_phases(), n);
     BOOST_MATH_HYPEREXP_CHECK_CLOSE_COLLECTIONS(RealT, dist_il.probabilities(), std::vector<RealT>(probs, probs+n), tol);
@@ -321,7 +321,7 @@ BOOST_AUTO_TEST_CASE(construct)
    result_v = he2.probabilities();
    BOOST_CHECK_EQUAL_COLLECTIONS(v2.begin(), v2.end(), result_v.begin(), result_v.end());
 
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !(defined(BOOST_GCC_VERSION) && (BOOST_GCC_VERSION < 40500))
    std::initializer_list<double> il = { 0.25, 0.5, 0.25 };
    std::initializer_list<double> il2 = { 0.5, 1, 1.5 };
    boost::math::hyperexponential he3(il, il2);
