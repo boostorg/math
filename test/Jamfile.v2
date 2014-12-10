@@ -93,6 +93,7 @@ run log1p_expm1_test.cpp test_instances//test_instances pch_light ../../test/bui
 run powm1_sqrtp1m1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run special_functions_test.cpp ../../test/build//boost_unit_test_framework ;
 run test_airy.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_arcsine.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_bernoulli.cpp ../../test/build//boost_unit_test_framework ;
 run test_constants.cpp ../../test/build//boost_unit_test_framework ;
 run test_print_info_on_type.cpp ;
