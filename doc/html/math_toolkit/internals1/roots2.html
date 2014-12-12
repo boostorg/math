@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.1.0">
-<link rel="up" href="../internals1.html" title="Utilities &amp; internals">
+<link rel="up" href="../internals1.html" title="Utilities">
 <link rel="prev" href="roots.html" title="Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schroeder">
 <link rel="next" href="minima.html" title="Locating Function Minima: Brent's algorithm">
 </head>
@@ -143,19 +143,47 @@
         <span class="phrase"><a name="math_toolkit.internals1.roots2.description"></a></span><a class="link" href="roots2.html#math_toolkit.internals1.roots2.description">Description</a>
       </h5>
 <p>
-        These functions solve the root of some function <span class="emphasis"><em>f(x)</em></span>
-        <span class="emphasis"><em>without the need for any derivatives of <span class="emphasis"><em>f(x)</em></span></em></span>.
+        These functions <code class="computeroutput"><span class="identifier">bisect</span><span class="special">,</span>
+        <span class="identifier">bracket_and_solve_root</span></code>, and <code class="computeroutput"><span class="identifier">toms748_solve</span></code> solve the root of some function
+        <span class="emphasis"><em>f(x)</em></span> <span class="bold"><strong>without the need for any
+        derivatives of <span class="emphasis"><em>f(x)</em></span></strong></span>.
       </p>
+<p>
+        (Algorithms that can use the derivative of <span class="emphasis"><em>f(x)</em></span> are
+        nearly always faster and <a class="link" href="roots.html" title="Root Finding With Derivatives: Newton-Raphson, Halley &amp; Schroeder">root-finding
+        with derivatives</a> should be used whenever possible).
+      </p>
+<p>
+        Variants of these functions allow control via a tolerance for stopping iteration,
+        setting a maximum number of iterations, or provision of a guess.
+      </p>
+<p>
+        Variants with and without <a class="link" href="../../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> are provided
+        to allow:
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Control of the precision used via <a class="link" href="../pol_ref/precision_pol.html" title="Precision Policies">precision
+            policy</a>.
+          </li>
+<li class="listitem">
+            Handling of errors via <a class="link" href="../pol_ref/error_handling_policies.html" title="Error Handling Policies">error
+            handling policies</a>.
+          </li>
+</ul></div>
 <p>
         The <code class="computeroutput"><span class="identifier">bracket_and_solve_root</span></code>
-        functions use TOMS Algorithm 748 that is asymptotically the most efficient
-        known, and have been shown to be optimal for a certain classes of smooth
-        functions. Variants with and without __policies are provided.
+        functions use <a href="http://portal.acm.org/citation.cfm?id=210111" target="_top">TOMS
+        Algorithm 748: enclosing zeros of continuous functions</a> that is asymptotically
+        the most efficient known, and have been shown to be optimal for a certain
+        classes of smooth functions.
       </p>
 <p>
-        Alternatively, there is a simple bisection routine which can be useful in
-        its own right in some situations, or alternatively for narrowing down the
-        range containing the root, prior to calling a more advanced algorithm.
+        Alternatively, there is a simple <a href="http://en.wikipedia.org/wiki/Bisection_method" target="_top">bisection</a>
+        routine <code class="computeroutput"><span class="identifier">bisect</span></code> which can
+        be useful in its own right in some situations, or alternatively for narrowing
+        down the range containing the root, to get a good guess prior to calling
+        a more advanced algorithm.
       </p>
 <p>
         All the algorithms in this section reduce the diameter of the enclosing interval
@@ -165,15 +193,28 @@
         the root. This is also in contrast to some other derivative-free methods
         (for example the methods of <a href="http://en.wikipedia.org/wiki/Brent%27s_method" target="_top">Brent
         or Dekker)</a> which only reduce the enclosing interval on the final
-        step. Therefore these methods return a std::pair containing the enclosing
-        interval found, and accept a function object specifying the termination condition.
-        Three function objects are provided for ready-made termination conditions:
-        <span class="emphasis"><em>eps_tolerance</em></span> causes termination when the relative error
-        in the enclosing interval is below a certain threshold, while <span class="emphasis"><em>equal_floor</em></span>
-        and <span class="emphasis"><em>equal_ceil</em></span> are useful for certain statistical applications
-        where the result is known to be an integer. Other user-defined termination
-        conditions are likely to be used only rarely, but may be useful in some specific
-        circumstances.
+        step.
+      </p>
+<p>
+        Therefore, these methods return a <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code>
+        containing the enclosing interval found, and accept a function object specifying
+        the termination condition. Three function objects are provided for ready-made
+        termination conditions:
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            <span class="emphasis"><em>eps_tolerance</em></span> causes termination when the relative
+            error in the enclosing interval is below a certain threshold,
+          </li>
+<li class="listitem">
+            <span class="emphasis"><em>equal_floor</em></span>, <span class="emphasis"><em>equal_ceil</em></span> and
+            <span class="emphasis"><em>equal_nearest_integer</em></span> are useful for certain statistical
+            applications where the result is known to be an integer.
+          </li>
+</ul></div>
+<p>
+        Other user-defined termination conditions are likely to be used only rarely,
+        but might be useful in some specific circumstances.
       </p>
 <h4>
 <a name="math_toolkit.internals1.roots2.h2"></a>
@@ -207,7 +248,8 @@
       <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
-        These functions locate the root using bisection: function arguments are:
+        These functions locate the root using <a href="http://en.wikipedia.org/wiki/Bisection_method" target="_top">bisection</a>:
+        their function arguments are:
       </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
@@ -218,27 +260,29 @@
             </p></dd>
 <dt><span class="term">min</span></dt>
 <dd><p>
-              The left bracket of the interval known to contain the root.
+              The left bracket of an interval known to contain the root.
             </p></dd>
 <dt><span class="term">max</span></dt>
 <dd><p>
-              The right bracket of the interval known to contain the root. It is
-              a precondition that <span class="emphasis"><em>min &lt; max</em></span> and <span class="emphasis"><em>f(min)*f(max)
-              &lt;= 0</em></span>, the function signals evaluation error if these
-              preconditions are violated. The action taken is controlled by the evaluation
-              error policy. A best guess may be returned, perhaps significantly wrong.
+              The right bracket of an interval known to contain the root. It is a
+              precondition that <span class="emphasis"><em>min &lt; max</em></span> and <span class="emphasis"><em>f(min)
+              * f(max) &lt;= 0</em></span>. The function signals <a class="link" href="../error_handling.html#math_toolkit.error_handling.evaluation_error">evaluation_error</a>
+              if these preconditions are violated. The action taken is controlled
+              by the <a class="link" href="../pol_ref/error_handling_policies.html" title="Error Handling Policies">error
+              handling policies</a>. A best guess may be returned, perhaps significantly
+              wrong.
             </p></dd>
 <dt><span class="term">tol</span></dt>
 <dd><p>
               A binary functor that specifies the termination condition: the function
               will return the current brackets enclosing the root when <span class="emphasis"><em>tol(min,max)</em></span>
-              becomes true.
+              becomes <code class="computeroutput"><span class="keyword">true</span></code>.
             </p></dd>
 <dt><span class="term">max_iter</span></dt>
 <dd><p>
               The maximum number of invocations of <span class="emphasis"><em>f(x)</em></span> to make
-              while searching for the root. On exist this is set to actual number
-              of invocations performed.
+              while searching for the root. <br> On exit this is set to actual
+              number of invocations performed.
             </p></dd>
 </dl>
 </div>
@@ -302,24 +346,36 @@
       <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
-        This is a convenience function that calls <span class="emphasis"><em>toms748_solve</em></span>
-        internally to find the root of <span class="emphasis"><em>f(x)</em></span>. It's usable only
-        when <span class="emphasis"><em>f(x)</em></span> is a monotonic function, and the location
-        of the root is known approximately, and in particular it is known whether
-        the root is occurs for positive or negative <span class="emphasis"><em>x</em></span>. The parameters
-        are:
+        <code class="computeroutput"><span class="identifier">bracket_and_solve_root</span></code> is
+        a convenience function that calls <a href="http://portal.acm.org/citation.cfm?id=210111" target="_top">TOMS
+        Algorithm 748: enclosing zeros of continuous functions</a> internally
+        to find the root of <span class="emphasis"><em>f(x)</em></span>. It's usable only when:
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Derivative of <span class="emphasis"><em>f(x)</em></span> is a monotonic function.
+          </li>
+<li class="listitem">
+            The location of the root is known approximately (a guess).
+          </li>
+<li class="listitem">
+            It is known whether the root occurs for positive or negative <span class="emphasis"><em>x</em></span>.
+          </li>
+</ul></div>
+<p>
+        The parameters are:
       </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
 <dl class="variablelist">
 <dt><span class="term">f</span></dt>
 <dd><p>
-              A unary functor that is the function whose root is to be solved. f(x)
+              A unary functor that is the function whose root is to be solved. <span class="emphasis"><em>f(x)</em></span>
               must be uniformly increasing or decreasing on <span class="emphasis"><em>x</em></span>.
             </p></dd>
 <dt><span class="term">guess</span></dt>
 <dd><p>
-              An initial approximation to the root
+              An initial approximation to the root.
             </p></dd>
 <dt><span class="term">factor</span></dt>
 <dd><p>
@@ -340,13 +396,14 @@
 <dd><p>
               A binary functor that determines the termination condition for the
               search for the root. <span class="emphasis"><em>tol</em></span> is passed the current
-              brackets at each step, when it returns true then the current brackets
-              are returned as the result.
+              brackets at each step, when it returns <code class="computeroutput"><span class="keyword">true</span></code>
+              then the current brackets are returned as the result.
             </p></dd>
 <dt><span class="term">max_iter</span></dt>
 <dd><p>
               The maximum number of function invocations to perform in the search
-              for the root. On exit is set to the actual number of invocations performed.
+              for the root. <br> On exit <span class="emphasis"><em>max_iter</em></span> is set to
+              the actual number of invocations performed.
             </p></dd>
 </dl>
 </div>
@@ -431,10 +488,16 @@
       <span class="keyword">const</span> <a class="link" href="../../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&amp;);</span>
 </pre>
 <p>
-        These two functions implement TOMS Algorithm 748: it uses a mixture of cubic,
-        quadratic and linear (secant) interpolation to locate the root of <span class="emphasis"><em>f(x)</em></span>.
-        The two functions differ only by whether values for <span class="emphasis"><em>f(a)</em></span>
-        and <span class="emphasis"><em>f(b)</em></span> are already available. The toms748_solve parameters
+        The functions <code class="computeroutput"><span class="identifier">toms748_solve</span></code>
+        implement <a href="http://portal.acm.org/citation.cfm?id=210111" target="_top">TOMS
+        Algorithm 748: enclosing zeros of continuous functions</a> : using a
+        mixture of cubic, quadratic and linear (secant) interpolation to locate the
+        root of <span class="emphasis"><em>f(x)</em></span>. Function variants differ only by whether
+        values for <span class="emphasis"><em>f(a)</em></span> and <span class="emphasis"><em>f(b)</em></span> are already
+        available, and if special policies apply.
+      </p>
+<p>
+        The <code class="computeroutput"><span class="identifier">toms748_solve</span></code> parameters
         are:
       </p>
 <div class="variablelist">
@@ -454,8 +517,8 @@
 <dd><p>
               The upper bound for the initial bracket of the root. It is a precondition
               that <span class="emphasis"><em>a &lt; b</em></span> and that <span class="emphasis"><em>a</em></span>
-              and <span class="emphasis"><em>b</em></span> bracket the root to find so that <span class="emphasis"><em>f(a)*f(b)
-              &lt; 0</em></span>.
+              and <span class="emphasis"><em>b</em></span> bracket the root to find so that <span class="emphasis"><em>f(a)
+              * f(b) &lt; 0</em></span>.
             </p></dd>
 <dt><span class="term">fa</span></dt>
 <dd><p>
@@ -469,14 +532,14 @@
 <dd><p>
               A binary functor that determines the termination condition for the
               search for the root. <span class="emphasis"><em>tol</em></span> is passed the current
-              brackets at each step, when it returns true, then the current brackets
-              are returned as the result.
+              brackets at each step, when it returns <code class="computeroutput"><span class="keyword">true</span></code>,
+              then the current brackets are returned as the result.
             </p></dd>
 <dt><span class="term">max_iter</span></dt>
 <dd><p>
               The maximum number of function invocations to perform in the search
-              for the root. On exit <span class="emphasis"><em>max_iter</em></span> is set to actual
-              number of function invocations used.
+              for the root. <br> On exit <span class="emphasis"><em>max_iter</em></span> is set to
+              actual number of function invocations used.
             </p></dd>
 </dl>
 </div>
@@ -487,10 +550,24 @@
         documentation for more details</a>.
       </p>
 <p>
-        toms748_solve returns: a pair of values <span class="emphasis"><em>r</em></span> that bracket
-        the root so that: f(r.first) * f(r.second) &lt;= 0 and either tol(r.first,
-        r.second) == true or max_iter &gt;= m where <span class="emphasis"><em>m</em></span> is the
-        initial value of <span class="emphasis"><em>max_iter</em></span> passed to the function.
+        <code class="computeroutput"><span class="identifier">toms748_solve</span></code> returns a pair
+        of values <span class="emphasis"><em>r</em></span> that bracket the root so that:
+      </p>
+<pre class="programlisting"><span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">)</span> <span class="special">*</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">&lt;=</span> <span class="number">0</span>
+</pre>
+<p>
+        and either
+      </p>
+<pre class="programlisting"><span class="identifier">tol</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">first</span><span class="special">,</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">second</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span>
+</pre>
+<p>
+        or
+      </p>
+<pre class="programlisting"><span class="identifier">max_iter</span> <span class="special">&gt;=</span> <span class="identifier">m</span>
+</pre>
+<p>
+        where <span class="emphasis"><em>m</em></span> is the initial value of <span class="emphasis"><em>max_iter</em></span>
+        passed to the function.
       </p>
 <p>
         In other words, it's up to the caller to verify whether termination occurred
@@ -508,13 +585,18 @@
 </pre>
 <p>
         <code class="computeroutput"><span class="identifier">eps_tolerance</span></code> is the usual
-        termination condition used with these root finding functions. Its operator()
+        termination condition used with these root-finding functions. Its <code class="computeroutput"><span class="keyword">operator</span><span class="special">()</span></code>
         will return true when the relative distance between <span class="emphasis"><em>a</em></span>
-        and <span class="emphasis"><em>b</em></span> is less than twice the machine epsilon for T,
-        or 2<sup>1-bits</sup>, whichever is the larger. In other words, you set <span class="emphasis"><em>bits</em></span>
-        to the number of bits of precision you want in the result. The minimal tolerance
-        of twice the machine epsilon of T is required to ensure that we get back
-        a bracketing interval: since this must clearly be at least 1 epsilon in size.
+        and <span class="emphasis"><em>b</em></span> is less than twice the <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine
+        epsilon</a> for T, or 2<sup>1-bits</sup>, whichever is the larger. In other words,
+        you set <span class="emphasis"><em>bits</em></span> to the number of bits of precision you
+        want in the result. The minimal tolerance of twice the <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine
+        epsilon</a> of <code class="computeroutput"><span class="identifier">T</span></code>, typically
+        <code class="computeroutput"><span class="number">2</span> <span class="special">*</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">epsilon</span></code>, is required to ensure that we
+        get back a bracketing interval &gt; zero, since this must clearly be at least
+        1 <a href="http://en.wikipedia.org/wiki/Machine_epsilon" target="_top">machine epsilon</a>
+        in size.
       </p>
 <pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">equal_floor</span>
 <span class="special">{</span>
