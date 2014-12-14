@@ -661,6 +661,7 @@ test_rational_instances/test_rational_real_concept5.cpp
 run test_real_concept.cpp ../../test/build//boost_unit_test_framework ;
 run test_remez.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_roots.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_root_finding_concepts.cpp ../../test/build//boost_unit_test_framework ;
 run test_round.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_spherical_harmonic.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_students_t.cpp ../../test/build//boost_unit_test_framework ;

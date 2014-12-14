@@ -36,9 +36,37 @@ namespace boost{ namespace math{ namespace tools{
 
 namespace detail{
 
+namespace dummy{
+
+   template<int n, class T>
+   typename T::value_type get(const T&);
+}
+
+template <class Tuple, class T>
+void unpack_tuple(const Tuple& t, T& a, T& b)
+{
+   using dummy::get;
+   // Use ADL to find the right overload for get:
+   a = get<0>(t);
+   b = get<1>(t);
+}
+template <class Tuple, class T>
+void unpack_tuple(const Tuple& t, T& a, T& b, T& c)
+{
+   using dummy::get;
+   // Use ADL to find the right overload for get:
+   a = get<0>(t);
+   b = get<1>(t);
+   c = get<2>(t);
+}
+
 template <class Tuple, class T>
 inline void unpack_0(const Tuple& t, T& val)
-{ val = boost::math::get<0>(t); }
+{
+   using dummy::get;
+   // Rely on ADL to find the correct overload of get:
+   val = get<0>(t); 
+}
 
 template <class F, class T>
 void handle_zero_derivative(F f,
@@ -99,9 +127,15 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter, c
    T fmin = f(min);
    T fmax = f(max);
    if(fmin == 0)
+   {
+      max_iter = 2;
       return std::make_pair(min, min);
+   }
    if(fmax == 0)
+   {
+      max_iter = 2;
       return std::make_pair(max, max);
+   }
 
    //
    // Error checking:
@@ -180,6 +214,7 @@ inline std::pair<T, T> bisect(F f, T min, T max, Tol tol)
    return bisect(f, min, max, tol, m, policies::policy<>());
 }
 
+
 template <class F, class T>
 T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
 {
@@ -199,7 +234,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
       last_f0 = f0;
       delta2 = delta1;
       delta1 = delta;
-      boost::math::tie(f0, f1) = f(result);
+      detail::unpack_tuple(f(result), f0, f1);
       if(0 == f0)
          break;
       if(f1 == 0)
@@ -294,7 +329,7 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
       last_f0 = f0;
       delta2 = delta1;
       delta1 = delta;
-      boost::math::tie(f0, f1, f2) = f(result);
+      detail::unpack_tuple(f(result), f0, f1, f2);
 
       BOOST_MATH_INSTRUMENT_VARIABLE(f0);
       BOOST_MATH_INSTRUMENT_VARIABLE(f1);
@@ -454,7 +489,7 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
       last_f0 = f0;
       delta2 = delta1;
       delta1 = delta;
-      boost::math::tie(f0, f1, f2) = f(result);
+      detail::unpack_tuple(f(result), f0, f1, f2);
       if(0 == f0)
          break;
       if((f1 == 0) && (f2 == 0))
