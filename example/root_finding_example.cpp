@@ -37,15 +37,8 @@ using boost::math::tools::eps_tolerance; // Binary functor for specified number 
 using boost::math::tools::bracket_and_solve_root;
 using boost::math::tools::toms748_solve;
 
-#include <boost/math/tools/tuple.hpp>
-// using boost::math::tuple;
-// using boost::math::make_tuple;
-// using boost::math::tie;
-// which provide convenient aliases for various implementations,
-// including std::tr1, depending on what is available.
+#include <tuple>
 #include <utility> // pair, make_pair
-
-#include <boost/math/special_functions/next.hpp>
 
 //] [/root_finding_headers]
 
@@ -265,13 +258,12 @@ struct cbrt_functor_2deriv
   }
 
   // using boost::math::tuple; // to return three values.
-  boost::math::tuple<T, T, T> operator()(T const& x)
+  std::tuple<T, T, T> operator()(T const& x)
   { // Return both f(x) and f'(x) and f''(x).
-    using boost::math::make_tuple;
     T fx = x*x*x - value; // Difference (estimate x^3 - value).
     T dx = 3 * x*x; // 1st derivative = 3x^2.
     T d2x = 6 * x; // 2nd derivative = 6x.
-    return make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
+    return std:: make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
   }
 private:
   T value; // to be 'cube_rooted'.

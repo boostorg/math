@@ -195,7 +195,7 @@ and the relation:
 [equation nc_beta_ref1]
 
 Quantiles are computed using a specially modified version of
-[link math_toolkit.internals1.roots2 bracket_and_solve_root],
+[link math_toolkit.roots2 bracket_and_solve_root],
 starting the search for the root at the mean of the distribution.
 (A Cornish-Fisher type expansion was also tried, but while this gets
 quite close to the root in many cases, when it is wrong it tends to

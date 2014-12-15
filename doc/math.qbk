@@ -94,8 +94,8 @@ and use the function's name as the link text.]
 [def __zero_error [link math_toolkit.relative_error.zero_error effectively zero error]]
 [def __relative_error [link math_toolkit.relative_error relative zero error]]
 [/ links to roots]
-[def __root_finding_with_derivatives [link math_toolkit.internals1.roots root-finding with derivatives]]
-[def __root_finding_without_derivatives [link math_toolkit.internals1.roots2 root-finding without derivatives]]
+[def __root_finding_with_derivatives [link math_toolkit.roots root-finding with derivatives]]
+[def __root_finding_without_derivatives [link math_toolkit.roots2 root-finding without derivatives]]
 [def __bisection [@http://en.wikipedia.org/wiki/Bisection_method  bisection]]
 [/gammas]
 [def __lgamma [link math_toolkit.sf_gamma.lgamma lgamma]]
@@ -547,6 +547,13 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include octonion/math-octonion.qbk]
 [include gcd/math-gcd.qbk]
 
+[mathpart roots Root Finding Algorithms]
+
+[include roots/roots.qbk]
+[include roots/roots_without_derivatives.qbk]
+
+[endmathpart]
+
 [mathpart toolkit Series, Rationals and Continued Fractions, Root Finding, Function Minimization, Testing, and Development Tools]
 
 [include internals/internals_overview.qbk]
@@ -555,8 +562,6 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include internals/series.qbk]
 [include internals/fraction.qbk]
 [include internals/rational.qbk]
-[include internals/roots.qbk]
-[include internals/roots_without_derivatives.qbk]
 [include internals/minima.qbk]
 [include internals/tuple.qbk]
 [endsect] [/section:internals1 Utilities]

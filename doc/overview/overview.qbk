@@ -66,8 +66,8 @@ rational approximations].
 There is a fairly comprehensive set of root finding and
 [link math_toolkit.internals1.minima function minimisation
 algorithms]: the root finding algorithms are both
-[link math_toolkit.internals1.roots with] and
-[link math_toolkit.internals1.roots2 without] derivative support.
+[link math_toolkit.roots with] and
+[link math_toolkit.roots2 without] derivative support.
 
 A [link math_toolkit.internals2.minimax
 Remez algorithm implementation] allows for the locating of minimax rational

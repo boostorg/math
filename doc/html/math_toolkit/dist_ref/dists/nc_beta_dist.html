@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Noncentral Beta Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.1.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="negative_binomial_dist.html" title="Negative Binomial Distribution">
@@ -31,12 +31,12 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span> <span class="special">=</span> <span class="keyword">double</span><span class="special">,</span>
-          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
+          <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;15.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a>   <span class="special">=</span> <a class="link" href="../../pol_ref/pol_ref_ref.html" title="Policy Class Reference">policies::policy&lt;&gt;</a> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_beta_distribution</span><span class="special">;</span>
 
 <span class="keyword">typedef</span> <span class="identifier">non_central_beta_distribution</span><span class="special">&lt;&gt;</span> <span class="identifier">non_central_beta</span><span class="special">;</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;14.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">RealType</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../../../policy.html" title="Chapter&#160;15.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">non_central_beta_distribution</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
@@ -387,7 +387,7 @@ is
           <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref1.png"></span>
         </p>
 <p>
-          Quantiles are computed using a specially modified version of <a class="link" href="../../internals1/roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748">bracket_and_solve_root</a>,
+          Quantiles are computed using a specially modified version of <a class="link" href="../../roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748">bracket_and_solve_root</a>,
           starting the search for the root at the mean of the distribution. (A Cornish-Fisher
           type expansion was also tried, but while this gets quite close to the root
           in many cases, when it is wrong it tends to introduce quite pathological

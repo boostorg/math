@@ -374,7 +374,7 @@ There are also various special cases: refer to the code for details. ]]
 [[quantile][Since the cdf is non-linear in variate /k/ none of the inverse
             incomplete beta functions can be used here.  Instead the quantile
             is found numerically using a derivative free method 
-            ([link math_toolkit.internals1.roots2 TOMS Algorithm 748]).]]
+            ([link math_toolkit.roots2 TOMS Algorithm 748]).]]
 [[quantile from the complement][Found numerically as above.]]
 [[mean][ `p * n` ]]
 [[variance][ `p * n * (1-p)` ]]
