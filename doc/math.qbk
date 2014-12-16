@@ -554,7 +554,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [endmathpart]
 
-[mathpart toolkit Series, Rationals and Continued Fractions, Root Finding, Function Minimization, Testing, and Development Tools]
+[mathpart toolkit Series, Rationals and Continued Fractions, Function Minimization, Testing, and Development Tools]
 
 [include internals/internals_overview.qbk]
 
