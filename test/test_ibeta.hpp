@@ -362,5 +362,21 @@ void test_spots(T)
          static_cast<T>(1),
          static_cast<T>(0.825L)),
       static_cast<T>(0.996883849270604867987018345952777458206564642094991979259788L), tolerance);
+
+   //
+   // Bug cases from Rocco Romeo:
+   //
+   BOOST_CHECK_CLOSE(
+      ::boost::math::beta(
+      static_cast<T>(2),
+      static_cast<T>(24),
+      ldexp(static_cast<T>(1), -52)),
+      static_cast<T>(2.46519032881565349871772482100516780410072110983579277754743e-32L), tolerance);
+   BOOST_CHECK_CLOSE(
+      ::boost::math::ibeta(
+      static_cast<T>(2),
+      static_cast<T>(24),
+      ldexp(static_cast<T>(1), -52)),
+      static_cast<T>(1.47911419728939209923063489260310068246043266590147566652846e-29L), tolerance);
 }
 

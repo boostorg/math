@@ -13,6 +13,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/special_functions/factorials.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/log1p.hpp>
@@ -845,15 +846,42 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
 // complement of the binomial distribution cdf and use this finite sum.
 //
 template <class T>
-inline T binomial_ccdf(T n, T k, T x, T y)
+T binomial_ccdf(T n, T k, T x, T y)
 {
    BOOST_MATH_STD_USING // ADL of std names
+
    T result = pow(x, n);
-   T term = result;
-   for(unsigned i = itrunc(T(n - 1)); i > k; --i)
+
+   if(result > tools::min_value<T>())
    {
-      term *= ((i + 1) * y) / ((n - i) * x) ;
-      result += term;
+      T term = result;
+      for(unsigned i = itrunc(T(n - 1)); i > k; --i)
+      {
+         term *= ((i + 1) * y) / ((n - i) * x);
+         result += term;
+      }
+   }
+   else
+   {
+      // First term underflows so we need to start at the mode of the
+      // distribution and work outwards:
+      int start = itrunc(n * x);
+      if(start <= k + 1)
+         start = itrunc(k + 2);
+      result = pow(x, start) * pow(y, n - start) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(start));
+      T term = result;
+      T start_term = result;
+      for(unsigned i = start - 1; i > k; --i)
+      {
+         term *= ((i + 1) * y) / ((n - i) * x);
+         result += term;
+      }
+      term = start_term;
+      for(unsigned i = start + 1; i <= n; ++i)
+      {
+         term *= (n - i + 1) * x / (i * y);
+         result += term;
+      }
    }
 
    return result;
