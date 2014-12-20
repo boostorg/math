@@ -14,6 +14,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
 
@@ -78,8 +79,9 @@ void do_test_ellint_pi2(T& data, const char* type_name, const char* test)
 template <typename T>
 void test_spots(T, const char* type_name)
 {
+    BOOST_MATH_STD_USING
     // function values calculated on http://functions.wolfram.com/
-    static const boost::array<boost::array<T, 4>, 25> data1 = {{
+    static const boost::array<boost::array<T, 4>, 29> data1 = {{
         {{ SC_(1.0), SC_(-1.0), SC_(0.0), SC_(-1.557407724654902230506974807458360173087) }},
         {{ SC_(0.0), SC_(-4.0), SC_(0.4), SC_(-4.153623371196831087495427530365430979011) }},
         {{ SC_(0.0), SC_(8.0), SC_(-0.6), SC_(8.935930619078575123490612395578518914416) }},
@@ -105,7 +107,12 @@ void test_spots(T, const char* type_name)
         {{ SC_(1.125), SC_(3.0), SC_(0.25), SC_(-0.142697285116693775525461312178015106079842313950476205580178) }},
         {{ T(257)/256, SC_(1.5), SC_(0.125), SC_(22.2699300473528164111357290313578126108398839810535700884237) }},
         {{ T(257)/256, SC_(21.5), SC_(0.125), SC_(-0.535406081652313940727588125663856894154526187713506526799429) }},
-    }};
+        // Bug cases from Rocco Romeo:
+        { { SC_(-1E-170), boost::math::constants::pi<T>() / 4, SC_(1E-164), SC_(0.785398163397448309615660845819875721049292349843776455243736) } },
+        { { SC_(-1E-170), boost::math::constants::pi<T>() / 4, SC_(-1E-164), SC_(0.785398163397448309615660845819875721049292349843776455243736) } },
+        { { -ldexp(T(1.0), -52), boost::math::constants::pi<T>() / 4, SC_(0.9375), SC_(0.866032844934895872810905364370384153285798081574191920571016) } },
+        { { -ldexp(T(1.0), -52), boost::math::constants::pi<T>() / 4, SC_(-0.9375), SC_(0.866032844934895872810905364370384153285798081574191920571016) } },
+    } };
 
     do_test_ellint_pi3<T>(data1, type_name, "Elliptic Integral PI: Mathworld Data");
 
@@ -118,7 +125,7 @@ void test_spots(T, const char* type_name)
     do_test_ellint_pi3<T>(ellint_pi3_large_data, type_name, "Elliptic Integral PI: Large Random Data");
 
     // function values calculated on http://functions.wolfram.com/
-    static const boost::array<boost::array<T, 3>, 9> data2 = {{
+    static const boost::array<boost::array<T, 3>, 14> data2 = {{
         {{ SC_(0.0), SC_(0.2), SC_(1.586867847454166237308008033828114192951) }},
         {{ SC_(0.0), SC_(0.4), SC_(1.639999865864511206865258329748601457626) }},
         {{ SC_(0.0), SC_(0.0), SC_(1.57079632679489661923132169163975144209858469968755291048747) }},
@@ -128,7 +135,13 @@ void test_spots(T, const char* type_name)
         {{ SC_(-1e+10), SC_(-0.75), SC_(0.0000157080225184890546939710019277357161497407143903832703317801) }},
         {{ T(1) / 1024, SC_(-0.875), SC_(2.18674503176462374414944618968850352696579451638002110619287) }},
         {{ T(1023)/1024, SC_(-0.875), SC_(101.045289804941384100960063898569538919135722087486350366997) }},
-    }};
+        // Bug cases from Rocco Romeo:
+        { { SC_(1e-175), T(0), SC_(1.57079632679489661923132169163975144209858469968755291048747) } },
+        { { SC_(1e-170), SC_(1E-164), SC_(1.57079632679489661923132169163975144209858469968755291048747) } },
+        { { SC_(1e-170), SC_(-1E-164), SC_(1.57079632679489661923132169163975144209858469968755291048747) } },
+        { { -1.5f * ldexp(T(1), -52), SC_(-0.9375), SC_(2.48840049140103464299631535211815755485846563527849342319632) } },
+        { { -1.5f * ldexp(T(1), -52), SC_(0.9375), SC_(2.48840049140103464299631535211815755485846563527849342319632) } },
+    } };
 
     do_test_ellint_pi2<T>(data2, type_name, "Complete Elliptic Integral PI: Mathworld Data");
 

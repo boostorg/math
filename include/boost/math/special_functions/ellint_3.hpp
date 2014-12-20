@@ -117,10 +117,25 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
        T Nm1 = (1 - k2) / (1 - v);
        T p2 = sqrt(-v * (k2 - v) / (1 - v));
        T delta = sqrt(1 - k2 * sphi * sphi);
-       T result = ellint_pi_imp(N, phi, k, Nm1, pol);
+       T result = 0;
+       if(N > k2)
+       {
+          result = ellint_pi_imp(N, phi, k, Nm1, pol);
+          result *= sqrt(Nm1 * (1 - k2 / N));
+       }
 
-       result *= sqrt(Nm1 * (1 - k2 / N));
-       result += ellint_f_imp(phi, k, pol) * k2 / p2;
+       if((k2 < tools::min_value<T>()) || (p2 < tools::min_value<T>()))
+       {
+          // We need to use logs to avoid divide by zero:
+          T t = 2 * log(fabs(k)) - (log(-v) + log(k2 - v) - log(1 - v)) / 2;
+          t = exp(t);
+          if(t != 0)
+             result += ellint_f_imp(phi, k, pol) * t;
+       }
+       else
+       {
+          result += ellint_f_imp(phi, k, pol) * k2 / p2;
+       }
        result += atan((p2/2) * sin(2 * phi) / delta);
        result /= sqrt((1 - v) * (1 - k2 / v));
        return result;
@@ -248,11 +263,34 @@ T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
        T N = (k2 - v) / (1 - v);
        T Nm1 = (1 - k2) / (1 - v);
        T p2 = sqrt(-v * (k2 - v) / (1 - v));
+       T result = 0;
+       if(k2 < N)
+       {
+          result = boost::math::detail::ellint_pi_imp(N, k, Nm1, pol);
+          result *= sqrt(Nm1 * (1 - k2 / N));
+       }
+       /* else result = 0;
+          Result so far must be zero if k^2/N == 1, note that
+          since k^2 <= 1 it is necessarily true that k^2/N <= 1
+          even though slight roundoff error may actually yield
+          values > 1
+          */
 
-       T result = boost::math::detail::ellint_pi_imp(N, k, Nm1, pol);
-
-       result *= sqrt(Nm1 * (1 - k2 / N));
-       result += ellint_k_imp(k, pol) * k2 / p2;
+       if(k != 0)
+       {
+          if((k2 <= tools::min_value<T>()) || (p2 <= tools::min_value<T>()))
+          {
+             // We need to use logs to calculate k2 / p2:
+             T lk2 = 2 * log(fabs(k)) - (log(-v) + log(k2 - v) - log(1 - v)) / 2;
+             lk2 = exp(lk2);
+             if(lk2 != 0)
+               result += ellint_k_imp(k, pol) * lk2;
+          }
+          else
+          {
+             result += ellint_k_imp(k, pol) * k2 / p2;
+          }
+       }
        result /= sqrt((1 - v) * (1 - k2 / v));
        return result;
     }
