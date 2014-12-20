@@ -1063,8 +1063,31 @@ T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
       {
          result = gamma_incomplete_imp(a, x, true, invert, pol, p_derivative);
          if(result == 0)
-            return policies::raise_evaluation_error<T>(function, "Obtained %1% for the incomplete gamma function, but in truth we don't really know what the answer is...", result, pol);
-         result = log(result) + boost::math::lgamma(a, pol);
+         {
+            if(invert)
+            {
+               // Try http://functions.wolfram.com/06.06.06.0039.01
+               result = 1 + 1 / (12 * a) + 1 / (288 * a * a);
+               result = log(result) - a + (a - 0.5f) * log(a) + log(boost::math::constants::root_two_pi<T>());
+               if(p_derivative)
+                  *p_derivative = exp(a * log(x) - x);
+            }
+            else
+            {
+               // This is method 2 below, done in logs, we're really outside the
+               // range of this method, but since the result is almost certainly
+               // infinite, we should probably be OK:
+               result = a * log(x) - x;
+               if(p_derivative)
+                  *p_derivative = exp(result);
+               T init_value = 0;
+               result += log(detail::lower_gamma_series(a, x, pol, init_value) / a);
+            }
+         }
+         else
+         {
+            result = log(result) + boost::math::lgamma(a, pol);
+         }
       }
       if(result > tools::log_max_value<T>())
          return policies::raise_overflow_error<T>(function, 0, pol);
