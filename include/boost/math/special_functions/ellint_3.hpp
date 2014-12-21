@@ -259,39 +259,14 @@ T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 
     if(v < 0)
     {
+       // Apply A&S 17.7.17:
        T k2 = k * k;
        T N = (k2 - v) / (1 - v);
        T Nm1 = (1 - k2) / (1 - v);
-       T p2 = sqrt(-v * (k2 - v) / (1 - v));
        T result = 0;
-       if(k2 < N)
-       {
-          result = boost::math::detail::ellint_pi_imp(N, k, Nm1, pol);
-          result *= sqrt(Nm1 * (1 - k2 / N));
-       }
-       /* else result = 0;
-          Result so far must be zero if k^2/N == 1, note that
-          since k^2 <= 1 it is necessarily true that k^2/N <= 1
-          even though slight roundoff error may actually yield
-          values > 1
-          */
-
-       if(k != 0)
-       {
-          if((k2 <= tools::min_value<T>()) || (p2 <= tools::min_value<T>()))
-          {
-             // We need to use logs to calculate k2 / p2:
-             T lk2 = 2 * log(fabs(k)) - (log(-v) + log(k2 - v) - log(1 - v)) / 2;
-             lk2 = exp(lk2);
-             if(lk2 != 0)
-               result += ellint_k_imp(k, pol) * lk2;
-          }
-          else
-          {
-             result += ellint_k_imp(k, pol) * k2 / p2;
-          }
-       }
-       result /= sqrt((1 - v) * (1 - k2 / v));
+       result = boost::math::detail::ellint_pi_imp(N, k, Nm1, pol);
+       result *= -v * (1 - k2) / ((1 - v) * (k2 - v));
+       result += ellint_k_imp(k, pol) * k2 / (k2 - v);
        return result;
     }
 
