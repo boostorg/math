@@ -145,6 +145,12 @@ namespace boost
    typename tools::promote_args<RT1, RT2, RT3>::type
          ibeta_derivative(RT1 a, RT2 b, RT3 x, const Policy& pol);  // derivative of incomplete beta
 
+   // Binomial:
+   template <class T, class Policy>
+   T binomial_coefficient(unsigned n, unsigned k, const Policy& pol);
+   template <class T>
+   T binomial_coefficient(unsigned n, unsigned k);
+
    // erf & erfc error functions.
    template <class RT> // Error function.
    typename tools::promote_args<RT>::type erf(RT z);
@@ -1065,6 +1071,8 @@ namespace boost
    template <class RT1, class RT2, class RT3>\
    inline typename boost::math::tools::promote_args<RT1, RT2, RT3>::type \
    ibeta_derivative(RT1 a, RT2 b, RT3 x){ return ::boost::math::ibeta_derivative(a, b, x, Policy()); }\
+\
+   template <class T> T binomial_coefficient(unsigned n, unsigned k){ return ::boost::math::binomial_coefficient<T, Policy>(n, k, Policy()); }\
 \
    template <class RT>\
    inline typename boost::math::tools::promote_args<RT>::type erf(RT z) { return ::boost::math::erf(z, Policy()); }\
