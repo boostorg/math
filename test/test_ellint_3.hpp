@@ -125,7 +125,7 @@ void test_spots(T, const char* type_name)
     do_test_ellint_pi3<T>(ellint_pi3_large_data, type_name, "Elliptic Integral PI: Large Random Data");
 
     // function values calculated on http://functions.wolfram.com/
-    static const boost::array<boost::array<T, 3>, 16> data2 = {{
+    static const boost::array<boost::array<T, 3>, 17> data2 = {{
         {{ SC_(0.0), SC_(0.2), SC_(1.586867847454166237308008033828114192951) }},
         {{ SC_(0.0), SC_(0.4), SC_(1.639999865864511206865258329748601457626) }},
         {{ SC_(0.0), SC_(0.0), SC_(1.57079632679489661923132169163975144209858469968755291048747) }},
@@ -143,6 +143,7 @@ void test_spots(T, const char* type_name)
         { { -1.5f * ldexp(T(1), -52), SC_(0.9375), SC_(2.48840049140103464299631535211815755485846563527849342319632) } },
         { { ldexp(T(1), -560), ldexp(T(1), -165), SC_(1.57079632679489661923132169163975144209858469968756130722545) } },
         { { ldexp(T(1), -560), -ldexp(T(1), -165), SC_(1.57079632679489661923132169163975144209858469968754451374949) } },
+        { { std::numeric_limits<T>::max_exponent > 600 ? -ldexp(T(1), 600) : 0, SC_(0.5), std::numeric_limits<T>::max_exponent > 600 ? SC_(7.71118598318249916481121898327895181916104121635240801895419e-91) : SC_(1.68575035481259604287120365779907698950080089414108904411995) } },
     } };
 
     do_test_ellint_pi2<T>(data2, type_name, "Complete Elliptic Integral PI: Mathworld Data");

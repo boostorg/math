@@ -265,7 +265,9 @@ T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
        T Nm1 = (1 - k2) / (1 - v);
        T result = 0;
        result = boost::math::detail::ellint_pi_imp(N, k, Nm1, pol);
-       result *= -v * (1 - k2) / ((1 - v) * (k2 - v));
+       // This next part is split in two to avoid spurious over/underflow:
+       result *= -v / (1 - v);
+       result *= (1 - k2) / (k2 - v);
        result += ellint_k_imp(k, pol) * k2 / (k2 - v);
        return result;
     }
