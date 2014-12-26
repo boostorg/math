@@ -24,6 +24,7 @@
 #include <boost/math/special_functions/ellint_1.hpp>
 #include <boost/math/special_functions/ellint_2.hpp>
 #include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/special_functions/atanh.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/workaround.hpp>
@@ -55,6 +56,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
    }
 
    T sphi = sin(fabs(phi));
+   T result = 0;
 
    if(v > 1 / (sphi * sphi))
    {
@@ -69,6 +71,15 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
       // A&S 17.7.18 & 19
       return (k == 0) ? phi : ellint_f_imp(phi, k, pol);
    }
+   if(v == 1)
+   {
+      // http://functions.wolfram.com/08.06.03.0008.01
+      T m = k * k;
+      result = sqrt(1 - m * sphi * sphi) * tan(phi) - ellint_e_imp(phi, k, pol);
+      result /= 1 - m;
+      result += ellint_f_imp(phi, k, pol);
+      return result;
+   }
    if(phi == constants::half_pi<T>())
    {
       // Have to filter this case out before the next
@@ -80,7 +91,6 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
       //
       return ellint_pi_imp(v, k, vc, pol);
    }
-   T result = 0;
    if((phi > constants::half_pi<T>()) || (phi < 0))
    {
       // Carlson's algorithm works only for |phi| <= pi/2,
@@ -109,6 +119,10 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
          T rphi = boost::math::tools::fmod_workaround(T(fabs(phi)), T(constants::half_pi<T>()));
          T m = boost::math::round((fabs(phi) - rphi) / constants::half_pi<T>());
          int sign = 1;
+         if((m != 0) && (k >= 1))
+         {
+            return policies::raise_domain_error<T>(function, "Got k=1 and phi=%1% but the result is complex in that domain", phi, pol);
+         }
          if(boost::math::tools::fmod_workaround(m, T(2)) > 0.5)
          {
             m += 1;
@@ -193,6 +207,13 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
          return (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * vcr);
       }
    }
+   if(k == 1)
+   {
+      // See http://functions.wolfram.com/08.06.03.0013.01
+      result = sqrt(v) * atanh(sqrt(v) * sin(phi)) - log(1 / cos(phi) + tan(phi));
+      result /= v - 1;
+      return result;
+   }
 #if 0  // disabled but retained for future reference: see below.
    if(v > 1)
    {
@@ -231,7 +252,7 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
    // normalised above.
    //
    BOOST_ASSERT(fabs(phi) < constants::half_pi<T>());
-   BOOST_ASSERT(phi > 0);
+   BOOST_ASSERT(phi >= 0);
    T x, y, z, p, t;
    T cosp = cos(phi);
    x = cosp * cosp;
