@@ -145,7 +145,11 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
       T k2 = k * k;
       T N = (k2 - v) / (1 - v);
       T Nm1 = (1 - k2) / (1 - v);
-      T p2 = sqrt(-v * N);
+      T p2 = -v * N;
+      if(p2 <= tools::min_value<T>())
+         p2 = sqrt(-v) * sqrt(N);
+      else
+         p2 = sqrt(p2);
       T delta = sqrt(1 - k2 * sphi * sphi);
       if(N > k2)
       {

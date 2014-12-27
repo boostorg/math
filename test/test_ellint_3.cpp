@@ -69,7 +69,7 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*Mathworld.*",      // test data group
-      ".*", 100, 50);  // test function
+      ".*", 600, 200);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
