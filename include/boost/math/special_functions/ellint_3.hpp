@@ -140,12 +140,27 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
       //
       // If we don't shift to 0 <= v <= 1 we get
       // cancellation errors later on.  Use
-      // A&S 17.7.15/16 to shift to v > 0:
+      // A&S 17.7.15/16 to shift to v > 0.
+      //
+      // Mathematica simplifies the expressions
+      // given in A&S as follows (with thanks to
+      // Rocco Romeo for figuring these out!):
+      //
+      // V = (k2 - n)/(1 - n)
+      // Assuming[(k2 >= 0 && k2 <= 1) && n < 0, FullSimplify[Sqrt[(1 - V)*(1 - k2 / V)] / Sqrt[((1 - n)*(1 - k2 / n))]]]
+      // Result: ((-1 + k2) n) / ((-1 + n) (-k2 + n))
+      //
+      // Assuming[(k2 >= 0 && k2 <= 1) && n < 0, FullSimplify[k2 / (Sqrt[-n*(k2 - n) / (1 - n)] * Sqrt[(1 - n)*(1 - k2 / n)])]]
+      // Result : k2 / (k2 - n)
+      //
+      // Assuming[(k2 >= 0 && k2 <= 1) && n < 0, FullSimplify[Sqrt[1 / ((1 - n)*(1 - k2 / n))]]]
+      // Result : Sqrt[n / ((k2 - n) (-1 + n))]
       //
       T k2 = k * k;
       T N = (k2 - v) / (1 - v);
       T Nm1 = (1 - k2) / (1 - v);
       T p2 = -v * N;
+      T t;
       if(p2 <= tools::min_value<T>())
          p2 = sqrt(-v) * sqrt(N);
       else
@@ -154,41 +169,25 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
       if(N > k2)
       {
          result = ellint_pi_imp(N, phi, k, Nm1, pol);
-         BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         result *= sqrt(Nm1 * (1 - k2 / N));
-         BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         result *= v / (v - 1);
+         result *= (k2 - 1) / (v - k2);
       }
 
       if(k != 0)
       {
-         if((k2 < tools::min_value<T>()) || (p2 < tools::min_value<T>()))
-         {
-            // We need to use logs to avoid multiply/divide by zero:
-            T t = 2 * log(fabs(k)) - (log(-v) + log(k2 - v) - log(1 - v)) / 2;
-            BOOST_MATH_INSTRUMENT_VARIABLE(t);
-            t = exp(t);
-            if(t != 0)
-               result += ellint_f_imp(phi, k, pol) * t;
-            BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         }
-         else
-         {
-            T t = ellint_f_imp(phi, k, pol);
-            // multiply by k^2 and divide by p2, but in the right order:
-            if(p2 < 1)
-               t *= (k2 / p2);
-            else
-            {
-               t *= k2;
-               t /= p2;
-            }
-            result += t;
-         }
+         t = ellint_f_imp(phi, k, pol);
+         t *= k2 / (k2 - v);
+         result += t;
       }
-      result += atan((p2 / 2) * sin(2 * phi) / delta);
-      BOOST_MATH_INSTRUMENT_VARIABLE(result);
-      result /= sqrt((1 - v) * (1 - k2 / v));
-      BOOST_MATH_INSTRUMENT_VARIABLE(result);
+      t = v / ((k2 - v) * (v - 1));
+      if(t > tools::min_value<T>())
+      {
+         result += atan((p2 / 2) * sin(2 * phi) / delta) * sqrt(t);
+      }
+      else
+      {
+         result += atan((p2 / 2) * sin(2 * phi) / delta) * sqrt(fabs(1 / (k2 - v))) * sqrt(fabs(v / (v - 1)));
+      }
       return result;
    }
    if(k == 0)
