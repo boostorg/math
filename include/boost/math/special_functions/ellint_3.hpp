@@ -135,6 +135,26 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
       }
       return phi < 0 ? -result : result;
    }
+   if(k == 0)
+   {
+      // A&S 17.7.20:
+      if(v < 1)
+      {
+         T vcr = sqrt(vc);
+         return atan(vcr * tan(phi)) / vcr;
+      }
+      else if(v == 1)
+      {
+         return tan(phi);
+      }
+      else
+      {
+         // v > 1:
+         T vcr = sqrt(-vc);
+         T arg = vcr * tan(phi);
+         return (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * vcr);
+      }
+   }
    if(v < 0)
    {
       //
@@ -189,26 +209,6 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
          result += atan((p2 / 2) * sin(2 * phi) / delta) * sqrt(fabs(1 / (k2 - v))) * sqrt(fabs(v / (v - 1)));
       }
       return result;
-   }
-   if(k == 0)
-   {
-      // A&S 17.7.20:
-      if(v < 1)
-      {
-         T vcr = sqrt(vc);
-         return atan(vcr * tan(phi)) / vcr;
-      }
-      else if(v == 1)
-      {
-         return tan(phi);
-      }
-      else
-      {
-         // v > 1:
-         T vcr = sqrt(-vc);
-         T arg = vcr * tan(phi);
-         return (boost::math::log1p(arg, pol) - boost::math::log1p(-arg, pol)) / (2 * vcr);
-      }
    }
    if(k == 1)
    {
