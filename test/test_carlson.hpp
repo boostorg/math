@@ -131,14 +131,14 @@ void test_spots(T, const char* type_name)
    // Elliptic Integrals, B. C. Carlson: http://arxiv.org/abs/math.CA/9409227
    // RF:
    T tolerance = (std::max)(T(1e-13f), tools::epsilon<T>() * 5) * 100; // Note 5eps expressed as a persentage!!!
-   T eps2 = 2 * tools::epsilon<T>();
+   T eps2 = 5 * tools::epsilon<T>();
    BOOST_CHECK_CLOSE(ellint_rf(T(1), T(2), T(0)), T(1.3110287771461), tolerance);
    BOOST_CHECK_CLOSE(ellint_rf(T(0.5), T(1), T(0)), T(1.8540746773014), tolerance);
    BOOST_CHECK_CLOSE(ellint_rf(T(2), T(3), T(4)), T(0.58408284167715), tolerance);
    // RC:
    BOOST_CHECK_CLOSE_FRACTION(ellint_rc(T(0), T(1)/4), boost::math::constants::pi<T>(), eps2);
-   BOOST_CHECK_CLOSE_FRACTION(ellint_rc(T(9)/4, T(2)), log(T(2)), eps2);
-   BOOST_CHECK_CLOSE_FRACTION(ellint_rc(T(1)/4, T(-2)), log(T(2))/3, eps2);
+   BOOST_CHECK_CLOSE_FRACTION(ellint_rc(T(9)/4, T(2)), boost::math::constants::ln_two<T>(), eps2);
+   BOOST_CHECK_CLOSE_FRACTION(ellint_rc(T(1) / 4, T(-2)), boost::math::constants::ln_two<T>() / 3, eps2);
    // RJ:
    BOOST_CHECK_CLOSE(ellint_rj(T(0), T(1), T(2), T(3)), T(0.77688623778582), tolerance);
    BOOST_CHECK_CLOSE(ellint_rj(T(2), T(3), T(4), T(5)), T(0.14297579667157), tolerance);

@@ -27,82 +27,68 @@
 
 namespace boost { namespace math { namespace detail{
 
-template <typename T, typename Policy>
-T ellint_rf_imp(T x, T y, T z, const Policy& pol)
-{
-    T value, X, Y, Z, E2, E3, u, lambda, tolerance;
-    unsigned long k;
+   template <typename T, typename Policy>
+   T ellint_rf_imp(T x, T y, T z, const Policy& pol)
+   {
+      BOOST_MATH_STD_USING
+      using namespace boost::math;
 
-    BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
+      static const char* function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
 
-    static const char* function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
-
-    if (x < 0 || y < 0 || z < 0)
-    {
-       return policies::raise_domain_error<T>(function,
+      if(x < 0 || y < 0 || z < 0)
+      {
+         return policies::raise_domain_error<T>(function,
             "domain error, all arguments must be non-negative, "
             "only sensible result is %1%.",
             std::numeric_limits<T>::quiet_NaN(), pol);
-    }
-    if (x + y == 0 || y + z == 0 || z + x == 0)
-    {
-       return policies::raise_domain_error<T>(function,
+      }
+      if(x + y == 0 || y + z == 0 || z + x == 0)
+      {
+         return policies::raise_domain_error<T>(function,
             "domain error, at most one argument can be zero, "
             "only sensible result is %1%.",
             std::numeric_limits<T>::quiet_NaN(), pol);
-    }
+      }
 
-    // Carlson scales error as the 6th power of tolerance,
-    // but this seems not to work for types larger than
-    // 80-bit reals, this heuristic seems to work OK:
-    if(policies::digits<T, Policy>() > 64)
-    {
-      tolerance = pow(tools::epsilon<T>(), T(1)/4.25f);
-      BOOST_MATH_INSTRUMENT_VARIABLE(tolerance);
-    }
-    else
-    {
-      tolerance = pow(4*tools::epsilon<T>(), T(1)/6);
-      BOOST_MATH_INSTRUMENT_VARIABLE(tolerance);
-    }
+      T xn = x;
+      T yn = y;
+      T zn = z;
+      T An = (x + y + z) / 3;
+      T A0 = An;
+      T Q = pow(3 * boost::math::tools::epsilon<T>(), T(-1) / 8) * (std::max)((std::max)(fabs(An - xn), fabs(An - yn)), fabs(An - zn));
+      T fn = 1;
 
-    // duplication
-    k = 1;
-    do
-    {
-        u = (x + y + z) / 3;
-        X = (u - x) / u;
-        Y = (u - y) / u;
-        Z = (u - z) / u;
 
-        // Termination condition: 
-        if ((tools::max)(abs(X), abs(Y), abs(Z)) < tolerance) 
-           break; 
+      // duplication
+      unsigned k = 1;
+      for(; k < boost::math::policies::get_max_series_iterations<Policy>(); ++k)
+      {
+         T root_x = sqrt(xn);
+         T root_y = sqrt(yn);
+         T root_z = sqrt(zn);
+         T lambda = root_x * root_y + root_x * root_z + root_y * root_z;
+         An = (An + lambda) / 4;
+         xn = (xn + lambda) / 4;
+         yn = (yn + lambda) / 4;
+         zn = (zn + lambda) / 4;
+         Q /= 4;
+         fn *= 4;
+         if(Q < fabs(An))
+            break;
+      }
+      // Check to see if we gave up too soon:
+      policies::check_series_iterations<T>(function, k, pol);
+      BOOST_MATH_INSTRUMENT_VARIABLE(k);
 
-        T sx = sqrt(x);
-        T sy = sqrt(y);
-        T sz = sqrt(z);
-        lambda = sy * (sx + sz) + sz * sx;
-        x = (x + lambda) / 4;
-        y = (y + lambda) / 4;
-        z = (z + lambda) / 4;
-        ++k;
-    }
-    while(k < policies::get_max_series_iterations<Policy>());
+      T X = (A0 - x) / (An * fn);
+      T Y = (A0 - y) / (An * fn);
+      T Z = -X - Y;
 
-    // Check to see if we gave up too soon:
-    policies::check_series_iterations<T>(function, k, pol);
-    BOOST_MATH_INSTRUMENT_VARIABLE(k);
-
-    // Taylor series expansion to the 5th order
-    E2 = X * Y - Z * Z;
-    E3 = X * Y * Z;
-    value = (1 + E2*(E2/24 - E3*T(3)/44 - T(0.1)) + E3/14) / sqrt(u);
-    BOOST_MATH_INSTRUMENT_VARIABLE(value);
-
-    return value;
-}
+      // Taylor series expansion to the 7th order
+      T E2 = X * Y - Z * Z;
+      T E3 = X * Y * Z;
+      return (1 + E3 * (T(1) / 14 + 3 * E3 / 104) + E2 * (T(-1) / 10 + E2 / 24 - (3 * E3) / 44 - 5 * E2 * E2 / 208 + E2 * E3 / 16)) / sqrt(An);
+   }
 
 } // namespace detail
 

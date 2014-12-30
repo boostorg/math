@@ -81,14 +81,14 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       ".*RJ.*",      // test data group
-      ".*", 180, 50);  // test function
+      ".*", 250, 50);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                  // test type(s)
       ".*RJ.*",      // test data group
-      ".*", 180, 50);  // test function
+      ".*", 250, 50);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
