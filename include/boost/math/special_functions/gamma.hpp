@@ -88,10 +88,6 @@ T sinpx(T z)
    {
       z = -z;
    }
-   else
-   {
-      sign = -sign;
-   }
    T fl = floor(z);
    T dist;
    if(is_odd(fl))
