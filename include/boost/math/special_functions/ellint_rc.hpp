@@ -21,6 +21,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <iostream>
 
 // Carlson's degenerate elliptic integral

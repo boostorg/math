@@ -210,6 +210,22 @@ void test_spots(T, const char* type_name)
 
    do_test_ellint_rj<T>(ellint_rj_data, type_name, "RJ: Random data");
 
+#include "ellint_rj_e4.ipp"
+
+   do_test_ellint_rj<T>(ellint_rj_e4, type_name, "RJ: 4 Equal Values");
+
+#include "ellint_rj_e3.ipp"
+
+   do_test_ellint_rj<T>(ellint_rj_e3, type_name, "RJ: 3 Equal Values");
+
+#include "ellint_rj_e2.ipp"
+
+   do_test_ellint_rj<T>(ellint_rj_e2, type_name, "RJ: 2 Equal Values");
+
+#include "ellint_rj_zp.ipp"
+
+   do_test_ellint_rj<T>(ellint_rj_zp, type_name, "RJ: Equal z and p");
+
 #include "ellint_rd_data.ipp"
 
    do_test_ellint_rd<T>(ellint_rd_data, type_name, "RD: Random data");
