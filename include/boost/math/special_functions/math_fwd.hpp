@@ -27,6 +27,7 @@
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/policies/policy.hpp>
 #include <boost/mpl/comparison.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/config/no_tr1/complex.hpp>
 
 #define BOOST_NO_MACRO_EXPAND /**/
@@ -182,7 +183,7 @@ namespace boost
          legendre_p(int l, T x);
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type
+   typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
          legendre_p(int l, T x, const Policy& pol);
 
    template <class T>
@@ -190,7 +191,7 @@ namespace boost
          legendre_q(unsigned l, T x);
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type
+   typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
          legendre_q(unsigned l, T x, const Policy& pol);
 
    template <class T1, class T2, class T3>
