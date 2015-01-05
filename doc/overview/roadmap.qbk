@@ -9,6 +9,11 @@ All bug reports including closed ones can be viewed
 [h4 Math-2.2.0]
 
 * Added two new special functions - __trigamma and __polygamma.
+* Fixed namespace scope constants so they are constexpr on conforming compilers, see https://svn.boost.org/trac/boost/ticket/10901.
+* Fixed various cases of spurious under/overflow in the incomplete beta and gamma functions, plus the elliptic integrals,
+with thanks to Rocco Romeo.
+* Fix 3-arg __legendre_p and __legendre_q functions to not call the policy based overload if the final argument
+is not actually a policy.
 
 [h4 Math-2.1.0 (boost-1.57.0)]
 
