@@ -58,6 +58,10 @@ constexpr float fval = boost::math::constants::pi<float>();
 constexpr double dval = boost::math::constants::pi<double>();
 constexpr long double ldval = boost::math::constants::pi<long double>();
 
+constexpr float fval2 = boost::math::float_constants::pi;
+constexpr double dval2 = boost::math::double_constants::pi;
+constexpr long double ldval2 = boost::math::long_double_constants::pi;
+
 #endif
 
 // We need to declare a conceptual type whose precision is unknown at
