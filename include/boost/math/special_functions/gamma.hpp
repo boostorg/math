@@ -1604,8 +1604,14 @@ T gamma_p_derivative_imp(T a, T x, const Policy& pol)
       // overflow:
       return policies::raise_overflow_error<T>("boost::math::gamma_p_derivative<%1%>(%1%, %1%)", 0, pol);
    }
-
-   f1 /= x;
+   if(f1 == 0)
+   {
+      // Underflow in calculation, use logs instead:
+      f1 = a * log(x) - x - lgamma(a, pol) - log(x);
+      f1 = exp(f1);
+   }
+   else
+      f1 /= x;
 
    return f1;
 }
