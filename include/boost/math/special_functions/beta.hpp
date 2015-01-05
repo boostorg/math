@@ -869,18 +869,30 @@ T binomial_ccdf(T n, T k, T x, T y)
       if(start <= k + 1)
          start = itrunc(k + 2);
       result = pow(x, start) * pow(y, n - start) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(start));
-      T term = result;
-      T start_term = result;
-      for(unsigned i = start - 1; i > k; --i)
+      if(result == 0)
       {
-         term *= ((i + 1) * y) / ((n - i) * x);
-         result += term;
+         // OK, starting slightly above the mode didn't work, 
+         // we'll have to sum the terms the old fashioned way:
+         for(unsigned i = start - 1; i > k; --i)
+         {
+            result += pow(x, i) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i));
+         }
       }
-      term = start_term;
-      for(unsigned i = start + 1; i <= n; ++i)
+      else
       {
-         term *= (n - i + 1) * x / (i * y);
-         result += term;
+         T term = result;
+         T start_term = result;
+         for(unsigned i = start - 1; i > k; --i)
+         {
+            term *= ((i + 1) * y) / ((n - i) * x);
+            result += term;
+         }
+         term = start_term;
+         for(unsigned i = start + 1; i <= n; ++i)
+         {
+            term *= (n - i + 1) * x / (i * y);
+            result += term;
+         }
       }
    }
 
