@@ -875,7 +875,7 @@ T binomial_ccdf(T n, T k, T x, T y)
          // we'll have to sum the terms the old fashioned way:
          for(unsigned i = start - 1; i > k; --i)
          {
-            result += pow(x, i) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i));
+            result += pow(x, (int)i) * pow(y, n - i) * boost::math::binomial_coefficient<T>(itrunc(n), itrunc(i));
          }
       }
       else

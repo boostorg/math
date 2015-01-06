@@ -1579,6 +1579,7 @@ T tgamma_ratio_imp(T x, T y, const Policy& pol)
 template <class T, class Policy>
 T gamma_p_derivative_imp(T a, T x, const Policy& pol)
 {
+   BOOST_MATH_STD_USING
    //
    // Usual error checks first:
    //
