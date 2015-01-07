@@ -72,7 +72,7 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
       }
       else
       {
-         3 * (ellint_rc_imp(x, y, pol) - sqrt(x) / y) / (2 * (y - x));
+         return 3 * (ellint_rc_imp(x, y, pol) - sqrt(x) / y) / (2 * (y - x));
       }
    }
    if(x == y)
