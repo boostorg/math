@@ -229,5 +229,21 @@ void test_spots(T, const char* type_name)
 #include "ellint_rd_data.ipp"
 
    do_test_ellint_rd<T>(ellint_rd_data, type_name, "RD: Random data");
+
+#include "ellint_rd_xyy.ipp"
+
+   do_test_ellint_rd<T>(ellint_rd_xyy, type_name, "RD: y = z");
+
+#include "ellint_rd_xxz.ipp"
+
+   do_test_ellint_rd<T>(ellint_rd_xxz, type_name, "RD: x = y");
+
+#include "ellint_rd_0yy.ipp"
+
+   do_test_ellint_rd<T>(ellint_rd_0yy, type_name, "RD: x = 0, y = z");
+
+#include "ellint_rd_xxx.ipp"
+
+   do_test_ellint_rd<T>(ellint_rd_xxx, type_name, "RD: x = y = z");
 }
 

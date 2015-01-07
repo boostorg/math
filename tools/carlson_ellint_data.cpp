@@ -146,6 +146,83 @@ T ellint_rj_old(T x, T y, T z, T p, const Policy& pol)
    return value;
 }
 
+template <typename T, typename Policy>
+T ellint_rd_imp_old(T x, T y, T z, const Policy& pol)
+{
+   T value, u, lambda, sigma, factor, tolerance;
+   T X, Y, Z, EA, EB, EC, ED, EE, S1, S2;
+   unsigned long k;
+
+   BOOST_MATH_STD_USING
+   using namespace boost::math;
+
+   static const char* function = "boost::math::ellint_rd<%1%>(%1%,%1%,%1%)";
+
+   if(x < 0)
+   {
+      return policies::raise_domain_error<T>(function,
+         "Argument x must be >= 0, but got %1%", x, pol);
+   }
+   if(y < 0)
+   {
+      return policies::raise_domain_error<T>(function,
+         "Argument y must be >= 0, but got %1%", y, pol);
+   }
+   if(z <= 0)
+   {
+      return policies::raise_domain_error<T>(function,
+         "Argument z must be > 0, but got %1%", z, pol);
+   }
+   if(x + y == 0)
+   {
+      return policies::raise_domain_error<T>(function,
+         "At most one argument can be zero, but got, x + y = %1%", x + y, pol);
+   }
+
+   // error scales as the 6th power of tolerance
+   tolerance = pow(tools::epsilon<T>() / 3, T(1) / 6);
+
+   // duplication
+   sigma = 0;
+   factor = 1;
+   k = 1;
+   do
+   {
+      u = (x + y + z + z + z) / 5;
+      X = (u - x) / u;
+      Y = (u - y) / u;
+      Z = (u - z) / u;
+      if((tools::max)(abs(X), abs(Y), abs(Z)) < tolerance)
+         break;
+      T sx = sqrt(x);
+      T sy = sqrt(y);
+      T sz = sqrt(z);
+      lambda = sy * (sx + sz) + sz * sx; //sqrt(x * y) + sqrt(y * z) + sqrt(z * x);
+      sigma += factor / (sz * (z + lambda));
+      factor /= 4;
+      x = (x + lambda) / 4;
+      y = (y + lambda) / 4;
+      z = (z + lambda) / 4;
+      ++k;
+   } while(k < policies::get_max_series_iterations<Policy>());
+
+   // Check to see if we gave up too soon:
+   policies::check_series_iterations<T>(function, k, pol);
+
+   // Taylor series expansion to the 5th order
+   EA = X * Y;
+   EB = Z * Z;
+   EC = EA - EB;
+   ED = EA - 6 * EB;
+   EE = ED + EC + EC;
+   S1 = ED * (ED * T(9) / 88 - Z * EE * T(9) / 52 - T(3) / 14);
+   S2 = Z * (EE / 6 + Z * (-EC * T(9) / 22 + Z * EA * T(3) / 26));
+   value = 3 * sigma + factor * (1 + S1 + S2) / (u * sqrt(u));
+
+   return value;
+}
+
+
 boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rj_data_4e(mp_t n)
 {
    mp_t result = ellint_rj_old(n, n, n, n, boost::math::policies::policy<>());
@@ -180,6 +257,30 @@ boost::math::tuple<mp_t, mp_t, mp_t, mp_t, mp_t> generate_rj_data_2e_4(mp_t x, m
 {
    mp_t r = ellint_rj_old(x, y, p, p, boost::math::policies::policy<>());
    return boost::math::make_tuple(x, y, p, p, r);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rd_data_2e_1(mp_t x, mp_t y)
+{
+   mp_t r = ellint_rd_imp_old(x, y, y, boost::math::policies::policy<>());
+   return boost::math::make_tuple(x, y, y, r);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rd_data_2e_2(mp_t x, mp_t y)
+{
+   mp_t r = ellint_rd_imp_old(x, x, y, boost::math::policies::policy<>());
+   return boost::math::make_tuple(x, x, y, r);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rd_data_2e_3(mp_t x)
+{
+   mp_t r = ellint_rd_imp_old(mp_t(0), x, x, boost::math::policies::policy<>());
+   return boost::math::make_tuple(0, x, x, r);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rd_data_3e(mp_t x)
+{
+   mp_t r = ellint_rd_imp_old(x, x, x, boost::math::policies::policy<>());
+   return boost::math::make_tuple(x, x, x, r);
 }
 
 boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data(mp_t n)
@@ -294,12 +395,12 @@ int cpp_main(int argc, char*argv [])
       cont = (line == "y");
 #else
       get_user_parameter_info(arg1, "x");
-      get_user_parameter_info(arg2, "y");
-      get_user_parameter_info(arg3, "p");
+      //get_user_parameter_info(arg2, "y");
+      //get_user_parameter_info(arg3, "p");
       arg1.type |= dummy_param;
-      arg2.type |= dummy_param;
-      arg3.type |= dummy_param;
-      data.insert(generate_rj_data_2e_4, arg1, arg2, arg3);
+      //arg2.type |= dummy_param;
+      //arg3.type |= dummy_param;
+      data.insert(generate_rd_data_3e, arg1);
 
       std::cout << "Any more data [y/n]?";
       std::getline(std::cin, line);
