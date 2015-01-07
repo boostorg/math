@@ -50,6 +50,39 @@ namespace boost { namespace math { namespace detail{
             "only sensible result is %1%.",
             std::numeric_limits<T>::quiet_NaN(), pol);
       }
+      //
+      // Special cases from http://dlmf.nist.gov/19.20#i
+      //
+      if(x == y)
+      {
+         if(x == z)
+         {
+            // x, y, z equal:
+            return 1 / sqrt(x);
+         }
+         else
+         {
+            // 2 equal, x and y:
+            if(z == 0)
+               return constants::pi<T>() / (2 * sqrt(x));
+            else
+               return ellint_rc_imp(z, x, pol);
+         }
+      }
+      if(x == z)
+      {
+         if(y == 0)
+            return constants::pi<T>() / (2 * sqrt(x));
+         else
+            return ellint_rc_imp(y, x, pol);
+      }
+      if(y == z)
+      {
+         if(x == 0)
+            return constants::pi<T>() / (2 * sqrt(y));
+         else
+            return ellint_rc_imp(x, y, pol);
+      }
 
       T xn = x;
       T yn = y;

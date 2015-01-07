@@ -222,6 +222,73 @@ T ellint_rd_imp_old(T x, T y, T z, const Policy& pol)
    return value;
 }
 
+template <typename T, typename Policy>
+T ellint_rf_imp_old(T x, T y, T z, const Policy& pol)
+{
+   T value, X, Y, Z, E2, E3, u, lambda, tolerance;
+   unsigned long k;
+   BOOST_MATH_STD_USING
+   using namespace boost::math;
+   static const char* function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
+   if(x < 0 || y < 0 || z < 0)
+   {
+      return policies::raise_domain_error<T>(function,
+         "domain error, all arguments must be non-negative, "
+         "only sensible result is %1%.",
+         std::numeric_limits<T>::quiet_NaN(), pol);
+   }
+   if(x + y == 0 || y + z == 0 || z + x == 0)
+   {
+      return policies::raise_domain_error<T>(function,
+         "domain error, at most one argument can be zero, "
+         "only sensible result is %1%.",
+         std::numeric_limits<T>::quiet_NaN(), pol);
+   }
+   // Carlson scales error as the 6th power of tolerance,
+   // but this seems not to work for types larger than
+   // 80-bit reals, this heuristic seems to work OK:
+   if(policies::digits<T, Policy>() > 64)
+   {
+      tolerance = pow(tools::epsilon<T>(), T(1) / 4.25f);
+      BOOST_MATH_INSTRUMENT_VARIABLE(tolerance);
+   }
+   else
+   {
+      tolerance = pow(4 * tools::epsilon<T>(), T(1) / 6);
+      BOOST_MATH_INSTRUMENT_VARIABLE(tolerance);
+   }
+   // duplication
+   k = 1;
+   do
+   {
+      u = (x + y + z) / 3;
+      X = (u - x) / u;
+      Y = (u - y) / u;
+      Z = (u - z) / u;
+      // Termination condition:
+      if((tools::max)(abs(X), abs(Y), abs(Z)) < tolerance)
+         break;
+      T sx = sqrt(x);
+      T sy = sqrt(y);
+      T sz = sqrt(z);
+      lambda = sy * (sx + sz) + sz * sx;
+      x = (x + lambda) / 4;
+      y = (y + lambda) / 4;
+      z = (z + lambda) / 4;
+      ++k;
+   } while(k < policies::get_max_series_iterations<Policy>());
+   // Check to see if we gave up too soon:
+   policies::check_series_iterations<T>(function, k, pol);
+   BOOST_MATH_INSTRUMENT_VARIABLE(k);
+   // Taylor series expansion to the 5th order
+   E2 = X * Y - Z * Z;
+   E3 = X * Y * Z;
+   value = (1 + E2*(E2 / 24 - E3*T(3) / 44 - T(0.1)) + E3 / 14) / sqrt(u);
+   BOOST_MATH_INSTRUMENT_VARIABLE(value);
+   return value;
+}
+
+
 
 boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rj_data_4e(mp_t n)
 {
@@ -281,6 +348,36 @@ boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rd_data_3e(mp_t x)
 {
    mp_t r = ellint_rd_imp_old(x, x, x, boost::math::policies::policy<>());
    return boost::math::make_tuple(x, x, x, r);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data_xxx(mp_t x)
+{
+   mp_t r = ellint_rf_imp_old(x, x, x, boost::math::policies::policy<>());
+   return boost::math::make_tuple(x, x, x, r);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data_xyy(mp_t x, mp_t y)
+{
+   mp_t r = ellint_rf_imp_old(x, y, y, boost::math::policies::policy<>());
+   return boost::math::make_tuple(x, y, y, r);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data_xxy(mp_t x, mp_t y)
+{
+   mp_t r = ellint_rf_imp_old(x, x, y, boost::math::policies::policy<>());
+   return boost::math::make_tuple(x, x, y, r);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data_xyx(mp_t x, mp_t y)
+{
+   mp_t r = ellint_rf_imp_old(x, y, x, boost::math::policies::policy<>());
+   return boost::math::make_tuple(x, y, x, r);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data_0yy(mp_t y)
+{
+   mp_t r = ellint_rf_imp_old(mp_t(0), y, y, boost::math::policies::policy<>());
+   return boost::math::make_tuple(mp_t(0), y, y, r);
 }
 
 boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data(mp_t n)
@@ -400,7 +497,7 @@ int cpp_main(int argc, char*argv [])
       arg1.type |= dummy_param;
       //arg2.type |= dummy_param;
       //arg3.type |= dummy_param;
-      data.insert(generate_rd_data_3e, arg1);
+      data.insert(generate_rf_data_0yy, arg1);
 
       std::cout << "Any more data [y/n]?";
       std::getline(std::cin, line);
