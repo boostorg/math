@@ -90,7 +90,7 @@ void do_test_ellint_rj(T& data, const char* type_name, const char* test)
       bind_func<Real>(fp, 0, 1, 2, 3),
       extract_result<Real>(4));
       handle_test_result(result, data[result.worst()], result.worst(), 
-      type_name, "boost::math::ellint_rf", test);
+      type_name, "boost::math::ellint_rj", test);
 
    std::cout << std::endl;
 

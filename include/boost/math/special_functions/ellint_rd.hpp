@@ -17,6 +17,7 @@
 #endif
 
 #include <boost/math/special_functions/math_fwd.hpp>
+#include <boost/math/special_functions/ellint_rc.hpp>
 #include <boost/math/tools/config.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
@@ -72,12 +73,16 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
       }
       else
       {
-         return 3 * (ellint_rc_imp(x, y, pol) - sqrt(x) / y) / (2 * (y - x));
+         if((std::min)(x, y) / (std::max)(x, y) > 1.3)
+            return 3 * (ellint_rc_imp(x, y, pol) - sqrt(x) / y) / (2 * (y - x));
+         // Otherwise fall through to avoid cancellation in the above (RC(x,y) -> 1/x^0.5 as x -> y)
       }
    }
    if(x == y)
    {
-      return 3 * (ellint_rc_imp(z, x, pol) - 1 / sqrt(z)) / (z - x);
+      if((std::min)(x, z) / (std::max)(x, z) > 1.3)
+         return 3 * (ellint_rc_imp(z, x, pol) - 1 / sqrt(z)) / (z - x);
+      // Otherwise fall through to avoid cancellation in the above (RC(x,y) -> 1/x^0.5 as x -> y)
    }
 
    T xn = x;
@@ -85,7 +90,8 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
    T zn = z;
    T An = (x + y + 3 * z) / 5;
    T A0 = An;
-   T Q = pow(tools::epsilon<T>() / 4, -T(1) / 8) * (std::max)((std::max)(An - x, An - y), An - z);
+   // This has an extra 1.2 fudge factor which is really only needed when x, y and z are close in magnitude:
+   T Q = pow(tools::epsilon<T>() / 4, -T(1) / 8) * (std::max)((std::max)(An - x, An - y), An - z) * 1.2f;
    T lambda, rx, ry, rz;
    unsigned k = 0;
    T fn = 1;
