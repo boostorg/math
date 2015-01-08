@@ -242,6 +242,7 @@ void instantiate(RealType)
    boost::math::ellint_rc(v1, v2);
    boost::math::ellint_rd(v1, v2, v3);
    boost::math::ellint_rf(v1, v2, v3);
+   boost::math::ellint_rg(v1, v2, v3);
    boost::math::ellint_rj(v1, v2, v3, v1);
    boost::math::jacobi_elliptic(v1, v2, &v1, &v2);
    boost::math::jacobi_cd(v1, v2);
@@ -429,6 +430,7 @@ void instantiate(RealType)
    boost::math::ellint_rc(v1 * 1, v2 + 0);
    boost::math::ellint_rd(v1 * 1, v2 + 0, v3 / 1);
    boost::math::ellint_rf(v1 * 1, v2 + 0, v3 / 1);
+   boost::math::ellint_rg(v1 * 1, v2 + 0, v3 / 1);
    boost::math::ellint_rj(v1 * 1, v2 + 0, v3 / 1, v1 * 1);
    boost::math::jacobi_elliptic(v1 * 1, v2 + 0, &v1, &v2);
    boost::math::jacobi_cd(v1 * 1, v2 + 0);
@@ -596,6 +598,7 @@ void instantiate(RealType)
    boost::math::ellint_rc(v1, v2, pol);
    boost::math::ellint_rd(v1, v2, v3, pol);
    boost::math::ellint_rf(v1, v2, v3, pol);
+   boost::math::ellint_rg(v1, v2, v3, pol);
    boost::math::ellint_rj(v1, v2, v3, v1, pol);
    boost::math::jacobi_elliptic(v1, v2, &v1, &v2, pol);
    boost::math::jacobi_cd(v1, v2, pol);
@@ -785,6 +788,7 @@ void instantiate(RealType)
    test::ellint_rc(v1, v2);
    test::ellint_rd(v1, v2, v3);
    test::ellint_rf(v1, v2, v3);
+   test::ellint_rg(v1, v2, v3);
    test::ellint_rj(v1, v2, v3, v1);
    test::jacobi_elliptic(v1, v2, &v1, &v2);
    test::jacobi_cd(v1, v2);
@@ -993,6 +997,8 @@ void instantiate_mixed(RealType)
    boost::math::ellint_rd(fr, lr, dr);
    boost::math::ellint_rf(s, l, i);
    boost::math::ellint_rf(fr, dr, lr);
+   boost::math::ellint_rg(s, l, i);
+   boost::math::ellint_rg(fr, dr, lr);
    boost::math::ellint_rj(i, i, s, l);
    boost::math::ellint_rj(i, fr, dr, lr);
    boost::math::jacobi_cd(i, fr);
@@ -1132,6 +1138,8 @@ void instantiate_mixed(RealType)
    boost::math::ellint_rd(fr, lr, dr, pol);
    boost::math::ellint_rf(s, l, i, pol);
    boost::math::ellint_rf(fr, dr, lr, pol);
+   boost::math::ellint_rg(s, l, i, pol);
+   boost::math::ellint_rg(fr, dr, lr, pol);
    boost::math::ellint_rj(i, i, s, l, pol);
    boost::math::ellint_rj(i, fr, dr, lr, pol);
    boost::math::jacobi_cd(i, fr, pol);
@@ -1274,6 +1282,8 @@ void instantiate_mixed(RealType)
    test::ellint_rd(fr, lr, dr);
    test::ellint_rf(s, l, i);
    test::ellint_rf(fr, dr, lr);
+   test::ellint_rg(s, l, i);
+   test::ellint_rg(fr, dr, lr);
    test::ellint_rj(i, i, s, l);
    test::ellint_rj(i, fr, dr, lr);
    test::hypot(i, s);

@@ -31,6 +31,7 @@
 #include <boost/math/special_functions/ellint_rd.hpp>
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
+#include <boost/math/special_functions/ellint_rg.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/expint.hpp>
 #include <boost/math/special_functions/expm1.hpp>

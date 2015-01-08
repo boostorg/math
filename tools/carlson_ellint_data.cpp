@@ -459,7 +459,93 @@ boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rd_data(mp_t n)
    return boost::math::make_tuple(xr, yr, zr, result);
 }
 
-int cpp_main(int argc, char*argv [])
+mp_t rg_imp(const mp_t x, mp_t y, mp_t z)
+{
+   return (z * ellint_rf_imp_old(x, y, z, boost::math::policies::policy<>())
+      - (x - z) * (y - z) * ellint_rd_imp_old(x, y, z, boost::math::policies::policy<>()) / 3
+      + sqrt(x * y / z)) / 2;
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_data(mp_t n)
+{
+   static boost::mt19937 r;
+   boost::uniform_real<float> ur(0, 1);
+   boost::uniform_int<int> ui(-100, 100);
+   float x = ur(r);
+   x = ldexp(x, ui(r));
+   mp_t xr(truncate_to_float(&x));
+   float y = ur(r);
+   y = ldexp(y, ui(r));
+   mp_t yr(truncate_to_float(&y));
+   float z = ur(r);
+   z = ldexp(z, ui(r));
+   mp_t zr(truncate_to_float(&z));
+
+   mp_t result = rg_imp(xr, yr, zr);
+   return boost::math::make_tuple(xr, yr, zr, result);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_xxx(mp_t x)
+{
+   mp_t result = rg_imp(x, x, x);
+   return boost::math::make_tuple(x, x, x, result);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_xyy(mp_t x, mp_t y)
+{
+   mp_t result = rg_imp(x, y, y);
+   return boost::math::make_tuple(x, y, y, result);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_xxy(mp_t x, mp_t y)
+{
+   mp_t result = rg_imp(x, x, y);
+   return boost::math::make_tuple(x, x, y, result);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_xyx(mp_t x, mp_t y)
+{
+   mp_t result = rg_imp(x, y, x);
+   return boost::math::make_tuple(x, y, x, result);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_0xx(mp_t x)
+{
+   mp_t result = rg_imp(mp_t(0), x, x);
+   return boost::math::make_tuple(mp_t(0), x, x, result);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_x0x(mp_t x)
+{
+   mp_t result = rg_imp(x, mp_t(0), x);
+   return boost::math::make_tuple(x, mp_t(0), x, result);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_xx0(mp_t x)
+{
+   mp_t result = rg_imp(x, x, mp_t(0));
+   return boost::math::make_tuple(x, x, mp_t(0), result);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_00x(mp_t x)
+{
+   mp_t result = sqrt(x) / 2;
+   return boost::math::make_tuple(mp_t(0), mp_t(0), x, result);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_0x0(mp_t x)
+{
+   mp_t result = sqrt(x) / 2;
+   return boost::math::make_tuple(mp_t(0), x, mp_t(0), result);
+}
+
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_x00(mp_t x)
+{
+   mp_t result = sqrt(x) / 2;
+   return boost::math::make_tuple(x, mp_t(0), mp_t(0), result);
+}
+
+int cpp_main(int argc, char*argv[])
 {
    using namespace boost::math::tools;
 
@@ -497,7 +583,9 @@ int cpp_main(int argc, char*argv [])
       arg1.type |= dummy_param;
       //arg2.type |= dummy_param;
       //arg3.type |= dummy_param;
-      data.insert(generate_rf_data_0yy, arg1);
+      data.insert(generate_rg_00x, arg1);
+      data.insert(generate_rg_0x0, arg1);
+      data.insert(generate_rg_x00, arg1);
 
       std::cout << "Any more data [y/n]?";
       std::getline(std::cin, line);

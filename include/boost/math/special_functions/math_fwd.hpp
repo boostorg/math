@@ -304,6 +304,14 @@ namespace boost
    typename tools::promote_args<T1, T2, T3, T4>::type
          ellint_rj(T1 x, T2 y, T3 z, T4 p, const Policy& pol);
 
+   template <class T1, class T2, class T3>
+   typename tools::promote_args<T1, T2, T3>::type
+      ellint_rg(T1 x, T2 y, T3 z);
+
+   template <class T1, class T2, class T3, class Policy>
+   typename tools::promote_args<T1, T2, T3>::type
+      ellint_rg(T1 x, T2 y, T3 z, const Policy& pol);
+
    template <typename T>
    typename tools::promote_args<T>::type ellint_2(T k);
 
@@ -1150,6 +1158,10 @@ namespace boost
    inline typename boost::math::tools::promote_args<T1, T2, T3, T4>::type \
    ellint_rj(T1 x, T2 y, T3 z, T4 p){ return boost::math::ellint_rj(x, y, z, p, Policy()); }\
 \
+   template <class T1, class T2, class T3>\
+   inline typename boost::math::tools::promote_args<T1, T2, T3>::type \
+   ellint_rg(T1 x, T2 y, T3 z){ return ::boost::math::ellint_rg(x, y, z, Policy()); }\
+   \
    template <typename T>\
    inline typename boost::math::tools::promote_args<T>::type ellint_2(T k){ return boost::math::ellint_2(k, Policy()); }\
 \

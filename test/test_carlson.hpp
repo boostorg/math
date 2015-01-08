@@ -121,6 +121,31 @@ void do_test_ellint_rd(T& data, const char* type_name, const char* test)
 
 }
 
+template <class Real, typename T>
+void do_test_ellint_rg(T& data, const char* type_name, const char* test)
+{
+   typedef Real                   value_type;
+
+   std::cout << "Testing: " << test << std::endl;
+
+#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   value_type(*fp)(value_type, value_type, value_type) = boost::math::ellint_rg<value_type, value_type, value_type>;
+#else
+   value_type(*fp)(value_type, value_type, value_type) = boost::math::ellint_rg;
+#endif
+   boost::math::tools::test_result<value_type> result;
+
+   result = boost::math::tools::test_hetero<Real>(
+      data,
+      bind_func<Real>(fp, 0, 1, 2),
+      extract_result<Real>(3));
+   handle_test_result(result, data[result.worst()], result.worst(),
+      type_name, "boost::math::ellint_rg", test);
+
+   std::cout << std::endl;
+
+}
+
 template <typename T>
 void test_spots(T, const char* type_name)
 {
@@ -257,5 +282,21 @@ void test_spots(T, const char* type_name)
 #include "ellint_rd_xxx.ipp"
 
    do_test_ellint_rd<T>(ellint_rd_xxx, type_name, "RD: x = y = z");
+
+#include "ellint_rg.ipp"
+
+   do_test_ellint_rg<T>(ellint_rg, type_name, "RG: Random Data");
+
+#include "ellint_rg_00x.ipp"
+
+   do_test_ellint_rg<T>(ellint_rg_00x, type_name, "RG: two values 0");
+
+#include "ellint_rg_xxx.ipp"
+
+   do_test_ellint_rg<T>(ellint_rg_xxx, type_name, "RG: All values the same or zero");
+
+#include "ellint_rg_xyy.ipp"
+
+   do_test_ellint_rg<T>(ellint_rg_xyy, type_name, "RG: two values the same");
 }
 
