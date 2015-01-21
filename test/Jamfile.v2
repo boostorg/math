@@ -784,6 +784,7 @@ run  compile_test/sf_ellint_rc_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_rd_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_rf_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_rj_incl_test.cpp compile_test_main ;
+run  compile_test/sf_ellint_rg_incl_test.cpp compile_test_main ;
 run  compile_test/sf_erf_incl_test.cpp compile_test_main ;
 run  compile_test/sf_expint_incl_test.cpp compile_test_main ;
 run  compile_test/sf_expm1_incl_test.cpp compile_test_main ;

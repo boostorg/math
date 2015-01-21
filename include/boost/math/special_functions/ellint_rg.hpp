@@ -69,7 +69,7 @@ namespace boost { namespace math { namespace detail{
          {
             // x = y, z != 0
             swap(x, z);
-            return (x == 0) ? sqrt(z) / 2 : (y * ellint_rc_imp(x, y, pol) + sqrt(x)) / 2;
+            return (x == 0) ? T(sqrt(z) / 2) : T((y * ellint_rc_imp(x, y, pol) + sqrt(x)) / 2);
          }
       }
       else if(y == z)
@@ -77,7 +77,7 @@ namespace boost { namespace math { namespace detail{
          if(x == 0)
             return constants::pi<T>() * sqrt(y) / 4;
          else
-            return (y == 0) ? sqrt(x) / 2 : (y * ellint_rc_imp(x, y, pol) + sqrt(x)) / 2;
+            return (y == 0) ? T(sqrt(x) / 2) : T((y * ellint_rc_imp(x, y, pol) + sqrt(x)) / 2);
       }
 
       return (z * ellint_rf_imp(x, y, z, pol)
