@@ -1248,9 +1248,9 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          }
          else if(normalised)
          {
-            // the formula here for the non-normalised case is tricky to figure
+            // The formula here for the non-normalised case is tricky to figure
             // out (for me!!), and requires two pochhammer calculations rather
-            // than one, so leave it for now....
+            // than one, so leave it for now and only use this in the normalized case....
             int n = itrunc(T(floor(b)), pol);
             T bbar = b - n;
             if(bbar <= 0)
@@ -1261,8 +1261,7 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
             fract = ibeta_a_step(bbar, a, y, x, n, pol, normalised, static_cast<T*>(0));
             fract += ibeta_a_step(a, bbar, x, y, 20, pol, normalised, static_cast<T*>(0));
             if(invert)
-               fract -= (normalised ? 1 : boost::math::beta(a, b, pol));
-            //fract = ibeta_series(a+20, bbar, x, fract, l, normalised, p_derivative, y);
+               fract -= 1;  // Note this line would need changing if we ever enable this branch in non-normalized case
             fract = beta_small_b_large_a_series(T(a+20),  bbar, x, y, fract, T(1), pol, normalised);
             if(invert)
             {
