@@ -34,12 +34,35 @@
     </p>
 <h5>
 <a name="math_toolkit.history2.h0"></a>
-      <span class="phrase"><a name="math_toolkit.history2.math_2_2_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_2_0">Math-2.2.0</a>
+      <span class="phrase"><a name="math_toolkit.history2.math_2_2_0_boost_1_58_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_2_0_boost_1_58_0">Math-2.2.0
+      (boost-1.58.0)</a>
     </h5>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
           Added two new special functions - <a class="link" href="sf_gamma/trigamma.html" title="Trigamma">trigamma</a>
           and <a class="link" href="sf_gamma/polygamma.html" title="Polygamma">polygamma</a>.
-        </li></ul></div>
+        </li>
+<li class="listitem">
+          Fixed namespace scope constants so they are constexpr on conforming compilers,
+          see https://svn.boost.org/trac/boost/ticket/10901.
+        </li>
+<li class="listitem">
+          Fixed various cases of spurious under/overflow in the incomplete beta and
+          gamma functions, plus the elliptic integrals, with thanks to Rocco Romeo.
+        </li>
+<li class="listitem">
+          Fix 3-arg <a class="link" href="sf_poly/legendre.html" title="Legendre (and Associated) Polynomials">legendre_p</a>
+          and <a class="link" href="sf_poly/legendre.html" title="Legendre (and Associated) Polynomials">legendre_q</a> functions
+          to not call the policy based overload if the final argument is not actually
+          a policy.
+        </li>
+<li class="listitem">
+          Cleaned up some dead code in the incomplete beta function, see <a href="https://svn.boost.org/trac/boost/ticket/10985" target="_top">#10985</a>.
+        </li>
+<li class="listitem">
+          Fixed extreme-value pdf for large valued inputs, see <a href="https://svn.boost.org/trac/boost/ticket/10938" target="_top">#10938</a>.
+        </li>
+</ul></div>
 <h5>
 <a name="math_toolkit.history2.h1"></a>
       <span class="phrase"><a name="math_toolkit.history2.math_2_1_0_boost_1_57_0"></a></span><a class="link" href="history2.html#math_toolkit.history2.math_2_1_0_boost_1_57_0">Math-2.1.0

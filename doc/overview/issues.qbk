@@ -75,11 +75,6 @@ be implemented using Carlson's integrals (Low Priority).
 * The integrals K(k) and E(k) could be implemented using rational
 approximations (both for efficiency and accuracy),
 assuming we can find them. (Medium Priority).
-* There is a sub-domain of __ellint_3 that is unimplemented (see the docs
-for details), currently
-it's not clear how to solve this issue, or if it's ever likely
-to be an real problem in practice - especially as most other implementations
-don't support this domain either (Medium Priority).
 
 [h4 Owen's T Function]
 
@@ -100,6 +95,8 @@ These are useful in engineering applications - we have had a request to add thes
 as a better approximation for very large degrees of freedom?
 
 [h4 Feature Requests]
+
+We have a request for the Lambert W function, see [@https://svn.boost.org/trac/boost/ticket/11027 #11027].
 
 The following table lists distributions that are found in other packages
 but which are not yet present here, the more frequently the distribution

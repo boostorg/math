@@ -6,7 +6,7 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
-[h4 Math-2.2.0]
+[h4 Math-2.2.0 (boost-1.58.0)]
 
 * Added two new special functions - __trigamma and __polygamma.
 * Fixed namespace scope constants so they are constexpr on conforming compilers, see https://svn.boost.org/trac/boost/ticket/10901.
@@ -14,6 +14,8 @@ All bug reports including closed ones can be viewed
 with thanks to Rocco Romeo.
 * Fix 3-arg __legendre_p and __legendre_q functions to not call the policy based overload if the final argument
 is not actually a policy.
+* Cleaned up some dead code in the incomplete beta function, see [@https://svn.boost.org/trac/boost/ticket/10985 #10985].
+* Fixed extreme-value pdf for large valued inputs, see [@https://svn.boost.org/trac/boost/ticket/10938 #10938].
 
 [h4 Math-2.1.0 (boost-1.57.0)]
 
