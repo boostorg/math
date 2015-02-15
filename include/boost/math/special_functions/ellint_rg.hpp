@@ -16,6 +16,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/ellint_rd.hpp>
 #include <boost/math/special_functions/ellint_rf.hpp>
+#include <boost/math/special_functions/pow.hpp>
 
 namespace boost { namespace math { namespace detail{
 
@@ -23,8 +24,6 @@ namespace boost { namespace math { namespace detail{
    T ellint_rg_imp(T x, T y, T z, const Policy& pol)
    {
       BOOST_MATH_STD_USING
-      using namespace boost::math;
-
       static const char* function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
 
       if(x < 0 || y < 0 || z < 0)
@@ -52,7 +51,7 @@ namespace boost { namespace math { namespace detail{
       //
       // Special cases from http://dlmf.nist.gov/19.20#ii
       //
-      if(x == y)
+      if(x == z)
       {
          if(y == z)
          {
@@ -60,16 +59,16 @@ namespace boost { namespace math { namespace detail{
             // This also works for x = y = z = 0 presumably.
             return sqrt(x);
          }
-         else if(z == 0)
+         else if(y == 0)
          {
             // x = y, z = 0
             return constants::pi<T>() * sqrt(x) / 4;
          }
          else
          {
-            // x = y, z != 0
-            swap(x, z);
-            return (x == 0) ? T(sqrt(z) / 2) : T((y * ellint_rc_imp(x, y, pol) + sqrt(x)) / 2);
+            // x = z, y != 0
+            swap(x, y);
+            return (x == 0) ? T(sqrt(z) / 2) : T((z * ellint_rc_imp(x, z, pol) + sqrt(x)) / 2);
          }
       }
       else if(y == z)
@@ -79,7 +78,31 @@ namespace boost { namespace math { namespace detail{
          else
             return (y == 0) ? T(sqrt(x) / 2) : T((y * ellint_rc_imp(x, y, pol) + sqrt(x)) / 2);
       }
+      else if(y == 0)
+      {
+         swap(y, z);
+         //
+         // Special handling for common case, from
+         // Numerical Computation of Real or Complex Elliptic Integrals, eq.46
+         //
+         T xn = sqrt(x);
+         T yn = sqrt(y);
+         T x0 = xn;
+         T y0 = yn;
+         T sum = 0;
+         T sum_pow = 0.25f;
 
+         while(fabs(xn - yn) >= 2.7 * tools::root_epsilon<T>() * fabs(xn))
+         {
+            T t = sqrt(xn * yn);
+            xn = (xn + yn) / 2;
+            yn = t;
+            sum_pow *= 2;
+            sum += sum_pow * boost::math::pow<2>(xn - yn);
+         }
+         T RF = constants::pi<T>() / (xn + yn);
+         return ((boost::math::pow<2>((x0 + y0) / 2) - sum) * RF) / 2;
+      }
       return (z * ellint_rf_imp(x, y, z, pol)
          - (x - z) * (y - z) * ellint_rd_imp(x, y, z, pol) / 3
          + sqrt(x * y / z)) / 2;

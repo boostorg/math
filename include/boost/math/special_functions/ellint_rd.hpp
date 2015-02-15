@@ -31,7 +31,7 @@ template <typename T, typename Policy>
 T ellint_rd_imp(T x, T y, T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   using namespace boost::math;
+   using std::swap;
 
    static const char* function = "boost::math::ellint_rd<%1%>(%1%,%1%,%1%)";
 
@@ -83,6 +83,46 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
       if((std::min)(x, z) / (std::max)(x, z) > 1.3)
          return 3 * (ellint_rc_imp(z, x, pol) - 1 / sqrt(z)) / (z - x);
       // Otherwise fall through to avoid cancellation in the above (RC(x,y) -> 1/x^0.5 as x -> y)
+   }
+   if(y == 0)
+      swap(x, y);
+   if(x == 0)
+   {
+      //
+      // Special handling for common case, from
+      // Numerical Computation of Real or Complex Elliptic Integrals, eq.47
+      //
+      T xn = sqrt(y);
+      T yn = sqrt(z);
+      T x0 = xn;
+      T y0 = yn;
+      T sum = 0;
+      T sum_pow = 0.25f;
+
+      while(fabs(xn - yn) >= 2.7 * tools::root_epsilon<T>() * fabs(xn))
+      {
+         T t = sqrt(xn * yn);
+         xn = (xn + yn) / 2;
+         yn = t;
+         sum_pow *= 2;
+         sum += sum_pow * boost::math::pow<2>(xn - yn);
+      }
+      T RF = constants::pi<T>() / (xn + yn);
+      //
+      // This following calculation suffers from serious cancellation when y ~ z
+      // unless we combine terms.  We have:
+      //
+      // ( ((x0 + y0)/2)^2 - z ) / (z(y-z))
+      //
+      // Substituting y = x0^2 and z = y0^2 and simplifying we get the following:
+      //
+      T pt = (x0 + 3 * y0) / (4 * z * (x0 + y0));
+      //
+      // Since we've moved the demoninator from eq.47 inside the expression, we
+      // need to also scale "sum" by the same value:
+      //
+      pt -= sum / (z * (y - z));
+      return pt * RF * 3;
    }
 
    T xn = x;

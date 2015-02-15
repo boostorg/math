@@ -350,6 +350,12 @@ boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rd_data_3e(mp_t x)
    return boost::math::make_tuple(x, x, x, r);
 }
 
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rd_data_0xy(mp_t x, mp_t y)
+{
+   mp_t r = ellint_rd_imp_old(mp_t(0), x, y, boost::math::policies::policy<>());
+   return boost::math::make_tuple(mp_t(0), x, y, r);
+}
+
 boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data_xxx(mp_t x)
 {
    mp_t r = ellint_rf_imp_old(x, x, x, boost::math::policies::policy<>());
@@ -599,7 +605,7 @@ int cpp_main(int argc, char*argv[])
       arg1.type |= dummy_param;
       arg2.type |= dummy_param;
       //arg3.type |= dummy_param;
-      data.insert(generate_rf_data_xy0, arg1, arg2);
+      data.insert(generate_rd_data_0xy, arg1, arg2);
 
       std::cout << "Any more data [y/n]?";
       std::getline(std::cin, line);
