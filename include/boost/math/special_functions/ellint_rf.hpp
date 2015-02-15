@@ -34,6 +34,7 @@ namespace boost { namespace math { namespace detail{
    {
       BOOST_MATH_STD_USING
       using namespace boost::math;
+      using std::swap;
 
       static const char* function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
 
@@ -83,6 +84,26 @@ namespace boost { namespace math { namespace detail{
             return constants::pi<T>() / (2 * sqrt(y));
          else
             return ellint_rc_imp(x, y, pol);
+      }
+      if(x == 0)
+         swap(x, z);
+      else if(y == 0)
+         swap(y, z);
+      if(z == 0)
+      {
+         //
+         // Special case for one value zero:
+         //
+         T xn = sqrt(x);
+         T yn = sqrt(y);
+
+         while(fabs(xn - yn) >= 2.7 * tools::root_epsilon<T>() * fabs(xn))
+         {
+            T t = sqrt(xn * yn);
+            xn = (xn + yn) / 2;
+            yn = t;
+         }
+         return constants::pi<T>() / (xn + yn);
       }
 
       T xn = x;

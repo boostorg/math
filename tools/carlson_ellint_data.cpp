@@ -380,6 +380,12 @@ boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data_0yy(mp_t y)
    return boost::math::make_tuple(mp_t(0), y, y, r);
 }
 
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data_xy0(mp_t x, mp_t y)
+{
+   mp_t r = ellint_rf_imp_old(x, y, mp_t(0), boost::math::policies::policy<>());
+   return boost::math::make_tuple(x, y, mp_t(0), r);
+}
+
 boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rf_data(mp_t n)
 {
    static boost::mt19937 r;
@@ -459,8 +465,12 @@ boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rd_data(mp_t n)
    return boost::math::make_tuple(xr, yr, zr, result);
 }
 
-mp_t rg_imp(const mp_t x, mp_t y, mp_t z)
+mp_t rg_imp(mp_t x, mp_t y, mp_t z)
 {
+   using std::swap;
+   // If z is zero permute so the call to RD is valid:
+   if(z == 0)
+      swap(x, z);
    return (z * ellint_rf_imp_old(x, y, z, boost::math::policies::policy<>())
       - (x - z) * (y - z) * ellint_rd_imp_old(x, y, z, boost::math::policies::policy<>()) / 3
       + sqrt(x * y / z)) / 2;
@@ -545,6 +555,12 @@ boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_x00(mp_t x)
    return boost::math::make_tuple(x, mp_t(0), mp_t(0), result);
 }
 
+boost::math::tuple<mp_t, mp_t, mp_t, mp_t> generate_rg_xy0(mp_t x, mp_t y)
+{
+   mp_t result = rg_imp(x, y, mp_t(0));
+   return boost::math::make_tuple(x, y, mp_t(0), result);
+}
+
 int cpp_main(int argc, char*argv[])
 {
    using namespace boost::math::tools;
@@ -578,14 +594,12 @@ int cpp_main(int argc, char*argv[])
       cont = (line == "y");
 #else
       get_user_parameter_info(arg1, "x");
-      //get_user_parameter_info(arg2, "y");
+      get_user_parameter_info(arg2, "y");
       //get_user_parameter_info(arg3, "p");
       arg1.type |= dummy_param;
-      //arg2.type |= dummy_param;
+      arg2.type |= dummy_param;
       //arg3.type |= dummy_param;
-      data.insert(generate_rg_00x, arg1);
-      data.insert(generate_rg_0x0, arg1);
-      data.insert(generate_rg_x00, arg1);
+      data.insert(generate_rf_data_xy0, arg1, arg2);
 
       std::cout << "Any more data [y/n]?";
       std::getline(std::cin, line);
