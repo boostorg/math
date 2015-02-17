@@ -68,6 +68,14 @@ T ellint_e_imp(T phi, T k, const Policy& pol)
        // just return the second part of the duplication formula:
        result = 2 * phi * ellint_e_imp(k, pol) / constants::pi<T>();
     }
+    else if(k == 0)
+    {
+       return invert ? T(-phi) : phi;
+    }
+    else if(fabs(k) == 1)
+    {
+       return invert ? T(-sin(phi)) : sin(phi);
+    }
     else
     {
        // Carlson's algorithm works only for |phi| <= pi/2,
@@ -99,18 +107,18 @@ T ellint_e_imp(T phi, T k, const Policy& pol)
        {
           result = 0;
        }
-       else if(k == 0)
+       else if(sinp * sinp < tools::min_value<T>())
        {
-          result = rphi;
-       }
-       else if(k2 == 1)
-       {
-          result = sinp;
+          T x = cosp * cosp;
+          T t = k * k * sinp * sinp;
+          T y = 1 - t;
+          T z = 1;
+          result = s * sinp * (ellint_rf_imp(x, y, z, pol) - t * ellint_rd_imp(x, y, z, pol) / 3);
        }
        else
        {
           // http://dlmf.nist.gov/19.25#E10
-          result = s * ((1 - k2) * ellint_rf_imp(cm1, c - k2, c, pol) + k2 * (1 - k2) * ellint_rd(cm1, c, c - k2, pol) / 3 + k2 * sqrt(cm1 / (c * (c - k2))));
+          result = s * ((1 - k2) * ellint_rf_imp(cm1, T(c - k2), c, pol) + k2 * (1 - k2) * ellint_rd(cm1, c, T(c - k2), pol) / 3 + k2 * sqrt(cm1 / (c * (c - k2))));
        }
        if(m != 0)
           result += m * ellint_e_imp(k, pol);
