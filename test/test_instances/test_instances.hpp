@@ -218,6 +218,12 @@ namespace boost{ namespace math{
 
    template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type ellint_2(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE phi, const policies::policy<>& pol);
 
+   template tools::promote_args<BOOST_MATH_TEST_TYPE>::type ellint_d(BOOST_MATH_TEST_TYPE k);
+
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type ellint_d(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE phi);
+
+   template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type ellint_d(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE phi, const policies::policy<>& pol);
+
    template tools::promote_args<BOOST_MATH_TEST_TYPE>::type ellint_1(BOOST_MATH_TEST_TYPE k);
 
    template tools::promote_args<BOOST_MATH_TEST_TYPE, BOOST_MATH_TEST_TYPE>::type ellint_1(BOOST_MATH_TEST_TYPE k, BOOST_MATH_TEST_TYPE phi);

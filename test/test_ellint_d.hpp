@@ -13,7 +13,6 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/math/special_functions/ellint_d.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
 
@@ -96,9 +95,10 @@ void test_spots(T, const char* type_name)
 
     // Function values calculated on http://functions.wolfram.com/
     // Note that Mathematica's EllipticE accepts k^2 as the second parameter.
-    static const boost::array<boost::array<T, 2>, 2> data2 = {{
+    static const boost::array<boost::array<T, 2>, 3> data2 = {{
        { { SC_(0.5), SC_(0.87315258189267554964563356323264341) } },
        { { SC_(1.0) / 1024, SC_(0.78539844427788694671464428063604776) } },
+       { { boost::math::tools::root_epsilon<T>(), SC_(0.78539816339744830961566084581987572) } }
     }};
 
     do_test_ellint_d1<T>(data2, type_name, "Elliptic Integral E: Mathworld Data");
