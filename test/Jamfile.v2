@@ -780,6 +780,8 @@ run  compile_test/sf_polygamma_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_1_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_2_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_3_incl_test.cpp compile_test_main ;
+run  compile_test/sf_ellint_d_incl_test.cpp compile_test_main ;
+run  compile_test/sf_jacobi_zeta_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_rc_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_rd_incl_test.cpp compile_test_main ;
 run  compile_test/sf_ellint_rf_incl_test.cpp compile_test_main ;
