@@ -242,6 +242,7 @@ void instantiate(RealType)
    boost::math::ellint_d(v1);
    boost::math::ellint_d(v1, v2);
    boost::math::jacobi_zeta(v1, v2);
+   boost::math::heuman_lambda(v1, v2);
    boost::math::ellint_rc(v1, v2);
    boost::math::ellint_rd(v1, v2, v3);
    boost::math::ellint_rf(v1, v2, v3);
@@ -438,6 +439,7 @@ void instantiate(RealType)
    boost::math::ellint_d(v1 * 1);
    boost::math::ellint_d(v1 * 1, v2 + 0);
    boost::math::jacobi_zeta(v1 * 1, v2 + 0);
+   boost::math::heuman_lambda(v1 * 1, v2 + 0);
    boost::math::jacobi_elliptic(v1 * 1, v2 + 0, &v1, &v2);
    boost::math::jacobi_cd(v1 * 1, v2 + 0);
    boost::math::jacobi_cn(v1 * 1, v2 + 0);
@@ -604,6 +606,7 @@ void instantiate(RealType)
    boost::math::ellint_d(v1, pol);
    boost::math::ellint_d(v1, v2, pol);
    boost::math::jacobi_zeta(v1, v2, pol);
+   boost::math::heuman_lambda(v1, v2, pol);
    boost::math::ellint_rc(v1, v2, pol);
    boost::math::ellint_rd(v1, v2, v3, pol);
    boost::math::ellint_rf(v1, v2, v3, pol);
@@ -797,6 +800,7 @@ void instantiate(RealType)
    test::ellint_d(v1);
    test::ellint_d(v1, v2);
    test::jacobi_zeta(v1, v2);
+   test::heuman_lambda(v1, v2);
    test::ellint_rc(v1, v2);
    test::ellint_rd(v1, v2, v3);
    test::ellint_rf(v1, v2, v3);
@@ -1008,6 +1012,8 @@ void instantiate_mixed(RealType)
    boost::math::ellint_d(fr, lr);
    boost::math::jacobi_zeta(i, l);
    boost::math::jacobi_zeta(fr, lr);
+   boost::math::heuman_lambda(i, l);
+   boost::math::heuman_lambda(fr, lr);
    boost::math::ellint_rc(i, s);
    boost::math::ellint_rc(fr, lr);
    boost::math::ellint_rd(s, i, l);
@@ -1154,6 +1160,8 @@ void instantiate_mixed(RealType)
    boost::math::ellint_d(fr, lr, pol);
    boost::math::jacobi_zeta(i, l, pol);
    boost::math::jacobi_zeta(fr, lr, pol);
+   boost::math::heuman_lambda(i, l, pol);
+   boost::math::heuman_lambda(fr, lr, pol);
    boost::math::ellint_rc(i, s, pol);
    boost::math::ellint_rc(fr, lr, pol);
    boost::math::ellint_rd(s, i, l, pol);
@@ -1303,6 +1311,8 @@ void instantiate_mixed(RealType)
    test::ellint_d(fr, lr);
    test::jacobi_zeta(i, l);
    test::jacobi_zeta(fr, lr);
+   test::heuman_lambda(i, l);
+   test::heuman_lambda(fr, lr);
    test::ellint_rc(i, s);
    test::ellint_rc(fr, lr);
    test::ellint_rd(s, i, l);

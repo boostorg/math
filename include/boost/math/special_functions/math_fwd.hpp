@@ -345,6 +345,12 @@ namespace boost
    template <class T1, class T2, class Policy>
    typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi, const Policy& pol);
 
+   template <class T1, class T2>
+   typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi);
+
+   template <class T1, class T2, class Policy>
+   typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi, const Policy& pol);
+
    namespace detail{
 
    template <class T, class U, class V>
@@ -1191,6 +1197,9 @@ namespace boost
 \
    template <class T1, class T2>\
    inline typename boost::math::tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi){ return boost::math::jacobi_zeta(k, phi, Policy()); }\
+\
+   template <class T1, class T2>\
+   inline typename boost::math::tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi){ return boost::math::heuman_lambda(k, phi, Policy()); }\
 \
    template <typename T>\
    inline typename boost::math::tools::promote_args<T>::type ellint_1(T k){ return boost::math::ellint_1(k, Policy()); }\

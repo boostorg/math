@@ -1,15 +1,8 @@
-//  Copyright (c) 2006 Xiaogang Zhang
-//  Copyright (c) 2006 John Maddock
+//  Copyright (c) 2015 John Maddock
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-//  History:
-//  XZ wrote the original of this file as part of the Google
-//  Summer of Code 2006.  JM modified it to fit into the
-//  Boost.Math conceptual framework better, and to ensure
-//  that the code continues to work no matter how many digits
-//  type T has.
 
 #ifndef BOOST_MATH_ELLINT_JZ_HPP
 #define BOOST_MATH_ELLINT_JZ_HPP
