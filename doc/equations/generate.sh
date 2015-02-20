@@ -8,10 +8,10 @@
 # Paths to tools come first, change these to match your system:
 #
 math2svg='m:\download\open\SVGMath-0.3.1\math2svg.py'
-python='/cygdrive/c/program files/Python27/python.exe'
-inkscape='/cygdrive/c/Program Files (x86)/Inkscape/inkscape.exe'
+python='/cygdrive/c/Python27/python.exe'
+inkscape='/cygdrive/c/Program Files/Inkscape/inkscape.exe'
 # Image DPI:
-dpi=120
+dpi=90
 
 for mmlfile in $*; do
 	svgfile=$(basename $mmlfile .mml).svg
