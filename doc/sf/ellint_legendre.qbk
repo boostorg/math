@@ -393,7 +393,7 @@ would be complex).
   template <class T1, class ``__Policy``>
   ``__sf_result`` ellint_d(T1 k, const ``__Policy``&);
   
-Returns the complete elliptic integral ['D(k) = D([Pi]/2, k)]
+Returns the complete elliptic integral ['D(k) = D([pi]/2, k)]
 
 Requires ['-1 <= k <= 1] otherwise returns the 
 result of __domain_error (outside this range the result would be complex).
@@ -432,7 +432,7 @@ using the relation:
 
 [endsect]
 
-[section:jocobi_zeta Jacobi Zeta Function]
+[section:jacobi_zeta Jacobi Zeta Function]
 
 [heading Synopsis]
 
@@ -486,9 +486,9 @@ the Legendre integrals.
 
 The implementation for Z([phi], k) first makes the argument [phi] positive using:
 
-['D(-[phi], k) = -D([phi], k)]
+['Z(-[phi], k) = -Z([phi], k)]
 
-The functions are then implemented in terms of Carlson's integral R[sub J]
+The function is then implemented in terms of Carlson's integral R[sub J]
 using the relation:
 
 [equation jacobi_zeta]
@@ -500,7 +500,7 @@ the function simplifies to
 
 [endsect]
 
-[section:jocobi_zeta Heuman Lambda Function]
+[section:heuman_lambda Heuman Lambda Function]
 
 [heading Synopsis]
 

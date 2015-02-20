@@ -18,6 +18,7 @@ is not actually a policy.
 * Fixed extreme-value pdf for large valued inputs, see [@https://svn.boost.org/trac/boost/ticket/10938 #10938].
 * Large update to the Elliptic integral code to use Carlson's latest algorithms - these should be more stable, more accurate
 and slightly faster than before.  Also added support for Carlson's RG integral.
+* Added __ellint_d, __jacobi_zeta and __heuman_lambda elliptic integrals.
 
 [h4 Math-2.1.0 (boost-1.57.0)]
 
