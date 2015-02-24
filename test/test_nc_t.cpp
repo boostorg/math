@@ -838,9 +838,12 @@ BOOST_AUTO_TEST_CASE( test_main )
   
 #ifdef TEST_FLOAT
    test_accuracy(0.0F, "float"); // Test float.
+   test_big_df(0.F); // float
 #endif
 #ifdef TEST_DOUBLE
    test_accuracy(0.0, "double"); // Test double.
+   test_big_df(0.); // double
+   test_ignore_policy(0.0);
 #endif
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST_LDOUBLE
@@ -853,9 +856,6 @@ BOOST_AUTO_TEST_CASE( test_main )
 #endif
 #endif
   /* */
-   test_ignore_policy(0.0);
-   test_big_df(0.F); // float
-   test_big_df(0.); // double
 
    
 } // BOOST_AUTO_TEST_CASE( test_main )

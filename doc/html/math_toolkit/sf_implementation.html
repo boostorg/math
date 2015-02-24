@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Additional Implementation Notes</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.1.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.2.0">
 <link rel="up" href="../backgrounders.html" title="Chapter&#160;16.&#160;Backgrounders">
 <link rel="prev" href="../backgrounders.html" title="Chapter&#160;16.&#160;Backgrounders">
 <link rel="next" href="special_tut.html" title="Tutorial: How to Write a New Special Function">
@@ -710,7 +710,20 @@
   /cygdrive/c/progra~1/Inkscape/inkscape -d 120 -e $(cygpath -a -w $(basename $file .svg).png) $(cygpath -a -w $file);
 done</pre>
 <p>
-      Currently Inkscape seems to generate the better looking png's.
+      Using BASH
+    </p>
+<pre class="programlisting"># Convert single SVG to PNG file.
+# /c/progra~1/Inkscape/inkscape -d 120 -e a.png a.svg
+</pre>
+<p>
+      or to convert All files in folder SVG to PNG.
+    </p>
+<pre class="programlisting">for file in *.svg; do
+/c/progra~1/Inkscape/inkscape -d 120 -e $(basename $file .svg).png $file
+done
+</pre>
+<p>
+      Currently Inkscape seems to generate the better looking PNGs.
     </p>
 <p>
       The PDF is generated into \pdf\math.pdf using a command from a shell or command
