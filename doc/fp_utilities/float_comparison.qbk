@@ -1,0 +1,107 @@
+[section:float_comparison Floating-point Comparison]
+
+[import ../../example/float_comparison_example.cpp]
+
+Comparison of floating-point values has always been a source of endless difficulty and confusion.
+
+Unlike integral values that are exact,
+although the bit-pattern binary-representation is exact (at least within a platform),
+usually the representation of a decimal digit string  [*cannot] be exactly represented
+as a binary floating-point. So assignment usually involved rounding.
+
+Floating-point computations also involve rounding so that some 'computational noise' is added,
+and so results are also not exact (although repeatable, at least under identical platforms and compile options).
+
+Sadly, this conflicts with the expectation of most users, as many articles and innumerable cries for help show all too well.
+
+Fortunately, some convenient tools for comparing inexact floating-point  values are available from Boost.
+
+Some background reading is:
+
+* Knuth D.E. The art of computer programming, vol II, section 4.2, especially Floating-Point_Comparison 4.2.2, pages 198-220.
+* [@http://adtmag.com/articles/2000/03/16/comparing-floatshow-to-determine-if-floating-quantities-are-close-enough-once-a-tolerance-has-been-r.aspx
+Alberto Squassabia, Comparing floats listing]
+* [@http://adtmag.com/articles/2000/03/16/comparing-floats-how-to-determine-if-floating-quantities-are-close-enough-once-a-tolerance-has-been.aspx
+Alberto Squassabia, Comparing floats, part 1]
+* [@http://adtmag.com/Articles/2000/03/16/Comparing-Floats-How-To-Determine-if-Floating-Quantities-Are-Close-Enough-Once-a-Tolerance-Has-Been.aspx?Page=2
+Alberto Squassabia, Comparing floats, part 2]
+* [@https://code.google.com/p/googletest/wiki/AdvancedGuide#Floating-Point_Comparison Google Floating-Point_Comparison guide]
+* [@boost:/libs/test/doc/html/boost_test/users_guide/testing_tools/testing_floating_points.html Boost.Test Floating-Point_Comparison]
+
+Boost.Test and Boost.Math floating-point comparison allows
+
+* Relative comparison between two floating-point values.
+* Absolute comparison of one value with zero.
+
+The comparisons are only for floating-point values and are 'fuzzy',
+with a tolerance provided by the user.
+
+[h5 Synopsis]
+
+
+  #include <boost/test/floating_point_comparison.hpp>
+
+[compare_floats_synopsis]
+[compare_floats_using]
+[compare_floats_example_1]
+[compare_floats_example_2]
+[compare_floats_example_3]
+
+[h5 Comparing small values near zero]
+
+When the floating-point values become very small and near or at zero, using
+a relative test becomes unhelpful because one is dividing by a tiny value, or worse, by zero.
+Instead, an [*absolute test] is needed, comparing one (or usually both) values with zero,
+using a tolerance.
+
+Absolute comparisons provided by the `small_with_tolerance` class and `is_small` function.
+
+[h5 Synopsis]
+``
+  namespace boost {
+  namespace math {
+  namespace fpc {
+
+  template<typename FPT>
+  class small_with_tolerance
+  {
+  public:
+  // Public typedefs.
+  typedef bool result_type;
+
+  // Constructor.
+  explicit small_with_tolerance(FPT tolerance); // tolerance >= 0
+
+  // Functor
+  bool operator()(FPT value) const; // return true if <= absolute tolerance (near zero).
+  };
+
+  template<typename FPT>
+  bool
+  is_small(FPT value, FPT tolerance); // return true if value <= absolute tolerance (near zero).
+
+  }}} // namespace fpc, namespace math, namepace boost.
+``
+
+[note The type FPT of the tolerance and the type of the value [*must match].
+
+So `is_small(0.1F, 0.000001)` will fail to compile because "template parameter 'FPT' is ambiguous".
+Always provide the same type, using `static_cast<FPT>()` if necessary.]
+
+A few values near zero are tested with varying tolerance below.
+
+[compare_floats_small_1]
+
+A sample output from the whole example is:
+[compare_floats_output]
+
+See [@../../example/float_comparison_example.cpp] for full example code.
+
+[endsect] [/section:float_comparison Floating-point comparison]
+
+[/
+  Copyright 2015 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
