@@ -1,6 +1,4 @@
-[section:roots Root Finding With Derivatives: Newton-Raphson, Halley & Schroeder]
-
-[import ../../example/root_finding_example.cpp]
+[section:roots_deriv Root Finding With Derivatives: Newton-Raphson, Halley & Schroeder]
 
 [h4 Synopsis]
 
@@ -33,84 +31,73 @@
 
 [h4 Description]
 
-These functions `newton_raphson_iterate, halley_iterate`, and `schroeder_iterate`
-all perform iterative root finding using derivatives.
+These functions all perform iterative root-finding [*using derivatives]:
 
-(These functions should be used whenever derivative(s) are available,
-otherwise use __root_finding_without_derivatives).
-
-* `newton_raphson_iterate` performs second order
-[link math_toolkit.roots.newton Newton-Raphson iteration],
+* `newton_raphson_iterate` performs second order __newton.
 
 * `halley_iterate` and`schroeder_iterate` perform third order
-[link math_toolkit.roots.halley Halley] and [link math_toolkit.roots.schroeder Schroeder] iteration.
+__halley and __schroeder iteration.
 
 The functions all take the same parameters:
 
 [variablelist Parameters of the root finding functions
 [[F f] [Type F must be a callable function object that accepts one parameter and
-        returns a tuple: the tuple type can be any suitable implementation which adhers
-        to the tuple concept in C++11 (for example `std::tuple`, `std::pair`, `boost::tuple`, `boost::fusion::tuple`).
+        returns a __tuple:
 
 For the second order iterative methods ([@http://en.wikipedia.org/wiki/Newton_Raphson Newton Raphson])
-        the tuple should have [*two] elements containing the evaluation
-        of the function and its first derivative respectively.
+        the __tuple should have [*two] elements containing the evaluation
+        of the function and its first derivative.
 
 For the third order methods
 ([@http://en.wikipedia.org/wiki/Halley%27s_method Halley] and
 Schroeder)
-        the tuple should have *three* elements containing the evaluation of
-        the function and its first and second derivatives respectively.]]
+        the __tuple should have *three* elements containing the evaluation of
+        the function and its first and second derivatives.]]
 [[T guess] [The initial starting value. A good guess is crucial to quick convergence!]]
 [[T min] [The minimum possible value for the result, this is used as an initial lower bracket.]]
 [[T max] [The maximum possible value for the result, this is used as an initial upper bracket.]]
-[[int digits] [The desired number of binary digits of precision.]]
-[[uintmax_t& max_iter] [An optional maximum number of iterations to perform.
-Default `max_iter` is `(std::numeric_limits<boost::uintmax_t>::max)(),`  perhaps `18446744073709551615`
-which may be more than you want for wait for!
-[br] On exit this is set to the actual number of iterations performed: consequently
-you should always check this value on exit to determine whether iteration terminated
-because we had converged on the root, or because the maximum number of iterations was exceded.]]
+[[int digits] [The desired number of binary digits precision.]]
+[[uintmax_t& max_iter] [An optional maximum number of iterations to perform.  On exit, this is updated to the actual number of iterations performed.]]
+[[T] [Floating-point type, typically `double` (often deduced by __ADL)]]
+[[F] [Floating-point types of the functor, usually deduced from T by __ADL, so it is rarely necessary to define F.]]
 ]
 
 When using these functions you should note that:
 
-* Default `max_iter = (std::numeric_limits<boost::uintmax_t>::max)()` is effectively 'iterate for ever'!.
-* The functions may be very sensitive to the initial guess. Typically they converge very rapidly
-if the initial guess has two or three decimal digits correct.  However, convergence
+* Default `max_iter = (std::numeric_limits<boost::uintmax_t>::max)()` is effectively 'iterate for ever'.
+* They may be very sensitive to the initial guess, typically they converge very rapidly
+if the initial guess has two or three decimal digits correct.  However convergence
 can be no better than __bisection, or in some rare cases, even worse than __bisection if the
 initial guess is a long way from the correct value and the derivatives are close to zero.
 * These functions include special cases to handle zero first (and second where appropriate)
 derivatives, and fall back to __bisection in this case.  However, it is helpful
-if ['functor F] is defined to return an arbitrarily small value [*of the correct sign] rather
+if functor F is defined to return an arbitrarily small value ['of the correct sign] rather
 than zero.
 * If the derivative at the current best guess for the result is infinite (or
 very close to being infinite) then these functions may terminate prematurely.
 A large first derivative leads to a very small next step, triggering the termination
-condition.  Derivative-based iteration may not be appropriate in such cases.
-* If the function is 'Really Well Behaved' (monotonic and has only one root),
-and only if this is the case then
+condition.  Derivative based iteration may not be appropriate in such cases.
+* If the function is 'Really Well Behaved' (is monotonic and has only one root)
 the bracket bounds ['min] and ['max] may as well be set to the widest limits
 like zero and `numeric_limits<T>::max()`.
-*If the function more complex and may have more than one root or a pole,
-then the choice of bounds provides protection against jumping out to seek the 'wrong' root.
-* If the function is badly behaved then these functions fall back to __bisection 
-if the next computed step would take the
+*But if the function more complex and may have more than one root or a pole,
+the choice of bounds is protection against jumping out to seek the 'wrong' root.
+* These functions fall back to __bisection if the next computed step would take the
 next value out of bounds.  The bounds are updated after each step to ensure this leads
-to convergence.  In this situation, a good initial guess backed up by asymptotically-tight
-bounds will improve performance no end - rather than relying on bisecting [0, LARGE] for example.
+to convergence.  However, a good initial guess backed up by asymptotically-tight
+bounds will improve performance no end - rather than relying on __bisection.
 * The value of ['digits] is crucial to good performance of these functions,
-if it is set too high then, at best, you will get one extra (unnecessary)
-iteration, and, at worst, the last few steps will proceed by __bisection.
+if it is set too high then at best you will get one extra (unnecessary)
+iteration, and at worst the last few steps will proceed by __bisection.
 Remember that the returned value can never be more accurate than ['f(x)] can be
 evaluated, and that if ['f(x)] suffers from cancellation errors as it
-tends to zero, then the computed steps will be effectively random.  The
+tends to zero then the computed steps will be effectively random.  The
 value of ['digits] should be set so that iteration terminates before this point:
 remember that for second and third order methods the number of correct
-digits in the result is increasing quite substantially with each iteration,
-['digits] should be set by experiment so that the final
+digits in the result is increasing quite
+substantially with each iteration, ['digits] should be set by experiment so that the final
 iteration just takes the next value into the zone where ['f(x)] becomes inaccurate.
-* A good choice for the maximum number of iterations would be `boost::math::policies::get_max_root_iterations<Policy>()`).
+* To get the binary digits of accuracy, use `policies::get_max_root_iterations<Policy>())`.
 * If you need some diagnostic output to see what is going on, you can
 `#define BOOST_MATH_INSTRUMENT` before the `#include <boost/math/tools/roots.hpp>`,
 and also ensure that display of all the possibly significant digits with
@@ -127,13 +114,13 @@ Given an initial guess ['x0] the subsequent values are computed using:
 
 [equation roots1]
 
-Out of bounds steps revert to __bisection of the current bounds.
+Out of bounds steps revert to bisection of the current bounds.
 
 Under ideal conditions, the number of correct digits doubles with each iteration.
 
 [h4:halley Halley's Method]
 
-Given an initial guess x0 the subsequent values are computed using:
+Given an initial guess ['x0] the subsequent values are computed using:
 
 [equation roots2]
 
@@ -141,13 +128,13 @@ Over-compensation by the second derivative (one which would proceed
 in the wrong direction) causes the method to
 revert to a Newton-Raphson step.
 
-Out-of-bounds steps revert to __bisection of the current bounds.
+Out of bounds steps revert to bisection of the current bounds.
 
 Under ideal conditions, the number of correct digits trebles with each iteration.
 
 [h4:schroeder Schroeder's Method]
 
-Given an initial guess ['x0] the subsequent values are computed using:
+Given an initial guess x0 the subsequent values are computed using:
 
 [equation roots3]
 
@@ -156,91 +143,18 @@ in the wrong direction) causes the method to
 revert to a Newton-Raphson step.  Likewise a Newton step is used
 whenever that Newton step would change the next value by more than 10%.
 
-Out of bounds steps revert to __bisection of the current bounds.
+Out of bounds steps revert to __bisection_wikipedia of the current bounds.
 
 Under ideal conditions, the number of correct digits trebles with each iteration.
 
-[h4 Example]
+[h4 Examples]
 
-Let's suppose we want to find the cube root of a number: the equation we want to
-solve along with its derivatives are:
+See __root_finding_examples.
 
-[equation roots4]
-
-To begin with let us solve the problem using Newton-Raphson iterations.
-We will begin by defining a function object (functor) that returns the evaluation
-of the function to solve, along with its first derivative  ['f'(x)]:
-
-[root_finding_cbrt_functor_1stderiv]
-
-Implementing the cube root is fairly trivial now, the hardest part is finding
-a good approximation to begin with: in this case, we'll just divide the exponent
-by three. (There are better but more complex 'guess' algorithms used in 'real-life'.)
-
-[root_finding_cbrt_1deriv]
-
-Using the test data in [@../../test/cbrt_data.ipp], the test  [@../../test/test_cbrt.cpp]
-found the cube root exact to the last digit in every case,
-and in no more than 6 iterations at double precision.
-
-However, you will note that a high (maximum) precision was used in this
-example, exactly what was warned against earlier on in these docs!  In this
-particular case it is possible to compute ['f(x)] exactly and without undue
-cancellation error, so a high limit is not too much of an issue.  However,
-reducing the limit to `std::numeric_limits<T>::digits * 2 / 3` gave full
-precision in all but one of the test cases (and that one was out by just one bit).
-The maximum number of iterations remained 6, but in most cases was reduced by one.
-
-So we might decide to trade the accuracy and limit iterations for speed.
-
-   int get_digits = (digits * 2) /3; // Two thirds of maximum possible accuracy.
-   boost::uintmax_t maxit = 7; // Limit the number of iterations.
-
-Note also that the above code omits an optimization by computing ['z[sup2]],
-and reusing it, omits error handling, and does not handle negative values of z correctly.
-(As is traditional, these are left as an exercise for the reader!)
-
-The `boost::math::cbrt` function __cbrt also includes these and other improvements.
-
-Now let's adapt the functor slightly to return the second derivative ['f''(x)] as well:
-
-[root_finding_cbrt_functor_2deriv]
-
-And then adapt the `cbrt` function to use Halley iterations:
-
-[root_finding_cbrt_2deriv]
-
-Note that the iterations are set to stop at just one-half of full precision,
-and yet, even so, not one of the test cases had a single bit wrong.
-What's more, the maximum number of iterations was now just 4.
-
-Just to complete the picture, we could have called `schroeder_iterate` in the last
-example: and in fact it makes no difference to the accuracy or number of iterations
-in this particular case.  However, the relative performance of these two methods
-may vary depending upon the nature of ['f(x)], and the accuracy to which the initial
-guess can be computed.  There appear to be no generalisations that can be made
-except "try them and see".
-
-We could also have used a C++ lambda expression in place of the function object.
-
-Finally, had we called __cbrt with
-__multiprecision or [@http://shoup.net/ntl/doc/RR.txt NTL::RR]
-set to 1000 bit precision, then full precision still can be obtained with just 7 iterations.
-To put that in perspective,
-an increase in precision by a factor of 20 has less than doubled the number of
-iterations.  That just goes to emphasise that most of the iterations are used
-up getting the first few digits correct: after that these methods can churn out
-further digits with remarkable efficiency.
-
-Or to put it another way: [*nothing beats a really good initial guess!]
-
-See [@../../example/root_finding_example.cpp root_finding_example.cpp] for full source code.
-
-
-[endsect] [/section:roots Root Finding With Derivatives]
+[endsect] [/section:roots_deriv Root Finding With Derivatives]
 
 [/
-  Copyright 2006, 2010, 2012, 2014 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2010, 2012 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

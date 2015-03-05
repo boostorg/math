@@ -3,11 +3,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Tuples</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.1.0">
-<link rel="up" href="../internals1.html" title="Utilities">
-<link rel="prev" href="minima.html" title="Locating Function Minima: Brent's algorithm">
-<link rel="next" href="../internals2.html" title="Testing and Development">
+<link rel="up" href="../internals.html" title="Internal tools">
+<link rel="prev" href="rational.html" title="Polynomial and Rational Function Evaluation">
+<link rel="next" href="polynomials.html" title="Polynomials">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,21 +20,21 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="minima.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../internals2.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="rational.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="polynomials.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.internals1.tuples"></a><a class="link" href="tuples.html" title="Tuples">Tuples</a>
+<a name="math_toolkit.internals.tuples"></a><a class="link" href="tuples.html" title="Tuples">Tuples</a>
 </h3></div></div></div>
 <h5>
-<a name="math_toolkit.internals1.tuples.h0"></a>
-        <span class="phrase"><a name="math_toolkit.internals1.tuples.synopsis"></a></span><a class="link" href="tuples.html#math_toolkit.internals1.tuples.synopsis">Synopsis</a>
+<a name="math_toolkit.internals.tuples.h0"></a>
+        <span class="phrase"><a name="math_toolkit.internals.tuples.synopsis"></a></span><a class="link" href="tuples.html#math_toolkit.internals.tuples.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">tuple</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <h5>
-<a name="math_toolkit.internals1.tuples.h1"></a>
-        <span class="phrase"><a name="math_toolkit.internals1.tuples.description"></a></span><a class="link" href="tuples.html#math_toolkit.internals1.tuples.description">Description</a>
+<a name="math_toolkit.internals.tuples.h1"></a>
+        <span class="phrase"><a name="math_toolkit.internals.tuples.description"></a></span><a class="link" href="tuples.html#math_toolkit.internals.tuples.description">Description</a>
       </h5>
 <p>
         This header defines the type <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">tuple</span></code>,
@@ -48,16 +48,17 @@
       </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-            std::tuple etc when available, otherwise:
+            <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">tuple</span></code> etc when available, otherwise:
           </li>
 <li class="listitem">
-            std::tr1::tuple etc when available, otherwise:
+            <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">tr1</span><span class="special">::</span><span class="identifier">tuple</span></code> etc when available, otherwise:
           </li>
 <li class="listitem">
-            boost::fusion::tuple etc if the compiler supports it, otherwise:
+            <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">tuple</span></code> etc if the compiler supports
+            it, otherwise:
           </li>
 <li class="listitem">
-            boost::tuple.
+            <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">tuple</span></code>.
           </li>
 </ul></div>
 <p>
@@ -78,7 +79,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="minima.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals1.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../internals2.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="rational.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="polynomials.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

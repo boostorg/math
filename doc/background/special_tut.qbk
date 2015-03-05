@@ -86,9 +86,9 @@ what each line does:
       // to be different types.
       //
       typedef typename policies::normalise<
-         Policy, 
-         policies::promote_float<false>, 
-         policies::promote_double<false>, 
+         Policy,
+         policies::promote_float<false>,
+         policies::promote_double<false>,
          policies::discrete_quantile<>,
          policies::assert_undefined<> >::type forwarding_policy;
       //
@@ -99,9 +99,9 @@ what each line does:
       //
       return policies::checked_narrowing_cast<result_type, forwarding_policy>(
             detail::my_special_imp(
-                  static_cast<value_type>(a), 
-                  static_cast<value_type>(x), 
-                  forwarding_policy()), 
+                  static_cast<value_type>(a),
+                  static_cast<value_type>(x),
+                  forwarding_policy()),
             "boost::math::my_special<%1%>(%1%, %1%)");
    }
 
@@ -168,7 +168,7 @@ we'll divide these up in to 3 main categories:
 
 [h4 Spot Tests]
 
-Spot tests consist of checking that the expected exception is generated when the inputs are in error (or 
+Spot tests consist of checking that the expected exception is generated when the inputs are in error (or
 otherwise generate undefined values), and checking any special values.  We can check for expected exceptions
 with `BOOST_CHECK_THROW`, so for example if it's a domain error for the last parameter to be outside the range
 `[0,1]` then we might have:
@@ -205,16 +205,16 @@ tabulate these like this:
 We'll see how to use this table and the meaning of the `SC_` macro later.  One important point
 is to make sure that the input values have exact binary representations: so choose values such as
 1.5, 1.25, 1.125 etc.  This ensures that if `my_special` is unusually sensitive in one area, that
-we don't get apparently large errors just because the inputs are 0.5ulp in error.
+we don't get apparently large errors just because the inputs are 0.5 ulp in error.
 
 [h4 Random Test Values]
 
 We can generate a large number of test values to check both for future regressions, and for
 accumulated rounding or cancellation error in our implementation.  Ideally we would use an
-independent implementation for this (for example my_special may be defined in directly terms 
+independent implementation for this (for example my_special may be defined in directly terms
 of other special functions but not implemented that way for performance or accuracy reasons).
 Alternatively we may use our own implementation directly, but with any special cases (asymptotic
-expansions etc) disabled.  We have a set of [link math_toolkit.internals2.test_data tools] 
+expansions etc) disabled.  We have a set of [link math_toolkit.internals.test_data tools]
 to generate test data directly, here's a typical example:
 
 [import ../../example/special_data.cpp]
@@ -266,7 +266,7 @@ definition for the SC_ macro:
    #endif
 
 The easiest function to implement is the "test" function which is what we'll be calling
-from the test-driver program.  It simply includes the files containing the tabular 
+from the test-driver program.  It simply includes the files containing the tabular
 test data and calls `do_test` function for each table, along with a description of what's
 being tested:
 
@@ -361,7 +361,7 @@ Now we just need to write the test driver program, at it's most basic it looks s
       test(0.1, "double");
       //
       // Testing of long double and real_concept is protected
-      // by some logic to disable these for unsupported 
+      // by some logic to disable these for unsupported
       // or problem compilers.
       //
    #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
@@ -406,7 +406,7 @@ the particular tests plus the platform and compiler:
    #endif
       //
       // We call add_expected_result for each error rate we wish to adjust, these tell
-      // handle_test_result what level of error is acceptable.  We can have as many calls 
+      // handle_test_result what level of error is acceptable.  We can have as many calls
       // to add_expected_result as we need, each one establishes a rule for acceptable error
       // with rules set first given preference.
       //
@@ -417,14 +417,14 @@ the particular tests plus the platform and compiler:
          /* Second argument is a regular expression to match against the name of the
             C++ standard library as set in BOOST_STDLIB */
          ".*",
-         /* Third argument is a regular expression to match against the name of the 
+         /* Third argument is a regular expression to match against the name of the
             platform as set in BOOST_PLATFORM */
          ".*",
          /* Forth argument is the name of the type being tested, normally we will
             only need to up the acceptable error rate for the widest floating
             point type being tested */
          largest_real,
-         /* Fifth argument is a regular expression to match against 
+         /* Fifth argument is a regular expression to match against
             the name of the group of data being tested */
          "MySpecial Function:.*Small.*",
          /* Sixth argument is a regular expression to match against the name
@@ -432,7 +432,7 @@ the particular tests plus the platform and compiler:
          "boost::math::my_special",
          /* Seventh argument is the maximum allowable error expressed in units
             of machine epsilon passed as a long integer value */
-         50, 
+         50,
          /* Eighth argument is the maximum allowable mean error expressed in units
             of machine epsilon passed as a long integer value */
          20);

@@ -57,27 +57,25 @@ considered experimental: they are "exposed implementation details"
 whose interfaces and\/or implementations may change.
 
 There are helpers for the
-[link math_toolkit.internals1.series_evaluation
-evaluation of infinite series],
-[link math_toolkit.internals1.cf continued
-fractions] and [link math_toolkit.internals1.rational
+[link math_toolkit.internals.series_evaluation evaluation of infinite series],
+[link math_toolkit.internals.cf continued
+fractions] and [link math_toolkit.internals.rational
 rational approximations].
 
-There is a fairly comprehensive set of root finding and
-[link math_toolkit.internals1.minima function minimisation
-algorithms]: the root finding algorithms are both
-[link math_toolkit.roots with] and
-[link math_toolkit.roots2 without] derivative support.
+There is a fairly comprehensive set of root finding both
+__root_finding_without_derivatives
+and __root_finding_with_derivatives with derivative support,
+and function minimization using __brent_minima.
 
-A [link math_toolkit.internals2.minimax
-Remez algorithm implementation] allows for the locating of minimax rational
+A [link math_toolkit.internals.minimax Remez algorithm implementation]
+allows for the locating of minimax rational
 approximations.
 
 There are also (experimental) classes for the
-[link math_toolkit.internals2.polynomials manipulation of polynomials], for
-[link math_toolkit.internals2.error_test
+[link math_toolkit.internals.polynomials manipulation of polynomials], for
+[link math_toolkit.internals.error_test
 testing a special function against tabulated test data], and for
-the [link math_toolkit.internals2.test_data
+the [link math_toolkit.internals.test_data
 rapid generation of test data] and/or data for output to an
 external graphing application.
 

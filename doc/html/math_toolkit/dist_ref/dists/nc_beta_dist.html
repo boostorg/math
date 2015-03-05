@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Noncentral Beta Distribution</title>
 <link rel="stylesheet" href="../../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../../index.html" title="Math Toolkit 2.1.0">
 <link rel="up" href="../dists.html" title="Distributions">
 <link rel="prev" href="negative_binomial_dist.html" title="Negative Binomial Distribution">
@@ -387,11 +387,12 @@ is
           <span class="inlinemediaobject"><img src="../../../../equations/nc_beta_ref1.png"></span>
         </p>
 <p>
-          Quantiles are computed using a specially modified version of <a class="link" href="../../roots2.html" title="Root Finding Without Derivatives: Bisection, Bracket and TOMS748">bracket_and_solve_root</a>,
-          starting the search for the root at the mean of the distribution. (A Cornish-Fisher
-          type expansion was also tried, but while this gets quite close to the root
-          in many cases, when it is wrong it tends to introduce quite pathological
-          behaviour: more investigation in this area is probably warranted).
+          Quantiles are computed using a specially modified version of <a class="link" href="../../roots/roots_noderiv.html#math_toolkit.roots.roots_noderiv.bracket_solve">bracket
+          and solve</a>, starting the search for the root at the mean of the distribution.
+          (A Cornish-Fisher type expansion was also tried, but while this gets quite
+          close to the root in many cases, when it is wrong it tends to introduce
+          quite pathological behaviour: more investigation in this area is probably
+          warranted).
         </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

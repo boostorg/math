@@ -3,9 +3,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Graphing, Profiling, and Generating Test Data for Special Functions</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../../index.html" title="Math Toolkit 2.1.0">
-<link rel="up" href="../internals2.html" title="Testing and Development">
+<link rel="up" href="../internals.html" title="Internal tools">
 <link rel="prev" href="error_test.html" title="Relative Error and Testing">
 <link rel="next" href="../../using_udt.html" title="Chapter&#160;14.&#160;Use with User-Defined Floating-Point Types - Boost.Multiprecision and others">
 </head>
@@ -20,11 +20,11 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="error_test.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals2.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../using_udt.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="error_test.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../using_udt.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="math_toolkit.internals2.test_data"></a><a class="link" href="test_data.html" title="Graphing, Profiling, and Generating Test Data for Special Functions">Graphing, Profiling,
+<a name="math_toolkit.internals.test_data"></a><a class="link" href="test_data.html" title="Graphing, Profiling, and Generating Test Data for Special Functions">Graphing, Profiling,
       and Generating Test Data for Special Functions</a>
 </h3></div></div></div>
 <p>
@@ -46,8 +46,8 @@
           </li>
 </ul></div>
 <h5>
-<a name="math_toolkit.internals2.test_data.h0"></a>
-        <span class="phrase"><a name="math_toolkit.internals2.test_data.synopsis"></a></span><a class="link" href="test_data.html#math_toolkit.internals2.test_data.synopsis">Synopsis</a>
+<a name="math_toolkit.internals.test_data.h0"></a>
+        <span class="phrase"><a name="math_toolkit.internals.test_data.synopsis"></a></span><a class="link" href="test_data.html#math_toolkit.internals.test_data.synopsis">Synopsis</a>
       </h5>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">tools</span><span class="special">/</span><span class="identifier">test_data</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
@@ -160,8 +160,8 @@
 <span class="special">}}}</span> <span class="comment">// namespaces</span>
 </pre>
 <h5>
-<a name="math_toolkit.internals2.test_data.h1"></a>
-        <span class="phrase"><a name="math_toolkit.internals2.test_data.description"></a></span><a class="link" href="test_data.html#math_toolkit.internals2.test_data.description">Description</a>
+<a name="math_toolkit.internals.test_data.h1"></a>
+        <span class="phrase"><a name="math_toolkit.internals.test_data.description"></a></span><a class="link" href="test_data.html#math_toolkit.internals.test_data.description">Description</a>
       </h5>
 <p>
         This tool is best illustrated with the following series of examples.
@@ -190,8 +190,8 @@
           </li>
 </ul></div>
 <h6>
-<a name="math_toolkit.internals2.test_data.h2"></a>
-        <span class="phrase"><a name="math_toolkit.internals2.test_data.example_1_output_data_for_graph_"></a></span><a class="link" href="test_data.html#math_toolkit.internals2.test_data.example_1_output_data_for_graph_">Example
+<a name="math_toolkit.internals.test_data.h2"></a>
+        <span class="phrase"><a name="math_toolkit.internals.test_data.example_1_output_data_for_graph_"></a></span><a class="link" href="test_data.html#math_toolkit.internals.test_data.example_1_output_data_for_graph_">Example
         1: Output Data for Graph Plotting</a>
       </h6>
 <p>
@@ -224,8 +224,8 @@
         <span class="inlinemediaobject"><img src="../../../graphs/lgamma.png" align="middle"></span>
       </p>
 <h6>
-<a name="math_toolkit.internals2.test_data.h3"></a>
-        <span class="phrase"><a name="math_toolkit.internals2.test_data.example_2_creating_test_data"></a></span><a class="link" href="test_data.html#math_toolkit.internals2.test_data.example_2_creating_test_data">Example
+<a name="math_toolkit.internals.test_data.h3"></a>
+        <span class="phrase"><a name="math_toolkit.internals.test_data.example_2_creating_test_data"></a></span><a class="link" href="test_data.html#math_toolkit.internals.test_data.example_2_creating_test_data">Example
         2: Creating Test Data</a>
       </h6>
 <p>
@@ -360,7 +360,7 @@
 <p>
         The first two values in each row are the input parameters that were passed
         to our functor and the last value is the return value from the functor. Had
-        our functor returned a <a class="link" href="../internals1/tuples.html" title="Tuples">boost::math::tuple</a>
+        our functor returned a <a class="link" href="tuples.html" title="Tuples">boost::math::tuple</a>
         rather than a value, then we would have had one entry for each element in
         the tuple in addition to the input parameters.
       </p>
@@ -389,8 +389,8 @@
         used by default as it's rather hard on the compiler when the table is large.
       </p>
 <h6>
-<a name="math_toolkit.internals2.test_data.h4"></a>
-        <span class="phrase"><a name="math_toolkit.internals2.test_data.example_3_profiling_a_continued_"></a></span><a class="link" href="test_data.html#math_toolkit.internals2.test_data.example_3_profiling_a_continued_">Example
+<a name="math_toolkit.internals.test_data.h4"></a>
+        <span class="phrase"><a name="math_toolkit.internals.test_data.example_3_profiling_a_continued_"></a></span><a class="link" href="test_data.html#math_toolkit.internals.test_data.example_3_profiling_a_continued_">Example
         3: Profiling a Continued Fraction for Convergence and Accuracy</a>
       </h6>
 <p>
@@ -423,7 +423,7 @@
 </pre>
 <p>
         We want to measure both the relative error, and the rate of convergence of
-        this fraction, so we'll write a functor that returns both as a <a class="link" href="../internals1/tuples.html" title="Tuples">boost::math::tuple</a>:
+        this fraction, so we'll write a functor that returns both as a <a class="link" href="tuples.html" title="Tuples">boost::math::tuple</a>:
         class test_data will unpack the tuple for us, and create one column of data
         for each element in the tuple (in addition to the input parameters):
       </p>
@@ -436,7 +436,7 @@
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">profile_gamma_fraction</span>
 <span class="special">{</span>
-   <span class="keyword">typedef</span> <a class="link" href="../internals1/tuples.html" title="Tuples">boost::math::tuple</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">result_type</span><span class="special">;</span>
+   <span class="keyword">typedef</span> <a class="link" href="tuples.html" title="Tuples">boost::math::tuple</a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">result_type</span><span class="special">;</span>
 
    <span class="identifier">result_type</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">T</span> <span class="identifier">val</span><span class="special">)</span>
    <span class="special">{</span>
@@ -495,8 +495,8 @@
         of a and z.
       </p>
 <h5>
-<a name="math_toolkit.internals2.test_data.h5"></a>
-        <span class="phrase"><a name="math_toolkit.internals2.test_data.reference"></a></span><a class="link" href="test_data.html#math_toolkit.internals2.test_data.reference">reference</a>
+<a name="math_toolkit.internals.test_data.h5"></a>
+        <span class="phrase"><a name="math_toolkit.internals.test_data.reference"></a></span><a class="link" href="test_data.html#math_toolkit.internals.test_data.reference">reference</a>
       </h5>
 <p>
         Most of this tool has been described already in the examples above, we'll
@@ -557,7 +557,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="error_test.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals2.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../using_udt.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="error_test.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../internals.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../../using_udt.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

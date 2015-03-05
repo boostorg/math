@@ -1,6 +1,4 @@
 
-[section:roots  Rooting finding and minimization]
-
 Several tools are provided to aid finding minima and roots of functions.
 
 Some  __root_finding_without_derivatives methods are __bisection,
@@ -22,8 +20,6 @@ Also provided are __root_finding_examples:
 [include roots.qbk]
 [include root_finding_examples.qbk]
 [include minima.qbk]
-
-[endsect] [/section:roots]
 
 [/ roots_overview.qbk
   Copyright 2015 John Maddock and Paul A. Bristow.
