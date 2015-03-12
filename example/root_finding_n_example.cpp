@@ -62,7 +62,7 @@ struct nth_functor_2deriv
   }
 private:
   T a; // to be 'nth_rooted'.
-}; 
+};
 
 //] [/root_finding_nth_functor_2deriv]
 
@@ -119,8 +119,8 @@ T show_nth_root(T value)
   //std::cout.precision(std::numeric_limits<T>::max_digits10);
   // or use   cout.precision(max_digits10 = 2 + std::numeric_limits<double>::digits * 3010/10000);
   // Or guaranteed significant digits:
-   std::cout.precision(std::numeric_limits<T>::digits10); 
-  
+   std::cout.precision(std::numeric_limits<T>::digits10);
+
   T r = nth_2deriv<N>(value);
   std::cout << "Type " << typeid(T).name() << " value = " << value << ", " << N << "th root = " << r << std::endl;
   return r;
@@ -165,8 +165,8 @@ int main()
     // Type double value = 2, 1000000th root = 1.00000069314783
   }
   catch (const std::exception& e)
-  { // Always useful to include try & catch blocks because default policies 
-    // are to throw exceptions on arguments that cause errors like underflow, overflow. 
+  { // Always useful to include try & catch blocks because default policies
+    // are to throw exceptions on arguments that cause errors like underflow, overflow.
     // Lacking try & catch blocks, the program will abort without a message below,
     // which may give some helpful clues as to the cause of the exception.
     std::cout <<
@@ -177,8 +177,15 @@ int main()
 
 
 /*
+//[root_finding_example_output_1
 
+nth Root finding Example.
+Type double value = 2, 5th root = 1.14869835499704
+Type long double value = 2, 5th root = 1.14869835499704
+Type class boost::multiprecision::number<class boost::multiprecision::backends::cpp_dec_float<50,int,void>,1> value = 2,
+  5th root = 1.1486983549970350067986269467779275894438508890978
+Type class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<50,10,void,int,0,0>,0> value = 2,
+  5th root = 1.1486983549970350067986269467779275894438508890978
 
-
-
+//] [/root_finding_example_output_1]
 */

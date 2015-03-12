@@ -49,24 +49,28 @@ sizes: typically `float`, `double` or `long double`.
 
 [h4 Implementation Toolkit]
 
-Provides [link toolkit many of the tools] required to implement
+The section [link math_toolkit.internals_overview Internal tools]
+provides many of the tools required to implement
 mathematical special functions: hopefully the presence of
 these will encourage other authors to contribute more special
-function implementations in the future.  These tools are currently
-considered experimental: they are "exposed implementation details"
-whose interfaces and\/or implementations may change.
+function implementations in the future.
 
-There are helpers for the
-[link math_toolkit.internals.series_evaluation evaluation of infinite series],
-[link math_toolkit.internals.cf continued
-fractions] and [link math_toolkit.internals.rational
-rational approximations].
+Some tools are now considered well-tried and their signatures stable and unlikely to change.
 
 There is a fairly comprehensive set of root finding both
 __root_finding_without_derivatives
 and __root_finding_with_derivatives with derivative support,
 and function minimization using __brent_minima.
 
+Other [link math_toolkit.internals_overview Internal tools]
+are currently still considered experimental: they are "exposed implementation details"
+whose interfaces and\/or implementations may change without notice.
+
+There are helpers for the
+[link math_toolkit.internals.series_evaluation evaluation of infinite series],
+[link math_toolkit.internals.cf continued
+fractions] and [link math_toolkit.internals.rational
+rational approximations].
 A [link math_toolkit.internals.minimax Remez algorithm implementation]
 allows for the locating of minimax rational
 approximations.
@@ -82,7 +86,7 @@ external graphing application.
 [endsect] [/section:intro Introduction]
 
 [/
-  Copyright 2006, 2012 John Maddock and Paul A. Bristow.
+  Copyright 2006, 2012, 2015 John Maddock and Paul A. Bristow.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).

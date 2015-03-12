@@ -2,15 +2,15 @@
 
 [section:special_tut_impl Implementation]
 
-In this section we'll provide a "recipe" for adding a new special function to this library to make life easier for
-future authors wishing to contribute.  We'll assume the function returns a single floating point result, and takes
-two floating point arguments.  For the sake of exposistion we'll give the function the name "my_special".
+In this section, we'll provide a "recipe" for adding a new special function to this library to make life easier for
+future authors wishing to contribute.  We'll assume the function returns a single floating-point result, and takes
+two floating-point arguments.  For the sake of exposition we'll give the function the name [~my_special].
 
-Normally the implementation of such a function is split into two layers - a public user layer, and an internal
-implementation layer that does the actual work.  The implementation layer is declared inside a "detail" namespace
-and has a simple signature:
+Normally, the implementation of such a function is split into two layers - a public user layer, and an internal
+implementation layer that does the actual work.
+The implementation layer is declared inside a `detail` namespace and has a simple signature:
 
-   namespace boost{ namespace math{ namespace detail{
+   namespace boost { namespace math { namespace detail {
 
    template <class T, class Policy>
    T my_special_imp(const T& a, const T&b, const Policy& pol)
@@ -109,7 +109,7 @@ what each line does:
 
 We're now almost there, we just need to flesh out the details of the implementation layer:
 
-   namespace boost{ namespace math{ namespace detail{
+   namespace boost { namespace math { namespace detail {
 
    template <class T, class Policy>
    T my_special_imp(const T& a, const T&b, const Policy& pol)
@@ -125,13 +125,13 @@ The following guidelines indicate what (other than basic arithmetic) can go in t
 [link math_toolkit.error_handling.finding_more_information policy based error handlers].
 * Calls to standard library functions should be made unqualified (this allows argument
 dependent lookup to find standard library functions for user-defined floating point
-types such as those from Boost.Multiprecision).  In addition the macro `BOOST_MATH_STD_USING`
+types such as those from __multiprecision).  In addition, the macro `BOOST_MATH_STD_USING`
 should appear at the start of the function (note no semi-colon afterwards!) so that
 all the math functions in `namespace std` are visible in the current scope.
 * Calls to other special functions should be made as fully qualified calls, and include the
 policy parameter as the last argument, for example `boost::math::tgamma(a, pol)`.
 * Where possible, evaluation of series, continued fractions, polynomials, or root
-finding should use one of the [link toolkit boiler plate functions].  In any case, after
+finding should use one of the [link math_toolkit.internals_overview  boiler-plate functions].  In any case, after
 any iterative method, you should verify that the number of iterations did not exceed the
 maximum specified in the __Policy type, and if it did terminate as a result of exceeding the
 maximum, then the appropriate error handler should be called (see existing code for examples).
@@ -139,7 +139,7 @@ maximum, then the appropriate error handler should be called (see existing code 
 for example: `constants::pi<T>()`.
 * Where tables of coefficients are used (for example for rational approximations), care should be taken
 to ensure these are initialized at program startup to ensure thread safety when using user-defined number types.
-See for example the use of `erf_initializer` in boost/math/special_functions/erf.hpp.
+See for example the use of `erf_initializer` in [@../include/boost/math/special_functions/erf.hpp  erf.hpp].
 
 Here are some other useful internal functions:
 

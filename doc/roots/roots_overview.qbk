@@ -2,14 +2,14 @@
 Several tools are provided to aid finding minima and roots of functions.
 
 Some  __root_finding_without_derivatives methods are __bisection,
-__bracket_solve including use of __root_finding_TOMS748.
+__bracket_solve, including use of __root_finding_TOMS748.
 
 For __root_finding_with_derivatives the methods of
-__newton __halley and __schroeder are implemented.
+__newton, __halley, and __schroeder are implemented.
 
-For locating minima of a function, __brent_minima is provided.
+For locating minima of a function,  a __brent_minima_example is provided.
 
-Also provided are __root_finding_examples:
+There are several fully-worked __root_finding_examples, including:
 
 * __root_finding_example_cbrt_without_derivatives
 * __root_finding_example_cbrt_with_1_derivative

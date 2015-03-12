@@ -7,13 +7,14 @@
 The examples demonstrate how to use the various tools for
 [@http://en.wikipedia.org/wiki/Root-finding_algorithm root finding].
 
-We start with the simple cube root function [cbrt] ( C++ standard function name
+We start with the simple cube root function `cbrt` ( C++ standard function name
 [@http://en.cppreference.com/w/cpp/numeric/math/cbrt cbrt])
 showing __cbrt_no_derivatives.
 
 We then show how use of derivatives can improve the speed of convergence.
 
-(But these examples are only a demonstration and does not try to make the ultimate improvements of a 'real-life'
+(But these examples are only a demonstration and do not try to make
+the ultimate improvements of an 'industrial-strength'
 implementation, for example, of `boost::math::cbrt`, mainly by using a better computed initial 'guess'
 at [@boost:/libs/math/include/boost/math/special_functions/cbrt.hpp  cbrt.hpp]).
 
@@ -47,10 +48,10 @@ about the slope or curvature of the cube root function.
 Fortunately, the cube root function is 'Really Well Behaved' in that it is monotonic
 and has only one root (we leave negative values 'as an exercise for the student').
 
-We then show how adding what we can know about this function, first just the slope,
-the 1st derivation ['f'(x)], will speed homing in on the solution.
+We then show how adding what we can know about this function, first just the slope
+or 1st derivative ['f'(x)], will speed homing in on the solution.
 
-Lastly we show how adding the curvature ['f''(x)] too will speed convergence even more.
+Lastly, we show how adding the curvature ['f''(x)] too will speed convergence even more.
 
 [h3:cbrt_no_derivatives Cube root function without derivatives]
 
@@ -193,11 +194,11 @@ Or to put it another way: ['nothing beats a really good initial guess!]
 
 [h3:fifth_root Fifth-root function]
 
-Let's now suppose we want to find the [*fifth root] of a number a.
+Let's now suppose we want to find the [*fifth root] of a number ['a].
 
 The equation we want to solve is :
 
-__spaces['f](x) = x[super 5] -a
+__spaces['f](x) = ['x[super 5] -a]
 
 If your differentiation is a little rusty
 (or you are faced with an function whose complexity makes differentiation daunting),
@@ -240,7 +241,7 @@ __spaces['f]\'\'(x) = 20x[super 3]
 The apocryphally astute reader might, by now, be asking "How do we know if this computes the 'right' answer?".
 
 For most values, there is, sadly, no 'right' answer.
-This is because values can only rarely be exactly represented by C++ floating-point types.
+This is because values can only rarely be ['exactly represented] by C++ floating-point types.
 What we do want is the 'rightest' representation - one that is the nearest representable value.
 (For more about how numbers are represented see __floating_point).
 
@@ -256,20 +257,20 @@ to be the [*nearest representable] `double` value.
 
 For example, the cube root functions in our example for cbrt(28.) return
 
-	std::cbrt(28)                       3.0365889718756627
+`std::cbrt<double>(28.)  = 3.0365889718756627`
 
-	WolframAlpha says            3.036588971875662519420809578505669635581453977248111123242141...
+WolframAlpha says  `3.036588971875662519420809578505669635581453977248111123242141...`
 
-  static_cast<double>(3.03658897187566251942080957850)
-                                              3.0365889718756627
+`static_cast<double>(3.03658897187566251942080957850) = 3.0365889718756627`
 
-	 example cbrt(28)              3.0365889718756627
+This example `cbrt(28.)   =  3.0365889718756627`
 
 [tip To ensure that all potentially significant decimal digits are displayed use `std::numeric_limits<T>::max_digits10`
-or if not available on older platforms or compilers use `2 + std::numeric_limits<double>::digits * 3010/10000`.
+(or if not available on older platforms or compilers use `2+std::numeric_limits<double>::digits*3010/10000`).[br]
+
 Ideally, values should agree to `std::numeric-limits<T>::digits10` decimal digits.
 
-This also means that a 'reference' value to be [*input ]or `static_cast` should have
+This also means that a 'reference' value to be [*input] or `static_cast` should have
 at least `max_digits10` decimal digits (17 for 64-bit `double`).
 ]
 
@@ -281,17 +282,17 @@ Almost all platforms can easily use __multiprecision,
 for example, __cpp_dec_float or a binary type __cpp_bin_float types,
 to compute values at very much higher precision.
 
-[note With multiprecision types, it is debatable whether to use the type ['T] for computing the initial guesses.
+[note With multiprecision types, it is debatable whether to use the type `T` for computing the initial guesses.
 Type `double` is like to be accurate enough for the method used in these examples.
 This would limit the range of possible values to that of `double`.
-There is also the cost of conversion to and from type T to consider.
+There is also the cost of conversion to and from type `T` to consider.
 In these examples, `double` is used via `typedef double guess_type`.]
 
 Since the functors and functions used above are templated on the value type,
 we can very simply use them with any of the __multiprecision types.
 
 Some examples below are 50 decimal digit decimal and binary types
-(and on some platforms a much faster `float128 type` or `quad_float`)
+(and on some platforms a much faster `float128` or `quad_float` type )
 that we can use with these includes:
 
 [root_finding_multiprecision_include_1]
@@ -326,7 +327,7 @@ value = 2, cube root =1.25992104989487
 value = 2, cube root =1.2599210498948731647672106072782283505702514647015
 ]
 
-[tip Be [*very careful] about the floating-point type ['T] that is passed to the root-finding function.
+[tip Be [*very careful] about the floating-point type `T` that is passed to the root-finding function.
 Carelessly passing a integer by writing
 `cpp_dec_float_50  r = cbrt_2deriv(2);` or `show_cube_root(2);`
 will provoke many warnings and compile errors.
@@ -337,13 +338,13 @@ used to compute the guess and bracket values as `double`.
 Even more treacherous is passing a `double` as in `cpp_dec_float_50  r = cbrt_2deriv(2.);`
 which silently gives the 'wrong' result, computing a `double` result and [*then] converting to `cpp_dec_float_50`!
 All digits beyond `max_digits10` will be incorrect.
-Making the `cbrt` type explicit with `cbrt_2deriv<cpp_dec_float_50>(2.);` will give you the desired result.
+Making the `cbrt` type explicit with `cbrt_2deriv<cpp_dec_float_50>(2.);` will give you the desired 5o decimal digit precision result.
 ] [/tip]
 
 [h3:nth_root Generalizing to Compute the nth root]
 
 If desired, we can now further generalize to compute the ['n]th root by computing the derivatives [*at compile-time]
-using the rules for differentiation and the compile-time static function `pow<N>`
+using the rules for differentiation and the compile-time `static` function `pow<N>`
 where template parameter `N` is an integer.  Our functor and function now have an additional template parameter `N`,
 for the root required.
 
@@ -374,7 +375,7 @@ as noted above.]
 [warning Asking for unreasonable roots, for example, `show_nth_root<1000000>(2.);` may lead to
 [@http://en.wikipedia.org/wiki/Loss_of_significance Loss of significance] like
 `Type double value = 2, 1000000th root = 1.00000069314783`.
-Use of the the `pow` function is more sensible for this need.
+Use of the the `pow` function is more sensible for this unusual need.
 ]
 
 Full code of these examples is at

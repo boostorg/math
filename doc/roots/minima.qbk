@@ -58,7 +58,7 @@ of ['f(x)] at the minima.
 
 [h4:example Brent Minimisation Example]
 
-As a demonstration, we replicate this  [@http://en.wikipedia.org/wiki/Brent%27s_method#Example example]
+As a demonstration, we replicate this  [@http://en.wikipedia.org/wiki/Brent%27s_method#Example Wikipedia example]
 minimising the function ['y= (x+3)(x-1)[super 2]].
 
 It is obvious from the equation and the plot that there is a

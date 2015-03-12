@@ -6,8 +6,8 @@
 #include <boost/math/tools/roots.hpp>
 ``
 
-   namespace boost{ namespace math{
-   namespace tools{
+   namespace boost { namespace math {
+   namespace tools { // Note namespace boost::math::tools.
    // Bisection
    template <class F, class T, class Tol>
    std::pair<T, T>
@@ -113,15 +113,15 @@
 
 [h4 Description]
 
-These functions solve the root of some function ['f(x)] ['without the
-need for any derivatives of ['f(x)]].
+These functions solve the root of some function ['f(x)]
+['without the need for any derivatives of ['f(x)]].
 
 The `bracket_and_solve_root` functions use __root_finding_TOMS748
 that is asymptotically the most efficient known,
 and have been shown to be optimal for a certain classes of smooth functions.
 Variants with and without __policy_section are provided.
 
-Alternatively, __bisection is a simple __bisection_wikipedia routine which can be useful
+Alternatively, __bisect is a simple __bisection_wikipedia routine which can be useful
 in its own right in some situations, or alternatively for narrowing
 down the range containing the root, prior to calling a more advanced
 algorithm.
@@ -146,28 +146,28 @@ where the result is known to be an integer.
 * Other user-defined termination conditions are likely to be used
 only rarely, but may be useful in some specific circumstances.
 
-[h6:bisection Bisection]
+[h6:bisect Bisection]
 
    template <class F, class T, class Tol>
    std::pair<T, T>
-      bisect(
+      bisect(  // Unlimited iterations.
+         F f,
+         T min,
+         T max,
+         Tol tol);
+
+   template <class F, class T, class Tol>
+   std::pair<T, T>
+      bisect(  // Limited iterations.
          F f,
          T min,
          T max,
          Tol tol,
          boost::uintmax_t& max_iter);
 
-   template <class F, class T, class Tol>
-   std::pair<T, T>
-      bisect(
-         F f,
-         T min,
-         T max,
-         Tol tol);
-
    template <class F, class T, class Tol, class ``__Policy``>
    std::pair<T, T>
-      bisect(
+      bisect( // Specified policy.
          F f,
          T min,
          T max,
@@ -177,18 +177,18 @@ only rarely, but may be useful in some specific circumstances.
 
 These functions locate the root using __bisection_wikipedia.
 
-Function arguments are:
+`bisect` function arguments are:
 
 [variablelist
 [[f]  [A unary functor which is the function ['f(x)] whose root is to be found.]]
 [[min] [The left bracket of the interval known to contain the root.]]
-[[max] [The right bracket of the interval known to contain the root.
+[[max] [The right bracket of the interval known to contain the root.[br]
         It is a precondition that /min < max/ and /f(min)*f(max) <= 0/,
         the function signals evaluation error if these preconditions are violated.
-        The action taken is controlled by the evaluation error policy.
+        The action taken is controlled by the evaluation error policy.[br]
         A best guess may be returned, perhaps significantly wrong.]]
 [[tol]  [A binary functor that specifies the termination condition: the function
-        will return the current brackets enclosing the root when /tol(min,max)/ becomes true.]]
+        will return the current brackets enclosing the root when ['tol(min, max)] becomes true.]]
 [[max_iter][The maximum number of invocations of ['f(x)] to make while searching for the root.  On exit, this is updated to the actual number of invocations performed.]]
 [[T] [Floating-point type, typically `double` (often deduced by __ADL)]]
 [[F] [Floating-point types of the functor, usually deduced from T by __ADL, so it is rarely necessary to define F.]]
@@ -196,7 +196,7 @@ Function arguments are:
 
 [optional_policy]
 
-Returns: a pair of values ['r] that bracket the root so that:
+[*Returns]: a pair of values ['r] that bracket the root so that:
 
    f(r.first) * f(r.second) <= 0
 
@@ -211,9 +211,9 @@ or
 where ['m] is the initial value of ['max_iter] passed to the function.
 
 In other words, it's up to the caller to verify whether termination occurred
-as a result of exceeding /max_iter/ function invocations (easily done by
-checking the updated value of /max_iter/ when the function returns), rather than
-because the termination condition /tol/ was satisfied.
+as a result of exceeding ['max_iter] function invocations (easily done by
+checking the updated value of ['max_iter] when the function returns), rather than
+because the termination condition ['tol] was satisfied.
 
 [h6:bracket_solve Bracket and solve]
 
@@ -261,13 +261,13 @@ particular it is known whether the root is occurs for positive or negative
          when it returns true then the current brackets are returned as the result.]]
 [[max_iter] [The maximum number of function invocations to perform in the search
             for the root.  On exit is set to the actual number of invocations performed.]]
-[[T] [Floating-point type, typically `double` (often deduced by __ADL)]]
+[[T] [Floating-point type, typically `double`, often deduced by __ADL]]
 [[F] [Floating-point types of the functor, usually deduced from T by __ADL, so it is rarely necessary to define F.]]
 ]
 
 [optional_policy]
 
-Returns: a pair of values /r/ that bracket the root so that:
+[*Returns]: a pair of values ['r] that bracket the root so that:
 
    f(r.first) * f(r.second) <= 0
 
@@ -279,12 +279,12 @@ or
 
    max_iter >= m
 
-where /m/ is the initial value of /max_iter/ passed to the function.
+where ['m] is the initial value of ['max_iter] passed to the function.
 
 In other words, it's up to the caller to verify whether termination occurred
-as a result of exceeding /max_iter/ function invocations (easily done by
-checking the value of /max_iter/ when the function returns), rather than
-because the termination condition /tol/ was satisfied.
+as a result of exceeding ['max_iter] function invocations (easily done by
+checking the value of ['max_iter]  when the function returns), rather than
+because the termination condition ['tol] was satisfied.
 
 [h6:TOMS748 Algorithm TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions]
 
@@ -332,32 +332,32 @@ because the termination condition /tol/ was satisfied.
 
 These two functions implement TOMS Algorithm 748: it uses a mixture of
 cubic, quadratic and linear (secant) interpolation to locate the root of
-['f(x)].  The two functions differ only by whether values for /f(a)/ and
-/f(b)/ are already available.  The __root_finding_TOMS748 parameters are:
+['f(x)].  The two functions differ only by whether values for ['f(a)] and
+['f(b)] are already available.  The __root_finding_TOMS748 parameters are:
 
 [variablelist
 [[f]   [A unary functor that is the function whose root is to be solved.
-       f(x) need not be uniformly increasing or decreasing on /x/ and
+       f(x) need not be uniformly increasing or decreasing on ['x] and
        may have multiple roots.]]
 [[a]   [ The lower bound for the initial bracket of the root.]]
 [[b]   [The upper bound for the initial bracket of the root.
-       It is a precondition that /a < b/ and that /a/ and /b/
-       bracket the root to find so that /f(a)*f(b) < 0/.]]
-[[fa]  [Optional: the value of /f(a)/.]]
-[[fb]  [Optional: the value of /f(b)/.]]
+       It is a precondition that ['a < b] and that ['a] and ['b]
+       bracket the root to find so that ['f(a) * f(b) < 0].]]
+[[fa]  [Optional: the value of ['f(a)].]]
+[[fb]  [Optional: the value of ['f(b)].]]
 [[tol]   [A binary functor that determines the termination condition for the search
-         for the root.  /tol/ is passed the current brackets at each step,
+         for the root.  ['tol] is passed the current brackets at each step,
          when it returns true, then the current brackets are returned as the result.]]
 [[max_iter] [The maximum number of function invocations to perform in the search
-            for the root.  On exit /max_iter/ is set to actual number of function
+            for the root.  On exit, ['max_iter] is set to actual number of function
             invocations used.]]
-[[T] [Floating-point type, typically `double` (often deduced by __ADL)]]
+[[T] [Floating-point type, typically `double`, often deduced by __ADL]]
 [[F] [Floating-point types of the functor, usually deduced from T by __ADL, so it is rarely necessary to define F.]]
 ]
 
 [optional_policy]
 
-`toms748_solve` returns: a pair of values /r/ that bracket the root so that:
+`toms748_solve` returns: a pair of values ['r] that bracket the root so that:
 
    f(r.first) * f(r.second) <= 0
 
@@ -369,13 +369,13 @@ or
 
    max_iter >= m
 
-where /m/ is the initial value of /max_iter/ passed to the function.
+where ['m] is the initial value of ['max_iter] passed to the function.
 
 In other words, it's up to the caller to verify whether termination occurred
-as a result of exceeding /max_iter/ function invocations (easily done by
-checking the updated value of /max_iter/
+as a result of exceeding ['max_iter]  function invocations (easily done by
+checking the updated value of ['max_iter]
 against its previous value passed as parameter),
-rather than because the termination condition /tol/ was satisfied.
+rather than because the termination condition ['tol] was satisfied.
 
    template <class T>
    struct eps_tolerance
@@ -385,11 +385,11 @@ rather than because the termination condition /tol/ was satisfied.
    };
 
 `eps_tolerance` is the usual termination condition used with these root finding functions.
-Its `operator()` will return true when the relative distance between /a/ and /b/
+Its `operator()` will return true when the relative distance between ['a] and ['b]
 is less than twice the machine epsilon for T, or 2[super 1-bits], whichever is
-the larger.  In other words, you set /bits/ to the number of bits of precision you
-want in the result.  The minimal tolerance of twice the machine epsilon of T is
-required to ensure that we get back a bracketing interval: since this must clearly
+the larger.  In other words, you set ['bits] to the number of bits of precision you
+want in the result.  The minimal tolerance of ['twice the machine epsilon of type T] is
+required to ensure that we get back a bracketing interval, since this must clearly
 be at least 1 epsilon in size.
 
    struct equal_floor
@@ -399,8 +399,8 @@ be at least 1 epsilon in size.
    };
 
 This termination condition is used when you want to find an integer result
-that is the /floor/ of the true root.  It will terminate as soon as both ends
-of the interval have the same /floor/.
+that is the ['floor] of the true root.  It will terminate as soon as both ends
+of the interval have the same ['floor].
 
    struct equal_ceil
    {
@@ -409,8 +409,8 @@ of the interval have the same /floor/.
    };
 
 This termination condition is used when you want to find an integer result
-that is the /ceil/ of the true root.  It will terminate as soon as both ends
-of the interval have the same /ceil/.
+that is the ['ceil] of the true root.  It will terminate as soon as both ends
+of the interval have the same ['ceil].
 
    struct equal_nearest_integer
    {
@@ -429,7 +429,9 @@ See __root_finding_examples.
 [h4 Implementation]
 
 The implementation of the bisection algorithm is extremely straightforward
-and not detailed here.  __TOMS748 is described in detail in:
+and not detailed here.
+
+__TOMS748 is described in detail in:
 
 ['Algorithm 748: Enclosing Zeros of Continuous Functions,
 G. E. Alefeld, F. A. Potra and Yixun Shi,

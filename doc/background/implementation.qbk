@@ -23,10 +23,10 @@ has received considerable effort.
 
 (It also required much CPU effort -
 there was some danger of molten plastic dripping from the bottom of JM's laptop,
-so instead, PAB's Dual-core desktop was kept 50% busy for *days*
+so instead, PAB's Dual-core desktop was kept 50% busy for [*days]
 calculating some tables of test values!)
 
-For a specific RealType, say float or double,
+For a specific RealType, say `float` or `double`,
 it may be possible to find approximations for some functions
 that are simpler and thus faster, but less accurate
 (perhaps because there are no refining iterations,
@@ -55,7 +55,7 @@ constant values are given to 50 decimal digits if available
 Values are specified as long double types by appending L,
 unless they are exactly representable, for example integers, or binary fractions like 0.125.
 This avoids the risk of loss of accuracy converting from double, the default type.
-Values are used after static_cast<RealType>(1.2345L)
+Values are used after `static_cast<RealType>(1.2345L)`
 to provide the appropriate RealType for spot tests.
 
 Functions that return constants values, like kurtosis for example, are written as
