@@ -35,7 +35,7 @@
    
    }} // namespaces
    
-The return type of these functions is computed using the __arg_pomotion_rules:
+The return type of these functions is computed using the __arg_promotion_rules:
 note than when there is a single template argument the result is the same type 
 as that argument or `double` if the template argument is an integer type.
 

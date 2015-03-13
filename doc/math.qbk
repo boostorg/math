@@ -82,8 +82,7 @@
 [def __rounding_error [link math_toolkit.error_handling.rounding_error rounding_error]]
 [def __indeterminate_result_error [link math_toolkit.error_handling.indeterminate_result_error indeterminate_result_error]]
 [def __checked_narrowing_cast [link math_toolkit.error_handling.checked_narrowing_cast checked_narrowing_cast]]
-
-[def __arg_pomotion_rules [link math_toolkit.result_type ['result type calculation rules]]]
+[def __arg_promotion_rules [link math_toolkit.result_type ['result type calculation rules]]]
 [def __sf_result [link math_toolkit.result_type ['calculated-result-type]]]
 
 [/ The following macros expand to links to the various special functions
@@ -345,7 +344,6 @@ and use the function's name as the link text.]
 [def __promotion_policy [link math_toolkit.pol_ref.internal_promotion internal promotion policy]]
 [def __precision_policy [link math_toolkit.pol_ref.precision_pol precision policy]]
 [def __policy_macros [link math_toolkit.pol_ref.policy_defaults Using Macros to Change the Policy Defaults]]
-
 [def __random_variate [@http://en.wikipedia.org/wiki/Random_variate random variate]]
 [def __random_variable [@http://en.wikipedia.org/wiki/Random_variable random variable]]
 [def __probability_distribution [@http://en.wikipedia.org/wiki/Probability_distribution probability_distribution]]
@@ -366,6 +364,10 @@ and use the function's name as the link text.]
 [def __multiprecision [@boost:/libs/multiprecision/doc/html/index.html Boost.Multiprecision]]
 [def __cpp_dec_float [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_dec_float.html cpp_dec_float]]
 [def __cpp_bin_float [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html cpp_bin_float]]
+[def __boost_test [@boost:/libs/test/doc/html/index.html Boost.Test]]
+[def __boost_test_fp [@boost:/libs/test/doc/html/boost_test/users_guide/testing_tools/testing_floating_points.html Boost.Test floating-point comparison]]
+[def __boost_math_fp [link math_toolkit.float_comparison Boost.Math floating-point utilities]]
+[def __ulp [@http://en.wikipedia.org/wiki/Unit_in_the_last_place  Unit in the last place (ULP)]]
 [def __R [@http://www.r-project.org/ The R Project for Statistical Computing]]
 [def __godfrey [link godfrey Godfrey]]
 [def __pugh [link pugh Pugh]]

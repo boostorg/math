@@ -20,21 +20,16 @@ int main()
 {
   std::cout << "Compare floats using Boost.Test functions/classes" << std::endl;
 
-  //[compare_floats_synopsis
+//[compare_floats_synopsis
 /*`
 
-  namespace boost {
-  namespace math {
-  namespace fpc {
-
-Comparisons are implemented in `namespace boost::math::fpc`,
-most simply using the function `is_close_to`.
-
+  namespace boost { namespace math {
+  namespace fpc { // Note floating-point comparison namespace.
 
   template<typename FPT1, typename FPT2, typename ToleranceType>
   bool is_close_to( FPT1 left, FPT2 right, ToleranceType tolerance );
-  // Test how close two values are
-  // (using the default FPC_STRONG or 'essentially equal' criterion.
+  // Test if two values are close enough,
+  // (using the default FPC_STRONG or 'essentially equal' criterion).
 
   enum strength
   {
@@ -42,19 +37,19 @@ most simply using the function `is_close_to`.
     FPC_WEAK    // "Close enough" "approximately equal" - equation 2' in docs.
   };
 
-and as a templated class `close_at_tolerance` that can be convenient
-for multiple tests with the same tolerance and strength.
-
-These are used in the more widely used MACRO versions in Boost.Test like `BOOST_CHECK_CLOSE`.
-
-  template<typename FPT> class close_at_tolerance
-
   template<typename ToleranceType>
   explicit close_at_tolerance(ToleranceType tolerance, fpc::strength fpc_strength = FPC_STRONG );
 
+Comparisons are most simply made using the function `is_close_to`.
+
+There is also a templated class `close_at_tolerance` that can be convenient
+for multiple tests with the same tolerance and strength.
+
+(These are used by the popular MACRO versions in Boost.Test like `BOOST_CHECK_CLOSE`).
+
 For most applications, the default strength parameter can be left at the default 'strong'.
 
-The `Tolerance_type` is the same as floating-point type FPT, often a built-in type
+The `Tolerance_type` is the same as floating-point type `FPT`, often a built-in type
 like `float`, `double` or `long double`,
 but also __multiprecision types like __cpp_bin_float or __cpp_dec_float.
 
@@ -62,23 +57,23 @@ The constructor sets the [*fractional] tolerance and the equality strength.
 
 Two member functions allow access to the chosen tolerance and strength.
 
-  FPT fraction_tolerance() const;
-  fpc::strength strength() const; // weak or strong.
+  FPT fraction_tolerance() const; 
+  strength strength() const; // weak or strong.
 
 the `operator()` functor carries out the comparison,
 and returns `true` if ['essentially equal] else `false`.
 
-  bool operator()(FPT left, FPT right ) const; // true if close or 'equal'.
+  bool operator()(FPT left, FPT right) const; // true if close or 'equal'.
 
 Comparison tolerances can be very small, near the
 [@http://en.wikipedia.org/wiki/Machine_epsilon machine epsilon]
 or [@https://en.wikipedia.org/wiki/Unit_in_the_last_place Unit in Last Place (ULP)],
 typically for measuring 'computational' noise from multiple rounding or iteration,
-or can be a big a much bigger value like 0.01 (equivalent to a 1% tolerance),
+or can be a much bigger value like 0.01 (equivalent to a 1% tolerance),
 typically from measurement uncertainty.
 
-After ([*but not before]) a comparison has been made by a call of the functor `operator()`
-the access function
+After ([*but not before]) a comparison of values ['u] and ['v]
+has been made by a call of the functor `operator()`, the access function
 
   FPT failed_fraction() const;
 
@@ -97,7 +92,7 @@ that failed the test.
 
   using namespace boost::math::fpc;
 
-//`or
+//`or 
 
   using boost::math::fpc::close_at_tolerance;
   using boost::math::fpc::small_with_tolerance;
@@ -115,24 +110,24 @@ Newer compilers should provide `std::numeric_limitsFPT>::max_digits10`
 for this purpose, and here we use `float` precision where `max_digits10` = 9
 to avoid displaying a distracting number of decimal digits.
 
-[note Older compiler can use this formula to calculate `max_digits10`
-from `std::numeric_limitsFPT>::digits10`[br]
+[note Older compilers can use this formula to calculate `max_digits10`
+from `std::numeric_limits<FPT>::digits10`:[br]
 __spaces `int max_digits10 = 2 + std::numeric_limits<FPT>::digits10 * 3010/10000;`
 ] [/note]
 
-To set the display including all trailing zeros
+One can set the display including all trailing zeros
 (helpful for this example to show all potentially significant digits),
-and also to display `bool` values as words rather than integers.
+and also to display `bool` values as words rather than integers:
 */
-//] [/compare_floats_example_1]
-
   std::cout.precision(std::numeric_limits<float>::max_digits10);
   std::cout << std::boolalpha << std::showpoint << std::endl;
+
+//] [/compare_floats_example_1]
 
 //[compare_floats_example_2]
 /*`
 When comparing values that are ['quite close] or ['approximately equal],
-it is convenient to use the appropriate`epsilon` for the floating-point type.
+it is convenient to use the appropriate `epsilon` for the floating-point type `FPT`, here, for example, `float`:
 */
 
   float epsilon = std::numeric_limits<float>::epsilon();
@@ -143,20 +138,28 @@ it is convenient to use the appropriate`epsilon` for the floating-point type.
 //[compare_floats_example_3
 //`The simplest use is to compare two values with a tolerance thus:
 
-  bool is_close = is_close_to(1.F, 1.F + epsilon, epsilon);// One epsilon is close enough.
+  bool is_close = is_close_to(1.F, 1.F + epsilon, epsilon); // One epsilon apart is close enough.
   std::cout << "is_close_to(1.F, 1.F + epsilon, epsilon); is " << is_close << std::endl; // true
 
-  is_close = is_close_to(1.F, 1.F + 2 * epsilon, epsilon); // Two epsilon isn't close enough.
+  is_close = is_close_to(1.F, 1.F + 2 * epsilon, epsilon); // Two epsilon apart isn't close enough.
   std::cout << "is_close_to(1.F, 1.F + epsilon, epsilon); is " << is_close << std::endl; // false
+
+/*`
+[note The type FPT of the tolerance and the type of the values [*must match].
+
+So `is_close(0.1F, 1., 1.)` will fail to compile because "template parameter 'FPT' is ambiguous".
+Always provide the same type, using `static_cast<FPT>` if necessary.]
+*/
+
 
 /*`An instance of class `close_at_tolerance` is more convenient
 when multiple tests with the same conditions are planned.
-A class that stores a tolerance of three epsilon (and the default ['strong] test) is
+A class that stores a tolerance of three epsilon (and the default ['strong] test) is:
 */
 
-  close_at_tolerance<float> three_rounds(3 * epsilon); // strong by default.
+  close_at_tolerance<float> three_rounds(3 * epsilon); // 'strong' by default.
 
-  //`and we can confirm these settings:
+//`and we can confirm these settings:
 
   std::cout << "fraction_tolerance = "
     << three_rounds.fraction_tolerance()
@@ -170,7 +173,7 @@ A class that stores a tolerance of three epsilon (and the default ['strong] test
   float a = 1.23456789F;
   float b = 1.23456789F;
 
-  //`and make a comparison using our three-epsilon functor:
+//`and make a comparison using our 3*epsilon `three_rounds` functor:
 
   bool close = three_rounds(a, b);
   std::cout << "three_rounds(a, b) = " << close << std::endl; // true
@@ -180,22 +183,24 @@ A class that stores a tolerance of three epsilon (and the default ['strong] test
   std::cout << "failed_fraction = " << three_rounds.failed_fraction() << std::endl;
 
 /*`To get some nearby values, it is convenient to use the Boost.Math next functions,
-`#include <boost/math/special_functions/next.hpp>`
+for which we need an include 
+
+  #include <boost/math/special_functions/next.hpp>
+
 and some using declarations:
 */
-
 
   using boost::math::float_next;
   using boost::math::float_prior;
   using boost::math::nextafter;
   using boost::math::float_distance;
 
-//`To add a few ULP (Unit in Last Place) to one value:
-  b = float_next(a); // Add just one ULP (Unit in Last Place) to a.
-  b = float_next(b); // Add another one ULP (Unit in Last Place).
-  b = float_next(b); // Add another one ULP (Unit in Last Place).
+//`To add a few __ulp to one value:
+  b = float_next(a); // Add just one ULP to a.
+  b = float_next(b); // Add another one ULP.
+  b = float_next(b); // Add another one ULP.
   // 3 epsilon would pass.
-  b = float_next(b); // Add another one ULP (Unit in Last Place).
+  b = float_next(b); // Add another one ULP.
 
 //`and repeat our comparison:
 
@@ -220,7 +225,7 @@ where an uncertainty of a percent or so might be expected.
 
   close_at_tolerance<float> strong(epsilon); // Default is strong.
   bool rs = strong(fp1, fp2);
-  std::cout << " strong(fp1, fp2) is " << rs << std::endl;
+  std::cout << "strong(fp1, fp2) is " << rs << std::endl;
 
 //`Or we could contrast using the ['weak] criterion:
   close_at_tolerance<float> weak(epsilon, FPC_WEAK); // Explicitly weak.
@@ -336,7 +341,7 @@ failed_fraction = 0.000000000
 three_rounds(a, b) = false
 failed_fraction = 3.86237957e-007
 float_distance = 4.00000000
- strong(fp1, fp2) is false
+strong(fp1, fp2) is false
 weak(fp1, fp2) is false
 1.23456788 #= 1.23456836 is false
 1.23456788 ~= 1.23456836 is false

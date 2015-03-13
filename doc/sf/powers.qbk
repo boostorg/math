@@ -18,7 +18,7 @@
    
 Returns the sine of ['[pi]x].
 
-The return type of this function is computed using the __arg_pomotion_rules:
+The return type of this function is computed using the __arg_promotion_rules:
 the return is `double` when /x/ is an integer type and T otherwise.
 
 [optional_policy]
@@ -45,7 +45,7 @@ This function performs exact all-integer arithmetic argument reduction before co
    
 Returns the cosine of ['[pi]x].
 
-The return type of this function is computed using the __arg_pomotion_rules:
+The return type of this function is computed using the __arg_promotion_rules:
 the return is `double` when /x/ is an integer type and T otherwise.
 
 [optional_policy]
@@ -72,7 +72,7 @@ This function performs exact all-integer arithmetic argument reduction before co
    
 Returns the natural logarithm of `x+1`.
 
-The return type of this function is computed using the __arg_pomotion_rules:
+The return type of this function is computed using the __arg_promotion_rules:
 the return is `double` when /x/ is an integer type and T otherwise.
 
 [optional_policy]
@@ -132,7 +132,7 @@ calculated using NTL::RR at 1000-bit precision.
    
 Returns e[super x] - 1.
 
-The return type of this function is computed using the __arg_pomotion_rules:
+The return type of this function is computed using the __arg_promotion_rules:
 the return is `double` when /x/ is an integer type and T otherwise.
 
 [optional_policy]
@@ -180,7 +180,7 @@ calculated using NTL::RR at 1000-bit precision.
    
 Returns the cubed root of x: x[super 1/3].
 
-The return type of this function is computed using the __arg_pomotion_rules:
+The return type of this function is computed using the __arg_promotion_rules:
 the return is `double` when /x/ is an integer type and T otherwise.
 
 [optional_policy]
@@ -221,7 +221,7 @@ calculated using NTL::RR at 1000-bit precision.
    
 Returns `sqrt(1+x) - 1`.
 
-The return type of this function is computed using the __arg_pomotion_rules:
+The return type of this function is computed using the __arg_promotion_rules:
 the return is `double` when /x/ is an integer type and T otherwise.
 
 [optional_policy]
@@ -265,7 +265,7 @@ calculated using NTL::RR at 1000-bit precision.
    
 Returns x[super y ] - 1.
 
-The return type of this function is computed using the __arg_pomotion_rules
+The return type of this function is computed using the __arg_promotion_rules
 when T1 and T2 are dufferent types.
 
 [optional_policy]
@@ -301,7 +301,7 @@ calculated using NTL::RR at 1000-bit precision.
 __effects computes [equation hypot]
 in such a way as to avoid undue underflow and overflow.
 
-The return type of this function is computed using the __arg_pomotion_rules
+The return type of this function is computed using the __arg_promotion_rules
 when T1 and T2 are of different types.
 
 [optional_policy]

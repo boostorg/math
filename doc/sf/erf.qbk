@@ -22,7 +22,7 @@
    
    }} // namespaces
    
-The return type of these functions is computed using the __arg_pomotion_rules:
+The return type of these functions is computed using the __arg_promotion_rules:
 the return type is `double` if T is an integer type, and T otherwise.
 
 [optional_policy]

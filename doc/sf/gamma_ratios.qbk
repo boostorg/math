@@ -52,7 +52,7 @@ Note that the result is calculated accurately even when /delta/ is
 small compared to /a/: indeed even if /a+delta ~ a/.  The function is
 typically used when /a/ is large and /delta/ is very small.
 
-The return type of these functions is computed using the __arg_pomotion_rules
+The return type of these functions is computed using the __arg_promotion_rules
 when T1 and T2 are different types, otherwise the result type is simple T1.
 
 [graph tgamma_delta_ratio]

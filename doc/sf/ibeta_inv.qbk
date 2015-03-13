@@ -77,7 +77,7 @@ techniques and are consequently several times slower.
 These are implemented here as ibeta_inva and ibeta_invb,
 and complement versions ibetac_inva and ibetac_invb.]
 
-The return type of these functions is computed using the __arg_pomotion_rules
+The return type of these functions is computed using the __arg_promotion_rules
 when called with arguments T1...TN of different types.
 
    template <class T1, class T2, class T3>

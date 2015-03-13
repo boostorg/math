@@ -49,7 +49,7 @@ the result of __domain_error.
 
 [optional_policy]
 
-The return type of these functions is computed using the __arg_pomotion_rules
+The return type of these functions is computed using the __arg_promotion_rules
 when T1 and T2 are different types, otherwise the return type is simply T1.
 
    template <class T1, class T2>

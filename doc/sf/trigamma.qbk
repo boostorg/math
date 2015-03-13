@@ -27,7 +27,7 @@ derivative of the digamma function:
 
 [optional_policy]
 
-The return type of this function is computed using the __arg_pomotion_rules:
+The return type of this function is computed using the __arg_promotion_rules:
 the result is of type `double` when T is an integer type, and type T otherwise.
 
 [h4 Accuracy]

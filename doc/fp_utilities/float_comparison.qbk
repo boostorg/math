@@ -7,14 +7,26 @@ Comparison of floating-point values has always been a source of endless difficul
 Unlike integral values that are exact,
 although the bit-pattern binary-representation is exact (at least within a platform),
 usually the representation of a decimal digit string  [*cannot] be exactly represented
-as a binary floating-point. So assignment usually involved rounding.
+as a binary floating-point. So assignment usually involves rounding.
 
 Floating-point computations also involve rounding so that some 'computational noise' is added,
-and so results are also not exact (although repeatable, at least under identical platforms and compile options).
+and hence results are also not exact (although repeatable, at least under identical platforms and compile options).
 
 Sadly, this conflicts with the expectation of most users, as many articles and innumerable cries for help show all too well.
 
 Fortunately, some convenient tools for comparing inexact floating-point  values are available from Boost.
+
+__boost_test_fp and  __boost_math_fp floating-point comparison allow
+
+* [link math_toolkit.float_comparison.close_to_synopsis Relative comparison between two floating-point values].
+* [link math_toolkit.float_comparison.small Absolute comparison of one value with zero].
+
+[tip Relative comparison with values close to zero is usually misleading; it is better to
+[link math_toolkit.float_comparison.small compare each value with zero].
+If both are 'near enough zero' then they are 'equal enough'. ]
+
+The comparisons are only for floating-point values and are 'fuzzy',
+with a tolerance provided by the user.
 
 Some background reading is:
 
@@ -28,16 +40,9 @@ Alberto Squassabia, Comparing floats, part 2]
 * [@https://code.google.com/p/googletest/wiki/AdvancedGuide#Floating-Point_Comparison Google Floating-Point_Comparison guide]
 * [@boost:/libs/test/doc/html/boost_test/users_guide/testing_tools/testing_floating_points.html Boost.Test Floating-Point_Comparison]
 
-Boost.Test and Boost.Math floating-point comparison allows
+[h5:fp_relative Relative Comparison of Floating-point Values]
 
-* Relative comparison between two floating-point values.
-* Absolute comparison of one value with zero.
-
-The comparisons are only for floating-point values and are 'fuzzy',
-with a tolerance provided by the user.
-
-[h5 Synopsis]
-
+[h5:close_to_synopsis Synopsis]
 
   #include <boost/test/floating_point_comparison.hpp>
 
@@ -47,16 +52,16 @@ with a tolerance provided by the user.
 [compare_floats_example_2]
 [compare_floats_example_3]
 
-[h5 Comparing small values near zero]
+[h5:small Comparing small values near zero]
 
 When the floating-point values become very small and near or at zero, using
 a relative test becomes unhelpful because one is dividing by a tiny value, or worse, by zero.
 Instead, an [*absolute test] is needed, comparing one (or usually both) values with zero,
-using a tolerance.
+using a tolerance.  If both are near zero, then they can be considered 'equal enough'.
 
-Absolute comparisons provided by the `small_with_tolerance` class and `is_small` function.
+Absolute comparisons are conveniently made with the `small_with_tolerance` class and `is_small` function.
 
-[h5 Synopsis]
+[h5:small_synopsis Synopsis]
 ``
   namespace boost {
   namespace math {
@@ -86,7 +91,7 @@ Absolute comparisons provided by the `small_with_tolerance` class and `is_small`
 [note The type FPT of the tolerance and the type of the value [*must match].
 
 So `is_small(0.1F, 0.000001)` will fail to compile because "template parameter 'FPT' is ambiguous".
-Always provide the same type, using `static_cast<FPT>()` if necessary.]
+Always provide the same type, using [^static_cast<FPT>([~value])] if necessary.]
 
 A few values near zero are tested with varying tolerance below.
 
@@ -95,7 +100,8 @@ A few values near zero are tested with varying tolerance below.
 A sample output from the whole example is:
 [compare_floats_output]
 
-See [@../../example/float_comparison_example.cpp] for full example code.
+See [@../../example/float_comparison_example.cpp  float_comparison_example.cpp]
+for full example code.
 
 [endsect] [/section:float_comparison Floating-point comparison]
 

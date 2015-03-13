@@ -139,7 +139,7 @@ maximum, then the appropriate error handler should be called (see existing code 
 for example: `constants::pi<T>()`.
 * Where tables of coefficients are used (for example for rational approximations), care should be taken
 to ensure these are initialized at program startup to ensure thread safety when using user-defined number types.
-See for example the use of `erf_initializer` in [@../include/boost/math/special_functions/erf.hpp  erf.hpp].
+See for example the use of `erf_initializer` in [@../../include/boost/math/special_functions/erf.hpp  erf.hpp].
 
 Here are some other useful internal functions:
 

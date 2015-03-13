@@ -78,7 +78,7 @@ graph gives an idea of their behavior:
 
 [graph ellint_carlson]
 
-The return type of these functions is computed using the __arg_pomotion_rules
+The return type of these functions is computed using the __arg_promotion_rules
 when the arguments are of different types: otherwise the return is the same type 
 as the arguments.
 
