@@ -113,12 +113,12 @@
 
 [h4 Description]
 
-These functions solve the root of some function ['f(x)]
+These functions solve the root of some function ['f(x)] -
 ['without the need for any derivatives of ['f(x)]].
 
 The `bracket_and_solve_root` functions use __root_finding_TOMS748
-that is asymptotically the most efficient known,
-and have been shown to be optimal for a certain classes of smooth functions.
+by Alefeld, Potra and Shi that is asymptotically the most efficient known,
+and has been shown to be optimal for a certain classes of smooth functions.
 Variants with and without __policy_section are provided.
 
 Alternatively, __bisect is a simple __bisection_wikipedia routine which can be useful
@@ -183,15 +183,15 @@ These functions locate the root using __bisection_wikipedia.
 [[f]  [A unary functor which is the function ['f(x)] whose root is to be found.]]
 [[min] [The left bracket of the interval known to contain the root.]]
 [[max] [The right bracket of the interval known to contain the root.[br]
-        It is a precondition that /min < max/ and /f(min)*f(max) <= 0/,
-        the function signals evaluation error if these preconditions are violated.
+        It is a precondition that ['min < max] and ['f(min)*f(max) <= 0],
+        the function signals ['evaluation error] if these preconditions are violated.
         The action taken is controlled by the evaluation error policy.[br]
         A best guess may be returned, perhaps significantly wrong.]]
 [[tol]  [A binary functor that specifies the termination condition: the function
         will return the current brackets enclosing the root when ['tol(min, max)] becomes true.]]
 [[max_iter][The maximum number of invocations of ['f(x)] to make while searching for the root.  On exit, this is updated to the actual number of invocations performed.]]
-[[T] [Floating-point type, typically `double` (often deduced by __ADL)]]
-[[F] [Floating-point types of the functor, usually deduced from T by __ADL, so it is rarely necessary to define F.]]
+[[T] [Floating-point type, typically `double`, ]]
+[[F] [Unary Functor that returns any suitable __tuple_type, of type T. ]]
 ]
 
 [optional_policy]
@@ -242,27 +242,29 @@ because the termination condition ['tol] was satisfied.
 to find the root of ['f(x)].  It's usable only when ['f(x)] is a monotonic
 function, and the location of the root is known approximately, and in
 particular it is known whether the root is occurs for positive or negative
-/x/.  The `bracket_and_solve_root` parameters are:
+['x].
+
+The `bracket_and_solve_root` parameters are:
 
 [variablelist
 [[f][A unary functor that is the function whose root is to be solved.
-    ['f(x)] must be uniformly increasing or decreasing on /x/.]]
-[[guess][An initial approximation to the root]]
+    ['f(x)] must be uniformly increasing or decreasing on ['x].]]
+[[guess][An initial approximation to the root.]]
 [[factor][A scaling factor that is used to bracket the root: the value
          /guess/ is multiplied (or divided as appropriate) by /factor/
          until two values are found that bracket the root.  A value
-         such as 2 is a typical choice for /factor/.]]
-[[rising][Set to /true/ if ['f(x)] is rising on /x/ and /false/ if ['f(x)]
+         such as 2 is a typical choice for ['factor].]]
+[[rising][Set to ['true] if ['f(x)] is rising on /x/ and /false/ if ['f(x)]
          is falling on /x/.  This value is used along with the result
          of /f(guess)/ to determine if /guess/ is
          above or below the root.]]
 [[tol]   [A binary functor that determines the termination condition for the search
          for the root.  /tol/ is passed the current brackets at each step,
-         when it returns true then the current brackets are returned as the result.]]
+         when it returns true then the current brackets are returned as the pair result.]]
 [[max_iter] [The maximum number of function invocations to perform in the search
             for the root.  On exit is set to the actual number of invocations performed.]]
-[[T] [Floating-point type, typically `double`, often deduced by __ADL]]
-[[F] [Floating-point types of the functor, usually deduced from T by __ADL, so it is rarely necessary to define F.]]
+[[T] [Floating-point type, typically `double`, ]]
+[[F] [Unary Functor that returns any suitable __tuple_type, of type T. ]]
 ]
 
 [optional_policy]
@@ -351,8 +353,8 @@ cubic, quadratic and linear (secant) interpolation to locate the root of
 [[max_iter] [The maximum number of function invocations to perform in the search
             for the root.  On exit, ['max_iter] is set to actual number of function
             invocations used.]]
-[[T] [Floating-point type, typically `double`, often deduced by __ADL]]
-[[F] [Floating-point types of the functor, usually deduced from T by __ADL, so it is rarely necessary to define F.]]
+[[T] [Floating-point type, typically `double`, ]]
+[[F] [Unary Functor that returns any suitable __tuple_type, of type T. ]]
 ]
 
 [optional_policy]

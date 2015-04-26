@@ -490,7 +490,7 @@ These changes should be made last, when `my_special` is stable and the code is i
 [h4 Concept Checks]
 
 Our concept checks verify that your function's implementation makes no assumptions that aren't
-required by our [link math_toolkit.concepts Real number conceptual requirements].  They also
+required by our [link math_toolkit.real_concepts Real number conceptual requirements].  They also
 check for various common bugs and programming traps that we've fallen into over time.  To
 add your function to these tests, edit libs/math/test/compile_test/instantiate.hpp to add
 calls to your function: there are 7 calls to each function, each with a different purpose.

@@ -1,0 +1,182 @@
+[/
+Copyright 2015 Paul A. Bristow.
+Copyright 2015 John Maddock.
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:root_comparison  Comparison of Root Finding Algorithms]
+
+[section:cbrt_comparison  Comparison of Cube Root Finding Algorithms]
+
+In the table below, the cube root of 28 was computed 10000 for three __fundamental_types floating-point types,
+and one __multiprecision type __cpp_bin_float using 50 decimal digit precision, using four algorithms.
+
+The 'exact' answer was computed using a 100 decimal digit type:
+
+   cpp_bin_float_100 full_answer ("3.036588971875662519420809578505669635581453977248111123242141654169177268411884961770250390838097895");
+
+Times were measured using  __boost_timer using `class cpu_timer`.
+
+* ['Its] is the number of iterations.
+* ['Times] is the CPU time-taken in arbitrary units.
+* ['Norm] is a normalized time, in comparison to the quickest algorithm (with value 1.00).
+* ['Dis] is the distance from the nearest representation of the 'exact' root in bits.
+Distance from the 'exact' answer is measured by using function __float_distance.
+One or two bits distance means that all results are effectively 'correct'.
+Zero means 'exact' - the nearest __representable value for the floating-point type.
+
+The cube-root function is a simple function, and is a contrived example for root-finding.
+It does allow us to investigate some of the factors controlling efficiency that may be extrapolated to
+more complex functions.
+
+The program used was [@ ../../example/root_finding_algorithms.cpp root_finding_algorithms.cpp].
+100000 evaluations of each floating-point type and algorithm were used and the CPU times were
+judged from repeat runs to have an uncertainty of 10 %.  Comparing MSVC for `double` and `long double`
+(which are identical on this patform) may give a guide to uncertainty of timing.
+
+* The C++ Standard cube root function [@http://en.cppreference.com/w/cpp/numeric/math/cbrt std::cbrt]
+is only defined for built-in or fundamental types,
+so cannot be used with any User-Defined floating-point types like __multiprecision.
+This, and that the cube function is so impeccably-behaved,
+allows the implementer to use many tricks to achieve a fast computation.
+On some platforms,`std::cbrt` appeared several times as quick as the more general `boost::math::cbrt`,
+but results were highly dependent on hardware, compiler and options, 32 or 64-bit and platform.
+
+* Two compilers in optimise mode were compared: GCC 4.9.1 using Netbeans IDS
+and Microsoft Visual Studio 2013 (Update 1) on the same hardware.
+The number of iterations seemed consistent, but the relative run-times surprisingly different.
+
+* `boost::math::cbrt` allows use with ['any user-defined floating-point type], conveniently
+__multiprecision.  It too can take some advantage of the good-behaviour of the cube function,
+compared to the more general implementation in the nth root-finding examples.  For example,
+it uses a polynomial to generate a better guess than dividing the exponent by three,
+and can avoid the complex checks in __newton required to prevent the
+search going wildly off-track.  For a known precision, it may also be possible to
+fix the number of iterations, allowing inlining. Typically, it was found that computation using type `double`
+took a few times longer when using the various root-finding algorithms directly.
+
+* The importance of getting a good guess can be shown by using the `std::pow(x, 1.L/3)` function call
+to obtain a `double` or `long double` 15 decimal-digit precision guess at cube-root
+(much closer than the simple divide-exponent-by-3 method to get a 'guess').
+Using Halley's algorithm, it only took [*a single iteration] to achieve 50 decimal-digit precision.
+The limitation of this tatic is that the range of possible (exponent) values may be less than the multiprecision type.
+
+* Using type `float` and __TOMS748, a few less iterations were required, but the time the same as Newton-Raphson.
+
+* For __fundamental_types, there was little to choose between the three derivative methods,
+but for __cpp_bin_float, __newton was twice as fast.
+
+* Compiling with optimisation halved computation times, and any differences between algorithms
+became nearly negligible.  The optimisation speed-up of the __TOMS748 was especially noticable.
+
+* Using a multiprecision type like `cpp_bin_float_50` for a precision of 50 decimal digits
+took a lot longer, as expected because most computation
+uses software rather than 64-bit floating-point hardware.
+Speeds are often more than 50 times slower.
+
+* Using `cpp_bin_float_50`,  __TOMS748 was much slower showing the benefit of using derivatives.
+__newton was found to be twice as quick as either of the second-derivative methods:
+this must reflect the computational cost of calculating and using the extra derivatives
+versus saving one or two iterations.
+
+* Only one or two extra ['iterations] are needed to get the remaining 35 digits, whatever the algorithm used.
+(The time taken was of course much greater for __multiprecision types).
+
+* Using a 100 decimal-digit type only doubled the time and required only a very few more iterations,
+so the cost of extra precision is mainly the underlying cost of computing more digits,
+not in the way the algorithm works.  This confirms previous observations using __NTL high-precision types.
+
+* Experiment suggests that decreasing the number of bits of accuracy required from the maximum possible,
+for example, to 3/4, does not decrease the accuracy as measured by the floating-point distances:
+they remain essentially 'right'.
+This suggests that requiring the maximum-possible accuracy means that an extra unproductive iteration may take place.
+
+[include root_comparison_tables_gcc_075.qbk]
+[include root_comparison_tables_msvc_075.qbk]
+[include root_comparison_tables_gcc.qbk]
+[include root_comparison_tables_msvc.qbk]
+
+[endsect] [/section:cbrt_comparison  Comparison of Cube Root Finding Algorithms]
+
+[section:root_n_comparison Comparison of Nth-root Finding Algorithms]
+
+A second example compares four generalized nth-root finding algorithms for various n-th roots (5, 7 and 13)
+of a single value 28.0, for four floating-point types, `float`, `double`,
+`long double` and a __multiprecision type __cpp_bin_float_50
+and required all and only three-quarters available digits of accuracy.
+
+Tests used Microsoft Visual Studio 2013 (Update 1) and GCC 4.9.1 using source code
+[@../../example/root_n_finding_algorithms.cpp root_n_finding_algorithms.cpp].
+
+The timing uncertainty (especially using MSVC) is at least 5% of normalized time 'Norm'.
+
+To pick out the 'best' and 'worst' algorithms are highlighted in blue and red.
+More than one result can be 'best' when normalized times are indistinguishable
+within the uncertainty.
+
+[/include roots_table_100_msvc.qbk]
+[/include roots_table_75_msvc.qbk]
+
+[include roots_table_75_msvc_X86.qbk]
+[include roots_table_100_msvc_X86.qbk]
+
+[/include roots_table_100_msvc_AVX.qbk]
+[/include roots_table_75_msvc_AVX.qbk]
+
+[include roots_table_75_msvc_X86_SSE2.qbk]
+[include roots_table_100_msvc_X86_SSE2.qbk]
+
+[include roots_table_100_gcc_X64_SSE2.qbk]
+[include roots_table_75_gcc_X64_SSE2.qbk]
+
+[include type_info_table_100_msvc.qbk]
+[include type_info_table_75_msvc.qbk]
+
+Some tentative conclusions can be drawn from this limited exercise.
+
+* Perhaps surprisingly, there is little difference between the various algorithms for __fundamental_types floating-point types.
+Using the first derivatives (__newton) is usually the best, but the improvement over the no-derivative
+__TOMS748 is considerable in number of iterations, but little in execution time.
+
+* The extra cost of evaluating the second derivatives (__halley or __schroeder) is usually too much for any net benefit.
+
+* __halley usually seems better than __schroeder, but for no obvious reason.
+
+* For a __multiprecision floating-point type, the __newton is a clear winner with a several-fold gain over __TOMS748,
+and again no improvement from the second-derivative algorithms.
+
+* The run-time of 50 decimal-digit __multiprecision is about 30-fold greater than `double`.
+
+* The column 'dis' showing the number of bits distance from the correct result.
+The Newton-Raphson algorithm shows a bit or two better accuracy than __TOMS748.
+Multiprecision types have a number of __guard_digits and usually get exactly correct results.
+
+* The goodness of the 'guess' is especially crucial for __multiprecision.
+Separate experiments show that evaluating the 'guess' using `double` allows
+convergence to the final exact result in one or two iterations.
+So in this contrived example, crudely dividing the exponent by N for a 'guess',
+it would be far better to use a `pow<double>` or ,
+if more precise `pow<long double>`, function to estimate a 'guess'.
+The limitation of this tatic is that the range of possible (exponent) values may be less than the multiprecision type.
+
+
+* Reducing the number of bits of accuracy to three-quarters required,
+only reduced the time several percent, and the accuracy barely at all.
+
+* Using floating-point extension __SSE2 made a modest ten-percent speedup.
+
+*Using MSVC, there was some improvement using 64-bit, markedly for __multiprecision.
+
+* The GCC compiler 4.9.1 using 64-bit was at least five-folder faster,
+apparently reflecting better optimization.
+
+Clearly, your mileage [*will vary], but in summary, __newton seems the first choice of algorithm,
+and effort to find a good 'guess' the first speed-up target, especially for __multiprecision.
+And of course, compiler optimisation is crucial for speed.
+
+[endsect] [/section:root_n_comparison Comparison of Nth-root Finding Algorithms]
+
+[endsect] [/section:root_comparison  Comparison of Root Finding Algorithms]
+

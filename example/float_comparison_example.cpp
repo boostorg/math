@@ -57,7 +57,7 @@ The constructor sets the [*fractional] tolerance and the equality strength.
 
 Two member functions allow access to the chosen tolerance and strength.
 
-  FPT fraction_tolerance() const; 
+  FPT fraction_tolerance() const;
   strength strength() const; // weak or strong.
 
 the `operator()` functor carries out the comparison,
@@ -92,7 +92,7 @@ that failed the test.
 
   using namespace boost::math::fpc;
 
-//`or 
+//`or
 
   using boost::math::fpc::close_at_tolerance;
   using boost::math::fpc::small_with_tolerance;
@@ -182,8 +182,8 @@ A class that stores a tolerance of three epsilon (and the default ['strong] test
 
   std::cout << "failed_fraction = " << three_rounds.failed_fraction() << std::endl;
 
-/*`To get some nearby values, it is convenient to use the Boost.Math next functions,
-for which we need an include 
+/*`To get some nearby values, it is convenient to use the Boost.Math __next_float functions,
+for which we need an include
 
   #include <boost/math/special_functions/next.hpp>
 

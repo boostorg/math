@@ -30,7 +30,7 @@ with a tolerance provided by the user.
 
 Some background reading is:
 
-* Knuth D.E. The art of computer programming, vol II, section 4.2, especially Floating-Point_Comparison 4.2.2, pages 198-220.
+* Knuth D.E. The art of computer programming, vol II, section 4.2, especially Floating-Point Comparison 4.2.2, pages 198-220.
 * [@http://adtmag.com/articles/2000/03/16/comparing-floatshow-to-determine-if-floating-quantities-are-close-enough-once-a-tolerance-has-been-r.aspx
 Alberto Squassabia, Comparing floats listing]
 * [@http://adtmag.com/articles/2000/03/16/comparing-floats-how-to-determine-if-floating-quantities-are-close-enough-once-a-tolerance-has-been.aspx

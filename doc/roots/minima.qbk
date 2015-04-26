@@ -23,8 +23,8 @@ These two functions locate the minima of the continuous function ['f] using
 [*Parameters]
 
 [variablelist
-[[F] [class of functor]]
-[[T] [floating-point type for computation and result]]
+[[F] [class of functor.]]
+[[T] [floating-point type for computation and result.]]
 [[f] [The function to minimise a function object (functor) that should be smooth over the
           range ['\[min, max\]], with no maxima occurring in that interval.]]
 [[min] [The lower endpoint of the range in which to search  for the minima.]]
@@ -88,7 +88,7 @@ so choosing a tight min-max range is good.]
 For simplicity, we set the precision parameter `bits` to `std::numeric_limits<double>::digits`,
 which is effectively the maximum possible `std::numeric_limits<double>::digits`/2.
 Nor do we provide a maximum iterations parameter `max_iter`,
-so the function will iterate until it finds a minimum.
+(perhaps unwidely), so the function will iterate until it finds a minimum.
 
 [brent_minimise_double_1]
 
@@ -152,7 +152,7 @@ that we reduce the number of iterations from 10 to 7 and the result significantl
   Showing 13 bits precision with 9 decimal digits from tolerance 0.015625
   x at minimum = 0.9999776, f(0.9999776) = 2.0069572e-009 after  7 iterations.
 
-[h5:template Templated on floating-point type]
+[h5:template Templating on floating-point type]
 
 If we want to switch the floating-point type, then the functor must be revised.
 
@@ -185,6 +185,8 @@ For this optional include, the build should define the macro BOOST_HAVE_QUADMATH
 
 [brent_minimise_mp_include_1]
 
+or
+
 [brent_minimise_template_quad]
 
 [h5:multiprecision  Multiprecision]
@@ -209,9 +211,9 @@ and with our show function
 
 [brent_minimise_mp_output_2]
 
-[tip One can usually rely on __ADL
+[tip One can usually rely on __function_template_instantiation
 to avoid specifying the verbose multiprecision types,
-but some care in needed with the ['type of the values] provided
+but great care in needed with the ['type of the values] provided
 to avoid confusing the compiler.
 ]
 
@@ -226,7 +228,9 @@ The complete example code is at [@../../example/brent_minimise_example.cpp brent
 
 [h4 Implementation]
 
-This is a reasonably faithful implementation of Brent's algorithm, refer to:
+This is a reasonably faithful implementation of Brent's algorithm.
+
+[h4 References]
 
 # Brent, R.P. 1973, Algorithms for Minimization without Derivatives,
 (Englewood Cliffs, NJ: Prentice-Hall), Chapter 5.

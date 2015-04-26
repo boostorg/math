@@ -64,6 +64,11 @@
 [def __nearequal '''&#x224A;''']
 [def __spaces '''&#x2000;&#x2000;'''] [/ two spaces - useful for an indent.]
 
+[def __tick [role aligncenter [role green \u2714]]] [/ u2714 is a HEAVY CHECK MARK tick (2713 check
+mark)]
+[def __cross [role aligncenter [role red \u2718]]] [/ u2718 is a heavy cross]
+[def __star [role aligncenter [role red \u2736]]] [/ 6-point star]
+
 [def __caution This is now an official Boost library, but remains a library under
                development, the code is fully functional and robust, but
                interfaces, library structure, and function and distribution names
@@ -122,7 +127,6 @@ and use the function's name as the link text.]
 [def __fifth_root [link math_toolkit.roots.root_finding_examples.fifth_root fifth root]]
 [def __nth_root [link math_toolkit.roots.root_finding_examples.nth_root nth root]]
 [def __multiprecision_root [link math_toolkit.roots.root_finding_examples.multiprecision_root multiprecision root]]
-
 [/gammas]
 [def __lgamma [link math_toolkit.sf_gamma.lgamma lgamma]]
 [def __digamma [link math_toolkit.sf_gamma.digamma digamma]]
@@ -275,6 +279,7 @@ and use the function's name as the link text.]
 
 [/tools]
 [def __tuple [link math_toolkit.internals.tuples boost::math::tuple]]
+[def __tuple_type [link math_toolkit.internals.tuples std::pair, std::tuple, or boost::math::tuple]]
 
 [/ distribution non-members]
 [def __cdf [link math_toolkit.dist_ref.nmp.cdf Cumulative Distribution Function]]
@@ -352,6 +357,10 @@ and use the function's name as the link text.]
    __chf, __mean, __median, __mode, __variance, __sd, __skewness,
    __kurtosis, __kurtosis_excess, __range and __support]
 
+[def __real_concept [link math_toolkit.real_concepts  real concept]]
+[def __next_float [link math_toolkit.next_float Adjacent Floating-Point Values]]
+
+[/ External links]
 [def __gsl [@http://www.gnu.org/software/gsl/ GSL-1.9]]
 [def __glibc [@http://www.gnu.org/software/libc/ GNU C Lib]]
 [def __hpc [@http://docs.hp.com/en/B9106-90010/index.html HP-UX C Library]]
@@ -365,8 +374,10 @@ and use the function's name as the link text.]
 [def __cpp_dec_float [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_dec_float.html cpp_dec_float]]
 [def __cpp_bin_float [@boost:/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html cpp_bin_float]]
 [def __boost_test [@boost:/libs/test/doc/html/index.html Boost.Test]]
+[def __boost_timer [@boost:/libs/timer/doc/index.html Boost.Timer]]
 [def __boost_test_fp [@boost:/libs/test/doc/html/boost_test/users_guide/testing_tools/testing_floating_points.html Boost.Test floating-point comparison]]
 [def __boost_math_fp [link math_toolkit.float_comparison Boost.Math floating-point utilities]]
+[def __float_distance [@boost:/libs/math/doc/html/math_toolkit/next_float/float_distance.html Boost.Math float_distance]]
 [def __ulp [@http://en.wikipedia.org/wiki/Unit_in_the_last_place  Unit in the last place (ULP)]]
 [def __R [@http://www.r-project.org/ The R Project for Statistical Computing]]
 [def __godfrey [link godfrey Godfrey]]
@@ -388,6 +399,11 @@ and use the function's name as the link text.]
 [def __floating_point  [@http://en.wikipedia.org/wiki/Floating_point Floating point]]
 [def __epsilon [@http://en.wikipedia.org/wiki/Machine_epsilon machine epsilon]]
 [def __ADL [@http://en.cppreference.com/w/cpp/language/adl Argument Dependent Lookup (ADL)]]
+[def __function_template_instantiation [@http://en.cppreference.com/w/cpp/language/function_template Function template instantiation]]
+[def __fundamental_types [@http://en.cppreference.com/w/cpp/language/types fundamental]]
+[def __guard_digits [@http://en.wikipedia.org/wiki/Guard_digit guard digits]]
+[def __SSE2 [@http://en.wikipedia.org/wiki/SSE2 SSE2 instructions]]
+[def __representable [@http://en.wikipedia.org/wiki/Floating_point#Representable_numbers.2C_conversion_and_rounding representable]]
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']

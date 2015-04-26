@@ -162,7 +162,7 @@ template <class T>
 T fifth_noderiv(T x)
 { //! \returns fifth root of x using bracket_and_solve (no derivatives).
   using namespace std;  // Help ADL of std functions.
-  using namespace boost::math; // For bracket_and_solve_root.
+  using namespace boost::math::tools; // For bracket_and_solve_root.
 
   int exponent;
   frexp(x, &exponent); // Get exponent of z (ignore mantissa).

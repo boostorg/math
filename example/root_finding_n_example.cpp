@@ -26,7 +26,7 @@
 #include <boost/multiprecision/cpp_dec_float.hpp> // For cpp_dec_float_50.
 #include <boost/multiprecision/cpp_bin_float.hpp> // using boost::multiprecision::cpp_bin_float_50;
 #ifndef _MSC_VER  // float128 is not yet supported by Microsoft compiler at 2013.
-#include <boost/multiprecision/float128.hpp>
+# include <boost/multiprecision/float128.hpp>
 #endif
 
 #include <iostream>
@@ -73,14 +73,14 @@ std::cout << " x = " << x << ", fx = " << fx << ", dx = " << dx << ", dx2 = " <<
 #endif
 */
 
-// If T is a floating-point type, might be quick to compute the guess using a built-in type,
+// If T is a floating-point type, might be quicker to compute the guess using a built-in type,
 // probably quickest using double, but perhaps with float or long double, T.
 
-// If T is not a floating-point type for which frexp and ldexp are not defined,
+// If T is a type for which frexp and ldexp are not defined,
 // then it is necessary to compute the guess using a built-in type,
 // probably quickest (but limited range) using double,
-// but perhaps with float or long double or a multiprecision T for greater range.
-// typedef double guess_type;
+// but perhaps with float or long double, or a multiprecision T for the full range of T.
+// typedef double guess_type; is used to specify the this.
 
 //[root_finding_nth_function_2deriv
 
@@ -95,7 +95,7 @@ T nth_2deriv(T x)
   BOOST_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
   BOOST_STATIC_ASSERT_MSG((N > 1000) == false, "root N is too big!");
 
-  typedef double guess_type;
+  typedef double guess_type; // double may restrict (exponent) range for a multiprecision T?
 
   int exponent;
   frexp(static_cast<guess_type>(x), &exponent); // Get exponent of z (ignore mantissa).
@@ -154,7 +154,7 @@ int main()
     show_nth_root<5, double>(2.);
     show_nth_root<5, long double>(2.);
 #ifndef _MSC_VER  // float128 is not supported by Microsoft compiler 2013.
-    show_nth_root<float128, 5>(2);
+    show_nth_root<5, float128>(2);
 #endif
     show_nth_root<5, cpp_dec_float_50>(2); // dec
     show_nth_root<5, cpp_bin_float_50>(2); // bin
@@ -178,6 +178,7 @@ int main()
 
 /*
 //[root_finding_example_output_1
+ Using MSVC 2013
 
 nth Root finding Example.
 Type double value = 2, 5th root = 1.14869835499704
@@ -188,4 +189,24 @@ Type class boost::multiprecision::number<class boost::multiprecision::backends::
   5th root = 1.1486983549970350067986269467779275894438508890978
 
 //] [/root_finding_example_output_1]
+
+//[root_finding_example_output_2
+
+ Using GCC 4.91  (includes float_128 type)
+
+ nth Root finding Example.
+Type d value = 2, 5th root = 1.14869835499704
+Type e value = 2, 5th root = 1.14869835499703501
+Type N5boost14multiprecision6numberINS0_8backends16float128_backendELNS0_26expression_template_optionE0EEE value = 2, 5th root = 1.148698354997035006798626946777928
+Type N5boost14multiprecision6numberINS0_8backends13cpp_dec_floatILj50EivEELNS0_26expression_template_optionE1EEE value = 2, 5th root = 1.1486983549970350067986269467779275894438508890978
+Type N5boost14multiprecision6numberINS0_8backends13cpp_bin_floatILj50ELNS2_15digit_base_typeE10EviLi0ELi0EEELNS0_26expression_template_optionE0EEE value = 2, 5th root = 1.1486983549970350067986269467779275894438508890978
+
+RUN SUCCESSFUL (total time: 63ms)
+
+//] [/root_finding_example_output_2]
 */
+
+/*
+Throw out of range using GCC release mode :-(
+
+ */

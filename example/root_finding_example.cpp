@@ -12,10 +12,6 @@
 // Note that this file contains Quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!
 
-//#ifdef _MSC_VER
-//#  pragma warning(disable: 4180) // qualifier has no effect (in Fusion).
-//#endif
-
 //#define BOOST_MATH_INSTRUMENT
 
 /*
@@ -27,8 +23,8 @@ It shows how use of derivatives can improve the speed.
 implementation of `boost::math::cbrt`, mainly by using a better computed initial 'guess'
 at `<boost/math/special_functions/cbrt.hpp>`).
 
-Then we show how a high roots (fifth) can be computed,
-and in root_finding_n_example.cpp a generic method
+Then we show how a higher root (fifth) can be computed,
+and in `root_finding_n_example.cpp` a generic method
 for the ['n]th root that constructs the derivatives at compile-time,
 
 These methods should be applicable to other functions that can be differentiated easily.
@@ -135,7 +131,7 @@ T cbrt_noderiv(T x)
   int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
   // Some fraction of digits is used to control how accurate to try to make the result.
   int get_digits = (digits * 3) /4; // Near maximum (3/4) possible accuracy.
-  eps_tolerance<double> tol(get_digits); // Set the tolerance.
+  eps_tolerance<T> tol(get_digits); // Set the tolerance.
   std::pair<T, T> r =
     bracket_and_solve_root(cbrt_functor_noderiv<T>(x), guess, factor, is_rising, tol, it);
   return r.first + (r.second - r.first)/2;  // Midway between brackets.
@@ -156,12 +152,12 @@ So it may be wise to chose some reasonable estimate of how many iterations may b
 
   if (it >= maxit)
   {
-  std::cout << "Unable to locate solution in " << maxit << " iterations:"
-  " Current best guess is between " << r.first << " and " << r.second << std::endl;
+    std::cout << "Unable to locate solution in " << maxit << " iterations:"
+      " Current best guess is between " << r.first << " and " << r.second << std::endl;
   }
   else
   {
-  std::cout << "Converged after " << it << " (from maximum of " << maxit << " iterations)." << std::endl;
+    std::cout << "Converged after " << it << " (from maximum of " << maxit << " iterations)." << std::endl;
   }
 
 for output like
@@ -200,10 +196,10 @@ To \'return\' two values, we use a `std::pair` of floating-point values:
 
 template <class T>
 struct cbrt_functor_deriv
-{ // Functor also returning 1st derviative.
+{ // Functor also returning 1st derivative.
   cbrt_functor_deriv(T const& to_find_root_of) : a(to_find_root_of)
   { // Constructor stores value a to find root of,
-    // for example: calling cbrt_functor_deriv<T>(x) to use to get cube root of x.
+    // for example: calling cbrt_functor_deriv<T>(a) to use to get cube root of a.
   }
   std::pair<T, T> operator()(T const& x)
   { // Return both f(x) and f'(x).
@@ -212,7 +208,7 @@ struct cbrt_functor_deriv
     return std::make_pair(fx, dx); // 'return' both fx and dx.
   }
 private:
-  T a; // to be 'cube_rooted'.
+  T a; // Store value to be 'cube_rooted'.
 };
 
 /*`Our cube root function is now:*/
@@ -404,8 +400,8 @@ int main()
 //[root_finding_main_1
   try
   {
-    double threecubed = 27.; // value that has an exactly representable integer cube root.
-    double threecubedp1 = 28.; // whose cube root is *not* exactly representable.
+    double threecubed = 27.; // Value that has an *exactly representable* integer cube root.
+    double threecubedp1 = 28.; // Value whose cube root is *not* exactly representable.
 
     std::cout << "cbrt(28) " << boost::math::cbrt(28.) << std::endl; // boost::math:: version of cbrt.
     std::cout << "std::cbrt(28) " << std::cbrt(28.) << std::endl; // std:: version of cbrt.

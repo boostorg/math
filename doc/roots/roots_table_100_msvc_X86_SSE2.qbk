@@ -1,0 +1,37 @@
+[/i:/modular-boost/libs/math/doc/roots/roots_table_100_msvc_X86_SSE2 .qbk
+Copyright 2015 Paul A. Bristow.
+Copyright 2015 John Maddock.
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt).
+]
+
+
+[h6 Program I:\modular-boost\libs\math\example\root_n_finding_algorithms.cpp,
+ Microsoft Visual C++ version 12.0, Dinkumware standard library version 610, Win32
+Compiled in optimise mode., _X86_SSE2 ]
+Fraction of full accuracy 1
+[table:root_5 5th root(28) for float, double, long double and cpp_bin_float_50 types, using _X86_SSE2 
+[[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]
+[[Algo     ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ]]
+[[TOMS748  ][  7][  765][[role blue 1.00]][  0][ ][ 11][ 1046][1.10][  1][ ][ 11][ 1015][[role blue 1.05]][  1][ ][ 12][146437][[role red 5.98]][  0][ ]]
+[[Newton   ][  3][  890][1.16][  0][ ][  5][  953][[role blue 1.00]][ -1][ ][  5][  968][[role blue 1.00]][ -1][ ][  6][24468][[role blue 1.00]][  0][ ]]
+[[Halley   ][  2][  921][1.20][  0][ ][  4][  968][[role blue 1.02]][  0][ ][  4][  968][[role blue 1.00]][  0][ ][  4][42437][1.73][  0][ ]]
+[[Schroeder][  6][ 1015][1.33][  0][ ][  8][ 1062][1.11][ -1][ ][  8][ 1062][1.10][ -1][ ][  8][74203][3.03][  0][ ]]
+] [/end of table root]
+[table:root_7 7th root(28) for float, double, long double and cpp_bin_float_50 types, using _X86_SSE2 
+[[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]
+[[Algo     ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ]]
+[[TOMS748  ][ 12][  984][[role blue 1.02]][  1][ ][ 15][ 1234][1.25][  2][ ][ 15][ 1250][1.27][  2][ ][ 14][193953][[role red 5.37]][  0][ ]]
+[[Newton   ][  6][  968][[role blue 1.00]][  0][ ][  7][  984][[role blue 1.00]][  0][ ][  7][  984][[role blue 1.00]][  0][ ][  8][36109][[role blue 1.00]][  0][ ]]
+[[Halley   ][  5][  984][[role blue 1.02]][  0][ ][  6][ 1078][1.10][  0][ ][  6][ 1046][1.06][  0][ ][  6][67312][1.86][  0][ ]]
+[[Schroeder][  6][ 1000][[role blue 1.03]][  0][ ][  6][ 1046][1.06][  0][ ][  6][ 1000][[role blue 1.02]][  0][ ][  7][68156][1.89][  0][ ]]
+] [/end of table root]
+[table:root_11 11th root(28) for float, double, long double and cpp_bin_float_50 types, using _X86_SSE2 
+[[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]
+[[Algo     ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ]]
+[[TOMS748  ][ 12][ 1109][1.13][ -2][ ][ 14][ 1296][1.28][  2][ ][ 14][ 1281][1.26][  2][ ][ 17][289984][[role red 6.34]][  2][ ]]
+[[Newton   ][  7][  984][[role blue 1.00]][  0][ ][  8][ 1015][[role blue 1.00]][  0][ ][  8][ 1015][[role blue 1.00]][  0][ ][ 10][45734][[role blue 1.00]][  0][ ]]
+[[Halley   ][  5][ 1000][[role blue 1.02]][  0][ ][  6][ 1046][[role blue 1.03]][  0][ ][  6][ 1062][[role blue 1.05]][  0][ ][  7][79453][1.74][  0][ ]]
+[[Schroeder][  7][ 1031][[role blue 1.05]][  0][ ][  7][ 1078][1.06][  0][ ][  7][ 1046][[role blue 1.03]][  0][ ][  8][78437][1.72][  0][ ]]
+] [/end of table root]

@@ -39,6 +39,8 @@
 #include <tuple>
 #include <utility> // pair, make_pair
 
+// #define BUILTIN_POW_GUESS // define to use std::pow function to obtain a guess.
+
 template <class T>
 T cbrt_2deriv(T x)
 { // return cube root of x using 1st and 2nd derivatives and Halley.
@@ -46,21 +48,32 @@ T cbrt_2deriv(T x)
   using namespace boost::math::tools; // For halley_iterate.
 
   // If T is not a binary floating-point type, for example, cpp_dec_float_50
-  // then frexp is not defined, so it is necessary to compute the guess using a built-in type,
+  // then frexp may not be defined,
+  // so it may be necessary to compute the guess using a built-in type,
   // probably quickest using double, but perhaps with float or long double.
-  typedef double guess_type;
+  // Note that the range of exponent may be restricted by a built-in-type for guess.
+
+  typedef long double guess_type;
+
+#ifdef BUILTIN_POW_GUESS
+  guess_type pow_guess = std::pow(static_cast<guess_type>(x), static_cast<guess_type>(1) / 3);
+  T guess = pow_guess;
+  T min = pow_guess /2;
+  T max = pow_guess * 2;
+#else
   int exponent;
   frexp(static_cast<guess_type>(x), &exponent); // Get exponent of z (ignore mantissa).
   T guess = ldexp(static_cast<guess_type>(1.), exponent / 3); // Rough guess is to divide the exponent by three.
   T min = ldexp(static_cast<guess_type>(1.) / 2, exponent / 3); // Minimum possible value is half our guess.
   T max = ldexp(static_cast<guess_type>(2.), exponent / 3); // Maximum possible value is twice our guess.
+#endif
 
   int digits = std::numeric_limits<T>::digits / 2; // Half maximum possible binary digits accuracy for type T.
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
   T result = halley_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, digits, it);
   // Can show how many iterations (updated by halley_iterate).
-  // std::cout << "Iterations " << maxit << std::endl;
+  // std::cout << "Iterations " << it << " (from max of "<< maxit << ")." << std::endl;
   return result;
 } // cbrt_2deriv(x)
 
@@ -76,6 +89,7 @@ struct cbrt_functor_2deriv
   std::tuple<T, T, T> operator()(T const& x)
   { // Return both f(x) and f'(x) and f''(x).
     T fx = x*x*x - a; // Difference (estimate x^3 - value).
+   // std::cout << "x = " << x << "\nfx = " << fx << std::endl;
     T dx = 3 * x*x; // 1st derivative = 3x^2.
     T d2x = 6 * x; // 2nd derivative = 6x.
     return std::make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
@@ -124,7 +138,7 @@ T nth_2deriv(T x)
   boost::uintmax_t it = maxit;
   T result = halley_iterate(nth_functor_2deriv<n, T>(x), guess, min, max, digits, it);
   // Can show how many iterations (updated by halley_iterate).
-  cout << it << " iterations (from max of " << maxit << ")" << endl;
+  std::cout << it << " iterations (from max of " << maxit << ")" << std::endl;
 
   return result;
 } // nth_2deriv(x)
@@ -203,6 +217,15 @@ int main()
 
 /*
 
+Description: Autorun "J:\Cpp\MathToolkit\test\Math_test\Release\root_finding_multiprecision.exe"
+Multiprecision Root finding Example.
+cbrt(2) = 1.2599210498948731647672106072782283505702514647015
+cbrt(2) = 1.2599210498948731906665443602832965552806854248047
+cbrt(2) = 1.2599210498948731647672106072782283505702514647015
+cbrt(2) = 1.2599210498948731647672106072782283505702514647015
+value = 2, cube root =1.25992104989487
+value = 2, cube root =1.25992104989487
+value = 2, cube root =1.2599210498948731647672106072782283505702514647015
 
 
 */

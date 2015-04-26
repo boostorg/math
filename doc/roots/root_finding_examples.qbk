@@ -45,7 +45,7 @@ __spaces ['f(x) = x[cubed] -a]
 We will first solve this without using any information
 about the slope or curvature of the cube root function.
 
-Fortunately, the cube root function is 'Really Well Behaved' in that it is monotonic
+Fortunately, the cube-root function is 'Really Well Behaved' in that it is monotonic
 and has only one root (we leave negative values 'as an exercise for the student').
 
 We then show how adding what we can know about this function, first just the slope
@@ -59,10 +59,10 @@ First we define a function object (functor):
 
 [root_finding_noderiv_1]
 
-Implementing the cube root function itself is fairly trivial now:
+Implementing the cube-root function itself is fairly trivial now:
 the hardest part is finding a good approximation to begin with.
 In this case we'll just divide the exponent by three.
-(There are better but more complex guess algorithms used in 'real-life'.)
+(There are better but more complex guess algorithms used in 'real life'.)
 
 [root_finding_noderiv_2]
 
@@ -80,7 +80,7 @@ The result of `bracket_and_solve_root` is a [@http://www.cplusplus.com/reference
 of values that could be displayed.
 
 Tthe number of bits separating them can be found using `float_distance(r.first, r.second)`.
-The distance is zero (ideal) for 3[super 3] = 27
+The distance is zero (closest representable) for 3[super 3] = 27
 but `float_distance(r.first, r.second) = 3` for cube root of 28 with this function.
 The result (avoiding overflow) is midway between these two values.
 
@@ -94,7 +94,7 @@ For the root function, the 1st differential (the slope of the tangent to a curve
 This algorithm is similar to this [@http://en.wikipedia.org/wiki/Nth_root_algorithm nth root algorithm].
 
 If you need some reminders, then
-[@http://en.wikipedia.org/wiki/Derivative#Derivatives_of_elementary_functions Derivatives of elementary functions]
+[@http://en.wikipedia.org/wiki/Derivative#Derivatives_of_elementary_functions derivatives of elementary functions]
 may help.
 
 Using the rule that the derivative of ['x[super n]] for positive n (actually all nonzero n) is ['n x[super n-1]],
@@ -242,7 +242,7 @@ The apocryphally astute reader might, by now, be asking "How do we know if this 
 
 For most values, there is, sadly, no 'right' answer.
 This is because values can only rarely be ['exactly represented] by C++ floating-point types.
-What we do want is the 'rightest' representation - one that is the nearest representable value.
+What we do want is the 'best' representation - one that is the nearest __representable value.
 (For more about how numbers are represented see __floating_point).
 
 Of course, we might start with finding an external reference source like
@@ -276,7 +276,7 @@ at least `max_digits10` decimal digits (17 for 64-bit `double`).
 
 If we wish to compute [*higher-precision values] then, on some platforms, we may be able to use `long double`
 with a higher precision than `double` to compare with the very common `double`
-and/or a more efficient built-in quad floating-point type like __float128.
+and/or a more efficient built-in quad floating-point type like `__float128`.
 
 Almost all platforms can easily use __multiprecision,
 for example, __cpp_dec_float or a binary type __cpp_bin_float types,
@@ -297,7 +297,7 @@ that we can use with these includes:
 
 [root_finding_multiprecision_include_1]
 
-Some using statements simply their use:
+Some using statements simplify their use:
 
 [root_finding_multiprecision_example_1]
 
@@ -338,7 +338,7 @@ used to compute the guess and bracket values as `double`.
 Even more treacherous is passing a `double` as in `cpp_dec_float_50  r = cbrt_2deriv(2.);`
 which silently gives the 'wrong' result, computing a `double` result and [*then] converting to `cpp_dec_float_50`!
 All digits beyond `max_digits10` will be incorrect.
-Making the `cbrt` type explicit with `cbrt_2deriv<cpp_dec_float_50>(2.);` will give you the desired 5o decimal digit precision result.
+Making the `cbrt` type explicit with `cbrt_2deriv<cpp_dec_float_50>(2.);` will give you the desired 50 decimal digit precision result.
 ] [/tip]
 
 [h3:nth_root Generalizing to Compute the nth root]
@@ -349,7 +349,7 @@ where template parameter `N` is an integer.  Our functor and function now have a
 for the root required.
 
 [note Since this is a compile-time static process, the resulting code is as efficient as as if hand-coded as the cube and fifth-root examples above.
-The compiler should also optimise any repeated multiplications.]
+A good compiler should also optimise any repeated multiplications.]
 
 Our ['n]th root functor is
 

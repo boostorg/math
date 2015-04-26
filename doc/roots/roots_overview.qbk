@@ -14,12 +14,12 @@ There are several fully-worked __root_finding_examples, including:
 * __root_finding_example_cbrt_without_derivatives
 * __root_finding_example_cbrt_with_1_derivative
 * __root_finding_example_cbrt_with_2_derivatives
-* __brent_minima for a simple function.
 
 [include roots_without_derivatives.qbk]
 [include roots.qbk]
 [include root_finding_examples.qbk]
 [include minima.qbk]
+[include root_comparison.qbk]
 
 [/ roots_overview.qbk
   Copyright 2015 John Maddock and Paul A. Bristow.

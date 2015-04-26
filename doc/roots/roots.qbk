@@ -44,7 +44,7 @@ The functions all take the same parameters:
 
 [variablelist Parameters of the root finding functions
 [[F f] [Type F must be a callable function object that accepts one parameter and
-        returns a __tuple:
+        returns a __tuple_type:
 
 For second-order iterative method ([@http://en.wikipedia.org/wiki/Newton_Raphson Newton Raphson])
         the __tuple should have [*two] elements containing the evaluation
@@ -53,15 +53,15 @@ For second-order iterative method ([@http://en.wikipedia.org/wiki/Newton_Raphson
 For the third-order methods
 ([@http://en.wikipedia.org/wiki/Halley%27s_method Halley] and
 Schroeder)
-        the __tuple should have *three* elements containing the evaluation of
+        the `tuple` should have [*three*] elements containing the evaluation of
         the function and its first and second derivatives.]]
 [[T guess] [The initial starting value. A good guess is crucial to quick convergence!]]
 [[T min] [The minimum possible value for the result, this is used as an initial lower bracket.]]
 [[T max] [The maximum possible value for the result, this is used as an initial upper bracket.]]
 [[int digits] [The desired number of binary digits precision.]]
 [[uintmax_t& max_iter] [An optional maximum number of iterations to perform.  On exit, this is updated to the actual number of iterations performed.]]
-[[T] [Floating-point type, typically `double`, often deduced by __ADL.]]
-[[F] [Floating-point types of the functor, usually deduced from T by __ADL, so it is rarely necessary to define F.]]
+[[T] [Floating-point type, typically `double`, ]]
+[[F] [Unary Functor that returns any suitable floating-point type T. ]]
 ]
 
 When using these functions you should note that:
