@@ -18,13 +18,10 @@
 #include <boost/config.hpp>
 #include <boost/array.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
-#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/utility/enable_if.hpp>
-
 #include <boost/math/tools/roots.hpp>
-//using boost::math::policies::policy;
 
+//using boost::math::policies::policy;
 //using boost::math::tools::eps_tolerance; // Binary functor for specified number of bits.
 //using boost::math::tools::bracket_and_solve_root;
 //using boost::math::tools::toms748_solve;
@@ -33,7 +30,7 @@
 //using boost::math::tools::schroeder_iterate;
 
 #include <boost/math/special_functions/next.hpp> // For float_distance.
-#include <boost/math/special_functions/pow.hpp> // For float_distance.
+#include <boost/math/special_functions/pow.hpp> // For pow<N>.
 #include <boost/math/tools/tuple.hpp> // for tuple and make_tuple.
 
 #include <boost/multiprecision/cpp_bin_float.hpp> // is binary.
@@ -42,7 +39,6 @@ using boost::multiprecision::cpp_bin_float_50;
 
 #include <boost/timer/timer.hpp>
 #include <boost/system/error_code.hpp>
-#include <boost/multiprecision/cpp_bin_float/io.hpp>
 #include <boost/preprocessor/stringize.hpp>
 
 // STL
@@ -61,23 +57,32 @@ using boost::multiprecision::cpp_bin_float_50;
   std::string sourcefilename("");
 #endif
 
-#ifdef NDEBUG
-  std::string root = BOOST_STRINGIZE($(BOOST_ROOT));
-#endif
+  std::string chop_last(std::string s)
+  {
+     std::string::size_type pos = s.find_last_of("\\/");
+     if(pos == std::string::npos)
+        abort();
+     s.erase(pos);
+     return s;
+  }
 
-#ifndef BOOST_ROOT
-# define BOOST_ROOT i:/modular-boost/
-#endif
+  std::string make_root()
+  {
+     std::string result = chop_last(sourcefilename); // lose filename part
+     result = chop_last(result);   // lose /example/
+     result = chop_last(result);   // lose /math/
+     result = chop_last(result);   // lose /libs/
+     return result;
+  }
 
-#ifdef BOOST_ROOT
-std::string boost_root = BOOST_STRINGIZE(BOOST_ROOT);
-#endif
+std::string boost_root = make_root();
+
 
 std::string fp_hardware; // Any hardware features like SEE or AVX
 
 const std::string roots_name = "libs/math/doc/roots/";
 
-const std::string full_roots_name(boost_root + "libs/math/doc/roots/");
+const std::string full_roots_name(boost_root + "/libs/math/doc/roots/");
 
 const std::size_t nooftypes = 4;
 const std::size_t noofalgos = 4;
@@ -133,15 +138,12 @@ inline std::string build_test_name(const char* type_name, const char* test_name)
   result += type_name;
   result += "|";
   result += test_name;
-#ifdef _DEBUG 
-  // Assume preprocessor defines provided for MSVC and added for GCC -D_DEBUG=1 or 
-#if (_DEBUG == 0)
+#if defined(_DEBUG) || !defined(NDEBUG)
   result += "|";
   result += " debug";
-#else // for GCC -D_DEBUG=1
+#else
   result += "|";
   result += " release";
-#endif
 #endif
   result += "|";
   return result;
@@ -578,12 +580,10 @@ void table_root_info(cpp_bin_float_100 full_value)
 {
 
   std::cout << nooftypes << " floating-point types tested:" << std::endl;
-#ifdef _DEBUG
-#if (_DEBUG == 0)
+#if defined(_DEBUG) || !defined(NDEBUG)
   std::cout << "Compiled in debug mode." << std::endl;
 #else
   std::cout << "Compiled in optimise mode." << std::endl;
-#endif
 #endif
   std::cout << "FP hardware " << fp_hardware << std::endl;
   // Compute the 'right' answer for root N at 100 decimal digits.
@@ -663,14 +663,10 @@ int roots_tables(cpp_bin_float_100 full_value, double digits_accuracy)
   ::digits_accuracy = digits_accuracy;
   // Save globally so that it is available to root-finding algorithms. Ugly :-(
 
-#ifdef _DEBUG
-#  if (_DEBUG == 0)
-    std::string debug_or_optimize("Compiled in debug mode.");
-#  elif (_DEBUG == 1)
-     std::string debug_or_optimize("Compiled in optimise mode.");
-#  endif
+#if defined(_DEBUG) || !defined(NDEBUG)
+  std::string debug_or_optimize("Compiled in debug mode.");
 #else
-#  error _DEBUG is not defined in program run.  Add _DEBUG=1 to preprocessor defines for GCC?
+     std::string debug_or_optimize("Compiled in optimise mode.");
 #endif
 
   // Create filename for roots_table
@@ -813,7 +809,7 @@ int main()
 #    else
 #      ifdef __SSE2__
     std::cout << "Floating-point SSE2 " << std::endl;
-    fp_hardware += "_SSE2 ";
+    fp_hardware += "_SSE2";
 #      else
 #        ifdef __SSE__
     std::cout << "Floating-point SSE " << std::endl;
