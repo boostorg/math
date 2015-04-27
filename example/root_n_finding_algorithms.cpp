@@ -466,7 +466,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
 
   T to_root = static_cast<T>(big_value);
 
-  T result; // root
+  T result = 0; // root
   T ans = static_cast<T>(answer);
 
   using boost::timer::nanosecond_type;
@@ -485,7 +485,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     ti.start();
     for (long i = 0; i < eval_count; ++i)
     {
-      result = nth_root_noderiv<N, T>(to_root); // 
+      result += nth_root_noderiv<N, T>(to_root); // 
     }
     now = ti.elapsed();
     int time = static_cast<int>(now.user / eval_count);
@@ -506,7 +506,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     ti.start();
     for (long i = 0; i < eval_count; ++i)
     {
-      result = nth_root_1deriv<N, T>(to_root); // 
+      result += nth_root_1deriv<N, T>(to_root); // 
     }
     now = ti.elapsed();
     int time = static_cast<int>(now.user / eval_count);
@@ -528,7 +528,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     ti.start();
     for (long i = 0; i < eval_count; ++i)
     {
-      result = nth_root_2deriv<N>(to_root); // 
+      result += nth_root_2deriv<N>(to_root); // 
     }
     now = ti.elapsed();
     int time = static_cast<int>(now.user / eval_count);
@@ -549,7 +549,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     ti.start();
     for (long i = 0; i < eval_count; ++i)
     {
-      result = nth_root_2deriv_s<N>(to_root); // 
+      result += nth_root_2deriv_s<N>(to_root); // 
     }
     now = ti.elapsed();
     int time = static_cast<int>(now.user / eval_count);
@@ -568,6 +568,8 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   { // Normalize times.
     root_infos[type_no].normed_times.push_back(static_cast<double>(root_infos[type_no].times[i]) / root_infos[type_no].min_time);
   }
+
+  std::cout << "Accumulated result was: " << result << std::endl;
 
   return 4;  // eval_count of how many algorithms used.
 } // test_root
