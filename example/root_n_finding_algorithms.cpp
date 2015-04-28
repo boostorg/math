@@ -213,9 +213,8 @@ struct nth_root_functor_1deriv
   std::pair<T, T> operator()(T const& x)
   { // Return both f(x) and f'(x).
     using boost::math::pow; // // Compile-time integral power.
-    T fx = pow<N>(x) - a; // Difference (estimate x^n - a).
-    T dx = N * pow<N - 1>(x); // 1st derivative f'(x).
-    return std::make_pair(fx, dx); // 'return' both fx and dx.
+    T p = pow<N - 1>(x);
+    return std::make_pair(p * x - a, N * p); // 'return' both fx and dx.
   }
 
 private:
@@ -265,11 +264,9 @@ struct nth_root_functor_2deriv
   std::tuple<T, T, T> operator()(T const& x)
   { // Return f(x), f'(x) and f''(x).
     using boost::math::pow; // Compile-time integral power.
-    T fx = pow<N, T>(x) - a; // Difference (estimate x^n - a).
-    T dx = N * pow<N - 1, T>(x); // 1st derivative f'(x).
-    T d2x = N * (N - 1) * pow<N - 2, T>(x); // 2nd derivative f''(x).
+    T p = pow<N - 2>(x);
 
-    return std::make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
+    return std::make_tuple(p * x * x - a, p * x * N, p * N * (N - 1)); // 'return' fx, dx and d2x.
   }
 private:
   T a; // to be 'nth_rooted'.
@@ -466,7 +463,8 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
 
   T to_root = static_cast<T>(big_value);
 
-  T result = 0; // root
+  T result; // root
+  T sum = 0;
   T ans = static_cast<T>(answer);
 
   using boost::timer::nanosecond_type;
@@ -485,7 +483,8 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     ti.start();
     for (long i = 0; i < eval_count; ++i)
     {
-      result += nth_root_noderiv<N, T>(to_root); // 
+      result = nth_root_noderiv<N, T>(to_root); // 
+      sum += result;
     }
     now = ti.elapsed();
     int time = static_cast<int>(now.user / eval_count);
@@ -506,7 +505,8 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     ti.start();
     for (long i = 0; i < eval_count; ++i)
     {
-      result += nth_root_1deriv<N, T>(to_root); // 
+      result = nth_root_1deriv<N, T>(to_root); // 
+      sum += result;
     }
     now = ti.elapsed();
     int time = static_cast<int>(now.user / eval_count);
@@ -528,7 +528,8 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     ti.start();
     for (long i = 0; i < eval_count; ++i)
     {
-      result += nth_root_2deriv<N>(to_root); // 
+      result = nth_root_2deriv<N>(to_root); // 
+      sum += result;
     }
     now = ti.elapsed();
     int time = static_cast<int>(now.user / eval_count);
@@ -549,7 +550,8 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     ti.start();
     for (long i = 0; i < eval_count; ++i)
     {
-      result += nth_root_2deriv_s<N>(to_root); // 
+      result = nth_root_2deriv_s<N>(to_root); // 
+      sum += result;
     }
     now = ti.elapsed();
     int time = static_cast<int>(now.user / eval_count);
@@ -569,7 +571,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     root_infos[type_no].normed_times.push_back(static_cast<double>(root_infos[type_no].times[i]) / root_infos[type_no].min_time);
   }
 
-  std::cout << "Accumulated result was: " << result << std::endl;
+  std::cout << "Accumulated result was: " << sum << std::endl;
 
   return 4;  // eval_count of how many algorithms used.
 } // test_root
