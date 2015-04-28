@@ -513,7 +513,8 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
          else
             delta = ratio;  // fall back to Newton iteration.
       }
-      if(fabs(delta * 2) > fabs(delta2))
+      T convergence = fabs(delta / delta2);
+      if((convergence > 0.8) && (convergence < 2))
       {
          // last two steps haven't converged, try bisection:
          delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
