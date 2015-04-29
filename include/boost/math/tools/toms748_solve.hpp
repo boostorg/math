@@ -31,6 +31,10 @@ template <class T>
 class eps_tolerance
 {
 public:
+   eps_tolerance()
+   {
+      eps = 4 * tools::epsilon<T>();
+   }
    eps_tolerance(unsigned bits)
    {
       BOOST_MATH_STD_USING
