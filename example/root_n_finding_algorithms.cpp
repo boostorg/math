@@ -190,7 +190,7 @@ T nth_root_noderiv(T x)
   bool is_rising = true; // So if result if guess^3 is too low, then try increasing guess.
   int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
   // Some fraction of digits is used to control how accurate to try to make the result.
-  int get_digits = static_cast<int>(digits * digits_accuracy);
+  int get_digits = static_cast<int>(digits);
   eps_tolerance<T> tol(get_digits); // Set the tolerance.
   std::pair<T, T> r;
   r =  bracket_and_solve_root(nth_root_functor_noderiv<N, T>(x), guess, factor, is_rising, tol, it);
@@ -240,7 +240,7 @@ T nth_root_1deriv(T x)
   T max = static_cast<T>(ldexp(static_cast<guess_type>(2.), exponent / N)); // Maximum possible value is twice our guess.
 
   int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
-  int get_digits = static_cast<int>(digits * digits_accuracy);
+  int get_digits = static_cast<int>(digits * 0.6);
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
   T result = newton_raphson_iterate(nth_root_functor_1deriv<N, T>(x), guess, min, max, get_digits, it);
@@ -292,7 +292,7 @@ T nth_root_2deriv(T x)
   T max = static_cast<T>(ldexp(static_cast<guess_type>(2.), exponent / N)); // Maximum possible value is twice our guess.
 
   int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
-  int get_digits = static_cast<int>(digits * digits_accuracy);
+  int get_digits = static_cast<int>(digits * 0.4);
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
   T result = halley_iterate(nth_root_functor_2deriv<N, T>(x), guess, min, max, get_digits, it);
@@ -858,7 +858,7 @@ int main()
     roots_tables(full_value, 1.);
 
     // Output tables for some roots at less accuracy.
-    roots_tables(full_value, 0.75);
+    //roots_tables(full_value, 0.75);
 
     return boost::exit_success;
   }
