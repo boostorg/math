@@ -47,21 +47,21 @@ struct nth_functor_2deriv
   BOOST_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
 
   nth_functor_2deriv(T const& to_find_root_of) : a(to_find_root_of)
-  { // Constructor stores value a to find root of, for example:
-  }
+  { /* Constructor stores value a to find root of, for example: */ }
 
   // using boost::math::tuple; // to return three values.
   std::tuple<T, T, T> operator()(T const& x)
-  { // Return f(x), f'(x) and f''(x).
+  { 
+    // Return f(x), f'(x) and f''(x).
     using boost::math::pow;
-    T fx = pow<N>(x) - a; // Difference (estimate x^n - a).
-    T dx = N * pow<N - 1>(x); // 1st derivative f'(x).
-    T d2x = N * (N - 1) * pow<N - 2 >(x); // 2nd derivative f''(x).
+    T fx = pow<N>(x) - a;                  // Difference (estimate x^n - a).
+    T dx = N * pow<N - 1>(x);              // 1st derivative f'(x).
+    T d2x = N * (N - 1) * pow<N - 2 >(x);  // 2nd derivative f''(x).
 
-    return std::make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
+    return std::make_tuple(fx, dx, d2x);   // 'return' fx, dx and d2x.
   }
 private:
-  T a; // to be 'nth_rooted'.
+  T a;                                     // to be 'nth_rooted'.
 };
 
 //] [/root_finding_nth_functor_2deriv]
@@ -98,12 +98,13 @@ T nth_2deriv(T x)
   typedef double guess_type; // double may restrict (exponent) range for a multiprecision T?
 
   int exponent;
-  frexp(static_cast<guess_type>(x), &exponent); // Get exponent of z (ignore mantissa).
-  T guess = ldexp(static_cast<guess_type>(1.), exponent / N); // Rough guess is to divide the exponent by n.
+  frexp(static_cast<guess_type>(x), &exponent);                 // Get exponent of z (ignore mantissa).
+  T guess = ldexp(static_cast<guess_type>(1.), exponent / N);   // Rough guess is to divide the exponent by n.
   T min = ldexp(static_cast<guess_type>(1.) / 2, exponent / N); // Minimum possible value is half our guess.
-  T max = ldexp(static_cast<guess_type>(2.), exponent / N); // Maximum possible value is twice our guess.
+  T max = ldexp(static_cast<guess_type>(2.), exponent / N);     // Maximum possible value is twice our guess.
 
-  int digits = 2 * std::numeric_limits<T>::digits / 3; // Two thirds maximum possible binary digits accuracy for type T.
+  int digits = std::numeric_limits<T>::digits * 0.4;            // Accuracy tripples with each step, so stop when
+                                                                // slightly more than one third of the digits are correct.
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
   T result = halley_iterate(nth_functor_2deriv<N, T>(x), guess, min, max, digits, it);

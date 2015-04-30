@@ -48,7 +48,7 @@ but you should never use `using` statements globally in header files).]
 //using boost::math::tools::toms748_solve;
 
 #include <boost/math/special_functions/next.hpp> // For float_distance.
-#include <boost/math/tools/tuple.hpp> // for tuple and make_tuple.
+#include <tuple> // for std::tuple and std::make_tuple.
 #include <boost/math/special_functions/cbrt.hpp> // For boost::math::cbrt.
 
 //] [/root_finding_include_1]
@@ -88,10 +88,10 @@ Lastly we show how adding the curvature /f''(x)/ too will speed convergence even
 
 template <class T>
 struct cbrt_functor_noderiv
-{ //  cube root of x using only function - no derivatives.
+{ 
+  //  cube root of x using only function - no derivatives.
   cbrt_functor_noderiv(T const& to_find_root_of) : a(to_find_root_of)
-  { // Constructor just stores value a to find root of.
-  }
+  { /* Constructor just stores value a to find root of. */ }
   T operator()(T const& x)
   {
     T fx = x*x*x - a; // Difference (estimate x^3 - a).
@@ -116,25 +116,29 @@ and has only one root (we leave negative values 'as an exercise for the student'
 
 template <class T>
 T cbrt_noderiv(T x)
-{ // return cube root of x using bracket_and_solve (no derivatives).
-  using namespace std;  // Help ADL of std functions.
-  using namespace boost::math::tools; // For bracket_and_solve_root.
+{ 
+  // return cube root of x using bracket_and_solve (no derivatives).
+  using namespace std;                          // Help ADL of std functions.
+  using namespace boost::math::tools;           // For bracket_and_solve_root.
 
   int exponent;
-  frexp(x, &exponent); // Get exponent of z (ignore mantissa).
-  T guess = ldexp(1., exponent/3); // Rough guess is to divide the exponent by three.
-  T factor = 2; // How big steps to take when searching.
+  frexp(x, &exponent);                          // Get exponent of z (ignore mantissa).
+  T guess = ldexp(1., exponent/3);              // Rough guess is to divide the exponent by three.
+  T factor = 2;                                 // How big steps to take when searching.
 
-  const boost::uintmax_t maxit = 20; // Limit to maximum iterations.
-  boost::uintmax_t it = maxit; // Initally our chosen max iterations, but updated with actual.
-  bool is_rising = true; // So if result if guess^3 is too low, then try increasing guess.
-  int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
+  const boost::uintmax_t maxit = 20;            // Limit to maximum iterations.
+  boost::uintmax_t it = maxit;                  // Initally our chosen max iterations, but updated with actual.
+  bool is_rising = true;                        // So if result if guess^3 is too low, then try increasing guess.
+  int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
   // Some fraction of digits is used to control how accurate to try to make the result.
-  int get_digits = (digits * 3) /4; // Near maximum (3/4) possible accuracy.
-  eps_tolerance<T> tol(get_digits); // Set the tolerance.
-  std::pair<T, T> r =
-    bracket_and_solve_root(cbrt_functor_noderiv<T>(x), guess, factor, is_rising, tol, it);
-  return r.first + (r.second - r.first)/2;  // Midway between brackets.
+  int get_digits = digits - 3;                  // We have to have a non-zero interval at each step, so
+                                                // maximum accuracy is digits - 1.  But we also have to
+                                                // allow for inaccuracy in f(x), otherwise the last few
+                                                // iterations just thrash around.
+  eps_tolerance<T> tol(get_digits);             // Set the tolerance.
+  std::pair<T, T> r = bracket_and_solve_root(cbrt_functor_noderiv<T>(x), guess, factor, is_rising, tol, it);
+  return r.first + (r.second - r.first)/2;      // Midway between brackets is our result, if necessary we could
+                                                // return the result as an interval here.
 }
 
 /*`
@@ -145,8 +149,9 @@ which is more than anyone would wish to wait for!
 
 So it may be wise to chose some reasonable estimate of how many iterations may be needed, here only 20.]
 
-[note We could also have used a maximum iterations provided by any policy:
-`boost::uintmax_t max_it = policies::get_max_root_iterations<Policy>();`]
+[note We could also have used a maximum iterations provided by any Boost.Math __Policy:
+internally, Boost.Math's own routines use
+`boost::uintmax_t max_it = policies::get_max_root_iterations<Policy>();` to set an upper limit.]
 
 [tip One can show how many iterations in `bracket_and_solve_root` (this information is lost outside `cbrt_noderiv`), for example with:]
 
@@ -202,28 +207,31 @@ struct cbrt_functor_deriv
     // for example: calling cbrt_functor_deriv<T>(a) to use to get cube root of a.
   }
   std::pair<T, T> operator()(T const& x)
-  { // Return both f(x) and f'(x).
-    T fx = x*x*x - a; // Difference (estimate x^3 - value).
-    T dx =  3 * x*x; // 1st derivative = 3x^2.
-    return std::make_pair(fx, dx); // 'return' both fx and dx.
+  { 
+    // Return both f(x) and f'(x).
+    T fx = x*x*x - a;                // Difference (estimate x^3 - value).
+    T dx =  3 * x*x;                 // 1st derivative = 3x^2.
+    return std::make_pair(fx, dx);   // 'return' both fx and dx.
   }
 private:
-  T a; // Store value to be 'cube_rooted'.
+  T a;                               // Store value to be 'cube_rooted'.
 };
 
 /*`Our cube root function is now:*/
 
 template <class T>
 T cbrt_deriv(T x)
-{ // return cube root of x using 1st derivative and Newton_Raphson.
+{ 
+  // return cube root of x using 1st derivative and Newton_Raphson.
   using namespace boost::math::tools;
   int exponent;
-  frexp(x, &exponent); // Get exponent of z (ignore mantissa).
-  T guess = ldexp(1., exponent/3); // Rough guess is to divide the exponent by three.
-  T min = ldexp(0.5, exponent/3); // Minimum possible value is half our guess.
-  T max = ldexp(2., exponent/3); // Maximum possible value is twice our guess.
-  const int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
-  int get_digits = (digits * 3) /4; // Near maximum (3/4) possible accuracy.
+  frexp(x, &exponent);                                // Get exponent of z (ignore mantissa).
+  T guess = ldexp(1., exponent/3);                    // Rough guess is to divide the exponent by three.
+  T min = ldexp(0.5, exponent/3);                     // Minimum possible value is half our guess.
+  T max = ldexp(2., exponent/3);                      // Maximum possible value is twice our guess.
+  const int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
+  int get_digits = static_cast<int>(digits * 0.6);    // Accuracy doubles with each step, so stop when we have
+                                                      // just over half the digits correct.
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
   T result = newton_raphson_iterate(cbrt_functor_deriv<T>(x), guess, min, max, get_digits, it);
@@ -249,18 +257,19 @@ To \'return\' three values, we use a `tuple` of three floating-point values:
 
 template <class T>
 struct cbrt_functor_2deriv
-{ // Functor returning both 1st and 2nd derivatives.
+{ 
+  // Functor returning both 1st and 2nd derivatives.
   cbrt_functor_2deriv(T const& to_find_root_of) : a(to_find_root_of)
   { // Constructor stores value a to find root of, for example:
     // calling cbrt_functor_2deriv<T>(x) to get cube root of x,
   }
-  boost::math::tuple<T, T, T> operator()(T const& x)
-  { // Return both f(x) and f'(x) and f''(x).
-    using boost::math::make_tuple;
-    T fx = x*x*x - a; // Difference (estimate x^3 - value).
-    T dx = 3 * x*x; // 1st derivative = 3x^2.
-    T d2x = 6 * x; // 2nd derivative = 6x.
-    return make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
+  std::tuple<T, T, T> operator()(T const& x)
+  { 
+    // Return both f(x) and f'(x) and f''(x).
+    T fx = x*x*x - a;                     // Difference (estimate x^3 - value).
+    T dx = 3 * x*x;                       // 1st derivative = 3x^2.
+    T d2x = 6 * x;                        // 2nd derivative = 6x.
+    return std::make_tuple(fx, dx, d2x);  // 'return' fx, dx and d2x.
   }
 private:
   T a; // to be 'cube_rooted'.
@@ -270,17 +279,19 @@ private:
 
 template <class T>
 T cbrt_2deriv(T x)
-{ // return cube root of x using 1st and 2nd derivatives and Halley.
+{ 
+  // return cube root of x using 1st and 2nd derivatives and Halley.
   //using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools;
   int exponent;
-  frexp(x, &exponent); // Get exponent of z (ignore mantissa).
-  T guess = ldexp(1., exponent/3); // Rough guess is to divide the exponent by three.
-  T min = ldexp(0.5, exponent/3); // Minimum possible value is half our guess.
-  T max = ldexp(2., exponent/3);// Maximum possible value is twice our guess.
-  const int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
+  frexp(x, &exponent);                                // Get exponent of z (ignore mantissa).
+  T guess = ldexp(1., exponent/3);                    // Rough guess is to divide the exponent by three.
+  T min = ldexp(0.5, exponent/3);                     // Minimum possible value is half our guess.
+  T max = ldexp(2., exponent/3);                      // Maximum possible value is twice our guess.
+  const int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
   // digits used to control how accurate to try to make the result.
-  int get_digits = digits/2; // Near maximum (1/2) possible accuracy.
+  int get_digits = static_cast<int>(digits * 0.4);    // Accuracy tripples with each step, so stop when just
+                                                      // over one third of the digits are correct.
   boost::uintmax_t maxit = 20;
   T result = halley_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, maxit);
   return result;
@@ -343,20 +354,21 @@ __spaces['f]\'\'(x) = 20x[super 3]
 
 template <class T>
 struct fifth_functor_2deriv
-{ // Functor returning both 1st and 2nd derivatives.
+{ 
+  // Functor returning both 1st and 2nd derivatives.
   fifth_functor_2deriv(T const& to_find_root_of) : a(to_find_root_of)
-  { // Constructor stores value a to find root of, for example:
-  }
+  { /* Constructor stores value a to find root of, for example: */ }
 
   std::tuple<T, T, T> operator()(T const& x)
-  { // Return both f(x) and f'(x) and f''(x).
-    T fx = x*x*x*x*x - a; // Difference (estimate x^3 - value).
-    T dx = 5 * x*x*x*x; // 1st derivative = 5x^4.
-    T d2x = 20 * x*x*x; // 2nd derivative = 20 x^3
-    return std::make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
+  { 
+    // Return both f(x) and f'(x) and f''(x).
+    T fx = boost::math::pow<5>(x) - a;    // Difference (estimate x^3 - value).
+    T dx = 5 * boost::math::pow<4>(x);    // 1st derivative = 5x^4.
+    T d2x = 20 * boost::math::pow<3>(x);  // 2nd derivative = 20 x^3
+    return std::make_tuple(fx, dx, d2x);  // 'return' fx, dx and d2x.
   }
 private:
-  T a; // to be 'fifth_rooted'.
+  T a;                                    // to be 'fifth_rooted'.
 }; // struct fifth_functor_2deriv
 
 //] [/root_finding_fifth_functor_2deriv]
@@ -368,17 +380,18 @@ private:
 
 template <class T>
 T fifth_2deriv(T x)
-{ // return fifth root of x using 1st and 2nd derivatives and Halley.
-  using namespace std;  // Help ADL of std functions.
-  using namespace boost::math::tools; // for halley_iterate.
+{ 
+  // return fifth root of x using 1st and 2nd derivatives and Halley.
+  using namespace std;                  // Help ADL of std functions.
+  using namespace boost::math::tools;   // for halley_iterate.
 
   int exponent;
-  frexp(x, &exponent); // Get exponent of z (ignore mantissa).
-  T guess = ldexp(1., exponent / 5); // Rough guess is to divide the exponent by five.
-  T min = ldexp(0.5, exponent / 5); // Minimum possible value is half our guess.
-  T max = ldexp(2., exponent / 5); // Maximum possible value is twice our guess.
-
-  const int digits = std::numeric_limits<T>::digits / 2; // Half maximum possible binary digits accuracy for type T.
+  frexp(x, &exponent);                  // Get exponent of z (ignore mantissa).
+  T guess = ldexp(1., exponent / 5);    // Rough guess is to divide the exponent by five.
+  T min = ldexp(0.5, exponent / 5);     // Minimum possible value is half our guess.
+  T max = ldexp(2., exponent / 5);      // Maximum possible value is twice our guess.
+  // Stop when slightly more than one of the digits are correct:
+  const int digits = static_cast<int>(std::numeric_limits<T>::digits * 0.4); 
   const boost::uintmax_t maxit = 50;
   boost::uintmax_t it = maxit;
   T result = halley_iterate(fifth_functor_2deriv<T>(x), guess, min, max, digits, it);
@@ -393,18 +406,18 @@ int main()
   std::cout << "Root finding  Examples." << std::endl;
   std::cout.precision(std::numeric_limits<double>::max_digits10);
   // Show all possibly significant decimal digits for double.
-  //std::cout.precision(std::numeric_limits<double>::digits10);
+  // std::cout.precision(std::numeric_limits<double>::digits10);
   // Show all guaranteed significant decimal digits for double.
 
 
 //[root_finding_main_1
   try
   {
-    double threecubed = 27.; // Value that has an *exactly representable* integer cube root.
+    double threecubed = 27.;   // Value that has an *exactly representable* integer cube root.
     double threecubedp1 = 28.; // Value whose cube root is *not* exactly representable.
 
     std::cout << "cbrt(28) " << boost::math::cbrt(28.) << std::endl; // boost::math:: version of cbrt.
-    std::cout << "std::cbrt(28) " << std::cbrt(28.) << std::endl; // std:: version of cbrt.
+    std::cout << "std::cbrt(28) " << std::cbrt(28.) << std::endl;    // std:: version of cbrt.
     std::cout <<" cast double " << static_cast<double>(3.0365889718756625194208095785056696355814539772481111) << std::endl;
 
     // Cube root using bracketing:

@@ -87,15 +87,16 @@ struct cbrt_functor_2deriv
 
   // using boost::math::tuple; // to return three values.
   std::tuple<T, T, T> operator()(T const& x)
-  { // Return both f(x) and f'(x) and f''(x).
-    T fx = x*x*x - a; // Difference (estimate x^3 - value).
-   // std::cout << "x = " << x << "\nfx = " << fx << std::endl;
-    T dx = 3 * x*x; // 1st derivative = 3x^2.
-    T d2x = 6 * x; // 2nd derivative = 6x.
-    return std::make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
+  { 
+    // Return both f(x) and f'(x) and f''(x).
+    T fx = x*x*x - a;                     // Difference (estimate x^3 - value).
+    // std::cout << "x = " << x << "\nfx = " << fx << std::endl;
+    T dx = 3 * x*x;                       // 1st derivative = 3x^2.
+    T d2x = 6 * x;                        // 2nd derivative = 6x.
+    return std::make_tuple(fx, dx, d2x);  // 'return' fx, dx and d2x.
   }
 private:
-  T a; // to be 'cube_rooted'.
+  T a;                                    // to be 'cube_rooted'.
 }; // struct cbrt_functor_2deriv
 
 template <int n, class T>
@@ -103,37 +104,37 @@ struct nth_functor_2deriv
 { // Functor returning both 1st and 2nd derivatives.
 
   nth_functor_2deriv(T const& to_find_root_of) : value(to_find_root_of)
-  { // Constructor stores value to find root of, for example:
-  }
+  { /* Constructor stores value to find root of, for example: */ }
 
-  // using boost::math::tuple; // to return three values.
+  // using std::tuple; // to return three values.
   std::tuple<T, T, T> operator()(T const& x)
-  { // Return both f(x) and f'(x) and f''(x).
+  { 
+    // Return both f(x) and f'(x) and f''(x).
     using boost::math::pow;
-    T fx = pow<n>(x) -value; // Difference (estimate x^3 - value).
-    T dx = n * pow<n - 1>(x); // 1st derivative = 5x^4.
-    T d2x = n * (n - 1) * pow<n - 2 >(x); // 2nd derivative = 20 x^3
-    return std::make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
+    T fx = pow<n>(x) - value;              // Difference (estimate x^3 - value).
+    T dx = n * pow<n - 1>(x);              // 1st derivative = 5x^4.
+    T d2x = n * (n - 1) * pow<n - 2 >(x);  // 2nd derivative = 20 x^3
+    return std::make_tuple(fx, dx, d2x);   // 'return' fx, dx and d2x.
   }
 private:
-  T value; // to be 'nth_rooted'.
+  T value;                                 // to be 'nth_rooted'.
 }; // struct nth_functor_2deriv
 
 
 template <int n, class T>
 T nth_2deriv(T x)
-{ // return nth root of x using 1st and 2nd derivatives and Halley.
-
+{ 
+  // return nth root of x using 1st and 2nd derivatives and Halley.
   using namespace std;  // Help ADL of std functions.
   using namespace boost::math; // For halley_iterate.
 
   int exponent;
-  frexp(x, &exponent); // Get exponent of z (ignore mantissa).
-  T guess = ldexp(static_cast<T>(1.), exponent / n); // Rough guess is to divide the exponent by three.
-  T min = ldexp(static_cast<T>(0.5), exponent / n); // Minimum possible value is half our guess.
-  T max = ldexp(static_cast<T>(2.), exponent / n); // Maximum possible value is twice our guess.
+  frexp(x, &exponent);                                 // Get exponent of z (ignore mantissa).
+  T guess = ldexp(static_cast<T>(1.), exponent / n);   // Rough guess is to divide the exponent by three.
+  T min = ldexp(static_cast<T>(0.5), exponent / n);    // Minimum possible value is half our guess.
+  T max = ldexp(static_cast<T>(2.), exponent / n);     // Maximum possible value is twice our guess.
 
-  int digits = std::numeric_limits<T>::digits / 2; // Half maximum possible binary digits accuracy for type T.
+  int digits = std::numeric_limits<T>::digits / 2;     // Half maximum possible binary digits accuracy for type T.
   const boost::uintmax_t maxit = 50;
   boost::uintmax_t it = maxit;
   T result = halley_iterate(nth_functor_2deriv<n, T>(x), guess, min, max, digits, it);
