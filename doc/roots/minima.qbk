@@ -18,23 +18,22 @@
 [h4 Description]
 
 These two functions locate the minima of the continuous function ['f] using
-[@http://en.wikipedia.org/wiki/Brent%27s_method Brent's algorithm].
+[@http://en.wikipedia.org/wiki/Brent%27s_method Brent's method]: specifically it
+uses quadratic interpolation to locate the minima, or if that fails, falls back to
+a [@http://en.wikipedia.org/wiki/Golden_section_search golden-section search].
 
 [*Parameters]
 
 [variablelist
-[[F] [class of functor.]]
-[[T] [floating-point type for computation and result.]]
-[[f] [The function to minimise a function object (functor) that should be smooth over the
+[[f] [The function to minimise: a function object (functor) that should be smooth over the
           range ['\[min, max\]], with no maxima occurring in that interval.]]
 [[min] [The lower endpoint of the range in which to search  for the minima.]]
 [[max] [The upper endpoint of the range in which to search  for the minima.]]
 [[bits] [The number of bits precision to which the minima should be found.[br]
              Note that in principle, the minima can not be located to greater
              accuracy than the square root of machine epsilon (for 64-bit double, sqrt(1e-16)[cong]1e-8),
-             therefore if ['bits] is set to a value greater than one half of the bits in type T,
-             (for 64-bit `double` significand bits (52 +1) /2 = 26) then
-             `policies::digits<T, policies::policy<> >() /2` bits will be used instead.]]
+             therefore the value of ['bits] will be ignored if it's greater than half the number of bits
+             in the mantissa of T.]]
 [[max_iter] [The maximum number of iterations to use
              in the algorithm, if not provided the algorithm will just
              keep on going until the minima is found.]]
@@ -86,7 +85,7 @@ The search minimum and maximum are chosen as -4 to 4/3 (as in the Wikipedia exam
 so choosing a tight min-max range is good.]
 
 For simplicity, we set the precision parameter `bits` to `std::numeric_limits<double>::digits`,
-which is effectively the maximum possible `std::numeric_limits<double>::digits`/2.
+which is effectively the maximum possible i.e. `std::numeric_limits<double>::digits`/2.
 Nor do we provide a maximum iterations parameter `max_iter`,
 (perhaps unwidely), so the function will iterate until it finds a minimum.
 
@@ -155,6 +154,8 @@ that we reduce the number of iterations from 10 to 7 and the result significantl
 [h5:template Templating on floating-point type]
 
 If we want to switch the floating-point type, then the functor must be revised.
+Since the functor is stateless, the easiest option is to simply make
+`operator()` a template member function:
 
 [brent_minimise_T_functor]
 
@@ -165,9 +166,8 @@ The `brent_find_minima` function can now be used in template form.
 The form shown uses the floating-point type `long double` by deduction,
 but it is also possible to be more explicit, for example:
 
-  std::pair<long double, long double> r = brent_find_minima<>(func<long double>(), bracket_min, bracket_max, bits, it);
-  std::pair<long double, long double> r = brent_find_minima<func<long double>, long double>
-  (func<long double>(), bracket_min, bracket_max, bits, it);
+  std::pair<long double, long double> r = brent_find_minima<func, long double>
+  (func(), bracket_min, bracket_max, bits, it);
 
 In order to show the use of multiprecision below, it may be convenient to write a templated function to use this.
 
@@ -211,7 +211,7 @@ and with our show function
 
 [brent_minimise_mp_output_2]
 
-[tip One can usually rely on __function_template_instantiation
+[tip One can usually rely on template argument deduction
 to avoid specifying the verbose multiprecision types,
 but great care in needed with the ['type of the values] provided
 to avoid confusing the compiler.

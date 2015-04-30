@@ -74,9 +74,9 @@ struct funcdouble
 //] [/brent_minimise_double_functor]
 
 //[brent_minimise_T_functor
-template <class T = double>
 struct func
 {
+  template <class T>
   T operator()(T const& x)
   { //
     return (x + 3) * (x - 1) * (x - 1); //
@@ -135,7 +135,7 @@ void show_minima()
     T bracket_min = static_cast<T>(-4);
     T bracket_max = static_cast<T>(1.3333333333333333333333333333333333333333333333333);
 
-    std::pair<T, T> r = brent_find_minima<func<T>, T>(func<T>(), bracket_min, bracket_max, bits, it);
+    std::pair<T, T> r = brent_find_minima<func, T>(func(), bracket_min, bracket_max, bits, it);
 
     std::cout << "  x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second;
     if (it < maxit)
@@ -278,7 +278,7 @@ int main()
     const boost::uintmax_t maxit = 20;
     boost::uintmax_t it = maxit;
 
-    std::pair<long double, long double> r = brent_find_minima(func<long double>(), bracket_min, bracket_max, bits, it);
+    std::pair<long double, long double> r = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second
       << ", after " << it << " iterations. " << std::endl;
 //] [/brent_minimise_template_1]
@@ -351,7 +351,7 @@ int main()
     std::cout << bracket_min << " " << bracket_max << std::endl;
     const boost::uintmax_t maxit = 20;
     boost::uintmax_t it = maxit;
-    std::pair<cpp_bin_float_50, cpp_bin_float_50> r = brent_find_minima(func<cpp_bin_float_50>(), bracket_min, bracket_max, bits, it);
+    std::pair<cpp_bin_float_50, cpp_bin_float_50> r = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
 
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second
     // x at minimum = 1, f(1) = 5.04853e-018
@@ -394,7 +394,7 @@ int main()
     std::cout << bracket_min << " " << bracket_max << std::endl;
     const boost::uintmax_t maxit = 20;
     boost::uintmax_t it = maxit;
-    std::pair<cpp_bin_float_50_et_on, cpp_bin_float_50_et_on> r = brent_find_minima(func<cpp_bin_float_50_et_on>(), bracket_min, bracket_max, bits, it);
+    std::pair<cpp_bin_float_50_et_on, cpp_bin_float_50_et_on> r = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
 
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second << std::endl;
     // x at minimum = 1, f(1) = 5.04853e-018
@@ -415,7 +415,7 @@ int main()
     std::cout << bracket_min << " " << bracket_max << std::endl;
     const boost::uintmax_t maxit = 20;
     boost::uintmax_t it = maxit;
-    std::pair<cpp_bin_float_50_et_off, cpp_bin_float_50_et_off> r = brent_find_minima(func<cpp_bin_float_50>(), bracket_min, bracket_max, bits, it);
+    std::pair<cpp_bin_float_50_et_off, cpp_bin_float_50_et_off> r = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
 
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second << std::endl;
     // x at minimum = 1, f(1) = 5.04853e-018
@@ -435,7 +435,7 @@ int main()
     std::cout << bracket_min << " " << bracket_max << std::endl;
     const boost::uintmax_t maxit = 20;
     boost::uintmax_t it = maxit;
-    std::pair<cpp_dec_float_50, cpp_dec_float_50> r = brent_find_minima(func<cpp_dec_float_50>(), bracket_min, bracket_max, bits, it);
+    std::pair<cpp_dec_float_50, cpp_dec_float_50> r = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
 
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second << std::endl;
     // x at minimum = 1, f(1) = 5.04853e-018
@@ -454,7 +454,7 @@ int main()
     std::cout << bracket_min << " " << bracket_max << std::endl;
     const boost::uintmax_t maxit = 20;
     boost::uintmax_t it = maxit;
-    std::pair<cpp_dec_float_50_et_on, cpp_dec_float_50_et_on> r = brent_find_minima(func<cpp_dec_float_50_et_on>(), bracket_min, bracket_max, bits, it);
+    std::pair<cpp_dec_float_50_et_on, cpp_dec_float_50_et_on> r = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
 
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second << std::endl;
     // x at minimum = 1, f(1) = 5.04853e-018
@@ -475,7 +475,7 @@ int main()
     std::cout << bracket_min << " " << bracket_max << std::endl;
     const boost::uintmax_t maxit = 20;
     boost::uintmax_t it = maxit;
-    std::pair<cpp_dec_float_50_et_off, cpp_dec_float_50_et_off> r = brent_find_minima(func<cpp_dec_float_50_et_off>(), bracket_min, bracket_max, bits, it);
+    std::pair<cpp_dec_float_50_et_off, cpp_dec_float_50_et_off> r = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
 
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second << std::endl;
     // x at minimum = 1, f(1) = 5.04853e-018
