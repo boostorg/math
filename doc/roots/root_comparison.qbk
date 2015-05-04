@@ -42,7 +42,12 @@ so cannot be used with any User-Defined floating-point types like __multiprecisi
 This, and that the cube function is so impeccably-behaved,
 allows the implementer to use many tricks to achieve a fast computation.
 On some platforms,`std::cbrt` appeared several times as quick as the more general `boost::math::cbrt`,
-but results were highly dependent on hardware, compiler and options, 32 or 64-bit and platform.
+on other platforms `boost::math::cbrt` is noticably faster.  In general, the results are highly
+dependent on the code-generation / processor architecture selection compiler options used.  One can
+assume that the standard library will have been compiled with options ['nearly] optimal for the platform
+it was installed on, where as the user has more choice over the options used for Boost.Math.  Pick something
+too general/conservative and performance suffers, while selecting options that make use of the latest
+instruction set opcodes speed's things up noticably.'
 
 * Two compilers in optimise mode were compared: GCC 4.9.1 using Netbeans IDS
 and Microsoft Visual Studio 2013 (Update 1) on the same hardware.
@@ -51,11 +56,16 @@ The number of iterations seemed consistent, but the relative run-times surprisin
 * `boost::math::cbrt` allows use with ['any user-defined floating-point type], conveniently
 __multiprecision.  It too can take some advantage of the good-behaviour of the cube function,
 compared to the more general implementation in the nth root-finding examples.  For example,
-it uses a polynomial to generate a better guess than dividing the exponent by three,
+it uses a polynomial approximation to generate a better guess than dividing the exponent by three,
 and can avoid the complex checks in __newton required to prevent the
 search going wildly off-track.  For a known precision, it may also be possible to
-fix the number of iterations, allowing inlining. Typically, it was found that computation using type `double`
-took a few times longer when using the various root-finding algorithms directly.
+fix the number of iterations, allowing inlining and loop unrolling.  It also
+algebraically simplifies the Halley steps leading to a big reduction in the
+number of floating point operations required compared to a "black box" implementation
+that calculates the derivatives seperately and then combines them in the Halley code.
+Typically, it was found that computation using type `double`
+took a few times longer when using the various root-finding algorithms directly rather
+than the hand coded/optimized `cbrt` routine.
 
 * The importance of getting a good guess can be shown by using the `std::pow(x, 1.L/3)` function call
 to obtain a `double` or `long double` 15 decimal-digit precision guess at cube-root
@@ -66,7 +76,9 @@ The limitation of this tatic is that the range of possible (exponent) values may
 * Using type `float` and __TOMS748, a few less iterations were required, but the time the same as Newton-Raphson.
 
 * For __fundamental_types, there was little to choose between the three derivative methods,
-but for __cpp_bin_float, __newton was twice as fast.
+but for __cpp_bin_float, __newton was twice as fast.  Note that the cube-root is an extreme
+test case as the cost of calling the functor is so cheap that the runtimes are largely
+dominated by the complexity of the iteration code.
 
 * Compiling with optimisation halved computation times, and any differences between algorithms
 became nearly negligible.  The optimisation speed-up of the __TOMS748 was especially noticable.
@@ -140,9 +152,9 @@ Some tentative conclusions can be drawn from this limited exercise.
 Using the first derivatives (__newton) is usually the best, but the improvement over the no-derivative
 __TOMS748 is considerable in number of iterations, but little in execution time.
 
-* The extra cost of evaluating the second derivatives (__halley or __schroeder) is usually too much for any net benefit.
-
-* __halley usually seems better than __schroeder, but for no obvious reason.
+* The extra cost of evaluating the second derivatives (__halley or __schroeder) is usually too much for any net benefit:
+as with the cube root, these functors are so cheap to evaluate that the runtime is largely dominated by the
+complexity of the root finding method.
 
 * For a __multiprecision floating-point type, the __newton is a clear winner with a several-fold gain over __TOMS748,
 and again no improvement from the second-derivative algorithms.
@@ -169,7 +181,7 @@ only reduced the time several percent, and the accuracy barely at all.
 
 *Using MSVC, there was some improvement using 64-bit, markedly for __multiprecision.
 
-* The GCC compiler 4.9.1 using 64-bit was at least five-folder faster,
+* The GCC compiler 4.9.1 using 64-bit was at least five-folder faster that 32-bit,
 apparently reflecting better optimization.
 
 Clearly, your mileage [*will vary], but in summary, __newton seems the first choice of algorithm,

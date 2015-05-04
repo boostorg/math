@@ -378,10 +378,89 @@ as noted above.]
 Use of the the `pow` function is more sensible for this unusual need.
 ]
 
+[h3 A More complex example - Inverting the Elliptic Integrals]
+
+The arc length of an ellipse with radii ['a] and ['b] is given by:
+
+[pre L(a, b) = 4aE(k)]
+
+With:
+
+[pre k = [sqrt](1 - b[super 2]/a[super 2])]
+
+Where ['E(k)] is the complete elliptic integral of the second kind - see __ellint_2.
+
+Let's suppose we know the arc length and one radii, we can then calculate the other
+radius by inverting the formula above.  We'll begin by encoding the above formula
+into a functor that our root finding algorithms can call.  Note that while not
+completely obvious from the formula above, the function is completely symetrical
+in the two radii - which can be interchanged at will - in this case we need to
+make sure that `a >= b` so that we don't accidently take the square root of a negative number:
+
+[import ../../example/root_elliptic_finding.cpp]
+
+[elliptic_noderv_func]
+
+We'll also need a decent estimate to start searching from, the approximation:
+
+[pre L(a, b) [approx] 4[sqrt](a[super 2] + b[super 2])]
+
+Is easily inverted to give us what we need, which using derivative-free root 
+finding leads to the algorithm:
+
+[elliptic_root_noderiv]
+
+This function generally finds the root within 8-10 iterations, so given that the runtime
+is completely dominated by the cost of calling the ellliptic integral it would be nice to
+reduce that count somewhat. We'll try to do that by using a derivative based method,
+the derivatives of this function are rather hard to work out by hand, but fortunately
+[@http://www.wolframalpha.com/input/?i=d%2Fda+\[4+*+a+*+EllipticE%281+-+b^2%2Fa^2%29\]
+Wolfram Alpha] can do the grunt work for us to give:
+
+[pre d/da L(a, b) = 4(a[super 2]E(k) - b[super 2]K(k)) / (a[super 2] - b[super 2])]
+
+Note that now we have [*two] elliptic integral calls to get the derivative, so our
+functor will be at least twice as expensive to call as the derivative-free one above:
+we'll have to reduce the iteration count quite substantially to make a difference!
+
+Here's the revised functor:
+
+[elliptic_1deriv_func]
+
+The root finding code is now almost the same as before, but we'll make use of
+Newton iteration to get the result:
+
+[elliptic_1deriv]
+
+The number of iterations required for `double` precision is now usually around 4 - 
+so we've slightly more than halved the number of iterations, but made the 
+functor twice as expensive to call!
+
+Interestingly though, the second derivative requires no more expensive
+elliptic integral calls than the first does, in other words it comes
+essentially "for free", in which case we might as well make use of it
+and use Halley-iteration.  This is quite a typical situation when
+inverting special-functions.  Here's the revised functor:
+
+[elliptic_2deriv_func]
+
+The actual root finding code is almost the same as before, except we can
+use Halley, rather than Newton iteration:
+
+[elliptic_2deriv]
+
+While this function uses only slightly fewer iterations (typically around 3)
+to find the root, compared to the original derivative free method, we've moved from
+8-10 elliptic integral calls to 6.  Here's the actual performance comparison
+on Win32:
+
+[include elliptic_table_100_msvc_X86_SSE2.qbk]
+
 Full code of these examples is at
 [@../../example/root_finding_example.cpp  root_finding_example.cpp],
 [@../../example/root_finding_n_example.cpp  root_finding_n_example.cpp] and
 [@../../example/root_finding_multiprecision_example.cpp  root_finding_multiprecision_example.cpp].
+[@../../example/root_elliptic_finding.cpp  root_elliptic_finding.cpp].
 
 [endsect] [/section:root_examples Examples of Root Finding (with and without derivatives)]
 
