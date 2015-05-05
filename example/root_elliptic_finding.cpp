@@ -461,7 +461,7 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
   using boost::timer::cpu_times;
   using boost::timer::cpu_timer;
 
-  int eval_count = 100000; // To give a sufficiently stable timing for the fast built-in types,
+  int eval_count = boost::is_floating_point<T>::value ? 100000 : 10000; // To give a sufficiently stable timing for the fast built-in types,
   // This takes an inconveniently long time for multiprecision cpp_bin_float_50 etc  types.
 
   cpu_times now; // Holds wall, user and system times.

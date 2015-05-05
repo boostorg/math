@@ -116,13 +116,17 @@ The result of [@boost:/libs/math/include/boost/math/tools/roots.hpp `newton_raph
 function is a single value.
 
 [tip There is a compromise between accuracy and speed when chosing the value of `digits`.
-The simplest approach is to use
- `std::numeric_limits<T>::digits`,  the maximum possible,
- but this may mean some inefficient iterations.
- A good compromise may be to use `3 * std::numeric_limits<T>::digits/4`.   See below.]
+It is tempting to simply chose `std::numeric_limits<T>::digits`, 
+but this may mean some inefficient and unnecessary iterations as the function thrashes around
+trying to locate the last bit.  In theory, since the precision doubles with each step
+it is sufficient to stop when half the bits are correct: as the last step will have doubled
+that to full precision.  Of course the function has no way to tell if that is actually the case
+unless it does one more step to be sure.  In practice setting the precision to slightly more
+than `std::numeric_limits<T>::digits / 2` is a good choice.]
 
-It is possible to tell if the call met the accuracy set in `get_digits`
-by comparing the number of iterations, updated in `it`, with the maximum allowed in `max_it`.
+Note that it is up to the caller of the function to check the iteration count
+after the call to see if iteration stoped as a result of running out of iterations
+rather than meeting the required precision.
 
 Using the test data in [@../../test/test_cbrt.cpp  /test/test_cbrt.cpp] this found the cube root
 exact to the last digit in every case, and in no more than 6 iterations at double
@@ -139,7 +143,9 @@ Note also that the above code omits a probable optimization by computing z[sup2]
 and reusing it, omits error handling, and does not handle
 negative values of z correctly. (These are left as the customary exercise for the reader!)
 
-The `boost::math::cbrt` function also includes these and other improvements.
+The `boost::math::cbrt` function also includes these and other improvements:
+most importantly it uses a much better initial guess which reduces the iteration count to
+just 1 in almost all cases.
 
 [h3:cbrt_2_derivatives Cube root with 1st & 2nd derivative (slope & curvature)]
 
@@ -191,6 +197,13 @@ up getting the first few digits correct: after that these methods can churn out
 further digits with remarkable efficiency.
 
 Or to put it another way: ['nothing beats a really good initial guess!]
+
+[h3:lambda Using C++11 Lambda's']
+
+Since all the root finding functions accept a function-object, they can be made to
+work (often in a lot less code) with C++11 lambda's.  Here's the much reduced complete code:
+
+[root_finding_2deriv_lambda]
 
 [h3:fifth_root Fifth-root function]
 
@@ -454,7 +467,7 @@ to find the root, compared to the original derivative free method, we've moved f
 8-10 elliptic integral calls to 6.  Here's the actual performance comparison
 on Win32:
 
-[include elliptic_table_100_msvc_X86_SSE2.qbk]
+[include elliptic_table_100_msvc_X86_AVX.qbk]
 
 Full code of these examples is at
 [@../../example/root_finding_example.cpp  root_finding_example.cpp],

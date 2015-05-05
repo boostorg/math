@@ -143,17 +143,18 @@ T cbrt_noderiv(T x)
 
 /*`
 
-[note Default `boost::uintmax_t maxit = (std::numeric_limits<boost::uintmax_t>::max)();`
-and `(std::numeric_limits<boost::uintmax_t>::max)() = 18446744073709551615`
-which is more than anyone would wish to wait for!
+[note The final parameter specifying a maximum number of iterations is optional.
+However, it defaults to `boost::uintmax_t maxit = (std::numeric_limits<boost::uintmax_t>::max)();`
+which is `18446744073709551615` and is more than anyone would wish to wait for!
 
-So it may be wise to chose some reasonable estimate of how many iterations may be needed, here only 20.]
+So it may be wise to chose some reasonable estimate of how many iterations may be needed, 
+In this case the function is so well behaved that we can chose a low value of 20.
 
-[note We could also have used a maximum iterations provided by any Boost.Math __Policy:
-internally, Boost.Math's own routines use
-`boost::uintmax_t max_it = policies::get_max_root_iterations<Policy>();` to set an upper limit.]
+Internally when Boost.Math uses these functions, it sets the maximum iterations to
+`policies::get_max_root_iterations<Policy>();`.]
 
-[tip One can show how many iterations in `bracket_and_solve_root` (this information is lost outside `cbrt_noderiv`), for example with:]
+Should we have wished we can show how many iterations were used in `bracket_and_solve_root` 
+(this information is lost outside `cbrt_noderiv`), for example with:
 
   if (it >= maxit)
   {
@@ -194,7 +195,8 @@ and the [@http://en.wikipedia.org/wiki/Newton%27s_method#mediaviewer/File:Newton
 We need to define a different functor `cbrt_functor_deriv` that returns
 both the evaluation of the function to solve, along with its first derivative:
 
-To \'return\' two values, we use a `std::pair` of floating-point values:
+To \'return\' two values, we use a `std::pair` of floating-point values
+(though we could equally have used a std::tuple):
 */
 
 //[root_finding_1_deriv_1
@@ -299,6 +301,29 @@ T cbrt_2deriv(T x)
 
 //] [/root_finding_2deriv_1]
 
+//[root_finding_2deriv_lambda
+
+template <class T>
+T cbrt_2deriv_lambda(T x)
+{
+   // return cube root of x using 1st and 2nd derivatives and Halley.
+   //using namespace std;  // Help ADL of std functions.
+   using namespace boost::math::tools;
+   int exponent;
+   frexp(x, &exponent);                                // Get exponent of z (ignore mantissa).
+   T guess = ldexp(1., exponent / 3);                    // Rough guess is to divide the exponent by three.
+   T min = ldexp(0.5, exponent / 3);                     // Minimum possible value is half our guess.
+   T max = ldexp(2., exponent / 3);                      // Maximum possible value is twice our guess.
+   const int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
+   // digits used to control how accurate to try to make the result.
+   int get_digits = static_cast<int>(digits * 0.4);    // Accuracy tripples with each step, so stop when just
+   // over one third of the digits are correct.
+   boost::uintmax_t maxit = 20;
+   T result = halley_iterate([x](const T& g){ return std::make_tuple(g * g * g - x, 3 * g * g, 6 * g); }, guess, min, max, get_digits, maxit);
+   return result;
+}
+
+//] [/root_finding_2deriv_lambda]
 /*
 
 [h3 Fifth-root function]
@@ -438,6 +463,12 @@ int main()
     r = cbrt_2deriv(threecubed);
     std::cout << "cbrt_2deriv(" << threecubed << ") = " << r << std::endl;
     r = cbrt_2deriv(threecubedp1);
+    std::cout << "cbrt_2deriv(" << threecubedp1 << ") = " << r << std::endl;
+
+    // Cube root using lambda's:
+    r = cbrt_2deriv_lambda(threecubed);
+    std::cout << "cbrt_2deriv(" << threecubed << ") = " << r << std::endl;
+    r = cbrt_2deriv_lambda(threecubedp1);
     std::cout << "cbrt_2deriv(" << threecubedp1 << ") = " << r << std::endl;
 
     // Fifth root.
