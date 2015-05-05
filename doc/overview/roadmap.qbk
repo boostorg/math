@@ -6,6 +6,14 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
+[h4 Math-2.2.1]
+
+Patch release for Boost-1.58:
+
+* Minor [@https://github.com/boostorg/math/pull/13#issuecomment-98905579 patch for Haiku support.]
+* Fix the decimal digit count for 128-bit floating point types.
+* Fix a few documentation typos.
+
 [h4 Math-2.2.0 (boost-1.58.0)]
 
 * Added two new special functions - __trigamma and __polygamma.
