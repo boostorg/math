@@ -235,6 +235,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
       delta2 = delta1;
       delta1 = delta;
       detail::unpack_tuple(f(result), f0, f1);
+      --count;
       if(0 == f0)
          break;
       if(f1 == 0)
@@ -278,7 +279,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
          max = guess;
       else
          min = guess;
-   }while(--count && (fabs(result * factor) < fabs(delta)));
+   }while(count && (fabs(result * factor) < fabs(delta)));
 
    max_iter -= count;
 
@@ -330,6 +331,7 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
       delta2 = delta1;
       delta1 = delta;
       detail::unpack_tuple(f(result), f0, f1, f2);
+      --count;
 
       BOOST_MATH_INSTRUMENT_VARIABLE(f0);
       BOOST_MATH_INSTRUMENT_VARIABLE(f1);
@@ -448,7 +450,7 @@ T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_i
          max = guess;
       else
          min = guess;
-   }while(--count && (fabs(result * factor) < fabs(delta)));
+   }while(count && (fabs(result * factor) < fabs(delta)));
 
    max_iter -= count;
 
@@ -490,6 +492,7 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
       delta2 = delta1;
       delta1 = delta;
       detail::unpack_tuple(f(result), f0, f1, f2);
+      --count;
       if(0 == f0)
          break;
       if((f1 == 0) && (f2 == 0))
@@ -543,7 +546,7 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
          max = guess;
       else
          min = guess;
-   }while(--count && (fabs(result * factor) < fabs(delta)));
+   }while(count && (fabs(result * factor) < fabs(delta)));
 
    max_iter -= count;
 
