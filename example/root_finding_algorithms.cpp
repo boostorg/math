@@ -16,9 +16,6 @@
 #include <boost/config.hpp>
 #include <boost/array.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
-#include <boost/math/special_functions/math_fwd.hpp>
-#include <boost/math/concepts/real_concept.hpp>
-#include <boost/utility/enable_if.hpp>
 
 #include "table_type.hpp"
 // Copy of i:\modular-boost\libs\math\test\table_type.hpp
@@ -35,7 +32,7 @@
 //using boost::math::tools::schroeder_iterate;
 
 #include <boost/math/special_functions/next.hpp> // For float_distance.
-#include <boost/math/tools/tuple.hpp> // for tuple and make_tuple.
+#include <tuple> // for tuple and make_tuple.
 #include <boost/math/special_functions/cbrt.hpp> // For boost::math::cbrt.
 
 #include <boost/multiprecision/cpp_bin_float.hpp> // is binary.
@@ -67,14 +64,52 @@ using boost::multiprecision::cpp_bin_float_50;
 std::string sourcefilename = __FILE__;
 #endif
 
-#ifdef BOOST_ROOT
-  std::string boost_root = BOOST_STRINGIZE(BOOST_ROOT);
-#endif
+std::string chop_last(std::string s)
+{
+   std::string::size_type pos = s.find_last_of("\\/");
+   if(pos != std::string::npos)
+      s.erase(pos);
+   else if(s.empty())
+      abort();
+   else
+      s.erase();
+   return s;
+}
+
+std::string make_root()
+{
+   std::string result;
+   if(sourcefilename.find_first_of(":") != std::string::npos)
+   {
+      result = chop_last(sourcefilename); // lose filename part
+      result = chop_last(result);   // lose /example/
+      result = chop_last(result);   // lose /math/
+      result = chop_last(result);   // lose /libs/
+   }
+   else
+   {
+      result = chop_last(sourcefilename); // lose filename part
+      if(result.empty())
+         result = ".";
+      result += "/../../..";
+   }
+   return result;
+}
+
+std::string short_file_name(std::string s)
+{
+   std::string::size_type pos = s.find_last_of("\\/");
+   if(pos != std::string::npos)
+      s.erase(0, pos + 1);
+   return s;
+}
+
+std::string boost_root = make_root();
 
 #ifdef _MSC_VER
-  std::string filename = boost_root.append("libs/math/doc/roots/root_comparison_tables_msvc.qbk");
+  std::string filename = boost_root.append("/libs/math/doc/roots/root_comparison_tables_msvc.qbk");
 #else // assume GCC
-  std::string filename = boost_root.append("libs/math/doc/roots/root_comparison_tables_gcc.qbk");
+  std::string filename = boost_root.append("/libs/math/doc/roots/root_comparison_tables_gcc.qbk");
 #endif
 
 std::ofstream fout (filename.c_str(), std::ios_base::out);
@@ -134,20 +169,16 @@ inline std::string build_test_name(const char* type_name, const char* test_name)
   result += type_name;
   result += "|";
   result += test_name;
-#ifdef _DEBUG 
-#if (_DEBUG == 0)
+#if defined(_DEBUG ) || !defined(NDEBUG)
   result += "|";
   result += " debug";
 #else
   result += "|";
   result += " release";
 #endif
-#endif
   result += "|";
     return result;
 }
-
-double digits_accuracy = 1. ; // 1 == maximum possible accuracy.
 
 // No derivatives - using TOMS748 internally.
 template <class T>
@@ -192,7 +223,7 @@ T cbrt_noderiv(T x)
   bool is_rising = true; // So if result if guess^3 is too low, then try increasing guess.
   int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
   // Some fraction of digits is used to control how accurate to try to make the result.
-  int get_digits = static_cast<int>(digits * digits_accuracy); 
+  int get_digits = static_cast<int>(std::numeric_limits<T>::digits - 2);
 
   eps_tolerance<T> tol(get_digits); // Set the tolerance.
   std::pair<T, T> r =
@@ -227,12 +258,18 @@ T cbrt_deriv(T x)
 { // return cube root of x using 1st derivative and Newton_Raphson.
   using namespace boost::math::tools;
   int exponent;
-  frexp(x, &exponent); // Get exponent of z (ignore mantissa).
-  T guess = ldexp(static_cast<T>(1), exponent / 3); // Rough guess is to divide the exponent by three.
-  T min = ldexp(static_cast<T>(0.5), exponent / 3); // Minimum possible value is half our guess.
-  T max = ldexp(static_cast<T>(2), exponent / 3); // Maximum possible value is twice our guess.
+  T guess;
+  if(boost::is_fundamental<T>::value)
+  {
+     frexp(x, &exponent); // Get exponent of z (ignore mantissa).
+     guess = ldexp(static_cast<T>(1), exponent / 3); // Rough guess is to divide the exponent by three.
+  }
+  else
+     guess = boost::math::cbrt(static_cast<double>(x));
+  T min = guess / 2; // Minimum possible value is half our guess.
+  T max = 2 * guess; // Maximum possible value is twice our guess.
   const int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
-  int get_digits = static_cast<int>(digits * digits_accuracy);
+  int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.6);
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
   T result = newton_raphson_iterate(cbrt_functor_deriv<T>(x), guess, min, max, get_digits, it);
@@ -249,13 +286,12 @@ struct cbrt_functor_2deriv
   { // Constructor stores value a to find root of, for example:
     // calling cbrt_functor_2deriv<T>(x) to get cube root of x,
   }
-  boost::math::tuple<T, T, T> operator()(T const& x)
+  std::tuple<T, T, T> operator()(T const& x)
   { // Return both f(x) and f'(x) and f''(x).
-    using boost::math::make_tuple;
     T fx = x*x*x - a; // Difference (estimate x^3 - value).
     T dx = 3 * x*x; // 1st derivative = 3x^2.
     T d2x = 6 * x; // 2nd derivative = 6x.
-    return make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
+    return std::make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
   }
 private:
   T a; // to be 'cube_rooted'.
@@ -267,13 +303,19 @@ T cbrt_2deriv(T x)
   //using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools;
   int exponent;
-  frexp(x, &exponent); // Get exponent of z (ignore mantissa).
-  T guess = ldexp(static_cast<T>(1), exponent / 3); // Rough guess is to divide the exponent by three.
-  T min = ldexp(static_cast<T>(0.5), exponent / 3); // Minimum possible value is half our guess.
-  T max = ldexp(static_cast<T>(2), exponent / 3);// Maximum possible value is twice our guess.
+  T guess;
+  if(boost::is_fundamental<T>::value)
+  {
+     frexp(x, &exponent); // Get exponent of z (ignore mantissa).
+     guess = ldexp(static_cast<T>(1), exponent / 3); // Rough guess is to divide the exponent by three.
+  }
+  else
+     guess = boost::math::cbrt(static_cast<double>(x));
+  T min = guess / 2; // Minimum possible value is half our guess.
+  T max = 2 * guess; // Maximum possible value is twice our guess.
   const int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
   // digits used to control how accurate to try to make the result.
-  int get_digits = static_cast<int>(digits * digits_accuracy);
+  int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.4);
   boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
   T result = halley_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, it);
@@ -289,13 +331,19 @@ T cbrt_2deriv_s(T x)
   //using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools;
   int exponent;
-  frexp(x, &exponent); // Get exponent of z (ignore mantissa).
-  T guess = ldexp(static_cast<T>(1), exponent / 3); // Rough guess is to divide the exponent by three.
-  T min = ldexp(static_cast<T>(0.5), exponent / 3); // Minimum possible value is half our guess.
-  T max = ldexp(static_cast<T>(2), exponent / 3);// Maximum possible value is twice our guess.
+  T guess;
+  if(boost::is_fundamental<T>::value)
+  {
+     frexp(x, &exponent); // Get exponent of z (ignore mantissa).
+     guess = ldexp(static_cast<T>(1), exponent / 3); // Rough guess is to divide the exponent by three.
+  }
+  else
+     guess = boost::math::cbrt(static_cast<double>(x));
+  T min = guess / 2; // Minimum possible value is half our guess.
+  T max = 2 * guess; // Maximum possible value is twice our guess.
   const int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
   // digits used to control how accurate to try to make the result.
-  int get_digits = static_cast<int>(digits * digits_accuracy);
+  int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.4);
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
   T result = schroeder_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, it);
@@ -328,7 +376,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
 
   root_infos[type_no].bin_digits = std::numeric_limits<T>::digits;
 
-  root_infos[type_no].get_digits = static_cast<int>(std::numeric_limits<T>::digits * digits_accuracy);
+  root_infos[type_no].get_digits = std::numeric_limits<T>::digits;
 
   T to_root = static_cast<T>(big_value);
   T result; // root
@@ -339,7 +387,8 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   using boost::timer::cpu_times;
   using boost::timer::cpu_timer;
 
-   cpu_times now; // Holds wall, user and system times.
+  cpu_times now; // Holds wall, user and system times.
+  T sum = 0;
 
   // std::cbrt is much the fastest, but not useful for this comparison because it only handles fundamental types.
   // Using enable_if allows us to avoid a compile fail with multiprecision types, but still distorts the results too much.
@@ -397,7 +446,8 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     ti.start();
     for (long i = 0; i < count; ++i)
     {
-      result += boost::math::cbrt(to_root); // 
+      result = boost::math::cbrt(to_root); // 
+      sum += result;
     }
     now = ti.elapsed();
     boost:int_least64_t n = now.user;
@@ -409,7 +459,6 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     {
       root_infos[type_no].min_time = time;
     }
-    result = boost::math::cbrt(to_root);
     long int distance = static_cast<int>(boost::math::float_distance<T>(result, ans));
     root_infos[type_no].distances.push_back(distance);
     root_infos[type_no].iterations.push_back(0); // Iterations not knowable.
@@ -422,6 +471,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     for (long i = 0; i < count; ++i)
     {
       result = cbrt_noderiv<T>(to_root); // 
+      sum += result;
     }
     now = ti.elapsed();
 //    int time = static_cast<int>(now.user / count);
@@ -444,6 +494,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     for (long i = 0; i < count; ++i)
     {
       result = cbrt_deriv(to_root); // 
+      sum += result;
     }
     now = ti.elapsed();
 //    int time = static_cast<int>(now.user / count);
@@ -467,6 +518,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     for (long i = 0; i < count; ++i)
     {
       result = cbrt_2deriv(to_root); // 
+      sum += result;
     }
     now = ti.elapsed(); 
 //    int time = static_cast<int>(now.user / count);
@@ -490,6 +542,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     for (long i = 0; i < count; ++i)
     {
       result = cbrt_2deriv_s(to_root); // 
+      sum += result;
     }
     now = ti.elapsed();
 //    int time = static_cast<int>(now.user / count);
@@ -512,6 +565,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     root_infos[type_no].normed_times.push_back(normed_time);
   }
   algo++;
+  std::cout << "Accumulated sum was " << sum << std::endl;
   return algo;  // Count of how many algorithms used.
 } // test_root
 
@@ -542,7 +596,7 @@ void table_root_info(cpp_bin_float_100 full_value, cpp_bin_float_100 full_answer
     std::cout << "Floating-point type = " << root_infos[tp].full_typename << std::endl;
     std::cout << "Max_digits10 = " << root_infos[tp].max_digits10 << std::endl;
     std::cout << "Binary digits = " << root_infos[tp].bin_digits << std::endl;
-    std::cout << "Accuracy digits = " << root_infos[tp].get_digits << std::endl;
+    std::cout << "Accuracy digits = " << root_infos[tp].get_digits - 2 << ", " << static_cast<int>(root_infos[tp].get_digits * 0.6) << ", " << static_cast<int>(root_infos[tp].get_digits * 0.4) << std::endl;
     std::cout << "min_time = " << root_infos[tp].min_time << std::endl;
 
     std::cout << std::setprecision(root_infos[tp].max_digits10 ) << "Roots = ";
@@ -567,7 +621,7 @@ void table_root_info(cpp_bin_float_100 full_value, cpp_bin_float_100 full_answer
   } // for tp
 
   // Print info as Quickbook table.
-
+#if 0
   fout << "[table:cbrt_5  Info for float, double, long double and cpp_bin_float_50\n"
     << "[[type name] [max_digits10] [binary digits] [required digits]]\n";// header.
 
@@ -580,7 +634,7 @@ void table_root_info(cpp_bin_float_100 full_value, cpp_bin_float_100 full_answer
       << "["  << root_infos[tp].get_digits << "]]\n"; // Accuracy digits.
   } // tp
   fout << "] [/table cbrt_5] \n" << std::endl;
-
+#endif
   // Prepare Quickbook table of floating-point types.
   fout << "[table:cbrt_4 Cube root(28) for float, double, long double and cpp_bin_float_50\n"
     << "[[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]\n"
@@ -650,13 +704,12 @@ int main()
 #endif
 
     // Print out the program/compiler/stdlib/platform names as a Quickbook comment:
-    fout << "\n[h5 Program " << sourcefilename << ", "
+    fout << "\n[h5 Program " << short_file_name(sourcefilename) << ", "
       << BOOST_COMPILER << ", "
       << BOOST_STDLIB << ", "
-      << BOOST_PLATFORM << ", "
+      << BOOST_PLATFORM << (sizeof(void*) == 8 ? ", x64" : ", x86")
       << debug_or_optimize << "[br]"
-      << count << " evaluations of each of " << algo_names.size() << " root_finding algorithms.[br]"
-      << "Fraction of maximum possible bits of accuracy required is " << digits_accuracy
+      << count << " evaluations of each of " << algo_names.size() << " root_finding algorithms."
       << "]"
       << std::endl;
     

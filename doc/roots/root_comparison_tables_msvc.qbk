@@ -7,21 +7,13 @@ http://www.boost.org/LICENSE_1_0.txt).
 ]
 
 
-[h5 Program I:\modular-boost\libs\math\example\root_finding_algorithms.cpp, Microsoft Visual C++ version 12.0, Dinkumware standard library version 610, Win32, Compiled in optimise mode.[br]1000000 evaluations of each of 5 root_finding algorithms.[br]Fraction of maximum possible bits of accuracy required is 1]
-[table:cbrt_5  Info for float, double, long double and cpp_bin_float_50
-[[type name] [max_digits10] [binary digits] [required digits]]
-[[float][9][24][24]]
-[[double][17][53][53]]
-[[long double][17][53][53]]
-[[cpp_bin_float_50][52][168][168]]
-] [/table cbrt_5] 
-
+[h5 Program root_finding_algorithms.cpp, Microsoft Visual C++ version 12.0, Dinkumware standard library version 610, Win32, x64[br]1000000 evaluations of each of 5 root_finding algorithms.]
 [table:cbrt_4 Cube root(28) for float, double, long double and cpp_bin_float_50
 [[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]
 [[Algorithm][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ]]
-[[cbrt     ][  0][203125][1.0][  0][ ][  0][203125][1.0][  1][ ][  0][203125][1.0][  1][ ][  0][9312500][1.0][  0][ ]]
-[[TOMS748  ][  8][859375][4.2][ -1][ ][ 11][1109375][5.5][  2][ ][ 11][1140625][5.6][  2][ ][  7][130703125][14.][ -2][ ]]
-[[Newton   ][  6][1062500][5.2][  0][ ][  7][1015625][5.0][  0][ ][  7][1031250][5.1][  0][ ][  9][33640625][3.6][ -1][ ]]
-[[Halley   ][  4][1046875][5.2][  0][ ][  5][1093750][5.4][  0][ ][  5][1078125][5.3][  0][ ][  6][60750000][6.5][  0][ ]]
-[[Schroeder][  5][1078125][5.3][  0][ ][  6][1078125][5.3][  0][ ][  6][1062500][5.2][  0][ ][  7][64343750][6.9][  0][ ]]
+[[cbrt     ][  0][46875][1.0][  0][ ][  0][46875][1.0][  1][ ][  0][46875][1.0][  1][ ][  0][6078125][1.2][  0][ ]]
+[[TOMS748  ][  8][234375][5.0][ -1][ ][ 11][453125][9.7][  2][ ][ 11][437500][9.3][  2][ ][  7][73859375][14.][ -2][ ]]
+[[Newton   ][  5][109375][2.3][  0][ ][  6][125000][2.7][  0][ ][  6][140625][3.0][  0][ ][  2][5125000][1.0][  0][ ]]
+[[Halley   ][  3][125000][2.7][  0][ ][  4][171875][3.7][  0][ ][  4][171875][3.7][  0][ ][  2][11531250][2.3][  0][ ]]
+[[Schroeder][  4][265625][5.7][  0][ ][  5][218750][4.7][  0][ ][  5][234375][5.0][  0][ ][  2][12000000][2.3][  0][ ]]
 ] [/end of table cbrt_4]
