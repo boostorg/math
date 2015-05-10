@@ -59,18 +59,32 @@ using boost::multiprecision::cpp_bin_float_50;
   std::string chop_last(std::string s)
   {
      std::string::size_type pos = s.find_last_of("\\/");
-     if(pos == std::string::npos)
+     if(pos != std::string::npos)
+        s.erase(pos);
+     else if(s.empty())
         abort();
-     s.erase(pos);
+     else
+        s.erase();
      return s;
   }
 
   std::string make_root()
   {
-     std::string result = chop_last(sourcefilename); // lose filename part
-     result = chop_last(result);   // lose /example/
-     result = chop_last(result);   // lose /math/
-     result = chop_last(result);   // lose /libs/
+     std::string result;
+     if(sourcefilename.find_first_of(":") != std::string::npos)
+     {
+        result = chop_last(sourcefilename); // lose filename part
+        result = chop_last(result);   // lose /example/
+        result = chop_last(result);   // lose /math/
+        result = chop_last(result);   // lose /libs/
+     }
+     else
+     {
+        result = chop_last(sourcefilename); // lose filename part
+        if(result.empty())
+           result = ".";
+        result += "/../../..";
+     }
      return result;
   }
 
@@ -82,7 +96,7 @@ using boost::multiprecision::cpp_bin_float_50;
      return s;
   }
 
-std::string boost_root = make_root();
+  std::string boost_root = make_root();
 
 
 std::string fp_hardware; // Any hardware features like SEE or AVX
