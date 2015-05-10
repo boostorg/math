@@ -304,161 +304,182 @@ inline T newton_raphson_iterate(F f, T guess, T min, T max, int digits)
    return newton_raphson_iterate(f, guess, min, max, digits, m);
 }
 
+namespace detail{
+
+   struct halley_step
+   {
+      template <class T>
+      static T step(const T& /*x*/, const T& f0, const T& f1, const T& f2)
+      {
+         T denom = 2 * f0;
+         T num = 2 * f1 - f0 * (f2 / f1);
+         T delta;
+
+         BOOST_MATH_INSTRUMENT_VARIABLE(denom);
+         BOOST_MATH_INSTRUMENT_VARIABLE(num);
+
+         if((fabs(num) < 1) && (fabs(denom) >= fabs(num) * tools::max_value<T>()))
+         {
+            // possible overflow, use Newton step:
+            delta = f0 / f1;
+         }
+         else
+            delta = denom / num;
+         return delta;
+      }
+   };
+
+   template <class Stepper, class F, class T>
+   T second_order_root_finder(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
+   {
+      BOOST_MATH_STD_USING
+
+         T f0(0), f1, f2;
+      T result = guess;
+
+      T factor = static_cast<T>(ldexp(1.0, 1 - digits));
+      T delta = (std::max)(T(10000000 * guess), T(10000000));  // arbitarily large delta
+      T last_f0 = 0;
+      T delta1 = delta;
+      T delta2 = delta;
+
+      bool out_of_bounds_sentry = false;
+
+#ifdef BOOST_MATH_INSTRUMENT
+      std::cout << "Halley iteration, limit = " << factor << std::endl;
+#endif
+
+      boost::uintmax_t count(max_iter);
+
+      do{
+         last_f0 = f0;
+         delta2 = delta1;
+         delta1 = delta;
+         detail::unpack_tuple(f(result), f0, f1, f2);
+         --count;
+
+         BOOST_MATH_INSTRUMENT_VARIABLE(f0);
+         BOOST_MATH_INSTRUMENT_VARIABLE(f1);
+         BOOST_MATH_INSTRUMENT_VARIABLE(f2);
+
+         if(0 == f0)
+            break;
+         if(f1 == 0)
+         {
+            // Oops zero derivative!!!
+#ifdef BOOST_MATH_INSTRUMENT
+            std::cout << "Halley iteration, zero derivative found" << std::endl;
+#endif
+            detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
+         }
+         else
+         {
+            if(f2 != 0)
+            {
+               delta = Stepper::step(result, f0, f1, f2);
+               if(delta * f1 / f0 < 0)
+               {
+                  // Oh dear, we have a problem as Newton and Halley steps
+                  // disagree about which way we should move.  Probably
+                  // there is cancelation error in the calculation of the
+                  // Halley step, or else the derivatives are so small
+                  // that their values are basically trash.  We will move
+                  // in the direction indicated by a Newton step, but
+                  // by no more than twice the current guess value, otherwise
+                  // we can jump way out of bounds if we're not careful.
+                  // See https://svn.boost.org/trac/boost/ticket/8314.
+                  delta = f0 / f1;
+                  if(fabs(delta) > 2 * fabs(guess))
+                     delta = (delta < 0 ? -1 : 1) * 2 * fabs(guess);
+               }
+            }
+            else
+               delta = f0 / f1;
+         }
+#ifdef BOOST_MATH_INSTRUMENT
+         std::cout << "Halley iteration, delta = " << delta << std::endl;
+#endif
+         T convergence = fabs(delta / delta2);
+         if((convergence > 0.8) && (convergence < 2))
+         {
+            // last two steps haven't converged, try bisection:
+            delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
+            if(fabs(delta) > result)
+               delta = sign(delta) * result; // protect against huge jumps!
+            // reset delta2 so that this branch will *not* be taken on the
+            // next iteration:
+            delta2 = delta * 3;
+            BOOST_MATH_INSTRUMENT_VARIABLE(delta);
+         }
+         guess = result;
+         result -= delta;
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
+
+         // check for out of bounds step:
+         if(result < min)
+         {
+            T diff = ((fabs(min) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(min))) ? T(1000) : T(result / min);
+            if(fabs(diff) < 1)
+               diff = 1 / diff;
+            if(!out_of_bounds_sentry && (diff > 0) && (diff < 3))
+            {
+               // Only a small out of bounds step, lets assume that the result
+               // is probably approximately at min:
+               delta = 0.99f * (guess - min);
+               result = guess - delta;
+               out_of_bounds_sentry = true; // only take this branch once!
+            }
+            else
+            {
+               delta = (guess - min) / 2;
+               result = guess - delta;
+               if((result == min) || (result == max))
+                  break;
+            }
+         }
+         else if(result > max)
+         {
+            T diff = ((fabs(max) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(max))) ? T(1000) : T(result / max);
+            if(fabs(diff) < 1)
+               diff = 1 / diff;
+            if(!out_of_bounds_sentry && (diff > 0) && (diff < 3))
+            {
+               // Only a small out of bounds step, lets assume that the result
+               // is probably approximately at min:
+               delta = 0.99f * (guess - max);
+               result = guess - delta;
+               out_of_bounds_sentry = true; // only take this branch once!
+            }
+            else
+            {
+               delta = (guess - max) / 2;
+               result = guess - delta;
+               if((result == min) || (result == max))
+                  break;
+            }
+         }
+         // update brackets:
+         if(delta > 0)
+            max = guess;
+         else
+            min = guess;
+      } while(count && (fabs(result * factor) < fabs(delta)));
+
+      max_iter -= count;
+
+#ifdef BOOST_MATH_INSTRUMENT
+      std::cout << "Halley iteration, final count = " << max_iter << std::endl;
+#endif
+
+      return result;
+   }
+
+}
+
 template <class F, class T>
 T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
 {
-   BOOST_MATH_STD_USING
-
-   T f0(0), f1, f2;
-   T result = guess;
-
-   T factor = static_cast<T>(ldexp(1.0, 1 - digits));
-   T delta = (std::max)(T(10000000 * guess), T(10000000));  // arbitarily large delta
-   T last_f0 = 0;
-   T delta1 = delta;
-   T delta2 = delta;
-
-   bool out_of_bounds_sentry = false;
-
-#ifdef BOOST_MATH_INSTRUMENT
-   std::cout << "Halley iteration, limit = " << factor << std::endl;
-#endif
-
-   boost::uintmax_t count(max_iter);
-
-   do{
-      last_f0 = f0;
-      delta2 = delta1;
-      delta1 = delta;
-      detail::unpack_tuple(f(result), f0, f1, f2);
-      --count;
-
-      BOOST_MATH_INSTRUMENT_VARIABLE(f0);
-      BOOST_MATH_INSTRUMENT_VARIABLE(f1);
-      BOOST_MATH_INSTRUMENT_VARIABLE(f2);
-      
-      if(0 == f0)
-         break;
-      if(f1 == 0)
-      {
-         // Oops zero derivative!!!
-#ifdef BOOST_MATH_INSTRUMENT
-         std::cout << "Halley iteration, zero derivative found" << std::endl;
-#endif
-         detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
-      }
-      else
-      {
-         if(f2 != 0)
-         {
-            T denom = 2 * f0;
-            T num = 2 * f1 - f0 * (f2 / f1);
-
-            BOOST_MATH_INSTRUMENT_VARIABLE(denom);
-            BOOST_MATH_INSTRUMENT_VARIABLE(num);
-
-            if((fabs(num) < 1) && (fabs(denom) >= fabs(num) * tools::max_value<T>()))
-            {
-               // possible overflow, use Newton step:
-               delta = f0 / f1;
-            }
-            else
-               delta = denom / num;
-            if(delta * f1 / f0 < 0)
-            {
-               // Oh dear, we have a problem as Newton and Halley steps
-               // disagree about which way we should move.  Probably
-               // there is cancelation error in the calculation of the
-               // Halley step, or else the derivatives are so small
-               // that their values are basically trash.  We will move
-               // in the direction indicated by a Newton step, but
-               // by no more than twice the current guess value, otherwise
-               // we can jump way out of bounds if we're not careful.
-               // See https://svn.boost.org/trac/boost/ticket/8314.
-               delta = f0 / f1;
-               if(fabs(delta) > 2 * fabs(guess))
-                  delta = (delta < 0 ? -1 : 1) * 2 * fabs(guess);
-            }
-         }
-         else
-            delta = f0 / f1;
-      }
-#ifdef BOOST_MATH_INSTRUMENT
-      std::cout << "Halley iteration, delta = " << delta << std::endl;
-#endif
-      T convergence = fabs(delta / delta2);
-      if((convergence > 0.8) && (convergence < 2))
-      {
-         // last two steps haven't converged, try bisection:
-         delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
-         if(fabs(delta) > result)
-            delta = sign(delta) * result; // protect against huge jumps!
-         // reset delta2 so that this branch will *not* be taken on the
-         // next iteration:
-         delta2 = delta * 3;
-         BOOST_MATH_INSTRUMENT_VARIABLE(delta);
-      }
-      guess = result;
-      result -= delta;
-      BOOST_MATH_INSTRUMENT_VARIABLE(result);
-
-      // check for out of bounds step:
-      if(result < min)
-      {
-         T diff = ((fabs(min) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(min))) ? T(1000)  : T(result / min);
-         if(fabs(diff) < 1)
-            diff = 1 / diff;
-         if(!out_of_bounds_sentry && (diff > 0) && (diff < 3))
-         {
-            // Only a small out of bounds step, lets assume that the result
-            // is probably approximately at min:
-            delta = 0.99f * (guess  - min);
-            result = guess - delta;
-            out_of_bounds_sentry = true; // only take this branch once!
-         }
-         else
-         {
-            delta = (guess - min) / 2;
-            result = guess - delta;
-            if((result == min) || (result == max))
-               break;
-         }
-      }
-      else if(result > max)
-      {
-         T diff = ((fabs(max) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(max))) ? T(1000) : T(result / max);
-         if(fabs(diff) < 1)
-            diff = 1 / diff;
-         if(!out_of_bounds_sentry && (diff > 0) && (diff < 3))
-         {
-            // Only a small out of bounds step, lets assume that the result
-            // is probably approximately at min:
-            delta = 0.99f * (guess  - max);
-            result = guess - delta;
-            out_of_bounds_sentry = true; // only take this branch once!
-         }
-         else
-         {
-            delta = (guess - max) / 2;
-            result = guess - delta;
-            if((result == min) || (result == max))
-               break;
-         }
-      }
-      // update brackets:
-      if(delta > 0)
-         max = guess;
-      else
-         min = guess;
-   }while(count && (fabs(result * factor) < fabs(delta)));
-
-   max_iter -= count;
-
-#ifdef BOOST_MATH_INSTRUMENT
-   std::cout << "Halley iteration, final count = " << max_iter << std::endl;
-#endif
-
-   return result;
+   return detail::second_order_root_finder<detail::halley_step>(f, guess, min, max, digits, max_iter);
 }
 
 template <class F, class T>
@@ -468,45 +489,16 @@ inline T halley_iterate(F f, T guess, T min, T max, int digits)
    return halley_iterate(f, guess, min, max, digits, m);
 }
 
-template <class F, class T>
-T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
-{
-   BOOST_MATH_STD_USING
+namespace detail{
 
-   T f0(0), f1, f2, last_f0(0);
-   T result = guess;
-
-   T factor = static_cast<T>(ldexp(1.0, 1 - digits));
-   T delta = 0;
-   T delta1 = tools::max_value<T>();
-   T delta2 = tools::max_value<T>();
-
-#ifdef BOOST_MATH_INSTRUMENT
-   std::cout << "Schroeder iteration, limit = " << factor << std::endl;
-#endif
-
-   boost::uintmax_t count(max_iter);
-
-   do{
-      last_f0 = f0;
-      delta2 = delta1;
-      delta1 = delta;
-      detail::unpack_tuple(f(result), f0, f1, f2);
-      --count;
-      if(0 == f0)
-         break;
-      if((f1 == 0) && (f2 == 0))
-      {
-         // Oops zero derivative!!!
-#ifdef BOOST_MATH_INSTRUMENT
-         std::cout << "Halley iteration, zero derivative found" << std::endl;
-#endif
-         detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
-      }
-      else
+   struct schroeder_stepper
+   {
+      template <class T>
+      static T step(const T& x, const T& f0, const T& f1, const T& f2)
       {
          T ratio = f0 / f1;
-         if(ratio / result < 0.1)
+         T delta;
+         if(ratio / x < 0.1)
          {
             delta = ratio + (f2 / (2 * f1)) * ratio * ratio;
             // check second derivative doesn't over compensate:
@@ -515,53 +507,16 @@ T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& ma
          }
          else
             delta = ratio;  // fall back to Newton iteration.
+         return delta;
       }
-      T convergence = fabs(delta / delta2);
-      if((convergence > 0.8) && (convergence < 2))
-      {
-         // last two steps haven't converged, try bisection:
-         delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
-      }
-      guess = result;
-      result -= delta;
-#ifdef BOOST_MATH_INSTRUMENT
-      std::cout << "Halley iteration, delta = " << delta << std::endl;
-#endif
-      if(result <= min)
-      {
-         delta = 0.5F * (guess - min);
-         result = guess - delta;
-         if((result == min) || (result == max))
-            break;
-      }
-      else if(result >= max)
-      {
-         delta = 0.5F * (guess - max);
-         result = guess - delta;
-         if((result == min) || (result == max))
-            break;
-      }
-      // update brackets:
-      if(delta > 0)
-         max = guess;
-      else
-         min = guess;
-   }while(count && (fabs(result * factor) < fabs(delta)));
+   };
 
-   max_iter -= count;
+}
 
-#ifdef BOOST_MATH_INSTRUMENT
-   std::cout << "Schroeder iteration, final count = " << max_iter << std::endl;
-
-   static boost::uintmax_t max_count = 0;
-   if(max_iter > max_count)
-   {
-      max_count = max_iter;
-      std::cout << "Maximum iterations: " << max_iter << std::endl;
-   }
-#endif
-
-   return result;
+template <class F, class T>
+T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
+{
+   return detail::second_order_root_finder<detail::schroeder_stepper>(f, guess, min, max, digits, max_iter);
 }
 
 template <class F, class T>
