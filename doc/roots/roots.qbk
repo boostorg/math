@@ -136,7 +136,7 @@ Out of bounds steps revert to bisection of the current bounds.
 
 Under ideal conditions, the number of correct digits trebles with each iteration.
 
-[h4:schroeder Schroeder's Method]
+[h4:schroeder Schr'''&#xf6;'''der's Method]
 
 Given an initial guess x0 the subsequent values are computed using:
 
@@ -150,6 +150,12 @@ whenever that Newton step would change the next value by more than 10%.
 Out of bounds steps revert to __bisection_wikipedia of the current bounds.
 
 Under ideal conditions, the number of correct digits trebles with each iteration.
+
+This is Scr'''&#xf6;'''der's general result (equation 18 from [@http://drum.lib.umd.edu/handle/1903/577 Stewart, G. W. 
+"On Infinitely Many Algorithms for Solving Equations." English translation of Schr'''&#xf6;'''der's original paper. 
+College Park, MD: University of Maryland, Institute for Advanced Computer Studies, Department of Computer Science, 1993].)
+It guarantees at least quadratic convergence (the same as Newton's method), and is known to work well in the presence of multiple roots:
+something that neither Newton nor Halley can do.
 
 [h4 Examples]
 

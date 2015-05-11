@@ -114,9 +114,18 @@ not in the way the algorithm works.  This confirms previous observations using _
 
 A second example compares four generalized nth-root finding algorithms for various n-th roots (5, 7 and 13)
 of a single value 28.0, for four floating-point types, `float`, `double`,
-`long double` and a __multiprecision type __cpp_bin_float_50
-and required all and only three-quarters available digits of accuracy.
+`long double` and a __multiprecision type `cpp_bin_float_50`.
+In each case the target accuracy was set using our "recomended" accuracy limits 
+(or at least limits that make a good starting point - which is likely to give
+close to full accuracy without resorting to unnecessary iterations).
 
+[table
+[[Function][Precision Requested]]
+[[TOMS748][numeric_limits<T>::digits - 2]]
+[[Newton][[lfloor]numeric_limits<T>::digits * 0.6[rfloor]]]
+[[Halley][[lfloor]numeric_limits<T>::digits * 0.4[rfloor]]]
+[[Schroeder][[lfloor]numeric_limits<T>::digits * 0.4[rfloor]]]
+]
 Tests used Microsoft Visual Studio 2013 (Update 1) and GCC 4.9.1 using source code
 [@../../example/root_n_finding_algorithms.cpp root_n_finding_algorithms.cpp].
 
@@ -129,26 +138,31 @@ within the uncertainty.
 [/include roots_table_100_msvc.qbk]
 [/include roots_table_75_msvc.qbk]
 
-[include roots_table_75_msvc_X86.qbk]
-[include roots_table_100_msvc_X86.qbk]
+[/include roots_table_75_msvc_X86.qbk]
+[/include roots_table_100_msvc_X86.qbk]
 
 [/include roots_table_100_msvc_AVX.qbk]
 [/include roots_table_75_msvc_AVX.qbk]
 
-[include roots_table_75_msvc_X86_SSE2.qbk]
+[/include roots_table_75_msvc_X86_SSE2.qbk]
+[/include roots_table_100_msvc_X86_SSE2.qbk]
+
+[/include roots_table_100_gcc_X64_SSE2.qbk]
+[/include roots_table_75_gcc_X64_SSE2.qbk]
+
+[/include type_info_table_100_msvc.qbk]
+[/include type_info_table_75_msvc.qbk]
+
 [include roots_table_100_msvc_X86_SSE2.qbk]
-
-[include roots_table_100_gcc_X64_SSE2.qbk]
-[include roots_table_75_gcc_X64_SSE2.qbk]
-
-[include type_info_table_100_msvc.qbk]
-[include type_info_table_75_msvc.qbk]
+[include roots_table_100_msvc_X64_AVX.qbk]
 
 Some tentative conclusions can be drawn from this limited exercise.
 
 * Perhaps surprisingly, there is little difference between the various algorithms for __fundamental_types floating-point types.
-Using the first derivatives (__newton) is usually the best, but the improvement over the no-derivative
-__TOMS748 is considerable in number of iterations, but little in execution time.
+Using the first derivatives (__newton) is usually the best, but while the improvement over the no-derivative
+__TOMS748 is considerable in number of iterations, but little in execution time.  This reflects the fact that the function
+we are finding the root for is trivial to evaluate, so runtimetimes are dominated by the time taken by the boilerplate code
+in each method.
 
 * The extra cost of evaluating the second derivatives (__halley or __schroeder) is usually too much for any net benefit:
 as with the cube root, these functors are so cheap to evaluate that the runtime is largely dominated by the
@@ -161,7 +175,6 @@ and again no improvement from the second-derivative algorithms.
 
 * The column 'dis' showing the number of bits distance from the correct result.
 The Newton-Raphson algorithm shows a bit or two better accuracy than __TOMS748.
-Multiprecision types have a number of __guard_digits and usually get exactly correct results.
 
 * The goodness of the 'guess' is especially crucial for __multiprecision.
 Separate experiments show that evaluating the 'guess' using `double` allows
@@ -170,10 +183,6 @@ So in this contrived example, crudely dividing the exponent by N for a 'guess',
 it would be far better to use a `pow<double>` or ,
 if more precise `pow<long double>`, function to estimate a 'guess'.
 The limitation of this tatic is that the range of possible (exponent) values may be less than the multiprecision type.
-
-
-* Reducing the number of bits of accuracy to three-quarters required,
-only reduced the time several percent, and the accuracy barely at all.
 
 * Using floating-point extension __SSE2 made a modest ten-percent speedup.
 
@@ -187,6 +196,39 @@ and effort to find a good 'guess' the first speed-up target, especially for __mu
 And of course, compiler optimisation is crucial for speed.
 
 [endsect] [/section:root_n_comparison Comparison of Nth-root Finding Algorithms]
+
+[section:elliptic_comparison Comparison of Elliptic Integral Root Finding Algoritghms]
+
+A second example compares four root finding algorithms for locating
+the second radius of an ellipse with first radius 28 and arc length 300, 
+for four floating-point types, `float`, `double`,
+`long double` and a __multiprecision type `cpp_bin_float_50`.
+
+Which is to say we're solving:
+
+[pre 4xE(sqrt(1 - 28[super 2] / x[super 2])) - 300 = 0]
+
+In each case the target accuracy was set using our "recomended" accuracy limits 
+(or at least limits that make a good starting point - which is likely to give
+close to full accuracy without resorting to unnecessary iterations).
+
+[table
+[[Function][Precision Requested]]
+[[TOMS748][numeric_limits<T>::digits - 2]]
+[[Newton][[lfloor]numeric_limits<T>::digits * 0.6[rfloor]]]
+[[Halley][[lfloor]numeric_limits<T>::digits * 0.4[rfloor]]]
+[[Schroeder][[lfloor]numeric_limits<T>::digits * 0.4[rfloor]]]
+]
+Tests used Microsoft Visual Studio 2013 (Update 1) and GCC 4.9.1 using source code
+[@../../example/root_elliptic_finding.cpp root_elliptic_finding.cpp].
+
+The timing uncertainty (especially using MSVC) is at least 5% of normalized time 'Norm'.
+
+To pick out the 'best' and 'worst' algorithms are highlighted in blue and red.
+More than one result can be 'best' when normalized times are indistinguishable
+within the uncertainty.
+
+[endsect][/section:elliptic_comparison Comparison of Elliptic Integral Root Finding Algoritghms]
 
 [endsect] [/section:root_comparison  Comparison of Root Finding Algorithms]
 

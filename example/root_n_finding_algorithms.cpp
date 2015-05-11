@@ -210,9 +210,8 @@ T nth_root_noderiv(T x)
   const boost::uintmax_t maxit = 50; // Limit to maximum iterations.
   boost::uintmax_t it = maxit; // Initally our chosen max iterations, but updated with actual.
   bool is_rising = true; // So if result if guess^3 is too low, then try increasing guess.
-  int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
   // Some fraction of digits is used to control how accurate to try to make the result.
-  int get_digits = static_cast<int>(digits);
+  int get_digits = std::numeric_limits<T>::digits - 2;
   eps_tolerance<T> tol(get_digits); // Set the tolerance.
   std::pair<T, T> r;
   r =  bracket_and_solve_root(nth_root_functor_noderiv<N, T>(x), guess, factor, is_rising, tol, it);
@@ -323,32 +322,6 @@ T nth_root_2deriv(T x)
   return result;
 } // nth_2deriv Halley
 
-// Using 1st and 2nd derivatives using Schroeder algorithm.
-
-template <int N, class T = double>
-struct nth_root_functor_2deriv_s
-{ // Functor returning nth root using both 1st and 2nd derivatives.
-  BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
-  BOOST_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
-
-  nth_root_functor_2deriv_s(T const& to_find_root_of) : a(to_find_root_of)
-  { // Constructor stores value a to find root of, for example:
-  }
-
-  // using boost::math::tuple; // to return three values.
-  std::tuple<T, T, T> operator()(T const& x)
-  { // Return f(x), f'(x) and f''(x).
-    using boost::math::pow;
-    T fx = pow<N>(x) -a; // Difference (estimate x^n - a).
-    T dx = N * pow<N - 1>(x); // 1st derivative f'(x).
-    T d2x = N * (N - 1) * pow<N - 2 >(x); // 2nd derivative f''(x).
-
-    return std::make_tuple(fx, dx, d2x); // 'return' fx, dx and d2x.
-  }
-private:
-  T a; // to be 'nth_rooted'.
-}; // template <int N, class T = double> struct nth_root_functor_2deriv_s
-
 template <int N, class T = double>
 T nth_root_2deriv_s(T x)
 { // return nth root of x using 1st and 2nd derivatives and Schroeder.
@@ -368,11 +341,10 @@ T nth_root_2deriv_s(T x)
   T min = static_cast<T>(ldexp(static_cast<guess_type>(1.) / 2, exponent / N)); // Minimum possible value is half our guess.
   T max = static_cast<T>(ldexp(static_cast<guess_type>(2.), exponent / N)); // Maximum possible value is twice our guess.
 
-  int digits = std::numeric_limits<T>::digits; // Maximum possible binary digits accuracy for type T.
-  int get_digits = static_cast<int>(digits * digits_accuracy);
+  int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.4);
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
-  T result = schroeder_iterate(nth_root_functor_2deriv_s<N, T>(x), guess, min, max, get_digits, it);
+  T result = schroeder_iterate(nth_root_functor_2deriv<N, T>(x), guess, min, max, get_digits, it);
   iters = it;
 
   return result;
@@ -810,8 +782,12 @@ int main()
 // unlike AVX (but *are* defined by GCC and Clang). 
 // So the macro code above does define them.
 #if (defined(_M_AMD64) || defined (_M_X64))
-#  define _M_X64 
+#ifndef _M_X64
+#  define _M_X64
+#endif
+#ifndef __SSE2__
 #  define __SSE2__
+#endif
 #else
 #  ifdef _M_IX86_FP // Expands to an integer literal value indicating which /arch compiler option was used:
     std::cout << "Floating-point _M_IX86_FP = " << _M_IX86_FP << std::endl;
