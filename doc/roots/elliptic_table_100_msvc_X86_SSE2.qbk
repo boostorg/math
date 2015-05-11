@@ -1,4 +1,4 @@
-[/..\..\..\../libs/math/doc/roots/elliptic_table_100_msvc_X86_SSE2.qbk
+[/..\..\..\..\libs\math\example/../../../libs/math/doc/roots/elliptic_table_100_msvc_X86_SSE2.qbk
 Copyright 2015 Paul A. Bristow.
 Copyright 2015 John Maddock.
 Distributed under the Boost Software License, Version 1.0.
@@ -13,8 +13,8 @@ Compiled in optimise mode., _X86_SSE2]
 [table:elliptic root with radius 28 and arc length 300) for float, double, long double and cpp_bin_float_50 types, using _X86_SSE2
 [[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]
 [[Algo     ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ]]
-[[TOMS748  ][  5][ 1875][1.50][ -1][ ][  9][ 3750][1.85][  1][ ][  9][ 3750][1.85][  1][ ][  9][11148437][1.29][2027466061][ ]]
-[[Newton   ][  3][ 1875][1.50][ -1][ ][  4][ 2500][1.23][  0][ ][  4][ 2500][1.23][  0][ ][  5][10654687][1.24][2027466058][ ]]
-[[Halley   ][  2][ 1250][[role blue 1.00]][  0][ ][  3][ 2031][[role blue 1.00]][  1][ ][  3][ 2031][[role blue 1.00]][  1][ ][  4][8612500][[role blue 1.00]][2027466060][ ]]
-[[Schroeder][  3][ 1875][1.50][ -1][ ][  4][ 2500][1.23][  0][ ][  4][ 2500][1.23][  0][ ][  5][10776562][1.25][2027466061][ ]]
+[[TOMS748  ][  5][  312][[role blue 1.00]][ -1][ ][  9][  781][1.67][  1][ ][  9][  781][1.67][  1][ ][ 11][940625][1.52][ -3][ ]]
+[[Newton   ][  3][  468][1.50][ -1][ ][  4][  625][1.34][  1][ ][  4][  625][1.34][  1][ ][  5][745312][1.21][  0][ ]]
+[[Halley   ][  2][  312][[role blue 1.00]][  0][ ][  3][  468][[role blue 1.00]][  3][ ][  3][  468][[role blue 1.00]][  3][ ][  4][617187][[role blue 1.00]][  0][ ]]
+[[Schroeder][  3][  468][1.50][ -1][ ][  6][  781][1.67][  1][ ][  6][  781][1.67][  1][ ][  5][787500][1.28][ -2][ ]]
 ] [/end of table root]
