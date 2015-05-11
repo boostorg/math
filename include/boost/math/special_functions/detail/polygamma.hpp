@@ -481,7 +481,7 @@
     static const char* function = "boost::math::polygamma<%1%>(int, %1%)";
     polygamma_initializer<T, Policy>::initializer.force_instantiate();
     if(n < 0)
-       return policies::raise_domain_error<T>(function, "Order must be >= 0, but got %1%", n, pol);
+       return policies::raise_domain_error<T>(function, "Order must be >= 0, but got %1%", static_cast<T>(n), pol);
     if(x < 0)
     {
        if(floor(x) == x)

@@ -41,6 +41,7 @@ void expected_results()
       largest_type,                  // test type(s)
       ".*negative.*",                // test data group
       ".*", 800, 400);               // test function
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    if((std::numeric_limits<long double>::digits > std::numeric_limits<double>::digits)
       && (std::numeric_limits<long double>::digits - std::numeric_limits<double>::digits < 20))
    {
@@ -52,6 +53,7 @@ void expected_results()
          ".*bug cases.*",               // test data group
          ".*", 100, 30);                // test function
    }
+#endif
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

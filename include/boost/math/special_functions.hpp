@@ -27,10 +27,14 @@
 #include <boost/math/special_functions/ellint_1.hpp>
 #include <boost/math/special_functions/ellint_2.hpp>
 #include <boost/math/special_functions/ellint_3.hpp>
+#include <boost/math/special_functions/ellint_d.hpp>
+#include <boost/math/special_functions/jacobi_zeta.hpp>
+#include <boost/math/special_functions/heuman_lambda.hpp>
 #include <boost/math/special_functions/ellint_rc.hpp>
 #include <boost/math/special_functions/ellint_rd.hpp>
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/special_functions/ellint_rj.hpp>
+#include <boost/math/special_functions/ellint_rg.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/expint.hpp>
 #include <boost/math/special_functions/expm1.hpp>

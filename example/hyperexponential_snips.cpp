@@ -85,7 +85,7 @@ int main()
    //]
    }
 #endif
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !(defined(BOOST_GCC_VERSION) && (BOOST_GCC_VERSION < 40500))
    {
    //[hyperexponential_snip6
    hyperexponential he = { { 0.5, 0.5 }, { 1.0 / 10, 1.0 / 12 } };
