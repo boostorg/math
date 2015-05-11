@@ -467,8 +467,6 @@ to find the root, compared to the original derivative free method, we've moved f
 8-10 elliptic integral calls to 6.  Here's the actual performance comparison
 on Win32:
 
-[include elliptic_table_100_msvc_X86_AVX.qbk]
-
 Full code of these examples is at
 [@../../example/root_finding_example.cpp  root_finding_example.cpp],
 [@../../example/root_finding_n_example.cpp  root_finding_n_example.cpp] and

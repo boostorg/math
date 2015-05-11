@@ -228,6 +228,18 @@ To pick out the 'best' and 'worst' algorithms are highlighted in blue and red.
 More than one result can be 'best' when normalized times are indistinguishable
 within the uncertainty.
 
+[include elliptic_table_100_msvc_X86_AVX.qbk]
+
+Remarks:
+
+* The function being solved is now moderately expensive to call, and twice as expensive to call
+when obtaining the derivative than when not.  Consequently there is very little improvement in moving
+from a derivative free method, to Newton iteration.  However, once you've calculated the first derivative
+the second comes almost for free, consequently the third order methods (Halley and Schroder) do much the best.
+* Of the two second order methods, Halley does best aswould be expected: the Schroder method offers better
+guarentees of quadratic convergence, while Halley relies on a smooth function with a single root to
+give cubic convergence.
+
 [endsect][/section:elliptic_comparison Comparison of Elliptic Integral Root Finding Algoritghms]
 
 [endsect] [/section:root_comparison  Comparison of Root Finding Algorithms]
