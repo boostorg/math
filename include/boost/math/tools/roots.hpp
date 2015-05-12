@@ -224,7 +224,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
    T result = guess;
 
    T factor = static_cast<T>(ldexp(1.0, 1 - digits));
-   T delta = 1;
+   T delta = tools::max_value<T>();
    T delta1 = tools::max_value<T>();
    T delta2 = tools::max_value<T>();
 
