@@ -79,7 +79,7 @@ shows how it can be used.
 The result of `bracket_and_solve_root` is a [@http://www.cplusplus.com/reference/utility/pair/ pair]
 of values that could be displayed.
 
-Tthe number of bits separating them can be found using `float_distance(r.first, r.second)`.
+The number of bits separating them can be found using `float_distance(r.first, r.second)`.
 The distance is zero (closest representable) for 3[super 3] = 27
 but `float_distance(r.first, r.second) = 3` for cube root of 28 with this function.
 The result (avoiding overflow) is midway between these two values.
@@ -435,9 +435,9 @@ Where ['E(k)] is the complete elliptic integral of the second kind - see __ellin
 Let's suppose we know the arc length and one radii, we can then calculate the other
 radius by inverting the formula above.  We'll begin by encoding the above formula
 into a functor that our root finding algorithms can call.  Note that while not
-completely obvious from the formula above, the function is completely symetrical
+completely obvious from the formula above, the function is completely symmetrical
 in the two radii - which can be interchanged at will - in this case we need to
-make sure that `a >= b` so that we don't accidently take the square root of a negative number:
+make sure that `a >= b` so that we don't accidentally take the square root of a negative number:
 
 [import ../../example/root_elliptic_finding.cpp]
 
@@ -544,7 +544,7 @@ If you start in the wrong place, such as z[sub 0] here:
 
 [$../roots/bad_root_1.svg]
 
-Then almost any root finding algorithm will decend into a local minima rather than find the root.
+Then almost any root finding algorithm will descend into a local minima rather than find the root.
 
 [h3 Flatlining]
 
@@ -574,13 +574,13 @@ Consider starting at z[sub 0] in this situation:
 
 The first derivative is essentially infinite, and the second close to zero (and so offers no correction if we use it),
 as a result we take a very small first step.  In the worst case situation, the first step is so small 
-- perhaps even so small that subtractuing from z[sub 0] has no effect at the current working precision - that our algorithm
+- perhaps even so small that subtracting from z[sub 0] has no effect at the current working precision - that our algorithm
 will assume we are at the root already and terminate.  Otherwise we will take lot's of very small steps which never converge
 on the root: our algorithms will protect against that by reverting to bisection.
 
 An example of this situation would be trying to find the root of e[super -1/z[super 2]] - this function has a single
 root at ['z = 0], but for ['z[sub 0] < 0] neither Newton nor Halley steps will ever converge on the root, and for ['z[sub 0] > 0]
-the steps are actually divergent.s
+the steps are actually divergent.
 
 [endsect]
 

@@ -52,12 +52,12 @@ so cannot be used with any User-Defined floating-point types like __multiprecisi
 This, and that the cube function is so impeccably-behaved,
 allows the implementer to use many tricks to achieve a fast computation.
 On some platforms,`std::cbrt` appeared several times as quick as the more general `boost::math::cbrt`,
-on other platforms / compiler options `boost::math::cbrt` is noticably faster.  In general, the results are highly
+on other platforms / compiler options `boost::math::cbrt` is noticeably faster.  In general, the results are highly
 dependent on the code-generation / processor architecture selection compiler options used.  One can
 assume that the standard library will have been compiled with options ['nearly] optimal for the platform
 it was installed on, where as the user has more choice over the options used for Boost.Math.  Pick something
 too general/conservative and performance suffers, while selecting options that make use of the latest
-instruction set opcodes speed's things up noticably.
+instruction set opcodes speed's things up noticeably.
 
 * Two compilers in optimise mode were compared: GCC 4.9.1 using Netbeans IDS
 and Microsoft Visual Studio 2013 (Update 1) on the same hardware.
@@ -79,7 +79,7 @@ than the hand coded/optimized `cbrt` routine.
 
 * The importance of getting a good guess can be seen by the iteration count for the multiprecision case:
 here we "cheat" a little and use the cube-root calculated to double precision as the initial guess.
-The limitation of this tatic is that the range of possible (exponent) values may be less than the multiprecision type.
+The limitation of this tactic is that the range of possible (exponent) values may be less than the multiprecision type.
 
 * For __fundamental_types, there was little to choose between the three derivative methods,
 but for __cpp_bin_float, __newton was twice as fast.  Note that the cube-root is an extreme
@@ -182,7 +182,7 @@ convergence to the final exact result in one or two iterations.
 So in this contrived example, crudely dividing the exponent by N for a 'guess',
 it would be far better to use a `pow<double>` or ,
 if more precise `pow<long double>`, function to estimate a 'guess'.
-The limitation of this tatic is that the range of possible (exponent) values may be less than the multiprecision type.
+The limitation of this tactic is that the range of possible (exponent) values may be less than the multiprecision type.
 
 * Using floating-point extension __SSE2 made a modest ten-percent speedup.
 
