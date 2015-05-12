@@ -503,6 +503,37 @@ Full code of this example is at
 
 [endsect] [/section:root_examples Examples of Root Finding (with and without derivatives)]
 
+[section:bad_guess The Effect of a Poor Initial Guess]
+
+It's instructive to take our "toy" example algorithms, and use deliberately bad initial guesses to see how the
+various root finding algorithms fair.  We'll start with the cubed root, and using the cube root of 500 as the test case:
+
+[table
+[[Initial Guess=][-500% ([approx]1.323)][-100% ([approx]3.97)][-50% ([approx]3.96)][-20% ([approx]6.35)][-10% ([approx]7.14)][-5% ([approx]7.54)][5% ([approx]8.33)][10% ([approx]8.73)][20% ([approx]9.52)][50% ([approx]11.91)][100% ([approx]15.87)][500 ([approx]47.6)]]
+[[bracket_and_solve_root][12][8][8][10][11][11][11][11][11][11][7][13]]
+[[newton_iterate][12][7][7][5][5][4][4][5][5][6][7][9]]
+[[halley_iterate][7][4][4][3][3][3][3][3][3][4][4][6]]
+[[schroeder_iterate][11][6][6][4][3][3][3][3][4][5][5][8]]
+]
+
+As you can see `bracket_and_solve_root` is relatively insensitive to starting location - as long as you don't start many orders of magnitude away from the root it will
+take roughly the same number of steps to bracket the root and solve it.  On the other hand the derivative based methods are slow to start, but once they have some digits
+correct they increase precision exceptionally fast: they are therefore quite sensitive to the initial starting location.
+
+The next table shows the number of iterations required to find the second radius of an ellipse with first radius 50 and arc-length 500:
+
+[table
+[[Initial Guess=][-500% ([approx]20.6)][-100% ([approx]61.81)][-50% ([approx]61.81)][-20% ([approx]98.9)][-10% ([approx]111.3)][-5% ([approx]117.4)][5% ([approx]129.8)][10% ([approx]136)][20% ([approx]148.3)][50% ([approx]185.4)][100% ([approx]247.2)][500 ([approx]741.7)]]
+[[bracket_and_solve_root][11][5][5][8][8][7][7][8][9][8][6][10]]
+[[newton_iterate][4][4][4][3][3][3][3][3][3][4][4][4]]
+[[halley_iterate][4][3][3][3][3][2][2][3][3][3][3][3]]
+[[schroeder_iterate][4][3][3][3][3][2][2][3][3][3][3][3]]
+]
+
+Interestingly this function is much more resistant to a poor initial guess when using derivatives.
+
+[endsect]
+
 [section:bad_roots Examples Where Root Finding Goes Wrong]
 
 There are many reasons why root root finding can fail, here are just a few of the more common examples:
@@ -549,7 +580,7 @@ on the root: our algorithms will protect against that by reverting to bisection.
 
 An example of this situation would be trying to find the root of e[super -1/z[super 2]] - this function has a single
 root at ['z = 0], but for ['z[sub 0] < 0] neither Newton nor Halley steps will ever converge on the root, and for ['z[sub 0] > 0]
-the steps are actually divergent.
+the steps are actually divergent.s
 
 [endsect]
 
