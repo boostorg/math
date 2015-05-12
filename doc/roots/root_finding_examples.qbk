@@ -25,7 +25,7 @@ a generic method for the __nth_root that constructs the derivatives at compile-t
 
 These methods should be applicable to other functions that can be differentiated easily.
 
-[h3:no_derivatives Finding a root without derivatives]
+[section:cbrt_eg Finding the Cubed Root With and Without Derivatives]
 
 First some `#includes` that will be needed.
 
@@ -198,14 +198,24 @@ further digits with remarkable efficiency.
 
 Or to put it another way: ['nothing beats a really good initial guess!]
 
-[h3:lambda Using C++11 Lambda's']
+Full code of this example is at
+[@../../example/root_finding_example.cpp  root_finding_example.cpp],
+
+[endsect]
+
+[section:lambda Using C++11 Lambda's]
 
 Since all the root finding functions accept a function-object, they can be made to
-work (often in a lot less code) with C++11 lambda's.  Here's the much reduced complete code:
+work (often in a lot less code) with C++11 lambda's.  Here's the much reduced code for our "toy" cube root function:
 
 [root_finding_2deriv_lambda]
 
-[h3:fifth_root Fifth-root function]
+Full code of this example is at
+[@../../example/root_finding_example.cpp  root_finding_example.cpp],
+
+[endsect]
+
+[section:5th_root_eg Computing the Fifth Root]
 
 Let's now suppose we want to find the [*fifth root] of a number ['a].
 
@@ -249,7 +259,13 @@ __spaces['f]\'\'(x) = 20x[super 3]
 [root_finding_fifth_functor_2deriv]
 [root_finding_fifth_2deriv]
 
-[h3:multiprecision_root  Root-finding using Boost.Multiprecision]
+Full code of this example is at
+[@../../example/root_finding_example.cpp  root_finding_example.cpp] and
+[@../../example/root_finding_n_example.cpp  root_finding_n_example.cpp].
+
+[endsect]
+
+[section:multiprecision_root  Root-finding using Boost.Multiprecision]
 
 The apocryphally astute reader might, by now, be asking "How do we know if this computes the 'right' answer?".
 
@@ -302,7 +318,10 @@ There is also the cost of conversion to and from type `T` to consider.
 In these examples, `double` is used via `typedef double guess_type`.]
 
 Since the functors and functions used above are templated on the value type,
-we can very simply use them with any of the __multiprecision types.
+we can very simply use them with any of the __multiprecision types.  As a reminder,
+here's our toy cube root function using 2 derivatives and C++11 lambda functions to find the root:
+
+[root_finding_2deriv_lambda]
 
 Some examples below are 50 decimal digit decimal and binary types
 (and on some platforms a much faster `float128` or `quad_float` type )
@@ -354,14 +373,19 @@ All digits beyond `max_digits10` will be incorrect.
 Making the `cbrt` type explicit with `cbrt_2deriv<cpp_dec_float_50>(2.);` will give you the desired 50 decimal digit precision result.
 ] [/tip]
 
-[h3:nth_root Generalizing to Compute the nth root]
+Full code of this example is at
+[@../../example/root_finding_multiprecision_example.cpp  root_finding_multiprecision_example.cpp].
+
+[endsect]
+
+[section:nth_root Generalizing to Compute the nth root]
 
 If desired, we can now further generalize to compute the ['n]th root by computing the derivatives [*at compile-time]
-using the rules for differentiation and the compile-time `static` function `pow<N>`
-where template parameter `N` is an integer.  Our functor and function now have an additional template parameter `N`,
+using the rules for differentiation and `boost::math::pow<N>`
+where template parameter `N` is an integer and a compile time constant.  Our functor and function now have an additional template parameter `N`,
 for the root required.
 
-[note Since this is a compile-time static process, the resulting code is as efficient as as if hand-coded as the cube and fifth-root examples above.
+[note Since the powers and derivatives are fixed at compile time, the resulting code is as efficient as as if hand-coded as the cube and fifth-root examples above.
 A good compiler should also optimise any repeated multiplications.]
 
 Our ['n]th root functor is
@@ -391,7 +415,12 @@ as noted above.]
 Use of the the `pow` function is more sensible for this unusual need.
 ]
 
-[h3 A More complex example - Inverting the Elliptic Integrals]
+Full code of this example is at
+[@../../example/root_finding_n_example.cpp  root_finding_n_example.cpp].
+
+[endsect]
+
+[section:elliptic_eg A More complex example - Inverting the Elliptic Integrals]
 
 The arc length of an ellipse with radii ['a] and ['b] is given by:
 
@@ -464,16 +493,65 @@ use Halley, rather than Newton iteration:
 
 While this function uses only slightly fewer iterations (typically around 3)
 to find the root, compared to the original derivative free method, we've moved from
-8-10 elliptic integral calls to 6.  Here's the actual performance comparison
-on Win32:
+8-10 elliptic integral calls to 6.
 
-Full code of these examples is at
-[@../../example/root_finding_example.cpp  root_finding_example.cpp],
-[@../../example/root_finding_n_example.cpp  root_finding_n_example.cpp] and
-[@../../example/root_finding_multiprecision_example.cpp  root_finding_multiprecision_example.cpp].
+Full code of this example is at
 [@../../example/root_elliptic_finding.cpp  root_elliptic_finding.cpp].
 
+[endsect]
+
+
 [endsect] [/section:root_examples Examples of Root Finding (with and without derivatives)]
+
+[section:bad_roots Examples Where Root Finding Goes Wrong]
+
+There are many reasons why root root finding can fail, here are just a few of the more common examples:
+
+[h3 Local Minima]
+
+If you start in the wrong place, such as z[sub 0] here:
+
+[$../roots/bad_root_1.svg]
+
+Then almost any root finding algorithm will decend into a local minima rather than find the root.
+
+[h3 Flatlining]
+
+In this example, we're starting from a location (z[sub 0]) where the first derivative is essentially zero:
+
+[$../roots/bad_root_2.svg]
+
+In this situation the next iteration will shoot off to infinity (assuming we're using derivatives that is).  Our
+code guards against this by insisting that the root is always bracketed, and then never stepping outside those bounds.
+In a case like this, no root finding algorithm can do better than bisecting until the root is found.
+
+Note that there is no scale on the graph, we have seen examples of this situation occur in practice ['even when
+several decimal places of the initial guess z[sub 0] are correct.]
+
+This is really a special case of a more common situation where root finding with derivatives is ['divergent].  Consider
+starting at z[sub 0] in this case:
+
+[$../roots/bad_root_4.svg]
+
+An initial Newton step would take you further from the root than you started, as will all subsequent steps.
+
+[h3 Micro-stepping / Non-convergence]
+
+Consider starting at z[sub 0] in this situation:
+
+[$../roots/bad_root_3.svg]
+
+The first derivative is essentially infinite, and the second close to zero (and so offers no correction if we use it),
+as a result we take a very small first step.  In the worst case situation, the first step is so small 
+- perhaps even so small that subtractuing from z[sub 0] has no effect at the current working precision - that our algorithm
+will assume we are at the root already and terminate.  Otherwise we will take lot's of very small steps which never converge
+on the root: our algorithms will protect against that by reverting to bisection.
+
+An example of this situation would be trying to find the root of e[super -1/z[super 2]] - this function has a single
+root at ['z = 0], but for ['z[sub 0] < 0] neither Newton nor Halley steps will ever converge on the root, and for ['z[sub 0] > 0]
+the steps are actually divergent.
+
+[endsect]
 
 [/
   Copyright 2015 John Maddock and Paul A. Bristow.
