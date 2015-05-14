@@ -107,6 +107,7 @@ so the cost of extra precision is mainly the underlying cost of computing more d
 not in the way the algorithm works.  This confirms previous observations using __NTL high-precision types.
 
 [include root_comparison_tables_msvc.qbk]
+[include root_comparison_tables_gcc.qbk]
 
 [endsect] [/section:cbrt_comparison  Comparison of Cube Root Finding Algorithms]
 
@@ -155,6 +156,7 @@ within the uncertainty.
 
 [include roots_table_100_msvc_X86_SSE2.qbk]
 [include roots_table_100_msvc_X64_AVX.qbk]
+[include roots_table_100_gcc_X64_SSE2.qbk]
 
 Some tentative conclusions can be drawn from this limited exercise.
 
@@ -230,6 +232,7 @@ within the uncertainty.
 
 [include elliptic_table_100_msvc_X86_SSE2.qbk]
 [include elliptic_table_100_msvc_X64_AVX.qbk]
+[include elliptic_table_100_gcc_X64_SSE2.qbk]
 
 Remarks:
 

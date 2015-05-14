@@ -652,11 +652,18 @@ void table_root_info(cpp_bin_float_100 full_value, cpp_bin_float_100 full_answer
     for (size_t tp = 0; tp != root_infos.size(); tp++)
     { // For all types:
 
-      fout
-        << "[" << std::right << std::showpoint 
-        << std::setw(3) << std::setprecision(2) << root_infos[tp].iterations[algo] << "]["
-        << std::setw(5) << std::setprecision(5) << root_infos[tp].times[algo] << "]["
-        << std::setw(3) << std::setprecision(2) << root_infos[tp].normed_times[algo] << "]["
+       fout
+          << "[" << std::right << std::showpoint
+          << std::setw(3) << std::setprecision(2) << root_infos[tp].iterations[algo] << "]["
+          << std::setw(5) << std::setprecision(5) << root_infos[tp].times[algo] << "][";
+       if(fabs(root_infos[tp].normed_times[algo]) <= 1.05)
+          fout << "[role blue " << std::setw(3) << std::setprecision(2) << root_infos[tp].normed_times[algo] << "]";
+       else if(fabs(root_infos[tp].normed_times[algo]) > 4)
+          fout << "[role red " << std::setw(3) << std::setprecision(2) << root_infos[tp].normed_times[algo] << "]";
+       else
+          fout << std::setw(3) << std::setprecision(2) << root_infos[tp].normed_times[algo];
+       fout
+        << "]["
         << std::setw(3) << std::setprecision(2) << root_infos[tp].distances[algo] << "][ ]";
     } // tp
      fout <<"]" << std::endl;

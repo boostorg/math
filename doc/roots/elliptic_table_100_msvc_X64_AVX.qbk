@@ -9,12 +9,12 @@ http://www.boost.org/LICENSE_1_0.txt).
 
 [h6 Program [@../../example/root_elliptic_finding.cpp root_elliptic_finding.cpp],
  Microsoft Visual C++ version 12.0, Dinkumware standard library version 610, Win32
-Compiled in debug mode., _X64_AVX]
+Compiled in optimise mode., _X64_AVX]
 [table:elliptic root with radius 28 and arc length 300) for float, double, long double and cpp_bin_float_50 types, using _X64_AVX
 [[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]
 [[Algo     ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ]]
-[[TOMS748  ][  5][  468][1.50][ -1][ ][  9][ 1093][1.75][  1][ ][  9][  937][1.50][  1][ ][ 11][723437][1.54][ -3][ ]]
-[[Newton   ][  3][  468][1.50][ -1][ ][  4][  625][[role blue 1.00]][  1][ ][  4][  781][1.25][  1][ ][  5][587500][1.25][  0][ ]]
-[[Halley   ][  2][  312][[role blue 1.00]][  0][ ][  3][  625][[role blue 1.00]][  3][ ][  3][  625][[role blue 1.00]][  3][ ][  4][468750][[role blue 1.00]][  0][ ]]
-[[Schroeder][  3][  625][2.00][ -1][ ][  6][ 1250][2.00][  1][ ][  6][ 1093][1.75][  1][ ][  5][601562][1.28][ -2][ ]]
+[[TOMS748  ][  5][  500][1.33][ -1][ ][  9][ 1046][1.72][  1][ ][  9][ 1062][1.70][  1][ ][ 11][698437][1.54][ -3][ ]]
+[[Newton   ][  3][  484][1.29][ -1][ ][  4][  734][1.21][  1][ ][  4][  687][1.10][  1][ ][  5][545312][1.20][  0][ ]]
+[[Halley   ][  2][  375][[role blue 1.00]][  0][ ][  3][  609][[role blue 1.00]][  3][ ][  3][  625][[role blue 1.00]][  3][ ][  4][453125][[role blue 1.00]][  0][ ]]
+[[Schroeder][  3][  546][1.46][ -1][ ][  6][ 1109][1.82][  1][ ][  6][ 1187][1.90][  1][ ][  5][564062][1.24][ -2][ ]]
 ] [/end of table root]

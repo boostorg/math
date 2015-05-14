@@ -465,7 +465,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
   using boost::timer::cpu_times;
   using boost::timer::cpu_timer;
 
-  int eval_count = 1000000; // To give a sufficiently stable timing for the fast built-in types,
+  int eval_count = boost::is_floating_point<T>::value ? 10000000 : 100000; // To give a sufficiently stable timing for the fast built-in types,
   //int eval_count = 1000000; // To give a sufficiently stable timing for the fast built-in types,
   // This takes an inconveniently long time for multiprecision cpp_bin_float_50 etc  types.
 
@@ -576,7 +576,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
 template <int N>
 void table_root_info(cpp_bin_float_100 full_value)
 {
-
+   using std::abs;
   std::cout << nooftypes << " floating-point types tested:" << std::endl;
 #if defined(_DEBUG) || !defined(NDEBUG)
   std::cout << "Compiled in debug mode." << std::endl;

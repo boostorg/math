@@ -182,6 +182,7 @@ struct elliptic_root_functor_noderiv
    }
    T operator()(T const& x)
    {
+      using std::sqrt;
       // return the difference between required arc-length, and the calculated arc-length for an
       // ellipse with radii m_radius and x:
       T a = (std::max)(m_radius, x);
@@ -231,6 +232,7 @@ struct elliptic_root_functor_1deriv
    }
    std::pair<T, T> operator()(T const& x)
    {
+      using std::sqrt;
       // Return the difference between required arc-length, and the calculated arc-length for an
       // ellipse with radii m_radius and x, plus it's derivative.
       // See http://www.wolframalpha.com/input/?i=d%2Fda+[4+*+a+*+EllipticE%281+-+b^2%2Fa^2%29]
@@ -288,6 +290,7 @@ struct elliptic_root_functor_2deriv
    elliptic_root_functor_2deriv(T const& arc, T const& radius) : m_arc(arc), m_radius(radius) {}
    std::tuple<T, T, T> operator()(T const& x)
    {
+      using std::sqrt;
       // Return the difference between required arc-length, and the calculated arc-length for an
       // ellipse with radii m_radius and x, plus it's derivative.
       // See http://www.wolframalpha.com/input/?i=d^2%2Fda^2+[4+*+a+*+EllipticE%281+-+b^2%2Fa^2%29]
@@ -475,7 +478,7 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
   using boost::timer::cpu_times;
   using boost::timer::cpu_timer;
 
-  int eval_count = boost::is_floating_point<T>::value ? 100000 : 10000; // To give a sufficiently stable timing for the fast built-in types,
+  long eval_count = boost::is_floating_point<T>::value ? 1000000 : 10000; // To give a sufficiently stable timing for the fast built-in types,
   // This takes an inconveniently long time for multiprecision cpp_bin_float_50 etc  types.
 
   cpu_times now; // Holds wall, user and system times.
@@ -484,7 +487,7 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
     //algorithm_names.push_back("TOMS748"); // 
     cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
     ti.start();
-    for (long i = 0; i < eval_count; ++i)
+    for(long i = eval_count; i >= 0; --i)
     {
       result = elliptic_root_noderiv(radius, arc); // 
       sum += result;
@@ -506,7 +509,7 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
     // algorithm_names.push_back("Newton"); // algorithm
     cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
     ti.start();
-    for (long i = 0; i < eval_count; ++i)
+    for(long i = eval_count; i >= 0; --i)
     {
       result = elliptic_root_1deriv(radius, arc); // 
       sum += result;
@@ -529,7 +532,7 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
     //algorithm_names.push_back("Halley"); // algorithm
     cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
     ti.start();
-    for (long i = 0; i < eval_count; ++i)
+    for(long i = eval_count; i >= 0; --i)
     {
       result = elliptic_root_2deriv(radius, arc); // 
       sum += result;
@@ -551,7 +554,7 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
     // algorithm_names.push_back("Schroeder"); // algorithm
     cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
     ti.start();
-    for (long i = 0; i < eval_count; ++i)
+    for(long i = eval_count; i >= 0; --i)
     {
       result = elliptic_root_2deriv_s(arc, radius); // 
       sum += result;
@@ -584,6 +587,7 @@ int test_root(cpp_bin_float_100 big_radius, cpp_bin_float_100 big_arc, cpp_bin_f
  */
 void table_root_info(cpp_bin_float_100 radius, cpp_bin_float_100 arc)
 {
+   using std::abs;
 
   std::cout << nooftypes << " floating-point types tested:" << std::endl;
 #if defined(_DEBUG) || !defined(NDEBUG)
