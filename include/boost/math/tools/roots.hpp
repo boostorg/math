@@ -311,6 +311,7 @@ namespace detail{
       template <class T>
       static T step(const T& /*x*/, const T& f0, const T& f1, const T& f2)
       {
+         using std::fabs;
          T denom = 2 * f0;
          T num = 2 * f1 - f0 * (f2 / f1);
          T delta;
