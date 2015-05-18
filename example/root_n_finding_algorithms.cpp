@@ -5,7 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Comparison of finding roots using TOMS748, Newton-Raphson, Halley & Schroeder algorithms.
+// Comparison of finding roots using TOMS748, Newton-Raphson, Halley & Schroder algorithms.
 // root_n_finding_algorithms.cpp  Generalised for nth root version.
 
 // http://en.wikipedia.org/wiki/Cube_root
@@ -27,7 +27,7 @@
 //using boost::math::tools::toms748_solve;
 //using boost::math::tools::halley_iterate; 
 //using boost::math::tools::newton_raphson_iterate;
-//using boost::math::tools::schroeder_iterate;
+//using boost::math::tools::schroder_iterate;
 
 #include <boost/math/special_functions/next.hpp> // For float_distance.
 #include <boost/math/special_functions/pow.hpp> // For pow<N>.
@@ -118,7 +118,7 @@ std::ofstream fout;
 
 std::vector<std::string> algo_names =
 {
-  "TOMS748", "Newton", "Halley", "Schroeder"
+  "TOMS748", "Newton", "Halley", "Schr'''&#xf6;'''der"
 };
 
 std::vector<std::string> names =
@@ -136,7 +136,7 @@ struct root_info
   std::size_t bin_digits;  // binary in floating-point type numeric_limits<T>::digits;  
   int get_digits; // fraction of maximum possible accuracy required.
   // = digits * digits_accuracy
-  // Vector of values (4) for each algorithm, TOMS748, Newton, Halley & Schroeder.
+  // Vector of values (4) for each algorithm, TOMS748, Newton, Halley & Schroder.
   //std::vector< boost::int_least64_t> times;  converted to int.
   std::vector<int> times; // arbirary units (ticks).
   //boost::int_least64_t min_time = std::numeric_limits<boost::int_least64_t>::max(); // Used to normalize times (as int).
@@ -324,10 +324,10 @@ T nth_root_2deriv(T x)
 
 template <int N, class T = double>
 T nth_root_2deriv_s(T x)
-{ // return nth root of x using 1st and 2nd derivatives and Schroeder.
+{ // return nth root of x using 1st and 2nd derivatives and Schroder.
 
   using namespace std;  // Help ADL of std functions.
-  using namespace boost::math::tools; // For schroeder_iterate.
+  using namespace boost::math::tools; // For schroder_iterate.
 
   BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
   BOOST_STATIC_ASSERT_MSG((N > 0) == true, "root N must be > 0!");
@@ -344,7 +344,7 @@ T nth_root_2deriv_s(T x)
   int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.4);
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
-  T result = schroeder_iterate(nth_root_functor_2deriv<N, T>(x), guess, min, max, get_digits, it);
+  T result = schroder_iterate(nth_root_functor_2deriv<N, T>(x), guess, min, max, get_digits, it);
   iters = it;
 
   return result;
@@ -539,7 +539,7 @@ int test_root(cpp_bin_float_100 big_value, cpp_bin_float_100 answer, const char*
     root_infos[type_no].full_results.push_back(result);
   }
   {
-    // algorithm_names.push_back("Schroeder"); // algorithm
+    // algorithm_names.push_back("Schroder"); // algorithm
     cpu_timer ti; // Can start, pause, resume and stop, and read elapsed.
     ti.start();
     for (long i = 0; i < eval_count; ++i)

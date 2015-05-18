@@ -233,21 +233,21 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
 #endif
 #ifndef BOOST_NO_CXX11_HDR_TUPLE
-   result = boost::math::tools::schroeder_iterate(f6, x, 0.0, x, std::numeric_limits<double>::digits - 1);
+   result = boost::math::tools::schroder_iterate(f6, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
 #endif
-   result = boost::math::tools::schroeder_iterate(f7, x, 0.0, x, std::numeric_limits<double>::digits - 1);
+   result = boost::math::tools::schroder_iterate(f7, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::schroeder_iterate(f8, x, 0.0, x, std::numeric_limits<double>::digits - 1);
+   result = boost::math::tools::schroder_iterate(f8, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
 #ifndef BOOST_NO_CXX11_LAMBDAS
 #ifndef BOOST_NO_CXX11_HDR_TUPLE
-   result = boost::math::tools::schroeder_iterate([x](double z){ return std::make_tuple(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
+   result = boost::math::tools::schroder_iterate([x](double z){ return std::make_tuple(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
 #endif
-   result = boost::math::tools::schroeder_iterate([x](double z){ return boost::tuple<double, double, double>(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
+   result = boost::math::tools::schroder_iterate([x](double z){ return boost::tuple<double, double, double>(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
-   result = boost::math::tools::schroeder_iterate([x](double z){ return boost::fusion::tuple<double, double, double>(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
+   result = boost::math::tools::schroder_iterate([x](double z){ return boost::fusion::tuple<double, double, double>(z * z * z - x, 3 * z * z, 6 * z); }, x, 0.0, x, std::numeric_limits<double>::digits - 1);
    BOOST_CHECK_CLOSE_FRACTION(expected, result, tolerance);
 #endif
 } // BOOST_AUTO_TEST_CASE( test_main )

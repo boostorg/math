@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       BOOST_CHECK_LE(iters, 7);
       // Schroder next:
       iters = 1000;
-      dr = boost::math::tools::schroeder_iterate(cbrt_functor_2deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
+      dr = boost::math::tools::schroder_iterate(cbrt_functor_2deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
       BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
       BOOST_CHECK_LE(iters, 11);
       //
@@ -117,7 +117,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       BOOST_CHECK_LE(iters, 7);
       // Schroder next:
       iters = 1000;
-      dr = boost::math::tools::schroeder_iterate(cbrt_functor_2deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
+      dr = boost::math::tools::schroder_iterate(cbrt_functor_2deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
       BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
       BOOST_CHECK_LE(iters, 11);
       //
@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       BOOST_CHECK_LE(iters, 3);
       // Schroder next:
       iters = 1000;
-      dr = boost::math::tools::schroeder_iterate(cbrt_functor_2deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
+      dr = boost::math::tools::schroder_iterate(cbrt_functor_2deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
       BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
       BOOST_CHECK_LE(iters, 4);
       //
@@ -163,7 +163,7 @@ BOOST_AUTO_TEST_CASE( test_main )
       BOOST_CHECK_LE(iters, 3);
       // Schroder next:
       iters = 1000;
-      dr = boost::math::tools::schroeder_iterate(cbrt_functor_2deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
+      dr = boost::math::tools::schroder_iterate(cbrt_functor_2deriv(arg), guess, result / 10, result * 10, newton_limits, iters);
       BOOST_CHECK_CLOSE_FRACTION(dr, result, std::numeric_limits<double>::epsilon() * 2);
       BOOST_CHECK_LE(iters, 4);
 

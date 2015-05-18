@@ -7,7 +7,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Example of finding fifth root using Newton-Raphson, Halley, Schroeder, TOMS748 .
+// Example of finding fifth root using Newton-Raphson, Halley, Schroder, TOMS748 .
 
 // Note that this file contains Quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!

@@ -319,7 +319,10 @@ T cbrt_2deriv_lambda(T x)
    int get_digits = static_cast<int>(digits * 0.4);    // Accuracy tripples with each step, so stop when just
    // over one third of the digits are correct.
    boost::uintmax_t maxit = 20;
-   T result = halley_iterate([x](const T& g){ return std::make_tuple(g * g * g - x, 3 * g * g, 6 * g); }, guess, min, max, get_digits, maxit);
+   T result = halley_iterate(
+      // lambda function:
+      [x](const T& g){ return std::make_tuple(g * g * g - x, 3 * g * g, 6 * g); }, 
+      guess, min, max, get_digits, maxit);
    return result;
 }
 

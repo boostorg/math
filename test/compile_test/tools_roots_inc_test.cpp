@@ -34,6 +34,6 @@ void compile_and_link_test()
    check_result<std::pair<double, double> >(boost::math::tools::bisect<F, double, Tol>(f, d, d, tol));
    check_result<double>(boost::math::tools::newton_raphson_iterate<F2, double>(f2, d, d, d, i, max_iter));
    check_result<double>(boost::math::tools::halley_iterate<F3, double>(f3, d, d, d, i, max_iter));
-   check_result<double>(boost::math::tools::schroeder_iterate<F3, double>(f3, d, d, d, i, max_iter));
+   check_result<double>(boost::math::tools::schroder_iterate<F3, double>(f3, d, d, d, i, max_iter));
 }
 

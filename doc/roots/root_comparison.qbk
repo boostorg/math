@@ -41,9 +41,9 @@ The requested precision was set as follows:
 [table
 [[Function][Precision Requested]]
 [[TOMS748][numeric_limits<T>::digits - 2]]
-[[Newton][[lfloor]numeric_limits<T>::digits * 0.6[rfloor]]]
-[[Halley][[lfloor]numeric_limits<T>::digits * 0.4[rfloor]]]
-[[Schroeder][[lfloor]numeric_limits<T>::digits * 0.4[rfloor]]]
+[[Newton][floor(numeric_limits<T>::digits * 0.6)]]
+[[Halley][floor(numeric_limits<T>::digits * 0.4)]]
+[[Schr'''&#xf6;'''der][floor(numeric_limits<T>::digits * 0.4)]]
 ]
 
 * The C++ Standard cube root function [@http://en.cppreference.com/w/cpp/numeric/math/cbrt std::cbrt]
@@ -123,9 +123,9 @@ close to full accuracy without resorting to unnecessary iterations).
 [table
 [[Function][Precision Requested]]
 [[TOMS748][numeric_limits<T>::digits - 2]]
-[[Newton][[lfloor]numeric_limits<T>::digits * 0.6[rfloor]]]
-[[Halley][[lfloor]numeric_limits<T>::digits * 0.4[rfloor]]]
-[[Schroeder][[lfloor]numeric_limits<T>::digits * 0.4[rfloor]]]
+[[Newton][floor(numeric_limits<T>::digits * 0.6)]]
+[[Halley][floor(numeric_limits<T>::digits * 0.4)]]
+[[Schr'''&#xf6;'''der][floor(numeric_limits<T>::digits * 0.4)]]
 ]
 Tests used Microsoft Visual Studio 2013 (Update 1) and GCC 4.9.1 using source code
 [@../../example/root_n_finding_algorithms.cpp root_n_finding_algorithms.cpp].
@@ -166,7 +166,7 @@ __TOMS748 is considerable in number of iterations, but little in execution time.
 we are finding the root for is trivial to evaluate, so runtimetimes are dominated by the time taken by the boilerplate code
 in each method.
 
-* The extra cost of evaluating the second derivatives (__halley or __schroeder) is usually too much for any net benefit:
+* The extra cost of evaluating the second derivatives (__halley or __schroder) is usually too much for any net benefit:
 as with the cube root, these functors are so cheap to evaluate that the runtime is largely dominated by the
 complexity of the root finding method.
 
@@ -217,9 +217,9 @@ close to full accuracy without resorting to unnecessary iterations).
 [table
 [[Function][Precision Requested]]
 [[TOMS748][numeric_limits<T>::digits - 2]]
-[[Newton][[lfloor]numeric_limits<T>::digits * 0.6[rfloor]]]
-[[Halley][[lfloor]numeric_limits<T>::digits * 0.4[rfloor]]]
-[[Schroeder][[lfloor]numeric_limits<T>::digits * 0.4[rfloor]]]
+[[Newton][floor(numeric_limits<T>::digits * 0.6)]]
+[[Halley][floor(numeric_limits<T>::digits * 0.4)]]
+[[Schr'''&#xf6;'''der][floor(numeric_limits<T>::digits * 0.4)]]
 ]
 Tests used Microsoft Visual Studio 2013 (Update 1) and GCC 4.9.1 using source code
 [@../../example/root_elliptic_finding.cpp root_elliptic_finding.cpp].

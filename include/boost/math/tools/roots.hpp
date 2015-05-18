@@ -347,7 +347,7 @@ namespace detail{
       bool out_of_bounds_sentry = false;
 
 #ifdef BOOST_MATH_INSTRUMENT
-      std::cout << "Halley iteration, limit = " << factor << std::endl;
+      std::cout << "Second order root iteration, limit = " << factor << std::endl;
 #endif
 
       boost::uintmax_t count(max_iter);
@@ -369,7 +369,7 @@ namespace detail{
          {
             // Oops zero derivative!!!
 #ifdef BOOST_MATH_INSTRUMENT
-            std::cout << "Halley iteration, zero derivative found" << std::endl;
+            std::cout << "Second order root iteration, zero derivative found" << std::endl;
 #endif
             detail::handle_zero_derivative(f, last_f0, f0, delta, result, guess, min, max);
          }
@@ -398,7 +398,7 @@ namespace detail{
                delta = f0 / f1;
          }
 #ifdef BOOST_MATH_INSTRUMENT
-         std::cout << "Halley iteration, delta = " << delta << std::endl;
+         std::cout << "Second order root iteration, delta = " << delta << std::endl;
 #endif
          T convergence = fabs(delta / delta2);
          if((convergence > 0.8) && (convergence < 2))
@@ -469,7 +469,7 @@ namespace detail{
       max_iter -= count;
 
 #ifdef BOOST_MATH_INSTRUMENT
-      std::cout << "Halley iteration, final count = " << max_iter << std::endl;
+      std::cout << "Second order root iteration, final count = " << max_iter << std::endl;
 #endif
 
       return result;
@@ -492,7 +492,7 @@ inline T halley_iterate(F f, T guess, T min, T max, int digits)
 
 namespace detail{
 
-   struct schroeder_stepper
+   struct schroder_stepper
    {
       template <class T>
       static T step(const T& x, const T& f0, const T& f1, const T& f2)
@@ -515,17 +515,33 @@ namespace detail{
 }
 
 template <class F, class T>
+T schroder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
+{
+   return detail::second_order_root_finder<detail::schroder_stepper>(f, guess, min, max, digits, max_iter);
+}
+
+template <class F, class T>
+inline T schroder_iterate(F f, T guess, T min, T max, int digits)
+{
+   boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
+   return schroder_iterate(f, guess, min, max, digits, m);
+}
+//
+// These two are the old spelling of this function, retained for backwards compatibity just in case:
+//
+template <class F, class T>
 T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
 {
-   return detail::second_order_root_finder<detail::schroeder_stepper>(f, guess, min, max, digits, max_iter);
+   return detail::second_order_root_finder<detail::schroder_stepper>(f, guess, min, max, digits, max_iter);
 }
 
 template <class F, class T>
 inline T schroeder_iterate(F f, T guess, T min, T max, int digits)
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
-   return schroeder_iterate(f, guess, min, max, digits, m);
+   return schroder_iterate(f, guess, min, max, digits, m);
 }
+
 
 } // namespace tools
 } // namespace math

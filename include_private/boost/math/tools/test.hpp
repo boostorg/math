@@ -13,6 +13,7 @@
 #include <boost/math/tools/config.hpp>
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/test/test_tools.hpp>
 #include <stdexcept>
 #include <iostream>
@@ -60,98 +61,9 @@ struct calculate_result_type
 template <class T>
 T relative_error(T a, T b)
 {
-   BOOST_MATH_STD_USING
-#ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-   //
-   // If math.h has no long double support we can't rely
-   // on the math functions generating exponents outside
-   // the range of a double:
-   //
-   T min_val = (std::max)(
-      tools::min_value<T>(),
-      static_cast<T>((std::numeric_limits<double>::min)()));
-   T max_val = (std::min)(
-      tools::max_value<T>(),
-      static_cast<T>((std::numeric_limits<double>::max)()));
-#else
-   T min_val = tools::min_value<T>();
-   T max_val = tools::max_value<T>();
-#endif
-
-   if((a != 0) && (b != 0))
-   {
-      // TODO: use isfinite:
-      if(fabs(b) >= max_val)
-      {
-         if(fabs(a) >= max_val)
-            return 0;  // one infinity is as good as another!
-      }
-      // If the result is denormalised, treat all denorms as equivalent:
-      if((a < min_val) && (a > 0))
-         a = min_val;
-      else if((a > -min_val) && (a < 0))
-         a = -min_val;
-      if((b < min_val) && (b > 0))
-         b = min_val;
-      else if((b > -min_val) && (b < 0))
-         b = -min_val;
-      return (std::max)(fabs((a-b)/a), fabs((a-b)/b));
-   }
-
-   // Handle special case where one or both are zero:
-   if(min_val == 0)
-      return fabs(a-b);
-   if(fabs(a) < min_val)
-      a = min_val;
-   if(fabs(b) < min_val)
-      b = min_val;
-   return (std::max)(fabs((a-b)/a), fabs((a-b)/b));
+   return boost::math::relative_difference(a, b);
 }
 
-#if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
-template <>
-inline double relative_error<double>(double a, double b)
-{
-   BOOST_MATH_STD_USING
-   //
-   // On Mac OS X we evaluate "double" functions at "long double" precision,
-   // but "long double" actually has a very slightly narrower range than "double"!  
-   // Therefore use the range of "long double" as our limits since results outside
-   // that range may have been truncated to 0 or INF:
-   //
-   double min_val = (std::max)((double)tools::min_value<long double>(), tools::min_value<double>());
-   double max_val = (std::min)((double)tools::max_value<long double>(), tools::max_value<double>());
-
-   if((a != 0) && (b != 0))
-   {
-      // TODO: use isfinite:
-      if(b > max_val)
-      {
-         if(a > max_val)
-            return 0;  // one infinity is as good as another!
-      }
-      // If the result is denormalised, treat all denorms as equivalent:
-      if((a < min_val) && (a > 0))
-         a = min_val;
-      else if((a > -min_val) && (a < 0))
-         a = -min_val;
-      if((b < min_val) && (b > 0))
-         b = min_val;
-      else if((b > -min_val) && (b < 0))
-         b = -min_val;
-      return (std::max)(fabs((a-b)/a), fabs((a-b)/b));
-   }
-
-   // Handle special case where one or both are zero:
-   if(min_val == 0)
-      return fabs(a-b);
-   if(fabs(a) < min_val)
-      a = min_val;
-   if(fabs(b) < min_val)
-      b = min_val;
-   return (std::max)(fabs((a-b)/a), fabs((a-b)/b));
-}
-#endif
 
 template <class T>
 void set_output_precision(T)

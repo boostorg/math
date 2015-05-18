@@ -180,7 +180,7 @@ and yet, even so, not one of the test cases had a single bit wrong.
 What's more, the maximum number of iterations was now just 4.
 
 Just to complete the picture, we could have called
-[link math_toolkit.roots.roots_deriv.schroeder `schroeder_iterate`] in the last
+[link math_toolkit.roots.roots_deriv.schroder `schroder_iterate`] in the last
 example: and in fact it makes no difference to the accuracy or number of iterations
 in this particular case.  However, the relative performance of these two methods
 may vary depending upon the nature of ['f(x)], and the accuracy to which the initial
@@ -513,7 +513,7 @@ various root finding algorithms fair.  We'll start with the cubed root, and usin
 [[bracket_and_solve_root][12][8][8][10][11][11][11][11][11][11][7][13]]
 [[newton_iterate][12][7][7][5][5][4][4][5][5][6][7][9]]
 [[halley_iterate][7][4][4][3][3][3][3][3][3][4][4][6]]
-[[schroeder_iterate][11][6][6][4][3][3][3][3][4][5][5][8]]
+[[schroder_iterate][11][6][6][4][3][3][3][3][4][5][5][8]]
 ]
 
 As you can see `bracket_and_solve_root` is relatively insensitive to starting location - as long as you don't start many orders of magnitude away from the root it will
@@ -527,7 +527,7 @@ The next table shows the number of iterations required to find the second radius
 [[bracket_and_solve_root][11][5][5][8][8][7][7][8][9][8][6][10]]
 [[newton_iterate][4][4][4][3][3][3][3][3][3][4][4][4]]
 [[halley_iterate][4][3][3][3][3][2][2][3][3][3][3][3]]
-[[schroeder_iterate][4][3][3][3][3][2][2][3][3][3][3][3]]
+[[schroder_iterate][4][3][3][3][3][2][2][3][3][3][3][3]]
 ]
 
 Interestingly this function is much more resistant to a poor initial guess when using derivatives.

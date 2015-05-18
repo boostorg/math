@@ -5,7 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Comparison of finding roots using TOMS748, Newton-Raphson, Halley & Schroeder algorithms.
+// Comparison of finding roots using TOMS748, Newton-Raphson, Halley & Schroder algorithms.
 // Note that this file contains Quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!
 // This program also writes files in Quickbook tables mark-up format.
@@ -140,7 +140,7 @@ boost::uintmax_t cbrt_2deriv_s(T x, T guess)
    int get_digits = static_cast<int>(digits * 0.4);    // Accuracy tripples with each step, so stop when just
    // over one third of the digits are correct.
    boost::uintmax_t maxit = 20;
-   schroeder_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, maxit);
+   schroder_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, maxit);
    return maxit;
 }
 
@@ -283,14 +283,14 @@ boost::uintmax_t elliptic_root_2deriv(T radius, T arc, T guess)
    return it;
 } // nth_2deriv Halley
 //]
-// Using 1st and 2nd derivatives using Schroeder algorithm.
+// Using 1st and 2nd derivatives using Schroder algorithm.
 
 template <class T = double>
 boost::uintmax_t elliptic_root_2deriv_s(T radius, T arc, T guess)
-{ // return nth root of x using 1st and 2nd derivatives and Schroeder.
+{ // return nth root of x using 1st and 2nd derivatives and Schroder.
 
    using namespace std;  // Help ADL of std functions.
-   using namespace boost::math::tools; // For schroeder_iterate.
+   using namespace boost::math::tools; // For schroder_iterate.
 
    BOOST_STATIC_ASSERT_MSG(boost::is_integral<T>::value == false, "Only floating-point type types can be used!");
 
@@ -301,7 +301,7 @@ boost::uintmax_t elliptic_root_2deriv_s(T radius, T arc, T guess)
    int get_digits = static_cast<int>(digits * 0.4);
    const boost::uintmax_t maxit = 20;
    boost::uintmax_t it = maxit;
-   schroeder_iterate(elliptic_root_functor_2deriv<T>(arc, radius), guess, min, max, get_digits, it);
+   schroder_iterate(elliptic_root_functor_2deriv<T>(arc, radius), guess, min, max, get_digits, it);
    return it;
 } // T elliptic_root_2deriv_s Schroder
 
@@ -358,7 +358,7 @@ int main()
          << "][" << cbrt_2deriv(to_root, answer + answer)
          << "][" << cbrt_2deriv(to_root, answer + answer * 5) << "]]\n";
 
-      std::cout << "[[schroeder_iterate]["
+      std::cout << "[[schr'''&#xf6;'''der_iterate]["
          << cbrt_2deriv_s(to_root, answer / 6)
          << "][" << cbrt_2deriv_s(to_root, answer / 2)
          << "][" << cbrt_2deriv_s(to_root, answer - answer * 0.5)
@@ -424,7 +424,7 @@ int main()
          << "][" << elliptic_root_2deriv(radius_a, arc_length, radius_b + radius_b)
          << "][" << elliptic_root_2deriv(radius_a, arc_length, radius_b + radius_b * 5) << "]]\n";
 
-      std::cout << "[[schroeder_iterate]["
+      std::cout << "[[schr'''&#xf6;'''der_iterate]["
          << elliptic_root_2deriv_s(radius_a, arc_length, radius_b / 6)
          << "][" << elliptic_root_2deriv_s(radius_a, arc_length, radius_b / 2)
          << "][" << elliptic_root_2deriv_s(radius_a, arc_length, radius_b - radius_b * 0.5)

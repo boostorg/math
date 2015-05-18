@@ -5,7 +5,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Comparison of finding roots using TOMS748, Newton-Raphson, Schroeder & Halley algorithms.
+// Comparison of finding roots using TOMS748, Newton-Raphson, Schroder & Halley algorithms.
 
 // Note that this file contains Quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!
@@ -29,7 +29,7 @@
 //using boost::math::tools::eps_tolerance; // Binary functor for specified number of bits.
 //using boost::math::tools::bracket_and_solve_root;
 //using boost::math::tools::toms748_solve;
-//using boost::math::tools::schroeder_iterate;
+//using boost::math::tools::schroder_iterate;
 
 #include <boost/math/special_functions/next.hpp> // For float_distance.
 #include <tuple> // for tuple and make_tuple.
@@ -121,7 +121,7 @@ std::ofstream fout (filename.c_str(), std::ios_base::out);
 
 std::vector<std::string> algo_names =
 {
-  "cbrt", "TOMS748", "Newton", "Halley", "Schroeder"
+  "cbrt", "TOMS748", "Newton", "Halley", "Schr'''&#xf6;'''der"
 };
 
 std::vector<int> max_digits10s;
@@ -323,11 +323,11 @@ T cbrt_2deriv(T x)
   return result;
 }
 
-// Using 1st and 2nd derivatives using Schroeder algorithm.
+// Using 1st and 2nd derivatives using Schroder algorithm.
 
 template <class T>
 T cbrt_2deriv_s(T x)
-{ // return cube root of x using 1st and 2nd derivatives and Schroeder algorithm.
+{ // return cube root of x using 1st and 2nd derivatives and Schroder algorithm.
   //using namespace std;  // Help ADL of std functions.
   using namespace boost::math::tools;
   int exponent;
@@ -346,7 +346,7 @@ T cbrt_2deriv_s(T x)
   int get_digits = static_cast<int>(std::numeric_limits<T>::digits * 0.4);
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;
-  T result = schroeder_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, it);
+  T result = schroder_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, it);
   iters = it;
   return result;
 } // template <class T> T cbrt_2deriv_s(T x)

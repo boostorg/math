@@ -1,4 +1,4 @@
-[section:roots_deriv Root Finding With Derivatives: Newton-Raphson, Halley & Schroeder]
+[section:roots_deriv Root Finding With Derivatives: Newton-Raphson, Halley & Schr'''&#xf6;'''der]
 
 [h4 Synopsis]
 
@@ -22,12 +22,12 @@
    template <class F, class T>
    T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
 
-   // Schroeder
+   // Schr'''&#xf6;'''der
    template <class F, class T>
-   T schroeder_iterate(F f, T guess, T min, T max, int digits);
+   T schroder_iterate(F f, T guess, T min, T max, int digits);
 
    template <class F, class T>
-   T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
+   T schroder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
 
    }}} // namespaces boost::math::tools.
 
@@ -37,8 +37,8 @@ These functions all perform iterative root-finding [*using derivatives]:
 
 * `newton_raphson_iterate` performs second-order __newton.
 
-* `halley_iterate` and `schroeder_iterate` perform third-order
-__halley and __schroeder iteration.
+* `halley_iterate` and `schroder_iterate` perform third-order
+__halley and __schroder iteration.
 
 The functions all take the same parameters:
 
@@ -52,7 +52,7 @@ For second-order iterative method ([@http://en.wikipedia.org/wiki/Newton_Raphson
 
 For the third-order methods
 ([@http://en.wikipedia.org/wiki/Halley%27s_method Halley] and
-Schroeder)
+Schr'''&#xf6;'''der)
         the `tuple` should have [*three] elements containing the evaluation of
         the function and its first and second derivatives.]]
 [[T guess] [The initial starting value. A good guess is crucial to quick convergence!]]
@@ -97,7 +97,7 @@ remember that for second and third order methods the number of correct
 digits in the result is increasing quite
 substantially with each iteration, ['digits] should be set by experiment so that the final
 iteration just takes the next value into the zone where ['f(x)] becomes inaccurate.
-A good starting point for ['digits] would be 0.6*D for Newton and 0.4*D for Halley or Shoeder
+A good starting point for ['digits] would be 0.6*D for Newton and 0.4*D for Halley or Shr'''&#xf6;'''der
 iteration, where D is ['std::numeric_limits<T>::digits].
 * If you need some diagnostic output to see what is going on, you can
 `#define BOOST_MATH_INSTRUMENT` before the `#include <boost/math/tools/roots.hpp>`,
@@ -136,7 +136,7 @@ Out of bounds steps revert to bisection of the current bounds.
 
 Under ideal conditions, the number of correct digits trebles with each iteration.
 
-[h4:schroeder Schr'''&#xf6;'''der's Method]
+[h4:schroder Schr'''&#xf6;'''der's Method]
 
 Given an initial guess x0 the subsequent values are computed using:
 
@@ -151,10 +151,11 @@ Out of bounds steps revert to __bisection_wikipedia of the current bounds.
 
 Under ideal conditions, the number of correct digits trebles with each iteration.
 
-This is Scr'''&#xf6;'''der's general result (equation 18 from [@http://drum.lib.umd.edu/handle/1903/577 Stewart, G. W. 
+This is Schr'''&#xf6;'''der's general result (equation 18 from [@http://drum.lib.umd.edu/handle/1903/577 Stewart, G. W. 
 "On Infinitely Many Algorithms for Solving Equations." English translation of Schr'''&#xf6;'''der's original paper. 
 College Park, MD: University of Maryland, Institute for Advanced Computer Studies, Department of Computer Science, 1993].)
-It guarantees at least quadratic convergence (the same as Newton's method), and is known to work well in the presence of multiple roots:
+
+This method guarantees at least quadratic convergence (the same as Newton's method), and is known to work well in the presence of multiple roots:
 something that neither Newton nor Halley can do.
 
 [h4 Examples]

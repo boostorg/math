@@ -110,7 +110,7 @@ and use the function's name as the link text.]
 [def __brent_minima_example [link math_toolkit.roots.brent_minima.example Brent's method example]]
 [def __newton[link math_toolkit.roots.roots_deriv.newton Newton-Raphson iteration]],
 [def __halley [link math_toolkit.roots.roots_deriv.halley Halley]]
-[def __schroeder [link math_toolkit.roots.roots_deriv.schroeder Schroeder]]
+[def __schroder [link math_toolkit.roots.roots_deriv.schroder Schr'''&#xf6;'''der]]
 [def __brent_minima_example [link math_toolkit.roots.brent_minima.example Brent minima finding example]]
 [def __bisection [link math_toolkit.roots.roots_noderiv.bisect bisection]]
 [def __bisect [link math_toolkit.roots.roots_noderiv.bisect bisect]]
