@@ -103,7 +103,7 @@ T nth_2deriv(T x)
   T min = ldexp(static_cast<guess_type>(1.) / 2, exponent / N); // Minimum possible value is half our guess.
   T max = ldexp(static_cast<guess_type>(2.), exponent / N);     // Maximum possible value is twice our guess.
 
-  int digits = std::numeric_limits<T>::digits * 0.4;            // Accuracy tripples with each step, so stop when
+  int digits = std::numeric_limits<T>::digits * 0.4;            // Accuracy triples with each step, so stop when
                                                                 // slightly more than one third of the digits are correct.
   const boost::uintmax_t maxit = 20;
   boost::uintmax_t it = maxit;

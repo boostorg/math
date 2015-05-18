@@ -292,7 +292,7 @@ T cbrt_2deriv(T x)
   T max = ldexp(2., exponent/3);                      // Maximum possible value is twice our guess.
   const int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
   // digits used to control how accurate to try to make the result.
-  int get_digits = static_cast<int>(digits * 0.4);    // Accuracy tripples with each step, so stop when just
+  int get_digits = static_cast<int>(digits * 0.4);    // Accuracy triples with each step, so stop when just
                                                       // over one third of the digits are correct.
   boost::uintmax_t maxit = 20;
   T result = halley_iterate(cbrt_functor_2deriv<T>(x), guess, min, max, get_digits, maxit);
@@ -316,7 +316,7 @@ T cbrt_2deriv_lambda(T x)
    T max = ldexp(2., exponent / 3);                      // Maximum possible value is twice our guess.
    const int digits = std::numeric_limits<T>::digits;  // Maximum possible binary digits accuracy for type T.
    // digits used to control how accurate to try to make the result.
-   int get_digits = static_cast<int>(digits * 0.4);    // Accuracy tripples with each step, so stop when just
+   int get_digits = static_cast<int>(digits * 0.4);    // Accuracy triples with each step, so stop when just
    // over one third of the digits are correct.
    boost::uintmax_t maxit = 20;
    T result = halley_iterate(
