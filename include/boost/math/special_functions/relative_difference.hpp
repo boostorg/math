@@ -7,13 +7,17 @@
 #define BOOST_MATH_RELATIVE_ERROR
 
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/tools/promotion.hpp>
 
 namespace boost{
    namespace math{
 
-      template <class T>
-      T relative_difference(T a, T b)
+      template <class T, class U>
+      typename boost::math::tools::promote_args<T,U>::type relative_difference(const T& arg_a, const U& arg_b)
       {
+         typedef typename boost::math::tools::promote_args<T, U>::type result_type;
+         result_type a = arg_a;
+         result_type b = arg_b;
          BOOST_MATH_STD_USING
 #ifdef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
          //
@@ -21,28 +25,28 @@ namespace boost{
          // on the math functions generating exponents outside
          // the range of a double:
          //
-         T min_val = (std::max)(
-         tools::min_value<T>(),
-         static_cast<T>((std::numeric_limits<double>::min)()));
-         T max_val = (std::min)(
-         tools::max_value<T>(),
-         static_cast<T>((std::numeric_limits<double>::max)()));
+         result_type min_val = (std::max)(
+         tools::min_value<result_type>(),
+         static_cast<result_type>((std::numeric_limits<double>::min)()));
+         result_type max_val = (std::min)(
+            tools::max_value<result_type>(),
+            static_cast<result_type>((std::numeric_limits<double>::max)()));
 #else
-         T min_val = tools::min_value<T>();
-         T max_val = tools::max_value<T>();
+         result_type min_val = tools::min_value<result_type>();
+         result_type max_val = tools::max_value<result_type>();
 #endif
          // Screen out NaN's first, if either value is a NaN then the distance is "infinite":
          if((boost::math::isnan)(a) || (boost::math::isnan)(b))
             return max_val;
          // Screen out infinites:
-         if(fabs(b) >= max_val)
+         if(fabs(b) > max_val)
          {
-            if(fabs(a) >= max_val)
-               return 0;  // one infinity is as good as another!
+            if(fabs(a) > max_val)
+               return (a < 0) == (b < 0) ? 0 : max_val;  // one infinity is as good as another!
             else
                return max_val;  // one infinity and one finite value implies infinite difference
          }
-         else if(fabs(a) >= max_val)
+         else if(fabs(a) > max_val)
             return max_val;    // one infinity and one finite value implies infinite difference
 
          //
@@ -82,14 +86,14 @@ namespace boost{
          if((boost::math::isnan)(a) || (boost::math::isnan)(b))
             return max_val;
          // Screen out infinites:
-         if(fabs(b) >= max_val)
+         if(fabs(b) > max_val)
          {
-            if(fabs(a) >= max_val)
+            if(fabs(a) > max_val)
                return 0;  // one infinity is as good as another!
             else
                return max_val;  // one infinity and one finite value implies infinite difference
          }
-         else if(fabs(a) >= max_val)
+         else if(fabs(a) > max_val)
             return max_val;    // one infinity and one finite value implies infinite difference
 
          //
@@ -112,6 +116,15 @@ namespace boost{
       }
 #endif
 
+      template <class T, class U>
+      inline typename boost::math::tools::promote_args<T, U>::type epsilon_difference(const T& arg_a, const U& arg_b)
+      {
+         typedef typename boost::math::tools::promote_args<T, U>::type result_type;
+         result_type r = relative_difference(arg_a, arg_b);
+         if(tools::max_value<result_type>() * boost::math::tools::epsilon<result_type>() < r)
+            return tools::max_value<result_type>();
+         return r / boost::math::tools::epsilon<result_type>();
+      }
 } // namespace math
 } // namespace boost
 

@@ -1,6 +1,7 @@
 //!file
 //! \brief floating-point comparison from Boost.Test
 // Copyright Paul A. Bristow 2015.
+// Copyright John Maddock 2015.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -10,7 +11,7 @@
 // Note that this file contains Quickbook mark-up as well as code
 // and comments, don't change any of the special comment mark-ups!
 
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/math/special_functions/next.hpp>
 
 #include <iostream>
@@ -18,88 +19,21 @@
 
 int main()
 {
-  std::cout << "Compare floats using Boost.Test functions/classes" << std::endl;
+  std::cout << "Compare floats using Boost.Math functions/classes" << std::endl;
 
-//[compare_floats_synopsis
-/*`
-
-  namespace boost { namespace math {
-  namespace fpc { // Note floating-point comparison namespace.
-
-  template<typename FPT1, typename FPT2, typename ToleranceType>
-  bool is_close_to( FPT1 left, FPT2 right, ToleranceType tolerance );
-  // Test if two values are close enough,
-  // (using the default FPC_STRONG or 'essentially equal' criterion).
-
-  enum strength
-  {
-    FPC_STRONG, // "Very close" "essentially equal" - Knuth equation 1' in docs (default).
-    FPC_WEAK    // "Close enough" "approximately equal" - equation 2' in docs.
-  };
-
-  template<typename ToleranceType>
-  explicit close_at_tolerance(ToleranceType tolerance, fpc::strength fpc_strength = FPC_STRONG );
-
-Comparisons are most simply made using the function `is_close_to`.
-
-There is also a templated class `close_at_tolerance` that can be convenient
-for multiple tests with the same tolerance and strength.
-
-(These are used by the popular MACRO versions in Boost.Test like `BOOST_CHECK_CLOSE`).
-
-For most applications, the default strength parameter can be left at the default 'strong'.
-
-The `Tolerance_type` is the same as floating-point type `FPT`, often a built-in type
-like `float`, `double` or `long double`,
-but also __multiprecision types like __cpp_bin_float or __cpp_dec_float.
-
-The constructor sets the [*fractional] tolerance and the equality strength.
-
-Two member functions allow access to the chosen tolerance and strength.
-
-  FPT fraction_tolerance() const;
-  strength strength() const; // weak or strong.
-
-the `operator()` functor carries out the comparison,
-and returns `true` if ['essentially equal] else `false`.
-
-  bool operator()(FPT left, FPT right) const; // true if close or 'equal'.
-
-Comparison tolerances can be very small, near the
-[@http://en.wikipedia.org/wiki/Machine_epsilon machine epsilon]
-or [@https://en.wikipedia.org/wiki/Unit_in_the_last_place Unit in Last Place (ULP)],
-typically for measuring 'computational' noise from multiple rounding or iteration,
-or can be a much bigger value like 0.01 (equivalent to a 1% tolerance),
-typically from measurement uncertainty.
-
-After ([*but not before]) a comparison of values ['u] and ['v]
-has been made by a call of the functor `operator()`, the access function
-
-  FPT failed_fraction() const;
-
-returns the fraction
-
-__spaces ['abs(u-v) / abs(v)]  or ['abs(u-v) / abs(u)]
-
-that failed the test.
-
-*/
-//] [/compare_floats_synopsis]
 
 //[compare_floats_using
-/*`Some using statements will ensure that the classes, functions and enums are accessible.
+/*`Some using statements will ensure that the functions we need are accessible.
 */
 
-  using namespace boost::math::fpc;
+  using namespace boost::math;
 
 //`or
 
-  using boost::math::fpc::close_at_tolerance;
-  using boost::math::fpc::small_with_tolerance;
-  using boost::math::fpc::is_close_to;
-  using boost::math::fpc::is_small;
-  using boost::math::fpc::FPC_STRONG;
-  using boost::math::fpc::FPC_WEAK;
+  using boost::math::relative_difference;
+  using boost::math::epsilon_difference;
+  using boost::math::float_next;
+  using boost::math::float_prior;
 
 //] [/compare_floats_using]
 
@@ -127,15 +61,166 @@ and also to display `bool` values as words rather than integers:
 //[compare_floats_example_2]
 /*`
 When comparing values that are ['quite close] or ['approximately equal],
-it is convenient to use the appropriate `epsilon` for the floating-point type `FPT`, here, for example, `float`:
+we could use either float_distance or relative_difference/epsilon_difference, for example
+with type `float`, these two values are adjacent to each other:
 */
 
-  float epsilon = std::numeric_limits<float>::epsilon();
-  std::cout << "float epsilon = " << epsilon << std::endl; // +1.1920929e-007
+  float a = 1;
+  float b = 1 + std::numeric_limits<float>::epsilon();
+  std::cout << "a = " << a << std::endl;
+  std::cout << "b = " << b << std::endl;
+  std::cout << "float_distance = " << float_distance(a, b) << std::endl;
+  std::cout << "relative_difference = " << relative_difference(a, b) << std::endl;
+  std::cout << "epsilon_difference = " << epsilon_difference(a, b) << std::endl;
 
-//] [/compare_floats_example_2]
+/*`
+Which produces the output:
 
-//[compare_floats_example_3
+[pre
+a = 1.00000000
+b = 1.00000012
+float_distance = 1.00000000
+relative_difference = 1.19209290e-007
+epsilon_difference = 1.00000000
+]
+*/
+  //] [/compare_floats_example_2]
+
+//[compare_floats_example_3]
+/*`
+In the example above, it just so happens that the edit distance as measured by float_distance, and the
+difference measured in units of epsilon were equal.  However, due to the way floating point
+values are represented, that is not always the case:*/
+
+  a = 2.0f / 3.0f;   // 2/3 inexactly represented as a float
+  b = float_next(float_next(float_next(a))); // 3 floating point values above a
+  std::cout << "a = " << a << std::endl;
+  std::cout << "b = " << b << std::endl;
+  std::cout << "float_distance = " << float_distance(a, b) << std::endl;
+  std::cout << "relative_difference = " << relative_difference(a, b) << std::endl;
+  std::cout << "epsilon_difference = " << epsilon_difference(a, b) << std::endl;
+
+/*`
+Which produces the output:
+
+[pre
+a = 0.666666687
+b = 0.666666865
+float_distance = 3.00000000
+relative_difference = 2.68220901e-007
+epsilon_difference = 2.25000000
+]
+
+There is another important difference between `float_distance` and the
+`relative_difference/epsilon_difference` functions in that `float_distance`
+returns a signed result that reflects which argument is larger in magnitude,
+where as `relative_difference/epsilon_difference` simply return an unsigned
+value that represents how far apart the values are.  For example if we swap
+the order of the arguments:
+*/
+
+  std::cout << "float_distance = " << float_distance(b, a) << std::endl;
+  std::cout << "relative_difference = " << relative_difference(b, a) << std::endl;
+  std::cout << "epsilon_difference = " << epsilon_difference(b, a) << std::endl;
+
+  /*`
+  The output is now:
+
+  [pre
+  float_distance = -3.00000000
+  relative_difference = 2.68220901e-007
+  epsilon_difference = 2.25000000
+  ]
+*/
+  //] [/compare_floats_example_3]
+
+//[compare_floats_example_4]
+/*`
+Zeros are always treated as equal, as are infinities as long as they have the same sign:*/
+
+  a = 0;
+  b = -0;  // signed zero
+  std::cout << "relative_difference = " << relative_difference(a, b) << std::endl;
+  a = b = std::numeric_limits<float>::infinity();
+  std::cout << "relative_difference = " << relative_difference(a, b) << std::endl;
+  std::cout << "relative_difference = " << relative_difference(a, -b) << std::endl;
+
+/*`
+Which produces the output:
+
+[pre
+relative_difference = 0.000000000
+relative_difference = 0.000000000
+relative_difference = 3.40282347e+038
+]
+*/
+//] [/compare_floats_example_4]
+
+//[compare_floats_example_5]
+/*`
+Note that finite values are always infinitely far away from infinities even if those finite values are very large:*/
+
+  a = std::numeric_limits<float>::max();
+  b = std::numeric_limits<float>::infinity();
+  std::cout << "a = " << a << std::endl;
+  std::cout << "b = " << b << std::endl;
+  std::cout << "relative_difference = " << relative_difference(a, b) << std::endl;
+  std::cout << "epsilon_difference = " << epsilon_difference(a, b) << std::endl;
+
+/*`
+Which produces the output:
+
+[pre
+a = 3.40282347e+038
+b = 1.#INF0000
+relative_difference = 3.40282347e+038
+epsilon_difference = 3.40282347e+038
+]
+*/
+//] [/compare_floats_example_5]
+
+//[compare_floats_example_6]
+/*`
+Finally, all denormnalized values and zeros are treated as being effectively equal:*/
+
+  a = std::numeric_limits<float>::denorm_min();
+  b = a * 2;
+  std::cout << "a = " << a << std::endl;
+  std::cout << "b = " << b << std::endl;
+  std::cout << "float_distance = " << float_distance(a, b) << std::endl;
+  std::cout << "relative_difference = " << relative_difference(a, b) << std::endl;
+  std::cout << "epsilon_difference = " << epsilon_difference(a, b) << std::endl;
+  a = 0;
+  std::cout << "a = " << a << std::endl;
+  std::cout << "b = " << b << std::endl;
+  std::cout << "float_distance = " << float_distance(a, b) << std::endl;
+  std::cout << "relative_difference = " << relative_difference(a, b) << std::endl;
+  std::cout << "epsilon_difference = " << epsilon_difference(a, b) << std::endl;
+
+/*`
+Which produces the output:
+
+[pre
+a = 1.40129846e-045
+b = 2.80259693e-045
+float_distance = 1.00000000
+relative_difference = 0.000000000
+epsilon_difference = 0.000000000
+a = 0.000000000
+b = 2.80259693e-045
+float_distance = 2.00000000
+relative_difference = 0.000000000
+epsilon_difference = 0.000000000]
+
+Notice how, in the above example, two denormalized values that are a factor of 2 apart are
+none the less only one representation apart!
+
+*/
+//] [/compare_floats_example_6]
+
+
+#if 0
+//[old_compare_floats_example_3
 //`The simplest use is to compare two values with a tolerance thus:
 
   bool is_close = is_close_to(1.F, 1.F + epsilon, epsilon); // One epsilon apart is close enough.
@@ -241,7 +326,7 @@ where an uncertainty of a percent or so might be expected.
 
 //`but this has little advantage over using function `is_close_to` directly.
 
-//] [/compare_floats_example_3]
+//] [/old_compare_floats_example_3]
 
 
 /*When the floating-point values become very small and near zero, using
@@ -320,7 +405,7 @@ convenient if you make repeated tests with the same tolerance.
   std::cout << "my_test(0.001F) is " << my_test(0.01F) << std::endl; // false
 
   //] [/compare_floats_small_1]
-
+#endif
   return 0;
 }  // int main()
 
