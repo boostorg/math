@@ -8,6 +8,7 @@
 
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/tools/promotion.hpp>
+#include <boost/math/tools/precision.hpp>
 
 namespace boost{
    namespace math{

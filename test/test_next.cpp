@@ -10,6 +10,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/next.hpp>
+#include <boost/math/special_functions/ulp.hpp>
 #include <iostream>
 #include <iomanip>
 
@@ -57,6 +58,36 @@ void test_value(const T& val, const char* name)
    {
       BOOST_CHECK_EQUAL(float_distance(float_advance(float_next(float_next(val)), 4), float_next(float_next(val))), -4);
       BOOST_CHECK_EQUAL(float_distance(float_advance(float_next(float_next(val)), -4), float_next(float_next(val))), 4);
+   }
+   if(val > 0)
+   {
+      T n = val + ulp(val);
+      T fn = float_next(val);
+      if(n > fn)
+      {
+         BOOST_CHECK_LE(ulp(val), boost::math::tools::min_value<T>());
+      }
+      else
+      {
+         BOOST_CHECK_EQUAL(fn, n);
+      }
+   }
+   else if(val == 0)
+   {
+      BOOST_CHECK_EQUAL(T(0), ulp(val));
+   }
+   else
+   {
+      T n = val - ulp(val);
+      T fp = float_prior(val);
+      if(n < fp)
+      {
+         BOOST_CHECK_LE(ulp(val), boost::math::tools::min_value<T>());
+      }
+      else
+      {
+         BOOST_CHECK_EQUAL(fp, n);
+      }
    }
 }
 

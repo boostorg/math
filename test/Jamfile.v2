@@ -809,6 +809,7 @@ compile  compile_test/sf_math_fwd_incl_test.cpp ;
 run  compile_test/sf_modf_incl_test.cpp compile_test_main ;
 run  compile_test/sf_next_incl_test.cpp compile_test_main ;
 run  compile_test/sf_powm1_incl_test.cpp compile_test_main ;
+run  compile_test/sf_relative_distance_incl_test.cpp compile_test_main ;
 run  compile_test/sf_round_incl_test.cpp compile_test_main ;
 run  compile_test/sf_sign_incl_test.cpp compile_test_main ;
 run  compile_test/sf_sin_pi_incl_test.cpp compile_test_main ;
@@ -817,6 +818,7 @@ run  compile_test/sf_sinhc_incl_test.cpp compile_test_main ;
 run  compile_test/sf_sph_harm_incl_test.cpp compile_test_main ;
 run  compile_test/sf_sqrt1pm1_incl_test.cpp compile_test_main ;
 run  compile_test/sf_trunc_incl_test.cpp compile_test_main ;
+run  compile_test/sf_ulp_incl_test.cpp compile_test_main ;
 run  compile_test/sf_zeta_incl_test.cpp compile_test_main ;
 run  compile_test/std_real_concept_check.cpp ;
 run  compile_test/cstdfloat_concept_check_1.cpp
