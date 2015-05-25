@@ -135,7 +135,7 @@ void test_round_number(T arg)
    check_within_half(arg, r);
    r = trunc(arg);
    check_trunc_result(arg, r);
-   T frac = modf(arg, &r);
+   T frac = boost::math::modf(arg, &r);
    check_modf_result(arg, frac, r);
 
    if(abs(r) < (std::numeric_limits<int>::max)())
@@ -144,7 +144,7 @@ void test_round_number(T arg)
       check_within_half(arg, i);
       i = itrunc(arg);
       check_trunc_result(arg, i);
-      r = modf(arg, &i);
+      r = boost::math::modf(arg, &i);
       check_modf_result(arg, r, i);
    }
    if(std::numeric_limits<T>::digits >= std::numeric_limits<int>::digits)
@@ -164,7 +164,7 @@ void test_round_number(T arg)
       check_within_half(arg, l);
       l = ltrunc(arg);
       check_trunc_result(arg, l);
-      r = modf(arg, &l);
+      r = boost::math::modf(arg, &l);
       check_modf_result(arg, r, l);
    }
    if(std::numeric_limits<T>::digits >= std::numeric_limits<long>::digits)
@@ -186,7 +186,7 @@ void test_round_number(T arg)
       check_within_half(arg, ll);
       ll = lltrunc(arg);
       check_trunc_result(arg, ll);
-      r = modf(arg, &ll);
+      r = boost::math::modf(arg, &ll);
       check_modf_result(arg, r, ll);
    }
    if(std::numeric_limits<T>::digits >= std::numeric_limits<boost::long_long_type>::digits)

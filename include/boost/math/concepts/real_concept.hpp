@@ -215,10 +215,17 @@ inline real_concept floor(real_concept a)
 { return std::floor(a.value()); }
 inline real_concept modf(real_concept a, real_concept* ipart)
 {
+#ifdef __MINGW32__
+   real_concept_base_type ip;
+   real_concept_base_type result = boost::math::modf(a.value(), &ip);
+   *ipart = ip;
+   return result;
+#else
    real_concept_base_type ip;
    real_concept_base_type result = std::modf(a.value(), &ip);
    *ipart = ip;
    return result;
+#endif
 }
 inline real_concept frexp(real_concept a, int* expon)
 { return std::frexp(a.value(), expon); }
