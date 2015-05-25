@@ -248,6 +248,14 @@ and use the function's name as the link text.]
 [def __isnormal [link math_toolkit.fpclass isnormal]]
 [def __fp_facets [link math_toolkit.fp_facets nonfinite fp_facets]]
 
+[/utils]
+[def __float_next [link math_toolkit.next_float.float_next float_next]]
+[def __float_prior [link math_toolkit.next_float.float_prior float_prior]]
+[def __nextafter [link math_toolkit.next_float.nextafter nextafter]]
+[def __float_advance [link math_toolkit.next_float.float_advance float_advance]]
+[def __ulp [link math_toolkit.next_float.ulp ulp]]
+
+
 [/powers etc]
 [def __expm1 [link math_toolkit.powers.expm1 expm1]]
 [def __log1p [link math_toolkit.powers.log1p log1p]]

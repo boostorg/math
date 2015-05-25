@@ -74,7 +74,7 @@ void test_value(const T& val, const char* name)
    }
    else if(val == 0)
    {
-      BOOST_CHECK_EQUAL(T(0), ulp(val));
+      BOOST_CHECK_GE(boost::math::tools::min_value<T>(), ulp(val));
    }
    else
    {
