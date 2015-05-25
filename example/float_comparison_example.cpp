@@ -61,7 +61,7 @@ and also to display `bool` values as words rather than integers:
 //[compare_floats_example_2]
 /*`
 When comparing values that are ['quite close] or ['approximately equal],
-we could use either float_distance or relative_difference/epsilon_difference, for example
+we could use either `float_distance` or `relative_difference`/`epsilon_difference`, for example
 with type `float`, these two values are adjacent to each other:
 */
 
@@ -88,7 +88,7 @@ epsilon_difference = 1.00000000
 
 //[compare_floats_example_3]
 /*`
-In the example above, it just so happens that the edit distance as measured by float_distance, and the
+In the example above, it just so happens that the edit distance as measured by `float_distance`, and the
 difference measured in units of epsilon were equal.  However, due to the way floating point
 values are represented, that is not always the case:*/
 
@@ -181,7 +181,7 @@ epsilon_difference = 3.40282347e+038
 
 //[compare_floats_example_6]
 /*`
-Finally, all denormnalized values and zeros are treated as being effectively equal:*/
+Finally, all denormalized values and zeros are treated as being effectively equal:*/
 
   a = std::numeric_limits<float>::denorm_min();
   b = a * 2;

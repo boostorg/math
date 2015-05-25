@@ -59,7 +59,8 @@ The function `epsilon_difference` is a convenience function that returns `relati
 
 The following special cases are handled as follows:
 
-* If either of ['a] or ['b] is a NaN, then returns the largest representable value for T.
+* If either of ['a] or ['b] is a NaN, then returns the largest representable value for T: for example for type `double`, this
+is `std::numeric_limits<double>::max()` which is the same as `DBL_MAX` or `1.7976931348623157e+308`.
 * If ['a] and ['b] differ in sign then returns the largest representable value for T.
 * If both ['a] and ['b] are both infinities (of the same sign), then returns zero.
 * If just one of ['a] and ['b] is an infinity, then returns the largest representable value for T.
@@ -81,6 +82,8 @@ too small to represent in type T and underflows to zero.
 [compare_floats_example_4]
 [compare_floats_example_5]
 [compare_floats_example_6]
+
+All the above examples are contained in [@../../example/float_comparison_example.cpp float_comparison_example.cpp].
 
 [h5:small Handling Absolute Errors]
 
