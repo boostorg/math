@@ -217,7 +217,7 @@ Function `ulp` gives the size of a unit-in-the-last-place for a specified floati
 
 [h4 Description - ulp]
 
-Returns one unit in the last place of ['x].
+Returns one [@http://en.wikipedia.org/wiki/Unit_in_the_last_place unit in the last place] of ['x].
 
 Corner cases are handled as followes:
 
@@ -229,7 +229,8 @@ depending whether denormals are supported (which have the values 2.`225073858507
 * If the result is too small to represent, then returns the smallest representable value.
 * Always returns a positive value such that `ulp(x) == ulp(-x)`.
 
-[*Important:]  The behavior of this function is aligned to that of Java's ulp function, please note
+[*Important:]  The behavior of this function is aligned to that of [@http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html#ulp%28double%29 
+Java's ulp function], please note
 however that this function should only ever be used for rough and ready calculations as there are enough
 corner cases to trap even careful programmers.  In particular:
 
@@ -239,13 +240,13 @@ next floating point value, but `x - u` is not necessarily the previous value.  S
 value.  The corner cases occur at power of 2 boundaries.
 * When the argument becomes very small, it may be that there is no floating point value that
 represents one ULP.  Whether this is the case or not depends not only on whether the hardware
-may sometimes support denormals (as signalled by `std::numeric_limits<FPT>::has_denorm`), but also whether these are
+may ['sometimes] support denormals (as signalled by `std::numeric_limits<FPT>::has_denorm`), but also whether these are
 currently enabled at runtime (for example on SSE hardware, the DAZ or FTZ flags will disable denormal support).
 In this situation, the `ulp` function may return a value that is many orders of magnitude too large.
 
 In light of the issues above, we recomend that:
 
-* To move between adjacent floating point values always use __float_next, __float_prior or __nextafter (std::nextafter
+* To move between adjacent floating point values always use __float_next, __float_prior or __nextafter (`std::nextafter`
 is another candidate, but our experience is that this also often breaks depending which optimizations and
 hardware flags are in effect).
 * To move several floating point values away use __float_advance.
