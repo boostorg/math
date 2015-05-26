@@ -193,6 +193,7 @@ run test_cauchy.cpp ../../test/build//boost_unit_test_framework ;
 run test_cbrt.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_chi_squared.cpp ../../test/build//boost_unit_test_framework ;
 run test_classify.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_difference.cpp ../../test/build//boost_unit_test_framework ;
 run test_digamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_dist_overloads.cpp ../../test/build//boost_unit_test_framework ;
 run test_ellint_1.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
