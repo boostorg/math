@@ -5,6 +5,8 @@
 
 #include <pch.hpp>
 
+#ifndef BOOST_NO_CXX11_HDR_TUPLE
+
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -14,7 +16,7 @@
 #include <boost/math/special_functions/cbrt.hpp>
 #include <iostream>
 #include <iomanip>
-
+#include <tuple>
 
 // No derivatives - using TOMS748 internally.
 struct cbrt_functor_noderiv
@@ -171,3 +173,8 @@ BOOST_AUTO_TEST_CASE( test_main )
    }
 }
 
+#else
+
+int main() { return 0; }
+
+#endif

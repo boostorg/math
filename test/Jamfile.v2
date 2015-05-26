@@ -12,6 +12,7 @@ import testing ;
 import modules ;
 import path ;
 import pch ;
+import ../../config/checks/config : requires ;
 
 local ntl-path = [ modules.peek : NTL_PATH ] ;
 local gmp_path = [ modules.peek : GMP_PATH ] ;
@@ -665,7 +666,7 @@ test_rational_instances/test_rational_real_concept5.cpp
 run test_real_concept.cpp ../../test/build//boost_unit_test_framework ;
 run test_remez.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_roots.cpp pch ../../test/build//boost_unit_test_framework ;
-run test_root_iterations.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_root_iterations.cpp pch ../../test/build//boost_unit_test_framework : : : [ requires cxx11_hdr_tuple ] ;
 run test_root_finding_concepts.cpp ../../test/build//boost_unit_test_framework ;
 run test_round.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_spherical_harmonic.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;

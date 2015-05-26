@@ -8,6 +8,7 @@
 //
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/tuple.hpp>
+#include <utility> // for std::pair, our headers don't know what tuple type is to be used, we have to supply it.
 //
 // Note this header includes no other headers, this is
 // important if this test is to be meaningful:
