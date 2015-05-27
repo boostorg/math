@@ -321,9 +321,8 @@ The first few zeros returned by these functions have approximate values as follo
 [[6][-9.02265...][-8.49195...]]
 ]
 
-[graph airy_ai]
+[graph airy_zeros]
 
-[graph airy_bi]
 
 [h4 Examples of finding Airy Zeros]
 
