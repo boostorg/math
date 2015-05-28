@@ -357,7 +357,20 @@ The full code (and output) for this example is at
 
 [h3 Implementation]
 
-TODO
+Given the following function (A&S 10.4.105):
+
+[equation airy_zero_1]
+
+Then an initial estimate for the n[super th] zero a[sub n] of Ai is given by (A&S 10.4.94):
+
+[equation airy_zero_2]
+
+and an initial estimate for the n[super th] zero b[sub n] of Bi is given by (A&S 10.4.98):
+
+[equation airy_zero_3]
+
+Thereafter the roots are refined using Newton iteration.
+
 
 [h3 Testing]
 
