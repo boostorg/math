@@ -251,7 +251,7 @@ Note that this routine can only be used when:
 * ['f(x)] is monotonic in the half of the real axis containing ['guess].
 * The value of the inital guess must have the same sign as the root: the function
 will ['never cross the origin] when searching for the root.
-* The location of the root should be known at least approximately, 
+* The location of the root should be known at least approximately,
 if the location of the root differs by many orders of magnitude
 from ['guess] then many iterations will be needed to bracket the root in spite of
 the special heuristics used to guard against this very situation.  A typical example would be
@@ -353,18 +353,18 @@ because the termination condition ['tol] was satisfied.
 These functions implement TOMS Algorithm 748: it uses a mixture of
 cubic, quadratic and linear (secant) interpolation to locate the root of
 ['f(x)].  The two pairs of functions differ only by whether values for ['f(a)] and
-['f(b)] are already available.  
+['f(b)] are already available.
 
 Generally speaking it is easier (and often more efficient) to use __bracket_solve
 rather than trying to bracket the root yourself as this function requires.
 
 This function is provided rather than [@http://en.wikipedia.org/wiki/Brent%27s_method Brent's method] as it is known to be more
-effient in many cases (it is asymptotically the most efficient known, 
-and has been shown to be optimal for a certain classes of smooth functions).  
+effient in many cases (it is asymptotically the most efficient known,
+and has been shown to be optimal for a certain classes of smooth functions).
 It also has the useful property of decreasing the bracket size
-with each step, unlike Brent's method which only shrinks the enclosing interval in the 
+with each step, unlike Brent's method which only shrinks the enclosing interval in the
 final step.  This makes it particularly useful when you need a result where the ends
-of the interval round to the same integer: as often happens in statistical applications 
+of the interval round to the same integer: as often happens in statistical applications
 for example.  In this situation the function is able to exit after a much smaller
 number of iterations than would otherwise be possible.
 
@@ -415,7 +415,8 @@ rather than because the termination condition ['tol] was satisfied.
 
 [section:brent Brent-Decker Algorithm]
 
-The [@http://en.wikipedia.org/wiki/Brent%27s_method Brent-Dekker algorithm] although very well know is not provided by this library as __root_finding_TOMS748 or
+The [@http://en.wikipedia.org/wiki/Brent%27s_method Brent-Dekker algorithm], although very well know,
+is not provided by this library as __root_finding_TOMS748 or
 its slightly easier to use variant __bracket_solve are superior and provide equivalent functionality.
 
 [endsect]

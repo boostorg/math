@@ -4,7 +4,7 @@
 
 Comparison of floating-point values has always been a source of endless difficulty and confusion.
 
-Unlike integral values that are exact, all floating point operations
+Unlike integral values that are exact, all floating-point operations
 will potentially produce an inexact result that will be rounded to the nearest
 available binary representation.  Even apparently inocuous operations such as assigning
 0.1 to a double produces an inexact result (as this decimal number has no
@@ -24,17 +24,17 @@ Alberto Squassabia, Comparing floats listing]
 * [@https://code.google.com/p/googletest/wiki/AdvancedGuide#Floating-Point_Comparison Google Floating-Point_Comparison guide]
 * [@boost:/libs/test/doc/html/boost_test/users_guide/testing_tools/testing_floating_points.html Boost.Test Floating-Point_Comparison]
 
-Boost provides a number of ways to compare floating point values to see if they are tolerably close enough to each other,
+Boost provides a number of ways to compare floating-point values to see if they are tolerably close enough to each other,
 but first we must decide what kind of comparison we require:
 
 * Absolute difference/error: the absolute difference between two values ['a] and ['b] is simply `fabs(a-b)`.
 This is the only meaningful comparison to make if we know that the result may have cancellation error (see below).
-* The edit distance between the two values: i.e. how many (binary) floating point values are between two values ['a] and ['b]?
+* The edit distance between the two values: i.e. how many (binary) floating-point values are between two values ['a] and ['b]?
 This is provided by the function __float_distance, but is probably only useful when you know that the distance should be very small.
 This function is somewhat difficult to compute, and doesn't scale to values that are very far apart.  In other words, use with care.
 * The relative distance/error between two values.  This is quick and easy to compute, and is generally the method of choice when
 checking that your results are "tolerably close" to one another.  However, it is not as exact as the edit distance when dealing
-with small differences, and due to the way floating point values are encoded can "wobble" by a factor of 2 compared to the "true" 
+with small differences, and due to the way floating-point values are encoded can "wobble" by a factor of 2 compared to the "true"
 edit distance.  This is the method documented below: if `float_distance` is a surgeon's scalpel, then `relative_difference` is more
 like a Swiss army knife: both have important but different use cases.
 
@@ -97,18 +97,18 @@ Imagine we're testing the following function:
 This function has multiple roots, some of which are quite predicable in that both
 `sin(x)` and `sin(4x)` are zero together.  Others occur because the values returned
 from those two functions precisely cancel out.  At such points the relative difference
-between the true value of the function and the actual value returned may be ['arbitrarily 
+between the true value of the function and the actual value returned may be ['arbitrarily
 large] due to [@http://en.wikipedia.org/wiki/Loss_of_significance cancellation error].
 
 In such a case, testing the function above by requiring that the values returned by
 `relative_error` or `epsilon_error` are below some threshold is pointless: the best
 we can do is to verify that the ['absolute difference] between the true
-and calculated values is below some threshold.  
+and calculated values is below some threshold.
 
 Of course, determining what that threshold should be is often tricky,
 but a good starting point would be machine epsilon multiplied by the largest
 of the values being summed.  In the example above, the largest value returned
-by `sin(whatever)` is 1, so simply using machine epsilon as the target for 
+by `sin(whatever)` is 1, so simply using machine epsilon as the target for
 maximum absolute difference might be a good start (though in practice we may need
 a slightly higher value - some trial and error will be necessary).
 

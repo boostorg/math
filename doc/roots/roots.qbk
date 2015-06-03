@@ -98,7 +98,7 @@ digits in the result is increasing quite
 substantially with each iteration, ['digits] should be set by experiment so that the final
 iteration just takes the next value into the zone where ['f(x)] becomes inaccurate.
 A good starting point for ['digits] would be 0.6*D for Newton and 0.4*D for Halley or Shr'''&#xf6;'''der
-iteration, where D is ['std::numeric_limits<T>::digits].
+iteration, where D is `std::numeric_limits<T>::digits`.
 * If you need some diagnostic output to see what is going on, you can
 `#define BOOST_MATH_INSTRUMENT` before the `#include <boost/math/tools/roots.hpp>`,
 and also ensure that display of all the significant digits with
@@ -151,8 +151,8 @@ Out of bounds steps revert to __bisection_wikipedia of the current bounds.
 
 Under ideal conditions, the number of correct digits trebles with each iteration.
 
-This is Schr'''&#xf6;'''der's general result (equation 18 from [@http://drum.lib.umd.edu/handle/1903/577 Stewart, G. W. 
-"On Infinitely Many Algorithms for Solving Equations." English translation of Schr'''&#xf6;'''der's original paper. 
+This is Schr'''&#xf6;'''der's general result (equation 18 from [@http://drum.lib.umd.edu/handle/1903/577 Stewart, G. W.
+"On Infinitely Many Algorithms for Solving Equations." English translation of Schr'''&#xf6;'''der's original paper.
 College Park, MD: University of Maryland, Institute for Advanced Computer Studies, Department of Computer Science, 1993].)
 
 This method guarantees at least quadratic convergence (the same as Newton's method), and is known to work well in the presence of multiple roots:

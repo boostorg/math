@@ -22,7 +22,7 @@ Of course, the main cost of higher precision is very much decreased
 Some libraries offer true
 [@http://en.wikipedia.org/wiki/Arbitrary-precision_arithmetic arbitrary-precision arithmetic]
 where the precision is limited only by available memory and compute time, but most are used
-at some arbitrarily-fixed precision, say 100 decimal digits, like __boost_multiprecision `cpp_dec_float_100`.
+at some arbitrarily-fixed precision, say 100 decimal digits, like __multiprecision `cpp_dec_float_100`.
 
 __multiprecision can operate in both ways, but the most popular choice is likely to be about a hundred
 decimal digits, though examples of computing about a million digits have been demonstrated.
@@ -39,7 +39,7 @@ Some reasons why one would want to use a higher precision:
 * The range of the computed value exceeds the range of the type: factorials are the textbook example.
 * Using `double` is (or may be) too inaccurate.
 * Using `long double` (or may be) is too inaccurate.
-* Using an extended precision type implemented in software as
+* Using an extended-precision type implemented in software as
 [@http://en.wikipedia.org/wiki/Double-double_(arithmetic)#Double-double_arithmetic double-double]
 ([@http://en.wikipedia.org/wiki/Darwin_(operating_system) Darwin]) is sometimes unpredictably inaccurate.
 * Loss of precision or inaccuracy caused by extreme arguments or cancellation error.
@@ -76,7 +76,7 @@ A decimal digit string will also be 'read' precisely by the compiler
 into a built-in floating-point type to the nearest representable value.
 
 [note In contrast, reading a value from an `std::istream` into a built-in floating-point type
-is [*not guaranteed] by the C++ Standard to give the nearest representable value.]
+is [*not guaranteed by the C++ Standard] to give the nearest representable value.]
 
 William Kahan coined the term
 [@http://en.wikipedia.org/wiki/Rounding#The_table-maker.27s_dilemma Table-Maker's Dilemma]
@@ -126,7 +126,7 @@ functions then you will need to provide your own wrapper header that:
 * Provides std::numeric_limits<__float128> support.
 * Provides overloads of the standard library math function for type `__float128`and which forward to the libquadmath equivalents.
 
-Ultimately these facilities should be provided by GCC and libstdc++.
+Ultimately these facilities should be provided by GCC and `libstdc++`.
 
 [endsect]
 
