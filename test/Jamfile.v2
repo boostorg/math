@@ -189,7 +189,30 @@ run test_binomial.cpp  ../../test/build//boost_unit_test_framework
           <toolset>intel:<pch>off
         : test_binomial_real_concept6 ;
 run test_binomial_coeff.cpp pch ../../test/build//boost_unit_test_framework ;
-run test_carlson.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_carlson.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
+        : # command line
+        : # input files
+        : # requirements
+        <define>TEST1
+        : test_carlson_1 ;
+run test_carlson.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
+        : # command line
+        : # input files
+        : # requirements
+        <define>TEST2
+        : test_carlson_2 ;
+run test_carlson.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
+        : # command line
+        : # input files
+        : # requirements
+        <define>TEST3
+        : test_carlson_3 ;
+run test_carlson.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
+        : # command line
+        : # input files
+        : # requirements
+        <define>TEST4
+        : test_carlson_4 ;
 run test_cauchy.cpp ../../test/build//boost_unit_test_framework ;
 run test_cbrt.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_chi_squared.cpp ../../test/build//boost_unit_test_framework ;
