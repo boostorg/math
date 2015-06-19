@@ -68,6 +68,18 @@ inline void unpack_0(const Tuple& t, T& val)
    val = get<0>(t); 
 }
 
+template <class T, class U, class V>
+inline void unpack_tuple(const std::pair<T, U>& p, V& a, V& b)
+{
+   a = p.first;
+   b = p.second;
+}
+template <class T, class U, class V>
+inline void unpack_0(const std::pair<T, U>& p, V& a)
+{
+   a = p.first;
+}
+
 template <class F, class T>
 void handle_zero_derivative(F f,
                             T& last_f0,
