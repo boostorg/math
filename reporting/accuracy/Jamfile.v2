@@ -56,6 +56,7 @@ boostbook standalone
         # Some general style settings:
         <xsl:param>table.footnote.number.format=1
         <xsl:param>footnote.number.format=1
+        <xsl:param>html.stylesheet=http://www.boost.org/doc/libs/1_58_0/doc/src/boostbook.css
 
         # HTML options first:
         # Use graphics not text for navigation:
