@@ -29,10 +29,13 @@
 template <class Real, class T>
 void do_test_gamma(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && (!defined(TGAMMA_FUNCTION_TO_TEST) || !defined(LGAMMA_FUNCTION_TO_TEST)))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef TGAMMA_FUNCTION_TO_TEST
+   pg funcp = TGAMMA_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::tgamma<value_type>;
 #else
    pg funcp = boost::math::tgamma;
@@ -50,7 +53,7 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
       data,
       bind_func<Real>(funcp, 0),
       extract_result<Real>(1));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "tgamma", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::tgamma;
@@ -64,7 +67,9 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
    //
    // test lgamma against data:
    //
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef LGAMMA_FUNCTION_TO_TEST
+   funcp = LGAMMA_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    funcp = boost::math::lgamma<value_type>;
 #else
    funcp = boost::math::lgamma;
@@ -73,7 +78,7 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
       data,
       bind_func<Real>(funcp, 0),
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::lgamma", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "lgamma", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::lgamma;
@@ -86,15 +91,19 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
 #endif
 
    std::cout << std::endl;
+#endif
 }
 
 template <class Real, class T>
 void do_test_gammap1m1(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(TGAMMA1PM1_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef TGAMMA1PM1_FUNCTION_TO_TEST
+   pg funcp = TGAMMA1PM1_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::tgamma1pm1<value_type>;
 #else
    pg funcp = boost::math::tgamma1pm1;
@@ -112,8 +121,9 @@ void do_test_gammap1m1(const T& data, const char* type_name, const char* test_na
       data,
       bind_func<Real>(funcp, 0),
       extract_result<Real>(1));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma1pm1", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "tgamma1pm1", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>

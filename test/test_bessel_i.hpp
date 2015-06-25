@@ -24,18 +24,27 @@
 template <class T>
 T cyl_bessel_i_int_wrapper(T v, T x)
 {
+#ifdef BESSEL_IN_FUNCTION_TO_TEST
+   return static_cast<T>(
+      BESSEL_IN_FUNCTION_TO_TEST(
+      boost::math::itrunc(v), x));
+#else
    return static_cast<T>(
       boost::math::cyl_bessel_i(
       boost::math::itrunc(v), x));
+#endif
 }
 
 template <class Real, class T>
 void do_test_cyl_bessel_i(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(BESSEL_I_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef BESSEL_I_FUNCTION_TO_TEST
+   pg funcp = BESSEL_I_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::cyl_bessel_i<value_type, value_type>;
 #else
    pg funcp = boost::math::cyl_bessel_i;
@@ -53,7 +62,7 @@ void do_test_cyl_bessel_i(const T& data, const char* type_name, const char* test
       data, 
       bind_func<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_i", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "cyl_bessel_i", test_name);
    std::cout << std::endl;
 
 #ifdef TEST_OTHER
@@ -74,11 +83,13 @@ void do_test_cyl_bessel_i(const T& data, const char* type_name, const char* test
       std::cout << std::endl;
    }
 #endif
+#endif
 }
 
 template <class Real, class T>
 void do_test_cyl_bessel_i_int(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(BESSEL_IN_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
@@ -100,8 +111,9 @@ void do_test_cyl_bessel_i_int(const T& data, const char* type_name, const char* 
       data, 
       bind_func<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_i", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "cyl_bessel_i (integer orders)", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>

@@ -25,10 +25,13 @@
 template <class Real, class T>
 void do_test_cyl_bessel_j_prime(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(BESSEL_JP_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef BESSEL_JP_FUNCTION_TO_TEST
+   pg funcp = BESSEL_JP_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::cyl_bessel_j_prime<value_type, value_type>;
 #else
    pg funcp = boost::math::cyl_bessel_j_prime;
@@ -46,20 +49,26 @@ void do_test_cyl_bessel_j_prime(const T& data, const char* type_name, const char
       data, 
       bind_func<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_j_prime", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "cyl_bessel_j_prime", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>
 T cyl_bessel_j_prime_int_wrapper(T v, T x)
 {
+#ifdef BESSEL_JPN_FUNCTION_TO_TEST
+   return static_cast<T>(BESSEL_JPN_FUNCTION_TO_TEST(boost::math::itrunc(v), x));
+#else
    return static_cast<T>(boost::math::cyl_bessel_j_prime(boost::math::itrunc(v), x));
+#endif
 }
 
 
 template <class Real, class T>
 void do_test_cyl_bessel_j_prime_int(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(BESSEL_JPN_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
@@ -81,17 +90,21 @@ void do_test_cyl_bessel_j_prime_int(const T& data, const char* type_name, const 
       data, 
       bind_func<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::cyl_bessel_j_prime", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "cyl_bessel_j_prime (integer orders)", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class Real, class T>
 void do_test_sph_bessel_j_prime(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(BESSEL_JPS_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(unsigned, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef BESSEL_JPS_FUNCTION_TO_TEST
+   pg funcp = BESSEL_JPS_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::sph_bessel_prime<value_type>;
 #else
    pg funcp = boost::math::sph_bessel_prime;
@@ -109,8 +122,9 @@ void do_test_sph_bessel_j_prime(const T& data, const char* type_name, const char
       data, 
       bind_func_int1<Real>(funcp, 0, 1), 
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::sph_bessel_prime", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "sph_bessel_prime", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>

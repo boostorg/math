@@ -82,16 +82,16 @@ void set_output_precision(T)
 }
 
 template <class Seq>
-void print_row(const Seq& row)
+void print_row(const Seq& row, std::ostream& os = std::cout)
 {
    set_output_precision(row[0]);
    for(unsigned i = 0; i < row.size(); ++i)
    {
       if(i)
-         std::cout << ", ";
-      std::cout << row[i];
+         os << ", ";
+      os << row[i];
    }
-   std::cout << std::endl;
+   os << std::endl;
 }
 
 //
@@ -130,7 +130,7 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
       catch(const std::exception& e)
       {
          std::cerr << e.what() << std::endl;
-         print_row(row);
+         print_row(row, std::cerr);
          BOOST_ERROR("Unexpected exception.");
          // so we don't get further errors:
          point = expect_func(row);
@@ -150,16 +150,16 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
 #endif
       if(!(boost::math::isfinite)(point) && (boost::math::isfinite)(expected))
       {
-         std::cout << "CAUTION: Found non-finite result, when a finite value was expected at entry " << i << "\n";
-         std::cout << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;
-         print_row(row);
+         std::cerr << "CAUTION: Found non-finite result, when a finite value was expected at entry " << i << "\n";
+         std::cerr << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;
+         print_row(row, std::cerr);
          BOOST_ERROR("Unexpected non-finite result");
       }
       if(err > 0.5)
       {
-         std::cout << "CAUTION: Gross error found at entry " << i << ".\n";
-         std::cout << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;
-         print_row(row);
+         std::cerr << "CAUTION: Gross error found at entry " << i << ".\n";
+         std::cerr << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;
+         print_row(row, std::cerr);
          BOOST_ERROR("Gross error");
       }
       result.add(err);
@@ -198,7 +198,7 @@ test_result<Real> test_hetero(const A& a, F1 test_func, F2 expect_func)
       catch(const std::exception& e)
       {
          std::cerr << e.what() << std::endl;
-         print_row(row);
+         print_row(row, std::cerr);
          BOOST_ERROR("Unexpected exception.");
          // so we don't get further errors:
          point = expect_func(row);
@@ -218,16 +218,16 @@ test_result<Real> test_hetero(const A& a, F1 test_func, F2 expect_func)
 #endif
       if(!(boost::math::isfinite)(point) && (boost::math::isfinite)(expected))
       {
-         std::cout << "CAUTION: Found non-finite result, when a finite value was expected at entry " << i << "\n";
-         std::cout << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;
-         print_row(row);
+         std::cerr << "CAUTION: Found non-finite result, when a finite value was expected at entry " << i << "\n";
+         std::cerr << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;
+         print_row(row, std::cerr);
          BOOST_ERROR("Unexpected non-finite result");
       }
       if(err > 0.5)
       {
-         std::cout << "CAUTION: Gross error found at entry " << i << ".\n";
-         std::cout << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;
-         print_row(row);
+         std::cerr << "CAUTION: Gross error found at entry " << i << ".\n";
+         std::cerr << "Found: " << point << " Expected " << expected << " Error: " << err << std::endl;
+         print_row(row, std::cerr);
          BOOST_ERROR("Gross error");
       }
       result.add(err);

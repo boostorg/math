@@ -1,0 +1,1133 @@
+[/Cell Content:]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma1pm1_boost_tgamma1pm1_dz_[] [role blue Max = 6.61[epsilon] (Mean = 0.869[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_near_55[] [role blue Max = 1.64[epsilon] (Mean = 0.742[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_near_55[] [role blue Max = 156[epsilon] (Mean = 64.8[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_near_10[] [role blue Max = 3.81[epsilon] (Mean = 1.01[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_near_10[] [role blue Max = 2.6[epsilon] (Mean = 1.01[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_near_2[] [role blue Max = 0.878[epsilon] (Mean = 0.242[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_near_2[] [role blue Max = 4.5[epsilon] (Mean = 1.31[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_near_1[] [role blue Max = 0.948[epsilon] (Mean = 0.36[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_near_1[] [role blue Max = 2[epsilon] (Mean = 0.863[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_near_0[] [role blue Max = 1.42[epsilon] (Mean = 0.566[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_near_0[] [role blue Max = 2[epsilon] (Mean = 0.767[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_factorials[] [role blue Max = 0.991[epsilon] (Mean = 0.311[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_factorials[] [role blue Max = 15.4[epsilon] (Mean = 2.52[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__near_55[] (<math.h> = Max = 1.58[epsilon] (Mean = 0.584[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__near_55[] (<math.h> = Max = 152[epsilon] (Mean = 65.5[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__near_10[] (<math.h> = Max = 0.979[epsilon] (Mean = 0.342[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__near_10[] (<math.h> = Max = 1.74[epsilon] (Mean = 0.851[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__near_2[] (<math.h> = Max = 2.09e+005[epsilon] (Mean = 3.51e+004[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__near_2[] (<math.h> = Max = 1.05[epsilon] (Mean = 0.491[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__near_1[] (<math.h> = Max = 7.71e+004[epsilon] (Mean = 1.85e+004[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__near_1[] (<math.h> = Max = 1[epsilon] (Mean = 0.484[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__near_0[] (<math.h> = Max = 0.964[epsilon] (Mean = 0.324[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__near_0[] (<math.h> = Max = 1[epsilon] (Mean = 0.416[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__factorials[] (<math.h> = Max = 2.59[epsilon] (Mean = 0.577[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__factorials[] (<math.h> = Max = 235[epsilon] (Mean = 46.4[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__near_55[] (<tr1/cmath> = Max = 1.58[epsilon] (Mean = 0.584[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__near_55[] (<tr1/cmath> = Max = 152[epsilon] (Mean = 65.5[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__near_10[] (<tr1/cmath> = Max = 0.979[epsilon] (Mean = 0.342[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__near_10[] (<tr1/cmath> = Max = 1.74[epsilon] (Mean = 0.851[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__near_2[] (<tr1/cmath> = Max = 2.09e+005[epsilon] (Mean = 3.51e+004[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__near_2[] (<tr1/cmath> = Max = 1.05[epsilon] (Mean = 0.491[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__near_1[] (<tr1/cmath> = Max = 7.71e+004[epsilon] (Mean = 1.85e+004[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__near_1[] (<tr1/cmath> = Max = 1[epsilon] (Mean = 0.484[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__near_0[] (<tr1/cmath> = Max = 0.964[epsilon] (Mean = 0.324[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__near_0[] (<tr1/cmath> = Max = 1[epsilon] (Mean = 0.416[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__factorials[] (<tr1/cmath> = Max = 2.59[epsilon] (Mean = 0.577[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__factorials[] (<tr1/cmath> = Max = 235[epsilon] (Mean = 46.4[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc__math_h__Erf_Function_Large_Values[] (<math.h> = Max = 1.95[epsilon] (Mean = 0.673[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erf__math_h__Erf_Function_Large_Values[] (<math.h> = Max = 0[epsilon] (Mean = 0[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc__math_h__Erf_Function_Medium_Values[] (<math.h> = Max = 3.14[epsilon] (Mean = 0.68[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erf__math_h__Erf_Function_Medium_Values[] (<math.h> = Max = 1.45[epsilon] (Mean = 0.3[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc__math_h__Erf_Function_Small_Values[] (<math.h> = Max = 0.658[epsilon] (Mean = 0.0537[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erf__math_h__Erf_Function_Small_Values[] (<math.h> = Max = 0.996[epsilon] (Mean = 0.477[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc__tr1_cmath__Erf_Function_Large_Values[] (<tr1/cmath> = Max = 1.95[epsilon] (Mean = 0.673[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erf__tr1_cmath__Erf_Function_Large_Values[] (<tr1/cmath> = Max = 0[epsilon] (Mean = 0[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc__tr1_cmath__Erf_Function_Medium_Values[] (<tr1/cmath> = Max = 3.14[epsilon] (Mean = 0.68[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erf__tr1_cmath__Erf_Function_Medium_Values[] (<tr1/cmath> = Max = 1.45[epsilon] (Mean = 0.3[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc__tr1_cmath__Erf_Function_Small_Values[] (<tr1/cmath> = Max = 0.658[epsilon] (Mean = 0.0537[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erf__tr1_cmath__Erf_Function_Small_Values[] (<tr1/cmath> = Max = 0.996[epsilon] (Mean = 0.477[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc_inv_boost_Inverse_Erfc_Function_extreme_values[] [role blue Max = 1.62[epsilon] (Mean = 0.383[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc_inv_boost_Inverse_Erfc_Function[] [role blue Max = 0.996[epsilon] (Mean = 0.397[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_erf_inv_boost_Inverse_Erf_Function[] [role blue Max = 0.996[epsilon] (Mean = 0.389[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc_boost_Erf_Function_Large_Values[] [role blue Max = 1.75[epsilon] (Mean = 0.583[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_erf_boost_Erf_Function_Large_Values[] [role blue Max = 0[epsilon] (Mean = 0[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc_boost_Erf_Function_Medium_Values[] [role blue Max = 1.76[epsilon] (Mean = 0.399[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_erf_boost_Erf_Function_Medium_Values[] [role blue Max = 1.5[epsilon] (Mean = 0.196[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_erfc_boost_Erf_Function_Small_Values[] [role blue Max = 0[epsilon] (Mean = 0[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_erf_boost_Erf_Function_Small_Values[] [role blue Max = 0.925[epsilon] (Mean = 0.193[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cbrt__tr1_cmath__cbrt_Function[] (<tr1/cmath> = Max = 1.34[epsilon] (Mean = 0.471[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cbrt__math_h__cbrt_Function[] (<math.h> = Max = 1.34[epsilon] (Mean = 0.471[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cbrt_boost_cbrt_Function[] [role blue Max = 1.34[epsilon] (Mean = 0.471[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_sph_neumann_prime_boost_y_Random_Data[] [role blue Max = 361[epsilon] (Mean = 31.8[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_v_Random_Data[] [role blue Max = 3.61e+005[epsilon] (Mean = 1.34e+004[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_n_Random_Data[] [role blue Max = 3.39e+003[epsilon] (Mean = 196[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_0_and_Y_1_Random_Data[] [role blue Max = 21.6[epsilon] (Mean = 4.04[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_v_Mathworld_Data_large_values_[] [role blue Max = 1.57[epsilon] (Mean = 1.24[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_v_Mathworld_Data[] [role blue Max = 367[epsilon] (Mean = 129[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_integer_orders__boost_Y_n_Mathworld_Data_Integer_Version_[] [role blue Max = 2.6e+004[epsilon] (Mean = 8.43e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_integer_orders__boost_Y_1_Mathworld_Data_Integer_Version_[] [role blue Max = 1.11e+003[epsilon] (Mean = 370[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_integer_orders__boost_Y_0_Mathworld_Data_Integer_Version_[] [role blue Max = 1.28e+003[epsilon] (Mean = 425[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_n_Mathworld_Data[] [role blue Max = 2.6e+004[epsilon] (Mean = 8.43e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_1_Mathworld_Data[] [role blue Max = 1.11e+003[epsilon] (Mean = 370[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_0_Mathworld_Data[] [role blue Max = 1.28e+003[epsilon] (Mean = 425[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_sph_neumann__tr1_cmath__y_Random_Data[] (<tr1/cmath> = Max = 1.6e+006[epsilon] (Mean = 1.4e+005[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Random_Data[] (<tr1/cmath> = [role red Max = +INF[epsilon] (Mean = +INF[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Random_Data And other failures.])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yn_Random_Data[] (<tr1/cmath> = Max = 4.01e+003[epsilon] (Mean = 348[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Y0_and_Y1_Random_Data[] (<tr1/cmath> = Max = 2.59e+003[epsilon] (Mean = 500[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data_large_values_[] (<tr1/cmath> = Max = 43.2[epsilon] (Mean = 16.3[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data_large_values_ And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data[] (<tr1/cmath> = [role red Max = 3.49e+015[epsilon] (Mean = 1.05e+015[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data And other failures.])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders___tr1_cmath__Yn_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = [role red Max = 2.2e+020[epsilon] (Mean = 6.97e+019[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders___tr1_cmath__Yn_Mathworld_Data_Integer_Version_ And other failures.])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders___tr1_cmath__Y1_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = Max = 1.1e+004[epsilon] (Mean = 4.42e+003[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders___tr1_cmath__Y0_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = Max = 2.05e+005[epsilon] (Mean = 6.88e+004[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yn_Mathworld_Data[] (<tr1/cmath> = [role red Max = 2.2e+020[epsilon] (Mean = 6.97e+019[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yn_Mathworld_Data And other failures.])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Y1_Mathworld_Data[] (<tr1/cmath> = Max = 1.1e+004[epsilon] (Mean = 4.42e+003[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Y0_Mathworld_Data[] (<tr1/cmath> = Max = 2.05e+005[epsilon] (Mean = 6.88e+004[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_sph_neumann_boost_y_Random_Data[] [role blue Max = 262[epsilon] (Mean = 31[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Yv_Random_Data[] [role blue Max = 1.22e+005[epsilon] (Mean = 6.44e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Yn_Random_Data[] [role blue Max = 338[epsilon] (Mean = 31.7[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Y0_and_Y1_Random_Data[] [role blue Max = 11.8[epsilon] (Mean = 3.55[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Yv_Mathworld_Data_large_values_[] [role blue Max = 1.57[epsilon] (Mean = 1.17[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Yv_Mathworld_Data[] [role blue Max = 266[epsilon] (Mean = 81.4[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders__boost_Yn_Mathworld_Data_Integer_Version_[] [role blue Max = 2.6e+004[epsilon] (Mean = 8.41e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders__boost_Y1_Mathworld_Data_Integer_Version_[] [role blue Max = 1.28e+003[epsilon] (Mean = 425[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders__boost_Y0_Mathworld_Data_Integer_Version_[] [role blue Max = 1.11e+003[epsilon] (Mean = 369[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Yn_Mathworld_Data[] [role blue Max = 2.6e+004[epsilon] (Mean = 8.41e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Y1_Mathworld_Data[] [role blue Max = 1.28e+003[epsilon] (Mean = 425[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Y0_Mathworld_Data[] [role blue Max = 1.11e+003[epsilon] (Mean = 369[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_v_Random_Data[] [role blue Max = 7.95[epsilon] (Mean = 1.56[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_n_Random_Data[] [role blue Max = 4.53[epsilon] (Mean = 1.18[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_v_Mathworld_Data_large_values_[] [role blue Max = 58.7[epsilon] (Mean = 42.6[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_v_Mathworld_Data[] [role blue Max = 3.94[epsilon] (Mean = 2.39[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_n_Mathworld_Data_Integer_Version_[] [role blue Max = 4.47[epsilon] (Mean = 2.05[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_1_Mathworld_Data_Integer_Version_[] [role blue Max = 1.96[epsilon] (Mean = 1.02[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_0_Mathworld_Data_Integer_Version_[] [role blue Max = 1.8[epsilon] (Mean = 1.02[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_n_Mathworld_Data[] [role blue Max = 4.47[epsilon] (Mean = 2.05[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_1_Mathworld_Data[] [role blue Max = 1.96[epsilon] (Mean = 1.02[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_0_Mathworld_Data[] [role blue Max = 1.8[epsilon] (Mean = 1.02[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Random_Data[] (<tr1/cmath> = Max = 15.1[epsilon] (Mean = 2.78[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Random_Data And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kn_Random_Data[] (<tr1/cmath> = Max = 19.9[epsilon] (Mean = 3.47[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data_large_values_[] (<tr1/cmath> = Max = 42.3[epsilon] (Mean = 19.8[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data_large_values_ And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data[] (<tr1/cmath> = Max = 13[epsilon] (Mean = 4.7[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders___tr1_cmath__Bessel_Kn_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = Max = 12.9[epsilon] (Mean = 4.91[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders___tr1_cmath__Bessel_Kn_Mathworld_Data_Integer_Version_ And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders___tr1_cmath__Bessel_K1_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = Max = 8.94[epsilon] (Mean = 3.25[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders___tr1_cmath__Bessel_K0_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = Max = 9.33[epsilon] (Mean = 3.31[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kn_Mathworld_Data[] (<tr1/cmath> = Max = 12.9[epsilon] (Mean = 4.91[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kn_Mathworld_Data And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_K1_Mathworld_Data[] (<tr1/cmath> = Max = 8.94[epsilon] (Mean = 3.25[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_K0_Mathworld_Data[] (<tr1/cmath> = Max = 9.33[epsilon] (Mean = 3.31[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_Kv_Random_Data[] [role blue Max = 7.88[epsilon] (Mean = 1.49[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_Kn_Random_Data[] [role blue Max = 4.55[epsilon] (Mean = 1.17[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_Kv_Mathworld_Data_large_values_[] [role blue Max = 42.3[epsilon] (Mean = 21[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_Kv_Mathworld_Data[] [role blue Max = 3.42[epsilon] (Mean = 2.14[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders__boost_Bessel_Kn_Mathworld_Data_Integer_Version_[] [role blue Max = 4.48[epsilon] (Mean = 2.14[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders__boost_Bessel_K1_Mathworld_Data_Integer_Version_[] [role blue Max = 1.8[epsilon] (Mean = 1.02[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders__boost_Bessel_K0_Mathworld_Data_Integer_Version_[] [role blue Max = 4.16[epsilon] (Mean = 1.48[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_Kn_Mathworld_Data[] [role blue Max = 4.48[epsilon] (Mean = 2.14[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_K1_Mathworld_Data[] [role blue Max = 1.8[epsilon] (Mean = 1.02[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_K0_Mathworld_Data[] [role blue Max = 4.16[epsilon] (Mean = 1.48[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_sph_bessel_prime_boost_Bessel_j_Random_Data[] [role blue Max = 272[epsilon] (Mean = 22.2[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J_Random_Data_Tricky_large_values_[] [role blue Max = 3.12e+004[epsilon] (Mean = 2.82e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J_Random_Data[] [role blue Max = 366[epsilon] (Mean = 34.1[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_JN_Random_Data[] [role blue Max = 17.3[epsilon] (Mean = 2.55[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J_Mathworld_Data_large_values_[] [role blue Max = 989[epsilon] (Mean = 495[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J_Mathworld_Data[] [role blue Max = 5.04e+004[epsilon] (Mean = 1.32e+004[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_JN_Mathworld_Data_Integer_Version_[] [role blue Max = 2.6e+004[epsilon] (Mean = 9.13e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_[] [role blue Max = 5.88e+005[epsilon] (Mean = 2.63e+005[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J1_Mathworld_Data_Integer_Version_[] [role blue Max = 7.9[epsilon] (Mean = 3.37[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_[] [role blue Max = 1.11e+003[epsilon] (Mean = 452[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J0_Mathworld_Data_Integer_Version_[] [role blue Max = 18.9[epsilon] (Mean = 6.76[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_JN_Mathworld_Data[] [role blue Max = 2.6e+004[epsilon] (Mean = 9.13e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J1_Mathworld_Data_tricky_cases_[] [role blue Max = 5.88e+005[epsilon] (Mean = 2.63e+005[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J1_Mathworld_Data[] [role blue Max = 7.9[epsilon] (Mean = 3.37[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J0_Mathworld_Data_Tricky_cases_[] [role blue Max = 1.11e+003[epsilon] (Mean = 452[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J0_Mathworld_Data[] [role blue Max = 18.9[epsilon] (Mean = 6.76[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_sph_bessel_boost_Bessel_j_Random_Data[] [role blue Max = 373[epsilon] (Mean = 23.5[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J_Random_Data_Tricky_large_values_[] [role blue Max = 7.9e+003[epsilon] (Mean = 1.02e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J_Random_Data[] [role blue Max = 296[epsilon] (Mean = 30.3[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_JN_Random_Data[] [role blue Max = 50.8[epsilon] (Mean = 4.23[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J_Mathworld_Data_large_values_[] [role blue Max = 607[epsilon] (Mean = 304[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J_Mathworld_Data[] [role blue Max = 3.18e+004[epsilon] (Mean = 7.9e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders__boost_Bessel_JN_Mathworld_Data_Integer_Version_[] [role blue Max = 2.6e+004[epsilon] (Mean = 9.13e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders__boost_Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_[] [role blue Max = 4.92e+005[epsilon] (Mean = 2.2e+005[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders__boost_Bessel_J1_Mathworld_Data_Integer_Version_[] [role blue Max = 2.66[epsilon] (Mean = 1.16[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders__boost_Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_[] [role blue Max = 1.63e+008[epsilon] (Mean = 6.67e+007[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders__boost_Bessel_J0_Mathworld_Data_Integer_Version_[] [role blue Max = 6.55[epsilon] (Mean = 2.89[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_JN_Mathworld_Data[] [role blue Max = 2.6e+004[epsilon] (Mean = 9.13e+003[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J1_Mathworld_Data_tricky_cases_[] [role blue Max = 4.92e+005[epsilon] (Mean = 2.2e+005[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J1_Mathworld_Data[] [role blue Max = 2.66[epsilon] (Mean = 1.16[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J0_Mathworld_Data_Tricky_cases_[] [role blue Max = 1.63e+008[epsilon] (Mean = 6.67e+007[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J0_Mathworld_Data[] [role blue Max = 6.55[epsilon] (Mean = 2.89[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_sph_bessel__tr1_cmath__Bessel_j_Random_Data[] (<tr1/cmath> = Max = 1.91e+006[epsilon] (Mean = 1.09e+005[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Random_Data_Tricky_large_values_[] (<tr1/cmath> = [role red Max = 5.01e+017[epsilon] (Mean = 6.23e+016[epsilon]))]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Random_Data[] (<tr1/cmath> = Max = 501[epsilon] (Mean = 52.3[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_JN_Random_Data[] (<tr1/cmath> = Max = 1.12e+003[epsilon] (Mean = 86.8[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data_large_values_[] (<tr1/cmath> = Max = 34.9[epsilon] (Mean = 17.4[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data_large_values_ And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data[] (<tr1/cmath> = Max = 3.66e+005[epsilon] (Mean = 8.21e+004[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_JN_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = [role red Max = 2.13e+019[epsilon] (Mean = 5.16e+018[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_JN_Mathworld_Data_Integer_Version_ And other failures.])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_[] (<tr1/cmath> = Max = 2.15e+006[epsilon] (Mean = 1.58e+006[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J1_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = Max = 6.1[epsilon] (Mean = 2.95[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J1_Mathworld_Data_Integer_Version_ And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_[] (<tr1/cmath> = Max = 4.79e+008[epsilon] (Mean = 1.96e+008[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J0_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = Max = 5.04[epsilon] (Mean = 1.78[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J0_Mathworld_Data_Integer_Version_ And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_JN_Mathworld_Data[] (<tr1/cmath> = [role red Max = 2.13e+019[epsilon] (Mean = 5.16e+018[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_JN_Mathworld_Data And other failures.])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J1_Mathworld_Data_tricky_cases_[] (<tr1/cmath> = Max = 2.15e+006[epsilon] (Mean = 1.58e+006[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J1_Mathworld_Data[] (<tr1/cmath> = Max = 6.1[epsilon] (Mean = 2.95[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J1_Mathworld_Data And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J0_Mathworld_Data_Tricky_cases_[] (<tr1/cmath> = Max = 4.79e+008[epsilon] (Mean = 1.96e+008[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J0_Mathworld_Data[] (<tr1/cmath> = Max = 5.04[epsilon] (Mean = 1.78[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J0_Mathworld_Data And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_v_Mathworld_Data_large_values_[] [role blue Max = 42.6[epsilon] (Mean = 20.2[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_v_Random_Data[] [role blue Max = 456[epsilon] (Mean = 86.6[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_n_Random_Data[] [role blue Max = 9.61[epsilon] (Mean = 2.93[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_v_Mathworld_Data[] [role blue Max = 2.89e+003[epsilon] (Mean = 914[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_n_Mathworld_Data_Integer_Version_[] [role blue Max = 2.31[epsilon] (Mean = 1.4[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_1_Mathworld_Data_Integer_Version_[] [role blue Max = 2.3[epsilon] (Mean = 1.28[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_0_Mathworld_Data_Integer_Version_[] [role blue Max = 7.83[epsilon] (Mean = 2.95[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_n_Mathworld_Data[] [role blue Max = 2.31[epsilon] (Mean = 1.4[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_1_Mathworld_Data[] [role blue Max = 2.3[epsilon] (Mean = 1.28[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_0_Mathworld_Data[] [role blue Max = 7.83[epsilon] (Mean = 2.95[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_Iv_Mathworld_Data_large_values_[] [role blue Max = 14.7[epsilon] (Mean = 6.57[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_Iv_Random_Data[] [role blue Max = 386[epsilon] (Mean = 123[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_In_Random_Data[] [role blue Max = 10.5[epsilon] (Mean = 3.01[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_Iv_Mathworld_Data[] [role blue Max = 4.12[epsilon] (Mean = 1.95[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders__boost_Bessel_In_Mathworld_Data_Integer_Version_[] [role blue Max = 2.47[epsilon] (Mean = 1.44[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders__boost_Bessel_I1_Mathworld_Data_Integer_Version_[] [role blue Max = 7.83[epsilon] (Mean = 2.91[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders__boost_Bessel_I0_Mathworld_Data_Integer_Version_[] [role blue Max = 3.81[epsilon] (Mean = 1.94[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_In_Mathworld_Data[] [role blue Max = 2.47[epsilon] (Mean = 1.44[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_I1_Mathworld_Data[] [role blue Max = 7.83[epsilon] (Mean = 2.91[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_I0_Mathworld_Data[] [role blue Max = 3.81[epsilon] (Mean = 1.94[epsilon])]]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data_large_values_[] (<tr1/cmath> = Max = 118[epsilon] (Mean = 57.2[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data_large_values_ And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Random_Data[] (<tr1/cmath> = Max = 1.05e+003[epsilon] (Mean = 229[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Random_Data And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_In_Random_Data[] (<tr1/cmath> = Max = 838[epsilon] (Mean = 171[epsilon]))]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data[] (<tr1/cmath> = Max = 616[epsilon] (Mean = 221[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_In_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = Max = 430[epsilon] (Mean = 163[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_In_Mathworld_Data_Integer_Version_ And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I1_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = Max = 5[epsilon] (Mean = 2.15[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I1_Mathworld_Data_Integer_Version_ And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I0_Mathworld_Data_Integer_Version_[] (<tr1/cmath> = Max = 9.2[epsilon] (Mean = 3.64[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I0_Mathworld_Data_Integer_Version_ And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_In_Mathworld_Data[] (<tr1/cmath> = Max = 430[epsilon] (Mean = 163[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_In_Mathworld_Data And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I1_Mathworld_Data[] (<tr1/cmath> = Max = 5[epsilon] (Mean = 2.15[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I1_Mathworld_Data And other failures.])]
+[template GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I0_Mathworld_Data[] (<tr1/cmath> = Max = 9.2[epsilon] (Mean = 3.64[epsilon])  [link errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I0_Mathworld_Data And other failures.])]
+[template Microsoft_Visual_C_version_12_0_Win32_double_tgamma1pm1_boost_tgamma1pm1_dz_[] [role blue Max = 0.982[epsilon] (Mean = 0.399[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_near_55[] [role blue Max = 0.821[epsilon] (Mean = 0.419[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_near_55[] [role blue Max = 1.8[epsilon] (Mean = 0.817[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_near_10[] [role blue Max = 4.22[epsilon] (Mean = 1.33[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_near_10[] [role blue Max = 1.73[epsilon] (Mean = 0.729[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_near_2[] [role blue Max = 0.591[epsilon] (Mean = 0.159[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_near_2[] [role blue Max = 2[epsilon] (Mean = 0.995[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_near_1[] [role blue Max = 0.867[epsilon] (Mean = 0.468[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_near_1[] [role blue Max = 2[epsilon] (Mean = 0.865[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_near_0[] [role blue Max = 0.964[epsilon] (Mean = 0.462[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_near_0[] [role blue Max = 1.96[epsilon] (Mean = 0.684[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_factorials[] [role blue Max = 0.914[epsilon] (Mean = 0.167[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_factorials[] [role blue Max = 1.85[epsilon] (Mean = 0.491[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_erfc_inv_boost_Inverse_Erfc_Function[] [role blue Max = 1[epsilon] (Mean = 0.491[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_erf_inv_boost_Inverse_Erf_Function[] [role blue Max = 1.09[epsilon] (Mean = 0.502[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_erfc_boost_Erf_Function_Large_Values[] [role blue Max = 1.14[epsilon] (Mean = 0.248[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_erf_boost_Erf_Function_Large_Values[] [role blue Max = 0[epsilon] (Mean = 0[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_erfc_boost_Erf_Function_Medium_Values[] [role blue Max = 1.65[epsilon] (Mean = 0.373[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_erf_boost_Erf_Function_Medium_Values[] [role blue Max = 1[epsilon] (Mean = 0.169[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_erfc_boost_Erf_Function_Small_Values[] [role blue Max = 0[epsilon] (Mean = 0[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_erf_boost_Erf_Function_Small_Values[] [role blue Max = 0.996[epsilon] (Mean = 0.182[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cbrt_boost_cbrt_Function[] [role blue Max = 1.7[epsilon] (Mean = 0.565[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cbrt__math_h__cbrt_Function[] (<math.h> = Max = 1.7[epsilon] (Mean = 0.565[epsilon]))]
+[template Microsoft_Visual_C_version_12_0_Win32_double_sph_neumann_prime_boost_y_Random_Data[] [role blue Max = 296[epsilon] (Mean = 25.6[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_v_Random_Data[] [role blue Max = 3.23e+004[epsilon] (Mean = 1.13e+003[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_n_Random_Data[] [role blue Max = 621[epsilon] (Mean = 36[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_0_and_Y_1_Random_Data[] [role blue Max = 5.95[epsilon] (Mean = 1.36[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_v_Mathworld_Data_large_values_[] [role blue Max = 0.627[epsilon] (Mean = 0.237[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_v_Mathworld_Data[] [role blue Max = 23.7[epsilon] (Mean = 10.1[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_integer_orders__boost_Y_n_Mathworld_Data_Integer_Version_[] [role blue Max = 563[epsilon] (Mean = 178[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_integer_orders__boost_Y_1_Mathworld_Data_Integer_Version_[] [role blue Max = 3.08[epsilon] (Mean = 1.2[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_integer_orders__boost_Y_0_Mathworld_Data_Integer_Version_[] [role blue Max = 4.75[epsilon] (Mean = 1.75[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_n_Mathworld_Data[] [role blue Max = 563[epsilon] (Mean = 178[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_1_Mathworld_Data[] [role blue Max = 3.08[epsilon] (Mean = 1.2[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_0_Mathworld_Data[] [role blue Max = 4.75[epsilon] (Mean = 1.75[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_sph_neumann_boost_y_Random_Data[] [role blue Max = 281[epsilon] (Mean = 31.1[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Yv_Random_Data[] [role blue Max = 1.23e+003[epsilon] (Mean = 69.9[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Yn_Random_Data[] [role blue Max = 117[epsilon] (Mean = 10.2[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Y0_and_Y1_Random_Data[] [role blue Max = 4.17[epsilon] (Mean = 1.24[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Yv_Mathworld_Data_large_values_[] [role blue Max = 0.682[epsilon] (Mean = 0.35[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Yv_Mathworld_Data[] [role blue Max = 7.89[epsilon] (Mean = 3.27[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_integer_orders__boost_Yn_Mathworld_Data_Integer_Version_[] [role blue Max = 35[epsilon] (Mean = 11.8[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_integer_orders__boost_Y1_Mathworld_Data_Integer_Version_[] [role blue Max = 4.75[epsilon] (Mean = 1.72[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_integer_orders__boost_Y0_Mathworld_Data_Integer_Version_[] [role blue Max = 4.61[epsilon] (Mean = 2.29[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Yn_Mathworld_Data[] [role blue Max = 35[epsilon] (Mean = 11.8[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Y1_Mathworld_Data[] [role blue Max = 4.75[epsilon] (Mean = 1.72[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Y0_Mathworld_Data[] [role blue Max = 4.61[epsilon] (Mean = 2.29[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_v_Random_Data[] [role blue Max = 8.32[epsilon] (Mean = 1.65[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_n_Random_Data[] [role blue Max = 8.18[epsilon] (Mean = 1.45[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_v_Mathworld_Data_large_values_[] [role blue Max = 18.6[epsilon] (Mean = 12.1[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_v_Mathworld_Data[] [role blue Max = 3.94[epsilon] (Mean = 1.43[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_n_Mathworld_Data_Integer_Version_[] [role blue Max = 4.17[epsilon] (Mean = 1.74[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_1_Mathworld_Data_Integer_Version_[] [role blue Max = 1.09[epsilon] (Mean = 0.607[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_0_Mathworld_Data_Integer_Version_[] [role blue Max = 1[epsilon] (Mean = 0.573[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_n_Mathworld_Data[] [role blue Max = 4.17[epsilon] (Mean = 1.74[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_1_Mathworld_Data[] [role blue Max = 1.09[epsilon] (Mean = 0.607[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_0_Mathworld_Data[] [role blue Max = 1[epsilon] (Mean = 0.573[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_Kv_Random_Data[] [role blue Max = 8.33[epsilon] (Mean = 1.62[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_Kn_Random_Data[] [role blue Max = 7.47[epsilon] (Mean = 1.4[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_Kv_Mathworld_Data_large_values_[] [role blue Max = 59.8[epsilon] (Mean = 26.9[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_Kv_Mathworld_Data[] [role blue Max = 4.78[epsilon] (Mean = 2.2[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_integer_orders__boost_Bessel_Kn_Mathworld_Data_Integer_Version_[] [role blue Max = 3.63[epsilon] (Mean = 1.46[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_integer_orders__boost_Bessel_K1_Mathworld_Data_Integer_Version_[] [role blue Max = 1[epsilon] (Mean = 0.573[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_integer_orders__boost_Bessel_K0_Mathworld_Data_Integer_Version_[] [role blue Max = 1.55[epsilon] (Mean = 0.837[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_Kn_Mathworld_Data[] [role blue Max = 3.63[epsilon] (Mean = 1.46[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_K1_Mathworld_Data[] [role blue Max = 1[epsilon] (Mean = 0.573[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_K0_Mathworld_Data[] [role blue Max = 1.55[epsilon] (Mean = 0.837[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_sph_bessel_prime_boost_Bessel_j_Random_Data[] [role blue Max = 307[epsilon] (Mean = 25.2[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J_Random_Data_Tricky_large_values_[] [role blue Max = 379[epsilon] (Mean = 45.4[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J_Random_Data[] [role blue Max = 176[epsilon] (Mean = 9.76[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_JN_Random_Data[] [role blue Max = 6.34[epsilon] (Mean = 0.997[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J_Mathworld_Data_large_values_[] [role blue Max = 2.9[epsilon] (Mean = 1.61[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J_Mathworld_Data[] [role blue Max = 23.7[epsilon] (Mean = 8.01[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_JN_Mathworld_Data_Integer_Version_[] [role blue Max = 14[epsilon] (Mean = 6.13[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_[] [role blue Max = 288[epsilon] (Mean = 129[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J1_Mathworld_Data_Integer_Version_[] [role blue Max = 0.999[epsilon] (Mean = 0.627[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_[] [role blue Max = 3.67[epsilon] (Mean = 1.74[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J0_Mathworld_Data_Integer_Version_[] [role blue Max = 6.62[epsilon] (Mean = 2.55[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_JN_Mathworld_Data[] [role blue Max = 14[epsilon] (Mean = 6.13[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J1_Mathworld_Data_tricky_cases_[] [role blue Max = 288[epsilon] (Mean = 129[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J1_Mathworld_Data[] [role blue Max = 0.999[epsilon] (Mean = 0.627[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J0_Mathworld_Data_Tricky_cases_[] [role blue Max = 3.67[epsilon] (Mean = 1.74[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J0_Mathworld_Data[] [role blue Max = 6.62[epsilon] (Mean = 2.55[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_JN_Mathworld_Data_Integer_Version_[] (<math.h> = [role red Max = +INF[epsilon] (Mean = +INF[epsilon])  [link errors_Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_JN_Mathworld_Data_Integer_Version_ And other failures.])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_[] (<math.h> = Max = 1.44e+007[epsilon] (Mean = 6.5e+006[epsilon]))]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_J1_Mathworld_Data_Integer_Version_[] (<math.h> = Max = 11.4[epsilon] (Mean = 4.15[epsilon]))]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_[] (<math.h> = [role red Max = 2.54e+008[epsilon] (Mean = 1.04e+008[epsilon]))]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_J0_Mathworld_Data_Integer_Version_[] (<math.h> = Max = 1.89[epsilon] (Mean = 0.988[epsilon]))]
+[template Microsoft_Visual_C_version_12_0_Win32_double_sph_bessel_boost_Bessel_j_Random_Data[] [role blue Max = 245[epsilon] (Mean = 16.3[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J_Random_Data_Tricky_large_values_[] [role blue Max = 59.2[epsilon] (Mean = 8.67[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J_Random_Data[] [role blue Max = 9.24[epsilon] (Mean = 1.36[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_JN_Random_Data[] [role blue Max = 17.5[epsilon] (Mean = 1.46[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J_Mathworld_Data_large_values_[] [role blue Max = 9.31[epsilon] (Mean = 5.52[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J_Mathworld_Data[] [role blue Max = 14.9[epsilon] (Mean = 3.82[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders__boost_Bessel_JN_Mathworld_Data_Integer_Version_[] [role blue Max = 14.7[epsilon] (Mean = 5.4[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders__boost_Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_[] [role blue Max = 3.23e+004[epsilon] (Mean = 1.45e+004[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders__boost_Bessel_J1_Mathworld_Data_Integer_Version_[] [role blue Max = 1.73[epsilon] (Mean = 0.976[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders__boost_Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_[] [role blue Max = 1e+007[epsilon] (Mean = 4.09e+006[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders__boost_Bessel_J0_Mathworld_Data_Integer_Version_[] [role blue Max = 2.52[epsilon] (Mean = 1.2[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_JN_Mathworld_Data[] [role blue Max = 14.7[epsilon] (Mean = 5.4[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J1_Mathworld_Data_tricky_cases_[] [role blue Max = 3.23e+004[epsilon] (Mean = 1.45e+004[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J1_Mathworld_Data[] [role blue Max = 1.73[epsilon] (Mean = 0.976[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J0_Mathworld_Data_Tricky_cases_[] [role blue Max = 1e+007[epsilon] (Mean = 4.09e+006[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J0_Mathworld_Data[] [role blue Max = 2.52[epsilon] (Mean = 1.2[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_v_Mathworld_Data_large_values_[] [role blue Max = 59.5[epsilon] (Mean = 26.8[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_v_Random_Data[] [role blue Max = 14[epsilon] (Mean = 2.46[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_n_Random_Data[] [role blue Max = 9.85[epsilon] (Mean = 1.83[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_v_Mathworld_Data[] [role blue Max = 3.76e+003[epsilon] (Mean = 1.19e+003[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_n_Mathworld_Data_Integer_Version_[] [role blue Max = 3.61[epsilon] (Mean = 1.22[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_1_Mathworld_Data_Integer_Version_[] [role blue Max = 1.61[epsilon] (Mean = 0.786[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_0_Mathworld_Data_Integer_Version_[] [role blue Max = 0.885[epsilon] (Mean = 0.567[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_n_Mathworld_Data[] [role blue Max = 3.61[epsilon] (Mean = 1.22[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_1_Mathworld_Data[] [role blue Max = 1.61[epsilon] (Mean = 0.786[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_0_Mathworld_Data[] [role blue Max = 0.885[epsilon] (Mean = 0.567[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_Iv_Mathworld_Data_large_values_[] [role blue Max = 3.67[epsilon] (Mean = 1.64[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_Iv_Random_Data[] [role blue Max = 7.46[epsilon] (Mean = 1.54[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_In_Random_Data[] [role blue Max = 9.67[epsilon] (Mean = 1.89[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_Iv_Mathworld_Data[] [role blue Max = 2.97[epsilon] (Mean = 1.33[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_integer_orders__boost_Bessel_In_Mathworld_Data_Integer_Version_[] [role blue Max = 3.46[epsilon] (Mean = 1.32[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_integer_orders__boost_Bessel_I1_Mathworld_Data_Integer_Version_[] [role blue Max = 0.885[epsilon] (Mean = 0.55[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_integer_orders__boost_Bessel_I0_Mathworld_Data_Integer_Version_[] [role blue Max = 0.877[epsilon] (Mean = 0.549[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_In_Mathworld_Data[] [role blue Max = 3.46[epsilon] (Mean = 1.32[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_I1_Mathworld_Data[] [role blue Max = 0.885[epsilon] (Mean = 0.55[epsilon])]]
+[template Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_I0_Mathworld_Data[] [role blue Max = 0.877[epsilon] (Mean = 0.549[epsilon])]]
+
+[/tables:]
+[template table_tgamma1pm1[]
+[table:table_tgamma1pm1 Error rates for tgamma1pm1
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[tgamma1pm1(dz)][[Microsoft_Visual_C_version_12_0_Win32_double_tgamma1pm1_boost_tgamma1pm1_dz_]][[GNU_C_version_4_9_2_Win32_long_double_tgamma1pm1_boost_tgamma1pm1_dz_]]]
+]
+]
+
+[template table_lgamma[]
+[table:table_lgamma Error rates for lgamma
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[factorials][[Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_factorials]][[GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_factorials][br][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__factorials][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__factorials]]]
+[[near 0][[Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_near_0]][[GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_near_0][br][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__near_0][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__near_0]]]
+[[near 1][[Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_near_1]][[GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_near_1][br][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__near_1][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__near_1]]]
+[[near 2][[Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_near_2]][[GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_near_2][br][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__near_2][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__near_2]]]
+[[near -10][[Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_near_10]][[GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_near_10][br][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__near_10][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__near_10]]]
+[[near -55][[Microsoft_Visual_C_version_12_0_Win32_double_lgamma_boost_near_55]][[GNU_C_version_4_9_2_Win32_long_double_lgamma_boost_near_55][br][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__tr1_cmath__near_55][br][GNU_C_version_4_9_2_Win32_long_double_lgamma__math_h__near_55]]]
+]
+]
+
+[template table_tgamma[]
+[table:table_tgamma Error rates for tgamma
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[factorials][[Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_factorials]][[GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_factorials][br][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__factorials][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__factorials]]]
+[[near 0][[Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_near_0]][[GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_near_0][br][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__near_0][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__near_0]]]
+[[near 1][[Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_near_1]][[GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_near_1][br][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__near_1][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__near_1]]]
+[[near 2][[Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_near_2]][[GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_near_2][br][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__near_2][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__near_2]]]
+[[near -10][[Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_near_10]][[GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_near_10][br][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__near_10][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__near_10]]]
+[[near -55][[Microsoft_Visual_C_version_12_0_Win32_double_tgamma_boost_near_55]][[GNU_C_version_4_9_2_Win32_long_double_tgamma_boost_near_55][br][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__tr1_cmath__near_55][br][GNU_C_version_4_9_2_Win32_long_double_tgamma__math_h__near_55]]]
+]
+]
+
+[template table_erfc_inv[]
+[table:table_erfc_inv Error rates for erfc_inv
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Inverse Erfc Function][[Microsoft_Visual_C_version_12_0_Win32_double_erfc_inv_boost_Inverse_Erfc_Function]][[GNU_C_version_4_9_2_Win32_long_double_erfc_inv_boost_Inverse_Erfc_Function]]]
+[[Inverse Erfc Function: extreme values][][[GNU_C_version_4_9_2_Win32_long_double_erfc_inv_boost_Inverse_Erfc_Function_extreme_values]]]
+]
+]
+
+[template table_erf_inv[]
+[table:table_erf_inv Error rates for erf_inv
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Inverse Erf Function][[Microsoft_Visual_C_version_12_0_Win32_double_erf_inv_boost_Inverse_Erf_Function]][[GNU_C_version_4_9_2_Win32_long_double_erf_inv_boost_Inverse_Erf_Function]]]
+]
+]
+
+[template table_erfc[]
+[table:table_erfc Error rates for erfc
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Erf Function: Small Values][[Microsoft_Visual_C_version_12_0_Win32_double_erfc_boost_Erf_Function_Small_Values]][[GNU_C_version_4_9_2_Win32_long_double_erfc_boost_Erf_Function_Small_Values][br][br][GNU_C_version_4_9_2_Win32_long_double_erfc__tr1_cmath__Erf_Function_Small_Values][br][GNU_C_version_4_9_2_Win32_long_double_erfc__math_h__Erf_Function_Small_Values]]]
+[[Erf Function: Medium Values][[Microsoft_Visual_C_version_12_0_Win32_double_erfc_boost_Erf_Function_Medium_Values]][[GNU_C_version_4_9_2_Win32_long_double_erfc_boost_Erf_Function_Medium_Values][br][br][GNU_C_version_4_9_2_Win32_long_double_erfc__tr1_cmath__Erf_Function_Medium_Values][br][GNU_C_version_4_9_2_Win32_long_double_erfc__math_h__Erf_Function_Medium_Values]]]
+[[Erf Function: Large Values][[Microsoft_Visual_C_version_12_0_Win32_double_erfc_boost_Erf_Function_Large_Values]][[GNU_C_version_4_9_2_Win32_long_double_erfc_boost_Erf_Function_Large_Values][br][br][GNU_C_version_4_9_2_Win32_long_double_erfc__tr1_cmath__Erf_Function_Large_Values][br][GNU_C_version_4_9_2_Win32_long_double_erfc__math_h__Erf_Function_Large_Values]]]
+]
+]
+
+[template table_erf[]
+[table:table_erf Error rates for erf
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Erf Function: Small Values][[Microsoft_Visual_C_version_12_0_Win32_double_erf_boost_Erf_Function_Small_Values]][[GNU_C_version_4_9_2_Win32_long_double_erf_boost_Erf_Function_Small_Values][br][br][GNU_C_version_4_9_2_Win32_long_double_erf__tr1_cmath__Erf_Function_Small_Values][br][GNU_C_version_4_9_2_Win32_long_double_erf__math_h__Erf_Function_Small_Values]]]
+[[Erf Function: Medium Values][[Microsoft_Visual_C_version_12_0_Win32_double_erf_boost_Erf_Function_Medium_Values]][[GNU_C_version_4_9_2_Win32_long_double_erf_boost_Erf_Function_Medium_Values][br][br][GNU_C_version_4_9_2_Win32_long_double_erf__tr1_cmath__Erf_Function_Medium_Values][br][GNU_C_version_4_9_2_Win32_long_double_erf__math_h__Erf_Function_Medium_Values]]]
+[[Erf Function: Large Values][[Microsoft_Visual_C_version_12_0_Win32_double_erf_boost_Erf_Function_Large_Values]][[GNU_C_version_4_9_2_Win32_long_double_erf_boost_Erf_Function_Large_Values][br][br][GNU_C_version_4_9_2_Win32_long_double_erf__tr1_cmath__Erf_Function_Large_Values][br][GNU_C_version_4_9_2_Win32_long_double_erf__math_h__Erf_Function_Large_Values]]]
+]
+]
+
+[template table_cbrt[]
+[table:table_cbrt Error rates for cbrt
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[cbrt Function][[Microsoft_Visual_C_version_12_0_Win32_double_cbrt_boost_cbrt_Function][br][br][Microsoft_Visual_C_version_12_0_Win32_double_cbrt__math_h__cbrt_Function]][[GNU_C_version_4_9_2_Win32_long_double_cbrt_boost_cbrt_Function][br][br][GNU_C_version_4_9_2_Win32_long_double_cbrt__math_h__cbrt_Function][br][GNU_C_version_4_9_2_Win32_long_double_cbrt__tr1_cmath__cbrt_Function]]]
+]
+]
+
+[template table_sph_neumann_prime[]
+[table:table_sph_neumann_prime Error rates for sph_neumann_prime
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[y': Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_sph_neumann_prime_boost_y_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_sph_neumann_prime_boost_y_Random_Data]]]
+]
+]
+
+[template table_cyl_neumann_prime_integer_orders_[]
+[table:table_cyl_neumann_prime_integer_orders_ Error rates for cyl_neumann_prime (integer orders)
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Y'0: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_integer_orders__boost_Y_0_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_integer_orders__boost_Y_0_Mathworld_Data_Integer_Version_]]]
+[[Y'1: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_integer_orders__boost_Y_1_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_integer_orders__boost_Y_1_Mathworld_Data_Integer_Version_]]]
+[[Y'n: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_integer_orders__boost_Y_n_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_integer_orders__boost_Y_n_Mathworld_Data_Integer_Version_]]]
+]
+]
+
+[template table_cyl_neumann_prime[]
+[table:table_cyl_neumann_prime Error rates for cyl_neumann_prime
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Y'0: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_0_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_0_Mathworld_Data]]]
+[[Y'1: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_1_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_1_Mathworld_Data]]]
+[[Y'n: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_n_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_n_Mathworld_Data]]]
+[[Y'v: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_v_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_v_Mathworld_Data]]]
+[[Y'v: Mathworld Data (large values)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_v_Mathworld_Data_large_values_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_v_Mathworld_Data_large_values_]]]
+[[Y'0 and Y'1: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_0_and_Y_1_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_0_and_Y_1_Random_Data]]]
+[[Y'n: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_n_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_n_Random_Data]]]
+[[Y'v: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_prime_boost_Y_v_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_prime_boost_Y_v_Random_Data]]]
+]
+]
+
+[template table_sph_neumann[]
+[table:table_sph_neumann Error rates for sph_neumann
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[y: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_sph_neumann_boost_y_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_sph_neumann_boost_y_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_sph_neumann__tr1_cmath__y_Random_Data]]]
+]
+]
+
+[template table_cyl_neumann_integer_orders_[]
+[table:table_cyl_neumann_integer_orders_ Error rates for cyl_neumann (integer orders)
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Y0: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_integer_orders__boost_Y0_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders__boost_Y0_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders___tr1_cmath__Y0_Mathworld_Data_Integer_Version_]]]
+[[Y1: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_integer_orders__boost_Y1_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders__boost_Y1_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders___tr1_cmath__Y1_Mathworld_Data_Integer_Version_]]]
+[[Yn: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_integer_orders__boost_Yn_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders__boost_Yn_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders___tr1_cmath__Yn_Mathworld_Data_Integer_Version_]]]
+]
+]
+
+[template table_cyl_neumann[]
+[table:table_cyl_neumann Error rates for cyl_neumann
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Y0: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Y0_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Y0_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Y0_Mathworld_Data]]]
+[[Y1: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Y1_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Y1_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Y1_Mathworld_Data]]]
+[[Yn: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Yn_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Yn_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yn_Mathworld_Data]]]
+[[Yv: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Yv_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Yv_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data]]]
+[[Yv: Mathworld Data (large values)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Yv_Mathworld_Data_large_values_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Yv_Mathworld_Data_large_values_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data_large_values_]]]
+[[Y0 and Y1: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Y0_and_Y1_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Y0_and_Y1_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Y0_and_Y1_Random_Data]]]
+[[Yn: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Yn_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Yn_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yn_Random_Data]]]
+[[Yv: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_neumann_boost_Yv_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_boost_Yv_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Random_Data]]]
+]
+]
+
+[template table_cyl_bessel_k_prime_integer_orders_[]
+[table:table_cyl_bessel_k_prime_integer_orders_ Error rates for cyl_bessel_k_prime (integer orders)
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel K'0: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_0_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_0_Mathworld_Data_Integer_Version_]]]
+[[Bessel K'1: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_1_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_1_Mathworld_Data_Integer_Version_]]]
+[[Bessel K'n: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_n_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_integer_orders__boost_Bessel_K_n_Mathworld_Data_Integer_Version_]]]
+]
+]
+
+[template table_cyl_bessel_k_prime[]
+[table:table_cyl_bessel_k_prime Error rates for cyl_bessel_k_prime
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel K'0: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_0_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_0_Mathworld_Data]]]
+[[Bessel K'1: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_1_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_1_Mathworld_Data]]]
+[[Bessel K'n: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_n_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_n_Mathworld_Data]]]
+[[Bessel K'v: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_v_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_v_Mathworld_Data]]]
+[[Bessel K'v: Mathworld Data (large values)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_v_Mathworld_Data_large_values_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_v_Mathworld_Data_large_values_]]]
+[[Bessel K'n: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_n_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_n_Random_Data]]]
+[[Bessel K'v: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_prime_boost_Bessel_K_v_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_prime_boost_Bessel_K_v_Random_Data]]]
+]
+]
+
+[template table_cyl_bessel_k_integer_orders_[]
+[table:table_cyl_bessel_k_integer_orders_ Error rates for cyl_bessel_k (integer orders)
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel K0: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_integer_orders__boost_Bessel_K0_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders__boost_Bessel_K0_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders___tr1_cmath__Bessel_K0_Mathworld_Data_Integer_Version_]]]
+[[Bessel K1: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_integer_orders__boost_Bessel_K1_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders__boost_Bessel_K1_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders___tr1_cmath__Bessel_K1_Mathworld_Data_Integer_Version_]]]
+[[Bessel Kn: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_integer_orders__boost_Bessel_Kn_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders__boost_Bessel_Kn_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders___tr1_cmath__Bessel_Kn_Mathworld_Data_Integer_Version_]]]
+]
+]
+
+[template table_cyl_bessel_k[]
+[table:table_cyl_bessel_k Error rates for cyl_bessel_k
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel K0: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_K0_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_K0_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_K0_Mathworld_Data]]]
+[[Bessel K1: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_K1_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_K1_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_K1_Mathworld_Data]]]
+[[Bessel Kn: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_Kn_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_Kn_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kn_Mathworld_Data]]]
+[[Bessel Kv: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_Kv_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_Kv_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data]]]
+[[Bessel Kv: Mathworld Data (large values)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_Kv_Mathworld_Data_large_values_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_Kv_Mathworld_Data_large_values_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data_large_values_]]]
+[[Bessel Kn: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_Kn_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_Kn_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kn_Random_Data]]]
+[[Bessel Kv: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_k_boost_Bessel_Kv_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_boost_Bessel_Kv_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Random_Data]]]
+]
+]
+
+[template table_sph_bessel_prime[]
+[table:table_sph_bessel_prime Error rates for sph_bessel_prime
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel j': Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_sph_bessel_prime_boost_Bessel_j_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_sph_bessel_prime_boost_Bessel_j_Random_Data]]]
+]
+]
+
+[template table_cyl_bessel_j_prime_integer_orders_[]
+[table:table_cyl_bessel_j_prime_integer_orders_ Error rates for cyl_bessel_j_prime (integer orders)
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel J0': Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J0_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J0_Mathworld_Data_Integer_Version_]]]
+[[Bessel J0': Mathworld Data (Tricky cases) (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_]]]
+[[Bessel J1': Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J1_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J1_Mathworld_Data_Integer_Version_]]]
+[[Bessel J1': Mathworld Data (tricky cases) (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_]]]
+[[Bessel JN': Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_JN_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_integer_orders__boost_Bessel_JN_Mathworld_Data_Integer_Version_]]]
+]
+]
+
+[template table_cyl_bessel_j_prime[]
+[table:table_cyl_bessel_j_prime Error rates for cyl_bessel_j_prime
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel J0': Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J0_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J0_Mathworld_Data]]]
+[[Bessel J0': Mathworld Data (Tricky cases)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J0_Mathworld_Data_Tricky_cases_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J0_Mathworld_Data_Tricky_cases_]]]
+[[Bessel J1': Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J1_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J1_Mathworld_Data]]]
+[[Bessel J1': Mathworld Data (tricky cases)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J1_Mathworld_Data_tricky_cases_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J1_Mathworld_Data_tricky_cases_]]]
+[[Bessel JN': Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_JN_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_JN_Mathworld_Data]]]
+[[Bessel J': Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J_Mathworld_Data]]]
+[[Bessel J': Mathworld Data (large values)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J_Mathworld_Data_large_values_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J_Mathworld_Data_large_values_]]]
+[[Bessel JN': Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_JN_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_JN_Random_Data]]]
+[[Bessel J': Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J_Random_Data]]]
+[[Bessel J': Random Data (Tricky large values)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_prime_boost_Bessel_J_Random_Data_Tricky_large_values_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_prime_boost_Bessel_J_Random_Data_Tricky_large_values_]]]
+]
+]
+
+[template table_sph_bessel[]
+[table:table_sph_bessel Error rates for sph_bessel
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel j: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_sph_bessel_boost_Bessel_j_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_sph_bessel_boost_Bessel_j_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_sph_bessel__tr1_cmath__Bessel_j_Random_Data]]]
+]
+]
+
+[template table_cyl_bessel_j_integer_orders_[]
+[table:table_cyl_bessel_j_integer_orders_ Error rates for cyl_bessel_j (integer orders)
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel J0: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders__boost_Bessel_J0_Mathworld_Data_Integer_Version_][br][br][Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_J0_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders__boost_Bessel_J0_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J0_Mathworld_Data_Integer_Version_]]]
+[[Bessel J0: Mathworld Data (Tricky cases) (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders__boost_Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_][br][br][Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders__boost_Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J0_Mathworld_Data_Tricky_cases_Integer_Version_]]]
+[[Bessel J1: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders__boost_Bessel_J1_Mathworld_Data_Integer_Version_][br][br][Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_J1_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders__boost_Bessel_J1_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J1_Mathworld_Data_Integer_Version_]]]
+[[Bessel J1: Mathworld Data (tricky cases) (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders__boost_Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_][br][br][Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders__boost_Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J1_Mathworld_Data_tricky_cases_Integer_Version_]]]
+[[Bessel JN: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders__boost_Bessel_JN_Mathworld_Data_Integer_Version_][br][br][Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_JN_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders__boost_Bessel_JN_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_JN_Mathworld_Data_Integer_Version_]]]
+]
+]
+
+[template table_cyl_bessel_j[]
+[table:table_cyl_bessel_j Error rates for cyl_bessel_j
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel J0: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J0_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J0_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J0_Mathworld_Data]]]
+[[Bessel J0: Mathworld Data (Tricky cases)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J0_Mathworld_Data_Tricky_cases_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J0_Mathworld_Data_Tricky_cases_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J0_Mathworld_Data_Tricky_cases_]]]
+[[Bessel J1: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J1_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J1_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J1_Mathworld_Data]]]
+[[Bessel J1: Mathworld Data (tricky cases)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J1_Mathworld_Data_tricky_cases_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J1_Mathworld_Data_tricky_cases_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J1_Mathworld_Data_tricky_cases_]]]
+[[Bessel JN: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_JN_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_JN_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_JN_Mathworld_Data]]]
+[[Bessel J: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data]]]
+[[Bessel J: Mathworld Data (large values)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J_Mathworld_Data_large_values_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J_Mathworld_Data_large_values_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data_large_values_]]]
+[[Bessel JN: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_JN_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_JN_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_JN_Random_Data]]]
+[[Bessel J: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Random_Data]]]
+[[Bessel J: Random Data (Tricky large values)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_boost_Bessel_J_Random_Data_Tricky_large_values_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_boost_Bessel_J_Random_Data_Tricky_large_values_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Random_Data_Tricky_large_values_]]]
+]
+]
+
+[template table_cyl_bessel_i_prime_integer_orders_[]
+[table:table_cyl_bessel_i_prime_integer_orders_ Error rates for cyl_bessel_i_prime (integer orders)
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel I'0: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_0_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_0_Mathworld_Data_Integer_Version_]]]
+[[Bessel I'1: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_1_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_1_Mathworld_Data_Integer_Version_]]]
+[[Bessel I'n: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_n_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_integer_orders__boost_Bessel_I_n_Mathworld_Data_Integer_Version_]]]
+]
+]
+
+[template table_cyl_bessel_i_prime[]
+[table:table_cyl_bessel_i_prime Error rates for cyl_bessel_i_prime
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel I'0: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_0_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_0_Mathworld_Data]]]
+[[Bessel I'1: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_1_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_1_Mathworld_Data]]]
+[[Bessel I'n: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_n_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_n_Mathworld_Data]]]
+[[Bessel I'v: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_v_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_v_Mathworld_Data]]]
+[[Bessel I'n: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_n_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_n_Random_Data]]]
+[[Bessel I'v: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_v_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_v_Random_Data]]]
+[[Bessel I'v: Mathworld Data (large values)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_prime_boost_Bessel_I_v_Mathworld_Data_large_values_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_prime_boost_Bessel_I_v_Mathworld_Data_large_values_]]]
+]
+]
+
+[template table_cyl_bessel_i_integer_orders_[]
+[table:table_cyl_bessel_i_integer_orders_ Error rates for cyl_bessel_i (integer orders)
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel I0: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_integer_orders__boost_Bessel_I0_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders__boost_Bessel_I0_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I0_Mathworld_Data_Integer_Version_]]]
+[[Bessel I1: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_integer_orders__boost_Bessel_I1_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders__boost_Bessel_I1_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I1_Mathworld_Data_Integer_Version_]]]
+[[Bessel In: Mathworld Data (Integer Version)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_integer_orders__boost_Bessel_In_Mathworld_Data_Integer_Version_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders__boost_Bessel_In_Mathworld_Data_Integer_Version_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_In_Mathworld_Data_Integer_Version_]]]
+]
+]
+
+
+[template table_cyl_bessel_i[]
+[table:table_cyl_bessel_i Error rates for cyl_bessel_i
+[[][Microsoft Visual C++ version 12.0[br]Win32[br]double][GNU C++ version 4.9.2[br]Win32[br]long double]]
+[[Bessel I0: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_I0_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_I0_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I0_Mathworld_Data]]]
+[[Bessel I1: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_I1_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_I1_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I1_Mathworld_Data]]]
+[[Bessel In: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_In_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_In_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_In_Mathworld_Data]]]
+[[Bessel Iv: Mathworld Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_Iv_Mathworld_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_Iv_Mathworld_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data]]]
+[[Bessel In: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_In_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_In_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_In_Random_Data]]]
+[[Bessel Iv: Random Data][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_Iv_Random_Data]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_Iv_Random_Data][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Random_Data]]]
+[[Bessel Iv: Mathworld Data (large values)][[Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_i_boost_Bessel_Iv_Mathworld_Data_large_values_]][[GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_boost_Bessel_Iv_Mathworld_Data_large_values_][br][br][GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data_large_values_]]]
+]
+]
+
+
+[/sections:]
+[template section_tgamma1pm1[]
+[section:section_tgamma1pm1 tgamma1pm1]
+[table_tgamma1pm1]
+[endsect]
+]
+
+[template section_lgamma[]
+[section:section_lgamma lgamma]
+[table_lgamma]
+[endsect]
+]
+
+[template section_tgamma[]
+[section:section_tgamma tgamma]
+[table_tgamma]
+[endsect]
+]
+
+[template section_erfc_inv[]
+[section:section_erfc_inv erfc_inv]
+[table_erfc_inv]
+[endsect]
+]
+
+[template section_erf_inv[]
+[section:section_erf_inv erf_inv]
+[table_erf_inv]
+[endsect]
+]
+
+[template section_erfc[]
+[section:section_erfc erfc]
+[table_erfc]
+[endsect]
+]
+
+[template section_erf[]
+[section:section_erf erf]
+[table_erf]
+[endsect]
+]
+
+[template section_cbrt[]
+[section:section_cbrt cbrt]
+[table_cbrt]
+[endsect]
+]
+
+[template section_sph_neumann_prime[]
+[section:section_sph_neumann_prime sph_neumann_prime]
+[table_sph_neumann_prime]
+[endsect]
+]
+
+[template section_cyl_neumann_prime_integer_orders_[]
+[section:section_cyl_neumann_prime_integer_orders_ cyl_neumann_prime (integer orders)]
+[table_cyl_neumann_prime_integer_orders_]
+[endsect]
+]
+
+[template section_cyl_neumann_prime[]
+[section:section_cyl_neumann_prime cyl_neumann_prime]
+[table_cyl_neumann_prime]
+[endsect]
+]
+
+[template section_sph_neumann[]
+[section:section_sph_neumann sph_neumann]
+[table_sph_neumann]
+[endsect]
+]
+
+[template section_cyl_neumann_integer_orders_[]
+[section:section_cyl_neumann_integer_orders_ cyl_neumann (integer orders)]
+[table_cyl_neumann_integer_orders_]
+[endsect]
+]
+
+[template section_cyl_neumann[]
+[section:section_cyl_neumann cyl_neumann]
+[table_cyl_neumann]
+[endsect]
+]
+
+[template section_cyl_bessel_k_prime_integer_orders_[]
+[section:section_cyl_bessel_k_prime_integer_orders_ cyl_bessel_k_prime (integer orders)]
+[table_cyl_bessel_k_prime_integer_orders_]
+[endsect]
+]
+
+[template section_cyl_bessel_k_prime[]
+[section:section_cyl_bessel_k_prime cyl_bessel_k_prime]
+[table_cyl_bessel_k_prime]
+[endsect]
+]
+
+[template section_cyl_bessel_k_integer_orders_[]
+[section:section_cyl_bessel_k_integer_orders_ cyl_bessel_k (integer orders)]
+[table_cyl_bessel_k_integer_orders_]
+[endsect]
+]
+
+[template section_cyl_bessel_k[]
+[section:section_cyl_bessel_k cyl_bessel_k]
+[table_cyl_bessel_k]
+[endsect]
+]
+
+[template section_sph_bessel_prime[]
+[section:section_sph_bessel_prime sph_bessel_prime]
+[table_sph_bessel_prime]
+[endsect]
+]
+
+[template section_cyl_bessel_j_prime_integer_orders_[]
+[section:section_cyl_bessel_j_prime_integer_orders_ cyl_bessel_j_prime (integer orders)]
+[table_cyl_bessel_j_prime_integer_orders_]
+[endsect]
+]
+
+[template section_cyl_bessel_j_prime[]
+[section:section_cyl_bessel_j_prime cyl_bessel_j_prime]
+[table_cyl_bessel_j_prime]
+[endsect]
+]
+
+[template section_sph_bessel[]
+[section:section_sph_bessel sph_bessel]
+[table_sph_bessel]
+[endsect]
+]
+
+[template section_cyl_bessel_j_integer_orders_[]
+[section:section_cyl_bessel_j_integer_orders_ cyl_bessel_j (integer orders)]
+[table_cyl_bessel_j_integer_orders_]
+[endsect]
+]
+
+[template section_cyl_bessel_j[]
+[section:section_cyl_bessel_j cyl_bessel_j]
+[table_cyl_bessel_j]
+[endsect]
+]
+
+[template section_cyl_bessel_i_prime_integer_orders_[]
+[section:section_cyl_bessel_i_prime_integer_orders_ cyl_bessel_i_prime (integer orders)]
+[table_cyl_bessel_i_prime_integer_orders_]
+[endsect]
+]
+
+[template section_cyl_bessel_i_prime[]
+[section:section_cyl_bessel_i_prime cyl_bessel_i_prime]
+[table_cyl_bessel_i_prime]
+[endsect]
+]
+
+[template section_cyl_bessel_i_integer_orders_[]
+[section:section_cyl_bessel_i_integer_orders_ cyl_bessel_i (integer orders)]
+[table_cyl_bessel_i_integer_orders_]
+[endsect]
+]
+
+
+[template section_cyl_bessel_i[]
+[section:section_cyl_bessel_i cyl_bessel_i]
+[table_cyl_bessel_i]
+[endsect]
+]
+
+[template all_sections[]
+[section_cbrt]
+[section_cyl_bessel_i]
+[section_cyl_bessel_i_integer_orders_]
+[section_cyl_bessel_i_prime]
+[section_cyl_bessel_i_prime_integer_orders_]
+[section_cyl_bessel_j]
+[section_cyl_bessel_j_integer_orders_]
+[section_cyl_bessel_j_prime]
+[section_cyl_bessel_j_prime_integer_orders_]
+[section_cyl_bessel_k]
+[section_cyl_bessel_k_integer_orders_]
+[section_cyl_bessel_k_prime]
+[section_cyl_bessel_k_prime_integer_orders_]
+[section_cyl_neumann]
+[section_cyl_neumann_integer_orders_]
+[section_cyl_neumann_prime]
+[section_cyl_neumann_prime_integer_orders_]
+[section_erf]
+[section_erf_inv]
+[section_erfc]
+[section_erfc_inv]
+[section_lgamma]
+[section_sph_bessel]
+[section_sph_bessel_prime]
+[section_sph_neumann]
+[section_sph_neumann_prime]
+[section_tgamma]
+[section_tgamma1pm1]
+]
+
+[/error_content:]
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Random_Data[]
+[h4 Error Output For cyl_neumann with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Yv: Random Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Random_Data]
+CAUTION: Gross error found at entry 394.[br]Found: -3.29903 Expected 0.0192842 Error: 1.18973e+4932[br]125.28, 1007.46, 0.0192842[br]CAUTION: Gross error found at entry 395.[br]Found: 1.13543 Expected 0.0230358 Error: 48.2897[br]125.28, 1185.4, 0.0230358[br]CAUTION: Gross error found at entry 396.[br]Found: 0.00119445 Expected 0.00460223 Error: 2.85302[br]125.28, 3534.52, 0.00460223[br]CAUTION: Gross error found at entry 403.[br]Found: 1068 Expected -0.00270959 Error: 1.18973e+4932[br]255.547, 1007.46, -0.00270959[br]CAUTION: Gross error found at entry 404.[br]Found: -395.006 Expected 0.00738845 Error: 1.18973e+4932[br]255.547, 1185.4, 0.00738845[br]CAUTION: Gross error found at entry 405.[br]Found: 1.08701 Expected -0.000407036 Error: 1.18973e+4932[br]255.547, 3534.52, -0.000407036[br]CAUTION: Gross error found at entry 406.[br]Found: 0.0232211 Expected 0.00886946 Error: 1.61809[br]255.547, 8071.55, 0.00886946[br]CAUTION: Gross error found at entry 411.[br]Found: 65895.7 Expected -0.0158467 Error: 1.18973e+4932[br]503.011, 1007.46, -0.0158467[br]CAUTION: Gross error found at entry 412.[br]Found: -123316 Expected 0.00594357 Error: 1.18973e+4932[br]503.011, 1185.4, 0.00594357[br]CAUTION: Gross error found at entry 413.[br]Found: -706.209 Expected 0.010151 Error: 1.18973e+4932[br]503.011, 3534.52, 0.010151[br]CAUTION: Gross error found at entry 414.[br]Found: -21.2081 Expected 0.00888375 Error: 1.18973e+4932[br]503.011, 8071.55, 0.00888375[br]CAUTION: Gross error found at entry 415.[br]Found: 0.0272835 Expected 0.00552287 Error: 3.94008[br]503.011, 16229.2, 0.00552287[br]CAUTION: Gross error found at entry 416.[br]Found: 0.0103324 Expected 0.00445559 Error: 1.31898[br]503.011, 32066.2, 0.00445559[br]CAUTION: Gross error found at entry 417.[br]Found: 0.00540788 Expected -0.00384344 Error: 1.18973e+4932[br]503.011, 36367.9, -0.00384344[br]CAUTION: Gross error found at entry 418.[br]Found: 5.43091e+007 Expected -0.0772843 Error: 1.18973e+4932[br]1007.46, 1007.46, -0.0772843[br]CAUTION: Gross error found at entry 419.[br]Found: -2.84383e+007 Expected 0.0304312 Error: 1.18973e+4932[br]1007.46, 1185.4, 0.0304312[br]CAUTION: Gross error found at entry 420.[br]Found: -61440.2 Expected -0.00474217 Error: 1.29562e+007[br]1007.46, 3534.52, -0.00474217[br]CAUTION: Gross error found at entry 421.[br]Found: -4126.89 Expected -0.0074205 Error: 556146[br]1007.46, 8071.55, -0.0074205[br]CAUTION: Gross error found at entry 422.[br]Found: -69.2831 Expected -0.00179572 Error: 38581.4[br]1007.46, 16229.2, -0.00179572[br]CAUTION: Gross error found at entry 423.[br]Found: 2.32048 Expected 0.000750053 Error: 3092.76[br]1007.46, 32066.2, 0.000750053[br]CAUTION: Gross error found at entry 424.[br]Found: 3.90724 Expected 0.00305125 Error: 1279.54[br]1007.46, 36367.9, 0.00305125[br]CAUTION: Gross error found at entry 425.[br]Found: -1.83374e+008 Expected -7.25176e+028 Error: 3.95463e+020[br]1185.4, 1007.46, -7.25176e+028[br]CAUTION: Gross error found at entry 426.[br]Found: 1.09822e+008 Expected -0.0732059 Error: 1.18973e+4932[br]1185.4, 1185.4, -0.0732059[br]CAUTION: Gross error found at entry 427.[br]Found: 315632 Expected 0.000479585 Error: 6.58136e+008[br]1185.4, 3534.52, 0.000479585[br]CAUTION: Gross error found at entry 428.[br]Found: 16815.6 Expected 0.00174909 Error: 9.61391e+006[br]1185.4, 8071.55, 0.00174909[br]CAUTION: Gross error found at entry 429.[br]Found: 133.356 Expected 0.00416288 Error: 32033.6[br]1185.4, 16229.2, 0.00416288[br]CAUTION: Gross error found at entry 430.[br]Found: -1.38401 Expected -0.000320056 Error: 4323.27[br]1185.4, 32066.2, -0.000320056[br]CAUTION: Gross error found at entry 431.[br]Found: -17.7085 Expected -0.00417656 Error: 4238.96[br]1185.4, 36367.9, -0.00417656[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data_large_values_[]
+[h4 Error Output For cyl_neumann with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Yv: Mathworld Data (large values)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data_large_values_]
+Bad argument in __cyl_neumann_n.[br]-0.5, 1.2459e-206, 8.90598e-104[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data[]
+[h4 Error Output For cyl_neumann with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Yv: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data]
+Bad argument in __cyl_neumann_n.[br]-5.5, 3.125, -0.0274994[br]Bad argument in __cyl_neumann_n.[br]-5.5, 10000, -0.00759344[br]Bad argument in __cyl_neumann_n.[br]-10.0003, 0.000976562, -1.50382e+038[br]Bad argument in __cyl_neumann_n.[br]-10.0003, 100, 0.0583042[br]Bad argument in __cyl_neumann_n.[br]-141.75, 100, -3.8101e+009[br]Bad argument in __cyl_neumann_n.[br]-8.5, 12.5664, 0.0436808[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders___tr1_cmath__Yn_Mathworld_Data_Integer_Version_[]
+[h4 Error Output For cyl_neumann (integer orders) with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Yn: Mathworld Data (Integer Version)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders___tr1_cmath__Yn_Mathworld_Data_Integer_Version_]
+Bad argument in __cyl_neumann_n.[br]-5, 1e+006, 0.000331052[br]Bad argument in __cyl_neumann_n.[br]-10, 1e+006, 0.000725952[br]CAUTION: Gross error found at entry 7.[br]Found: 0.0540745 Expected 0.00217255 Error: 23.8899[br]1000, 100000, 0.00217255[br]Bad argument in __cyl_neumann_n.[br]-1000, 700, -1.88753e+077[br]Bad argument in __cyl_neumann_n.[br]-25, 8, 3.45114e+008[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yn_Mathworld_Data[]
+[h4 Error Output For cyl_neumann with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Yn: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yn_Mathworld_Data]
+Bad argument in __cyl_neumann_n.[br]-5, 1e+006, 0.000331052[br]Bad argument in __cyl_neumann_n.[br]-10, 1e+006, 0.000725952[br]CAUTION: Gross error found at entry 7.[br]Found: 0.0540745 Expected 0.00217255 Error: 23.8899[br]1000, 100000, 0.00217255[br]Bad argument in __cyl_neumann_n.[br]-1000, 700, -1.88753e+077[br]Bad argument in __cyl_neumann_n.[br]-25, 8, 3.45114e+008[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Random_Data[]
+[h4 Error Output For cyl_bessel_k with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel Kv: Random Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Random_Data]
+Bad argument in __cyl_bessel_k.[br]-80.4919, 24.7501, 6.57902e+028[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 63.7722, 2.39552e-009[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 125.28, 3.06904e-045[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 255.547, 2.30343e-107[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 503.011, 1.20315e-217[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 1007.46, 2.86537e-438[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 1185.4, 8.63263e-516[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 3534.52, 5.01367e-1537[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 8071.55, 7.76555e-3508[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 16229.2, 0[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 32066.2, 0[br]Bad argument in __cyl_bessel_k.[br]-80.4919, 36367.9, 0[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 24.7501, 1.19405e+024[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 63.7722, 5.81897e-012[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 125.28, 9.89214e-047[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 255.547, 3.9726e-108[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 503.011, 4.87462e-218[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 1007.46, 1.82221e-438[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 1185.4, 5.87506e-516[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 3534.52, 4.40608e-1537[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 8071.55, 7.3384e-3508[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 16229.2, 0[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 32066.2, 0[br]Bad argument in __cyl_bessel_k.[br]-74.6026, 36367.9, 0[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 24.7501, 5.5618e+022[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 63.7722, 1.09452e-012[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 125.28, 3.8393e-047[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 255.547, 2.45173e-108[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 503.011, 3.80454e-218[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 1007.46, 1.60949e-438[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 1185.4, 5.28662e-516[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 3534.52, 4.25273e-1537[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 8071.55, 7.22542e-3508[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 16229.2, 0[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 32066.2, 0[br]Bad argument in __cyl_bessel_k.[br]-72.9046, 36367.9, 0[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 24.7501, 6.74518e+014[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 63.7722, 6.54531e-017[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 125.28, 1.65653e-049[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 255.547, 1.54767e-109[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 503.011, 9.22721e-219[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 1007.46, 7.91894e-439[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 1185.4, 2.89281e-516[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 3534.52, 3.4736e-1537[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 8071.55, 6.6126e-3508[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 16229.2, 0[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 32066.2, 0[br]Bad argument in __cyl_bessel_k.[br]-62.3236, 36367.9, 0[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 24.7501, 2.00028e+010[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 63.7722, 3.01107e-019[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 125.28, 8.54693e-051[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 255.547, 3.47666e-110[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 503.011, 4.29705e-219[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 1007.46, 5.40242e-439[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 1185.4, 2.08996e-516[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 3534.52, 3.11458e-1537[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 8071.55, 6.30409e-3508[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 16229.2, 0[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 32066.2, 0[br]Bad argument in __cyl_bessel_k.[br]-55.7932, 36367.9, 0[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 9.50706, 5.6936e+022[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 24.7501, 1242.73[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 63.7722, 7.99341e-023[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 125.28, 9.88149e-053[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 255.547, 3.73007e-111[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 503.011, 1.37367e-219[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 1007.46, 3.05398e-439[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 1185.4, 1.28695e-516[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 3534.52, 2.6469e-1537[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 8071.55, 5.87052e-3508[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 16229.2, 0[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 32066.2, 0[br]Bad argument in __cyl_bessel_k.[br]-44.3004, 36367.9, 0[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 5.11399, 4.97154e+027[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 9.50706, 1.51436e+017[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 24.7501, 0.639495[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 63.7722, 2.19334e-024[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 125.28, 1.45351e-053[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 255.547, 1.43713e-111[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 503.011, 8.44445e-220[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 1007.46, 2.39453e-439[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 1185.4, 1.04655e-516[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 3534.52, 2.46949e-1537[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 8071.55, 5.69483e-3508[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 16229.2, 0[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 32066.2, 0[br]Bad argument in __cyl_bessel_k.[br]-38.3666, 36367.9, 0[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data_large_values_[]
+[h4 Error Output For cyl_bessel_k with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel Kv: Mathworld Data (large values)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data_large_values_]
+Bad argument in __cyl_bessel_k.[br]-1, 3.72917e-155, 2.68156e+154[br]Bad argument in __cyl_bessel_k.[br]-1.125, 3.72917e-155, 5.53984e+173[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data[]
+[h4 Error Output For cyl_bessel_k with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel Kv: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data]
+Bad argument in __cyl_bessel_k.[br]-5.5, 10, 7.33045e-005[br]Bad argument in __cyl_bessel_k.[br]-5.5, 100, 5.41275e-045[br]Bad argument in __cyl_bessel_k.[br]-141.399, 50, 1.30185e+042[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders___tr1_cmath__Bessel_Kn_Mathworld_Data_Integer_Version_[]
+[h4 Error Output For cyl_bessel_k (integer orders) with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel Kn: Mathworld Data (Integer Version)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders___tr1_cmath__Bessel_Kn_Mathworld_Data_Integer_Version_]
+Bad argument in __cyl_bessel_k.[br]-5, 100, 5.27326e-045[br]Bad argument in __cyl_bessel_k.[br]-10, 1, 1.80713e+008[br]Bad argument in __cyl_bessel_k.[br]-1000, 700, 6.51562e-031[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kn_Mathworld_Data[]
+[h4 Error Output For cyl_bessel_k with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel Kn: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kn_Mathworld_Data]
+Bad argument in __cyl_bessel_k.[br]-5, 100, 5.27326e-045[br]Bad argument in __cyl_bessel_k.[br]-10, 1, 1.80713e+008[br]Bad argument in __cyl_bessel_k.[br]-1000, 700, 6.51562e-031[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data_large_values_[]
+[h4 Error Output For cyl_bessel_j with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel J: Mathworld Data (large values)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data_large_values_]
+Bad argument in __cyl_bessel_j.[br]-0.5, 1.2459e-206, 7.14823e+102[br]Bad argument in __cyl_bessel_j.[br]-256, 8, 1.46866e-353[br]Bad argument in __cyl_bessel_j.[br]-2.5, 4, -0.0145679[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data[]
+[h4 Error Output For cyl_bessel_j with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel J: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data]
+Bad argument in __cyl_bessel_j.[br]-5.5, 3.1416, -2.5582[br]Bad argument in __cyl_bessel_j.[br]-5.5, 10000, 0.00244984[br]Bad argument in __cyl_bessel_j.[br]-5.5, 10000, 0.00244984[br]Bad argument in __cyl_bessel_j.[br]-5.5, 1e+006, 0.000279243[br]Bad argument in __cyl_bessel_j.[br]-0.5, 101, 0.0708185[br]Bad argument in __cyl_bessel_j.[br]-10.0003, 0.000976562, 1.41474e+035[br]Bad argument in __cyl_bessel_j.[br]-10.0003, 15, -0.0902239[br]Bad argument in __cyl_bessel_j.[br]-10.0003, 100, -0.0547614[br]Bad argument in __cyl_bessel_j.[br]-8.5, 12.5664, -0.257087[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_JN_Mathworld_Data_Integer_Version_[]
+[h4 Error Output For cyl_bessel_j (integer orders) with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel JN: Mathworld Data (Integer Version)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_JN_Mathworld_Data_Integer_Version_]
+Bad argument in __cyl_bessel_j.[br]-1, 1.25, -0.510623[br]Bad argument in __cyl_bessel_j.[br]-2, 0, 0[br]Bad argument in __cyl_bessel_j.[br]5, -10, 0.234062[br]Bad argument in __cyl_bessel_j.[br]-5, 1e+006, 0.000725964[br]Bad argument in __cyl_bessel_j.[br]-5, -1, 0.000249758[br]Bad argument in __cyl_bessel_j.[br]10, -10, 0.207486[br]Bad argument in __cyl_bessel_j.[br]10, -5, 0.0014678[br]Bad argument in __cyl_bessel_j.[br]-10, 1e+006, -0.000331079[br]CAUTION: Gross error found at entry 15.[br]Found: 0.0042409 Expected 0.00128318 Error: 2.305[br]1000, 100000, 0.00128318[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J1_Mathworld_Data_Integer_Version_[]
+[h4 Error Output For cyl_bessel_j (integer orders) with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel J1: Mathworld Data (Integer Version)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J1_Mathworld_Data_Integer_Version_]
+Bad argument in __cyl_bessel_j.[br]1, -2, -0.576725[br]Bad argument in __cyl_bessel_j.[br]1, -8, -0.234636[br]Bad argument in __cyl_bessel_j.[br]1, -10, -0.0434727[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J0_Mathworld_Data_Integer_Version_[]
+[h4 Error Output For cyl_bessel_j (integer orders) with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel J0: Mathworld Data (Integer Version)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J0_Mathworld_Data_Integer_Version_]
+Bad argument in __cyl_bessel_j.[br]0, -2, 0.223891[br]Bad argument in __cyl_bessel_j.[br]0, -8, 0.171651[br]Bad argument in __cyl_bessel_j.[br]0, -10, -0.245936[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_JN_Mathworld_Data[]
+[h4 Error Output For cyl_bessel_j with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel JN: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_JN_Mathworld_Data]
+Bad argument in __cyl_bessel_j.[br]-1, 1.25, -0.510623[br]Bad argument in __cyl_bessel_j.[br]-2, 0, 0[br]Bad argument in __cyl_bessel_j.[br]5, -10, 0.234062[br]Bad argument in __cyl_bessel_j.[br]-5, 1e+006, 0.000725964[br]Bad argument in __cyl_bessel_j.[br]-5, -1, 0.000249758[br]Bad argument in __cyl_bessel_j.[br]10, -10, 0.207486[br]Bad argument in __cyl_bessel_j.[br]10, -5, 0.0014678[br]Bad argument in __cyl_bessel_j.[br]-10, 1e+006, -0.000331079[br]CAUTION: Gross error found at entry 15.[br]Found: 0.0042409 Expected 0.00128318 Error: 2.305[br]1000, 100000, 0.00128318[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J1_Mathworld_Data[]
+[h4 Error Output For cyl_bessel_j with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel J1: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J1_Mathworld_Data]
+Bad argument in __cyl_bessel_j.[br]1, -2, -0.576725[br]Bad argument in __cyl_bessel_j.[br]1, -8, -0.234636[br]Bad argument in __cyl_bessel_j.[br]1, -10, -0.0434727[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J0_Mathworld_Data[]
+[h4 Error Output For cyl_bessel_j with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel J0: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J0_Mathworld_Data]
+Bad argument in __cyl_bessel_j.[br]0, -2, 0.223891[br]Bad argument in __cyl_bessel_j.[br]0, -8, 0.171651[br]Bad argument in __cyl_bessel_j.[br]0, -10, -0.245936[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data_large_values_[]
+[h4 Error Output For cyl_bessel_i with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel Iv: Mathworld Data (large values)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data_large_values_]
+Bad argument in __cyl_bessel_i.[br]-1, 3.72917e-155, 1.86459e-155[br]Bad argument in __cyl_bessel_i.[br]-1.125, 3.72917e-155, -1.34964e+173[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Random_Data[]
+[h4 Error Output For cyl_bessel_i with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel Iv: Random Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Random_Data]
+Bad argument in __cyl_bessel_i.[br]-80.4919, 24.7501, 4.18698e+028[br]Bad argument in __cyl_bessel_i.[br]-80.4919, 63.7722, 2.03248e+006[br]Bad argument in __cyl_bessel_i.[br]-74.6026, 24.7501, 7.20977e+023[br]Bad argument in __cyl_bessel_i.[br]-74.6026, 63.7722, 8.7549e+008[br]Bad argument in __cyl_bessel_i.[br]-72.9046, 24.7501, 1.04535e+022[br]Bad argument in __cyl_bessel_i.[br]-72.9046, 63.7722, 4.7162e+009[br]Bad argument in __cyl_bessel_i.[br]-62.3236, 24.7501, 3.65147e+014[br]Bad argument in __cyl_bessel_i.[br]-62.3236, 63.7722, 8.56683e+013[br]Bad argument in __cyl_bessel_i.[br]-55.7932, 24.7501, -7.70364e+009[br]Bad argument in __cyl_bessel_i.[br]-55.7932, 63.7722, 1.95969e+016[br]Bad argument in __cyl_bessel_i.[br]-44.3004, 9.50706, 2.93478e+022[br]Bad argument in __cyl_bessel_i.[br]-44.3004, 24.7501, 640.568[br]Bad argument in __cyl_bessel_i.[br]-44.3004, 63.7722, 8.05557e+019[br]Bad argument in __cyl_bessel_i.[br]-38.3666, 5.11399, 2.89105e+027[br]Bad argument in __cyl_bessel_i.[br]-38.3666, 9.50706, 8.80632e+016[br]Bad argument in __cyl_bessel_i.[br]-38.3666, 24.7501, 0.389004[br]Bad argument in __cyl_bessel_i.[br]-38.3666, 63.7722, 3.06303e+021[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data[]
+[h4 Error Output For cyl_bessel_i with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel Iv: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data]
+Bad argument in __cyl_bessel_i.[br]-4.99902, 2.125, 0.0267921[br]Bad argument in __cyl_bessel_i.[br]-5.5, 10, 597.578[br]Bad argument in __cyl_bessel_i.[br]-5.5, 100, 9.22363e+041[br]Bad argument in __cyl_bessel_i.[br]-10.0003, 0.000976562, 1.41474e+035[br]Bad argument in __cyl_bessel_i.[br]-10.0003, 50, 1.07153e+020[br]Bad argument in __cyl_bessel_i.[br]-141.4, 100, 2066.28[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_In_Mathworld_Data_Integer_Version_[]
+[h4 Error Output For cyl_bessel_i (integer orders) with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel In: Mathworld Data (Integer Version)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_In_Mathworld_Data_Integer_Version_]
+Bad argument in __cyl_bessel_i.[br]-2, 0, 0[br]Bad argument in __cyl_bessel_i.[br]-5, 100, 9.47009e+041[br]Bad argument in __cyl_bessel_i.[br]-5, -1, -0.000271463[br]Bad argument in __cyl_bessel_i.[br]10, -5, 0.00458004[br]Bad argument in __cyl_bessel_i.[br]-100, -200, 4.35275e+074[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I1_Mathworld_Data_Integer_Version_[]
+[h4 Error Output For cyl_bessel_i (integer orders) with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel I1: Mathworld Data (Integer Version)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I1_Mathworld_Data_Integer_Version_]
+Bad argument in __cyl_bessel_i.[br]1, -2, -1.59064[br]Bad argument in __cyl_bessel_i.[br]1, -8, -399.873[br]Bad argument in __cyl_bessel_i.[br]1, -10, -2670.99[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I0_Mathworld_Data_Integer_Version_[]
+[h4 Error Output For cyl_bessel_i (integer orders) with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel I0: Mathworld Data (Integer Version)]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I0_Mathworld_Data_Integer_Version_]
+Bad argument in __cyl_bessel_i.[br]0, -2, 2.27959[br]Bad argument in __cyl_bessel_i.[br]0, -7, 168.594[br]Bad argument in __cyl_bessel_i.[br]0, -1, 1.26607[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_In_Mathworld_Data[]
+[h4 Error Output For cyl_bessel_i with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel In: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_In_Mathworld_Data]
+Bad argument in __cyl_bessel_i.[br]-2, 0, 0[br]Bad argument in __cyl_bessel_i.[br]-5, 100, 9.47009e+041[br]Bad argument in __cyl_bessel_i.[br]-5, -1, -0.000271463[br]Bad argument in __cyl_bessel_i.[br]10, -5, 0.00458004[br]Bad argument in __cyl_bessel_i.[br]-100, -200, 4.35275e+074[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I1_Mathworld_Data[]
+[h4 Error Output For cyl_bessel_i with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel I1: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I1_Mathworld_Data]
+Bad argument in __cyl_bessel_i.[br]1, -2, -1.59064[br]Bad argument in __cyl_bessel_i.[br]1, -8, -399.873[br]Bad argument in __cyl_bessel_i.[br]1, -10, -2670.99[br]
+
+
+
+]
+
+[template errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I0_Mathworld_Data[]
+[h4 Error Output For cyl_bessel_i with compiler GNU C++ version 4.9.2 and library <tr1/cmath> and test data Bessel I0: Mathworld Data]
+
+[#errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I0_Mathworld_Data]
+Bad argument in __cyl_bessel_i.[br]0, -2, 2.27959[br]Bad argument in __cyl_bessel_i.[br]0, -7, 168.594[br]Bad argument in __cyl_bessel_i.[br]0, -1, 1.26607[br]
+
+
+
+]
+
+[template errors_Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_JN_Mathworld_Data_Integer_Version_[]
+[h4 Error Output For cyl_bessel_j (integer orders) with compiler Microsoft Visual C++ version 12.0 and library <math.h> and test data Bessel JN: Mathworld Data (Integer Version)]
+
+[#errors_Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_JN_Mathworld_Data_Integer_Version_]
+CAUTION: Found non-finite result, when a finite value was expected at entry 16[br]Found: -1.#IND Expected 0 Error: 1.79769e+308[br]10, 1e-100, 0[br]CAUTION: Gross error found at entry 16.[br]Found: -1.#IND Expected 0 Error: 1.79769e+308[br]10, 1e-100, 0[br]
+
+
+
+]
+
+[template all_errors[]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Random_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data_large_values_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yv_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann_integer_orders___tr1_cmath__Yn_Mathworld_Data_Integer_Version_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_neumann__tr1_cmath__Yn_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Random_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data_large_values_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kv_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k_integer_orders___tr1_cmath__Bessel_Kn_Mathworld_Data_Integer_Version_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_k__tr1_cmath__Bessel_Kn_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data_large_values_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_JN_Mathworld_Data_Integer_Version_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J1_Mathworld_Data_Integer_Version_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j_integer_orders___tr1_cmath__Bessel_J0_Mathworld_Data_Integer_Version_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_JN_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J1_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_j__tr1_cmath__Bessel_J0_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data_large_values_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Random_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_Iv_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_In_Mathworld_Data_Integer_Version_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I1_Mathworld_Data_Integer_Version_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i_integer_orders___tr1_cmath__Bessel_I0_Mathworld_Data_Integer_Version_]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_In_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I1_Mathworld_Data]
+[errors_GNU_C_version_4_9_2_Win32_long_double_cyl_bessel_i__tr1_cmath__Bessel_I0_Mathworld_Data]
+[errors_Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_JN_Mathworld_Data_Integer_Version_]
+]
