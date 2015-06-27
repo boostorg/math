@@ -44,23 +44,25 @@ rule all-tests {
      local result ;
      for local source in [ glob test*.cpp ]
      {
-         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework ] 
+         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework 
          : : : 
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
-          <toolset>gcc:<linkflags>$(OTHERFLAGS)
+          <toolset>gcc:<linkflags>$(OTHERFLAGS) ]
          ;
          result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework 
-         : : : [ check-target-builds has_libstdcxx_tr1 : <define>TEST_LIBSTDCXX : <build>no ] : $(source:B)_libstdcxx_tr1 ] 
+         : : : [ check-target-builds has_libstdcxx_tr1 : <define>TEST_LIBSTDCXX : <build>no ] 
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
+          : $(source:B)_libstdcxx_tr1 ] 
          ;
          result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework 
-         : : : [ check-target-builds has_c99_cmath : <define>TEST_C99 : <build>no ] : $(source:B)_c99 ] 
+         : : : [ check-target-builds has_c99_cmath : <define>TEST_C99 : <build>no ] 
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
+          : $(source:B)_c99 ] 
          ;
      }
      return $(result) ;     
