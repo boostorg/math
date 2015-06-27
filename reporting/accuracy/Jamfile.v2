@@ -40,7 +40,7 @@ obj has_libstdcxx_tr1 : has_libstdcxx_tr1.cpp ;
 explicit has_libstdcxx_tr1 ;
 obj has_c99_cmath : has_c99_cmath.cpp ;
 explicit has_c99_cmath ;
-exe has_gsl : has_gsl.cpp ;
+exe has_gsl : has_gsl.cpp gsl ;
 explicit has_gsl ;
 
 rule all-tests {
