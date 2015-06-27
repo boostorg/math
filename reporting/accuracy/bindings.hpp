@@ -103,6 +103,8 @@ inline long double assoc_legendre_p_binder(int i, int j, long double d)
 
 #include <gsl/gsl_sf.h>
 
+#define TEST_LIBRARY_NAME "GSL"
+
 //#define CBRT_FUNCTION_TO_TEST boost::cbrt
 #define ERF_FUNCTION_TO_TEST gsl_sf_erf
 #define ERFC_FUNCTION_TO_TEST gsl_sf_erfc
