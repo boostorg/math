@@ -99,6 +99,20 @@ inline long double assoc_legendre_p_binder(int i, int j, long double d)
 #define TYPE_TO_TEST long double
 #endif
 
+#elif defined(TEST_GSL)
+
+//#define CBRT_FUNCTION_TO_TEST boost::cbrt
+#define ERF_FUNCTION_TO_TEST gsl_sf_erf
+#define ERFC_FUNCTION_TO_TEST gsl_sf_erfc
+//#define ERF_INV_FUNCTION_TO_TEST boost::math::erf_inv
+//#define ERFC_INV_FUNCTION_TO_TEST boost::math::erfc_inv
+
+#define LGAMMA_FUNCTION_TO_TEST gsl_sf_lngamma
+#define TGAMMA_FUNCTION_TO_TEST gsl_sf_gamma
+//#define TGAMMA1PM1_FUNCTION_TO_TEST boost::math::tgamma1pm1
+
+#define TYPE_TO_TEST double
+
 #else
 
 #define TEST_LIBRARY_NAME "boost"

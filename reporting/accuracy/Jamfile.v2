@@ -35,10 +35,13 @@ if $(is_unix)
 #
 # Configuration first:
 #
+lib gsl ;
 obj has_libstdcxx_tr1 : has_libstdcxx_tr1.cpp ;
 explicit has_libstdcxx_tr1 ;
 obj has_c99_cmath : has_c99_cmath.cpp ;
 explicit has_c99_cmath ;
+exe has_gsl : has_gsl.cpp ;
+explicit has_gsl ;
 
 rule all-tests {
      local result ;
@@ -63,6 +66,13 @@ rule all-tests {
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
           : $(source:B)_c99 ] 
+         ;
+         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework gsl
+         : : : [ check-target-builds has_gsl : <define>TEST_GSL : <build>no ] 
+          <target-os>linux:<linkflags>-lpthread
+          <target-os>linux:<linkflags>-lrt
+          <toolset>gcc:<linkflags>$(OTHERFLAGS)
+          : $(source:B)_gsl ] 
          ;
      }
      return $(result) ;     
