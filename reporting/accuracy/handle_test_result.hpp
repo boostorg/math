@@ -34,7 +34,9 @@ boost::filesystem::path path_to_content;
 
 struct content_loader
 {
-   content_loader()
+   boost::interprocess::named_mutex mu;
+   boost::interprocess::scoped_lock<boost::interprocess::named_mutex> lock;
+   content_loader() : mu(boost::interprocess::open_or_create, "handle_test_result"), lock(mu)
    {
       boost::filesystem::path p(__FILE__);
       p = p.parent_path();
@@ -409,8 +411,6 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
                        const char* test_name, 
                        const char* group_name)
 {
-   boost::interprocess::named_mutex mu(boost::interprocess::open_or_create, "handle_test_result");
-   boost::interprocess::scoped_lock<boost::interprocess::named_mutex> lock(mu);
    T eps = boost::math::tools::epsilon<T>();
    T max_error_found = (result.max)() / eps;
    T mean_error_found = result.rms() / eps;

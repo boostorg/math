@@ -29,17 +29,24 @@ struct negative_tgamma_ratio
    template <class Row>
    Real operator()(const Row& row)
    {
+#ifdef TGAMMA_DELTA_RATIO_FUNCTION_TO_TEST
+      return TGAMMA_DELTA_RATIO_FUNCTION_TO_TEST(Real(row[0]), Real(-Real(row[1])));
+#else
       return boost::math::tgamma_delta_ratio(Real(row[0]), Real(-Real(row[1])));
+#endif
    }
 };
 
 template <class Real, class T>
 void do_test_tgamma_delta_ratio(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(TGAMMA_DELTA_RATIO_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef TGAMMA_DELTA_RATIO_FUNCTION_TO_TEST
+   pg funcp = TGAMMA_DELTA_RATIO_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::tgamma_delta_ratio<value_type, value_type>;
 #else
    pg funcp = boost::math::tgamma_delta_ratio;
@@ -57,21 +64,27 @@ void do_test_tgamma_delta_ratio(const T& data, const char* type_name, const char
       data,
       bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_delta_ratio(a, delta)", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "tgamma_delta_ratio", test_name);
    result = boost::math::tools::test_hetero<Real>(
       data,
       negative_tgamma_ratio<Real>(),
       extract_result<Real>(3));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_delta_ratio(a -delta)", test_name);
+   std::string s(test_name);
+   s += " (negative delta)";
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "tgamma_delta_ratio", s.c_str());
+#endif
 }
 
 template <class Real, class T>
 void do_test_tgamma_ratio(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(TGAMMA_RATIO_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef TGAMMA_RATIO_FUNCTION_TO_TEST
+   pg funcp = TGAMMA_RATIO_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::tgamma_ratio<value_type, value_type>;
 #else
    pg funcp = boost::math::tgamma_ratio;
@@ -89,7 +102,8 @@ void do_test_tgamma_ratio(const T& data, const char* type_name, const char* test
       data,
       bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_ratio(a, b)", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "tgamma_ratio", test_name);
+#endif
 }
 
 template <class T>

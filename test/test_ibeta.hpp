@@ -27,10 +27,13 @@
 template <class Real, class T>
 void do_test_beta(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(BETA_INC_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef BETA_INC_FUNCTION_TO_TEST
+   pg funcp = BETA_INC_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::beta<value_type, value_type, value_type>;
 #else
    pg funcp = boost::math::beta;
@@ -48,9 +51,11 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
       data,
       bind_func<Real>(funcp, 0, 1, 2),
       extract_result<Real>(3));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::beta", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "beta", test_name);
 
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef BETAC_INC_FUNCTION_TO_TEST
+   funcp = BETAC_INC_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    funcp = boost::math::betac<value_type, value_type, value_type>;
 #else
    funcp = boost::math::betac;
@@ -59,9 +64,11 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
       data,
       bind_func<Real>(funcp, 0, 1, 2),
       extract_result<Real>(4));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::betac", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "betac", test_name);
 
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef IBETA_FUNCTION_TO_TEST
+   funcp = IBETA_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    funcp = boost::math::ibeta<value_type, value_type, value_type>;
 #else
    funcp = boost::math::ibeta;
@@ -70,9 +77,11 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
       data,
       bind_func<Real>(funcp, 0, 1, 2),
       extract_result<Real>(5));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibeta", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "ibeta", test_name);
 
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef IBETAC_FUNCTION_TO_TEST
+   funcp = IBETAC_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    funcp = boost::math::ibetac<value_type, value_type, value_type>;
 #else
    funcp = boost::math::ibetac;
@@ -81,7 +90,7 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
       data,
       bind_func<Real>(funcp, 0, 1, 2),
       extract_result<Real>(6));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::ibetac", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "ibetac", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::ibeta;
@@ -93,6 +102,7 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
    }
 #endif
    std::cout << std::endl;
+#endif
 }
 
 template <class T>

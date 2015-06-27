@@ -22,10 +22,13 @@
 template <class Real, class T>
 void do_test_digamma(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(DIGAMMA_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef DIGAMMA_FUNCTION_TO_TEST
+   pg funcp = DIGAMMA_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::digamma<value_type>;
 #else
    pg funcp = boost::math::digamma;
@@ -43,8 +46,9 @@ void do_test_digamma(const T& data, const char* type_name, const char* test_name
       data, 
       bind_func<Real>(funcp, 0), 
       extract_result<Real>(1));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::digamma", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "digamma", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>

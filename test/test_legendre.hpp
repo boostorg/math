@@ -31,10 +31,15 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
    typedef Real                   value_type;
 
    typedef value_type (*pg)(int, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   pg funcp = boost::math::legendre_p<value_type>;
+   pg funcp;
+
+#if !(defined(ERROR_REPORTING_MODE) && !defined(LEGENDRE_P_FUNCTION_TO_TEST))
+#ifdef LEGENDRE_P_FUNCTION_TO_TEST
+   funcp = LEGENDRE_P_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::legendre_p<value_type>;
 #else
-   pg funcp = boost::math::legendre_p;
+   funcp = boost::math::legendre_p;
 #endif
 
    boost::math::tools::test_result<value_type> result;
@@ -49,7 +54,7 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
       data,
       bind_func_int1<Real>(funcp, 0, 1),
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::legendre_p", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "legendre_p", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::legendre_p;
@@ -60,9 +65,13 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
       print_test_result(result, data[result.worst()], result.worst(), type_name, "other::legendre_p");
    }
 #endif
+#endif
 
    typedef value_type (*pg2)(unsigned, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#if !(defined(ERROR_REPORTING_MODE) && !defined(LEGENDRE_Q_FUNCTION_TO_TEST))
+#ifdef LEGENDRE_Q_FUNCTION_TO_TEST
+   pg2 funcp2 = LEGENDRE_Q_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg2 funcp2 = boost::math::legendre_q<value_type>;
 #else
    pg2 funcp2 = boost::math::legendre_q;
@@ -75,7 +84,7 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
       data,
       bind_func_int1<Real>(funcp2, 0, 1),
       extract_result<Real>(3));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::legendre_q", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "legendre_q", test_name);
 #ifdef TEST_OTHER
    if(::boost::is_floating_point<value_type>::value){
       funcp = other::legendre_q;
@@ -89,15 +98,19 @@ void do_test_legendre_p(const T& data, const char* type_name, const char* test_n
 
 
    std::cout << std::endl;
+#endif
 }
 
 template <class Real, class T>
 void do_test_assoc_legendre_p(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(LEGENDRE_PA_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(int, int, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef LEGENDRE_PA_FUNCTION_TO_TEST
+   pg funcp = LEGENDRE_PA_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::legendre_p<value_type>;
 #else
    pg funcp = boost::math::legendre_p;
@@ -115,8 +128,9 @@ void do_test_assoc_legendre_p(const T& data, const char* type_name, const char* 
       data,
       bind_func_int2<Real>(funcp, 0, 1, 2),
       extract_result<Real>(3));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::legendre_p", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "legendre_p (associated)", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>

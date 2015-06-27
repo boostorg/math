@@ -24,11 +24,14 @@
 template <class Real, typename T>
 void do_test_ellint_rf(T& data, const char* type_name, const char* test)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(ELLINT_RF_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef ELLINT_RF_FUNCTION_TO_TEST
+   value_type(*fp)(value_type, value_type, value_type) = ELLINT_RF_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
     value_type (*fp)(value_type, value_type, value_type) = boost::math::ellint_rf<value_type, value_type, value_type>;
 #else
     value_type (*fp)(value_type, value_type, value_type) = boost::math::ellint_rf;
@@ -40,20 +43,23 @@ void do_test_ellint_rf(T& data, const char* type_name, const char* test)
       bind_func<Real>(fp, 0, 1, 2),
       extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), 
-      type_name, "boost::math::ellint_rf", test);
+      type_name, "ellint_rf", test);
 
    std::cout << std::endl;
-
+#endif
 }
 
 template <class Real, typename T>
 void do_test_ellint_rc(T& data, const char* type_name, const char* test)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(ELLINT_RC_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef ELLINT_RC_FUNCTION_TO_TEST
+   value_type(*fp)(value_type, value_type) = ELLINT_RC_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
     value_type (*fp)(value_type, value_type) = boost::math::ellint_rc<value_type, value_type>;
 #else
     value_type (*fp)(value_type, value_type) = boost::math::ellint_rc;
@@ -65,20 +71,23 @@ void do_test_ellint_rc(T& data, const char* type_name, const char* test)
       bind_func<Real>(fp, 0, 1),
       extract_result<Real>(2));
       handle_test_result(result, data[result.worst()], result.worst(), 
-      type_name, "boost::math::ellint_rc", test);
+      type_name, "ellint_rc", test);
 
    std::cout << std::endl;
-
+#endif
 }
 
 template <class Real, typename T>
 void do_test_ellint_rj(T& data, const char* type_name, const char* test)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(ELLINT_RJ_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef ELLINT_RJ_FUNCTION_TO_TEST
+   value_type(*fp)(value_type, value_type, value_type, value_type) = ELLINT_RJ_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
     value_type (*fp)(value_type, value_type, value_type, value_type) = boost::math::ellint_rj<value_type, value_type, value_type, value_type>;
 #else
     value_type (*fp)(value_type, value_type, value_type, value_type) = boost::math::ellint_rj;
@@ -90,20 +99,23 @@ void do_test_ellint_rj(T& data, const char* type_name, const char* test)
       bind_func<Real>(fp, 0, 1, 2, 3),
       extract_result<Real>(4));
       handle_test_result(result, data[result.worst()], result.worst(), 
-      type_name, "boost::math::ellint_rj", test);
+      type_name, "ellint_rj", test);
 
    std::cout << std::endl;
-
+#endif
 }
 
 template <class Real, typename T>
 void do_test_ellint_rd(T& data, const char* type_name, const char* test)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(ELLINT_RD_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef ELLINT_RD_FUNCTION_TO_TEST
+   value_type(*fp)(value_type, value_type, value_type) = ELLINT_RD_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
     value_type (*fp)(value_type, value_type, value_type) = boost::math::ellint_rd<value_type, value_type, value_type>;
 #else
     value_type (*fp)(value_type, value_type, value_type) = boost::math::ellint_rd;
@@ -115,20 +127,23 @@ void do_test_ellint_rd(T& data, const char* type_name, const char* test)
       bind_func<Real>(fp, 0, 1, 2),
       extract_result<Real>(3));
     handle_test_result(result, data[result.worst()], result.worst(), 
-      type_name, "boost::math::ellint_rd", test);
+      type_name, "ellint_rd", test);
 
    std::cout << std::endl;
-
+#endif
 }
 
 template <class Real, typename T>
 void do_test_ellint_rg(T& data, const char* type_name, const char* test)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(ELLINT_RD_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef ELLINT_RG_FUNCTION_TO_TEST
+   value_type(*fp)(value_type, value_type, value_type) = ELLINT_RG_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    value_type(*fp)(value_type, value_type, value_type) = boost::math::ellint_rg<value_type, value_type, value_type>;
 #else
    value_type(*fp)(value_type, value_type, value_type) = boost::math::ellint_rg;
@@ -140,10 +155,10 @@ void do_test_ellint_rg(T& data, const char* type_name, const char* test)
       bind_func<Real>(fp, 0, 1, 2),
       extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(),
-      type_name, "boost::math::ellint_rg", test);
+      type_name, "ellint_rg", test);
 
    std::cout << std::endl;
-
+#endif
 }
 
 #if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4)

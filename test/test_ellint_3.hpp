@@ -29,11 +29,14 @@
 template <class Real, typename T>
 void do_test_ellint_pi3(T& data, const char* type_name, const char* test)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(ELLINT_3_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef ELLINT_3_FUNCTION_TO_TEST
+   value_type(*fp2)(value_type, value_type, value_type) = ELLINT_3_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
     value_type (*fp2)(value_type, value_type, value_type) = boost::math::ellint_3<value_type, value_type, value_type>;
 #else
     value_type (*fp2)(value_type, value_type, value_type) = boost::math::ellint_3;
@@ -45,20 +48,23 @@ void do_test_ellint_pi3(T& data, const char* type_name, const char* test)
       bind_func<Real>(fp2, 2, 0, 1),
       extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(),
-      type_name, "boost::math::ellint_3", test);
+      type_name, "ellint_3", test);
 
    std::cout << std::endl;
-
+#endif
 }
 
 template <class Real, typename T>
 void do_test_ellint_pi2(T& data, const char* type_name, const char* test)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(ELLINT_3C_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    std::cout << "Testing: " << test << std::endl;
 
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef ELLINT_3C_FUNCTION_TO_TEST
+   value_type(*fp2)(value_type, value_type) = ELLINT_3C_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
     value_type (*fp2)(value_type, value_type) = boost::math::ellint_3<value_type, value_type>;
 #else
     value_type (*fp2)(value_type, value_type) = boost::math::ellint_3;
@@ -70,10 +76,10 @@ void do_test_ellint_pi2(T& data, const char* type_name, const char* test)
       bind_func<Real>(fp2, 1, 0),
       extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(),
-      type_name, "boost::math::ellint_3", test);
+      type_name, "ellint_3 (complete)", test);
 
    std::cout << std::endl;
-
+#endif
 }
 
 template <typename T>

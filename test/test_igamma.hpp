@@ -32,10 +32,16 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
-   pg funcp = boost::math::tgamma<value_type, value_type>;
+   pg funcp;
+
+#if !(defined(ERROR_REPORTING_MODE) && !defined(IGAMMA_FUNCTION_TO_TEST))
+
+#ifdef IGAMMA_FUNCTION_TO_TEST
+   funcp = IGAMMA_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+   funcp = boost::math::tgamma<value_type, value_type>;
 #else
-   pg funcp = boost::math::tgamma;
+   funcp = boost::math::tgamma;
 #endif
 
    boost::math::tools::test_result<value_type> result;
@@ -52,11 +58,13 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
          data,
          bind_func<Real>(funcp, 0, 1),
          extract_result<Real>(2));
-      handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma", test_name);
+      handle_test_result(result, data[result.worst()], result.worst(), type_name, "tgamma (incomplete)", test_name);
       //
       // test tgamma_lower(T, T) against data:
       //
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef IGAMMAL_FUNCTION_TO_TEST
+      funcp = IGAMMAL_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
       funcp = boost::math::tgamma_lower<value_type, value_type>;
 #else
       funcp = boost::math::tgamma_lower;
@@ -65,12 +73,16 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
          data,
          bind_func<Real>(funcp, 0, 1),
          extract_result<Real>(4));
-      handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::tgamma_lower", test_name);
+      handle_test_result(result, data[result.worst()], result.worst(), type_name, "tgamma_lower", test_name);
    }
+#endif
+#if !(defined(ERROR_REPORTING_MODE) && !defined(GAMMAQ_FUNCTION_TO_TEST))
    //
    // test gamma_q(T, T) against data:
    //
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef GAMMAQ_FUNCTION_TO_TEST
+   funcp = GAMMAQ_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    funcp = boost::math::gamma_q<value_type, value_type>;
 #else
    funcp = boost::math::gamma_q;
@@ -79,7 +91,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       data,
       bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(3));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_q", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "gamma_q", test_name);
 #if defined(TEST_OTHER)
    //
    // test other gamma_q(T, T) against data:
@@ -97,7 +109,9 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    //
    // test gamma_p(T, T) against data:
    //
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef GAMMAP_FUNCTION_TO_TEST
+   funcp = GAMMAP_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    funcp = boost::math::gamma_p<value_type, value_type>;
 #else
    funcp = boost::math::gamma_p;
@@ -106,7 +120,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       data,
       bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(5));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::gamma_p", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "gamma_p", test_name);
 #if defined(TEST_OTHER)
    //
    // test other gamma_p(T, T) against data:
@@ -122,6 +136,7 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    }
 #endif
    std::cout << std::endl;
+#endif
 }
 
 template <class T>
