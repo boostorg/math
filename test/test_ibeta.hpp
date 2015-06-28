@@ -26,7 +26,6 @@
 template <class Real, class T>
 void do_test_beta(const T& data, const char* type_name, const char* test_name)
 {
-#if !(defined(ERROR_REPORTING_MODE) && !defined(BETA_INC_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type, value_type);
@@ -40,6 +39,7 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
 
    boost::math::tools::test_result<value_type> result;
 
+#if !(defined(ERROR_REPORTING_MODE) && !defined(BETA_INC_FUNCTION_TO_TEST))
    std::cout << "Testing " << test_name << " with type " << type_name
       << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 
@@ -51,6 +51,7 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
       bind_func<Real>(funcp, 0, 1, 2),
       extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "beta", test_name);
+#endif
 
 #ifdef BETAC_INC_FUNCTION_TO_TEST
    funcp = BETAC_INC_FUNCTION_TO_TEST;
@@ -59,12 +60,13 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::betac;
 #endif
+#if !(defined(ERROR_REPORTING_MODE) && !defined(BETAC_INC_FUNCTION_TO_TEST))
    result = boost::math::tools::test_hetero<Real>(
       data,
       bind_func<Real>(funcp, 0, 1, 2),
       extract_result<Real>(4));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "betac", test_name);
-
+#endif
 #ifdef IBETA_FUNCTION_TO_TEST
    funcp = IBETA_FUNCTION_TO_TEST;
 #elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -72,12 +74,13 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::ibeta;
 #endif
+#if !(defined(ERROR_REPORTING_MODE) && !defined(IBETA_FUNCTION_TO_TEST))
    result = boost::math::tools::test_hetero<Real>(
       data,
       bind_func<Real>(funcp, 0, 1, 2),
       extract_result<Real>(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "ibeta", test_name);
-
+#endif
 #ifdef IBETAC_FUNCTION_TO_TEST
    funcp = IBETAC_FUNCTION_TO_TEST;
 #elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
@@ -85,6 +88,7 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::ibetac;
 #endif
+#if !(defined(ERROR_REPORTING_MODE) && !defined(IBETAC_FUNCTION_TO_TEST))
    result = boost::math::tools::test_hetero<Real>(
       data,
       bind_func<Real>(funcp, 0, 1, 2),
