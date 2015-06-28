@@ -15,7 +15,6 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
-#include "test_bessel_hooks.hpp"
 #include "table_type.hpp"
 
 #ifndef SC_
@@ -52,22 +51,6 @@ void do_test_cyl_neumann_y(const T& data, const char* type_name, const char* tes
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "cyl_neumann", test_name);
    std::cout << std::endl;
 
-#ifdef TEST_OTHER
-   if(boost::is_floating_point<value_type>::value)
-   {
-      funcp = other::cyl_neumann;
-
-      //
-      // test other::cyl_neumann against data:
-      //
-      result = boost::math::tools::test_hetero<Real>(
-         data, 
-         bind_func<Real>(funcp, 0, 1), 
-         extract_result<Real>(2));
-      handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::cyl_neumann", test_name);
-      std::cout << std::endl;
-   }
-#endif
 #endif
 }
 

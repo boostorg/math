@@ -14,7 +14,6 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
-#include "test_legendre_hooks.hpp"
 #include "table_type.hpp"
 
 #ifndef SC_

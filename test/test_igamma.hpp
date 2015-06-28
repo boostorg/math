@@ -18,7 +18,6 @@
 #include <boost/array.hpp>
 #include "functor.hpp"
 
-#include "test_gamma_hooks.hpp"
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
@@ -92,20 +91,6 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "gamma_q", test_name);
-#if defined(TEST_OTHER)
-   //
-   // test other gamma_q(T, T) against data:
-   //
-   if(boost::is_floating_point<value_type>::value)
-   {
-      funcp = other::gamma_q;
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0, 1),
-         extract_result<Real>(3));
-      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_q");
-   }
-#endif
    //
    // test gamma_p(T, T) against data:
    //
@@ -121,20 +106,6 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
       bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(5));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "gamma_p", test_name);
-#if defined(TEST_OTHER)
-   //
-   // test other gamma_p(T, T) against data:
-   //
-   if(boost::is_floating_point<value_type>::value)
-   {
-      funcp = other::gamma_p;
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0, 1),
-         extract_result<Real>(5));
-      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_p");
-   }
-#endif
    std::cout << std::endl;
 #endif
 }

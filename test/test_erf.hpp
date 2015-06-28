@@ -14,7 +14,6 @@
 #include <boost/array.hpp>
 #include "functor.hpp"
 
-#include "test_erf_hooks.hpp"
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
@@ -49,16 +48,6 @@ void do_test_erf(const T& data, const char* type_name, const char* test_name)
       bind_func<Real>(funcp, 0),
       extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "erf", test_name);
-#ifdef TEST_OTHER
-   if(::boost::is_floating_point<value_type>::value){
-      funcp = other::erf;
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0),
-         extract_result<Real>(1));
-      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::erf");
-   }
-#endif
    //
    // test erfc against data:
    //
@@ -74,16 +63,6 @@ void do_test_erf(const T& data, const char* type_name, const char* test_name)
       bind_func<Real>(funcp, 0),
       extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "erfc", test_name);
-#ifdef TEST_OTHER
-   if(::boost::is_floating_point<value_type>::value){
-      funcp = other::erfc;
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0),
-         extract_result<Real>(2));
-      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::erfc");
-   }
-#endif
    std::cout << std::endl;
 }
 

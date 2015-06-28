@@ -16,7 +16,6 @@
 #include <boost/array.hpp>
 #include "functor.hpp"
 
-#include "test_beta_hooks.hpp"
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 

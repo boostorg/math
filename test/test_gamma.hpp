@@ -18,7 +18,6 @@
 #include <boost/array.hpp>
 #include "functor.hpp"
 
-#include "test_gamma_hooks.hpp"
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
@@ -54,16 +53,6 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
       bind_func<Real>(funcp, 0),
       extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "tgamma", test_name);
-#ifdef TEST_OTHER
-   if(::boost::is_floating_point<value_type>::value){
-      funcp = other::tgamma;
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0),
-         extract_result<Real>(1));
-      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::tgamma");
-   }
-#endif
    //
    // test lgamma against data:
    //
@@ -79,16 +68,6 @@ void do_test_gamma(const T& data, const char* type_name, const char* test_name)
       bind_func<Real>(funcp, 0),
       extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "lgamma", test_name);
-#ifdef TEST_OTHER
-   if(::boost::is_floating_point<value_type>::value){
-      funcp = other::lgamma;
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0),
-         extract_result<Real>(2));
-      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::lgamma");
-   }
-#endif
 
    std::cout << std::endl;
 #endif

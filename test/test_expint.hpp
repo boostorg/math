@@ -17,7 +17,6 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
-#include "test_expint_hooks.hpp"
 #include "table_type.hpp"
 
 #ifndef SC_
@@ -36,14 +35,6 @@ T expint_wrapper(T n, T z)
 #endif
 }
 
-#ifdef TEST_OTHER
-template <class T>
-T other_expint_wrapper(T n, T z)
-{
-   return other::expint(
-      boost::math::itrunc(n), z);
-}
-#endif
 template <class Real, class T>
 void do_test_expint(const T& data, const char* type_name, const char* test_name)
 {
@@ -72,20 +63,6 @@ void do_test_expint(const T& data, const char* type_name, const char* test_name)
       bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "expint (En)", test_name);
-#ifdef TEST_OTHER
-   if(boost::is_floating_point<value_type>::value && other::expint(2u, 2.0))
-   {
-      funcp = other_expint_wrapper;
-      //
-      // test expint against data:
-      //
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0, 1),
-         extract_result<Real>(2));
-      handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::expint", test_name);
-   }
-#endif
    std::cout << std::endl;
 #endif
 }
@@ -120,20 +97,6 @@ void do_test_expint_Ei(const T& data, const char* type_name, const char* test_na
       bind_func<Real>(funcp, 0),
       extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "expint (Ei)", test_name);
-#ifdef TEST_OTHER
-   if(boost::is_floating_point<value_type>::value && other::expint(2.0))
-   {
-      funcp = other::expint;
-      //
-      // test expint against data:
-      //
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0),
-         extract_result<Real>(1));
-      handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::expint", test_name);
-   }
-#endif
 #endif
 }
 

@@ -18,7 +18,6 @@
 #include <boost/array.hpp>
 #include "functor.hpp"
 
-#include "test_gamma_hooks.hpp"
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
@@ -155,29 +154,6 @@ void do_test_gamma_inv(const T& data, const char* type_name, const char* test_na
       bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(3));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "gamma_q_inv", test_name);
-#ifdef TEST_OTHER
-   if(boost::is_floating_point<value_type>::value)
-   {
-      funcp = other::gamma_p_inv;
-      //
-      // test gamma_p_inv(T, T) against data:
-      //
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0, 1),
-         extract_result<Real>(2));
-      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_q");
-      //
-      // test gamma_q_inv(T, T) against data:
-      //
-      funcp = other::gamma_q_inv;
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0, 1),
-         extract_result<Real>(3));
-      print_test_result(result, data[result.worst()], result.worst(), type_name, "other::gamma_q");
-   }
-#endif
 #endif
 }
 

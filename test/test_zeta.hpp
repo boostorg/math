@@ -17,7 +17,6 @@
 #include "functor.hpp"
 
 #include "handle_test_result.hpp"
-#include "test_zeta_hooks.hpp"
 #include "table_type.hpp"
 
 #ifndef SC_
@@ -54,18 +53,6 @@ void do_test_zeta(const T& data, const char* type_name, const char* test_name)
       bind_func<Real>(funcp, 0),
       extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "zeta", test_name);
-#ifdef TEST_OTHER
-   if(boost::is_floating_point<value_type>::value)
-   {
-      funcp = other::zeta;
-
-      result = boost::math::tools::test_hetero<Real>(
-         data,
-         bind_func<Real>(funcp, 0),
-         extract_result<Real>(1));
-      handle_test_result(result, data[result.worst()], result.worst(), type_name, "other::zeta", test_name);
-   }
-#endif
    std::cout << std::endl;
 #endif
 }
