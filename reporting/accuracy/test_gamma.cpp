@@ -44,6 +44,10 @@ BOOST_AUTO_TEST_CASE(test_main)
       test_long_double = true;
    }
 
+#ifdef ALWAYS_TEST_DOUBLE
+   test_double = true;
+#endif
+
    if(test_float)
       test_gamma(0.0f, "float");
    if(test_double)

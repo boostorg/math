@@ -50,6 +50,7 @@ rule all-tests {
      {
          result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework 
          : : : 
+          [ check-target-builds has_gsl : <define>ALWAYS_TEST_DOUBLE : ] 
           <target-os>linux:<linkflags>-lpthread
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS) ]

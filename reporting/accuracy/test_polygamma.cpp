@@ -41,6 +41,10 @@ BOOST_AUTO_TEST_CASE(test_main, *boost::unit_test::expected_failures(10000))
       test_long_double = true;
    }
 
+#ifdef ALWAYS_TEST_DOUBLE
+   test_double = true;
+#endif
+
    if(test_float)
       test_polygamma(0.0f, "float");
    if(test_double)
