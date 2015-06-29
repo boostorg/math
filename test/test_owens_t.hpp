@@ -88,6 +88,7 @@ void test_spots(RealType)
 template <class RealType> // Any floating-point type RealType.
 void check_against_T7(RealType)
 {
+   using namespace std;
    // Basic sanity checks, test data is as accurate as long double,
    // so set tolerance to a few epsilon expressed as a fraction.
    RealType tolerance = boost::math::tools::epsilon<RealType>() * 150; // most OK with 3 eps tolerance.
