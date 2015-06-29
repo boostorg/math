@@ -16,6 +16,7 @@
 
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
+#include "owens_t_T7.hpp"
 
 
 template <class RealType>
