@@ -50,7 +50,7 @@ void do_test_beta(const T& data, const char* type_name, const char* test_name)
       data,
       bind_func<Real>(funcp, 0, 1, 2),
       extract_result<Real>(3));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "beta", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "beta (incomplete)", test_name);
 #endif
 
 #ifdef BETAC_INC_FUNCTION_TO_TEST
