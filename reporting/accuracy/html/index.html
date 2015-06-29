@@ -39,6 +39,7 @@
     (incomplete)</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_betac">betac</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_binomial_coefficient">binomial_coefficient</a></span></dt>
+<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_boost_math_owens_t">boost::math::owens_t</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_cbrt">cbrt</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_cos_pi">cos_pi</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_cyl_bessel_i">cyl_bessel_i</a></span></dt>
@@ -91,6 +92,7 @@
     (Ei)</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_expint_En_">expint
     (En)</a></span></dt>
+<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_expm1">expm1</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_gamma_p">gamma_p</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_gamma_p_inv">gamma_p_inv</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_gamma_p_inva">gamma_p_inva</a></span></dt>
@@ -111,12 +113,17 @@
     (associated)</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_legendre_q">legendre_q</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_lgamma">lgamma</a></span></dt>
+<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_log1p">log1p</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_polygamma">polygamma</a></span></dt>
+<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_powm1">powm1</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_sin_pi">sin_pi</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_sph_bessel">sph_bessel</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_sph_bessel_prime">sph_bessel_prime</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_sph_neumann">sph_neumann</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_sph_neumann_prime">sph_neumann_prime</a></span></dt>
+<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_spherical_harmonic_i">spherical_harmonic_i</a></span></dt>
+<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_spherical_harmonic_r">spherical_harmonic_r</a></span></dt>
+<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_sqrt1pm1">sqrt1pm1</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_tgamma">tgamma</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_tgamma1pm1">tgamma1pm1</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_tgamma_delta_ratio">tgamma_delta_ratio</a></span></dt>
@@ -392,10 +399,60 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="special_function_error_rates_rep.section_boost_math_owens_t"></a><a class="link" href="index.html#special_function_error_rates_rep.section_boost_math_owens_t" title="boost::math::owens_t">boost::math::owens_t</a>
+</h2></div></div></div>
+<div class="table">
+<a name="special_function_error_rates_rep.section_boost_math_owens_t.table_boost_math_owens_t"></a><p class="title"><b>Table&#160;5.&#160;Error rates for boost::math::owens_t</b></p>
+<div class="table-contents"><table class="table" summary="Error rates for boost::math::owens_t">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+            </th>
+<th>
+              <p>
+                Microsoft Visual C++ version 12.0<br> Win32<br> double
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                Owens T (medium small values)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">Max = 4.37&#949; (Mean = 0.973&#949;)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Owens T (large and diverse values)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">Max = 3.78&#949; (Mean = 0.621&#949;)</span>
+              </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<br class="table-break">
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="special_function_error_rates_rep.section_cbrt"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cbrt" title="cbrt">cbrt</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cbrt.table_cbrt"></a><p class="title"><b>Table&#160;5.&#160;Error rates for cbrt</b></p>
+<a name="special_function_error_rates_rep.section_cbrt.table_cbrt"></a><p class="title"><b>Table&#160;6.&#160;Error rates for cbrt</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cbrt">
 <colgroup>
 <col>
@@ -432,7 +489,7 @@
 <a name="special_function_error_rates_rep.section_cos_pi"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cos_pi" title="cos_pi">cos_pi</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cos_pi.table_cos_pi"></a><p class="title"><b>Table&#160;6.&#160;Error rates for cos_pi</b></p>
+<a name="special_function_error_rates_rep.section_cos_pi.table_cos_pi"></a><p class="title"><b>Table&#160;7.&#160;Error rates for cos_pi</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cos_pi">
 <colgroup>
 <col>
@@ -482,7 +539,7 @@
 <a name="special_function_error_rates_rep.section_cyl_bessel_i"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cyl_bessel_i" title="cyl_bessel_i">cyl_bessel_i</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_i.table_cyl_bessel_i"></a><p class="title"><b>Table&#160;7.&#160;Error rates for cyl_bessel_i</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_i.table_cyl_bessel_i"></a><p class="title"><b>Table&#160;8.&#160;Error rates for cyl_bessel_i</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_i">
 <colgroup>
 <col>
@@ -593,7 +650,7 @@
     (integer orders)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_i_integer_orders_.table_cyl_bessel_i_integer_orders_"></a><p class="title"><b>Table&#160;8.&#160;Error rates for cyl_bessel_i (integer orders)</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_i_integer_orders_.table_cyl_bessel_i_integer_orders_"></a><p class="title"><b>Table&#160;9.&#160;Error rates for cyl_bessel_i (integer orders)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_i (integer orders)">
 <colgroup>
 <col>
@@ -655,7 +712,7 @@
 <a name="special_function_error_rates_rep.section_cyl_bessel_i_prime"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cyl_bessel_i_prime" title="cyl_bessel_i_prime">cyl_bessel_i_prime</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_i_prime.table_cyl_bessel_i_prime"></a><p class="title"><b>Table&#160;9.&#160;Error rates for cyl_bessel_i_prime</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_i_prime.table_cyl_bessel_i_prime"></a><p class="title"><b>Table&#160;10.&#160;Error rates for cyl_bessel_i_prime</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_i_prime">
 <colgroup>
 <col>
@@ -766,7 +823,7 @@
     (integer orders)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_i_prime_integer_orders_.table_cyl_bessel_i_prime_integer_orders_"></a><p class="title"><b>Table&#160;10.&#160;Error rates for cyl_bessel_i_prime (integer orders)</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_i_prime_integer_orders_.table_cyl_bessel_i_prime_integer_orders_"></a><p class="title"><b>Table&#160;11.&#160;Error rates for cyl_bessel_i_prime (integer orders)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_i_prime (integer orders)">
 <colgroup>
 <col>
@@ -828,7 +885,7 @@
 <a name="special_function_error_rates_rep.section_cyl_bessel_j"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cyl_bessel_j" title="cyl_bessel_j">cyl_bessel_j</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_j.table_cyl_bessel_j"></a><p class="title"><b>Table&#160;11.&#160;Error rates for cyl_bessel_j</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_j.table_cyl_bessel_j"></a><p class="title"><b>Table&#160;12.&#160;Error rates for cyl_bessel_j</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_j">
 <colgroup>
 <col>
@@ -975,7 +1032,7 @@
     (integer orders)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_j_integer_orders_.table_cyl_bessel_j_integer_orders_"></a><p class="title"><b>Table&#160;12.&#160;Error rates for cyl_bessel_j (integer orders)</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_j_integer_orders_.table_cyl_bessel_j_integer_orders_"></a><p class="title"><b>Table&#160;13.&#160;Error rates for cyl_bessel_j (integer orders)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_j (integer orders)">
 <colgroup>
 <col>
@@ -1068,7 +1125,7 @@
 <a name="special_function_error_rates_rep.section_cyl_bessel_j_prime"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cyl_bessel_j_prime" title="cyl_bessel_j_prime">cyl_bessel_j_prime</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_j_prime.table_cyl_bessel_j_prime"></a><p class="title"><b>Table&#160;13.&#160;Error rates for cyl_bessel_j_prime</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_j_prime.table_cyl_bessel_j_prime"></a><p class="title"><b>Table&#160;14.&#160;Error rates for cyl_bessel_j_prime</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_j_prime">
 <colgroup>
 <col>
@@ -1215,7 +1272,7 @@
     (integer orders)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_j_prime_integer_orders_.table_cyl_bessel_j_prime_integer_orders_"></a><p class="title"><b>Table&#160;14.&#160;Error rates for cyl_bessel_j_prime (integer orders)</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_j_prime_integer_orders_.table_cyl_bessel_j_prime_integer_orders_"></a><p class="title"><b>Table&#160;15.&#160;Error rates for cyl_bessel_j_prime (integer orders)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_j_prime (integer orders)">
 <colgroup>
 <col>
@@ -1301,7 +1358,7 @@
 <a name="special_function_error_rates_rep.section_cyl_bessel_k"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cyl_bessel_k" title="cyl_bessel_k">cyl_bessel_k</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_k.table_cyl_bessel_k"></a><p class="title"><b>Table&#160;15.&#160;Error rates for cyl_bessel_k</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_k.table_cyl_bessel_k"></a><p class="title"><b>Table&#160;16.&#160;Error rates for cyl_bessel_k</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_k">
 <colgroup>
 <col>
@@ -1412,7 +1469,7 @@
     (integer orders)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_k_integer_orders_.table_cyl_bessel_k_integer_orders_"></a><p class="title"><b>Table&#160;16.&#160;Error rates for cyl_bessel_k (integer orders)</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_k_integer_orders_.table_cyl_bessel_k_integer_orders_"></a><p class="title"><b>Table&#160;17.&#160;Error rates for cyl_bessel_k (integer orders)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_k (integer orders)">
 <colgroup>
 <col>
@@ -1474,7 +1531,7 @@
 <a name="special_function_error_rates_rep.section_cyl_bessel_k_prime"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cyl_bessel_k_prime" title="cyl_bessel_k_prime">cyl_bessel_k_prime</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_k_prime.table_cyl_bessel_k_prime"></a><p class="title"><b>Table&#160;17.&#160;Error rates for cyl_bessel_k_prime</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_k_prime.table_cyl_bessel_k_prime"></a><p class="title"><b>Table&#160;18.&#160;Error rates for cyl_bessel_k_prime</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_k_prime">
 <colgroup>
 <col>
@@ -1585,7 +1642,7 @@
     (integer orders)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_bessel_k_prime_integer_orders_.table_cyl_bessel_k_prime_integer_orders_"></a><p class="title"><b>Table&#160;18.&#160;Error rates for cyl_bessel_k_prime (integer orders)</b></p>
+<a name="special_function_error_rates_rep.section_cyl_bessel_k_prime_integer_orders_.table_cyl_bessel_k_prime_integer_orders_"></a><p class="title"><b>Table&#160;19.&#160;Error rates for cyl_bessel_k_prime (integer orders)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_bessel_k_prime (integer orders)">
 <colgroup>
 <col>
@@ -1647,7 +1704,7 @@
 <a name="special_function_error_rates_rep.section_cyl_neumann"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cyl_neumann" title="cyl_neumann">cyl_neumann</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_neumann.table_cyl_neumann"></a><p class="title"><b>Table&#160;19.&#160;Error rates for cyl_neumann</b></p>
+<a name="special_function_error_rates_rep.section_cyl_neumann.table_cyl_neumann"></a><p class="title"><b>Table&#160;20.&#160;Error rates for cyl_neumann</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_neumann">
 <colgroup>
 <col>
@@ -1770,7 +1827,7 @@
     (integer orders)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_neumann_integer_orders_.table_cyl_neumann_integer_orders_"></a><p class="title"><b>Table&#160;20.&#160;Error rates for cyl_neumann (integer orders)</b></p>
+<a name="special_function_error_rates_rep.section_cyl_neumann_integer_orders_.table_cyl_neumann_integer_orders_"></a><p class="title"><b>Table&#160;21.&#160;Error rates for cyl_neumann (integer orders)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_neumann (integer orders)">
 <colgroup>
 <col>
@@ -1835,7 +1892,7 @@
 <a name="special_function_error_rates_rep.section_cyl_neumann_prime"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cyl_neumann_prime" title="cyl_neumann_prime">cyl_neumann_prime</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_neumann_prime.table_cyl_neumann_prime"></a><p class="title"><b>Table&#160;21.&#160;Error rates for cyl_neumann_prime</b></p>
+<a name="special_function_error_rates_rep.section_cyl_neumann_prime.table_cyl_neumann_prime"></a><p class="title"><b>Table&#160;22.&#160;Error rates for cyl_neumann_prime</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_neumann_prime">
 <colgroup>
 <col>
@@ -1958,7 +2015,7 @@
     (integer orders)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cyl_neumann_prime_integer_orders_.table_cyl_neumann_prime_integer_orders_"></a><p class="title"><b>Table&#160;22.&#160;Error rates for cyl_neumann_prime (integer orders)</b></p>
+<a name="special_function_error_rates_rep.section_cyl_neumann_prime_integer_orders_.table_cyl_neumann_prime_integer_orders_"></a><p class="title"><b>Table&#160;23.&#160;Error rates for cyl_neumann_prime (integer orders)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for cyl_neumann_prime (integer orders)">
 <colgroup>
 <col>
@@ -2020,7 +2077,7 @@
 <a name="special_function_error_rates_rep.section_digamma"></a><a class="link" href="index.html#special_function_error_rates_rep.section_digamma" title="digamma">digamma</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_digamma.table_digamma"></a><p class="title"><b>Table&#160;23.&#160;Error rates for digamma</b></p>
+<a name="special_function_error_rates_rep.section_digamma.table_digamma"></a><p class="title"><b>Table&#160;24.&#160;Error rates for digamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for digamma">
 <colgroup>
 <col>
@@ -2130,7 +2187,7 @@
 <a name="special_function_error_rates_rep.section_ellint_1"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ellint_1" title="ellint_1">ellint_1</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_1.table_ellint_1"></a><p class="title"><b>Table&#160;24.&#160;Error rates for ellint_1</b></p>
+<a name="special_function_error_rates_rep.section_ellint_1.table_ellint_1"></a><p class="title"><b>Table&#160;25.&#160;Error rates for ellint_1</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_1">
 <colgroup>
 <col>
@@ -2181,7 +2238,7 @@
     (complete)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_1_complete_.table_ellint_1_complete_"></a><p class="title"><b>Table&#160;25.&#160;Error rates for ellint_1 (complete)</b></p>
+<a name="special_function_error_rates_rep.section_ellint_1_complete_.table_ellint_1_complete_"></a><p class="title"><b>Table&#160;26.&#160;Error rates for ellint_1 (complete)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_1 (complete)">
 <colgroup>
 <col>
@@ -2231,7 +2288,7 @@
 <a name="special_function_error_rates_rep.section_ellint_2"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ellint_2" title="ellint_2">ellint_2</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_2.table_ellint_2"></a><p class="title"><b>Table&#160;26.&#160;Error rates for ellint_2</b></p>
+<a name="special_function_error_rates_rep.section_ellint_2.table_ellint_2"></a><p class="title"><b>Table&#160;27.&#160;Error rates for ellint_2</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_2">
 <colgroup>
 <col>
@@ -2282,7 +2339,7 @@
     (complete)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_2_complete_.table_ellint_2_complete_"></a><p class="title"><b>Table&#160;27.&#160;Error rates for ellint_2 (complete)</b></p>
+<a name="special_function_error_rates_rep.section_ellint_2_complete_.table_ellint_2_complete_"></a><p class="title"><b>Table&#160;28.&#160;Error rates for ellint_2 (complete)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_2 (complete)">
 <colgroup>
 <col>
@@ -2332,7 +2389,7 @@
 <a name="special_function_error_rates_rep.section_ellint_3"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ellint_3" title="ellint_3">ellint_3</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_3.table_ellint_3"></a><p class="title"><b>Table&#160;28.&#160;Error rates for ellint_3</b></p>
+<a name="special_function_error_rates_rep.section_ellint_3.table_ellint_3"></a><p class="title"><b>Table&#160;29.&#160;Error rates for ellint_3</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_3">
 <colgroup>
 <col>
@@ -2395,7 +2452,7 @@
     (complete)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_3_complete_.table_ellint_3_complete_"></a><p class="title"><b>Table&#160;29.&#160;Error rates for ellint_3 (complete)</b></p>
+<a name="special_function_error_rates_rep.section_ellint_3_complete_.table_ellint_3_complete_"></a><p class="title"><b>Table&#160;30.&#160;Error rates for ellint_3 (complete)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_3 (complete)">
 <colgroup>
 <col>
@@ -2445,7 +2502,7 @@
 <a name="special_function_error_rates_rep.section_ellint_d"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ellint_d" title="ellint_d">ellint_d</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_d.table_ellint_d"></a><p class="title"><b>Table&#160;30.&#160;Error rates for ellint_d</b></p>
+<a name="special_function_error_rates_rep.section_ellint_d.table_ellint_d"></a><p class="title"><b>Table&#160;31.&#160;Error rates for ellint_d</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_d">
 <colgroup>
 <col>
@@ -2496,7 +2553,7 @@
     (complete)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_d_complete_.table_ellint_d_complete_"></a><p class="title"><b>Table&#160;31.&#160;Error rates for ellint_d (complete)</b></p>
+<a name="special_function_error_rates_rep.section_ellint_d_complete_.table_ellint_d_complete_"></a><p class="title"><b>Table&#160;32.&#160;Error rates for ellint_d (complete)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_d (complete)">
 <colgroup>
 <col>
@@ -2546,7 +2603,7 @@
 <a name="special_function_error_rates_rep.section_ellint_rc"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ellint_rc" title="ellint_rc">ellint_rc</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_rc.table_ellint_rc"></a><p class="title"><b>Table&#160;32.&#160;Error rates for ellint_rc</b></p>
+<a name="special_function_error_rates_rep.section_ellint_rc.table_ellint_rc"></a><p class="title"><b>Table&#160;33.&#160;Error rates for ellint_rc</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_rc">
 <colgroup>
 <col>
@@ -2582,7 +2639,7 @@
 <a name="special_function_error_rates_rep.section_ellint_rd"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ellint_rd" title="ellint_rd">ellint_rd</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_rd.table_ellint_rd"></a><p class="title"><b>Table&#160;33.&#160;Error rates for ellint_rd</b></p>
+<a name="special_function_error_rates_rep.section_ellint_rd.table_ellint_rd"></a><p class="title"><b>Table&#160;34.&#160;Error rates for ellint_rd</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_rd">
 <colgroup>
 <col>
@@ -2680,7 +2737,7 @@
 <a name="special_function_error_rates_rep.section_ellint_rf"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ellint_rf" title="ellint_rf">ellint_rf</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_rf.table_ellint_rf"></a><p class="title"><b>Table&#160;34.&#160;Error rates for ellint_rf</b></p>
+<a name="special_function_error_rates_rep.section_ellint_rf.table_ellint_rf"></a><p class="title"><b>Table&#160;35.&#160;Error rates for ellint_rf</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_rf">
 <colgroup>
 <col>
@@ -2766,7 +2823,7 @@
 <a name="special_function_error_rates_rep.section_ellint_rg"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ellint_rg" title="ellint_rg">ellint_rg</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_rg.table_ellint_rg"></a><p class="title"><b>Table&#160;35.&#160;Error rates for ellint_rg</b></p>
+<a name="special_function_error_rates_rep.section_ellint_rg.table_ellint_rg"></a><p class="title"><b>Table&#160;36.&#160;Error rates for ellint_rg</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_rg">
 <colgroup>
 <col>
@@ -2852,7 +2909,7 @@
 <a name="special_function_error_rates_rep.section_ellint_rj"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ellint_rj" title="ellint_rj">ellint_rj</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ellint_rj.table_ellint_rj"></a><p class="title"><b>Table&#160;36.&#160;Error rates for ellint_rj</b></p>
+<a name="special_function_error_rates_rep.section_ellint_rj.table_ellint_rj"></a><p class="title"><b>Table&#160;37.&#160;Error rates for ellint_rj</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ellint_rj">
 <colgroup>
 <col>
@@ -2938,7 +2995,7 @@
 <a name="special_function_error_rates_rep.section_erf"></a><a class="link" href="index.html#special_function_error_rates_rep.section_erf" title="erf">erf</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_erf.table_erf"></a><p class="title"><b>Table&#160;37.&#160;Error rates for erf</b></p>
+<a name="special_function_error_rates_rep.section_erf.table_erf"></a><p class="title"><b>Table&#160;38.&#160;Error rates for erf</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for erf">
 <colgroup>
 <col>
@@ -3003,7 +3060,7 @@
 <a name="special_function_error_rates_rep.section_erf_inv"></a><a class="link" href="index.html#special_function_error_rates_rep.section_erf_inv" title="erf_inv">erf_inv</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_erf_inv.table_erf_inv"></a><p class="title"><b>Table&#160;38.&#160;Error rates for erf_inv</b></p>
+<a name="special_function_error_rates_rep.section_erf_inv.table_erf_inv"></a><p class="title"><b>Table&#160;39.&#160;Error rates for erf_inv</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for erf_inv">
 <colgroup>
 <col>
@@ -3039,7 +3096,7 @@
 <a name="special_function_error_rates_rep.section_erfc"></a><a class="link" href="index.html#special_function_error_rates_rep.section_erfc" title="erfc">erfc</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_erfc.table_erfc"></a><p class="title"><b>Table&#160;39.&#160;Error rates for erfc</b></p>
+<a name="special_function_error_rates_rep.section_erfc.table_erfc"></a><p class="title"><b>Table&#160;40.&#160;Error rates for erfc</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for erfc">
 <colgroup>
 <col>
@@ -3104,7 +3161,7 @@
 <a name="special_function_error_rates_rep.section_erfc_inv"></a><a class="link" href="index.html#special_function_error_rates_rep.section_erfc_inv" title="erfc_inv">erfc_inv</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_erfc_inv.table_erfc_inv"></a><p class="title"><b>Table&#160;40.&#160;Error rates for erfc_inv</b></p>
+<a name="special_function_error_rates_rep.section_erfc_inv.table_erfc_inv"></a><p class="title"><b>Table&#160;41.&#160;Error rates for erfc_inv</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for erfc_inv">
 <colgroup>
 <col>
@@ -3141,7 +3198,7 @@
     (Ei)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_expint_Ei_.table_expint_Ei_"></a><p class="title"><b>Table&#160;41.&#160;Error rates for expint (Ei)</b></p>
+<a name="special_function_error_rates_rep.section_expint_Ei_.table_expint_Ei_"></a><p class="title"><b>Table&#160;42.&#160;Error rates for expint (Ei)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for expint (Ei)">
 <colgroup>
 <col>
@@ -3192,7 +3249,7 @@
     (En)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_expint_En_.table_expint_En_"></a><p class="title"><b>Table&#160;42.&#160;Error rates for expint (En)</b></p>
+<a name="special_function_error_rates_rep.section_expint_En_.table_expint_En_"></a><p class="title"><b>Table&#160;43.&#160;Error rates for expint (En)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for expint (En)">
 <colgroup>
 <col>
@@ -3251,10 +3308,47 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="special_function_error_rates_rep.section_expm1"></a><a class="link" href="index.html#special_function_error_rates_rep.section_expm1" title="expm1">expm1</a>
+</h2></div></div></div>
+<div class="table">
+<a name="special_function_error_rates_rep.section_expm1.table_expm1"></a><p class="title"><b>Table&#160;44.&#160;Error rates for expm1</b></p>
+<div class="table-contents"><table class="table" summary="Error rates for expm1">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+            </th>
+<th>
+              <p>
+                Microsoft Visual C++ version 12.0<br> Win32<br> double
+              </p>
+            </th>
+</tr></thead>
+<tbody><tr>
+<td>
+              <p>
+                Random test data
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">Max = 0.996&#949; (Mean = 0.283&#949;)</span><br> <br>
+                (&lt;math.h&gt; = Max = 1.31&#949; (Mean = 0.496&#949;))
+              </p>
+            </td>
+</tr></tbody>
+</table></div>
+</div>
+<br class="table-break">
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="special_function_error_rates_rep.section_gamma_p"></a><a class="link" href="index.html#special_function_error_rates_rep.section_gamma_p" title="gamma_p">gamma_p</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_gamma_p.table_gamma_p"></a><p class="title"><b>Table&#160;43.&#160;Error rates for gamma_p</b></p>
+<a name="special_function_error_rates_rep.section_gamma_p.table_gamma_p"></a><p class="title"><b>Table&#160;45.&#160;Error rates for gamma_p</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for gamma_p">
 <colgroup>
 <col>
@@ -3328,7 +3422,7 @@
 <a name="special_function_error_rates_rep.section_gamma_p_inv"></a><a class="link" href="index.html#special_function_error_rates_rep.section_gamma_p_inv" title="gamma_p_inv">gamma_p_inv</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_gamma_p_inv.table_gamma_p_inv"></a><p class="title"><b>Table&#160;44.&#160;Error rates for gamma_p_inv</b></p>
+<a name="special_function_error_rates_rep.section_gamma_p_inv.table_gamma_p_inv"></a><p class="title"><b>Table&#160;46.&#160;Error rates for gamma_p_inv</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for gamma_p_inv">
 <colgroup>
 <col>
@@ -3390,7 +3484,7 @@
 <a name="special_function_error_rates_rep.section_gamma_p_inva"></a><a class="link" href="index.html#special_function_error_rates_rep.section_gamma_p_inva" title="gamma_p_inva">gamma_p_inva</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_gamma_p_inva.table_gamma_p_inva"></a><p class="title"><b>Table&#160;45.&#160;Error rates for gamma_p_inva</b></p>
+<a name="special_function_error_rates_rep.section_gamma_p_inva.table_gamma_p_inva"></a><p class="title"><b>Table&#160;47.&#160;Error rates for gamma_p_inva</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for gamma_p_inva">
 <colgroup>
 <col>
@@ -3426,7 +3520,7 @@
 <a name="special_function_error_rates_rep.section_gamma_q"></a><a class="link" href="index.html#special_function_error_rates_rep.section_gamma_q" title="gamma_q">gamma_q</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_gamma_q.table_gamma_q"></a><p class="title"><b>Table&#160;46.&#160;Error rates for gamma_q</b></p>
+<a name="special_function_error_rates_rep.section_gamma_q.table_gamma_q"></a><p class="title"><b>Table&#160;48.&#160;Error rates for gamma_q</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for gamma_q">
 <colgroup>
 <col>
@@ -3500,7 +3594,7 @@
 <a name="special_function_error_rates_rep.section_gamma_q_inv"></a><a class="link" href="index.html#special_function_error_rates_rep.section_gamma_q_inv" title="gamma_q_inv">gamma_q_inv</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_gamma_q_inv.table_gamma_q_inv"></a><p class="title"><b>Table&#160;47.&#160;Error rates for gamma_q_inv</b></p>
+<a name="special_function_error_rates_rep.section_gamma_q_inv.table_gamma_q_inv"></a><p class="title"><b>Table&#160;49.&#160;Error rates for gamma_q_inv</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for gamma_q_inv">
 <colgroup>
 <col>
@@ -3562,7 +3656,7 @@
 <a name="special_function_error_rates_rep.section_gamma_q_inva"></a><a class="link" href="index.html#special_function_error_rates_rep.section_gamma_q_inva" title="gamma_q_inva">gamma_q_inva</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_gamma_q_inva.table_gamma_q_inva"></a><p class="title"><b>Table&#160;48.&#160;Error rates for gamma_q_inva</b></p>
+<a name="special_function_error_rates_rep.section_gamma_q_inva.table_gamma_q_inva"></a><p class="title"><b>Table&#160;50.&#160;Error rates for gamma_q_inva</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for gamma_q_inva">
 <colgroup>
 <col>
@@ -3598,7 +3692,7 @@
 <a name="special_function_error_rates_rep.section_hermite"></a><a class="link" href="index.html#special_function_error_rates_rep.section_hermite" title="hermite">hermite</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_hermite.table_hermite"></a><p class="title"><b>Table&#160;49.&#160;Error rates for hermite</b></p>
+<a name="special_function_error_rates_rep.section_hermite.table_hermite"></a><p class="title"><b>Table&#160;51.&#160;Error rates for hermite</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for hermite">
 <colgroup>
 <col>
@@ -3634,7 +3728,7 @@
 <a name="special_function_error_rates_rep.section_heuman_lambda"></a><a class="link" href="index.html#special_function_error_rates_rep.section_heuman_lambda" title="heuman_lambda">heuman_lambda</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_heuman_lambda.table_heuman_lambda"></a><p class="title"><b>Table&#160;50.&#160;Error rates for heuman_lambda</b></p>
+<a name="special_function_error_rates_rep.section_heuman_lambda.table_heuman_lambda"></a><p class="title"><b>Table&#160;52.&#160;Error rates for heuman_lambda</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for heuman_lambda">
 <colgroup>
 <col>
@@ -3684,7 +3778,7 @@
 <a name="special_function_error_rates_rep.section_ibeta"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ibeta" title="ibeta">ibeta</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ibeta.table_ibeta"></a><p class="title"><b>Table&#160;51.&#160;Error rates for ibeta</b></p>
+<a name="special_function_error_rates_rep.section_ibeta.table_ibeta"></a><p class="title"><b>Table&#160;53.&#160;Error rates for ibeta</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ibeta">
 <colgroup>
 <col>
@@ -3758,7 +3852,7 @@
 <a name="special_function_error_rates_rep.section_ibeta_inv"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ibeta_inv" title="ibeta_inv">ibeta_inv</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ibeta_inv.table_ibeta_inv"></a><p class="title"><b>Table&#160;52.&#160;Error rates for ibeta_inv</b></p>
+<a name="special_function_error_rates_rep.section_ibeta_inv.table_ibeta_inv"></a><p class="title"><b>Table&#160;54.&#160;Error rates for ibeta_inv</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ibeta_inv">
 <colgroup>
 <col>
@@ -3794,7 +3888,7 @@
 <a name="special_function_error_rates_rep.section_ibetac"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ibetac" title="ibetac">ibetac</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ibetac.table_ibetac"></a><p class="title"><b>Table&#160;53.&#160;Error rates for ibetac</b></p>
+<a name="special_function_error_rates_rep.section_ibetac.table_ibetac"></a><p class="title"><b>Table&#160;55.&#160;Error rates for ibetac</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ibetac">
 <colgroup>
 <col>
@@ -3868,7 +3962,7 @@
 <a name="special_function_error_rates_rep.section_ibetac_inv"></a><a class="link" href="index.html#special_function_error_rates_rep.section_ibetac_inv" title="ibetac_inv">ibetac_inv</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_ibetac_inv.table_ibetac_inv"></a><p class="title"><b>Table&#160;54.&#160;Error rates for ibetac_inv</b></p>
+<a name="special_function_error_rates_rep.section_ibetac_inv.table_ibetac_inv"></a><p class="title"><b>Table&#160;56.&#160;Error rates for ibetac_inv</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for ibetac_inv">
 <colgroup>
 <col>
@@ -3904,7 +3998,7 @@
 <a name="special_function_error_rates_rep.section_jacobi_cn"></a><a class="link" href="index.html#special_function_error_rates_rep.section_jacobi_cn" title="jacobi_cn">jacobi_cn</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_jacobi_cn.table_jacobi_cn"></a><p class="title"><b>Table&#160;55.&#160;Error rates for jacobi_cn</b></p>
+<a name="special_function_error_rates_rep.section_jacobi_cn.table_jacobi_cn"></a><p class="title"><b>Table&#160;57.&#160;Error rates for jacobi_cn</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for jacobi_cn">
 <colgroup>
 <col>
@@ -3990,7 +4084,7 @@
 <a name="special_function_error_rates_rep.section_jacobi_dn"></a><a class="link" href="index.html#special_function_error_rates_rep.section_jacobi_dn" title="jacobi_dn">jacobi_dn</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_jacobi_dn.table_jacobi_dn"></a><p class="title"><b>Table&#160;56.&#160;Error rates for jacobi_dn</b></p>
+<a name="special_function_error_rates_rep.section_jacobi_dn.table_jacobi_dn"></a><p class="title"><b>Table&#160;58.&#160;Error rates for jacobi_dn</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for jacobi_dn">
 <colgroup>
 <col>
@@ -4076,7 +4170,7 @@
 <a name="special_function_error_rates_rep.section_jacobi_sn"></a><a class="link" href="index.html#special_function_error_rates_rep.section_jacobi_sn" title="jacobi_sn">jacobi_sn</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_jacobi_sn.table_jacobi_sn"></a><p class="title"><b>Table&#160;57.&#160;Error rates for jacobi_sn</b></p>
+<a name="special_function_error_rates_rep.section_jacobi_sn.table_jacobi_sn"></a><p class="title"><b>Table&#160;59.&#160;Error rates for jacobi_sn</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for jacobi_sn">
 <colgroup>
 <col>
@@ -4162,7 +4256,7 @@
 <a name="special_function_error_rates_rep.section_legendre_p"></a><a class="link" href="index.html#special_function_error_rates_rep.section_legendre_p" title="legendre_p">legendre_p</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_legendre_p.table_legendre_p"></a><p class="title"><b>Table&#160;58.&#160;Error rates for legendre_p</b></p>
+<a name="special_function_error_rates_rep.section_legendre_p.table_legendre_p"></a><p class="title"><b>Table&#160;60.&#160;Error rates for legendre_p</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for legendre_p">
 <colgroup>
 <col>
@@ -4213,7 +4307,7 @@
     (associated)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_legendre_p_associated_.table_legendre_p_associated_"></a><p class="title"><b>Table&#160;59.&#160;Error rates for legendre_p (associated)</b></p>
+<a name="special_function_error_rates_rep.section_legendre_p_associated_.table_legendre_p_associated_"></a><p class="title"><b>Table&#160;61.&#160;Error rates for legendre_p (associated)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for legendre_p (associated)">
 <colgroup>
 <col>
@@ -4249,7 +4343,7 @@
 <a name="special_function_error_rates_rep.section_legendre_q"></a><a class="link" href="index.html#special_function_error_rates_rep.section_legendre_q" title="legendre_q">legendre_q</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_legendre_q.table_legendre_q"></a><p class="title"><b>Table&#160;60.&#160;Error rates for legendre_q</b></p>
+<a name="special_function_error_rates_rep.section_legendre_q.table_legendre_q"></a><p class="title"><b>Table&#160;62.&#160;Error rates for legendre_q</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for legendre_q">
 <colgroup>
 <col>
@@ -4299,7 +4393,7 @@
 <a name="special_function_error_rates_rep.section_lgamma"></a><a class="link" href="index.html#special_function_error_rates_rep.section_lgamma" title="lgamma">lgamma</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_lgamma.table_lgamma"></a><p class="title"><b>Table&#160;61.&#160;Error rates for lgamma</b></p>
+<a name="special_function_error_rates_rep.section_lgamma.table_lgamma"></a><p class="title"><b>Table&#160;63.&#160;Error rates for lgamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for lgamma">
 <colgroup>
 <col>
@@ -4400,10 +4494,47 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="special_function_error_rates_rep.section_log1p"></a><a class="link" href="index.html#special_function_error_rates_rep.section_log1p" title="log1p">log1p</a>
+</h2></div></div></div>
+<div class="table">
+<a name="special_function_error_rates_rep.section_log1p.table_log1p"></a><p class="title"><b>Table&#160;64.&#160;Error rates for log1p</b></p>
+<div class="table-contents"><table class="table" summary="Error rates for log1p">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+            </th>
+<th>
+              <p>
+                Microsoft Visual C++ version 12.0<br> Win32<br> double
+              </p>
+            </th>
+</tr></thead>
+<tbody><tr>
+<td>
+              <p>
+                Random test data
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">Max = 0.509&#949; (Mean = 0.057&#949;)</span><br> <br>
+                (&lt;math.h&gt; = Max = 0.509&#949; (Mean = 0.057&#949;))
+              </p>
+            </td>
+</tr></tbody>
+</table></div>
+</div>
+<br class="table-break">
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="special_function_error_rates_rep.section_polygamma"></a><a class="link" href="index.html#special_function_error_rates_rep.section_polygamma" title="polygamma">polygamma</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_polygamma.table_polygamma"></a><p class="title"><b>Table&#160;62.&#160;Error rates for polygamma</b></p>
+<a name="special_function_error_rates_rep.section_polygamma.table_polygamma"></a><p class="title"><b>Table&#160;65.&#160;Error rates for polygamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for polygamma">
 <colgroup>
 <col>
@@ -4498,10 +4629,46 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="special_function_error_rates_rep.section_powm1"></a><a class="link" href="index.html#special_function_error_rates_rep.section_powm1" title="powm1">powm1</a>
+</h2></div></div></div>
+<div class="table">
+<a name="special_function_error_rates_rep.section_powm1.table_powm1"></a><p class="title"><b>Table&#160;66.&#160;Error rates for powm1</b></p>
+<div class="table-contents"><table class="table" summary="Error rates for powm1">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+            </th>
+<th>
+              <p>
+                Microsoft Visual C++ version 12.0<br> Win32<br> double
+              </p>
+            </th>
+</tr></thead>
+<tbody><tr>
+<td>
+              <p>
+                powm1
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">Max = 1.99&#949; (Mean = 0.461&#949;)</span>
+              </p>
+            </td>
+</tr></tbody>
+</table></div>
+</div>
+<br class="table-break">
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="special_function_error_rates_rep.section_sin_pi"></a><a class="link" href="index.html#special_function_error_rates_rep.section_sin_pi" title="sin_pi">sin_pi</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_sin_pi.table_sin_pi"></a><p class="title"><b>Table&#160;63.&#160;Error rates for sin_pi</b></p>
+<a name="special_function_error_rates_rep.section_sin_pi.table_sin_pi"></a><p class="title"><b>Table&#160;67.&#160;Error rates for sin_pi</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for sin_pi">
 <colgroup>
 <col>
@@ -4551,7 +4718,7 @@
 <a name="special_function_error_rates_rep.section_sph_bessel"></a><a class="link" href="index.html#special_function_error_rates_rep.section_sph_bessel" title="sph_bessel">sph_bessel</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_sph_bessel.table_sph_bessel"></a><p class="title"><b>Table&#160;64.&#160;Error rates for sph_bessel</b></p>
+<a name="special_function_error_rates_rep.section_sph_bessel.table_sph_bessel"></a><p class="title"><b>Table&#160;68.&#160;Error rates for sph_bessel</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for sph_bessel">
 <colgroup>
 <col>
@@ -4587,7 +4754,7 @@
 <a name="special_function_error_rates_rep.section_sph_bessel_prime"></a><a class="link" href="index.html#special_function_error_rates_rep.section_sph_bessel_prime" title="sph_bessel_prime">sph_bessel_prime</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_sph_bessel_prime.table_sph_bessel_prime"></a><p class="title"><b>Table&#160;65.&#160;Error rates for sph_bessel_prime</b></p>
+<a name="special_function_error_rates_rep.section_sph_bessel_prime.table_sph_bessel_prime"></a><p class="title"><b>Table&#160;69.&#160;Error rates for sph_bessel_prime</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for sph_bessel_prime">
 <colgroup>
 <col>
@@ -4623,7 +4790,7 @@
 <a name="special_function_error_rates_rep.section_sph_neumann"></a><a class="link" href="index.html#special_function_error_rates_rep.section_sph_neumann" title="sph_neumann">sph_neumann</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_sph_neumann.table_sph_neumann"></a><p class="title"><b>Table&#160;66.&#160;Error rates for sph_neumann</b></p>
+<a name="special_function_error_rates_rep.section_sph_neumann.table_sph_neumann"></a><p class="title"><b>Table&#160;70.&#160;Error rates for sph_neumann</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for sph_neumann">
 <colgroup>
 <col>
@@ -4659,7 +4826,7 @@
 <a name="special_function_error_rates_rep.section_sph_neumann_prime"></a><a class="link" href="index.html#special_function_error_rates_rep.section_sph_neumann_prime" title="sph_neumann_prime">sph_neumann_prime</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_sph_neumann_prime.table_sph_neumann_prime"></a><p class="title"><b>Table&#160;67.&#160;Error rates for sph_neumann_prime</b></p>
+<a name="special_function_error_rates_rep.section_sph_neumann_prime.table_sph_neumann_prime"></a><p class="title"><b>Table&#160;71.&#160;Error rates for sph_neumann_prime</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for sph_neumann_prime">
 <colgroup>
 <col>
@@ -4692,10 +4859,118 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="special_function_error_rates_rep.section_spherical_harmonic_i"></a><a class="link" href="index.html#special_function_error_rates_rep.section_spherical_harmonic_i" title="spherical_harmonic_i">spherical_harmonic_i</a>
+</h2></div></div></div>
+<div class="table">
+<a name="special_function_error_rates_rep.section_spherical_harmonic_i.table_spherical_harmonic_i"></a><p class="title"><b>Table&#160;72.&#160;Error rates for spherical_harmonic_i</b></p>
+<div class="table-contents"><table class="table" summary="Error rates for spherical_harmonic_i">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+            </th>
+<th>
+              <p>
+                Microsoft Visual C++ version 12.0<br> Win32<br> double
+              </p>
+            </th>
+</tr></thead>
+<tbody><tr>
+<td>
+              <p>
+                Spherical Harmonics
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">Max = 2.27e+004&#949; (Mean = 725&#949;)</span>
+              </p>
+            </td>
+</tr></tbody>
+</table></div>
+</div>
+<br class="table-break">
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="special_function_error_rates_rep.section_spherical_harmonic_r"></a><a class="link" href="index.html#special_function_error_rates_rep.section_spherical_harmonic_r" title="spherical_harmonic_r">spherical_harmonic_r</a>
+</h2></div></div></div>
+<div class="table">
+<a name="special_function_error_rates_rep.section_spherical_harmonic_r.table_spherical_harmonic_r"></a><p class="title"><b>Table&#160;73.&#160;Error rates for spherical_harmonic_r</b></p>
+<div class="table-contents"><table class="table" summary="Error rates for spherical_harmonic_r">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+            </th>
+<th>
+              <p>
+                Microsoft Visual C++ version 12.0<br> Win32<br> double
+              </p>
+            </th>
+</tr></thead>
+<tbody><tr>
+<td>
+              <p>
+                Spherical Harmonics
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">Max = 2.27e+004&#949; (Mean = 725&#949;)</span>
+              </p>
+            </td>
+</tr></tbody>
+</table></div>
+</div>
+<br class="table-break">
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="special_function_error_rates_rep.section_sqrt1pm1"></a><a class="link" href="index.html#special_function_error_rates_rep.section_sqrt1pm1" title="sqrt1pm1">sqrt1pm1</a>
+</h2></div></div></div>
+<div class="table">
+<a name="special_function_error_rates_rep.section_sqrt1pm1.table_sqrt1pm1"></a><p class="title"><b>Table&#160;74.&#160;Error rates for sqrt1pm1</b></p>
+<div class="table-contents"><table class="table" summary="Error rates for sqrt1pm1">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+            </th>
+<th>
+              <p>
+                Microsoft Visual C++ version 12.0<br> Win32<br> double
+              </p>
+            </th>
+</tr></thead>
+<tbody><tr>
+<td>
+              <p>
+                sqrt1pm1
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">Max = 1.36&#949; (Mean = 0.44&#949;)</span>
+              </p>
+            </td>
+</tr></tbody>
+</table></div>
+</div>
+<br class="table-break">
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="special_function_error_rates_rep.section_tgamma"></a><a class="link" href="index.html#special_function_error_rates_rep.section_tgamma" title="tgamma">tgamma</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_tgamma.table_tgamma"></a><p class="title"><b>Table&#160;68.&#160;Error rates for tgamma</b></p>
+<a name="special_function_error_rates_rep.section_tgamma.table_tgamma"></a><p class="title"><b>Table&#160;75.&#160;Error rates for tgamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for tgamma">
 <colgroup>
 <col>
@@ -4799,7 +5074,7 @@
 <a name="special_function_error_rates_rep.section_tgamma1pm1"></a><a class="link" href="index.html#special_function_error_rates_rep.section_tgamma1pm1" title="tgamma1pm1">tgamma1pm1</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_tgamma1pm1.table_tgamma1pm1"></a><p class="title"><b>Table&#160;69.&#160;Error rates for tgamma1pm1</b></p>
+<a name="special_function_error_rates_rep.section_tgamma1pm1.table_tgamma1pm1"></a><p class="title"><b>Table&#160;76.&#160;Error rates for tgamma1pm1</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for tgamma1pm1">
 <colgroup>
 <col>
@@ -4835,7 +5110,7 @@
 <a name="special_function_error_rates_rep.section_tgamma_delta_ratio"></a><a class="link" href="index.html#special_function_error_rates_rep.section_tgamma_delta_ratio" title="tgamma_delta_ratio">tgamma_delta_ratio</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_tgamma_delta_ratio.table_tgamma_delta_ratio"></a><p class="title"><b>Table&#160;70.&#160;Error rates for tgamma_delta_ratio</b></p>
+<a name="special_function_error_rates_rep.section_tgamma_delta_ratio.table_tgamma_delta_ratio"></a><p class="title"><b>Table&#160;77.&#160;Error rates for tgamma_delta_ratio</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for tgamma_delta_ratio">
 <colgroup>
 <col>
@@ -4934,7 +5209,7 @@
     (incomplete)</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_tgamma_incomplete_.table_tgamma_incomplete_"></a><p class="title"><b>Table&#160;71.&#160;Error rates for tgamma (incomplete)</b></p>
+<a name="special_function_error_rates_rep.section_tgamma_incomplete_.table_tgamma_incomplete_"></a><p class="title"><b>Table&#160;78.&#160;Error rates for tgamma (incomplete)</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for tgamma (incomplete)">
 <colgroup>
 <col>
@@ -4996,7 +5271,7 @@
 <a name="special_function_error_rates_rep.section_tgamma_lower"></a><a class="link" href="index.html#special_function_error_rates_rep.section_tgamma_lower" title="tgamma_lower">tgamma_lower</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_tgamma_lower.table_tgamma_lower"></a><p class="title"><b>Table&#160;72.&#160;Error rates for tgamma_lower</b></p>
+<a name="special_function_error_rates_rep.section_tgamma_lower.table_tgamma_lower"></a><p class="title"><b>Table&#160;79.&#160;Error rates for tgamma_lower</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for tgamma_lower">
 <colgroup>
 <col>
@@ -5058,7 +5333,7 @@
 <a name="special_function_error_rates_rep.section_tgamma_ratio"></a><a class="link" href="index.html#special_function_error_rates_rep.section_tgamma_ratio" title="tgamma_ratio">tgamma_ratio</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_tgamma_ratio.table_tgamma_ratio"></a><p class="title"><b>Table&#160;73.&#160;Error rates for tgamma_ratio</b></p>
+<a name="special_function_error_rates_rep.section_tgamma_ratio.table_tgamma_ratio"></a><p class="title"><b>Table&#160;80.&#160;Error rates for tgamma_ratio</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for tgamma_ratio">
 <colgroup>
 <col>
@@ -5094,7 +5369,7 @@
 <a name="special_function_error_rates_rep.section_trigamma"></a><a class="link" href="index.html#special_function_error_rates_rep.section_trigamma" title="trigamma">trigamma</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_trigamma.table_trigamma"></a><p class="title"><b>Table&#160;74.&#160;Error rates for trigamma</b></p>
+<a name="special_function_error_rates_rep.section_trigamma.table_trigamma"></a><p class="title"><b>Table&#160;81.&#160;Error rates for trigamma</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for trigamma">
 <colgroup>
 <col>
@@ -5130,7 +5405,7 @@
 <a name="special_function_error_rates_rep.section_zeta"></a><a class="link" href="index.html#special_function_error_rates_rep.section_zeta" title="zeta">zeta</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_zeta.table_zeta"></a><p class="title"><b>Table&#160;75.&#160;Error rates for zeta</b></p>
+<a name="special_function_error_rates_rep.section_zeta.table_zeta"></a><p class="title"><b>Table&#160;82.&#160;Error rates for zeta</b></p>
 <div class="table-contents"><table class="table" summary="Error rates for zeta">
 <colgroup>
 <col>
@@ -5232,7 +5507,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: June 29, 2015 at 10:52:00 GMT</small></p></td>
+<td align="left"><p><small>Last revised: June 29, 2015 at 18:21:41 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

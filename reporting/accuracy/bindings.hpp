@@ -15,6 +15,9 @@
 
 #define TEST_LIBRARY_NAME "<tr1/cmath>"
 
+#define LOG1P_FUNCTION_TO_TEST std::tr1::log1p
+#define EXPM1_FUNCTION_TO_TEST std::tr1::log1p
+
 #define CBRT_FUNCTION_TO_TEST std::tr1::cbrt
 #define ERF_FUNCTION_TO_TEST std::tr1::erf
 #define ERFC_FUNCTION_TO_TEST std::tr1::erfc
@@ -74,6 +77,9 @@ inline long double assoc_legendre_p_binder(int i, int j, long double d)
 
 #ifdef _MSC_VER
 
+#define LOG1P_FUNCTION_TO_TEST ::log1p
+#define EXPM1_FUNCTION_TO_TEST ::expm1
+
 #define CBRT_FUNCTION_TO_TEST ::cbrt
 #define ERF_FUNCTION_TO_TEST ::erf
 #define ERFC_FUNCTION_TO_TEST ::erfc
@@ -87,7 +93,10 @@ inline long double assoc_legendre_p_binder(int i, int j, long double d)
 
 #else
 
-#define CBRT_FUNCTION_TO_TEST ::cbrt
+#define LOG1P_FUNCTION_TO_TEST ::log1pl
+#define EXPM1_FUNCTION_TO_TEST ::expm1l
+
+#define CBRT_FUNCTION_TO_TEST ::cbrtl
 #define ERF_FUNCTION_TO_TEST ::erfl
 #define ERFC_FUNCTION_TO_TEST ::erfcl
 
@@ -293,7 +302,10 @@ inline double legendre_q(unsigned n, double x) { return gsl_sf_legendre_Ql(n, x)
 
 #define TEST_LIBRARY_NAME "boost"
 
-#define CBRT_FUNCTION_TO_TEST boost::cbrt
+#define LOG1P_FUNCTION_TO_TEST boost::math::log1p
+#define EXPM1_FUNCTION_TO_TEST boost::math::expm1
+
+#define CBRT_FUNCTION_TO_TEST boost::math::cbrt
 #define ERF_FUNCTION_TO_TEST boost::math::erf
 #define ERFC_FUNCTION_TO_TEST boost::math::erfc
 #define ERF_INV_FUNCTION_TO_TEST boost::math::erf_inv
@@ -389,6 +401,12 @@ inline double legendre_q(unsigned n, double x) { return gsl_sf_legendre_Ql(n, x)
 #define COS_PI_RATIO_FUNCTION_TO_TEST boost::math::cos_pi
 #define TRIGAMMA_RATIO_FUNCTION_TO_TEST boost::math::trigamma
 #define ZETA_FUNCTION_TO_TEST boost::math::zeta
+
+#define SQRT1PM1_FUNCTION_TO_TEST boost::math::sqrt1pm1
+#define POWM1_FUNCTION_TO_TEST boost::math::powm1
+#define OWENS_T_FUNCTION_TO_TEST boost::math::owens_t
+#define SPHERICAL_HARMONIC_R_FUNCTION_TO_TEST boost::math::spherical_harmonic_r
+#define SPHERICAL_HARMONIC_I_FUNCTION_TO_TEST boost::math::spherical_harmonic_i
 
 #endif
 
