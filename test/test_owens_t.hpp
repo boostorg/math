@@ -141,7 +141,7 @@ void do_test_owens_t(const T& data, const char* type_name, const char* test_name
       data,
       bind_func<Real>(funcp, 0, 1),
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::owens_t", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "owens_t", test_name);
 
    std::cout << std::endl;
 #endif

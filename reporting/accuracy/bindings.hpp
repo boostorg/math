@@ -300,6 +300,10 @@ inline double legendre_q(unsigned n, double x) { return gsl_sf_legendre_Ql(n, x)
 
 #else
 
+#include <boost/math/distributions/non_central_beta.hpp>
+#include <boost/math/distributions/non_central_chi_squared.hpp>
+#include <boost/math/distributions/non_central_t.hpp>
+
 #define TEST_LIBRARY_NAME "boost"
 
 #define LOG1P_FUNCTION_TO_TEST boost::math::log1p
@@ -407,6 +411,21 @@ inline double legendre_q(unsigned n, double x) { return gsl_sf_legendre_Ql(n, x)
 #define OWENS_T_FUNCTION_TO_TEST boost::math::owens_t
 #define SPHERICAL_HARMONIC_R_FUNCTION_TO_TEST boost::math::spherical_harmonic_r
 #define SPHERICAL_HARMONIC_I_FUNCTION_TO_TEST boost::math::spherical_harmonic_i
+
+template <class T> T do_nc_beta_cdf(T a, T b, T nc, T x){ return cdf(boost::math::non_central_beta_distribution<T>(a, b, nc), x); }
+template <class T> T do_nc_beta_ccdf(T a, T b, T nc, T x){ return cdf(complement(boost::math::non_central_beta_distribution<T>(a, b, nc), x)); }
+template <class T> T do_nc_chi_squared_cdf(T df, T nc, T x){ return cdf(boost::math::non_central_chi_squared_distribution<T>(df, nc), x); }
+template <class T> T do_nc_chi_squared_ccdf(T df, T nc, T x){ return cdf(complement(boost::math::non_central_chi_squared_distribution<T>(df, nc), x)); }
+template <class T> T do_nc_t_cdf(T df, T nc, T x){ return cdf(boost::math::non_central_t_distribution<T>(df, nc), x); }
+template <class T> T do_nc_t_ccdf(T df, T nc, T x){ return cdf(complement(boost::math::non_central_t_distribution<T>(df, nc), x)); }
+
+#define NC_BETA_CDF_FUNCTION_TO_TEST do_nc_beta_cdf
+#define NC_BETA_CCDF_FUNCTION_TO_TEST do_nc_beta_ccdf
+#define NC_CHI_SQUARED_CDF_FUNCTION_TO_TEST do_nc_chi_squared_cdf
+#define NC_CHI_SQUARED_CCDF_FUNCTION_TO_TEST do_nc_chi_squared_ccdf
+#define NC_T_CDF_FUNCTION_TO_TEST do_nc_t_cdf
+#define NC_T_CCDF_FUNCTION_TO_TEST do_nc_t_ccdf
+
 
 #endif
 
