@@ -176,7 +176,7 @@ void test_bessel(T, const char* name)
 #include "bessel_i_prime_data.ipp"
     do_test_cyl_bessel_i_prime<T>(bessel_i_prime_data, name, "Bessel I'v: Random Data");
 
-    if(0 != static_cast<T>(ldexp(0.5, -700)))
+    if(0 != ldexp(static_cast<T>(0.5), -700))
       do_test_cyl_bessel_i_prime<T>(iv_prime_large_data, name, "Bessel I'v: Mathworld Data (large values)");
 }
 
