@@ -4,6 +4,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 #include "bindings.hpp"
 #include "../../test/test_bessel_i_prime.hpp"
 #include <boost/math/special_functions/bessel_prime.hpp>
