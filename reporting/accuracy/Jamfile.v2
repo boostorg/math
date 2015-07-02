@@ -37,12 +37,15 @@ if $(is_unix)
 #
 lib gsl ;
 lib gslcblas ;
+lib Rmath ;
 obj has_libstdcxx_tr1 : has_libstdcxx_tr1.cpp ;
 explicit has_libstdcxx_tr1 ;
 obj has_c99_cmath : has_c99_cmath.cpp ;
 explicit has_c99_cmath ;
 exe has_gsl : has_gsl.cpp gsl gslcblas ;
 explicit has_gsl ;
+exe has_rmath : has_rmath.cpp Rmath ;
+explicit has_rmath ;
 
 rule all-tests {
      local result ;
@@ -75,6 +78,13 @@ rule all-tests {
           <target-os>linux:<linkflags>-lrt
           <toolset>gcc:<linkflags>$(OTHERFLAGS)
           : $(source:B)_gsl ] 
+         ;
+         result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/filesystem /boost/test//boost_unit_test_framework Rmath
+         : : : [ check-target-builds has_rmath : <define>TEST_RMATH : <build>no ] 
+          <target-os>linux:<linkflags>-lpthread
+          <target-os>linux:<linkflags>-lrt
+          <toolset>gcc:<linkflags>$(OTHERFLAGS)
+          : $(source:B)_rmath ] 
          ;
      }
      return $(result) ;     
@@ -112,7 +122,4 @@ boostbook standalone
         # How far down we go with TOC's
         <xsl:param>generate.section.toc.level=10
     ;
-
-
-
 

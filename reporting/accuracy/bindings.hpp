@@ -16,7 +16,7 @@
 #define TEST_LIBRARY_NAME "<tr1/cmath>"
 
 #define LOG1P_FUNCTION_TO_TEST std::tr1::log1p
-#define EXPM1_FUNCTION_TO_TEST std::tr1::expm1
+#define EXPM1_FUNCTION_TO_TEST std::tr1::log1p
 
 #define CBRT_FUNCTION_TO_TEST std::tr1::cbrt
 #define ERF_FUNCTION_TO_TEST std::tr1::erf
@@ -38,12 +38,12 @@
 
 #define BETA_FUNCTION_TO_TEST std::tr1::betal
 
-#define ELLINT_1_FUNCTION_TO_TEST std::tr1::ellint_1
-#define ELLINT_1C_FUNCTION_TO_TEST std::tr1::comp_ellint_1
-#define ELLINT_2_FUNCTION_TO_TEST std::tr1::ellint_2
-#define ELLINT_2C_FUNCTION_TO_TEST std::tr1::comp_ellint_2
-#define ELLINT_3_FUNCTION_TO_TEST std::tr1::ellint_3
-#define ELLINT_3C_FUNCTION_TO_TEST std::tr1::comp_ellint_3
+#define ELLINT_1_FUNCTION_TO_TEST std::tr1::ellint_1l
+#define ELLINT_1C_FUNCTION_TO_TEST std::tr1::comp_ellint_1l
+#define ELLINT_2_FUNCTION_TO_TEST std::tr1::ellint_2l
+#define ELLINT_2C_FUNCTION_TO_TEST std::tr1::comp_ellint_2l
+#define ELLINT_3_FUNCTION_TO_TEST std::tr1::ellint_3l
+#define ELLINT_3C_FUNCTION_TO_TEST std::tr1::comp_ellint_3l
 
 #define EI_FUNCTION_TO_TEST std::tr1::expintl
 
@@ -295,6 +295,154 @@ inline double legendre_q(unsigned n, double x) { return gsl_sf_legendre_Ql(n, x)
 //#define COS_PI_RATIO_FUNCTION_TO_TEST boost::math::cos_pi
 #define TRIGAMMA_RATIO_FUNCTION_TO_TEST gsl_sf_psi_1
 #define ZETA_FUNCTION_TO_TEST gsl_sf_zeta
+
+#define TYPE_TO_TEST double
+
+#elif defined(TEST_RMATH)
+
+#define MATHLIB_STANDALONE
+#include <Rmath.h>
+
+#undef trunc
+
+#define TEST_LIBRARY_NAME "Rmath"
+
+#define LOG1P_FUNCTION_TO_TEST log1p
+#define EXPM1_FUNCTION_TO_TEST expm1
+
+//#define CBRT_FUNCTION_TO_TEST boost::math::cbrt
+//#define ERF_FUNCTION_TO_TEST boost::math::erf
+//#define ERFC_FUNCTION_TO_TEST boost::math::erfc
+//#define ERF_INV_FUNCTION_TO_TEST boost::math::erf_inv
+//#define ERFC_INV_FUNCTION_TO_TEST boost::math::erfc_inv
+
+#define LGAMMA_FUNCTION_TO_TEST lgammafn
+#define TGAMMA_FUNCTION_TO_TEST gammafn
+//#define TGAMMA1PM1_FUNCTION_TO_TEST boost::math::tgamma1pm1
+
+inline double I(double n, double x) { return bessel_i(x, n, 1); }
+inline double K(double n, double x) { return bessel_k(x, n, 1); }
+inline double J(double n, double x) { return bessel_j(x, n); }
+inline double Y(double n, double x) { return bessel_y(x, n); }
+
+#define BESSEL_I_FUNCTION_TO_TEST I
+#define BESSEL_IN_FUNCTION_TO_TEST I
+//#define BESSEL_IP_FUNCTION_TO_TEST boost::math::cyl_bessel_i_prime
+//#define BESSEL_IPN_FUNCTION_TO_TEST boost::math::cyl_bessel_i_prime
+#define BESSEL_J_FUNCTION_TO_TEST J
+#define BESSEL_JN_FUNCTION_TO_TEST J
+//#define BESSEL_JS_FUNCTION_TO_TEST boost::math::sph_bessel
+//#define BESSEL_JP_FUNCTION_TO_TEST boost::math::cyl_bessel_j_prime
+//#define BESSEL_JPN_FUNCTION_TO_TEST boost::math::cyl_bessel_j_prime
+//#define BESSEL_JPS_FUNCTION_TO_TEST boost::math::sph_bessel_prime
+#define BESSEL_K_FUNCTION_TO_TEST K
+#define BESSEL_KN_FUNCTION_TO_TEST K
+//#define BESSEL_KP_FUNCTION_TO_TEST boost::math::cyl_bessel_k_prime
+//#define BESSEL_KPN_FUNCTION_TO_TEST boost::math::cyl_bessel_k_prime
+#define BESSEL_Y_FUNCTION_TO_TEST Y
+#define BESSEL_YN_FUNCTION_TO_TEST Y
+//#define BESSEL_YS_FUNCTION_TO_TEST boost::math::sph_neumann
+//#define BESSEL_YP_FUNCTION_TO_TEST boost::math::cyl_neumann_prime
+//#define BESSEL_YNP_FUNCTION_TO_TEST boost::math::cyl_neumann_prime
+//#define BESSEL_YSP_FUNCTION_TO_TEST boost::math::sph_neumann_prime
+
+#define BETA_FUNCTION_TO_TEST beta
+//#define BINOMIAL_FUNCTION_TO_TEST boost::math::binomial_coefficient<T>
+
+//#define ELLINT_RC_FUNCTION_TO_TEST boost::math::ellint_rc
+//#define ELLINT_RD_FUNCTION_TO_TEST boost::math::ellint_rd
+//#define ELLINT_RF_FUNCTION_TO_TEST boost::math::ellint_rf
+//#define ELLINT_RG_FUNCTION_TO_TEST boost::math::ellint_rg
+//#define ELLINT_RJ_FUNCTION_TO_TEST boost::math::ellint_rj
+
+#define DIGAMMA_FUNCTION_TO_TEST digamma
+
+//#define ELLINT_1_FUNCTION_TO_TEST boost::math::ellint_1
+//#define ELLINT_1C_FUNCTION_TO_TEST boost::math::ellint_1
+//#define ELLINT_2_FUNCTION_TO_TEST boost::math::ellint_2
+//#define ELLINT_2C_FUNCTION_TO_TEST boost::math::ellint_2
+//#define ELLINT_3_FUNCTION_TO_TEST boost::math::ellint_3
+//#define ELLINT_3C_FUNCTION_TO_TEST boost::math::ellint_3
+//#define ELLINT_D2_FUNCTION_TO_TEST boost::math::ellint_d
+//#define ELLINT_D1_FUNCTION_TO_TEST boost::math::ellint_d
+
+//#define EI_FUNCTION_TO_TEST boost::math::expint
+//#define EN_FUNCTION_TO_TEST boost::math::expint
+
+//#define HERMITE_FUNCTION_TO_TEST boost::math::hermite
+//#define HEUMAN_LAMBDA_FUNCTION_TO_TEST boost::math::heuman_lambda
+
+inline double ibeta(double a, double b, double x) { return pbeta(x, a, b, 1, 0); }
+inline double ibetac(double a, double b, double x) { return pbeta(x, a, b, 0, 0); }
+inline double ibeta_inv(double a, double b, double x) { return qbeta(x, a, b, 1, 0); }
+inline double ibetac_inv(double a, double b, double x) { return qbeta(x, a, b, 0, 0); }
+
+//#define BETA_INC_FUNCTION_TO_TEST boost::math::beta
+//#define BETAC_INC_FUNCTION_TO_TEST boost::math::betac
+#define IBETA_FUNCTION_TO_TEST ibeta
+#define IBETAC_FUNCTION_TO_TEST ibetac
+#define IBETA_INV_FUNCTION_TO_TEST ibeta_inv
+#define IBETAC_INV_FUNCTION_TO_TEST ibetac_inv
+//#define IBETA_INVA_FUNCTION_TO_TEST boost::math::ibeta_inva
+//#define IBETAC_INVA_FUNCTION_TO_TEST boost::math::ibetac_inva
+//#define IBETA_INVB_FUNCTION_TO_TEST boost::math::ibeta_invb
+//#define IBETAC_INVB_FUNCTION_TO_TEST boost::math::ibetac_invb
+
+inline double gamma_p(double a, double x) { return pgamma(x, a, 1.0, 1, 0); }
+inline double gamma_q(double a, double x) { return pgamma(x, a, 1.0, 0, 0); }
+inline double gamma_p_inv(double a, double x) { return qgamma(x, a, 1.0, 1, 0); }
+inline double gamma_q_inv(double a, double x) { return qgamma(x, a, 1.0, 0, 0); }
+
+//#define IGAMMA_FUNCTION_TO_TEST boost::math::tgamma
+//#define IGAMMAL_FUNCTION_TO_TEST boost::math::tgamma_lower
+#define GAMMAP_FUNCTION_TO_TEST gamma_p
+#define GAMMAQ_FUNCTION_TO_TEST gamma_q
+#define GAMMAP_INV_FUNCTION_TO_TEST gamma_p_inv
+#define GAMMAQ_INV_FUNCTION_TO_TEST gamma_q_inv
+//#define GAMMAP_INVA_FUNCTION_TO_TEST boost::math::gamma_p_inva
+//#define GAMMAQ_INVA_FUNCTION_TO_TEST boost::math::gamma_q_inva
+
+//#define SN_FUNCTION_TO_TEST boost::math::jacobi_sn
+//#define CN_FUNCTION_TO_TEST boost::math::jacobi_cn
+//#define DN_FUNCTION_TO_TEST boost::math::jacobi_dn
+//#define JACOBI_ZETA_FUNCTION_TO_TEST boost::math::jacobi_zeta
+
+//#define LAGUERRE_FUNCTION_TO_TEST boost::math::laguerre
+//#define ASSOC_LAGUERRE_FUNCTION_TO_TEST boost::math::laguerre
+
+//#define LEGENDRE_P_FUNCTION_TO_TEST boost::math::legendre_p
+//#define LEGENDRE_Q_FUNCTION_TO_TEST boost::math::legendre_q
+//#define LEGENDRE_PA_FUNCTION_TO_TEST boost::math::legendre_p
+
+inline double polygamma(int n, double x) { return psigamma(x, n); }
+
+#define POLYGAMMA_FUNCTION_TO_TEST polygamma
+//#define TGAMMA_RATIO_FUNCTION_TO_TEST boost::math::tgamma_ratio
+//#define TGAMMA_DELTA_RATIO_FUNCTION_TO_TEST boost::math::tgamma_delta_ratio
+//#define SIN_PI_RATIO_FUNCTION_TO_TEST sinpi
+//#define COS_PI_RATIO_FUNCTION_TO_TEST cospi
+#define TRIGAMMA_RATIO_FUNCTION_TO_TEST trigamma
+//#define ZETA_FUNCTION_TO_TEST boost::math::zeta
+
+//#define SQRT1PM1_FUNCTION_TO_TEST boost::math::sqrt1pm1
+//#define POWM1_FUNCTION_TO_TEST boost::math::powm1
+//#define OWENS_T_FUNCTION_TO_TEST boost::math::owens_t
+//#define SPHERICAL_HARMONIC_R_FUNCTION_TO_TEST boost::math::spherical_harmonic_r
+//#define SPHERICAL_HARMONIC_I_FUNCTION_TO_TEST boost::math::spherical_harmonic_i
+
+template <class T> T do_nc_beta_cdf(T a, T b, T nc, T x){ return pnbeta(x, a, b, nc, 1, 0); }
+template <class T> T do_nc_beta_ccdf(T a, T b, T nc, T x){ return pnbeta(x, a, b, nc, 0, 0); }
+template <class T> T do_nc_chi_squared_cdf(T df, T nc, T x){ return pnchisq(x, df, nc, 1, 0); }
+template <class T> T do_nc_chi_squared_ccdf(T df, T nc, T x){ return pnchisq(x, df, nc, 0, 0); }
+template <class T> T do_nc_t_cdf(T df, T nc, T x){ return pnt(x, df, nc, 1, 0); }
+template <class T> T do_nc_t_ccdf(T df, T nc, T x){ return pnt(x, df, nc, 0, 0); }
+
+#define NC_BETA_CDF_FUNCTION_TO_TEST do_nc_beta_cdf
+#define NC_BETA_CCDF_FUNCTION_TO_TEST do_nc_beta_ccdf
+#define NC_CHI_SQUARED_CDF_FUNCTION_TO_TEST do_nc_chi_squared_cdf
+#define NC_CHI_SQUARED_CCDF_FUNCTION_TO_TEST do_nc_chi_squared_ccdf
+#define NC_T_CDF_FUNCTION_TO_TEST do_nc_t_cdf
+#define NC_T_CCDF_FUNCTION_TO_TEST do_nc_t_ccdf
 
 #define TYPE_TO_TEST double
 
