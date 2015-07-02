@@ -452,6 +452,15 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
       std::string err_s = pbuf->str();
       if(err_s.size())
       {
+         if(err_s.size() > 4096)
+         {
+            std::string::size_type pos = err_s.find("\n", 4096);
+            if(pos != std::string::npos)
+            {
+               err_s.erase(pos);
+               err_s += "*** FURTHER CONTENT HAS BEEN TRUNCATED FOR BREVITY ***\n";
+            }
+         }
          std::string::size_type pos = err_s.find("\n");
          while(pos != std::string::npos)
          {
