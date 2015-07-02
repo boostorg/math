@@ -33,6 +33,8 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
    typedef value_type (*pg)(value_type, value_type);
    pg funcp;
 
+   boost::math::tools::test_result<value_type> result;
+
 #if !(defined(ERROR_REPORTING_MODE) && !defined(IGAMMA_FUNCTION_TO_TEST))
 
 #ifdef IGAMMA_FUNCTION_TO_TEST
@@ -42,8 +44,6 @@ void do_test_gamma_2(const T& data, const char* type_name, const char* test_name
 #else
    funcp = boost::math::tgamma;
 #endif
-
-   boost::math::tools::test_result<value_type> result;
 
    std::cout << "Testing " << test_name << " with type " << type_name
       << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
