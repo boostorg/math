@@ -43,11 +43,13 @@ void do_test_erf(const T& data, const char* type_name, const char* test_name)
    //
    // test erf against data:
    //
+#if !(defined(ERROR_REPORTING_MODE) && !defined(ERF_FUNCTION_TO_TEST))
    result = boost::math::tools::test_hetero<Real>(
       data,
       bind_func<Real>(funcp, 0),
       extract_result<Real>(1));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "erf", test_name);
+#endif
    //
    // test erfc against data:
    //
@@ -58,12 +60,14 @@ void do_test_erf(const T& data, const char* type_name, const char* test_name)
 #else
    funcp = boost::math::erfc;
 #endif
+#if !(defined(ERROR_REPORTING_MODE) && !defined(ERFC_FUNCTION_TO_TEST))
    result = boost::math::tools::test_hetero<Real>(
       data,
       bind_func<Real>(funcp, 0),
       extract_result<Real>(2));
    handle_test_result(result, data[result.worst()], result.worst(), type_name, "erfc", test_name);
    std::cout << std::endl;
+#endif
 }
 
 
