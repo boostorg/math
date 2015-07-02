@@ -112,15 +112,15 @@ std::string save_table(std::vector<std::vector<std::string> >& table)
    return result;
 }
 
-void add_to_all_sections(const std::string& id)
+void add_to_all_sections(const std::string& id, std::string list_name = "all_sections")
 {
-   std::string::size_type pos = content.find("[template all_sections[]"), end_pos;
+   std::string::size_type pos = content.find("[template " + list_name + "[]"), end_pos;
    if(pos == std::string::npos)
    {
       //
       // Just append to the end:
       //
-      content.append("\n[template all_sections[]\n[").append(id).append("]\n]\n");
+      content.append("\n[template ").append(list_name).append("[]\n[").append(id).append("]\n]\n");
    }
    else
    {
@@ -133,7 +133,7 @@ void add_to_all_sections(const std::string& id)
          "([^\\[\\]]*(?0)?)*"
          "\\]|\\]"
          );
-      boost::regex_token_iterator<std::string::const_iterator> i(content.begin() + pos + 24, content.end(), item_e), j;
+      boost::regex_token_iterator<std::string::const_iterator> i(content.begin() + pos + 12 + list_name.size(), content.end(), item_e), j;
       std::set<std::string> sections;
       while(i != j)
       {
@@ -151,7 +151,7 @@ void add_to_all_sections(const std::string& id)
       {
          new_list += "[" + *sec + "]\n";
       }
-      content.replace(pos + 24, end_pos - pos - 24, new_list);
+      content.replace(pos + 12 + list_name.size(), end_pos - pos - 12 - list_name.size(), new_list);
    }
 }
 
@@ -290,7 +290,10 @@ void add_cell(const std::string& cell_name, const std::string& table_name, const
             content += "\n\n[/sections:]\n" + new_section;
          add_to_all_sections(section_id);
       }
-
+      //
+      // Add to list of all tables (not in sections):
+      //
+      add_to_all_sections(table_id, "all_tables");
    }
 }
 
