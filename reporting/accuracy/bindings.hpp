@@ -16,7 +16,7 @@
 #define TEST_LIBRARY_NAME "<tr1/cmath>"
 
 #define LOG1P_FUNCTION_TO_TEST std::tr1::log1p
-#define EXPM1_FUNCTION_TO_TEST std::tr1::log1p
+#define EXPM1_FUNCTION_TO_TEST std::tr1::expm1
 
 #define CBRT_FUNCTION_TO_TEST std::tr1::cbrt
 #define ERF_FUNCTION_TO_TEST std::tr1::erf
@@ -38,12 +38,12 @@
 
 #define BETA_FUNCTION_TO_TEST std::tr1::betal
 
-#define ELLINT_1_FUNCTION_TO_TEST std::tr1::ellint_1l
-#define ELLINT_1C_FUNCTION_TO_TEST std::tr1::comp_ellint_1l
-#define ELLINT_2_FUNCTION_TO_TEST std::tr1::ellint_2l
-#define ELLINT_2C_FUNCTION_TO_TEST std::tr1::comp_ellint_2l
-#define ELLINT_3_FUNCTION_TO_TEST std::tr1::ellint_3l
-#define ELLINT_3C_FUNCTION_TO_TEST std::tr1::comp_ellint_3l
+#define ELLINT_1_FUNCTION_TO_TEST std::tr1::ellint_1
+#define ELLINT_1C_FUNCTION_TO_TEST std::tr1::comp_ellint_1
+#define ELLINT_2_FUNCTION_TO_TEST std::tr1::ellint_2
+#define ELLINT_2C_FUNCTION_TO_TEST std::tr1::comp_ellint_2
+#define ELLINT_3_FUNCTION_TO_TEST std::tr1::ellint_3
+#define ELLINT_3C_FUNCTION_TO_TEST std::tr1::comp_ellint_3
 
 #define EI_FUNCTION_TO_TEST std::tr1::expintl
 
