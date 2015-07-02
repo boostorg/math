@@ -115,7 +115,7 @@ inline long double assoc_legendre_p_binder(int i, int j, long double d)
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_errno.h>
 
-#define TEST_LIBRARY_NAME "GSL"
+#define TEST_LIBRARY_NAME "GSL " GSL_VERSION
 
 void gsl_handler(const char * reason, const char * file, int line, int gsl_errno)
 {
@@ -305,7 +305,7 @@ inline double legendre_q(unsigned n, double x) { return gsl_sf_legendre_Ql(n, x)
 
 #undef trunc
 
-#define TEST_LIBRARY_NAME "Rmath"
+#define TEST_LIBRARY_NAME "Rmath " R_VERSION_STRING
 
 #define LOG1P_FUNCTION_TO_TEST log1p
 #define EXPM1_FUNCTION_TO_TEST expm1
