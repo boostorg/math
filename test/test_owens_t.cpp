@@ -41,6 +41,7 @@ using boost::math::owens_t;
 #include "libs/math/test/handle_test_result.hpp"
 #include "libs/math/test/table_type.hpp"
 #include "libs/math/test/functor.hpp"
+#include "test_owens_t.hpp"
 
 //
 // Defining TEST_CPP_DEC_FLOAT enables testing of multiprecision support.
@@ -105,7 +106,7 @@ void expected_results()
          ".*",                            // platform
          largest_type,                    // test type(s)
          ".*",      // test data group
-         "boost::math::owens_t", 500, 100);  // test function
+         "owens_t", 500, 100);  // test function
    }
    else
    {
@@ -115,7 +116,7 @@ void expected_results()
          ".*",                            // platform
          largest_type,                    // test type(s)
          ".*",      // test data group
-         "boost::math::owens_t", 60, 5);  // test function
+         "owens_t", 60, 5);  // test function
    }
    //
    // Finish off by printing out the compiler/stdlib/platform names,

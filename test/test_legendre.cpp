@@ -73,28 +73,28 @@ void expected_results()
          ".*",                          // platform
          largest_type,                  // test type(s)
          "Legendre Polynomials.*Large.*",      // test data group
-         "boost::math::legendre_p", 1000, 200);  // test function
+         "legendre_p", 1000, 200);  // test function
       add_expected_result(
          ".*",                          // compiler
          ".*",                          // stdlib
          ".*",                          // platform
          largest_type,                  // test type(s)
          "Legendre Polynomials.*Large.*",      // test data group
-         "boost::math::legendre_q", 7000, 1000);  // test function
+         "legendre_q", 7000, 1000);  // test function
       add_expected_result(
          ".*",                          // compiler
          ".*",                          // stdlib
          ".*",                          // platform
          "real_concept",                  // test type(s)
          "Legendre Polynomials.*Large.*",      // test data group
-         "boost::math::legendre_p", 1000, 200);  // test function
+         "legendre_p", 1000, 200);  // test function
       add_expected_result(
          ".*",                          // compiler
          ".*",                          // stdlib
          ".*",                          // platform
          "real_concept",                  // test type(s)
          "Legendre Polynomials.*Large.*",      // test data group
-         "boost::math::legendre_q", 7000, 1000);  // test function
+         "legendre_q", 7000, 1000);  // test function
    }
    //
    // Catch all cases come last:
@@ -105,28 +105,28 @@ void expected_results()
       ".*",                          // platform
       largest_type,                  // test type(s)
       "Legendre Polynomials.*Large.*",      // test data group
-      "boost::math::legendre_p", 500, 200);  // test function
+      "legendre_p", 500, 200);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
       "Legendre Polynomials.*Large.*",      // test data group
-      "boost::math::legendre_q", 5400, 500);  // test function
+      "legendre_q", 5400, 500);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
       "Legendre Polynomials.*",      // test data group
-      "boost::math::legendre_p", 300, 80);  // test function
+      "legendre_p", 300, 80);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       largest_type,                  // test type(s)
       "Legendre Polynomials.*",      // test data group
-      "boost::math::legendre_q", 100, 50);  // test function
+      "legendre_q", 100, 50);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
@@ -141,28 +141,28 @@ void expected_results()
       ".*",                          // platform
       "real_concept",                  // test type(s)
       "Legendre Polynomials.*Large.*",      // test data group
-      "boost::math::legendre_p", 500, 200);  // test function
+      "legendre_p", 500, 200);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                  // test type(s)
       "Legendre Polynomials.*Large.*",      // test data group
-      "boost::math::legendre_q", 5400, 500);  // test function
+      "legendre_q", 5400, 500);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                  // test type(s)
       "Legendre Polynomials.*",      // test data group
-      "boost::math::legendre_p", 300, 80);  // test function
+      "legendre_p", 300, 80);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                  // test type(s)
       "Legendre Polynomials.*",      // test data group
-      "boost::math::legendre_q", 100, 50);  // test function
+      "legendre_q", 100, 50);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

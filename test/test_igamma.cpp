@@ -271,21 +271,21 @@ void expected_results()
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "boost::math::gamma_q", 500, 50);  // test function
+      "gamma_q", 500, 50);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "Cygwin",                         // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "boost::math::gamma_p", 700, 50);  // test function
+      "gamma_p", 700, 50);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "[^|]*",                          // platform
       largest_type,                     // test type(s)
       "[^|]*large[^|]*",                // test data group
-      "boost::math::gamma_p", 350, 50);  // test function
+      "gamma_p", 350, 50);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

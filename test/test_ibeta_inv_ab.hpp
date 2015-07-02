@@ -199,10 +199,7 @@ void test_beta(T, const char* name)
 #endif
 
 #if !defined(TEST_REAL_CONCEPT) || defined(FULL_TEST) || (TEST_DATA == 4)
-#ifndef FULL_TEST
    if(boost::is_floating_point<T>::value){
-#endif
-#endif
    //
    // This accuracy test is normally only enabled for "real"
    // floating point types and not for class real_concept.
@@ -212,7 +209,6 @@ void test_beta(T, const char* name)
 #  include "ibeta_inva_data.ipp"
 
    test_inverses2<T>(ibeta_inva_data, name, "Inverse incomplete beta");
-#ifndef FULL_TEST
    }
 #endif
 #endif

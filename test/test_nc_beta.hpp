@@ -17,6 +17,32 @@
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
+#define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
+      {\
+      unsigned int failures = boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed;\
+      BOOST_CHECK_CLOSE(a, b, prec); \
+      if(failures != boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed)\
+            {\
+         std::cerr << "Failure was at row " << i << std::endl;\
+         std::cerr << std::setprecision(35); \
+         std::cerr << "{ " << data[i][0] << " , " << data[i][1] << " , " << data[i][2];\
+         std::cerr << " , " << data[i][3] << " , " << data[i][4] << " } " << std::endl;\
+            }\
+      }
+
+#define BOOST_CHECK_EX(a, i) \
+      {\
+      unsigned int failures = boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed;\
+      BOOST_CHECK(a); \
+      if(failures != boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed)\
+            {\
+         std::cerr << "Failure was at row " << i << std::endl;\
+         std::cerr << std::setprecision(35); \
+         std::cerr << "{ " << data[i][0] << " , " << data[i][1] << " , " << data[i][2];\
+         std::cerr << " , " << data[i][3] << " , " << data[i][4] << " } " << std::endl;\
+            }\
+      }
+
 template <class T>
 T nc_beta_cdf(T a, T b, T nc, T x)
 {
