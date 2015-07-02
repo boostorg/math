@@ -458,7 +458,7 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
             if(pos != std::string::npos)
             {
                err_s.erase(pos);
-               err_s += "*** FURTHER CONTENT HAS BEEN TRUNCATED FOR BREVITY ***\n";
+               err_s += "\n*** FURTHER CONTENT HAS BEEN TRUNCATED FOR BREVITY ***\n";
             }
          }
          std::string::size_type pos = err_s.find("\n");
