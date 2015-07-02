@@ -114,6 +114,7 @@ inline long double assoc_legendre_p_binder(int i, int j, long double d)
 
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_errno.h>
+#include <gsl/gsl_version.h>
 
 #define TEST_LIBRARY_NAME "GSL " GSL_VERSION
 
