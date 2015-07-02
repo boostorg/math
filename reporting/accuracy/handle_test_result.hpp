@@ -98,10 +98,10 @@ std::string save_table(std::vector<std::vector<std::string> >& table)
 {
    std::string result;
 
-   for(auto i = table.begin(), j = table.end(); i != j; ++i)
+   for(std::vector<std::vector<std::string> >::const_iterator i = table.begin(), j = table.end(); i != j; ++i)
    {
       result += "[";
-      for(auto k = i->begin(), l = i->end(); k != l; ++k)
+      for(std::vector<std::string>::const_iterator k = i->begin(), l = i->end(); k != l; ++k)
       {
          result += "[";
          result += *k;
@@ -147,7 +147,7 @@ void add_to_all_sections(const std::string& id, std::string list_name = "all_sec
       }
       sections.insert(id);
       std::string new_list = "\n";
-      for(auto sec = sections.begin(); sec != sections.end(); ++sec)
+      for(std::set<std::string>::const_iterator sec = sections.begin(); sec != sections.end(); ++sec)
       {
          new_list += "[" + *sec + "]\n";
       }
