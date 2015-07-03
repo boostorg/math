@@ -424,7 +424,7 @@ void handle_test_result(const boost::math::tools::test_result<T>& result,
    std::stringstream ss;
    ss << std::setprecision(3);
    if(std::string(TEST_LIBRARY_NAME) != "boost")
-      ss << "(" << TEST_LIBRARY_NAME << " = ";
+      ss << "(['" << TEST_LIBRARY_NAME << ":] ";
    else
       ss << "[role blue ";
 

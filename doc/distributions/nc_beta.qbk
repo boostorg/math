@@ -96,23 +96,14 @@ The domain of the random variable is \[0, 1\].
 The following table shows the peak errors
 (in units of [@http://en.wikipedia.org/wiki/Machine_epsilon epsilon])
 found on various platforms with various floating point types.
-No comparison to the [@http://www.r-project.org/ R-2.5.1 Math library],
-or to the FORTRAN implementations of AS226 or AS310 are given since these appear
-to only guarantee absolute error: this would causes our test harness
-to assign an /"infinite"/ error to these libraries for some of our
-test values when measuring /relative error/.
+The failures in the comparison to the [@http://www.r-project.org/ R Math library],
+seem to be mostly in the corner cases when the probablity would be very small.
 Unless otherwise specified any floating-point type that is narrower
 than the one shown will have __zero_error.
 
-[table Errors In CDF of the Noncentral Beta
-[[Significand Size] [Platform and Compiler] [[alpha], [beta],[lambda] < 200]  [[alpha],[beta],[lambda] > 200]]
-[[53] [Win32, Visual C++ 8] [Peak=620 Mean=22]  [Peak=8670 Mean=1040]]
-[[64] [RedHat Linux IA32, gcc-4.1.1] [Peak=825 Mean=50]  [Peak=2.5x10[super 4] Mean=4000]]
+[table_non_central_beta_CDF]
 
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=825 Mean=30]  [Peak=1.7x10[super 4] Mean=2500]]
-
-[[113] [HPUX IA64, aCC A.06.06] [Peak=420 Mean=50]  [Peak=9200 Mean=1200]]
-]
+[table_non_central_beta_CDF_complement]
 
 Error rates for the PDF, the complement of the CDF and for the quantile
 functions are broadly similar.

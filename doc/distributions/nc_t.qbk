@@ -82,13 +82,9 @@ found on various platforms with various floating-point types.
 Unless otherwise specified, any floating-point type that is narrower
 than the one shown will have __zero_error.
 
-[table Errors In CDF of the Noncentral T Distribution
-[[Significand Size (bits)] [Platform and Compiler] [[nu], [delta] < 600]]
-[[53] [Win32, Visual C++ 8] [Peak=120 Mean=26 ] ]
-[[64] [RedHat Linux IA32, gcc-4.1.1] [Peak=121 Mean=26] ]
-[[64] [Redhat Linux IA64, gcc-3.4.4] [Peak=122 Mean=25] ]
-[[113] [HPUX IA64, aCC A.06.06] [Peak=115 Mean=24] ]
-]
+[table_non_central_t_CDF]
+
+[table_non_central_t_CDF_complement]
 
 [caution The complexity of the current algorithm is dependent upon
 [delta][super 2]: consequently the time taken to evaluate the CDF

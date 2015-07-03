@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE(test_main, *boost::unit_test::expected_failures(10000))
 
 #ifdef TYPE_TO_TEST
 
-   test_spots(static_cast<TYPE_TO_TEST>(0), NAME_OF_TYPE_TO_TEST);
+   test_laguerre(static_cast<TYPE_TO_TEST>(0), NAME_OF_TYPE_TO_TEST);
 
 #else
    bool test_float = false;
@@ -46,13 +46,13 @@ BOOST_AUTO_TEST_CASE(test_main, *boost::unit_test::expected_failures(10000))
 #endif
 
    if(test_float)
-      test_spots(0.0f, "float");
+      test_laguerre(0.0f, "float");
    if(test_double)
-      test_spots(0.0, "double");
+      test_laguerre(0.0, "double");
    if(test_long_double)
-      test_spots(0.0L, "long double");
+      test_laguerre(0.0L, "long double");
 #ifdef BOOST_MATH_USE_FLOAT128
-   //test_spots(0.0Q, "__float128");
+   //test_laguerre(0.0Q, "__float128");
 #endif
 
 

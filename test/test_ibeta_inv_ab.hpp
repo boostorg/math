@@ -197,6 +197,7 @@ void test_beta(T, const char* name)
 
    test_inverses<T>(ibeta_large_data);
 #endif
+#endif
 
 #if !defined(TEST_REAL_CONCEPT) || defined(FULL_TEST) || (TEST_DATA == 4)
    if(boost::is_floating_point<T>::value){
@@ -210,7 +211,6 @@ void test_beta(T, const char* name)
 
    test_inverses2<T>(ibeta_inva_data, name, "Inverse incomplete beta");
    }
-#endif
 #endif
 }
 

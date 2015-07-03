@@ -62,6 +62,10 @@ are accurate to less than ~ 2 epsilon.  For higher precision types these
 functions have the same accuracy as the 
 [link math_toolkit.sf_erf.error_function forward error functions].
 
+[table_erf_inv]
+
+[table_erfc_inv]
+
 [h4 Testing]
 
 There are two sets of tests: 

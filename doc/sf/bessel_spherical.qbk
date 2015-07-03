@@ -58,8 +58,9 @@ a simplified version of this implementation
 
 [h4 Accuracy]
 
-Other than for some special cases, these functions are computed in terms of
-__cyl_bessel_j and __cyl_neumann: refer to these functions for accuracy data.
+[table_sph_bessel]
+
+[table_sph_neumann]
 
 [h4 Implementation]
 

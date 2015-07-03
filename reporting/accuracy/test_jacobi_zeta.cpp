@@ -5,8 +5,8 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "bindings.hpp"
-#include "../../test/test_jacobi.hpp"
-#include <boost/math/special_functions/jacobi_elliptic.hpp>
+#include "../../test/test_jacobi_zeta.hpp"
+#include <boost/math/special_functions/jacobi_zeta.hpp>
 
 BOOST_AUTO_TEST_CASE(test_main, *boost::unit_test::expected_failures(10000))
 {
