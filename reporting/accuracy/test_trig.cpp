@@ -9,7 +9,9 @@
 #include <boost/math/special_functions/sin_pi.hpp>
 #include <boost/math/special_functions/cos_pi.hpp>
 
-BOOST_AUTO_TEST_CASE(test_main, *boost::unit_test::expected_failures(10000))
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(test_main, 10000);
+
+BOOST_AUTO_TEST_CASE(test_main)
 {
    BOOST_MATH_CONTROL_FP;
 

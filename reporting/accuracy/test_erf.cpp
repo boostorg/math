@@ -8,7 +8,9 @@
 #include "bindings.hpp"
 #include "../../test/test_erf.hpp"
 
-BOOST_AUTO_TEST_CASE( test_main )
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(test_main, 10000);
+
+BOOST_AUTO_TEST_CASE(test_main)
 {
    BOOST_MATH_CONTROL_FP;
 

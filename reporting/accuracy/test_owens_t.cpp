@@ -10,7 +10,9 @@
 #include <boost/math/special_functions/owens_t.hpp> // for owens_t function.
 #include <boost/test/unit_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_main, *boost::unit_test::expected_failures(10000))
+BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(test_main, 10000);
+
+BOOST_AUTO_TEST_CASE(test_main)
 {
    BOOST_MATH_CONTROL_FP;
 
