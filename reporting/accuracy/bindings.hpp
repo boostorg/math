@@ -447,6 +447,164 @@ template <class T> T do_nc_t_ccdf(T df, T nc, T x){ return pnt(x, df, nc, 0, 0);
 
 #define TYPE_TO_TEST double
 
+#elif defined(TEST_CEPHES)
+
+#define TEST_LIBRARY_NAME "Cephes"
+#define TYPE_TO_TEST double
+
+extern "C" {
+
+   double log1p(double) throw();
+   double expm1(double) throw();
+   double cbrt(double) throw();
+   double erf(double) throw();
+   double erfc(double) throw();
+   double gamma(double) throw();
+   double lgam(double) throw();
+
+   double iv(double, double) throw();
+   double jv(double, double) throw();
+   double jn(int, double) throw();
+   double kn(int, double) throw();
+   double yn(int, double) throw();
+
+   double beta(double, double)throw();
+   double psi(double);
+
+   double ellik(double, double);
+   double ellpk(double);
+   double ellie(double, double);
+   double ellpe(double);
+
+   double ei(double);
+   // Can't get any sensible values from Cephes expn???
+   //double expn(double, double);
+
+   double incbet(double, double, double);
+   double incbi(double, double, double);
+
+   double igam(double, double);
+   double igamc(double, double);
+   double igami(double, double);
+
+   double ellpj(double u, double m, double *sn, double *cn, double *dn, double *phi);
+
+   double zetac(double);
+
+}
+
+inline double ellint_1(double k, double phi) { return ellik(phi, k * k); }
+inline double ellint_2(double k, double phi) { return ellie(phi, k * k); }
+inline double ellint_1(double k) { return ellpk(k * k); }
+inline double ellint_2(double k) { return ellpe(k * k); }
+
+inline double sn(double k, double u)
+{
+   double sn, cn, dn, phi;
+   ellpj(u, k * k, &sn, &cn, &dn, &phi);
+   return sn;
+}
+inline double cn(double k, double u)
+{
+   double sn, cn, dn, phi;
+   ellpj(u, k * k, &sn, &cn, &dn, &phi);
+   return cn;
+}
+
+inline double dn(double k, double u)
+{
+   double sn, cn, dn, phi;
+   ellpj(u, k * k, &sn, &cn, &dn, &phi);
+   return dn;
+}
+
+#define LOG1P_FUNCTION_TO_TEST log1p
+#define EXPM1_FUNCTION_TO_TEST expm1
+
+#define CBRT_FUNCTION_TO_TEST cbrt
+#define ERF_FUNCTION_TO_TEST erf
+#define ERFC_FUNCTION_TO_TEST erfc
+//#define ERF_INV_FUNCTION_TO_TEST boost::math::erf_inv
+//#define ERFC_INV_FUNCTION_TO_TEST boost::math::erfc_inv
+
+#define LGAMMA_FUNCTION_TO_TEST lgam
+#define TGAMMA_FUNCTION_TO_TEST gamma
+//#define TGAMMA1PM1_FUNCTION_TO_TEST boost::math::tgamma1pm1
+
+#define BESSEL_I_FUNCTION_TO_TEST iv
+#define BESSEL_IN_FUNCTION_TO_TEST iv
+//#define BESSEL_IP_FUNCTION_TO_TEST boost::math::cyl_bessel_i_prime
+//#define BESSEL_IPN_FUNCTION_TO_TEST boost::math::cyl_bessel_i_prime
+#define BESSEL_J_FUNCTION_TO_TEST jv
+#define BESSEL_JN_FUNCTION_TO_TEST jn
+//#define BESSEL_JS_FUNCTION_TO_TEST boost::math::sph_bessel
+//#define BESSEL_JP_FUNCTION_TO_TEST boost::math::cyl_bessel_j_prime
+//#define BESSEL_JPN_FUNCTION_TO_TEST boost::math::cyl_bessel_j_prime
+//#define BESSEL_JPS_FUNCTION_TO_TEST boost::math::sph_bessel_prime
+//#define BESSEL_K_FUNCTION_TO_TEST boost::math::cyl_bessel_k
+#define BESSEL_KN_FUNCTION_TO_TEST kn
+//#define BESSEL_KP_FUNCTION_TO_TEST boost::math::cyl_bessel_k_prime
+//#define BESSEL_KPN_FUNCTION_TO_TEST boost::math::cyl_bessel_k_prime
+//#define BESSEL_Y_FUNCTION_TO_TEST boost::math::cyl_neumann
+#define BESSEL_YN_FUNCTION_TO_TEST yn
+//#define BESSEL_YS_FUNCTION_TO_TEST boost::math::sph_neumann
+//#define BESSEL_YP_FUNCTION_TO_TEST boost::math::cyl_neumann_prime
+//#define BESSEL_YNP_FUNCTION_TO_TEST boost::math::cyl_neumann_prime
+//#define BESSEL_YSP_FUNCTION_TO_TEST boost::math::sph_neumann_prime
+
+#define BETA_FUNCTION_TO_TEST beta
+//#define BINOMIAL_FUNCTION_TO_TEST boost::math::binomial_coefficient<T>
+
+//#define ELLINT_RC_FUNCTION_TO_TEST boost::math::ellint_rc
+//#define ELLINT_RD_FUNCTION_TO_TEST boost::math::ellint_rd
+//#define ELLINT_RF_FUNCTION_TO_TEST boost::math::ellint_rf
+//#define ELLINT_RG_FUNCTION_TO_TEST boost::math::ellint_rg
+//#define ELLINT_RJ_FUNCTION_TO_TEST boost::math::ellint_rj
+
+#define DIGAMMA_FUNCTION_TO_TEST psi
+
+#define ELLINT_1_FUNCTION_TO_TEST ellint_1
+// Can't seem to get sensible answers from Cephes complete elliptic integrals???
+//#define ELLINT_1C_FUNCTION_TO_TEST ellint_1
+#define ELLINT_2_FUNCTION_TO_TEST ellint_2
+//#define ELLINT_2C_FUNCTION_TO_TEST ellint_2
+//#define ELLINT_3_FUNCTION_TO_TEST boost::math::ellint_3
+//#define ELLINT_3C_FUNCTION_TO_TEST boost::math::ellint_3
+//#define ELLINT_D2_FUNCTION_TO_TEST boost::math::ellint_d
+//#define ELLINT_D1_FUNCTION_TO_TEST boost::math::ellint_d
+
+#define EI_FUNCTION_TO_TEST ei
+//#define EN_FUNCTION_TO_TEST expn
+
+//#define HERMITE_FUNCTION_TO_TEST boost::math::hermite
+//#define HEUMAN_LAMBDA_FUNCTION_TO_TEST boost::math::heuman_lambda
+
+//#define BETA_INC_FUNCTION_TO_TEST incbet
+//#define BETAC_INC_FUNCTION_TO_TEST boost::math::betac
+#define IBETA_FUNCTION_TO_TEST incbet
+//#define IBETAC_FUNCTION_TO_TEST boost::math::ibetac
+#define IBETA_INV_FUNCTION_TO_TEST incbi
+//#define IBETAC_INV_FUNCTION_TO_TEST boost::math::ibetac_inv
+//#define IBETA_INVA_FUNCTION_TO_TEST boost::math::ibeta_inva
+//#define IBETAC_INVA_FUNCTION_TO_TEST boost::math::ibetac_inva
+//#define IBETA_INVB_FUNCTION_TO_TEST boost::math::ibeta_invb
+//#define IBETAC_INVB_FUNCTION_TO_TEST boost::math::ibetac_invb
+
+//#define IGAMMA_FUNCTION_TO_TEST boost::math::tgamma
+//#define IGAMMAL_FUNCTION_TO_TEST boost::math::tgamma_lower
+#define GAMMAP_FUNCTION_TO_TEST igam
+#define GAMMAQ_FUNCTION_TO_TEST igamc
+//#define GAMMAP_INV_FUNCTION_TO_TEST boost::math::gamma_p_inv
+#define GAMMAQ_INV_FUNCTION_TO_TEST igami
+//#define GAMMAP_INVA_FUNCTION_TO_TEST boost::math::gamma_p_inva
+//#define GAMMAQ_INVA_FUNCTION_TO_TEST boost::math::gamma_q_inva
+
+#define SN_FUNCTION_TO_TEST sn
+#define CN_FUNCTION_TO_TEST cn
+#define DN_FUNCTION_TO_TEST dn
+
+#define ZETA_FUNCTION_TO_TEST zetac
+
 #else
 
 #include <boost/math/distributions/non_central_beta.hpp>
