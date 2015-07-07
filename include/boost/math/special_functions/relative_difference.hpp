@@ -71,7 +71,7 @@ namespace boost{
 
 #if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
       template <>
-      inline double relative_difference<double>(double a, double b)
+      inline typename boost::math::tools::promote_args<double, double>::type relative_difference(const double& arg_a, const double& arg_b)
       {
          BOOST_MATH_STD_USING
          //
