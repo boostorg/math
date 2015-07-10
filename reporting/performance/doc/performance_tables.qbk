@@ -1,0 +1,34 @@
+[/Cell Content:]
+[template cl_arch_ia32_Ox_x64_build_Microsoft_Visual_C_version_12_0Win32[]62ns]
+[template boost_math_cbrtcl_arch_ia32_Ox_x64_build_Microsoft_Visual_C_version_12_0Win32[]45ns]
+[template cl_arch_sse2_Ox_x86_build_Microsoft_Visual_C_version_12_0Win32[]68ns]
+[template boost_math_cbrtcl_arch_sse2_Ox_x86_build_Microsoft_Visual_C_version_12_0Win32[]64ns]
+[template cl_Od_x86_build_Microsoft_Visual_C_version_12_0Win32[]201ns]
+[template boost_math_cbrtcl_Od_x86_build_Microsoft_Visual_C_version_12_0Win32[]262ns]
+
+[/tables:]
+
+[template table_cbrt[]
+[table:table_cbrt Performance comparison for cbrt
+[[Function][cl /Od (x86 build)][cl /arch:sse2 /Ox (x86 build)][cl /arch:ia32 /Ox (x64 build)]]
+[[boost::math::cbrt][[role green 86ns]][[role green 2ns]][[role green 32ns]]]
+[[::cbrt][[role green 86ns]][[role green 2ns]][[role green 32ns]]]
+]
+]
+
+
+[/sections:]
+
+[template section_cbrt[]
+[section:section_cbrt cbrt]
+[table_cbrt]
+[endsect]
+]
+
+[template all_sections[]
+[section_cbrt]
+]
+
+[template all_tables[]
+[table_cbrt]
+]

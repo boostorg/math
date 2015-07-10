@@ -1,0 +1,131 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Special Function Error Rates Report</title>
+<link rel="stylesheet" href="http://www.boost.org/doc/libs/1_58_0/doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="index.html" title="Special Function Error Rates Report">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.html">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav"></div>
+<div class="article">
+<div class="titlepage">
+<div>
+<div><h2 class="title">
+<a name="special_function_error_rates_rep"></a>Special Function Error Rates Report</h2></div>
+<div><div class="legalnotice">
+<a name="special_function_error_rates_rep.legal"></a><p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div></div>
+</div>
+<hr>
+</div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl><dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_cbrt">cbrt</a></span></dt></dl>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="special_function_error_rates_rep.section_cbrt"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cbrt" title="cbrt">cbrt</a>
+</h2></div></div></div>
+<div class="table">
+<a name="special_function_error_rates_rep.section_cbrt.table_cbrt"></a><p class="title"><b>Table&#160;1.&#160;Performance comparison for cbrt</b></p>
+<div class="table-contents"><table class="table" summary="Performance comparison for cbrt">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Function
+              </p>
+            </th>
+<th>
+              <p>
+                cl /Od (x86 build)
+              </p>
+            </th>
+<th>
+              <p>
+                cl /arch:sse2 /Ox (x86 build)
+              </p>
+            </th>
+<th>
+              <p>
+                cl /arch:ia32 /Ox (x64 build)
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                boost::math::cbrt
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">86ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">2ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">32ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ::cbrt
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">86ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">2ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">32ns</span>
+              </p>
+            </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<br class="table-break">
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"><p><small>Last revised: July 09, 2015 at 18:35:13 GMT</small></p></td>
+<td align="right"><div class="copyright-footer"></div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav"></div>
+</body>
+</html>
