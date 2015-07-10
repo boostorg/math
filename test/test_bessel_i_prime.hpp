@@ -146,7 +146,7 @@ void test_bessel(T, const char* name)
 #if LDBL_MAX_10_EXP > 326
         {{ SC_(-1.125), static_cast<T>(ldexp(0.5, -512)), SC_(4.0715272050947359203430409041001937149343363573066460226173390878707e327) }},
 #else
-        {{ SC_(-1.125), static_cast<T>(ldexp(0.5, -400)), SC_(9.2176109325125492442218016833983080399738569000864e255) }},
+        { { SC_(-1.125), static_cast<T>(ldexp(0.5, -512)), std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>() } },
 #endif
     }};
 
