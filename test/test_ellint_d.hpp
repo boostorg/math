@@ -106,5 +106,10 @@ void test_spots(T, const char* type_name)
 #include "ellint_d_data.ipp"
 
     do_test_ellint_d1<T>(ellint_d_data, type_name, "Elliptic Integral D: Random Data");
+
+    BOOST_CHECK_THROW(boost::math::ellint_d(T(1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_d(T(-1)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_d(T(1.5)), std::domain_error);
+    BOOST_CHECK_THROW(boost::math::ellint_d(T(-1.5)), std::domain_error);
 }
 
