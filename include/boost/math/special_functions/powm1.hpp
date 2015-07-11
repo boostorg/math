@@ -22,12 +22,13 @@ inline T powm1_imp(const T a, const T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
-   if((fabs(a) < 1) || (fabs(z) < 1))
+   //  Refer to the series expansion at z = 0 for (a-1)^z for the logic
+   // in choosing this cutoff, see http://www.wolframalpha.com/input/?i=%28x%2B1%29^y
+   if(fabs(a * z) < 1)
    {
-      T p = log(a) * z;
-      if(fabs(p) < 2)
-         return boost::math::expm1(p, pol);
-      // otherwise fall though:
+      T p = fabs(a - 1) < 0.5f ? boost::math::log1p(a-1, pol) : log(a);
+      p *= z;
+      return boost::math::expm1(p, pol);
    }
    return pow(a, z) - 1;
 }
