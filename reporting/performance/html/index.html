@@ -33,16 +33,23 @@
 </div>
 <div class="toc">
 <p><b>Table of Contents</b></p>
-<dl><dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_cbrt">cbrt</a></span></dt></dl>
+<dl>
+<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_Compiler_Option_Comparison_on_Win32">Compiler
+    Option Comparison on Win32</a></span></dt>
+<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_Library_Comparison_on_Win32">Library
+    Comparison on Win32</a></span></dt>
+</dl>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="special_function_error_rates_rep.section_cbrt"></a><a class="link" href="index.html#special_function_error_rates_rep.section_cbrt" title="cbrt">cbrt</a>
+<a name="special_function_error_rates_rep.section_Compiler_Option_Comparison_on_Win32"></a><a class="link" href="index.html#special_function_error_rates_rep.section_Compiler_Option_Comparison_on_Win32" title="Compiler Option Comparison on Win32">Compiler
+    Option Comparison on Win32</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_cbrt.table_cbrt"></a><p class="title"><b>Table&#160;1.&#160;Performance comparison for cbrt</b></p>
-<div class="table-contents"><table class="table" summary="Performance comparison for cbrt">
+<a name="special_function_error_rates_rep.section_Compiler_Option_Comparison_on_Win32.table_Compiler_Option_Comparison_on_Win32"></a><p class="title"><b>Table&#160;1.&#160;Compiler Option Comparison on Win32</b></p>
+<div class="table-contents"><table class="table" summary="Compiler Option Comparison on Win32">
 <colgroup>
+<col>
 <col>
 <col>
 <col>
@@ -56,7 +63,12 @@
             </th>
 <th>
               <p>
-                cl /Od (x86 build)
+                icl /arch:ia32 /Ox (x86 build)
+              </p>
+            </th>
+<th>
+              <p>
+                cl /Ox (x64 build)
               </p>
             </th>
 <th>
@@ -66,12 +78,11 @@
             </th>
 <th>
               <p>
-                cl /arch:ia32 /Ox (x64 build)
+                cl /Od (x86 build)
               </p>
             </th>
 </tr></thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>
               <p>
                 boost::math::cbrt
@@ -79,39 +90,210 @@
             </td>
 <td>
               <p>
-                <span class="green">86ns</span>
+                <span class="green">37ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">2ns</span>
+                <span class="blue">60ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">32ns</span>
+                <span class="blue">63ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">277ns</span>
+              </p>
+            </td>
+</tr></tbody>
+</table></div>
+</div>
+<br class="table-break">
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="special_function_error_rates_rep.section_Library_Comparison_on_Win32"></a><a class="link" href="index.html#special_function_error_rates_rep.section_Library_Comparison_on_Win32" title="Library Comparison on Win32">Library
+    Comparison on Win32</a>
+</h2></div></div></div>
+<div class="table">
+<a name="special_function_error_rates_rep.section_Library_Comparison_on_Win32.table_Library_Comparison_on_Win32"></a><p class="title"><b>Table&#160;2.&#160;Library Comparison on Win32</b></p>
+<div class="table-contents"><table class="table" summary="Library Comparison on Win32">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Function
+              </p>
+            </th>
+<th>
+              <p>
+                Boost
+              </p>
+            </th>
+<th>
+              <p>
+                math.h
+              </p>
+            </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+              <p>
+                cbrt<br> (85/85 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">64ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">69ns</span>
               </p>
             </td>
 </tr>
 <tr>
 <td>
               <p>
-                ::cbrt
+                erf<br> (950/950 tests selected)
               </p>
             </td>
 <td>
               <p>
-                <span class="green">86ns</span>
+                <span class="green">14ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">2ns</span>
+                <span class="blue">26ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                erfc<br> (950/950 tests selected)
               </p>
             </td>
 <td>
               <p>
-                <span class="green">32ns</span>
+                <span class="green">20ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">93ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                expm1<br> (80/80 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">12ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">13ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cyl_bessel_j (integer order)<br> (268/268 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">121ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">260ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                lgamma<br> (400/400 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">91ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">148ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                log1p<br> (80/80 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">12ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">19ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                tgamma<br> (400/400 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">89ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">975ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cyl_neumann (integer order)<br> (428/428 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">327ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">169ns</span>
               </p>
             </td>
 </tr>
@@ -122,7 +304,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: July 09, 2015 at 18:35:13 GMT</small></p></td>
+<td align="left"><p><small>Last revised: July 13, 2015 at 07:59:35 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

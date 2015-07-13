@@ -17,7 +17,7 @@ std::string save_table(std::vector<std::vector<std::string> >& table);
 void add_to_all_sections(const std::string& id, std::string list_name = "all_sections");
 void add_cell(const std::string& cell_name, const std::string& table_name, const std::string& row_name, const std::string& column_heading);
 void set_result(const std::string& cell_name, const std::string& cell_content, const std::string& table_name, const std::string& row_name, const std::string& column_name);
-void report_execution_time_multi_compilation(double t, std::string function_group, std::string function, std::string compilation);
+void report_execution_time(double t, std::string table, std::string row, std::string heading);
 std::string get_compiler_options_name();
 
 #endif // TABLE_HELPER_HPP

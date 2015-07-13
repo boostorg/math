@@ -98,59 +98,13 @@ std::string save_table(std::vector<std::vector<std::string> >& table)
 {
    std::string result;
 
-   static const boost::regex value_e("\\d+");
-
-   std::vector<boost::uintmax_t> best_values(table[0].size(), (std::numeric_limits<boost::uintmax_t>::max)());
-
-   for(unsigned i = 1; i < table[0].size(); ++i)
-   {
-      for(unsigned k = 1; k < table.size(); ++k)
-      {
-         boost::smatch what;
-         if(regex_search(table[k][i], what, value_e))
-         {
-            boost::uintmax_t val = boost::lexical_cast<boost::uintmax_t>(what.str());
-            if(val < best_values[i])
-               best_values[i] = val;
-         }
-      }
-   }
-
    for(std::vector<std::vector<std::string> >::const_iterator i = table.begin(), j = table.end(); i != j; ++i)
    {
       result += "[";
       for(std::vector<std::string>::const_iterator k = i->begin(), l = i->end(); k != l; ++k)
       {
          result += "[";
-         if((i == table.begin()) || (k == i->begin()))
-         {
-            result += *k;
-         }
-         else
-         {
-            boost::smatch what;
-            if(regex_search(*k, what, value_e))
-            {
-               boost::uintmax_t val = boost::lexical_cast<boost::uintmax_t>(what.str());
-               bool have_role = false;
-               if(val < 1.2 * best_values[k - i->begin()])
-               {
-                  have_role = true;
-                  result += "[role green ";
-               }
-               else if(val > 2 * best_values[k - i->begin()])
-               {
-                  have_role = true;
-                  result += "[role red ";
-               }
-               result += boost::lexical_cast<std::string>(val);
-               result += "ns";
-               if(have_role)
-                  result += "]";
-            }
-            else
-               result += *k;
-         }
+         result += *k;
          result += "]";
       }
       result += "]\n";
@@ -201,7 +155,27 @@ void add_to_all_sections(const std::string& id, std::string list_name)
    }
 }
 
-void add_cell(const std::string& cell_name, const std::string& table_name, const std::string& row_name, const std::string& column_heading)
+std::string get_colour(boost::uintmax_t val, boost::uintmax_t best)
+{
+   if(val <= best * 1.2)
+      return "green";
+   if(val > best * 2)
+      return "red";
+   return "blue";
+}
+
+boost::intmax_t get_value_from_cell(const std::string& cell)
+{
+   static const boost::regex time_e("\\[role[^\\d]+(\\d+)ns\\]");
+   boost::smatch what;
+   if(regex_search(cell, what, time_e))
+   {
+      return boost::lexical_cast<boost::uintmax_t>(what.str(1));
+   }
+   return -1;
+}
+
+void add_cell(boost::intmax_t val, const std::string& table_name, const std::string& row_name, const std::string& column_heading)
 {
    //
    // Load the table, add our data, and re-write:
@@ -266,27 +240,44 @@ void add_cell(const std::string& cell_name, const std::string& table_name, const
          row_id = table_data.size() - 1;
       }
       //
-      // Update the entry:
+      // Find the best result in this row:
       //
-      std::string& s = table_data[row_id][column_id];
-      if(s.empty())
+      boost::uintmax_t best = (std::numeric_limits<boost::uintmax_t>::max)();
+      std::vector<boost::intmax_t> values;
+      for(unsigned i = 1; i < table_data[row_id].size(); ++i)
       {
-         std::cout << "Adding " << cell_name << " to empty cell.";
-         s = "[" + cell_name + "]";
-      }
-      else
-      {
-         if(cell_name.find("_boost_") != std::string::npos)
+         if(i == column_id)
          {
-            std::cout << "Adding " << cell_name << " to start of cell.";
-            s.insert(0, "[" + cell_name + "][br][br]");
+            if(val < best)
+               best = val;
+            values.push_back(val);
          }
          else
          {
-            std::cout << "Adding " << cell_name << " to end of cell.";
-            if((s.find("_boost_") != std::string::npos) && (s.find("[br]") == std::string::npos))
-               s += "[br]"; // extra break if we're adding directly after the boost results.
-            s += "[br][" + cell_name + "]";
+            std::cout << "Existing cell value was " << table_data[row_id][i] << std::endl;
+            boost::uintmax_t cell_val = get_value_from_cell(table_data[row_id][i]);
+            std::cout << "Extracted value: " << cell_val << std::endl;
+            if(cell_val < best)
+               best = cell_val;
+            values.push_back(cell_val);
+         }
+      }
+      //
+      // Update the row:
+      //
+      for(unsigned i = 1; i < table_data[row_id].size(); ++i)
+      {
+         std::string& s = table_data[row_id][i];
+         s = "[role ";
+         if(values[i - 1] < 0)
+         {
+            s += "grey -]";
+         }
+         else
+         {
+            s += get_colour(values[i - 1], best);
+            s += " ";
+            s += boost::lexical_cast<std::string>(values[i - 1]) + "ns]";
          }
       }
       //
@@ -301,16 +292,16 @@ void add_cell(const std::string& cell_name, const std::string& table_name, const
       //
       std::string new_table = "\n[template " + table_id;
       new_table += "[]\n[table:" + table_id;
-      new_table += " Performance comparison for ";
+      new_table += " ";
       new_table += table_name;
       new_table += "\n[[Function][";
       new_table += column_heading;
       new_table += "]]\n";
       new_table += "[[";
       new_table += row_name;
-      new_table += "][[";
-      new_table += cell_name;
-      new_table += "]]]\n]\n]\n";
+      new_table += "][[role blue ";
+      new_table += boost::lexical_cast<std::string>(val);
+      new_table += "ns]]]\n]\n]\n";
 
       std::string::size_type pos = content.find("[/tables:]");
       if(pos != std::string::npos)
@@ -338,70 +329,42 @@ void add_cell(const std::string& cell_name, const std::string& table_name, const
    }
 }
 
-void set_result(const std::string& cell_name, const std::string& cell_content, const std::string& table_name, const std::string& row_name, const std::string& column_name)
+void report_execution_time(double t, std::string table, std::string row, std::string heading)
 {
-   loader.instantiate();
-   const boost::regex e("\\[template\\s+" + cell_name +
-      "\\[\\]([^\\n]*)\\]$");
-
-   boost::smatch what;
-   if(regex_search(content, what, e))
-   {
-      content.replace(what.position(1), what.length(1), cell_content);
-   }
-   else
-   {
-      // Need to add new content:
-      std::string::size_type pos = content.find("[/Cell Content:]");
-      std::string t = "\n[template " + cell_name + "[] " + cell_content + "]";
-      if(pos != std::string::npos)
-         content.insert(pos + 16, t);
-      else
-      {
-         content.insert(0, t);
-         content.insert(0, "[/Cell Content:]");
-      }
-   }
-   //
-   // Check to verify that our content is actually used somewhere,
-   // if not we need to create a place for it:
-   //
-   if(content.find("[" + cell_name + "]") == std::string::npos)
-      add_cell(cell_name, table_name, row_name, column_name);
-}
-
-
-void report_execution_time_multi_compilation(double t, std::string function_group, std::string function, std::string compilation)
-{
-   std::string cell_name = sanitize_string(function) + sanitize_string(compilation) + sanitize_string(BOOST_COMPILER) + sanitize_string(BOOST_PLATFORM);
-   std::string cell_content = boost::lexical_cast<std::string>(static_cast<boost::uintmax_t>(t / 1e-9));
-   cell_content += "ns";
-   std::string table_name = function_group;
-   std::string row_name = function;
-   std::string column_name = compilation;
-   set_result(cell_name, cell_content, table_name, row_name, column_name);
+   add_cell(static_cast<boost::uintmax_t>(t / 1e-9), table, row, heading);
 }
 
 std::string get_compiler_options_name()
 {
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || defined(__ICL)
    std::string result;
-#ifdef _DEBUG
-   result =  "cl /Od";
-#elif defined(__AVX2__)
-   result = "cl /arch:AVX2 /Ox";
-#elif defined(__AVX__)
-   result = "cl /arch:AVX /Ox";
-#elif _M_IX86_FP == 2
-   result = "cl /arch:sse2 /Ox";
+#ifdef BOOST_MSVC
+   result = "cl ";
 #else
-   result = "cl /arch:ia32 /Ox";
+   result = "icl ";
 #endif
 #ifdef _M_AMD64
+#ifdef __AVX__
+   result += "/arch:AVX /Ox";
+#else
+   result += "/Ox";
+#endif
    result += " (x64 build)";
 #else
+#ifdef _DEBUG
+   result +=  "/Od";
+#elif defined(__AVX2__)
+   result += "/arch:AVX2 /Ox";
+#elif defined(__AVX__)
+   result += "/arch:AVX /Ox";
+#elif _M_IX86_FP == 2
+   result += "/arch:sse2 /Ox";
+#else
+   result += "/arch:ia32 /Ox";
+#endif
    result += " (x86 build)";
 #endif
+   std::cout << "Compiler options are found as: " << result << std::endl;
    return result;
 #else
    return "Unknown";

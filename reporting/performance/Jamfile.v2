@@ -16,6 +16,10 @@ import ../../../config/checks/config : requires ;
 using quickbook ;
 using auto-index ;
 
+import ../../../predef/check/predef
+    : check require
+    : predef-check predef-require ;
+
 project
     : requirements
       <include>../../include_private
@@ -82,19 +86,21 @@ rule all-tests {
      local result ;
      for local source in [ glob test*.cpp ]
      {
+        result += [ run $(source) /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+        : : : release <include>../../test [ check-target-builds ../accuracy//has_c99_cmath : <define>TEST_C99 ] ] ;
      }
 
      #
      # Special cases to test different compiler options:
      #
      result += [ run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : debug <toolset>msvc [ check-target-builds ../accuracy//has_c99_cmath : <define>TEST_C99 : ]  : test_cbrt_msvc_debug ] ;
+     : : : debug <define>COMPILER_COMPARISON_TABLES [ predef-require "BOOST_COMP_MSVC" ] : test_cbrt_msvc_debug ] ;
      result += [ run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <address-model>32 <toolset>msvc [ check-target-builds ../accuracy//has_c99_cmath : <define>TEST_C99 : ]  : test_cbrt_msvc_release_32 ] ;
+     : : : release <define>COMPILER_COMPARISON_TABLES <address-model>32 [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox : test_cbrt_msvc_release_32 ] ;
      result += [ run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <address-model>64 <toolset>msvc <cxxflags>-arch:SSE2 [ check-target-builds ../accuracy//has_c99_cmath : <define>TEST_C99 : ]  : test_cbrt_msvc_release_64 ] ;
+     : : : release <define>COMPILER_COMPARISON_TABLES <address-model>64 [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox : test_cbrt_msvc_release_64 ] ;
      result += [ run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <address-model>64 <cxxflags>-arch:AVX <toolset>msvc [ check-target-builds ../accuracy//has_c99_cmath : <define>TEST_C99 : ]  : test_cbrt_msvc_release_64_avx ] ;
+     : : : release <define>COMPILER_COMPARISON_TABLES [ predef-require "__ICL +0 > 1100" ] <cxxflags>-Ox : test_cbrt_intel_release ] ;
 
      return $(result) ;     
 }
