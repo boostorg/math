@@ -9,6 +9,14 @@
 #include <vector>
 #include <string>
 
+//
+// Also include headers for whatever else we may be testing:
+//
+#ifdef TEST_LIBSTDCXX
+#include <tr1/cmath>
+#include <stdexcept>
+#endif
+
 extern std::vector<std::vector<double> > data;
 
 std::string sanitize_string(const std::string& s);

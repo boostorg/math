@@ -80,7 +80,7 @@ private:
 double sum = 0;
 
 template <class Func>
-double exec_timed_test(Func& f)
+double exec_timed_test(Func f)
 {
    double t = 0;
    unsigned repeats = 1;

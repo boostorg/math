@@ -32,23 +32,23 @@
 #define BESSEL_JS_FUNCTION_TO_TEST std::tr1::sph_bessel
 #define BESSEL_K_FUNCTION_TO_TEST std::tr1::cyl_bessel_k
 #define BESSEL_KN_FUNCTION_TO_TEST std::tr1::cyl_bessel_k
-#define BESSEL_Y_FUNCTION_TO_TEST std::tr1::cyl_neumannl
-#define BESSEL_YN_FUNCTION_TO_TEST std::tr1::cyl_neumannl
-#define BESSEL_YS_FUNCTION_TO_TEST std::tr1::sph_neumannl
+#define BESSEL_Y_FUNCTION_TO_TEST std::tr1::cyl_neumann
+#define BESSEL_YN_FUNCTION_TO_TEST std::tr1::cyl_neumann
+#define BESSEL_YS_FUNCTION_TO_TEST std::tr1::sph_neumann
 
-#define BETA_FUNCTION_TO_TEST std::tr1::betal
+#define BETA_FUNCTION_TO_TEST std::tr1::beta
 
-#define ELLINT_1_FUNCTION_TO_TEST std::tr1::ellint_1l
-#define ELLINT_1C_FUNCTION_TO_TEST std::tr1::comp_ellint_1l
-#define ELLINT_2_FUNCTION_TO_TEST std::tr1::ellint_2l
-#define ELLINT_2C_FUNCTION_TO_TEST std::tr1::comp_ellint_2l
-#define ELLINT_3_FUNCTION_TO_TEST std::tr1::ellint_3l
-#define ELLINT_3C_FUNCTION_TO_TEST std::tr1::comp_ellint_3l
+#define ELLINT_1_FUNCTION_TO_TEST std::tr1::ellint_1
+#define ELLINT_1C_FUNCTION_TO_TEST std::tr1::comp_ellint_1
+#define ELLINT_2_FUNCTION_TO_TEST std::tr1::ellint_2
+#define ELLINT_2C_FUNCTION_TO_TEST std::tr1::comp_ellint_2
+#define ELLINT_3_FUNCTION_TO_TEST std::tr1::ellint_3
+#define ELLINT_3C_FUNCTION_TO_TEST std::tr1::comp_ellint_3
 
-#define EI_FUNCTION_TO_TEST std::tr1::expintl
+#define EI_FUNCTION_TO_TEST std::tr1::expint
 
-#define LAGUERRE_FUNCTION_TO_TEST std::tr1::laguerrel
-#define ASSOC_LAGUERRE_FUNCTION_TO_TEST std::tr1::assoc_laguerrel
+#define LAGUERRE_FUNCTION_TO_TEST std::tr1::laguerre
+#define ASSOC_LAGUERRE_FUNCTION_TO_TEST std::tr1::assoc_laguerre
 
 inline long double legendre_p_binder(int i, long double d)
 {
