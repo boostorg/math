@@ -24,7 +24,7 @@ inline T powm1_imp(const T a, const T z, const Policy& pol)
 
    //  Refer to the series expansion at z = 0 for (a-1)^z for the logic
    // in choosing this cutoff, see http://www.wolframalpha.com/input/?i=%28x%2B1%29^y
-   if(fabs(a * z) < 1)
+   if(fabs((a - 1) * z) < 1)
    {
       T p = fabs(a - 1) < 0.5f ? boost::math::log1p(a-1, pol) : log(a);
       p *= z;
