@@ -16,6 +16,11 @@
 #include <tr1/cmath>
 #include <stdexcept>
 #endif
+#ifdef TEST_GSL
+#include <gsl/gsl_sf.h>
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_version.h>
+#endif
 
 extern std::vector<std::vector<double> > data;
 
