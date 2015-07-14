@@ -44,12 +44,24 @@ void screen_data(Func f, Result r)
          double err = boost::math::relative_difference(computed, expected);
          if(err > 1e-7)
          {
+            std::cout << "Erasing row: ";
+            for(unsigned i = 0; i < data[row].size(); ++i)
+            {
+               std::cout << data[row][i] << " ";
+            }
+            std::cout << "Error was " << err << std::endl;
             data.erase(data.begin() + row);
             --row;
          }
       }
       catch(const std::exception&)
       {
+         std::cout << "Erasing row: ";
+         for(unsigned i = 0; i < data[row].size(); ++i)
+         {
+            std::cout << data[row][i] << " ";
+         }
+         std::cout << "due to thrown exception\n";
          data.erase(data.begin() + row);
          --row;
       }
