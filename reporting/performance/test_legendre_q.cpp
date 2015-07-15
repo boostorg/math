@@ -28,22 +28,19 @@ int main()
 
    unsigned data_total = data.size();
 
-   screen_data([](const std::vector<double>& v){  return boost::math::legendre_p(v[0], v[1]);  }, [](const std::vector<double>& v){ return v[2];  });
+   screen_data([](const std::vector<double>& v){  return boost::math::legendre_q(v[0], v[1]);  }, [](const std::vector<double>& v){ return v[3];  });
 
 
-#if defined(TEST_LIBSTDCXX) && !defined(COMPILER_COMPARISON_TABLES)
-   screen_data([](const std::vector<double>& v){  return std::tr1::legendre(v[0], v[1]);  }, [](const std::vector<double>& v){ return v[2];  });
-#endif
 #if defined(TEST_GSL) && !defined(COMPILER_COMPARISON_TABLES)
-   screen_data([](const std::vector<double>& v){  return gsl_sf_legendre_Pl(v[0], v[1]);  }, [](const std::vector<double>& v){ return v[2];  });
+   screen_data([](const std::vector<double>& v){  return gsl_sf_legendre_Ql(v[0], v[1]);  }, [](const std::vector<double>& v){ return v[3];  });
 #endif
 
    unsigned data_used = data.size();
-   std::string function = "legendre[br](" + boost::lexical_cast<std::string>(data_used) + "/" + boost::lexical_cast<std::string>(data_total) + " tests selected)";
+   std::string function = "legendre Q[br](" + boost::lexical_cast<std::string>(data_used) + "/" + boost::lexical_cast<std::string>(data_total) + " tests selected)";
 
    double time;
 
-   time = exec_timed_test([](const std::vector<double>& v){  return boost::math::legendre_p(v[0], v[1]);  });
+   time = exec_timed_test([](const std::vector<double>& v){  return boost::math::legendre_q(v[0], v[1]);  });
    std::cout << time << std::endl;
    report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Boost");
    //
@@ -52,20 +49,15 @@ int main()
 #if !defined(COMPILER_COMPARISON_TABLES)
    if(sizeof(long double) != sizeof(double))
    {
-      time = exec_timed_test([](const std::vector<double>& v){  return boost::math::legendre_p(v[0], v[1], boost::math::policies::make_policy(boost::math::policies::promote_double<false>()));  });
+      time = exec_timed_test([](const std::vector<double>& v){  return boost::math::legendre_q(v[0], v[1], boost::math::policies::make_policy(boost::math::policies::promote_double<false>()));  });
       std::cout << time << std::endl;
       report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Boost[br](no internal promotion to long double)");
    }
 #endif
 
 
-#if defined(TEST_LIBSTDCXX) && !defined(COMPILER_COMPARISON_TABLES)
-   time = exec_timed_test([](const std::vector<double>& v){  return std::tr1::legendre(v[0], v[1]);  });
-   std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "tr1/cmath");
-#endif
 #if defined(TEST_GSL) && !defined(COMPILER_COMPARISON_TABLES)
-   time = exec_timed_test([](const std::vector<double>& v){  return gsl_sf_legendre_Pl(v[0], v[1]);  });
+   time = exec_timed_test([](const std::vector<double>& v){  return gsl_sf_legendre_Ql(v[0], v[1]);  });
    std::cout << time << std::endl;
    report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "gsl");
 #endif

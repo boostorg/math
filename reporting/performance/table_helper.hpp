@@ -20,6 +20,28 @@
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_version.h>
+
+void gsl_handler(const char * reason, const char * file, int line, int gsl_errno)
+{
+   if(gsl_errno == GSL_ERANGE) return; // handle zero or infinity in our test code.
+   throw std::domain_error(reason);
+}
+
+struct gsl_error_handler_setter
+{
+   gsl_error_handler_t * old_handler;
+   gsl_error_handler_setter()
+   {
+      old_handler = gsl_set_error_handler(gsl_handler);
+   }
+   ~gsl_error_handler_setter()
+   {
+      gsl_set_error_handler(old_handler);
+   }
+};
+
+static const gsl_error_handler_setter handler;
+
 #endif
 
 extern std::vector<std::vector<double> > data;

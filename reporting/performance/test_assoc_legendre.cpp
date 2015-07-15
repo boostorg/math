@@ -32,6 +32,9 @@ int main()
 #if defined(TEST_LIBSTDCXX) && !defined(COMPILER_COMPARISON_TABLES)
    screen_data([](const std::vector<double>& v){  return std::tr1::assoc_legendre(v[0], v[1], v[2]);  }, [](const std::vector<double>& v){ return v[3];  });
 #endif
+#if defined(TEST_GSL) && !defined(COMPILER_COMPARISON_TABLES)
+   screen_data([](const std::vector<double>& v){  return gsl_sf_legendre_Plm(v[0], v[1], v[2]);  }, [](const std::vector<double>& v){ return v[3];  });
+#endif
 
    unsigned data_used = data.size();
    std::string function = "assoc_legendre[br](" + boost::lexical_cast<std::string>(data_used) + "/" + boost::lexical_cast<std::string>(data_total) + " tests selected)";
@@ -59,7 +62,11 @@ int main()
    std::cout << time << std::endl;
    report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "tr1/cmath");
 #endif
-
+#if defined(TEST_GSL) && !defined(COMPILER_COMPARISON_TABLES)
+   time = exec_timed_test([](const std::vector<double>& v){  return gsl_sf_legendre_Plm(v[0], v[1], v[2]);  });
+   std::cout << time << std::endl;
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "gsl");
+#endif
 
    return 0;
 }

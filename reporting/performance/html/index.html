@@ -34,55 +34,11 @@
 <div class="toc">
 <p><b>Table of Contents</b></p>
 <dl class="toc">
-<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_Compiler_Option_Comparison_on_Win32">Compiler
-    Option Comparison on Win32</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_Compiler_Option_Comparison_on_linux">Compiler
     Option Comparison on linux</a></span></dt>
-<dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_Library_Comparison_with_GNU_C_version_4_9_2_on_Win32">Library
-    Comparison with GNU C++ version 4.9.2 on Win32</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_error_rates_rep.section_Library_Comparison_with_GNU_C_version_5_1_0_on_linux">Library
     Comparison with GNU C++ version 5.1.0 on linux</a></span></dt>
 </dl>
-</div>
-<div class="section">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="special_function_error_rates_rep.section_Compiler_Option_Comparison_on_Win32"></a><a class="link" href="index.html#special_function_error_rates_rep.section_Compiler_Option_Comparison_on_Win32" title="Compiler Option Comparison on Win32">Compiler
-    Option Comparison on Win32</a>
-</h2></div></div></div>
-<div class="table">
-<a name="special_function_error_rates_rep.section_Compiler_Option_Comparison_on_Win32.table_Compiler_Option_Comparison_on_Win32"></a><p class="title"><b>Table&#160;1.&#160;Compiler Option Comparison on Win32</b></p>
-<div class="table-contents"><table class="table" summary="Compiler Option Comparison on Win32">
-<colgroup>
-<col>
-<col>
-</colgroup>
-<thead><tr>
-<th>
-              <p>
-                Function
-              </p>
-            </th>
-<th>
-              <p>
-                Unknown
-              </p>
-            </th>
-</tr></thead>
-<tbody><tr>
-<td>
-              <p>
-                boost::math::cbrt
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">49ns</span>
-              </p>
-            </td>
-</tr></tbody>
-</table></div>
-</div>
-<br class="table-break">
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -90,7 +46,7 @@
     Option Comparison on linux</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_Compiler_Option_Comparison_on_linux.table_Compiler_Option_Comparison_on_linux"></a><p class="title"><b>Table&#160;2.&#160;Compiler Option Comparison on linux</b></p>
+<a name="special_function_error_rates_rep.section_Compiler_Option_Comparison_on_linux.table_Compiler_Option_Comparison_on_linux"></a><p class="title"><b>Table&#160;1.&#160;Compiler Option Comparison on linux</b></p>
 <div class="table-contents"><table class="table" summary="Compiler Option Comparison on linux">
 <colgroup>
 <col>
@@ -116,895 +72,10 @@
             </td>
 <td>
               <p>
-                <span class="green">41ns</span>
+                <span class="blue">42ns</span>
               </p>
             </td>
 </tr></tbody>
-</table></div>
-</div>
-<br class="table-break">
-</div>
-<div class="section">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="special_function_error_rates_rep.section_Library_Comparison_with_GNU_C_version_4_9_2_on_Win32"></a><a class="link" href="index.html#special_function_error_rates_rep.section_Library_Comparison_with_GNU_C_version_4_9_2_on_Win32" title="Library Comparison with GNU C++ version 4.9.2 on Win32">Library
-    Comparison with GNU C++ version 4.9.2 on Win32</a>
-</h2></div></div></div>
-<div class="table">
-<a name="special_function_error_rates_rep.section_Library_Comparison_with_GNU_C_version_4_9_2_on_Win32.table_Library_Comparison_with_GNU_C_version_4_9_2_on_Win32"></a><p class="title"><b>Table&#160;3.&#160;Library Comparison with GNU C++ version 4.9.2 on Win32</b></p>
-<div class="table-contents"><table class="table" summary="Library Comparison with GNU C++ version 4.9.2 on Win32">
-<colgroup>
-<col>
-<col>
-<col>
-<col>
-<col>
-</colgroup>
-<thead><tr>
-<th>
-              <p>
-                Function
-              </p>
-            </th>
-<th>
-              <p>
-                Boost
-              </p>
-            </th>
-<th>
-              <p>
-                Boost<br> (no internal promotion to long double)
-              </p>
-            </th>
-<th>
-              <p>
-                tr1/cmath
-              </p>
-            </th>
-<th>
-              <p>
-                math.h
-              </p>
-            </th>
-</tr></thead>
-<tbody>
-<tr>
-<td>
-              <p>
-                assoc_laguerre<br> (2240/2240 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">231ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">197ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">233ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                beta<br> (2202/2202 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">377ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">225ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">190ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cbrt<br> (85/85 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">53ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">44ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">58ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">61ns</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_1<br> (627/629 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">386ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">234ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">456ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_1 (complete)<br> (109/109 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">82ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">45ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">237ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_2<br> (527/530 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">650ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">452ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">714ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_2 (complete)<br> (110/110 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">66ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">32ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">528ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_3<br> (831/845 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1848ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">975ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1312ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_3 (complete)<br> (500/500 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">985ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">544ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">842ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                erf<br> (950/950 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">36ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">25ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">43ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">43ns</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                erfc<br> (950/950 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">51ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">36ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">65ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">63ns</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                expint<br> (436/436 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">85ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">60ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">225ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                expm1<br> (80/80 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">30ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">25ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">23ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">24ns</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_i (integer order)<br> (515/526 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">681ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">243ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">238ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_i<br> (215/240 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">1035ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">470ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">219ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_j (integer order)<br> (252/268 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">158ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">94ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">304ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">197ns</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                sph_bessel<br> (483/483 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1361ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">910ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">1870ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_j<br> (431/451 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">817ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">507ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">420ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_k (integer order)<br> (505/508 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3622ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">373ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2837ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_k<br> (187/279 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">6861ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">722ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3074ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                laguerre<br> (280/280 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">146ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">130ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">164ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                lgamma<br> (400/400 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">228ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">137ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">60ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">62ns</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                log1p<br> (80/80 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">29ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">16ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">28ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">29ns</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                tgamma<br> (400/400 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">217ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">139ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">76ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">73ns</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_neumann (integer order)<br> (423/428 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">510ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">350ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">692ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">156ns</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                sph_neumann<br> (284/284 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3629ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1730ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">2824ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_neumann<br> (400/450 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">1383ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">635ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">773ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                legendre<br> (205/400 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">177ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">110ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">49ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                legendre<br> (300/300 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">414ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">327ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">383ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                assoc_legendre<br> (205/400 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">184ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">120ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">49ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                zeta<br> (448/448 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">339ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">231ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">192023ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-</tbody>
 </table></div>
 </div>
 <br class="table-break">
@@ -1015,7 +86,7 @@
     Comparison with GNU C++ version 5.1.0 on linux</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_error_rates_rep.section_Library_Comparison_with_GNU_C_version_5_1_0_on_linux.table_Library_Comparison_with_GNU_C_version_5_1_0_on_linux"></a><p class="title"><b>Table&#160;4.&#160;Library Comparison with GNU C++ version 5.1.0 on linux</b></p>
+<a name="special_function_error_rates_rep.section_Library_Comparison_with_GNU_C_version_5_1_0_on_linux.table_Library_Comparison_with_GNU_C_version_5_1_0_on_linux"></a><p class="title"><b>Table&#160;2.&#160;Library Comparison with GNU C++ version 5.1.0 on linux</b></p>
 <div class="table-contents"><table class="table" summary="Library Comparison with GNU C++ version 5.1.0 on linux">
 <colgroup>
 <col>
@@ -1048,12 +119,12 @@
             </th>
 <th>
               <p>
-                math.h
+                gsl
               </p>
             </th>
 <th>
               <p>
-                gsl
+                math.h
               </p>
             </th>
 </tr></thead>
@@ -1061,27 +132,187 @@
 <tr>
 <td>
               <p>
-                ellint_3 (complete)<br> (500/500 tests selected)
+                assoc_laguerre<br> (2240/2240 tests selected)
               </p>
             </td>
 <td>
               <p>
-                <span class="red">1142ns</span>
+                <span class="green">220ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">449ns</span>
+                <span class="green">191ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">809ns</span>
+                <span class="green">225ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">222ns</span>
               </p>
             </td>
 <td>
               <p>
                 <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                assoc_legendre<br> (205/400 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">247ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">102ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">60ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">153ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                beta (incomplete)<br> (2682/3210 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">1762ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">550ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">751ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                beta<br> (2202/2202 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">694ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">160ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">150ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">389ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cbrt<br> (85/85 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">44ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">17ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">34ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">32ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cyl_bessel_i (integer order)<br> (494/526 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">817ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">252ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">219ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">495ns</span>
               </p>
             </td>
 <td>
@@ -1090,22 +321,27 @@
 <tr>
 <td>
               <p>
-                cyl_bessel_i (integer order)<br> (515/526 tests selected)
+                cyl_bessel_i<br> (179/240 tests selected)
               </p>
             </td>
 <td>
               <p>
-                <span class="red">790ns</span>
+                <span class="red">1343ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">244ns</span>
+                <span class="blue">385ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">241ns</span>
+                <span class="green">204ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">664ns</span>
               </p>
             </td>
 <td>
@@ -1113,7 +349,197 @@
                 <span class="grey">-</span>
               </p>
             </td>
+</tr>
+<tr>
 <td>
+              <p>
+                cyl_bessel_j (integer order)<br> (252/268 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">271ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">103ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">252ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">274ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">200ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cyl_bessel_j<br> (426/451 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">1096ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">393ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">368ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">844ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cyl_bessel_k (integer order)<br> (505/508 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">3549ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">357ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2769ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">267ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cyl_bessel_k<br> (96/279 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">4410ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">638ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">765ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">855ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cyl_neumann (integer order)<br> (423/428 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">562ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">287ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">696ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">536ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">394ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                cyl_neumann<br> (400/450 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">1424ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">571ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">730ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">1393ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
             </td>
 </tr>
 <tr>
@@ -1124,7 +550,7 @@
             </td>
 <td>
               <p>
-                <span class="red">51ns</span>
+                <span class="red">54ns</span>
               </p>
             </td>
 <td>
@@ -1134,7 +560,188 @@
             </td>
 <td>
               <p>
-                <span class="red">234ns</span>
+                <span class="red">245ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">284ns</span>
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ellint_1<br> (627/629 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">360ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">179ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">410ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">502ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ellint_2 (complete)<br> (109/110 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">55ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">33ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">521ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">591ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ellint_2<br> (527/530 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">787ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">342ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">634ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">717ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ellint_3 (complete)<br> (500/500 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">1221ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">481ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">886ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">992ns</span>
+              </p>
+            </td>
+<td>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ellint_3<br> (831/845 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2180ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">771ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1206ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1301ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ellint_rc<br> (201/201 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">74ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">46ns</span>
               </p>
             </td>
 <td>
@@ -1143,6 +750,238 @@
               </p>
             </td>
 <td>
+              <p>
+                <span class="red">207ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ellint_rd<br> (7588/7588 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">492ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">225ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">368ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ellint_rf<br> (7788/7788 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">92ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">64ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">346ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                ellint_rj<br> (7642/8032 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">459ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">196ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2255ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                erf<br> (950/950 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">38ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">15ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">17ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">144ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">17ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                erfc<br> (950/950 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">55ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">32ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">25ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">76ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">24ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                expint (En)<br> (1059/1059 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">253ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">140ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">661ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                expint<br> (436/436 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">92ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">37ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">198ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">138ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
             </td>
 </tr>
 <tr>
@@ -1158,234 +997,34 @@
             </td>
 <td>
               <p>
+                <span class="green">11ns</span>
+              </p>
+            </td>
+<td>
+              <p>
                 <span class="green">10ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">9ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">9ns</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_2 (complete)<br> (110/110 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">54ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">33ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">517ns</span>
-              </p>
-            </td>
-<td>
-              <p>
                 <span class="grey">-</span>
               </p>
             </td>
 <td>
+              <p>
+                <span class="green">10ns</span>
+              </p>
             </td>
 </tr>
 <tr>
 <td>
               <p>
-                cyl_bessel_k<br> (187/279 tests selected)
+                gamma_p<br> (1379/1379 tests selected)
               </p>
             </td>
 <td>
               <p>
-                <span class="red">6302ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">670ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2893ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_neumann (integer order)<br> (423/428 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">556ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">277ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">677ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">367ns</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_3<br> (831/845 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2093ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">763ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1202ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cbrt<br> (85/85 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">42ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">16ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">20ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">20ns</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_2<br> (527/530 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">784ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">340ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">649ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                assoc_legendre<br> (205/400 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">245ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">99ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">60ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                zeta<br> (448/448 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">494ns</span>
+                <span class="red">471ns</span>
               </p>
             </td>
 <td>
@@ -1395,7 +1034,34 @@
             </td>
 <td>
               <p>
-                <span class="red">137024ns</span>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">935ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                gamma_q<br> (1371/1379 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">477ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">196ns</span>
               </p>
             </td>
 <td>
@@ -1404,27 +1070,30 @@
               </p>
             </td>
 <td>
+              <p>
+                <span class="red">1145ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
             </td>
 </tr>
 <tr>
 <td>
               <p>
-                cyl_bessel_j<br> (431/451 tests selected)
+                jacobi_cn<br> (2368/2757 tests selected)
               </p>
             </td>
 <td>
               <p>
-                <span class="red">1041ns</span>
+                <span class="red">460ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">388ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">362ns</span>
+                <span class="blue">172ns</span>
               </p>
             </td>
 <td>
@@ -1433,22 +1102,94 @@
               </p>
             </td>
 <td>
+              <p>
+                <span class="green">90ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
             </td>
 </tr>
 <tr>
 <td>
               <p>
-                tgamma<br> (400/400 tests selected)
+                jacobi_dn<br> (2368/2757 tests selected)
               </p>
             </td>
 <td>
               <p>
-                <span class="red">341ns</span>
+                <span class="red">456ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">95ns</span>
+                <span class="blue">166ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">90ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                jacobi_sn<br> (2368/2757 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">465ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">170ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">92ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                laguerre<br> (280/280 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">136ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">121ns</span>
               </p>
             </td>
 <td>
@@ -1458,31 +1199,29 @@
             </td>
 <td>
               <p>
-                <span class="blue">155ns</span>
+                <span class="green">144ns</span>
               </p>
             </td>
 <td>
+              <p>
+                <span class="grey">-</span>
+              </p>
             </td>
 </tr>
 <tr>
 <td>
               <p>
-                cyl_bessel_k (integer order)<br> (505/508 tests selected)
+                legendre Q<br> (300/300 tests selected)
               </p>
             </td>
 <td>
               <p>
-                <span class="red">3463ns</span>
+                <span class="blue">472ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">347ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2686ns</span>
+                <span class="green">387ns</span>
               </p>
             </td>
 <td>
@@ -1491,37 +1230,45 @@
               </p>
             </td>
 <td>
+              <p>
+                <span class="green">420ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
             </td>
 </tr>
 <tr>
 <td>
               <p>
-                erf<br> (950/950 tests selected)
+                legendre<br> (300/300 tests selected)
               </p>
             </td>
 <td>
               <p>
-                <span class="red">36ns</span>
+                <span class="green">384ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">14ns</span>
+                <span class="green">329ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">17ns</span>
+                <span class="green">374ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">17ns</span>
+                <span class="red">713ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="red">141ns</span>
+                <span class="grey">-</span>
               </p>
             </td>
 </tr>
@@ -1543,363 +1290,18 @@
             </td>
 <td>
               <p>
-                <span class="green">47ns</span>
+                <span class="green">46ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">47ns</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_1<br> (627/629 tests selected)
+                <span class="red">271ns</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">353ns</span>
+                <span class="green">46ns</span>
               </p>
-            </td>
-<td>
-              <p>
-                <span class="green">183ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">421ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                assoc_laguerre<br> (2240/2240 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">215ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">187ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">226ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                beta<br> (2202/2202 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">692ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">155ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">150ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                sph_neumann<br> (284/284 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3527ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1584ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">2783ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                sph_bessel<br> (483/483 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1533ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">901ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">1980ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                legendre<br> (300/300 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">389ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">340ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">368ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_j (integer order)<br> (253/268 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">266ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">101ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">255ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">202ns</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_i<br> (215/240 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">1304ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">357ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">190ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                expint<br> (436/436 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">93ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">38ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">201ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                erfc<br> (950/950 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">56ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">21ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">26ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">26ns</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_neumann<br> (400/450 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">1446ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">592ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">748ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                laguerre<br> (280/280 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">137ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">119ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">157ns</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
             </td>
 </tr>
 <tr>
@@ -1910,7 +1312,7 @@
             </td>
 <td>
               <p>
-                <span class="green">12ns</span>
+                <span class="green">11ns</span>
               </p>
             </td>
 <td>
@@ -1925,10 +1327,237 @@
             </td>
 <td>
               <p>
-                <span class="green">11ns</span>
+                <span class="grey">-</span>
               </p>
             </td>
 <td>
+              <p>
+                <span class="green">11ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                polygamma<br> (828/1535 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">3809ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1216ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">2316ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                sph_bessel<br> (483/483 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1512ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">891ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">1869ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2373ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                sph_neumann<br> (284/284 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">3462ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">1709ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2849ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">432ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                tgamma (incomplete)<br> (1266/1379 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">695ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">296ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">877ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                tgamma<br> (400/400 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">337ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">94ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">154ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">90ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">157ns</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                trigamma<br> (659/659 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">35ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">21ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">844ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                zeta<br> (448/448 tests selected)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">495ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">186ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">144658ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">283ns</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="grey">-</span>
+              </p>
             </td>
 </tr>
 </tbody>
@@ -1938,7 +1567,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: July 14, 2015 at 12:18:34 GMT</small></p></td>
+<td align="left"><p><small>Last revised: July 15, 2015 at 18:36:38 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
