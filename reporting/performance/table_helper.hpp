@@ -44,6 +44,13 @@ static const gsl_error_handler_setter handler;
 
 #endif
 
+#ifdef TEST_RMATH
+// Rmath overloads ftrunc, leading to strange errors from GCC unless we include this:
+#include <boost/math/special_functions.hpp>
+#define MATHLIB_STANDALONE
+#include <Rmath.h>
+#endif
+
 extern std::vector<std::vector<double> > data;
 
 std::string sanitize_string(const std::string& s);

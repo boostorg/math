@@ -105,6 +105,9 @@ int main()
 #if defined(TEST_GSL) && !defined(COMPILER_COMPARISON_TABLES)
    screen_data([](const std::vector<double>& v){  return gsl_sf_bessel_Jn(static_cast<int>(v[0]), v[1]);  }, [](const std::vector<double>& v){ return v[2];  });
 #endif
+#if defined(TEST_RMATH) && !defined(COMPILER_COMPARISON_TABLES)
+   screen_data([](const std::vector<double>& v){  return bessel_j(v[1], static_cast<int>(v[0]));  }, [](const std::vector<double>& v){ return v[2];  });
+#endif
 
    unsigned data_used = data.size();
    std::string function = "cyl_bessel_j (integer order)[br](" + boost::lexical_cast<std::string>(data_used) + "/" + boost::lexical_cast<std::string>(data_total) + " tests selected)";
@@ -141,6 +144,11 @@ int main()
    time = exec_timed_test([](const std::vector<double>& v){  return gsl_sf_bessel_Jn(static_cast<int>(v[0]), v[1]);  });
    std::cout << time << std::endl;
    report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "gsl");
+#endif
+#if defined(TEST_RMATH) && !defined(COMPILER_COMPARISON_TABLES)
+   time = exec_timed_test([](const std::vector<double>& v){  return bessel_j(v[1], static_cast<int>(v[0]));  });
+   std::cout << time << std::endl;
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Rmath");
 #endif
 
 

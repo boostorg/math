@@ -41,6 +41,10 @@ int main()
    std::cout << "Screening GSL data:\n";
    screen_data([](const std::vector<double>& v){  return gsl_sf_gamma_inc_Q(v[0], v[1]);  }, [](const std::vector<double>& v){ return v[3];  });
 #endif
+#if defined(TEST_RMATH) && !defined(COMPILER_COMPARISON_TABLES)
+   std::cout << "Screening GSL data:\n";
+   screen_data([](const std::vector<double>& v){  return pgamma(v[1], v[0], 1.0, 0, 0);  }, [](const std::vector<double>& v){ return v[3];  });
+#endif
 
    unsigned data_used = data.size();
    std::string function = "gamma_q[br](" + boost::lexical_cast<std::string>(data_used) + "/" + boost::lexical_cast<std::string>(data_total) + " tests selected)";
@@ -67,6 +71,11 @@ int main()
    time = exec_timed_test([](const std::vector<double>& v){  return gsl_sf_gamma_inc_Q(v[0], v[1]);  });
    std::cout << time << std::endl;
    report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "gsl");
+#endif
+#if defined(TEST_RMATH) && !defined(COMPILER_COMPARISON_TABLES)
+   time = exec_timed_test([](const std::vector<double>& v){  return pgamma(v[1], v[0], 1.0, 0, 0);  });
+   std::cout << time << std::endl;
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Rmath");
 #endif
 
    return 0;
