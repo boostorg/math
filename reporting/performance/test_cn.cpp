@@ -63,7 +63,7 @@ typedef double T;
 
 int main()
 {
-#if !defined(COMPILER_COMPARISON_TABLES) !defined(TEST_GSL)
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL)
    // we have nothing to compare against, just bail out:
    return 0;
 #endif
