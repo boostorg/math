@@ -17,6 +17,11 @@
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_LIBSTDCXX)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
    typedef double T;
 #define SC_(x) static_cast<double>(x)
 #include "zeta_data.ipp"

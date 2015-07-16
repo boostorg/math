@@ -54,6 +54,11 @@ static const boost::array<boost::array<typename table_type<T>::type, 3>, 10> yn_
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_C99) && !defined(TEST_GSL) && !defined(TEST_LIBSTDCXX) && !defined(TEST_RMATH)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
 #include "bessel_y01_data.ipp"
 #include "bessel_yn_data.ipp"
 

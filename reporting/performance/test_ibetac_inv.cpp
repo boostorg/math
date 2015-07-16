@@ -21,6 +21,11 @@ typedef double T;
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_RMATH)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
 #  include "ibeta_inv_data.ipp"
 
    add_data(ibeta_inv_data);

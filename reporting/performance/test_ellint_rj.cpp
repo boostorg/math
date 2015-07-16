@@ -20,6 +20,11 @@ typedef double T;
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
 #include "ellint_rj_data.ipp"
 #include "ellint_rj_e4.ipp"
 #include "ellint_rj_e3.ipp"

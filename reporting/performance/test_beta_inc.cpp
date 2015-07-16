@@ -21,6 +21,10 @@ typedef double T;
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
 #  include "ibeta_small_data.ipp"
 #  include "ibeta_data.ipp"
 #  include "ibeta_large_data.ipp"

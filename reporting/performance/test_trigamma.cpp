@@ -17,6 +17,11 @@
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_RMATH)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
    typedef double T;
 #define SC_(x) static_cast<double>(x)
    boost::array<boost::array<T, 3>, 659> data =
@@ -38,7 +43,7 @@ int main()
 #if defined(TEST_GSL) && !defined(COMPILER_COMPARISON_TABLES)
    screen_data([](const std::vector<double>& v){  return gsl_sf_psi_1(v[0]);  }, [](const std::vector<double>& v){ return v[1];  });
 #endif
-#if defined(TEST_GSL) && !defined(COMPILER_COMPARISON_TABLES)
+#if defined(TEST_RMATH) && !defined(COMPILER_COMPARISON_TABLES)
    screen_data([](const std::vector<double>& v){  return ::trigamma(v[0]);  }, [](const std::vector<double>& v){ return v[1];  });
 #endif
 

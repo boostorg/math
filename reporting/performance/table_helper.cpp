@@ -16,6 +16,8 @@
 #include <vector>
 #include <set>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include "table_helper.hpp"
 
 std::vector<std::vector<double> > data;
@@ -27,6 +29,15 @@ inline std::string sanitize_string(const std::string& s)
    while(result[0] == '_')
       result.erase(0);
    return result;
+}
+
+std::string format_precision(double val, int digits)
+{
+   std::stringstream ss;
+   ss << std::setprecision(digits);
+   ss << std::fixed;
+   ss << val;
+   return ss.str();
 }
 
 static std::string content;
@@ -166,7 +177,7 @@ std::string get_colour(boost::uintmax_t val, boost::uintmax_t best)
 
 boost::intmax_t get_value_from_cell(const std::string& cell)
 {
-   static const boost::regex time_e("\\[role[^\\d]+(\\d+)ns\\]");
+   static const boost::regex time_e("(\\d+)ns");
    boost::smatch what;
    if(regex_search(cell, what, time_e))
    {
@@ -277,7 +288,9 @@ void add_cell(boost::intmax_t val, const std::string& table_name, const std::str
          {
             s += get_colour(values[i - 1], best);
             s += " ";
-            s += boost::lexical_cast<std::string>(values[i - 1]) + "ns]";
+            s += format_precision(static_cast<double>(values[i - 1]) / best, 2);
+            s += "[br](";
+            s += boost::lexical_cast<std::string>(values[i - 1]) + "ns)]";
          }
       }
       //
@@ -300,9 +313,9 @@ void add_cell(boost::intmax_t val, const std::string& table_name, const std::str
       new_table += "]]\n";
       new_table += "[[";
       new_table += row_name;
-      new_table += "][[role blue ";
+      new_table += "][[role blue 1.00[br](";
       new_table += boost::lexical_cast<std::string>(val);
-      new_table += "ns]]]\n]\n]\n";
+      new_table += "ns)]]]\n]\n]\n";
 
       std::string::size_type pos = content.find("[/tables:]");
       if(pos != std::string::npos)

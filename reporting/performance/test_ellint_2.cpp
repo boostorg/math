@@ -32,6 +32,11 @@ static const boost::array<boost::array<T, 3>, 10> data1 = { {
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_LIBSTDCXX)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
 #include "ellint_e2_data.ipp"
 
    add_data(data1);

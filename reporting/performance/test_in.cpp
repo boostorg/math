@@ -57,6 +57,11 @@ static const boost::array<boost::array<T, 3>, 11> in_data = { {
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_LIBSTDCXX) && !defined(TEST_RMATH)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
 #include "bessel_i_int_data.ipp"
 
    add_data(i0_data);

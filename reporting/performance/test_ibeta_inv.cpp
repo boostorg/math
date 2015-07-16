@@ -21,6 +21,11 @@ typedef double T;
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_RMATH)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
 #  include "ibeta_inv_data.ipp"
 
    add_data(ibeta_inv_data);
@@ -43,7 +48,11 @@ int main()
 
    time = exec_timed_test([](const std::vector<double>& v){  return boost::math::ibeta_inv(v[0], v[1], v[2]);  });
    std::cout << time << std::endl;
+#if defined(COMPILER_COMPARISON_TABLES)
+   report_execution_time(time, std::string("Compiler Option Comparison on ") + BOOST_PLATFORM, "boost::math::ibeta_inv", get_compiler_options_name());
+#else
    report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Boost");
+#endif
    //
    // Boost again, but with promotion to long double turned off:
    //

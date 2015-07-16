@@ -17,6 +17,11 @@
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_C99) && !defined(TEST_GSL) && !defined(TEST_LIBSTDCXX) && !defined(TEST_RMATH)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
    typedef double T;
 #define SC_(x) static_cast<double>(x)
 #  include "test_gamma_data.ipp"

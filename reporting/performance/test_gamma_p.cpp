@@ -20,6 +20,11 @@ typedef double T;
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_RMATH)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
 #  include "igamma_med_data.ipp"
 #  include "igamma_small_data.ipp"
 #  include "igamma_big_data.ipp"

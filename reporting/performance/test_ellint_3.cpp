@@ -96,6 +96,11 @@ static const boost::array<boost::array<T, 4>, 65> data1 = { {
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_LIBSTDCXX)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
 #include "ellint_pi3_data.ipp"
 #include "ellint_pi3_large_data.ipp"
 

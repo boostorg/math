@@ -20,6 +20,11 @@ typedef double T;
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
 #  include "legendre_p.ipp"
 #  include "legendre_p_large.ipp"
 

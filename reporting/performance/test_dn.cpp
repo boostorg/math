@@ -63,6 +63,12 @@ typedef double T;
 
 int main()
 {
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL)
+   // we have nothing to compare against, just bail out:
+   return 0;
+#endif
+
+
 #include "jacobi_elliptic.ipp"
 #include "jacobi_elliptic_small.ipp"
 #include "jacobi_near_1.ipp"
