@@ -295,7 +295,7 @@ void add_cell(boost::intmax_t val, const std::string& table_name, const std::str
       }
       //
       // Convert back to a string and insert into content:
-      std::sort(table_data.begin(), table_data.end(), [](std::vector<std::string> const& a, std::vector<std::string> const& b) { return a[0] < b[0]; } );
+      std::sort(table_data.begin() + 1, table_data.end(), [](std::vector<std::string> const& a, std::vector<std::string> const& b) { return a[0] < b[0]; } );
       std::string c = save_table(table_data);
       content.replace(table_location.position(1), table_location.length(1), c);
    }
