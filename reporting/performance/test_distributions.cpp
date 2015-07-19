@@ -8,6 +8,7 @@
 #endif
 
 #define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#define DISTRIBUTIONS_TEST
 
 #include <boost/math/distributions.hpp>
 #include <boost/array.hpp>
@@ -16,6 +17,10 @@
 #include "table_helper.hpp"
 #include "performance.hpp"
 #include <iostream>
+
+#ifdef TEST_GSL
+#include <gsl/gsl_cdf.h>
+#endif
 
 class distribution_tester
 {
@@ -121,6 +126,12 @@ public:
       catch(const std::exception& e)
       {
          std::cerr << "Aborting due to exception: " << e.what() << std::endl;
+         std::cerr << "In " << distro_name + " (" + std::string(sub_name) + ")" << std::endl;
+         report_execution_time(
+            std::numeric_limits<boost::uintmax_t>::max(),
+            std::string("Distribution performance comparison with ") + BOOST_COMPILER + std::string(" on ") + BOOST_PLATFORM,
+            distro_name + " (" + std::string(sub_name) + ")",
+            column);
       }
    }
 };
@@ -517,6 +528,66 @@ int main()
       weibull.add_test_case(2000, 500, two_param_quantile<boost::math::weibull_distribution<> >());
 
       test_boost_2_param<boost::math::weibull_distribution>(weibull);
+
+#ifdef TEST_GSL
+   // normal, note no location param
+   n.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_gaussian_P(x, v[1]); }, "CDF", "GSL");
+   n.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_gaussian_Pinv(x, v[1]); }, "quantile", "GSL", true);
+   // exponential:
+   exponential.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_exponential_P(x, 1/v[0]); }, "CDF", "GSL");
+   exponential.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_exponential_Pinv(x, 1/v[0]); }, "quantile", "GSL", true);
+   // laplace, note no location param:
+   laplace.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_laplace_P(x, v[1]); }, "CDF", "GSL");
+   laplace.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_laplace_Pinv(x, v[1]); }, "quantile", "GSL", true);
+   // cauchy, note no location param:
+   cauchy.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_cauchy_P(x, v[1]); }, "CDF", "GSL");
+   cauchy.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_cauchy_Pinv(x, v[1]); }, "quantile", "GSL", true);
+   // rayleigh:
+   rayleigh.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_rayleigh_P(x, v[0]); }, "CDF", "GSL");
+   rayleigh.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_rayleigh_Pinv(x, v[0]); }, "quantile", "GSL", true);
+   // gamma:
+   gamma.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_gamma_P(x, v[0], v[1]); }, "CDF", "GSL");
+   gamma.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_gamma_Pinv(x, v[0], v[1]); }, "quantile", "GSL", true);
+   // lognormal:
+   lognormal.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_lognormal_P(x, v[0], v[1]); }, "CDF", "GSL");
+   lognormal.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_lognormal_Pinv(x, v[0], v[1]); }, "quantile", "GSL", true);
+   // chi squared:
+   chi_squared.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_chisq_P(x, v[0]); }, "CDF", "GSL");
+   chi_squared.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_chisq_Pinv(x, v[0]); }, "quantile", "GSL", true);
+   // F:
+   fisher.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_fdist_P(x, v[0], v[1]); }, "CDF", "GSL");
+   fisher.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_fdist_Pinv(x, v[0], v[1]); }, "quantile", "GSL", true);
+   // T:
+   students_t.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_tdist_P(x, v[0]); }, "CDF", "GSL");
+   students_t.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_tdist_Pinv(x, v[0]); }, "quantile", "GSL", true);
+   // beta:
+   beta.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_beta_P(x, v[0], v[1]); }, "CDF", "GSL");
+   beta.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_beta_Pinv(x, v[0], v[1]); }, "quantile", "GSL", true);
+   // logistic, note no location param
+   logistic.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_logistic_P(x, v[1]); }, "CDF", "GSL");
+   logistic.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_logistic_Pinv(x, v[1]); }, "quantile", "GSL", true);
+   // pareto:
+   pareto.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_pareto_P(x, v[1], v[0]); }, "CDF", "GSL");
+   pareto.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_pareto_Pinv(x, v[1], v[0]); }, "quantile", "GSL", true);
+   // weibull:
+   weibull.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_weibull_P(x, v[1], v[0]); }, "CDF", "GSL");
+   weibull.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_weibull_Pinv(x, v[1], v[0]); }, "quantile", "GSL", true);
+   // poisson:
+   poisson.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_poisson_P(x, v[0]); }, "CDF", "GSL");
+   //poisson.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_poisson_Pinv(x, v[0]); }, "quantile", "GSL", true);
+   // binomial:
+   binomial.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_binomial_P(x, v[1], v[0]); }, "CDF", "GSL");
+   //binomial.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_binomial_Pinv(x, v[1], v[0]); }, "quantile", "GSL", true);
+   // negative_binomial:
+   negative_binomial.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_negative_binomial_P(x, v[1], v[0]); }, "CDF", "GSL");
+   //negative_binomial.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_negative_binomial_Pinv(x, v[1], v[0]); }, "quantile", "GSL", true);
+   // geometric:
+   geometric.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_geometric_P(x + 1, v[0]); }, "CDF", "GSL");
+   //geometric.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_geometric_Pinv(x, v[0]) - 1; }, "quantile", "GSL", true);
+   // hypergeometric:
+   hypergeometric.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_hypergeometric_P(x, v[0], v[2] - v[0], v[1]); }, "CDF", "GSL");
+   //hypergeometric.run_timed_tests([](const std::vector<double>& v, double x){  return gsl_cdf_hypergeometric_Pinv(x, v[0], v[2] - v[0], v[1]); }, "quantile", "GSL", true);
+#endif
 
 
    }

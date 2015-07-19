@@ -24,7 +24,11 @@
 void gsl_handler(const char * reason, const char * file, int line, int gsl_errno)
 {
    if(gsl_errno == GSL_ERANGE) return; // handle zero or infinity in our test code.
+#ifdef DISTRIBUTIONS_TEST
+   return;
+#else
    throw std::domain_error(reason);
+#endif
 }
 
 struct gsl_error_handler_setter
