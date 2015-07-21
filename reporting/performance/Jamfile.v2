@@ -96,6 +96,7 @@ rule all-tests {
         [ check-target-builds ../accuracy//has_rmath : <define>TEST_RMATH <source>Rmath ]
         [ check-target-builds is_intel_win : <build>no : ]
         <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt
+        <toolset>msvc:<address-model>64
         ] ;
      }
 

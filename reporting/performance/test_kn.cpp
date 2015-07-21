@@ -86,7 +86,7 @@ int main()
 
    time = exec_timed_test([](const std::vector<double>& v){  return boost::math::cyl_bessel_k(static_cast<int>(v[0]), v[1]);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Boost");
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, boost_name());
    //
    // Boost again, but with promotion to long double turned off:
    //
@@ -95,7 +95,7 @@ int main()
    {
       time = exec_timed_test([](const std::vector<double>& v){  return boost::math::cyl_bessel_k(static_cast<int>(v[0]), v[1], boost::math::policies::make_policy(boost::math::policies::promote_double<false>()));  });
       std::cout << time << std::endl;
-      report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Boost[br](no internal promotion to long double)");
+      report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, boost_name() + "[br]promote_double<false>");
    }
 #endif
 
@@ -108,12 +108,12 @@ int main()
 #if defined(TEST_GSL) && !defined(COMPILER_COMPARISON_TABLES)
    time = exec_timed_test([](const std::vector<double>& v){  return gsl_sf_bessel_Kn(static_cast<int>(v[0]), v[1]);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "gsl");
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "GSL " GSL_VERSION);
 #endif
 #if defined(TEST_RMATH) && !defined(COMPILER_COMPARISON_TABLES)
    time = exec_timed_test([](const std::vector<double>& v){  return bessel_k(v[1], static_cast<int>(v[0]), 1);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Rmath");
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Rmath " + R_VERSION_STRING);
 #endif
 
    return 0;

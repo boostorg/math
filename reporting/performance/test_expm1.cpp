@@ -44,7 +44,7 @@ int main()
 
    double time = exec_timed_test([](const std::vector<double>& v){  return boost::math::expm1(v[0]);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Boost");
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, boost_name());
    //
    // Boost again, but with promotion to long double turned off:
    //
@@ -53,7 +53,7 @@ int main()
    {
       double time = exec_timed_test([](const std::vector<double>& v){  return boost::math::expm1(v[0], boost::math::policies::make_policy(boost::math::policies::promote_double<false>()));  });
       std::cout << time << std::endl;
-      report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Boost[br](no internal promotion to long double)");
+      report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, boost_name() + "[br]promote_double<false>");
    }
 #endif
 

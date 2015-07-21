@@ -51,7 +51,7 @@ int main()
 #if defined(COMPILER_COMPARISON_TABLES)
    report_execution_time(time, std::string("Compiler Option Comparison on ") + BOOST_PLATFORM, "boost::math::ibeta_inv", get_compiler_options_name());
 #else
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Boost");
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, boost_name());
 #endif
    //
    // Boost again, but with promotion to long double turned off:
@@ -61,7 +61,7 @@ int main()
    {
       time = exec_timed_test([](const std::vector<double>& v){  return boost::math::ibeta_inv(v[0], v[1], v[2], boost::math::policies::make_policy(boost::math::policies::promote_double<false>()));  });
       std::cout << time << std::endl;
-      report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Boost[br](no internal promotion to long double)");
+      report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, boost_name() + "[br]promote_double<false>");
    }
 #endif
 
@@ -69,7 +69,7 @@ int main()
 #if defined(TEST_RMATH) && !defined(COMPILER_COMPARISON_TABLES)
    time = exec_timed_test([](const std::vector<double>& v){  return ::qbeta(v[2], v[0], v[1], 1, 0);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Rmath");
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Rmath " + R_VERSION_STRING);
 #endif
 
    return 0;

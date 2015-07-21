@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <string>
+#include <boost/version.hpp>
 
 //
 // Also include headers for whatever else we may be testing:
@@ -65,6 +66,11 @@ void add_cell(const std::string& cell_name, const std::string& table_name, const
 void set_result(const std::string& cell_name, const std::string& cell_content, const std::string& table_name, const std::string& row_name, const std::string& column_name);
 void report_execution_time(double t, std::string table, std::string row, std::string heading);
 std::string get_compiler_options_name();
+
+inline std::string boost_name()
+{
+   return "boost " + boost::lexical_cast<std::string>(BOOST_VERSION / 100000) + "." + boost::lexical_cast<std::string>((BOOST_VERSION / 100) % 1000);
+}
 
 #endif // TABLE_HELPER_HPP
 

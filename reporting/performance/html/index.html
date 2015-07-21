@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Special Function and Distribution Performance Report</title>
 <link rel="stylesheet" href="http://www.boost.org/doc/libs/1_58_0/doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="Special Function and Distribution Performance Report">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -33,15 +33,11 @@
 </div>
 <div class="toc">
 <p><b>Table of Contents</b></p>
-<dl class="toc">
+<dl>
 <dt><span class="section"><a href="index.html#special_function_and_distributio.section_Compiler_Option_Comparison_on_Win32">Compiler
     Option Comparison on Win32</a></span></dt>
-<dt><span class="section"><a href="index.html#special_function_and_distributio.section_Distribution_performance_comparison_with_GNU_C_version_5_1_0_on_linux">Distribution
-    performance comparison with GNU C++ version 5.1.0 on linux</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_and_distributio.section_Distribution_performance_comparison_with_Microsoft_Visual_C_version_12_0_on_Win32">Distribution
     performance comparison with Microsoft Visual C++ version 12.0 on Win32</a></span></dt>
-<dt><span class="section"><a href="index.html#special_function_and_distributio.section_Library_Comparison_with_GNU_C_version_5_1_0_on_linux">Library
-    Comparison with GNU C++ version 5.1.0 on linux</a></span></dt>
 <dt><span class="section"><a href="index.html#special_function_and_distributio.section_Library_Comparison_with_Microsoft_Visual_C_version_12_0_on_Win32">Library
     Comparison with Microsoft Visual C++ version 12.0 on Win32</a></span></dt>
 </dl>
@@ -59,12 +55,16 @@
 <col>
 <col>
 <col>
-<col>
 </colgroup>
 <thead><tr>
 <th>
               <p>
                 Function
+              </p>
+            </th>
+<th>
+              <p>
+                cl /arch:sse2 /Ox (x86 build)
               </p>
             </th>
 <th>
@@ -77,16 +77,6 @@
                 cl /Od (x86 build)
               </p>
             </th>
-<th>
-              <p>
-                cl /arch:sse2 /Ox (x86 build)
-              </p>
-            </th>
-<th>
-              <p>
-                icl /arch:ia32 /Ox (x86 build)
-              </p>
-            </th>
 </tr></thead>
 <tbody>
 <tr>
@@ -97,22 +87,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.22<br> (45ns)</span>
+                <span class="blue">1.39<br> (61ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="red">7.11<br> (263ns)</span>
+                <span class="green">1.00<br> (44ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.70<br> (63ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (37ns)</span>
+                <span class="red">6.02<br> (265ns)</span>
               </p>
             </td>
 </tr>
@@ -124,22 +109,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.23<br> (97ns)</span>
+                <span class="green">1.14<br> (109ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="red">8.25<br> (652ns)</span>
+                <span class="green">1.00<br> (96ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.44<br> (114ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (79ns)</span>
+                <span class="red">6.80<br> (653ns)</span>
               </p>
             </td>
 </tr>
@@ -151,3301 +131,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.34<br> (1934ns)</span>
+                <span class="green">1.00<br> (1807ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="red">4.28<br> (6186ns)</span>
+                <span class="green">1.05<br> (1893ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.32<br> (1911ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1445ns)</span>
-              </p>
-            </td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<br class="table-break">
-</div>
-<div class="section">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="special_function_and_distributio.section_Distribution_performance_comparison_with_GNU_C_version_5_1_0_on_linux"></a><a class="link" href="index.html#special_function_and_distributio.section_Distribution_performance_comparison_with_GNU_C_version_5_1_0_on_linux" title="Distribution performance comparison with GNU C++ version 5.1.0 on linux">Distribution
-    performance comparison with GNU C++ version 5.1.0 on linux</a>
-</h2></div></div></div>
-<div class="table">
-<a name="special_function_and_distributio.section_Distribution_performance_comparison_with_GNU_C_version_5_1_0_on_linux.table_Distribution_performance_comparison_with_GNU_C_version_5_1_0_on_linux"></a><p class="title"><b>Table&#160;2.&#160;Distribution performance comparison with GNU C++ version 5.1.0 on linux</b></p>
-<div class="table-contents"><table class="table" summary="Distribution performance comparison with GNU C++ version 5.1.0 on linux">
-<colgroup>
-<col>
-<col>
-<col>
-<col>
-<col>
-<col>
-<col>
-</colgroup>
-<thead><tr>
-<th>
-              <p>
-                Function
-              </p>
-            </th>
-<th>
-              <p>
-                Boost
-              </p>
-            </th>
-<th>
-              <p>
-                Boost<br> promote_double&lt;false&gt;
-              </p>
-            </th>
-<th>
-              <p>
-                Boost<br> promote_double&lt;false&gt;<br> digits10&lt;10&gt;
-              </p>
-            </th>
-<th>
-              <p>
-                Boost<br> float<br> promote_float&lt;false&gt;
-              </p>
-            </th>
-<th>
-              <p>
-                GSL
-              </p>
-            </th>
-<th>
-              <p>
-                Rmath
-              </p>
-            </th>
-</tr></thead>
-<tbody>
-<tr>
-<td>
-              <p>
-                ArcSine (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.83<br> (33ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.83<br> (33ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.83<br> (33ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (18ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ArcSine (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.29<br> (9ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.29<br> (9ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.29<br> (9ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (7ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ArcSine (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.31<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.31<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.31<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (16ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Beta (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.18<br> (429ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.29<br> (174ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.22<br> (165ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (135ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.61<br> (487ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.24<br> (303ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Beta (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.79<br> (338ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.03<br> (125ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.05<br> (127ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (121ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.98<br> (240ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Beta (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.64<br> (2721ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.49<br> (1113ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.22<br> (912ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (747ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">20.99<br> (15676ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">24.51<br> (18309ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Binomial (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.77<br> (1112ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.13<br> (629ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.71<br> (503ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (295ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.08<br> (910ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.57<br> (759ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Binomial (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.31<br> (368ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (159ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.02<br> (162ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.16<br> (184ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.12<br> (178ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Binomial (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.54<br> (4988ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.10<br> (2968ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.72<br> (2431ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1410ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.44<br> (2030ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Cauchy (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (27ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.25<br> (25ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.40<br> (28ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.20<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (20ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.50<br> (30ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Cauchy (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.29<br> (9ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.14<br> (8ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.14<br> (8ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (7ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.57<br> (11ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Cauchy (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.55<br> (48ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.42<br> (44ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.55<br> (48ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (31ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">81.77<br> (2535ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">83.77<br> (2597ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ChiSquared (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.99<br> (538ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.87<br> (252ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.63<br> (220ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (135ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">28.86<br> (3896ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.17<br> (293ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ChiSquared (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.40<br> (347ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.31<br> (134ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.30<br> (133ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (102ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.12<br> (114ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ChiSquared (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.18<br> (1483ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.16<br> (768ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.65<br> (584ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (355ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">103.59<br> (36775ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.54<br> (1610ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Exponential (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.33<br> (20ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.27<br> (19ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.27<br> (19ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (15ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.47<br> (22ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.87<br> (28ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Exponential (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.33<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.33<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.39<br> (25ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (18ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.78<br> (32ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Exponential (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.53<br> (23ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.60<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.67<br> (25ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.60<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (15ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.47<br> (22ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ExtremeValue (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.27<br> (51ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.23<br> (49ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.30<br> (52ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (40ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ExtremeValue (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.40<br> (70ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.44<br> (72ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.44<br> (72ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (50ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ExtremeValue (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.69<br> (71ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.62<br> (68ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.71<br> (72ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (42ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                F (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.08<br> (995ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.36<br> (575ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.81<br> (441ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (244ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.83<br> (935ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.60<br> (635ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                F (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.99<br> (401ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.22<br> (164ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.17<br> (157ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (134ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.34<br> (180ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                F (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.74<br> (2828ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.49<br> (1542ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.31<br> (1352ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1032ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">14.88<br> (15361ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.05<br> (3152ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Gamma (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.82<br> (611ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.52<br> (243ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.49<br> (238ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (160ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">9.35<br> (1496ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.14<br> (343ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Gamma (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.03<br> (468ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.39<br> (161ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.38<br> (160ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (116ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.42<br> (165ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Gamma (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.08<br> (1882ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.83<br> (845ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.20<br> (555ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (461ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">26.04<br> (12006ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.80<br> (1750ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Geometric (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.13<br> (26ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (23ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.13<br> (26ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.43<br> (56ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Geometric (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (34ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (34ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.12<br> (38ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.24<br> (42ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">6.47<br> (220ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Geometric (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (22ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (22ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (22ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.09<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.41<br> (53ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Hypergeometric (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">45.21<br> (21703ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">22.04<br> (10579ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">20.80<br> (9982ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">21.73<br> (10431ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.29<br> (619ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (480ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Hypergeometric (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">53.31<br> (21858ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">25.91<br> (10623ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">24.64<br> (10102ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">25.15<br> (10310ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (410ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Hypergeometric (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">15.39<br> (21405ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">7.39<br> (10286ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">7.35<br> (10220ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">102.73<br> (142894ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1391ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                InverseChiSquared (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.31<br> (556ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.85<br> (239ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.40<br> (181ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (129ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                InverseChiSquared (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.30<br> (327ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.40<br> (139ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.32<br> (131ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (99ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                InverseChiSquared (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.48<br> (1367ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.85<br> (726ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.42<br> (557ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (393ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                InverseGamma (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.54<br> (627ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.36<br> (241ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.20<br> (213ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (177ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                InverseGamma (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.05<br> (474ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.43<br> (167ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (158ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (117ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                InverseGamma (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.66<br> (1890ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.63<br> (839ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.09<br> (561ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (516ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                InverseGaussian (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.24<br> (47ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.05<br> (22ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                InverseGaussian (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.28<br> (23ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.22<br> (22ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.28<br> (23ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (18ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                InverseGaussian (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.57<br> (66ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.29<br> (54ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.26<br> (53ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (42ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Laplace (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (27ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (27ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (27ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.05<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (20ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Laplace (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (27ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (27ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (27ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (20ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Laplace (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.41<br> (31ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.41<br> (31ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.41<br> (31ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (22ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.23<br> (27ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                LogNormal (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.03<br> (118ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.21<br> (70ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.17<br> (68ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (58ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.41<br> (82ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.74<br> (101ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                LogNormal (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.51<br> (68ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.47<br> (66ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.42<br> (64ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (45ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.53<br> (69ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                LogNormal (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.44<br> (102ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.34<br> (95ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (96ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.06<br> (75ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (71ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.25<br> (89ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Logistic (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.38<br> (29ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.38<br> (29ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.43<br> (30ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.38<br> (29ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.67<br> (35ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Logistic (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (31ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (31ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.39<br> (32ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (23ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (31ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Logistic (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.48<br> (34ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.48<br> (34ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.48<br> (34ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (23ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (31ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.70<br> (39ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NegativeBinomial (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.61<br> (1652ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.80<br> (1001ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.15<br> (768ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (358ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.66<br> (1309ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.47<br> (883ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NegativeBinomial (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.54<br> (373ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.14<br> (168ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.24<br> (183ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (147ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (198ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NegativeBinomial (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.90<br> (9215ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.63<br> (5202ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.22<br> (3881ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (3183ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.38<br> (17139ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralBeta (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.08<br> (2609ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.14<br> (1365ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.78<br> (1139ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (639ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.83<br> (1168ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralBeta (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.92<br> (1926ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.38<br> (1170ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.98<br> (974ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (491ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.97<br> (969ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralBeta (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.54<br> (60022ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.71<br> (29383ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.14<br> (23216ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (10836ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">7.59<br> (82245ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralChiSquared (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.04<br> (6874ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.57<br> (4374ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.07<br> (3525ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1700ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">6.44<br> (10942ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralChiSquared (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.89<br> (1148ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.77<br> (703ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.56<br> (621ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (397ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.13<br> (450ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralChiSquared (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">7.01<br> (50157ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.57<br> (25536ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.47<br> (17634ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (7151ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">73.83<br> (527925ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralF (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.90<br> (2461ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.05<br> (1293ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.78<br> (1124ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (631ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.10<br> (1328ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralF (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.69<br> (2020ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.91<br> (1044ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.68<br> (919ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (547ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.65<br> (902ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralF (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.48<br> (37444ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.29<br> (19161ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.04<br> (17067ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (8356ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">8.26<br> (69014ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralT (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.68<br> (9192ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.94<br> (5772ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.41<br> (4727ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.14<br> (2232ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1964ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralT (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.66<br> (7020ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.41<br> (4633ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.11<br> (4050ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1920ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.13<br> (4093ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralT (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.42<br> (98001ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.06<br> (55421ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.17<br> (39264ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (18094ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.90<br> (88620ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Normal (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.47<br> (79ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.09<br> (35ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.09<br> (35ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (32ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (32ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.97<br> (63ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Normal (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.45<br> (32ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.45<br> (32ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.45<br> (32ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (22ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.77<br> (39ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Normal (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.09<br> (67ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.66<br> (53ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.66<br> (53ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.34<br> (43ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (32ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.41<br> (45ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Pareto (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.22<br> (60ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.16<br> (57ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.27<br> (62ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (49ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.02<br> (50ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Pareto (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.02<br> (91ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.09<br> (97ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (89ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.31<br> (117ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Pareto (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.08<br> (56ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (54ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.17<br> (61ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (70ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (52ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Poisson (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.36<br> (252ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.57<br> (118ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.39<br> (104ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (75ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">9.69<br> (727ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.71<br> (278ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Poisson (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.00<br> (192ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.33<br> (85ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.33<br> (85ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (64ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.48<br> (95ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Poisson (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.00<br> (1160ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.45<br> (562ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.29<br> (499ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (387ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.73<br> (668ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Rayleigh (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.28<br> (23ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.22<br> (22ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.56<br> (28ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (18ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.17<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Rayleigh (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.30<br> (26ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (27ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.35<br> (27ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (20ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Rayleigh (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.19<br> (25ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.19<br> (25ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.14<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.14<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                SkewNormal (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.70<br> (467ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.55<br> (426ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.55<br> (426ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (274ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                SkewNormal (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.83<br> (88ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.23<br> (59ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.23<br> (59ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (48ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                SkewNormal (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.16<br> (3630ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.96<br> (3287ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.39<br> (2336ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1680ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                StudentsT (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">6.62<br> (1457ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.09<br> (459ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.96<br> (431ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (220ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.18<br> (260ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.73<br> (381ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                StudentsT (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.07<br> (685ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.48<br> (200ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.50<br> (203ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.01<br> (137ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (135ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                StudentsT (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.94<br> (2498ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.61<br> (816ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.56<br> (791ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (506ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.17<br> (1099ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.93<br> (976ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Weibull (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.11<br> (90ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (84ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.02<br> (83ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.30<br> (105ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (81ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.27<br> (103ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Weibull (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.48<br> (154ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.46<br> (152ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.46<br> (152ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.78<br> (185ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (104ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Weibull (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.05<br> (88ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (87ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (87ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.25<br> (105ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (84ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.13<br> (95ns)</span>
+                <span class="red">3.41<br> (6165ns)</span>
               </p>
             </td>
 </tr>
@@ -3460,7 +156,7 @@
     performance comparison with Microsoft Visual C++ version 12.0 on Win32</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_and_distributio.section_Distribution_performance_comparison_with_Microsoft_Visual_C_version_12_0_on_Win32.table_Distribution_performance_comparison_with_Microsoft_Visual_C_version_12_0_on_Win32"></a><p class="title"><b>Table&#160;3.&#160;Distribution performance comparison with Microsoft Visual C++ version
+<a name="special_function_and_distributio.section_Distribution_performance_comparison_with_Microsoft_Visual_C_version_12_0_on_Win32.table_Distribution_performance_comparison_with_Microsoft_Visual_C_version_12_0_on_Win32"></a><p class="title"><b>Table&#160;2.&#160;Distribution performance comparison with Microsoft Visual C++ version
       12.0 on Win32</b></p>
 <div class="table-contents"><table class="table" summary="Distribution performance comparison with Microsoft Visual C++ version
       12.0 on Win32">
@@ -3478,7 +174,7 @@
             </th>
 <th>
               <p>
-                Boost
+                boost 1.59
               </p>
             </th>
 <th>
@@ -3501,17 +197,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (51ns)</span>
+                <span class="blue">1.43<br> (40ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (52ns)</span>
+                <span class="blue">1.43<br> (40ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.06<br> (54ns)</span>
+                <span class="green">1.00<br> (28ns)</span>
               </p>
             </td>
 </tr>
@@ -3523,17 +219,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.04<br> (28ns)</span>
+                <span class="green">1.00<br> (15ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (27ns)</span>
+                <span class="green">1.00<br> (15ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.33<br> (36ns)</span>
+                <span class="green">1.00<br> (15ns)</span>
               </p>
             </td>
 </tr>
@@ -3545,17 +241,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (48ns)</span>
+                <span class="green">1.05<br> (20ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (48ns)</span>
+                <span class="green">1.00<br> (19ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (49ns)</span>
+                <span class="green">1.05<br> (20ns)</span>
               </p>
             </td>
 </tr>
@@ -3567,17 +263,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.41<br> (190ns)</span>
+                <span class="blue">1.75<br> (187ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.16<br> (156ns)</span>
+                <span class="blue">1.61<br> (172ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (135ns)</span>
+                <span class="green">1.00<br> (107ns)</span>
               </p>
             </td>
 </tr>
@@ -3589,17 +285,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.24<br> (166ns)</span>
+                <span class="blue">1.60<br> (146ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (134ns)</span>
+                <span class="blue">1.59<br> (145ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.01<br> (136ns)</span>
+                <span class="green">1.00<br> (91ns)</span>
               </p>
             </td>
 </tr>
@@ -3611,17 +307,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.48<br> (1092ns)</span>
+                <span class="blue">1.75<br> (1100ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.04<br> (768ns)</span>
+                <span class="blue">1.41<br> (887ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (740ns)</span>
+                <span class="green">1.00<br> (629ns)</span>
               </p>
             </td>
 </tr>
@@ -3633,17 +329,17 @@
             </td>
 <td>
               <p>
-                <span class="red">2.14<br> (631ns)</span>
+                <span class="red">2.27<br> (685ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.60<br> (473ns)</span>
+                <span class="blue">1.81<br> (548ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (295ns)</span>
+                <span class="green">1.00<br> (302ns)</span>
               </p>
             </td>
 </tr>
@@ -3655,17 +351,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.29<br> (198ns)</span>
+                <span class="blue">1.56<br> (193ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (154ns)</span>
+                <span class="blue">1.53<br> (190ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.06<br> (164ns)</span>
+                <span class="green">1.00<br> (124ns)</span>
               </p>
             </td>
 </tr>
@@ -3677,17 +373,17 @@
             </td>
 <td>
               <p>
-                <span class="red">2.04<br> (2997ns)</span>
+                <span class="red">2.15<br> (3137ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.59<br> (2331ns)</span>
+                <span class="blue">1.74<br> (2546ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (1470ns)</span>
+                <span class="green">1.00<br> (1462ns)</span>
               </p>
             </td>
 </tr>
@@ -3699,17 +395,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.06<br> (34ns)</span>
+                <span class="green">1.19<br> (31ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.03<br> (33ns)</span>
+                <span class="green">1.19<br> (31ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (32ns)</span>
+                <span class="green">1.00<br> (26ns)</span>
               </p>
             </td>
 </tr>
@@ -3721,17 +417,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.07<br> (15ns)</span>
+                <span class="blue">1.22<br> (11ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.07<br> (15ns)</span>
+                <span class="blue">1.22<br> (11ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (14ns)</span>
+                <span class="green">1.00<br> (9ns)</span>
               </p>
             </td>
 </tr>
@@ -3743,17 +439,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (38ns)</span>
+                <span class="green">1.10<br> (22ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (38ns)</span>
+                <span class="green">1.10<br> (22ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.05<br> (40ns)</span>
+                <span class="green">1.00<br> (20ns)</span>
               </p>
             </td>
 </tr>
@@ -3765,17 +461,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.55<br> (240ns)</span>
+                <span class="red">2.04<br> (259ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.28<br> (199ns)</span>
+                <span class="blue">1.70<br> (216ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (155ns)</span>
+                <span class="green">1.00<br> (127ns)</span>
               </p>
             </td>
 </tr>
@@ -3787,17 +483,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.29<br> (135ns)</span>
+                <span class="blue">1.79<br> (125ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (107ns)</span>
+                <span class="blue">1.69<br> (118ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (105ns)</span>
+                <span class="green">1.00<br> (70ns)</span>
               </p>
             </td>
 </tr>
@@ -3809,17 +505,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.71<br> (706ns)</span>
+                <span class="red">2.01<br> (709ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.20<br> (498ns)</span>
+                <span class="blue">1.51<br> (531ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (414ns)</span>
+                <span class="green">1.00<br> (352ns)</span>
               </p>
             </td>
 </tr>
@@ -3831,12 +527,12 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.43<br> (20ns)</span>
+                <span class="green">1.07<br> (15ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.43<br> (20ns)</span>
+                <span class="green">1.07<br> (15ns)</span>
               </p>
             </td>
 <td>
@@ -3853,17 +549,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.13<br> (17ns)</span>
+                <span class="green">1.07<br> (15ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.13<br> (17ns)</span>
+                <span class="green">1.07<br> (15ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (15ns)</span>
+                <span class="green">1.00<br> (14ns)</span>
               </p>
             </td>
 </tr>
@@ -3875,17 +571,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.12<br> (28ns)</span>
+                <span class="green">1.00<br> (18ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.16<br> (29ns)</span>
+                <span class="green">1.00<br> (18ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (25ns)</span>
+                <span class="green">1.17<br> (21ns)</span>
               </p>
             </td>
 </tr>
@@ -3897,17 +593,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (38ns)</span>
+                <span class="blue">1.44<br> (39ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (38ns)</span>
+                <span class="blue">1.44<br> (39ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.08<br> (41ns)</span>
+                <span class="green">1.00<br> (27ns)</span>
               </p>
             </td>
 </tr>
@@ -3919,17 +615,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (36ns)</span>
+                <span class="blue">1.48<br> (40ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (36ns)</span>
+                <span class="blue">1.48<br> (40ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.03<br> (37ns)</span>
+                <span class="green">1.00<br> (27ns)</span>
               </p>
             </td>
 </tr>
@@ -3941,17 +637,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.03<br> (39ns)</span>
+                <span class="green">1.11<br> (31ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (38ns)</span>
+                <span class="green">1.07<br> (30ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.05<br> (40ns)</span>
+                <span class="green">1.00<br> (28ns)</span>
               </p>
             </td>
 </tr>
@@ -3963,12 +659,12 @@
             </td>
 <td>
               <p>
-                <span class="red">2.14<br> (568ns)</span>
+                <span class="red">2.41<br> (640ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.60<br> (426ns)</span>
+                <span class="blue">1.86<br> (495ns)</span>
               </p>
             </td>
 <td>
@@ -3985,17 +681,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.31<br> (205ns)</span>
+                <span class="blue">1.58<br> (201ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (156ns)</span>
+                <span class="blue">1.60<br> (203ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.11<br> (173ns)</span>
+                <span class="green">1.00<br> (127ns)</span>
               </p>
             </td>
 </tr>
@@ -4007,17 +703,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.21<br> (1389ns)</span>
+                <span class="blue">1.42<br> (1529ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (1169ns)</span>
+                <span class="blue">1.24<br> (1341ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (1148ns)</span>
+                <span class="green">1.00<br> (1078ns)</span>
               </p>
             </td>
 </tr>
@@ -4029,17 +725,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.31<br> (230ns)</span>
+                <span class="blue">1.72<br> (239ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.11<br> (195ns)</span>
+                <span class="blue">1.57<br> (218ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (175ns)</span>
+                <span class="green">1.00<br> (139ns)</span>
               </p>
             </td>
 </tr>
@@ -4051,17 +747,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.27<br> (167ns)</span>
+                <span class="blue">1.84<br> (153ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.01<br> (132ns)</span>
+                <span class="blue">1.73<br> (144ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (131ns)</span>
+                <span class="green">1.00<br> (83ns)</span>
               </p>
             </td>
 </tr>
@@ -4073,17 +769,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.58<br> (791ns)</span>
+                <span class="red">2.07<br> (814ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (511ns)</span>
+                <span class="blue">1.39<br> (549ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (500ns)</span>
+                <span class="green">1.00<br> (394ns)</span>
               </p>
             </td>
 </tr>
@@ -4095,17 +791,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.16<br> (29ns)</span>
+                <span class="green">1.00<br> (21ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.16<br> (29ns)</span>
+                <span class="green">1.00<br> (21ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (25ns)</span>
+                <span class="green">1.00<br> (21ns)</span>
               </p>
             </td>
 </tr>
@@ -4117,17 +813,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.26<br> (29ns)</span>
+                <span class="blue">1.81<br> (29ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.26<br> (29ns)</span>
+                <span class="blue">1.75<br> (28ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (23ns)</span>
+                <span class="green">1.00<br> (16ns)</span>
               </p>
             </td>
 </tr>
@@ -4139,17 +835,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (27ns)</span>
+                <span class="green">1.00<br> (21ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (27ns)</span>
+                <span class="green">1.00<br> (21ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.11<br> (30ns)</span>
+                <span class="green">1.10<br> (23ns)</span>
               </p>
             </td>
 </tr>
@@ -4161,17 +857,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (9554ns)</span>
+                <span class="green">1.02<br> (10663ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (9587ns)</span>
+                <span class="green">1.01<br> (10648ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.01<br> (9659ns)</span>
+                <span class="green">1.00<br> (10501ns)</span>
               </p>
             </td>
 </tr>
@@ -4183,17 +879,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (9740ns)</span>
+                <span class="green">1.03<br> (11103ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (9894ns)</span>
+                <span class="green">1.01<br> (10895ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (9923ns)</span>
+                <span class="green">1.00<br> (10768ns)</span>
               </p>
             </td>
 </tr>
@@ -4205,17 +901,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (9825ns)</span>
+                <span class="green">1.00<br> (10992ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (9780ns)</span>
+                <span class="green">1.00<br> (10967ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="red">13.20<br> (129096ns)</span>
+                <span class="red">12.56<br> (137721ns)</span>
               </p>
             </td>
 </tr>
@@ -4227,17 +923,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.62<br> (240ns)</span>
+                <span class="red">2.20<br> (262ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.22<br> (181ns)</span>
+                <span class="blue">1.71<br> (203ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (148ns)</span>
+                <span class="green">1.00<br> (119ns)</span>
               </p>
             </td>
 </tr>
@@ -4249,17 +945,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.25<br> (157ns)</span>
+                <span class="blue">1.79<br> (150ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (129ns)</span>
+                <span class="blue">1.69<br> (142ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (126ns)</span>
+                <span class="green">1.00<br> (84ns)</span>
               </p>
             </td>
 </tr>
@@ -4271,17 +967,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.64<br> (710ns)</span>
+                <span class="red">2.07<br> (779ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.19<br> (517ns)</span>
+                <span class="blue">1.56<br> (587ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (434ns)</span>
+                <span class="green">1.00<br> (376ns)</span>
               </p>
             </td>
 </tr>
@@ -4293,17 +989,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.24<br> (227ns)</span>
+                <span class="blue">1.60<br> (234ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.07<br> (195ns)</span>
+                <span class="blue">1.38<br> (201ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (183ns)</span>
+                <span class="green">1.00<br> (146ns)</span>
               </p>
             </td>
 </tr>
@@ -4315,17 +1011,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.33<br> (174ns)</span>
+                <span class="blue">1.92<br> (165ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.05<br> (138ns)</span>
+                <span class="blue">1.73<br> (149ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (131ns)</span>
+                <span class="green">1.00<br> (86ns)</span>
               </p>
             </td>
 </tr>
@@ -4337,17 +1033,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.53<br> (787ns)</span>
+                <span class="blue">1.95<br> (811ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (513ns)</span>
+                <span class="blue">1.33<br> (553ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.01<br> (519ns)</span>
+                <span class="green">1.00<br> (415ns)</span>
               </p>
             </td>
 </tr>
@@ -4359,17 +1055,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (23ns)</span>
+                <span class="green">1.09<br> (24ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (23ns)</span>
+                <span class="green">1.14<br> (25ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.13<br> (26ns)</span>
+                <span class="green">1.00<br> (22ns)</span>
               </p>
             </td>
 </tr>
@@ -4381,12 +1077,12 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (23ns)</span>
+                <span class="green">1.13<br> (26ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (23ns)</span>
+                <span class="green">1.13<br> (26ns)</span>
               </p>
             </td>
 <td>
@@ -4403,17 +1099,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (53ns)</span>
+                <span class="green">1.00<br> (39ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (53ns)</span>
+                <span class="green">1.03<br> (40ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (54ns)</span>
+                <span class="green">1.03<br> (40ns)</span>
               </p>
             </td>
 </tr>
@@ -4425,17 +1121,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.14<br> (24ns)</span>
+                <span class="green">1.17<br> (21ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.14<br> (24ns)</span>
+                <span class="green">1.17<br> (21ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (21ns)</span>
+                <span class="green">1.00<br> (18ns)</span>
               </p>
             </td>
 </tr>
@@ -4447,17 +1143,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.09<br> (25ns)</span>
+                <span class="blue">1.47<br> (22ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.09<br> (25ns)</span>
+                <span class="blue">1.53<br> (23ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (23ns)</span>
+                <span class="green">1.00<br> (15ns)</span>
               </p>
             </td>
 </tr>
@@ -4469,17 +1165,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.04<br> (24ns)</span>
+                <span class="green">1.00<br> (17ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.04<br> (24ns)</span>
+                <span class="green">1.00<br> (17ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (23ns)</span>
+                <span class="green">1.06<br> (18ns)</span>
               </p>
             </td>
 </tr>
@@ -4491,17 +1187,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (58ns)</span>
+                <span class="blue">1.28<br> (50ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (57ns)</span>
+                <span class="blue">1.26<br> (49ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (57ns)</span>
+                <span class="green">1.00<br> (39ns)</span>
               </p>
             </td>
 </tr>
@@ -4513,17 +1209,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (43ns)</span>
+                <span class="blue">1.35<br> (46ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (43ns)</span>
+                <span class="blue">1.26<br> (43ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.16<br> (50ns)</span>
+                <span class="green">1.00<br> (34ns)</span>
               </p>
             </td>
 </tr>
@@ -4535,574 +1231,7 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (86ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.01<br> (87ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.03<br> (89ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Logistic (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (23ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Logistic (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.08<br> (28ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.08<br> (28ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (26ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Logistic (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (25ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (25ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (25ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NegativeBinomial (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.44<br> (989ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.78<br> (721ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (406ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NegativeBinomial (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.28<br> (217ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (169ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.09<br> (184ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NegativeBinomial (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.38<br> (5052ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.05<br> (3865ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (3666ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralBeta (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.14<br> (1350ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.71<br> (1075ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (630ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralBeta (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.14<br> (1129ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.72<br> (907ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (527ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralBeta (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.67<br> (27604ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.07<br> (21386ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (10349ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralChiSquared (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.52<br> (4249ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.94<br> (3272ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1684ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralChiSquared (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.62<br> (592ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.44<br> (527ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (365ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralChiSquared (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.25<br> (24705ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.16<br> (16454ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (7611ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralF (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.03<br> (1292ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.59<br> (1014ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (638ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralF (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.80<br> (1030ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.47<br> (840ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (571ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralF (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.22<br> (18879ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.66<br> (14123ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (8494ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralT (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.40<br> (5523ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.87<br> (4308ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (2303ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralT (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.32<br> (4205ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.87<br> (3392ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (1815ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                NonCentralT (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.73<br> (50950ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.91<br> (35595ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (18652ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Normal (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (35ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.06<br> (37ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.03<br> (36ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Normal (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.07<br> (29ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (28ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (27ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Normal (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.02<br> (55ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.06<br> (57ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (54ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Pareto (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.02<br> (60ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (59ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.07<br> (63ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Pareto (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.02<br> (92ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.03<br> (93ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (90ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Pareto (quantile)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (61ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.02<br> (62ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.03<br> (63ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Poisson (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.26<br> (111ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.07<br> (94ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (88ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Poisson (PDF)
+                <span class="blue">1.27<br> (80ns)</span>
               </p>
             </td>
 <td>
@@ -5115,70 +1244,43 @@
                 <span class="green">1.00<br> (63ns)</span>
               </p>
             </td>
+</tr>
+<tr>
 <td>
               <p>
-                <span class="green">1.10<br> (69ns)</span>
+                Logistic (CDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.35<br> (23ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.35<br> (23ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (17ns)</span>
               </p>
             </td>
 </tr>
 <tr>
 <td>
               <p>
-                Poisson (quantile)
+                Logistic (PDF)
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.20<br> (610ns)</span>
+                <span class="green">1.17<br> (27ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.06<br> (535ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (507ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Rayleigh (CDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (25ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (24ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                Rayleigh (PDF)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.04<br> (24ns)</span>
+                <span class="blue">1.22<br> (28ns)</span>
               </p>
             </td>
 <td>
@@ -5190,22 +1292,616 @@
 <tr>
 <td>
               <p>
+                Logistic (quantile)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.11<br> (21ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.11<br> (21ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (19ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NegativeBinomial (CDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.50<br> (1084ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.91<br> (826ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (433ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NegativeBinomial (PDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.54<br> (212ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.59<br> (220ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (138ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NegativeBinomial (quantile)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.51<br> (5386ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.19<br> (4247ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (3559ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralBeta (CDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.55<br> (1507ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.03<br> (1198ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (591ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralBeta (PDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.60<br> (1266ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.14<br> (1043ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (487ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralBeta (quantile)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">3.37<br> (31260ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.58<br> (23925ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (9271ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralChiSquared (CDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.59<br> (4684ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.01<br> (3646ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (1811ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralChiSquared (PDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.60<br> (636ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.38<br> (548ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (398ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralChiSquared (quantile)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">3.60<br> (27296ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.43<br> (18434ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (7575ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralF (CDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.35<br> (1447ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.96<br> (1209ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (616ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralF (PDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.41<br> (1154ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.19<br> (1049ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (479ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralF (quantile)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.50<br> (20818ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.93<br> (16052ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (8312ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralT (CDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.54<br> (5940ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.11<br> (4927ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (2339ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralT (PDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.65<br> (4845ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.12<br> (3886ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (1829ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                NonCentralT (quantile)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.98<br> (57685ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="red">2.12<br> (41122ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (19378ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Normal (CDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.26<br> (34ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.26<br> (34ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (27ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Normal (PDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.41<br> (31ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.41<br> (31ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (22ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Normal (quantile)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (39ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.05<br> (41ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (39ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Pareto (CDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.31<br> (42ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.31<br> (42ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (32ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Pareto (PDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.52<br> (96ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.51<br> (95ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (63ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Pareto (quantile)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.39<br> (43ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.45<br> (45ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (31ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Poisson (CDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.85<br> (126ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.63<br> (111ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (68ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Poisson (PDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.67<br> (80ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.58<br> (76ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (48ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Poisson (quantile)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.45<br> (582ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.49<br> (597ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (401ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Rayleigh (CDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.17<br> (21ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.17<br> (21ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (18ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
+                Rayleigh (PDF)
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.18<br> (20ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="blue">1.24<br> (21ns)</span>
+              </p>
+            </td>
+<td>
+              <p>
+                <span class="green">1.00<br> (17ns)</span>
+              </p>
+            </td>
+</tr>
+<tr>
+<td>
+              <p>
                 Rayleigh (quantile)
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (30ns)</span>
+                <span class="green">1.00<br> (22ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.03<br> (31ns)</span>
+                <span class="green">1.00<br> (22ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (30ns)</span>
+                <span class="green">1.05<br> (23ns)</span>
               </p>
             </td>
 </tr>
@@ -5217,17 +1913,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.02<br> (241ns)</span>
+                <span class="green">1.03<br> (227ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (237ns)</span>
+                <span class="green">1.03<br> (228ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.03<br> (244ns)</span>
+                <span class="green">1.00<br> (221ns)</span>
               </p>
             </td>
 </tr>
@@ -5239,17 +1935,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.10<br> (98ns)</span>
+                <span class="blue">1.39<br> (89ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.08<br> (96ns)</span>
+                <span class="blue">1.39<br> (89ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (89ns)</span>
+                <span class="green">1.00<br> (64ns)</span>
               </p>
             </td>
 </tr>
@@ -5261,17 +1957,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.38<br> (2155ns)</span>
+                <span class="blue">1.53<br> (2081ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (1556ns)</span>
+                <span class="green">1.10<br> (1496ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (1557ns)</span>
+                <span class="green">1.00<br> (1359ns)</span>
               </p>
             </td>
 </tr>
@@ -5283,17 +1979,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.36<br> (451ns)</span>
+                <span class="blue">1.80<br> (467ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.14<br> (378ns)</span>
+                <span class="blue">1.67<br> (435ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (331ns)</span>
+                <span class="green">1.00<br> (260ns)</span>
               </p>
             </td>
 </tr>
@@ -5305,17 +2001,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.27<br> (219ns)</span>
+                <span class="blue">1.82<br> (218ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (173ns)</span>
+                <span class="blue">1.84<br> (221ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.06<br> (183ns)</span>
+                <span class="green">1.00<br> (120ns)</span>
               </p>
             </td>
 </tr>
@@ -5327,17 +2023,17 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.20<br> (897ns)</span>
+                <span class="blue">1.56<br> (846ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.12<br> (836ns)</span>
+                <span class="blue">1.51<br> (822ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (745ns)</span>
+                <span class="green">1.00<br> (543ns)</span>
               </p>
             </td>
 </tr>
@@ -5349,17 +2045,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (70ns)</span>
+                <span class="blue">1.48<br> (74ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.03<br> (72ns)</span>
+                <span class="blue">1.48<br> (74ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.07<br> (75ns)</span>
+                <span class="green">1.00<br> (50ns)</span>
               </p>
             </td>
 </tr>
@@ -5371,17 +2067,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (105ns)</span>
+                <span class="red">2.03<br> (130ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.03<br> (108ns)</span>
+                <span class="blue">2.00<br> (128ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.04<br> (109ns)</span>
+                <span class="green">1.00<br> (64ns)</span>
               </p>
             </td>
 </tr>
@@ -5393,2001 +2089,17 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (78ns)</span>
+                <span class="blue">1.32<br> (66ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.04<br> (81ns)</span>
+                <span class="blue">1.34<br> (67ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (78ns)</span>
-              </p>
-            </td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<br class="table-break">
-</div>
-<div class="section">
-<div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="special_function_and_distributio.section_Library_Comparison_with_GNU_C_version_5_1_0_on_linux"></a><a class="link" href="index.html#special_function_and_distributio.section_Library_Comparison_with_GNU_C_version_5_1_0_on_linux" title="Library Comparison with GNU C++ version 5.1.0 on linux">Library
-    Comparison with GNU C++ version 5.1.0 on linux</a>
-</h2></div></div></div>
-<div class="table">
-<a name="special_function_and_distributio.section_Library_Comparison_with_GNU_C_version_5_1_0_on_linux.table_Library_Comparison_with_GNU_C_version_5_1_0_on_linux"></a><p class="title"><b>Table&#160;4.&#160;Library Comparison with GNU C++ version 5.1.0 on linux</b></p>
-<div class="table-contents"><table class="table" summary="Library Comparison with GNU C++ version 5.1.0 on linux">
-<colgroup>
-<col>
-<col>
-<col>
-<col>
-<col>
-<col>
-<col>
-</colgroup>
-<thead><tr>
-<th>
-              <p>
-                Function
-              </p>
-            </th>
-<th>
-              <p>
-                Boost
-              </p>
-            </th>
-<th>
-              <p>
-                Boost<br> (no internal promotion to long double)
-              </p>
-            </th>
-<th>
-              <p>
-                tr1/cmath
-              </p>
-            </th>
-<th>
-              <p>
-                gsl
-              </p>
-            </th>
-<th>
-              <p>
-                Rmath
-              </p>
-            </th>
-<th>
-              <p>
-                math.h
-              </p>
-            </th>
-</tr></thead>
-<tbody>
-<tr>
-<td>
-              <p>
-                assoc_laguerre<br> (2240/2240 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.15<br> (220ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (192ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.19<br> (229ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.13<br> (217ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                assoc_legendre<br> (205/400 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.10<br> (246ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.65<br> (99ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (60ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.53<br> (152ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                beta (incomplete)<br> (2682/3210 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.15<br> (1724ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (547ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.36<br> (745ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                beta<br> (2202/2202 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.60<br> (699ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.02<br> (155ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (152ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.59<br> (394ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.67<br> (254ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cbrt<br> (85/85 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.53<br> (43ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (17ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.24<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.24<br> (21ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_i (integer order)<br> (494/526 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.66<br> (790ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.19<br> (256ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (216ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.39<br> (516ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.25<br> (1134ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_i<br> (177/240 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">6.73<br> (1386ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.93<br> (398ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (206ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.56<br> (939ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">8.27<br> (1703ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_j (integer order)<br> (250/268 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.63<br> (260ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (99ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.48<br> (246ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.58<br> (255ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.29<br> (425ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.95<br> (193ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_j<br> (423/451 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.87<br> (1070ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.08<br> (402ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (373ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.32<br> (867ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.22<br> (455ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_k (integer order)<br> (505/508 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">13.89<br> (3430ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.39<br> (343ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">10.69<br> (2641ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (247ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.42<br> (350ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_bessel_k<br> (96/279 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">6.80<br> (4529ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (666ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.19<br> (790ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.30<br> (867ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.26<br> (837ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_neumann (integer order)<br> (423/428 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.98<br> (571ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (289ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.45<br> (708ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.83<br> (528ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.70<br> (1068ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.36<br> (392ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                cyl_neumann<br> (400/450 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.47<br> (1458ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (590ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.28<br> (756ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.44<br> (1439ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.08<br> (635ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                digamma<br> (1019/1019 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.79<br> (70ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (39ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.69<br> (105ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.13<br> (161ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_1 (complete)<br> (109/109 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.08<br> (54ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (26ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">9.58<br> (249ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">11.23<br> (292ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_1<br> (627/629 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.98<br> (364ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (184ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.29<br> (421ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.55<br> (469ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_2 (complete)<br> (109/110 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.70<br> (56ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (33ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">16.09<br> (531ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">18.24<br> (602ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_2<br> (527/530 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.30<br> (805ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (350ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.86<br> (650ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.13<br> (745ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_3 (complete)<br> (500/500 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.43<br> (1192ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (490ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.88<br> (922ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.92<br> (943ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_3<br> (831/845 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.74<br> (2129ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (777ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.58<br> (1230ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.70<br> (1324ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_rc<br> (201/201 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.63<br> (75ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (46ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.52<br> (208ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_rd<br> (7588/7588 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.17<br> (501ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (231ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.63<br> (376ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_rf<br> (7788/7788 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.49<br> (94ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (63ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.59<br> (352ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ellint_rj<br> (7642/8032 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.30<br> (471ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (205ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">11.29<br> (2314ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                erf<br> (950/950 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.64<br> (37ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (14ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.29<br> (18ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">10.43<br> (146ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.21<br> (17ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                erfc<br> (950/950 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.80<br> (56ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (20ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.20<br> (24ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.70<br> (74ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.20<br> (24ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                expint (En)<br> (1059/1059 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.78<br> (258ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (145ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.68<br> (678ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                expint<br> (436/436 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.47<br> (94ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (38ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.45<br> (207ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.79<br> (144ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                expm1<br> (80/80 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (10ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.10<br> (11ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (10ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (10ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                gamma_p<br> (1379/1379 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.41<br> (466ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (193ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.81<br> (929ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.63<br> (314ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                gamma_p_inv<br> (559/559 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.19<br> (1552ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (710ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.18<br> (1551ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                gamma_q<br> (1371/1379 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.48<br> (471ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (190ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.73<br> (1089ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.68<br> (320ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                gamma_q_inv<br> (78/559 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.46<br> (1699ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (692ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.17<br> (810ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ibeta<br> (3210/3210 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.44<br> (1699ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.23<br> (606ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (494ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ibeta_inv<br> (952/1210 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.44<br> (5293ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (2168ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">27.50<br> (59626ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ibetac<br> (3210/3210 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.43<br> (1696ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.22<br> (606ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (495ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                ibetac_inv<br> (945/1210 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.45<br> (5376ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (2190ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">19.65<br> (43025ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                jacobi_cn<br> (2368/2757 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.89<br> (460ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.83<br> (172ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (94ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                jacobi_dn<br> (2368/2757 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.10<br> (459ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.89<br> (170ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (90ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                jacobi_sn<br> (2368/2757 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.77<br> (542ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.84<br> (173ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (94ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                laguerre<br> (280/280 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.13<br> (137ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (121ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.29<br> (156ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.21<br> (146ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                legendre Q<br> (300/300 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.19<br> (474ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (397ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.10<br> (437ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                legendre<br> (300/300 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.16<br> (385ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (332ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.11<br> (367ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.10<br> (698ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                lgamma<br> (400/400 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.33<br> (240ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.44<br> (110ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (45ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">5.82<br> (262ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">2.00<br> (90ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (45ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                log1p<br> (80/80 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.09<br> (12ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.09<br> (12ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (11ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (11ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                polygamma<br> (823/1535 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">8.58<br> (2883ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.21<br> (744ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">7.07<br> (2374ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (336ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                sph_bessel<br> (483/483 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.71<br> (1554ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (910ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.14<br> (1949ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.70<br> (2458ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                sph_neumann<br> (284/284 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">8.01<br> (3406ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">3.76<br> (1596ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">6.44<br> (2739ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (425ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                tgamma (incomplete)<br> (1266/1379 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.36<br> (714ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (303ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.96<br> (898ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                tgamma<br> (400/400 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">4.47<br> (349ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.24<br> (97ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.05<br> (160ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.22<br> (95ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (78ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.05<br> (160ns)</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                trigamma<br> (659/659 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.71<br> (36ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (21ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">40.14<br> (843ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">11.76<br> (247ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-</tr>
-<tr>
-<td>
-              <p>
-                zeta<br> (448/448 tests selected)
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">2.71<br> (494ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="green">1.00<br> (182ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="red">772.41<br> (140579ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="blue">1.56<br> (284ns)</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
-              </p>
-            </td>
-<td>
-              <p>
-                <span class="grey">-</span>
+                <span class="green">1.00<br> (50ns)</span>
               </p>
             </td>
 </tr>
@@ -7402,7 +2114,7 @@
     Comparison with Microsoft Visual C++ version 12.0 on Win32</a>
 </h2></div></div></div>
 <div class="table">
-<a name="special_function_and_distributio.section_Library_Comparison_with_Microsoft_Visual_C_version_12_0_on_Win32.table_Library_Comparison_with_Microsoft_Visual_C_version_12_0_on_Win32"></a><p class="title"><b>Table&#160;5.&#160;Library Comparison with Microsoft Visual C++ version 12.0 on Win32</b></p>
+<a name="special_function_and_distributio.section_Library_Comparison_with_Microsoft_Visual_C_version_12_0_on_Win32.table_Library_Comparison_with_Microsoft_Visual_C_version_12_0_on_Win32"></a><p class="title"><b>Table&#160;3.&#160;Library Comparison with Microsoft Visual C++ version 12.0 on Win32</b></p>
 <div class="table-contents"><table class="table" summary="Library Comparison with Microsoft Visual C++ version 12.0 on Win32">
 <colgroup>
 <col>
@@ -7417,7 +2129,7 @@
             </th>
 <th>
               <p>
-                Boost
+                boost 1.59
               </p>
             </th>
 <th>
@@ -7435,29 +2147,29 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (61ns)</span>
+                <span class="green">1.00<br> (44ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.11<br> (68ns)</span>
+                <span class="blue">1.36<br> (60ns)</span>
               </p>
             </td>
 </tr>
 <tr>
 <td>
               <p>
-                cyl_bessel_j (integer order)<br> (268/268 tests selected)
+                cyl_bessel_j (integer order)<br> (267/268 tests selected)
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (134ns)</span>
+                <span class="green">1.00<br> (93ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="red">2.04<br> (273ns)</span>
+                <span class="red">2.52<br> (234ns)</span>
               </p>
             </td>
 </tr>
@@ -7469,12 +2181,12 @@
             </td>
 <td>
               <p>
-                <span class="blue">1.95<br> (330ns)</span>
+                <span class="red">2.10<br> (279ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (169ns)</span>
+                <span class="green">1.00<br> (133ns)</span>
               </p>
             </td>
 </tr>
@@ -7486,12 +2198,12 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (15ns)</span>
+                <span class="green">1.00<br> (14ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.67<br> (25ns)</span>
+                <span class="blue">1.36<br> (19ns)</span>
               </p>
             </td>
 </tr>
@@ -7503,12 +2215,12 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (20ns)</span>
+                <span class="green">1.00<br> (18ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="red">4.50<br> (90ns)</span>
+                <span class="red">2.72<br> (49ns)</span>
               </p>
             </td>
 </tr>
@@ -7520,12 +2232,12 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (10ns)</span>
+                <span class="green">1.00<br> (8ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.30<br> (13ns)</span>
+                <span class="blue">1.25<br> (10ns)</span>
               </p>
             </td>
 </tr>
@@ -7537,12 +2249,12 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (98ns)</span>
+                <span class="green">1.00<br> (70ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.64<br> (161ns)</span>
+                <span class="blue">1.81<br> (127ns)</span>
               </p>
             </td>
 </tr>
@@ -7554,12 +2266,12 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (12ns)</span>
+                <span class="green">1.00<br> (10ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="blue">1.75<br> (21ns)</span>
+                <span class="green">1.20<br> (12ns)</span>
               </p>
             </td>
 </tr>
@@ -7571,12 +2283,12 @@
             </td>
 <td>
               <p>
-                <span class="green">1.00<br> (87ns)</span>
+                <span class="green">1.00<br> (79ns)</span>
               </p>
             </td>
 <td>
               <p>
-                <span class="red">10.89<br> (947ns)</span>
+                <span class="red">10.91<br> (862ns)</span>
               </p>
             </td>
 </tr>
@@ -7587,7 +2299,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: July 20, 2015 at 17:42:33 GMT</small></p></td>
+<td align="left"><p><small>Last revised: July 21, 2015 at 12:21:00 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
