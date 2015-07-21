@@ -69,7 +69,7 @@ int main()
 #if defined(TEST_RMATH) && !defined(COMPILER_COMPARISON_TABLES)
    time = exec_timed_test([](const std::vector<double>& v){  return ::qbeta(v[2], v[0], v[1], 1, 0);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Rmath " + R_VERSION_STRING);
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "Rmath "  R_VERSION_STRING);
 #endif
 
    return 0;
