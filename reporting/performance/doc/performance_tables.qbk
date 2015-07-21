@@ -112,10 +112,10 @@
 
 [template table_Compiler_Option_Comparison_on_Win32[]
 [table:table_Compiler_Option_Comparison_on_Win32 Compiler Option Comparison on Win32
-[[Function][cl /arch:sse2 /Ox (x86 build)][cl /Ox (x64 build)][cl /Od (x86 build)]]
-[[boost::math::cbrt][[role blue 1.39[br](61ns)]][[role green 1.00[br](44ns)]][[role red 6.02[br](265ns)]]]
-[[boost::math::cyl_bessel_j (integer orders)][[role green 1.14[br](109ns)]][[role green 1.00[br](96ns)]][[role red 6.80[br](653ns)]]]
-[[boost::math::ibeta_inv][[role green 1.00[br](1807ns)]][[role green 1.05[br](1893ns)]][[role red 3.41[br](6165ns)]]]
+[[Function][cl /arch:sse2 /Ox (x86 build)][cl /Ox (x64 build)][cl /Od (x86 build)][icl /arch:ia32 /Ox (x86 build)]]
+[[boost::math::cbrt][[role blue 1.65[br](61ns)]][[role green 1.19[br](44ns)]][[role red 7.16[br](265ns)]][[role green 1.00[br](37ns)]]]
+[[boost::math::cyl_bessel_j (integer orders)][[role blue 1.38[br](109ns)]][[role blue 1.22[br](96ns)]][[role red 8.27[br](653ns)]][[role green 1.00[br](79ns)]]]
+[[boost::math::ibeta_inv][[role blue 1.26[br](1807ns)]][[role blue 1.32[br](1893ns)]][[role red 4.28[br](6165ns)]][[role green 1.00[br](1439ns)]]]
 ]
 ]
 
