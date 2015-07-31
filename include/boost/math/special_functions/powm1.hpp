@@ -26,12 +26,12 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
 
    if (x > 0)
    {
-      if ((x < 20) && (x > 0.001))
+      if ((x < 10) && (x > 0.001))
       {
          if (fabs(y * (x - 1)) < 0.5)
             return boost::math::expm1(y * log(x));
       }
-      else if (y < 0.15)
+      else if (y < 0.25)
       {
          // We don't have any good/quick approximation for log(x) * y
          // so just try it and see:
