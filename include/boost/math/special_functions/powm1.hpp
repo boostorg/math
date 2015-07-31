@@ -26,9 +26,9 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
 
    if (x > 0)
    {
-      if (x < 20)
+      if ((x < 20) && (x > 0.001))
       {
-         if (fabs(y * (x - 1)) < 1)
+         if (fabs(y * (x - 1)) < 0.5)
             return boost::math::expm1(y * log(x));
       }
       else if (y < 0.15)
@@ -48,6 +48,8 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
       // y had better be an integer:
       if (boost::math::trunc(y) != y)
          return boost::math::policies::raise_domain_error<T>(function, "For non-integral exponent, expected base > 0 but got %1%", x, pol);
+      if (boost::math::trunc(y / 2) == y / 2)
+         return powm1_imp(T(-x), y, pol);
    }
    return pow(x, y) - 1;
 }

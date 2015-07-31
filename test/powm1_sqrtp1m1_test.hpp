@@ -1586,5 +1586,13 @@ void test_powm1_sqrtp1m1(T, const char* type_name)
       bind_func<T>(f2, 0, 1), 
       extract_result<T>(2));
    handle_test_result(result, powm1_data[result.worst()], result.worst(), type_name, "boost::math::powm1", "powm1");
+
+#include "powm1_data.ipp"
+   result = boost::math::tools::test_hetero<T>(
+      powm1_data,
+      bind_func<T>(f2, 0, 1),
+      extract_result<T>(2));
+   handle_test_result(result, powm1_big_data[result.worst()], result.worst(), type_name, "boost::math::powm1", "powm1");
+
 }
 

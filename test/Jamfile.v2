@@ -46,6 +46,7 @@ project
       <toolset>msvc:<cxxflags>/wd4610
       <toolset>msvc:<cxxflags>/wd4510
       <toolset>msvc:<cxxflags>/wd4127
+      <toolset>msvc:<cxxflags>/wd4459
       <toolset>msvc:<cxxflags>/wd4701 # needed for lexical cast - temporary.
        <toolset>msvc:<cxxflags>/wd4189 # local variable is initialized but not referenced
      <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
