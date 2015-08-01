@@ -358,7 +358,7 @@ namespace boost
                s = boost::math::sign(pzero - q);
             if(s != boost::math::sign(guess))
             {
-               guess = s;
+               guess = static_cast<T>(s);
             }
 
             value_type result = detail::generic_quantile(

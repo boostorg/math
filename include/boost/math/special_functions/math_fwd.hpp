@@ -607,8 +607,10 @@ namespace boost
       template <class T1, class T2, class Policy>
       struct bessel_traits
       {
-         typedef typename tools::promote_args<
-            T1, T2
+         typedef typename mpl::if_<
+            is_integral<T1>,
+            typename tools::promote_args<T2>::type,
+            typename tools::promote_args<T1, T2>::type
          >::type result_type;
 
          typedef typename policies::precision<result_type, Policy>::type precision_type;

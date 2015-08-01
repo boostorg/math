@@ -1394,7 +1394,7 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos&
          return 1 / (z * boost::math::tgamma(z + delta, pol));
       }
    }
-   T zgh = z + Lanczos::g() - constants::half<T>();
+   T zgh = static_cast<T>(z + Lanczos::g() - constants::half<T>());
    T result;
    if(fabs(delta) < 10)
    {

@@ -28,6 +28,7 @@ project
       <toolset>msvc:<cxxflags>/wd4701
       <toolset>msvc:<cxxflags>/wd4127
       <toolset>msvc:<cxxflags>/wd4305
+      <toolset>msvc:<cxxflags>/wd4459
       #-<toolset>msvc:<cxxflags>/Za # nonfinite Serialization examples fail link if disable MS extensions,
       #  because serialization library is built with MS extensions enabled (default).
       <include>../../..

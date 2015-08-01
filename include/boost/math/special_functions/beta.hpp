@@ -82,11 +82,11 @@ T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
       std::swap(a, b);
 
    // Lanczos calculation:
-   T agh = a + Lanczos::g() - T(0.5);
-   T bgh = b + Lanczos::g() - T(0.5);
-   T cgh = c + Lanczos::g() - T(0.5);
+   T agh = static_cast<T>(a + Lanczos::g() - 0.5f);
+   T bgh = static_cast<T>(b + Lanczos::g() - 0.5f);
+   T cgh = static_cast<T>(c + Lanczos::g() - 0.5f);
    result = Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b) / Lanczos::lanczos_sum_expG_scaled(c);
-   T ambh = a - T(0.5) - b;
+   T ambh = a - 0.5f - b;
    if((fabs(b * ambh) < (cgh * 100)) && (a > 100))
    {
       // Special case where the base of the power term is close to 1
@@ -215,9 +215,9 @@ T ibeta_power_terms(T a,
    T c = a + b;
 
    // combine power terms with Lanczos approximation:
-   T agh = a + Lanczos::g() - T(0.5);
-   T bgh = b + Lanczos::g() - T(0.5);
-   T cgh = c + Lanczos::g() - T(0.5);
+   T agh = static_cast<T>(a + Lanczos::g() - 0.5f);
+   T bgh = static_cast<T>(b + Lanczos::g() - 0.5f);
+   T cgh = static_cast<T>(c + Lanczos::g() - 0.5f);
    result = Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b));
 
    // l1 and l2 are the base of the exponents minus one:
@@ -480,9 +480,9 @@ T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_deriva
       T c = a + b;
 
       // incomplete beta power term, combined with the Lanczos approximation:
-      T agh = a + Lanczos::g() - T(0.5);
-      T bgh = b + Lanczos::g() - T(0.5);
-      T cgh = c + Lanczos::g() - T(0.5);
+      T agh = static_cast<T>(a + Lanczos::g() - 0.5f);
+      T bgh = static_cast<T>(b + Lanczos::g() - 0.5f);
+      T cgh = static_cast<T>(c + Lanczos::g() - 0.5f);
       result = Lanczos::lanczos_sum_expG_scaled(c) / (Lanczos::lanczos_sum_expG_scaled(a) * Lanczos::lanczos_sum_expG_scaled(b));
       if(a * b < bgh * 10)
          result *= exp((b - 0.5f) * boost::math::log1p(a / bgh, pol));
@@ -606,7 +606,7 @@ struct ibeta_fraction2_t
       T denom = (a + 2 * m - 1);
       aN /= denom * denom;
 
-      T bN = m;
+      T bN = static_cast<T>(m);
       bN += (m * (b - m) * x) / (a + 2*m - 1);
       bN += ((a + m) * (a * y - b * x + 1 + m *(2 - x))) / (a + 2*m + 1);
 
@@ -943,12 +943,12 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
          if(b == 0)
             return policies::raise_domain_error<T>(function, "The arguments a and b to the incomplete beta function cannot both be zero, with x=%1%.", x, pol);
          if(b > 0)
-            return inv ? 0 : 1;
+            return static_cast<T>(inv ? 0 : 1);
       }
       else if(b == 0)
       {
          if(a > 0)
-            return inv ? 1 : 0;
+            return static_cast<T>(inv ? 1 : 0);
       }
    }
    else
