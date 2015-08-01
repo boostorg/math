@@ -44,7 +44,7 @@
         // x is crazy large, just concentrate on the first part of the expression and use logs:
         if(n == 1) return 1 / x;
         T nlx = n * log(x);
-        if((nlx < tools::log_max_value<T>()) && (n < max_factorial<T>::value))
+        if((nlx < tools::log_max_value<T>()) && (n < (int)max_factorial<T>::value))
            return ((n & 1) ? 1 : -1) * boost::math::factorial<T>(n - 1) * pow(x, -n);
         else
          return ((n & 1) ? 1 : -1) * exp(boost::math::lgamma(T(n), pol) - n * log(x));
@@ -71,7 +71,7 @@
      // or the power term underflows, this just gets set to 0 and then we
      // know that we have to use logs for the initial terms:
      //
-     part_term = ((n > boost::math::max_factorial<T>::value) && (T(n) * n > tools::log_max_value<T>())) 
+     part_term = ((n > (int)boost::math::max_factorial<T>::value) && (T(n) * n > tools::log_max_value<T>())) 
         ? T(0) : static_cast<T>(boost::math::factorial<T>(n - 1, pol) * pow(x, -n - 1));
      if(part_term == 0)
      {
