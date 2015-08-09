@@ -130,6 +130,29 @@ unsigned hypergeometric_quantile_imp(T p, T q, unsigned r, unsigned n, unsigned 
       unsigned x = base;
       result = hypergeometric_pdf<T>(x, r, n, N, pol);
       T diff = result;
+      if (diff == 0)
+      {
+         ++x;
+         // We want to skip through x values as fast as we can until we start getting non-zero values,
+         // otherwise we're just making lots of expensive PDF calls:
+         T log_pdf = boost::math::lgamma(n + 1, pol)
+            + boost::math::lgamma(r + 1, pol)
+            + boost::math::lgamma(N - n + 1, pol)
+            + boost::math::lgamma(N - r + 1, pol)
+            - boost::math::lgamma(N + 1, pol)
+            - boost::math::lgamma(x + 1, pol)
+            - boost::math::lgamma(n - x + 1, pol)
+            - boost::math::lgamma(r - x + 1, pol)
+            - boost::math::lgamma(N - n - r + x + 1, pol);
+         while (log_pdf < tools::log_min_value<T>())
+         {
+            log_pdf += -log(x + 1) + log(n - x) + log(r - x) - log(N - n - r + x + 1);
+            ++x;
+         }
+         // By the time we get here, log_pdf may be fairly inaccurate due to
+         // roundoff errors, get a fresh PDF calculation before proceding:
+         diff = hypergeometric_pdf<T>(x, r, n, N, pol);
+      }
       while(result < p)
       {
          diff = (diff > tools::min_value<T>() * 8) 
@@ -155,6 +178,29 @@ unsigned hypergeometric_quantile_imp(T p, T q, unsigned r, unsigned n, unsigned 
       unsigned x = lim;
       result = 0;
       T diff = hypergeometric_pdf<T>(x, r, n, N, pol);
+      if (diff == 0)
+      {
+         // We want to skip through x values as fast as we can until we start getting non-zero values,
+         // otherwise we're just making lots of expensive PDF calls:
+         --x;
+         T log_pdf = boost::math::lgamma(n + 1, pol)
+            + boost::math::lgamma(r + 1, pol)
+            + boost::math::lgamma(N - n + 1, pol)
+            + boost::math::lgamma(N - r + 1, pol)
+            - boost::math::lgamma(N + 1, pol)
+            - boost::math::lgamma(x + 1, pol)
+            - boost::math::lgamma(n - x + 1, pol)
+            - boost::math::lgamma(r - x + 1, pol)
+            - boost::math::lgamma(N - n - r + x + 1, pol);
+         while (log_pdf < tools::log_min_value<T>())
+         {
+            log_pdf += log(x) - log(n - x + 1) - log(r - x + 1) + log(N - n - r + x);
+            --x;
+         }
+         // By the time we get here, log_pdf may be fairly inaccurate due to
+         // roundoff errors, get a fresh PDF calculation before proceding:
+         diff = hypergeometric_pdf<T>(x, r, n, N, pol);
+      }
       while(result + diff / 2 < q)
       {
          result += diff;
