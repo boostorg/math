@@ -88,8 +88,15 @@ public:
       }
    }
 
+   enum
+   {
+      main_table = 1,
+      boost_only_table = 2,
+      both_tables = 3
+   };
+
    template <class F>
-   void run_timed_tests(F f, std::string sub_name, std::string column, bool p_value = false)
+   void run_timed_tests(F f, std::string sub_name, std::string column, bool p_value = false, int where = main_table)
    {
       try{
          double t = 0;
@@ -117,11 +124,25 @@ public:
                repeats *= 2;
          } while(t < 0.5);
 
-         report_execution_time(
-            t / data_size,
-            std::string("Distribution performance comparison with ") + BOOST_COMPILER + std::string(" on ") + BOOST_PLATFORM,
-            distro_name + " (" + std::string(sub_name) + ")",
-            column);
+         static const std::string main_table_name = std::string("Distribution performance comparison with ") + BOOST_COMPILER + std::string(" on ") + BOOST_PLATFORM;
+         static const std::string boost_table_name = std::string("Distribution performance comparison with for different performance options with ") + BOOST_COMPILER + std::string(" on ") + BOOST_PLATFORM;
+
+         if (where & 1)
+         {
+            report_execution_time(
+               t / data_size,
+               main_table_name,
+               distro_name + " (" + std::string(sub_name) + ")",
+               column);
+         }
+         if (where & 2)
+         {
+            report_execution_time(
+               t / data_size,
+               boost_table_name,
+               distro_name + " (" + std::string(sub_name) + ")",
+               column);
+         }
       }
       catch(const std::exception& e)
       {
@@ -200,22 +221,22 @@ void test_boost_1_param(distribution_tester& tester)
    typedef boost::math::policies::policy<boost::math::policies::promote_double<false>, boost::math::policies::digits10<10> > no_promote_double_10_digits_policy;
    typedef boost::math::policies::policy<boost::math::policies::promote_float<false> > no_promote_float_policy;
 
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, default_policy>(v[0]), x); }, "PDF", boost_name());
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, default_policy>(v[0]), x); }, "CDF", boost_name());
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, default_policy>(v[0]), x); }, "quantile", boost_name(), true);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, default_policy>(v[0]), x); }, "PDF", boost_name(), false, distribution_tester::both_tables);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, default_policy>(v[0]), x); }, "CDF", boost_name(), false, distribution_tester::both_tables);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, default_policy>(v[0]), x); }, "quantile", boost_name(), true, distribution_tester::both_tables);
    if(sizeof(double) != sizeof(long double))
    {
-      tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_policy>(v[0]), x); }, "PDF", "Boost[br]promote_double<false>");
-      tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_policy>(v[0]), x); }, "CDF", "Boost[br]promote_double<false>");
-      tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_policy>(v[0]), x); }, "quantile", "Boost[br]promote_double<false>", true);
+      tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_policy>(v[0]), x); }, "PDF", "Boost[br]promote_double<false>", false, distribution_tester::both_tables);
+      tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_policy>(v[0]), x); }, "CDF", "Boost[br]promote_double<false>", false, distribution_tester::both_tables);
+      tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_policy>(v[0]), x); }, "quantile", "Boost[br]promote_double<false>", true, distribution_tester::both_tables);
    }
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_10_digits_policy>(v[0]), x); }, "PDF", "Boost[br]promote_double<false>[br]digits10<10>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_10_digits_policy>(v[0]), x); }, "CDF", "Boost[br]promote_double<false>[br]digits10<10>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_10_digits_policy>(v[0]), x); }, "quantile", "Boost[br]promote_double<false>[br]digits10<10>", true);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_10_digits_policy>(v[0]), x); }, "PDF", "Boost[br]promote_double<false>[br]digits10<10>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_10_digits_policy>(v[0]), x); }, "CDF", "Boost[br]promote_double<false>[br]digits10<10>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_10_digits_policy>(v[0]), x); }, "quantile", "Boost[br]promote_double<false>[br]digits10<10>", true, distribution_tester::boost_only_table);
 
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<float, no_promote_float_policy>(static_cast<float>(v[0])), static_cast<float>(x)); }, "PDF", "Boost[br]float[br]promote_float<false>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<float, no_promote_float_policy>(static_cast<float>(v[0])), static_cast<float>(x)); }, "CDF", "Boost[br]float[br]promote_float<false>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<float, no_promote_float_policy>(static_cast<float>(v[0])), static_cast<float>(x)); }, "quantile", "Boost[br]float[br]promote_float<false>", true);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<float, no_promote_float_policy>(static_cast<float>(v[0])), static_cast<float>(x)); }, "PDF", "Boost[br]float[br]promote_float<false>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<float, no_promote_float_policy>(static_cast<float>(v[0])), static_cast<float>(x)); }, "CDF", "Boost[br]float[br]promote_float<false>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<float, no_promote_float_policy>(static_cast<float>(v[0])), static_cast<float>(x)); }, "quantile", "Boost[br]float[br]promote_float<false>", true, distribution_tester::boost_only_table);
 }
 
 template <template <class T, class U> class D>
@@ -229,22 +250,22 @@ void test_boost_2_param(distribution_tester& tester)
    typedef boost::math::policies::policy<boost::math::policies::promote_double<false>, boost::math::policies::digits10<10> > no_promote_double_10_digits_policy;
    typedef boost::math::policies::policy<boost::math::policies::promote_float<false> > no_promote_float_policy;
 
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, default_policy>(v[0], v[1]), x); }, "PDF", boost_name());
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, default_policy>(v[0], v[1]), x); }, "CDF", boost_name());
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, default_policy>(v[0], v[1]), x); }, "quantile", boost_name(), true);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, default_policy>(v[0], v[1]), x); }, "PDF", boost_name(), false, distribution_tester::both_tables);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, default_policy>(v[0], v[1]), x); }, "CDF", boost_name(), false, distribution_tester::both_tables);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, default_policy>(v[0], v[1]), x); }, "quantile", boost_name(), true, distribution_tester::both_tables);
    if(sizeof(double) != sizeof(long double))
    {
-      tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_policy>(v[0], v[1]), x); }, "PDF", "Boost[br]promote_double<false>");
-      tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_policy>(v[0], v[1]), x); }, "CDF", "Boost[br]promote_double<false>");
-      tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_policy>(v[0], v[1]), x); }, "quantile", "Boost[br]promote_double<false>", true);
+      tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_policy>(v[0], v[1]), x); }, "PDF", "Boost[br]promote_double<false>", false, distribution_tester::both_tables);
+      tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_policy>(v[0], v[1]), x); }, "CDF", "Boost[br]promote_double<false>", false, distribution_tester::both_tables);
+      tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_policy>(v[0], v[1]), x); }, "quantile", "Boost[br]promote_double<false>", true, distribution_tester::both_tables);
    }
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_10_digits_policy>(v[0], v[1]), x); }, "PDF", "Boost[br]promote_double<false>[br]digits10<10>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_10_digits_policy>(v[0], v[1]), x); }, "CDF", "Boost[br]promote_double<false>[br]digits10<10>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_10_digits_policy>(v[0], v[1]), x); }, "quantile", "Boost[br]promote_double<false>[br]digits10<10>", true);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_10_digits_policy>(v[0], v[1]), x); }, "PDF", "Boost[br]promote_double<false>[br]digits10<10>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_10_digits_policy>(v[0], v[1]), x); }, "CDF", "Boost[br]promote_double<false>[br]digits10<10>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_10_digits_policy>(v[0], v[1]), x); }, "quantile", "Boost[br]promote_double<false>[br]digits10<10>", true, distribution_tester::boost_only_table);
 
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1])), static_cast<float>(x)); }, "PDF", "Boost[br]float[br]promote_float<false>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1])), static_cast<float>(x)); }, "CDF", "Boost[br]float[br]promote_float<false>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1])), static_cast<float>(x)); }, "quantile", "Boost[br]float[br]promote_float<false>", true);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1])), static_cast<float>(x)); }, "PDF", "Boost[br]float[br]promote_float<false>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1])), static_cast<float>(x)); }, "CDF", "Boost[br]float[br]promote_float<false>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1])), static_cast<float>(x)); }, "quantile", "Boost[br]float[br]promote_float<false>", true, distribution_tester::boost_only_table);
 }
 
 template <template <class T, class U> class D>
@@ -258,22 +279,22 @@ void test_boost_3_param(distribution_tester& tester)
    typedef boost::math::policies::policy<boost::math::policies::promote_double<false>, boost::math::policies::digits10<10> > no_promote_double_10_digits_policy;
    typedef boost::math::policies::policy<boost::math::policies::promote_float<false> > no_promote_float_policy;
 
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, default_policy>(v[0], v[1], v[2]), x); }, "PDF", boost_name());
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, default_policy>(v[0], v[1], v[2]), x); }, "CDF", boost_name());
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, default_policy>(v[0], v[1], v[2]), x); }, "quantile", boost_name(), true);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, default_policy>(v[0], v[1], v[2]), x); }, "PDF", boost_name(), false, distribution_tester::both_tables);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, default_policy>(v[0], v[1], v[2]), x); }, "CDF", boost_name(), false, distribution_tester::both_tables);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, default_policy>(v[0], v[1], v[2]), x); }, "quantile", boost_name(), true, distribution_tester::both_tables);
    if(sizeof(double) != sizeof(long double))
    {
-      tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_policy>(v[0], v[1], v[2]), x); }, "PDF", "Boost[br]promote_double<false>");
-      tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_policy>(v[0], v[1], v[2]), x); }, "CDF", "Boost[br]promote_double<false>");
-      tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_policy>(v[0], v[1], v[2]), x); }, "quantile", "Boost[br]promote_double<false>", true);
+      tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_policy>(v[0], v[1], v[2]), x); }, "PDF", "Boost[br]promote_double<false>", false, distribution_tester::both_tables);
+      tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_policy>(v[0], v[1], v[2]), x); }, "CDF", "Boost[br]promote_double<false>", false, distribution_tester::both_tables);
+      tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_policy>(v[0], v[1], v[2]), x); }, "quantile", "Boost[br]promote_double<false>", true, distribution_tester::both_tables);
    }
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_10_digits_policy>(v[0], v[1], v[2]), x); }, "PDF", "Boost[br]promote_double<false>[br]digits10<10>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_10_digits_policy>(v[0], v[1], v[2]), x); }, "CDF", "Boost[br]promote_double<false>[br]digits10<10>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_10_digits_policy>(v[0], v[1], v[2]), x); }, "quantile", "Boost[br]promote_double<false>[br]digits10<10>", true);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<double, no_promote_double_10_digits_policy>(v[0], v[1], v[2]), x); }, "PDF", "Boost[br]promote_double<false>[br]digits10<10>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<double, no_promote_double_10_digits_policy>(v[0], v[1], v[2]), x); }, "CDF", "Boost[br]promote_double<false>[br]digits10<10>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<double, no_promote_double_10_digits_policy>(v[0], v[1], v[2]), x); }, "quantile", "Boost[br]promote_double<false>[br]digits10<10>", true, distribution_tester::boost_only_table);
 
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1]), static_cast<float>(v[2])), static_cast<float>(x)); }, "PDF", "Boost[br]float[br]promote_float<false>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1]), static_cast<float>(v[2])), static_cast<float>(x)); }, "CDF", "Boost[br]float[br]promote_float<false>");
-   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1]), static_cast<float>(v[2])), static_cast<float>(x)); }, "quantile", "Boost[br]float[br]promote_float<false>", true);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return pdf(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1]), static_cast<float>(v[2])), static_cast<float>(x)); }, "PDF", "Boost[br]float[br]promote_float<false>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return cdf(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1]), static_cast<float>(v[2])), static_cast<float>(x)); }, "CDF", "Boost[br]float[br]promote_float<false>", false, distribution_tester::boost_only_table);
+   tester.run_timed_tests([](const std::vector<double>& v, double x){  return quantile(D<float, no_promote_float_policy>(static_cast<float>(v[0]), static_cast<float>(v[1]), static_cast<float>(v[2])), static_cast<float>(x)); }, "quantile", "Boost[br]float[br]promote_float<false>", true, distribution_tester::boost_only_table);
 }
 
 int main()
@@ -378,8 +399,14 @@ int main()
 
       distribution_tester hypergeometric("Hypergeometric");
       hypergeometric.add_test_case(10, 5, 100, three_param_quantile<boost::math::hypergeometric_distribution<> >());
+      hypergeometric.add_test_case(50, 75, 100, three_param_quantile<boost::math::hypergeometric_distribution<> >());
+      hypergeometric.add_test_case(30, 20, 100, three_param_quantile<boost::math::hypergeometric_distribution<> >());
       hypergeometric.add_test_case(100, 50, 1000000, three_param_quantile<boost::math::hypergeometric_distribution<> >());
+      hypergeometric.add_test_case(500000, 3000, 1000000, three_param_quantile<boost::math::hypergeometric_distribution<> >());
+      hypergeometric.add_test_case(20000, 800000, 1000000, three_param_quantile<boost::math::hypergeometric_distribution<> >());
       hypergeometric.add_test_case(100, 5, 1000, three_param_quantile<boost::math::hypergeometric_distribution<> >());
+      hypergeometric.add_test_case(500, 50, 1000, three_param_quantile<boost::math::hypergeometric_distribution<> >());
+      hypergeometric.add_test_case(2, 25, 1000, three_param_quantile<boost::math::hypergeometric_distribution<> >());
       hypergeometric.add_test_case(1, 5, 1000, three_param_quantile<boost::math::hypergeometric_distribution<> >());
       hypergeometric.add_test_case(100, 500, 1000, three_param_quantile<boost::math::hypergeometric_distribution<> >());
 
