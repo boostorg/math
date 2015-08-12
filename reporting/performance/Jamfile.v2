@@ -65,13 +65,17 @@ shichi.c sici.c sin.c sindg.c sinh.c spence.c stdtr.c struve.c
 tan.c tandg.c tanh.c unity.c yn.c zeta.c zetac.c 
 sqrt.c floor.c setprec.c mtherr.c ;
 
+DCDFLIB_SOURCE = dcdflib.c ipmpar.c ;
+
 path-constant here : . ;
 make $(here)/third_party/cephes_double/acosh.c : : @check_exists ;
+make $(here)/third_party/dcdflib/dcdflib.c : : @check_exists ;
 actions check_exists
 {
     stat $(<)
 }
 explicit $(here)/third_party/cephes_double/acosh.c ;
+explicit $(here)/third_party/dcdflib/dcdflib.c ;
 
 lib cephes_double : $(here)/third_party/cephes_double/$(CEPHES_SOURCE)
     :         
@@ -81,6 +85,15 @@ lib cephes_double : $(here)/third_party/cephes_double/$(CEPHES_SOURCE)
    ;
 
 explicit cephes_double ;
+
+lib dcdflib : $(here)/third_party/dcdflib/$(DCDFLIB_SOURCE)
+    :         
+        release
+        <link>static
+        [ check-target-builds $(here)/third_party/dcdflib/dcdflib.c : : <build>no ] 
+   ;
+
+explicit dcdflib ;
 
 obj table_helper : table_helper.cpp ;
 
@@ -95,51 +108,52 @@ rule all-tests {
         [ check-target-builds ../accuracy//has_gsl : <define>TEST_GSL <source>gsl <source>gslcblas ]
         [ check-target-builds ../accuracy//has_rmath : <define>TEST_RMATH <source>Rmath ]
         [ check-target-builds is_intel_win : <build>no : ]
+        [ check-target-builds $(here)/third_party/dcdflib/dcdflib.c : <define>TEST_DCDFLIB <source>dcdflib : <build>no ]
         <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt
-        <toolset>msvc:<address-model>64
+        #<toolset>msvc:<address-model>64
         ] ;
      }
-
-     #
-     # Special cases to test different compiler options,
-     # cbrt first as an example of a trivial function:
-     #
-     result += [ run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : debug <define>COMPILER_COMPARISON_TABLES [ predef-require "BOOST_COMP_MSVC" ] <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_cbrt_msvc_debug ] ;
-     result += [ run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <define>COMPILER_COMPARISON_TABLES <address-model>32 [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_cbrt_msvc_release_32 ] ;
-     result += [ run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <define>COMPILER_COMPARISON_TABLES <address-model>64 [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_cbrt_msvc_release_64 ] ;
-     result += [ run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <define>COMPILER_COMPARISON_TABLES [ check-target-builds is_intel_win : : <build>no ] <toolset>intel:<cxxflags>-Ox <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_cbrt_intel_release ] ;
-     #
-     # Now jn as a little more complex:
-     #
-     result += [ run test_jn.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : debug <define>COMPILER_COMPARISON_TABLES <include>../../test [ predef-require "BOOST_COMP_MSVC" ] <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_jn_msvc_debug ] ;
-     result += [ run test_jn.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test <address-model>32 [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_jn_msvc_release_32 ] ;
-     result += [ run test_jn.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <define>COMPILER_COMPARISON_TABLES <address-model>64 <include>../../test [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_jn_msvc_release_64 ] ;
-     result += [ run test_jn.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test [ check-target-builds is_intel_win : : <build>no ] <toolset>intel:<cxxflags>-Ox <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_jn_intel_release ] ;
-     #
-     # Then something really expensive, like the inverse-incomplete-beta:
-     #
-     result += [ run test_ibeta_inv.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : debug <define>COMPILER_COMPARISON_TABLES <include>../../test [ predef-require "BOOST_COMP_MSVC" ] <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_ibeta_inv_msvc_debug ] ;
-     result += [ run test_ibeta_inv.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test <address-model>32 [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_ibeta_inv_msvc_release_32 ] ;
-     result += [ run test_ibeta_inv.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test <address-model>64 [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_ibeta_inv_msvc_release_64 ] ;
-     result += [ run test_ibeta_inv.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
-     : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test [ check-target-builds is_intel_win : : <build>no ] <toolset>intel:<cxxflags>-Ox <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt : test_ibeta_inv_intel_release ] ;
-
-
      return $(result) ;     
 }
             
-test-suite report_gen : [ all-tests ] ;
+#
+# Special cases to test different compiler options,
+# cbrt first as an example of a trivial function:
+#
+run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+     : : : debug <define>COMPILER_COMPARISON_TABLES [ predef-require "BOOST_COMP_MSVC" ] <address-model>32 : test_cbrt_msvc_debug ;
+run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+     : : : release <define>COMPILER_COMPARISON_TABLES [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <address-model>32 : test_cbrt_msvc_release_32 ;
+run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+     : : : release <define>COMPILER_COMPARISON_TABLES [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <address-model>64 : test_cbrt_msvc_release_64 ;
+run test_cbrt.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+     : : : release <define>COMPILER_COMPARISON_TABLES [ check-target-builds is_intel_win : : <build>no ] <toolset>intel:<cxxflags>-Ox <address-model>64 : test_cbrt_intel_release ;
+#
+# Now jn as a little more complex:
+#
+run test_jn.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+   : : : debug <define>COMPILER_COMPARISON_TABLES <include>../../test [ predef-require "BOOST_COMP_MSVC" ] <address-model>32 : test_jn_msvc_debug ;
+run test_jn.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+   : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <address-model>32 : test_jn_msvc_release_32 ;
+run test_jn.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+   : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <address-model>64 : test_jn_msvc_release_64 ;
+run test_jn.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+   : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test [ check-target-builds is_intel_win : : <build>no ] <address-model>64 : test_jn_intel_release ;
+#
+# Then something really expensive, like the inverse-incomplete-beta:
+#
+run test_ibeta_inv.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+   : : : debug <define>COMPILER_COMPARISON_TABLES <include>../../test [ predef-require "BOOST_COMP_MSVC" ] <address-model>32 : test_ibeta_inv_msvc_debug ;
+run test_ibeta_inv.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+   : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <address-model>32 : test_ibeta_inv_msvc_release_32 ;
+run test_ibeta_inv.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+   : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test [ predef-require "BOOST_COMP_MSVC" ] <cxxflags>-Ox <address-model>64 : test_ibeta_inv_msvc_release_64 ;
+run test_ibeta_inv.cpp /boost/regex//boost_regex /boost/system /boost/chrono /boost/filesystem table_helper
+   : : : release <define>COMPILER_COMPARISON_TABLES <include>../../test [ check-target-builds is_intel_win : : <build>no ] <toolset>intel:<cxxflags>-Ox <address-model>64 : test_ibeta_inv_intel_release ;
+
+test-suite report_gen : [ all-tests ] test_cbrt_msvc_debug test_cbrt_msvc_release_32 test_cbrt_msvc_release_64 test_cbrt_intel_release 
+   test_jn_msvc_debug test_jn_msvc_release_32 test_jn_msvc_release_64 test_jn_intel_release test_ibeta_inv_msvc_debug 
+   test_ibeta_inv_msvc_release_32 test_ibeta_inv_msvc_release_64 test_ibeta_inv_intel_release ;
 
 path-constant images_location : html ;
 path-constant here : . ;
