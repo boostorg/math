@@ -56,6 +56,242 @@ static const gsl_error_handler_setter handler;
 #include <Rmath.h>
 #endif
 
+#ifdef TEST_DCDFLIB
+extern "C" {
+   extern void cdfbet(int*, double*, double*, double*, double*, double*, double*, int*, double*);
+   extern void cdfbin(int*, double*, double*, double*, double*, double*, double*, int*, double*);
+   extern void cdfchi(int*, double*, double*, double*, double*, int*, double*);
+   extern void cdfchn(int*, double*, double*, double*, double*, double*, int*, double*);
+   extern void cdff(int*, double*, double*, double*, double*, double*, int*, double*);
+   extern void cdffnc(int*, double*, double*, double*, double*, double*, double*, int*s, double*);
+   extern void cdfgam(int*, double*, double*, double*, double*, double*, int*, double*);
+   extern void cdfnbn(int*, double*, double*, double*, double*, double*, double*, int*, double*);
+   extern void cdfnor(int*, double*, double*, double*, double*, double*, int*, double*);
+   extern void cdfpoi(int*, double*, double*, double*, double*, int*, double*);
+   extern void cdft(int*, double*, double*, double*, double*, int*, double*);
+   extern void cdftnc(int*, double*, double*, double*, double*, double*, int*, double*);
+}
+
+inline double dcdflib_beta_cdf(double x, double a, double b)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound, y(1-x);
+   cdfbet(&what, &p, &q, &x, &y, &a, &b, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_beta_quantile(double p, double a, double b)
+{
+   int what = 2;
+   int status = 0;
+   double x, y, bound, q(1 - p);
+   cdfbet(&what, &p, &q, &x, &y, &a, &b, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_binomial_cdf(double x, double s, double sf)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound, sfc(1-sf);
+   cdfbin(&what, &p, &q, &x, &s, &sf, &sfc, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_binomial_quantile(double p, double s, double sf)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p), sfc(1-sf);
+   cdfbin(&what, &p, &q, &x, &s, &sf, &sfc, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_chi_cdf(double x, double df)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound;
+   cdfchi(&what, &p, &q, &x, &df, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_chi_quantile(double p, double df)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p);
+   cdfchi(&what, &p, &q, &x, &df, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_chi_n_cdf(double x, double df, double nc)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound;
+   cdfchn(&what, &p, &q, &x, &df, &nc, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_chi_n_quantile(double p, double df, double nc)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p);
+   cdfchn(&what, &p, &q, &x, &df, &nc, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_f_cdf(double x, double df1, double df2)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound;
+   cdff(&what, &p, &q, &x, &df1, &df2, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_f_quantile(double p, double df1, double df2)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p);
+   cdff(&what, &p, &q, &x, &df1, &df2, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_f_n_cdf(double x, double df1, double df2, double nc)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound;
+   cdffnc(&what, &p, &q, &x, &df1, &df2, &nc, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_f_n_quantile(double p, double df1, double df2, double nc)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p);
+   cdffnc(&what, &p, &q, &x, &df1, &df2, &nc, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_gamma_cdf(double x, double shape, double scale)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound;
+   scale = 1 / scale;
+   cdfgam(&what, &p, &q, &x, &shape, &scale, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_gamma_quantile(double p, double shape, double scale)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p);
+   scale = 1 / scale;
+   cdfgam(&what, &p, &q, &x, &shape, &scale, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_nbin_cdf(double x, double r, double sf)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound, sfc(1 - sf);
+   cdfnbn(&what, &p, &q, &x, &r, &sf, &sfc, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_nbin_quantile(double p, double r, double sf)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p), sfc(1 - sf);
+   cdfnbn(&what, &p, &q, &x, &r, &sf, &sfc, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_norm_cdf(double x, double mean, double sd)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound;
+   cdfnor(&what, &p, &q, &x, &mean, &sd, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_norm_quantile(double p, double mean, double sd)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p);
+   cdfnor(&what, &p, &q, &x, &mean, &sd, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_poisson_cdf(double x, double param)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound;
+   cdfpoi(&what, &p, &q, &x, &param, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_poisson_quantile(double p, double param)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p);
+   cdfpoi(&what, &p, &q, &x, &param, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_t_cdf(double x, double param)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound;
+   cdft(&what, &p, &q, &x, &param, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_t_quantile(double p, double param)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p);
+   cdft(&what, &p, &q, &x, &param, &status, &bound);
+   return x;
+}
+
+inline double dcdflib_t_n_cdf(double x, double param, double nc)
+{
+   int what = 1;
+   int status = 0;
+   double p, q, bound;
+   cdftnc(&what, &p, &q, &x, &param, &nc, &status, &bound);
+   return p;
+}
+
+inline double dcdflib_t_n_quantile(double p, double param, double nc)
+{
+   int what = 2;
+   int status = 0;
+   double x, bound, q(1 - p);
+   cdftnc(&what, &p, &q, &x, &param, &nc, &status, &bound);
+   return x;
+}
+
+#endif
+
 extern std::vector<std::vector<double> > data;
 
 std::string sanitize_string(const std::string& s);
