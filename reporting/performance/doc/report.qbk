@@ -11,5 +11,5 @@
 [import performance_tables.qbk]
 [import ../../../doc/html4_symbols.qbk]
 
-[all_sections]
+[performance_all_sections]
 

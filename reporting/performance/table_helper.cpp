@@ -339,7 +339,7 @@ void add_cell(boost::intmax_t val, const std::string& table_name, const std::str
       //
       // Add to list of all tables (not in sections):
       //
-      add_to_all_sections(table_id, "all_tables");
+      add_to_all_sections(table_id, "performance_all_tables");
    }
 }
 

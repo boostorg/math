@@ -12,12 +12,15 @@
 In all of the following tables, the best performing
 result in each row, is assigned a relative value of "1" and shown
 in bold, so a score of "2" means ['"twice as slow as the best
-performing result".]  Actual timings in seconds per function call
-are also shown in parenthesis.
+performing result".]  Actual timings in nano-seconds per function call
+are also shown in parenthesis.  To make the results easier to read, they
+are color-coded as follows: the best result and everything within 20% of
+it is green, anything that's more than twice as slow as the best result is red,
+and results in between are blue.
 
 Result were obtained on a system
-with an Intel 2.8GHz Pentium 4 processor with 2Gb of RAM and running
-either Windows XP or Mandriva Linux.
+with an Intel core i7 4710MQ with 16Gb RAM and running
+either Windows 8.1 or Xubuntu Linux.
 
 [caution As usual with performance results these should be taken with a large pinch
 of salt: relative performance is known to shift quite a bit depending
@@ -28,73 +31,107 @@ all the appropriate corner cases.  They do not necessarily represent
 "typical" usage: whatever that may be!
 ]
 
-[note Since these tests were run, most compilers have improved their code optimisation,
-and processor speeds have improved too, so these results are known to be out of date.]
-
 [endsect]
 
-[section:getting_best Getting the Best Performance from this Library]
+[section:getting_best Getting the Best Performance from this Library: Compiler and Compiler Options]
 
 By far the most important thing you can do when using this library
 is turn on your compiler's optimisation options.  As the following
 table shows the penalty for using the library in debug mode can be
-quite large.
+quite large.  In addition switching to 64-bit code has a small but noticable
+improvement in performance, as does switching to a different compiler 
+(Intel C++ 15 in this example).
 
-[table  Performance Comparison of Release and Debug Settings
-[[Function]
-      [Microsoft Visual C++ 8.0
-
-      Debug Settings: /Od /ZI
-      ]
-         [Microsoft Visual C++ 8.0
-
-         Release settings: /Ox /arch:SSE2
-         ]]
-
-[[__erf][[perf msvc-debug-erf..[para 16.65][para (1.028e-006s)]]][[perf msvc-erf..[para *1.00*][para (1.483e-007s)]]]]
-[[__erf_inv][[perf msvc-debug-erf_inv..[para 19.28][para (1.215e-006s)]]][[perf msvc-erf_inv..[para *1.00*][para (4.888e-007s)]]]]
-[[__ibeta and __ibetac][[perf msvc-debug-ibeta..[para 8.32][para (1.540e-005s)]]][[perf msvc-ibeta..[para *1.00*][para (1.852e-006s)]]]]
-[[__ibeta_inv and __ibetac_inv][[perf msvc-debug-ibeta_inv..[para 10.25][para (7.492e-005s)]]][[perf msvc-ibeta_inv..[para *1.00*][para (7.311e-006s)]]]]
-[[__ibeta_inva, __ibetac_inva, __ibeta_invb and __ibetac_invb][[perf msvc-debug-ibeta_invab..[para 8.57][para (2.441e-004s)]]][[perf msvc-ibeta_invab..[para *1.00*][para (2.847e-005s)]]]]
-[[__gamma_p and __gamma_q][[perf msvc-debug-igamma..[para 10.98][para (1.044e-005s)]]][[perf msvc-igamma..[para *1.00*][para (9.504e-007s)]]]]
-[[__gamma_p_inv and __gamma_q_inv][[perf msvc-debug-igamma_inv..[para 10.25][para (3.721e-005s)]]][[perf msvc-igamma_inv..[para *1.00*][para (3.631e-006s)]]]]
-[[__gamma_p_inva and __gamma_q_inva][[perf msvc-debug-igamma_inva..[para 11.26][para (1.124e-004s)]]][[perf msvc-igamma_inva..[para *1.00*][para (9.982e-006s)]]]]
-]
+[table_Compiler_Option_Comparison_on_Win32]
 
 [endsect]
 
-[section:comp_compilers Comparing Compilers]
+[section:tradoffs Trading Accuracy for Performance]
 
-After a good choice of build settings the next most important thing
-you can do, is choose your compiler
-- and the standard C library it sits on top of - very carefully.  GCC-3.x
-in particular has been found to be particularly bad at inlining code,
-and performing the kinds of high level transformations that good C++ performance
-demands (thankfully GCC-4.x is somewhat better in this respect).
+There are a number of __policies that can be used to trade accuracy for performance:
 
-[table  Performance Comparison of Various Windows Compilers
-[[Function]
-   [Intel C++ 10.0
+* Internal promotion: by default functions with `float` arguments are evaluated at `double` precision
+internally to ensure full precision in the result.  Similarly `double` precision functions are
+evaluated at `long double` precision internally by default.  Changing these defaults can have a significant
+speed advantage at the expense of accuracy, note also that evaluating using `float` internally may result in 
+numerical instability for some of the more complex algorithms, we suggest you use this option with care.
+* Target accuracy: just because you choose to evaluate at `double` precision doesn't mean you necessarily want
+to target full 16-digit accuracy, if you wish you can change the default (full machine precision) to whatever
+is "good enough" for your particular use case.
 
-   ( /Ox /Qipo /QxN )
-   ]
-      [Microsoft Visual C++ 8.0
+For example, suppose you want to evaluate `double` precision functions at `double` precision internally, you 
+can change the global default by passing `-DBOOST_MATH_PROMOTE_DOUBLE_POLICY=false` on the command line, or
+at the point of call via something like this:
 
-      ( /Ox /arch:SSE2 )
-      ]
-      [Cygwin G++ 3.4
+   double val = boost::math::erf(my_argument, boost::math::policies::make_policy(boost::math::policies::promote_double<false>()));
 
-      ( /O3 )
-      ]]
-[[__erf][[perf intel-erf..[para *1.00*][para (4.118e-008s)]]][[perf msvc-erf..[para *1.00*][para (1.483e-007s)]]][[perf gcc-erf..[para 3.24][para (1.336e-007s)]]]]
-[[__erf_inv][[perf intel-erf_inv..[para *1.00*][para (4.439e-008s)]]][[perf msvc-erf_inv..[para *1.00*][para (4.888e-007s)]]][[perf gcc-erf_inv..[para 7.88][para (3.500e-007s)]]]]
-[[__ibeta and __ibetac][[perf intel-ibeta..[para *1.00*][para (1.631e-006s)]]][[perf msvc-ibeta..[para 1.14][para (1.852e-006s)]]][[perf gcc-ibeta..[para 3.05][para (4.975e-006s)]]]]
-[[__ibeta_inv and __ibetac_inv][[perf intel-ibeta_inv..[para *1.00*][para (6.133e-006s)]]][[perf msvc-ibeta_inv..[para 1.19][para (7.311e-006s)]]][[perf gcc-ibeta_inv..[para 2.60][para (1.597e-005s)]]]]
-[[__ibeta_inva, __ibetac_inva, __ibeta_invb and __ibetac_invb][[perf intel-ibeta_invab..[para *1.00*][para (2.453e-005s)]]][[perf msvc-ibeta_invab..[para 1.16][para (2.847e-005s)]]][[perf gcc-ibeta_invab..[para 2.83][para (6.947e-005s)]]]]
-[[__gamma_p and __gamma_q][[perf intel-igamma..[para *1.00*][para (6.735e-007s)]]][[perf msvc-igamma..[para 1.41][para (9.504e-007s)]]][[perf gcc-igamma..[para 2.78][para (1.872e-006s)]]]]
-[[__gamma_p_inv and __gamma_q_inv][[perf intel-igamma_inv..[para *1.00*][para (2.637e-006s)]]][[perf msvc-igamma_inv..[para 1.38][para (3.631e-006s)]]][[perf gcc-igamma_inv..[para 3.31][para (8.736e-006s)]]]]
-[[__gamma_p_inva and __gamma_q_inva][[perf intel-igamma_inva..[para *1.00*][para (7.716e-006s)]]][[perf msvc-igamma_inva..[para 1.29][para (9.982e-006s)]]][[perf gcc-igamma_inva..[para 2.56][para (1.974e-005s)]]]]
-]
+However, an easier option might be:
+
+   #include <boost/math/special_functions.hpp> // Or any individual special function header
+
+   namespace math{
+   
+   namespace precise{
+   //
+   // Define a Policy for accurate evaluation - this is the same as the default, unless
+   // someone has changed the global defaults.
+   //
+   typedef boost::math::policies::policy<> accurate_policy;
+   //
+   // Invoke BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS to declare
+   // functions that use the above policy.  Note no trailing
+   // ";" required on the macro call:
+   //
+   BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(accurate_policy)
+
+
+   }
+
+   namespace fast{
+   //
+   // Define a Policy for fast evaluation:
+   //
+   using namespace boost::math::polcies;
+   typedef policy<promote_double<false> > fast_policy;
+   //
+   // Invoke BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS:
+   //
+   BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(fast_policy)
+
+   }
+   
+   }
+
+And now one can call:
+
+   math::accurate::tgamma(x);
+
+For the "accurate" version of tgamma, and:
+
+   math::fast::tgamma(x);
+
+For the faster version.
+
+Had we wished to change the target precision (to 10 decimal places) as well as the evaluation type used, we might have done:
+
+   namespace math{
+   namespace fast{
+   //
+   // Define a Policy for fast evaluation:
+   //
+   using namespace boost::math::polcies;
+   typedef policy<promote_double<false>, digits10<10> > fast_policy;
+   //
+   // Invoke BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS:
+   //
+   BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS(fast_policy)
+   
+   }
+   }
+
+Here's how these options change the relative performance of the distributions on Linux:
+
+[table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
 
 [endsect]
 
@@ -201,42 +238,9 @@ suited to highly vectorisable processors in the future.
 [[Intel C++ 10.0 (Linux), Rational evaluation] [[perf intel-linux-Rational-method-0..[para *1.00*][para (1.245e-007s)]]][[perf intel-linux-Rational-method-1..[para *1.00*][para (1.245e-007s)]]][[perf intel-linux-Rational-method-2..[para 1.35][para (1.684e-007s)]]][[perf intel-linux-Rational-method-3..[para 1.04][para (1.294e-007s)]]]]
 ]
 
-There is one final performance tuning option that is available as a compile time
-[link policy policy].  Normally when evaluating functions at `double`
-precision, these are actually evaluated at `long double` precision internally:
-this helps to ensure that as close to full `double` precision as possible is
-achieved, but may slow down execution in some environments.  The defaults for
-this policy can be changed by
-[link math_toolkit.pol_ref.policy_defaults
-defining the macro `BOOST_MATH_PROMOTE_DOUBLE_POLICY`]
-to `false`, or
-[link math_toolkit.pol_ref.internal_promotion
-by specifying a specific policy] when calling the special
-functions or distributions.  See also the
-[link math_toolkit.pol_tutorial policy tutorial].
-
-[table  Performance Comparison with and Without Internal Promotion to long double
-[[Function]
-   [GCC 4.2 , Linux
-
-   (with internal promotion of double to long double).
-   ]
-      [GCC 4.2, Linux
-
-      (without promotion of double).
-      ]
-]
-[[__erf][[perf gcc-4_2-ld-erf..[para 1.48][para (1.387e-007s)]]][[perf gcc-4_2-erf..[para *1.00*][para (9.377e-008s)]]]]
-[[__erf_inv][[perf gcc-4_2-ld-erf_inv..[para 1.11][para (4.009e-007s)]]][[perf gcc-4_2-erf_inv..[para *1.00*][para (3.598e-007s)]]]]
-[[__ibeta and __ibetac][[perf gcc-4_2-ld-ibeta..[para 1.29][para (5.354e-006s)]]][[perf gcc-4_2-ibeta..[para *1.00*][para (4.137e-006s)]]]]
-[[__ibeta_inv and __ibetac_inv][[perf gcc-4_2-ld-ibeta_inv..[para 1.44][para (2.220e-005s)]]][[perf gcc-4_2-ibeta_inv..[para *1.00*][para (1.538e-005s)]]]]
-[[__ibeta_inva, __ibetac_inva, __ibeta_invb and __ibetac_invb][[perf gcc-4_2-ld-ibeta_invab..[para 1.25][para (7.009e-005s)]]][[perf gcc-4_2-ibeta_invab..[para *1.00*][para (5.607e-005s)]]]]
-[[__gamma_p and __gamma_q][[perf gcc-4_2-ld-igamma..[para 1.26][para (3.116e-006s)]]][[perf gcc-4_2-igamma..[para *1.00*][para (2.464e-006s)]]]]
-[[__gamma_p_inv and __gamma_q_inv][[perf gcc-4_2-ld-igamma_inv..[para 1.27][para (1.178e-005s)]]][[perf gcc-4_2-igamma_inv..[para *1.00*][para (9.291e-006s)]]]]
-[[__gamma_p_inva and __gamma_q_inva][[perf gcc-4_2-ld-igamma_inva..[para 1.20][para (2.765e-005s)]]][[perf gcc-4_2-igamma_inva..[para *1.00*][para (2.311e-005s)]]]]
-]
 
 [endsect]
+
 [section:comparisons Comparisons to Other Open Source Libraries]
 
 We've run our performance tests both for our own code, and against other

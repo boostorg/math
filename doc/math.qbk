@@ -41,6 +41,7 @@
 [/ Must be first included file!]
 
 [import ../reporting/accuracy/doc/accuracy_tables.qbk]
+[import ../reporting/performance/doc/performance_tables.qbk]
 
 [import html4_symbols.qbk]
 

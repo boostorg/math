@@ -502,7 +502,7 @@
 [endsect]
 ]
 
-[template all_sections[]
+[template performance_all_sections[]
 [section_Compiler_Option_Comparison_on_Win32]
 [section_Distribution_performance_comparison_with_GNU_C_version_5_1_0_on_linux]
 [section_Distribution_performance_comparison_with_Microsoft_Visual_C_version_14_0_on_Win32]
@@ -512,7 +512,7 @@
 [section_Library_Comparison_with_Microsoft_Visual_C_version_14_0_on_Win32]
 ]
 
-[template all_tables[]
+[template performance_all_tables[]
 [table_Compiler_Option_Comparison_on_Win32]
 [table_Distribution_performance_comparison_with_GNU_C_version_5_1_0_on_linux]
 [table_Distribution_performance_comparison_with_Microsoft_Visual_C_version_14_0_on_Win32]
