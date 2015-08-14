@@ -129,6 +129,28 @@ Had we wished to change the target precision (to 10 decimal places) as well as t
    }
    }
 
+One can do a similar thing with the distribution classes:
+
+   #include <boost/math/distributions.hpp> // or any individual distribution header
+
+   namespace math{ namespace fast{
+   //
+   // Define a policy for fastest possible evaluation:
+   //
+   using namespace boost::math::polcies;
+   typedef policy<promote_float<false> > fast_float_policy;
+   //
+   // Invoke BOOST_MATH_DECLARE_DISTRIBUTIONS
+   //
+   BOOST_MATH_DECLARE_DISTRIBUTIONS(float, fast_float_policy)
+
+   }} // namespaces
+
+   //
+   // And use:
+   //
+   float p_val = cdf(math::fast::normal(1.0f, 3.0f), 0.25f);
+
 Here's how these options change the relative performance of the distributions on Linux:
 
 [table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
