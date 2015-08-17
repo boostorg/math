@@ -54,14 +54,14 @@ void screen_data(Func f, Result r)
             --row;
          }
       }
-      catch(const std::exception&)
+      catch(const std::exception& e)
       {
          std::cout << "Erasing row: ";
          for(unsigned i = 0; i < data[row].size(); ++i)
          {
             std::cout << data[row][i] << " ";
          }
-         std::cout << "due to thrown exception\n";
+         std::cout << "due to thrown exception: " << e.what() << std::endl;
          data.erase(data.begin() + row);
          --row;
       }

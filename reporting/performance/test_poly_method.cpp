@@ -112,7 +112,7 @@ void test_poly_1(const boost::mpl::int_<N>&)
          result += boost::math::tools::detail::evaluate_polynomial_c_imp_1(denom, v[0] + i, static_cast<boost::mpl::int_<N>*>(0));
       return result;
    });
-   report_execution_time(time, std::string("Polynomial Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 1[br](Double Coefficients)");
+   report_execution_time(time, std::string("Polynomial Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 1[br](Double Coefficients)");
 
    time = exec_timed_test([](const std::vector<double>& v)
    {
@@ -121,7 +121,7 @@ void test_poly_1(const boost::mpl::int_<N>&)
          result += boost::math::tools::detail::evaluate_polynomial_c_imp_1(denom_int, v[0] + i, static_cast<boost::mpl::int_<N>*>(0));
       return result;
    });
-   report_execution_time(time, std::string("Polynomial Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 1[br](Integer Coefficients)");
+   report_execution_time(time, std::string("Polynomial Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 1[br](Integer Coefficients)");
 }
 
 
@@ -141,7 +141,7 @@ void test_poly_2(const boost::mpl::int_<N>&)
          result += boost::math::tools::detail::evaluate_polynomial_c_imp_2(denom, v[0] + i, static_cast<boost::mpl::int_<N>*>(0));
       return result;
    });
-   report_execution_time(time, std::string("Polynomial Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 2[br](Double Coefficients)");
+   report_execution_time(time, std::string("Polynomial Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 2[br](Double Coefficients)");
 
    time = exec_timed_test([](const std::vector<double>& v) 
    {  
@@ -150,7 +150,7 @@ void test_poly_2(const boost::mpl::int_<N>&)
          result += boost::math::tools::detail::evaluate_polynomial_c_imp_2(denom_int, v[0] + i, static_cast<boost::mpl::int_<N>*>(0)); 
       return result;
    });
-   report_execution_time(time, std::string("Polynomial Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 2[br](Integer Coefficients)");
+   report_execution_time(time, std::string("Polynomial Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 2[br](Integer Coefficients)");
 }
 
 void test_poly_3(const boost::mpl::int_<1>&)
@@ -167,14 +167,14 @@ void test_poly_3(const boost::mpl::int_<N>&)
       result += boost::math::tools::detail::evaluate_polynomial_c_imp_3(denom, v[0] + i, static_cast<boost::mpl::int_<N>*>(0)); 
    return result;
    });
-   report_execution_time(time, std::string("Polynomial Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 3[br](Double Coefficients)");
+   report_execution_time(time, std::string("Polynomial Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 3[br](Double Coefficients)");
 
    time = exec_timed_test([](const std::vector<double>& v) {  double result = 0;
    for (unsigned i = 0; i < 10; ++i)
       result += boost::math::tools::detail::evaluate_polynomial_c_imp_3(denom_int, v[0] + i, static_cast<boost::mpl::int_<N>*>(0)); 
    return result;
    });
-   report_execution_time(time, std::string("Polynomial Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 3[br](Integer Coefficients)");
+   report_execution_time(time, std::string("Polynomial Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 3[br](Integer Coefficients)");
 }
 
 template <class T, class U>
@@ -205,7 +205,7 @@ void test_rat_1(const boost::mpl::int_<N>&)
          result += boost::math::tools::detail::evaluate_rational_c_imp_1(num, denom, v[0] + i, static_cast<boost::mpl::int_<N>*>(0));
       return result;
    });
-   report_execution_time(time, std::string("Rational Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 1[br](Double Coefficients)");
+   report_execution_time(time, std::string("Rational Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 1[br](Double Coefficients)");
 
    time = exec_timed_test([](const std::vector<double>& v)
    {
@@ -214,7 +214,7 @@ void test_rat_1(const boost::mpl::int_<N>&)
          result += boost::math::tools::detail::evaluate_rational_c_imp_1(num, denom_int, v[0] + i, static_cast<boost::mpl::int_<N>*>(0));
       return result;
    });
-   report_execution_time(time, std::string("Rational Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 1[br](Integer Coefficients)");
+   report_execution_time(time, std::string("Rational Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 1[br](Integer Coefficients)");
 }
 
 void test_rat_2(const boost::mpl::int_<1>&)
@@ -233,7 +233,7 @@ void test_rat_2(const boost::mpl::int_<N>&)
          result += boost::math::tools::detail::evaluate_rational_c_imp_2(num, denom, v[0] + i, static_cast<boost::mpl::int_<N>*>(0));
       return result;
    });
-   report_execution_time(time, std::string("Rational Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 2[br](Double Coefficients)");
+   report_execution_time(time, std::string("Rational Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 2[br](Double Coefficients)");
 
    time = exec_timed_test([](const std::vector<double>& v)
    {
@@ -242,7 +242,7 @@ void test_rat_2(const boost::mpl::int_<N>&)
          result += boost::math::tools::detail::evaluate_rational_c_imp_2(num, denom_int, v[0] + i, static_cast<boost::mpl::int_<N>*>(0));
       return result;
    });
-   report_execution_time(time, std::string("Rational Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 2[br](Integer Coefficients)");
+   report_execution_time(time, std::string("Rational Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 2[br](Integer Coefficients)");
 }
 
 void test_rat_3(const boost::mpl::int_<1>&)
@@ -261,7 +261,7 @@ void test_rat_3(const boost::mpl::int_<N>&)
          result += boost::math::tools::detail::evaluate_rational_c_imp_3(num, denom, v[0] + i, static_cast<boost::mpl::int_<N>*>(0));
       return result;
    });
-   report_execution_time(time, std::string("Rational Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 3[br](Double Coefficients)");
+   report_execution_time(time, std::string("Rational Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 3[br](Double Coefficients)");
 
    time = exec_timed_test([](const std::vector<double>& v)
    {
@@ -270,7 +270,7 @@ void test_rat_3(const boost::mpl::int_<N>&)
          result += boost::math::tools::detail::evaluate_rational_c_imp_3(num, denom_int, v[0] + i, static_cast<boost::mpl::int_<N>*>(0));
       return result;
    });
-   report_execution_time(time, std::string("Rational Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(N), "Method 3[br](Integer Coefficients)");
+   report_execution_time(time, std::string("Rational Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(N), "Method 3[br](Integer Coefficients)");
 }
 
 template <class T, class U, class V>
@@ -326,7 +326,7 @@ int main()
             result += evaluate_polynomial_0(denom, v[0] + j, i);
          return result;
       });
-      report_execution_time(time, std::string("Polynomial Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(i), "Method 0[br](Double Coefficients)");
+      report_execution_time(time, std::string("Polynomial Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(i), "Method 0[br](Double Coefficients)");
 
       time = exec_timed_test([&](const std::vector<double>& v) {
          double result = 0;
@@ -334,7 +334,7 @@ int main()
             result += evaluate_polynomial_0(denom_int, v[0] + j, i);
          return result;
       });
-      report_execution_time(time, std::string("Polynomial Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(i), "Method 0[br](Integer Coefficients)");
+      report_execution_time(time, std::string("Polynomial Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(i), "Method 0[br](Integer Coefficients)");
    }
 
    test_poly_1(boost::mpl::int_<20>());
@@ -349,7 +349,7 @@ int main()
             result += evaluate_rational_0(num, denom, v[0] + j, i);
          return result;
       });
-      report_execution_time(time, std::string("Rational Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(i), "Method 0[br](Double Coefficients)");
+      report_execution_time(time, std::string("Rational Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(i), "Method 0[br](Double Coefficients)");
 
       time = exec_timed_test([&](const std::vector<double>& v) {
          double result = 0;
@@ -357,7 +357,7 @@ int main()
             result += evaluate_rational_0(num, denom_int, v[0] + j, i);
          return result;
       });
-      report_execution_time(time, std::string("Rational Method Comparison on ") + BOOST_PLATFORM, "Order " + make_order_string(i), "Method 0[br](Integer Coefficients)");
+      report_execution_time(time, std::string("Rational Method Comparison with ") + compiler_name() + std::string(" on ") + platform_name(), "Order " + make_order_string(i), "Method 0[br](Integer Coefficients)");
    }
 
    test_rat_1(boost::mpl::int_<20>());

@@ -183,14 +183,20 @@
 //
 #ifdef BOOST_MSVC
 #  define BOOST_MATH_POLY_METHOD 2
+#  define BOOST_MATH_RATIONAL_METHOD 1
 #elif defined(BOOST_INTEL)
 #  define BOOST_MATH_POLY_METHOD 2
-#  define BOOST_MATH_RATIONAL_METHOD 2
+#  define BOOST_MATH_RATIONAL_METHOD 1
 #elif defined(__GNUC__)
+#if __GNUC__ < 4
 #  define BOOST_MATH_POLY_METHOD 3
 #  define BOOST_MATH_RATIONAL_METHOD 3
 #  define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
 #  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##.0L
+#else
+#  define BOOST_MATH_POLY_METHOD 3
+#  define BOOST_MATH_RATIONAL_METHOD 1
+#endif
 #endif
 
 #if defined(BOOST_NO_LONG_LONG) && !defined(BOOST_MATH_INT_TABLE_TYPE)
@@ -203,16 +209,16 @@
 // via an unrolled specialisation:
 //
 #ifndef BOOST_MATH_MAX_POLY_ORDER
-#  define BOOST_MATH_MAX_POLY_ORDER 17
+#  define BOOST_MATH_MAX_POLY_ORDER 20
 #endif 
 //
 // Set the method used to evaluate polynomials and rationals:
 //
 #ifndef BOOST_MATH_POLY_METHOD
-#  define BOOST_MATH_POLY_METHOD 1
+#  define BOOST_MATH_POLY_METHOD 2
 #endif 
 #ifndef BOOST_MATH_RATIONAL_METHOD
-#  define BOOST_MATH_RATIONAL_METHOD 0
+#  define BOOST_MATH_RATIONAL_METHOD 1
 #endif 
 //
 // decide whether to store constants as integers or reals:

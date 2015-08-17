@@ -107,7 +107,7 @@ rule all-tests {
         [ check-target-builds ../accuracy//has_libstdcxx_tr1 : <define>TEST_LIBSTDCXX ] 
         [ check-target-builds ../accuracy//has_gsl : <define>TEST_GSL <source>gsl <source>gslcblas ]
         [ check-target-builds ../accuracy//has_rmath : <define>TEST_RMATH <source>Rmath ]
-        [ check-target-builds is_intel_win : <build>no : ]
+       # [ check-target-builds is_intel_win : <build>no : ]
         [ check-target-builds $(here)/third_party/dcdflib/dcdflib.c : <define>TEST_DCDFLIB <source>dcdflib : <build>no ]
         <target-os>linux:<linkflags>-lpthread <target-os>linux:<linkflags>-lrt
         #<toolset>msvc:<address-model>64

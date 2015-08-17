@@ -98,6 +98,7 @@ public:
    template <class F>
    void run_timed_tests(F f, std::string sub_name, std::string column, bool p_value = false, int where = main_table)
    {
+      std::cout << "Testing " << distro_name + " (" + std::string(sub_name) + ")" << " with library " << column << std::endl;
       try{
          double t = 0;
          unsigned repeats = 1;
@@ -124,8 +125,8 @@ public:
                repeats *= 2;
          } while(t < 0.5);
 
-         static const std::string main_table_name = std::string("Distribution performance comparison with ") + BOOST_COMPILER + std::string(" on ") + BOOST_PLATFORM;
-         static const std::string boost_table_name = std::string("Distribution performance comparison with for different performance options with ") + BOOST_COMPILER + std::string(" on ") + BOOST_PLATFORM;
+         static const std::string main_table_name = std::string("Distribution performance comparison with ") + compiler_name() + std::string(" on ") + platform_name();
+         static const std::string boost_table_name = std::string("Distribution performance comparison with for different performance options with ") + compiler_name() + std::string(" on ") + platform_name();
 
          if (where & 1)
          {
@@ -150,7 +151,7 @@ public:
          std::cerr << "In " << distro_name + " (" + std::string(sub_name) + ")" << std::endl;
          report_execution_time(
             std::numeric_limits<boost::uintmax_t>::max(),
-            std::string("Distribution performance comparison with ") + BOOST_COMPILER + std::string(" on ") + BOOST_PLATFORM,
+            std::string("Distribution performance comparison with ") + compiler_name() + std::string(" on ") + platform_name(),
             distro_name + " (" + std::string(sub_name) + ")",
             column);
       }
@@ -430,10 +431,10 @@ int main()
       test_boost_2_param<boost::math::inverse_gamma_distribution>(inverse_gamma);
 
       distribution_tester inverse_gaussian("InverseGaussian");
-      inverse_gaussian.add_test_case(0, 1, two_param_quantile<boost::math::inverse_gaussian_distribution<> >());
+      inverse_gaussian.add_test_case(0.001, 1, two_param_quantile<boost::math::inverse_gaussian_distribution<> >());
       inverse_gaussian.add_test_case(20, 20, two_param_quantile<boost::math::inverse_gaussian_distribution<> >());
 
-      test_boost_2_param<boost::math::normal_distribution>(inverse_gaussian);
+      test_boost_2_param<boost::math::inverse_gaussian_distribution>(inverse_gaussian);
 
       distribution_tester laplace("Laplace");
       laplace.add_test_case(0, 1, two_param_quantile<boost::math::laplace_distribution<> >());

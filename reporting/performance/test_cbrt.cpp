@@ -17,11 +17,6 @@
 
 int main()
 {
-#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_C99) && !defined(TEST_LIBSTDCXX)
-   // we have nothing to compare against, just bail out:
-   return 0;
-#endif
-
    typedef double T;
 #define SC_(x) static_cast<double>(x)
 #  include "../../test/cbrt_data.ipp"
@@ -41,13 +36,17 @@ int main()
 
    unsigned data_used = data.size();
    std::string function = "cbrt[br](" + boost::lexical_cast<std::string>(data_used) + "/" + boost::lexical_cast<std::string>(data_total) + " tests selected)";
+   std::string function_short = "cbrt";
 
    double time = exec_timed_test([](const std::vector<double>& v){  return boost::math::cbrt(v[1]);  });
    std::cout << time << std::endl;
 #if defined(COMPILER_COMPARISON_TABLES)
-   report_execution_time(time, std::string("Compiler Option Comparison on ") + BOOST_PLATFORM, "boost::math::cbrt", get_compiler_options_name());
+   report_execution_time(time, std::string("Compiler Option Comparison on ") + platform_name(), "boost::math::cbrt", get_compiler_options_name());
 #else
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, boost_name());
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_RMATH)
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(compiler_name()) + std::string(" on ") + platform_name(), function, boost_name());
+#endif
+   report_execution_time(time, std::string("Compiler Comparison on ") + std::string(platform_name()), function_short, compiler_name() + std::string("[br]") + boost_name());
 #endif
    //
    // Boost again, but with promotion to long double turned off:
@@ -57,7 +56,10 @@ int main()
    {
       double time = exec_timed_test([](const std::vector<double>& v){  return boost::math::cbrt(v[1], boost::math::policies::make_policy(boost::math::policies::promote_double<false>()));  });
       std::cout << time << std::endl;
-      report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, boost_name() + "[br]promote_double<false>");
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_RMATH)
+      report_execution_time(time, std::string("Library Comparison with ") + std::string(compiler_name()) + std::string(" on ") + platform_name(), function, boost_name() + "[br]promote_double<false>");
+#endif
+      report_execution_time(time, std::string("Compiler Comparison on ") + std::string(platform_name()), function_short, compiler_name() + std::string("[br]") + boost_name() + "[br]promote_double<false>");
    }
 #endif
 
@@ -65,12 +67,12 @@ int main()
 #if defined(TEST_C99) && !defined(COMPILER_COMPARISON_TABLES)
    time = exec_timed_test([](const std::vector<double>& v){  return ::cbrt(v[1]);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "math.h");
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(compiler_name()) + std::string(" on ") + platform_name(), function, "math.h");
 #endif
 #if defined(TEST_LIBSTDCXX) && !defined(COMPILER_COMPARISON_TABLES)
    time = exec_timed_test([](const std::vector<double>& v){  return std::tr1::cbrt(v[1]);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "tr1/cmath");
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(compiler_name()) + std::string(" on ") + platform_name(), function, "tr1/cmath");
 #endif
 
 

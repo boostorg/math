@@ -141,7 +141,7 @@ void add_to_all_sections(const std::string& id, std::string list_name)
       //
       static const boost::regex item_e(
          "\\["
-         "([^\\[\\]]*(?0)?)*"
+         "((?=[^\\]])[^\\[\\]]*+(?0)?+)*+"
          "\\]|\\]"
          );
       boost::regex_token_iterator<std::string::const_iterator> i(content.begin() + pos + 12 + list_name.size(), content.end(), item_e), j;
@@ -193,10 +193,10 @@ void add_cell(boost::intmax_t val, const std::string& table_name, const std::str
    //
    std::string table_id = "table_" + sanitize_string(table_name);
    boost::regex table_e("\\[table:" + table_id
-      + "\\s[^\\[]+"
+      + "\\s[^\\[]++"
       "((\\["
-      "([^\\[\\]]*(?2)?)*"
-      "\\]\\s*)*\\s*)"
+      "([^\\[\\]]*+(?2)?+)*+"
+      "\\]\\s*+)*+\\s*+)"
       "\\]"
       );
 

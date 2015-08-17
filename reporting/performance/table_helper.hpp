@@ -308,5 +308,23 @@ inline std::string boost_name()
    return "boost " + boost::lexical_cast<std::string>(BOOST_VERSION / 100000) + "." + boost::lexical_cast<std::string>((BOOST_VERSION / 100) % 1000);
 }
 
+inline std::string compiler_name()
+{
+#ifdef COMPILER_NAME
+   return COMPILER_NAME;
+#else
+   return BOOST_COMPILER;
+#endif
+}
+
+inline std::string platform_name()
+{
+#ifdef _WIN32
+   return "Windows x64";
+#else
+   return BOOST_PLATFORM;
+#endif
+}
+
 #endif // TABLE_HELPER_HPP
 

@@ -20,11 +20,6 @@ typedef double T;
 
 int main()
 {
-#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_LIBSTDCXX)
-   // we have nothing to compare against, just bail out:
-   return 0;
-#endif
-
 #include "sph_neumann_data.ipp"
 
    add_data(sph_neumann_data);
@@ -43,12 +38,16 @@ int main()
 
    unsigned data_used = data.size();
    std::string function = "sph_neumann[br](" + boost::lexical_cast<std::string>(data_used) + "/" + boost::lexical_cast<std::string>(data_total) + " tests selected)";
+   std::string function_short = "sph_neumann";
 
    double time;
 
    time = exec_timed_test([](const std::vector<double>& v){  return boost::math::sph_neumann(static_cast<int>(v[0]), v[1]);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, boost_name());
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_RMATH)
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(compiler_name()) + std::string(" on ") + platform_name(), function, boost_name());
+#endif
+   report_execution_time(time, std::string("Compiler Comparison on ") + std::string(platform_name()), function_short, compiler_name() + std::string("[br]") + boost_name());
    //
    // Boost again, but with promotion to long double turned off:
    //
@@ -57,7 +56,10 @@ int main()
    {
       time = exec_timed_test([](const std::vector<double>& v){  return boost::math::sph_neumann(static_cast<int>(v[0]), v[1], boost::math::policies::make_policy(boost::math::policies::promote_double<false>()));  });
       std::cout << time << std::endl;
-      report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, boost_name() + "[br]promote_double<false>");
+#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_RMATH)
+      report_execution_time(time, std::string("Library Comparison with ") + std::string(compiler_name()) + std::string(" on ") + platform_name(), function, boost_name() + "[br]promote_double<false>");
+#endif
+      report_execution_time(time, std::string("Compiler Comparison on ") + std::string(platform_name()), function_short, compiler_name() + std::string("[br]") + boost_name() + "[br]promote_double<false>");
    }
 #endif
 
@@ -65,12 +67,12 @@ int main()
 #if defined(TEST_LIBSTDCXX) && !defined(COMPILER_COMPARISON_TABLES)
    time = exec_timed_test([](const std::vector<double>& v){  return std::tr1::sph_neumann(static_cast<int>(v[0]), v[1]);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "tr1/cmath");
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(compiler_name()) + std::string(" on ") + platform_name(), function, "tr1/cmath");
 #endif
 #if defined(TEST_GSL) && !defined(COMPILER_COMPARISON_TABLES)
    time = exec_timed_test([](const std::vector<double>& v){  return gsl_sf_bessel_yl(static_cast<int>(v[0]), v[1]);  });
    std::cout << time << std::endl;
-   report_execution_time(time, std::string("Library Comparison with ") + std::string(BOOST_COMPILER) + std::string(" on ") + BOOST_PLATFORM, function, "GSL " GSL_VERSION);
+   report_execution_time(time, std::string("Library Comparison with ") + std::string(compiler_name()) + std::string(" on ") + platform_name(), function, "GSL " GSL_VERSION);
 #endif
 
    return 0;
