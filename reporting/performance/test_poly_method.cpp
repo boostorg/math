@@ -15,6 +15,7 @@
 #include <iostream>
 
 #define evaluate_polynomial_c_imp evaluate_polynomial_c_imp_1
+#undef BOOST_MATH_TOOLS_POLY_EVAL_20_HPP
 #include <boost/math/tools/detail/polynomial_horner1_20.hpp>
 #undef evaluate_polynomial_c_imp
 #undef BOOST_MATH_TOOLS_POLY_EVAL_20_HPP
@@ -26,6 +27,7 @@
 #include <boost/math/tools/detail/polynomial_horner3_20.hpp>
 #undef evaluate_polynomial_c_imp
 
+#undef BOOST_MATH_TOOLS_POLY_RAT_20_HPP
 #define evaluate_rational_c_imp evaluate_rational_c_imp_1
 #include <boost/math/tools/detail/rational_horner1_20.hpp>
 #undef evaluate_rational_c_imp
