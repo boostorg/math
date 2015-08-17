@@ -113,7 +113,7 @@ public:
                {
                   for(unsigned j = 0; j < tests[i].x_values.size(); ++j)
                   {
-                     if(boost::math::isfinite(tests[i].x_values[j]))
+                     if((boost::math::isfinite)(tests[i].x_values[j]))
                         sum += f(tests[i].params, p_value ? quantiles[j] : tests[i].x_values[j]);
                      ++data_size;
                   }
