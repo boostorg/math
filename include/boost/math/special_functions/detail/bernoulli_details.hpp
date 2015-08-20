@@ -452,7 +452,7 @@ public:
          tangent_numbers_series(new_size);
       }
 
-      for(std::size_t i = (std::max)(max_bernoulli_b2n<T>::value + 1, start); i < start + n; ++i)
+      for(std::size_t i = (std::max)(std::size_t(max_bernoulli_b2n<T>::value + 1), start); i < start + n; ++i)
       {
          *out = (i >= m_overflow_limit) ? policies::raise_overflow_error<T>("boost::math::bernoulli_b2n<%1%>(std::size_t)", 0, T(i), pol) : bn[i];
          ++out;
