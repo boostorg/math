@@ -112,7 +112,7 @@ For the "accurate" version of tgamma, and:
 
 For the faster version.
 
-Had we wished to change the target precision (to 10 decimal places) as well as the evaluation type used, we might have done:
+Had we wished to change the target precision (to 9 decimal places) as well as the evaluation type used, we might have done:
 
    namespace math{
    namespace fast{
@@ -120,7 +120,7 @@ Had we wished to change the target precision (to 10 decimal places) as well as t
    // Define a Policy for fast evaluation:
    //
    using namespace boost::math::polcies;
-   typedef policy<promote_double<false>, digits10<10> > fast_policy;
+   typedef policy<promote_double<false>, digits10<9> > fast_policy;
    //
    // Invoke BOOST_MATH_DECLARE_SPECIAL_FUNCTIONS:
    //

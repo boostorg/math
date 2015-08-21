@@ -126,7 +126,7 @@ public:
          } while(t < 0.5);
 
          static const std::string main_table_name = std::string("Distribution performance comparison with ") + compiler_name() + std::string(" on ") + platform_name();
-         static const std::string boost_table_name = std::string("Distribution performance comparison with for different performance options with ") + compiler_name() + std::string(" on ") + platform_name();
+         static const std::string boost_table_name = std::string("Distribution performance comparison for different performance options with ") + compiler_name() + std::string(" on ") + platform_name();
 
          if (where & 1)
          {
