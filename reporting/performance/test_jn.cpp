@@ -120,7 +120,7 @@ int main()
 #if defined(COMPILER_COMPARISON_TABLES)
    report_execution_time(time, std::string("Compiler Option Comparison on ") + platform_name(), "boost::math::cyl_bessel_j (integer orders)", get_compiler_options_name());
 #else
-#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_RMATH)
+#if !defined(COMPILER_COMPARISON_TABLES) && (defined(TEST_GSL) || defined(TEST_RMATH) || defined(TEST_C99) || defined(TEST_LIBSTDCXX))
    report_execution_time(time, std::string("Library Comparison with ") + std::string(compiler_name()) + std::string(" on ") + platform_name(), function, boost_name());
 #endif
    report_execution_time(time, std::string("Compiler Comparison on ") + std::string(platform_name()), function_short, compiler_name() + std::string("[br]") + boost_name());
@@ -133,7 +133,7 @@ int main()
    {
       time = exec_timed_test([](const std::vector<double>& v){  return boost::math::cyl_bessel_j(static_cast<int>(v[0]), v[1], boost::math::policies::make_policy(boost::math::policies::promote_double<false>()));  });
       std::cout << time << std::endl;
-#if !defined(COMPILER_COMPARISON_TABLES) && !defined(TEST_GSL) && !defined(TEST_RMATH)
+#if !defined(COMPILER_COMPARISON_TABLES) && (defined(TEST_GSL) || defined(TEST_RMATH) || defined(TEST_C99) || defined(TEST_LIBSTDCXX))
       report_execution_time(time, std::string("Library Comparison with ") + std::string(compiler_name()) + std::string(" on ") + platform_name(), function, boost_name() + "[br]promote_double<false>");
 #endif
       report_execution_time(time, std::string("Compiler Comparison on ") + std::string(platform_name()), function_short, compiler_name() + std::string("[br]") + boost_name() + "[br]promote_double<false>");
