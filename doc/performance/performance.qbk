@@ -38,17 +38,17 @@ all the appropriate corner cases.  They do not necessarily represent
 By far the most important thing you can do when using this library
 is turn on your compiler's optimisation options.  As the following
 table shows the penalty for using the library in debug mode can be
-quite large.  In addition switching to 64-bit code has a small but noticable
+quite large.  In addition switching to 64-bit code has a small but noticeable
 improvement in performance, as does switching to a different compiler 
 (Intel C++ 15 in this example).
 
-[table_Compiler_Option_Comparison_on_Win32]
+[table_Compiler_Option_Comparison_on_Windows_x64]
 
 [endsect]
 
 [section:tradoffs Trading Accuracy for Performance]
 
-There are a number of __policies that can be used to trade accuracy for performance:
+There are a number of [link policy Policies] that can be used to trade accuracy for performance:
 
 * Internal promotion: by default functions with `float` arguments are evaluated at `double` precision
 internally to ensure full precision in the result.  Similarly `double` precision functions are
@@ -153,7 +153,7 @@ One can do a similar thing with the distribution classes:
 
 Here's how these options change the relative performance of the distributions on Linux:
 
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
+[table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
 
 [endsect]
 
@@ -242,17 +242,17 @@ the following tables show the results for MSVC-14.0 and GCC-5.1.0 (Linux).  Ther
 the various methods, but generally loop-unrolled methods perform better.  Interestingly, ordering the code
 to try and "second guess" possible optimizations seems not to be such a good idea (method 3 below).
 
-[table_Polynomial_Method_Comparison_on_Win32]
+[table_Polynomial_Method_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
 
-[table_Rational_Method_Comparison_on_Win32]
+[table_Rational_Method_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
 
-[table_Polynomial_Method_Comparison_on_linux]
+[table_Polynomial_Method_Comparison_with_GNU_C_version_5_1_0_on_linux]
 
-[table_Rational_Method_Comparison_on_linux]
+[table_Rational_Method_Comparison_with_GNU_C_version_5_1_0_on_linux]
 
 [endsect]
 
-[section:compilers Comparing Different Compilers]
+[section:comp_compilers Comparing Different Compilers]
 
 By running our performance test suite multiple times, we can compare the effect of different compilers: as
 might be expected, the differences are generally small compared to say disabling internal use of `long double`.
@@ -285,30 +285,65 @@ numerical stability.
 
 The first results compare standard library functions to Boost equivalents with MSVC-14.0:
 
-[Library_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[table_Library_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
 
 On Linux with GCC, we can also compare to the TR1 functions, and to GSL and RMath:
 
+[table_Library_Comparison_with_GNU_C_version_5_1_0_on_linux]
 
+And finally we can compare the statistical distributions to GSL, RMath and DCDFLIB:
+
+[table_Distribution_performance_comparison_with_GNU_C_version_5_1_0_on_linux]
 
 [endsect]
 
-[section:perf_test_app The Performance Test Application]
+[section:perf_test_app The Performance Test Applications]
 
-Under ['boost-path]\/libs\/math\/performance you will find a
-(fairly rudimentary) performance test application for this library.
+Under ['boost-path]\/libs\/math\/reporting\/performance you will find 
+some reasonable comprehensive performance test applications for this library.
 
-To run this application yourself, build the all the .cpp files in
-['boost-path]\/libs\/math\/performance into an application using
-your usual release-build settings.  Run the application with --help
-to see a full list of options, or with --all to test everything
-(which takes quite a while), or with --tune to test the
-[link math_toolkit.tuning available performance tuning options].
+In order to generate the tables you will have seen in this documentation (or others
+for your specific compiler) you need to invoke `bjam` in this directory, using a C++11
+capable compiler.  Note that
+results extend/overwrite whatever is already present in
+['boost-path]\/libs\/math\/reporting\/performance\/doc\/performance_tables.qbk, 
+you may want to delete this file before you begin so as to make a fresh start for
+your particular system.
 
-If you want to use this application to test the effect of changing
-any of the __policy_section, then you will need to build and run it twice:
-once with the default __policy_section, and then a second time with the
-__policy_section you want to test set as the default.
+The programs produce results in Boost's Quickbook format which is not terribly
+human readable.  If you configure your user-config.jam to be able to build Docbook
+documentation, then you will also get a full summary of all the data in HTML format
+in ['boost-path]\/libs\/math\/reporting\/performance\/html\/index.html.  Assuming
+you're on a 'nix-like platform the procedure to do this is to first install the
+`xsltproc`, `Docbook DTD`, and `Bookbook XSL` packages.  Then:
+
+* Copy ['boost-path]\/tools\/build\/example\/user-config.jam to your home directory.
+* Add `using xsltproc ;` to the end of the file (note the space surrounding each token, including the final ";", this is important!)
+This assumes that `xsltproc` is in your path.
+* Add `using boostbook : path-to-xsl-stylesheets : path-to-dtd ;` to the end of the file.  The `path-to-dtd` should point
+to version 4.2.x of the Docbook DTD, while `path-to-xsl-stylesheets` should point to the folder containing the latest XSLT stylesheets.
+Both paths should use all forward slashes even on Windows.
+
+At this point you should be able to run the tests and generate the HTML summary, if GSL, RMath or libstdc++ are
+present in the compilers path they will be automatically tested.  For DCDFLIB you will need to place the C
+source in ['boost-path]\/libs\/math\/reporting\/performance\/third_party\/dcdflib.
+
+If you want to compare multiple compilers, or multiple options for one compiler, then you will
+need to invoke `bjam` multiple times, once for each compiler.  Note that in order to test
+multiple configurations of the same compiler, each has to be given a unique name in the test
+program, otherwise they all edit the same table cells.  Suppose you want to test GCC with 
+and without the -ffast-math option, in this case bjam would be invoked first as:
+
+   bjam toolset=gcc -a cxxflags=-std=gnu++11
+
+Which would run the tests using default optimization options (-O3), we can then run again
+using -ffast-math:
+
+   bjam toolset=gcc -a cxxflags='-std=gnu++11 -ffast-math' define=COMPILER_NAME='"GCC with -ffast-math"'
+
+In the command line above, the -a flag forces a full rebuild, and the preprocessor define COMPILER_NAME needs to be set
+to a string literal describing the compiler configuration, hence the double quotes - one for the command line, one for the
+compiler.
 
 [endsect]
 
