@@ -254,7 +254,7 @@ to try and "second guess" possible optimizations seems not to be such a good ide
 
 [section:compilers Comparing Different Compilers]
 
-By running our performance test suite multiple times, we can compare the effect of different compilers, as
+By running our performance test suite multiple times, we can compare the effect of different compilers: as
 might be expected, the differences are generally small compared to say disabling internal use of `long double`.
 However, there are still gains to be main, particularly from some of the commercial offerings:
 
@@ -286,6 +286,10 @@ numerical stability.
 The first results compare standard library functions to Boost equivalents with MSVC-14.0:
 
 [Library_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+
+On Linux with GCC, we can also compare to the TR1 functions, and to GSL and RMath:
+
+
 
 [endsect]
 

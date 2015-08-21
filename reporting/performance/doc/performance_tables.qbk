@@ -51,8 +51,8 @@
 ]
 ]
 
-[template table_Distribution_performance_comparison_with_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux[]
-[table:table_Distribution_performance_comparison_with_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux Distribution performance comparison with for different performance options with Clang version 3.7.0 (trunk 236512) on linux
+[template table_Distribution_performance_comparison_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux[]
+[table:table_Distribution_performance_comparison_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux Distribution performance comparison for different performance options with Clang version 3.7.0 (trunk 236512) on linux
 [[Function][boost 1.59][Boost[br]promote_double<false>][Boost[br]promote_double<false>[br]digits10<10>][Boost[br]float[br]promote_float<false>]]
 [[ArcSine (CDF)][[role blue 1.55[br](51ns)]][[role blue 1.52[br](50ns)]][[role blue 1.55[br](51ns)]][[role green 1.00[br](33ns)]]]
 [[ArcSine (PDF)][[role green 1.05[br](20ns)]][[role green 1.00[br](19ns)]][[role green 1.00[br](19ns)]][[role green 1.00[br](19ns)]]]
@@ -345,8 +345,8 @@
 ]
 ]
 
-[template table_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux[]
-[table:table_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux Distribution performance comparison with for different performance options with Intel C++ C++0x mode version 1500 on linux
+[template table_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux[]
+[table:table_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux Distribution performance comparison for different performance options with Intel C++ C++0x mode version 1500 on linux
 [[Function][boost 1.59][Boost[br]promote_double<false>][Boost[br]promote_double<false>[br]digits10<10>][Boost[br]float[br]promote_float<false>]]
 [[ArcSine (CDF)][[role blue 1.35[br](35ns)]][[role blue 1.38[br](36ns)]][[role blue 1.35[br](35ns)]][[role green 1.00[br](26ns)]]]
 [[ArcSine (PDF)][[role green 1.07[br](15ns)]][[role green 1.00[br](14ns)]][[role green 1.07[br](15ns)]][[role green 1.00[br](14ns)]]]
@@ -639,8 +639,8 @@
 ]
 ]
 
-[template table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux[]
-[table:table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux Distribution performance comparison with for different performance options with GNU C++ version 5.1.0 on linux
+[template table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux[]
+[table:table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux Distribution performance comparison for different performance options with GNU C++ version 5.1.0 on linux
 [[Function][boost 1.59][Boost[br]promote_double<false>][Boost[br]promote_double<false>[br]digits10<10>][Boost[br]float[br]promote_float<false>]]
 [[ArcSine (CDF)][[role red 2.11[br](38ns)]][[role red 2.11[br](38ns)]][[role red 2.11[br](38ns)]][[role green 1.00[br](18ns)]]]
 [[ArcSine (PDF)][[role green 1.12[br](9ns)]][[role green 1.12[br](9ns)]][[role green 1.12[br](9ns)]][[role green 1.00[br](8ns)]]]
@@ -991,8 +991,8 @@
 ]
 ]
 
-[template table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64[]
-[table:table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64 Distribution performance comparison with for different performance options with GNU C++ version 4.9.2 on Windows x64
+[template table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64[]
+[table:table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64 Distribution performance comparison for different performance options with GNU C++ version 4.9.2 on Windows x64
 [[Function][boost 1.59][Boost[br]promote_double<false>][Boost[br]promote_double<false>[br]digits10<10>][Boost[br]float[br]promote_float<false>]]
 [[ArcSine (CDF)][[role green 1.00[br](34ns)]][[role green 1.00[br](34ns)]][[role green 1.00[br](34ns)]][[role blue 1.79[br](61ns)]]]
 [[ArcSine (PDF)][[role blue 1.29[br](9ns)]][[role blue 1.29[br](9ns)]][[role blue 1.29[br](9ns)]][[role green 1.00[br](7ns)]]]
@@ -1263,8 +1263,8 @@
 ]
 ]
 
-[template table_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64[]
-[table:table_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64 Distribution performance comparison with for different performance options with Intel C++ C++0x mode version 1500 on Windows x64
+[template table_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64[]
+[table:table_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64 Distribution performance comparison for different performance options with Intel C++ C++0x mode version 1500 on Windows x64
 [[Function][boost 1.59][Boost[br]promote_double<false>[br]digits10<10>][Boost[br]float[br]promote_float<false>]]
 [[ArcSine (CDF)][[role blue 1.40[br](35ns)]][[role blue 1.44[br](36ns)]][[role green 1.00[br](25ns)]]]
 [[ArcSine (PDF)][[role green 1.07[br](15ns)]][[role green 1.14[br](16ns)]][[role green 1.00[br](14ns)]]]
@@ -1523,8 +1523,8 @@
 ]
 ]
 
-[template table_Distribution_performance_comparison_with_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64[]
-[table:table_Distribution_performance_comparison_with_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64 Distribution performance comparison with for different performance options with Microsoft Visual C++ version 14.0 on Windows x64
+[template table_Distribution_performance_comparison_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64[]
+[table:table_Distribution_performance_comparison_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64 Distribution performance comparison for different performance options with Microsoft Visual C++ version 14.0 on Windows x64
 [[Function][boost 1.59][Boost[br]promote_double<false>[br]digits10<10>][Boost[br]float[br]promote_float<false>]]
 [[ArcSine (CDF)][[role blue 1.48[br](40ns)]][[role blue 1.44[br](39ns)]][[role green 1.00[br](27ns)]]]
 [[ArcSine (PDF)][[role green 1.07[br](16ns)]][[role green 1.00[br](15ns)]][[role green 1.00[br](15ns)]]]
@@ -1797,9 +1797,9 @@
 [endsect]
 ]
 
-[template section_Distribution_performance_comparison_with_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux[]
-[section:section_Distribution_performance_comparison_with_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux Distribution performance comparison with for different performance options with Clang version 3.7.0 (trunk 236512) on linux]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux]
+[template section_Distribution_performance_comparison_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux[]
+[section:section_Distribution_performance_comparison_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux Distribution performance comparison for different performance options with Clang version 3.7.0 (trunk 236512) on linux]
+[table_Distribution_performance_comparison_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux]
 [endsect]
 ]
 
@@ -1827,9 +1827,9 @@
 [endsect]
 ]
 
-[template section_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux[]
-[section:section_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux Distribution performance comparison with for different performance options with Intel C++ C++0x mode version 1500 on linux]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux]
+[template section_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux[]
+[section:section_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux Distribution performance comparison for different performance options with Intel C++ C++0x mode version 1500 on linux]
+[table_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux]
 [endsect]
 ]
 
@@ -1857,9 +1857,9 @@
 [endsect]
 ]
 
-[template section_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux[]
-[section:section_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux Distribution performance comparison with for different performance options with GNU C++ version 5.1.0 on linux]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
+[template section_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux[]
+[section:section_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux Distribution performance comparison for different performance options with GNU C++ version 5.1.0 on linux]
+[table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
 [endsect]
 ]
 
@@ -1893,9 +1893,9 @@
 [endsect]
 ]
 
-[template section_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64[]
-[section:section_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64 Distribution performance comparison with for different performance options with GNU C++ version 4.9.2 on Windows x64]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64]
+[template section_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64[]
+[section:section_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64 Distribution performance comparison for different performance options with GNU C++ version 4.9.2 on Windows x64]
+[table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64]
 [endsect]
 ]
 
@@ -1923,9 +1923,9 @@
 [endsect]
 ]
 
-[template section_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64[]
-[section:section_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64 Distribution performance comparison with for different performance options with Intel C++ C++0x mode version 1500 on Windows x64]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64]
+[template section_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64[]
+[section:section_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64 Distribution performance comparison for different performance options with Intel C++ C++0x mode version 1500 on Windows x64]
+[table_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64]
 [endsect]
 ]
 
@@ -1959,9 +1959,9 @@
 [endsect]
 ]
 
-[template section_Distribution_performance_comparison_with_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64[]
-[section:section_Distribution_performance_comparison_with_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64 Distribution performance comparison with for different performance options with Microsoft Visual C++ version 14.0 on Windows x64]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[template section_Distribution_performance_comparison_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64[]
+[section:section_Distribution_performance_comparison_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64 Distribution performance comparison for different performance options with Microsoft Visual C++ version 14.0 on Windows x64]
+[table_Distribution_performance_comparison_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
 [endsect]
 ]
 
@@ -1994,12 +1994,12 @@
 [section_Distribution_performance_comparison_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64]
 [section_Distribution_performance_comparison_with_Intel_C_C_0x_mode_version_1500_on_linux]
 [section_Distribution_performance_comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
-[section_Distribution_performance_comparison_with_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux]
-[section_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64]
-[section_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
-[section_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64]
-[section_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux]
-[section_Distribution_performance_comparison_with_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[section_Distribution_performance_comparison_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux]
+[section_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64]
+[section_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
+[section_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64]
+[section_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux]
+[section_Distribution_performance_comparison_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
 [section_Library_Comparison_with_Clang_version_3_7_0_trunk_236512_on_linux]
 [section_Library_Comparison_with_GNU_C_version_4_9_2_on_Windows_x64]
 [section_Library_Comparison_with_GNU_C_version_5_1_0_on_linux]
@@ -2030,12 +2030,12 @@
 [table_Distribution_performance_comparison_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64]
 [table_Distribution_performance_comparison_with_Intel_C_C_0x_mode_version_1500_on_linux]
 [table_Distribution_performance_comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux]
-[table_Distribution_performance_comparison_with_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[table_Distribution_performance_comparison_for_different_performance_options_with_Clang_version_3_7_0_trunk_236512_on_linux]
+[table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_4_9_2_on_Windows_x64]
+[table_Distribution_performance_comparison_for_different_performance_options_with_GNU_C_version_5_1_0_on_linux]
+[table_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_Windows_x64]
+[table_Distribution_performance_comparison_for_different_performance_options_with_Intel_C_C_0x_mode_version_1500_on_linux]
+[table_Distribution_performance_comparison_for_different_performance_options_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
 [table_Library_Comparison_with_Clang_version_3_7_0_trunk_236512_on_linux]
 [table_Library_Comparison_with_GNU_C_version_4_9_2_on_Windows_x64]
 [table_Library_Comparison_with_GNU_C_version_5_1_0_on_linux]
