@@ -33,9 +33,9 @@ namespace boost{ namespace math{
 namespace tools{
 
 template <class T>
-int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T));
+BOOST_CONSTEXPR int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_NOEXCEPT;
 template <class T>
-T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T));
+BOOST_CONSTEXPR T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T);
 
 }
 

@@ -205,6 +205,24 @@
 #endif
 
 //
+// noexcept support:
+//
+#ifndef BOOST_NO_CXX11_NOEXCEPT
+#ifndef BOOST_NO_CXX11_HDR_TYPE_TRAITS
+#include <type_traits>
+#  define BOOST_MATH_NOEXCEPT(T) noexcept(std::is_floating_point<T>::value)
+#  define BOOST_MATH_IS_FLOAT(T) (std::is_floating_point<T>::value)
+#else
+#include <boost/type_traits/is_floating_point.hpp>
+#  define BOOST_MATH_NOEXCEPT(T) noexcept(boost::is_floating_point<T>::value)
+#  define BOOST_MATH_IS_FLOAT(T) (boost::is_floating_point<T>::value)
+#endif
+#else
+#  define BOOST_MATH_NOEXCEPT(T)
+#  define BOOST_MATH_IS_FLOAT(T) false
+#endif
+
+//
 // The maximum order of polynomial that will be evaluated 
 // via an unrolled specialisation:
 //
@@ -302,13 +320,13 @@ namespace tools
 {
 
 template <class T>
-inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c)
+inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c) BOOST_MATH_NOEXCEPT(T)
 {
    return (std::max)((std::max)(a, b), c);
 }
 
 template <class T>
-inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
+inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d) BOOST_MATH_NOEXCEPT(T)
 {
    return (std::max)((std::max)(a, b), (std::max)(c, d));
 }
@@ -316,7 +334,7 @@ inline T max BOOST_PREVENT_MACRO_SUBSTITUTION(T a, T b, T c, T d)
 } // namespace tools
 
 template <class T>
-void suppress_unused_variable_warning(const T&)
+void suppress_unused_variable_warning(const T&) BOOST_MATH_NOEXCEPT(T)
 {
 }
 
