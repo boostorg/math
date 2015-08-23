@@ -16,6 +16,9 @@
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
+#include <iostream>
+#include <iomanip>
+
 #define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
       {\
       unsigned int failures = boost::unit_test::results_collector.results( boost::unit_test::framework::current_test_case().p_id ).p_assertions_failed;\
@@ -121,7 +124,7 @@ void test_spots(RealType)
    if(boost::is_floating_point<RealType>::value != 1)
       tolerance *= 20; // real_concept special functions are less accurate
 
-   cout << "Tolerance = " << tolerance << "%." << endl;
+   std::cout << "Tolerance = " << tolerance << "%." << std::endl;
 
    using boost::math::chi_squared_distribution;
    using  ::boost::math::chi_squared;
