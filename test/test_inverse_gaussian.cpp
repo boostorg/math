@@ -96,7 +96,7 @@ void test_spots(RealType)
   inverse_gaussian_distribution<RealType> w11;
 
   // Error tests:
-  check_out_of_range<inverse_gaussian_distribution<RealType> >(0, 1);
+  check_out_of_range<inverse_gaussian_distribution<RealType> >(0.25, 1);
   
   // Check complements.
 
