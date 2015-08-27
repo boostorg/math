@@ -195,13 +195,6 @@ inline T epsilon(const mpl::false_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
    return eps;
 }
 
-} // namespace detail
-
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable:4309)
-#endif
-
 template <class T>
 struct log_limit_traits
 {
@@ -217,11 +210,24 @@ struct log_limit_traits
    BOOST_STATIC_ASSERT(::std::numeric_limits<T>::is_specialized || (value == 0));
 };
 
+template <class T, bool b> struct log_limit_noexcept_traits_imp : public log_limit_traits<T> {};
+template <class T> struct log_limit_noexcept_traits_imp<T, false> : public boost::integral_constant<int, 0> {};
+
 template <class T>
-inline BOOST_CONSTEXPR T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && log_limit_traits<T>::value)
+struct log_limit_noexcept_traits : public log_limit_noexcept_traits_imp<T, BOOST_MATH_IS_FLOAT(T)> {};
+
+} // namespace detail
+
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4309)
+#endif
+
+template <class T>
+inline BOOST_CONSTEXPR T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_NOEXCEPT_IF(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   return detail::log_max_value<T>(typename log_limit_traits<T>::tag_type());
+   return detail::log_max_value<T>(typename detail::log_limit_traits<T>::tag_type());
 #else
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
    BOOST_MATH_STD_USING
@@ -231,10 +237,10 @@ inline BOOST_CONSTEXPR T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOO
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && log_limit_traits<T>::value)
+inline BOOST_CONSTEXPR T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_NOEXCEPT_IF(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   return detail::log_min_value<T>(typename log_limit_traits<T>::tag_type());
+   return detail::log_min_value<T>(typename detail::log_limit_traits<T>::tag_type());
 #else
    BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
    BOOST_MATH_STD_USING
