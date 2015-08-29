@@ -15,7 +15,7 @@ void test()
    using namespace boost::math::policies;
    using namespace boost;
 
-#if !defined(BOOST_NO_CXX11_CONSTEXPR) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS)
+#if !defined(BOOST_NO_CXX11_CONSTEXPR) && !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_MATH_DISABLE_CONSTEXPR)
 
    constexpr auto p1 = make_policy();
    constexpr auto p2 = make_policy(promote_double<false>());
