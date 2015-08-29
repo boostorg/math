@@ -39,7 +39,7 @@ namespace tools
 // See  Conceptual Requirements for Real Number Types.
 
 template <class T>
-inline BOOST_CONSTEXPR int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_NOEXCEPT
+inline BOOST_MATH_CONSTEXPR int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_NOEXCEPT
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -54,7 +54,7 @@ inline BOOST_CONSTEXPR int digits(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOO
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))  BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))  BOOST_MATH_NOEXCEPT(T)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -66,7 +66,7 @@ inline BOOST_CONSTEXPR T max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T))  BOOST_
 // -max_value<double> = -1.79769e+308, max_value<double> = 1.79769e+308.
 
 template <class T>
-inline BOOST_CONSTEXPR T min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
@@ -86,13 +86,13 @@ namespace detail{
 // For type float first:
 //
 template <class T>
-inline BOOST_CONSTEXPR T log_max_value(const mpl::int_<128>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T log_max_value(const mpl::int_<128>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
 {
    return 88.0f;
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T log_min_value(const mpl::int_<128>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T log_min_value(const mpl::int_<128>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
 {
    return -87.0f;
 }
@@ -100,13 +100,13 @@ inline BOOST_CONSTEXPR T log_min_value(const mpl::int_<128>& BOOST_MATH_APPEND_E
 // Now double:
 //
 template <class T>
-inline BOOST_CONSTEXPR T log_max_value(const mpl::int_<1024>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T log_max_value(const mpl::int_<1024>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
 {
    return 709.0;
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T log_min_value(const mpl::int_<1024>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T log_min_value(const mpl::int_<1024>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
 {
    return -708.0;
 }
@@ -114,13 +114,13 @@ inline BOOST_CONSTEXPR T log_min_value(const mpl::int_<1024>& BOOST_MATH_APPEND_
 // 80 and 128-bit long doubles:
 //
 template <class T>
-inline BOOST_CONSTEXPR T log_max_value(const mpl::int_<16384>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T log_max_value(const mpl::int_<16384>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
 {
    return 11356.0L;
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T log_min_value(const mpl::int_<16384>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T log_min_value(const mpl::int_<16384>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
 {
    return -11355.0L;
 }
@@ -162,14 +162,14 @@ inline T log_min_value(const mpl::int_<0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_T
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T epsilon(const mpl::true_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T epsilon(const mpl::true_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_MATH_NOEXCEPT(T)
 {
    return std::numeric_limits<T>::epsilon();
 }
 
 #if defined(__GNUC__) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
 template <>
-inline BOOST_CONSTEXPR long double epsilon<long double>(const mpl::true_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(long double)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR long double epsilon<long double>(const mpl::true_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(long double)) BOOST_MATH_NOEXCEPT(T)
 {
    // numeric_limits on Darwin (and elsewhere) tells lies here:
    // the issue is that long double on a few platforms is
@@ -224,7 +224,7 @@ struct log_limit_noexcept_traits : public log_limit_noexcept_traits_imp<T, BOOST
 #endif
 
 template <class T>
-inline BOOST_CONSTEXPR T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_NOEXCEPT_IF(detail::log_limit_noexcept_traits<T>::value)
+inline BOOST_MATH_CONSTEXPR T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_NOEXCEPT_IF(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::log_max_value<T>(typename detail::log_limit_traits<T>::tag_type());
@@ -237,7 +237,7 @@ inline BOOST_CONSTEXPR T log_max_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOO
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_NOEXCEPT_IF(detail::log_limit_noexcept_traits<T>::value)
+inline BOOST_MATH_CONSTEXPR T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOOST_NOEXCEPT_IF(detail::log_limit_noexcept_traits<T>::value)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::log_min_value<T>(typename detail::log_limit_traits<T>::tag_type());
@@ -254,7 +254,7 @@ inline BOOST_CONSTEXPR T log_min_value(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE(T)) BOO
 #endif
 
 template <class T>
-inline BOOST_CONSTEXPR T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOST_MATH_NOEXCEPT(T)
 {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    return detail::epsilon<T>(mpl::bool_< ::std::numeric_limits<T>::is_specialized>());
@@ -268,25 +268,25 @@ inline BOOST_CONSTEXPR T epsilon(BOOST_MATH_EXPLICIT_TEMPLATE_TYPE_SPEC(T)) BOOS
 namespace detail{
 
 template <class T>
-inline BOOST_CONSTEXPR T root_epsilon_imp(const mpl::int_<24>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T root_epsilon_imp(const mpl::int_<24>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(0.00034526698300124390839884978618400831996329879769945L);
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T root_epsilon_imp(const T*, const mpl::int_<53>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T root_epsilon_imp(const T*, const mpl::int_<53>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(0.1490116119384765625e-7L);
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T root_epsilon_imp(const T*, const mpl::int_<64>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T root_epsilon_imp(const T*, const mpl::int_<64>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(0.32927225399135962333569506281281311031656150598474e-9L);
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T root_epsilon_imp(const T*, const mpl::int_<113>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T root_epsilon_imp(const T*, const mpl::int_<113>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(0.1387778780781445675529539585113525390625e-16L);
 }
@@ -300,25 +300,25 @@ inline T root_epsilon_imp(const T*, const Tag&)
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T cbrt_epsilon_imp(const mpl::int_<24>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T cbrt_epsilon_imp(const mpl::int_<24>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(0.0049215666011518482998719164346805794944150447839903L);
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T cbrt_epsilon_imp(const T*, const mpl::int_<53>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T cbrt_epsilon_imp(const T*, const mpl::int_<53>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(6.05545445239333906078989272793696693569753008995e-6L);
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T cbrt_epsilon_imp(const T*, const mpl::int_<64>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T cbrt_epsilon_imp(const T*, const mpl::int_<64>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(4.76837158203125e-7L);
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T cbrt_epsilon_imp(const T*, const mpl::int_<113>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T cbrt_epsilon_imp(const T*, const mpl::int_<113>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(5.7749313854154005630396773604745549542403508090496e-12L);
 }
@@ -332,25 +332,25 @@ inline T cbrt_epsilon_imp(const T*, const Tag&)
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T forth_root_epsilon_imp(const T*, const mpl::int_<24>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T forth_root_epsilon_imp(const T*, const mpl::int_<24>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(0.018581361171917516667460937040007436176452688944747L);
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T forth_root_epsilon_imp(const T*, const mpl::int_<53>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T forth_root_epsilon_imp(const T*, const mpl::int_<53>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(0.0001220703125L);
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T forth_root_epsilon_imp(const T*, const mpl::int_<64>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T forth_root_epsilon_imp(const T*, const mpl::int_<64>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(0.18145860519450699870567321328132261891067079047605e-4L);
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T forth_root_epsilon_imp(const T*, const mpl::int_<113>&) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR T forth_root_epsilon_imp(const T*, const mpl::int_<113>&) BOOST_MATH_NOEXCEPT(T)
 {
    return static_cast<T>(0.37252902984619140625e-8L);
 }
@@ -373,19 +373,19 @@ struct root_epsilon_traits
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T root_epsilon() BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && detail::root_epsilon_traits<T>::has_noexcept)
+inline BOOST_MATH_CONSTEXPR T root_epsilon() BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::root_epsilon_imp(static_cast<T const*>(0), typename detail::root_epsilon_traits<T>::tag_type());
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T cbrt_epsilon() BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && detail::root_epsilon_traits<T>::has_noexcept)
+inline BOOST_MATH_CONSTEXPR T cbrt_epsilon() BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::cbrt_epsilon_imp(static_cast<T const*>(0), typename detail::root_epsilon_traits<T>::tag_type());
 }
 
 template <class T>
-inline BOOST_CONSTEXPR T forth_root_epsilon() BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && detail::root_epsilon_traits<T>::has_noexcept)
+inline BOOST_MATH_CONSTEXPR T forth_root_epsilon() BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && detail::root_epsilon_traits<T>::has_noexcept)
 {
    return detail::forth_root_epsilon_imp(static_cast<T const*>(0), typename detail::root_epsilon_traits<T>::tag_type());
 }
