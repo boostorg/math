@@ -90,7 +90,7 @@ namespace boost
                betaf -= xtermf;
                T term = poisf * betaf;
                sum += term;
-               if((fabs(last_term) > fabs(term)) && (fabs(term/sum) < errtol))
+               if((fabs(last_term) >= fabs(term)) && (fabs(term/sum) < errtol))
                   break;
                last_term = term;
                ++count;

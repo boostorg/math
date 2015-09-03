@@ -40,6 +40,9 @@
 [import ../../../tools/auto_index/include/auto_index_helpers.qbk]
 [/ Must be first included file!]
 
+[import ../reporting/accuracy/doc/accuracy_tables.qbk]
+[import ../reporting/performance/doc/performance_tables.qbk]
+
 [import html4_symbols.qbk]
 
 [import overview/common_overviews.qbk] [/ overviews that appear in more than one place!]
@@ -647,6 +650,23 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include background/lanczos.qbk]
 [include background/remez.qbk]
 [include background/references.qbk]
+
+[section:logs_and_tables Error logs and tables]
+
+[section:all_table Tables of Error Rates for all Functions]
+
+[all_tables]
+
+[endsect]
+
+[section:logs Error Logs For Error Rate Tables]
+
+[all_errors]
+
+[endsect]
+
+[endsect]
+
 [endmathpart] [/section:backgrounders Backgrounders]
 
 [mathpart status Library Status]

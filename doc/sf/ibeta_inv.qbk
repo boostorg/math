@@ -182,6 +182,22 @@ note that in some parts of their domain, these functions can
 be extremely sensitive to changes in input, particularly when
 the argument /p/ (or it's complement /q/) is very close to `0` or `1`.
 
+Comparisons to other libraries are shown below, note that our test data
+exercises some rather extreme cases in the incomplete beta function
+which many other libraries fail to handle:
+
+[table_ibeta_inv]
+
+[table_ibetac_inv]
+
+[table_ibeta_inva]
+
+[table_ibetac_inva]
+
+[table_ibeta_invb]
+
+[table_ibetac_invb]
+
 [h4 Testing]
 
 There are two sets of tests: 

@@ -39,11 +39,11 @@ namespace detail{
 namespace dummy{
 
    template<int n, class T>
-   typename T::value_type get(const T&);
+   typename T::value_type get(const T&) BOOST_MATH_NOEXCEPT(T);
 }
 
 template <class Tuple, class T>
-void unpack_tuple(const Tuple& t, T& a, T& b)
+void unpack_tuple(const Tuple& t, T& a, T& b) BOOST_MATH_NOEXCEPT(T)
 {
    using dummy::get;
    // Use ADL to find the right overload for get:
@@ -51,7 +51,7 @@ void unpack_tuple(const Tuple& t, T& a, T& b)
    b = get<1>(t);
 }
 template <class Tuple, class T>
-void unpack_tuple(const Tuple& t, T& a, T& b, T& c)
+void unpack_tuple(const Tuple& t, T& a, T& b, T& c) BOOST_MATH_NOEXCEPT(T)
 {
    using dummy::get;
    // Use ADL to find the right overload for get:
@@ -61,7 +61,7 @@ void unpack_tuple(const Tuple& t, T& a, T& b, T& c)
 }
 
 template <class Tuple, class T>
-inline void unpack_0(const Tuple& t, T& val)
+inline void unpack_0(const Tuple& t, T& val) BOOST_MATH_NOEXCEPT(T)
 {
    using dummy::get;
    // Rely on ADL to find the correct overload of get:
@@ -69,13 +69,13 @@ inline void unpack_0(const Tuple& t, T& val)
 }
 
 template <class T, class U, class V>
-inline void unpack_tuple(const std::pair<T, U>& p, V& a, V& b)
+inline void unpack_tuple(const std::pair<T, U>& p, V& a, V& b) BOOST_MATH_NOEXCEPT(T)
 {
    a = p.first;
    b = p.second;
 }
 template <class T, class U, class V>
-inline void unpack_0(const std::pair<T, U>& p, V& a)
+inline void unpack_0(const std::pair<T, U>& p, V& a) BOOST_MATH_NOEXCEPT(T)
 {
    a = p.first;
 }
@@ -88,7 +88,7 @@ void handle_zero_derivative(F f,
                             T& result,
                             T& guess,
                             const T& min,
-                            const T& max)
+                            const T& max) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    if(last_f0 == 0)
    {
@@ -134,7 +134,7 @@ void handle_zero_derivative(F f,
 } // namespace
 
 template <class F, class T, class Tol, class Policy>
-std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter, const Policy& pol)
+std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(policies::is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    T fmin = f(min);
    T fmax = f(max);
@@ -214,13 +214,13 @@ std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter, c
 }
 
 template <class F, class T, class Tol>
-inline std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter)
+inline std::pair<T, T> bisect(F f, T min, T max, Tol tol, boost::uintmax_t& max_iter)  BOOST_NOEXCEPT_IF(policies::is_noexcept_error_policy<policies::policy<> >::value && BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    return bisect(f, min, max, tol, max_iter, policies::policy<>());
 }
 
 template <class F, class T, class Tol>
-inline std::pair<T, T> bisect(F f, T min, T max, Tol tol)
+inline std::pair<T, T> bisect(F f, T min, T max, Tol tol) BOOST_NOEXCEPT_IF(policies::is_noexcept_error_policy<policies::policy<> >::value && BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
    return bisect(f, min, max, tol, m, policies::policy<>());
@@ -228,7 +228,7 @@ inline std::pair<T, T> bisect(F f, T min, T max, Tol tol)
 
 
 template <class F, class T>
-T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
+T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    BOOST_MATH_STD_USING
 
@@ -310,7 +310,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
 }
 
 template <class F, class T>
-inline T newton_raphson_iterate(F f, T guess, T min, T max, int digits)
+inline T newton_raphson_iterate(F f, T guess, T min, T max, int digits) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
    return newton_raphson_iterate(f, guess, min, max, digits, m);
@@ -321,7 +321,7 @@ namespace detail{
    struct halley_step
    {
       template <class T>
-      static T step(const T& /*x*/, const T& f0, const T& f1, const T& f2)
+      static T step(const T& /*x*/, const T& f0, const T& f1, const T& f2) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T))
       {
          using std::fabs;
          T denom = 2 * f0;
@@ -343,7 +343,7 @@ namespace detail{
    };
 
    template <class Stepper, class F, class T>
-   T second_order_root_finder(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
+   T second_order_root_finder(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
    {
       BOOST_MATH_STD_USING
 
@@ -490,13 +490,13 @@ namespace detail{
 }
 
 template <class F, class T>
-T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
+T halley_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    return detail::second_order_root_finder<detail::halley_step>(f, guess, min, max, digits, max_iter);
 }
 
 template <class F, class T>
-inline T halley_iterate(F f, T guess, T min, T max, int digits)
+inline T halley_iterate(F f, T guess, T min, T max, int digits) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
    return halley_iterate(f, guess, min, max, digits, m);
@@ -507,7 +507,7 @@ namespace detail{
    struct schroder_stepper
    {
       template <class T>
-      static T step(const T& x, const T& f0, const T& f1, const T& f2)
+      static T step(const T& x, const T& f0, const T& f1, const T& f2) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T))
       {
          T ratio = f0 / f1;
          T delta;
@@ -527,13 +527,13 @@ namespace detail{
 }
 
 template <class F, class T>
-T schroder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
+T schroder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    return detail::second_order_root_finder<detail::schroder_stepper>(f, guess, min, max, digits, max_iter);
 }
 
 template <class F, class T>
-inline T schroder_iterate(F f, T guess, T min, T max, int digits)
+inline T schroder_iterate(F f, T guess, T min, T max, int digits) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
    return schroder_iterate(f, guess, min, max, digits, m);
@@ -542,13 +542,13 @@ inline T schroder_iterate(F f, T guess, T min, T max, int digits)
 // These two are the old spelling of this function, retained for backwards compatibity just in case:
 //
 template <class F, class T>
-T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter)
+T schroeder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    return detail::second_order_root_finder<detail::schroder_stepper>(f, guess, min, max, digits, max_iter);
 }
 
 template <class F, class T>
-inline T schroeder_iterate(F f, T guess, T min, T max, int digits)
+inline T schroeder_iterate(F f, T guess, T min, T max, int digits) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && noexcept(std::declval<F>()(std::declval<T>())))
 {
    boost::uintmax_t m = (std::numeric_limits<boost::uintmax_t>::max)();
    return schroder_iterate(f, guess, min, max, digits, m);
@@ -560,6 +560,4 @@ inline T schroeder_iterate(F f, T guess, T min, T max, int digits)
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
-
-
 

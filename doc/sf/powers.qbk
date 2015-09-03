@@ -25,6 +25,8 @@ the return is `double` when /x/ is an integer type and T otherwise.
 
 This function performs exact all-integer arithmetic argument reduction before computing the sine of ['[pi]x].
 
+[table_sin_pi]
+
 [endsect]
 
 [section:cos_pi cos_pi]
@@ -51,6 +53,8 @@ the return is `double` when /x/ is an integer type and T otherwise.
 [optional_policy]
 
 This function performs exact all-integer arithmetic argument reduction before computing the cosine of ['[pi]x].
+
+[table_cos_pi]
 
 [endsect]
 
@@ -107,6 +111,8 @@ The following graph illustrates the behaviour of log1p:
 For built in floating point types `log1p`
 should have approximately 1 epsilon accuracy.
 
+[table_log1p]
+
 [h4 Testing]
 
 A mixture of spot test sanity checks, and random high precision test values
@@ -155,6 +161,8 @@ The following graph illustrates the behaviour of expm1:
 For built in floating point types `expm1`
 should have approximately 1 epsilon accuracy.
 
+[table_expm1]
+
 [h4 Testing]
 
 A mixture of spot test sanity checks, and random high precision test values
@@ -195,6 +203,8 @@ The following graph illustrates the behaviour of cbrt:
 
 For built in floating-point types `cbrt`
 should have approximately 2 epsilon accuracy.
+
+[table_cbrt]
 
 [h4 Testing]
 
@@ -240,6 +250,8 @@ The following graph illustrates the behaviour of sqrt1pm1:
 For built in floating-point types `sqrt1pm1`
 should have approximately 3 epsilon accuracy.
 
+[table_sqrt1pm1]
+
 [h4 Testing]
 
 A selection of random high precision test values
@@ -282,6 +294,8 @@ The following graph illustrates the behaviour of powm1:
 [h4 Accuracy]
 
 Should have approximately 2-3 epsilon accuracy.
+
+[table_powm1]
 
 [h4 Testing]
 

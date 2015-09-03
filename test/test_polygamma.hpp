@@ -36,10 +36,13 @@
 template <class Real, class T>
 void do_test_polygamma(const T& data, const char* type_name, const char* test_name)
 {
+#if !(defined(ERROR_REPORTING_MODE) && !defined(POLYGAMMA_FUNCTION_TO_TEST))
    typedef Real                   value_type;
 
    typedef value_type(*pg)(int, value_type);
-#if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
+#ifdef POLYGAMMA_FUNCTION_TO_TEST
+   pg funcp = POLYGAMMA_FUNCTION_TO_TEST;
+#elif defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::polygamma<value_type>;
 #else
    pg funcp = boost::math::polygamma;
@@ -57,8 +60,9 @@ void do_test_polygamma(const T& data, const char* type_name, const char* test_na
       data,
       bind_func_int1<Real>(funcp, 0, 1),
       extract_result<Real>(2));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "boost::math::polygamma", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "polygamma", test_name);
    std::cout << std::endl;
+#endif
 }
 
 template <class T>
