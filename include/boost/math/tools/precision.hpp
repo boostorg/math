@@ -206,12 +206,12 @@ struct log_limit_traits
       mpl::int_<(std::numeric_limits<T>::max_exponent > INT_MAX ? INT_MAX : static_cast<int>(std::numeric_limits<T>::max_exponent))>,
       mpl::int_<0>
    >::type tag_type;
-   BOOST_STATIC_CONSTANT(int, value = tag_type::value);
+   BOOST_STATIC_CONSTANT(bool, value = tag_type::value ? true : false);
    BOOST_STATIC_ASSERT(::std::numeric_limits<T>::is_specialized || (value == 0));
 };
 
 template <class T, bool b> struct log_limit_noexcept_traits_imp : public log_limit_traits<T> {};
-template <class T> struct log_limit_noexcept_traits_imp<T, false> : public boost::integral_constant<int, 0> {};
+template <class T> struct log_limit_noexcept_traits_imp<T, false> : public boost::integral_constant<bool, false> {};
 
 template <class T>
 struct log_limit_noexcept_traits : public log_limit_noexcept_traits_imp<T, BOOST_MATH_IS_FLOAT(T)> {};
