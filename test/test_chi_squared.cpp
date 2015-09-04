@@ -20,6 +20,7 @@
 using ::boost::math::concepts::real_concept;
 
 #include <boost/math/distributions/chi_squared.hpp> // for chi_squared_distribution
+#include <boost/math/distributions/non_central_chi_squared.hpp> // for chi_squared_distribution
 using boost::math::chi_squared_distribution;
 using boost::math::chi_squared;
 
@@ -69,6 +70,25 @@ void test_spot(
             quantile(dist, P), cs, tol);
       BOOST_CHECK_CLOSE(
             quantile(complement(dist, Q)), cs, tol);
+   }
+
+   boost::math::non_central_chi_squared_distribution<RealType> dist2(df, 0);
+   BOOST_CHECK_CLOSE(
+      cdf(dist2, cs), P, tol);
+   BOOST_CHECK_CLOSE(
+      pdf(dist2, cs), naive_pdf(dist2.degrees_of_freedom(), cs), tol);
+   if((P < 0.99) && (Q < 0.99))
+   {
+      //
+      // We can only check this if P is not too close to 1,
+      // so that we can guarentee Q is free of error:
+      //
+      BOOST_CHECK_CLOSE(
+         cdf(complement(dist2, cs)), Q, tol);
+      BOOST_CHECK_CLOSE(
+         quantile(dist2, P), cs, tol);
+      BOOST_CHECK_CLOSE(
+         quantile(complement(dist2, Q)), cs, tol);
    }
 }
 

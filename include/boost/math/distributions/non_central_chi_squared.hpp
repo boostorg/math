@@ -334,7 +334,7 @@ namespace boost
             BOOST_MATH_STD_USING
             value_type result;
             if(l == 0)
-               result = cdf(boost::math::chi_squared_distribution<RealType, Policy>(k), x);
+              return invert == false ? cdf(boost::math::chi_squared_distribution<RealType, Policy>(k), x) : cdf(complement(boost::math::chi_squared_distribution<RealType, Policy>(k), x));
             else if(x > k + l)
             {
                // Complement is the smaller of the two:
