@@ -218,10 +218,10 @@ void test_spots(RealType)
 
    // error tests
    check_out_of_range<boost::math::gamma_distribution<RealType> >(1, 1);
-   BOOST_CHECK_THROW(boost::math::gamma_distribution<RealType>(0, 1), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::gamma_distribution<RealType>(-1, 1), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::gamma_distribution<RealType>(1, 0), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::gamma_distribution<RealType>(1, -1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::gamma_distribution<RealType>(0, 1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::gamma_distribution<RealType>(-1, 1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::gamma_distribution<RealType>(1, 0), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::gamma_distribution<RealType>(1, -1), std::domain_error);
 
 } // template <class RealType>void test_spots(RealType)
 

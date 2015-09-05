@@ -16,6 +16,7 @@
 #  pragma warning(disable: 4127) // conditional expression is constant
 #endif
 
+#include <boost/math/tools/test.hpp> // for real_concept
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 using ::boost::math::concepts::real_concept;
 
@@ -443,7 +444,7 @@ void test_spots(RealType T)
        kurtosis_excess(dist)
        , static_cast<RealType>(1.5), tol2);
     // special cases:
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        pdf(
           chi_squared_distribution<RealType>(static_cast<RealType>(1)),
           static_cast<RealType>(0)), std::overflow_error
@@ -473,62 +474,62 @@ void test_spots(RealType T)
        cdf(complement(chi_squared_distribution<RealType>(3), static_cast<RealType>(0)))
        , static_cast<RealType>(1));
 
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        pdf(
           chi_squared_distribution<RealType>(static_cast<RealType>(-1)),
           static_cast<RealType>(1)), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        pdf(
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
           static_cast<RealType>(-1)), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        cdf(
           chi_squared_distribution<RealType>(static_cast<RealType>(-1)),
           static_cast<RealType>(1)), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        cdf(
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
           static_cast<RealType>(-1)), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        cdf(complement(
           chi_squared_distribution<RealType>(static_cast<RealType>(-1)),
           static_cast<RealType>(1))), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        cdf(complement(
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
           static_cast<RealType>(-1))), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        quantile(
           chi_squared_distribution<RealType>(static_cast<RealType>(-1)),
           static_cast<RealType>(0.5)), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        quantile(
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
           static_cast<RealType>(-1)), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        quantile(
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
           static_cast<RealType>(1.1)), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        quantile(complement(
           chi_squared_distribution<RealType>(static_cast<RealType>(-1)),
           static_cast<RealType>(0.5))), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        quantile(complement(
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
           static_cast<RealType>(-1))), std::domain_error
        );
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
        quantile(complement(
           chi_squared_distribution<RealType>(static_cast<RealType>(8)),
           static_cast<RealType>(1.1))), std::domain_error

@@ -202,9 +202,13 @@ struct bernoulli_initializer
          // initialize our dymanic table:
          //
          boost::math::bernoulli_b2n<T>(2, Policy());
+#ifndef BOOST_NO_EXCEPTIONS
          try{
+#endif
             boost::math::bernoulli_b2n<T>(max_bernoulli_b2n<T>::value + 1, Policy());
+#ifndef BOOST_NO_EXCEPTIONS
          } catch(const std::overflow_error&){}
+#endif
          boost::math::tangent_t2n<T>(2, Policy());
       }
       void force_instantiate()const{}
@@ -254,7 +258,9 @@ struct fixed_vector : private std::allocator<T>
    void resize(unsigned n, const T& val)
    {
       if(n > m_capacity)
-         throw std::runtime_error("Exhausted storage for Bernoulli numbers.");
+      {
+         BOOST_THROW_EXCEPTION(std::runtime_error("Exhausted storage for Bernoulli numbers."));
+      }
       for(unsigned i = m_used; i < n; ++i)
          new (m_data + i) T(val);
       m_used = n;

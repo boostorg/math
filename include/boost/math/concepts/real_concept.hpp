@@ -388,6 +388,26 @@ inline BOOST_MATH_CONSTEXPR int digits<concepts::real_concept>(BOOST_MATH_EXPLIC
 }
 
 } // namespace tools
+/*
+namespace policies {
+   namespace detail {
+
+      template <class T>
+      inline concepts::real_concept raise_rounding_error(
+         const char*,
+         const char*,
+         const T& val,
+         const concepts::real_concept&,
+         const  ::boost::math::policies::rounding_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
+      {
+         errno = ERANGE;
+         // This may or may not do the right thing, but the user asked for the error
+         // to be silent so here we go anyway:
+         return  val > 0 ? boost::math::tools::max_value<concepts::real_concept>() : -boost::math::tools::max_value<concepts::real_concept>();
+      }
+
+   }
+}*/
 
 #if defined(__SGI_STL_PORT) || defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS)
 //

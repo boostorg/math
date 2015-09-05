@@ -79,12 +79,14 @@ void test(T, const char* type_name)
       BOOST_CHECK_EQUAL(boost::math::expm1(T(-std::numeric_limits<T>::infinity())), m_one);
       BOOST_CHECK_EQUAL(boost::math::expm1(std::numeric_limits<T>::infinity()), std::numeric_limits<T>::infinity());
 #ifndef __BORLANDC__
+#ifndef BOOST_NO_EXCEPTIONS
       // When building with Borland's compiler, simply the *presence*
       // of these tests cause other unrelated tests to fail!!! :-(
       using namespace boost::math::policies;
       typedef policy<overflow_error<throw_on_error> > pol;
-      BOOST_CHECK_THROW(boost::math::log1p(m_one, pol()), std::overflow_error);
-      BOOST_CHECK_THROW(boost::math::expm1(std::numeric_limits<T>::infinity(), pol()), std::overflow_error);
+      BOOST_MATH_CHECK_THROW(boost::math::log1p(m_one, pol()), std::overflow_error);
+      BOOST_MATH_CHECK_THROW(boost::math::expm1(std::numeric_limits<T>::infinity(), pol()), std::overflow_error);
+#endif
 #endif
    }
 }

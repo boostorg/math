@@ -7,6 +7,7 @@
 //
 
 #include <algorithm>
+#include <boost/math/tools/test.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/math/distributions/complement.hpp>
 #include <boost/math/distributions/hyperexponential.hpp>
@@ -376,12 +377,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(error_cases, RealT, test_types)
    boost::array<RealT, 2> probs = { { 1, 2 } };
    boost::array<RealT, 3> probs2 = { { 1, 2, 3 } };
    boost::array<RealT, 3> rates = { { 1, 2, 3 } };
-   BOOST_CHECK_THROW(dist_t(probs.begin(), probs.end(), rates.begin(), rates.end()), std::domain_error);
-   BOOST_CHECK_THROW(dist_t(probs, rates), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist_t(probs.begin(), probs.end(), rates.begin(), rates.end()), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist_t(probs, rates), std::domain_error);
    rates[1] = 0;
-   BOOST_CHECK_THROW(dist_t(probs2, rates), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist_t(probs2, rates), std::domain_error);
    rates[1] = -1;
-   BOOST_CHECK_THROW(dist_t(probs2, rates), std::domain_error);
-   BOOST_CHECK_THROW(dist_t(probs.begin(), probs.begin(), rates.begin(), rates.begin()), std::domain_error);
-   BOOST_CHECK_THROW(dist_t(rates.begin(), rates.begin()), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist_t(probs2, rates), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist_t(probs.begin(), probs.begin(), rates.begin(), rates.begin()), std::domain_error);
+   BOOST_MATH_CHECK_THROW(dist_t(rates.begin(), rates.begin()), std::domain_error);
 }

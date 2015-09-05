@@ -201,7 +201,7 @@ void test_spots(T)
    if(std::numeric_limits<T>::max_exponent <= 1024 && std::numeric_limits<T>::has_infinity)
    {
       BOOST_CHECK_EQUAL(::boost::math::tgamma(static_cast<T>(176), static_cast<T>(100)), std::numeric_limits<T>::infinity());
-      //BOOST_CHECK_THROW(::boost::math::tgamma(static_cast<T>(176), static_cast<T>(100), throw_policy()), std::overflow_error);
+      //BOOST_MATH_CHECK_THROW(::boost::math::tgamma(static_cast<T>(176), static_cast<T>(100), throw_policy()), std::overflow_error);
       BOOST_CHECK_EQUAL(::boost::math::tgamma(static_cast<T>(530), static_cast<T>(2000)), std::numeric_limits<T>::infinity());
       BOOST_CHECK_EQUAL(::boost::math::tgamma(static_cast<T>(740), static_cast<T>(2500)), std::numeric_limits<T>::infinity());
       BOOST_CHECK_EQUAL(::boost::math::tgamma(static_cast<T>(530.5), static_cast<T>(2000)), std::numeric_limits<T>::infinity());

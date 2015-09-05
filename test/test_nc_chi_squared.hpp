@@ -264,11 +264,11 @@ void test_spots(RealType)
 
    // Error handling checks:
    check_out_of_range<boost::math::non_central_chi_squared_distribution<RealType> >(1, 1);
-   BOOST_CHECK_THROW(pdf(boost::math::non_central_chi_squared_distribution<RealType>(0, 1), 0), std::domain_error);
-   BOOST_CHECK_THROW(pdf(boost::math::non_central_chi_squared_distribution<RealType>(-1, 1), 0), std::domain_error);
-   BOOST_CHECK_THROW(pdf(boost::math::non_central_chi_squared_distribution<RealType>(1, -1), 0), std::domain_error);
-   BOOST_CHECK_THROW(quantile(boost::math::non_central_chi_squared_distribution<RealType>(1, 1), -1), std::domain_error);
-   BOOST_CHECK_THROW(quantile(boost::math::non_central_chi_squared_distribution<RealType>(1, 1), 2), std::domain_error);
+   BOOST_MATH_CHECK_THROW(pdf(boost::math::non_central_chi_squared_distribution<RealType>(0, 1), 0), std::domain_error);
+   BOOST_MATH_CHECK_THROW(pdf(boost::math::non_central_chi_squared_distribution<RealType>(-1, 1), 0), std::domain_error);
+   BOOST_MATH_CHECK_THROW(pdf(boost::math::non_central_chi_squared_distribution<RealType>(1, -1), 0), std::domain_error);
+   BOOST_MATH_CHECK_THROW(quantile(boost::math::non_central_chi_squared_distribution<RealType>(1, 1), -1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(quantile(boost::math::non_central_chi_squared_distribution<RealType>(1, 1), 2), std::domain_error);
 #endif
 } // template <class RealType>void test_spots(RealType)
 
@@ -383,6 +383,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          // Sanity check mode, the accuracy of
          // the mode is at *best* the square root of the accuracy of the PDF:
          //
+#ifndef BOOST_NO_EXCEPTIONS
          try{
             value_type m = mode(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]));
             value_type p = pdf(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]), m);
@@ -390,6 +391,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
             BOOST_CHECK_EX(pdf(boost::math::non_central_chi_squared_distribution<value_type>(data[i][0], data[i][1]), m * (1 - sqrt(precision)) * 50) <= p, i);
          }
          catch(const boost::math::evaluation_error&) {}
+#endif
          //
          // Sanity check degrees-of-freedom finder, don't bother at float
          // precision though as there's not enough data in the probability

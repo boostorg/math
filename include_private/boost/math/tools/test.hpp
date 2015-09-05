@@ -14,6 +14,7 @@
 #include <boost/math/tools/stats.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/test/test_tools.hpp>
 #include <stdexcept>
 #include <iostream>
@@ -181,9 +182,12 @@ test_result<Real> test_hetero(const A& a, F1 test_func, F2 expect_func)
    {
       const row_type& row = a[i];
       value_type point;
+#ifndef BOOST_NO_EXCEPTIONS
       try
       {
+#endif
          point = test_func(row);
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(const std::underflow_error&)
       {
@@ -203,6 +207,7 @@ test_result<Real> test_hetero(const A& a, F1 test_func, F2 expect_func)
          // so we don't get further errors:
          point = expect_func(row);
       }
+#endif
       value_type expected = expect_func(row);
       value_type err = relative_error(point, expected);
 #ifdef BOOST_INSTRUMENT
@@ -237,9 +242,61 @@ test_result<Real> test_hetero(const A& a, F1 test_func, F2 expect_func)
    return result;
 }
 
+template <class Val, class Exception>
+void test_check_throw(Val v, Exception e)
+{
+   BOOST_CHECK(errno);
+   errno = 0;
+}
+
+template <class Val>
+void test_check_throw(Val val, std::domain_error const* e)
+{
+   BOOST_CHECK(errno == EDOM);
+   errno = 0;
+   if(std::numeric_limits<Val>::has_quiet_NaN)
+   {
+      BOOST_CHECK((boost::math::isnan)(val));
+   }
+}
+
+template <class Val>
+void test_check_throw(Val v, std::overflow_error const* e)
+{
+   BOOST_CHECK(errno == ERANGE);
+   errno = 0;
+   BOOST_CHECK((v >= boost::math::tools::max_value<Val>()) || (v <= -boost::math::tools::max_value<Val>()));
+}
+
+template <class Val>
+void test_check_throw(Val v, boost::math::rounding_error const* e)
+{
+   BOOST_CHECK(errno == ERANGE);
+   errno = 0;
+   if(std::numeric_limits<Val>::is_specialized && std::numeric_limits<Val>::is_integer)
+   {
+      BOOST_CHECK((v == (std::numeric_limits<Val>::max)()) || (v == (std::numeric_limits<Val>::min)()));
+   }
+   else
+   {
+      BOOST_CHECK((v == boost::math::tools::max_value<Val>()) || (v == -boost::math::tools::max_value<Val>()));
+   }
+}
+
 } // namespace tools
 } // namespace math
 } // namespace boost
+
+
+  //
+  // exception-free testing support, ideally we'd only define this in our tests,
+  // but to keep things simple we really need it somewhere that's always included:
+  //
+#ifdef BOOST_NO_EXCEPTIONS
+#  define BOOST_MATH_CHECK_THROW(x, ExceptionType) boost::math::tools::test_check_throw(x, static_cast<ExceptionType const*>(0));
+#else
+#  define BOOST_MATH_CHECK_THROW(x, y) BOOST_CHECK_THROW(x, y)
+#endif
 
 #endif
 

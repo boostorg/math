@@ -8,6 +8,7 @@
 
 // test_exponential_dist.cpp
 
+#include <boost/math/tools/test.hpp>
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/exponential.hpp>
     using boost::math::exponential_distribution;
@@ -230,31 +231,31 @@ void test_spots(RealType T)
    // Things that are errors:
    //
    exponential_distribution<RealType> dist(0.5);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        quantile(dist, RealType(1.0)),
        std::overflow_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        quantile(complement(dist, RealType(0.0))),
        std::overflow_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        pdf(dist, RealType(-1)),
        std::domain_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        cdf(dist, RealType(-1)),
        std::domain_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        cdf(exponential_distribution<RealType>(-1), RealType(1)),
        std::domain_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        quantile(dist, RealType(-1)),
        std::domain_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        quantile(dist, RealType(2)),
        std::domain_error);
 
    check_out_of_range<exponential_distribution<RealType> >(2);
-   BOOST_CHECK_THROW(exponential_distribution<RealType>(0), std::domain_error);
-   BOOST_CHECK_THROW(exponential_distribution<RealType>(-1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(exponential_distribution<RealType>(0), std::domain_error);
+   BOOST_MATH_CHECK_THROW(exponential_distribution<RealType>(-1), std::domain_error);
    if(std::numeric_limits<RealType>::has_infinity)
    {
       RealType inf = std::numeric_limits<RealType>::infinity();

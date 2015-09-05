@@ -15,6 +15,7 @@
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/rayleigh.hpp>
     using boost::math::rayleigh_distribution;
+#include <boost/math/tools/test.hpp>
 
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
@@ -89,32 +90,32 @@ void test_spots(RealType T)
    rayleigh_distribution<RealType> dist(0.5);
 
    check_out_of_range<rayleigh_distribution<RealType> >(1);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        quantile(dist,
        RealType(1.)), // quantile unity should overflow.
        std::overflow_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        quantile(complement(dist,
        RealType(0.))), // quantile complement zero should overflow.
        std::overflow_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        pdf(dist, RealType(-1)), // Bad negative x.
        std::domain_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        cdf(dist, RealType(-1)), // Bad negative x.
        std::domain_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        cdf(rayleigh_distribution<RealType>(-1), // bad sigma < 0
        RealType(1)),
        std::domain_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        cdf(rayleigh_distribution<RealType>(0), // bad sigma == 0
        RealType(1)),
        std::domain_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        quantile(dist, RealType(-1)), // negative quantile probability.
        std::domain_error);
-   BOOST_CHECK_THROW(
+   BOOST_MATH_CHECK_THROW(
        quantile(dist, RealType(2)), // > unity  quantile probability.
        std::domain_error);
 

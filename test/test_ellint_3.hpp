@@ -202,12 +202,12 @@ void test_spots(T, const char* type_name)
     do_test_ellint_pi2<T>(ellint_pi2_data, type_name, "Complete Elliptic Integral PI: Random Data");
 
     // Special cases, exceptions etc:
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(1.0001), T(-1), T(0)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(0.5), T(20), T(1.5)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(1.0001), T(-1)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(0.5), T(1)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(0.5), T(2)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(1), T(0.5), T(2)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(1), T(-0.5), T(2)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::ellint_3(T(1), T(-0.5), T(-2)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(1.0001), T(-1), T(0)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(0.5), T(20), T(1.5)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(1.0001), T(-1)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(0.5), T(1)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(0.5), T(2)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(1), T(0.5), T(2)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(1), T(-0.5), T(2)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::ellint_3(T(1), T(-0.5), T(-2)), std::domain_error);
 }

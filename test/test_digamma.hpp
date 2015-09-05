@@ -96,8 +96,8 @@ void test_digamma(T, const char* name)
    } };
    do_test_digamma<T>(digamma_half_integers, name, "Digamma Function: Half integer arguments");
 
-   BOOST_CHECK_THROW(boost::math::digamma(T(0)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::digamma(T(-1)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::digamma(T(-2)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::digamma(T(0)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::digamma(T(-1)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::digamma(T(-2)), std::domain_error);
 }
 

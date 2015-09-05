@@ -267,10 +267,10 @@ void test_bessel_prime(T, const char* name)
     //
     // Special cases that are errors:
     //
-    BOOST_CHECK_THROW(boost::math::sph_bessel_prime(1, T(0)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::sph_bessel_prime(100000, T(0)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::cyl_bessel_j_prime(T(-2.5), T(0)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::cyl_bessel_j_prime(T(-2.5), T(-2)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::cyl_bessel_j_prime(T(2.5), T(-2)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::sph_bessel_prime(1, T(0)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::sph_bessel_prime(100000, T(0)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j_prime(T(-2.5), T(0)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j_prime(T(-2.5), T(-2)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j_prime(T(2.5), T(-2)), std::domain_error);
 }
 

@@ -150,14 +150,14 @@ void test_spots(T, const char*)
       BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(193.25), T(ldexp(T(1), -525))), T(1.2040790040958522422697601672703926839178050326148e+199L), 3 * tol);
       BOOST_CHECK_CLOSE_FRACTION(boost::math::tgamma_ratio(T(193.25), T(194.75)), T(0.00037151765099653237632823607820104961270831942138159L), 3 * tol);
    }
-   BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(0), T(2)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), T(0)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(-1), T(2)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), T(-1)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::tgamma_ratio(T(0), T(2)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::tgamma_ratio(T(2), T(0)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::tgamma_ratio(T(-1), T(2)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(boost::math::tgamma_ratio(T(2), T(-1)), std::domain_error);
    if(std::numeric_limits<T>::has_infinity)
    {
-      BOOST_CHECK_THROW(boost::math::tgamma_ratio(std::numeric_limits<T>::infinity(), T(2)), std::domain_error);
-      BOOST_CHECK_THROW(boost::math::tgamma_ratio(T(2), std::numeric_limits<T>::infinity()), std::domain_error);
+      BOOST_MATH_CHECK_THROW(boost::math::tgamma_ratio(std::numeric_limits<T>::infinity(), T(2)), std::domain_error);
+      BOOST_MATH_CHECK_THROW(boost::math::tgamma_ratio(T(2), std::numeric_limits<T>::infinity()), std::domain_error);
    }
    //
    // Some bug cases from Rocco Romeo:

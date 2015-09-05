@@ -130,6 +130,7 @@ void test_spot(
    boost::math::non_central_t_distribution<RealType> dist(df, ncp);
    BOOST_CHECK_CLOSE(
       cdf(dist, t), P, tol);
+#ifndef BOOST_NO_EXCEPTIONS
    try{
       BOOST_CHECK_CLOSE(
          mean(dist), naive_mean(df, ncp), tol);
@@ -145,6 +146,7 @@ void test_spot(
    catch(const std::domain_error&)
    {
    }
+#endif
    /*
    BOOST_CHECK_CLOSE(
    pdf(dist, t), naive_pdf(dist.degrees_of_freedom(), ncp, t), tol * 50);
@@ -296,10 +298,10 @@ void test_spots(RealType)
 
    // Error handling checks:
    //check_out_of_range<boost::math::non_central_t_distribution<RealType> >(1, 1);  // Fails one check because df for this distribution *can* be infinity.
-   BOOST_CHECK_THROW(pdf(boost::math::non_central_t_distribution<RealType>(0, 1), 0), std::domain_error);
-   BOOST_CHECK_THROW(pdf(boost::math::non_central_t_distribution<RealType>(-1, 1), 0), std::domain_error);
-   BOOST_CHECK_THROW(quantile(boost::math::non_central_t_distribution<RealType>(1, 1), -1), std::domain_error);
-   BOOST_CHECK_THROW(quantile(boost::math::non_central_t_distribution<RealType>(1, 1), 2), std::domain_error);
+   BOOST_MATH_CHECK_THROW(pdf(boost::math::non_central_t_distribution<RealType>(0, 1), 0), std::domain_error);
+   BOOST_MATH_CHECK_THROW(pdf(boost::math::non_central_t_distribution<RealType>(-1, 1), 0), std::domain_error);
+   BOOST_MATH_CHECK_THROW(quantile(boost::math::non_central_t_distribution<RealType>(1, 1), -1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(quantile(boost::math::non_central_t_distribution<RealType>(1, 1), 2), std::domain_error);
 } // template <class RealType>void test_spots(RealType)
 
 template <class T>
@@ -519,9 +521,15 @@ void test_big_df(RealType)
       BOOST_CHECK_CLOSE_FRACTION(kurtosis_excess(maxdf), static_cast<RealType>(3), tolerance);
 
       // Bad df examples.
-      BOOST_CHECK_THROW(non_central_t_distribution<RealType> minfdf(-inf, 0), std::domain_error);
-      BOOST_CHECK_THROW(non_central_t_distribution<RealType> minfdf(nan, 0), std::domain_error);
-      BOOST_CHECK_THROW(non_central_t_distribution<RealType> minfdf(-nan, 0), std::domain_error);
+#ifndef BOOST_NO_EXCEPTIONS
+      BOOST_MATH_CHECK_THROW(non_central_t_distribution<RealType> minfdf(-inf, 0), std::domain_error);
+      BOOST_MATH_CHECK_THROW(non_central_t_distribution<RealType> minfdf(nan, 0), std::domain_error);
+      BOOST_MATH_CHECK_THROW(non_central_t_distribution<RealType> minfdf(-nan, 0), std::domain_error);
+#else
+      BOOST_MATH_CHECK_THROW(non_central_t_distribution<RealType>(-inf, 0), std::domain_error);
+      BOOST_MATH_CHECK_THROW(non_central_t_distribution<RealType>(nan, 0), std::domain_error);
+      BOOST_MATH_CHECK_THROW(non_central_t_distribution<RealType>(-nan, 0), std::domain_error);
+#endif
 
 
       // BOOST_CHECK_CLOSE_FRACTION(pdf(infdf, 0), static_cast<RealType>(0.3989422804014326779399460599343818684759L), tolerance);

@@ -268,8 +268,8 @@ void test_bessel(T, const char* name)
     //
     // Special cases that are errors:
     //
-    BOOST_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(0)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(-2)), std::domain_error);
-    BOOST_CHECK_THROW(boost::math::cyl_bessel_j(T(2.5), T(-2)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(0)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(-2.5), T(-2)), std::domain_error);
+    BOOST_MATH_CHECK_THROW(boost::math::cyl_bessel_j(T(2.5), T(-2)), std::domain_error);
 }
 

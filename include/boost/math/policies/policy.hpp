@@ -44,6 +44,28 @@ namespace policies{
 //
 // Define macros for our default policies, if they're not defined already:
 //
+// Special cases for exceptions disabled first:
+//
+#ifdef BOOST_NO_EXCEPTIONS
+#  ifndef BOOST_MATH_DOMAIN_ERROR_POLICY
+#    define BOOST_MATH_DOMAIN_ERROR_POLICY errno_on_error
+#  endif
+#  ifndef BOOST_MATH_POLE_ERROR_POLICY
+#     define BOOST_MATH_POLE_ERROR_POLICY errno_on_error
+#  endif
+#  ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
+#     define BOOST_MATH_OVERFLOW_ERROR_POLICY errno_on_error
+#  endif
+#  ifndef BOOST_MATH_EVALUATION_ERROR_POLICY
+#     define BOOST_MATH_EVALUATION_ERROR_POLICY errno_on_error
+#  endif
+#  ifndef BOOST_MATH_ROUNDING_ERROR_POLICY
+#     define BOOST_MATH_ROUNDING_ERROR_POLICY errno_on_error
+#  endif
+#endif
+//
+// Then the regular cases:
+//
 #ifndef BOOST_MATH_DOMAIN_ERROR_POLICY
 #define BOOST_MATH_DOMAIN_ERROR_POLICY throw_on_error
 #endif
@@ -974,7 +996,7 @@ struct constructor_error_check
 {
    typedef typename Policy::domain_error_type domain_error_type;
    typedef typename mpl::if_c<
-      (domain_error_type::value == throw_on_error) || (domain_error_type::value == user_error),
+      (domain_error_type::value == throw_on_error) || (domain_error_type::value == user_error) || (domain_error_type::value == errno_on_error),
       mpl::true_,
       mpl::false_>::type type;
 };

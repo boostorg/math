@@ -509,6 +509,20 @@ inline TargetType raise_rounding_error(
    return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
 }
 
+template <class T>
+inline T raise_rounding_error(
+           const char* ,
+           const char* ,
+           const T& val,
+           const T&,
+           const  ::boost::math::policies::rounding_error< ::boost::math::policies::errno_on_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   errno = ERANGE;
+   // This may or may not do the right thing, but the user asked for the error
+   // to be silent so here we go anyway:
+   return  val > 0 ? boost::math::tools::max_value<T>() : -boost::math::tools::max_value<T>();
+}
+
 template <class T, class TargetType>
 inline TargetType raise_rounding_error(
            const char* function,

@@ -16,6 +16,7 @@
 
 //#include <pch.hpp> // include directory libs/math/src/tr1/ is needed.
 
+#include <boost/math/tools/test.hpp>
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp> // Boost.Test
@@ -90,8 +91,13 @@ void test_spots(RealType)
   cout << "Tolerance for type " << typeid(RealType).name()  << " is " << tolerance << endl;
 
   // Check some bad parameters to the distribution,
-  BOOST_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType> nbad1(0, 0), std::domain_error); // zero scale
-  BOOST_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType> nbad1(0, -1), std::domain_error); // negative scale
+#ifndef BOOST_NO_EXCEPTIONS
+  BOOST_MATH_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType> nbad1(0, 0), std::domain_error); // zero scale
+  BOOST_MATH_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType> nbad1(0, -1), std::domain_error); // negative scale
+#else
+  BOOST_MATH_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType>(0, 0), std::domain_error); // zero scale
+  BOOST_MATH_CHECK_THROW(boost::math::inverse_gaussian_distribution<RealType>(0, -1), std::domain_error); // negative scale
+#endif
 
   inverse_gaussian_distribution<RealType> w11;
 

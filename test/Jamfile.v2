@@ -29,6 +29,8 @@ if $(remove-test-targets)
    OBJ_REMOVAL_OPTIONS = <pch>off ;
 }
 
+obj no_eh : noeh_support.cpp ;
+
 
 project
     : requirements
@@ -48,8 +50,8 @@ project
       <toolset>msvc:<cxxflags>/wd4127
       <toolset>msvc:<cxxflags>/wd4459
       <toolset>msvc:<cxxflags>/wd4701 # needed for lexical cast - temporary.
-       <toolset>msvc:<cxxflags>/wd4189 # local variable is initialized but not referenced
-     <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
+      <toolset>msvc:<cxxflags>/wd4189 # local variable is initialized but not referenced
+      <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
       <toolset>msvc-7.1:<pch>off
       <toolset>gcc,<target-os>windows:<pch>off
       <toolset>borland:<runtime-link>static
@@ -57,6 +59,7 @@ project
       # suppress xstring(237) : warning C4506: no definition for inline function
       <include>../../..
       <source>../../regex/build//boost_regex
+      <exception-handling>off:<source>no_eh
       <link>shared:<define>BOOST_REGEX_DYN_LINK=1
       # For simplicities sake, make everything a static lib:
       <link>static

@@ -328,21 +328,21 @@ void test_spots(RealType)
    //
    // Error checks:
    //
-   BOOST_CHECK_THROW(weibull_distribution<RealType>(1, -1), std::domain_error);
-   BOOST_CHECK_THROW(weibull_distribution<RealType>(-1, 1), std::domain_error);
-   BOOST_CHECK_THROW(weibull_distribution<RealType>(1, 0), std::domain_error);
-   BOOST_CHECK_THROW(weibull_distribution<RealType>(0, 1), std::domain_error);
-   BOOST_CHECK_THROW(pdf(dist, -1), std::domain_error);
-   BOOST_CHECK_THROW(cdf(dist, -1), std::domain_error);
-   BOOST_CHECK_THROW(cdf(complement(dist, -1)), std::domain_error);
-   BOOST_CHECK_THROW(quantile(dist, 1), std::overflow_error);
-   BOOST_CHECK_THROW(quantile(complement(dist, 0)), std::overflow_error);
-   BOOST_CHECK_THROW(quantile(dist, -1), std::domain_error);
-   BOOST_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(weibull_distribution<RealType>(1, -1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(weibull_distribution<RealType>(-1, 1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(weibull_distribution<RealType>(1, 0), std::domain_error);
+   BOOST_MATH_CHECK_THROW(weibull_distribution<RealType>(0, 1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(pdf(dist, -1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(cdf(dist, -1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(cdf(complement(dist, -1)), std::domain_error);
+   BOOST_MATH_CHECK_THROW(quantile(dist, 1), std::overflow_error);
+   BOOST_MATH_CHECK_THROW(quantile(complement(dist, 0)), std::overflow_error);
+   BOOST_MATH_CHECK_THROW(quantile(dist, -1), std::domain_error);
+   BOOST_MATH_CHECK_THROW(quantile(complement(dist, -1)), std::domain_error);
 
    BOOST_CHECK_EQUAL(pdf(dist, 0), exp(-pow(RealType(0) / RealType(3), RealType(2))) * pow(RealType(0), RealType(1)) * RealType(2) / RealType(3));
    BOOST_CHECK_EQUAL(pdf(weibull_distribution<RealType>(1, 3), 0), exp(-pow(RealType(0) / RealType(3), RealType(1))) * pow(RealType(0), RealType(0)) * RealType(1) / RealType(3));
-   BOOST_CHECK_THROW(pdf(weibull_distribution<RealType>(0.5, 3), 0), std::overflow_error);
+   BOOST_MATH_CHECK_THROW(pdf(weibull_distribution<RealType>(0.5, 3), 0), std::overflow_error);
 
    check_out_of_range<weibull_distribution<RealType> >(1, 1);
 } // template <class RealType>void test_spots(RealType)

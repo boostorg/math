@@ -173,12 +173,12 @@ void test_values(const T& val, const char* name)
    {
       BOOST_CHECK_EQUAL(boost::math::float_prior(std::numeric_limits<T>::infinity()), (std::numeric_limits<T>::max)());
       BOOST_CHECK_EQUAL(boost::math::float_next(-std::numeric_limits<T>::infinity()), -(std::numeric_limits<T>::max)());
-      BOOST_CHECK_THROW(boost::math::float_prior(-std::numeric_limits<T>::infinity()), std::domain_error);
-      BOOST_CHECK_THROW(boost::math::float_next(std::numeric_limits<T>::infinity()), std::domain_error);
+      BOOST_MATH_CHECK_THROW(boost::math::float_prior(-std::numeric_limits<T>::infinity()), std::domain_error);
+      BOOST_MATH_CHECK_THROW(boost::math::float_next(std::numeric_limits<T>::infinity()), std::domain_error);
       if(boost::math::policies:: BOOST_MATH_OVERFLOW_ERROR_POLICY == boost::math::policies::throw_on_error)
       {
-         BOOST_CHECK_THROW(boost::math::float_prior(-(std::numeric_limits<T>::max)()), std::overflow_error);
-         BOOST_CHECK_THROW(boost::math::float_next((std::numeric_limits<T>::max)()), std::overflow_error);
+         BOOST_MATH_CHECK_THROW(boost::math::float_prior(-(std::numeric_limits<T>::max)()), std::overflow_error);
+         BOOST_MATH_CHECK_THROW(boost::math::float_next((std::numeric_limits<T>::max)()), std::overflow_error);
       }
       else
       {

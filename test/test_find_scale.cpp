@@ -59,7 +59,7 @@ void test_spots(RealType)
   cout << "Tolerance for type " << typeid(RealType).name()  << " is "
     << setprecision(3) << tolerance  << " (or " << tolerance * 100 << "%)." << endl;
 
-  BOOST_CHECK_THROW( // Probability outside 0 to 1.
+  BOOST_MATH_CHECK_THROW( // Probability outside 0 to 1.
        find_scale<normal_distribution<RealType> >(
        static_cast<RealType>(0.), static_cast<RealType>(-1.), static_cast<RealType>(0.) ),
        std::domain_error);
@@ -69,32 +69,32 @@ void test_spots(RealType)
   BOOST_CHECK_EQUAL(n.scale(), 1); // aka standard_deviation.
 
    // Check for 'bad' arguments.
-  BOOST_CHECK_THROW(find_scale<normal>(0., -1., 0.), std::domain_error); // p below 0 to 1.
-  BOOST_CHECK_THROW(find_scale<normal>(0., 2., 0.), std::domain_error); // p above 0 to 1.
-  BOOST_CHECK_THROW(find_scale<normal>(numeric_limits<double>::infinity(), 0.5, 0.),
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(0., -1., 0.), std::domain_error); // p below 0 to 1.
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(0., 2., 0.), std::domain_error); // p above 0 to 1.
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(numeric_limits<double>::infinity(), 0.5, 0.),
     std::domain_error); // z not finite.
-  BOOST_CHECK_THROW(find_scale<normal>(numeric_limits<double>::quiet_NaN(), -1., 0.),
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(numeric_limits<double>::quiet_NaN(), -1., 0.),
     std::domain_error); // z not finite
-  BOOST_CHECK_THROW(find_scale<normal>(0., -1., numeric_limits<double>::quiet_NaN()),
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(0., -1., numeric_limits<double>::quiet_NaN()),
     std::domain_error); // scale not finite
 
 
-  BOOST_CHECK_THROW(find_scale<normal>(complement(0., -1., 0.)), std::domain_error); // p below 0 to 1.
-  BOOST_CHECK_THROW(find_scale<normal>(complement(0., 2., 0.)), std::domain_error); // p above 0 to 1.
-  BOOST_CHECK_THROW(find_scale<normal>(complement(numeric_limits<double>::infinity(), 0.5, 0.)),
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(0., -1., 0.)), std::domain_error); // p below 0 to 1.
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(0., 2., 0.)), std::domain_error); // p above 0 to 1.
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(numeric_limits<double>::infinity(), 0.5, 0.)),
     std::domain_error); // z not finite.
-  BOOST_CHECK_THROW(find_scale<normal>(complement(numeric_limits<double>::quiet_NaN(), -1., 0.)),
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(numeric_limits<double>::quiet_NaN(), -1., 0.)),
     std::domain_error); // z not finite
-  BOOST_CHECK_THROW(find_scale<normal>(complement(0., -1., numeric_limits<double>::quiet_NaN())),
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(0., -1., numeric_limits<double>::quiet_NaN())),
     std::domain_error); // scale not finite
 
-  BOOST_CHECK_THROW(find_scale<normal>(complement(0., -1., 0.)), std::domain_error); // p below 0 to 1.
+  BOOST_MATH_CHECK_THROW(find_scale<normal>(complement(0., -1., 0.)), std::domain_error); // p below 0 to 1.
 
 
   // Check for ab-use with unsuitable distribution(s), for example,
   // pareto distribution (and most others) can't be used with find_scale (or find_location)
   // because they lack the scale and location attributes.
-  // BOOST_CHECK_THROW(find_scale<pareto>(0., 0.5, 0.), std::domain_error);
+  // BOOST_MATH_CHECK_THROW(find_scale<pareto>(0., 0.5, 0.), std::domain_error);
   // correctly fails to compile in find_scale() at
   // BOOST_STATIC_ASSERT(::boost::math::tools::is_scaled_distribution<Dist>::value); 
 

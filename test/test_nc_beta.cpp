@@ -250,9 +250,9 @@ void test_spots(RealType)
       * exp(RealType(-31.5)) * 100 * 101 / (103 * 104) - 
       RealType(4.82280451915522329944315287538684030781836554279474240490936e13L) * RealType(4.82280451915522329944315287538684030781836554279474240490936e13L) 
       * exp(RealType(-63)) * 10000 / (103 * 103)), abs_tolerance);
-   BOOST_CHECK_THROW(skewness(dist), boost::math::evaluation_error);
-   BOOST_CHECK_THROW(kurtosis(dist), boost::math::evaluation_error);
-   BOOST_CHECK_THROW(kurtosis_excess(dist), boost::math::evaluation_error);
+   BOOST_MATH_CHECK_THROW(skewness(dist), boost::math::evaluation_error);
+   BOOST_MATH_CHECK_THROW(kurtosis(dist), boost::math::evaluation_error);
+   BOOST_MATH_CHECK_THROW(kurtosis_excess(dist), boost::math::evaluation_error);
 } // template <class RealType>void test_spots(RealType)
 
 
