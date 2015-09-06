@@ -15,6 +15,7 @@
 
 #include <pch.hpp>
 
+#include <boost/math/tools/test.hpp>
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/normal.hpp> // for normal_distribution
   using boost::math::normal; // Default type double.
@@ -98,7 +99,7 @@ void test_spots(RealType)
   // Define a (bad?) policy to ignore domain errors ('bad' arguments):
   typedef policy<domain_error<ignore_error> > ignore_domain_policy;
   // Using a typedef is convenient, especially if it is re-used.
-
+#ifndef BOOST_NO_EXCEPTIONS
   BOOST_CHECK_NO_THROW(find_location<normal>(0, -1, 1,
     ignore_domain_policy())); // probability outside [0, 1]
   BOOST_CHECK_NO_THROW(find_location<normal>(numeric_limits<double>::infinity(), -1, 1,
@@ -108,7 +109,7 @@ void test_spots(RealType)
     ignore_domain_policy()))); // probability outside [0, 1]
   BOOST_CHECK_NO_THROW(find_location<normal>(complement(numeric_limits<double>::infinity(), -1, 1,
     ignore_domain_policy()))); // z not finite.
-
+#endif
   // Find location to give a probability p (0.05) of z (-2)
   RealType sd = static_cast<RealType>(1); // normal default standard deviation = 1.
   RealType z = static_cast<RealType>(-2); // z to give prob p

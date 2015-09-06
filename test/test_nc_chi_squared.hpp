@@ -77,6 +77,7 @@ void test_spot(
    boost::math::non_central_chi_squared_distribution<RealType> dist(df, ncp);
    BOOST_CHECK_CLOSE(
       cdf(dist, cs), P, tol);
+#ifndef BOOST_NO_EXCEPTIONS
    try{
       BOOST_CHECK_CLOSE(
          pdf(dist, cs), naive_pdf(dist.degrees_of_freedom(), ncp, cs), tol * 150);
@@ -84,6 +85,7 @@ void test_spot(
    catch(const std::overflow_error&)
    {
    }
+#endif
    if((P < 0.99) && (Q < 0.99))
    {
       //
@@ -398,7 +400,9 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          // values to get back to the correct degrees of freedom or 
          // non-cenrality parameter:
          //
+#ifndef BOOST_NO_EXCEPTIONS
          try{
+#endif
             if((data[i][3] < 0.99) && (data[i][3] != 0))
             {
                BOOST_CHECK_CLOSE_EX(
@@ -417,11 +421,13 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
                   boost::math::non_central_chi_squared_distribution<value_type>::find_non_centrality(boost::math::complement(data[i][0], data[i][2], data[i][4])),
                   data[i][1], precision, i);
             }
+#ifndef BOOST_NO_EXCEPTIONS
          }
          catch(const std::exception& e)
          {
             BOOST_ERROR(e.what());
          }
+#endif
       }
    }
 #endif

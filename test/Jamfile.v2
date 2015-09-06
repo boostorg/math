@@ -102,7 +102,7 @@ run test_arcsine.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_bernoulli.cpp ../../test/build//boost_unit_test_framework ;
 run test_constants.cpp ../../test/build//boost_unit_test_framework ;
 run test_print_info_on_type.cpp ;
-run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 ;
+run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no ;
 run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_y.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_i.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
@@ -898,20 +898,20 @@ run ../quaternion/quaternion_mult_incl_test.cpp
 run test_legacy_nonfinite.cpp ../../test/build//boost_unit_test_framework ;
 run test_basic_nonfinite.cpp ../../test/build//boost_unit_test_framework ;
 run test_lexical_cast.cpp ../../test/build//boost_unit_test_framework ;
-run test_nonfinite_trap.cpp ../../test/build//boost_unit_test_framework ;
+run test_nonfinite_trap.cpp ../../test/build//boost_unit_test_framework : : : <exception-handling>off:<build>no ;
 run test_signed_zero.cpp ../../test/build//boost_unit_test_framework ;
 
 run complex_test.cpp ../../test/build//boost_unit_test_framework ;
 
-compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ;
-compile multiprc_concept_check_2.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ;
-compile multiprc_concept_check_3.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ;
-compile multiprc_concept_check_4.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release ;
+compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no ;
+compile multiprc_concept_check_2.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no ;
+compile multiprc_concept_check_3.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no ;
+compile multiprc_concept_check_4.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no ;
 compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : <build>no ] <debug-symbols>off ;
 compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off ;
 compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off ;
 compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] <debug-symbols>off ;
-compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] <debug-symbols>off ;
+compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] <debug-symbols>off <exception-handling>off:<build>no ;
 
 # Temporary tests for support of max_digits10
 # run ztest_max_digits10.cpp ;

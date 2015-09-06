@@ -416,6 +416,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
          // Sanity check mode, the accuracy of
          // the mode is at *best* the square root of the accuracy of the PDF:
          //
+#ifndef BOOST_NO_EXCEPTIONS
          try{
             value_type m = mode(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]));
             value_type p = pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m);
@@ -424,6 +425,7 @@ void quantile_sanity_check(T& data, const char* type_name, const char* test)
             BOOST_CHECK_EX(pdf(boost::math::non_central_t_distribution<value_type>(data[i][0], data[i][1]), m - delta) <= p, i);
          }
          catch(const boost::math::evaluation_error&) {}
+#endif
 #if 0
          //
          // Sanity check degrees-of-freedom finder, don't bother at float

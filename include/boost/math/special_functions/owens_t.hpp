@@ -577,14 +577,18 @@ namespace boost
             // when the last accelerated term was small enough...
             //
             int n;
+#ifndef BOOST_NO_EXCEPTIONS
             try
             {
+#endif
                n = itrunc(T(tools::log_max_value<T>() / 6));
+#ifndef BOOST_NO_EXCEPTIONS
             }
             catch(...)
             {
                n = (std::numeric_limits<int>::max)();
             }
+#endif
             n = (std::min)(n, 1500);
             T d = pow(3 + sqrt(T(8)), n);
             d = (d + 1 / d) / 2;
@@ -691,14 +695,18 @@ namespace boost
             // when the last accelerated term was small enough...
             //
             int n;
+#ifndef BOOST_NO_EXCEPTIONS
             try
             {
+#endif
                n = itrunc(RealType(tools::log_max_value<RealType>() / 6));
+#ifndef BOOST_NO_EXCEPTIONS
             }
             catch(...)
             {
                n = (std::numeric_limits<int>::max)();
             }
+#endif
             n = (std::min)(n, 1500);
             RealType d = pow(3 + sqrt(RealType(8)), n);
             d = (d + 1 / d) / 2;
@@ -860,25 +868,33 @@ namespace boost
             bool have_t1(false), have_t2(false);
             if(ah < 3)
             {
+#ifndef BOOST_NO_EXCEPTIONS
                try
                {
+#endif
                   have_t1 = true;
                   p1 = owens_t_T1_accelerated(h, a, forwarding_policy());
                   if(p1.second < target_precision)
                      return p1.first;
+#ifndef BOOST_NO_EXCEPTIONS
                }
                catch(const boost::math::evaluation_error&){}  // T1 may fail and throw, that's OK
+#endif
             }
             if(ah > 1)
             {
+#ifndef BOOST_NO_EXCEPTIONS
                try
                {
+#endif
                   have_t2 = true;
                   p2 = owens_t_T2_accelerated(h, a, ah, forwarding_policy());
                   if(p2.second < target_precision)
                      return p2.first;
+#ifndef BOOST_NO_EXCEPTIONS
                }
                catch(const boost::math::evaluation_error&){}  // T2 may fail and throw, that's OK
+#endif
             }
             //
             // If we haven't tried T1 yet, do it now - sometimes it succeeds and the number of iterations
@@ -886,14 +902,18 @@ namespace boost
             //
             if(!have_t1)
             {
+#ifndef BOOST_NO_EXCEPTIONS
                try
                {
+#endif
                   have_t1 = true;
                   p1 = owens_t_T1_accelerated(h, a, forwarding_policy());
                   if(p1.second < target_precision)
                      return p1.first;
+#ifndef BOOST_NO_EXCEPTIONS
                }
                catch(const boost::math::evaluation_error&){}  // T1 may fail and throw, that's OK
+#endif
             }
             //
             // If we haven't tried T2 yet, do it now - sometimes it succeeds and the number of iterations
@@ -901,24 +921,32 @@ namespace boost
             //
             if(!have_t2)
             {
+#ifndef BOOST_NO_EXCEPTIONS
                try
                {
+#endif
                   have_t2 = true;
                   p2 = owens_t_T2_accelerated(h, a, ah, forwarding_policy());
                   if(p2.second < target_precision)
                      return p2.first;
+#ifndef BOOST_NO_EXCEPTIONS
                }
                catch(const boost::math::evaluation_error&){}  // T2 may fail and throw, that's OK
+#endif
             }
             //
             // OK, nothing left to do but try the most expensive option which is T4,
             // this is often slow to converge, but when it does converge it tends to
             // be accurate:
+#ifndef BOOST_NO_EXCEPTIONS
             try
             {
+#endif
                return T4_mp(h, a, pol);
+#ifndef BOOST_NO_EXCEPTIONS
             }
             catch(const boost::math::evaluation_error&){}  // T4 may fail and throw, that's OK
+#endif
             //
             // Now look back at the results from T1 and T2 and see if either gave better
             // results than we could get from the 64-bit precision versions.

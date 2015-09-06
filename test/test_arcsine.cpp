@@ -115,17 +115,6 @@ void test_ignore_policy(RealType)
         // std::cout << "arcsine(-inf,+1) mean " << mean(ignore_error_arcsine(-std::numeric_limits<RealType>::infinity())) << std::endl;
         //BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(std::numeric_limits<RealType>::infinity(), 0))));
       }
-      // Check error message is correct.
-      try
-      { 
-        typedef arcsine_distribution<RealType> signal_error_arcsine;
-        //std::cout << mean(signal_error_arcsine(-std::numeric_limits<RealType>::infinity())) << std::endl;
-        // Error in function boost::math::arcsine_distribution<float>::arcsine_distribution: x_min argument is -1.#INF, but must be finite !
-      }
-      catch (std::exception ex)
-      {
-        std::cout << ex.what() << std::endl;
-      }
 
       // NaN constructors.
       BOOST_CHECK((boost::math::isnan)(mean(ignore_error_arcsine(2, nan))));
@@ -172,22 +161,6 @@ void test_ignore_policy(RealType)
 
     // 
     BOOST_CHECK(boost::math::isfinite(mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon()))));
-
-    // Checks on error messages.
-    try
-    {
-      typedef arcsine_distribution<RealType> signal_error_arcsine;
-      //std::cout << "mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon())) == "
-      //  << mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon())) << std::endl;
-      //  mean(ignore_error_arcsine(0, std::numeric_limits<RealType>::epsilon())) == 5.96046e-008
-      //std::cout << "mean(ignore_error_arcsine(0, 0)) == "
-      //  << mean(ignore_error_arcsine(0, 0)) << std::endl;
-      // mean(ignore_error_arcsine(0, 0)) == 1.#QNAN
-    }
-    catch (std::exception ex)
-    {
-      std::cout << ex.what() << std::endl;
-    }
 
     check_support<arcsine_distribution<RealType> >(arcsine_distribution<RealType>(0, 1));
   } // ordinary floats.

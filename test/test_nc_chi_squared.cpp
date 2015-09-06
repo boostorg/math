@@ -20,6 +20,7 @@
 #  define TEST_REAL_CONCEPT
 #endif
 
+#include <boost/math/tools/test.hpp>
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/distributions/non_central_chi_squared.hpp> // for chi_squared_distribution
 #include <boost/math/special_functions/cbrt.hpp> // for chi_squared_distribution

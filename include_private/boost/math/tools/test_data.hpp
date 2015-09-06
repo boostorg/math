@@ -530,9 +530,12 @@ bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
          }
          else
          {
+#ifndef BOOST_NO_EXCEPTIONS
             try
             {
+#endif
                info.z2 = boost::lexical_cast<T>(line);
+#ifndef BOOST_NO_EXCEPTIONS
             }
             catch(const boost::bad_lexical_cast&)
             {
@@ -546,6 +549,7 @@ bool get_user_parameter_info(parameter_info<T>& info, const char* param_name)
                std::cout << "Sorry don't recognise that either, giving up...\n\n";
                return false;
             }
+#endif
          }
          if(info.z1 >= info.z2)
          {

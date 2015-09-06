@@ -114,9 +114,12 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
    {
       const row_type& row = a[i];
       value_type point;
+#ifndef BOOST_NO_EXCEPTIONS
       try
       {
+#endif
          point = test_func(row);
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(const std::underflow_error&)
       {
@@ -136,6 +139,7 @@ test_result<typename calculate_result_type<A>::value_type> test(const A& a, F1 t
          // so we don't get further errors:
          point = expect_func(row);
       }
+#endif
       value_type expected = expect_func(row);
       value_type err = relative_error(point, expected);
 #ifdef BOOST_INSTRUMENT
