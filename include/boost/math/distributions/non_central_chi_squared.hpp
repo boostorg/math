@@ -442,7 +442,7 @@ namespace boost
             // noncentral chi squared", Biometrika 46: 364.
             // See also:
             // "A comparison of approximations to percentiles of the noncentral chi2-distribution",
-            // Hardeo Sahai and Mario Miguel Ojeda, Revista de Matematica: Teoria y Aplicaciones 2003 10(1–2) : 57–76.
+            // Hardeo Sahai and Mario Miguel Ojeda, Revista de Matematica: Teoria y Aplicaciones 2003 10(1-2) : 57-76.
             // Note that the latter reference refers to an approximation of the CDF, when they really mean the quantile.
             //
             value_type b = -(l * l) / (k + 3 * l);

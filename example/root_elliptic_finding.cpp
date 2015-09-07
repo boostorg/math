@@ -140,7 +140,7 @@ struct root_info
   std::vector<int> times; // arbirary units (ticks).
   //boost::int_least64_t min_time = std::numeric_limits<boost::int_least64_t>::max(); // Used to normalize times (as int).
   std::vector<double> normed_times;
-  int min_time = std::numeric_limits<int>::max(); // Used to normalize times.
+  int min_time = (std::numeric_limits<int>::max)(); // Used to normalize times.
   std::vector<uintmax_t> iterations;
   std::vector<long int> distances;
   std::vector<cpp_bin_float_100> full_results;

@@ -160,7 +160,7 @@ relative_difference = 3.40282347e+038
 /*`
 Note that finite values are always infinitely far away from infinities even if those finite values are very large:*/
 
-  a = std::numeric_limits<float>::max();
+  a = (std::numeric_limits<float>::max)();
   b = std::numeric_limits<float>::infinity();
   std::cout << "a = " << a << std::endl;
   std::cout << "b = " << b << std::endl;
@@ -377,7 +377,7 @@ A few values near zero are tested with varying tolerance below.
   c = std::numeric_limits<float>::denorm_min(); // 1.40129846e-045
   std::cout << "denorm_ min =" << c << ", is_small is " << is_small(c, epsilon) << std::endl; // true
 
-  c = std::numeric_limits<float>::min(); // 1.17549435e-038
+  c = (std::numeric_limits<float>::min)(); // 1.17549435e-038
   std::cout << "min = " << c << ", is_small is " << is_small(c, epsilon) << std::endl; // true
 
   c = 1 * epsilon; // 1.19209290e-007
