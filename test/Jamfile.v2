@@ -883,7 +883,7 @@ compile  compile_test/tools_toms748_inc_test.cpp ;
 run ../test/common_factor_test.cpp
     ../../test/build//boost_unit_test_framework ;
 
-run ../octonion/octonion_test.cpp
+run octonion_test.cpp
     ../../test/build//boost_unit_test_framework ;
 
 run ../quaternion/quaternion_test.cpp
