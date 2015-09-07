@@ -114,6 +114,7 @@ run students_t_example2.cpp ;
 run students_t_example3.cpp ;
 run students_t_single_sample.cpp ;
 run students_t_two_samples.cpp ;
+run HSO3SO4.cpp ;
 
 run root_elliptic_finding.cpp /boost/timer : : : release <link>static ;
 run root_finding_algorithms.cpp /boost/timer : : : release <link>static ;
