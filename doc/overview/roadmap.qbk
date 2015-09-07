@@ -6,6 +6,13 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
+[h4 Math-2.2.2]
+
+Patch release for Boost 1.60:
+
+* Allow the library to be used and tested with compiler exception handling support turned off.  To better facilitate this
+the default error handling policies have been changed to ['errno_on_error] but only when the compiler has no exception handling support.
+
 [h4 Math-2.2.1]
 
 Patch release for Boost-1.58:
