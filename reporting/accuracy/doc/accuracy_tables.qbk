@@ -4759,3 +4759,10 @@ CAUTION: Found non-finite result, when a finite value was expected at entry 16[b
 [errors_GNU_C_version_5_1_0_linux_double_cyl_neumann_GSL_1_16_Yn_Mathworld_Data]
 [errors_Microsoft_Visual_C_version_12_0_Win32_double_cyl_bessel_j_integer_orders___math_h__Bessel_JN_Mathworld_Data_Integer_Version_]
 ]
+
+[/
+  Copyright 2015 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

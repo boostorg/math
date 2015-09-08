@@ -2055,3 +2055,10 @@
 [table_Rational_Method_Comparison_with_Intel_C_C_0x_mode_version_1500_on_linux]
 [table_Rational_Method_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
 ]
+
+[/
+  Copyright 2015 John Maddock and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

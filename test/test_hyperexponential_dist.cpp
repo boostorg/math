@@ -343,7 +343,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(special_cases, RealT, test_types)
 {
     const RealT tol = make_tolerance<RealT>();
 
-	// When the number of phases is 1, the hyperexponential distribution is an exponential distribution
+    // When the number of phases is 1, the hyperexponential distribution is an exponential distribution
     const RealT rates1[] = { static_cast<RealT>(0.5L) };
     boost::math::hyperexponential_distribution<RealT> hexp1(rates1);
     boost::math::exponential_distribution<RealT> exp1(rates1[0]);
@@ -356,7 +356,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(special_cases, RealT, test_types)
     BOOST_CHECK_CLOSE(boost::math::quantile(hexp1, static_cast<RealT>(0.75L)), boost::math::quantile(exp1, static_cast<RealT>(0.75L)), tol);
     BOOST_CHECK_CLOSE(boost::math::mode(hexp1), boost::math::mode(exp1), tol);
 
-	// When a k-phase hyperexponential distribution has all rates equal to r, the distribution is an exponential distribution with rate r
+    // When a k-phase hyperexponential distribution has all rates equal to r, the distribution is an exponential distribution with rate r
     const RealT rate2 = static_cast<RealT>(0.5L);
     const RealT rates2[] = { rate2, rate2, rate2 };
     boost::math::hyperexponential_distribution<RealT> hexp2(rates2);
