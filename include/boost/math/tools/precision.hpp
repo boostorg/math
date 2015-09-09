@@ -169,7 +169,7 @@ inline BOOST_MATH_CONSTEXPR T epsilon(const mpl::true_& BOOST_MATH_APPEND_EXPLIC
 
 #if defined(__GNUC__) && ((LDBL_MANT_DIG == 106) || (__LDBL_MANT_DIG__ == 106))
 template <>
-inline BOOST_MATH_CONSTEXPR long double epsilon<long double>(const mpl::true_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(long double)) BOOST_MATH_NOEXCEPT(T)
+inline BOOST_MATH_CONSTEXPR long double epsilon<long double>(const mpl::true_& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(long double)) BOOST_MATH_NOEXCEPT(long double)
 {
    // numeric_limits on Darwin (and elsewhere) tells lies here:
    // the issue is that long double on a few platforms is
