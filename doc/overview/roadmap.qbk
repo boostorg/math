@@ -6,7 +6,7 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
-[h4 Math-2.2.2]
+[h4 Math-2.3.0]
 
 New Features:
 
@@ -29,6 +29,7 @@ See [@https://svn.boost.org/trac/boost/ticket/11547 11547].
 * Completely revamped performance testing and error-rate measuring code so we can more easily document how well (or not!) we're doing.
 This information will hopefully get more frequently updated in future as it's more or less automatically generated - see the /reporting/
 sub-directory for more information.
+* Fix some corner cases in the beta, incomplete beta, and incomplete beta derivative.  With thanks to Rocco Romeo.
 
 [h4 Math-2.2.1]
 

@@ -163,14 +163,14 @@ void expected_results()
       "Sun.*",                          // platform
       largest_type,                     // test type(s)
       "(?i).*medium.*",                 // test data group
-      ".*", 200, 40);                   // test function
+      ".*", 250, 40);                   // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
       "Sun.*",                          // platform
       "real_concept",                   // test type(s)
       "(?i).*medium.*",                 // test data group
-      ".*", 200, 40);                   // test function
+      ".*", 250, 40);                   // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib
@@ -253,7 +253,7 @@ void expected_results()
       "[^|]*",                          // platform
       "real_concept",                   // test type(s)
       "(?i).*medium.*",                     // test data group
-      ".*", 200, 50);  // test function
+      ".*", 250, 50);  // test function
    add_expected_result(
       "[^|]*",                          // compiler
       "[^|]*",                          // stdlib

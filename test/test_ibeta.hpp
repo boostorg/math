@@ -405,5 +405,38 @@ void test_spots(T)
       static_cast<T>(31),
       ldexp(static_cast<T>(1), -373)),
       static_cast<T>(1.34000034802625019731220264886560918028433223747877241307138e-222L), tolerance);
+   //
+   // Bug cases from Rocco Romeo:
+   //
+   BOOST_CHECK_CLOSE(
+      ::boost::math::beta(
+         static_cast<T>(2),
+         static_cast<T>(4),
+         ldexp(static_cast<T>(1 + static_cast<T>(1.0) / 1024), -351)),
+      static_cast<T>(2.381008060978474962211278613067275529112106932635520021e-212L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::beta(
+            static_cast<T>(2),
+            static_cast<T>(4),
+            ldexp(static_cast<T>(1 + static_cast<T>(1.0) / 2048), -351)),
+         static_cast<T>(2.378685692854274898232669682422430136513931911501225435e-212L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta(
+            static_cast<T>(3),
+            static_cast<T>(5),
+            ldexp(static_cast<T>(1 + static_cast<T>(15) / 16), -268)),
+            static_cast<T>(2.386034198603463687323052353589201848077110231388968865e-240L), tolerance);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_derivative(
+            static_cast<T>(2),
+            static_cast<T>(4),
+            ldexp(static_cast<T>(1), -557)),
+         static_cast<T>(4.23957586190238472641508753637420672781472122471791800210e-167L), tolerance * 4);
+      BOOST_CHECK_CLOSE(
+         ::boost::math::ibeta_derivative(
+            static_cast<T>(2),
+            static_cast<T>(4.5),
+            ldexp(static_cast<T>(1), -557)),
+         static_cast<T>(5.24647512910420109893867082626308082567071751558842352760e-167L), tolerance * 4);
 }
 
