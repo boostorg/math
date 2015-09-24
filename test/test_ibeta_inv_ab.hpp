@@ -34,7 +34,7 @@ template <class Real, class T>
 void test_inverses(const T& data)
 {
    using namespace std;
-   typedef typename T::value_type row_type;
+   //typedef typename T::value_type row_type;
    typedef Real                   value_type;
 
    value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policies::digits<value_type, boost::math::policies::policy<> >()/2)) * 100;
@@ -95,7 +95,7 @@ template <class Real, class T>
 void test_inverses2(const T& data, const char* type_name, const char* test_name)
 {
 #if !(defined(ERROR_REPORTING_MODE) && !defined(IBETA_INVA_FUNCTION_TO_TEST))
-   typedef typename T::value_type row_type;
+   //typedef typename T::value_type row_type;
    typedef Real                   value_type;
 
    typedef value_type (*pg)(value_type, value_type, value_type);

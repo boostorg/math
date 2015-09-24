@@ -196,7 +196,7 @@ void test_spots(T)
    BOOST_CHECK_CLOSE(::boost::math::gamma_p(static_cast<T>(30), ldexp(T(1), -30)), static_cast<T>(4.460092102072560946444018923090222645613009128135650652e-304L), tolerance);
    BOOST_CHECK_CLOSE(::boost::math::gamma_p_derivative(static_cast<T>(2), ldexp(T(1), -575)), static_cast<T>(8.08634922390438981326119906687585206568664784377654648227177e-174L), tolerance);
 
-   typedef boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::throw_on_error> > throw_policy;
+   //typedef boost::math::policies::policy<boost::math::policies::overflow_error<boost::math::policies::throw_on_error> > throw_policy;
 
    if(std::numeric_limits<T>::max_exponent <= 1024 && std::numeric_limits<T>::has_infinity)
    {
