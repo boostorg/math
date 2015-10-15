@@ -6,6 +6,31 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
+[h4 Math-2.3.0 (Boost-1.60)]
+
+New Features:
+
+* Promote the root finding and function minimization code to first class citizens - these are now officially supported as part of the library.
+* Allow the library to be used and tested with compiler exception handling support turned off.  To better facilitate this
+the default error handling policies have been changed to ['errno_on_error] but only when the compiler has no exception handling support.
+
+Patches:
+
+* Fix behaviour of the non-central chi-squared distribution when the non-centrality parameter is zero to match the chi-squared, 
+see [@https://svn.boost.org/trac/boost/ticket/11557 11557].
+* Fix comments in code for the hypergeometric to match what it actually does, also fixes the parameter access functions to return
+the correct values.  See [@https://svn.boost.org/trac/boost/ticket/11556 11556].
+* Stopped using hidden visiblity library build with the Oracle compiler as it leads to unresolved externals from the C++ standard library.
+See [@https://svn.boost.org/trac/boost/ticket/11547 11547].
+* Fix unintended use of __declspec when building with Oracle C++.  See [@https://svn.boost.org/trac/boost/ticket/11546 11546].
+* Fix corner case bug in root bracketing code, see [@https://svn.boost.org/trac/boost/ticket/11532 11532].
+* Add some missing typecasts in arguments to std::max in Bernoulli code.  See [@https://svn.boost.org/trac/boost/ticket/11453 11453].
+* Fix mistaken assumptions about the possible values for FLT_EVAL_METHOD.  See [@https://svn.boost.org/trac/boost/ticket/11429 11429].
+* Completely revamped performance testing and error-rate measuring code so we can more easily document how well (or not!) we're doing.
+This information will hopefully get more frequently updated in future as it's more or less automatically generated - see the /reporting/
+sub-directory for more information.
+* Fix some corner cases in the beta, incomplete beta, and incomplete beta derivative.  With thanks to Rocco Romeo.
+
 [h4 Math-2.2.1]
 
 Patch release for Boost-1.58:

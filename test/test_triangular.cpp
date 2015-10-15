@@ -98,31 +98,31 @@ void test_spots(RealType)
 
   if (std::numeric_limits<RealType>::has_quiet_NaN == true)
   {
-  BOOST_CHECK_THROW( // duff parameter lower.
+  BOOST_MATH_CHECK_THROW( // duff parameter lower.
     triangular_distribution<RealType>(static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN()), 0, 0),
     std::domain_error);
 
-  BOOST_CHECK_THROW( // duff parameter mode.
+  BOOST_MATH_CHECK_THROW( // duff parameter mode.
     triangular_distribution<RealType>(0, static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN()), 0),
     std::domain_error);
 
-  BOOST_CHECK_THROW( // duff parameter upper.
+  BOOST_MATH_CHECK_THROW( // duff parameter upper.
     triangular_distribution<RealType>(0, 0, static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN())),
     std::domain_error);
   } // quiet_NaN tests.
 
-  BOOST_CHECK_THROW( // duff parameters upper < lower.
+  BOOST_MATH_CHECK_THROW( // duff parameters upper < lower.
     triangular_distribution<RealType>(1, 0, -1),
     std::domain_error);
 
-  BOOST_CHECK_THROW( // duff parameters upper == lower.
+  BOOST_MATH_CHECK_THROW( // duff parameters upper == lower.
     triangular_distribution<RealType>(0, 0, 0),
     std::domain_error);
-  BOOST_CHECK_THROW( // duff parameters mode < lower.
+  BOOST_MATH_CHECK_THROW( // duff parameters mode < lower.
     triangular_distribution<RealType>(0, -1, 1),
     std::domain_error);
 
-  BOOST_CHECK_THROW( // duff parameters mode > upper.
+  BOOST_MATH_CHECK_THROW( // duff parameters mode > upper.
     triangular_distribution<RealType>(0, 2, 1),
     std::domain_error);
 
@@ -223,22 +223,22 @@ void test_spots(RealType)
     // Note that these assume that  BOOST_MATH_OVERFLOW_ERROR_POLICY is NOT throw_on_error.
     // #define BOOST_MATH_OVERFLOW_ERROR_POLICY == throw_on_error would give a throw here.
     // #define BOOST_MATH_DOMAIN_ERROR_POLICY == throw_on_error IS defined, so the throw path
-    // of error handling is tested below with BOOST_CHECK_THROW tests.
+    // of error handling is tested below with BOOST_MATH_CHECK_THROW tests.
 
-    BOOST_CHECK_THROW( // x == infinity NOT OK.
+    BOOST_MATH_CHECK_THROW( // x == infinity NOT OK.
       pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(std::numeric_limits<RealType>::infinity())),
       std::domain_error);
 
-    BOOST_CHECK_THROW( // x == minus infinity not OK too.
+    BOOST_MATH_CHECK_THROW( // x == minus infinity not OK too.
       pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-std::numeric_limits<RealType>::infinity())),
       std::domain_error);
   }
   if(std::numeric_limits<RealType>::has_quiet_NaN)
   { // BOOST_CHECK tests for NaN using std::numeric_limits<>::has_quiet_NaN() - should throw.
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
       pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(std::numeric_limits<RealType>::quiet_NaN())),
       std::domain_error);
-    BOOST_CHECK_THROW(
+    BOOST_MATH_CHECK_THROW(
       pdf(triangular_distribution<RealType>(0, 0, 1), static_cast<RealType>(-std::numeric_limits<RealType>::quiet_NaN())),
       std::domain_error);
   } // test for x = NaN using std::numeric_limits<>::quiet_NaN()
@@ -480,7 +480,7 @@ void test_spots(RealType)
     // Note that these assume that BOOST_MATH_OVERFLOW_ERROR_POLICY is NOT throw_on_error.
     // #define BOOST_MATH_OVERFLOW_ERROR_POLICY == throw_on_error would give a throw here.
     // #define BOOST_MATH_DOMAIN_ERROR_POLICY == throw_on_error IS defined, so the throw path
-    // of error handling is tested below with BOOST_CHECK_THROW tests.
+    // of error handling is tested below with BOOST_MATH_CHECK_THROW tests.
 
     using boost::math::policies::policy;
     using boost::math::policies::domain_error;
@@ -500,9 +500,9 @@ void test_spots(RealType)
     // value of std::numeric_limits<RealType>::infinity() is zero, so FPclassify is zero,
     // so (boost::math::isfinite)(std::numeric_limits<RealType>::infinity()) does not detect infinity.
     // so these tests would never throw.
-    //BOOST_CHECK_THROW(pdf(tridef, std::numeric_limits<RealType>::infinity()),  std::domain_error);
-    //BOOST_CHECK_THROW(pdf(tridef, std::numeric_limits<RealType>::quiet_NaN()),  std::domain_error);
-    // BOOST_CHECK_THROW(pdf(tridef, boost::math::tools::max_value<RealType>() * 2),  std::domain_error); // Doesn't throw.
+    //BOOST_MATH_CHECK_THROW(pdf(tridef, std::numeric_limits<RealType>::infinity()),  std::domain_error);
+    //BOOST_MATH_CHECK_THROW(pdf(tridef, std::numeric_limits<RealType>::quiet_NaN()),  std::domain_error);
+    // BOOST_MATH_CHECK_THROW(pdf(tridef, boost::math::tools::max_value<RealType>() * 2),  std::domain_error); // Doesn't throw.
     BOOST_CHECK_EQUAL(pdf(tridef, boost::math::tools::max_value<RealType>()), 0);
   }
   // Special cases:
@@ -522,10 +522,10 @@ void test_spots(RealType)
   // Error checks:
   if(std::numeric_limits<RealType>::has_quiet_NaN)
   { // BOOST_CHECK tests for quiet_NaN (not for real_concept, for example - see notes above).
-    BOOST_CHECK_THROW(triangular_distribution<RealType>(0, std::numeric_limits<RealType>::quiet_NaN()), std::domain_error);
-    BOOST_CHECK_THROW(triangular_distribution<RealType>(0, -std::numeric_limits<RealType>::quiet_NaN()), std::domain_error);
+    BOOST_MATH_CHECK_THROW(triangular_distribution<RealType>(0, std::numeric_limits<RealType>::quiet_NaN()), std::domain_error);
+    BOOST_MATH_CHECK_THROW(triangular_distribution<RealType>(0, -std::numeric_limits<RealType>::quiet_NaN()), std::domain_error);
   }
-  BOOST_CHECK_THROW(triangular_distribution<RealType>(1, 0), std::domain_error); // lower > upper!
+  BOOST_MATH_CHECK_THROW(triangular_distribution<RealType>(1, 0), std::domain_error); // lower > upper!
 
   check_out_of_range<triangular_distribution<RealType> >(-1, 0, 1);
 } // template <class RealType>void test_spots(RealType)
@@ -679,7 +679,7 @@ BOOST_AUTO_TEST_CASE( test_main )
      std::cout << "<note>The long double tests have been disabled on this platform "
         "either because the long double overloads of the usual math functions are "
         "not available at all, or because they are too inaccurate for these tests "
-        "to pass.</note>" << std::cout;
+        "to pass.</note>" << std::endl;
   #endif
 
   
