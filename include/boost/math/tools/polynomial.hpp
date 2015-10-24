@@ -98,6 +98,47 @@ T evaluate_chebyshev(const Seq& a, const T& x)
    return a[0] / 2 + yk * x - yk1;
 }
 
+
+template <typename T>
+class polynomial;
+
+
+/* Calculates a / b and a % b, returning the pair (quotient, remainder) together
+ * because the same amount of computation yields both.
+ */
+template <typename T>
+std::pair< polynomial<T>, polynomial<T> >
+quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
+{
+    if (divisor.degree() == 0 && divisor[0] == T(0))
+        throw std::domain_error("Divide by zero.");
+    std::vector<T> intermediate_result(dividend.data());
+    
+    {
+        T const normalizer = divisor[0];
+        for (std::size_t i = 0; i < dividend.degree() - divisor.degree() + 1; i++)
+        {
+            if (intermediate_result[i] != T(0))
+            {
+                T const coefficient = intermediate_result[i] /= normalizer;
+                for (std::size_t j = 1; j < divisor.degree() + 1; j++)
+                {
+                    intermediate_result[i + j] += -divisor[j] * coefficient;
+                }
+            }
+        }
+    }
+    
+    {
+        typedef BOOST_DEDUCED_TYPENAME std::vector<T>::iterator iterator;
+        iterator f = intermediate_result.begin();
+        iterator m = f + dividend.degree() - divisor.degree() + 1;
+        iterator l = m + divisor.degree();
+        return std::make_pair(polynomial<T>(f, m), polynomial<T>(m, l));
+    }
+}
+
+
 template <class T>
 class polynomial
 {
@@ -237,44 +278,22 @@ public:
       return *this;
    }
 
+   template <typename U>
+   polynomial& operator /=(const polynomial<U>& value)
+   {
+       *this = quotient_remainder(*this, value).first;
+       return *this;
+   }
+   
+   template <typename U>
+   polynomial& operator %=(const polynomial<U>& value)
+   {
+       *this = quotient_remainder(*this, value).second;
+       return *this;
+   }
 private:
    std::vector<T> m_data;
 };
-
-
-/* Calculates a / b and a % b, returning the pair (quotient, remainder) together
- * because the same amount of computation yields both.
-*/
-template <typename T>
-std::pair< polynomial<T>, polynomial<T> > quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
-{
-    if (divisor.degree() == 0 && divisor[0] == T(0))
-        throw std::domain_error("Divide by zero.");
-    std::vector<T> intermediate_result(dividend.data());
-
-    {
-        T const normalizer = divisor[0];
-        for (std::size_t i = 0; i < dividend.degree() - divisor.degree() + 1; i++)
-        {
-            if (intermediate_result[i] != T(0))
-            {
-                T const coefficient = intermediate_result[i] /= normalizer;
-                for (std::size_t j = 1; j < divisor.degree() + 1; j++)
-                {
-                    intermediate_result[i + j] += -divisor[j] * coefficient;
-                }
-            }
-        }
-    }
-    
-    {
-        typedef BOOST_DEDUCED_TYPENAME std::vector<T>::iterator iterator;
-        iterator f = intermediate_result.begin();
-        iterator m = f + dividend.degree() - divisor.degree() + 1;
-        iterator l = m + divisor.degree();
-        return std::make_pair(polynomial<T>(f, m), polynomial<T>(m, l));
-    }
-}
 
 
 template <class T>
@@ -299,6 +318,22 @@ inline polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b)
    polynomial<T> result(a);
    result *= b;
    return result;
+}
+
+template <class T>
+inline polynomial<T> operator / (const polynomial<T>& a, const polynomial<T>& b)
+{
+    polynomial<T> result(a);
+    result /= b;
+    return result;
+}
+
+template <class T>
+inline polynomial<T> operator % (const polynomial<T>& a, const polynomial<T>& b)
+{
+    polynomial<T> result(a);
+    result %= b;
+    return result;
 }
 
 template <class T, class U>
