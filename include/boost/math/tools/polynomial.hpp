@@ -108,11 +108,13 @@ public:
 
    // construct:
    polynomial(){}
+   
    template <class U>
    polynomial(const U* data, unsigned order)
       : m_data(data, data + order + 1)
    {
    }
+   
    template <class U>
    polynomial(const U& point)
    {
@@ -132,6 +134,12 @@ public:
       }
    }
 
+   template <typename I>
+   polynomial(I first, I last)
+      : m_data(first, last)
+   {
+   }
+   
    // access:
    size_type size()const { return m_data.size(); }
    size_type degree()const { return m_data.size() - 1; }
@@ -150,6 +158,11 @@ public:
    std::vector<T> chebyshev()const
    {
       return polynomial_to_chebyshev(m_data);
+   }
+   
+   std::vector<T> const& data() const
+   {
+       return m_data;
    }
 
    // operators:
@@ -227,6 +240,42 @@ public:
 private:
    std::vector<T> m_data;
 };
+
+
+/* Calculates a / b and a % b, returning the pair (quotient, remainder) together
+ * because the same amount of computation yields both.
+*/
+template <typename T>
+std::pair< polynomial<T>, polynomial<T> > quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
+{
+    if (divisor.degree() == 0 && divisor[0] == T(0))
+        throw std::domain_error("Divide by zero.");
+    std::vector<T> intermediate_result(dividend.data());
+
+    {
+        T const normalizer = divisor[0];
+        for (std::size_t i = 0; i < dividend.degree() - divisor.degree() + 1; i++)
+        {
+            if (intermediate_result[i] != T(0))
+            {
+                T const coefficient = intermediate_result[i] /= normalizer;
+                for (std::size_t j = 1; j < divisor.degree() + 1; j++)
+                {
+                    intermediate_result[i + j] += -divisor[j] * coefficient;
+                }
+            }
+        }
+    }
+    
+    {
+        typedef BOOST_DEDUCED_TYPENAME std::vector<T>::iterator iterator;
+        iterator f = intermediate_result.begin();
+        iterator m = f + dividend.degree() - divisor.degree() + 1;
+        iterator l = m + divisor.degree();
+        return std::make_pair(polynomial<T>(f, m), polynomial<T>(m, l));
+    }
+}
+
 
 template <class T>
 inline polynomial<T> operator + (const polynomial<T>& a, const polynomial<T>& b)
