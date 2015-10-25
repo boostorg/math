@@ -133,6 +133,8 @@ unchecked_synthetic_division(const polynomial<T>& dividend, const polynomial<T>&
         iterator const f = intermediate_result.begin();
         iterator const m = f + dividend.degree() - divisor.degree() + 1;
         iterator const l = m + (*m == T(0) ? 1 : divisor.degree());
+        BOOST_ASSERT(m - f > 0);
+        BOOST_ASSERT(l - m > 0);
         return std::make_pair(polynomial<T>(f, m), polynomial<T>(m, l));
     }
 }
