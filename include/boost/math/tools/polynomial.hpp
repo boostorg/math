@@ -103,15 +103,14 @@ template <typename T>
 class polynomial;
 
 
-/* Calculates a / b and a % b, returning the pair (quotient, remainder) together
- * because the same amount of computation yields both.
- */
+
 template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
-quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
+unchecked_synthetic_division(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
-    if (divisor.degree() == 0 && divisor[0] == T(0))
-        throw std::domain_error("Divide by zero.");
+    BOOST_ASSERT(dividend.degree() >= divisor.degree());
+    BOOST_ASSERT(divisor.degree() != 0 || divisor[0] != T(0));
+    
     std::vector<T> intermediate_result(dividend.data());
     
     {
@@ -131,11 +130,29 @@ quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
     
     {
         typedef BOOST_DEDUCED_TYPENAME std::vector<T>::iterator iterator;
-        iterator f = intermediate_result.begin();
-        iterator m = f + dividend.degree() - divisor.degree() + 1;
-        iterator l = m + divisor.degree();
+        iterator const f = intermediate_result.begin();
+        iterator const m = f + dividend.degree() - divisor.degree() + 1;
+        iterator const l = m + (*m == T(0) ? 1 : divisor.degree());
         return std::make_pair(polynomial<T>(f, m), polynomial<T>(m, l));
     }
+}
+
+/* Calculates a / b and a % b, returning the pair (quotient, remainder) together
+ * because the same amount of computation yields both.
+ */
+template <typename T>
+std::pair< polynomial<T>, polynomial<T> >
+quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
+{
+    if (divisor.degree() == 0 && divisor[0] == T(0))
+        throw std::domain_error("Divide by zero.");
+    
+    if (dividend.degree() < divisor.degree())
+    {
+        return std::make_pair(polynomial<T>(T(0)), dividend);
+    }
+    
+    return unchecked_synthetic_division(dividend, divisor);
 }
 
 
