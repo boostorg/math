@@ -14,6 +14,7 @@
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/binomial.hpp>
+#include <boost/operators.hpp>
 
 #include <vector>
 #include <ostream>
@@ -99,7 +100,8 @@ T evaluate_chebyshev(const Seq& a, const T& x)
 }
 
 template <class T>
-class polynomial
+class polynomial 
+    : ordered_ring_operators< polynomial<T> >
 {
 public:
    // typedefs:
@@ -150,6 +152,11 @@ public:
    std::vector<T> chebyshev()const
    {
       return polynomial_to_chebyshev(m_data);
+   }
+   
+   const std::vector<T>& data() const
+   {
+       return m_data;
    }
 
    // operators:
@@ -298,6 +305,18 @@ inline polynomial<T> operator * (const U& a, const polynomial<T>& b)
    polynomial<T> result(b);
    result *= a;
    return result;
+}
+
+template <typename T>
+bool operator == (polynomial<T> const &a, polynomial<T> const &b)
+{
+    return a.data() == b.data();
+}
+
+template <typename T>
+bool operator < (polynomial<T> const &a, polynomial<T> const &b)
+{
+    return a.data() < b.data();
 }
 
 template <class charT, class traits, class T>
