@@ -61,6 +61,10 @@ T bessel_yn(int n, T x, const Policy& pol)
           return boost::math::sign(scale) * boost::math::sign(value) * policies::raise_overflow_error<T>(function, 0, pol);
        value /= scale;
     }
+    else if(asymptotic_bessel_large_x_limit(n, x))
+    {
+       value = factor * asymptotic_bessel_y_large_x_2(static_cast<T>(abs(n)), x);
+    }
     else if (n == 0)
     {
         value = bessel_y0(x, pol);
@@ -76,23 +80,27 @@ T bessel_yn(int n, T x, const Policy& pol)
        int k = 1;
        BOOST_ASSERT(k < n);
        policies::check_series_iterations<T>("boost::math::bessel_y_n<%1%>(%1%,%1%)", n, pol);
-       do
+       T fact = 2 * k / x;
+       value = fact * current - prev;
+       prev = current;
+       current = value;
+       ++k;
+       if(fact > 1)
        {
-           T fact = 2 * k / x;
-           if((fact > 1) && ((tools::max_value<T>() - fabs(prev)) / fact < fabs(current)))
-           {
-              prev /= current;
-              factor /= current;
-              current = 1;
-           }
+          prev /= current;
+          factor /= current;
+          current = 1;
+       }
+       while(k < n)
+       {
+           fact = 2 * k / x;
            value = fact * current - prev;
            prev = current;
            current = value;
            ++k;
        }
-       while(k < n);
        if(fabs(tools::max_value<T>() * factor) < fabs(value))
-          return sign(value) * sign(value) * policies::raise_overflow_error<T>(function, 0, pol);
+          return sign(value) * sign(factor) * policies::raise_overflow_error<T>(function, 0, pol);
        value /= factor;
     }
     return value;
