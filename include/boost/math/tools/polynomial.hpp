@@ -14,6 +14,7 @@
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/binomial.hpp>
+#include <boost/operators.hpp>
 
 #include <vector>
 #include <ostream>
@@ -159,7 +160,9 @@ quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 
 
 template <class T>
-class polynomial
+class polynomial : 
+    dividable< polynomial<int>
+    , modable< polynomial<int> > >
 {
 public:
    // typedefs:
@@ -337,22 +340,6 @@ inline polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b)
    polynomial<T> result(a);
    result *= b;
    return result;
-}
-
-template <class T>
-inline polynomial<T> operator / (const polynomial<T>& a, const polynomial<T>& b)
-{
-    polynomial<T> result(a);
-    result /= b;
-    return result;
-}
-
-template <class T>
-inline polynomial<T> operator % (const polynomial<T>& a, const polynomial<T>& b)
-{
-    polynomial<T> result(a);
-    result %= b;
-    return result;
 }
 
 template <class T, class U>
