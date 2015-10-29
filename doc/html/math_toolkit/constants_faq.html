@@ -310,8 +310,8 @@
       should be 32. (the default <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">RR</span><span class="special">&gt;::</span><span class="identifier">digits10</span><span class="special">()</span></code>
       should be about 40). (which seems to agree with experiments). We output constants
       (including some noisy bits, an approximation to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">RR</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span><span class="special">()</span></code>)
-      by adding 2 extra decimal digits, so using <code class="computeroutput"><span class="identifier">quad_float</span><span class="special">::</span><span class="identifier">SetOutputPrecision</span><span class="special">(</span><span class="number">32</span> <span class="special">+</span>
-      <span class="number">2</span><span class="special">);</span></code>
+      by adding 2 or 3 extra decimal digits, so using <code class="computeroutput"><span class="identifier">quad_float</span><span class="special">::</span><span class="identifier">SetOutputPrecision</span><span class="special">(</span><span class="number">32</span> <span class="special">+</span>
+      <span class="number">3</span><span class="special">);</span></code>
     </p>
 <p>
       Apple Mac/Darwin uses a similar <span class="emphasis"><em>doubledouble</em></span> 106-bit for
