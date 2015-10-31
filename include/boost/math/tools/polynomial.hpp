@@ -24,6 +24,15 @@
 namespace boost{ namespace math{ namespace tools{
 
 template <class T>
+struct identity
+{
+    T operator()(T const &x) const
+    {
+        return x;
+    }
+};
+
+template <class T>
 T chebyshev_coefficient(unsigned n, unsigned m)
 {
    BOOST_MATH_STD_USING
@@ -103,7 +112,6 @@ T evaluate_chebyshev(const Seq& a, const T& x)
 
 template <typename T>
 class polynomial;
-
 
 
 template <typename T>
@@ -200,7 +208,8 @@ public:
    template <class U>
    polynomial(const U& point)
    {
-      m_data.push_back(point);
+       if (point != U(0))
+          m_data.push_back(point);
    }
 
    // copy:
@@ -218,7 +227,11 @@ public:
 
    // access:
    size_type size()const { return m_data.size(); }
-   size_type degree()const { return m_data.size() - 1; }
+   size_type degree()const
+   { 
+       BOOST_ASSERT(size() != 0);
+       return m_data.size() - 1;
+    }
    value_type& operator[](size_type i)
    {
       return m_data[i];
@@ -256,12 +269,18 @@ public:
    template <class U>
    polynomial& operator -=(const U& value)
    {
-      if(m_data.size() == 0)
-         m_data.push_back(-value);
-      else
-      {
-         m_data[0] -= value;
-      }
+       if (value != U(0))
+       {
+            if(m_data.size() == 0)
+                m_data.push_back(-value);
+            else
+            {
+                if (m_data.size() == 1 && m_data[0] == value)
+                    m_data.clear();
+                else
+                    m_data[0] -= value;
+            }
+       }
       return *this;
    }
    template <class U>
@@ -271,25 +290,17 @@ public:
          m_data[i] *= value;
       return *this;
    }
+   
    template <class U>
    polynomial& operator +=(const polynomial<U>& value)
    {
-      size_type s1 = (std::min)(m_data.size(), value.size());
-      for(size_type i = 0; i < s1; ++i)
-         m_data[i] += value[i];
-      for(size_type i = s1; i < value.size(); ++i)
-         m_data.push_back(value[i]);
-      return *this;
+      return linear_translation(value, identity<U>(), std::plus<U>());
    }
+   
    template <class U>
    polynomial& operator -=(const polynomial<U>& value)
    {
-      size_type s1 = (std::min)(m_data.size(), value.size());
-      for(size_type i = 0; i < s1; ++i)
-         m_data[i] -= value[i];
-      for(size_type i = s1; i < value.size(); ++i)
-         m_data.push_back(-value[i]);
-      return *this;
+       return linear_translation(value, std::negate<U>(), std::minus<U>());
    }
    template <class U>
    polynomial& operator *=(const polynomial<U>& value)
@@ -327,7 +338,23 @@ public:
        return *this;
    }
 private:
-   std::vector<T> m_data;
+    template <class U, class R1, class R2>
+    polynomial& linear_translation(const polynomial<U>& value, R1 sign, R2 op)
+    {
+        if (value != zero_element(std::multiplies< polynomial<U> >()))
+        {
+            size_type s1 = (std::min)(m_data.size(), value.size());
+            for(size_type i = 0; i < s1; ++i)
+                m_data[i] = op(m_data[i], value[i]);
+            for(size_type i = s1; i < value.size(); ++i)
+                m_data.push_back(sign(value[i]));
+            while (!m_data.empty() && m_data.back() == U(0))
+                m_data.pop_back();
+        }
+        return *this;
+    }
+    
+    std::vector<T> m_data;
 };
 
 
