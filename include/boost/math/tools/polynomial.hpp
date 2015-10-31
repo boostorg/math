@@ -11,6 +11,7 @@
 #endif
 
 #include <boost/assert.hpp>
+#include <boost/config.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/binomial.hpp>
@@ -109,35 +110,49 @@ template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 unchecked_synthetic_division(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
-    BOOST_ASSERT(dividend.degree() >= divisor.degree());
-    BOOST_ASSERT(divisor.degree() != 0 || divisor[0] != T(0));
+    BOOST_ASSERT(divisor.degree() <= dividend.degree());
     
     std::vector<T> intermediate_result(dividend.data());
+    if (divisor.degree() == T(0))
+        intermediate_result.insert(begin(intermediate_result), T(0));
     
     {
-        T const normalizer = divisor[0];
-        for (std::size_t i = 0; i < dividend.degree() - divisor.degree() + 1; i++)
+        typedef BOOST_DEDUCED_TYPENAME std::vector<T>::reverse_iterator reverse_iterator;
+        T const normalizer = divisor[divisor.size() - 1];
+        for (reverse_iterator i = intermediate_result.rbegin(); 
+             i != intermediate_result.rbegin() + dividend.degree() - divisor.degree() + 1; 
+             i++)
         {
-            if (intermediate_result[i] != T(0))
+            if (*i != T(0))
             {
-                T const coefficient = intermediate_result[i] /= normalizer;
+                T const coefficient = *i /= normalizer;
                 for (std::size_t j = 1; j < divisor.degree() + 1; j++)
-                {
-                    intermediate_result[i + j] += -divisor[j] * coefficient;
-                }
+                    *(i + j) += -*(divisor.data().rbegin() + j) * coefficient;
             }
         }
     }
     
     {
         typedef BOOST_DEDUCED_TYPENAME std::vector<T>::iterator iterator;
-        iterator const f = intermediate_result.begin();
-        iterator const m = f + dividend.degree() - divisor.degree() + 1;
-        iterator const l = m + (*m == T(0) ? 1 : divisor.degree());
+        iterator const f = intermediate_result.begin(); // remainder
+        iterator const m = f + std::max(divisor.degree(), 1ul); // quotient
+        iterator const l = intermediate_result.end();
         BOOST_ASSERT(m - f > 0);
         BOOST_ASSERT(l - m > 0);
-        return std::make_pair(polynomial<T>(f, m), polynomial<T>(m, l));
+        polynomial<T> const quotient(m, l);
+        polynomial<T> const remainder = *f != T(0) ? polynomial<T>(f, m) : polynomial<T>();
+        return std::make_pair(quotient, remainder);
     }
+}
+
+
+/**
+ * Returns the zero element for multiplication of polynomials.
+ */
+template <class T>
+polynomial<T> zero_element(std::multiplies< polynomial<T> >)
+{
+    return polynomial<T>();
 }
 
 /* Calculates a / b and a % b, returning the pair (quotient, remainder) together
@@ -147,22 +162,20 @@ template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
-    if (divisor.degree() == 0 && divisor[0] == T(0))
+    polynomial<T> const zero = zero_element(std::multiplies< polynomial<T> >());
+    if (divisor == zero)
         throw std::domain_error("Divide by zero.");
-    
     if (dividend.degree() < divisor.degree())
-    {
-        return std::make_pair(polynomial<T>(T(0)), dividend);
-    }
-    
+        return std::make_pair(zero, dividend); // TODO: Is this right?
     return unchecked_synthetic_division(dividend, divisor);
 }
 
 
 template <class T>
 class polynomial : 
-    dividable< polynomial<int>
-    , modable< polynomial<int> > >
+    equality_comparable< polynomial<T>, 
+    dividable< polynomial<T>, 
+    modable< polynomial<T> > > >
 {
 public:
    // typedefs:
@@ -175,6 +188,12 @@ public:
    template <class U>
    polynomial(const U* data, unsigned order)
       : m_data(data, data + order + 1)
+   {
+   }
+   
+   template <class I>
+   polynomial(I first, I last)
+   : m_data(first, last)
    {
    }
    
@@ -197,12 +216,6 @@ public:
       }
    }
 
-   template <typename I>
-   polynomial(I first, I last)
-      : m_data(first, last)
-   {
-   }
-   
    // access:
    size_type size()const { return m_data.size(); }
    size_type degree()const { return m_data.size() - 1; }
@@ -388,6 +401,12 @@ inline polynomial<T> operator * (const U& a, const polynomial<T>& b)
    polynomial<T> result(b);
    result *= a;
    return result;
+}
+
+template <class T>
+bool operator == (const polynomial<T> &x, const polynomial<T> &y)
+{
+    return x.data() == y.data();
 }
 
 template <class charT, class traits, class T>
