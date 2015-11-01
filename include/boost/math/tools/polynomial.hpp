@@ -11,7 +11,9 @@
 #endif
 
 #include <boost/assert.hpp>
+#include <boost/bind.hpp>
 #include <boost/config.hpp>
+#include <boost/function.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/binomial.hpp>
@@ -119,6 +121,8 @@ std::pair< polynomial<T>, polynomial<T> >
 unchecked_synthetic_division(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
     BOOST_ASSERT(divisor.degree() <= dividend.degree());
+    BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_ASSERT(dividend != zero_element(std::multiplies< polynomial<T> >()));
     
     std::vector<T> intermediate_result(dividend.data());
     if (divisor.degree() == T(0))
@@ -127,15 +131,17 @@ unchecked_synthetic_division(const polynomial<T>& dividend, const polynomial<T>&
     {
         typedef BOOST_DEDUCED_TYPENAME std::vector<T>::reverse_iterator reverse_iterator;
         T const normalizer = divisor[divisor.size() - 1];
-        for (reverse_iterator i = intermediate_result.rbegin(); 
-             i != intermediate_result.rbegin() + dividend.degree() - divisor.degree() + 1; 
-             i++)
+        reverse_iterator const last = intermediate_result.rbegin() + dividend.degree() - divisor.degree() + 1;
+        for (reverse_iterator i = intermediate_result.rbegin(); i != last; i++)
         {
             if (*i != T(0))
             {
                 T const coefficient = *i /= normalizer;
-                for (std::size_t j = 1; j < divisor.degree() + 1; j++)
-                    *(i + j) += -*(divisor.data().rbegin() + j) * coefficient;
+                // for (std::size_t j = 1; j < divisor.degree() + 1; j++)
+                    // *(i + j) -= *(divisor.data().rbegin() + j) * coefficient;
+                boost::function<T(T, T)> const op = bind(std::minus<T>(), _1, bind(std::multiplies<T>(), _2, coefficient));
+                reverse_iterator const j = i + 1;
+                std::transform(j, j + divisor.degree(), divisor.data().rbegin() + 1, j, op);
             }
         }
     }
@@ -174,7 +180,7 @@ quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
     if (divisor == zero)
         throw std::domain_error("Divide by zero.");
     if (dividend.degree() < divisor.degree())
-        return std::make_pair(zero, dividend); // TODO: Is this right?
+        return std::make_pair(zero, dividend);
     return unchecked_synthetic_division(dividend, divisor);
 }
 
@@ -288,6 +294,7 @@ public:
    {
       for(size_type i = 0; i < m_data.size(); ++i)
          m_data[i] *= value;
+      // std::transform(m_data.begin(), m_data.end(), m_data.begin(), bind(std::multiplies<U>(), _1, value));
       return *this;
    }
    
