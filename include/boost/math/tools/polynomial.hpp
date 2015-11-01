@@ -204,12 +204,14 @@ public:
    polynomial(const U* data, unsigned order)
       : m_data(data, data + order + 1)
    {
+       remove_high_degree_zeroes();
    }
    
    template <class I>
    polynomial(I first, I last)
    : m_data(first, last)
    {
+       remove_high_degree_zeroes();
    }
    
    template <class U>
@@ -355,10 +357,15 @@ private:
                 m_data[i] = op(m_data[i], value[i]);
             for(size_type i = s1; i < value.size(); ++i)
                 m_data.push_back(sign(value[i]));
-            while (!m_data.empty() && m_data.back() == U(0))
-                m_data.pop_back();
+            remove_high_degree_zeroes();
         }
         return *this;
+    }
+    
+    void remove_high_degree_zeroes()
+    {
+        using namespace boost::lambda;
+        m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
     }
     
     std::vector<T> m_data;
