@@ -11,9 +11,9 @@
 #endif
 
 #include <boost/assert.hpp>
-#include <boost/bind.hpp>
 #include <boost/config.hpp>
 #include <boost/function.hpp>
+#include <boost/lambda/lambda.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/binomial.hpp>
@@ -124,6 +124,8 @@ unchecked_synthetic_division(const polynomial<T>& dividend, const polynomial<T>&
     BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
     BOOST_ASSERT(dividend != zero_element(std::multiplies< polynomial<T> >()));
     
+    using namespace boost::lambda;
+    
     std::vector<T> intermediate_result(dividend.data());
     if (divisor.degree() == T(0))
         intermediate_result.insert(begin(intermediate_result), T(0));
@@ -139,9 +141,8 @@ unchecked_synthetic_division(const polynomial<T>& dividend, const polynomial<T>&
                 T const coefficient = *i /= normalizer;
                 // for (std::size_t j = 1; j < divisor.degree() + 1; j++)
                     // *(i + j) -= *(divisor.data().rbegin() + j) * coefficient;
-                boost::function<T(T, T)> const op = bind(std::minus<T>(), _1, bind(std::multiplies<T>(), _2, coefficient));
                 reverse_iterator const j = i + 1;
-                std::transform(j, j + divisor.degree(), divisor.data().rbegin() + 1, j, op);
+                std::transform(j, j + divisor.degree(), divisor.data().rbegin() + 1, j, _1 - _2 * coefficient);
             }
         }
     }
@@ -294,7 +295,6 @@ public:
    {
       for(size_type i = 0; i < m_data.size(); ++i)
          m_data[i] *= value;
-      // std::transform(m_data.begin(), m_data.end(), m_data.begin(), bind(std::multiplies<U>(), _1, value));
       return *this;
    }
    
