@@ -204,14 +204,14 @@ public:
    polynomial(const U* data, unsigned order)
       : m_data(data, data + order + 1)
    {
-       remove_high_degree_zeroes();
+       normalize();
    }
    
    template <class I>
    polynomial(I first, I last)
    : m_data(first, last)
    {
-       remove_high_degree_zeroes();
+       normalize();
    }
    
    template <class U>
@@ -357,12 +357,14 @@ private:
                 m_data[i] = op(m_data[i], value[i]);
             for(size_type i = s1; i < value.size(); ++i)
                 m_data.push_back(sign(value[i]));
-            remove_high_degree_zeroes();
+            normalize();
         }
         return *this;
     }
     
-    void remove_high_degree_zeroes()
+    /** Remove zero coefficients 'from the top', that is for which there are no
+        non-zero coefficients of higher degree. */
+    void normalize()
     {
         using namespace boost::lambda;
         m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
