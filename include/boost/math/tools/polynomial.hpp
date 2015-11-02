@@ -285,13 +285,13 @@ public:
    template <class U>
    polynomial& operator +=(const polynomial<U>& value)
    {
-      return linear_translation(value, identity<U>(), std::plus<U>());
+      return addition(value, identity<U>(), std::plus<U>());
    }
    
    template <class U>
    polynomial& operator -=(const polynomial<U>& value)
    {
-       return linear_translation(value, std::negate<U>(), std::minus<U>());
+       return addition(value, std::negate<U>(), std::minus<U>());
    }
    template <class U>
    polynomial& operator *=(const polynomial<U>& value)
@@ -341,7 +341,7 @@ private:
     }
     
     template <class U, class R1, class R2>
-    polynomial& linear_translation(const polynomial<U>& value, R1 sign, R2 op)
+    polynomial& addition(const polynomial<U>& value, R1 sign, R2 op)
     {
         if (value != zero_element(std::multiplies< polynomial<U> >()))
         {
