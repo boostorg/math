@@ -267,30 +267,12 @@ public:
    template <class U>
    polynomial& operator +=(const U& value)
    {
-      if(m_data.size() == 0)
-         m_data.push_back(value);
-      else
-      {
-         m_data[0] += value;
-      }
-      return *this;
+       return addition(value, std::plus<U>());
    }
    template <class U>
    polynomial& operator -=(const U& value)
    {
-       if (value != U(0))
-       {
-            if(m_data.size() == 0)
-                m_data.push_back(-value);
-            else
-            {
-                if (m_data.size() == 1 && m_data[0] == value)
-                    m_data.clear();
-                else
-                    m_data[0] -= value;
-            }
-       }
-      return *this;
+       return addition(value, std::minus<U>());
    }
    template <class U>
    polynomial& operator *=(const U& value)
@@ -347,6 +329,17 @@ public:
        return *this;
    }
 private:
+    template <class U, class R2>
+    polynomial& addition(const U& value, R2 op)
+    {
+        if(m_data.size() == 0)
+            m_data.push_back(value);
+        else
+            m_data[0] = op(m_data[0], value);
+        normalize();
+        return *this;
+    }
+    
     template <class U, class R1, class R2>
     polynomial& linear_translation(const polynomial<U>& value, R1 sign, R2 op)
     {
