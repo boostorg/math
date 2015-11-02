@@ -172,16 +172,15 @@ polynomial<T> zero_element(std::multiplies< polynomial<T> >)
 
 /* Calculates a / b and a % b, returning the pair (quotient, remainder) together
  * because the same amount of computation yields both.
+ * This function is not defined for division by zero: user beware.
  */
 template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
-    polynomial<T> const zero = zero_element(std::multiplies< polynomial<T> >());
-    if (divisor == zero)
-        throw std::domain_error("Divide by zero.");
+    BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
     if (dividend.degree() < divisor.degree())
-        return std::make_pair(zero, dividend);
+        return std::make_pair(zero_element(std::multiplies< polynomial<T> >()), dividend);
     return unchecked_synthetic_division(dividend, divisor);
 }
 
