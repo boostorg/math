@@ -277,6 +277,7 @@ public:
    {
       for(size_type i = 0; i < m_data.size(); ++i)
          m_data[i] *= value;
+      normalize();
       return *this;
    }
    
@@ -295,7 +296,12 @@ public:
    polynomial& operator *=(const polynomial<U>& value)
    {
       // TODO: FIXME: use O(N log(N)) algorithm!!!
-      BOOST_ASSERT(value.size());
+      polynomial const zero = zero_element(std::multiplies<polynomial>());
+      if (value == zero)
+      {
+          *this = zero;
+          return *this;
+      }
       polynomial base(*this);
       *this *= value[0];
       for(size_type i = 1; i < value.size(); ++i)
