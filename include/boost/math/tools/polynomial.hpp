@@ -120,29 +120,27 @@ template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 unchecked_synthetic_division(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
-    BOOST_ASSERT(divisor.degree() <= dividend.degree());
+    BOOST_ASSERT(divisor.size() <= dividend.size());
     BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
     BOOST_ASSERT(dividend != zero_element(std::multiplies< polynomial<T> >()));
     
     using namespace boost::lambda;
     
     std::vector<T> intermediate_result(dividend.data());
-    if (divisor.degree() == T(0))
+    if (divisor.size() == 1)
         intermediate_result.insert(begin(intermediate_result), T(0));
     
     {
         typedef BOOST_DEDUCED_TYPENAME std::vector<T>::reverse_iterator reverse_iterator;
         T const normalizer = divisor[divisor.size() - 1];
-        reverse_iterator const last = intermediate_result.rbegin() + dividend.degree() - divisor.degree() + 1;
+        reverse_iterator const last = intermediate_result.rbegin() + dividend.size() - divisor.size() + 1;
         for (reverse_iterator i = intermediate_result.rbegin(); i != last; i++)
         {
             if (*i != T(0))
             {
                 T const coefficient = *i /= normalizer;
-                // for (std::size_t j = 1; j < divisor.degree() + 1; j++)
-                    // *(i + j) -= *(divisor.data().rbegin() + j) * coefficient;
                 reverse_iterator const j = i + 1;
-                std::transform(j, j + divisor.degree(), divisor.data().rbegin() + 1, j, _1 - _2 * coefficient);
+                std::transform(j, j + divisor.size() - 1, divisor.data().rbegin() + 1, j, _1 - _2 * coefficient);
             }
         }
     }
@@ -150,7 +148,7 @@ unchecked_synthetic_division(const polynomial<T>& dividend, const polynomial<T>&
     {
         typedef BOOST_DEDUCED_TYPENAME std::vector<T>::iterator iterator;
         iterator const f = intermediate_result.begin(); // remainder
-        iterator const m = f + std::max(divisor.degree(), 1ul); // quotient
+        iterator const m = f + std::max(divisor.size() - 1, 1ul); // quotient
         iterator const l = intermediate_result.end();
         BOOST_ASSERT(m - f > 0);
         BOOST_ASSERT(l - m > 0);
@@ -179,7 +177,7 @@ std::pair< polynomial<T>, polynomial<T> >
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
     BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
-    if (dividend.degree() < divisor.degree())
+    if (dividend.size() < divisor.size())
         return std::make_pair(zero_element(std::multiplies< polynomial<T> >()), dividend);
     return unchecked_synthetic_division(dividend, divisor);
 }
@@ -237,7 +235,8 @@ public:
    size_type size()const { return m_data.size(); }
    size_type degree()const
    { 
-       BOOST_ASSERT(size() != 0);
+       if (size() == 0)
+           throw std::logic_error("degree() is undefined for the zero polynomial.");
        return m_data.size() - 1;
     }
    value_type& operator[](size_type i)
