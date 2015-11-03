@@ -449,6 +449,13 @@ bool operator == (const polynomial<T> &x, const polynomial<T> &y)
     return x.data() == y.data();
 }
 
+// Unary minus (negate).
+template <class T>
+polynomial<T> operator - (const polynomial<T>& x)
+{
+    return x * T(-1);
+}
+
 template <class charT, class traits, class T>
 inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly)
 {
