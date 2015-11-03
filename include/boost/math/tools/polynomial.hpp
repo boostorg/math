@@ -266,12 +266,12 @@ public:
    template <class U>
    polynomial& operator +=(const U& value)
    {
-       return addition(value, std::plus<U>());
+       return addition(value, identity<U>(), std::plus<U>());
    }
    template <class U>
    polynomial& operator -=(const U& value)
    {
-       return addition(value, std::minus<U>());
+       return addition(value, std::negate<U>(), std::minus<U>());
    }
    template <class U>
    polynomial& operator *=(const U& value)
@@ -328,11 +328,11 @@ public:
        return *this;
    }
 private:
-    template <class U, class R2>
-    polynomial& addition(const U& value, R2 op)
+    template <class U, class R1, class R2>
+    polynomial& addition(const U& value, R1 sign, R2 op)
     {
         if(m_data.size() == 0)
-            m_data.push_back(value);
+            m_data.push_back(sign(value));
         else
             m_data[0] = op(m_data[0], value);
         normalize();
