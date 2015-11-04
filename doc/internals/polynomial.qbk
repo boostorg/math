@@ -42,6 +42,10 @@
       polynomial& operator -=(const polynomial<U>& value);
       template <class U>
       polynomial& operator *=(const polynomial<U>& value);
+      template <class U>
+      polynomial& operator /=(const polynomial<U>& value);
+      template <class U>
+      polynomial& operator %=(const polynomial<U>& value);
    };
 
    template <class T>
@@ -50,6 +54,10 @@
    polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b);
    template <class T>
    polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b);
+   template <class T>
+   polynomial<T> operator / (const polynomial<T>& a, const polynomial<T>& b);
+   template <class T>
+   polynomial<T> operator % (const polynomial<T>& a, const polynomial<T>& b);
    
    template <class T, class U>
    polynomial<T> operator + (const polynomial<T>& a, const U& b);
@@ -64,6 +72,9 @@
    polynomial<T> operator - (const U& a, const polynomial<T>& b);
    template <class U, class T>
    polynomial<T> operator * (const U& a, const polynomial<T>& b);
+
+   template <class T>
+   polynomial<T> operator - (const polynomial<T>& a);
    
    template <class charT, class traits, class T>
    std::basic_ostream<charT, traits>& operator << 
@@ -79,9 +90,10 @@ Implementation is currently of the "naive" variety, with O(N^2)
 multiplication for example.  This class should not be used in
 high-performance computing environments: it is intended for the
 simple manipulation of small polynomials, typically generated
-for special function approximation.
+for special function approximation. It also has division and remainder
+compatible with Euclidean GCD.
 
-Advanced manipulations: the FFT, division, GCD, factorisation etc are
+Advanced manipulations: the FFT, factorisation etc are
 not currently provided.  Submissions for these are of course welcome :-)
 
 [endsect][/section:polynomials Polynomials]
