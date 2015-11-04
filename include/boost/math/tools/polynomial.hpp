@@ -117,8 +117,8 @@ class polynomial;
 
 
 template <typename T>
-std::pair< polynomial<T>, polynomial<T> >
-unchecked_synthetic_division(const polynomial<T>& dividend, const polynomial<T>& divisor)
+BOOST_DEDUCED_TYPENAME disable_if<is_integral<T>, std::pair< polynomial<T>, polynomial<T> > >::type
+synthetic_division(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
     BOOST_ASSERT(divisor.size() <= dividend.size());
     BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
@@ -179,13 +179,14 @@ polynomial<T> identity_element(std::multiplies< polynomial<T> >)
  * This function is not defined for division by zero: user beware.
  */
 template <typename T>
-std::pair< polynomial<T>, polynomial<T> >
+
+BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, std::pair< polynomial<T>, polynomial<T> > >::type
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
     BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
     if (dividend.size() < divisor.size())
         return std::make_pair(zero_element(std::multiplies< polynomial<T> >()), dividend);
-    return unchecked_synthetic_division(dividend, divisor);
+    return synthetic_division(dividend, divisor);
 }
 
 
@@ -326,14 +327,16 @@ public:
    }
 
    template <typename U>
-   polynomial& operator /=(const polynomial<U>& value)
+   BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, polynomial& >::type
+   operator /=(const polynomial<U>& value)
    {
        *this = quotient_remainder(*this, value).first;
        return *this;
    }
    
    template <typename U>
-   polynomial& operator %=(const polynomial<U>& value)
+   BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, polynomial& >::type
+   operator %=(const polynomial<U>& value)
    {
        *this = quotient_remainder(*this, value).second;
        return *this;
