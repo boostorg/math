@@ -168,6 +168,12 @@ polynomial<T> zero_element(std::multiplies< polynomial<T> >)
     return polynomial<T>();
 }
 
+template <class T>
+polynomial<T> identity_element(std::multiplies< polynomial<T> >)
+{
+    return polynomial<T>(T(1));
+}
+
 /* Calculates a / b and a % b, returning the pair (quotient, remainder) together
  * because the same amount of computation yields both.
  * This function is not defined for division by zero: user beware.
