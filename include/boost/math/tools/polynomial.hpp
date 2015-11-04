@@ -347,15 +347,12 @@ private:
     template <class U, class R1, class R2>
     polynomial& addition(const polynomial<U>& value, R1 sign, R2 op)
     {
-        if (value != zero_element(std::multiplies< polynomial<U> >()))
-        {
-            size_type s1 = (std::min)(m_data.size(), value.size());
-            for(size_type i = 0; i < s1; ++i)
-                m_data[i] = op(m_data[i], value[i]);
-            for(size_type i = s1; i < value.size(); ++i)
-                m_data.push_back(sign(value[i]));
-            normalize();
-        }
+        size_type s1 = (std::min)(m_data.size(), value.size());
+        for(size_type i = 0; i < s1; ++i)
+            m_data[i] = op(m_data[i], value[i]);
+        for(size_type i = s1; i < value.size(); ++i)
+            m_data.push_back(sign(value[i]));
+        normalize();
         return *this;
     }
     
