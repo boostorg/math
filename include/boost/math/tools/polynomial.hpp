@@ -18,6 +18,7 @@
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/operators.hpp>
+#include <boost/type_traits.hpp>
 
 #include <vector>
 #include <ostream>
@@ -112,12 +113,27 @@ T evaluate_chebyshev(const Seq& a, const T& x)
 }
 
 
+namespace detail {
+    /**
+     * Returns true for types that are field-like.
+     * Primarily to exclude integral and complex types since we can't actually test
+     * the semantics of the operators (easily).
+     */
+    template <typename T>
+    struct is_field_like
+    {
+        BOOST_STATIC_CONSTANT(bool, value = !std::numeric_limits<T>::is_integer
+        && !is_complex<T>::value && has_divides_assign<T>::value);
+    };
+}
+
+
 template <typename T>
 class polynomial;
 
 
 template <typename T>
-BOOST_DEDUCED_TYPENAME disable_if<is_integral<T>, std::pair< polynomial<T>, polynomial<T> > >::type
+BOOST_DEDUCED_TYPENAME enable_if<detail::is_field_like<T>, std::pair< polynomial<T>, polynomial<T> > >::type
 synthetic_division(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
     BOOST_ASSERT(divisor.size() <= dividend.size());
@@ -179,8 +195,7 @@ polynomial<T> identity_element(std::multiplies< polynomial<T> >)
  * This function is not defined for division by zero: user beware.
  */
 template <typename T>
-
-BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, std::pair< polynomial<T>, polynomial<T> > >::type
+BOOST_DEDUCED_TYPENAME enable_if<detail::is_field_like<T>, std::pair< polynomial<T>, polynomial<T> > >::type
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
     BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
@@ -327,7 +342,7 @@ public:
    }
 
    template <typename U>
-   BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, polynomial& >::type
+   BOOST_DEDUCED_TYPENAME enable_if<detail::is_field_like<T>, polynomial& >::type
    operator /=(const polynomial<U>& value)
    {
        *this = quotient_remainder(*this, value).first;
@@ -335,7 +350,7 @@ public:
    }
    
    template <typename U>
-   BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, polynomial& >::type
+   BOOST_DEDUCED_TYPENAME enable_if<detail::is_field_like<T>, polynomial& >::type
    operator %=(const polynomial<U>& value)
    {
        *this = quotient_remainder(*this, value).second;
