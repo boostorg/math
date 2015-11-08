@@ -39,7 +39,6 @@ boost::array<coefficient_type, 3> const d2b = {{-7, 5, 6}};
 boost::array<coefficient_type, 3> const d2c = {{31, -21, -22}};
 boost::array<coefficient_type, 1> const d0a = {{6}};
 boost::array<coefficient_type, 1> const d0b = {{3}};
-boost::array<coefficient_type, 1> const d0c = {{1}};
 
 PR const a(d3a.begin(), d3a.end());
 PR const b(d1a.begin(), d1a.end());
@@ -51,12 +50,13 @@ PR const e(d2c.begin(), d2c.end());
 PR const f(d0b.begin(), d0b.end());
 PR const g(d3c.begin(), d3c.end());
 PR const zero = zero_element(std::multiplies<PR>());
-PR const one(d0c.begin(), d0c.end());
+PR const one = identity_element(std::multiplies<PR>());
 
 BOOST_AUTO_TEST_CASE( test_properties )
 {
     BOOST_CHECK_THROW(zero.degree(), std::logic_error);
 }
+
 
 BOOST_AUTO_TEST_CASE( test_division )
 {
@@ -75,7 +75,11 @@ BOOST_AUTO_TEST_CASE( test_division )
     BOOST_CHECK_EQUAL(result.quotient, g);
     BOOST_CHECK_EQUAL(result.remainder, zero);
     BOOST_CHECK_EQUAL(a, g * f + zero); // Sanity check.
+    // Check that division by a regular number gives the same result.
+    BOOST_CHECK_EQUAL(a / 3.0, g);
+    BOOST_CHECK_EQUAL(a % 3.0, zero);
 
+    // Sanity checks.
     BOOST_CHECK_EQUAL(a / a, one);
     BOOST_CHECK_EQUAL(a % a, zero);
     // BOOST_CHECK_EQUAL(zero / zero, zero); // TODO
@@ -123,6 +127,7 @@ BOOST_AUTO_TEST_CASE( test_multiplication )
 BOOST_AUTO_TEST_CASE( test_arithmetic_relations )
 {
     BOOST_CHECK_EQUAL(a * 2, a + a);
+    BOOST_CHECK_EQUAL(a * 0.5, a / 2);
     BOOST_CHECK_EQUAL(a, (a * a) / a);
     BOOST_CHECK_EQUAL(a - b, -b + a);
 }

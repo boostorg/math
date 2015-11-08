@@ -287,6 +287,24 @@ public:
       normalize();
       return *this;
    }
+
+   template <class U>
+   BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, polynomial&>::type
+   operator /=(const U& value)
+   {
+       using namespace boost::lambda;
+       std::transform(m_data.begin(), m_data.end(), m_data.begin(), _1 / value);
+       normalize();
+       return *this;
+   }
+
+   template <class U>
+   BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, polynomial&>::type
+   operator %=(const U& value)
+   {
+       *this = zero_element(std::multiplies<polynomial>());
+       return *this;
+   }
    
    template <class U>
    polynomial& operator +=(const polynomial<U>& value)
