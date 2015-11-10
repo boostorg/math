@@ -71,9 +71,11 @@ namespace boost{
 
 #if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
       template <>
-      inline boost::math::tools::promote_args<double, double>::type relative_difference(const double& a, const double& b)
+      inline boost::math::tools::promote_args<double, double>::type relative_difference(const double& arg_a, const double& arg_b)
       {
          BOOST_MATH_STD_USING
+         double a = arg_a;
+         double b = arg_b;
          //
          // On Mac OS X we evaluate "double" functions at "long double" precision,
          // but "long double" actually has a very slightly narrower range than "double"!  
