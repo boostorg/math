@@ -183,7 +183,9 @@ and the maximum number of  possibly significant decimal digits using
 
     std::numeric_limits<boost::floatmax_t>::max_digits10
 
-[tip  `max_digits10` is not always supported, but can be calculated at compile-time using the Kahan formula.]
+[tip  `max_digits10` is not always supported,
+but can be calculated at compile-time using the Kahan formula.
+]
 
 [note One could test
 

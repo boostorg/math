@@ -432,46 +432,96 @@ void test_spots(RealType)
     boost::math::tools::epsilon<RealType>(),
     static_cast<RealType>(boost::math::tools::epsilon<double>())) * 10; // 10 eps as a fraction.
   cout << "Tolerance (as fraction) for type " << typeid(RealType).name()  << " is " << tolerance << "." << endl;
-  triangular_distribution<RealType> tridef; // (-1, 0, 1) // default
-  RealType x = static_cast<RealType>(0.5);
-  using namespace std; // ADL of std names.
-  // mean:
-  BOOST_CHECK_CLOSE_FRACTION(
-    mean(tridef), static_cast<RealType>(0), tolerance);
-  // variance:
-  BOOST_CHECK_CLOSE_FRACTION(
-    variance(tridef), static_cast<RealType>(0.16666666666666666666666666666666666666666667L), tolerance);
-  // was 0.0833333333333333333333333333333333333333333L
+  
+    triangular_distribution<RealType> tridef; // (-1, 0, 1) // Default distribution.
+    RealType x = static_cast<RealType>(0.5);
+    using namespace std; // ADL of std names.
+    // mean:
+    BOOST_CHECK_CLOSE_FRACTION(
+      mean(tridef), static_cast<RealType>(0), tolerance);
+    // variance:
+    BOOST_CHECK_CLOSE_FRACTION(
+      variance(tridef), static_cast<RealType>(0.16666666666666666666666666666666666666666667L), tolerance);
+    // was 0.0833333333333333333333333333333333333333333L
 
-  // std deviation:
-  BOOST_CHECK_CLOSE_FRACTION(
-    standard_deviation(tridef), sqrt(variance(tridef)), tolerance);
-  // hazard:
-  BOOST_CHECK_CLOSE_FRACTION(
-    hazard(tridef, x), pdf(tridef, x) / cdf(complement(tridef, x)), tolerance);
-  // cumulative hazard:
-  BOOST_CHECK_CLOSE_FRACTION(
-    chf(tridef, x), -log(cdf(complement(tridef, x))), tolerance);
-  // coefficient_of_variation:
-  if (mean(tridef) != 0)
+    // std deviation:
+    BOOST_CHECK_CLOSE_FRACTION(
+      standard_deviation(tridef), sqrt(variance(tridef)), tolerance);
+    // hazard:
+    BOOST_CHECK_CLOSE_FRACTION(
+      hazard(tridef, x), pdf(tridef, x) / cdf(complement(tridef, x)), tolerance);
+    // cumulative hazard:
+    BOOST_CHECK_CLOSE_FRACTION(
+      chf(tridef, x), -log(cdf(complement(tridef, x))), tolerance);
+    // coefficient_of_variation:
+    if (mean(tridef) != 0)
+    {
+      BOOST_CHECK_CLOSE_FRACTION(
+        coefficient_of_variation(tridef), standard_deviation(tridef) / mean(tridef), tolerance);
+    }
+    // mode:
+    BOOST_CHECK_CLOSE_FRACTION(
+      mode(tridef), static_cast<RealType>(0), tolerance);
+    // skewness:
+    BOOST_CHECK_CLOSE_FRACTION(
+      median(tridef), static_cast<RealType>(0), tolerance);
+    // https://reference.wolfram.com/language/ref/Skewness.html  skewness{-1, 0, +1} = 0
+    // skewness[triangulardistribution{-1, 0, +1}] does not compute a result.
+    // skewness[triangulardistribution{0, +1}] result == 0
+    // skewness[normaldistribution{0,1}] result == 0
+
+    BOOST_CHECK_EQUAL(
+      skewness(tridef), static_cast<RealType>(0));
+    // kurtosis:
+    BOOST_CHECK_CLOSE_FRACTION(
+      kurtosis_excess(tridef), kurtosis(tridef) - static_cast<RealType>(3L), tolerance);
+    // kurtosis excess = kurtosis - 3;
+    BOOST_CHECK_CLOSE_FRACTION(
+      kurtosis_excess(tridef), static_cast<RealType>(-0.6), tolerance); // Constant value of -3/5 for all distributions.
+
   {
-  BOOST_CHECK_CLOSE_FRACTION(
-    coefficient_of_variation(tridef), standard_deviation(tridef) / mean(tridef), tolerance);
-  }
-  // mode:
-  BOOST_CHECK_CLOSE_FRACTION(
-    mode(tridef), static_cast<RealType>(0), tolerance);
-  // skewness:
-  BOOST_CHECK_CLOSE_FRACTION(
-    median(trim12), static_cast<RealType>(-0.13397459621556151), tolerance);
-  BOOST_CHECK_EQUAL(
-    skewness(tridef), static_cast<RealType>(0));
-  // kurtosis:
-  BOOST_CHECK_CLOSE_FRACTION(
-    kurtosis_excess(tridef), kurtosis(tridef) - static_cast<RealType>(3L), tolerance);
-  // kurtosis excess = kurtosis - 3;
-  BOOST_CHECK_CLOSE_FRACTION(
-    kurtosis_excess(tridef), static_cast<RealType>(-0.6), tolerance); // for all distributions.
+    triangular_distribution<RealType> tri01(0, 1, 1); //  Asymmetric 0, 1, 1 distribution.
+    RealType x = static_cast<RealType>(0.5);
+    using namespace std; // ADL of std names.
+                         // mean:
+    BOOST_CHECK_CLOSE_FRACTION(
+      mean(tri01), static_cast<RealType>(0.66666666666666666666666666666666666666666666666667L), tolerance);
+    // variance: N[variance[triangulardistribution{0, 1}, 1], 50]
+    BOOST_CHECK_CLOSE_FRACTION(
+      variance(tri01), static_cast<RealType>(0.055555555555555555555555555555555555555555555555556L), tolerance);
+    // std deviation:
+    BOOST_CHECK_CLOSE_FRACTION(
+      standard_deviation(tri01), sqrt(variance(tri01)), tolerance);
+    // hazard:
+    BOOST_CHECK_CLOSE_FRACTION(
+      hazard(tri01, x), pdf(tri01, x) / cdf(complement(tri01, x)), tolerance);
+    // cumulative hazard:
+    BOOST_CHECK_CLOSE_FRACTION(
+      chf(tri01, x), -log(cdf(complement(tri01, x))), tolerance);
+    // coefficient_of_variation:
+    if (mean(tri01) != 0)
+    {
+      BOOST_CHECK_CLOSE_FRACTION(
+        coefficient_of_variation(tri01), standard_deviation(tri01) / mean(tri01), tolerance);
+    }
+    // mode:
+    BOOST_CHECK_CLOSE_FRACTION(
+      mode(tri01), static_cast<RealType>(1), tolerance);
+    // skewness:
+    BOOST_CHECK_CLOSE_FRACTION(
+      median(tri01), static_cast<RealType>(0.70710678118654752440084436210484903928483593768847L), tolerance);
+
+    // https://reference.wolfram.com/language/ref/Skewness.html
+    // N[skewness[triangulardistribution{0, 1}, 1], 50]
+    BOOST_CHECK_CLOSE_FRACTION(
+      skewness(tri01), static_cast<RealType>(-0.56568542494923801952067548968387923142786875015078L), tolerance);
+    // kurtosis:
+    BOOST_CHECK_CLOSE_FRACTION(
+      kurtosis_excess(tri01), kurtosis(tri01) - static_cast<RealType>(3L), tolerance);
+    // kurtosis excess = kurtosis - 3;
+    BOOST_CHECK_CLOSE_FRACTION(
+      kurtosis_excess(tri01), static_cast<RealType>(-0.6), tolerance); // Constant value of -3/5 for all distributions.
+  } // tri01 tests
 
   if(std::numeric_limits<RealType>::has_infinity)
   { // BOOST_CHECK tests for infinity using std::numeric_limits<>::infinity()
