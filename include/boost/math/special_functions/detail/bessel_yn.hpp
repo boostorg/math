@@ -52,7 +52,6 @@ T bessel_yn(int n, T x, const Policy& pol)
     {
         factor = 1;
     }
-
     if(x < policies::get_epsilon<T, Policy>())
     {
        T scale = 1;
@@ -80,21 +79,22 @@ T bessel_yn(int n, T x, const Policy& pol)
        int k = 1;
        BOOST_ASSERT(k < n);
        policies::check_series_iterations<T>("boost::math::bessel_y_n<%1%>(%1%,%1%)", n, pol);
-       T fact = 2 * k / x;
-       value = fact * current - prev;
+       T mult = 2 * k / x;
+       value = mult * current - prev;
        prev = current;
        current = value;
        ++k;
-       if(fact > 1)
+       if((mult > 1) && (fabs(current) > 1))
        {
           prev /= current;
           factor /= current;
+          value /= current;
           current = 1;
        }
        while(k < n)
        {
-           fact = 2 * k / x;
-           value = fact * current - prev;
+           mult = 2 * k / x;
+           value = mult * current - prev;
            prev = current;
            current = value;
            ++k;
