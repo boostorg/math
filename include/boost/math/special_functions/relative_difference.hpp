@@ -102,7 +102,7 @@ namespace boost{
          //
          // If the values have different signs, treat as infinite difference:
          //
-         if((a < 0) != (b < 0))
+         if(((a < 0) != (b < 0)) && (a != 0) && (b != 0))
             return max_val;
          a = fabs(a);
          b = fabs(b);
