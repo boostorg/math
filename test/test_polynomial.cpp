@@ -5,13 +5,14 @@
 
 #include <boost/config.hpp>
 #define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
-
-#include <utility>
-
 #include <boost/array.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/common_factor_rt.hpp>
+#include <boost/mpl/list.hpp>
+#include <boost/test/test_case_template.hpp>
+#include <boost/test/unit_test.hpp>
+
+#include <utility>
 
 using namespace boost::math;
 using namespace boost::math::tools;
@@ -27,41 +28,43 @@ struct answer
     polynomial<T> remainder;
 };
 
-typedef double coefficient_type;
-typedef polynomial<coefficient_type> PR;
+boost::array<double, 4> const d3a = {{10, -6, -4, 3}};
+boost::array<double, 4> const d3b = {{-7, 5, 6, 1}};
+boost::array<double, 4> const d3c = {{10.0/3.0, -2.0, -4.0/3.0, 1.0}};
+boost::array<double, 2> const d1a = {{-2, 1}};
+boost::array<double, 3> const d2a = {{-2, 2, 3}};
+boost::array<double, 3> const d2b = {{-7, 5, 6}};
+boost::array<double, 3> const d2c = {{31, -21, -22}};
+boost::array<double, 1> const d0a = {{6}};
+boost::array<double, 1> const d0b = {{3}};
 
-boost::array<coefficient_type, 4> const d3a = {{10, -6, -4, 3}};
-boost::array<coefficient_type, 4> const d3b = {{-7, 5, 6, 1}};
-boost::array<coefficient_type, 4> const d3c = {{10.0/3.0, -2.0, -4.0/3.0, 1.0}};
-boost::array<coefficient_type, 2> const d1a = {{-2, 1}};
-boost::array<coefficient_type, 3> const d2a = {{-2, 2, 3}};
-boost::array<coefficient_type, 3> const d2b = {{-7, 5, 6}};
-boost::array<coefficient_type, 3> const d2c = {{31, -21, -22}};
-boost::array<coefficient_type, 1> const d0a = {{6}};
-boost::array<coefficient_type, 1> const d0b = {{3}};
 
-PR const a(d3a.begin(), d3a.end());
-PR const b(d1a.begin(), d1a.end());
-PR const q(d2a.begin(), d2a.end());
-PR const r(d0a.begin(), d0a.end());
-PR const c(d3b.begin(), d3b.end());
-PR const d(d2b.begin(), d2b.end());
-PR const e(d2c.begin(), d2c.end());
-PR const f(d0b.begin(), d0b.end());
-PR const g(d3c.begin(), d3c.end());
-PR const zero = zero_element(std::multiplies<PR>());
-PR const one = identity_element(std::multiplies<PR>());
-
-BOOST_AUTO_TEST_CASE( test_properties )
+BOOST_AUTO_TEST_CASE( test_degree )
 {
+    polynomial<double> const zero = zero_element(std::multiplies< polynomial<double> >());
+    polynomial<double> const a(d3a.begin(), d3a.end());
     BOOST_CHECK_THROW(zero.degree(), std::logic_error);
+    BOOST_CHECK_EQUAL(a.degree(), 3);
 }
 
 
-BOOST_AUTO_TEST_CASE( test_division )
-{
+typedef boost::mpl::list<int, double> test_types;
 
-    answer<coefficient_type> result = quotient_remainder(a, b);
+BOOST_AUTO_TEST_CASE( test_division_over_field )
+{
+    polynomial<double> const a(d3a.begin(), d3a.end());
+    polynomial<double> const b(d1a.begin(), d1a.end());
+    polynomial<double> const q(d2a.begin(), d2a.end());
+    polynomial<double> const r(d0a.begin(), d0a.end());
+    polynomial<double> const c(d3b.begin(), d3b.end());
+    polynomial<double> const d(d2b.begin(), d2b.end());
+    polynomial<double> const e(d2c.begin(), d2c.end());
+    polynomial<double> const f(d0b.begin(), d0b.end());
+    polynomial<double> const g(d3c.begin(), d3c.end());
+    polynomial<double> const zero = zero_element(std::multiplies< polynomial<double> >());
+    polynomial<double> const one = identity_element(std::multiplies< polynomial<double> >());
+
+    answer<double> result = quotient_remainder(a, b);
     BOOST_CHECK_EQUAL(result.quotient, q);
     BOOST_CHECK_EQUAL(result.remainder, r);
     BOOST_CHECK_EQUAL(a, q * b + r); // Sanity check.
@@ -85,49 +88,87 @@ BOOST_AUTO_TEST_CASE( test_division )
     // BOOST_CHECK_EQUAL(zero / zero, zero); // TODO
 }
 
+BOOST_AUTO_TEST_CASE( test_division_over_ufd )
+{
+    polynomial<int> const zero = zero_element(std::multiplies< polynomial<int> >());
+    polynomial<int> const one = identity_element(std::multiplies< polynomial<int> >());
+    boost::array<int, 9> const d8 = {{-5, 2, 8, -3, -3, 0, 1, 0, 1}};
+    boost::array<int, 7> const d6 = {{21, -9, -4, 0, 5, 0, 3}};
+    boost::array<int, 3> const d2 = {{-6, 0, 9}};
+    boost::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
+    polynomial<int> const aa(d8.begin(), d8.end());
+    polynomial<int> const bb(d6.begin(), d6.end());
+    polynomial<int> const q(d2.begin(), d2.end());
+    polynomial<int> const r(d5.begin(), d5.end());
+    
+    answer<int> result = quotient_remainder(aa, bb);
+    BOOST_CHECK_EQUAL(result.quotient, q);
+    BOOST_CHECK_EQUAL(result.remainder, r);
+
+    // Sanity checks.
+    BOOST_CHECK_EQUAL(aa / aa, one);
+    BOOST_CHECK_EQUAL(aa % aa, zero);
+}
+
+
 BOOST_AUTO_TEST_CASE( test_gcd )
 {
-    boost::array<coefficient_type, 9> const d8 = {{0, 0, 0, 0, 0, 0, 0, 0, 1}};
-    boost::array<coefficient_type, 7> const d6 = {{0, 0, 0, 0, 0, 0, 1}};
-    PR aa(d8.begin(), d8.end());
-    PR bb(d6.begin(), d6.end());
-    PR foo = gcd(aa, bb);
+    boost::array<double, 9> const d8 = {{0, 0, 0, 0, 0, 0, 0, 0, 1}};
+    boost::array<double, 7> const d6 = {{0, 0, 0, 0, 0, 0, 1}};
+    polynomial<double> aa(d8.begin(), d8.end());
+    polynomial<double> bb(d6.begin(), d6.end());
+    polynomial<double> foo = gcd(aa, bb);
     BOOST_CHECK_EQUAL(foo, bb);
 }
 
 // Sanity checks to make sure I didn't break it.
-BOOST_AUTO_TEST_CASE( test_addition )
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, test_types )
 {
-    PR result = a + b; // different degree
-    boost::array<coefficient_type, 4> tmp = {{8, -5, -4, 3}};
-    PR expected(tmp.begin(), tmp.end());
+    polynomial<T> const a(d3a.begin(), d3a.end());
+    polynomial<T> const b(d1a.begin(), d1a.end());
+    polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+    
+    polynomial<T> result = a + b; // different degree
+    boost::array<T, 4> tmp = {{8, -5, -4, 3}};
+    polynomial<T> expected(tmp.begin(), tmp.end());
     BOOST_CHECK_EQUAL(result, expected);
-    BOOST_CHECK_EQUAL(a + 0.0, a);
+    BOOST_CHECK_EQUAL(a + zero, a);
     BOOST_CHECK_EQUAL(a + b, b + a);
 }
 
-BOOST_AUTO_TEST_CASE( test_subtraction )
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_subtraction, T, test_types )
 {
-    BOOST_CHECK_EQUAL(a - 0.0, a);
-    BOOST_CHECK_EQUAL(0.0 - a, -a);
+    polynomial<T> const a(d3a.begin(), d3a.end());
+    polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+
+    BOOST_CHECK_EQUAL(a - T(0), a);
+    BOOST_CHECK_EQUAL(T(0) - a, -a);
     BOOST_CHECK_EQUAL(a - zero, a);
     BOOST_CHECK_EQUAL(zero - a, -a);
     BOOST_CHECK_EQUAL(a - a, zero);
 }
 
-BOOST_AUTO_TEST_CASE( test_multiplication )
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, test_types )
 {
-    BOOST_CHECK_EQUAL(a * 0.0, zero);
+    polynomial<T> const a(d3a.begin(), d3a.end());
+    polynomial<T> const b(d1a.begin(), d1a.end());
+    polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+    
+    BOOST_CHECK_EQUAL(a * T(0), zero);
     BOOST_CHECK_EQUAL(a * zero, zero);
-    BOOST_CHECK_EQUAL(zero * 0.0, zero);
+    BOOST_CHECK_EQUAL(zero * T(0), zero);
     BOOST_CHECK_EQUAL(zero * zero, zero);
     BOOST_CHECK_EQUAL(a * b, b * a);
 }
 
-BOOST_AUTO_TEST_CASE( test_arithmetic_relations )
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_arithmetic_relations, T, test_types )
 {
-    BOOST_CHECK_EQUAL(a * 2, a + a);
-    BOOST_CHECK_EQUAL(a * 0.5, a / 2);
+    polynomial<T> const a(d3a.begin(), d3a.end());
+    polynomial<T> const b(d1a.begin(), d1a.end());
+
+    BOOST_CHECK_EQUAL(a * T(2), a + a);
+    BOOST_CHECK_EQUAL(a * 0.5, a / 2.0);
     BOOST_CHECK_EQUAL(a, (a * a) / a);
+    BOOST_CHECK_EQUAL(a, (a / a) * a);
     BOOST_CHECK_EQUAL(a - b, -b + a);
 }

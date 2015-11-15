@@ -116,25 +116,66 @@ template <typename T>
 class polynomial;
 
 namespace detail {
+    
 /** 
+* Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
+* Chapter 4.6.1, Algorithm D: Division of polynomials over a field.
+* 
+* @tparam  T   Coefficient type, must be not be an integer.
+* 
+* Template-parameter T actually must be a field but we don't currently have that 
+* subtlety of distinction.
+*/
+template <typename T, typename N>
+BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, void >::type
+division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
+{
+    q[k] = u[n + k] / v[n];
+    for (std::size_t j = n + k; j > k;)
+    {
+        j--;
+        u[j] -= q[k] * v[j - k];
+    }
+}
+
+
+/** 
+* Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
+* Chapter 4.6.1, Algorithm R: Pseudo-division of polynomials.
+* 
+* @tparam  T   Coefficient type, must be an integer.
+* 
+* Template-parameter T actually must be a unique factorization domain but we
+* don't currently have that subtlety of distinction.
+*/
+template <typename T, typename N>
+BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<T>::is_integer, void >::type
+division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
+{
+    q[k] = u[n + k] * std::pow(v[n], k);
+    for (std::size_t j = n + k; j > 0;)
+    {
+        j--;
+        u[j] = v[n] * u[j] - (j < k ? T(0) : u[n + k] * v[j - k]);
+    }
+}
+
+
+/**
  * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
- * Chapter 4.6.1, Algorithm D.
+ * Chapter 4.6.1, Algorithm D and R: Main loop.
  * 
- * @tparam  T   Coefficient type, must be a field.
  * @param   u   Dividend.
  * @param   v   Divisor.
- * 
- * One day in the future (C++17) we can use Concepts to distinguish functions 
- * but until then we'll simply use names.
  */
 template <typename T>
-BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, std::pair< polynomial<T>, polynomial<T> > >::type
-division_over_field(polynomial<T> u, const polynomial<T>& v)
+std::pair< polynomial<T>, polynomial<T> >
+division(polynomial<T> u, const polynomial<T>& v)
 {
     BOOST_ASSERT(v.size() <= u.size());
     BOOST_ASSERT(v != zero_element(std::multiplies< polynomial<T> >()));
     BOOST_ASSERT(u != zero_element(std::multiplies< polynomial<T> >()));
-
+    
     std::size_t const m = u.size() - 1, n = v.size() - 1;
     std::size_t k = m - n;
     polynomial<T> q;
@@ -142,18 +183,15 @@ division_over_field(polynomial<T> u, const polynomial<T>& v)
     
     do
     {
-        q[k] = u[n + k] / v[n];
-        // The algorithm notation is n+k-1 down to k but for loop termination
-        // convenience we do n+k down to k+1 (because k can equal 0).
-        for (std::size_t j = n + k; j > k; j--)
-            u[j - 1] -= q[k] * v[j - k - 1];
+        division_impl(q, u, v, n, k);
     }
     while (k-- != 0);
-    polynomial<T> const r(u.data().begin(), u.data().begin() + n);
-    return std::make_pair(q, r);
+    u.data().resize(n);
+    u.normalize(); // Occasionally, the remainder is zeroes.
+    return std::make_pair(q, u);
 }
-}
-
+    
+} // namespace detail
 
 /**
  * Returns the zero element for multiplication of polynomials.
@@ -175,13 +213,13 @@ polynomial<T> identity_element(std::multiplies< polynomial<T> >)
  * This function is not defined for division by zero: user beware.
  */
 template <typename T>
-BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, std::pair< polynomial<T>, polynomial<T> > >::type
+std::pair< polynomial<T>, polynomial<T> >
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
     BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
     if (dividend.size() < divisor.size())
         return std::make_pair(zero_element(std::multiplies< polynomial<T> >()), dividend);
-    return detail::division_over_field(dividend, divisor);
+    return detail::division(dividend, divisor);
 }
 
 
@@ -289,8 +327,7 @@ public:
    }
 
    template <class U>
-   BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, polynomial&>::type
-   operator /=(const U& value)
+   polynomial& operator /=(const U& value)
    {
        using namespace boost::lambda;
        std::transform(m_data.begin(), m_data.end(), m_data.begin(), _1 / value);
@@ -299,8 +336,7 @@ public:
    }
 
    template <class U>
-   BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, polynomial&>::type
-   operator %=(const U& value)
+   polynomial& operator %=(const U& value)
    {
        *this = zero_element(std::multiplies<polynomial>());
        return *this;
@@ -345,20 +381,27 @@ public:
    }
 
    template <typename U>
-   BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, polynomial& >::type
-   operator /=(const polynomial<U>& value)
+   polynomial& operator /=(const polynomial<U>& value)
    {
        *this = quotient_remainder(*this, value).first;
        return *this;
    }
    
    template <typename U>
-   BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, polynomial& >::type
-   operator %=(const polynomial<U>& value)
+   polynomial& operator %=(const polynomial<U>& value)
    {
        *this = quotient_remainder(*this, value).second;
        return *this;
    }
+
+   /** Remove zero coefficients 'from the top', that is for which there are no
+    *        non-zero coefficients of higher degree. */
+   void normalize()
+   {
+       using namespace boost::lambda;
+       m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
+   }
+   
 private:
     template <class U, class R1, class R2>
     polynomial& addition(const U& value, R1 sign, R2 op)
@@ -381,14 +424,6 @@ private:
             m_data.push_back(sign(value[i]));
         normalize();
         return *this;
-    }
-    
-    /** Remove zero coefficients 'from the top', that is for which there are no
-        non-zero coefficients of higher degree. */
-    void normalize()
-    {
-        using namespace boost::lambda;
-        m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
     }
     
     std::vector<T> m_data;
