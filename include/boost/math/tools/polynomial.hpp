@@ -115,47 +115,43 @@ T evaluate_chebyshev(const Seq& a, const T& x)
 template <typename T>
 class polynomial;
 
-
+namespace detail {
+/** 
+ * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
+ * Chapter 4.6.1, Algorithm D.
+ * 
+ * @tparam  T   Coefficient type, must be a field.
+ * @param   u   Dividend.
+ * @param   v   Divisor.
+ * 
+ * One day in the future (C++17) we can use Concepts to distinguish functions 
+ * but until then we'll simply use names.
+ */
 template <typename T>
-BOOST_DEDUCED_TYPENAME disable_if<is_integral<T>, std::pair< polynomial<T>, polynomial<T> > >::type
-synthetic_division(const polynomial<T>& dividend, const polynomial<T>& divisor)
+BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, std::pair< polynomial<T>, polynomial<T> > >::type
+division_over_field(polynomial<T> u, const polynomial<T>& v)
 {
-    BOOST_ASSERT(divisor.size() <= dividend.size());
-    BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
-    BOOST_ASSERT(dividend != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_ASSERT(v.size() <= u.size());
+    BOOST_ASSERT(v != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_ASSERT(u != zero_element(std::multiplies< polynomial<T> >()));
+
+    std::size_t const m = u.size() - 1, n = v.size() - 1;
+    std::size_t k = m - n;
+    polynomial<T> q;
+    q.data().resize(m - n + 1);
     
-    using namespace boost::lambda;
-    
-    std::vector<T> intermediate_result(dividend.data());
-    if (divisor.size() == 1)
-        intermediate_result.insert(begin(intermediate_result), T(0));
-    
+    do
     {
-        typedef BOOST_DEDUCED_TYPENAME std::vector<T>::reverse_iterator reverse_iterator;
-        T const normalizer = divisor[divisor.size() - 1];
-        reverse_iterator const last = intermediate_result.rbegin() + dividend.size() - divisor.size() + 1;
-        for (reverse_iterator i = intermediate_result.rbegin(); i != last; i++)
-        {
-            if (*i != T(0))
-            {
-                T const coefficient = *i /= normalizer;
-                reverse_iterator const j = i + 1;
-                std::transform(j, j + divisor.size() - 1, divisor.data().rbegin() + 1, j, _1 - _2 * coefficient);
-            }
-        }
+        q[k] = u[n + k] / v[n];
+        // The algorithm notation is n+k-1 down to k but for loop termination
+        // convenience we do n+k down to k+1 (because k can equal 0).
+        for (std::size_t j = n + k; j > k; j--)
+            u[j - 1] -= q[k] * v[j - k - 1];
     }
-    
-    {
-        typedef BOOST_DEDUCED_TYPENAME std::vector<T>::iterator iterator;
-        iterator const f = intermediate_result.begin(); // remainder
-        iterator const m = f + std::max(divisor.size() - 1, 1ul); // quotient
-        iterator const l = intermediate_result.end();
-        BOOST_ASSERT(m - f > 0);
-        BOOST_ASSERT(l - m > 0);
-        polynomial<T> const quotient(m, l);
-        polynomial<T> const remainder = *f != T(0) ? polynomial<T>(f, m) : polynomial<T>();
-        return std::make_pair(quotient, remainder);
-    }
+    while (k-- != 0);
+    polynomial<T> const r(u.data().begin(), u.data().begin() + n);
+    return std::make_pair(q, r);
+}
 }
 
 
@@ -179,14 +175,13 @@ polynomial<T> identity_element(std::multiplies< polynomial<T> >)
  * This function is not defined for division by zero: user beware.
  */
 template <typename T>
-
 BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, std::pair< polynomial<T>, polynomial<T> > >::type
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
     BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
     if (dividend.size() < divisor.size())
         return std::make_pair(zero_element(std::multiplies< polynomial<T> >()), dividend);
-    return synthetic_division(dividend, divisor);
+    return detail::division_over_field(dividend, divisor);
 }
 
 
@@ -268,6 +263,11 @@ public:
        return m_data;
    }
 
+   std::vector<T> & data()
+   {
+       return m_data;
+   }
+   
    // operators:
    template <class U>
    polynomial& operator +=(const U& value)
