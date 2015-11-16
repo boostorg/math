@@ -37,6 +37,10 @@
       template <class U>
       polynomial& operator *=(const U& value);
       template <class U>
+      polynomial& operator /=(const U& value);
+      template <class U>
+      polynomial& operator %=(const U& value);
+      template <class U>
       polynomial& operator +=(const polynomial<U>& value);
       template <class U>
       polynomial& operator -=(const polynomial<U>& value);
@@ -65,6 +69,10 @@
    polynomial<T> operator - (const polynomial<T>& a, const U& b);
    template <class T, class U>
    polynomial<T> operator * (const polynomial<T>& a, const U& b);
+   template <class T, class U>
+   polynomial<T> operator / (const polynomial<T>& a, const U& b);
+   template <class T, class U>
+   polynomial<T> operator % (const polynomial<T>& a, const U& b);
    
    template <class U, class T>
    polynomial<T> operator + (const U& a, const polynomial<T>& b);
@@ -90,8 +98,10 @@ Implementation is currently of the "naive" variety, with O(N^2)
 multiplication for example.  This class should not be used in
 high-performance computing environments: it is intended for the
 simple manipulation of small polynomials, typically generated
-for special function approximation. It also has division and remainder
-compatible with Euclidean GCD.
+for special function approximation.
+It does has division for polynomials over a field (floating point, complex, etc)
+and over a unique factorization domain (integers). The former is compatible with
+Euclidean GCD.
 
 Advanced manipulations: the FFT, factorisation etc are
 not currently provided.  Submissions for these are of course welcome :-)
