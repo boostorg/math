@@ -227,7 +227,9 @@ template <class T>
 class polynomial : 
     equality_comparable< polynomial<T>, 
     dividable< polynomial<T>, 
-    modable< polynomial<T> > > >
+    dividable2< polynomial<T>, T,
+    modable< polynomial<T>,
+    modable2< polynomial<T>, T > > > > >
 {
 public:
    // typedefs:
