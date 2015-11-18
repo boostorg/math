@@ -254,7 +254,7 @@ public:
    }
    
    template <class U>
-   polynomial(const U& point)
+   explicit polynomial(const U& point)
    {
        if (point != U(0))
           m_data.push_back(point);
