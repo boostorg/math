@@ -38,6 +38,11 @@ boost::array<double, 3> const d2c = {{31, -21, -22}};
 boost::array<double, 1> const d0a = {{6}};
 boost::array<double, 1> const d0b = {{3}};
 
+boost::array<int, 9> const d8 = {{-5, 2, 8, -3, -3, 0, 1, 0, 1}};
+boost::array<int, 7> const d6 = {{21, -9, -4, 0, 5, 0, 3}};
+boost::array<int, 3> const d2 = {{-6, 0, 9}};
+boost::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
+
 
 BOOST_AUTO_TEST_CASE( test_degree )
 {
@@ -92,10 +97,6 @@ BOOST_AUTO_TEST_CASE( test_division_over_ufd )
 {
     polynomial<int> const zero = zero_element(std::multiplies< polynomial<int> >());
     polynomial<int> const one = identity_element(std::multiplies< polynomial<int> >());
-    boost::array<int, 9> const d8 = {{-5, 2, 8, -3, -3, 0, 1, 0, 1}};
-    boost::array<int, 7> const d6 = {{21, -9, -4, 0, 5, 0, 3}};
-    boost::array<int, 3> const d2 = {{-6, 0, 9}};
-    boost::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
     polynomial<int> const aa(d8.begin(), d8.end());
     polynomial<int> const bb(d6.begin(), d6.end());
     polynomial<int> const q(d2.begin(), d2.end());
@@ -163,7 +164,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, test_types )
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_arithmetic_relations, T, test_types )
 {
-    polynomial<T> const a(d3a.begin(), d3a.end());
+    polynomial<T> const a(d8.begin(), d8.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
 
     BOOST_CHECK_EQUAL(a * T(2), a + a);
