@@ -509,16 +509,16 @@ inline polynomial<T> operator * (const U& a, const polynomial<T>& b)
 }
 
 template <class T>
-bool operator == (const polynomial<T> &x, const polynomial<T> &y)
+bool operator == (const polynomial<T> &a, const polynomial<T> &b)
 {
-    return x.data() == y.data();
+    return a.data() == b.data();
 }
 
 // Unary minus (negate).
 template <class T>
-polynomial<T> operator - (const polynomial<T>& x)
+polynomial<T> operator - (const polynomial<T>& a)
 {
-    return x * T(-1);
+    return a * T(-1);
 }
 
 template <class charT, class traits, class T>

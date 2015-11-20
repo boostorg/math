@@ -20,15 +20,19 @@
       polynomial(){}
       template <class U>
       polynomial(const U* data, unsigned order);
+      template <class I>
+      polynomial(I first, I last);
       template <class U>
-      polynomial(const U& point);
+      explicit polynomial(const U& point);
       
       // access:
       size_type size()const;
       size_type degree()const;
       value_type& operator[](size_type i);
       const value_type& operator[](size_type i)const;
-
+      std::vector<T> const& data() const;
+      std::vector<T>& data();
+      
       // operators:
       template <class U>
       polynomial& operator +=(const U& value);
@@ -83,11 +87,20 @@
 
    template <class T>
    polynomial<T> operator - (const polynomial<T>& a);
+
+   template <class T>
+   bool operator == (const polynomial<T> &a, const polynomial<T> &b);
+   template <class T>
+   bool operator != (const polynomial<T> &a, const polynomial<T> &b);
    
    template <class charT, class traits, class T>
    std::basic_ostream<charT, traits>& operator << 
       (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly);
 
+   template <typename T>
+   std::pair< polynomial<T>, polynomial<T> >
+   quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor);
+      
    }}} // namespaces
 
 [h4 Description]
