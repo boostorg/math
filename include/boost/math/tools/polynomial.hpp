@@ -367,10 +367,14 @@ public:
       }
       polynomial base(*this);
       *this *= value[0];
+      if (*this == zero)
+          this->data().push_back(0); // Denormalize to fit algorithm.
       for(size_type i = 1; i < value.size(); ++i)
       {
          polynomial t(base);
          t *= value[i];
+         if (t == zero)
+             t.data().push_back(0); // Denormalize to fit algorithm.
          size_type s = size() - i;
          for(size_type j = 0; j < s; ++j)
          {

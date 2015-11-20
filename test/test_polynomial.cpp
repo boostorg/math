@@ -39,6 +39,7 @@ boost::array<double, 1> const d0a = {{6}};
 boost::array<double, 1> const d0b = {{3}};
 
 boost::array<int, 9> const d8 = {{-5, 2, 8, -3, -3, 0, 1, 0, 1}};
+boost::array<int, 9> const d8b = {{0, 2, 8, -3, -3, 0, 1, 0, 1}};
 boost::array<int, 7> const d6 = {{21, -9, -4, 0, 5, 0, 3}};
 boost::array<int, 3> const d2 = {{-6, 0, 9}};
 boost::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
@@ -164,13 +165,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, test_types )
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_arithmetic_relations, T, test_types )
 {
-    polynomial<T> const a(d8.begin(), d8.end());
+    polynomial<T> const a(d8b.begin(), d8b.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
 
     BOOST_CHECK_EQUAL(a * T(2), a + a);
     BOOST_CHECK_EQUAL(a - b, -b + a);
     BOOST_CHECK_EQUAL(a * 0.5, a / 2);
-    // NOTE: The following tests fail for int (but pass for double).
     BOOST_CHECK_EQUAL(a, (a * a) / a);
     BOOST_CHECK_EQUAL(a, (a / a) * a);
 }
