@@ -26,15 +26,6 @@
 namespace boost{ namespace math{ namespace tools{
 
 template <class T>
-struct identity
-{
-    T operator()(T const &x) const
-    {
-        return x;
-    }
-};
-
-template <class T>
 T chebyshev_coefficient(unsigned n, unsigned m)
 {
    BOOST_MATH_STD_USING
@@ -190,7 +181,16 @@ division(polynomial<T> u, const polynomial<T>& v)
     u.normalize(); // Occasionally, the remainder is zeroes.
     return std::make_pair(q, u);
 }
-    
+
+template <class T>
+struct identity
+{
+    T operator()(T const &x) const
+    {
+        return x;
+    }
+};
+
 } // namespace detail
 
 /**
@@ -426,7 +426,7 @@ private:
     template <class U>
     polynomial& addition(const U& value)
     {
-        return addition(value, identity<U>(), std::plus<U>());
+        return addition(value, detail::identity<U>(), std::plus<U>());
     }
     
     template <class U>
@@ -449,7 +449,7 @@ private:
     template <class U>
     polynomial& addition(const polynomial<U>& value)
     {
-        return addition(value, identity<U>(), std::plus<U>());
+        return addition(value, detail::identity<U>(), std::plus<U>());
     }
     
     template <class U>
