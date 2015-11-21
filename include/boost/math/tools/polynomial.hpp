@@ -312,18 +312,23 @@ public:
    template <class U>
    polynomial& operator +=(const U& value)
    {
-       return addition(value, identity<U>(), std::plus<U>());
+       addition(value);
+       normalize();
+       return *this;
    }
+   
    template <class U>
    polynomial& operator -=(const U& value)
    {
-       return addition(value, std::negate<U>(), std::minus<U>());
+       subtraction(value);
+       normalize();
+       return *this;
    }
+   
    template <class U>
    polynomial& operator *=(const U& value)
    {
-      for(size_type i = 0; i < m_data.size(); ++i)
-         m_data[i] *= value;
+      multiplication(value);
       normalize();
       return *this;
    }
@@ -331,8 +336,7 @@ public:
    template <class U>
    polynomial& operator /=(const U& value)
    {
-       using namespace boost::lambda;
-       std::transform(m_data.begin(), m_data.end(), m_data.begin(), _1 / value);
+       division(value);
        normalize();
        return *this;
    }
@@ -347,13 +351,17 @@ public:
    template <class U>
    polynomial& operator +=(const polynomial<U>& value)
    {
-      return addition(value, identity<U>(), std::plus<U>());
+      addition(value);
+      normalize();
+      return *this;
    }
    
    template <class U>
    polynomial& operator -=(const polynomial<U>& value)
    {
-       return addition(value, std::negate<U>(), std::minus<U>());
+       subtraction(value);
+       normalize();
+       return *this;
    }
    template <class U>
    polynomial& operator *=(const polynomial<U>& value)
@@ -366,15 +374,11 @@ public:
           return *this;
       }
       polynomial base(*this);
-      *this *= value[0];
-      if (*this == zero)
-          this->data().push_back(0); // Denormalize to fit algorithm.
+      this->multiplication(value[0]);
       for(size_type i = 1; i < value.size(); ++i)
       {
          polynomial t(base);
-         t *= value[i];
-         if (t == zero)
-             t.data().push_back(0); // Denormalize to fit algorithm.
+         t.multiplication(value[i]);
          size_type s = size() - i;
          for(size_type j = 0; j < s; ++j)
          {
@@ -416,8 +420,19 @@ private:
             m_data.push_back(sign(value));
         else
             m_data[0] = op(m_data[0], value);
-        normalize();
         return *this;
+    }
+    
+    template <class U>
+    polynomial& addition(const U& value)
+    {
+        return addition(value, identity<U>(), std::plus<U>());
+    }
+    
+    template <class U>
+    polynomial& subtraction(const U& value)
+    {
+        return addition(value, std::negate<U>(), std::minus<U>());
     }
     
     template <class U, class R1, class R2>
@@ -428,7 +443,34 @@ private:
             m_data[i] = op(m_data[i], value[i]);
         for(size_type i = s1; i < value.size(); ++i)
             m_data.push_back(sign(value[i]));
-        normalize();
+        return *this;
+    }
+    
+    template <class U>
+    polynomial& addition(const polynomial<U>& value)
+    {
+        return addition(value, identity<U>(), std::plus<U>());
+    }
+    
+    template <class U>
+    polynomial& subtraction(const polynomial<U>& value)
+    {
+        return addition(value, std::negate<U>(), std::minus<U>());
+    }
+    
+    template <class U>
+    polynomial& multiplication(const U& value)
+    {
+        using namespace boost::lambda;
+        std::transform(m_data.begin(), m_data.end(), m_data.begin(), _1 * value);
+        return *this;
+    }
+    
+    template <class U>
+    polynomial& division(const U& value)
+    {
+        using namespace boost::lambda;
+        std::transform(m_data.begin(), m_data.end(), m_data.begin(), _1 / value);
         return *this;
     }
     
