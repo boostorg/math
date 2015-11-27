@@ -170,7 +170,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_arithmetic_relations, T, test_types )
 
     BOOST_CHECK_EQUAL(a * T(2), a + a);
     BOOST_CHECK_EQUAL(a - b, -b + a);
-    BOOST_CHECK_EQUAL(a * 0.5, a / 2);
+    BOOST_CHECK_EQUAL(a * 0.5, a / T(2));
     BOOST_CHECK_EQUAL(a, (a * a) / a);
     BOOST_CHECK_EQUAL(a, (a / a) * a);
 }
