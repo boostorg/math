@@ -37,7 +37,7 @@ the algorithms to find location and scale
 #include <limits>
   using std::numeric_limits;
 #include <stdexcept>
-  // using std::exception;
+  
 //] [/normal_std Quickbook]
 
 int main()
