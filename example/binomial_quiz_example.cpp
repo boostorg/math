@@ -39,7 +39,7 @@ First, we need to be able to use the binomial distribution constructor
 #include <iomanip>
   using std::setw; using std::setprecision;
 #include <exception>
-  // using std::exception;
+  
 
 
 //][/binomial_quiz_example1]
