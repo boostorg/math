@@ -212,7 +212,7 @@ void test_spots(T, const char* name)
    if(boost::math::tools::digits<T>() > 60)
    {
       BOOST_CHECK_CLOSE(::boost::math::tgamma(-1 + ldexp(static_cast<T>(1), -55)), static_cast<T>(-3.60287970189639684227843350984671785799289582631555600561524e16L), tolerance);
-      BOOST_CHECK_CLOSE(::boost::math::tgamma(-1 - ldexp(static_cast<T>(1), -55)), static_cast<T>(3.60287970189639675772156649015328997929531384279596450489170e16L), tolerance * 2);
+      BOOST_CHECK_CLOSE(::boost::math::tgamma(-1 - ldexp(static_cast<T>(1), -55)), static_cast<T>(3.60287970189639675772156649015328997929531384279596450489170e16L), tolerance * 3);
       BOOST_CHECK_CLOSE(::boost::math::tgamma(-4 + ldexp(static_cast<T>(1), -55)), static_cast<T>(1.50119987579016539608823618465835611632004877549994080474627e15L), tolerance * extra_tol);
       BOOST_CHECK_CLOSE(::boost::math::tgamma(-4 - ldexp(static_cast<T>(1), -55)), static_cast<T>(-1.50119987579016527057843048200831672241827850458884790004313e15L), tolerance * extra_tol);
    }
