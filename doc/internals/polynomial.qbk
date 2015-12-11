@@ -99,7 +99,7 @@
 
    template <typename T>
    std::pair< polynomial<T>, polynomial<T> >
-   quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor);
+   quotient_remainder(const polynomial<T>& a, const polynomial<T>& b);
       
    }}} // namespaces
 
@@ -112,6 +112,7 @@ multiplication for example.  This class should not be used in
 high-performance computing environments: it is intended for the
 simple manipulation of small polynomials, typically generated
 for special function approximation.
+
 It does has division for polynomials over a field (floating point, complex, etc)
 and over a unique factorization domain (integers). 
 Division of polynomials over a field is compatible with Euclidean GCD.
