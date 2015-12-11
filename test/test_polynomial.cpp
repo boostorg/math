@@ -115,12 +115,21 @@ BOOST_AUTO_TEST_CASE( test_division_over_ufd )
 
 BOOST_AUTO_TEST_CASE( test_gcd )
 {
-    boost::array<double, 9> const d8 = {{0, 0, 0, 0, 0, 0, 0, 0, 1}};
-    boost::array<double, 7> const d6 = {{0, 0, 0, 0, 0, 0, 1}};
-    polynomial<double> aa(d8.begin(), d8.end());
-    polynomial<double> bb(d6.begin(), d6.end());
-    polynomial<double> foo = gcd(aa, bb);
-    BOOST_CHECK_EQUAL(foo, bb);
+    /* NOTE: Euclidean gcd is not yet customized to return THE greatest 
+     * common polynomial divisor. If d is THE greatest common divisior of u and
+     * v, then gcd(u, v) will return d or -d according to the algorithm.
+     * By convention, it should return d, as for example Maxima and Wolfram 
+     * Alpha do.
+     * This test is an example of the fact that it returns -d.
+     */
+    boost::array<double, 9> const d8 = {{105, 278, -88, -56, 16}};
+    boost::array<double, 7> const d6 = {{70, 232, -44, -64, 16}};
+    boost::array<double, 7> const d2 = {{-35, 24, -4}};
+    polynomial<double> const u(d8.begin(), d8.end());
+    polynomial<double> const v(d6.begin(), d6.end());
+    polynomial<double> const w(d2.begin(), d2.end());
+    polynomial<double> const d = gcd(u, v);
+    BOOST_CHECK_EQUAL(w, d);
 }
 
 // Sanity checks to make sure I didn't break it.
