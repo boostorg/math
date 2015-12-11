@@ -128,17 +128,12 @@ inline BOOST_MATH_CONSTEXPR T log_min_value(const mpl::int_<16384>& BOOST_MATH_A
 template <class T>
 inline T log_max_value(const mpl::int_<0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
-#else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-#endif
    BOOST_MATH_STD_USING
 #ifdef __SUNPRO_CC
-   static const T m = (std::numeric_limits<T>::max)();
+   static const T m = boost::math::tools::max_value<T>();
    static const T val = log(m);
 #else
-   static const T val = log((std::numeric_limits<T>::max)());
+   static const T val = log(boost::math::tools::max_value<T>());
 #endif
    return val;
 }
@@ -146,17 +141,12 @@ inline T log_max_value(const mpl::int_<0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_T
 template <class T>
 inline T log_min_value(const mpl::int_<0>& BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-   BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
-#else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-#endif
    BOOST_MATH_STD_USING
 #ifdef __SUNPRO_CC
-   static const T m = (std::numeric_limits<T>::min)();
+   static const T m = boost::math::tools::min_value<T>();
    static const T val = log(m);
 #else
-   static const T val = log((std::numeric_limits<T>::min)());
+   static const T val = log(boost::math::tools::min_value<T>());
 #endif
    return val;
 }

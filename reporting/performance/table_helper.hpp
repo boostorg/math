@@ -294,12 +294,6 @@ inline double dcdflib_t_n_quantile(double p, double param, double nc)
 
 extern std::vector<std::vector<double> > data;
 
-std::string sanitize_string(const std::string& s);
-void load_table(std::vector<std::vector<std::string> >& table, std::string::const_iterator begin, std::string::const_iterator end);
-std::string save_table(std::vector<std::vector<std::string> >& table);
-void add_to_all_sections(const std::string& id, std::string list_name = "performance_all_sections");
-void add_cell(const std::string& cell_name, const std::string& table_name, const std::string& row_name, const std::string& column_heading);
-void set_result(const std::string& cell_name, const std::string& cell_content, const std::string& table_name, const std::string& row_name, const std::string& column_name);
 void report_execution_time(double t, std::string table, std::string row, std::string heading);
 std::string get_compiler_options_name();
 

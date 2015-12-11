@@ -4,7 +4,7 @@ The majority of the implementation notes are included with the documentation
 of each function or distribution.  The notes here are of a more general nature,
 and reflect more the general implementation philosophy used.
 
-[h4 Implemention philosophy]
+[h4 Implementation philosophy]
 
 "First be right, then be fast."
 
@@ -290,7 +290,7 @@ Remez implementations may well produce differing coefficients: the
 problem is well known to be ill conditioned in general, and our Remez implementation
 often found a broad and ill-defined minima for many of these approximations
 (of course for simple "toy" examples like approximating `exp` the minima
-is well defined, and the coeffiecents should agree no matter whose Remez
+is well defined, and the coefficients should agree no matter whose Remez
 implementation is used).  This should not in general effect the validity
 of the approximations: there's good literature supporting the idea that
 coefficients can be "in error" without necessarily adversely effecting
@@ -419,7 +419,7 @@ Where list-of-params is a list of *valid* parameters from which the distribution
 - ie the same number of args are passed to the function,
 as are passed to the distribution constructor.
 
-The values of the parameters are not important, but must be *valid* to pass the contructor checks;
+The values of the parameters are not important, but must be *valid* to pass the constructor checks;
 the default values are suitable, but must be explicitly provided, for example:
 
    check_out_of_range<extreme_value_distribution<RealType> >(1, 2);
@@ -484,7 +484,7 @@ copy an existing mml file and then edit it with Mathcast: the existing
 format should then be preserved.  This is a bug in the XML parser used by
 SVGMath which the author is aware of.
 
-If neccessary the XHTML wrapper can be removed with:
+If necessary the XHTML wrapper can be removed with:
 
 [pre cat filename | tr -d "\\r\\n" \| sed -e 's\/.*\\(<math\[^>\]\*>.\*<\/math>\\).\*\/\\1\/' > newfile]
 

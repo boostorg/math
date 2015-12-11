@@ -20,7 +20,11 @@
 #include <iomanip>
 #include "table_helper.hpp"
 
+void add_cell(boost::intmax_t val, const std::string& table_name, const std::string& row_name, const std::string& column_heading);
+void add_to_all_sections(const std::string& id, std::string list_name = "performance_all_sections");
+
 std::vector<std::vector<double> > data;
+std::vector<std::tuple<double, std::string, std::string, std::string> > items_to_add;
 
 inline std::string sanitize_string(const std::string& s)
 {
@@ -45,10 +49,11 @@ boost::filesystem::path path_to_content;
 
 struct content_loader
 {
-   boost::interprocess::named_mutex mu;
-   boost::interprocess::scoped_lock<boost::interprocess::named_mutex> lock;
-   content_loader() : mu(boost::interprocess::open_or_create, "handle_test_result"), lock(mu)
+   content_loader(){}
+   ~content_loader()
    {
+      boost::interprocess::named_mutex mu(boost::interprocess::open_or_create, "handle_test_result");
+      boost::interprocess::scoped_lock<boost::interprocess::named_mutex> lock(mu);
       boost::filesystem::path p(__FILE__);
       p = p.parent_path();
       p /= "doc";
@@ -67,9 +72,16 @@ struct content_loader
             } while(is.good());
          }
       }
-   }
-   ~content_loader()
-   {
+      //
+      // Now iterate through results and add them one at a time:
+      //
+      for(auto i = items_to_add.begin(); i != items_to_add.end(); ++i)
+      {
+         add_cell(static_cast<boost::uintmax_t>(std::get<0>(*i) / 1e-9), std::get<1>(*i), std::get<2>(*i), std::get<3>(*i));
+      }
+      //
+      // Write out the results:
+      //
       boost::filesystem::ofstream os(path_to_content);
       os << content;
    }
@@ -345,7 +357,8 @@ void add_cell(boost::intmax_t val, const std::string& table_name, const std::str
 
 void report_execution_time(double t, std::string table, std::string row, std::string heading)
 {
-   add_cell(static_cast<boost::uintmax_t>(t / 1e-9), table, row, heading);
+   items_to_add.push_back(std::make_tuple(t, table, row, heading));
+   //add_cell(static_cast<boost::uintmax_t>(t / 1e-9), table, row, heading);
 }
 
 std::string get_compiler_options_name()

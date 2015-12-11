@@ -435,7 +435,7 @@ T ibeta_power_terms(T a,
                         bool normalised,
                         const Policy& pol, 
                         T prefix = 1,
-                        const char* function = "boost::math::ibeta<%1%>(%1%, %1%, %1%)")
+                        const char* = "boost::math::ibeta<%1%>(%1%, %1%, %1%)")
 {
    BOOST_MATH_STD_USING
 
