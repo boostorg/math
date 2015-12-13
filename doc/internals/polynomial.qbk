@@ -20,15 +20,19 @@
       polynomial(){}
       template <class U>
       polynomial(const U* data, unsigned order);
+      template <class I>
+      polynomial(I first, I last);
       template <class U>
-      polynomial(const U& point);
+      explicit polynomial(const U& point);
       
       // access:
       size_type size()const;
       size_type degree()const;
       value_type& operator[](size_type i);
       const value_type& operator[](size_type i)const;
-
+      std::vector<T> const& data() const;
+      std::vector<T>& data();
+      
       // operators:
       template <class U>
       polynomial& operator +=(const U& value);
@@ -37,11 +41,19 @@
       template <class U>
       polynomial& operator *=(const U& value);
       template <class U>
+      polynomial& operator /=(const U& value);
+      template <class U>
+      polynomial& operator %=(const U& value);
+      template <class U>
       polynomial& operator +=(const polynomial<U>& value);
       template <class U>
       polynomial& operator -=(const polynomial<U>& value);
       template <class U>
       polynomial& operator *=(const polynomial<U>& value);
+      template <class U>
+      polynomial& operator /=(const polynomial<U>& value);
+      template <class U>
+      polynomial& operator %=(const polynomial<U>& value);
    };
 
    template <class T>
@@ -50,6 +62,10 @@
    polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b);
    template <class T>
    polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b);
+   template <class T>
+   polynomial<T> operator / (const polynomial<T>& a, const polynomial<T>& b);
+   template <class T>
+   polynomial<T> operator % (const polynomial<T>& a, const polynomial<T>& b);
    
    template <class T, class U>
    polynomial<T> operator + (const polynomial<T>& a, const U& b);
@@ -57,6 +73,10 @@
    polynomial<T> operator - (const polynomial<T>& a, const U& b);
    template <class T, class U>
    polynomial<T> operator * (const polynomial<T>& a, const U& b);
+   template <class T, class U>
+   polynomial<T> operator / (const polynomial<T>& a, const U& b);
+   template <class T, class U>
+   polynomial<T> operator % (const polynomial<T>& a, const U& b);
    
    template <class U, class T>
    polynomial<T> operator + (const U& a, const polynomial<T>& b);
@@ -64,16 +84,28 @@
    polynomial<T> operator - (const U& a, const polynomial<T>& b);
    template <class U, class T>
    polynomial<T> operator * (const U& a, const polynomial<T>& b);
+
+   template <class T>
+   polynomial<T> operator - (const polynomial<T>& a);
+
+   template <class T>
+   bool operator == (const polynomial<T> &a, const polynomial<T> &b);
+   template <class T>
+   bool operator != (const polynomial<T> &a, const polynomial<T> &b);
    
    template <class charT, class traits, class T>
    std::basic_ostream<charT, traits>& operator << 
       (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly);
 
+   template <typename T>
+   std::pair< polynomial<T>, polynomial<T> >
+   quotient_remainder(const polynomial<T>& a, const polynomial<T>& b);
+      
    }}} // namespaces
 
 [h4 Description]
 
-This is a fairly trivial class for polynomial manipulation.
+This is a somewhat trivial class for polynomial manipulation.
 
 Implementation is currently of the "naive" variety, with O(N^2)
 multiplication for example.  This class should not be used in
@@ -81,7 +113,11 @@ high-performance computing environments: it is intended for the
 simple manipulation of small polynomials, typically generated
 for special function approximation.
 
-Advanced manipulations: the FFT, division, GCD, factorisation etc are
+It does has division for polynomials over a field (floating point, complex, etc)
+and over a unique factorization domain (integers). 
+Division of polynomials over a field is compatible with Euclidean GCD.
+
+Advanced manipulations: the FFT, factorisation etc are
 not currently provided.  Submissions for these are of course welcome :-)
 
 [endsect][/section:polynomials Polynomials]
