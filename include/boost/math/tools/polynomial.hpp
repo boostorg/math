@@ -558,9 +558,10 @@ bool operator == (const polynomial<T> &a, const polynomial<T> &b)
 
 // Unary minus (negate).
 template <class T>
-polynomial<T> operator - (const polynomial<T>& a)
+polynomial<T> operator - (polynomial<T> a)
 {
-    return a * T(-1);
+    std::transform(a.data().begin(), a.data().end(), a.data().begin(), std::negate<T>());
+    return a;
 }
 
 template <class charT, class traits, class T>
