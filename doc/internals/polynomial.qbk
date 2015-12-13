@@ -24,7 +24,7 @@
       polynomial(I first, I last);
       template <class U>
       explicit polynomial(const U& point);
-      
+
       // access:
       size_type size()const;
       size_type degree()const;
@@ -32,7 +32,7 @@
       const value_type& operator[](size_type i)const;
       std::vector<T> const& data() const;
       std::vector<T>& data();
-      
+
       // operators:
       template <class U>
       polynomial& operator +=(const U& value);
@@ -66,7 +66,7 @@
    polynomial<T> operator / (const polynomial<T>& a, const polynomial<T>& b);
    template <class T>
    polynomial<T> operator % (const polynomial<T>& a, const polynomial<T>& b);
-   
+
    template <class T, class U>
    polynomial<T> operator + (const polynomial<T>& a, const U& b);
    template <class T, class U>
@@ -77,7 +77,7 @@
    polynomial<T> operator / (const polynomial<T>& a, const U& b);
    template <class T, class U>
    polynomial<T> operator % (const polynomial<T>& a, const U& b);
-   
+
    template <class U, class T>
    polynomial<T> operator + (const U& a, const polynomial<T>& b);
    template <class U, class T>
@@ -92,38 +92,60 @@
    bool operator == (const polynomial<T> &a, const polynomial<T> &b);
    template <class T>
    bool operator != (const polynomial<T> &a, const polynomial<T> &b);
-   
+
    template <class charT, class traits, class T>
-   std::basic_ostream<charT, traits>& operator << 
+   std::basic_ostream<charT, traits>& operator <<
       (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly);
 
    template <typename T>
    std::pair< polynomial<T>, polynomial<T> >
    quotient_remainder(const polynomial<T>& a, const polynomial<T>& b);
-      
+
    }}} // namespaces
 
 [h4 Description]
 
 This is a somewhat trivial class for polynomial manipulation.
 
-Implementation is currently of the "naive" variety, with O(N^2)
-multiplication for example.  This class should not be used in
+Implementation is currently of the "naive" variety, with [bigo](N[super 2])
+multiplication, for example.  This class should not be used in
 high-performance computing environments: it is intended for the
 simple manipulation of small polynomials, typically generated
 for special function approximation.
 
 It does has division for polynomials over a field (floating point, complex, etc)
-and over a unique factorization domain (integers). 
+and over a unique factorization domain (integers).
 Division of polynomials over a field is compatible with Euclidean GCD.
 
 Advanced manipulations: the FFT, factorisation etc are
 not currently provided.  Submissions for these are of course welcome :-)
 
-[endsect][/section:polynomials Polynomials]
+[h4:polynomial_examples  Polynomial Arithmetic Examples]
 
-[/ 
+[import ../../example/polynomial_arithmetic.cpp]
+
+[polynomial_arithmetic_0]
+[polynomial_arithmetic_1]
+
+[polynomial_arithmetic_2]
+for output:
+[polynomial_output_1]
+
+[polynomial_arithmetic_3]
+for output
+[polynomial_output_2]
+
+[h5 Division, Quotient and Remainder]
+[polynomial_arithmetic_4]
+
+The source code is at [@../../example/polynomial_arithmetic.cpp polynomial_arithmetic.cpp]
+
+[endsect] [/section:polynomials Polynomials]
+
+[/
   Copyright 2006 John Maddock and Paul A. Bristow.
+  Copyright 2015 Jeremy William Murphy.
+
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
