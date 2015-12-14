@@ -38,7 +38,7 @@ using std::abs;
 using std::pair;
 
 using namespace boost::math;
-using namespace boost::math::tools;
+using namespace boost::math::tools; // for polynomial
 using boost::lexical_cast;
 
 //] [/polynomial_arithmetic_1]
@@ -58,11 +58,12 @@ string inner_coefficient(T const &x)
   return result;
 }
 
-/*! Convert from Boost container storage, for example: [ 10, -6, -4, 3 ]
-to human formula notation: 3x^3 - 4x^2 - 6x + 10.
+/*! Output in formula format.
+For example: from a polynomial in Boost container storage  [ 10, -6, -4, 3 ]
+show as human-friendly formula notation: 3x^3 - 4x^2 - 6x + 10.
 */
 template <typename T>
-string pretty_format(polynomial<T> const &a)
+string formula_format(polynomial<T> const &a)
 {
   string result;
   if (a.size() == 0)
@@ -94,7 +95,7 @@ string pretty_format(polynomial<T> const &a)
     }
   }
   return result;
-} // string pretty_format(polynomial<T> const &a)
+} // string formula_format(polynomial<T> const &a)
 
 
 int main()
@@ -115,29 +116,30 @@ in descending order of degree, Boost.Math stores in [*ascending order of degree]
   Boost polynomial storage: [ 10, -6, -4, 3 ]
 */
   boost::array<double, 4> const d3a = {{10, -6, -4, 3}};
-  boost::array<double, 2> const d1a = {{-2, 1}};
   polynomial<double> const a(d3a.begin(), d3a.end());
+
+  boost::array<double, 2> const d1a = {{-2, 1}};
   polynomial<double> const b(d1a.begin(), d1a.end());
-// pretty_format() converts from Boost storage to human notation.
-  cout << "a = " << pretty_format(a)
-  << "\nb = " << pretty_format(b) << "\n\n";
+
+  // formula_format() converts from Boost storage to human notation.
+  cout << "a = " << formula_format(a)
+  << "\nb = " << formula_format(b) << "\n\n";
 
 //] [/polynomial_arithmetic_2]
 
 //[polynomial_arithmetic_3
-// Now we can do arithmetic with the usual infix operators: + - * / and %.
+  // Now we can do arithmetic with the usual infix operators: + - * / and %.
   polynomial<double> s = a + b;
-  cout << "a + b = " << pretty_format(s) << "\n";
+  cout << "a + b = " << formula_format(s) << "\n";
   polynomial<double> d = a - b;
-  cout << "a - b = " << pretty_format(d) << "\n";
+  cout << "a - b = " << formula_format(d) << "\n";
   polynomial<double> p = a * b;
-  cout << "a * b = " << pretty_format(p) << "\n";
+  cout << "a * b = " << formula_format(p) << "\n";
   polynomial<double> q = a / b;
-  cout << "a / b = " << pretty_format(q) << "\n";
+  cout << "a / b = " << formula_format(q) << "\n";
   polynomial<double> r = a % b;
-  cout << "a % b = " << pretty_format(r) << "\n";
+  cout << "a % b = " << formula_format(r) << "\n";
 //] [/polynomial_arithmetic_3]
-
 
 //[polynomial_arithmetic_4
 /*`

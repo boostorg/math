@@ -1,4 +1,7 @@
 //  (C) Copyright John Maddock 2006.
+//  (C) Copyright Jeremy William Murphy 2015.
+
+
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -107,14 +110,14 @@ template <typename T>
 class polynomial;
 
 namespace detail {
-    
-/** 
+
+/**
 * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
 * Chapter 4.6.1, Algorithm D: Division of polynomials over a field.
-* 
+*
 * @tparam  T   Coefficient type, must be not be an integer.
-* 
-* Template-parameter T actually must be a field but we don't currently have that 
+*
+* Template-parameter T actually must be a field but we don't currently have that
 * subtlety of distinction.
 */
 template <typename T, typename N>
@@ -130,12 +133,12 @@ division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N
 }
 
 
-/** 
+/**
 * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
 * Chapter 4.6.1, Algorithm R: Pseudo-division of polynomials.
-* 
+*
 * @tparam  T   Coefficient type, must be an integer.
-* 
+*
 * Template-parameter T actually must be a unique factorization domain but we
 * don't currently have that subtlety of distinction.
 */
@@ -155,7 +158,7 @@ division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N
 /**
  * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
  * Chapter 4.6.1, Algorithm D and R: Main loop.
- * 
+ *
  * @param   u   Dividend.
  * @param   v   Divisor.
  */
@@ -166,12 +169,12 @@ division(polynomial<T> u, const polynomial<T>& v)
     BOOST_ASSERT(v.size() <= u.size());
     BOOST_ASSERT(v != zero_element(std::multiplies< polynomial<T> >()));
     BOOST_ASSERT(u != zero_element(std::multiplies< polynomial<T> >()));
-    
+
     std::size_t const m = u.size() - 1, n = v.size() - 1;
     std::size_t k = m - n;
     polynomial<T> q;
     q.data().resize(m - n + 1);
-    
+
     do
     {
         division_impl(q, u, v, n, k);
@@ -224,9 +227,9 @@ quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 
 
 template <class T>
-class polynomial : 
-    equality_comparable< polynomial<T>, 
-    dividable< polynomial<T>, 
+class polynomial :
+    equality_comparable< polynomial<T>,
+    dividable< polynomial<T>,
     dividable2< polynomial<T>, T,
     modable< polynomial<T>,
     modable2< polynomial<T>, T > > > > >
@@ -238,21 +241,21 @@ public:
 
    // construct:
    polynomial(){}
-   
+
    template <class U>
    polynomial(const U* data, unsigned order)
       : m_data(data, data + order + 1)
    {
        normalize();
    }
-   
+
    template <class I>
    polynomial(I first, I last)
    : m_data(first, last)
    {
        normalize();
    }
-   
+
    template <class U>
    explicit polynomial(const U& point)
    {
@@ -276,7 +279,7 @@ public:
    // access:
    size_type size()const { return m_data.size(); }
    size_type degree()const
-   { 
+   {
        if (size() == 0)
            throw std::logic_error("degree() is undefined for the zero polynomial.");
        return m_data.size() - 1;
@@ -297,7 +300,7 @@ public:
    {
       return polynomial_to_chebyshev(m_data);
    }
-   
+
    std::vector<T> const& data() const
    {
        return m_data;
@@ -307,7 +310,7 @@ public:
    {
        return m_data;
    }
-   
+
    // operators:
    template <class U>
    polynomial& operator +=(const U& value)
@@ -316,7 +319,7 @@ public:
        normalize();
        return *this;
    }
-   
+
    template <class U>
    polynomial& operator -=(const U& value)
    {
@@ -324,7 +327,7 @@ public:
        normalize();
        return *this;
    }
-   
+
    template <class U>
    polynomial& operator *=(const U& value)
    {
@@ -347,7 +350,7 @@ public:
        *this = zero_element(std::multiplies<polynomial>());
        return *this;
    }
-   
+
    template <class U>
    polynomial& operator +=(const polynomial<U>& value)
    {
@@ -355,7 +358,7 @@ public:
       normalize();
       return *this;
    }
-   
+
    template <class U>
    polynomial& operator -=(const polynomial<U>& value)
    {
@@ -396,7 +399,7 @@ public:
        *this = quotient_remainder(*this, value).first;
        return *this;
    }
-   
+
    template <typename U>
    polynomial& operator %=(const polynomial<U>& value)
    {
@@ -411,7 +414,7 @@ public:
        using namespace boost::lambda;
        m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
    }
-   
+
 private:
     template <class U, class R1, class R2>
     polynomial& addition(const U& value, R1 sign, R2 op)
@@ -422,19 +425,19 @@ private:
             m_data[0] = op(m_data[0], value);
         return *this;
     }
-    
+
     template <class U>
     polynomial& addition(const U& value)
     {
         return addition(value, detail::identity<U>(), std::plus<U>());
     }
-    
+
     template <class U>
     polynomial& subtraction(const U& value)
     {
         return addition(value, std::negate<U>(), std::minus<U>());
     }
-    
+
     template <class U, class R1, class R2>
     polynomial& addition(const polynomial<U>& value, R1 sign, R2 op)
     {
@@ -445,19 +448,19 @@ private:
             m_data.push_back(sign(value[i]));
         return *this;
     }
-    
+
     template <class U>
     polynomial& addition(const polynomial<U>& value)
     {
         return addition(value, detail::identity<U>(), std::plus<U>());
     }
-    
+
     template <class U>
     polynomial& subtraction(const polynomial<U>& value)
     {
         return addition(value, std::negate<U>(), std::minus<U>());
     }
-    
+
     template <class U>
     polynomial& multiplication(const U& value)
     {
@@ -465,7 +468,7 @@ private:
         std::transform(m_data.begin(), m_data.end(), m_data.begin(), _1 * value);
         return *this;
     }
-    
+
     template <class U>
     polynomial& division(const U& value)
     {
@@ -473,7 +476,7 @@ private:
         std::transform(m_data.begin(), m_data.end(), m_data.begin(), _1 / value);
         return *this;
     }
-    
+
     std::vector<T> m_data;
 };
 

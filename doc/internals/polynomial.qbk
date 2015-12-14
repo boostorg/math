@@ -6,7 +6,8 @@
 #include <boost/math/tools/polynomial.hpp>
 ``
 
-   namespace boost{ namespace math{ namespace tools{
+   namespace boost { namespace math {
+   namespace tools {
 
    template <class T>
    class polynomial
@@ -101,11 +102,18 @@
    std::pair< polynomial<T>, polynomial<T> >
    quotient_remainder(const polynomial<T>& a, const polynomial<T>& b);
 
-   }}} // namespaces
+   } //    namespace tools
+   }} //    namespace boost { namespace math
 
 [h4 Description]
 
 This is a somewhat trivial class for polynomial manipulation.
+
+See
+
+* [@https://en.wikipedia.org/wiki/Polynomial Polynomial] and
+* Donald E. Knuth, The Art of Computer Programming: Volume 2, Third edition, (1998)
+Chapter 4.6.1, Algorithm D: Division of polynomials over a field.
 
 Implementation is currently of the "naive" variety, with [bigo](N[super 2])
 multiplication, for example.  This class should not be used in
@@ -113,9 +121,11 @@ high-performance computing environments: it is intended for the
 simple manipulation of small polynomials, typically generated
 for special function approximation.
 
-It does has division for polynomials over a field (floating point, complex, etc)
+It does has division for polynomials over a [@https://en.wikipedia.org/wiki/Field_%28mathematics%29 field]
+(here floating point, complex, etc)
 and over a unique factorization domain (integers).
-Division of polynomials over a field is compatible with Euclidean GCD.
+Division of polynomials over a field is compatible with
+[@https://en.wikipedia.org/wiki/Euclidean_algorithm Euclidean GCD].
 
 Advanced manipulations: the FFT, factorisation etc are
 not currently provided.  Submissions for these are of course welcome :-)
