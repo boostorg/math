@@ -143,7 +143,8 @@ template <typename T, typename N>
 BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<T>::is_integer, void >::type
 division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
 {
-    q[k] = u[n + k] * std::pow(v[n], k);
+    using std::pow;
+    q[k] = u[n + k] * static_cast<T>(pow(v[n], k));
     for (std::size_t j = n + k; j > 0;)
     {
         j--;
@@ -342,8 +343,9 @@ public:
    }
 
    template <class U>
-   polynomial& operator %=(const U& value)
+   polynomial& operator %=(const U& /*value*/)
    {
+       // We can always divide by a scalar, so there is no remainder:
        *this = zero_element(std::multiplies<polynomial>());
        return *this;
    }
