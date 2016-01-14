@@ -46,7 +46,7 @@ namespace policies{
 //
 // Special cases for exceptions disabled first:
 //
-#ifdef BOOST_NO_EXCEPTIONS
+#if defined(BOOST_NO_EXCEPTIONS)
 #  ifndef BOOST_MATH_DOMAIN_ERROR_POLICY
 #    define BOOST_MATH_DOMAIN_ERROR_POLICY errno_on_error
 #  endif
@@ -63,6 +63,35 @@ namespace policies{
 #     define BOOST_MATH_ROUNDING_ERROR_POLICY errno_on_error
 #  endif
 #endif
+
+   //
+   // Special cases for CUDA devices:
+   //
+#ifdef __CUDA_ARCH__
+#  ifndef BOOST_MATH_DOMAIN_ERROR_POLICY
+#    define BOOST_MATH_DOMAIN_ERROR_POLICY ignore_error
+#  endif
+#  ifndef BOOST_MATH_POLE_ERROR_POLICY
+#     define BOOST_MATH_POLE_ERROR_POLICY ignore_error
+#  endif
+#  ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
+#     define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#  endif
+#  ifndef BOOST_MATH_EVALUATION_ERROR_POLICY
+#     define BOOST_MATH_EVALUATION_ERROR_POLICY ignore_error
+#  endif
+#  ifndef BOOST_MATH_ROUNDING_ERROR_POLICY
+#     define BOOST_MATH_ROUNDING_ERROR_POLICY ignore_error
+#  endif
+#  ifndef BOOST_MATH_PROMOTE_FLOAT_POLICY
+#     define BOOST_MATH_PROMOTE_FLOAT_POLICY false
+#  endif
+#  ifndef BOOST_MATH_PROMOTE_DOUBLE_POLICY
+#     define BOOST_MATH_PROMOTE_DOUBLE_POLICY false
+#  endif
+#endif
+
+
 //
 // Then the regular cases:
 //
@@ -378,8 +407,12 @@ struct default_args<false, true>
    typedef default_policy arg2;
 };
 
+template <bool b1, bool b2> struct fake_default_arg { typedef default_policy type; };
+template <> struct fake_default_arg<false, false> { typedef digits10<0> type; };
+
 typedef default_args<BOOST_MATH_PROMOTE_FLOAT_POLICY, BOOST_MATH_PROMOTE_DOUBLE_POLICY>::arg1 forwarding_arg1;
 typedef default_args<BOOST_MATH_PROMOTE_FLOAT_POLICY, BOOST_MATH_PROMOTE_DOUBLE_POLICY>::arg2 forwarding_arg2;
+typedef fake_default_arg<BOOST_MATH_PROMOTE_FLOAT_POLICY, BOOST_MATH_PROMOTE_DOUBLE_POLICY>::type fake_default_arg_placeholder;
 
 } // detail
 //
@@ -490,7 +523,7 @@ public:
 };
 
 template <>
-struct policy<detail::forwarding_arg1, detail::forwarding_arg2, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy>
+struct policy<detail::forwarding_arg1, detail::forwarding_arg2, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, default_policy, detail::fake_default_arg_placeholder>
 {
 public:
    typedef domain_error<> domain_error_type;
@@ -639,7 +672,7 @@ struct normalise<policy<detail::forwarding_arg1, detail::forwarding_arg2>,
           default_policy,
           default_policy,
           default_policy,
-          default_policy>
+          detail::fake_default_arg_placeholder>
 {
    typedef policy<detail::forwarding_arg1, detail::forwarding_arg2> type;
 };
