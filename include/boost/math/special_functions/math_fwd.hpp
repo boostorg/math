@@ -164,14 +164,14 @@ namespace boost
    BOOST_GPU_ENABLED typename tools::promote_args<RT>::type erfc(RT z, const Policy&);
 
    template <class RT>// Error function inverse.
-   typename tools::promote_args<RT>::type erf_inv(RT z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type erf_inv(RT z);
    template <class RT, class Policy>// Error function inverse.
-   typename tools::promote_args<RT>::type erf_inv(RT z, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type erf_inv(RT z, const Policy& pol);
 
    template <class RT>// Error function complement inverse.
-   typename tools::promote_args<RT>::type erfc_inv(RT z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type erfc_inv(RT z);
    template <class RT, class Policy>// Error function complement inverse.
-   typename tools::promote_args<RT>::type erfc_inv(RT z, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type erfc_inv(RT z, const Policy& pol);
 
    // Polynomials:
    template <class T1, class T2, class T3>

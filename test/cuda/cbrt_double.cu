@@ -39,18 +39,18 @@ int main(void)
 
     // Print the vector length to be used, and compute its size
     int numElements = 50000;
-    std::cout << "[Vector addition of " << numElements << " elements]" << std::endl;
+    std::cout << "[Vector operation on " << numElements << " elements]" << std::endl;
 
     // Allocate the managed input vector A
-    cuda_managed_ptr<float_type> h_A(numElements);
+    cuda_managed_ptr<float_type> input_vector(numElements);
 
     // Allocate the managed output vector C
-    cuda_managed_ptr<float_type> h_C(numElements);
+    cuda_managed_ptr<float_type> output_vector(numElements);
 
     // Initialize the input vectors
     for (int i = 0; i < numElements; ++i)
     {
-        h_A[i] = rand()/(float_type)RAND_MAX;
+        input_vector[i] = rand()/(float_type)RAND_MAX;
     }
 
     // Launch the Vector Add CUDA Kernel
@@ -60,7 +60,7 @@ int main(void)
 
     watch w;
     
-    cuda_test<<<blocksPerGrid, threadsPerBlock>>>(h_A.get(), h_C.get(), numElements);
+    cuda_test<<<blocksPerGrid, threadsPerBlock>>>(input_vector.get(), output_vector.get(), numElements);
 
     std::cout << "CUDA kernal done in: " << w.elapsed() << "s" << std::endl;
     
@@ -77,12 +77,12 @@ int main(void)
     results.reserve(numElements);
     w.reset();
     for(int i = 0; i < numElements; ++i)
-       results.push_back(boost::math::cbrt(h_A[i]));
+       results.push_back(boost::math::cbrt(input_vector[i]));
     double t = w.elapsed();
     // check the results
     for(int i = 0; i < numElements; ++i)
     {
-        if (boost::math::epsilon_difference(h_C[i], results[i]) > 10)
+        if (boost::math::epsilon_difference(output_vector[i], results[i]) > 10)
         {
             std::cerr << "Result verification failed at element " << i << "!" << std::endl;
             return EXIT_FAILURE;
