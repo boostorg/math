@@ -154,14 +154,14 @@ namespace boost
 
    // erf & erfc error functions.
    template <class RT> // Error function.
-   typename tools::promote_args<RT>::type erf(RT z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type erf(RT z);
    template <class RT, class Policy> // Error function.
-   typename tools::promote_args<RT>::type erf(RT z, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type erf(RT z, const Policy&);
 
    template <class RT>// Error function complement.
-   typename tools::promote_args<RT>::type erfc(RT z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type erfc(RT z);
    template <class RT, class Policy>// Error function complement.
-   typename tools::promote_args<RT>::type erfc(RT z, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type erfc(RT z, const Policy&);
 
    template <class RT>// Error function inverse.
    typename tools::promote_args<RT>::type erf_inv(RT z);
@@ -524,10 +524,10 @@ namespace boost
 
    // cbrt - cube root.
    template <class RT>
-   typename tools::promote_args<RT>::type cbrt(RT z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type cbrt(RT z);
 
    template <class RT, class Policy>
-   typename tools::promote_args<RT>::type cbrt(RT z, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type cbrt(RT z, const Policy&);
 
    // log1p is log(x + 1)
    template <class T>
