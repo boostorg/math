@@ -510,6 +510,49 @@ inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR TargetType raise_rounding_error(
    return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
 }
 
+#ifdef __CUDA_ARCH__
+template <class T>
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR float raise_rounding_error(
+   const char*,
+   const char*,
+   const T& val,
+   const float&,
+   const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   return  val > 0 ? FLT_MAX : -FLT_MAX;
+}
+template <class T>
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR double raise_rounding_error(
+   const char*,
+   const char*,
+   const T& val,
+   const double&,
+   const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   return  val > 0 ? DBL_MAX : -DBL_MAX;
+}
+template <class T>
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR int raise_rounding_error(
+   const char*,
+   const char*,
+   const T& val,
+   const int&,
+   const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   return  val > 0 ? INT_MAX : INT_MIN;
+}
+template <class T>
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR long raise_rounding_error(
+   const char*,
+   const char*,
+   const T& val,
+   const long&,
+   const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   return  val > 0 ? LONG_MAX : LONG_MIN;
+}
+#endif
+
 template <class T, class TargetType>
 inline TargetType raise_rounding_error(
            const char* ,

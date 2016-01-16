@@ -74,10 +74,10 @@ struct lanczos6 : public mpl::int_<35>
    // double precision:
    //
    template <class T>
-   static T lanczos_sum(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum(const T& z)
    {
       lanczos_initializer<lanczos6, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[6] = {
+      BOOST_MATH_GPU_STATIC const T num[6] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 8706.349592549009182288174442774377925882)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 8523.650341121874633477483696775067709735)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 3338.029219476423550899999750161289306564)),
@@ -85,7 +85,7 @@ struct lanczos6 : public mpl::int_<35>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 63.99951844938187085666201263218840287667)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 2.506628274631006311133031631822390264407))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
          static_cast<boost::uint16_t>(0u),
          static_cast<boost::uint16_t>(24u),
          static_cast<boost::uint16_t>(50u),
@@ -97,10 +97,10 @@ struct lanczos6 : public mpl::int_<35>
    }
 
    template <class T>
-   static T lanczos_sum_expG_scaled(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum_expG_scaled(const T& z)
    {
       lanczos_initializer<lanczos6, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[6] = {
+      BOOST_MATH_GPU_STATIC const T num[6] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 32.81244541029783471623665933780748627823)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 32.12388941444332003446077108933558534361)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 12.58034729455216106950851080138931470954)),
@@ -108,7 +108,7 @@ struct lanczos6 : public mpl::int_<35>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 0.2412010548258800231126240760264822486599)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 0.009446967704539249494420221613134244048319))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
          static_cast<boost::uint16_t>(0u),
          static_cast<boost::uint16_t>(24u),
          static_cast<boost::uint16_t>(50u),
@@ -121,10 +121,10 @@ struct lanczos6 : public mpl::int_<35>
 
 
    template<class T>
-   static T lanczos_sum_near_1(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_1(const T& dz)
    {
       lanczos_initializer<lanczos6, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[5] = {
+      BOOST_MATH_GPU_STATIC const T d[5] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 2.044879010930422922760429926121241330235)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, -2.751366405578505366591317846728753993668)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 1.02282965224225004296750609604264824677)),
@@ -140,10 +140,10 @@ struct lanczos6 : public mpl::int_<35>
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_2(const T& dz)
    {
       lanczos_initializer<lanczos6, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[5] = {
+      BOOST_MATH_GPU_STATIC const T d[5] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 5.748142489536043490764289256167080091892)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, -7.734074268282457156081021756682138251825)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 35, 2.875167944990511006997713242805893543947)),
@@ -159,7 +159,7 @@ struct lanczos6 : public mpl::int_<35>
       return result;
    }
 
-   static double g(){ return 5.581000000000000405009359383257105946541; }
+   static BOOST_GPU_ENABLED double g(){ return 5.581000000000000405009359383257105946541; }
 };
 
 //
@@ -174,10 +174,10 @@ struct lanczos11 : public mpl::int_<60>
    // extended-double precision:
    //
    template <class T>
-   static T lanczos_sum(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum(const T& z)
    {
       lanczos_initializer<lanczos11, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[11] = {
+      BOOST_MATH_GPU_STATIC const T num[11] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 38474670393.31776828316099004518914832218)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 36857665043.51950660081971227404959150474)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 15889202453.72942008945006665994637853242)),
@@ -190,7 +190,7 @@ struct lanczos11 : public mpl::int_<60>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 261.6140441641668190791708576058805625502)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 2.506628274631000502415573855452633787834))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[11] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[11] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(362880u),
          static_cast<boost::uint32_t>(1026576u),
@@ -207,10 +207,10 @@ struct lanczos11 : public mpl::int_<60>
    }
 
    template <class T>
-   static T lanczos_sum_expG_scaled(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum_expG_scaled(const T& z)
    {
       lanczos_initializer<lanczos11, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[11] = {
+      BOOST_MATH_GPU_STATIC const T num[11] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 709811.662581657956893540610814842699825)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 679979.847415722640161734319823103390728)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 293136.785721159725251629480984140341656)),
@@ -223,7 +223,7 @@ struct lanczos11 : public mpl::int_<60>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 0.004826466289237661857584712046231435101741)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 0.4624429436045378766270459638520555557321e-4))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[11] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[11] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(362880u),
          static_cast<boost::uint32_t>(1026576u),
@@ -241,10 +241,10 @@ struct lanczos11 : public mpl::int_<60>
 
 
    template<class T>
-   static T lanczos_sum_near_1(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_1(const T& dz)
    {
       lanczos_initializer<lanczos11, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[10] = {
+      BOOST_MATH_GPU_STATIC const T d[10] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 4.005853070677940377969080796551266387954)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, -13.17044315127646469834125159673527183164)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 17.19146865350790353683895137079288129318)),
@@ -265,10 +265,10 @@ struct lanczos11 : public mpl::int_<60>
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_2(const T& dz)
    {
       lanczos_initializer<lanczos11, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[10] = {
+      BOOST_MATH_GPU_STATIC const T d[10] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 19.05889633808148715159575716844556056056)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, -62.66183664701721716960978577959655644762)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 60, 81.7929198065004751699057192860287512027)),
@@ -289,7 +289,7 @@ struct lanczos11 : public mpl::int_<60>
       return result;
    }
 
-   static double g(){ return 10.90051099999999983936049829935654997826; }
+   static BOOST_GPU_ENABLED double g(){ return 10.90051099999999983936049829935654997826; }
 };
 
 //
@@ -304,10 +304,10 @@ struct lanczos13 : public mpl::int_<72>
    // higher precision:
    //
    template <class T>
-   static T lanczos_sum(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum(const T& z)
    {
       lanczos_initializer<lanczos13, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[13] = {
+      BOOST_MATH_GPU_STATIC const T num[13] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 44012138428004.60895436261759919070125699)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 41590453358593.20051581730723108131357995)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 18013842787117.99677796276038389462742949)),
@@ -322,7 +322,7 @@ struct lanczos13 : public mpl::int_<72>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 381.8801248632926870394389468349331394196)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 2.506628274631000502415763426076722427007))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(39916800u),
          static_cast<boost::uint32_t>(120543840u),
@@ -341,10 +341,10 @@ struct lanczos13 : public mpl::int_<72>
    }
 
    template <class T>
-   static T lanczos_sum_expG_scaled(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum_expG_scaled(const T& z)
    {
       lanczos_initializer<lanczos13, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[13] = {
+      BOOST_MATH_GPU_STATIC const T num[13] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 86091529.53418537217994842267760536134841)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 81354505.17858011242874285785316135398567)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 35236626.38815461910817650960734605416521)),
@@ -359,7 +359,7 @@ struct lanczos13 : public mpl::int_<72>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 0.0007469903808915448316510079585999893674101)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 0.4903180573459871862552197089738373164184e-5))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(39916800u),
          static_cast<boost::uint32_t>(120543840u),
@@ -379,10 +379,10 @@ struct lanczos13 : public mpl::int_<72>
 
 
    template<class T>
-   static T lanczos_sum_near_1(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_1(const T& dz)
    {
       lanczos_initializer<lanczos13, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[12] = {
+      BOOST_MATH_GPU_STATIC const T d[12] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 4.832115561461656947793029596285626840312)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, -19.86441536140337740383120735104359034688)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 33.9927422807443239927197864963170585331)),
@@ -405,10 +405,10 @@ struct lanczos13 : public mpl::int_<72>
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_2(const T& dz)
    {
       lanczos_initializer<lanczos13, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[12] = {
+      BOOST_MATH_GPU_STATIC const T d[12] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 26.96979819614830698367887026728396466395)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, -110.8705424709385114023884328797900204863)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 72, 189.7258846119231466417015694690434770085)),
@@ -431,7 +431,7 @@ struct lanczos13 : public mpl::int_<72>
       return result;
    }
 
-   static double g(){ return 13.1445650000000000545696821063756942749; }
+   static BOOST_GPU_ENABLED double g(){ return 13.1445650000000000545696821063756942749; }
 };
 
 //
@@ -446,10 +446,10 @@ struct lanczos22 : public mpl::int_<120>
    // evaluated at higher precision:
    //
    template <class T>
-   static T lanczos_sum(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum(const T& z)
    {
       lanczos_initializer<lanczos22, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[22] = {
+      BOOST_MATH_GPU_STATIC const T num[22] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 46198410803245094237463011094.12173081986)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 43735859291852324413622037436.321513777)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 19716607234435171720534556386.97481377748)),
@@ -473,7 +473,7 @@ struct lanczos22 : public mpl::int_<120>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 1167.501919472435718934219997431551246996)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 2.50662827463100050241576528481104525333))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[22] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[22] = {
          BOOST_MATH_INT_VALUE_SUFFIX(0, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(2432902008176640000, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(8752948036761600000, uLL),
@@ -501,10 +501,10 @@ struct lanczos22 : public mpl::int_<120>
    }
 
    template <class T>
-   static T lanczos_sum_expG_scaled(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum_expG_scaled(const T& z)
    {
       lanczos_initializer<lanczos22, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[22] = {
+      BOOST_MATH_GPU_STATIC const T num[22] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 6939996264376682180.277485395074954356211)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 6570067992110214451.87201438870245659384)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 2961859037444440551.986724631496417064121)),
@@ -528,7 +528,7 @@ struct lanczos22 : public mpl::int_<120>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 0.1753839324538447655939518484052327068859e-6)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 0.3765495513732730583386223384116545391759e-9))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[22] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[22] = {
          BOOST_MATH_INT_VALUE_SUFFIX(0, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(2432902008176640000, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(8752948036761600000, uLL),
@@ -557,10 +557,10 @@ struct lanczos22 : public mpl::int_<120>
 
 
    template<class T>
-   static T lanczos_sum_near_1(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_1(const T& dz)
    {
       lanczos_initializer<lanczos22, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[21] = {
+      BOOST_MATH_GPU_STATIC const T d[21] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 8.318998691953337183034781139546384476554)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, -63.15415991415959158214140353299240638675)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 217.3108224383632868591462242669081540163)),
@@ -592,10 +592,10 @@ struct lanczos22 : public mpl::int_<120>
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_2(const T& dz)
    {
       lanczos_initializer<lanczos22, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[21] = {
+      BOOST_MATH_GPU_STATIC const T d[21] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 75.39272007105208086018421070699575462226)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, -572.3481967049935412452681346759966390319)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 120, 1969.426202741555335078065370698955484358)),
@@ -627,7 +627,7 @@ struct lanczos22 : public mpl::int_<120>
       return result;
    }
 
-   static double g(){ return 22.61890999999999962710717227309942245483; }
+   static BOOST_GPU_ENABLED double g(){ return 22.61890999999999962710717227309942245483; }
 };
 
 //
@@ -641,9 +641,9 @@ struct lanczos6m24 : public mpl::int_<24>
    // Use for float precision, when evaluated as a float:
    //
    template <class T>
-   static T lanczos_sum(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum(const T& z)
    {
-      static const T num[6] = {
+      BOOST_MATH_GPU_STATIC const T num[6] = {
          static_cast<T>(58.52061591769095910314047740215847630266L),
          static_cast<T>(182.5248962595894264831189414768236280862L),
          static_cast<T>(211.0971093028510041839168287718170827259L),
@@ -651,7 +651,7 @@ struct lanczos6m24 : public mpl::int_<24>
          static_cast<T>(27.5192015197455403062503721613097825345L),
          static_cast<T>(2.50662858515256974113978724717473206342L)
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
          static_cast<boost::uint16_t>(0u),
          static_cast<boost::uint16_t>(24u),
          static_cast<boost::uint16_t>(50u),
@@ -663,9 +663,9 @@ struct lanczos6m24 : public mpl::int_<24>
    }
 
    template <class T>
-   static T lanczos_sum_expG_scaled(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum_expG_scaled(const T& z)
    {
-      static const T num[6] = {
+      BOOST_MATH_GPU_STATIC const T num[6] = {
          static_cast<T>(14.0261432874996476619570577285003839357L),
          static_cast<T>(43.74732405540314316089531289293124360129L),
          static_cast<T>(50.59547402616588964511581430025589038612L),
@@ -673,7 +673,7 @@ struct lanczos6m24 : public mpl::int_<24>
          static_cast<T>(6.595765571169314946316366571954421695196L),
          static_cast<T>(0.6007854010515290065101128585795542383721L)
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint16_t) denom[6] = {
          static_cast<boost::uint16_t>(0u),
          static_cast<boost::uint16_t>(24u),
          static_cast<boost::uint16_t>(50u),
@@ -686,9 +686,9 @@ struct lanczos6m24 : public mpl::int_<24>
 
 
    template<class T>
-   static T lanczos_sum_near_1(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_1(const T& dz)
    {
-      static const T d[5] = {
+      BOOST_MATH_GPU_STATIC const T d[5] = {
          static_cast<T>(0.4922488055204602807654354732674868442106L),
          static_cast<T>(0.004954497451132152436631238060933905650346L),
          static_cast<T>(-0.003374784572167105840686977985330859371848L),
@@ -704,9 +704,9 @@ struct lanczos6m24 : public mpl::int_<24>
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_2(const T& dz)
    {
-      static const T d[5] = {
+      BOOST_MATH_GPU_STATIC const T d[5] = {
          static_cast<T>(0.6534966888520080645505805298901130485464L),
          static_cast<T>(0.006577461728560758362509168026049182707101L),
          static_cast<T>(-0.004480276069269967207178373559014835978161L),
@@ -722,7 +722,7 @@ struct lanczos6m24 : public mpl::int_<24>
       return result;
    }
 
-   static double g(){ return 1.428456135094165802001953125; }
+   static BOOST_GPU_ENABLED double g(){ return 1.428456135094165802001953125; }
 };
 
 //
@@ -736,9 +736,9 @@ struct lanczos13m53 : public mpl::int_<53>
    // Use for double precision, when evaluated as a double:
    //
    template <class T>
-   static T lanczos_sum(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum(const T& z)
    {
-      static const T num[13] = {
+      BOOST_MATH_GPU_STATIC const T num[13] = {
          static_cast<T>(23531376880.41075968857200767445163675473L),
          static_cast<T>(42919803642.64909876895789904700198885093L),
          static_cast<T>(35711959237.35566804944018545154716670596L),
@@ -753,7 +753,7 @@ struct lanczos13m53 : public mpl::int_<53>
          static_cast<T>(210.8242777515793458725097339207133627117L),
          static_cast<T>(2.506628274631000270164908177133837338626L)
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(39916800u),
          static_cast<boost::uint32_t>(120543840u),
@@ -772,9 +772,9 @@ struct lanczos13m53 : public mpl::int_<53>
    }
 
    template <class T>
-   static T lanczos_sum_expG_scaled(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum_expG_scaled(const T& z)
    {
-      static const T num[13] = {
+      BOOST_MATH_GPU_STATIC const T num[13] = {
          static_cast<T>(56906521.91347156388090791033559122686859L),
          static_cast<T>(103794043.1163445451906271053616070238554L),
          static_cast<T>(86363131.28813859145546927288977868422342L),
@@ -789,7 +789,7 @@ struct lanczos13m53 : public mpl::int_<53>
          static_cast<T>(0.5098416655656676188125178644804694509993L),
          static_cast<T>(0.006061842346248906525783753964555936883222L)
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint32_t) denom[13] = {
          static_cast<boost::uint32_t>(0u),
          static_cast<boost::uint32_t>(39916800u),
          static_cast<boost::uint32_t>(120543840u),
@@ -809,9 +809,9 @@ struct lanczos13m53 : public mpl::int_<53>
 
 
    template<class T>
-   static T lanczos_sum_near_1(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_1(const T& dz)
    {
-      static const T d[12] = {
+      BOOST_MATH_GPU_STATIC const T d[12] = {
          static_cast<T>(2.208709979316623790862569924861841433016L),
          static_cast<T>(-3.327150580651624233553677113928873034916L),
          static_cast<T>(1.483082862367253753040442933770164111678L),
@@ -834,9 +834,9 @@ struct lanczos13m53 : public mpl::int_<53>
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_2(const T& dz)
    {
-      static const T d[12] = {
+      BOOST_MATH_GPU_STATIC const T d[12] = {
          static_cast<T>(6.565936202082889535528455955485877361223L),
          static_cast<T>(-9.8907772644920670589288081640128194231L),
          static_cast<T>(4.408830289125943377923077727900630927902L),
@@ -859,7 +859,7 @@ struct lanczos13m53 : public mpl::int_<53>
       return result;
    }
 
-   static double g(){ return 6.024680040776729583740234375; }
+   static BOOST_GPU_ENABLED double g(){ return 6.024680040776729583740234375; }
 };
 
 //
@@ -873,10 +873,10 @@ struct lanczos17m64 : public mpl::int_<64>
    // Use for extended-double precision, when evaluated as an extended-double:
    //
    template <class T>
-   static T lanczos_sum(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum(const T& z)
    {
       lanczos_initializer<lanczos17m64, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[17] = {
+      BOOST_MATH_GPU_STATIC const T num[17] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 553681095419291969.2230556393350368550504)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 731918863887667017.2511276782146694632234)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 453393234285807339.4627124634539085143364)),
@@ -895,7 +895,7 @@ struct lanczos17m64 : public mpl::int_<64>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 488.0063567520005730476791712814838113252)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 2.50662827463100050241576877135758834683))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[17] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[17] = {
          BOOST_MATH_INT_VALUE_SUFFIX(0, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(1307674368000, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(4339163001600, uLL),
@@ -918,10 +918,10 @@ struct lanczos17m64 : public mpl::int_<64>
    }
 
    template <class T>
-   static T lanczos_sum_expG_scaled(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum_expG_scaled(const T& z)
    {
       lanczos_initializer<lanczos17m64, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[17] = {
+      BOOST_MATH_GPU_STATIC const T num[17] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 2715894658327.717377557655133124376674911)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 3590179526097.912105038525528721129550434)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 2223966599737.814969312127353235818710172)),
@@ -940,7 +940,7 @@ struct lanczos17m64 : public mpl::int_<64>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.002393749522058449186690627996063983095463)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 0.1229541408909435212800785616808830746135e-4))
       };
-      static const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[17] = {
+      BOOST_MATH_GPU_STATIC const BOOST_MATH_INT_TABLE_TYPE(T, boost::uint64_t) denom[17] = {
          BOOST_MATH_INT_VALUE_SUFFIX(0, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(1307674368000, uLL),
          BOOST_MATH_INT_VALUE_SUFFIX(4339163001600, uLL),
@@ -964,10 +964,10 @@ struct lanczos17m64 : public mpl::int_<64>
 
 
    template<class T>
-   static T lanczos_sum_near_1(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_1(const T& dz)
    {
       lanczos_initializer<lanczos17m64, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[16] = {
+      BOOST_MATH_GPU_STATIC const T d[16] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 4.493645054286536365763334986866616581265)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -16.95716370392468543800733966378143997694)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 26.19196892983737527836811770970479846644)),
@@ -994,10 +994,10 @@ struct lanczos17m64 : public mpl::int_<64>
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_2(const T& dz)
    {
       lanczos_initializer<lanczos17m64, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[16] = {
+      BOOST_MATH_GPU_STATIC const T d[16] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 23.56409085052261327114594781581930373708)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -88.92116338946308797946237246006238652361)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 137.3472822086847596961177383569603988797)),
@@ -1024,7 +1024,7 @@ struct lanczos17m64 : public mpl::int_<64>
       return result;
    }
 
-   static double g(){ return 12.2252227365970611572265625; }
+   static BOOST_GPU_ENABLED double g(){ return 12.2252227365970611572265625; }
 };
 
 //
@@ -1038,10 +1038,10 @@ struct lanczos24m113 : public mpl::int_<113>
    // Use for long-double precision, when evaluated as an long-double:
    //
    template <class T>
-   static T lanczos_sum(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum(const T& z)
    {
       lanczos_initializer<lanczos24m113, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[24] = {
+      BOOST_MATH_GPU_STATIC const T num[24] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 2029889364934367661624137213253.22102954656825019111612712252027267955023987678816620961507)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 2338599599286656537526273232565.2727349714338768161421882478417543004440597874814359063158)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 1288527989493833400335117708406.3953711906175960449186720680201425446299360322830739180195)),
@@ -1067,7 +1067,7 @@ struct lanczos24m113 : public mpl::int_<113>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 1151.61895453463992438325318456328526085882924197763140514450975619271382783957699017875304)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 2.50662827463100050241576528481104515966515623051532908941425544355490413900497467936202516))
       };
-      static const T denom[24] = {
+      BOOST_MATH_GPU_STATIC const T denom[24] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 0.0)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 0.112400072777760768e22)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 0.414847677933545472e22)),
@@ -1097,10 +1097,10 @@ struct lanczos24m113 : public mpl::int_<113>
    }
 
    template <class T>
-   static T lanczos_sum_expG_scaled(const T& z)
+   static BOOST_GPU_ENABLED T lanczos_sum_expG_scaled(const T& z)
    {
       lanczos_initializer<lanczos24m113, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T num[24] = {
+      BOOST_MATH_GPU_STATIC const T num[24] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 3035162425359883494754.02878223286972654682199012688209026810841953293372712802258398358538)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 3496756894406430103600.16057175075063458536101374170860226963245118484234495645518505519827)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 1926652656689320888654.01954015145958293168365236755537645929361841917596501251362171653478)),
@@ -1126,7 +1126,7 @@ struct lanczos24m113 : public mpl::int_<113>
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 0.172194142179211139195966608011235161516824700287310869949928393345257114743230967204370963e-5)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 0.374799931707148855771381263542708435935402853962736029347951399323367765509988401336565436e-8))
       };
-      static const T denom[24] = {
+      BOOST_MATH_GPU_STATIC const T denom[24] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 0.0)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 0.112400072777760768e22)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 0.414847677933545472e22)),
@@ -1157,10 +1157,10 @@ struct lanczos24m113 : public mpl::int_<113>
 
 
    template<class T>
-   static T lanczos_sum_near_1(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_1(const T& dz)
    {
       lanczos_initializer<lanczos24m113, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[23] = {
+      BOOST_MATH_GPU_STATIC const T d[23] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 7.4734083002469026177867421609938203388868806387315406134072298925733950040583068760685908)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, -50.4225805042247530267317342133388132970816607563062253708655085754357843064134941138154171)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 152.288200621747008570784082624444625293884063492396162110698238568311211546361189979357019)),
@@ -1194,10 +1194,10 @@ struct lanczos24m113 : public mpl::int_<113>
    }
 
    template<class T>
-   static T lanczos_sum_near_2(const T& dz)
+   static BOOST_GPU_ENABLED T lanczos_sum_near_2(const T& dz)
    {
       lanczos_initializer<lanczos24m113, T>::force_instantiate(); // Ensure our constants get initialized before main()
-      static const T d[23] = {
+      BOOST_MATH_GPU_STATIC const T d[23] = {
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 61.4165001061101455341808888883960361969557848005400286332291451422461117307237198559485365)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, -414.372973678657049667308134761613915623353625332248315105320470271523320700386200587519147)),
          static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 113, 1251.50505818554680171298972755376376836161706773644771875668053742215217922228357204561873)),
@@ -1231,7 +1231,7 @@ struct lanczos24m113 : public mpl::int_<113>
       return result;
    }
 
-   static double g(){ return 20.3209821879863739013671875; }
+   static BOOST_GPU_ENABLED double g(){ return 20.3209821879863739013671875; }
 };
 
 

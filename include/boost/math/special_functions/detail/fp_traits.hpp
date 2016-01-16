@@ -184,8 +184,8 @@ template<> struct fp_traits_non_native<float, single_precision>
     BOOST_STATIC_CONSTANT(uint32_t, significand = 0x007fffff);
 
     typedef uint32_t bits;
-    static void get_bits(float x, uint32_t& a) { std::memcpy(&a, &x, 4); }
-    static void set_bits(float& x, uint32_t a) { std::memcpy(&x, &a, 4); }
+    static BOOST_GPU_ENABLED void get_bits(float x, uint32_t& a) { std::memcpy(&a, &x, 4); }
+    static BOOST_GPU_ENABLED void set_bits(float& x, uint32_t a) { std::memcpy(&x, &a, 4); }
 };
 
 // ieee_tag version, double (64 bits) ----------------------------------------------
@@ -204,12 +204,12 @@ template<> struct fp_traits_non_native<double, double_precision>
 
     typedef uint32_t bits;
 
-    static void get_bits(double x, uint32_t& a)
+    static BOOST_GPU_ENABLED void get_bits(double x, uint32_t& a)
     {
         std::memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + offset_, 4);
     }
 
-    static void set_bits(double& x, uint32_t a)
+    static BOOST_GPU_ENABLED void set_bits(double& x, uint32_t a)
     {
         std::memcpy(reinterpret_cast<unsigned char*>(&x) + offset_, &a, 4);
     }
@@ -240,8 +240,8 @@ template<> struct fp_traits_non_native<double, double_precision>
         = (((uint64_t)0x000fffff) << 32) + ((uint64_t)0xffffffffu);
 
     typedef uint64_t bits;
-    static void get_bits(double x, uint64_t& a) { std::memcpy(&a, &x, 8); }
-    static void set_bits(double& x, uint64_t a) { std::memcpy(&x, &a, 8); }
+    static BOOST_GPU_ENABLED void get_bits(double x, uint64_t& a) { std::memcpy(&a, &x, 8); }
+    static BOOST_GPU_ENABLED void set_bits(double& x, uint64_t a) { std::memcpy(&x, &a, 8); }
 };
 
 #endif
@@ -264,12 +264,12 @@ template<> struct fp_traits_non_native<long double, double_precision>
 
     typedef uint32_t bits;
 
-    static void get_bits(long double x, uint32_t& a)
+    static BOOST_GPU_ENABLED void get_bits(long double x, uint32_t& a)
     {
         std::memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + offset_, 4);
     }
 
-    static void set_bits(long double& x, uint32_t a)
+    static BOOST_GPU_ENABLED void set_bits(long double& x, uint32_t a)
     {
         std::memcpy(reinterpret_cast<unsigned char*>(&x) + offset_, &a, 4);
     }
@@ -300,8 +300,8 @@ template<> struct fp_traits_non_native<long double, double_precision>
         = ((uint64_t)0x000fffff << 32) + (uint64_t)0xffffffffu;
 
     typedef uint64_t bits;
-    static void get_bits(long double x, uint64_t& a) { std::memcpy(&a, &x, 8); }
-    static void set_bits(long double& x, uint64_t a) { std::memcpy(&x, &a, 8); }
+    static BOOST_GPU_ENABLED void get_bits(long double x, uint64_t& a) { std::memcpy(&a, &x, 8); }
+    static BOOST_GPU_ENABLED void set_bits(long double& x, uint64_t a) { std::memcpy(&x, &a, 8); }
 };
 
 #endif
@@ -327,12 +327,12 @@ struct fp_traits_non_native<long double, extended_double_precision>
 
     typedef uint32_t bits;
 
-    static void get_bits(long double x, uint32_t& a)
+    static BOOST_GPU_ENABLED void get_bits(long double x, uint32_t& a)
     {
         std::memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + 6, 4);
     }
 
-    static void set_bits(long double& x, uint32_t a)
+    static BOOST_GPU_ENABLED void set_bits(long double& x, uint32_t a)
     {
         std::memcpy(reinterpret_cast<unsigned char*>(&x) + 6, &a, 4);
     }
@@ -378,12 +378,12 @@ struct fp_traits_non_native<long double, extended_double_precision>
 
     typedef uint32_t bits;
 
-    static void get_bits(long double x, uint32_t& a)
+    static BOOST_GPU_ENABLED void get_bits(long double x, uint32_t& a)
     {
         std::memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + offset_, 4);
     }
 
-    static void set_bits(long double& x, uint32_t a)
+    static BOOST_GPU_ENABLED void set_bits(long double& x, uint32_t a)
     {
         std::memcpy(reinterpret_cast<unsigned char*>(&x) + offset_, &a, 4);
     }
@@ -425,14 +425,14 @@ struct fp_traits_non_native<long double, extended_double_precision>
 
     typedef uint32_t bits;
 
-    static void get_bits(long double x, uint32_t& a)
+    static BOOST_GPU_ENABLED void get_bits(long double x, uint32_t& a)
     {
         std::memcpy(&a, &x, 2);
         std::memcpy(reinterpret_cast<unsigned char*>(&a) + 2,
                reinterpret_cast<const unsigned char*>(&x) + 4, 2);
     }
 
-    static void set_bits(long double& x, uint32_t a)
+    static BOOST_GPU_ENABLED void set_bits(long double& x, uint32_t a)
     {
         std::memcpy(&x, &a, 2);
         std::memcpy(reinterpret_cast<unsigned char*>(&x) + 4,
@@ -459,12 +459,12 @@ struct fp_traits_non_native<long double, extended_double_precision>
 
     typedef uint32_t bits;
 
-    static void get_bits(long double x, uint32_t& a)
+    static BOOST_GPU_ENABLED void get_bits(long double x, uint32_t& a)
     {
         std::memcpy(&a, reinterpret_cast<const unsigned char*>(&x) + offset_, 4);
     }
 
-    static void set_bits(long double& x, uint32_t a)
+    static BOOST_GPU_ENABLED void set_bits(long double& x, uint32_t a)
     {
         std::memcpy(reinterpret_cast<unsigned char*>(&x) + offset_, &a, 4);
     }

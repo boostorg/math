@@ -21,22 +21,22 @@ namespace boost
    { 
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol);
    template <class T>
-   typename tools::promote_args<T>::type trunc(const T& v);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v);
    template <class T, class Policy>
-   int itrunc(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED int itrunc(const T& v, const Policy& pol);
    template <class T>
-   int itrunc(const T& v);
+   BOOST_GPU_ENABLED int itrunc(const T& v);
    template <class T, class Policy>
-   long ltrunc(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED long ltrunc(const T& v, const Policy& pol);
    template <class T>
-   long ltrunc(const T& v);
+   BOOST_GPU_ENABLED long ltrunc(const T& v);
 #ifdef BOOST_HAS_LONG_LONG
    template <class T, class Policy>
-   boost::long_long_type lltrunc(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED boost::long_long_type lltrunc(const T& v, const Policy& pol);
    template <class T>
-   boost::long_long_type lltrunc(const T& v);
+   BOOST_GPU_ENABLED boost::long_long_type lltrunc(const T& v);
 #endif
    template <class T, class Policy>
    typename tools::promote_args<T>::type round(const T& v, const Policy& pol);

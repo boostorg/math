@@ -46,7 +46,7 @@ public:
       void *ptr;
       err = cudaMallocManaged(&ptr, n * sizeof(T));
       if(err != cudaSuccess)
-         throw std::bad_alloc();
+         throw std::runtime_error(cudaGetErrorString(err));
       cudaDeviceSynchronize();
       data = static_cast<T*>(ptr);
    }

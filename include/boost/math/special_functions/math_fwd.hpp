@@ -385,7 +385,7 @@ namespace boost
    template <class RT, class Policy>
    RT factorial(unsigned int, const Policy& pol);
    template <class RT>
-   RT unchecked_factorial(unsigned int BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(RT));
+   BOOST_GPU_ENABLED RT unchecked_factorial(unsigned int BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(RT));
    template <class RT>
    RT double_factorial(unsigned i);
    template <class RT, class Policy>
@@ -405,7 +405,7 @@ namespace boost
 
    // Gamma functions.
    template <class RT>
-   typename tools::promote_args<RT>::type tgamma(RT z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type tgamma(RT z);
 
    template <class RT>
    typename tools::promote_args<RT>::type tgamma1pm1(RT z);
@@ -414,22 +414,22 @@ namespace boost
    typename tools::promote_args<RT>::type tgamma1pm1(RT z, const Policy& pol);
 
    template <class RT1, class RT2>
-   typename tools::promote_args<RT1, RT2>::type tgamma(RT1 a, RT2 z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type tgamma(RT1 a, RT2 z);
 
    template <class RT1, class RT2, class Policy>
    typename tools::promote_args<RT1, RT2>::type tgamma(RT1 a, RT2 z, const Policy& pol);
 
    template <class RT>
-   typename tools::promote_args<RT>::type lgamma(RT z, int* sign);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type lgamma(RT z, int* sign);
 
    template <class RT, class Policy>
-   typename tools::promote_args<RT>::type lgamma(RT z, int* sign, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type lgamma(RT z, int* sign, const Policy& pol);
 
    template <class RT>
-   typename tools::promote_args<RT>::type lgamma(RT x);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type lgamma(RT x);
 
    template <class RT, class Policy>
-   typename tools::promote_args<RT>::type lgamma(RT x, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type lgamma(RT x, const Policy& pol);
 
    template <class RT1, class RT2>
    typename tools::promote_args<RT1, RT2>::type tgamma_lower(RT1 a, RT2 z);
@@ -820,34 +820,34 @@ namespace boost
    typename tools::promote_args<T>::type cos_pi(T x, const Policy&);
 
    template <class T>
-   typename tools::promote_args<T>::type cos_pi(T x);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type cos_pi(T x);
 
    template <class T>
-   int fpclassify BOOST_NO_MACRO_EXPAND(T t);
+   BOOST_GPU_ENABLED int fpclassify BOOST_NO_MACRO_EXPAND(T t);
 
    template <class T>
-   bool isfinite BOOST_NO_MACRO_EXPAND(T z);
+   BOOST_GPU_ENABLED bool isfinite BOOST_NO_MACRO_EXPAND(T z);
 
    template <class T>
-   bool isinf BOOST_NO_MACRO_EXPAND(T t);
+   BOOST_GPU_ENABLED bool isinf BOOST_NO_MACRO_EXPAND(T t);
 
    template <class T>
-   bool isnan BOOST_NO_MACRO_EXPAND(T t);
+   BOOST_GPU_ENABLED bool isnan BOOST_NO_MACRO_EXPAND(T t);
 
    template <class T>
-   bool isnormal BOOST_NO_MACRO_EXPAND(T t);
+   BOOST_GPU_ENABLED bool isnormal BOOST_NO_MACRO_EXPAND(T t);
 
    template<class T>
-   int signbit BOOST_NO_MACRO_EXPAND(T x);
+   BOOST_GPU_ENABLED int signbit BOOST_NO_MACRO_EXPAND(T x);
 
    template <class T>
-   int sign BOOST_NO_MACRO_EXPAND(const T& z);
+   BOOST_GPU_ENABLED int sign BOOST_NO_MACRO_EXPAND(const T& z);
 
    template <class T, class U>
-   typename tools::promote_args_permissive<T, U>::type copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y);
+   BOOST_GPU_ENABLED typename tools::promote_args_permissive<T, U>::type copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y);
 
    template <class T>
-   typename tools::promote_args_permissive<T>::type changesign BOOST_NO_MACRO_EXPAND(const T& z);
+   BOOST_GPU_ENABLED typename tools::promote_args_permissive<T>::type changesign BOOST_NO_MACRO_EXPAND(const T& z);
 
    // Exponential integrals:
    namespace detail{
