@@ -9,12 +9,14 @@
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/mpl/list.hpp>
+#include <boost/mpl/joint_view.hpp>
 #include <boost/test/test_case_template.hpp>
 #include <boost/test/unit_test.hpp>
-
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 #include <utility>
 
-using namespace boost::math;
 using namespace boost::math::tools;
 using namespace std;
 
@@ -50,11 +52,9 @@ BOOST_AUTO_TEST_CASE( test_degree )
     polynomial<double> const zero = zero_element(std::multiplies< polynomial<double> >());
     polynomial<double> const a(d3a.begin(), d3a.end());
     BOOST_CHECK_THROW(zero.degree(), std::logic_error);
-    BOOST_CHECK_EQUAL(a.degree(), 3);
+    BOOST_CHECK_EQUAL(a.degree(), 3u);
 }
 
-
-typedef boost::mpl::list<int, double> test_types;
 
 BOOST_AUTO_TEST_CASE( test_division_over_field )
 {
@@ -128,12 +128,16 @@ BOOST_AUTO_TEST_CASE( test_gcd )
     polynomial<double> const u(d8.begin(), d8.end());
     polynomial<double> const v(d6.begin(), d6.end());
     polynomial<double> const w(d2.begin(), d2.end());
-    polynomial<double> const d = gcd(u, v);
+    polynomial<double> const d = boost::math::gcd(u, v);
     BOOST_CHECK_EQUAL(w, d);
 }
 
 // Sanity checks to make sure I didn't break it.
-BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, test_types )
+typedef boost::mpl::list<int, long, boost::multiprecision::cpp_int> integral_test_types;
+typedef boost::mpl::list<double, boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50> non_integral_test_types;
+typedef boost::mpl::joint_view<integral_test_types, non_integral_test_types> all_test_types;
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
 {
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
@@ -147,7 +151,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, test_types )
     BOOST_CHECK_EQUAL(a + b, b + a);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE( test_subtraction, T, test_types )
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_subtraction, T, all_test_types )
 {
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
@@ -159,7 +163,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_subtraction, T, test_types )
     BOOST_CHECK_EQUAL(a - a, zero);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, test_types )
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, all_test_types )
 {
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
@@ -172,14 +176,23 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, test_types )
     BOOST_CHECK_EQUAL(a * b, b * a);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE( test_arithmetic_relations, T, test_types )
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_arithmetic_relations, T, all_test_types )
 {
     polynomial<T> const a(d8b.begin(), d8b.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
 
     BOOST_CHECK_EQUAL(a * T(2), a + a);
     BOOST_CHECK_EQUAL(a - b, -b + a);
-    BOOST_CHECK_EQUAL(a * 0.5, a / T(2));
     BOOST_CHECK_EQUAL(a, (a * a) / a);
     BOOST_CHECK_EQUAL(a, (a / a) * a);
 }
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_non_integral_arithmetic_relations, T, non_integral_test_types )
+{
+    polynomial<T> const a(d8b.begin(), d8b.end());
+    polynomial<T> const b(d1a.begin(), d1a.end());
+    
+    BOOST_CHECK_EQUAL(a * T(0.5), a / T(2));
+}
+
