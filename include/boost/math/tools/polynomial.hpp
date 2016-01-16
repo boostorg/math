@@ -467,7 +467,7 @@ private:
     polynomial& multiplication(const U& value)
     {
         using namespace boost::lambda;
-        std::transform(m_data.begin(), m_data.end(), m_data.begin(), _1 * value);
+        std::transform(m_data.begin(), m_data.end(), m_data.begin(), ret<T>(_1 * value));
         return *this;
     }
 
@@ -475,7 +475,7 @@ private:
     polynomial& division(const U& value)
     {
         using namespace boost::lambda;
-        std::transform(m_data.begin(), m_data.end(), m_data.begin(), _1 / value);
+        std::transform(m_data.begin(), m_data.end(), m_data.begin(), ret<T>(_1 / value));
         return *this;
     }
 
