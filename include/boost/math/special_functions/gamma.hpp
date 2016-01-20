@@ -718,7 +718,7 @@ struct small_gamma2_series
 {
    typedef T result_type;
 
-   small_gamma2_series(T a_, T x_) : result(-x_), x(-x_), apn(a_+1), n(1){}
+   BOOST_GPU_ENABLED small_gamma2_series(T a_, T x_) : result(-x_), x(-x_), apn(a_+1), n(1){}
 
    BOOST_GPU_ENABLED T operator()()
    {
@@ -1671,9 +1671,11 @@ struct igamma_initializer
       void force_instantiate()const{}
    };
    static const init initializer;
-   static void force_instantiate()
+   static BOOST_GPU_ENABLED void force_instantiate()
    {
+#ifndef __CUDA_ARCH__
       initializer.force_instantiate();
+#endif
    }
 };
 
