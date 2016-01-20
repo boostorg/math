@@ -39,39 +39,39 @@ namespace boost
 
    // Beta functions.
    template <class RT1, class RT2>
-   typename tools::promote_args<RT1, RT2>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type
          beta(RT1 a, RT2 b); // Beta function (2 arguments).
 
    template <class RT1, class RT2, class A>
-   typename tools::promote_args<RT1, RT2, A>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, A>::type
          beta(RT1 a, RT2 b, A x); // Beta function (3 arguments).
 
    template <class RT1, class RT2, class RT3, class Policy>
-   typename tools::promote_args<RT1, RT2, RT3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
          beta(RT1 a, RT2 b, RT3 x, const Policy& pol); // Beta function (3 arguments).
 
    template <class RT1, class RT2, class RT3>
-   typename tools::promote_args<RT1, RT2, RT3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
          betac(RT1 a, RT2 b, RT3 x);
 
    template <class RT1, class RT2, class RT3, class Policy>
-   typename tools::promote_args<RT1, RT2, RT3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
          betac(RT1 a, RT2 b, RT3 x, const Policy& pol);
 
    template <class RT1, class RT2, class RT3>
-   typename tools::promote_args<RT1, RT2, RT3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
          ibeta(RT1 a, RT2 b, RT3 x); // Incomplete beta function.
 
    template <class RT1, class RT2, class RT3, class Policy>
-   typename tools::promote_args<RT1, RT2, RT3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
          ibeta(RT1 a, RT2 b, RT3 x, const Policy& pol); // Incomplete beta function.
 
    template <class RT1, class RT2, class RT3>
-   typename tools::promote_args<RT1, RT2, RT3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
          ibetac(RT1 a, RT2 b, RT3 x); // Incomplete beta complement function.
 
    template <class RT1, class RT2, class RT3, class Policy>
-   typename tools::promote_args<RT1, RT2, RT3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
          ibetac(RT1 a, RT2 b, RT3 x, const Policy& pol); // Incomplete beta complement function.
 
    template <class T1, class T2, class T3, class T4>
@@ -139,11 +139,11 @@ namespace boost
          ibetac_invb(RT1 a, RT2 b, RT3 q, const Policy&); // Incomplete beta complement inverse function.
 
    template <class RT1, class RT2, class RT3>
-   typename tools::promote_args<RT1, RT2, RT3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
          ibeta_derivative(RT1 a, RT2 b, RT3 x);  // derivative of incomplete beta
 
    template <class RT1, class RT2, class RT3, class Policy>
-   typename tools::promote_args<RT1, RT2, RT3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
          ibeta_derivative(RT1 a, RT2 b, RT3 x, const Policy& pol);  // derivative of incomplete beta
 
    // Binomial:

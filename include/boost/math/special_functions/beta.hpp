@@ -31,7 +31,7 @@ namespace detail{
 // Implementation of Beta(a,b) using the Lanczos approximation:
 //
 template <class T, class Lanczos, class Policy>
-T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
+BOOST_GPU_ENABLED T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
 {
    BOOST_MATH_STD_USING  // for ADL of std names
 
@@ -199,7 +199,7 @@ T beta_imp(T a, T b, const lanczos::undefined_lanczos& /* l */, const Policy& po
 // horrendous cancellation errors.
 //
 template <class T, class Lanczos, class Policy>
-T ibeta_power_terms(T a,
+BOOST_GPU_ENABLED T ibeta_power_terms(T a,
                         T b,
                         T x,
                         T y,
@@ -508,8 +508,8 @@ template <class T>
 struct ibeta_series_t
 {
    typedef T result_type;
-   ibeta_series_t(T a_, T b_, T x_, T mult) : result(mult), x(x_), apn(a_), poch(1-b_), n(1) {}
-   T operator()()
+   BOOST_GPU_ENABLED ibeta_series_t(T a_, T b_, T x_, T mult) : result(mult), x(x_), apn(a_), poch(1-b_), n(1) {}
+   BOOST_GPU_ENABLED T operator()()
    {
       T r = result / apn;
       apn += 1;
@@ -524,7 +524,7 @@ private:
 };
 
 template <class T, class Lanczos, class Policy>
-T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_derivative, T y, const Policy& pol)
+BOOST_GPU_ENABLED T ibeta_series(T a, T b, T x, T s0, const Lanczos&, bool normalised, T* p_derivative, T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
 
@@ -677,9 +677,9 @@ struct ibeta_fraction2_t
 {
    typedef std::pair<T, T> result_type;
 
-   ibeta_fraction2_t(T a_, T b_, T x_, T y_) : a(a_), b(b_), x(x_), y(y_), m(0) {}
+   BOOST_GPU_ENABLED ibeta_fraction2_t(T a_, T b_, T x_, T y_) : a(a_), b(b_), x(x_), y(y_), m(0) {}
 
-   result_type operator()()
+   BOOST_GPU_ENABLED result_type operator()()
    {
       T aN = (a + m - 1) * (a + b + m - 1) * m * (b - m) * x * x;
       T denom = (a + 2 * m - 1);
@@ -702,7 +702,7 @@ private:
 // Evaluate the incomplete beta via the continued fraction representation:
 //
 template <class T, class Policy>
-inline T ibeta_fraction2(T a, T b, T x, T y, const Policy& pol, bool normalised, T* p_derivative)
+inline BOOST_GPU_ENABLED T ibeta_fraction2(T a, T b, T x, T y, const Policy& pol, bool normalised, T* p_derivative)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
    BOOST_MATH_STD_USING
@@ -725,7 +725,7 @@ inline T ibeta_fraction2(T a, T b, T x, T y, const Policy& pol, bool normalised,
 // Computes the difference between ibeta(a,b,x) and ibeta(a+k,b,x):
 //
 template <class T, class Policy>
-T ibeta_a_step(T a, T b, T x, T y, int k, const Policy& pol, bool normalised, T* p_derivative)
+BOOST_GPU_ENABLED T ibeta_a_step(T a, T b, T x, T y, int k, const Policy& pol, bool normalised, T* p_derivative)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
 
@@ -759,7 +759,7 @@ T ibeta_a_step(T a, T b, T x, T y, int k, const Policy& pol, bool normalised, T*
 // it is currently only called for small k.
 //
 template <class T>
-inline T rising_factorial_ratio(T a, T b, int k)
+inline BOOST_GPU_ENABLED T rising_factorial_ratio(T a, T b, int k)
 {
    // calculate:
    // (a)(a+1)(a+2)...(a+k-1)
@@ -799,6 +799,7 @@ struct Pn_size<float>
    BOOST_STATIC_CONSTANT(unsigned, value = 15); // ~8-15 digit accuracy
    BOOST_STATIC_ASSERT(::boost::math::max_factorial<float>::value >= 30);
 };
+#ifndef __CUDA_ARCH__
 template <>
 struct Pn_size<double>
 {
@@ -811,9 +812,10 @@ struct Pn_size<long double>
    BOOST_STATIC_CONSTANT(unsigned, value = 50); // ~35-50 digit accuracy
    BOOST_STATIC_ASSERT(::boost::math::max_factorial<long double>::value >= 100);
 };
+#endif
 
 template <class T, class Policy>
-T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& pol, bool normalised)
+BOOST_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& pol, bool normalised)
 {
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
    BOOST_MATH_STD_USING
@@ -925,7 +927,7 @@ T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& po
 // complement of the binomial distribution cdf and use this finite sum.
 //
 template <class T>
-T binomial_ccdf(T n, T k, T x, T y)
+BOOST_GPU_ENABLED T binomial_ccdf(T n, T k, T x, T y)
 {
    BOOST_MATH_STD_USING // ADL of std names
 
@@ -986,7 +988,7 @@ T binomial_ccdf(T n, T k, T x, T y)
 // each domain:
 //
 template <class T, class Policy>
-T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_derivative)
+BOOST_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_derivative)
 {
    static const char* function = "boost::math::ibeta<%1%>(%1%, %1%, %1%)";
    typedef typename lanczos::lanczos<T, Policy>::type lanczos_type;
@@ -1386,15 +1388,15 @@ T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised, T* p_de
 } // template <class T, class Lanczos>T ibeta_imp(T a, T b, T x, const Lanczos& l, bool inv, bool normalised)
 
 template <class T, class Policy>
-inline T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised)
+BOOST_GPU_ENABLED inline T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool normalised)
 {
    return ibeta_imp(a, b, x, pol, inv, normalised, static_cast<T*>(0));
 }
 
 template <class T, class Policy>
-T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
+BOOST_GPU_ENABLED T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
 {
-   static const char* function = "ibeta_derivative<%1%>(%1%,%1%,%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "ibeta_derivative<%1%>(%1%,%1%,%1%)";
    //
    // start with the usual error checks:
    //
@@ -1429,7 +1431,7 @@ T ibeta_derivative_imp(T a, T b, T x, const Policy& pol)
 // Some forwarding functions that dis-ambiguate the third argument type:
 //
 template <class RT1, class RT2, class Policy>
-inline typename tools::promote_args<RT1, RT2>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type
    beta(RT1 a, RT2 b, const Policy&, const mpl::true_*)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1446,7 +1448,7 @@ inline typename tools::promote_args<RT1, RT2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::beta_imp(static_cast<value_type>(a), static_cast<value_type>(b), evaluation_type(), forwarding_policy()), "boost::math::beta<%1%>(%1%,%1%)");
 }
 template <class RT1, class RT2, class RT3>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
    beta(RT1 a, RT2 b, RT3 x, const mpl::false_*)
 {
    return boost::math::beta(a, b, x, policies::policy<>());
@@ -1459,7 +1461,7 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 // and forward to the implementation functions:
 //
 template <class RT1, class RT2, class A>
-inline typename tools::promote_args<RT1, RT2, A>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, A>::type
    beta(RT1 a, RT2 b, A arg)
 {
    typedef typename policies::is_policy<A>::type tag;
@@ -1467,14 +1469,14 @@ inline typename tools::promote_args<RT1, RT2, A>::type
 }
 
 template <class RT1, class RT2>
-inline typename tools::promote_args<RT1, RT2>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type
    beta(RT1 a, RT2 b)
 {
    return boost::math::beta(a, b, policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
    beta(RT1 a, RT2 b, RT3 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1491,7 +1493,7 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
    betac(RT1 a, RT2 b, RT3 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1507,14 +1509,14 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), true, false), "boost::math::betac<%1%>(%1%,%1%,%1%)");
 }
 template <class RT1, class RT2, class RT3>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
    betac(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::betac(a, b, x, policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta(RT1 a, RT2 b, RT3 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1530,14 +1532,14 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), false, true), "boost::math::ibeta<%1%>(%1%,%1%,%1%)");
 }
 template <class RT1, class RT2, class RT3>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::ibeta(a, b, x, policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
    ibetac(RT1 a, RT2 b, RT3 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1553,14 +1555,14 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy(), true, true), "boost::math::ibetac<%1%>(%1%,%1%,%1%)");
 }
 template <class RT1, class RT2, class RT3>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
    ibetac(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::ibetac(a, b, x, policies::policy<>());
 }
 
 template <class RT1, class RT2, class RT3, class Policy>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta_derivative(RT1 a, RT2 b, RT3 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1576,7 +1578,7 @@ inline typename tools::promote_args<RT1, RT2, RT3>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::ibeta_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(b), static_cast<value_type>(x), forwarding_policy()), "boost::math::ibeta_derivative<%1%>(%1%,%1%,%1%)");
 }
 template <class RT1, class RT2, class RT3>
-inline typename tools::promote_args<RT1, RT2, RT3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2, RT3>::type
    ibeta_derivative(RT1 a, RT2 b, RT3 x)
 {
    return boost::math::ibeta_derivative(a, b, x, policies::policy<>());
