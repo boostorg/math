@@ -3,18 +3,20 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
 
 #include <iostream>
 #include <iomanip>
-#include <boost/math/special_functions/erf.hpp>
+#include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
+#include <boost/array.hpp>
 #include "cuda_managed_ptr.hpp"
 #include "stopwatch.hpp"
 
 // For the CUDA runtime routines (prefixed with "cuda_")
 #include <cuda_runtime.h>
 
-typedef float float_type;
+typedef double float_type;
 
 /**
  * CUDA Kernel Device code
@@ -27,45 +29,67 @@ __global__ void cuda_test(const float_type *in, float_type *out, int numElements
 
     if (i < numElements)
     {
-        out[i] = boost::math::erf(in[i]);
+        out[i] = ::lgamma(in[i]);
     }
 }
+
+template <class T> struct table_type { typedef T type; };
+typedef float_type T;
+#define SC_(x) static_cast<T>(x)
+
+#include "../test_gamma_data.ipp"
 
 /**
  * Host main routine
  */
 int main(void)
 {
+  try{
+    // Consolidate the test data:
+    std::vector<float_type> v;
+
+    for(unsigned i = 0; i < factorials.size(); ++i)
+       v.push_back(factorials[i][0]);
+    for(unsigned i = 0; i < near_1.size(); ++i)
+       v.push_back(near_1[i][0]);
+    for(unsigned i = 0; i < near_2.size(); ++i)
+       v.push_back(near_2[i][0]);
+    for(unsigned i = 0; i < near_0.size(); ++i)
+       v.push_back(near_0[i][0]);
+    for(unsigned i = 0; i < near_m10.size(); ++i)
+       v.push_back(near_m10[i][0]);
+    for(unsigned i = 0; i < near_m55.size(); ++i)
+       v.push_back(near_m55[i][0]);
     // Error code to check return values for CUDA calls
     cudaError_t err = cudaSuccess;
 
     // Print the vector length to be used, and compute its size
     int numElements = 50000;
-    std::cout << "[Vector addition of " << numElements << " elements]" << std::endl;
+    std::cout << "[Vector operation on " << numElements << " elements]" << std::endl;
 
     // Allocate the managed input vector A
-    cuda_managed_ptr<float_type> h_A(numElements);
+    cuda_managed_ptr<float_type> input_vector(numElements);
 
     // Allocate the managed output vector C
-    cuda_managed_ptr<float_type> h_C(numElements);
+    cuda_managed_ptr<float_type> output_vector(numElements);
 
     // Initialize the input vectors
     for (int i = 0; i < numElements; ++i)
     {
-        h_A[i] = rand()/(float_type)RAND_MAX;
+        int table_id = i % v.size();
+        input_vector[i] = v[table_id];
     }
 
     // Launch the Vector Add CUDA Kernel
-    int threadsPerBlock = 256;
+    int threadsPerBlock = 1024;
     int blocksPerGrid =(numElements + threadsPerBlock - 1) / threadsPerBlock;
     std::cout << "CUDA kernel launch with " << blocksPerGrid << " blocks of " << threadsPerBlock << " threads" << std::endl;
     
     watch w;
-    cuda_test<<<blocksPerGrid, threadsPerBlock>>>(h_A.get(), h_C.get(), numElements);
+    cuda_test<<<blocksPerGrid, threadsPerBlock>>>(input_vector.get(), output_vector.get(), numElements);
     std::cout << "CUDA kernal done in " << w.elapsed() << "s" << std::endl;
     
     err = cudaGetLastError();
-
     if (err != cudaSuccess)
     {
         std::cerr << "Failed to launch vectorAdd kernel (error code " << cudaGetErrorString(err) << ")!" << std::endl;
@@ -77,19 +101,20 @@ int main(void)
     results.reserve(numElements);
     w.reset();
     for(int i = 0; i < numElements; ++i)
-       results.push_back(boost::math::erf(h_A[i]));
+       results.push_back(boost::math::lgamma(input_vector[i]));
     double t = w.elapsed();
     // check the results
     for(int i = 0; i < numElements; ++i)
     {
-        if (boost::math::epsilon_difference(h_C[i], results[i]) > 10)
+        if (boost::math::epsilon_difference(output_vector[i], results[i]) > 300)
         {
             std::cerr << "Result verification failed at element " << i << "!" << std::endl;
+            std::cerr << "Error rate was: " << boost::math::epsilon_difference(output_vector[i], results[i]) << "eps" << std::endl;
             return EXIT_FAILURE;
         }
     }
 
-    std::cout << "Test PASSED in " << t << "s" << std::endl;
+    std::cout << "Test PASSED with calculation time: " << t << "s" << std::endl;
 
     // Reset the device and exit
     // cudaDeviceReset causes the driver to clean up all state. While
@@ -106,7 +131,11 @@ int main(void)
     }
 
     std::cout << "Done\n";
-
-    return 0;
+  }
+  catch(const std::exception& e)
+  {
+    std::cerr << "Stopped with exception: " << e.what() << std::endl;
+  }
+  return 0;
 }
 

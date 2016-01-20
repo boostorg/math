@@ -5,7 +5,8 @@
 
 #include <iostream>
 #include <iomanip>
-#include <boost/math/special_functions.hpp>
+#include <boost/math/special_functions/erf.hpp>
+#include <boost/math/special_functions/relative_difference.hpp>
 #include "cuda_managed_ptr.hpp"
 #include "stopwatch.hpp"
 

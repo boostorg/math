@@ -408,16 +408,16 @@ namespace boost
    BOOST_GPU_ENABLED typename tools::promote_args<RT>::type tgamma(RT z);
 
    template <class RT>
-   typename tools::promote_args<RT>::type tgamma1pm1(RT z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type tgamma1pm1(RT z);
 
    template <class RT, class Policy>
-   typename tools::promote_args<RT>::type tgamma1pm1(RT z, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type tgamma1pm1(RT z, const Policy& pol);
 
    template <class RT1, class RT2>
    BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type tgamma(RT1 a, RT2 z);
 
    template <class RT1, class RT2, class Policy>
-   typename tools::promote_args<RT1, RT2>::type tgamma(RT1 a, RT2 z, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type tgamma(RT1 a, RT2 z, const Policy& pol);
 
    template <class RT>
    BOOST_GPU_ENABLED typename tools::promote_args<RT>::type lgamma(RT z, int* sign);
@@ -432,40 +432,40 @@ namespace boost
    BOOST_GPU_ENABLED typename tools::promote_args<RT>::type lgamma(RT x, const Policy& pol);
 
    template <class RT1, class RT2>
-   typename tools::promote_args<RT1, RT2>::type tgamma_lower(RT1 a, RT2 z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type tgamma_lower(RT1 a, RT2 z);
 
    template <class RT1, class RT2, class Policy>
-   typename tools::promote_args<RT1, RT2>::type tgamma_lower(RT1 a, RT2 z, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type tgamma_lower(RT1 a, RT2 z, const Policy&);
 
    template <class RT1, class RT2>
-   typename tools::promote_args<RT1, RT2>::type gamma_q(RT1 a, RT2 z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type gamma_q(RT1 a, RT2 z);
 
    template <class RT1, class RT2, class Policy>
-   typename tools::promote_args<RT1, RT2>::type gamma_q(RT1 a, RT2 z, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type gamma_q(RT1 a, RT2 z, const Policy&);
 
    template <class RT1, class RT2>
-   typename tools::promote_args<RT1, RT2>::type gamma_p(RT1 a, RT2 z);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type gamma_p(RT1 a, RT2 z);
 
    template <class RT1, class RT2, class Policy>
-   typename tools::promote_args<RT1, RT2>::type gamma_p(RT1 a, RT2 z, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT1, RT2>::type gamma_p(RT1 a, RT2 z, const Policy&);
 
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type tgamma_delta_ratio(T1 z, T2 delta);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type tgamma_delta_ratio(T1 z, T2 delta);
 
    template <class T1, class T2, class Policy>
-   typename tools::promote_args<T1, T2>::type tgamma_delta_ratio(T1 z, T2 delta, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type tgamma_delta_ratio(T1 z, T2 delta, const Policy&);
 
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type tgamma_ratio(T1 a, T2 b);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type tgamma_ratio(T1 a, T2 b);
 
    template <class T1, class T2, class Policy>
-   typename tools::promote_args<T1, T2>::type tgamma_ratio(T1 a, T2 b, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type tgamma_ratio(T1 a, T2 b, const Policy&);
 
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type gamma_p_derivative(T1 a, T2 x);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type gamma_p_derivative(T1 a, T2 x);
 
    template <class T1, class T2, class Policy>
-   typename tools::promote_args<T1, T2>::type gamma_p_derivative(T1 a, T2 x, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type gamma_p_derivative(T1 a, T2 x, const Policy&);
 
    // gamma inverse.
    template <class T1, class T2>
@@ -531,32 +531,32 @@ namespace boost
 
    // log1p is log(x + 1)
    template <class T>
-   typename tools::promote_args<T>::type log1p(T);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type log1p(T);
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type log1p(T, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type log1p(T, const Policy&);
 
    // log1pmx is log(x + 1) - x
    template <class T>
-   typename tools::promote_args<T>::type log1pmx(T);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type log1pmx(T);
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type log1pmx(T, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type log1pmx(T, const Policy&);
 
    // Exp (x) minus 1 functions.
    template <class T>
-   typename tools::promote_args<T>::type expm1(T);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type expm1(T);
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type expm1(T, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type expm1(T, const Policy&);
 
    // Power - 1
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
          powm1(const T1 a, const T2 z);
 
    template <class T1, class T2, class Policy>
-   typename tools::promote_args<T1, T2>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
          powm1(const T1 a, const T2 z, const Policy&);
 
    // sqrt(1+x) - 1

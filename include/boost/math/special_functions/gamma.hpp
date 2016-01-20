@@ -328,7 +328,7 @@ private:
    T a, z, result;
 public:
    typedef T result_type;
-   lower_incomplete_gamma_series(T a1, T z1) : a(a1), z(z1), result(1){}
+   BOOST_GPU_ENABLED lower_incomplete_gamma_series(T a1, T z1) : a(a1), z(z1), result(1){}
 
    BOOST_GPU_ENABLED T operator()()
    {
@@ -1722,9 +1722,11 @@ struct lgamma_initializer
       void force_instantiate()const{}
    };
    static const init initializer;
-   static void force_instantiate()
+   static BOOST_GPU_ENABLED void force_instantiate()
    {
+#ifndef __CUDA_ARCH__
       initializer.force_instantiate();
+#endif
    }
 };
 
@@ -1813,7 +1815,7 @@ inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type
    tgamma1pm1(T z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1831,7 +1833,7 @@ inline typename tools::promote_args<T>::type
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type
    tgamma1pm1(T z)
 {
    return tgamma1pm1(z, policies::policy<>());
@@ -1852,7 +1854,7 @@ inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    return detail::tgamma(a, z, maybe_policy());
 }
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    tgamma(T1 a, T2 z, const Policy& pol)
 {
    return detail::tgamma(a, z, pol, mpl::false_());
@@ -1861,7 +1863,7 @@ inline typename tools::promote_args<T1, T2>::type
 // Full lower incomplete gamma:
 //
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    tgamma_lower(T1 a, T2 z, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1883,7 +1885,7 @@ inline typename tools::promote_args<T1, T2>::type
       forwarding_policy(), static_cast<value_type*>(0)), "tgamma_lower<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    tgamma_lower(T1 a, T2 z)
 {
    return tgamma_lower(a, z, policies::policy<>());
@@ -1892,7 +1894,7 @@ inline typename tools::promote_args<T1, T2>::type
 // Regularised upper incomplete gamma:
 //
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    gamma_q(T1 a, T2 z, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1914,7 +1916,7 @@ inline typename tools::promote_args<T1, T2>::type
       forwarding_policy(), static_cast<value_type*>(0)), "gamma_q<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    gamma_q(T1 a, T2 z)
 {
    return gamma_q(a, z, policies::policy<>());
@@ -1923,7 +1925,7 @@ inline typename tools::promote_args<T1, T2>::type
 // Regularised lower incomplete gamma:
 //
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    gamma_p(T1 a, T2 z, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1945,7 +1947,7 @@ inline typename tools::promote_args<T1, T2>::type
       forwarding_policy(), static_cast<value_type*>(0)), "gamma_p<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    gamma_p(T1 a, T2 z)
 {
    return gamma_p(a, z, policies::policy<>());
@@ -1953,7 +1955,7 @@ inline typename tools::promote_args<T1, T2>::type
 
 // ratios of gamma functions:
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    tgamma_delta_ratio(T1 z, T2 delta, const Policy& /* pol */)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -1969,13 +1971,13 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_delta_ratio_imp(static_cast<value_type>(z), static_cast<value_type>(delta), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    tgamma_delta_ratio(T1 z, T2 delta)
 {
    return tgamma_delta_ratio(z, delta, policies::policy<>());
 }
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    tgamma_ratio(T1 a, T2 b, const Policy&)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -1990,14 +1992,14 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::tgamma_ratio_imp(static_cast<value_type>(a), static_cast<value_type>(b), forwarding_policy()), "boost::math::tgamma_delta_ratio<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    tgamma_ratio(T1 a, T2 b)
 {
    return tgamma_ratio(a, b, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    gamma_p_derivative(T1 a, T2 x, const Policy&)
 {
    BOOST_FPU_EXCEPTION_GUARD
@@ -2013,7 +2015,7 @@ inline typename tools::promote_args<T1, T2>::type
    return policies::checked_narrowing_cast<result_type, forwarding_policy>(detail::gamma_p_derivative_imp(static_cast<value_type>(a), static_cast<value_type>(x), forwarding_policy()), "boost::math::gamma_p_derivative<%1%>(%1%, %1%)");
 }
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    gamma_p_derivative(T1 a, T2 x)
 {
    return gamma_p_derivative(a, x, policies::policy<>());
