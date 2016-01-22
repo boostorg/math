@@ -24,10 +24,44 @@ protected:
 
 int managed_holder_base::count = 0;
 
+//
+// Reset the device and exit:
+// cudaDeviceReset causes the driver to clean up all state. While
+// not mandatory in normal operation, it is good practice.  It is also
+// needed to ensure correct operation when the application is being
+// profiled. Calling cudaDeviceReset causes all profile data to be
+// flushed before the application exits.
+//
+// We have a global instance of this class, plus instances for each
+// managed pointer.  Last one out the door switches the lights off.
+//
+class cudaResetter
+{
+   static int count;
+public:
+   cudaResetter() { ++count;  }
+   ~cudaResetter()
+   {
+      if(--count == 0)
+      {
+         cudaError_t err = cudaDeviceReset();
+         if(err != cudaSuccess)
+         {
+            std::cerr << "Failed to deinitialize the device! error=" << cudaGetErrorString(err) << std::endl;
+         }
+      }
+   }
+};
+
+int cudaResetter::count = 0;
+
+cudaResetter global_resetter;
+
 template <class T>
 class cuda_managed_ptr
 {
    T* data;
+   static const cudaResetter resetter;
    cuda_managed_ptr(const cuda_managed_ptr&) = delete;
    cuda_managed_ptr& operator=(cuda_managed_ptr const&) = delete;
    void free()
@@ -35,7 +69,11 @@ class cuda_managed_ptr
       if(data)
       {
          cudaDeviceSynchronize();
-         cudaFree(data);
+         cudaError_t err = cudaFree(data);
+         if(err != cudaSuccess)
+         {
+            std::cerr << "Failed to deinitialize the device! error=" << cudaGetErrorString(err) << std::endl;
+         }
       }
    }
 public:
@@ -91,6 +129,9 @@ public:
    T& operator[](std::size_t n) { return data[n]; }
    const T& operator[](std::size_t n)const { return data[n]; }
 };
+
+template <class T>
+cudaResetter const cuda_managed_ptr<T>::resetter;
 
 #endif
 

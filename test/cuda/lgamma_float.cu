@@ -115,21 +115,6 @@ int main(void)
     }
 
     std::cout << "Test PASSED with calculation time: " << t << "s" << std::endl;
-
-    // Reset the device and exit
-    // cudaDeviceReset causes the driver to clean up all state. While
-    // not mandatory in normal operation, it is good practice.  It is also
-    // needed to ensure correct operation when the application is being
-    // profiled. Calling cudaDeviceReset causes all profile data to be
-    // flushed before the application exits
-    err = cudaDeviceReset();
-
-    if (err != cudaSuccess)
-    {
-        std::cerr << "Failed to deinitialize the device! error=" << cudaGetErrorString(err) << std::endl;
-        return EXIT_FAILURE;
-    }
-
     std::cout << "Done\n";
   }
   catch(const std::exception& e)
