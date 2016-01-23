@@ -799,20 +799,22 @@ struct Pn_size<float>
    BOOST_STATIC_CONSTANT(unsigned, value = 15); // ~8-15 digit accuracy
    BOOST_STATIC_ASSERT(::boost::math::max_factorial<float>::value >= 30);
 };
-#ifndef __CUDA_ARCH__
 template <>
 struct Pn_size<double>
 {
    BOOST_STATIC_CONSTANT(unsigned, value = 30); // 16-20 digit accuracy
+#ifndef __CUDA_ARCH__
    BOOST_STATIC_ASSERT(::boost::math::max_factorial<double>::value >= 60);
+#endif
 };
 template <>
 struct Pn_size<long double>
 {
    BOOST_STATIC_CONSTANT(unsigned, value = 50); // ~35-50 digit accuracy
+#ifndef __CUDA_ARCH__
    BOOST_STATIC_ASSERT(::boost::math::max_factorial<long double>::value >= 100);
-};
 #endif
+};
 
 template <class T, class Policy>
 BOOST_GPU_ENABLED T beta_small_b_large_a_series(T a, T b, T x, T y, T s0, T mult, const Policy& pol, bool normalised)

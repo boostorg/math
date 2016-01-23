@@ -148,9 +148,9 @@ namespace boost
 
    // Binomial:
    template <class T, class Policy>
-   T binomial_coefficient(unsigned n, unsigned k, const Policy& pol);
+   BOOST_GPU_ENABLED T binomial_coefficient(unsigned n, unsigned k, const Policy& pol);
    template <class T>
-   T binomial_coefficient(unsigned n, unsigned k);
+   BOOST_GPU_ENABLED T binomial_coefficient(unsigned n, unsigned k);
 
    // erf & erfc error functions.
    template <class RT> // Error function.
@@ -381,27 +381,27 @@ namespace boost
    template <class RT>
    struct max_factorial;
    template <class RT>
-   RT factorial(unsigned int);
+   BOOST_GPU_ENABLED RT factorial(unsigned int);
    template <class RT, class Policy>
-   RT factorial(unsigned int, const Policy& pol);
+   BOOST_GPU_ENABLED RT factorial(unsigned int, const Policy& pol);
    template <class RT>
    BOOST_GPU_ENABLED RT unchecked_factorial(unsigned int BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE(RT));
    template <class RT>
-   RT double_factorial(unsigned i);
+   BOOST_GPU_ENABLED RT double_factorial(unsigned i);
    template <class RT, class Policy>
-   RT double_factorial(unsigned i, const Policy& pol);
+   BOOST_GPU_ENABLED RT double_factorial(unsigned i, const Policy& pol);
 
    template <class RT>
-   typename tools::promote_args<RT>::type falling_factorial(RT x, unsigned n);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type falling_factorial(RT x, unsigned n);
 
    template <class RT, class Policy>
-   typename tools::promote_args<RT>::type falling_factorial(RT x, unsigned n, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type falling_factorial(RT x, unsigned n, const Policy& pol);
 
    template <class RT>
-   typename tools::promote_args<RT>::type rising_factorial(RT x, int n);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type rising_factorial(RT x, int n);
 
    template <class RT, class Policy>
-   typename tools::promote_args<RT>::type rising_factorial(RT x, int n, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<RT>::type rising_factorial(RT x, int n, const Policy& pol);
 
    // Gamma functions.
    template <class RT>

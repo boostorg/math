@@ -27,7 +27,7 @@ namespace boost { namespace math
 {
 
 template <class T, class Policy>
-inline T factorial(unsigned i, const Policy& pol)
+inline BOOST_GPU_ENABLED T factorial(unsigned i, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
    // factorial<unsigned int>(n) is not implemented
@@ -48,7 +48,7 @@ inline T factorial(unsigned i, const Policy& pol)
 }
 
 template <class T>
-inline T factorial(unsigned i)
+inline BOOST_GPU_ENABLED T factorial(unsigned i)
 {
    return factorial<T>(i, policies::policy<>());
 }
@@ -71,7 +71,7 @@ inline double factorial<double>(unsigned i)
 }
 */
 template <class T, class Policy>
-T double_factorial(unsigned i, const Policy& pol)
+BOOST_GPU_ENABLED T double_factorial(unsigned i, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
    BOOST_MATH_STD_USING  // ADL lookup of std names
@@ -106,7 +106,7 @@ T double_factorial(unsigned i, const Policy& pol)
 }
 
 template <class T>
-inline T double_factorial(unsigned i)
+inline BOOST_GPU_ENABLED T double_factorial(unsigned i)
 {
    return double_factorial<T>(i, policies::policy<>());
 }
@@ -114,7 +114,7 @@ inline T double_factorial(unsigned i)
 namespace detail{
 
 template <class T, class Policy>
-T rising_factorial_imp(T x, int n, const Policy& pol)
+BOOST_GPU_ENABLED T rising_factorial_imp(T x, int n, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
    if(x < 0)
@@ -162,7 +162,7 @@ T rising_factorial_imp(T x, int n, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
+inline BOOST_GPU_ENABLED T falling_factorial_imp(T x, unsigned n, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(!boost::is_integral<T>::value);
    BOOST_MATH_STD_USING // ADL of std names
@@ -226,7 +226,7 @@ inline T falling_factorial_imp(T x, unsigned n, const Policy& pol)
 } // namespace detail
 
 template <class RT>
-inline typename tools::promote_args<RT>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT>::type
    falling_factorial(RT x, unsigned n)
 {
    typedef typename tools::promote_args<RT>::type result_type;
@@ -235,7 +235,7 @@ inline typename tools::promote_args<RT>::type
 }
 
 template <class RT, class Policy>
-inline typename tools::promote_args<RT>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT>::type
    falling_factorial(RT x, unsigned n, const Policy& pol)
 {
    typedef typename tools::promote_args<RT>::type result_type;
@@ -244,7 +244,7 @@ inline typename tools::promote_args<RT>::type
 }
 
 template <class RT>
-inline typename tools::promote_args<RT>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT>::type
    rising_factorial(RT x, int n)
 {
    typedef typename tools::promote_args<RT>::type result_type;
@@ -253,7 +253,7 @@ inline typename tools::promote_args<RT>::type
 }
 
 template <class RT, class Policy>
-inline typename tools::promote_args<RT>::type
+inline BOOST_GPU_ENABLED typename tools::promote_args<RT>::type
    rising_factorial(RT x, int n, const Policy& pol)
 {
    typedef typename tools::promote_args<RT>::type result_type;
