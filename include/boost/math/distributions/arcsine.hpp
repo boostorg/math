@@ -54,7 +54,7 @@ namespace boost
       // Common error checking routines for arcsine distribution functions:
       // Duplicating for x_min and x_max provides specific error messages.
       template <class RealType, class Policy>
-      inline bool check_x_min(const char* function, const RealType& x, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_x_min(const char* function, const RealType& x, RealType* result, const Policy& pol)
       {
         if (!(boost::math::isfinite)(x))
         {
@@ -67,7 +67,7 @@ namespace boost
       } // bool check_x_min
 
       template <class RealType, class Policy>
-      inline bool check_x_max(const char* function, const RealType& x, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_x_max(const char* function, const RealType& x, RealType* result, const Policy& pol)
       {
         if (!(boost::math::isfinite)(x))
         {
@@ -81,11 +81,16 @@ namespace boost
 
 
       template <class RealType, class Policy>
-      inline bool check_x_minmax(const char* function, const RealType& x_min, const RealType& x_max, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_x_minmax(const char* function, const RealType& x_min, const RealType& x_max, RealType* result, const Policy& pol)
       { // Check x_min < x_max
         if (x_min >= x_max)
         {
-          std::string msg = "x_max argument is %1%, but must be > x_min = " + lexical_cast<std::string>(x_min) + "!";
+#ifdef __CUDA_ARCH__
+           *result = policies::raise_domain_error<RealType>(
+              function,
+              "x_max value %1% is out of range", x_max, pol);
+#else
+           std::string msg = "x_max argument is %1%, but must be > x_min = " + lexical_cast<std::string>(x_min) + "!";
           *result = policies::raise_domain_error<RealType>(
             function,
             msg.c_str(), x_max, pol);
@@ -94,13 +99,14 @@ namespace boost
           // But would require replication of all helpers functions in /policies/error_handling.hpp for two values,
           // as well as two value versions of raise_error, raise_domain_error and do_format ...
           // so use slightly hacky lexical_cast to string instead.
+#endif
           return false;
         }
         return true;
       } // bool check_x_minmax
 
       template <class RealType, class Policy>
-      inline bool check_prob(const char* function, const RealType& p, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_prob(const char* function, const RealType& p, RealType* result, const Policy& pol)
       {
         if ((p < 0) || (p > 1) || !(boost::math::isfinite)(p))
         {
@@ -113,7 +119,7 @@ namespace boost
       } // bool check_prob
 
       template <class RealType, class Policy>
-      inline bool check_x(const char* function, const RealType& x_min, const RealType& x_max, const RealType& x, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_x(const char* function, const RealType& x_min, const RealType& x_max, const RealType& x, RealType* result, const Policy& pol)
       { // Check x finite and x_min < x < x_max.
         if (!(boost::math::isfinite)(x))
         {
@@ -137,7 +143,7 @@ namespace boost
       } // bool check_x
 
       template <class RealType, class Policy>
-      inline bool check_dist(const char* function, const RealType& x_min, const RealType& x_max, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_dist(const char* function, const RealType& x_min, const RealType& x_max, RealType* result, const Policy& pol)
       { // Check both x_min and x_max finite, and x_min  < x_max.
         return check_x_min(function, x_min, result, pol)
             && check_x_max(function, x_max, result, pol)
@@ -145,14 +151,14 @@ namespace boost
       } // bool check_dist
 
       template <class RealType, class Policy>
-      inline bool check_dist_and_x(const char* function, const RealType& x_min, const RealType& x_max, RealType x, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_dist_and_x(const char* function, const RealType& x_min, const RealType& x_max, RealType x, RealType* result, const Policy& pol)
       {
         return check_dist(function, x_min, x_max, result, pol)
           && arcsine_detail::check_x(function, x_min, x_max, x, result, pol);
       } // bool check_dist_and_x
 
       template <class RealType, class Policy>
-      inline bool check_dist_and_prob(const char* function, const RealType& x_min, const RealType& x_max, RealType p, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_dist_and_prob(const char* function, const RealType& x_min, const RealType& x_max, RealType p, RealType* result, const Policy& pol)
       {
         return check_dist(function, x_min, x_max, result, pol)
           && check_prob(function, p, result, pol);
@@ -167,7 +173,7 @@ namespace boost
       typedef RealType value_type;
       typedef Policy policy_type;
 
-      arcsine_distribution(RealType x_min = 0, RealType x_max = 1) : m_x_min(x_min), m_x_max(x_max)
+      BOOST_GPU_ENABLED arcsine_distribution(RealType x_min = 0, RealType x_max = 1) : m_x_min(x_min), m_x_max(x_max)
       { // Default beta (alpha = beta = 0.5) is standard arcsine with x_min = 0, x_max = 1.
         // Generalized to allow x_min and x_max to be specified.
         RealType result;
@@ -178,11 +184,11 @@ namespace boost
           &result, Policy());
       } // arcsine_distribution constructor.
       // Accessor functions:
-      RealType x_min() const
+      BOOST_GPU_ENABLED RealType x_min() const
       {
         return m_x_min;
       }
-      RealType x_max() const
+      BOOST_GPU_ENABLED RealType x_max() const
       {
         return m_x_max;
       }
@@ -197,21 +203,21 @@ namespace boost
 
 
     template <class RealType, class Policy>
-    inline const std::pair<RealType, RealType> range(const arcsine_distribution<RealType, Policy>&  dist)
+    inline BOOST_GPU_ENABLED const std::pair<RealType, RealType> range(const arcsine_distribution<RealType, Policy>&  dist)
     { // Range of permissible values for random variable x.
       using boost::math::tools::max_value;
       return std::pair<RealType, RealType>(static_cast<RealType>(dist.x_min()), static_cast<RealType>(dist.x_max()));
     }
 
     template <class RealType, class Policy>
-    inline const std::pair<RealType, RealType> support(const arcsine_distribution<RealType, Policy>&  dist)
+    inline BOOST_GPU_ENABLED const std::pair<RealType, RealType> support(const arcsine_distribution<RealType, Policy>&  dist)
     { // Range of supported values for random variable x.
       // This is range where cdf rises from 0 to 1, and outside it, the pdf is zero.
       return std::pair<RealType, RealType>(static_cast<RealType>(dist.x_min()), static_cast<RealType>(dist.x_max()));
     }
 
     template <class RealType, class Policy>
-    inline RealType mean(const arcsine_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType mean(const arcsine_distribution<RealType, Policy>& dist)
     { // Mean of arcsine distribution .
       RealType result;
       RealType x_min = dist.x_min();
@@ -230,7 +236,7 @@ namespace boost
     } // mean
 
     template <class RealType, class Policy>
-    inline RealType variance(const arcsine_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType variance(const arcsine_distribution<RealType, Policy>& dist)
     { // Variance of standard arcsine distribution = (1-0)/8 = 0.125.
       RealType result;
       RealType x_min = dist.x_min();
@@ -248,7 +254,7 @@ namespace boost
     } // variance
 
     template <class RealType, class Policy>
-    inline RealType mode(const arcsine_distribution<RealType, Policy>& /* dist */)
+    inline BOOST_GPU_ENABLED RealType mode(const arcsine_distribution<RealType, Policy>& /* dist */)
     { //There are always [*two] values for the mode, at ['x_min] and at ['x_max], default 0 and 1,
       // so instead we raise the exception domain_error.
       return policies::raise_domain_error<RealType>(
@@ -259,7 +265,7 @@ namespace boost
     } // mode
 
     template <class RealType, class Policy>
-    inline RealType median(const arcsine_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType median(const arcsine_distribution<RealType, Policy>& dist)
     { // Median of arcsine distribution (a + b) / 2 == mean.
       RealType x_min = dist.x_min();
       RealType x_max = dist.x_max();
@@ -277,7 +283,7 @@ namespace boost
     }
 
     template <class RealType, class Policy>
-    inline RealType skewness(const arcsine_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType skewness(const arcsine_distribution<RealType, Policy>& dist)
     {
       RealType result;
       RealType x_min = dist.x_min();
@@ -296,7 +302,7 @@ namespace boost
     } // skewness
 
     template <class RealType, class Policy>
-    inline RealType kurtosis_excess(const arcsine_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType kurtosis_excess(const arcsine_distribution<RealType, Policy>& dist)
     {
       RealType result;
       RealType x_min = dist.x_min();
@@ -316,7 +322,7 @@ namespace boost
     } // kurtosis_excess
 
     template <class RealType, class Policy>
-    inline RealType kurtosis(const arcsine_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType kurtosis(const arcsine_distribution<RealType, Policy>& dist)
     {
       RealType result;
       RealType x_min = dist.x_min();
@@ -336,12 +342,12 @@ namespace boost
     } // kurtosis
 
     template <class RealType, class Policy>
-    inline RealType pdf(const arcsine_distribution<RealType, Policy>& dist, const RealType& xx)
+    inline BOOST_GPU_ENABLED RealType pdf(const arcsine_distribution<RealType, Policy>& dist, const RealType& xx)
     { // Probability Density/Mass Function arcsine.
       BOOST_FPU_EXCEPTION_GUARD
       BOOST_MATH_STD_USING // For ADL of std functions.
 
-      static const char* function = "boost::math::pdf(arcsine_distribution<%1%> const&, %1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::pdf(arcsine_distribution<%1%> const&, %1%)";
 
       RealType lo = dist.x_min();
       RealType hi = dist.x_max();
@@ -362,11 +368,11 @@ namespace boost
     } // pdf
 
     template <class RealType, class Policy>
-    inline RealType cdf(const arcsine_distribution<RealType, Policy>& dist, const RealType& x)
+    inline BOOST_GPU_ENABLED RealType cdf(const arcsine_distribution<RealType, Policy>& dist, const RealType& x)
     { // Cumulative Distribution Function arcsine.
       BOOST_MATH_STD_USING // For ADL of std functions.
 
-      static const char* function = "boost::math::cdf(arcsine_distribution<%1%> const&, %1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::cdf(arcsine_distribution<%1%> const&, %1%)";
 
       RealType x_min = dist.x_min();
       RealType x_max = dist.x_max();
@@ -395,10 +401,10 @@ namespace boost
     } // arcsine cdf
 
     template <class RealType, class Policy>
-    inline RealType cdf(const complemented2_type<arcsine_distribution<RealType, Policy>, RealType>& c)
+    inline BOOST_GPU_ENABLED RealType cdf(const complemented2_type<arcsine_distribution<RealType, Policy>, RealType>& c)
     { // Complemented Cumulative Distribution Function arcsine.
       BOOST_MATH_STD_USING // For ADL of std functions.
-      static const char* function = "boost::math::cdf(arcsine_distribution<%1%> const&, %1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::cdf(arcsine_distribution<%1%> const&, %1%)";
 
       RealType x = c.param;
       arcsine_distribution<RealType, Policy> const& dist = c.dist;
@@ -431,7 +437,7 @@ namespace boost
     } // arcine ccdf
 
     template <class RealType, class Policy>
-    inline RealType quantile(const arcsine_distribution<RealType, Policy>& dist, const RealType& p)
+    inline BOOST_GPU_ENABLED RealType quantile(const arcsine_distribution<RealType, Policy>& dist, const RealType& p)
     { 
       // Quantile or Percent Point arcsine function or
       // Inverse Cumulative probability distribution function CDF.
@@ -445,7 +451,7 @@ namespace boost
 
       using boost::math::constants::half_pi;
 
-      static const char* function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
 
       RealType result = 0; // of argument checks:
       RealType x_min = dist.x_min();
@@ -475,7 +481,7 @@ namespace boost
     } // quantile
 
     template <class RealType, class Policy>
-    inline RealType quantile(const complemented2_type<arcsine_distribution<RealType, Policy>, RealType>& c)
+    inline BOOST_GPU_ENABLED RealType quantile(const complemented2_type<arcsine_distribution<RealType, Policy>, RealType>& c)
     { 
       // Complement Quantile or Percent Point arcsine function.
       // Return the number of expected x for a given
@@ -483,7 +489,7 @@ namespace boost
       BOOST_MATH_STD_USING // For ADL of std functions.
 
       using boost::math::constants::half_pi;
-      static const char* function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::quantile(arcsine_distribution<%1%> const&, %1%)";
 
       // Error checks:
       RealType q = c.param;
