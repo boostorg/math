@@ -110,59 +110,19 @@ BOOST_GPU_ENABLED T sinpx(T z)
 // tgamma(z), with Lanczos support:
 //
 template <class T, class Policy, class Lanczos>
-BOOST_GPU_ENABLED T gamma_imp(T z, const Policy& pol, const Lanczos& l)
+BOOST_GPU_ENABLED T gamma_positive_imp(T z, const Policy& pol, const Lanczos& l, const char* function)
 {
    BOOST_MATH_STD_USING
-
    T result = 1;
-
-#ifdef BOOST_MATH_INSTRUMENT
-   BOOST_MATH_GPU_STATIC bool b = false;
-   if(!b)
-   {
-      std::cout << "tgamma_imp called with " << typeid(z).name() << " " << typeid(l).name() << std::endl;
-      b = true;
-   }
-#endif
-   BOOST_MATH_GPU_STATIC const char* function = "boost::math::tgamma<%1%>(%1%)";
-
-   if(z <= 0)
-   {
-      if(floor(z) == z)
-         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
-      if(z <= -20)
-      {
-         result = gamma_imp(T(-z), pol, l); 
-         //result *= sinpx(z);
-         BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
-            return -boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
-         result = -boost::math::constants::pi<T>() / result;
-         if(result == 0)
-            return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
-         if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
-            return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
-         BOOST_MATH_INSTRUMENT_VARIABLE(result);
-         return result;
-      }
-      // shift z to > 1:
-      while(z < 0)
-      {
-         result /= z;
-         z += 1;
-      }
-   }
-
-
    BOOST_MATH_INSTRUMENT_VARIABLE(result);
    if((floor(z) == z) && (z < max_factorial<T>::value))
    {
       result *= unchecked_factorial<T>(itrunc(z, pol) - 1);
       BOOST_MATH_INSTRUMENT_VARIABLE(result);
    }
-   else if (z < tools::root_epsilon<T>())
+   else if(z < tools::root_epsilon<T>())
    {
-      if (z < 1 / tools::max_value<T>())
+      if(z < 1 / tools::max_value<T>())
          result = policies::raise_overflow_error<T>(function, 0, pol);
       result *= 1 / z - constants::euler<T>();
    }
@@ -198,6 +158,52 @@ BOOST_GPU_ENABLED T gamma_imp(T z, const Policy& pol, const Lanczos& l)
       }
    }
    return result;
+}
+
+template <class T, class Policy, class Lanczos>
+BOOST_GPU_ENABLED T gamma_imp(T z, const Policy& pol, const Lanczos& l)
+{
+   BOOST_MATH_STD_USING
+
+   T result = 1;
+
+#ifdef BOOST_MATH_INSTRUMENT
+   BOOST_MATH_GPU_STATIC bool b = false;
+   if(!b)
+   {
+      std::cout << "tgamma_imp called with " << typeid(z).name() << " " << typeid(l).name() << std::endl;
+      b = true;
+   }
+#endif
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::tgamma<%1%>(%1%)";
+
+   if(z <= 0)
+   {
+      if(floor(z) == z)
+         return policies::raise_pole_error<T>(function, "Evaluation of tgamma at a negative integer %1%.", z, pol);
+      if(z <= -20)
+      {
+         result = gamma_positive_imp(T(-z), pol, l, function);
+         result *= sinpx(z);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         if((fabs(result) < 1) && (tools::max_value<T>() * fabs(result) < boost::math::constants::pi<T>()))
+            return -boost::math::sign(result) * policies::raise_overflow_error<T>(function, "Result of tgamma is too large to represent.", pol);
+         result = -boost::math::constants::pi<T>() / result;
+         if(result == 0)
+            return policies::raise_underflow_error<T>(function, "Result of tgamma is too small to represent.", pol);
+         if((boost::math::fpclassify)(result) == (int)FP_SUBNORMAL)
+            return policies::raise_denorm_error<T>(function, "Result of tgamma is denormalized.", result, pol);
+         BOOST_MATH_INSTRUMENT_VARIABLE(result);
+         return result;
+      }
+      // shift z to > 1:
+      while(z < 0)
+      {
+         result /= z;
+         z += 1;
+      }
+   }
+   return result * gamma_positive_imp(z, pol, l, function);
 }
 //
 // lgamma(z) with Lanczos support:
@@ -810,7 +816,13 @@ BOOST_GPU_ENABLED T regularised_gamma_prefix(T a, T z, const Policy& pol, const 
       if(z <= tools::log_min_value<T>())
       {
          // Oh dear, have to use logs, should be free of cancellation errors though:
+#ifdef __CUDA_ARCH__
+         // Even though boost::math::lgamma is definitely not recursive, using it here
+         // causes CUDA to think that this function is :(
+         return exp(a * log(z) - z - std::lgamma(a));
+#else
          return exp(a * log(z) - z - lgamma_imp(a, pol, l));
+#endif
       }
       else
       {
@@ -1028,6 +1040,7 @@ BOOST_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
 
    T result = 0; // Just to avoid warning C4701: potentially uninitialized local variable 'result' used
 
+#ifndef __CUDA_ARCH__  // this branch causes recursion on CUDA
    if(a >= max_factorial<T>::value && !normalised)
    {
       //
@@ -1091,6 +1104,7 @@ BOOST_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
          return policies::raise_overflow_error<T>(function, 0, pol);
       return exp(result);
    }
+#endif // CUDA
 
    BOOST_ASSERT((p_derivative == 0) || (normalised == true));
 

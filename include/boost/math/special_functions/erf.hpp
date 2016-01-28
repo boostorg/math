@@ -170,20 +170,36 @@ T erf_imp(T z, bool invert, const Policy& pol, const Tag& t)
 }
 
 template <class T, class Policy>
-BOOST_GPU_ENABLED T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
+BOOST_GPU_ENABLED T erf_imp(T z, bool invert, const Policy&, const mpl::int_<53>&)
 {
    BOOST_MATH_STD_USING
 
    BOOST_MATH_INSTRUMENT_CODE("53-bit precision erf_imp called");
 
+   int prefix_multiplier = 1;
+   int prefix_adder = 0;
+
    if(z < 0)
    {
+      // Recursion is logically simpler here, but confuses static analyzers that need to be
+      // able to calculate the maximimum program stack size at compile time (ie CUDA).
+      z = -z;
       if(!invert)
-         return -erf_imp(T(-z), invert, pol, t);
+      {
+         prefix_multiplier = -1;
+         // return -erf_imp(T(-z), invert, pol, t);
+      }
       else if(z < -0.5)
-         return 2 - erf_imp(T(-z), invert, pol, t);
+      {
+         prefix_adder = 2;
+         // return 2 - erf_imp(T(-z), invert, pol, t);
+      }
       else
-         return 1 + erf_imp(T(-z), false, pol, t);
+      {
+         invert = false;
+         prefix_adder = 1;
+         // return 1 + erf_imp(T(-z), false, pol, t);
+      }
    }
 
    T result;
@@ -367,10 +383,11 @@ BOOST_GPU_ENABLED T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_
 
    if(invert)
    {
-      result = 1 - result;
+      prefix_adder += prefix_multiplier * 1;
+      prefix_multiplier = -prefix_multiplier;
    }
 
-   return result;
+   return prefix_adder + prefix_multiplier * result;
 } // template <class T, class Lanczos>T erf_imp(T z, bool invert, const Lanczos& l, const mpl::int_<53>& t)
 
 
