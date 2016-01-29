@@ -29,7 +29,7 @@ namespace detail{
 // Error check:
 //
 template <class RealType, class Policy>
-inline bool verify_lambda(const char* function, RealType l, RealType* presult, const Policy& pol)
+inline BOOST_GPU_ENABLED bool verify_lambda(const char* function, RealType l, RealType* presult, const Policy& pol)
 {
    if((l <= 0) || !(boost::math::isfinite)(l))
    {
@@ -42,7 +42,7 @@ inline bool verify_lambda(const char* function, RealType l, RealType* presult, c
 }
 
 template <class RealType, class Policy>
-inline bool verify_exp_x(const char* function, RealType x, RealType* presult, const Policy& pol)
+inline BOOST_GPU_ENABLED bool verify_exp_x(const char* function, RealType x, RealType* presult, const Policy& pol)
 {
    if((x < 0) || (boost::math::isnan)(x))
    {
@@ -63,14 +63,14 @@ public:
    typedef RealType value_type;
    typedef Policy policy_type;
 
-   exponential_distribution(RealType l_lambda = 1)
+   BOOST_GPU_ENABLED exponential_distribution(RealType l_lambda = 1)
       : m_lambda(l_lambda)
    {
       RealType err;
       detail::verify_lambda("boost::math::exponential_distribution<%1%>::exponential_distribution", l_lambda, &err, Policy());
    } // exponential_distribution
 
-   RealType lambda()const { return m_lambda; }
+   BOOST_GPU_ENABLED RealType lambda()const { return m_lambda; }
 
 private:
    RealType m_lambda;
@@ -103,11 +103,11 @@ inline const std::pair<RealType, RealType> support(const exponential_distributio
 }
 
 template <class RealType, class Policy>
-inline RealType pdf(const exponential_distribution<RealType, Policy>& dist, const RealType& x)
+inline BOOST_GPU_ENABLED RealType pdf(const exponential_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
 
-   static const char* function = "boost::math::pdf(const exponential_distribution<%1%>&, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::pdf(const exponential_distribution<%1%>&, %1%)";
 
    RealType lambda = dist.lambda();
    RealType result = 0;
@@ -123,11 +123,11 @@ inline RealType pdf(const exponential_distribution<RealType, Policy>& dist, cons
 } // pdf
 
 template <class RealType, class Policy>
-inline RealType cdf(const exponential_distribution<RealType, Policy>& dist, const RealType& x)
+inline BOOST_GPU_ENABLED RealType cdf(const exponential_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
 
-   static const char* function = "boost::math::cdf(const exponential_distribution<%1%>&, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::cdf(const exponential_distribution<%1%>&, %1%)";
 
    RealType result = 0;
    RealType lambda = dist.lambda();
@@ -141,11 +141,11 @@ inline RealType cdf(const exponential_distribution<RealType, Policy>& dist, cons
 } // cdf
 
 template <class RealType, class Policy>
-inline RealType quantile(const exponential_distribution<RealType, Policy>& dist, const RealType& p)
+inline BOOST_GPU_ENABLED RealType quantile(const exponential_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
 
-   static const char* function = "boost::math::quantile(const exponential_distribution<%1%>&, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::quantile(const exponential_distribution<%1%>&, %1%)";
 
    RealType result = 0;
    RealType lambda = dist.lambda();
@@ -164,11 +164,11 @@ inline RealType quantile(const exponential_distribution<RealType, Policy>& dist,
 } // quantile
 
 template <class RealType, class Policy>
-inline RealType cdf(const complemented2_type<exponential_distribution<RealType, Policy>, RealType>& c)
+inline BOOST_GPU_ENABLED RealType cdf(const complemented2_type<exponential_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
 
-   static const char* function = "boost::math::cdf(const exponential_distribution<%1%>&, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::cdf(const exponential_distribution<%1%>&, %1%)";
 
    RealType result = 0;
    RealType lambda = c.dist.lambda();
@@ -185,11 +185,11 @@ inline RealType cdf(const complemented2_type<exponential_distribution<RealType, 
 }
 
 template <class RealType, class Policy>
-inline RealType quantile(const complemented2_type<exponential_distribution<RealType, Policy>, RealType>& c)
+inline BOOST_GPU_ENABLED RealType quantile(const complemented2_type<exponential_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
 
-   static const char* function = "boost::math::quantile(const exponential_distribution<%1%>&, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::quantile(const exponential_distribution<%1%>&, %1%)";
 
    RealType result = 0;
    RealType lambda = c.dist.lambda();
@@ -210,7 +210,7 @@ inline RealType quantile(const complemented2_type<exponential_distribution<RealT
 }
 
 template <class RealType, class Policy>
-inline RealType mean(const exponential_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType mean(const exponential_distribution<RealType, Policy>& dist)
 {
    RealType result = 0;
    RealType lambda = dist.lambda();
@@ -220,7 +220,7 @@ inline RealType mean(const exponential_distribution<RealType, Policy>& dist)
 }
 
 template <class RealType, class Policy>
-inline RealType standard_deviation(const exponential_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType standard_deviation(const exponential_distribution<RealType, Policy>& dist)
 {
    RealType result = 0;
    RealType lambda = dist.lambda();
@@ -230,32 +230,32 @@ inline RealType standard_deviation(const exponential_distribution<RealType, Poli
 }
 
 template <class RealType, class Policy>
-inline RealType mode(const exponential_distribution<RealType, Policy>& /*dist*/)
+inline BOOST_GPU_ENABLED RealType mode(const exponential_distribution<RealType, Policy>& /*dist*/)
 {
    return 0;
 }
 
 template <class RealType, class Policy>
-inline RealType median(const exponential_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType median(const exponential_distribution<RealType, Policy>& dist)
 {
    using boost::math::constants::ln_two;
    return ln_two<RealType>() / dist.lambda(); // ln(2) / lambda
 }
 
 template <class RealType, class Policy>
-inline RealType skewness(const exponential_distribution<RealType, Policy>& /*dist*/)
+inline BOOST_GPU_ENABLED RealType skewness(const exponential_distribution<RealType, Policy>& /*dist*/)
 {
    return 2;
 }
 
 template <class RealType, class Policy>
-inline RealType kurtosis(const exponential_distribution<RealType, Policy>& /*dist*/)
+inline BOOST_GPU_ENABLED RealType kurtosis(const exponential_distribution<RealType, Policy>& /*dist*/)
 {
    return 9;
 }
 
 template <class RealType, class Policy>
-inline RealType kurtosis_excess(const exponential_distribution<RealType, Policy>& /*dist*/)
+inline BOOST_GPU_ENABLED RealType kurtosis_excess(const exponential_distribution<RealType, Policy>& /*dist*/)
 {
    return 6;
 }
