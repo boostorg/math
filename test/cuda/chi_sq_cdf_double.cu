@@ -7,9 +7,10 @@
 
 #include <iostream>
 #include <iomanip>
-#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
-#include <boost/array.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_real_distribution.hpp>
 #include "cuda_managed_ptr.hpp"
 #include "stopwatch.hpp"
 
@@ -22,24 +23,16 @@ typedef double float_type;
  * CUDA Kernel Device code
  *
  */
-__global__ void cuda_test(const float_type *in1, const float_type * in2, float_type *out, int numElements)
+__global__ void cuda_test(const float_type *in1, float_type *out, int numElements)
 {
     using std::cos;
     int i = blockDim.x * blockIdx.x + threadIdx.x;
 
     if (i < numElements)
     {
-        out[i] = boost::math::gamma_p(in1[i], in2[i]);
+        out[i] = cdf(boost::math::chi_squared_distribution<float_type>(2), in1[i]);
     }
 }
-
-template <class T> struct table_type { typedef T type; };
-typedef float_type T;
-#define SC_(x) static_cast<T>(x)
-
-#include "../igamma_med_data.ipp"
-#include "../igamma_big_data.ipp"
-#include "../igamma_small_data.ipp"
 
 /**
  * Host main routine
@@ -47,24 +40,6 @@ typedef float_type T;
 int main(void)
 {
   try{
-    // Consolidate the test data:
-    std::vector<float_type> v1, v2;
-
-    for(unsigned i = 0; i < igamma_med_data.size(); ++i)
-    {
-       v1.push_back(igamma_med_data[i][0]);
-       v2.push_back(igamma_med_data[i][1]);
-    }
-    for(unsigned i = 0; i < igamma_big_data.size(); ++i)
-    {
-       v1.push_back(igamma_big_data[i][0]);
-       v2.push_back(igamma_big_data[i][1]);
-    }
-    for(unsigned i = 0; i < igamma_small_data.size(); ++i)
-    {
-       v1.push_back(igamma_small_data[i][0]);
-       v2.push_back(igamma_small_data[i][1]);
-    }
 
     // Error code to check return values for CUDA calls
     cudaError_t err = cudaSuccess;
@@ -75,17 +50,16 @@ int main(void)
 
     // Allocate the managed input vector A
     cuda_managed_ptr<float_type> input_vector1(numElements);
-    cuda_managed_ptr<float_type> input_vector2(numElements);
 
     // Allocate the managed output vector C
     cuda_managed_ptr<float_type> output_vector(numElements);
 
+    boost::random::mt19937 gen;
+    boost::random::uniform_real_distribution<float_type> dist(0.00001, 10000);
     // Initialize the input vectors
     for (int i = 0; i < numElements; ++i)
     {
-        int table_id = i % v1.size();
-        input_vector1[i] = v1[table_id];
-        input_vector2[i] = v2[table_id];
+        input_vector1[i] = dist(gen);
     }
 
     // Launch the Vector Add CUDA Kernel
@@ -94,7 +68,7 @@ int main(void)
     std::cout << "CUDA kernel launch with " << blocksPerGrid << " blocks of " << threadsPerBlock << " threads" << std::endl;
     
     watch w;
-    cuda_test<<<blocksPerGrid, threadsPerBlock>>>(input_vector1.get(), input_vector2.get(), output_vector.get(), numElements);
+    cuda_test<<<blocksPerGrid, threadsPerBlock>>>(input_vector1.get(), output_vector.get(), numElements);
     std::cout << "CUDA kernal done in " << w.elapsed() << "s" << std::endl;
     
     err = cudaGetLastError();
@@ -109,12 +83,12 @@ int main(void)
     results.reserve(numElements);
     w.reset();
     for(int i = 0; i < numElements; ++i)
-       results.push_back(boost::math::gamma_p(input_vector1[i], input_vector2[i]));
+       results.push_back(cdf(boost::math::chi_squared_distribution<float_type>(2), input_vector1[i]));
     double t = w.elapsed();
     // check the results
     for(int i = 0; i < numElements; ++i)
     {
-        if (boost::math::epsilon_difference(output_vector[i], results[i]) > 300)
+        if (boost::math::epsilon_difference(output_vector[i], results[i]) > 100.0)
         {
             std::cerr << "Result verification failed at element " << i << "!" << std::endl;
             std::cerr << "Error rate was: " << boost::math::epsilon_difference(output_vector[i], results[i]) << "eps" << std::endl;
