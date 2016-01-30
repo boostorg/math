@@ -42,7 +42,7 @@ public:
    // ----------------------------------
    // Constructor(s)
    // ----------------------------------
-   laplace_distribution(RealType l_location = 0, RealType l_scale = 1)
+   BOOST_GPU_ENABLED laplace_distribution(RealType l_location = 0, RealType l_scale = 1)
       : m_location(l_location), m_scale(l_scale)
    {
       RealType result;
@@ -54,17 +54,17 @@ public:
    // Public functions
    // ----------------------------------
 
-   RealType location() const
+   BOOST_GPU_ENABLED RealType location() const
    {
       return m_location;
    }
 
-   RealType scale() const
+   BOOST_GPU_ENABLED RealType scale() const
    {
       return m_scale;
    }
 
-   bool check_parameters(const char* function, RealType* result) const
+   BOOST_GPU_ENABLED bool check_parameters(const char* function, RealType* result) const
    {
          if(false == detail::check_scale(function, m_scale, result, Policy())) return false;
          if(false == detail::check_location(function, m_location, result, Policy())) return false;
@@ -112,7 +112,7 @@ inline const std::pair<RealType, RealType> support(const laplace_distribution<Re
 }
 
 template <class RealType, class Policy>
-inline RealType pdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
+inline BOOST_GPU_ENABLED RealType pdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING // for ADL of std functions
 
@@ -144,7 +144,7 @@ inline RealType pdf(const laplace_distribution<RealType, Policy>& dist, const Re
 } // pdf
 
 template <class RealType, class Policy>
-inline RealType cdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
+inline BOOST_GPU_ENABLED RealType cdf(const laplace_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // For ADL of std functions.
 
@@ -179,7 +179,7 @@ inline RealType cdf(const laplace_distribution<RealType, Policy>& dist, const Re
 
 
 template <class RealType, class Policy>
-inline RealType quantile(const laplace_distribution<RealType, Policy>& dist, const RealType& p)
+inline BOOST_GPU_ENABLED RealType quantile(const laplace_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING // for ADL of std functions.
 
@@ -217,7 +217,7 @@ inline RealType quantile(const laplace_distribution<RealType, Policy>& dist, con
 
 
 template <class RealType, class Policy>
-inline RealType cdf(const complemented2_type<laplace_distribution<RealType, Policy>, RealType>& c)
+inline BOOST_GPU_ENABLED RealType cdf(const complemented2_type<laplace_distribution<RealType, Policy>, RealType>& c)
 {
    // Calculate complement of cdf.
    BOOST_MATH_STD_USING // for ADL of std functions
@@ -257,7 +257,7 @@ inline RealType cdf(const complemented2_type<laplace_distribution<RealType, Poli
 
 
 template <class RealType, class Policy>
-inline RealType quantile(const complemented2_type<laplace_distribution<RealType, Policy>, RealType>& c)
+inline BOOST_GPU_ENABLED RealType quantile(const complemented2_type<laplace_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING // for ADL of std functions.
 
@@ -292,43 +292,43 @@ inline RealType quantile(const complemented2_type<laplace_distribution<RealType,
 } // quantile
 
 template <class RealType, class Policy>
-inline RealType mean(const laplace_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType mean(const laplace_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
 template <class RealType, class Policy>
-inline RealType standard_deviation(const laplace_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType standard_deviation(const laplace_distribution<RealType, Policy>& dist)
 {
    return constants::root_two<RealType>() * dist.scale();
 }
 
 template <class RealType, class Policy>
-inline RealType mode(const laplace_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType mode(const laplace_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
 template <class RealType, class Policy>
-inline RealType median(const laplace_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType median(const laplace_distribution<RealType, Policy>& dist)
 {
    return dist.location();
 }
 
 template <class RealType, class Policy>
-inline RealType skewness(const laplace_distribution<RealType, Policy>& /*dist*/)
+inline BOOST_GPU_ENABLED RealType skewness(const laplace_distribution<RealType, Policy>& /*dist*/)
 {
    return 0;
 }
 
 template <class RealType, class Policy>
-inline RealType kurtosis(const laplace_distribution<RealType, Policy>& /*dist*/)
+inline BOOST_GPU_ENABLED RealType kurtosis(const laplace_distribution<RealType, Policy>& /*dist*/)
 {
    return 6;
 }
 
 template <class RealType, class Policy>
-inline RealType kurtosis_excess(const laplace_distribution<RealType, Policy>& /*dist*/)
+inline BOOST_GPU_ENABLED RealType kurtosis_excess(const laplace_distribution<RealType, Policy>& /*dist*/)
 {
    return 3;
 }
