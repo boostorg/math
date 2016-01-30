@@ -393,7 +393,7 @@ BOOST_GPU_ENABLED typename tools::promote_args<T>::type erfc_inv(T z, const Poli
    //
    // Begin by testing for domain errors, and other special cases:
    //
-   static const char* function = "boost::math::erfc_inv<%1%>(%1%, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::erfc_inv<%1%>(%1%, %1%)";
    if((z < 0) || (z > 2))
       return policies::raise_domain_error<result_type>(function, "Argument outside range [0,2] in inverse erfc function (got p=%1%).", z, pol);
    if(z == 0)

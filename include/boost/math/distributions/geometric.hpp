@@ -67,7 +67,7 @@ namespace boost
     {
       // Common error checking routines for geometric distribution function:
       template <class RealType, class Policy>
-      inline bool check_success_fraction(const char* function, const RealType& p, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_success_fraction(const char* function, const RealType& p, RealType* result, const Policy& pol)
       {
         if( !(boost::math::isfinite)(p) || (p < 0) || (p > 1) )
         {
@@ -80,13 +80,13 @@ namespace boost
       }
 
       template <class RealType, class Policy>
-      inline bool check_dist(const char* function, const RealType& p, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_dist(const char* function, const RealType& p, RealType* result, const Policy& pol)
       {
         return check_success_fraction(function, p, result, pol);
       }
 
       template <class RealType, class Policy>
-      inline bool check_dist_and_k(const char* function,  const RealType& p, RealType k, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_dist_and_k(const char* function,  const RealType& p, RealType k, RealType* result, const Policy& pol)
       {
         if(check_dist(function, p, result, pol) == false)
         {
@@ -103,7 +103,7 @@ namespace boost
       } // Check_dist_and_k
 
       template <class RealType, class Policy>
-      inline bool check_dist_and_prob(const char* function, RealType p, RealType prob, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_dist_and_prob(const char* function, RealType p, RealType prob, RealType* result, const Policy& pol)
       {
         if((check_dist(function, p, result, pol) && detail::check_probability(function, prob, result, pol)) == false)
         {
@@ -120,7 +120,7 @@ namespace boost
       typedef RealType value_type;
       typedef Policy policy_type;
 
-      geometric_distribution(RealType p) : m_p(p)
+      BOOST_GPU_ENABLED geometric_distribution(RealType p) : m_p(p)
       { // Constructor stores success_fraction p.
         RealType result;
         geometric_detail::check_dist(
@@ -130,11 +130,11 @@ namespace boost
       } // geometric_distribution constructor.
 
       // Private data getter class member functions.
-      RealType success_fraction() const
+      BOOST_GPU_ENABLED RealType success_fraction() const
       { // Probability of success as fraction in range 0 to 1.
         return m_p;
       }
-      RealType successes() const
+      BOOST_GPU_ENABLED RealType successes() const
       { // Total number of successes r = 1 (for compatibility with negative binomial?).
         return 1;
       }
@@ -145,7 +145,7 @@ namespace boost
         RealType trials,
         RealType alpha) // alpha 0.05 equivalent to 95% for one-sided test.
       {
-        static const char* function = "boost::math::geometric<%1%>::find_lower_bound_on_p";
+        BOOST_MATH_GPU_STATIC const char* function = "boost::math::geometric<%1%>::find_lower_bound_on_p";
         RealType result = 0;  // of error checks.
         RealType successes = 1;
         RealType failures = trials - successes;
@@ -170,7 +170,7 @@ namespace boost
         RealType trials,
         RealType alpha) // alpha 0.05 equivalent to 95% for one-sided test.
       {
-        static const char* function = "boost::math::geometric<%1%>::find_upper_bound_on_p";
+        BOOST_MATH_GPU_STATIC const char* function = "boost::math::geometric<%1%>::find_upper_bound_on_p";
         RealType result = 0;  // of error checks.
         RealType successes = 1;
         RealType failures = trials - successes;
@@ -203,7 +203,7 @@ namespace boost
         RealType p,     // success fraction 0 <= p <= 1.
         RealType alpha) // risk level threshold 0 <= alpha <= 1.
       {
-        static const char* function = "boost::math::geometric<%1%>::find_minimum_number_of_trials";
+        BOOST_MATH_GPU_STATIC const char* function = "boost::math::geometric<%1%>::find_minimum_number_of_trials";
         // Error checks:
         RealType result = 0;
         if(false == geometric_detail::check_dist_and_k(
@@ -221,7 +221,7 @@ namespace boost
         RealType p,     // success fraction 0 <= p <= 1.
         RealType alpha) // risk level threshold 0 <= alpha <= 1.
       {
-        static const char* function = "boost::math::geometric<%1%>::find_maximum_number_of_trials";
+        BOOST_MATH_GPU_STATIC const char* function = "boost::math::geometric<%1%>::find_maximum_number_of_trials";
         // Error checks:
         RealType result = 0;
         if(false == geometric_detail::check_dist_and_k(
@@ -257,7 +257,7 @@ namespace boost
     }
 
     template <class RealType, class Policy>
-    inline RealType mean(const geometric_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType mean(const geometric_distribution<RealType, Policy>& dist)
     { // Mean of geometric distribution = (1-p)/p.
       return (1 - dist.success_fraction() ) / dist.success_fraction();
     } // mean
@@ -265,21 +265,21 @@ namespace boost
     // median implemented via quantile(half) in derived accessors.
 
     template <class RealType, class Policy>
-    inline RealType mode(const geometric_distribution<RealType, Policy>&)
+    inline BOOST_GPU_ENABLED RealType mode(const geometric_distribution<RealType, Policy>&)
     { // Mode of geometric distribution = zero.
       BOOST_MATH_STD_USING // ADL of std functions.
       return 0;
     } // mode
     
     template <class RealType, class Policy>
-    inline RealType variance(const geometric_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType variance(const geometric_distribution<RealType, Policy>& dist)
     { // Variance of Binomial distribution = (1-p) / p^2.
       return  (1 - dist.success_fraction())
         / (dist.success_fraction() * dist.success_fraction());
     } // variance
 
     template <class RealType, class Policy>
-    inline RealType skewness(const geometric_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType skewness(const geometric_distribution<RealType, Policy>& dist)
     { // skewness of geometric distribution = 2-p / (sqrt(r(1-p))
       BOOST_MATH_STD_USING // ADL of std functions.
       RealType p = dist.success_fraction();
@@ -287,7 +287,7 @@ namespace boost
     } // skewness
 
     template <class RealType, class Policy>
-    inline RealType kurtosis(const geometric_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType kurtosis(const geometric_distribution<RealType, Policy>& dist)
     { // kurtosis of geometric distribution
       // http://en.wikipedia.org/wiki/geometric is kurtosis_excess so add 3
       RealType p = dist.success_fraction();
@@ -295,7 +295,7 @@ namespace boost
     } // kurtosis
 
      template <class RealType, class Policy>
-    inline RealType kurtosis_excess(const geometric_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType kurtosis_excess(const geometric_distribution<RealType, Policy>& dist)
     { // kurtosis excess of geometric distribution
       // http://mathworld.wolfram.com/Kurtosis.html table of kurtosis_excess
       RealType p = dist.success_fraction();
@@ -310,11 +310,11 @@ namespace boost
     // chf of geometric distribution provided by derived accessors.
 
     template <class RealType, class Policy>
-    inline RealType pdf(const geometric_distribution<RealType, Policy>& dist, const RealType& k)
+    inline BOOST_GPU_ENABLED RealType pdf(const geometric_distribution<RealType, Policy>& dist, const RealType& k)
     { // Probability Density/Mass Function.
       BOOST_FPU_EXCEPTION_GUARD
       BOOST_MATH_STD_USING  // For ADL of math functions.
-      static const char* function = "boost::math::pdf(const geometric_distribution<%1%>&, %1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::pdf(const geometric_distribution<%1%>&, %1%)";
 
       RealType p = dist.success_fraction();
       RealType result = 0;
@@ -348,9 +348,9 @@ namespace boost
     } // geometric_pdf
 
     template <class RealType, class Policy>
-    inline RealType cdf(const geometric_distribution<RealType, Policy>& dist, const RealType& k)
+    inline BOOST_GPU_ENABLED RealType cdf(const geometric_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function of geometric.
-      static const char* function = "boost::math::cdf(const geometric_distribution<%1%>&, %1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::cdf(const geometric_distribution<%1%>&, %1%)";
 
       // k argument may be integral, signed, or unsigned, or floating point.
       // If necessary, it has already been promoted from an integral type.
@@ -379,10 +379,10 @@ namespace boost
     } // cdf Cumulative Distribution Function geometric.
 
       template <class RealType, class Policy>
-      inline RealType cdf(const complemented2_type<geometric_distribution<RealType, Policy>, RealType>& c)
+      inline BOOST_GPU_ENABLED RealType cdf(const complemented2_type<geometric_distribution<RealType, Policy>, RealType>& c)
       { // Complemented Cumulative Distribution Function geometric.
       BOOST_MATH_STD_USING
-      static const char* function = "boost::math::cdf(const geometric_distribution<%1%>&, %1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::cdf(const geometric_distribution<%1%>&, %1%)";
       // k argument may be integral, signed, or unsigned, or floating point.
       // If necessary, it has already been promoted from an integral type.
       RealType const& k = c.param;
@@ -404,14 +404,14 @@ namespace boost
     } // cdf Complemented Cumulative Distribution Function geometric.
 
     template <class RealType, class Policy>
-    inline RealType quantile(const geometric_distribution<RealType, Policy>& dist, const RealType& x)
+    inline BOOST_GPU_ENABLED RealType quantile(const geometric_distribution<RealType, Policy>& dist, const RealType& x)
     { // Quantile, percentile/100 or Percent Point geometric function.
       // Return the number of expected failures k for a given probability p.
 
       // Inverse cumulative Distribution Function or Quantile (percentile / 100) of geometric Probability.
       // k argument may be integral, signed, or unsigned, or floating point.
 
-      static const char* function = "boost::math::quantile(const geometric_distribution<%1%>&, %1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::quantile(const geometric_distribution<%1%>&, %1%)";
       BOOST_MATH_STD_USING // ADL of std functions.
 
       RealType success_fraction = dist.success_fraction();
@@ -455,11 +455,11 @@ namespace boost
     } // RealType quantile(const geometric_distribution dist, p)
 
     template <class RealType, class Policy>
-    inline RealType quantile(const complemented2_type<geometric_distribution<RealType, Policy>, RealType>& c)
+    inline BOOST_GPU_ENABLED RealType quantile(const complemented2_type<geometric_distribution<RealType, Policy>, RealType>& c)
     {  // Quantile or Percent Point Binomial function.
        // Return the number of expected failures k for a given
        // complement of the probability Q = 1 - P.
-       static const char* function = "boost::math::quantile(const geometric_distribution<%1%>&, %1%)";
+       BOOST_MATH_GPU_STATIC const char* function = "boost::math::quantile(const geometric_distribution<%1%>&, %1%)";
        BOOST_MATH_STD_USING
        // Error checks:
        RealType x = c.param;
