@@ -23,7 +23,7 @@ namespace boost{ namespace math
 namespace detail{
 
 template <class RealType, class Policy>
-inline bool check_weibull_shape(
+inline BOOST_GPU_ENABLED bool check_weibull_shape(
       const char* function,
       RealType shape,
       RealType* result, const Policy& pol)
@@ -39,7 +39,7 @@ inline bool check_weibull_shape(
 }
 
 template <class RealType, class Policy>
-inline bool check_weibull_x(
+inline BOOST_GPU_ENABLED bool check_weibull_x(
       const char* function,
       RealType const& x,
       RealType* result, const Policy& pol)
@@ -55,7 +55,7 @@ inline bool check_weibull_x(
 }
 
 template <class RealType, class Policy>
-inline bool check_weibull(
+inline BOOST_GPU_ENABLED bool check_weibull(
       const char* function,
       RealType scale,
       RealType shape,
@@ -73,19 +73,19 @@ public:
    typedef RealType value_type;
    typedef Policy policy_type;
 
-   weibull_distribution(RealType l_shape, RealType l_scale = 1)
+   BOOST_GPU_ENABLED weibull_distribution(RealType l_shape, RealType l_scale = 1)
       : m_shape(l_shape), m_scale(l_scale)
    {
       RealType result;
       detail::check_weibull("boost::math::weibull_distribution<%1%>::weibull_distribution", l_scale, l_shape, &result, Policy());
    }
 
-   RealType shape()const
+   BOOST_GPU_ENABLED RealType shape()const
    {
       return m_shape;
    }
 
-   RealType scale()const
+   BOOST_GPU_ENABLED RealType scale()const
    {
       return m_scale;
    }
@@ -117,11 +117,11 @@ inline const std::pair<RealType, RealType> support(const weibull_distribution<Re
 }
 
 template <class RealType, class Policy>
-inline RealType pdf(const weibull_distribution<RealType, Policy>& dist, const RealType& x)
+inline BOOST_GPU_ENABLED RealType pdf(const weibull_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::pdf(const weibull_distribution<%1%>, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::pdf(const weibull_distribution<%1%>, %1%)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -151,11 +151,11 @@ inline RealType pdf(const weibull_distribution<RealType, Policy>& dist, const Re
 }
 
 template <class RealType, class Policy>
-inline RealType cdf(const weibull_distribution<RealType, Policy>& dist, const RealType& x)
+inline BOOST_GPU_ENABLED RealType cdf(const weibull_distribution<RealType, Policy>& dist, const RealType& x)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::cdf(const weibull_distribution<%1%>, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::cdf(const weibull_distribution<%1%>, %1%)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -172,11 +172,11 @@ inline RealType cdf(const weibull_distribution<RealType, Policy>& dist, const Re
 }
 
 template <class RealType, class Policy>
-inline RealType quantile(const weibull_distribution<RealType, Policy>& dist, const RealType& p)
+inline BOOST_GPU_ENABLED RealType quantile(const weibull_distribution<RealType, Policy>& dist, const RealType& p)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::quantile(const weibull_distribution<%1%>, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::quantile(const weibull_distribution<%1%>, %1%)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -196,11 +196,11 @@ inline RealType quantile(const weibull_distribution<RealType, Policy>& dist, con
 }
 
 template <class RealType, class Policy>
-inline RealType cdf(const complemented2_type<weibull_distribution<RealType, Policy>, RealType>& c)
+inline BOOST_GPU_ENABLED RealType cdf(const complemented2_type<weibull_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::cdf(const weibull_distribution<%1%>, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::cdf(const weibull_distribution<%1%>, %1%)";
 
    RealType shape = c.dist.shape();
    RealType scale = c.dist.scale();
@@ -217,11 +217,11 @@ inline RealType cdf(const complemented2_type<weibull_distribution<RealType, Poli
 }
 
 template <class RealType, class Policy>
-inline RealType quantile(const complemented2_type<weibull_distribution<RealType, Policy>, RealType>& c)
+inline BOOST_GPU_ENABLED RealType quantile(const complemented2_type<weibull_distribution<RealType, Policy>, RealType>& c)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::quantile(const weibull_distribution<%1%>, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::quantile(const weibull_distribution<%1%>, %1%)";
 
    RealType shape = c.dist.shape();
    RealType scale = c.dist.scale();
@@ -242,11 +242,11 @@ inline RealType quantile(const complemented2_type<weibull_distribution<RealType,
 }
 
 template <class RealType, class Policy>
-inline RealType mean(const weibull_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType mean(const weibull_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::mean(const weibull_distribution<%1%>)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::mean(const weibull_distribution<%1%>)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -260,12 +260,12 @@ inline RealType mean(const weibull_distribution<RealType, Policy>& dist)
 }
 
 template <class RealType, class Policy>
-inline RealType variance(const weibull_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType variance(const weibull_distribution<RealType, Policy>& dist)
 {
    RealType shape = dist.shape();
    RealType scale = dist.scale();
 
-   static const char* function = "boost::math::variance(const weibull_distribution<%1%>)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::variance(const weibull_distribution<%1%>)";
 
    RealType result = 0;
    if(false == detail::check_weibull(function, scale, shape, &result, Policy()))
@@ -280,11 +280,11 @@ inline RealType variance(const weibull_distribution<RealType, Policy>& dist)
 }
 
 template <class RealType, class Policy>
-inline RealType mode(const weibull_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType mode(const weibull_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std function pow.
 
-   static const char* function = "boost::math::mode(const weibull_distribution<%1%>)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::mode(const weibull_distribution<%1%>)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -301,11 +301,11 @@ inline RealType mode(const weibull_distribution<RealType, Policy>& dist)
 }
 
 template <class RealType, class Policy>
-inline RealType median(const weibull_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType median(const weibull_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std function pow.
 
-   static const char* function = "boost::math::median(const weibull_distribution<%1%>)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::median(const weibull_distribution<%1%>)";
 
    RealType shape = dist.shape(); // Wikipedia k
    RealType scale = dist.scale(); // Wikipedia lambda
@@ -321,11 +321,11 @@ inline RealType median(const weibull_distribution<RealType, Policy>& dist)
 }
 
 template <class RealType, class Policy>
-inline RealType skewness(const weibull_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType skewness(const weibull_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::skewness(const weibull_distribution<%1%>)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::skewness(const weibull_distribution<%1%>)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -347,11 +347,11 @@ inline RealType skewness(const weibull_distribution<RealType, Policy>& dist)
 }
 
 template <class RealType, class Policy>
-inline RealType kurtosis_excess(const weibull_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType kurtosis_excess(const weibull_distribution<RealType, Policy>& dist)
 {
    BOOST_MATH_STD_USING  // for ADL of std functions
 
-   static const char* function = "boost::math::kurtosis_excess(const weibull_distribution<%1%>)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::kurtosis_excess(const weibull_distribution<%1%>)";
 
    RealType shape = dist.shape();
    RealType scale = dist.scale();
@@ -377,7 +377,7 @@ inline RealType kurtosis_excess(const weibull_distribution<RealType, Policy>& di
 }
 
 template <class RealType, class Policy>
-inline RealType kurtosis(const weibull_distribution<RealType, Policy>& dist)
+inline BOOST_GPU_ENABLED RealType kurtosis(const weibull_distribution<RealType, Policy>& dist)
 {
    return kurtosis_excess(dist) + 3;
 }
