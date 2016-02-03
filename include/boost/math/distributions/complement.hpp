@@ -7,6 +7,8 @@
 #ifndef BOOST_STATS_COMPLEMENT_HPP
 #define BOOST_STATS_COMPLEMENT_HPP
 
+#include <boost/config.hpp>
+
 //
 // This code really defines our own tuple type.
 // It would be nice to reuse boost::math::tuple
