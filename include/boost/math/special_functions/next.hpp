@@ -30,14 +30,14 @@ namespace boost{ namespace math{
 namespace detail{
 
 template <class T>
-inline T get_smallest_value(mpl::true_ const&)
+inline BOOST_GPU_ENABLED T get_smallest_value(mpl::true_ const&)
 {
    //
    // numeric_limits lies about denorms being present - particularly
    // when this can be turned on or off at runtime, as is the case
    // when using the SSE2 registers in DAZ or FTZ mode.
    //
-   static const T m = std::numeric_limits<T>::denorm_min();
+   BOOST_MATH_GPU_STATIC const T m = std::numeric_limits<T>::denorm_min();
 #ifdef BOOST_MATH_CHECK_SSE2
    return (_mm_getcsr() & (_MM_FLUSH_ZERO_ON | 0x40)) ? tools::min_value<T>() : m;;
 #else
@@ -46,15 +46,17 @@ inline T get_smallest_value(mpl::true_ const&)
 }
 
 template <class T>
-inline T get_smallest_value(mpl::false_ const&)
+inline BOOST_GPU_ENABLED T get_smallest_value(mpl::false_ const&)
 {
    return tools::min_value<T>();
 }
 
 template <class T>
-inline T get_smallest_value()
+inline BOOST_GPU_ENABLED T get_smallest_value()
 {
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1310)
+#ifdef __CUDA_ARCH__
+   return get_smallest_value<T>(mpl::bool_<false>());
+#elif defined(BOOST_MSVC) && (BOOST_MSVC <= 1310)
    return get_smallest_value<T>(mpl::bool_<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == 1)>());
 #else
    return get_smallest_value<T>(mpl::bool_<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present)>());
@@ -66,25 +68,25 @@ inline T get_smallest_value()
 // we calculate the value of the least-significant-bit:
 //
 template <class T>
-T get_min_shift_value();
+BOOST_GPU_ENABLED T get_min_shift_value();
 
 template <class T>
 struct min_shift_initializer
 {
    struct init
    {
-      init()
+      BOOST_GPU_ENABLED init()
       {
          do_init();
       }
-      static void do_init()
+      static BOOST_GPU_ENABLED void do_init()
       {
          get_min_shift_value<T>();
       }
-      void force_instantiate()const{}
+      BOOST_GPU_ENABLED void force_instantiate()const{}
    };
    static const init initializer;
-   static void force_instantiate()
+   static BOOST_GPU_ENABLED void force_instantiate()
    {
       initializer.force_instantiate();
    }
@@ -95,21 +97,21 @@ const typename min_shift_initializer<T>::init min_shift_initializer<T>::initiali
 
 
 template <class T>
-inline T get_min_shift_value()
+inline BOOST_GPU_ENABLED T get_min_shift_value()
 {
    BOOST_MATH_STD_USING
-   static const T val = ldexp(tools::min_value<T>(), tools::digits<T>() + 1);
+   BOOST_MATH_GPU_STATIC const T val = ldexp(tools::min_value<T>(), tools::digits<T>() + 1);
    min_shift_initializer<T>::force_instantiate();
 
    return val;
 }
 
 template <class T, class Policy>
-T float_next_imp(const T& val, const Policy& pol)
+BOOST_GPU_ENABLED T float_next_imp(const T& val, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    int expon;
-   static const char* function = "float_next<%1%>(%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_next<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
 
@@ -149,7 +151,7 @@ T float_next_imp(const T& val, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type float_next(const T& val, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_next(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    return detail::float_next_imp(static_cast<result_type>(val), pol);
@@ -164,7 +166,7 @@ inline typename tools::promote_args<T>::type float_next(const T& val, const Poli
 template <class Policy>
 inline double float_next(const double& val, const Policy& pol)
 {
-   static const char* function = "float_next<%1%>(%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_next<%1%>(%1%)";
 
    if(!(boost::math::isfinite)(val) && (val > 0))
       return policies::raise_domain_error<double>(
@@ -179,7 +181,7 @@ inline double float_next(const double& val, const Policy& pol)
 #endif
 
 template <class T>
-inline typename tools::promote_args<T>::type float_next(const T& val)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_next(const T& val)
 {
    return float_next(val, policies::policy<>());
 }
@@ -187,11 +189,11 @@ inline typename tools::promote_args<T>::type float_next(const T& val)
 namespace detail{
 
 template <class T, class Policy>
-T float_prior_imp(const T& val, const Policy& pol)
+BOOST_GPU_ENABLED T float_prior_imp(const T& val, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    int expon;
-   static const char* function = "float_prior<%1%>(%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_prior<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
 
@@ -232,7 +234,7 @@ T float_prior_imp(const T& val, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type float_prior(const T& val, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_prior(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    return detail::float_prior_imp(static_cast<result_type>(val), pol);
@@ -247,7 +249,7 @@ inline typename tools::promote_args<T>::type float_prior(const T& val, const Pol
 template <class Policy>
 inline double float_prior(const double& val, const Policy& pol)
 {
-   static const char* function = "float_prior<%1%>(%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_prior<%1%>(%1%)";
 
    if(!(boost::math::isfinite)(val) && (val < 0))
       return policies::raise_domain_error<double>(
@@ -262,20 +264,20 @@ inline double float_prior(const double& val, const Policy& pol)
 #endif
 
 template <class T>
-inline typename tools::promote_args<T>::type float_prior(const T& val)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_prior(const T& val)
 {
    return float_prior(val, policies::policy<>());
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
    return val < direction ? boost::math::float_next<result_type>(val, pol) : val == direction ? val : boost::math::float_prior<result_type>(val, pol);
 }
 
 template <class T, class U>
-inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction)
 {
    return nextafter(val, direction, policies::policy<>());
 }
@@ -283,13 +285,13 @@ inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U&
 namespace detail{
 
 template <class T, class Policy>
-T float_distance_imp(const T& a, const T& b, const Policy& pol)
+BOOST_GPU_ENABLED T float_distance_imp(const T& a, const T& b, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
    // Error handling:
    //
-   static const char* function = "float_distance<%1%>(%1%, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_distance<%1%>(%1%, %1%)";
    if(!(boost::math::isfinite)(a))
       return policies::raise_domain_error<T>(
          function,
@@ -384,14 +386,14 @@ T float_distance_imp(const T& a, const T& b, const Policy& pol)
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
    return detail::float_distance_imp(static_cast<result_type>(a), static_cast<result_type>(b), pol);
 }
 
 template <class T, class U>
-typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 {
    return boost::math::float_distance(a, b, policies::policy<>());
 }
@@ -399,13 +401,13 @@ typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 namespace detail{
 
 template <class T, class Policy>
-T float_advance_imp(T val, int distance, const Policy& pol)
+BOOST_GPU_ENABLED T float_advance_imp(T val, int distance, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
    // Error handling:
    //
-   static const char* function = "float_advance<%1%>(%1%, int)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_advance<%1%>(%1%, int)";
 
    int fpclass = (boost::math::fpclassify)(val);
 
@@ -482,14 +484,14 @@ T float_advance_imp(T val, int distance, const Policy& pol)
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    return detail::float_advance_imp(static_cast<result_type>(val), distance, pol);
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type float_advance(const T& val, int distance)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_advance(const T& val, int distance)
 {
    return boost::math::float_advance(val, distance, policies::policy<>());
 }

@@ -551,6 +551,16 @@ inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR long raise_rounding_error(
 {
    return  val > 0 ? LONG_MAX : LONG_MIN;
 }
+template <class T>
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR long long raise_rounding_error(
+   const char*,
+   const char*,
+   const T& val,
+   const long long&,
+   const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   return  val > 0 ? LLONG_MAX : LLONG_MIN;
+}
 #endif
 
 template <class T, class TargetType>

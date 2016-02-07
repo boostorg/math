@@ -81,7 +81,7 @@ inline BOOST_GPU_ENABLED long ltrunc(const T& v, const Policy& pol)
    typedef typename tools::promote_args<T>::type result_type;
    result_type r = boost::math::trunc(v, pol);
 #ifdef __CUDA_ARCH__
-   if((r > LONG_MAX) || (r < LONG_LIN))
+   if((r > LONG_MAX) || (r < LONG_MIN))
 #else
    if((r > (std::numeric_limits<long>::max)()) || (r < (std::numeric_limits<long>::min)()))
 #endif
@@ -102,7 +102,11 @@ inline BOOST_GPU_ENABLED boost::long_long_type lltrunc(const T& v, const Policy&
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
    result_type r = boost::math::trunc(v, pol);
+#ifdef __CUDA_ARCH__
+   if((r > LLONG_MAX) || (r < LLONG_MIN))
+#else
    if((r > (std::numeric_limits<boost::long_long_type>::max)()) || (r < (std::numeric_limits<boost::long_long_type>::min)()))
+#endif
       return static_cast<boost::long_long_type>(policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", 0, v, static_cast<boost::long_long_type>(0), pol));
    return static_cast<boost::long_long_type>(r);
 }
