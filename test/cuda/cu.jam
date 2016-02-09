@@ -1,0 +1,15 @@
+
+
+import os ;
+import type ;
+type.register CU : cu ;
+import generators ;
+generators.register-standard cu.inline-file : CU : OBJ ;
+
+#rule cuda { }
+
+actions inline-file 
+{
+    nvcc -c -I../../../.. -DBOOST_ALL_NO_LIB -o $(<) $(>)
+}
+
