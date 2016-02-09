@@ -25,6 +25,9 @@
 #include <vector>
 #include <ostream>
 #include <algorithm>
+#if __cplusplus >= 201103L
+#include <initializer_list>
+#endif
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -276,6 +279,20 @@ public:
          m_data.push_back(boost::math::tools::real_cast<T>(p[i]));
       }
    }
+   
+#if __cplusplus >= 201103L
+    polynomial(std::initializer_list<T> l) : polynomial(std::begin(l), std::end(l))
+    {
+    }
+    
+    polynomial&
+    operator=(std::initializer_list<T> l)
+    {
+        m_data.assign(std::begin(l), std::end(l));
+        return *this;
+    }
+#endif
+
 
    // access:
    size_type size()const { return m_data.size(); }
