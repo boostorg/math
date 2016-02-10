@@ -29,12 +29,12 @@
 namespace boost { namespace math { namespace detail{
 
 template <typename T, typename Policy>
-T ellint_rd_imp(T x, T y, T z, const Policy& pol)
+BOOST_GPU_ENABLED T ellint_rd_imp(T x, T y, T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using std::swap;
 
-   static const char* function = "boost::math::ellint_rd<%1%>(%1%,%1%,%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::ellint_rd<%1%>(%1%,%1%,%1%)";
 
    if(x < 0)
    {
@@ -176,7 +176,7 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
 } // namespace detail
 
 template <class T1, class T2, class T3, class Policy>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
    ellint_rd(T1 x, T2 y, T3 z, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -189,7 +189,7 @@ inline typename tools::promote_args<T1, T2, T3>::type
 }
 
 template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
    ellint_rd(T1 x, T2 y, T3 z)
 {
    return ellint_rd(x, y, z, policies::policy<>());

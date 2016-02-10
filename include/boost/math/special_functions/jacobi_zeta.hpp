@@ -26,7 +26,7 @@ namespace detail{
 
 // Elliptic integral - Jacobi Zeta
 template <typename T, typename Policy>
-T jacobi_zeta_imp(T phi, T k, const Policy& pol)
+BOOST_GPU_ENABLED T jacobi_zeta_imp(T phi, T k, const Policy& pol)
 {
     BOOST_MATH_STD_USING
     using namespace boost::math::tools;
@@ -55,7 +55,7 @@ T jacobi_zeta_imp(T phi, T k, const Policy& pol)
 } // detail
 
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -63,7 +63,7 @@ inline typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi, cons
 }
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi)
 {
    return boost::math::jacobi_zeta(k, phi, policies::policy<>());
 }

@@ -321,8 +321,8 @@ BOOST_GPU_ENABLED T float_distance_imp(const T& a, const T& b, const Policy& pol
    if(a < 0)
       return float_distance(static_cast<T>(-b), static_cast<T>(-a), pol);
 
-   BOOST_ASSERT(a >= 0);
-   BOOST_ASSERT(b >= a);
+   BOOST_MATH_ASSERT(a >= 0);
+   BOOST_MATH_ASSERT(b >= a);
 
    int expon;
    //
@@ -379,7 +379,7 @@ BOOST_GPU_ENABLED T float_distance_imp(const T& a, const T& b, const Policy& pol
    //
    // Result must be an integer:
    //
-   BOOST_ASSERT(result == floor(result));
+   BOOST_MATH_ASSERT(result == floor(result));
    return result;
 }
 

@@ -100,7 +100,7 @@ BOOST_GPU_ENABLED T sinpx(T z)
    {
       dist = z - fl;
    }
-   BOOST_ASSERT(fl >= 0);
+   BOOST_MATH_ASSERT(fl >= 0);
    if(dist > 0.5)
       dist = 1 - dist;
    T result = sin(dist*boost::math::constants::pi<T>());
@@ -1106,7 +1106,7 @@ BOOST_GPU_ENABLED T gamma_incomplete_imp(T a, T x, bool normalised, bool invert,
    }
 #endif // CUDA
 
-   BOOST_ASSERT((p_derivative == 0) || (normalised == true));
+   BOOST_MATH_ASSERT((p_derivative == 0) || (normalised == true));
 
    bool is_int, is_half_int;
    bool is_small_a = (a < 30) && (a <= x + 1) && (x < tools::log_max_value<T>());

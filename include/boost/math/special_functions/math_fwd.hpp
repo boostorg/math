@@ -274,83 +274,83 @@ namespace boost
 
    // Elliptic integrals:
    template <class T1, class T2, class T3>
-   typename tools::promote_args<T1, T2, T3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
          ellint_rf(T1 x, T2 y, T3 z);
 
    template <class T1, class T2, class T3, class Policy>
-   typename tools::promote_args<T1, T2, T3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
          ellint_rf(T1 x, T2 y, T3 z, const Policy& pol);
 
    template <class T1, class T2, class T3>
-   typename tools::promote_args<T1, T2, T3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
          ellint_rd(T1 x, T2 y, T3 z);
 
    template <class T1, class T2, class T3, class Policy>
-   typename tools::promote_args<T1, T2, T3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
          ellint_rd(T1 x, T2 y, T3 z, const Policy& pol);
 
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
          ellint_rc(T1 x, T2 y);
 
    template <class T1, class T2, class Policy>
-   typename tools::promote_args<T1, T2>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
          ellint_rc(T1 x, T2 y, const Policy& pol);
 
    template <class T1, class T2, class T3, class T4>
-   typename tools::promote_args<T1, T2, T3, T4>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3, T4>::type
          ellint_rj(T1 x, T2 y, T3 z, T4 p);
 
    template <class T1, class T2, class T3, class T4, class Policy>
-   typename tools::promote_args<T1, T2, T3, T4>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3, T4>::type
          ellint_rj(T1 x, T2 y, T3 z, T4 p, const Policy& pol);
 
    template <class T1, class T2, class T3>
-   typename tools::promote_args<T1, T2, T3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
       ellint_rg(T1 x, T2 y, T3 z);
 
    template <class T1, class T2, class T3, class Policy>
-   typename tools::promote_args<T1, T2, T3>::type
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
       ellint_rg(T1 x, T2 y, T3 z, const Policy& pol);
 
    template <typename T>
-   typename tools::promote_args<T>::type ellint_2(T k);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type ellint_2(T k);
 
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi);
 
    template <class T1, class T2, class Policy>
-   typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_2(T1 k, T2 phi, const Policy& pol);
 
    template <typename T>
-   typename tools::promote_args<T>::type ellint_1(T k);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type ellint_1(T k);
 
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi);
 
    template <class T1, class T2, class Policy>
-   typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol);
 
    template <typename T>
-   typename tools::promote_args<T>::type ellint_d(T k);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type ellint_d(T k);
 
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type ellint_d(T1 k, T2 phi);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_d(T1 k, T2 phi);
 
    template <class T1, class T2, class Policy>
-   typename tools::promote_args<T1, T2>::type ellint_d(T1 k, T2 phi, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_d(T1 k, T2 phi, const Policy& pol);
 
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi);
 
    template <class T1, class T2, class Policy>
-   typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type jacobi_zeta(T1 k, T2 phi, const Policy& pol);
 
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi);
 
    template <class T1, class T2, class Policy>
-   typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi, const Policy& pol);
 
    namespace detail{
 
@@ -368,13 +368,13 @@ namespace boost
 
 
    template <class T1, class T2, class T3>
-   typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi);
+   BOOST_GPU_ENABLED typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi);
 
    template <class T1, class T2, class T3, class Policy>
-   typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy& pol);
 
    template <class T1, class T2>
-   typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v);
+   BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v);
 
    // Factorial functions.
    // Note: not for integral types, at present.
@@ -969,10 +969,10 @@ namespace boost
 
    // pow:
    template <int N, typename T, class Policy>
-   typename tools::promote_args<T>::type pow(T base, const Policy& policy);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type pow(T base, const Policy& policy);
 
    template <int N, typename T>
-   typename tools::promote_args<T>::type pow(T base);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type pow(T base);
 
    // next:
    template <class T, class U, class Policy>

@@ -885,7 +885,7 @@ inline BOOST_MATH_CONSTEXPR BOOST_GPU_ENABLED int digits_imp(mpl::true_ const&) 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
 #endif
    typedef typename boost::math::policies::precision<T, Policy>::type p_t;
    return p_t::value;
@@ -970,8 +970,8 @@ inline BOOST_MATH_CONSTEXPR BOOST_GPU_ENABLED T get_epsilon_imp(mpl::true_ const
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT( ::std::numeric_limits<T>::radix == 2);
 #else
-   BOOST_ASSERT(::std::numeric_limits<T>::is_specialized);
-   BOOST_ASSERT(::std::numeric_limits<T>::radix == 2);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::is_specialized);
+   BOOST_MATH_ASSERT(::std::numeric_limits<T>::radix == 2);
 #endif
    typedef typename boost::math::policies::precision<T, Policy>::type p_t;
    typedef mpl::bool_<p_t::value <= std::numeric_limits<boost::uintmax_t>::digits> is_small_int;

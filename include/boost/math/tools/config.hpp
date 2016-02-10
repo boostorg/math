@@ -273,6 +273,14 @@
 #define BOOST_MATH_GPU_STATIC static
 #endif
 //
+// Asserts don't work on CUDA either:
+//
+#ifdef __CUDA_ARCH__
+#define BOOST_MATH_ASSERT(x)
+#else
+#define BOOST_MATH_ASSERT(x) BOOST_ASSERT(x)
+#endif
+//
 // And then the actual configuration:
 //
 #if defined(_GLIBCXX_USE_FLOAT128) && defined(BOOST_GCC) && !defined(__STRICT_ANSI__) \

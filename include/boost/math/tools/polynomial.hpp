@@ -42,7 +42,7 @@ T chebyshev_coefficient(unsigned n, unsigned m)
    unsigned r = n - m;
    r /= 2;
 
-   BOOST_ASSERT(n - 2 * r == m);
+   BOOST_MATH_ASSERT(n - 2 * r == m);
 
    if(r & 1)
       result = -result;
@@ -167,9 +167,9 @@ template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 division(polynomial<T> u, const polynomial<T>& v)
 {
-    BOOST_ASSERT(v.size() <= u.size());
-    BOOST_ASSERT(v != zero_element(std::multiplies< polynomial<T> >()));
-    BOOST_ASSERT(u != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_MATH_ASSERT(v.size() <= u.size());
+    BOOST_MATH_ASSERT(v != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_MATH_ASSERT(u != zero_element(std::multiplies< polynomial<T> >()));
 
     std::size_t const m = u.size() - 1, n = v.size() - 1;
     std::size_t k = m - n;
@@ -220,7 +220,7 @@ template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
-    BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_MATH_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
     if (dividend.size() < divisor.size())
         return std::make_pair(zero_element(std::multiplies< polynomial<T> >()), dividend);
     return detail::division(dividend, divisor);

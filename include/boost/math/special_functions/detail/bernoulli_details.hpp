@@ -251,8 +251,8 @@ struct fixed_vector : private std::allocator<T>
          this->destroy(&m_data[i]);
       this->deallocate(m_data, m_capacity);
    }
-   T& operator[](unsigned n) { BOOST_ASSERT(n < m_used); return m_data[n]; }
-   const T& operator[](unsigned n)const { BOOST_ASSERT(n < m_used); return m_data[n]; }
+   T& operator[](unsigned n) { BOOST_MATH_ASSERT(n < m_used); return m_data[n]; }
+   const T& operator[](unsigned n)const { BOOST_MATH_ASSERT(n < m_used); return m_data[n]; }
    unsigned size()const { return m_used; }
    unsigned size() { return m_used; }
    void resize(unsigned n, const T& val)

@@ -58,7 +58,7 @@ template <class T, class Policy>
 inline BOOST_GPU_ENABLED T igamma_temme_large(T, T, const Policy& /* pol */, mpl::int_<0> const *)
 {
    // stub function, should never actually be called
-   BOOST_ASSERT(0);
+   BOOST_MATH_ASSERT(0);
    return 0;
 }
 //

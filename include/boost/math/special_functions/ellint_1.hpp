@@ -31,22 +31,22 @@
 namespace boost { namespace math {
 
 template <class T1, class T2, class Policy>
-typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol);
+BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol);
 
 namespace detail{
 
 template <typename T, typename Policy>
-T ellint_k_imp(T k, const Policy& pol);
+BOOST_GPU_ENABLED T ellint_k_imp(T k, const Policy& pol);
 
 // Elliptic integral (Legendre form) of the first kind
 template <typename T, typename Policy>
-T ellint_f_imp(T phi, T k, const Policy& pol)
+BOOST_GPU_ENABLED T ellint_f_imp(T phi, T k, const Policy& pol)
 {
     BOOST_MATH_STD_USING
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
-    static const char* function = "boost::math::ellint_f<%1%>(%1%,%1%)";
+    BOOST_MATH_GPU_STATIC const char* function = "boost::math::ellint_f<%1%>(%1%,%1%)";
     BOOST_MATH_INSTRUMENT_VARIABLE(phi);
     BOOST_MATH_INSTRUMENT_VARIABLE(k);
     BOOST_MATH_INSTRUMENT_VARIABLE(function);
@@ -131,12 +131,12 @@ T ellint_f_imp(T phi, T k, const Policy& pol)
 
 // Complete elliptic integral (Legendre form) of the first kind
 template <typename T, typename Policy>
-T ellint_k_imp(T k, const Policy& pol)
+BOOST_GPU_ENABLED T ellint_k_imp(T k, const Policy& pol)
 {
     BOOST_MATH_STD_USING
     using namespace boost::math::tools;
 
-    static const char* function = "boost::math::ellint_k<%1%>(%1%)";
+    BOOST_MATH_GPU_STATIC const char* function = "boost::math::ellint_k<%1%>(%1%)";
 
     if (abs(k) > 1)
     {
@@ -157,7 +157,7 @@ T ellint_k_imp(T k, const Policy& pol)
 }
 
 template <typename T, typename Policy>
-inline typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const mpl::true_&)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, const mpl::true_&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -165,7 +165,7 @@ inline typename tools::promote_args<T>::type ellint_1(T k, const Policy& pol, co
 }
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const mpl::false_&)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const mpl::false_&)
 {
    return boost::math::ellint_1(k, phi, policies::policy<>());
 }
@@ -174,14 +174,14 @@ inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const m
 
 // Complete elliptic integral (Legendre form) of the first kind
 template <typename T>
-inline typename tools::promote_args<T>::type ellint_1(T k)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type ellint_1(T k)
 {
    return ellint_1(k, policies::policy<>());
 }
 
 // Elliptic integral (Legendre form) of the first kind
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -189,7 +189,7 @@ inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi, const P
 }
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_1(T1 k, T2 phi)
 {
    typedef typename policies::is_policy<T2>::type tag_type;
    return detail::ellint_1(k, phi, tag_type());

@@ -103,7 +103,7 @@ T bessel_i1(T x)
     BOOST_MATH_STD_USING
     using namespace boost::math::tools;
 
-    BOOST_ASSERT(x >= 0); // negative x is handled before we get here
+    BOOST_MATH_ASSERT(x >= 0); // negative x is handled before we get here
     w = abs(x);
     if (x == 0)
     {
