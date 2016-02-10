@@ -71,7 +71,8 @@ int main()
     using namespace boost::math::detail;
     
     // pair<unsigned, unsigned> test_data{24140, 40902};
-    pair<unsigned, unsigned> test_data{1836311903, 2971215073}; // 46th and 47th Fibonacci numbers. 47th is prime.
-    array<function<unsigned(unsigned, unsigned)>, 2> test_functions{{gcd_euclidean<unsigned>, gcd_binary<unsigned>}};
-    for_each(begin(test_functions), end(test_functions), test_function_template<unsigned>(test_data));
+    typedef unsigned int_type;
+    pair<int_type, int_type> test_data{1836311903, 2971215073}; // 46th and 47th Fibonacci numbers. 47th is prime.
+    array<function<int_type(int_type, int_type)>, 2> test_functions{{gcd_euclidean<int_type>, gcd_binary<int_type>}};
+    for_each(begin(test_functions), end(test_functions), test_function_template<int_type>(test_data));
 }
