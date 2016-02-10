@@ -45,6 +45,7 @@ pair<double, Result> exec_timed_test_foo(Func f, double min_elapsed = 0.5)
     return {t / repeats, sum};
 }
 
+
 template <typename T>
 struct test_function_template
 {
@@ -56,7 +57,7 @@ struct test_function_template
     void operator()(Function f) const
     {
         auto result = exec_timed_test_foo(bind(f, data.first, data.second));
-        cout << f.target_type().name() << ": " << result.first << endl;
+        cout << f.target_type().name() << ": " << result.first << " (" << result.second << ")" << endl;
         report_execution_time(result.first, 
                             string("gcd method comparison with ") + compiler_name() + string(" on ") + platform_name(), 
                             typeid(decltype(data.first)).name(), 
@@ -69,7 +70,8 @@ int main()
 {
     using namespace boost::math::detail;
     
-    pair<unsigned, unsigned> test_data{24140, 40902};
+    // pair<unsigned, unsigned> test_data{24140, 40902};
+    pair<unsigned, unsigned> test_data{1836311903, 2971215073}; // 46th and 47th Fibonacci numbers. 47th is prime.
     array<function<unsigned(unsigned, unsigned)>, 2> test_functions{{gcd_euclidean<unsigned>, gcd_binary<unsigned>}};
     for_each(begin(test_functions), end(test_functions), test_function_template<unsigned>(test_data));
 }
