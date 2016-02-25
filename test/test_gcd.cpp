@@ -18,12 +18,6 @@
 #include <utility>
 
 
-using namespace boost::math;
-using namespace std;
-
-typedef boost::mpl::list<int, long, boost::multiprecision::cpp_int> signed_integral_test_types;
-
-
 BOOST_AUTO_TEST_CASE(test_zero)
 {
     unsigned a = boost::math::gcd(2u, 0u);
@@ -31,6 +25,8 @@ BOOST_AUTO_TEST_CASE(test_zero)
     a = boost::math::gcd(0u, 2u);
     BOOST_CHECK_EQUAL(a, 2u);
 }
+
+typedef boost::mpl::list<int, long, boost::multiprecision::cpp_int> signed_integral_test_types;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_signed, T, signed_integral_test_types)
 {
@@ -46,6 +42,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_unsigned, T, unsigned_integral_test_types)
 {
     T a = boost::math::gcd(static_cast<T>(40902), static_cast<T>(24140));
     BOOST_CHECK_EQUAL(a, static_cast<T>(34));
-    a = gcd(static_cast<T>(1836311903), static_cast<T>(2971215073)); // 46th and 47th Fibonacci numbers. 47th is prime.
+    a = boost::math::gcd(static_cast<T>(1836311903), static_cast<T>(2971215073)); // 46th and 47th Fibonacci numbers. 47th is prime.
     BOOST_CHECK_EQUAL(a, static_cast<T>(1));
 }
