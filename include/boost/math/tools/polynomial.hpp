@@ -229,11 +229,10 @@ quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 
 template <class T>
 class polynomial :
-    equality_comparable< polynomial<T>,
-    dividable< polynomial<T>,
-    dividable2< polynomial<T>, T,
-    modable< polynomial<T>,
-    modable2< polynomial<T>, T > > > > >
+    ordered_euclidean_ring_operators< polynomial<T>,
+    dividable< polynomial<T>, T,
+    modable< polynomial<T>, T,
+    right_shiftable< polynomial<T> > > > >
 {
 public:
    // typedefs:
@@ -568,6 +567,14 @@ bool operator == (const polynomial<T> &a, const polynomial<T> &b)
 {
     return a.data() == b.data();
 }
+
+
+template <class T>
+bool operator < (const polynomial<T> &a, const polynomial<T> &b)
+{
+    return a.size() < b.size();
+}
+
 
 // Unary minus (negate).
 template <class T>
