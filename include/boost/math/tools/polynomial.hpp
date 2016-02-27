@@ -408,6 +408,14 @@ public:
        *this = quotient_remainder(*this, value).second;
        return *this;
    }
+   
+   template <typename U>
+   polynomial& operator >>=(U const &value)
+   {
+       BOOST_ASSERT(value <= m_data.size());
+       m_data.erase(m_data.begin(), m_data.begin() + value);
+       return *this;
+   }
 
    /** Remove zero coefficients 'from the top', that is for which there are no
     *        non-zero coefficients of higher degree. */
