@@ -204,3 +204,16 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_right_shift, T, all_test_types )
     a >>= 1;
     BOOST_CHECK_EQUAL(a, b);
 }
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_order, T, all_test_types )
+{
+    polynomial<T> const a(d8b.begin(), d8b.end());
+    polynomial<T> const b(d1a.begin(), d1a.end());
+    polynomial<T> const c(d3a.begin(), d3a.end());
+    polynomial<T> const d = zero_element(std::multiplies< polynomial<T> >());
+    vector< polynomial<T> > x = {a, b, c, d};
+    sort(x.begin(), x.end());
+    vector< polynomial<T> > expected = {d, b, c, a};
+    BOOST_CHECK(x == expected);
+}
