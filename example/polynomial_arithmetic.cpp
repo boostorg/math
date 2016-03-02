@@ -118,8 +118,8 @@ in descending order of degree, Boost.Math stores in [*ascending order of degree]
   boost::array<double, 4> const d3a = {{10, -6, -4, 3}};
   polynomial<double> const a(d3a.begin(), d3a.end());
 
-  boost::array<double, 2> const d1a = {{-2, 1}};
-  polynomial<double> const b(d1a.begin(), d1a.end());
+  // With C++11 and later, you can also use initializer_list construction.
+  polynomial<double> const b{{-2.0, 1.0}};
 
   // formula_format() converts from Boost storage to human notation.
   cout << "a = " << formula_format(a)
