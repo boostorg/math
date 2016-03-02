@@ -231,8 +231,7 @@ template <class T>
 class polynomial :
     ordered_euclidean_ring_operators< polynomial<T>,
     dividable< polynomial<T>, T,
-    modable< polynomial<T>, T,
-    right_shiftable< polynomial<T> > > > >
+    modable< polynomial<T>, T > > >
 {
 public:
    // typedefs:
@@ -536,6 +535,14 @@ inline polynomial<T> operator * (const polynomial<T>& a, const U& b)
    polynomial<T> result(a);
    result *= b;
    return result;
+}
+
+template <typename T, typename U>
+polynomial<T> operator >> (const polynomial<T>& a, const U& b)
+{
+    polynomial<T> result(a);
+    result >>= b;
+    return result;
 }
 
 template <class U, class T>
