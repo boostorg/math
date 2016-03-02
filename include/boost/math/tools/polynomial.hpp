@@ -25,7 +25,7 @@
 #include <vector>
 #include <ostream>
 #include <algorithm>
-#if __cplusplus >= 201103L
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 #include <initializer_list>
 #endif
 
@@ -135,6 +135,27 @@ division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N
     }
 }
 
+template <class T, class N>
+T integer_power(T t, N n)
+{
+   switch(n)
+   {
+   case 0:
+      return static_cast<T>(1u);
+   case 1:
+      return t;
+   case 2:
+      return t * t;
+   case 3:
+      return t * t * t;
+   }
+   T result = integer_power(t, n / 2);
+   result *= result;
+   if(n & 1)
+      result *= t;
+   return result;
+}
+
 
 /**
 * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
@@ -150,7 +171,7 @@ BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<T>::is_integer, void >::t
 division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
 {
     using std::pow;
-    q[k] = u[n + k] * static_cast<T>(pow(v[n], k));
+    q[k] = u[n + k] * integer_power(v[n], k);
     for (std::size_t j = n + k; j > 0;)
     {
         j--;
@@ -280,7 +301,7 @@ public:
       }
    }
    
-#if __cplusplus >= 201103L
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
     polynomial(std::initializer_list<T> l) : polynomial(std::begin(l), std::end(l))
     {
     }
