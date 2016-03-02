@@ -18,15 +18,16 @@
 #include <utility>
 
 
-BOOST_AUTO_TEST_CASE(test_zero)
+typedef boost::mpl::list<int, long, boost::multiprecision::cpp_int> signed_integral_test_types;
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_zero, T, signed_integral_test_types)
 {
-    unsigned a = boost::math::gcd(2u, 0u);
-    BOOST_CHECK_EQUAL(a, 2u);
-    a = boost::math::gcd(0u, 2u);
-    BOOST_CHECK_EQUAL(a, 2u);
+    T a = boost::math::gcd(static_cast<T>(2), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(a, static_cast<T>(2));
+    a = boost::math::gcd(static_cast<T>(0), static_cast<T>(2));
+    BOOST_CHECK_EQUAL(a, static_cast<T>(2));
 }
 
-typedef boost::mpl::list<int, long, boost::multiprecision::cpp_int> signed_integral_test_types;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_signed, T, signed_integral_test_types)
 {
