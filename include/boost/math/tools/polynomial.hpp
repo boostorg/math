@@ -254,11 +254,9 @@ quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 
 template <class T>
 class polynomial :
-    equality_comparable< polynomial<T>,
-    dividable< polynomial<T>,
-    dividable2< polynomial<T>, T,
-    modable< polynomial<T>,
-    modable2< polynomial<T>, T > > > > >
+    ordered_euclidean_ring_operators< polynomial<T>,
+    dividable< polynomial<T>, T,
+    modable< polynomial<T>, T > > >
 {
 public:
    // typedefs:
@@ -447,6 +445,14 @@ public:
        *this = quotient_remainder(*this, value).second;
        return *this;
    }
+   
+   template <typename U>
+   polynomial& operator >>=(U const &value)
+   {
+       BOOST_ASSERT(value <= m_data.size());
+       m_data.erase(m_data.begin(), m_data.begin() + value);
+       return *this;
+   }
 
    /** Remove zero coefficients 'from the top', that is for which there are no
     *        non-zero coefficients of higher degree. */
@@ -570,6 +576,14 @@ inline polynomial<T> operator * (const polynomial<T>& a, const U& b)
    return result;
 }
 
+template <typename T, typename U>
+polynomial<T> operator >> (const polynomial<T>& a, const U& b)
+{
+    polynomial<T> result(a);
+    result >>= b;
+    return result;
+}
+
 template <class U, class T>
 inline polynomial<T> operator + (const U& a, const polynomial<T>& b)
 {
@@ -599,6 +613,14 @@ bool operator == (const polynomial<T> &a, const polynomial<T> &b)
 {
     return a.data() == b.data();
 }
+
+
+template <class T>
+bool operator < (const polynomial<T> &a, const polynomial<T> &b)
+{
+    return a.size() < b.size();
+}
+
 
 // Unary minus (negate).
 template <class T>
