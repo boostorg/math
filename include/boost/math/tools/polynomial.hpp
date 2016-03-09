@@ -128,7 +128,7 @@ BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, void >::
 division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
 {
     q[k] = u[n + k] / v[n];
-    for (std::size_t j = n + k; j > k;)
+    for (N j = n + k; j > k;)
     {
         j--;
         u[j] -= q[k] * v[j - k];
@@ -170,9 +170,8 @@ template <typename T, typename N>
 BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<T>::is_integer, void >::type
 division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
 {
-    using std::pow;
     q[k] = u[n + k] * integer_power(v[n], k);
-    for (std::size_t j = n + k; j > 0;)
+    for (N j = n + k; j > 0;)
     {
         j--;
         u[j] = v[n] * u[j] - (j < k ? T(0) : u[n + k] * v[j - k]);
@@ -195,8 +194,10 @@ division(polynomial<T> u, const polynomial<T>& v)
     BOOST_ASSERT(v != zero_element(std::multiplies< polynomial<T> >()));
     BOOST_ASSERT(u != zero_element(std::multiplies< polynomial<T> >()));
 
-    std::size_t const m = u.size() - 1, n = v.size() - 1;
-    std::size_t k = m - n;
+    typedef typename polynomial<T>::size_type N;
+    
+    N const m = u.size() - 1, n = v.size() - 1;
+    N k = m - n;
     polynomial<T> q;
     q.data().resize(m - n + 1);
 
