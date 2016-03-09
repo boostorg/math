@@ -55,12 +55,12 @@ BOOST_AUTO_TEST_CASE( test_construction )
 }
 
 
-#if __cplusplus >= 201103L
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 BOOST_AUTO_TEST_CASE( test_initializer_list_construction )
 {
     polynomial<double> a(begin(d3a), end(d3a));
     polynomial<double> b = {10, -6, -4, 3};
-    polynomial<double> c{10, -6, -4, 3};
+    polynomial<double> c{{10, -6, -4, 3}};
     BOOST_CHECK_EQUAL(a, b);
     BOOST_CHECK_EQUAL(b, c);
 }
