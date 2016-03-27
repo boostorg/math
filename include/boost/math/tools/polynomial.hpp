@@ -448,7 +448,22 @@ public:
        return *this;
    }
 
-   /** Remove zero coefficients 'from the top', that is for which there are no
+   template <typename U>
+   polynomial& operator >>=(U const &n)
+   {
+       BOOST_ASSERT(n <= m_data.size());
+       m_data.erase(m_data.begin(), m_data.begin() + n);
+       return *this;
+    }
+
+    template <typename U>
+    polynomial& operator <<=(U const &n)
+    {
+        m_data.insert(m_data.begin(), n, static_cast<T>(0));
+        return *this;
+    }
+    
+    /** Remove zero coefficients 'from the top', that is for which there are no
     *        non-zero coefficients of higher degree. */
    void normalize()
    {
@@ -598,6 +613,22 @@ template <class T>
 bool operator == (const polynomial<T> &a, const polynomial<T> &b)
 {
     return a.data() == b.data();
+}
+
+template <typename T, typename U>
+polynomial<T> operator >> (const polynomial<T>& a, const U& b)
+{
+    polynomial<T> result(a);
+    result >>= b;
+    return result;
+}
+
+template <typename T, typename U>
+polynomial<T> operator << (const polynomial<T>& a, const U& b)
+{
+    polynomial<T> result(a);
+    result <<= b;
+    return result;
 }
 
 // Unary minus (negate).
