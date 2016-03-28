@@ -15,12 +15,16 @@
 #ifndef BOOST_MATH_COMMON_FACTOR_RT_HPP
 #define BOOST_MATH_COMMON_FACTOR_RT_HPP
 
+#include <boost/core/enable_if.hpp>
 #include <boost/math_fwd.hpp>  // self include
 
 #include <boost/config.hpp>  // for BOOST_NESTED_TEMPLATE, etc.
 #include <boost/limits.hpp>  // for std::numeric_limits
 #include <climits>           // for CHAR_MIN
 #include <boost/detail/workaround.hpp>
+
+#include <boost/multiprecision/integer.hpp>
+#include <boost/math/tools/polynomial.hpp>
 
 #ifdef BOOST_MSVC
 #pragma warning(push)
@@ -124,30 +128,45 @@ namespace detail
         return ( result < zero ) ? static_cast<IntegerType>(-result) : result;
     }
 
-    // Greatest common divisor for unsigned binary integers
-    template < typename BuiltInUnsigned >
-    BuiltInUnsigned
-    gcd_binary
-    (
-        BuiltInUnsigned  u,
-        BuiltInUnsigned  v
-    )
+    template <typename T>
+    BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<T>::is_integer, bool>::type
+    odd(T const &x)
     {
-        if ( u && v )
+        return static_cast<bool>(x & 1u);
+    }
+
+    template <typename T>
+    BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<T>::is_integer, bool>::type
+    even(T const &x)
+    {
+        return !odd(x);
+    }
+    
+    template <typename T>
+    bool Stein_gcd_less(T const &x, T const &y)
+    {
+        return x < y;
+    }
+    
+    // Greatest common divisor for entities in the Stein domain
+    template < typename SteinDomain >
+    SteinDomain gcd_Stein(SteinDomain u, SteinDomain v)
+    {
+        if ( u && v ) // TODO: Define for polynomial.
         {
-            // Shift out common factors of 2
+            // Shift out common factors of the smallest prime.
             unsigned  shifts = 0;
 
-            while ( !(u & 1u) && !(v & 1u) )
+            while ( even(u) && even(v) )
             {
                 ++shifts;
-                u >>= 1;
-                v >>= 1;
+                u >>= 1u;
+                v >>= 1u;
             }
 
             // Start with the still-even one, if any
-            BuiltInUnsigned  r[] = { u, v };
-            unsigned         which = static_cast<bool>( u & 1u );
+            boost::array<SteinDomain * const, 2> r = { &u, &v };
+            unsigned         which = odd(u);
 
             // Whittle down the values via their differences
             do
@@ -158,25 +177,27 @@ namespace detail
                     r[ which ] = (r[which] >> 1);
                 }
 #else
-                // Remove factors of two from the even one
-                while ( !(r[ which ] & 1u) )
+                // Remove factors from the even one
+                while ( even(*r[ which ]) )
                 {
-                    r[ which ] >>= 1;
+                    *r[ which ] >>= 1;
                 }
 #endif
 
                 // Replace the larger of the two with their difference
-                if ( r[!which] > r[which] )
+                // Stein_gcd_less is operator< for integers, but not necessarily
+                // for interesting types such as polynomial.
+                if ( Stein_gcd_less(*r[which], *r[!which]) )
                 {
                     which ^= 1u;
                 }
 
-                r[ which ] -= r[ !which ];
+                *r[ which ] -= *r[ !which ];
             }
-            while ( r[which] );
+            while ( *r[which] );
 
             // Shift-in the common factor of 2 to the residues' GCD
-            return r[ !which ] << shifts;
+            return *r[ !which ] << shifts;
         }
         else
         {
@@ -269,13 +290,15 @@ namespace detail
     // Specialize for the built-in integers
 #define BOOST_PRIVATE_GCD_UF( Ut )                  \
     template < >  struct gcd_optimal_evaluator<Ut>  \
-    {  Ut  operator ()( Ut a, Ut b ) const  { return gcd_binary( a, b ); }  }
+    {  Ut  operator ()( Ut a, Ut b ) const  { return gcd_Stein( a, b ); }  }
 
     BOOST_PRIVATE_GCD_UF( unsigned char );
     BOOST_PRIVATE_GCD_UF( unsigned short );
     BOOST_PRIVATE_GCD_UF( unsigned );
     BOOST_PRIVATE_GCD_UF( unsigned long );
-
+    BOOST_PRIVATE_GCD_UF( boost::multiprecision::uint128_t );
+    BOOST_PRIVATE_GCD_UF( boost::math::tools::polynomial<double> );
+    
 #ifdef BOOST_HAS_LONG_LONG
     BOOST_PRIVATE_GCD_UF( boost::ulong_long_type );
 #elif defined(BOOST_HAS_MS_INT64)

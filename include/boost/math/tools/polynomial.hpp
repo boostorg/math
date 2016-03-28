@@ -302,6 +302,11 @@ public:
       }
    }
    
+   operator bool() const
+    {
+        return *this == static_cast<polynomial>(0);
+    }
+   
 #ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
     polynomial(std::initializer_list<T> l) : polynomial(std::begin(l), std::end(l))
     {
@@ -640,6 +645,7 @@ polynomial<T> operator - (polynomial<T> a)
 }
 
 template <class T>
+
 bool odd(polynomial<T> const &a)
 {
     return a.size() > 0 && a[0] != static_cast<T>(0);
@@ -649,6 +655,12 @@ template <class T>
 bool even(polynomial<T> const &a)
 {
     return !odd(a);
+}
+
+template <class T>
+bool Stein_gcd_less(polynomial<T> const &a, polynomial<T> const &b)
+{
+    return a.size() < b.size();
 }
 
 template <class charT, class traits, class T>

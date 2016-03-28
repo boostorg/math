@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_signed, T, signed_integral_test_types)
     BOOST_CHECK_EQUAL(a, static_cast<T>(34));
 }
 
-typedef boost::mpl::list<unsigned, unsigned long> unsigned_integral_test_types;
+typedef boost::mpl::list<unsigned, unsigned long, boost::multiprecision::uint128_t> unsigned_integral_test_types;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_unsigned, T, unsigned_integral_test_types)
 {
