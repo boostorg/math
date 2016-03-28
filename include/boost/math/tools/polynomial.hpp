@@ -454,14 +454,14 @@ public:
        BOOST_ASSERT(n <= m_data.size());
        m_data.erase(m_data.begin(), m_data.begin() + n);
        return *this;
-    }
+   }
 
-    template <typename U>
-    polynomial& operator <<=(U const &n)
-    {
-        m_data.insert(m_data.begin(), n, static_cast<T>(0));
-        return *this;
-    }
+   template <typename U>
+   polynomial& operator <<=(U const &n)
+   {
+       m_data.insert(m_data.begin(), n, static_cast<T>(0));
+       return *this;
+   }
     
     /** Remove zero coefficients 'from the top', that is for which there are no
     *        non-zero coefficients of higher degree. */
