@@ -38,6 +38,8 @@ boost::array<double, 3> const d2a = {{-2, 2, 3}};
 boost::array<double, 3> const d2b = {{-7, 5, 6}};
 boost::array<double, 3> const d2c = {{31, -21, -22}};
 boost::array<double, 1> const d0a = {{6}};
+boost::array<double, 2> const d0a1 = {{0, 6}};
+boost::array<double, 6> const d0a5 = {{0, 0, 0, 0, 0, 6}};
 boost::array<double, 1> const d0b = {{3}};
 
 boost::array<int, 9> const d8 = {{-5, 2, 8, -3, -3, 0, 1, 0, 1}};
@@ -216,3 +218,46 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_non_integral_arithmetic_relations, T, non_int
     BOOST_CHECK_EQUAL(a * T(0.5), a / T(2));
 }
 
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_right_shift, T, all_test_types )
+{
+    polynomial<T> a(d8b.begin(), d8b.end());
+    polynomial<T> const aa(a);
+    polynomial<T> const b(d8b.begin() + 1, d8b.end());
+    polynomial<T> const c(d8b.begin() + 5, d8b.end());
+    a >>= 0u;
+    BOOST_CHECK_EQUAL(a, aa);
+    a >>= 1u;
+    BOOST_CHECK_EQUAL(a, b);
+    a = a >> 4u;
+    BOOST_CHECK_EQUAL(a, c);
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_left_shift, T, all_test_types )
+{
+    polynomial<T> a(d0a.begin(), d0a.end());
+    polynomial<T> const aa(a);
+    polynomial<T> const b(d0a1.begin(), d0a1.end());
+    polynomial<T> const c(d0a5.begin(), d0a5.end());
+    a <<= 0u;
+    BOOST_CHECK_EQUAL(a, aa);    
+    a <<= 1u;
+    BOOST_CHECK_EQUAL(a, b);
+    a = a << 4u;
+    BOOST_CHECK_EQUAL(a, c);
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
+{
+    polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+    BOOST_CHECK_EQUAL(odd(zero), false);
+    BOOST_CHECK_EQUAL(even(zero), true);
+    polynomial<T> const a(d0a.begin(), d0a.end());
+    BOOST_CHECK_EQUAL(odd(a), true);
+    BOOST_CHECK_EQUAL(even(a), false);
+    polynomial<T> const b(d0a1.begin(), d0a1.end());
+    BOOST_CHECK_EQUAL(odd(b), false);
+    BOOST_CHECK_EQUAL(even(b), true);
+}

@@ -302,6 +302,11 @@ public:
       }
    }
    
+   operator bool() const
+    {
+        return *this == static_cast<polynomial>(0);
+    }
+   
 #ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
     polynomial(std::initializer_list<T> l) : polynomial(std::begin(l), std::end(l))
     {
@@ -448,7 +453,22 @@ public:
        return *this;
    }
 
-   /** Remove zero coefficients 'from the top', that is for which there are no
+   template <typename U>
+   polynomial& operator >>=(U const &n)
+   {
+       BOOST_ASSERT(n <= m_data.size());
+       m_data.erase(m_data.begin(), m_data.begin() + n);
+       return *this;
+   }
+
+   template <typename U>
+   polynomial& operator <<=(U const &n)
+   {
+       m_data.insert(m_data.begin(), n, static_cast<T>(0));
+       return *this;
+   }
+    
+    /** Remove zero coefficients 'from the top', that is for which there are no
     *        non-zero coefficients of higher degree. */
    void normalize()
    {
@@ -600,12 +620,47 @@ bool operator == (const polynomial<T> &a, const polynomial<T> &b)
     return a.data() == b.data();
 }
 
+template <typename T, typename U>
+polynomial<T> operator >> (const polynomial<T>& a, const U& b)
+{
+    polynomial<T> result(a);
+    result >>= b;
+    return result;
+}
+
+template <typename T, typename U>
+polynomial<T> operator << (const polynomial<T>& a, const U& b)
+{
+    polynomial<T> result(a);
+    result <<= b;
+    return result;
+}
+
 // Unary minus (negate).
 template <class T>
 polynomial<T> operator - (polynomial<T> a)
 {
     std::transform(a.data().begin(), a.data().end(), a.data().begin(), std::negate<T>());
     return a;
+}
+
+template <class T>
+
+bool odd(polynomial<T> const &a)
+{
+    return a.size() > 0 && a[0] != static_cast<T>(0);
+}
+
+template <class T>
+bool even(polynomial<T> const &a)
+{
+    return !odd(a);
+}
+
+template <class T>
+bool Stein_gcd_less(polynomial<T> const &a, polynomial<T> const &b)
+{
+    return a.size() < b.size();
 }
 
 template <class charT, class traits, class T>
