@@ -818,7 +818,7 @@ run test_tr1.c
 run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
 : : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ;
 
-lib compile_test_main : compile_test/main.cpp ;
+obj compile_test_main : compile_test/main.cpp ;
 
 run  compile_test/compl_abs_incl_test.cpp compile_test_main ;
 run  compile_test/compl_acos_incl_test.cpp compile_test_main ;
