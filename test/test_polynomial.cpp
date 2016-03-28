@@ -247,3 +247,17 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_left_shift, T, all_test_types )
     a = a << 4u;
     BOOST_CHECK_EQUAL(a, c);
 }
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
+{
+    polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+    BOOST_CHECK_EQUAL(odd(zero), false);
+    BOOST_CHECK_EQUAL(even(zero), true);
+    polynomial<T> const a(d0a.begin(), d0a.end());
+    BOOST_CHECK_EQUAL(odd(a), true);
+    BOOST_CHECK_EQUAL(even(a), false);
+    polynomial<T> const b(d0a1.begin(), d0a1.end());
+    BOOST_CHECK_EQUAL(odd(b), false);
+    BOOST_CHECK_EQUAL(even(b), true);
+}

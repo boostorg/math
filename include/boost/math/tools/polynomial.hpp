@@ -639,6 +639,18 @@ polynomial<T> operator - (polynomial<T> a)
     return a;
 }
 
+template <class T>
+bool odd(polynomial<T> const &a)
+{
+    return a.size() > 0 && a[0] != static_cast<T>(0);
+}
+
+template <class T>
+bool even(polynomial<T> const &a)
+{
+    return !odd(a);
+}
+
 template <class charT, class traits, class T>
 inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly)
 {
