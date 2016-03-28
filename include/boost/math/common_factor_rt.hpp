@@ -180,7 +180,7 @@ namespace detail
                 // Remove factors from the even one
                 while ( even(*r[ which ]) )
                 {
-                    *r[ which ] >>= 1;
+                    *r[ which ] >>= 1u;
                 }
 #endif
 
