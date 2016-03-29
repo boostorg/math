@@ -101,18 +101,20 @@ void test_type(const char* name)
 {
    using namespace boost::math::detail;
    typedef T int_type;
-   std::vector<pair<int_type, int_type> > data;
+   std::vector<pair<int_type, int_type> > data, data2;
 
    for(unsigned i = 0; i < 1000; ++i)
    {
       data.push_back(std::make_pair(get_random_arg<T>(), get_random_arg<T>()));
    }
+   // uncomment and change data to data2 below to test one specific value:
+   //data2.assign(data.size(), data[1]);
 
 
    //pair<int_type, int_type> test_data{ 1836311903, 2971215073 }; // 46th and 47th Fibonacci numbers. 47th is prime.
    
    typedef pair< function<int_type(int_type, int_type)>, string> f_test;
-   array<f_test, 2> test_functions{ { { gcd_euclidean<int_type>, "gcd_euclidean" },{ gcd_binary<int_type>, "gcd_binary" } } };
+   array<f_test, 2> test_functions{ { { gcd_binary<int_type>, "gcd_binary" } ,{ gcd_euclidean<int_type>, "gcd_euclidean" } } };
    for_each(begin(test_functions), end(test_functions), test_function_template<int_type>(data, name));
 }
 

@@ -6,13 +6,13 @@
 [[Function][gcd_euclidean
 boost 1.61][gcd_binary
 boost 1.61]]
-[[gcd<boost::multiprecision::uint1024_t>][[role green 1.00[br](1465376ns)]][[role red 5.95[br](8723958ns)]]]
-[[gcd<boost::multiprecision::uint256_t>][[role green 1.00[br](1263418ns)]][[role red 6.77[br](8552105ns)]]]
-[[gcd<boost::multiprecision::uint512_t>][[role green 1.00[br](1200892ns)]][[role red 6.82[br](8186409ns)]]]
-[[gcd<unsigned long long>][[role green 1.00[br](433382ns)]][[role red 2.07[br](897472ns)]]]
-[[gcd<unsigned long>][[role green 1.00[br](154126ns)]][[role red 3.11[br](480102ns)]]]
-[[gcd<unsigned short>][[role green 1.00[br](76887ns)]][[role red 2.85[br](218976ns)]]]
-[[gcd<unsigned>][[role green 1.00[br](149976ns)]][[role red 3.13[br](469794ns)]]]
+[[gcd<boost::multiprecision::uint1024_t>][[role green 1.00[br](1437657ns)]][[role red 5.95[br](8555088ns)]]]
+[[gcd<boost::multiprecision::uint256_t>][[role green 1.00[br](1182399ns)]][[role red 7.09[br](8385859ns)]]]
+[[gcd<boost::multiprecision::uint512_t>][[role green 1.00[br](1168211ns)]][[role red 6.88[br](8033724ns)]]]
+[[gcd<unsigned long long>][[role green 1.00[br](426342ns)]][[role red 2.05[br](872688ns)]]]
+[[gcd<unsigned long>][[role green 1.00[br](153116ns)]][[role red 3.07[br](470809ns)]]]
+[[gcd<unsigned short>][[role green 1.00[br](75239ns)]][[role red 2.77[br](208550ns)]]]
+[[gcd<unsigned>][[role green 1.00[br](173500ns)]][[role red 2.66[br](460764ns)]]]
 ]
 ]
 
