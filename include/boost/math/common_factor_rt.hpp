@@ -16,7 +16,7 @@
 #define BOOST_MATH_COMMON_FACTOR_RT_HPP
 
 #include <boost/math_fwd.hpp>  // self include
-
+#include <algorithm>
 #include <boost/config.hpp>  // for BOOST_NESTED_TEMPLATE, etc.
 #include <boost/limits.hpp>  // for std::numeric_limits
 #include <climits>           // for CHAR_MIN
@@ -124,69 +124,41 @@ namespace detail
         return ( result < zero ) ? static_cast<IntegerType>(-result) : result;
     }
 
-    // Greatest common divisor for unsigned binary integers
-    template < typename BuiltInUnsigned >
-    BuiltInUnsigned
-    gcd_binary
-    (
-        BuiltInUnsigned  u,
-        BuiltInUnsigned  v
-    )
+    template <typename T>
+    bool odd(T const &x)
     {
-        if ( u && v )
-        {
-            // Shift out common factors of 2
-            unsigned  shifts = 0;
-
-            while ( !(u & 1u) && !(v & 1u) )
-            {
-                ++shifts;
-                u >>= 1;
-                v >>= 1;
-            }
-
-            // Start with the still-even one, if any
-            BuiltInUnsigned  r[] = { u, v };
-            unsigned         which = static_cast<bool>( u & 1u );
-
-            // Whittle down the values via their differences
-            do
-            {
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-                while ( !(r[ which ] & 1u) )
-                {
-                    r[ which ] = (r[which] >> 1);
-                }
-#else
-                // Remove factors of two from the even one
-                while ( !(r[ which ] & 1u) )
-                {
-                    r[ which ] >>= 1;
-                }
-#endif
-
-                // Replace the larger of the two with their difference
-                if ( r[!which] > r[which] )
-                {
-                    which ^= 1u;
-                }
-
-                r[ which ] -= r[ !which ];
-            }
-            while ( r[which] );
-
-            // Shift-in the common factor of 2 to the residues' GCD
-            return r[ !which ] << shifts;
-        }
-        else
-        {
-            // At least one input is zero, return the other
-            // (adding since zero is the additive identity)
-            // or zero if both are zero.
-            return u + v;
-        }
+        return x & 0x1;
     }
 
+    template <typename T>
+    bool even(T const &x)
+    {
+        return !odd(x);
+    }
+    
+    // Greatest common divisor for unsigned binary integers
+    template <typename N>
+    N gcd_binary(N m, N n)
+    {
+        if (m < N(0)) m = -m;
+        if (n < N(0)) n = -n;
+        if (m == N(0)) return n;
+        if (n == N(0)) return m;
+        // m > 0 && n > 0
+        unsigned d_m = 0;
+        while (even(m)) { m >>= 1; d_m++;}
+        unsigned d_n = 0;
+        while (even(n)) { n >>= 1; d_n++;}
+        // odd(m) && odd(n)
+        while (m != n) {
+            if (n > m) swap(n, m);
+            m -= n;
+            do m >>= 1; while (even(m));
+            // m == n
+        }
+        return m << std::min(d_m, d_n);
+    }
+    
     // Least common multiple for rings (including unsigned integers)
     template < typename RingType >
     inline
