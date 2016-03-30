@@ -127,7 +127,7 @@ namespace detail
     template <typename T>
     bool odd(T const &x)
     {
-        return x & 0x1;
+        return static_cast<bool>(x & 1u);
     }
 
     template <typename T>
@@ -140,8 +140,8 @@ namespace detail
     template <typename N>
     N gcd_binary(N m, N n)
     {
-        if (m < N(0)) m = -m;
-        if (n < N(0)) n = -n;
+        BOOST_ASSERT(m >= static_cast<N>(0));
+        BOOST_ASSERT(n >= static_cast<N>(0));
         if (m == N(0)) return n;
         if (n == N(0)) return m;
         // m > 0 && n > 0
