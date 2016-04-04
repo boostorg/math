@@ -114,7 +114,7 @@ void test_type(const char* name)
    //pair<int_type, int_type> test_data{ 1836311903, 2971215073 }; // 46th and 47th Fibonacci numbers. 47th is prime.
    
    typedef pair< function<int_type(int_type, int_type)>, string> f_test;
-   array<f_test, 2> test_functions{ { { gcd_binary<int_type>, "gcd_binary" } ,{ gcd_euclidean<int_type>, "gcd_euclidean" } } };
+   array<f_test, 2> test_functions{ { { Stein_gcd<int_type>, "gcd_binary" } ,{ Euclid_gcd<int_type>, "gcd_euclidean" } } };
    for_each(begin(test_functions), end(test_functions), test_function_template<int_type>(data, name));
 }
 
