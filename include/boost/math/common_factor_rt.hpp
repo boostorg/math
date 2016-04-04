@@ -83,12 +83,12 @@ namespace detail
     {
         while (b != EuclideanDomain(0))
         {
-            a = a % b;
-            std::swap(a, b);
+            a %= b;
+            swap(a, b);
         }
         return a;
     }
-}
+} // namespace detail
 
 
 template <typename T>
