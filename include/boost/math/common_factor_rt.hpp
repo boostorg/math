@@ -9,10 +9,11 @@
 
 #include <boost/assert.hpp>
 #include <boost/core/enable_if.hpp>
-#include <boost/type_traits.hpp>
 #include <boost/mpl/and.hpp>
+#include <boost/type_traits.hpp>
 
 #include <algorithm>
+#include <limits>
 
 namespace boost {
 namespace math{
@@ -93,7 +94,7 @@ namespace detail
 
 
 template <typename T>
-BOOST_DEDUCED_TYPENAME enable_if_c<mpl::and_< has_right_shift_assign<T>, has_less<T> >::value, T>::type
+BOOST_DEDUCED_TYPENAME enable_if_c<mpl::and_< mpl::and_< has_right_shift_assign<T>, has_left_shift_assign<T> >, has_less<T> >::value, T>::type
 optimal_gcd(T const &a, T const &b)
 {
     return detail::Stein_gcd(a, b);
@@ -101,7 +102,7 @@ optimal_gcd(T const &a, T const &b)
 
 
 template <typename T>
-BOOST_DEDUCED_TYPENAME disable_if_c<mpl::and_< has_right_shift_assign<T>, has_less<T> >::value, T>::type
+BOOST_DEDUCED_TYPENAME disable_if_c<mpl::and_< mpl::and_< has_right_shift_assign<T>, has_left_shift_assign<T> >, has_less<T> >::value, T>::type
 optimal_gcd(T const &a, T const &b)
 {
     return detail::Euclid_gcd(a, b);
@@ -109,15 +110,15 @@ optimal_gcd(T const &a, T const &b)
 
 
 template <typename Integer>
-BOOST_DEDUCED_TYPENAME enable_if_c<is_signed<Integer>::value, Integer>::type
+BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<Integer>::is_signed, Integer>::type
 gcd(Integer const &a, Integer const &b)
 {
-    return optimal_gcd(abs(a), abs(b));
+    return optimal_gcd(static_cast<Integer>(abs(a)), static_cast<Integer>(abs(b)));
 }
 
 
 template <typename Integer>
-BOOST_DEDUCED_TYPENAME disable_if_c<is_signed<Integer>::value, Integer>::type
+BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<Integer>::is_signed, Integer>::type
 gcd(Integer const &a, Integer const &b)
 {
     return optimal_gcd(a, b);
