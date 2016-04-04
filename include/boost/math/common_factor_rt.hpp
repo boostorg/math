@@ -69,7 +69,8 @@ namespace detail
             while (even(m));
         }
         // m == n
-        return m << std::min(d_m, d_n);
+        m <<= std::min(d_m, d_n);
+        return m;
     }
 
     
