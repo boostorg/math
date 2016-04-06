@@ -1254,7 +1254,7 @@ void test_type(const char* name)
    //pair<int_type, int_type> test_data{ 1836311903, 2971215073 }; // 46th and 47th Fibonacci numbers. 47th is prime.
    
    typedef pair< function<int_type(int_type, int_type)>, string> f_test;
-   array<f_test, 5> test_functions{ { { gcd_binary<int_type>, "gcd_binary" } ,{ gcd_euclidean<int_type>, "gcd_euclidean" },{ binary_textbook<int_type>, "gcd_binary_textbook" },{ euclid_textbook<int_type>, "gcd_euclid_textbook" },{ mixed_binary_gcd<int_type>, "mixed_binary_gcd" } } };
+   array<f_test, 5> test_functions{ { { Stein_gcd<int_type>, "Stein_gcd" } ,{ Euclid_gcd<int_type>, "Euclid_gcd" },{ binary_textbook<int_type>, "Stein_gcd_textbook" },{ euclid_textbook<int_type>, "gcd_euclid_textbook" },{ mixed_binary_gcd<int_type>, "mixed_binary_gcd" } } };
    for_each(begin(test_functions), end(test_functions), test_function_template<int_type>(data, name));
 }
 
@@ -1476,7 +1476,7 @@ void test_n_bits(unsigned n, std::string data_name, const std::vector<pair<boost
    }
 
    typedef pair< function<int_type(int_type, int_type)>, string> f_test;
-   array<f_test, 2> test_functions{ { /*{ gcd_binary<int_type>, "gcd_binary" } ,{ gcd_euclidean<int_type>, "gcd_euclidean" },{ binary_textbook<int_type>, "gcd_binary_textbook" },{ euclid_textbook<int_type>, "gcd_euclid_textbook" },{ mixed_binary_gcd<int_type>, "mixed_binary_gcd" },{ gcd_stein<int_type>, "gcd_stein" },*/{ big_gcd, "boost::multiprecision::gcd" },{ big_gcd_new, "big_gcd_new" } } };
+   array<f_test, 2> test_functions{ { /*{ Stein_gcd<int_type>, "Stein_gcd" } ,{ Euclid_gcd<int_type>, "Euclid_gcd" },{ binary_textbook<int_type>, "Stein_gcd_textbook" },{ euclid_textbook<int_type>, "gcd_euclid_textbook" },{ mixed_binary_gcd<int_type>, "mixed_binary_gcd" },{ gcd_stein<int_type>, "gcd_stein" },*/{ big_gcd, "boost::multiprecision::gcd" },{ big_gcd_new, "big_gcd_new" } } };
    for_each(begin(test_functions), end(test_functions), test_function_template<int_type>(p_data ? *p_data : data, data_name.c_str(), true));
 }
 
