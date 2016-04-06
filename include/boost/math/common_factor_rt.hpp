@@ -17,17 +17,18 @@
 
 namespace boost {
 namespace math{
+
 namespace detail
 {
     template <typename T>
-    bool odd(T const &x)
+    inline bool odd(T const &x)
     {
-        return static_cast<bool>(x & 0x1);
+        return static_cast<bool>(x & 0x1u);
     }
     
     
     template <typename T>
-    bool even(T const &x)
+    inline bool even(T const &x)
     {
         return !odd(x);
     }
@@ -81,7 +82,7 @@ namespace detail
      * 
      */
     template <typename EuclideanDomain>
-    EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b)
+    inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b)
     {
         while (b != EuclideanDomain(0))
         {
@@ -90,39 +91,111 @@ namespace detail
         }
         return a;
     }
+
+
+    template <typename T>
+    inline BOOST_DEDUCED_TYPENAME enable_if_c<mpl::and_< mpl::and_< has_right_shift_assign<T>, has_left_shift_assign<T> >, has_less<T> >::value, T>::type
+       optimal_gcd_select(T const &a, T const &b)
+    {
+       return detail::Stein_gcd(a, b);
+    }
+
+
+    template <typename T>
+    inline BOOST_DEDUCED_TYPENAME disable_if_c<mpl::and_< mpl::and_< has_right_shift_assign<T>, has_left_shift_assign<T> >, has_less<T> >::value, T>::type
+       optimal_gcd_select(T const &a, T const &b)
+    {
+       return detail::Euclid_gcd(a, b);
+    }
+
+    //
+    // To figure out whether a type has abs support or not, we use tribool logic:
+    // 1) Definitely has abs,
+    // 2) Definitely does not have abs,
+    // 3) Don't know.
+    // We want to call (3) only when all else fails as it doesn't work for built in types :(
+    //
+    typedef char nt[29761];
+    typedef nt& no_type;
+    template <class T> no_type abs(T const& ...);
+    using std::abs;
+    //
+    // default template - don't know
+    //
+    template <class T, bool b, bool c>
+    struct has_abs_imp
+    {
+       static const T val;
+       BOOST_STATIC_CONSTANT(bool, value = sizeof(abs(val)) != sizeof(no_type));
+    };
+    //
+    // Definitely no abs:
+    //
+    template <class T>
+    struct has_abs_imp<T, true, false>
+    {
+       BOOST_STATIC_CONSTANT(bool, value = false);
+    };
+    //
+    // Definitely has abs:
+    //
+    template <class T>
+    struct has_abs_imp<T, false, true>
+    {
+       BOOST_STATIC_CONSTANT(bool, value = true);
+    };
+
+    template <class T>
+    struct has_abs
+    {
+       BOOST_STATIC_CONSTANT(bool, value = (has_abs_imp<T, (boost::is_unsigned<T>::value || (std::numeric_limits<T>::is_specialized && !std::numeric_limits<T>::is_signed)), (boost::is_signed<T>::value || (std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::is_signed))>::value));
+    };
+
 } // namespace detail
 
 
-template <typename T>
-BOOST_DEDUCED_TYPENAME enable_if_c<mpl::and_< mpl::and_< has_right_shift_assign<T>, has_left_shift_assign<T> >, has_less<T> >::value, T>::type
-optimal_gcd(T const &a, T const &b)
-{
-    return detail::Stein_gcd(a, b);
-}
-
-
-template <typename T>
-BOOST_DEDUCED_TYPENAME disable_if_c<mpl::and_< mpl::and_< has_right_shift_assign<T>, has_left_shift_assign<T> >, has_less<T> >::value, T>::type
-optimal_gcd(T const &a, T const &b)
-{
-    return detail::Euclid_gcd(a, b);
-}
-
 
 template <typename Integer>
-BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<Integer>::is_signed, Integer>::type
+inline BOOST_DEDUCED_TYPENAME enable_if_c<detail::has_abs<Integer>::value, Integer>::type
 gcd(Integer const &a, Integer const &b)
 {
     using std::abs;
-    return optimal_gcd(static_cast<Integer>(abs(a)), static_cast<Integer>(abs(b)));
+    return detail::optimal_gcd_select(static_cast<Integer>(abs(a)), static_cast<Integer>(abs(b)));
 }
 
 
 template <typename Integer>
-BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<Integer>::is_signed, Integer>::type
+inline BOOST_DEDUCED_TYPENAME disable_if_c<detail::has_abs<Integer>::value, Integer>::type
 gcd(Integer const &a, Integer const &b)
 {
-    return optimal_gcd(a, b);
+    return detail::optimal_gcd_select(a, b);
+}
+
+namespace detail
+{
+   template <class T>
+   inline T lcm_imp(const T& a, const T& b)
+   {
+      T temp = boost::math::gcd(a, b);
+      return temp ? T(a / temp * b) : T(0);
+   }
+
+}
+
+template <typename Integer>
+inline BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<Integer>::is_signed, Integer>::type
+lcm(Integer const &a, Integer const &b)
+{
+   using std::abs;
+   return detail::lcm_imp(static_cast<Integer>(abs(a)), static_cast<Integer>(abs(b)));
+}
+
+
+template <typename Integer>
+inline BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<Integer>::is_signed, Integer>::type
+lcm(Integer const &a, Integer const &b)
+{
+   return detail::lcm_imp(a, b);
 }
 
 
