@@ -85,13 +85,16 @@ string formula_format(polynomial<T> const &a)
           result += "^" + lexical_cast<string>(i);
           i--;
           for (; i != 1; i--)
-              result += inner_coefficient(a[i]) + "x^" + lexical_cast<string>(i);
+              if (a[i])
+                result += inner_coefficient(a[i]) + "x^" + lexical_cast<string>(i);
 
-          result += inner_coefficient(a[i]) + "x";
+          if (a[i])
+            result += inner_coefficient(a[i]) + "x";
       }
       i--;
 
-      result += " " + sign_str(a[i]) + " " + lexical_cast<string>(abs(a[i]));
+      if (a[i])
+        result += " " + sign_str(a[i]) + " " + lexical_cast<string>(abs(a[i]));
     }
   }
   return result;
