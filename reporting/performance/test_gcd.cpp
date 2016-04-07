@@ -108,13 +108,13 @@ T get_uniform_random()
 }
 
 template <class T>
-inline bool is_even(T const& val)
+inline bool even(T const& val)
 {
    return !(val & 1u);
 }
 
 template <class Backend, boost::multiprecision::expression_template_option ExpressionTemplates>
-inline bool is_even(boost::multiprecision::number<Backend, ExpressionTemplates> const& val)
+inline bool even(boost::multiprecision::number<Backend, ExpressionTemplates> const& val)
 {
    return !bit_test(val, 0);
 }
@@ -301,17 +301,6 @@ T generate_random(unsigned bits_wanted)
    }
    val %= max_val;
    return val;
-}
-
-template <class T>
-inline bool even(const T& val)
-{
-   return !(val & 1);
-}
-template <class T>
-inline bool odd(const T& val)
-{
-   return (val & 1);
 }
 
 template <typename N>
