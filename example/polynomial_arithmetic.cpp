@@ -164,6 +164,39 @@ to get both results together as a pair.
   BOOST_ASSERT(result.first == q);
   BOOST_ASSERT(result.second == r);
 //] [/polynomial_arithmetic_4]
+//[polynomial_arithmetic_5
+  /* 
+We can use the right and left shift operators to add and remove a factor of x.
+This has the same semantics as left and right shift for integers where it is a 
+factor of 2. x is the smallest prime factor of a polynomial as is 2 for integers.
+*/
+    cout << "Right and left shift operators.\n";
+    cout << "\n" << formula_format(p) << "\n";
+    cout << "... right shift by 1 ...\n";
+    p >>= 1;
+    cout << formula_format(p) << "\n";
+    cout << "... left shift by 2 ...\n";
+    p <<= 2;
+    cout << formula_format(p) << "\n";    
+  
+/*
+We can also give a meaning to odd and even for a polynomial that is consistent
+with these operations: a polynomial is odd if it has a non-zero constant value, 
+even otherwise. That is:
+    x^2 + 1     odd
+    x^2         even    
+   */
+    cout << std::boolalpha;
+    cout << "\nPrint whether a polynomial is odd.\n";
+    cout << formula_format(s) << "   odd? " << odd(s) << "\n";
+    // We cheekily use the internal details to subtract the constant, making it even.
+    s -= s.data().front();
+    cout << formula_format(s) << "   odd? " << odd(s) << "\n";
+    // And of course you can check if it is even:
+    cout << formula_format(s) << "   even? " << even(s) << "\n";
+    
+    
+    //] [/polynomial_arithmetic_5]
 }
 catch (exception const &e)
 {
