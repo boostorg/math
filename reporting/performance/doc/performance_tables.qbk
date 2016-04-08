@@ -846,6 +846,12 @@
 
 
 [/sections:]
+[template section_gcd_method_comparison_with_GNU_C_version_5_3_0_on_Windows_x64[]
+[section:section_gcd_method_comparison_with_GNU_C_version_5_3_0_on_Windows_x64 gcd method comparison with GNU C++ version 5.3.0 on Windows x64]
+[table_gcd_method_comparison_with_GNU_C_version_5_3_0_on_Windows_x64]
+[endsect]
+]
+
 [template section_gcd_method_comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64[]
 [section:section_gcd_method_comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64 gcd method comparison with Microsoft Visual C++ version 14.0 on Windows x64]
 [table_gcd_method_comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
@@ -975,6 +981,7 @@
 [section_Rational_Method_Comparison_with_GNU_C_version_5_3_0_on_Windows_x64]
 [section_Rational_Method_Comparison_with_Intel_C_C_0x_mode_version_1600_on_Windows_x64]
 [section_Rational_Method_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[section_gcd_method_comparison_with_GNU_C_version_5_3_0_on_Windows_x64]
 [section_gcd_method_comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
 ]
 
@@ -996,11 +1003,58 @@
 [table_Rational_Method_Comparison_with_GNU_C_version_5_3_0_on_Windows_x64]
 [table_Rational_Method_Comparison_with_Intel_C_C_0x_mode_version_1600_on_Windows_x64]
 [table_Rational_Method_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[table_gcd_method_comparison_with_GNU_C_version_5_3_0_on_Windows_x64]
 [table_gcd_method_comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
 ]
 
 
 [/tables:]
+[template table_gcd_method_comparison_with_GNU_C_version_5_3_0_on_Windows_x64[]
+[table:table_gcd_method_comparison_with_GNU_C_version_5_3_0_on_Windows_x64 gcd method comparison with GNU C++ version 5.3.0 on Windows x64
+[[Function][Stein_gcd
+boost 1.61][Euclid_gcd
+boost 1.61][Stein_gcd_textbook
+boost 1.61][gcd_euclid_textbook
+boost 1.61][mixed_binary_gcd
+boost 1.61]]
+[[gcd<boost::multiprecision::uint1024_t> (Trivial cases)][[role red 2.96[br](2746ns)]][[role green 1.00[br](928ns)]][[role blue 1.41[br](1304ns)]][[role green 1.10[br](1024ns)]][[role green 1.05[br](971ns)]]]
+[[gcd<boost::multiprecision::uint1024_t> (adjacent Fibonacci numbers)][[role red 2.19[br](40301224ns)]][[role red 3.89[br](71447317ns)]][[role blue 1.48[br](27159857ns)]][[role red 4.89[br](89815006ns)]][[role green 1.00[br](18364879ns)]]]
+[[gcd<boost::multiprecision::uint1024_t> (permutations of Fibonacci numbers)][[role red 14.38[br](23668771413ns)]][[role green 1.00[br](1645391078ns)]][[role red 11.03[br](18154895895ns)]][[role blue 1.22[br](2008231090ns)]][[role blue 1.61[br](2648925080ns)]]]
+[[gcd<boost::multiprecision::uint1024_t> (random prime number products)][[role red 5.85[br](6425426ns)]][[role blue 1.27[br](1391786ns)]][[role red 3.90[br](4289084ns)]][[role blue 1.76[br](1928582ns)]][[role green 1.00[br](1098692ns)]]]
+[[gcd<boost::multiprecision::uint1024_t> (uniform random numbers)][[role blue 1.86[br](144245134ns)]][[role blue 1.46[br](113272216ns)]][[role blue 1.30[br](100890480ns)]][[role blue 1.71[br](132707537ns)]][[role green 1.00[br](77719422ns)]]]
+[[gcd<boost::multiprecision::uint256_t> (Trivial cases)][[role red 3.60[br](2101ns)]][[role green 1.04[br](606ns)]][[role blue 1.32[br](772ns)]][[role green 1.00[br](584ns)]][[role green 1.03[br](603ns)]]]
+[[gcd<boost::multiprecision::uint256_t> (adjacent Fibonacci numbers)][[role blue 1.82[br](16733410ns)]][[role blue 1.93[br](17716649ns)]][[role green 1.18[br](10807866ns)]][[role red 2.22[br](20343352ns)]][[role green 1.00[br](9180502ns)]]]
+[[gcd<boost::multiprecision::uint256_t> (permutations of Fibonacci numbers)][[role red 2.33[br](9168534731ns)]][[role blue 1.40[br](5492875544ns)]][[role blue 1.50[br](5903509165ns)]][[role blue 1.61[br](6322329125ns)]][[role green 1.00[br](3935983561ns)]]]
+[[gcd<boost::multiprecision::uint256_t> (random prime number products)][[role red 4.33[br](4917503ns)]][[role green 1.17[br](1330232ns)]][[role red 2.87[br](3263664ns)]][[role blue 1.34[br](1528634ns)]][[role green 1.00[br](1136839ns)]]]
+[[gcd<boost::multiprecision::uint256_t> (uniform random numbers)][[role blue 1.79[br](22337489ns)]][[role blue 1.42[br](17749646ns)]][[role green 1.11[br](13928997ns)]][[role blue 1.65[br](20573528ns)]][[role green 1.00[br](12499210ns)]]]
+[[gcd<boost::multiprecision::uint512_t> (Trivial cases)][[role red 3.26[br](2271ns)]][[role green 1.00[br](696ns)]][[role blue 1.34[br](936ns)]][[role green 1.02[br](708ns)]][[role green 1.02[br](713ns)]]]
+[[gcd<boost::multiprecision::uint512_t> (adjacent Fibonacci numbers)][[role red 2.06[br](34484828ns)]][[role red 2.76[br](46168734ns)]][[role green 1.17[br](19630485ns)]][[role red 3.07[br](51396712ns)]][[role green 1.00[br](16740364ns)]]]
+[[gcd<boost::multiprecision::uint512_t> (permutations of Fibonacci numbers)][[role red 4.09[br](19966267682ns)]][[role blue 1.29[br](6317043722ns)]][[role red 2.32[br](11342144664ns)]][[role blue 1.44[br](7017091139ns)]][[role green 1.00[br](4885679448ns)]]]
+[[gcd<boost::multiprecision::uint512_t> (random prime number products)][[role red 5.50[br](6205628ns)]][[role blue 1.27[br](1430346ns)]][[role red 3.06[br](3452646ns)]][[role blue 1.47[br](1657952ns)]][[role green 1.00[br](1128578ns)]]]
+[[gcd<boost::multiprecision::uint512_t> (uniform random numbers)][[role blue 1.97[br](61346153ns)]][[role blue 1.46[br](45444167ns)]][[role green 1.10[br](34443157ns)]][[role blue 1.61[br](50140151ns)]][[role green 1.00[br](31185556ns)]]]
+[[gcd<unsigned long long> (Trivial cases)][[role green 1.00[br](110ns)]][[role blue 1.53[br](168ns)]][[role blue 1.37[br](151ns)]][[role blue 1.27[br](140ns)]][[role green 1.20[br](132ns)]]]
+[[gcd<unsigned long long> (adjacent Fibonacci numbers)][[role green 1.00[br](7050ns)]][[role red 12.45[br](87745ns)]][[role blue 1.92[br](13502ns)]][[role red 12.39[br](87343ns)]][[role red 2.59[br](18269ns)]]]
+[[gcd<unsigned long long> (permutations of Fibonacci numbers)][[role red 2.22[br](3129883ns)]][[role green 1.12[br](1583073ns)]][[role blue 1.99[br](2809825ns)]][[role green 1.08[br](1518328ns)]][[role green 1.00[br](1408678ns)]]]
+[[gcd<unsigned long long> (random prime number products)][[role blue 1.41[br](589422ns)]][[role green 1.08[br](452651ns)]][[role blue 1.23[br](516140ns)]][[role green 1.06[br](444478ns)]][[role green 1.00[br](418094ns)]]]
+[[gcd<unsigned long long> (uniform random numbers)][[role green 1.13[br](780744ns)]][[role green 1.15[br](791117ns)]][[role green 1.00[br](690640ns)]][[role green 1.13[br](782164ns)]][[role green 1.08[br](747378ns)]]]
+[[gcd<unsigned long> (Trivial cases)][[role green 1.11[br](105ns)]][[role green 1.00[br](95ns)]][[role blue 1.74[br](165ns)]][[role green 1.00[br](95ns)]][[role green 1.04[br](99ns)]]]
+[[gcd<unsigned long> (adjacent Fibonacci numbers)][[role green 1.00[br](1801ns)]][[role red 7.78[br](14019ns)]][[role red 2.57[br](4633ns)]][[role red 7.31[br](13169ns)]][[role blue 1.52[br](2734ns)]]]
+[[gcd<unsigned long> (permutations of Fibonacci numbers)][[role red 2.18[br](333776ns)]][[role blue 1.22[br](186833ns)]][[role red 2.55[br](390596ns)]][[role green 1.10[br](168474ns)]][[role green 1.00[br](153238ns)]]]
+[[gcd<unsigned long> (random prime number products)][[role blue 1.73[br](306317ns)]][[role green 1.07[br](190045ns)]][[role blue 1.72[br](304222ns)]][[role green 1.00[br](176904ns)]][[role green 1.15[br](202928ns)]]]
+[[gcd<unsigned long> (uniform random numbers)][[role blue 1.41[br](391299ns)]][[role green 1.02[br](283120ns)]][[role blue 1.39[br](384542ns)]][[role green 1.00[br](276931ns)]][[role green 1.15[br](318349ns)]]]
+[[gcd<unsigned short> (Trivial cases)][[role blue 1.30[br](120ns)]][[role green 1.00[br](92ns)]][[role blue 1.83[br](168ns)]][[role green 1.00[br](92ns)]][[role green 1.11[br](102ns)]]]
+[[gcd<unsigned short> (adjacent Fibonacci numbers)][[role green 1.00[br](555ns)]][[role red 5.67[br](3149ns)]][[role red 2.07[br](1151ns)]][[role red 5.51[br](3058ns)]][[role blue 1.43[br](791ns)]]]
+[[gcd<unsigned short> (permutations of Fibonacci numbers)][[role green 1.00[br](10686ns)]][[role red 2.28[br](24370ns)]][[role red 3.10[br](33149ns)]][[role red 2.04[br](21777ns)]][[role green 1.01[br](10754ns)]]]
+[[gcd<unsigned short> (random prime number products)][[role blue 1.59[br](143810ns)]][[role green 1.13[br](102607ns)]][[role blue 1.81[br](163412ns)]][[role green 1.00[br](90405ns)]][[role green 1.03[br](93348ns)]]]
+[[gcd<unsigned short> (uniform random numbers)][[role blue 1.44[br](194008ns)]][[role green 1.07[br](144487ns)]][[role blue 1.53[br](207063ns)]][[role green 1.00[br](135144ns)]][[role green 1.05[br](141583ns)]]]
+[[gcd<unsigned> (Trivial cases)][[role blue 1.22[br](106ns)]][[role green 1.06[br](92ns)]][[role blue 1.85[br](161ns)]][[role green 1.00[br](87ns)]][[role green 1.10[br](96ns)]]]
+[[gcd<unsigned> (adjacent Fibonacci numbers)][[role green 1.00[br](1780ns)]][[role red 8.10[br](14413ns)]][[role red 2.47[br](4401ns)]][[role red 7.56[br](13448ns)]][[role blue 1.52[br](2701ns)]]]
+[[gcd<unsigned> (permutations of Fibonacci numbers)][[role red 2.23[br](342478ns)]][[role blue 1.22[br](186588ns)]][[role red 2.40[br](368783ns)]][[role green 1.09[br](166713ns)]][[role green 1.00[br](153443ns)]]]
+[[gcd<unsigned> (random prime number products)][[role blue 1.71[br](307684ns)]][[role green 1.09[br](196453ns)]][[role blue 1.66[br](298640ns)]][[role green 1.00[br](179513ns)]][[role green 1.14[br](204976ns)]]]
+[[gcd<unsigned> (uniform random numbers)][[role blue 1.39[br](386374ns)]][[role green 1.03[br](287880ns)]][[role blue 1.36[br](380431ns)]][[role green 1.00[br](278932ns)]][[role green 1.13[br](316161ns)]]]
+]
+]
+
 [template table_gcd_method_comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64[]
 [table:table_gcd_method_comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64 gcd method comparison with Microsoft Visual C++ version 14.0 on Windows x64
 [[Function][Stein_gcd
