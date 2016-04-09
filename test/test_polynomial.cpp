@@ -246,6 +246,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_left_shift, T, all_test_types )
     BOOST_CHECK_EQUAL(a, b);
     a = a << 4u;
     BOOST_CHECK_EQUAL(a, c);
+    polynomial<T> zero = zero_element(multiplies< polynomial<T> >());
+    // Multiplying zero by x should still be zero.
+    zero <<= 1u;
+    BOOST_CHECK_EQUAL(zero, zero_element(multiplies< polynomial<T> >()));
 }
 
 
