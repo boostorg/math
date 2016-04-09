@@ -11,7 +11,6 @@
 #include <boost/config.hpp>
 #include <boost/core/enable_if.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
-#include <boost/range/adaptor/strided.hpp>
 
 #include <cmath>
 #include <complex>
@@ -75,28 +74,22 @@ namespace detail
     }
 }
 
-template <typename I, typename J, typename N, typename CRU>
-void inner_fft(I y_0, I y_1, J y, N n, CRU &w, CRU const &w_n)
-{
-    for (unsigned k = 0; k < n / 2 - 1; k++)
-    {
-        y[k] = y_0[k] + w * y_1[k];
-        y[k + n / 2] = y_0[k] - w * y_1[k];
-        w *= w_n;
-    }
-}
 
+// Recursive FFT based on Cormen et al, Introduction to algorithms, 3rd ed., 2009
 template <typename I, typename J>
-void fft(I first, I last, J y)
+void recursive_fft(I first, I last, J y)
 {
     using namespace boost::math::tools::detail;
     
-    typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<I>::difference_type difference_type;
-    typedef std::complex<double> complex_t;
-    difference_type const n = distance(first, last);
+    typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<I>::difference_type N;
+    typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<J>::value_type complex_t;
+    N const n = distance(first, last);
     BOOST_ASSERT((n & (n - 1)) == 0); // We require that n is a power of 2.
     if (n == 1)
+    {
+        *y = *first;
         return;
+    }
     complex_t const i(0, 1);
     complex_t const w_n = std::exp((2.0 * M_PI * i) / static_cast<double>(n));
     complex_t w = 1;
@@ -104,14 +97,82 @@ void fft(I first, I last, J y)
     y_0.resize(n / 2);
     y_1.resize(n / 2);
     
-    fft(make_stride_iterator(first, 2), make_stride_iterator(last - 1, 2), y_0.begin());
-    fft(make_stride_iterator(first + 1, 2), make_stride_iterator(last, 2), y_1.begin());
+    recursive_fft(make_stride_iterator(first, 2), make_stride_iterator(last, 2), y_0.begin());
+    recursive_fft(make_stride_iterator(first + 1, 2), make_stride_iterator(last + 1, 2), y_1.begin());
 
-    for (unsigned k = 0; k < n / 2 - 1; k++)
+    for (N k = 0; k < n / 2; k++)
     {
         y[k] = y_0[k] + w * y_1[k];
         y[k + n / 2] = y_0[k] - w * y_1[k];
         w *= w_n;
+    }
+}
+
+
+// Based on code from Henry Warren Jr, Hacker's Delight, 2nd ed., 2013, p 138
+template <typename N>
+void increment_reversed_integer(N &x, N m)
+{
+    x ^= m;
+    if (x <= m)
+    {
+        do
+        {
+            m >>= 1;
+            x ^= m;
+        }
+        while (x < m);
+    }
+}
+
+
+// Presumably this can be done more elegantly (and efficiently) in combination 
+// with a permutation_iterator, etc.
+template <typename I>
+void bit_reversed_permute(I first, I last)
+{
+    typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<I>::difference_type N;
+    N const n = std::distance(first, last);
+    BOOST_ASSERT((n & (n - 1)) == 0); // This might not be a requirement.
+
+    N const m = n / 2;
+    N i_rev = m;
+    for (I i = first + 1; i != last - 1; i++)
+    {
+        if (i_rev > i - first)
+            std::iter_swap(i, first + i_rev);
+        increment_reversed_integer(i_rev, m);
+    }    
+}
+
+
+// Iterative FFT based on Cormen et al, Introduction to algorithms, 3rd ed., 2009
+template <typename I, typename J>
+void iterative_fft(I first, I last, J A)
+{
+    typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<J>::value_type complex_t;
+    typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<I>::difference_type N;
+    std::copy(first, last, A);
+    N const n = std::distance(first, last);
+    bit_reversed_permute(A, A + n);
+    complex_t const i(0, 1);
+    N log2_n = log2(n); // TODO: Err... C99?
+    for (N s = 1; s <= log2_n; s++)
+    {
+        N const m = N(1) << s;
+        complex_t const w_m = std::exp((2.0 * M_PI * i) / static_cast<double>(m));
+        for (N k = 0; k < n; k += m)
+        {
+            complex_t w = 1;
+            N const m_2 = m / 2;
+            for (N j = 0; j < m_2; j++)
+            {
+                complex_t const t = w * A[k + j + m_2];
+                A[k + j + m_2] = A[k + j] - t;
+                A[k + j] += t;
+                w *= w_m;
+            }
+        }
     }
 }
 
