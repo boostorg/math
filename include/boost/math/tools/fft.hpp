@@ -36,9 +36,13 @@ namespace detail
         stride_iterator(Iterator x, base_distance stride) : super_t(x), stride(stride) {}
         
         template <typename OtherIterator>
-        stride_iterator(stride_iterator<OtherIterator> const &x, typename enable_if_convertible<OtherIterator, Iterator>::type* = 0) : super_t(x.base())
+        stride_iterator(stride_iterator<OtherIterator> const &x, typename enable_if_convertible<OtherIterator, Iterator>::type* = 0) : super_t(x.base()), stride(x.stride)
         {}
         
+        /* This constructor is the main reason for hand-rolling a stride
+         * iterator: when striding a stride iterator, I want to simply multiply
+         * the stride values, not make nested stride iterators. 
+         */
         template <typename OtherIterator>
         stride_iterator(stride_iterator<OtherIterator> const &x, base_distance stride, typename enable_if_convertible<OtherIterator, Iterator>::type* = 0) : super_t(x.base()), stride(x.stride * stride)
         {}
