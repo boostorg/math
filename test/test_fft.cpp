@@ -41,15 +41,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_recursive_fft, T, signed_integral_test_types)
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_bit_reversed_permute, T, signed_integral_test_types)
-{
-    std::vector<int> a;
-    std::copy(make_counting_iterator(0), make_counting_iterator(16), std::back_inserter(a));
-    bit_reversed_permute(a.begin(), a.end());
-    boost::array<int, 16> b = {0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15};
-    BOOST_CHECK_EQUAL_COLLECTIONS(boost::begin(a), boost::end(a), boost::begin(b), boost::end(b));
-}
-
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_iterative_fft, T, signed_integral_test_types)
 {
     std::vector<double> a;

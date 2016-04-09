@@ -114,7 +114,7 @@ template <typename N>
 void increment_reversed_integer(N &x, N m)
 {
     x ^= m;
-    if (x <= m)
+    if (x < m)
     {
         do
         {
@@ -126,37 +126,24 @@ void increment_reversed_integer(N &x, N m)
 }
 
 
-// Presumably this can be done more elegantly (and efficiently) in combination 
-// with a permutation_iterator, etc.
-template <typename I>
-void bit_reversed_permute(I first, I last)
-{
-    typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<I>::difference_type N;
-    N const n = std::distance(first, last);
-    BOOST_ASSERT((n & (n - 1)) == 0); // This might not be a requirement.
-
-    N const m = n / 2;
-    N i_rev = m;
-    for (I i = first + 1; i != last - 1; i++)
-    {
-        if (i_rev > i - first)
-            std::iter_swap(i, first + i_rev);
-        increment_reversed_integer(i_rev, m);
-    }    
-}
-
-
 // Iterative FFT based on Cormen et al, Introduction to algorithms, 3rd ed., 2009
 template <typename I, typename J>
 void iterative_fft(I first, I last, J A)
 {
     typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<J>::value_type complex_t;
     typedef BOOST_DEDUCED_TYPENAME std::iterator_traits<I>::difference_type N;
-    std::copy(first, last, A);
+    // Copy and permute the input.
+    // TODO: Presumably can be done more elegantly with permutation_iterator.
     N const n = std::distance(first, last);
-    bit_reversed_permute(A, A + n);
+    N i_rev = 0;
+    for (; first != last; first++)
+    {
+        A[i_rev] = *first;
+        increment_reversed_integer(i_rev, n / 2);
+    }
+
     complex_t const i(0, 1);
-    N log2_n = log2(n); // TODO: Err... C99?
+    N const log2_n = log2(n); // TODO: Err... C99?
     for (N s = 1; s <= log2_n; s++)
     {
         N const m = N(1) << s;
@@ -168,6 +155,7 @@ void iterative_fft(I first, I last, J A)
             for (N j = 0; j < m_2; j++)
             {
                 complex_t const t = w * A[k + j + m_2];
+                // TODO: Assignment into arrays probably not good for performance.
                 A[k + j + m_2] = A[k + j] - t;
                 A[k + j] += t;
                 w *= w_m;
