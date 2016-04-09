@@ -44,16 +44,22 @@ namespace detail
         stride_iterator(stride_iterator<OtherIterator> const &x, base_distance stride, typename enable_if_convertible<OtherIterator, Iterator>::type* = 0) : super_t(x.base()), stride(x.stride * stride)
         {}
 
-    private:
-        void increment() { std::advance(this->base_reference(), stride); }
-        void decrement() { std::advance(this->base_reference(), -stride); }
-        
+        // TODO: These *should* be private but compilation fails unexpectedly.
         template <class OtherDerived, class OtherIterator, class V, class C, class R, class D>
         BOOST_DEDUCED_TYPENAME super_t::difference_type
         distance_to(iterator_adaptor<OtherDerived, OtherIterator, V, C, R, D> const& y) const
         {
             return (y.base() - this->base_reference()) / stride;
         }
+        
+        void advance(BOOST_DEDUCED_TYPENAME super_t::difference_type n)
+        {
+            std::advance(this->base_reference(), stride * n);
+        }
+    private:
+        void increment() { std::advance(this->base_reference(), stride); }
+        void decrement() { std::advance(this->base_reference(), -stride); }
+        
     };
     
     template <typename Iterator, typename N>
@@ -61,8 +67,6 @@ namespace detail
     {
         return stride_iterator<Iterator>(x, stride);
     }
-    
-    // BOOST_DEDUCED_TYPENAME disable_if_c<is_convertible<Iterator, stride_iterator<Iterator> >::value, stride_iterator<Iterator> >::type
     
     template <typename Iterator, typename N>
     stride_iterator<Iterator> make_stride_iterator(Iterator x, N stride)
