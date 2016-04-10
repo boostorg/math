@@ -118,14 +118,10 @@ template <typename N>
 void increment_reversed_integer(N &x, N m)
 {
     x ^= m;
-    if (x < m)
+    while (x < m)
     {
-        do
-        {
-            m >>= 1;
-            x ^= m;
-        }
-        while (x < m);
+        m >>= 1;
+        x ^= m;
     }
 }
 
