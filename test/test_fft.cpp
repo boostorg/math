@@ -32,13 +32,13 @@ typedef std::complex<double> complex_t;
 
 // TODO: Fixtures.
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_recursive_fft, T, signed_integral_test_types)
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_recursive_fft_radix2, T, signed_integral_test_types)
 {
     std::vector<double> a;
     std::copy(make_counting_iterator(0), make_counting_iterator(16), std::back_inserter(a));
     std::vector< std::complex<double> > result;
     result.resize(16);
-    recursive_fft(a.begin(), a.end(), result.begin());
+    recursive_fft_radix2(a.begin(), a.end(), result.begin());
     // TODO: Compare against benchmark result (GSL).
 }
 
@@ -67,11 +67,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_fft_agreement, T, signed_integral_test_types)
     recursive_result.resize(16);
     iterative_result.resize(16);
     iterative_fft_radix2(boost::begin(a), boost::end(a), boost::begin(iterative_result), identity<complex_t>());
-    recursive_fft(a.begin(), a.end(), recursive_result.begin());
+    recursive_fft_radix2(a.begin(), a.end(), recursive_result.begin());
     BOOST_CHECK_EQUAL_COLLECTIONS(iterative_result.begin(), iterative_result.end(), recursive_result.begin(), recursive_result.end());
 }
 
 
+/* Check that fft_inverse(fft_forward(x)) == x.
+ * Might fail due to numerical error.
+ */
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_fft_involution, T, signed_integral_test_types)
 {
     std::vector<double> a;

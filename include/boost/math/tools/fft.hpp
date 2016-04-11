@@ -93,7 +93,7 @@ namespace detail
 
 // Recursive FFT based on Cormen et al, Introduction to algorithms, 3rd ed., 2009
 template <typename I, typename J>
-void recursive_fft(I first, I last, J y)
+void recursive_fft_radix2(I first, I last, J y)
 {
     using namespace boost::math::tools::detail;
     
@@ -113,8 +113,8 @@ void recursive_fft(I first, I last, J y)
     y_0.resize(n / 2);
     y_1.resize(n / 2);
     
-    recursive_fft(make_stride_iterator(first, 2), make_stride_iterator(last, 2), y_0.begin());
-    recursive_fft(make_stride_iterator(first + 1, 2), make_stride_iterator(last + 1, 2), y_1.begin());
+    recursive_fft_radix2(make_stride_iterator(first, 2), make_stride_iterator(last, 2), y_0.begin());
+    recursive_fft_radix2(make_stride_iterator(first + 1, 2), make_stride_iterator(last + 1, 2), y_1.begin());
 
     for (N k = 0; k < n / 2; k++)
     {
