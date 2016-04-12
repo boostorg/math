@@ -47,6 +47,26 @@ boost::array<int, 3> const d2 = {{-6, 0, 9}};
 boost::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
 
 
+BOOST_AUTO_TEST_CASE( test_construction )
+{
+    polynomial<double> const a(d3a.begin(), d3a.end());
+    polynomial<double> const b(d3a.begin(), 3);
+    BOOST_CHECK_EQUAL(a, b);
+}
+
+
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+BOOST_AUTO_TEST_CASE( test_initializer_list_construction )
+{
+    polynomial<double> a(begin(d3a), end(d3a));
+    polynomial<double> b = {10, -6, -4, 3};
+    polynomial<double> c{{10, -6, -4, 3}};
+    BOOST_CHECK_EQUAL(a, b);
+    BOOST_CHECK_EQUAL(b, c);
+}
+#endif
+
+
 BOOST_AUTO_TEST_CASE( test_degree )
 {
     polynomial<double> const zero = zero_element(std::multiplies< polynomial<double> >());

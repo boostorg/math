@@ -25,6 +25,9 @@
 #include <vector>
 #include <ostream>
 #include <algorithm>
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+#include <initializer_list>
+#endif
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -125,11 +128,32 @@ BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_integer, void >::
 division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
 {
     q[k] = u[n + k] / v[n];
-    for (std::size_t j = n + k; j > k;)
+    for (N j = n + k; j > k;)
     {
         j--;
         u[j] -= q[k] * v[j - k];
     }
+}
+
+template <class T, class N>
+T integer_power(T t, N n)
+{
+   switch(n)
+   {
+   case 0:
+      return static_cast<T>(1u);
+   case 1:
+      return t;
+   case 2:
+      return t * t;
+   case 3:
+      return t * t * t;
+   }
+   T result = integer_power(t, n / 2);
+   result *= result;
+   if(n & 1)
+      result *= t;
+   return result;
 }
 
 
@@ -146,9 +170,8 @@ template <typename T, typename N>
 BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<T>::is_integer, void >::type
 division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T>& v, N n, N k)
 {
-    using std::pow;
-    q[k] = u[n + k] * static_cast<T>(pow(v[n], k));
-    for (std::size_t j = n + k; j > 0;)
+    q[k] = u[n + k] * integer_power(v[n], k);
+    for (N j = n + k; j > 0;)
     {
         j--;
         u[j] = v[n] * u[j] - (j < k ? T(0) : u[n + k] * v[j - k]);
@@ -171,8 +194,10 @@ division(polynomial<T> u, const polynomial<T>& v)
     BOOST_ASSERT(v != zero_element(std::multiplies< polynomial<T> >()));
     BOOST_ASSERT(u != zero_element(std::multiplies< polynomial<T> >()));
 
-    std::size_t const m = u.size() - 1, n = v.size() - 1;
-    std::size_t k = m - n;
+    typedef typename polynomial<T>::size_type N;
+    
+    N const m = u.size() - 1, n = v.size() - 1;
+    N k = m - n;
     polynomial<T> q;
     q.data().resize(m - n + 1);
 
@@ -276,6 +301,20 @@ public:
          m_data.push_back(boost::math::tools::real_cast<T>(p[i]));
       }
    }
+   
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+    polynomial(std::initializer_list<T> l) : polynomial(std::begin(l), std::end(l))
+    {
+    }
+    
+    polynomial&
+    operator=(std::initializer_list<T> l)
+    {
+        m_data.assign(std::begin(l), std::end(l));
+        return *this;
+    }
+#endif
+
 
    // access:
    size_type size()const { return m_data.size(); }
