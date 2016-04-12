@@ -41,6 +41,7 @@ namespace detail
     template <typename SteinDomain>
     SteinDomain Stein_gcd(SteinDomain m, SteinDomain n)
     {
+        using std::swap;
         BOOST_ASSERT(m >= 0);
         BOOST_ASSERT(n >= 0);
         if (m == SteinDomain(0))
@@ -84,6 +85,7 @@ namespace detail
     template <typename EuclideanDomain>
     inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b)
     {
+        using std::swap;
         while (b != EuclideanDomain(0))
         {
             a %= b;
