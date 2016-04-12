@@ -7,10 +7,6 @@
 #  pragma warning (disable : 4224)
 #endif
 
-#include "../../test/table_type.hpp"
-#include "table_helper.hpp"
-#include "performance.hpp"
-
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/math/special_functions/prime.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
@@ -26,6 +22,10 @@
 #include <vector>
 #include <functional>
 #include "fibonacci.hpp"
+#include "../../test/table_type.hpp"
+#include "table_helper.hpp"
+#include "performance.hpp"
+
 
 using namespace std;
 
