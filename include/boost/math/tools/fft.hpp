@@ -147,8 +147,7 @@ void iterative_fft_radix2(I first, I last, J A, R1 sign)
     // Copy and permute the input.
     // TODO: Presumably can be done more elegantly with permutation_iterator.
     N const n = std::distance(first, last);
-    N i_rev = 0;
-    for (; first != last; first++)
+    for (N i_rev = 0; first != last; first++)
     {
         A[i_rev] = *first;
         increment_reversed_integer(i_rev, n / 2);
