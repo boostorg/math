@@ -457,6 +457,9 @@ lcm
  *
  * Knuth counts down from n to zero but we naturally go from first to last.
  * 
+ * Partly by quirk, partly by design, this algorithm is defined for n = 1, 
+ * because the gcd of x is x. It is not defined for n = 0.
+ * 
  * @tparam  I   Input iterator.
  */
 template <typename I>
