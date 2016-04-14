@@ -450,6 +450,22 @@ lcm
 }
 
 
+template <typename I>
+typename std::iterator_traits<I>::value_type
+gcd_n(I first, I last)
+{
+    BOOST_ASSERT(first != last);
+    typedef typename std::iterator_traits<I>::value_type T;
+    
+    T d = *first++;
+    while (d != 1 && first != last)
+    {
+        d = gcd(d, *first);
+        first++;
+    }
+    return d;
+}
+
 }  // namespace math
 }  // namespace boost
 

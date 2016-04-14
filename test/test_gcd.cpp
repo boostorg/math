@@ -46,3 +46,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_unsigned, T, unsigned_integral_test_types)
     a = boost::math::gcd(static_cast<T>(1836311903), static_cast<T>(2971215073)); // 46th and 47th Fibonacci numbers. 47th is prime.
     BOOST_CHECK_EQUAL(a, static_cast<T>(1));
 }
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_n, T, unsigned_integral_test_types)
+{
+    std::vector<T> a;
+    T x = boost::math::gcd_n(a.begin(), a.end());
+}
