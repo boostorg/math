@@ -21,6 +21,7 @@
 #include <boost/limits.hpp>  // for std::numeric_limits
 #include <climits>           // for CHAR_MIN
 #include <boost/detail/workaround.hpp>
+#include <iterator>
 
 #ifdef BOOST_MSVC
 #pragma warning(push)
@@ -450,6 +451,14 @@ lcm
 }
 
 
+/**
+ * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
+ * Chapter 4.5.2, Algorithm C: Greatest common divisor of n integers.
+ *
+ * Knuth counts down from n to zero but we naturally go from first to last.
+ * 
+ * @tparam  I   Input iterator.
+ */
 template <typename I>
 typename std::iterator_traits<I>::value_type
 gcd_n(I first, I last)
