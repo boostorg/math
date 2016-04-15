@@ -610,7 +610,17 @@ polynomial<T> operator - (polynomial<T> a)
 }
 
 
-// Knuth, 4.6.1
+/* From Knuth, 4.6.1:
+ * 
+ * We may write any nonzero polynomial u(x) as
+ *
+ *      u(x) = cont(u) · pp(u(x))
+ *
+ * where cont(u), the content of u, is an element of S, and pp(u(x)), the primitive
+ * part of u(x), is a primitive polynomial over S. 
+ * When u(x) = 0, it is convenient to define cont(u) = pp(u(x)) = O.
+ */
+
 template <class T>
 T content(polynomial<T> const &x)
 {
@@ -622,7 +632,8 @@ T content(polynomial<T> const &x)
 template <class T>
 polynomial<T> primitive_part(polynomial<T> const &x)
 {
-    return x / content(x);
+    polynomial<T> const zero = zero_element(std::multiplies< polynomial<T> >());
+    return x == zero ? zero : x / content(x);
 }
 
 template <class charT, class traits, class T>
