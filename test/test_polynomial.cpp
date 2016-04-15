@@ -216,3 +216,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_non_integral_arithmetic_relations, T, non_int
     BOOST_CHECK_EQUAL(a * T(0.5), a / T(2));
 }
 
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
+{
+    polynomial<T> const a(d8b.begin(), d8b.end());
+    BOOST_CHECK_EQUAL(a, content(a) * primitive_part(a));
+}

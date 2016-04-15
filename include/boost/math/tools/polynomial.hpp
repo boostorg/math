@@ -21,6 +21,7 @@
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/operators.hpp>
+#include <boost/math/common_factor_rt.hpp>
 
 #include <vector>
 #include <ostream>
@@ -606,6 +607,22 @@ polynomial<T> operator - (polynomial<T> a)
 {
     std::transform(a.data().begin(), a.data().end(), a.data().begin(), std::negate<T>());
     return a;
+}
+
+
+// Knuth, 4.6.1
+template <class T>
+T content(polynomial<T> const &x)
+{
+    polynomial<T> const zero = zero_element(std::multiplies< polynomial<T> >());
+    return x == zero ? T(0) : gcd_n(x.data().begin(), x.data().end());
+}
+
+// Knuth, 4.6.1
+template <class T>
+polynomial<T> primitive_part(polynomial<T> const &x)
+{
+    return x / content(x);
 }
 
 template <class charT, class traits, class T>
