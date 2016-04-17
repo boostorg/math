@@ -118,8 +118,9 @@ void recursive_fft_radix2(I first, I last, J y)
 
     for (N k = 0; k < n / 2; k++)
     {
-        y[k] = y_0[k] + w * y_1[k];
-        y[k + n / 2] = y_0[k] - w * y_1[k];
+        complex_t const t = w * y_1[k];
+        y[k] = y_0[k] + t;
+        y[k + n / 2] = y_0[k] - t;
         w *= w_n;
     }
 }
