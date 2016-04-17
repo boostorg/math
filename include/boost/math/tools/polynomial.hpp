@@ -457,6 +457,11 @@ public:
        m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
    }
 
+   operator bool() const
+   {
+       return !m_data.empty();
+   }
+   
 private:
     template <class U, class R1, class R2>
     polynomial& addition(const U& value, R1 sign, R2 op)
