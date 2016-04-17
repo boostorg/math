@@ -153,7 +153,9 @@ BOOST_AUTO_TEST_CASE( test_gcd )
 }
 
 // Sanity checks to make sure I didn't break it.
-typedef boost::mpl::list<int, long, boost::multiprecision::cpp_int> integral_test_types;
+typedef boost::mpl::list<short, int, long> sp_integral_test_types;
+typedef boost::mpl::list<boost::multiprecision::cpp_int> mp_integral_test_types;
+typedef boost::mpl::joint_view<sp_integral_test_types, mp_integral_test_types> integral_test_types;
 typedef boost::mpl::list<double, boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50> non_integral_test_types;
 typedef boost::mpl::joint_view<integral_test_types, non_integral_test_types> all_test_types;
 
@@ -220,4 +222,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
 {
     polynomial<T> const a(d8b.begin(), d8b.end());
     BOOST_CHECK_EQUAL(a, content(a) * primitive_part(a));
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_ufd, T, integral_test_types)
+{
+    polynomial<T> const a(d8.begin(), d8.end());
+    polynomial<T> const b(d6.begin(), d6.end());
+    polynomial<T> d = gcd(a, b);
+    BOOST_CHECK_EQUAL(d, polynomial<T>(1));
 }

@@ -641,6 +641,61 @@ polynomial<T> primitive_part(polynomial<T> const &x)
     return x == zero ? zero : x / content(x);
 }
 
+
+// Trivial but useful convenience function defined by Knuth.
+template <class T>
+T leading_coefficient(polynomial<T> const &x)
+{
+    return x.data().back();
+}
+
+/* 4.6.1C: Greatest common divisor over a unique factorization domain.
+ * 
+ */
+template <class T>
+typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
+gcd(polynomial<T> u, polynomial<T> v)
+{
+    BOOST_ASSERT(u);
+    BOOST_ASSERT(v);
+    typedef typename polynomial<T>::size_type N;
+    using boost::math::gcd;
+    
+    // Reduce to primitive.
+    T const u_cont = content(u), v_cont = content(v);
+    T const d = gcd(u_cont, v_cont);
+    u /= u_cont;
+    v /= v_cont;
+    T g = 1, h = 1;
+    polynomial<T> r;
+    while (true)
+    {
+        // Pseudo-division.
+        N const delta = u.degree() - v.degree();
+        r = u % v;
+        if (!r)
+            goto gcd_end;
+        if (r.degree() == 0)
+        {
+            v = polynomial<T>(T(1));
+            goto gcd_end;
+        }
+        // Adjust remainder.
+        u = v;
+        v = r / (g * detail::integer_power(h, delta));
+        g = leading_coefficient(u);
+        T const tmp = detail::integer_power(g, delta);
+        if (delta <= 1)
+            h = tmp * detail::integer_power(h, N(1) - delta);
+        else
+            h = tmp / detail::integer_power(h, delta - N(1));
+    }
+    // Attach the content.
+gcd_end:
+    return d * primitive_part(v);
+}
+
+
 template <class charT, class traits, class T>
 inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly)
 {
