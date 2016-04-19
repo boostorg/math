@@ -649,23 +649,31 @@ T leading_coefficient(polynomial<T> const &x)
     return x.data().back();
 }
 
+namespace detail
+{
+    template <class T>
+    T reduce_to_primitive(polynomial<T> &u, polynomial<T> &v)
+    {
+        T const u_cont = content(u), v_cont = content(v);
+        u /= u_cont;
+        v /= v_cont;
+        return gcd(u_cont, v_cont);
+    }
+}
+
 /* 4.6.1C: Greatest common divisor over a unique factorization domain.
  * 
  */
 template <class T>
 typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
-gcd(polynomial<T> u, polynomial<T> v)
+gcd_ufd(polynomial<T> u, polynomial<T> v)
 {
     BOOST_ASSERT(u);
     BOOST_ASSERT(v);
     typedef typename polynomial<T>::size_type N;
     using boost::math::gcd;
     
-    // Reduce to primitive.
-    T const u_cont = content(u), v_cont = content(v);
-    T const d = gcd(u_cont, v_cont);
-    u /= u_cont;
-    v /= v_cont;
+    T const d = detail::reduce_to_primitive(u, v);
     T g = 1, h = 1;
     polynomial<T> r;
     while (true)
@@ -693,6 +701,48 @@ gcd(polynomial<T> u, polynomial<T> v)
     // Attach the content.
 gcd_end:
     return d * primitive_part(v);
+}
+
+
+// Knuth, 4.6.1E
+template <class T>
+typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
+generalized_gcd(polynomial<T> u, polynomial<T> v)
+{
+    BOOST_ASSERT(u);
+    BOOST_ASSERT(v);
+    using boost::math::gcd;
+
+    // Reduce to primitive.
+    T const d = detail::reduce_to_primitive(u, v);
+
+    polynomial<T> r;
+    while (true)
+    {
+        // Pseudo-division.
+        r = u % v;
+        if (!r)
+            goto gcd_end;
+        if (r.degree() == 0)
+        {
+            v = polynomial<T>(T(1));
+            goto gcd_end;
+        }
+        // Make remainder primitive.
+        u = v;
+        v = primitive_part(r);
+    }
+
+gcd_end:
+    return d * v;
+}
+
+
+template <class T>
+typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
+gcd(polynomial<T> const &u, polynomial<T> const &v)
+{
+    return gcd_ufd(u, v);
 }
 
 

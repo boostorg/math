@@ -228,15 +228,19 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_ufd, T, integral_test_types)
 {
     polynomial<T> const a(d8.begin(), d8.end());
     polynomial<T> const b(d6.begin(), d6.end());
-    polynomial<T> d = gcd(a, b);
+    polynomial<T> d = gcd_ufd(a, b);
     BOOST_CHECK_EQUAL(d, polynomial<T>(1));
-
+    d = generalized_gcd(a, b);
+    BOOST_CHECK_EQUAL(d, polynomial<T>(1));
+    
     boost::array<T, 5> const i4a = {{105, 278, -88, -56, 16}};
     boost::array<T, 5> const i4b = {{70, 232, -44, -64, 16}};
     boost::array<T, 3> const i2 = {{-35, 24, -4}};
     polynomial<T> const u(i4a.begin(), i4a.end());
     polynomial<T> const v(i4b.begin(), i4b.end());
     polynomial<T> const w(i2.begin(), i2.end());
-    d = gcd(u, v);
-    BOOST_CHECK_EQUAL(w, d);
+    d = gcd_ufd(u, v);
+    BOOST_CHECK_EQUAL(d, w);
+    polynomial<T> d_g = generalized_gcd(u, v);
+    BOOST_CHECK_EQUAL(d, w);
 }
