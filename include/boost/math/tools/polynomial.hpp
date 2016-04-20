@@ -16,12 +16,14 @@
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/function.hpp>
+#include <boost/integer.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/special_functions/binomial.hpp>
-#include <boost/operators.hpp>
 #include <boost/math/common_factor_rt.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/operators.hpp>
 
 #include <vector>
 #include <ostream>
@@ -663,19 +665,33 @@ namespace detail
 
 /* 4.6.1C: Greatest common divisor over a unique factorization domain.
  * 
+ * Although step C3 keeps the coefficients to a "reasonable" size, they are
+ * still potentially several binary orders of magnitude larger than the inputs.
  */
 template <class T>
 typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
-gcd_ufd(polynomial<T> u, polynomial<T> v)
+gcd_ufd(polynomial<T> const &a, polynomial<T> const &b)
 {
-    BOOST_ASSERT(u);
-    BOOST_ASSERT(v);
+    BOOST_ASSERT(a);
+    BOOST_ASSERT(b);
     typedef typename polynomial<T>::size_type N;
+    // If T is a POD, double the output size, otherwise assume it is multi-prec.
+    // This precludes the use of long as a coefficient type in combination with
+    // gcd.
+    /*
+    typedef typename mpl::if_<is_pod<T>,
+                            typename mpl::if_<is_unsigned<T>, 
+                                    typename uint_t<sizeof(T) * 16>::fast, 
+                                    typename int_t<sizeof(T) * 16>::fast >::type,
+                            T>::type U;
+                            */
+    typedef T U;
     using boost::math::gcd;
     
-    T const d = detail::reduce_to_primitive(u, v);
-    T g = 1, h = 1;
-    polynomial<T> r;
+    polynomial<U> u(a), v(b);
+    U const d = detail::reduce_to_primitive(u, v);
+    U g = 1, h = 1;
+    polynomial<U> r;
     while (true)
     {
         // Pseudo-division.
@@ -685,7 +701,7 @@ gcd_ufd(polynomial<T> u, polynomial<T> v)
             goto gcd_end;
         if (r.degree() == 0)
         {
-            v = polynomial<T>(T(1));
+            v = polynomial<U>(U(1));
             goto gcd_end;
         }
         // Adjust remainder.
@@ -702,41 +718,6 @@ gcd_ufd(polynomial<T> u, polynomial<T> v)
 gcd_end:
     return d * primitive_part(v);
 }
-
-
-// Knuth, 4.6.1E
-template <class T>
-typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
-generalized_gcd(polynomial<T> u, polynomial<T> v)
-{
-    BOOST_ASSERT(u);
-    BOOST_ASSERT(v);
-    using boost::math::gcd;
-
-    // Reduce to primitive.
-    T const d = detail::reduce_to_primitive(u, v);
-
-    polynomial<T> r;
-    while (true)
-    {
-        // Pseudo-division.
-        r = u % v;
-        if (!r)
-            goto gcd_end;
-        if (r.degree() == 0)
-        {
-            v = polynomial<T>(T(1));
-            goto gcd_end;
-        }
-        // Make remainder primitive.
-        u = v;
-        v = primitive_part(r);
-    }
-
-gcd_end:
-    return d * v;
-}
-
 
 template <class T>
 typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
