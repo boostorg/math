@@ -698,11 +698,11 @@ gcd_ufd(polynomial<T> const &a, polynomial<T> const &b)
         N const delta = u.degree() - v.degree();
         r = u % v;
         if (!r)
-            goto gcd_end;
+            return d * primitive_part(v); // Attach the content.
         if (r.degree() == 0)
         {
             v = polynomial<U>(U(1));
-            goto gcd_end;
+            return d * primitive_part(v); // Attach the content.
         }
         // Adjust remainder.
         u = v;
@@ -714,9 +714,6 @@ gcd_ufd(polynomial<T> const &a, polynomial<T> const &b)
         else
             h = tmp / detail::integer_power(h, delta - N(1));
     }
-    // Attach the content.
-gcd_end:
-    return d * primitive_part(v);
 }
 
 template <class T>
