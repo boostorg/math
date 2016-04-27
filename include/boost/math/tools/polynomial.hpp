@@ -644,7 +644,7 @@ polynomial<T> primitive_part(polynomial<T> const &x)
 }
 
 
-// Trivial but useful convenience function defined by Knuth.
+// Trivial but useful convenience function referred to simply as l() in Knuth.
 template <class T>
 T leading_coefficient(polynomial<T> const &x)
 {
@@ -653,6 +653,9 @@ T leading_coefficient(polynomial<T> const &x)
 
 namespace detail
 {
+    /* Reduce u and v to their primitive parts and return the gcd of their 
+     * contents.
+     */
     template <class T>
     T reduce_to_primitive(polynomial<T> &u, polynomial<T> &v)
     {
@@ -676,8 +679,6 @@ gcd_ufd(polynomial<T> const &a, polynomial<T> const &b)
     BOOST_ASSERT(b);
     typedef typename polynomial<T>::size_type N;
     // If T is a POD, double the output size, otherwise assume it is multi-prec.
-    // This precludes the use of long as a coefficient type in combination with
-    // gcd.
     /*
     typedef typename mpl::if_<is_pod<T>,
                             typename mpl::if_<is_unsigned<T>, 
@@ -686,7 +687,6 @@ gcd_ufd(polynomial<T> const &a, polynomial<T> const &b)
                             T>::type U;
                             */
     typedef T U;
-    using boost::math::gcd;
     
     polynomial<U> u(a), v(b);
     U const d = detail::reduce_to_primitive(u, v);
