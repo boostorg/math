@@ -695,7 +695,6 @@ gcd_ufd(polynomial<T> const &a, polynomial<T> const &b)
     while (true)
     {
         // Pseudo-division.
-        N const delta = u.degree() - v.degree();
         r = u % v;
         if (!r)
             return d * primitive_part(v); // Attach the content.
@@ -704,6 +703,7 @@ gcd_ufd(polynomial<T> const &a, polynomial<T> const &b)
             v = polynomial<U>(U(1));
             return d * primitive_part(v); // Attach the content.
         }
+        N const delta = u.degree() - v.degree();
         // Adjust remainder.
         u = v;
         v = r / (g * detail::integer_power(h, delta));
