@@ -409,7 +409,7 @@ public:
        return *this;
    }
    template <class U>
-   polynomial& operator *=(const polynomial<U>& value)
+   polynomial& operator *=(const polynomial<U> value)
    {
       // TODO: FIXME: use O(N log(N)) algorithm!!!
       polynomial const zero = zero_element(std::multiplies<polynomial>());
@@ -642,6 +642,21 @@ template <class T>
 bool even(polynomial<T> const &a)
 {
     return !odd(a);
+}
+
+template <class T>
+polynomial<T> pow(polynomial<T> base, int exp)
+{
+    BOOST_ASSERT(exp >= 0);
+    polynomial<T> result(T(1));
+    if (exp & 1) result = base;
+    /* "Exponentiation by squaring" */
+    while (exp >>= 1)
+    {
+        base *= base;
+        if (exp & 1) result *= base;
+    }
+    return result;
 }
 
 template <class charT, class traits, class T>
