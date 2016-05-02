@@ -647,7 +647,16 @@ bool even(polynomial<T> const &a)
 template <class T>
 polynomial<T> pow(polynomial<T> base, int exp)
 {
-    BOOST_ASSERT(exp >= 0);
+    if (exp < 0)
+       throw std::domain_error("Negative powers are not supported for polynomials.");
+    /* Consider:
+       if (base.size() == 1)
+        {
+            using std::pow;
+            return polynomial<T>(T(pow(base[0], exp))); // Use ADL to find the right pow
+        }
+        But this wouldn't work for integral T
+     */
     polynomial<T> result(T(1));
     if (exp & 1) result = base;
     /* "Exponentiation by squaring" */
