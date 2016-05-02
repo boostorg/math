@@ -408,7 +408,7 @@ public:
        return *this;
    }
    template <class U>
-   polynomial& operator *=(const polynomial<U> value)
+   polynomial& operator *=(const polynomial<U>& value)
    {
       // TODO: FIXME: use O(N log(N)) algorithm!!!
       polynomial const zero = zero_element(std::multiplies<polynomial>());
@@ -417,21 +417,15 @@ public:
           *this = zero;
           return *this;
       }
+      int i = value.size() - 1;
+      if (!i)
+          return multiplication(value[0]);
       polynomial base(*this);
-      this->multiplication(value[0]);
-      for(size_type i = 1; i < value.size(); ++i)
-      {
-         polynomial t(base);
-         t.multiplication(value[i]);
-         size_type s = size() - i;
-         for(size_type j = 0; j < s; ++j)
-         {
-            m_data[i+j] += t[j];
-         }
-         for(size_type j = s; j < t.size(); ++j)
-            m_data.push_back(t[j]);
-      }
-      return *this;
+      m_data.resize(size() + i);
+      for(; i >= 0; --i)
+         for(int j = base.size() - 1; j >= 0; --j)
+            m_data[i+j] += base[j] * value[i];
+      return subtraction(base);
    }
 
    template <typename U>
