@@ -409,7 +409,7 @@ public:
        return *this;
    }
    template <class U>
-   polynomial& operator *=(const polynomial<U> value)
+   polynomial& operator *=(const polynomial<U>& value)
    {
       // TODO: FIXME: use O(N log(N)) algorithm!!!
       polynomial const zero = zero_element(std::multiplies<polynomial>());
