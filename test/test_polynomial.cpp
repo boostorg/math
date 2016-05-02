@@ -216,3 +216,20 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_non_integral_arithmetic_relations, T, non_int
     BOOST_CHECK_EQUAL(a * T(0.5), a / T(2));
 }
 
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_self_multiply_assign, T, all_test_types )
+{
+    polynomial<T> a(d3a.begin(), d3a.end());
+    polynomial<T> const b(a);
+    boost::array<double, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
+    polynomial<T> const asq(d3a_sq.begin(), d3a_sq.end());
+
+    a *= a;
+
+    BOOST_CHECK_EQUAL(a, b*b);
+    BOOST_CHECK_EQUAL(a, asq);
+
+    a *= a;
+
+    BOOST_CHECK_EQUAL(a, b*b*b*b);
+}
+
