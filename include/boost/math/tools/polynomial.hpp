@@ -417,15 +417,12 @@ public:
           *this = zero;
           return *this;
       }
-      int i = value.size() - 1;
-      if (!i)
-          return multiplication(value[0]);
-      polynomial base(*this);
-      m_data.resize(size() + i);
-      for(; i >= 0; --i)
-         for(int j = base.size() - 1; j >= 0; --j)
-            m_data[i+j] += base[j] * value[i];
-      return subtraction(base);
+      std::vector<T> prod(size() + value.size() - 1);
+      for (size_type i = 0; i < value.size(); ++i)
+         for (size_type j = 0; j < size(); ++j)
+            prod[i+j] += m_data[j] * value[i];
+      m_data.swap(prod);
+      return *this;
    }
 
    template <typename U>
