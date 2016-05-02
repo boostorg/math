@@ -311,6 +311,7 @@ public:
     operator=(std::initializer_list<T> l)
     {
         m_data.assign(std::begin(l), std::end(l));
+        normalize();
         return *this;
     }
 #endif
