@@ -417,7 +417,7 @@ public:
           *this = zero;
           return *this;
       }
-      std::vector<T> prod(size() + value.size() - 1);
+      std::vector<T> prod(size() + value.size() - 1, T(0));
       for (size_type i = 0; i < value.size(); ++i)
          for (size_type j = 0; j < size(); ++j)
             prod[i+j] += m_data[j] * value[i];
