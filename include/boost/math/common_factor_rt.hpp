@@ -20,7 +20,9 @@
 #include <boost/config.hpp>  // for BOOST_NESTED_TEMPLATE, etc.
 #include <boost/limits.hpp>  // for std::numeric_limits
 #include <climits>           // for CHAR_MIN
+#include <iterator>
 #include <boost/detail/workaround.hpp>
+#include <boost/math/algebraic_traits.hpp>
 
 #ifdef BOOST_MSVC
 #pragma warning(push)
@@ -433,6 +435,31 @@ gcd
     gcd_evaluator<IntegerType>  solver;
 
     return solver( a, b );
+}
+
+template <typename T>
+struct algebraic_traits<gcd_evaluator, T>
+{
+    BOOST_STATIC_CONSTEXPR
+    T zero_element() { return T(1); }
+    
+    BOOST_STATIC_CONSTEXPR
+    bool is_commutative() { return true; }
+    
+    BOOST_STATIC_CONSTEXPR
+    bool is_associative() { return true; }
+};
+
+
+template <typename I>
+std::pair<typename std::iterator_traits<I>::value_type, I>
+gcd_range(I first, I last)
+{
+    BOOST_ASSERT(first != last);
+    typedef typename std::iterator_traits<I>::value_type T;
+    I second = first;
+    second++;
+    return accumulate_if(second, last, *first, gcd_evaluator<T>());
 }
 
 template < typename IntegerType >

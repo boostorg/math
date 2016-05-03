@@ -15,6 +15,9 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+
+#include <boost/math/algorithm.hpp>
+
 #include <utility>
 
 
@@ -45,4 +48,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_unsigned, T, unsigned_integral_test_types)
     BOOST_CHECK_EQUAL(a, static_cast<T>(34));
     a = boost::math::gcd(static_cast<T>(1836311903), static_cast<T>(2971215073)); // 46th and 47th Fibonacci numbers. 47th is prime.
     BOOST_CHECK_EQUAL(a, static_cast<T>(1));
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_range, T, unsigned_integral_test_types)
+{
+    boost::array<T, 7> const foo = {32, 24, 17, 19, 23, 33, 25};
+    std::pair<T, T const *> bar = boost::math::gcd_range(foo.begin(), foo.end());
+    BOOST_CHECK_EQUAL(bar.first, T(1));
+    BOOST_CHECK_EQUAL(bar.second, foo.begin() + 3);
 }
