@@ -93,6 +93,8 @@ struct algebraic_traits_commutativity<std::plus, std::string>
 template <typename T>
 struct algebraic_traits< std::multiplies, T >
 {
+    BOOST_STATIC_CONSTANT(bool, is_specialized = true);
+    
     BOOST_STATIC_CONSTEXPR
     T zero_element() { return T(0); }
     
@@ -107,9 +109,12 @@ struct algebraic_traits< std::multiplies, T >
 
 //  plus
 
+// The inefficient way to multiply inherit?
 template <typename T>
 struct algebraic_traits<std::plus, T> : public algebraic_traits_commutativity<std::plus, T>, public algebraic_traits_associativity<std::plus, T>
 {
+    BOOST_STATIC_CONSTANT(bool, is_specialized = true);
+
     BOOST_STATIC_CONSTEXPR
     T identity_element() { return T(0); }
 };
@@ -118,6 +123,8 @@ struct algebraic_traits<std::plus, T> : public algebraic_traits_commutativity<st
 template <>
 struct algebraic_traits<std::plus, std::string>
 {
+    BOOST_STATIC_CONSTANT(bool, is_specialized = true);
+
     // TODO: Can be constexpr? String literal in C++14?
     BOOST_STATIC_CONSTEXPR
     std::string identity_element() { return std::string(); }
