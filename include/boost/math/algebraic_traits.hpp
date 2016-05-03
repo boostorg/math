@@ -19,6 +19,7 @@
 #include <string>
 
 namespace boost {
+namespace math {
 namespace detail {
     
 struct algebraic_traits_base
@@ -62,12 +63,6 @@ typename enable_if< typename mpl::or_<is_floating_point<T>, mpl::bool_<!std::num
 
 
 // commutativity
-
-template <template <typename> class BinaryOperation, typename T, typename Enable = void>
-struct algebraic_traits : public detail::algebraic_traits_base
-{
-    // To provide default implementations or not?
-};
 
 
 // associativity
@@ -123,7 +118,7 @@ struct algebraic_traits<std::plus, T> : public algebraic_traits_commutativity<st
 template <>
 struct algebraic_traits<std::plus, std::string>
 {
-    // TODO: Can be constexpr?
+    // TODO: Can be constexpr? String literal in C++14?
     BOOST_STATIC_CONSTEXPR
     std::string identity_element() { return std::string(); }
     
@@ -135,7 +130,7 @@ struct algebraic_traits<std::plus, std::string>
 };
 
 
-
+} // math
 } // boost
 
 #endif
