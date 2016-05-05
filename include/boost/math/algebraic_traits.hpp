@@ -18,6 +18,43 @@
 #include <functional>
 #include <string>
 
+/*                                      PURPOSE
+ * 
+ * A facility to provide convenient access to algebraic traits of types.
+ * 
+ * For example:
+ * 
+ *      algebraic_traits<std::multiplies, int>::zero_element() -> 0
+ *      algebraic_traits<std::multiplies, int>::identity_element() -> 1
+ *      algebraic_traits<std::plus, std::string>::identity_element() -> ""
+ * 
+ *      algebraic_traits<std::multiplies, int>::is_associative() -> true
+ *      algebraic_traits<std::multiplies, double>::is_associative() -> false
+ *      algebraic_traits<std::plus, std::string>::is_associative() -> true
+ *      algebraic_traits<std::multiplies, double>::is_commutative() -> true
+ *      algebraic_traits<std::plus, std::string>::is_commutative() -> false
+ * 
+ * Or alternatively:
+ * 
+ *      std::multiplies<int> op1;
+ *      std::multiplies<double> op2;
+ *      std::plus<std::string> op3;
+ *      algebraic_traits::zero_element(op1) -> 0
+ *      algebraic_traits::zero_element(op2) -> 0.0
+ *      algebraic_traits::zero_element(op3) -> ""
+ * 
+ * 
+ * Properties to consider:
+ * 
+ * Medial
+ * Distributive
+ * Commutative
+ * Idempotent
+ * Associative
+ * Unital
+ * Cancellative
+ */
+
 namespace boost {
 namespace math {
 namespace detail {
