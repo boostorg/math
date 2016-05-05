@@ -73,9 +73,24 @@ namespace detail
 // in other words a warning suppression mechanism:
 //
 template <class Formatter, class Group>
-inline std::string do_format(Formatter f, const Group& g)
+inline std::string do_format(Formatter& f, const Group& g)
 {
    return (f % g).str();
+}
+
+template <class T>
+BOOST_DEDUCED_TYPENAME disable_if_c<std::numeric_limits<T>::is_specialized, std::string >::type
+prec_format(boost::format& fmt, const T& val)
+{
+    return (fmt % val).str();
+}
+
+template <class T>
+BOOST_DEDUCED_TYPENAME enable_if_c<std::numeric_limits<T>::is_specialized, std::string >::type
+prec_format(boost::format& fmt, const T& val)
+{
+   int prec = 2 + (boost::math::policies::digits<T, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
+   return do_format(fmt, boost::io::group(std::setprecision(prec), val));
 }
 
 template <class T>
@@ -103,13 +118,17 @@ template <class E, class T>
 void raise_error(const char* function, const char* message)
 {
   if(function == 0)
-       function = "Unknown function operating on type %1%";
+     function = "Unknown function operating on type %1%";
   if(message == 0)
-       message = "Cause unknown";
+     message = "Cause unknown";
 
   std::string msg("Error in function ");
 #ifndef BOOST_NO_RTTI
-  msg += (boost::format(function) % boost::math::policies::detail::name_of<T>()).str();
+  boost::format ffmt(function);
+  if (ffmt.expected_args())
+     msg += (ffmt % boost::math::policies::detail::name_of<T>()).str();
+  else
+     msg += function;
 #else
   msg += function;
 #endif
@@ -130,15 +149,21 @@ void raise_error(const char* function, const char* message, const T& val)
 
   std::string msg("Error in function ");
 #ifndef BOOST_NO_RTTI
-  msg += (boost::format(function) % boost::math::policies::detail::name_of<T>()).str();
+  boost::format ffmt(function);
+  if (ffmt.expected_args())
+     msg += (ffmt % boost::math::policies::detail::name_of<T>()).str();
+  else
+     msg += function;
 #else
   msg += function;
 #endif
   msg += ": ";
-  msg += message;
 
-  int prec = 2 + (boost::math::policies::digits<T, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
-  msg = do_format(boost::format(msg), boost::io::group(std::setprecision(prec), val));
+  boost::format mfmt(message);
+  if (mfmt.expected_args())
+     msg += prec_format(mfmt, val);
+  else
+     msg += message;
 
   E e(msg);
   boost::throw_exception(e);
@@ -319,14 +344,22 @@ inline T raise_overflow_error(
            const T& val,
            const  ::boost::math::policies::overflow_error< ::boost::math::policies::user_error>&)
 {
-   std::string fmsg("Error in function ");
+   std::string fmsg("Error in function "), msg;
 #ifndef BOOST_NO_RTTI
-   fmsg += (boost::format(function) % boost::math::policies::detail::name_of<T>()).str();
+   boost::format ffmt(function);
+   if (ffmt.expected_args())
+       fmsg += (ffmt % boost::math::policies::detail::name_of<T>()).str();
+   else
+       fmsg += function;
 #else
    fmsg += function;
 #endif
-   int prec = 2 + (boost::math::policies::digits<T, boost::math::policies::policy<> >() * 30103UL) / 100000UL;
-   std::string msg = do_format(boost::format(message), boost::io::group(std::setprecision(prec), val));
+   boost::format mfmt(message);
+   if (mfmt.expected_args())
+       msg = prec_format(mfmt, val);
+   else
+       msg = message;
+
    return user_overflow_error(fmsg.c_str(), msg.c_str(), std::numeric_limits<T>::infinity());
 }
 
