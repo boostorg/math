@@ -19,6 +19,7 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/operators.hpp>
 
@@ -648,22 +649,38 @@ template <class T>
 polynomial<T> pow(polynomial<T> base, int exp)
 {
     if (exp < 0)
-       throw std::domain_error("Negative powers are not supported for polynomials.");
-    /* Consider:
-       if (base.size() == 1)
+    {
+        if (base.size() == 1)
         {
             using std::pow;
-            return polynomial<T>(T(pow(base[0], exp))); // Use ADL to find the right pow
+            T res(pow(base[0], exp)); // Use ADL to find the right pow
+            if (res == T(0)) // integral
+                return policies::raise_domain_error(
+                        "boost::math::tools::pow<%1%>",
+                        "Negative powers not supported for integer constants.",
+                        base, policies::policy<>());
+            return polynomial<T>(res);
         }
-        But this wouldn't work for integral T
-     */
+        return policies::raise_domain_error(
+                "boost::math::tools::pow<%1%>",
+                "Negative powers are not supported for non-constant polynomials.",
+                base, policies::policy<>());
+        // if the policy is ignore_error or errno_on_error, raise_domain_error
+        // will return std::numeric_limits<polynomial<T>>::quiet_NaN(), which
+        // defaults to polynomial<T>(), which is the zero polynomial
+        /* ARG, but throw_on_error (default) requires boost::math::policies::digits<T,policy>
+         * which requires std::numeric_limits<T> to be specialized,
+         * just to try to format val into %1% in message, which isn't even there!! */
+    }
     polynomial<T> result(T(1));
-    if (exp & 1) result = base;
+    if (exp & 1)
+        result = base;
     /* "Exponentiation by squaring" */
     while (exp >>= 1)
     {
         base *= base;
-        if (exp & 1) result *= base;
+        if (exp & 1)
+            result *= base;
     }
     return result;
 }
