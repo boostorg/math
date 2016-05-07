@@ -314,6 +314,7 @@ public:
     operator=(std::initializer_list<T> l)
     {
         m_data.assign(std::begin(l), std::end(l));
+        normalize();
         return *this;
     }
 #endif
@@ -420,20 +421,11 @@ public:
           *this = zero;
           return *this;
       }
-      polynomial base(*this);
-      this->multiplication(value[0]);
-      for(size_type i = 1; i < value.size(); ++i)
-      {
-         polynomial t(base);
-         t.multiplication(value[i]);
-         size_type s = size() - i;
-         for(size_type j = 0; j < s; ++j)
-         {
-            m_data[i+j] += t[j];
-         }
-         for(size_type j = s; j < t.size(); ++j)
-            m_data.push_back(t[j]);
-      }
+      std::vector<T> prod(size() + value.size() - 1, T(0));
+      for (size_type i = 0; i < value.size(); ++i)
+         for (size_type j = 0; j < size(); ++j)
+            prod[i+j] += m_data[j] * value[i];
+      m_data.swap(prod);
       return *this;
    }
 

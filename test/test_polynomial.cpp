@@ -61,8 +61,19 @@ BOOST_AUTO_TEST_CASE( test_initializer_list_construction )
     polynomial<double> a(begin(d3a), end(d3a));
     polynomial<double> b = {10, -6, -4, 3};
     polynomial<double> c{{10, -6, -4, 3}};
+    polynomial<double> d{{10, -6, -4, 3, 0, 0}};
     BOOST_CHECK_EQUAL(a, b);
     BOOST_CHECK_EQUAL(b, c);
+    BOOST_CHECK_EQUAL(d.degree(), 3u);
+}
+
+BOOST_AUTO_TEST_CASE( test_initializer_list_assignment )
+{
+    polynomial<double> a(begin(d3a), end(d3a));
+    polynomial<double> b;
+    b = {10, -6, -4, 3, 0, 0};
+    BOOST_CHECK_EQUAL(b.degree(), 3u);
+    BOOST_CHECK_EQUAL(a, b);
 }
 #endif
 
@@ -244,4 +255,22 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_ufd, T, sp_integral_gcd_test_types)
     polynomial<T> const w(i2.begin(), i2.end());
     d = gcd_ufd(u, v);
     BOOST_CHECK_EQUAL(d, w);
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_self_multiply_assign, T, all_test_types )
+{
+    polynomial<T> a(d3a.begin(), d3a.end());
+    polynomial<T> const b(a);
+    boost::array<double, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
+    polynomial<T> const asq(d3a_sq.begin(), d3a_sq.end());
+
+    a *= a;
+
+    BOOST_CHECK_EQUAL(a, b*b);
+    BOOST_CHECK_EQUAL(a, asq);
+
+    a *= a;
+
+    BOOST_CHECK_EQUAL(a, b*b*b*b);
 }
