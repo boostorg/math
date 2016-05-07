@@ -50,18 +50,22 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_unsigned, T, unsigned_integral_test_types)
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_range, T, unsigned_integral_test_types)
 {
-    T d;
     std::vector<T> a;
+    typedef typename std::vector<T>::iterator I;
+    std::pair<T, I> d;
     a.push_back(40902);
     d = boost::math::gcd_range(a.begin(), a.end());
-    BOOST_CHECK_EQUAL(d, 40902);
+    BOOST_CHECK(d == std::make_pair(T(40902), a.end()));
     a.push_back(24140);
     d = boost::math::gcd_range(a.begin(), a.end());
-    BOOST_CHECK_EQUAL(d, 34);
+    BOOST_CHECK(d == std::make_pair(T(34), a.end()));
     a.push_back(85);
     d = boost::math::gcd_range(a.begin(), a.end());
-    BOOST_CHECK_EQUAL(d, 17);
+    BOOST_CHECK(d == std::make_pair(T(17), a.end()));
     a.push_back(23893);
     d = boost::math::gcd_range(a.begin(), a.end());
-    BOOST_CHECK_EQUAL(d, 1);
+    BOOST_CHECK(d == std::make_pair(T(1), a.end()));
+    a.push_back(1024);
+    d = boost::math::gcd_range(a.begin(), a.end());
+    BOOST_CHECK(d == std::make_pair(T(1), a.end() - 1));
 }

@@ -456,14 +456,16 @@ lcm
  * Chapter 4.5.2, Algorithm C: Greatest common divisor of n integers.
  *
  * Knuth counts down from n to zero but we naturally go from first to last.
+ * We also return the termination position because it might be useful to know.
  * 
  * Partly by quirk, partly by design, this algorithm is defined for n = 1, 
- * because the gcd of x is x. It is not defined for n = 0.
+ * because the gcd of {x} is x. It is not defined for n = 0.
  * 
  * @tparam  I   Input iterator.
+ * @return  The gcd of the range and the iterator position at termination.
  */
 template <typename I>
-typename std::iterator_traits<I>::value_type
+std::pair<typename std::iterator_traits<I>::value_type, I>
 gcd_range(I first, I last)
 {
     BOOST_ASSERT(first != last);
@@ -475,7 +477,7 @@ gcd_range(I first, I last)
         d = gcd(d, *first);
         first++;
     }
-    return d;
+    return std::make_pair(d, first);
 }
 
 }  // namespace math
