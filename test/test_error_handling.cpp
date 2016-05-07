@@ -110,9 +110,25 @@ policy<
    indeterminate_result_error<user_error> > user_policy;
 policy<> default_policy;
 
-#define TEST_EXCEPTION(expression, exception)\
+#define TEST_EXCEPTION(expression, exception, msg)\
    BOOST_MATH_CHECK_THROW(expression, exception);\
-   try{ expression; }catch(const exception& e){ std::cout << e.what() << std::endl; }
+   try{ expression; }catch(const exception& e){ std::cout << e.what() << std::endl; BOOST_CHECK_EQUAL(std::string(e.what()), std::string(msg)); }
+
+template <class T>
+std::string format_message_string(const char* str)
+{
+   std::string type_name = boost::math::policies::detail::name_of<T>();
+   std::string result(str);
+   if(type_name != "float")
+   {
+      std::string::size_type pos;
+      while((pos = result.find("float")) != std::string::npos)
+      {
+         result.replace(pos, 5, type_name);
+      }
+   }
+   return result;
+}
 
 template <class T>
 void test_error(T)
@@ -124,20 +140,20 @@ void test_error(T)
    // Check that exception is thrown, catch and show the message, for example:
    // Error in function boost::math::test_function<float>(float, float, float): Error while handling value 0
 #ifndef BOOST_NO_EXCEPTIONS
-   TEST_EXCEPTION(boost::math::policies::raise_domain_error(func, msg1, T(0.0), throw_policy), std::domain_error);
-   TEST_EXCEPTION(boost::math::policies::raise_domain_error(func, 0, T(0.0), throw_policy), std::domain_error);
-   TEST_EXCEPTION(boost::math::policies::raise_pole_error(func, msg1, T(0.0), throw_policy), std::domain_error);
-   TEST_EXCEPTION(boost::math::policies::raise_pole_error(func, 0, T(0.0), throw_policy), std::domain_error);
-   TEST_EXCEPTION(boost::math::policies::raise_overflow_error<T>(func, msg2, throw_policy), std::overflow_error);
-   TEST_EXCEPTION(boost::math::policies::raise_overflow_error<T>(func, 0, throw_policy), std::overflow_error);
-   TEST_EXCEPTION(boost::math::policies::raise_underflow_error<T>(func, msg2, throw_policy), std::underflow_error);
-   TEST_EXCEPTION(boost::math::policies::raise_underflow_error<T>(func, 0, throw_policy), std::underflow_error);
-   TEST_EXCEPTION(boost::math::policies::raise_denorm_error<T>(func, msg2, T(0), throw_policy), std::underflow_error);
-   TEST_EXCEPTION(boost::math::policies::raise_denorm_error<T>(func, 0, T(0), throw_policy), std::underflow_error);
-   TEST_EXCEPTION(boost::math::policies::raise_evaluation_error(func, msg1, T(1.25), throw_policy), boost::math::evaluation_error);
-   TEST_EXCEPTION(boost::math::policies::raise_evaluation_error(func, 0, T(1.25), throw_policy), boost::math::evaluation_error);
-   TEST_EXCEPTION(boost::math::policies::raise_indeterminate_result_error(func, msg1, T(1.25), T(12.34), throw_policy), std::domain_error);
-   TEST_EXCEPTION(boost::math::policies::raise_indeterminate_result_error(func, 0, T(1.25), T(12.34), throw_policy), std::domain_error);
+   TEST_EXCEPTION(boost::math::policies::raise_domain_error(func, msg1, T(0.0), throw_policy), std::domain_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error while handling value 0"));
+   TEST_EXCEPTION(boost::math::policies::raise_domain_error(func, 0, T(0.0), throw_policy), std::domain_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Domain Error evaluating function at 0"));
+   TEST_EXCEPTION(boost::math::policies::raise_pole_error(func, msg1, T(0.0), throw_policy), std::domain_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error while handling value 0"));
+   TEST_EXCEPTION(boost::math::policies::raise_pole_error(func, 0, T(0.0), throw_policy), std::domain_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Evaluation of function at pole 0"));
+   TEST_EXCEPTION(boost::math::policies::raise_overflow_error<T>(func, msg2, throw_policy), std::overflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error message goes here..."));
+   TEST_EXCEPTION(boost::math::policies::raise_overflow_error<T>(func, 0, throw_policy), std::overflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Overflow Error"));
+   TEST_EXCEPTION(boost::math::policies::raise_underflow_error<T>(func, msg2, throw_policy), std::underflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error message goes here..."));
+   TEST_EXCEPTION(boost::math::policies::raise_underflow_error<T>(func, 0, throw_policy), std::underflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Underflow Error"));
+   TEST_EXCEPTION(boost::math::policies::raise_denorm_error<T>(func, msg2, T(0), throw_policy), std::underflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error message goes here..."));
+   TEST_EXCEPTION(boost::math::policies::raise_denorm_error<T>(func, 0, T(0), throw_policy), std::underflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Denorm Error"));
+   TEST_EXCEPTION(boost::math::policies::raise_evaluation_error(func, msg1, T(1.25), throw_policy), boost::math::evaluation_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error while handling value 1.25"));
+   TEST_EXCEPTION(boost::math::policies::raise_evaluation_error(func, 0, T(1.25), throw_policy), boost::math::evaluation_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Internal Evaluation Error, best value so far was 1.25"));
+   TEST_EXCEPTION(boost::math::policies::raise_indeterminate_result_error(func, msg1, T(1.25), T(12.34), throw_policy), std::domain_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error while handling value 1.25"));
+   TEST_EXCEPTION(boost::math::policies::raise_indeterminate_result_error(func, 0, T(1.25), T(12.34), throw_policy), std::domain_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Indeterminate result with value 1.25"));
    //
    // Now try user error handlers: these should all throw user_error():
    // - because by design these are undefined and must be defined by the user ;-)
