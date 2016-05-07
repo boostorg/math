@@ -63,8 +63,19 @@ BOOST_AUTO_TEST_CASE( test_initializer_list_construction )
     polynomial<double> a(begin(d3a), end(d3a));
     polynomial<double> b = {10, -6, -4, 3};
     polynomial<double> c{{10, -6, -4, 3}};
+    polynomial<double> d{{10, -6, -4, 3, 0, 0}};
     BOOST_CHECK_EQUAL(a, b);
     BOOST_CHECK_EQUAL(b, c);
+    BOOST_CHECK_EQUAL(d.degree(), 3u);
+}
+
+BOOST_AUTO_TEST_CASE( test_initializer_list_assignment )
+{
+    polynomial<double> a(begin(d3a), end(d3a));
+    polynomial<double> b;
+    b = {10, -6, -4, 3, 0, 0};
+    BOOST_CHECK_EQUAL(b.degree(), 3u);
+    BOOST_CHECK_EQUAL(a, b);
 }
 #endif
 
@@ -190,12 +201,18 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, all_test_types )
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
     polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+    boost::array<T, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
+    polynomial<T> const a_sq(d3a_sq.begin(), d3a_sq.end());
     
     BOOST_CHECK_EQUAL(a * T(0), zero);
     BOOST_CHECK_EQUAL(a * zero, zero);
     BOOST_CHECK_EQUAL(zero * T(0), zero);
     BOOST_CHECK_EQUAL(zero * zero, zero);
     BOOST_CHECK_EQUAL(a * b, b * a);
+    polynomial<T> aa(a);
+    aa *= aa;
+    BOOST_CHECK_EQUAL(aa, a_sq);
+    BOOST_CHECK_EQUAL(aa, a * a);
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_arithmetic_relations, T, all_test_types )
