@@ -53,6 +53,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_range, T, unsigned_integral_test_types)
     T d;
     std::vector<T> a;
     a.push_back(40902);
+    d = boost::math::gcd_range(a.begin(), a.end());
+    BOOST_CHECK_EQUAL(d, 40902);
     a.push_back(24140);
     d = boost::math::gcd_range(a.begin(), a.end());
     BOOST_CHECK_EQUAL(d, 34);
