@@ -12,11 +12,21 @@
 #include <boost/mpl/and.hpp>
 #include <boost/type_traits.hpp>
 
+#include <boost/config.hpp>  // for BOOST_NESTED_TEMPLATE, etc.
+#include <boost/limits.hpp>  // for std::numeric_limits
+#include <climits>           // for CHAR_MIN
+#include <boost/detail/workaround.hpp>
+#include <iterator>
 #include <algorithm>
 #include <limits>
 
 #if (defined(BOOST_MSVC) || (defined(__clang__) && defined(__c2__)) || (defined(BOOST_INTEL) && defined(_MSC_VER))) && (defined(_M_IX86) || defined(_M_X64))
 #include <intrin.h>
+#endif
+
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127 4244)  // Conditional expression is constant
 #endif
 
 namespace boost {
@@ -375,6 +385,40 @@ inline Integer lcm(Integer const &a, Integer const &b)
    return detail::lcm_imp(static_cast<Integer>(gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_traits<Integer>::abs(b)));
 }
 
-}}
+/**
+ * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
+ * Chapter 4.5.2, Algorithm C: Greatest common divisor of n integers.
+ *
+ * Knuth counts down from n to zero but we naturally go from first to last.
+ * We also return the termination position because it might be useful to know.
+ * 
+ * Partly by quirk, partly by design, this algorithm is defined for n = 1, 
+ * because the gcd of {x} is x. It is not defined for n = 0.
+ * 
+ * @tparam  I   Input iterator.
+ * @return  The gcd of the range and the iterator position at termination.
+ */
+template <typename I>
+std::pair<typename std::iterator_traits<I>::value_type, I>
+gcd_range(I first, I last)
+{
+    BOOST_ASSERT(first != last);
+    typedef typename std::iterator_traits<I>::value_type T;
+    
+    T d = *first++;
+    while (d != T(1) && first != last)
+    {
+        d = gcd(d, *first);
+        first++;
+    }
+    return std::make_pair(d, first);
+}
+
+}  // namespace math
+}  // namespace boost
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 #endif  // BOOST_MATH_COMMON_FACTOR_RT_HPP
