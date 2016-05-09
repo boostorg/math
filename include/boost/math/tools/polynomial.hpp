@@ -452,6 +452,7 @@ public:
    polynomial& operator <<=(U const &n)
    {
        m_data.insert(m_data.begin(), n, static_cast<T>(0));
+       normalize();
        return *this;
    }
     

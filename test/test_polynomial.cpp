@@ -201,12 +201,18 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, all_test_types )
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
     polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+    boost::array<T, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
+    polynomial<T> const a_sq(d3a_sq.begin(), d3a_sq.end());
     
     BOOST_CHECK_EQUAL(a * T(0), zero);
     BOOST_CHECK_EQUAL(a * zero, zero);
     BOOST_CHECK_EQUAL(zero * T(0), zero);
     BOOST_CHECK_EQUAL(zero * zero, zero);
     BOOST_CHECK_EQUAL(a * b, b * a);
+    polynomial<T> aa(a);
+    aa *= aa;
+    BOOST_CHECK_EQUAL(aa, a_sq);
+    BOOST_CHECK_EQUAL(aa, a * a);
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_arithmetic_relations, T, all_test_types )
@@ -246,7 +252,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_self_multiply_assign, T, all_test_types )
     BOOST_CHECK_EQUAL(a, b*b*b*b);
 }
 
-
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_right_shift, T, all_test_types )
 {
     polynomial<T> a(d8b.begin(), d8b.end());
@@ -274,6 +279,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_left_shift, T, all_test_types )
     BOOST_CHECK_EQUAL(a, b);
     a = a << 4u;
     BOOST_CHECK_EQUAL(a, c);
+    polynomial<T> zero = zero_element(multiplies< polynomial<T> >());
+    // Multiplying zero by x should still be zero.
+    zero <<= 1u;
+    BOOST_CHECK_EQUAL(zero, zero_element(multiplies< polynomial<T> >()));
 }
 
 
