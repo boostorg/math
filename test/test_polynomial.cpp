@@ -298,3 +298,21 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
     BOOST_CHECK_EQUAL(odd(b), false);
     BOOST_CHECK_EQUAL(even(b), true);
 }
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_bool, T, all_test_types)
+{
+    polynomial<T> const zero;
+    polynomial<T> const a(d0a.begin(), d0a.end());
+    BOOST_CHECK_EQUAL(bool(zero), false);
+    BOOST_CHECK_EQUAL(bool(a), true);
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_clear, T, all_test_types)
+{
+    polynomial<T> const zero;
+    polynomial<T> a(d0a.begin(), d0a.end());
+    a.clear();
+    BOOST_CHECK_EQUAL(a, zero);
+}

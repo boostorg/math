@@ -191,8 +191,8 @@ std::pair< polynomial<T>, polynomial<T> >
 division(polynomial<T> u, const polynomial<T>& v)
 {
     BOOST_ASSERT(v.size() <= u.size());
-    BOOST_ASSERT(v != zero_element(std::multiplies< polynomial<T> >()));
-    BOOST_ASSERT(u != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_ASSERT(v);
+    BOOST_ASSERT(u);
 
     typedef typename polynomial<T>::size_type N;
     
@@ -245,9 +245,9 @@ template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
-    BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_ASSERT(divisor);
     if (dividend.size() < divisor.size())
-        return std::make_pair(zero_element(std::multiplies< polynomial<T> >()), dividend);
+        return std::make_pair(polynomial<T>(), dividend);
     return detail::division(dividend, divisor);
 }
 
@@ -389,7 +389,7 @@ public:
    polynomial& operator %=(const U& /*value*/)
    {
        // We can always divide by a scalar, so there is no remainder:
-       *this = zero_element(std::multiplies<polynomial>());
+       this->clear();
        return *this;
    }
 
@@ -412,10 +412,9 @@ public:
    polynomial& operator *=(const polynomial<U>& value)
    {
       // TODO: FIXME: use O(N log(N)) algorithm!!!
-      polynomial const zero = zero_element(std::multiplies<polynomial>());
-      if (value == zero)
+      if (!value)
       {
-          *this = zero;
+          this->clear();
           return *this;
       }
       std::vector<T> prod(size() + value.size() - 1, T(0));
@@ -454,6 +453,18 @@ public:
        m_data.insert(m_data.begin(), n, static_cast<T>(0));
        normalize();
        return *this;
+   }
+   
+   // Useful for fast test of equality to zero.
+   operator bool() const
+   {
+       return !m_data.empty();
+   }
+    
+   // Fast way to set a polynomial to zero.
+   void clear()
+   {
+       m_data.clear();
    }
     
     /** Remove zero coefficients 'from the top', that is for which there are no
