@@ -298,3 +298,26 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
     BOOST_CHECK_EQUAL(odd(b), false);
     BOOST_CHECK_EQUAL(even(b), true);
 }
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
+{
+    polynomial<T> a(d3a.begin(), d3a.end());
+    polynomial<T> const one = identity_element(std::multiplies< polynomial<T> >());
+    boost::array<double, 7> const d3a_sqr = {{100, -120, -44, 108, -20, -24, 9}};
+    boost::array<double, 10> const d3a_cub =
+        {{1000, -1800, -120, 2124, -1032, -684, 638, -18, -108, 27}};
+    polynomial<T> const asqr(d3a_sqr.begin(), d3a_sqr.end());
+    polynomial<T> const acub(d3a_cub.begin(), d3a_cub.end());
+
+    BOOST_CHECK_EQUAL(pow(a, 0), one);
+    BOOST_CHECK_EQUAL(pow(a, 1), a);
+    BOOST_CHECK_EQUAL(pow(a, 2), asqr);
+    BOOST_CHECK_EQUAL(pow(a, 3), acub);
+    BOOST_CHECK_EQUAL(pow(a, 4), pow(asqr, 2));
+    BOOST_CHECK_EQUAL(pow(a, 5), asqr * acub);
+    BOOST_CHECK_EQUAL(pow(a, 6), pow(acub, 2));
+    BOOST_CHECK_EQUAL(pow(a, 7), acub * acub * a);
+
+    BOOST_CHECK_THROW(pow(a, -1), std::domain_error);
+    BOOST_CHECK_EQUAL(pow(one, 137), one);
+}
