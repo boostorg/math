@@ -15,6 +15,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/config/suffix.hpp>
 #include <boost/function.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/math/tools/rational.hpp>
@@ -455,12 +456,27 @@ public:
        return *this;
    }
    
-   // Useful for fast test of equality to zero.
-   operator bool() const
+   // Convenient and efficient query for zero.
+   bool is_zero() const
+   {
+       return m_data.empty();
+   }
+   
+   // Conversion to bool.
+#ifdef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
+   typedef bool (polynomial::*unmentionable_type)() const;
+
+   BOOST_FORCEINLINE operator unmentionable_type() const
+   {
+       return is_zero() ? false : &polynomial::is_zero;
+   }
+#else
+   BOOST_FORCEINLINE explicit operator bool() const
    {
        return !m_data.empty();
    }
-    
+#endif
+
    // Fast way to set a polynomial to zero.
    void clear()
    {
