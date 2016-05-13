@@ -390,7 +390,7 @@ public:
    polynomial& operator %=(const U& /*value*/)
    {
        // We can always divide by a scalar, so there is no remainder:
-       this->clear();
+       this->set_zero();
        return *this;
    }
 
@@ -415,7 +415,7 @@ public:
       // TODO: FIXME: use O(N log(N)) algorithm!!!
       if (!value)
       {
-          this->clear();
+          this->set_zero();
           return *this;
       }
       std::vector<T> prod(size() + value.size() - 1, T(0));
@@ -478,7 +478,7 @@ public:
 #endif
 
    // Fast way to set a polynomial to zero.
-   void clear()
+   void set_zero()
    {
        m_data.clear();
    }

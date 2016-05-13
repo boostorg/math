@@ -309,10 +309,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_bool, T, all_test_types)
 }
 
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_clear, T, all_test_types)
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_set_zero, T, all_test_types)
 {
     polynomial<T> const zero;
     polynomial<T> a(d0a.begin(), d0a.end());
-    a.clear();
+    a.set_zero();
     BOOST_CHECK_EQUAL(a, zero);
 }
