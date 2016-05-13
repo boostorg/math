@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE( test_initializer_list_assignment )
 
 BOOST_AUTO_TEST_CASE( test_degree )
 {
-    polynomial<double> const zero = zero_element(std::multiplies< polynomial<double> >());
+    polynomial<double> const zero;
     polynomial<double> const a(d3a.begin(), d3a.end());
     BOOST_CHECK_THROW(zero.degree(), std::logic_error);
     BOOST_CHECK_EQUAL(a.degree(), 3u);
@@ -100,8 +100,8 @@ BOOST_AUTO_TEST_CASE( test_division_over_field )
     polynomial<double> const e(d2c.begin(), d2c.end());
     polynomial<double> const f(d0b.begin(), d0b.end());
     polynomial<double> const g(d3c.begin(), d3c.end());
-    polynomial<double> const zero = zero_element(std::multiplies< polynomial<double> >());
-    polynomial<double> const one = identity_element(std::multiplies< polynomial<double> >());
+    polynomial<double> const zero;
+    polynomial<double> const one(1.0);
 
     answer<double> result = quotient_remainder(a, b);
     BOOST_CHECK_EQUAL(result.quotient, q);
@@ -129,8 +129,8 @@ BOOST_AUTO_TEST_CASE( test_division_over_field )
 
 BOOST_AUTO_TEST_CASE( test_division_over_ufd )
 {
-    polynomial<int> const zero = zero_element(std::multiplies< polynomial<int> >());
-    polynomial<int> const one = identity_element(std::multiplies< polynomial<int> >());
+    polynomial<int> const zero;
+    polynomial<int> const one(1);
     polynomial<int> const aa(d8.begin(), d8.end());
     polynomial<int> const bb(d6.begin(), d6.end());
     polynomial<int> const q(d2.begin(), d2.end());
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
 {
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
-    polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+    polynomial<T> const zero;
     
     polynomial<T> result = a + b; // different degree
     boost::array<T, 4> tmp = {{8, -5, -4, 3}};
@@ -187,7 +187,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_subtraction, T, all_test_types )
 {
     polynomial<T> const a(d3a.begin(), d3a.end());
-    polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+    polynomial<T> const zero;
 
     BOOST_CHECK_EQUAL(a - T(0), a);
     BOOST_CHECK_EQUAL(T(0) - a, -a);
@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, all_test_types )
 {
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
-    polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+    polynomial<T> const zero;
     boost::array<T, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
     polynomial<T> const a_sq(d3a_sq.begin(), d3a_sq.end());
     
@@ -279,7 +279,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_left_shift, T, all_test_types )
     BOOST_CHECK_EQUAL(a, b);
     a = a << 4u;
     BOOST_CHECK_EQUAL(a, c);
-    polynomial<T> zero = zero_element(multiplies< polynomial<T> >());
+    polynomial<T> zero;
     // Multiplying zero by x should still be zero.
     zero <<= 1u;
     BOOST_CHECK_EQUAL(zero, zero_element(multiplies< polynomial<T> >()));
@@ -288,7 +288,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_left_shift, T, all_test_types )
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
 {
-    polynomial<T> const zero = zero_element(multiplies< polynomial<T> >());
+    polynomial<T> const zero;
     BOOST_CHECK_EQUAL(odd(zero), false);
     BOOST_CHECK_EQUAL(even(zero), true);
     polynomial<T> const a(d0a.begin(), d0a.end());
@@ -302,7 +302,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
 {
     polynomial<T> a(d3a.begin(), d3a.end());
-    polynomial<T> const one = identity_element(std::multiplies< polynomial<T> >());
+    polynomial<T> const one(T(1));
     boost::array<double, 7> const d3a_sqr = {{100, -120, -44, 108, -20, -24, 9}};
     boost::array<double, 10> const d3a_cub =
         {{1000, -1800, -120, 2124, -1032, -684, 638, -18, -108, 27}};
