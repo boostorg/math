@@ -427,17 +427,30 @@ public:
       return *this;
    }
 
-   template <typename U>
-   polynomial& operator /=(const polynomial<U>& value)
+   polynomial& operator /=(const polynomial& value)
    {
        *this = quotient_remainder(*this, value).first;
        return *this;
    }
 
    template <typename U>
-   polynomial& operator %=(const polynomial<U>& value)
+   polynomial& operator /=(const polynomial<U>& value)
+   {
+       *this = quotient_remainder(*this, polynomial(value)).first;
+       return *this;
+   }
+
+   polynomial& operator %=(const polynomial& value)
    {
        *this = quotient_remainder(*this, value).second;
+       return *this;
+   }
+
+
+   template <typename U>
+   polynomial& operator %=(const polynomial<U>& value)
+   {
+       *this = quotient_remainder(*this, polynomial(value)).second;
        return *this;
    }
 
