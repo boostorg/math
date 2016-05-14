@@ -254,12 +254,11 @@ quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 
 
 template <class T>
-class polynomial :
-    equality_comparable< polynomial<T>,
-    dividable< polynomial<T>,
-    dividable2< polynomial<T>, T,
-    modable< polynomial<T>,
-    modable2< polynomial<T>, T > > > > >
+class polynomial : ordered_euclidean_ring_operators< polynomial<T> >
+    /* Provides operators +, -, *, /, % for two polynomials (using member += etc.);
+     * operators >, <=, >= using operator < ; and operator != using operator ==.
+     * Note that polynomials are not actually a euclidean ring when T is not
+     * a field type, in particular, if T is integral. */
 {
 public:
    // typedefs:
@@ -544,30 +543,6 @@ private:
 };
 
 
-template <class T>
-inline polynomial<T> operator + (const polynomial<T>& a, const polynomial<T>& b)
-{
-   polynomial<T> result(a);
-   result += b;
-   return result;
-}
-
-template <class T>
-inline polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b)
-{
-   polynomial<T> result(a);
-   result -= b;
-   return result;
-}
-
-template <class T>
-inline polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b)
-{
-   polynomial<T> result(a);
-   result *= b;
-   return result;
-}
-
 template <class T, class U>
 inline polynomial<T> operator + (const polynomial<T>& a, const U& b)
 {
@@ -589,6 +564,22 @@ inline polynomial<T> operator * (const polynomial<T>& a, const U& b)
 {
    polynomial<T> result(a);
    result *= b;
+   return result;
+}
+
+template <class T, class U>
+inline polynomial<T> operator / (const polynomial<T>& a, const U& b)
+{
+   polynomial<T> result(a);
+   result /= b;
+   return result;
+}
+
+template <class T, class U>
+inline polynomial<T> operator % (const polynomial<T>& a, const U& b)
+{
+   polynomial<T> result(a);
+   result %= b;
    return result;
 }
 
@@ -620,6 +611,15 @@ template <class T>
 bool operator == (const polynomial<T> &a, const polynomial<T> &b)
 {
     return a.data() == b.data();
+}
+
+template <class T>
+bool operator < (const polynomial<T> &a, const polynomial<T> &b)
+{
+    if (a.size() != b.size())
+        return a.size() < b.size();
+    return std::lexicographical_compare(a.data().rbegin(), a.data().rend(),
+                                        b.data().rbegin(), b.data().rend());
 }
 
 template <typename T, typename U>
