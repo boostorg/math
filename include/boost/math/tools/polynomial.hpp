@@ -608,13 +608,13 @@ inline polynomial<T> operator * (const U& a, const polynomial<T>& b)
 }
 
 template <class T>
-bool operator == (const polynomial<T> &a, const polynomial<T> &b)
+inline bool operator == (const polynomial<T> &a, const polynomial<T> &b)
 {
     return a.data() == b.data();
 }
 
 template <class T>
-bool operator < (const polynomial<T> &a, const polynomial<T> &b)
+inline bool operator < (const polynomial<T> &a, const polynomial<T> &b)
 {
     if (a.size() != b.size())
         return a.size() < b.size();
@@ -623,7 +623,7 @@ bool operator < (const polynomial<T> &a, const polynomial<T> &b)
 }
 
 template <typename T, typename U>
-polynomial<T> operator >> (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator >> (const polynomial<T>& a, const U& b)
 {
     polynomial<T> result(a);
     result >>= b;
@@ -631,7 +631,7 @@ polynomial<T> operator >> (const polynomial<T>& a, const U& b)
 }
 
 template <typename T, typename U>
-polynomial<T> operator << (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator << (const polynomial<T>& a, const U& b)
 {
     polynomial<T> result(a);
     result <<= b;
@@ -640,20 +640,20 @@ polynomial<T> operator << (const polynomial<T>& a, const U& b)
 
 // Unary minus (negate).
 template <class T>
-polynomial<T> operator - (polynomial<T> a)
+inline polynomial<T> operator - (polynomial<T> a)
 {
     std::transform(a.data().begin(), a.data().end(), a.data().begin(), std::negate<T>());
     return a;
 }
 
 template <class T>
-bool odd(polynomial<T> const &a)
+inline bool odd(polynomial<T> const &a)
 {
     return a.size() > 0 && a[0] != static_cast<T>(0);
 }
 
 template <class T>
-bool even(polynomial<T> const &a)
+inline bool even(polynomial<T> const &a)
 {
     return !odd(a);
 }
