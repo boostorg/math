@@ -22,6 +22,7 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/operators.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 #include <vector>
 #include <ostream>
@@ -378,7 +379,8 @@ public:
    }
 
    template <class U>
-   polynomial& operator /=(const U& value)
+   BOOST_DEDUCED_TYPENAME enable_if<boost::is_convertible<U,T>, polynomial >::type&
+   operator /=(const U& value)
    {
        division(value);
        normalize();
@@ -386,7 +388,8 @@ public:
    }
 
    template <class U>
-   polynomial& operator %=(const U& /*value*/)
+   BOOST_DEDUCED_TYPENAME enable_if<boost::is_convertible<U,T>, polynomial >::type&
+   operator %=(const U& /*value*/)
    {
        // We can always divide by a scalar, so there is no remainder:
        *this = zero_element(std::multiplies<polynomial>());
@@ -432,24 +435,9 @@ public:
        return *this;
    }
 
-   template <typename U>
-   polynomial& operator /=(const polynomial<U>& value)
-   {
-       *this = quotient_remainder(*this, polynomial(value)).first;
-       return *this;
-   }
-
    polynomial& operator %=(const polynomial& value)
    {
        *this = quotient_remainder(*this, value).second;
-       return *this;
-   }
-
-
-   template <typename U>
-   polynomial& operator %=(const polynomial<U>& value)
-   {
-       *this = quotient_remainder(*this, polynomial(value)).second;
        return *this;
    }
 
