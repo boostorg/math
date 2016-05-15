@@ -20,6 +20,7 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/mpl/if.hpp>
@@ -443,7 +444,23 @@ public:
        return *this;
    }
 
-   /** Remove zero coefficients 'from the top', that is for which there are no
+   template <typename U>
+   polynomial& operator >>=(U const &n)
+   {
+       BOOST_ASSERT(n <= m_data.size());
+       m_data.erase(m_data.begin(), m_data.begin() + n);
+       return *this;
+   }
+
+   template <typename U>
+   polynomial& operator <<=(U const &n)
+   {
+       m_data.insert(m_data.begin(), n, static_cast<T>(0));
+       normalize();
+       return *this;
+   }
+    
+    /** Remove zero coefficients 'from the top', that is for which there are no
     *        non-zero coefficients of higher degree. */
    void normalize()
    {
@@ -600,6 +617,22 @@ bool operator == (const polynomial<T> &a, const polynomial<T> &b)
     return a.data() == b.data();
 }
 
+template <typename T, typename U>
+polynomial<T> operator >> (const polynomial<T>& a, const U& b)
+{
+    polynomial<T> result(a);
+    result >>= b;
+    return result;
+}
+
+template <typename T, typename U>
+polynomial<T> operator << (const polynomial<T>& a, const U& b)
+{
+    polynomial<T> result(a);
+    result <<= b;
+    return result;
+}
+
 // Unary minus (negate).
 template <class T>
 polynomial<T> operator - (polynomial<T> a)
@@ -715,6 +748,42 @@ gcd(polynomial<T> const &u, polynomial<T> const &v)
     return gcd_ufd(u, v);
 }
 
+
+template <class T>
+bool odd(polynomial<T> const &a)
+{
+    return a.size() > 0 && a[0] != static_cast<T>(0);
+}
+
+template <class T>
+bool even(polynomial<T> const &a)
+{
+    return !odd(a);
+}
+
+template <class T>
+polynomial<T> pow(polynomial<T> base, int exp)
+{
+    if (exp < 0)
+        return policies::raise_domain_error(
+                "boost::math::tools::pow<%1%>",
+                "Negative powers are not supported for polynomials.",
+                base, policies::policy<>());
+        // if the policy is ignore_error or errno_on_error, raise_domain_error
+        // will return std::numeric_limits<polynomial<T>>::quiet_NaN(), which
+        // defaults to polynomial<T>(), which is the zero polynomial
+    polynomial<T> result(T(1));
+    if (exp & 1)
+        result = base;
+    /* "Exponentiation by squaring" */
+    while (exp >>= 1)
+    {
+        base *= base;
+        if (exp & 1)
+            result *= base;
+    }
+    return result;
+}
 
 template <class charT, class traits, class T>
 inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly)

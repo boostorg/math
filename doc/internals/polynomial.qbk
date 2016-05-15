@@ -91,9 +91,21 @@
    polynomial<T> operator - (const polynomial<T>& a);
 
    template <class T>
+   polynomial<T> operator >>= (const U& a);
+   template <class T>
+   polynomial<T> operator >> (polynomial<T> const &a, const U& b);
+   template <class T>
+   polynomial<T> operator <<= (const U& a);
+   template <class T>
+   polynomial<T> operator << (polynomial<T> const &a, const U& b);   
+   
+   template <class T>
    bool operator == (const polynomial<T> &a, const polynomial<T> &b);
    template <class T>
    bool operator != (const polynomial<T> &a, const polynomial<T> &b);
+
+   template <class T>
+   polynomial<T> pow(polynomial<T> base, int exp);
 
    template <class charT, class traits, class T>
    std::basic_ostream<charT, traits>& operator <<
