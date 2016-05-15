@@ -56,10 +56,8 @@
       polynomial& operator -=(const polynomial<U>& value);
       template <class U>
       polynomial& operator *=(const polynomial<U>& value);
-      template <class U>
-      polynomial& operator /=(const polynomial<U>& value);
-      template <class U>
-      polynomial& operator %=(const polynomial<U>& value);
+      polynomial& operator /=(const polynomial<T>& value);
+      polynomial& operator %=(const polynomial<T>& value);
    };
 
    template <class T>
@@ -79,10 +77,10 @@
    polynomial<T> operator - (const polynomial<T>& a, const U& b);
    template <class T, class U>
    polynomial<T> operator * (const polynomial<T>& a, const U& b);
-   template <class T>
-   polynomial<T> operator / (const polynomial<T>& a, const T& b);
-   template <class T>
-   polynomial<T> operator % (const polynomial<T>& a, const T& b);
+   template <class T, class U>
+   polynomial<T> operator / (const polynomial<T>& a, const U& b);
+   template <class T, class U>
+   polynomial<T> operator % (const polynomial<T>& a, const U& b);
 
    template <class U, class T>
    polynomial<T> operator + (const U& a, const polynomial<T>& b);
@@ -105,11 +103,20 @@
    bool operator != (const polynomial<T> &a, const polynomial<T> &b);
 
    template <class T>
-   polynomial<T> pow(polynomial<T> base, int exp);
+   bool operator < (const polynomial<T> &a, const polynomial<T> &b);
+   template <class T>
+   bool operator <= (const polynomial<T> &a, const polynomial<T> &b);
+   template <class T>
+   bool operator > (const polynomial<T> &a, const polynomial<T> &b);
+   template <class T>
+   bool operator >= (const polynomial<T> &a, const polynomial<T> &b);
 
    template <class charT, class traits, class T>
    std::basic_ostream<charT, traits>& operator <<
       (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly);
+
+   template <class T>
+   polynomial<T> pow(polynomial<T> base, int exp);
 
    template <typename T>
    std::pair< polynomial<T>, polynomial<T> >
