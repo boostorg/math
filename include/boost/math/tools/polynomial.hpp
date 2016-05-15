@@ -19,6 +19,7 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/operators.hpp>
 
@@ -642,6 +643,30 @@ template <class T>
 bool even(polynomial<T> const &a)
 {
     return !odd(a);
+}
+
+template <class T>
+polynomial<T> pow(polynomial<T> base, int exp)
+{
+    if (exp < 0)
+        return policies::raise_domain_error(
+                "boost::math::tools::pow<%1%>",
+                "Negative powers are not supported for polynomials.",
+                base, policies::policy<>());
+        // if the policy is ignore_error or errno_on_error, raise_domain_error
+        // will return std::numeric_limits<polynomial<T>>::quiet_NaN(), which
+        // defaults to polynomial<T>(), which is the zero polynomial
+    polynomial<T> result(T(1));
+    if (exp & 1)
+        result = base;
+    /* "Exponentiation by squaring" */
+    while (exp >>= 1)
+    {
+        base *= base;
+        if (exp & 1)
+            result *= base;
+    }
+    return result;
 }
 
 template <class charT, class traits, class T>
