@@ -388,11 +388,23 @@ public:
    }
 
    template <class U>
-   BOOST_DEDUCED_TYPENAME enable_if<boost::is_convertible<U,T>, polynomial >::type&
+   BOOST_DEDUCED_TYPENAME enable_if_c<boost::is_convertible<U,T>::value &&
+                           std::numeric_limits<T>::is_integer, polynomial >::type&
+   operator %=(const U& value)
+   {
+       // In the case that T is integral, this preserves the semantics
+       // p == r*(p/r) + (p % r), for polynomial<T> p and U r.
+       modulus(value);
+       normalize();
+       return *this;
+   }
+
+   template <class U>
+   BOOST_DEDUCED_TYPENAME enable_if_c<boost::is_convertible<U,T>::value &&
+                           !std::numeric_limits<T>::is_integer, polynomial >::type&
    operator %=(const U& /*value*/)
    {
-       // We can always divide by a scalar, so there is no remainder:
-       *this = zero_element(std::multiplies<polynomial>());
+       m_data.clear();
        return *this;
    }
 
@@ -527,6 +539,15 @@ private:
         return *this;
     }
 
+    template <class U>
+    polynomial& modulus(const U& value)
+    {
+       typedef typename std::vector<T>::iterator iter;
+       for (iter it = m_data.begin(); it != m_data.end(); ++it)
+           *it -= T(value * T(*it / value));
+       return *this;
+    }
+    
     std::vector<T> m_data;
 };
 
