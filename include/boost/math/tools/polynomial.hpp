@@ -553,51 +553,45 @@ private:
 
 
 template <class T, class U>
-inline polynomial<T> operator + (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator + (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result += b;
-   return result;
+   a += b;
+   return a;
 }
 
 template <class T, class U>
-inline polynomial<T> operator - (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator - (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result -= b;
-   return result;
+   a -= b;
+   return a;
 }
 
 template <class T, class U>
-inline polynomial<T> operator * (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator * (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result *= b;
-   return result;
+   a *= b;
+   return a;
 }
 
 template <class T, class U>
-inline polynomial<T> operator / (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator / (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result /= b;
-   return result;
+   a /= b;
+   return a;
 }
 
 template <class T, class U>
-inline polynomial<T> operator % (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator % (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result %= b;
-   return result;
+   a %= b;
+   return a;
 }
 
 template <class U, class T>
-inline polynomial<T> operator + (const U& a, const polynomial<T>& b)
+inline polynomial<T> operator + (const U& a, polynomial<T> b)
 {
-   polynomial<T> result(b);
-   result += a;
-   return result;
+   b += a;
+   return b;
 }
 
 template <class U, class T>
@@ -609,11 +603,10 @@ inline polynomial<T> operator - (const U& a, const polynomial<T>& b)
 }
 
 template <class U, class T>
-inline polynomial<T> operator * (const U& a, const polynomial<T>& b)
+inline polynomial<T> operator * (const U& a, polynomial<T> b)
 {
-   polynomial<T> result(b);
-   result *= a;
-   return result;
+   b *= a;
+   return b;
 }
 
 template <class T>
@@ -632,19 +625,17 @@ inline bool operator < (const polynomial<T> &a, const polynomial<T> &b)
 }
 
 template <typename T, typename U>
-inline polynomial<T> operator >> (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator >> (polynomial<T> a, const U& b)
 {
-    polynomial<T> result(a);
-    result >>= b;
-    return result;
+    a >>= b;
+    return a;
 }
 
 template <typename T, typename U>
-inline polynomial<T> operator << (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator << (polynomial<T> a, const U& b)
 {
-    polynomial<T> result(a);
-    result <<= b;
-    return result;
+    a <<= b;
+    return a;
 }
 
 // Unary minus (negate).
