@@ -104,6 +104,9 @@
    template <class T>
    bool operator != (const polynomial<T> &a, const polynomial<T> &b);
 
+   template <class T>
+   polynomial<T> pow(polynomial<T> base, int exp);
+
    template <class charT, class traits, class T>
    std::basic_ostream<charT, traits>& operator <<
       (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly);
