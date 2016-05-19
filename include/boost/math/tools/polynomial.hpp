@@ -295,7 +295,7 @@ public:
       : m_data(p.m_data) { }
 
    template <class U>
-   polynomial(const polynomial<U>& p)
+   explicit polynomial(const polynomial<U>& p)
    {
       for(unsigned i = 0; i < p.size(); ++i)
       {
@@ -408,23 +408,21 @@ public:
        return *this;
    }
 
-   template <class U>
-   polynomial& operator +=(const polynomial<U>& value)
+   polynomial& operator +=(const polynomial& value)
    {
       addition(value);
       normalize();
       return *this;
    }
 
-   template <class U>
-   polynomial& operator -=(const polynomial<U>& value)
+   polynomial& operator -=(const polynomial& value)
    {
        subtraction(value);
        normalize();
        return *this;
    }
-   template <class U>
-   polynomial& operator *=(const polynomial<U>& value)
+
+   polynomial& operator *=(const polynomial& value)
    {
       // TODO: FIXME: use O(N log(N)) algorithm!!!
       polynomial const zero = zero_element(std::multiplies<polynomial>());
