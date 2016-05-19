@@ -453,17 +453,16 @@ public:
        return *this;
    }
 
-   template <typename U>
-   polynomial& operator >>=(U const &n)
+   polynomial& operator >>=(int n)
    {
-       BOOST_ASSERT(n <= m_data.size());
+       BOOST_ASSERT(n >= 0 && n <= m_data.size());
        m_data.erase(m_data.begin(), m_data.begin() + n);
        return *this;
    }
 
-   template <typename U>
-   polynomial& operator <<=(U const &n)
+   polynomial& operator <<=(int n)
    {
+       BOOST_ASSERT(n >= 0);
        m_data.insert(m_data.begin(), n, static_cast<T>(0));
        normalize();
        return *this;
@@ -624,15 +623,15 @@ inline bool operator < (const polynomial<T> &a, const polynomial<T> &b)
                                         b.data().rbegin(), b.data().rend());
 }
 
-template <typename T, typename U>
-inline polynomial<T> operator >> (polynomial<T> a, const U& b)
+template <typename T>
+inline polynomial<T> operator >> (polynomial<T> a, int b)
 {
     a >>= b;
     return a;
 }
 
-template <typename T, typename U>
-inline polynomial<T> operator << (polynomial<T> a, const U& b)
+template <typename T>
+inline polynomial<T> operator << (polynomial<T> a, int b)
 {
     a <<= b;
     return a;
