@@ -455,7 +455,7 @@ public:
 
    polynomial& operator >>=(int n)
    {
-       BOOST_ASSERT(n >= 0 && n <= m_data.size());
+       BOOST_ASSERT(n >= 0 && static_cast<unsigned>(n) <= m_data.size());
        m_data.erase(m_data.begin(), m_data.begin() + n);
        return *this;
    }
