@@ -379,8 +379,7 @@ public:
    }
 
    template <class U>
-   BOOST_DEDUCED_TYPENAME enable_if<boost::is_convertible<U,T>, polynomial >::type&
-   operator /=(const U& value)
+   polynomial& operator /=(const U& value)
    {
        division(value);
        normalize();
@@ -388,23 +387,19 @@ public:
    }
 
    template <class U>
-   BOOST_DEDUCED_TYPENAME enable_if_c<boost::is_convertible<U,T>::value &&
-                           std::numeric_limits<T>::is_integer, polynomial >::type&
-   operator %=(const U& value)
+   polynomial& operator %=(const U& value)
    {
        // In the case that T is integral, this preserves the semantics
        // p == r*(p/r) + (p % r), for polynomial<T> p and U r.
-       modulus(value);
-       normalize();
-       return *this;
-   }
-
-   template <class U>
-   BOOST_DEDUCED_TYPENAME enable_if_c<boost::is_convertible<U,T>::value &&
-                           !std::numeric_limits<T>::is_integer, polynomial >::type&
-   operator %=(const U& /*value*/)
-   {
-       m_data.clear();
+       if (std::numeric_limits<T>::is_integer)
+       {
+           modulus(value);
+           normalize();
+       }
+       else
+       {
+           m_data.clear();
+       }
        return *this;
    }
 
