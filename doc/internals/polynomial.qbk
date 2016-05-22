@@ -25,6 +25,8 @@
       polynomial(I first, I last);
       template <class U>
       explicit polynomial(const U& point);
+      template <class U>
+      explicit polynomial(const polynomial<U>& p);
       polynomial(std::initializer_list<T> l); // C++11
 
       // access:
@@ -46,18 +48,13 @@
       polynomial& operator /=(const U& value);
       template <class U>
       polynomial& operator %=(const U& value);
-      template <class U>
-      polynomial& operator >>=(const U& a);
-      template <class U>
-      polynomial& operator <<=(const U& a);
-      template <class U>
-      polynomial& operator +=(const polynomial<U>& value);
-      template <class U>
-      polynomial& operator -=(const polynomial<U>& value);
-      template <class U>
-      polynomial& operator *=(const polynomial<U>& value);
-      polynomial& operator /=(const polynomial<T>& value);
-      polynomial& operator %=(const polynomial<T>& value);
+      polynomial& operator >>=(int n);
+      polynomial& operator <<=(int n);
+      polynomial& operator +=(const polynomial& value);
+      polynomial& operator -=(const polynomial& value);
+      polynomial& operator *=(const polynomial& value);
+      polynomial& operator /=(const polynomial& value);
+      polynomial& operator %=(const polynomial& value);
    };
 
    template <class T>
@@ -93,9 +90,9 @@
    polynomial<T> operator - (const polynomial<T>& a); // Unary minus
 
    template <class T>
-   polynomial<T> operator >> (polynomial<T> const &a, const U& b);
+   polynomial<T> operator >> (polynomial<T> const &a, int b);
    template <class T>
-   polynomial<T> operator << (polynomial<T> const &a, const U& b);   
+   polynomial<T> operator << (polynomial<T> const &a, int b);   
    
    template <class T>
    bool operator == (const polynomial<T> &a, const polynomial<T> &b);
