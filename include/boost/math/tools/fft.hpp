@@ -126,7 +126,11 @@ void recursive_fft_radix2(I first, I last, J y)
 }
 
 
-// Based on code from Henry Warren Jr, Hacker's Delight, 2nd ed., 2013, p 138
+/**
+ * Based on code from Henry Warren Jr, Hacker's Delight, 2nd ed., 2013, p 138
+ * @param x Reversed integer to increment.
+ * @param m Increment.
+ */
 template <typename N>
 void increment_reversed_integer(N &x, N m)
 {
@@ -139,7 +143,14 @@ void increment_reversed_integer(N &x, N m)
 }
 
 
-// Iterative FFT based on Cormen et al, Introduction to algorithms, 3rd ed., 2009
+/** 
+ * Iterative FFT based on Cormen et al, Introduction to algorithms, 3rd ed., 2009
+ * @tparam  I   InputIterator
+ * @tparam  J   Mutable RandomAccessIterator
+ * @tparam  R1  Unary Transformation f(T) -> T
+ * @param   first   First element of data
+ * @param   last    One after last element of data
+ */
 template <typename I, typename J, typename R1>
 void iterative_fft_radix2(I first, I last, J A, R1 sign)
 {
