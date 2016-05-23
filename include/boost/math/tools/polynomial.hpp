@@ -18,6 +18,7 @@
 #include <boost/config/suffix.hpp>
 #include <boost/function.hpp>
 #include <boost/lambda/lambda.hpp>
+#include <boost/math/common_factor_rt.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -444,8 +445,7 @@ public:
    template <typename U>
    polynomial& operator >>=(U const &n)
    {
-       BOOST_ASSERT(n <= m_data.size());
-       m_data.erase(m_data.begin(), m_data.begin() + n);
+       m_data.erase(m_data.begin(), m_data.begin() + std::min(size_type(n), m_data.size()));
        return *this;
    }
 
@@ -696,6 +696,7 @@ polynomial<T> pow(polynomial<T> base, int exp)
     return result;
 }
 
+
 template <class charT, class traits, class T>
 inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly)
 {
@@ -710,6 +711,50 @@ inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT,
 }
 
 } // namespace tools
+
+//
+// Special handling for polynomials:
+//
+template <class T>
+struct gcd_traits< boost::math::tools::polynomial<T> > : public gcd_traits_defaults< boost::math::tools::polynomial<T> >
+{
+    static boost::math::tools::polynomial<T>
+    abs(const boost::math::tools::polynomial<T> &val)
+    {
+        return val.size() > 0 && val.data().back() < T(0) ? -val : val;
+    }
+    
+    inline static int make_odd(boost::math::tools::polynomial<T> &x)
+    {
+        unsigned r = 0;
+        while (even(x))
+        {
+            x >>= 1;
+            r++;
+        }
+        return r;
+    }
+    
+    inline static bool
+    less(boost::math::tools::polynomial<T> const &a, boost::math::tools::polynomial<T> const &b)
+    {
+        return a.size() < b.size();
+    }
+    
+    inline static void
+    subtract(boost::math::tools::polynomial<T> &a, boost::math::tools::polynomial<T> const &b)
+    {
+        T ratio = a.data().front() / b.data().front();
+        a -= ratio * b;
+        // normalize coefficients so that leading coefficient is whole
+        if (std::floor(a.data().back()) != a.data().back())
+        {
+            ratio = T(1) / a.data().back();
+            a *= ratio;
+        }
+    }
+};
+    
 } // namespace math
 } // namespace boost
 

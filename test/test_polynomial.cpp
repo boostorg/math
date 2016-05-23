@@ -161,8 +161,18 @@ BOOST_AUTO_TEST_CASE( test_gcd )
     polynomial<double> const u(d8.begin(), d8.end());
     polynomial<double> const v(d6.begin(), d6.end());
     polynomial<double> const w(d2.begin(), d2.end());
-    polynomial<double> const d = boost::math::gcd(u, v);
+    polynomial<double> d = boost::math::gcd(u, v);
     BOOST_CHECK_EQUAL(w, d);
+    d = boost::math::detail::Stein_gcd(u, v);
+    BOOST_CHECK_EQUAL(w, d);
+    boost::array<double, 4> const s3 = {{-2, -3, 0, 1}};
+    boost::array<double, 3> const s2 = {{-4, 0, 1}};
+    boost::array<double, 3> const d_expected = {{-2, 1}};
+    polynomial<double> const x(s3.begin(), s3.end());
+    polynomial<double> const y(s2.begin(), s2.end());
+    polynomial<double> const z(d_expected.begin(), d_expected.end());
+    d = boost::math::detail::Stein_gcd(x, y);
+    BOOST_CHECK_EQUAL(z, d);
 }
 
 // Sanity checks to make sure I didn't break it.

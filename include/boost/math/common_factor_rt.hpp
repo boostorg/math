@@ -65,6 +65,11 @@ namespace boost {
             return a < b;
          }
 
+         inline static void subtract(T& a, const T& b)
+         {
+            a -= b;
+         }
+         
          enum method_type
          {
             method_euclid = 0,
@@ -83,19 +88,6 @@ namespace boost {
       //
       template <class T>
       struct gcd_traits : public gcd_traits_defaults<T> {};
-      //
-      // Special handling for polynomials:
-      //
-      namespace tools {
-         template <class T>
-         class polynomial;
-      }
-
-      template <class T>
-      struct gcd_traits<boost::math::tools::polynomial<T> > : public gcd_traits_defaults<T>
-      {
-         static const boost::math::tools::polynomial<T>& abs(const boost::math::tools::polynomial<T>& val) { return val; }
-      };
       //
       // Some platforms have fast bitscan operations, that allow us to implement
       // make_odd much more efficiently:
@@ -277,7 +269,7 @@ namespace detail
 
       shifts = std::min(gcd_traits<T>::make_odd(u), gcd_traits<T>::make_odd(v));
 
-      while(gcd_traits<T>::less(1, v))
+      while(u != v)
       {
          u %= v;
          v -= u;
@@ -290,7 +282,8 @@ namespace detail
          if(gcd_traits<T>::less(u, v))
             swap(u, v);
       }
-      return (v == 1 ? v : u) << shifts;
+      u <<= shifts;
+      return u;
    }
 
     /** Stein gcd (aka 'binary gcd')
@@ -301,25 +294,32 @@ namespace detail
     SteinDomain Stein_gcd(SteinDomain m, SteinDomain n)
     {
         using std::swap;
-        BOOST_ASSERT(m >= 0);
-        BOOST_ASSERT(n >= 0);
-        if (m == SteinDomain(0))
+        // BOOST_ASSERT(m >= 0);
+        // BOOST_ASSERT(n >= 0);
+        if (!m)
             return n;
-        if (n == SteinDomain(0))
+        if (!n)
             return m;
         // m > 0 && n > 0
-        int d_m = gcd_traits<SteinDomain>::make_odd(m);
-        int d_n = gcd_traits<SteinDomain>::make_odd(n);
+        unsigned shifts = std::min(gcd_traits<SteinDomain>::make_odd(m), gcd_traits<SteinDomain>::make_odd(n));
         // odd(m) && odd(n)
         while (m != n)
         {
-            if (n > m)
+            if (gcd_traits<SteinDomain>::less(m, n))
                 swap(n, m);
-            m -= n;
-            gcd_traits<SteinDomain>::make_odd(m);
+            // n <= m (by degree)
+            gcd_traits<SteinDomain>::subtract(m, n);
+            // gcd_traits<SteinDomain>::make_odd(m);
+            if (!m)
+            {
+                n <<= shifts;
+                return n;
+            }
+            BOOST_ASSERT(even(m));
+            do m >>= 1; while (even(m));
         }
         // m == n
-        m <<= std::min(d_m, d_n);
+        m <<= shifts;
         return m;
     }
 
