@@ -22,7 +22,6 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/operators.hpp>
-#include <boost/type_traits/is_convertible.hpp>
 
 #include <vector>
 #include <ostream>
