@@ -197,6 +197,17 @@ even otherwise. That is:
     
     
     //] [/polynomial_arithmetic_5]
+    //[polynomial_arithmetic_6]
+    /* For performance and convenience, we can test whether a polynomial is zero 
+     * by implicitly converting to bool with the same semantics as int.    */
+    polynomial<double> zero; // Default construction is 0.
+    cout << "zero: " << (zero ? "not zero" : "zero") << "\n";
+    cout << "r: " << (r ? "not zero" : "zero") << "\n";
+    /* We can also set a polynomial to zero without needing a another zero 
+     * polynomial to assign to it. */
+    r.set_zero();
+    cout << "r: " << (r ? "not zero" : "zero") << "\n";    
+    //] [/polynomial_arithmetic_6]
 }
 catch (exception const &e)
 {
