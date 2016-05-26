@@ -35,49 +35,49 @@ namespace boost
     {
 
 #define    BOOST_QUATERNION_ACCESSOR_GENERATOR(type)                    \
-            type                    real() const                        \
+            BOOST_CONSTEXPR type                 real() const           \
             {                                                           \
                 return(a);                                              \
             }                                                           \
                                                                         \
-            quaternion<type>        unreal() const                      \
+            BOOST_CONSTEXPR quaternion<type>     unreal() const         \
             {                                                           \
                 return(quaternion<type>(static_cast<type>(0),b,c,d));   \
             }                                                           \
                                                                         \
-            type                    R_component_1() const               \
+            BOOST_CONSTEXPR type                 R_component_1() const  \
             {                                                           \
                 return(a);                                              \
             }                                                           \
                                                                         \
-            type                    R_component_2() const               \
+            BOOST_CONSTEXPR type                 R_component_2() const  \
             {                                                           \
                 return(b);                                              \
             }                                                           \
                                                                         \
-            type                    R_component_3() const               \
+            BOOST_CONSTEXPR type                 R_component_3() const  \
             {                                                           \
                 return(c);                                              \
             }                                                           \
                                                                         \
-            type                    R_component_4() const               \
+            BOOST_CONSTEXPR type                 R_component_4() const  \
             {                                                           \
                 return(d);                                              \
             }                                                           \
                                                                         \
-            ::std::complex<type>    C_component_1() const               \
+            BOOST_CONSTEXPR ::std::complex<type> C_component_1() const  \
             {                                                           \
                 return(::std::complex<type>(a,b));                      \
             }                                                           \
                                                                         \
-            ::std::complex<type>    C_component_2() const               \
+            BOOST_CONSTEXPR ::std::complex<type> C_component_2() const  \
             {                                                           \
                 return(::std::complex<type>(c,d));                      \
             }
         
         
 #define    BOOST_QUATERNION_MEMBER_ASSIGNMENT_GENERATOR(type)                               \
-            template<typename X>                                                            \
+            template<typename X> BOOST_CXX14_CONSTEXPR                                      \
             quaternion<type> &        operator = (quaternion<X> const  & a_affecter)        \
             {                                                                               \
                 a = static_cast<type>(a_affecter.R_component_1());                          \
@@ -88,6 +88,7 @@ namespace boost
                 return(*this);                                                              \
             }                                                                               \
                                                                                             \
+            BOOST_CXX14_CONSTEXPR                                                           \
             quaternion<type> &        operator = (quaternion<type> const & a_affecter)      \
             {                                                                               \
                 a = a_affecter.a;                                                           \
@@ -98,6 +99,7 @@ namespace boost
                 return(*this);                                                              \
             }                                                                               \
                                                                                             \
+            BOOST_CXX14_CONSTEXPR                                                           \
             quaternion<type> &        operator = (type const & a_affecter)                  \
             {                                                                               \
                 a = a_affecter;                                                             \
@@ -107,6 +109,7 @@ namespace boost
                 return(*this);                                                              \
             }                                                                               \
                                                                                             \
+            BOOST_CXX14_CONSTEXPR                                                           \
             quaternion<type> &        operator = (::std::complex<type> const & a_affecter)  \
             {                                                                               \
                 a = a_affecter.real();                                                      \
@@ -136,10 +139,10 @@ namespace boost
             // constructor for H seen as R^4
             // (also default constructor)
             
-            explicit            quaternion( T const & requested_a = T(),
-                                            T const & requested_b = T(),
-                                            T const & requested_c = T(),
-                                            T const & requested_d = T())
+            explicit BOOST_CONSTEXPR quaternion( T const & requested_a = T(),
+                                                 T const & requested_b = T(),
+                                                 T const & requested_c = T(),
+                                                 T const & requested_d = T())
             :   a(requested_a),
                 b(requested_b),
                 c(requested_c),
@@ -151,8 +154,8 @@ namespace boost
             
             // constructor for H seen as C^2
                 
-            explicit            quaternion( ::std::complex<T> const & z0,
-                                            ::std::complex<T> const & z1 = ::std::complex<T>())
+            explicit BOOST_CONSTEXPR quaternion( ::std::complex<T> const & z0,
+                                                 ::std::complex<T> const & z1 = ::std::complex<T>())
             :   a(z0.real()),
                 b(z0.imag()),
                 c(z1.real()),
@@ -169,7 +172,7 @@ namespace boost
             // templated copy constructor
             
             template<typename X>
-            explicit            quaternion(quaternion<X> const & a_recopier)
+            explicit BOOST_CONSTEXPR quaternion(quaternion<X> const & a_recopier)
             :   a(static_cast<T>(a_recopier.R_component_1())),
                 b(static_cast<T>(a_recopier.R_component_2())),
                 c(static_cast<T>(a_recopier.R_component_3())),
@@ -204,6 +207,7 @@ namespace boost
             //            symbolically, "q *= rhs;" means "q = q * rhs;"
             //            and "q /= rhs;" means "q = q * inverse_of(rhs);"
             
+            BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator += (T const & rhs)
             {
                 T    at = a + rhs;    // exception guard
@@ -214,6 +218,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator += (::std::complex<T> const & rhs)
             {
                 T    at = a + rhs.real();    // exception guard
@@ -226,7 +231,7 @@ namespace boost
             }
             
             
-            template<typename X>
+            template<typename X> BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator += (quaternion<X> const & rhs)
             {
                 T    at = a + static_cast<T>(rhs.R_component_1());    // exception guard
@@ -244,6 +249,7 @@ namespace boost
             
             
             
+            BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator -= (T const & rhs)
             {
                 T    at = a - rhs;    // exception guard
@@ -254,6 +260,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator -= (::std::complex<T> const & rhs)
             {
                 T    at = a - rhs.real();    // exception guard
@@ -266,7 +273,7 @@ namespace boost
             }
             
             
-            template<typename X>
+            template<typename X> BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator -= (quaternion<X> const & rhs)
             {
                 T    at = a - static_cast<T>(rhs.R_component_1());    // exception guard
@@ -283,6 +290,8 @@ namespace boost
             }
             
             
+            
+            BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator *= (T const & rhs)
             {
                 T    at = a * rhs;    // exception guard
@@ -299,6 +308,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator *= (::std::complex<T> const & rhs)
             {
                 T    ar = rhs.real();
@@ -318,7 +328,7 @@ namespace boost
             }
             
             
-            template<typename X>
+            template<typename X> BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator *= (quaternion<X> const & rhs)
             {
                 T    ar = static_cast<T>(rhs.R_component_1());
@@ -341,6 +351,7 @@ namespace boost
             
             
             
+            BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator /= (T const & rhs)
             {
                 T    at = a / rhs;    // exception guard
@@ -357,6 +368,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator /= (::std::complex<T> const & rhs)
             {
                 T    ar = rhs.real();
@@ -378,7 +390,7 @@ namespace boost
             }
             
             
-            template<typename X>
+            template<typename X> BOOST_CXX14_CONSTEXPR
             quaternion<T> &        operator /= (quaternion<X> const & rhs)
             {
                 T    ar = static_cast<T>(rhs.R_component_1());
@@ -434,29 +446,30 @@ namespace boost
         // implementation of quaternion specialization
         
         
-#define    BOOST_QUATERNION_CONSTRUCTOR_GENERATOR(type)                                                 \
-            explicit            quaternion( type const & requested_a = static_cast<type>(0),            \
-                                            type const & requested_b = static_cast<type>(0),            \
-                                            type const & requested_c = static_cast<type>(0),            \
-                                            type const & requested_d = static_cast<type>(0))            \
-            :   a(requested_a),                                                                         \
-                b(requested_b),                                                                         \
-                c(requested_c),                                                                         \
-                d(requested_d)                                                                          \
-            {                                                                                           \
-            }                                                                                           \
-                                                                                                        \
-            explicit            quaternion( ::std::complex<type> const & z0,                            \
-                                            ::std::complex<type> const & z1 = ::std::complex<type>())   \
-            :   a(z0.real()),                                                                           \
-                b(z0.imag()),                                                                           \
-                c(z1.real()),                                                                           \
-                d(z1.imag())                                                                            \
-            {                                                                                           \
+#define    BOOST_QUATERNION_CONSTRUCTOR_GENERATOR(type)                                                    \
+            explicit BOOST_CONSTEXPR quaternion( type const & requested_a = static_cast<type>(0),          \
+                                                 type const & requested_b = static_cast<type>(0),          \
+                                                 type const & requested_c = static_cast<type>(0),          \
+                                                 type const & requested_d = static_cast<type>(0))          \
+            :   a(requested_a),                                                                            \
+                b(requested_b),                                                                            \
+                c(requested_c),                                                                            \
+                d(requested_d)                                                                             \
+            {                                                                                              \
+            }                                                                                              \
+                                                                                                           \
+            explicit BOOST_CONSTEXPR quaternion( ::std::complex<type> const & z0,                          \
+                                                 ::std::complex<type> const & z1 = ::std::complex<type>()) \
+            :   a(z0.real()),                                                                              \
+                b(z0.imag()),                                                                              \
+                c(z1.real()),                                                                              \
+                d(z1.imag())                                                                               \
+            {                                                                                              \
             }
         
         
 #define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_1(type)             \
+            BOOST_CXX14_CONSTEXPR                                    \
             quaternion<type> &        operator += (type const & rhs) \
             {                                                        \
                 a += rhs;                                            \
@@ -465,6 +478,7 @@ namespace boost
             }
     
 #define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_2(type)                             \
+            BOOST_CXX14_CONSTEXPR                                                    \
             quaternion<type> &        operator += (::std::complex<type> const & rhs) \
             {                                                                        \
                 a += rhs.real();                                                     \
@@ -474,7 +488,7 @@ namespace boost
             }
     
 #define    BOOST_QUATERNION_MEMBER_ADD_GENERATOR_3(type)                      \
-            template<typename X>                                              \
+            template<typename X> BOOST_CXX14_CONSTEXPR                        \
             quaternion<type> &        operator += (quaternion<X> const & rhs) \
             {                                                                 \
                 a += static_cast<type>(rhs.R_component_1());                  \
@@ -486,6 +500,7 @@ namespace boost
             }
     
 #define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_1(type)             \
+            BOOST_CXX14_CONSTEXPR                                    \
             quaternion<type> &        operator -= (type const & rhs) \
             {                                                        \
                 a -= rhs;                                            \
@@ -494,6 +509,7 @@ namespace boost
             }
     
 #define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_2(type)                             \
+            BOOST_CXX14_CONSTEXPR                                                    \
             quaternion<type> &        operator -= (::std::complex<type> const & rhs) \
             {                                                                        \
                 a -= rhs.real();                                                     \
@@ -503,7 +519,7 @@ namespace boost
             }
     
 #define    BOOST_QUATERNION_MEMBER_SUB_GENERATOR_3(type)                      \
-            template<typename X>                                              \
+            template<typename X> BOOST_CXX14_CONSTEXPR                        \
             quaternion<type> &        operator -= (quaternion<X> const & rhs) \
             {                                                                 \
                 a -= static_cast<type>(rhs.R_component_1());                  \
@@ -515,6 +531,7 @@ namespace boost
             }
     
 #define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_1(type)             \
+            BOOST_CXX14_CONSTEXPR                                    \
             quaternion<type> &        operator *= (type const & rhs) \
             {                                                        \
                 a *= rhs;                                            \
@@ -526,6 +543,7 @@ namespace boost
             }
     
 #define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_2(type)                             \
+            BOOST_CXX14_CONSTEXPR                                                    \
             quaternion<type> &        operator *= (::std::complex<type> const & rhs) \
             {                                                                        \
                 type    ar = rhs.real();                                             \
@@ -545,7 +563,7 @@ namespace boost
             }
     
 #define    BOOST_QUATERNION_MEMBER_MUL_GENERATOR_3(type)                      \
-            template<typename X>                                              \
+            template<typename X> BOOST_CXX14_CONSTEXPR                        \
             quaternion<type> &        operator *= (quaternion<X> const & rhs) \
             {                                                                 \
                 type    ar = static_cast<type>(rhs.R_component_1());          \
@@ -574,6 +592,7 @@ namespace boost
 // (painfully) explicit.
     
 #define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_1(type)             \
+            BOOST_CXX14_CONSTEXPR                                    \
             quaternion<type> &        operator /= (type const & rhs) \
             {                                                        \
                 a /= rhs;                                            \
@@ -767,7 +786,7 @@ namespace boost
             // UNtemplated copy constructor
             // (this is taken care of by the compiler itself)
             
-            // explicit copy constructors (precision-loosing converters)
+            // explicit copy constructors (precision-losing converters)
             
             explicit            quaternion(quaternion<double> const & a_recopier)
             {
@@ -835,7 +854,7 @@ namespace boost
                 *this = detail::quaternion_type_converter<double, float>(a_recopier);
             }
             
-            // explicit copy constructors (precision-loosing converters)
+            // explicit copy constructors (precision-losing converters)
             
             explicit                quaternion(quaternion<long double> const & a_recopier)
             {
@@ -978,27 +997,27 @@ namespace boost
         }
         
 #define    BOOST_QUATERNION_OPERATOR_GENERATOR_1_L(op)                                                  \
-        template<typename T>                                                                            \
+        template<typename T>    BOOST_CXX14_CONSTEXPR                                                   \
         inline quaternion<T>    operator op (T const & lhs, quaternion<T> const & rhs)                  \
         BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)
         
 #define    BOOST_QUATERNION_OPERATOR_GENERATOR_1_R(op)                                                  \
-        template<typename T>                                                                            \
+        template<typename T>    BOOST_CXX14_CONSTEXPR                                                   \
         inline quaternion<T>    operator op (quaternion<T> const & lhs, T const & rhs)                  \
         BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)
         
 #define    BOOST_QUATERNION_OPERATOR_GENERATOR_2_L(op)                                                  \
-        template<typename T>                                                                            \
+        template<typename T>    BOOST_CXX14_CONSTEXPR                                                   \
         inline quaternion<T>    operator op (::std::complex<T> const & lhs, quaternion<T> const & rhs)  \
         BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)
         
 #define    BOOST_QUATERNION_OPERATOR_GENERATOR_2_R(op)                                                  \
-        template<typename T>                                                                            \
+        template<typename T>    BOOST_CXX14_CONSTEXPR                                                   \
         inline quaternion<T>    operator op (quaternion<T> const & lhs, ::std::complex<T> const & rhs)  \
         BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)
         
 #define    BOOST_QUATERNION_OPERATOR_GENERATOR_3(op)                                                    \
-        template<typename T>                                                                            \
+        template<typename T>    BOOST_CXX14_CONSTEXPR                                                   \
         inline quaternion<T>    operator op (quaternion<T> const & lhs, quaternion<T> const & rhs)      \
         BOOST_QUATERNION_OPERATOR_GENERATOR_BODY(op)
         
@@ -1027,21 +1046,21 @@ namespace boost
 #undef    BOOST_QUATERNION_OPERATOR_GENERATOR_BODY
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline quaternion<T>                    operator + (quaternion<T> const & q)
         {
             return(q);
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline quaternion<T>                    operator - (quaternion<T> const & q)
         {
             return(quaternion<T>(-q.R_component_1(),-q.R_component_2(),-q.R_component_3(),-q.R_component_4()));
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (T const & lhs, quaternion<T> const & rhs)
         {
             return    (
@@ -1053,7 +1072,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (quaternion<T> const & lhs, T const & rhs)
         {
             return    (
@@ -1065,7 +1084,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (::std::complex<T> const & lhs, quaternion<T> const & rhs)
         {
             return    (
@@ -1077,7 +1096,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (quaternion<T> const & lhs, ::std::complex<T> const & rhs)
         {
             return    (
@@ -1089,7 +1108,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (quaternion<T> const & lhs, quaternion<T> const & rhs)
         {
             return    (
@@ -1106,30 +1125,30 @@ namespace boost
             return(!(lhs == rhs));               \
         }
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (T const & lhs, quaternion<T> const & rhs)
         BOOST_QUATERNION_NOT_EQUAL_GENERATOR
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (quaternion<T> const & lhs, T const & rhs)
         BOOST_QUATERNION_NOT_EQUAL_GENERATOR
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (::std::complex<T> const & lhs, quaternion<T> const & rhs)
         BOOST_QUATERNION_NOT_EQUAL_GENERATOR
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (quaternion<T> const & lhs, ::std::complex<T> const & rhs)
         BOOST_QUATERNION_NOT_EQUAL_GENERATOR
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (quaternion<T> const & lhs, quaternion<T> const & rhs)
         BOOST_QUATERNION_NOT_EQUAL_GENERATOR
         
 #undef    BOOST_QUATERNION_NOT_EQUAL_GENERATOR
         
         
-        // Note:    we allow the following formats, whith a, b, c, and d reals
+        // Note:    we allow the following formats, with a, b, c, and d reals
         //            a
         //            (a), (a,b), (a,b,c), (a,b,c,d)
         //            (a,(c)), (a,(c,d)), ((a)), ((a),c), ((a),(c)), ((a),(c,d)), ((a,b)), ((a,b),c), ((a,b),(c)), ((a,b),(c,d))
@@ -1420,14 +1439,14 @@ namespace boost
         
         // values
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline T                                real(quaternion<T> const & q)
         {
             return(q.real());
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline quaternion<T>                    unreal(quaternion<T> const & q)
         {
             return(q.unreal());
@@ -1508,14 +1527,14 @@ namespace boost
         
         // Note:    This is the Cayley norm, not the Euclidian norm...
         
-        template<typename T>
+        template<typename T> BOOST_CXX14_CONSTEXPR
         inline T                                norm(quaternion<T>const  & q)
         {
             return(real(q*conj(q)));
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline quaternion<T>                    conj(quaternion<T> const & q)
         {
             return(quaternion<T>(   +q.R_component_1(),
@@ -1717,7 +1736,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CXX14_CONSTEXPR
         quaternion<T>                            pow(quaternion<T> const & q,
                                                     int n)
         {
