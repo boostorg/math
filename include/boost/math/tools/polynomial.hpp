@@ -15,6 +15,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/config/suffix.hpp>
 #include <boost/function.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/math/tools/rational.hpp>
@@ -192,8 +193,8 @@ std::pair< polynomial<T>, polynomial<T> >
 division(polynomial<T> u, const polynomial<T>& v)
 {
     BOOST_ASSERT(v.size() <= u.size());
-    BOOST_ASSERT(v != zero_element(std::multiplies< polynomial<T> >()));
-    BOOST_ASSERT(u != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_ASSERT(v);
+    BOOST_ASSERT(u);
 
     typedef typename polynomial<T>::size_type N;
     
@@ -246,9 +247,9 @@ template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
-    BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_ASSERT(divisor);
     if (dividend.size() < divisor.size())
-        return std::make_pair(zero_element(std::multiplies< polynomial<T> >()), dividend);
+        return std::make_pair(polynomial<T>(), dividend);
     return detail::division(dividend, divisor);
 }
 
@@ -397,7 +398,7 @@ public:
        }
        else
        {
-           m_data.clear();
+           set_zero();
        }
        return *this;
    }
@@ -419,10 +420,9 @@ public:
    polynomial& operator *=(const polynomial& value)
    {
       // TODO: FIXME: use O(N log(N)) algorithm!!!
-      polynomial const zero = zero_element(std::multiplies<polynomial>());
-      if (value == zero)
+      if (!value)
       {
-          *this = zero;
+          this->set_zero();
           return *this;
       }
       std::vector<T> prod(size() + value.size() - 1, T(0));
@@ -458,6 +458,33 @@ public:
        m_data.insert(m_data.begin(), n, static_cast<T>(0));
        normalize();
        return *this;
+   }
+   
+   // Convenient and efficient query for zero.
+   bool is_zero() const
+   {
+       return m_data.empty();
+   }
+   
+   // Conversion to bool.
+#ifdef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
+   typedef bool (polynomial::*unmentionable_type)() const;
+
+   BOOST_FORCEINLINE operator unmentionable_type() const
+   {
+       return is_zero() ? false : &polynomial::is_zero;
+   }
+#else
+   BOOST_FORCEINLINE explicit operator bool() const
+   {
+       return !m_data.empty();
+   }
+#endif
+
+   // Fast way to set a polynomial to zero.
+   void set_zero()
+   {
+       m_data.clear();
    }
     
     /** Remove zero coefficients 'from the top', that is for which there are no

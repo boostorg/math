@@ -36,6 +36,10 @@
       const value_type& operator[](size_type i)const;
       std::vector<T> const& data() const;
       std::vector<T>& data();
+      explicit operator bool() const;
+      
+      // modify:
+      void set_zero();
 
       // operators:
       template <class U>
