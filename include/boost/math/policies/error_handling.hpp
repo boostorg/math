@@ -26,6 +26,7 @@
 #  pragma warning(push) // Quiet warnings in boost/format.hpp
 #  pragma warning(disable: 4996) // _SCL_SECURE_NO_DEPRECATE
 #  pragma warning(disable: 4512) // assignment operator could not be generated.
+#  pragma warning(disable: 4127) // conditional expression is constant
 // And warnings in error handling:
 #  pragma warning(disable: 4702) // unreachable code.
 // Note that this only occurs when the compiler can deduce code is unreachable,
