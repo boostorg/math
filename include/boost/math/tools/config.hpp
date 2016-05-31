@@ -449,7 +449,7 @@ namespace boost{ namespace math{
 #  define BOOST_MATH_THREAD_LOCAL thread_local
 #elif defined(__GNUC__)
 #  define BOOST_MATH_THREAD_LOCAL __thread
-#elif define(__MSC_VER__)
+#elif defined(__MSC_VER__)
 #  define BOOST_MATH_THREAD_LOCAL __declspec(thread)
 #else
 #  define BOOST_MATH_THREAD_LOCAL
