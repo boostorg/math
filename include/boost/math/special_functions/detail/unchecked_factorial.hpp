@@ -712,7 +712,7 @@ inline T unchecked_factorial_imp(unsigned i, const mpl::int_<0>&)
       if(digits != boost::math::tools::digits<T>())
       {
          for(unsigned k = 0; k < sizeof(factorials) / sizeof(factorials[0]); ++k)
-            factorials[k] = boost::math::tools::convert_from_string<T>(factorial_strings[k]);
+            factorials[k] = static_cast<T>(boost::math::tools::convert_from_string<T>(factorial_strings[k]));
       }
 
    return factorials[i];
