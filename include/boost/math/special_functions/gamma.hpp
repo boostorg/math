@@ -514,7 +514,7 @@ inline T log_gamma_near_1(const T& z, Policy const& pol)
 
    do
    {
-      term = boost::math::zeta<T>(j + 2) * power_term / (j + 2);
+      term = boost::math::zeta<T>(j + 2, pol) * power_term / (j + 2);
       if(j & 1)
          result -= term;
       else
@@ -721,7 +721,7 @@ T tgammap1m1_imp(T dz, Policy const& pol, const Lanczos& l)
 
 template <class T, class Policy>
 inline T tgammap1m1_imp(T z, Policy const& pol,
-                 const ::boost::math::lanczos::undefined_lanczos& l)
+                 const ::boost::math::lanczos::undefined_lanczos&)
 {
    BOOST_MATH_STD_USING // ADL of std names
 
