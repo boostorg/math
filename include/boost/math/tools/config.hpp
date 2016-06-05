@@ -445,7 +445,7 @@ namespace boost{ namespace math{
 //
 // Thread local storage:
 //
-#ifndef BOOST_NO_CXX11_HDR_THREAD
+#if (__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
 #  define BOOST_MATH_THREAD_LOCAL thread_local
 #elif defined(__GNUC__)
 #  define BOOST_MATH_THREAD_LOCAL __thread
