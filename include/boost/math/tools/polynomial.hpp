@@ -495,11 +495,6 @@ public:
        m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
    }
 
-   operator bool() const
-   {
-       return !m_data.empty();
-   }
-   
 private:
     template <class U, class R1, class R2>
     polynomial& addition(const U& value, R1 sign, R2 op)
@@ -683,16 +678,21 @@ polynomial<T> operator - (polynomial<T> a)
 template <class T>
 T content(polynomial<T> const &x)
 {
-    polynomial<T> const zero = zero_element(std::multiplies< polynomial<T> >());
-    return x == zero ? T(0) : gcd_n(x.data().begin(), x.data().end());
+    return x ? gcd_range(x.data().begin(), x.data().end()).first : T(0);
 }
 
 // Knuth, 4.6.1
 template <class T>
+polynomial<T> primitive_part(polynomial<T> const &x, T const &cont)
+{
+    return x ? x / cont : polynomial<T>();
+}
+
+
+template <class T>
 polynomial<T> primitive_part(polynomial<T> const &x)
 {
-    polynomial<T> const zero = zero_element(std::multiplies< polynomial<T> >());
-    return x == zero ? zero : x / content(x);
+    return primitive_part(x, content(x));
 }
 
 
