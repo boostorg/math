@@ -666,7 +666,7 @@ polynomial<T> operator - (polynomial<T> a)
 
 /* From Knuth, 4.6.1:
  * 
- * We may write any nonzero polynomial u(x) as
+ * We may write any nonzero polynomial u(x) from R[x] where R is a UFD as
  *
  *      u(x) = cont(u) · pp(u(x))
  *
