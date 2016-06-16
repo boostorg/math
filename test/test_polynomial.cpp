@@ -331,6 +331,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
     BOOST_CHECK_EQUAL(even(b), true);
 }
 
+
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
 {
     polynomial<T> a(d3a.begin(), d3a.end());
@@ -352,4 +353,24 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
 
     BOOST_CHECK_THROW(pow(a, -1), std::domain_error);
     BOOST_CHECK_EQUAL(pow(one, 137), one);
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_bool, T, all_test_types)
+{
+    polynomial<T> const zero;
+    polynomial<T> const a(d0a.begin(), d0a.end());
+    BOOST_CHECK_EQUAL(bool(zero), false);
+    BOOST_CHECK_EQUAL(bool(a), true);
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_set_zero, T, all_test_types)
+{
+    polynomial<T> const zero;
+    polynomial<T> a(d0a.begin(), d0a.end());
+    a.set_zero();
+    BOOST_CHECK_EQUAL(a, zero);
+    a.set_zero(); // Ensure that setting zero to zero is a no-op.
+    BOOST_CHECK_EQUAL(a, zero);
 }
