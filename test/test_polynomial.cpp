@@ -244,11 +244,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
 }
 
 
-typedef boost::mpl::list<short, int> sp_integral_gcd_test_types;
-typedef boost::mpl::joint_view<sp_integral_gcd_test_types, mp_integral_test_types> integral_gcd_test_types;
-
-
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_ufd, T, sp_integral_gcd_test_types)
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_ufd, T, integral_test_types)
 {
     polynomial<T> const a(d8.begin(), d8.end());
     polynomial<T> const b(d6.begin(), d6.end());
