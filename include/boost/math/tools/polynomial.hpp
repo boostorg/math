@@ -718,32 +718,32 @@ namespace detail
     }
 }
 
-/* 4.6.1C: Greatest common divisor over a unique factorization domain.
+
+/**
+ * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
+ * Algorithm 4.6.1C: Greatest common divisor over a unique factorization domain.
+ * 
+ * The subresultant algorithm by George E. Collins [JACM 14 (1967), 128-142], 
+ * later improved by W. S. Brown and J. F. Traub [JACM 18 (1971), 505-514].
  * 
  * Although step C3 keeps the coefficients to a "reasonable" size, they are
  * still potentially several binary orders of magnitude larger than the inputs.
+ * Thus, this algorithm should only be used where T is a multi-precision type.
+ * 
+ * @tparam  T   Polynomial coefficient type.
+ * @return      Greatest common divisor of polynomials u and v.
  */
 template <class T>
 typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
-gcd_ufd(polynomial<T> const &a, polynomial<T> const &b)
+gcd_ufd(polynomial<T> u, polynomial<T> v)
 {
-    BOOST_ASSERT(a);
-    BOOST_ASSERT(b);
+    BOOST_ASSERT(u);
+    BOOST_ASSERT(v);
     typedef typename polynomial<T>::size_type N;
-    // If T is a POD, double the output size, otherwise assume it is multi-prec.
-    /*
-    typedef typename mpl::if_<is_pod<T>,
-                            typename mpl::if_<is_unsigned<T>, 
-                                    typename uint_t<sizeof(T) * 16>::fast, 
-                                    typename int_t<sizeof(T) * 16>::fast >::type,
-                            T>::type U;
-                            */
-    typedef T U;
     
-    polynomial<U> u(a), v(b);
-    U const d = detail::reduce_to_primitive(u, v);
-    U g = 1, h = 1;
-    polynomial<U> r;
+    T const d = detail::reduce_to_primitive(u, v);
+    T g = 1, h = 1;
+    polynomial<T> r;
     while (true)
     {
         // Pseudo-division.
@@ -752,7 +752,7 @@ gcd_ufd(polynomial<T> const &a, polynomial<T> const &b)
             return d * primitive_part(v); // Attach the content.
         if (r.degree() == 0)
         {
-            v = polynomial<U>(U(1));
+            v = polynomial<T>(T(1));
             return d * primitive_part(v); // Attach the content.
         }
         N const delta = u.degree() - v.degree();
@@ -761,7 +761,7 @@ gcd_ufd(polynomial<T> const &a, polynomial<T> const &b)
         v = r / (g * detail::integer_power(h, delta));
         g = leading_coefficient(u);
         T const tmp = detail::integer_power(g, delta);
-        if (delta <= 1)
+        if (delta <= N(1))
             h = tmp * detail::integer_power(h, N(1) - delta);
         else
             h = tmp / detail::integer_power(h, delta - N(1));
