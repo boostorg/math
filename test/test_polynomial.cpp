@@ -239,12 +239,27 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_non_integral_arithmetic_relations, T, non_int
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
 {
-    polynomial<T> const a(d8b.begin(), d8b.end());
-    BOOST_CHECK_EQUAL(a, content(a) * primitive_part(a));
+    boost::array<polynomial<T>, 4> const q={{
+        polynomial<T>(d8.begin(), d8.end()), 
+        polynomial<T>(d8b.begin(), d8b.end()),
+        polynomial<T>(d3a.begin(), d3a.end()),
+        polynomial<T>(d3b.begin(), d3b.end())
+    }};
+    for (std::size_t i = 0; i < q.size(); i++)
+    {
+        BOOST_CHECK_EQUAL(q[i], content(q[i]) * primitive_part(q[i]));
+        BOOST_CHECK_EQUAL(primitive_part(q[i]), primitive_part(q[i], content(q[i])));
+    }
+
+    polynomial<T> const zero;
+    BOOST_CHECK_EQUAL(primitive_part(zero), zero);
+    BOOST_CHECK_EQUAL(content(zero), T(0));
 }
 
+typedef boost::mpl::list<int, long> il_integral_test_types;
+typedef boost::mpl::joint_view<il_integral_test_types, mp_integral_test_types> ufd_integral_test_types;
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_ufd, T, integral_test_types)
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_ufd, T, ufd_integral_test_types)
 {
     polynomial<T> const a(d8.begin(), d8.end());
     polynomial<T> const b(d6.begin(), d6.end());
@@ -259,6 +274,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_ufd, T, integral_test_types)
     polynomial<T> const w(i2.begin(), i2.end());
     d = gcd_ufd(u, v);
     BOOST_CHECK_EQUAL(d, w);
+    
+    polynomial<T> const zero;
+    BOOST_CHECK_EQUAL(gcd_ufd(a, zero), a);
+    BOOST_CHECK_EQUAL(gcd_ufd(zero, a), a);
 }
 
 
