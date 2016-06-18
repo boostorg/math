@@ -737,8 +737,13 @@ template <class T>
 typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
 gcd_ufd(polynomial<T> u, polynomial<T> v)
 {
-    BOOST_ASSERT(u);
-    BOOST_ASSERT(v);
+    BOOST_ASSERT(u || v);
+    
+    if (!u)
+        return v;
+    if (!v)
+        return u;
+    
     typedef typename polynomial<T>::size_type N;
     
     T const d = detail::reduce_to_primitive(u, v);
