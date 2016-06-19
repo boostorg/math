@@ -735,7 +735,7 @@ namespace detail
  */
 template <class T>
 typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
-gcd_ufd(polynomial<T> u, polynomial<T> v)
+subresultant_gcd(polynomial<T> u, polynomial<T> v)
 {
     BOOST_ASSERT(u || v);
     
@@ -777,7 +777,7 @@ template <class T>
 typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
-    return gcd_ufd(u, v);
+    return subresultant_gcd(u, v);
 }
 
 

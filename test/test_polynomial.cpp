@@ -259,11 +259,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
 typedef boost::mpl::list<int, long> il_integral_test_types;
 typedef boost::mpl::joint_view<il_integral_test_types, mp_integral_test_types> ufd_integral_test_types;
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_ufd, T, ufd_integral_test_types)
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_subresultant_gcd, T, ufd_integral_test_types)
 {
     polynomial<T> const a(d8.begin(), d8.end());
     polynomial<T> const b(d6.begin(), d6.end());
-    polynomial<T> d = gcd_ufd(a, b);
+    polynomial<T> d = subresultant_gcd(a, b);
     BOOST_CHECK_EQUAL(d, polynomial<T>(1));
     
     boost::array<T, 5> const i4a = {{105, 278, -88, -56, 16}};
@@ -272,12 +272,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_gcd_ufd, T, ufd_integral_test_types)
     polynomial<T> const u(i4a.begin(), i4a.end());
     polynomial<T> const v(i4b.begin(), i4b.end());
     polynomial<T> const w(i2.begin(), i2.end());
-    d = gcd_ufd(u, v);
+    d = subresultant_gcd(u, v);
     BOOST_CHECK_EQUAL(d, w);
     
     polynomial<T> const zero;
-    BOOST_CHECK_EQUAL(gcd_ufd(a, zero), a);
-    BOOST_CHECK_EQUAL(gcd_ufd(zero, a), a);
+    BOOST_CHECK_EQUAL(subresultant_gcd(a, zero), a);
+    BOOST_CHECK_EQUAL(subresultant_gcd(zero, a), a);
 }
 
 
