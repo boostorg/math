@@ -295,13 +295,14 @@ namespace detail
     {
         using std::swap;
         BOOST_ASSERT(m || n);
+        // TODO: What is a negative polynomial???
         // BOOST_ASSERT(m >= 0);
         // BOOST_ASSERT(n >= 0);
         if (!m)
             return n;
         if (!n)
             return m;
-        // m > 0 && n > 0
+        // m > 0 && n > 0   ???
         unsigned shifts = std::min(gcd_traits<SteinDomain>::make_odd(m), gcd_traits<SteinDomain>::make_odd(n));
         // odd(m) && odd(n)
         while (m != n)
