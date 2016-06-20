@@ -294,6 +294,7 @@ namespace detail
     SteinDomain Stein_gcd(SteinDomain m, SteinDomain n)
     {
         using std::swap;
+        BOOST_ASSERT(m || n);
         // BOOST_ASSERT(m >= 0);
         // BOOST_ASSERT(n >= 0);
         if (!m)
