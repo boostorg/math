@@ -109,10 +109,7 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
         if (!r)
             return d * primitive_part(v); // Attach the content.
         if (r.degree() == 0)
-        {
-            v = polynomial<T>(T(1));
-            return d * primitive_part(v); // Attach the content.
-        }
+            return d * polynomial<T>(T(1)); // The content is the result.
         N const delta = u.degree() - v.degree();
         // Adjust remainder.
         u = v;
