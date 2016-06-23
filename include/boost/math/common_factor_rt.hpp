@@ -309,15 +309,16 @@ namespace detail
         {
             if (gcd_traits<SteinDomain>::less(m, n))
                 swap(n, m);
-            // n <= m (by degree)
+            BOOST_ASSERT(n.degree() <= m.degree());
             gcd_traits<SteinDomain>::subtract(m, n);
-            // gcd_traits<SteinDomain>::make_odd(m);
+            BOOST_ASSERT(even(m));
+            // With polynomials, it is possible that m is now zero.
             if (!m)
             {
                 n <<= shifts;
                 return n;
             }
-            BOOST_ASSERT(even(m));
+            // gcd_traits<SteinDomain>::make_odd(m);
             do m >>= 1; while (even(m));
         }
         // m == n
