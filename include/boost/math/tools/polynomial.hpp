@@ -744,13 +744,13 @@ struct gcd_traits< boost::math::tools::polynomial<T> > : public gcd_traits_defau
     inline static void
     subtract(boost::math::tools::polynomial<T> &a, boost::math::tools::polynomial<T> const &b)
     {
-        T ratio = a.data().front() / b.data().front();
-        a -= ratio * b;
+        T const ratio_of_constants = a.data().front() / b.data().front();
+        a -= ratio_of_constants * b;
         // normalize coefficients so that leading coefficient is whole
         if (std::floor(a.data().back()) != a.data().back())
         {
-            ratio = T(1) / a.data().back();
-            a *= ratio;
+            T const inv_leading_coeff = T(1) / a.data().back();
+            a *= inv_leading_coeff;
         }
     }
 };
