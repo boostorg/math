@@ -17,14 +17,11 @@
 #include <boost/config.hpp>
 #include <boost/config/suffix.hpp>
 #include <boost/function.hpp>
-#include <boost/integer.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/binomial.hpp>
-#include <boost/math/common_factor_rt.hpp>
-#include <boost/mpl/if.hpp>
 #include <boost/operators.hpp>
 
 #include <vector>
@@ -662,7 +659,6 @@ polynomial<T> operator - (polynomial<T> a)
     std::transform(a.data().begin(), a.data().end(), a.data().begin(), std::negate<T>());
     return a;
 }
-
 
 template <class T>
 bool odd(polynomial<T> const &a)

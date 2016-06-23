@@ -12,6 +12,7 @@
 #endif
 
 #include <boost/math/tools/polynomial.hpp>
+#include <boost/math/common_factor_rt.hpp>
 
 
 namespace boost{ namespace math{ namespace tools{
