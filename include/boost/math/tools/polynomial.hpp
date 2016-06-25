@@ -710,6 +710,13 @@ inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT,
    return os;
 }
 
+
+template <typename T>
+T constant_coefficient(polynomial<T> const &x)
+{
+    return x ? x.data().front() : T(0);
+}
+
 } // namespace tools
 
 //
@@ -744,14 +751,13 @@ struct gcd_traits< boost::math::tools::polynomial<T> > : public gcd_traits_defau
     inline static void
     subtract(boost::math::tools::polynomial<T> &a, boost::math::tools::polynomial<T> const &b)
     {
-        T const ratio_of_constants = a.data().front() / b.data().front();
-        a -= ratio_of_constants * b;
+        using std::floor;
+
+        T const r = constant_coefficient(a) / constant_coefficient(b);
+        a -= r * b;
         // normalize coefficients so that leading coefficient is whole
-        if (std::floor(a.data().back()) != a.data().back())
-        {
-            T const inv_leading_coeff = T(1) / a.data().back();
-            a *= inv_leading_coeff;
-        }
+        if (floor(a.data().back()) != a.data().back())
+            a /= a.data().back();
     }
 };
     
