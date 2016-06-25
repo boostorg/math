@@ -145,8 +145,16 @@ BOOST_AUTO_TEST_CASE( test_division_over_ufd )
     BOOST_CHECK_EQUAL(aa % aa, zero);
 }
 
+typedef boost::mpl::list<int, long, boost::multiprecision::cpp_int> integral_test_types;
+typedef boost::mpl::list<float, double, long double> pod_floating_point_types;
+typedef boost::mpl::list<boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50> mp_floating_point_types;
+typedef boost::mpl::list<boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50> mp_non_integral_test_types;
+typedef boost::mpl::joint_view<pod_floating_point_types, mp_floating_point_types> floating_point_types;
+typedef boost::mpl::joint_view<pod_floating_point_types, mp_non_integral_test_types> non_integral_test_types;
+typedef boost::mpl::joint_view<integral_test_types, non_integral_test_types> all_test_types;
 
-BOOST_AUTO_TEST_CASE( test_Euclidean_gcd )
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_Euclidean_gcd, T, floating_point_types)
 {
     /* NOTE: Euclidean gcd is not yet customized to return THE greatest 
      * common polynomial divisor. If d is THE greatest common divisior of u and
@@ -155,51 +163,58 @@ BOOST_AUTO_TEST_CASE( test_Euclidean_gcd )
      * Alpha do.
      * This test is an example of the fact that it returns -d.
      */
-    boost::array<double, 9> const d8 = {{105, 278, -88, -56, 16}};
-    boost::array<double, 7> const d6 = {{70, 232, -44, -64, 16}};
-    boost::array<double, 7> const d2 = {{35, -24, 4}};
-    polynomial<double> u(d8.begin(), d8.end());
-    polynomial<double> v(d6.begin(), d6.end());
-    polynomial<double> expected(d2.begin(), d2.end());
-    polynomial<double> result = boost::math::detail::Euclid_gcd(u, v);
-    BOOST_CHECK_EQUAL(result, expected);
-    boost::array<double, 4> const s3 = {{-2, -3, 0, 1}};
-    boost::array<double, 3> const s2 = {{-4, 0, 1}};
-    boost::array<double, 3> const d_expected = {{-2, 1}};
-    u = polynomial<double>(s3.begin(), s3.end());
-    v = polynomial<double>(s2.begin(), s2.end());
-    expected = polynomial<double>(d_expected.begin(), d_expected.end());
+    boost::array<T, 9> const d8 = {{105, 278, -88, -56, 16}};
+    boost::array<T, 7> const d6 = {{70, 232, -44, -64, 16}};
+    boost::array<T, 7> const d2 = {{35, -24, 4}};
+    polynomial<T> u(d8.begin(), d8.end());
+    polynomial<T> v(d6.begin(), d6.end());
+    polynomial<T> expected(d2.begin(), d2.end());
+    polynomial<T> result;
     result = boost::math::detail::Euclid_gcd(u, v);
-    BOOST_CHECK_EQUAL(result, expected);
+    BOOST_CHECK(result == expected || result == expected * T(-1.0));
+    result = boost::math::detail::Euclid_gcd(v, u);
+    BOOST_CHECK(result == expected || result == expected * T(-1.0));
+    
+    boost::array<T, 4> const s3 = {{-2, -3, 0, 1}};
+    boost::array<T, 3> const s2 = {{-4, 0, 1}};
+    boost::array<T, 3> const d_expected = {{-2, 1}};
+    u = polynomial<T>(s3.begin(), s3.end());
+    v = polynomial<T>(s2.begin(), s2.end());
+    expected = polynomial<T>(d_expected.begin(), d_expected.end());
+    result = boost::math::detail::Euclid_gcd(u, v);
+    BOOST_CHECK(result == expected || result == expected * T(-1.0));
+    result = boost::math::detail::Euclid_gcd(v, u);
+    BOOST_CHECK(result == expected || result == expected * T(-1.0));
 }
 
 
-BOOST_AUTO_TEST_CASE( test_Stein_gcd )
+BOOST_AUTO_TEST_CASE_TEMPLATE( test_Stein_gcd, T, pod_floating_point_types )
 {
     // Stein gcd is not quite right for polynomials yet.
-    boost::array<double, 9> const d8 = {{105, 278, -88, -56, 16}};
-    boost::array<double, 7> const d6 = {{70, 232, -44, -64, 16}};
-    boost::array<double, 7> const d2 = {{35, -24, 4}};
-    polynomial<double> u(d8.begin(), d8.end());
-    polynomial<double> v(d6.begin(), d6.end());
-    polynomial<double> expected(d2.begin(), d2.end());
-    polynomial<double> result = boost::math::detail::Stein_gcd(u, v);
-    BOOST_CHECK_EQUAL(result, expected);
-    boost::array<double, 4> const s3 = {{-2, -3, 0, 1}};
-    boost::array<double, 3> const s2 = {{-4, 0, 1}};
-    boost::array<double, 3> const d_expected = {{-2, 1}};
-    u = polynomial<double>(s3.begin(), s3.end());
-    v = polynomial<double>(s2.begin(), s2.end());
-    expected = polynomial<double>(d_expected.begin(), d_expected.end());
+    boost::array<T, 9> const d8 = {{105, 278, -88, -56, 16}};
+    boost::array<T, 7> const d6 = {{70, 232, -44, -64, 16}};
+    boost::array<T, 7> const d2 = {{35, -24, 4}};
+    polynomial<T> u(d8.begin(), d8.end());
+    polynomial<T> v(d6.begin(), d6.end());
+    polynomial<T> expected(d2.begin(), d2.end());
+    polynomial<T> result;
     result = boost::math::detail::Stein_gcd(u, v);
+    BOOST_CHECK_EQUAL(result, expected);
+    result = boost::math::detail::Stein_gcd(v, u);
+    BOOST_CHECK_EQUAL(result, expected);
+    
+    boost::array<T, 4> const s3 = {{-2, -3, 0, 1}};
+    boost::array<T, 3> const s2 = {{-4, 0, 1}};
+    boost::array<T, 3> const d_expected = {{-2, 1}};
+    u = polynomial<T>(s3.begin(), s3.end());
+    v = polynomial<T>(s2.begin(), s2.end());
+    expected = polynomial<T>(d_expected.begin(), d_expected.end());
+    result = boost::math::detail::Stein_gcd(u, v);
+    BOOST_CHECK_EQUAL(result, expected);
+    result = boost::math::detail::Stein_gcd(v, u);
     BOOST_CHECK_EQUAL(result, expected);
 }
 
-
-// Sanity checks to make sure I didn't break it.
-typedef boost::mpl::list<int, long, boost::multiprecision::cpp_int> integral_test_types;
-typedef boost::mpl::list<double, boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50> non_integral_test_types;
-typedef boost::mpl::joint_view<integral_test_types, non_integral_test_types> all_test_types;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
 {
