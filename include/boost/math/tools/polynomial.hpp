@@ -751,6 +751,8 @@ struct gcd_traits< boost::math::tools::polynomial<T> > : public gcd_traits_defau
     inline static void
     subtract(boost::math::tools::polynomial<T> &a, boost::math::tools::polynomial<T> const &b)
     {
+#if 0
+        // Stepanov's implementation; suffers from floating point inaccuracy.
         using std::floor;
 
         T const r = constant_coefficient(a) / constant_coefficient(b);
@@ -758,6 +760,12 @@ struct gcd_traits< boost::math::tools::polynomial<T> > : public gcd_traits_defau
         // normalize coefficients so that leading coefficient is whole
         if (floor(a.data().back()) != a.data().back())
             a /= a.data().back();
+#else
+        // Antoine Joux's implementation: huge coefficients.
+        T const tmp = constant_coefficient(a);
+        a *= constant_coefficient(b);
+        a -= tmp * b;
+#endif
     }
 };
     
