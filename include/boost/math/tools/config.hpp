@@ -445,7 +445,7 @@ namespace boost{ namespace math{
 //
 // Thread local storage:
 //
-#ifdef __has_feature
+#if defined(__has_feature) && defined(__clang__)
 
 #if __has_feature(cxx_thread_local)
 #  define BOOST_MATH_THREAD_LOCAL thread_local
@@ -464,8 +464,9 @@ namespace boost{ namespace math{
 #  define BOOST_MATH_THREAD_LOCAL
 #endif
 
-#endif // BOOST_MATH_TOOLS_CONFIG_HPP
 #endif
+
+#endif // BOOST_MATH_TOOLS_CONFIG_HPP
 
 
 
