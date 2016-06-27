@@ -289,37 +289,37 @@ namespace detail
     /** Stein gcd (aka 'binary gcd')
      * 
      * From Mathematics to Generic Programming, Alexander Stepanov, Daniel Rose
+     * 
+     * What can we say about the Stein Domain? 
+     * - It must have zero.
+     * - It must have parity: being exclusively even or odd.
+     * - It must have a smallest prime (2 for integers, x for polynomials, etc).
+     * - It must have shift operations that add or remove factors of the smallest prime.
+     * - It does not work for negative integers.
      */
     template <typename SteinDomain>
     SteinDomain Stein_gcd(SteinDomain m, SteinDomain n)
     {
         using std::swap;
         BOOST_ASSERT(m || n);
-        // TODO: What is a negative polynomial???
-        // BOOST_ASSERT(m >= 0);
-        // BOOST_ASSERT(n >= 0);
         if (!m)
             return n;
         if (!n)
             return m;
-        // m > 0 && n > 0   ???
         unsigned shifts = std::min(gcd_traits<SteinDomain>::make_odd(m), gcd_traits<SteinDomain>::make_odd(n));
         // odd(m) && odd(n)
         while (m != n)
         {
             if (gcd_traits<SteinDomain>::less(m, n))
                 swap(n, m);
-            BOOST_ASSERT(n.degree() <= m.degree());
             gcd_traits<SteinDomain>::subtract(m, n);
-            BOOST_ASSERT(even(m));
-            // With polynomials, it is possible that m is now zero.
+            // With polynomials for example, it is possible that m is now zero.
             if (!m)
             {
                 n <<= shifts;
                 return n;
             }
-            // gcd_traits<SteinDomain>::make_odd(m);
-            do m >>= 1; while (even(m));
+            gcd_traits<SteinDomain>::make_odd(m);
         }
         // m == n
         m <<= shifts;
