@@ -432,9 +432,8 @@ gcd_range(I first, I last)
 {
     BOOST_ASSERT(first != last);
     typedef typename std::iterator_traits<I>::value_type T;
-    I second = first;
-    second++;
-    return accumulate_if(second, last, *first, gcd_evaluator<T>());
+    I const init(first++);
+    return accumulate_if(first, last, *init, gcd_evaluator<T>());
 }
 
 }  // namespace math
