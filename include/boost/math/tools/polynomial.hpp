@@ -721,14 +721,16 @@ T constant_coefficient(polynomial<T> const &x)
 
 //
 // Special handling for polynomials:
+// Note that gcd_traits_polynomial is templated on the coefficient type T,
+// not on polynomial<T>.
 //
 template <class T>
-struct gcd_traits< boost::math::tools::polynomial<T> > : public gcd_traits_defaults< boost::math::tools::polynomial<T> >
+struct gcd_traits_polynomial : public gcd_traits_defaults< boost::math::tools::polynomial<T> >
 {
-    static boost::math::tools::polynomial<T>
+    static boost::math::tools::polynomial<T> const &
     abs(const boost::math::tools::polynomial<T> &val)
     {
-        return val.size() > 0 && val.data().back() < T(0) ? -val : val;
+        return val;
     }
     
     inline static int make_odd(boost::math::tools::polynomial<T> &x)
@@ -768,11 +770,15 @@ struct gcd_traits< boost::math::tools::polynomial<T> > : public gcd_traits_defau
 #endif
     }
 };
+
+
+template <typename T>
+struct gcd_traits< boost::math::tools::polynomial<T> > : public gcd_traits_polynomial<T>
+{
     
+};
+
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_POLYNOMIAL_HPP
-
-
-
