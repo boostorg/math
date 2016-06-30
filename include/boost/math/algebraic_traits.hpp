@@ -41,7 +41,7 @@
  *      std::plus<std::string> op3;
  *      algebraic_traits::zero_element(op1) -> 0
  *      algebraic_traits::zero_element(op2) -> 0.0
- *      algebraic_traits::zero_element(op3) -> ""
+ *      algebraic_traits::identity_element(op3) -> ""
  * 
  * 
  * Properties to consider:
