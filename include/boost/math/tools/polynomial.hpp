@@ -25,6 +25,7 @@
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/operators.hpp>
 
+#include <limits>
 #include <vector>
 #include <ostream>
 #include <algorithm>
@@ -491,6 +492,12 @@ public:
        using namespace boost::lambda;
        m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
    }
+   
+   // Negate in-place.
+   void negate()
+   {
+       std::transform(data().begin(), data().end(), data().begin(), std::negate<T>());
+   }
 
 private:
     template <class U, class R1, class R2>
@@ -717,6 +724,14 @@ T constant_coefficient(polynomial<T> const &x)
     return x ? x.data().front() : T(0);
 }
 
+// Trivial but useful convenience function referred to simply as l() in Knuth.
+template <class T>
+T leading_coefficient(polynomial<T> const &x)
+{
+    BOOST_ASSERT(x);
+    return x.data().back();
+}
+
 } // namespace tools
 
 //
@@ -724,13 +739,36 @@ T constant_coefficient(polynomial<T> const &x)
 // Note that gcd_traits_polynomial is templated on the coefficient type T,
 // not on polynomial<T>.
 //
-template <class T>
-struct gcd_traits_polynomial : public gcd_traits_defaults< boost::math::tools::polynomial<T> >
+template <typename T, typename Enabled = void>
+struct gcd_traits_polynomial 
+{};
+
+
+
+// gcd_traits for Z[x].
+template <typename T>
+struct gcd_traits_polynomial<T, typename enable_if_c< std::numeric_limits<T>::is_integer >::type > : public gcd_traits_defaults< boost::math::tools::polynomial<T> >
 {
     static boost::math::tools::polynomial<T> const &
     abs(const boost::math::tools::polynomial<T> &val)
     {
         return val;
+    }
+    
+    inline static 
+    void normalize(boost::math::tools::polynomial<T> &x)
+    {
+        using boost::lambda::_1;
+        
+        // This does assume that the coefficients are totally ordered.
+        if (x)
+        {
+            if (leading_coefficient(x) < T(0))
+                x.negate();
+            // Find the first non-zero, because we can't do gcd(0, 0).
+            T const d = gcd_range(find_if(x.data().begin(), x.data().end(), _1 != T(0)), x.data().end()).first;
+            x /= d;
+        }
     }
     
     inline static int make_odd(boost::math::tools::polynomial<T> &x)
@@ -753,20 +791,67 @@ struct gcd_traits_polynomial : public gcd_traits_defaults< boost::math::tools::p
     inline static void
     subtract(boost::math::tools::polynomial<T> &a, boost::math::tools::polynomial<T> const &b)
     {
-#if 0
-        // Stepanov's implementation; suffers from floating point inaccuracy.
-        using std::floor;
-
-        T const r = constant_coefficient(a) / constant_coefficient(b);
-        a -= r * b;
-        // normalize coefficients so that leading coefficient is whole
-        if (floor(a.data().back()) != a.data().back())
-            a /= a.data().back();
-#else
         // Antoine Joux's implementation: huge coefficients.
         T const tmp = constant_coefficient(a);
         a *= constant_coefficient(b);
         a -= tmp * b;
+        normalize(a);
+    }
+};
+
+
+template <typename T>
+struct gcd_traits_polynomial<T, typename enable_if< is_floating_point<T> >::type > : public gcd_traits_defaults< boost::math::tools::polynomial<T> >
+{
+    static boost::math::tools::polynomial<T> const &
+    abs(const boost::math::tools::polynomial<T> &val)
+    {
+        return val;
+    }
+    
+    
+    inline static int make_odd(boost::math::tools::polynomial<T> &x)
+    {
+        unsigned r = 0;
+        while (even(x))
+        {
+            x >>= 1;
+            r++;
+        }
+        return r;
+    }
+    
+    inline static bool
+    less(boost::math::tools::polynomial<T> const &a, boost::math::tools::polynomial<T> const &b)
+    {
+        return a.size() < b.size();
+    }
+    
+    inline static void
+    subtract(boost::math::tools::polynomial<T> &a, boost::math::tools::polynomial<T> const &b)
+    {
+#if 1
+        // Stepanov's implementation; suffers from floating point inaccuracy.
+        using std::floor;
+        
+        T const r = constant_coefficient(a) / constant_coefficient(b);
+        a -= r * b;
+        // normalize coefficients so that leading coefficient is whole
+        if (a && floor(a.data().back()) != a.data().back())
+            a /= a.data().back();
+#else
+        using boost::lambda::_1;
+        
+        // Antoine Joux's implementation: huge coefficients.
+        T const tmp = constant_coefficient(a);
+        a *= constant_coefficient(b);
+        a -= tmp * b;
+        if (std::numeric_limits<T>::has_infinity)
+        {
+            T const &inf(std::numeric_limits<T>::infinity());
+            if (std::find_if(a.data().begin(), a.data().end(), _1 == inf || _1 == -inf) != a.data().end())
+                throw std::domain_error("Floating point overflow.");
+        }
 #endif
     }
 };
