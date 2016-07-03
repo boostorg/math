@@ -245,6 +245,23 @@ namespace boost {
       };
 #endif
 
+template <typename T>
+inline 
+typename enable_if_c<std::numeric_limits<T>::is_integer, bool>::type
+odd(const T& x)
+{
+    return x & 1u;
+}
+
+template <typename T>
+inline 
+typename enable_if_c<std::numeric_limits<T>::is_integer, bool>::type
+even(const T& x)
+{
+    return !odd(x);
+}
+      
+      
 namespace detail
 {
     
@@ -313,6 +330,7 @@ namespace detail
             if (gcd_traits<SteinDomain>::less(m, n))
                 swap(n, m);
             gcd_traits<SteinDomain>::subtract(m, n);
+            BOOST_ASSERT(even(m));
             // With polynomials for example, it is possible that m is now zero.
             if (!m)
             {
