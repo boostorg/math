@@ -166,8 +166,16 @@ BOOST_AUTO_TEST_CASE( test_gcd )
 }
 
 // Sanity checks to make sure I didn't break it.
-typedef boost::mpl::list<int, long, boost::multiprecision::cpp_int> integral_test_types;
-typedef boost::mpl::list<double, boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50> non_integral_test_types;
+typedef boost::mpl::list<int, long
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+   , boost::multiprecision::cpp_int
+#endif
+> integral_test_types;
+typedef boost::mpl::list<double
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+   , boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50
+#endif
+> non_integral_test_types;
 typedef boost::mpl::joint_view<integral_test_types, non_integral_test_types> all_test_types;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
