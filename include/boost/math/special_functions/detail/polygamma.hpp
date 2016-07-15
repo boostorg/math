@@ -407,14 +407,17 @@ namespace boost { namespace math { namespace detail{
 #ifdef BOOST_HAS_THREADS
      static boost::detail::lightweight_mutex m;
      boost::detail::lightweight_mutex::scoped_lock l(m);
-     static int digits = tools::digits<T>();
 #endif
+     static int digits = tools::digits<T>();
      static std::vector<std::vector<T> > table(1, std::vector<T>(1, T(-1)));
 
-     if(digits != tools::digits<T>())
+     int current_digits = tools::digits<T>();
+
+     if(digits != current_digits)
      {
         // Oh my... our precision has changed!
         table = std::vector<std::vector<T> >(1, std::vector<T>(1, T(-1)));
+        digits = current_digits;
      }
 
      int index = n - 1;
