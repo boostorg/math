@@ -479,3 +479,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_set_zero, T, all_test_types)
     a.set_zero(); // Ensure that setting zero to zero is a no-op.
     BOOST_CHECK_EQUAL(a, zero);
 }
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_leading_coefficient, T, all_test_types)
+{
+    polynomial<T> const zero;
+    BOOST_CHECK_EQUAL(leading_coefficient(zero), T(0));
+    polynomial<T> a(d0a.begin(), d0a.end());
+    BOOST_CHECK_EQUAL(leading_coefficient(a), T(d0a.back()));
+}

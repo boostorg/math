@@ -53,8 +53,9 @@ polynomial<T> primitive_part(polynomial<T> const &x)
 template <class T>
 T leading_coefficient(polynomial<T> const &x)
 {
-    return x.data().back();
+    return x ? x.data().back() : T(0);
 }
+
 
 namespace detail
 {
