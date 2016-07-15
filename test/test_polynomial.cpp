@@ -287,43 +287,6 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial_int, T, integral_test_types, FM2GP_tri
 BOOST_AUTO_TEST_SUITE_END()
 
 
-BOOST_AUTO_TEST_SUITE(Euclid_gcd_field)
-
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, floating_point_types, FM2GP_Ex_8_3__1<T> )
-{
-    typedef FM2GP_Ex_8_3__1<T> fixture_type;
-    polynomial<T> w;
-    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::x, fixture_type::y));
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::y, fixture_type::x));
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-}
-
-
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, floating_point_types, FM2GP_Ex_8_3__2<T> )
-{
-    typedef FM2GP_Ex_8_3__2<T> fixture_type;
-    polynomial<T> w;
-    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::x, fixture_type::y));
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::y, fixture_type::x));
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-}
-
-
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial, T, floating_point_types, FM2GP_trivial<T> )
-{
-    typedef FM2GP_trivial<T> fixture_type;
-    polynomial<T> w;
-    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::x, fixture_type::y));
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::y, fixture_type::x));
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-}
-
-BOOST_AUTO_TEST_SUITE_END()
-
-
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
 {
     polynomial<T> const a(d3a.begin(), d3a.end());
