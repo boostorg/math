@@ -22,6 +22,7 @@ using namespace boost::math;
 using namespace boost::math::tools;
 using namespace std;
 using boost::math::detail::Euclid_gcd;
+using boost::math::tools::subresultant_gcd;
 
 template <typename T>
 struct answer
@@ -223,76 +224,63 @@ struct FM2GP_trivial
     }
 };
 
-BOOST_AUTO_TEST_SUITE(Stein_gcd_ufd)
+// Sanity checks to make sure I didn't break it.
+typedef boost::mpl::list<int, long> sp_integral_test_types;
+typedef boost::mpl::list<boost::multiprecision::cpp_int> mp_integral_test_types;
+typedef boost::mpl::joint_view<sp_integral_test_types, mp_integral_test_types> integral_test_types;
+typedef boost::mpl::list<float, double, long double> pod_floating_point_types;
+typedef boost::mpl::list<double, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50> floating_point_types;
+typedef boost::mpl::list<boost::multiprecision::cpp_rational> rational_types;
+typedef boost::mpl::joint_view<floating_point_types, rational_types> non_integral_test_types;
+typedef boost::mpl::joint_view<integral_test_types, floating_point_types> all_test_types;
 
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( test_Stein_gcd_1_int, T, integral_test_types, FM2GP_Ex_8_3__1<T> )
+template <typename T>
+void normalize(polynomial<T> &p)
+{
+    if (leading_coefficient(p) < T(0))
+        std::transform(p.data().begin(), p.data().end(), p.data().begin(), std::negate<T>());
+}
+
+BOOST_AUTO_TEST_SUITE(test_subresultant_gcd)
+
+/**
+ * Note that we do not expect 'pure' gcd algorithms to normalize the result.
+ * However, the usual public interface function gcd() will normalize the result.
+ */
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, integral_test_types, FM2GP_Ex_8_3__1<T> )
 {
     typedef FM2GP_Ex_8_3__1<T> fixture_type;
     polynomial<T> w;
-    w = Stein_gcd(fixture_type::x, fixture_type::y);
+    w = subresultant_gcd(fixture_type::x, fixture_type::y);
+    normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = Stein_gcd(fixture_type::y, fixture_type::x);
+    w = subresultant_gcd(fixture_type::y, fixture_type::x);
+    normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( test_Stein_gcd_2_int, T, integral_test_types, FM2GP_Ex_8_3__2<T> )
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, integral_test_types, FM2GP_Ex_8_3__2<T> )
 {
     typedef FM2GP_Ex_8_3__2<T> fixture_type;
     polynomial<T> w;
-    w = Stein_gcd(fixture_type::x, fixture_type::y);
+    w = subresultant_gcd(fixture_type::x, fixture_type::y);
+    normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = Stein_gcd(fixture_type::y, fixture_type::x);
+    w = subresultant_gcd(fixture_type::y, fixture_type::x);
+    normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( test_Stein_gcd_trivial, T, integral_test_types, FM2GP_trivial<T> )
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial_int, T, integral_test_types, FM2GP_trivial<T> )
 {
     typedef FM2GP_trivial<T> fixture_type;
     polynomial<T> w;
-    w = Stein_gcd(fixture_type::x, fixture_type::y);
+    w = subresultant_gcd(fixture_type::x, fixture_type::y);
+    normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = Stein_gcd(fixture_type::y, fixture_type::x);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-}
-
-BOOST_AUTO_TEST_SUITE_END()
-
-
-BOOST_AUTO_TEST_SUITE(Stein_gcd_field)
-
-BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(Ex_8_3__1, 2)
-
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, pod_floating_point_types, FM2GP_Ex_8_3__1<T> )
-{
-    typedef FM2GP_Ex_8_3__1<T> fixture_type;
-    polynomial<T> w;
-    w = Stein_gcd(fixture_type::x, fixture_type::y);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = Stein_gcd(fixture_type::y, fixture_type::x);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-}
-
-
-BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(Ex_8_3__2, 2)
-
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, pod_floating_point_types, FM2GP_Ex_8_3__2<T> )
-{
-    typedef FM2GP_Ex_8_3__2<T> fixture_type;
-    polynomial<T> w;
-    w = Stein_gcd(fixture_type::x, fixture_type::y);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = Stein_gcd(fixture_type::y, fixture_type::x);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-}
-
-
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial, T, pod_floating_point_types, FM2GP_trivial<T> )
-{
-    typedef FM2GP_trivial<T> fixture_type;
-    polynomial<T> w;
-    w = Stein_gcd(fixture_type::x, fixture_type::y);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = Stein_gcd(fixture_type::y, fixture_type::x);
+    w = subresultant_gcd(fixture_type::y, fixture_type::x);
+    normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
@@ -335,55 +323,6 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial, T, floating_point_types, FM2GP_trivia
 
 BOOST_AUTO_TEST_SUITE_END()
 
-
-BOOST_AUTO_TEST_SUITE(Euclid_gcd_ufd)
-
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, integral_test_types, FM2GP_Ex_8_3__1<T> )
-{
-    typedef FM2GP_Ex_8_3__1<T> fixture_type;
-    polynomial<T> w;
-    w = Euclid_gcd(fixture_type::x, fixture_type::y);
-    gcd_traits< polynomial<T> >::normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = Euclid_gcd(fixture_type::y, fixture_type::x);
-    gcd_traits< polynomial<T> >::normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-}
-
-
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, integral_test_types, FM2GP_Ex_8_3__2<T> )
-{
-    typedef FM2GP_Ex_8_3__2<T> fixture_type;
-    polynomial<T> w;
-    w = Euclid_gcd(fixture_type::x, fixture_type::y);
-    gcd_traits< polynomial<T> >::normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = Euclid_gcd(fixture_type::y, fixture_type::x);
-    gcd_traits< polynomial<T> >::normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-}
-
-
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial, T, integral_test_types, FM2GP_trivial<T> )
-{
-    typedef FM2GP_trivial<T> fixture_type;
-    polynomial<T> w;
-    w = Euclid_gcd(fixture_type::x, fixture_type::y);
-    gcd_traits< polynomial<T> >::normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-    w = Euclid_gcd(fixture_type::y, fixture_type::x);
-    gcd_traits< polynomial<T> >::normalize(w);
-    BOOST_CHECK_EQUAL(w, fixture_type::z);
-}
-
-BOOST_AUTO_TEST_SUITE_END()
-
-// Sanity checks to make sure I didn't break it.
-typedef boost::mpl::list<short, int, long> sp_integral_test_types;
-typedef boost::mpl::list<boost::multiprecision::cpp_int> mp_integral_test_types;
-typedef boost::mpl::joint_view<sp_integral_test_types, mp_integral_test_types> integral_test_types;
-typedef boost::mpl::list<double, boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50> non_integral_test_types;
-typedef boost::mpl::joint_view<integral_test_types, non_integral_test_types> all_test_types;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
 {
