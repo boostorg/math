@@ -225,7 +225,8 @@ struct FM2GP_trivial
 };
 
 // Sanity checks to make sure I didn't break it.
-typedef boost::mpl::list<short, int, long> sp_integral_test_types;
+typedef boost::mpl::list<char, short, int, long> sp_integral_test_types;
+typedef boost::mpl::list<int, long> large_sp_integral_test_types;
 
 typedef boost::mpl::list<
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
@@ -234,6 +235,7 @@ typedef boost::mpl::list<
 > mp_integral_test_types;
 
 typedef boost::mpl::joint_view<sp_integral_test_types, mp_integral_test_types> integral_test_types;
+typedef boost::mpl::joint_view<large_sp_integral_test_types, mp_integral_test_types> large_integral_test_types;
 
 typedef boost::mpl::list<double, long double
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
@@ -258,7 +260,7 @@ void normalize(polynomial<T> &p)
 
 BOOST_AUTO_TEST_SUITE(test_subresultant_gcd)
 
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, integral_test_types, FM2GP_Ex_8_3__1<T> )
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, large_integral_test_types, FM2GP_Ex_8_3__1<T> )
 {
     typedef FM2GP_Ex_8_3__1<T> fixture_type;
     polynomial<T> w;
@@ -270,7 +272,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, integral_test_types, FM2GP_Ex_8_
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, integral_test_types, FM2GP_Ex_8_3__2<T> )
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, large_integral_test_types, FM2GP_Ex_8_3__2<T> )
 {
     typedef FM2GP_Ex_8_3__2<T> fixture_type;
     polynomial<T> w;
@@ -282,7 +284,7 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, integral_test_types, FM2GP_Ex_8_
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
-BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial_int, T, integral_test_types, FM2GP_trivial<T> )
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial_int, T, large_integral_test_types, FM2GP_trivial<T> )
 {
     typedef FM2GP_trivial<T> fixture_type;
     polynomial<T> w;
@@ -446,7 +448,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
     BOOST_CHECK_EQUAL(even(b), true);
 }
 
-
+// NOTE: Slightly unexpected: this unit test passes even when T = char.
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
 {
     polynomial<T> a(d3a.begin(), d3a.end());
