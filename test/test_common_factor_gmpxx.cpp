@@ -7,8 +7,6 @@
 #include <gmpxx.h>
 #include <boost/math/common_factor.hpp>
 
-template class boost::math::gcd_evaluator<mpz_class>;
-template class boost::math::lcm_evaluator<mpz_class>;
 template mpz_class boost::math::gcd(const mpz_class&, const mpz_class&);
 template mpz_class boost::math::lcm(const mpz_class&, const mpz_class&);
 
