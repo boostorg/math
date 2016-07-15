@@ -241,12 +241,12 @@ void normalize(polynomial<T> &p)
         std::transform(p.data().begin(), p.data().end(), p.data().begin(), std::negate<T>());
 }
 
-BOOST_AUTO_TEST_SUITE(test_subresultant_gcd)
-
 /**
  * Note that we do not expect 'pure' gcd algorithms to normalize the result.
- * However, the usual public interface function gcd() will normalize the result.
+ * However, the usual public interface function gcd() will do that.
  */
+
+BOOST_AUTO_TEST_SUITE(test_subresultant_gcd)
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, integral_test_types, FM2GP_Ex_8_3__1<T> )
 {
