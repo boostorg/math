@@ -304,7 +304,7 @@ public:
       }
    }
    
-#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
     polynomial(std::initializer_list<T> l) : polynomial(std::begin(l), std::end(l))
     {
     }

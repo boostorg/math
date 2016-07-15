@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE( test_construction )
 }
 
 
-#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
 BOOST_AUTO_TEST_CASE( test_initializer_list_construction )
 {
     polynomial<double> a(begin(d3a), end(d3a));
