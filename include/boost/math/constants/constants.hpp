@@ -186,6 +186,12 @@ namespace boost{ namespace math
 #  define BOOST_MATH_FLOAT128_CONSTANT_OVERLOAD(x)
 #endif
 
+#ifdef BOOST_NO_CXX11_THREAD_LOCAL
+#  define BOOST_MATH_PRECOMPUTE_IF_NOT_LOCAL(constant_, name)       constant_initializer<T, & BOOST_JOIN(constant_, name)<T>::get_from_variable_precision>::force_instantiate();
+#else
+#  define BOOST_MATH_PRECOMPUTE_IF_NOT_LOCAL(constant_, name)
+#endif
+
 #define BOOST_DEFINE_MATH_CONSTANT(name, x, y)\
    namespace detail{\
    template <class T> struct BOOST_JOIN(constant_, name){\
@@ -202,6 +208,18 @@ namespace boost{ namespace math
    {\
       static const T result = compute<N>();\
       return result;\
+   }\
+   static inline const T& get_from_variable_precision()\
+   {\
+      static BOOST_MATH_THREAD_LOCAL int digits = 0;\
+      static BOOST_MATH_THREAD_LOCAL T value;\
+      int current_digits = boost::math::tools::digits<T>();\
+      if(digits != current_digits)\
+      {\
+         value = current_digits > max_string_digits ? compute<0>() : T(boost::math::tools::convert_from_string<T>(y));\
+         digits = current_digits; \
+      }\
+      return value;\
    }\
    /* public getters come next */\
    public:\
@@ -225,10 +243,8 @@ namespace boost{ namespace math
    /* This one is for true arbitary precision, which may well vary at runtime: */ \
    static inline T get(const mpl::int_<0>&)\
    {\
-      static BOOST_MATH_THREAD_LOCAL int digits = 0;\
-      static BOOST_MATH_THREAD_LOCAL T value;\
-      if(digits != boost::math::tools::digits<T>()) value = tools::digits<T>() > max_string_digits ? compute<0>() : T(boost::math::tools::convert_from_string<T>(y));\
-      return value; }\
+      BOOST_MATH_PRECOMPUTE_IF_NOT_LOCAL(constant_, name)\
+      return get_from_variable_precision(); }\
    }; /* end of struct */\
    } /* namespace detail */ \
    \

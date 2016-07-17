@@ -152,12 +152,30 @@ BOOST_AUTO_TEST_CASE( test_division_over_ufd )
     BOOST_CHECK_EQUAL(aa % aa, zero);
 }
 
+
 typedef boost::mpl::list<int, long> pod_integral_test_types;
-typedef boost::mpl::list<int, long, boost::multiprecision::cpp_int> integral_test_types;
+
+typedef boost::mpl::list<int, long
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+    , boost::multiprecision::cpp_int
+#endif
+> integral_test_types;
+
 typedef boost::mpl::list<double> pod_floating_point_types;
 typedef boost::mpl::joint_view<pod_integral_test_types, pod_floating_point_types> pod_test_types;
-typedef boost::mpl::list<boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50> mp_floating_point_types;
-typedef boost::mpl::list<boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50> mp_non_integral_test_types;
+
+typedef boost::mpl::list<
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50
+#endif
+> mp_floating_point_types;
+
+typedef boost::mpl::list<
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50
+#endif
+> mp_non_integral_test_types;
+
 typedef boost::mpl::joint_view<pod_floating_point_types, mp_floating_point_types> floating_point_types;
 typedef boost::mpl::joint_view<pod_floating_point_types, mp_non_integral_test_types> non_integral_test_types;
 typedef boost::mpl::joint_view<integral_test_types, non_integral_test_types> all_test_types;

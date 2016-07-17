@@ -37,7 +37,11 @@ T euclid_textbook(T a, T b)
    return unsigned_abs(a);
 }
 
-typedef boost::mpl::list<boost::int32_t, boost::int64_t, boost::multiprecision::cpp_int> signed_integral_test_types;
+typedef boost::mpl::list<boost::int32_t
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+   , boost::int64_t, boost::multiprecision::cpp_int
+#endif
+> signed_integral_test_types;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_zero, T, signed_integral_test_types)
 {
@@ -56,7 +60,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_signed, T, signed_integral_test_types)
     BOOST_CHECK_EQUAL(a, static_cast<T>(34));
 }
 
-typedef boost::mpl::list<boost::uint32_t, boost::uint64_t, boost::multiprecision::uint256_t> unsigned_integral_test_types;
+typedef boost::mpl::list<boost::uint32_t
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+   , boost::uint64_t, boost::multiprecision::uint256_t
+#endif
+> unsigned_integral_test_types;
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_unsigned, T, unsigned_integral_test_types)
 {

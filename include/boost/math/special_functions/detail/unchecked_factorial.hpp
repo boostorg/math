@@ -473,6 +473,28 @@ struct max_factorial<double>
 
 #ifndef BOOST_MATH_NO_LEXICAL_CAST
 
+template <class T>
+struct unchecked_factorial_initializer
+{
+   struct init
+   {
+      init()
+      {
+         boost::math::unchecked_factorial<T>(3);
+      }
+      void force_instantiate()const {}
+   };
+   static const init initializer;
+   static void force_instantiate()
+   {
+      initializer.force_instantiate();
+   }
+};
+
+template <class T>
+const typename unchecked_factorial_initializer<T>::init unchecked_factorial_initializer<T>::initializer;
+
+
 template <class T, int N>
 inline T unchecked_factorial_imp(unsigned i, const mpl::int_<N>&)
 {
@@ -483,6 +505,8 @@ inline T unchecked_factorial_imp(unsigned i, const mpl::int_<N>&)
    // and convert to an unsigned type if essential, for example:
    // unsigned int nfac = static_cast<unsigned int>(factorial<double>(n));
    // See factorial documentation for more detail.
+
+   unchecked_factorial_initializer<T>::force_instantiate();
 
    static const boost::array<T, 101> factorials = {{
       T(boost::math::tools::convert_from_string<T>("1")),
@@ -601,7 +625,9 @@ inline T unchecked_factorial_imp(unsigned i, const mpl::int_<0>&)
    // and convert to an unsigned type if essential, for example:
    // unsigned int nfac = static_cast<unsigned int>(factorial<double>(n));
    // See factorial documentation for more detail.
-
+#ifdef BOOST_NO_CXX11_THREAD_LOCAL
+   unchecked_factorial_initializer<T>::force_instantiate();
+#endif
    static const char* const factorial_strings[] = {
          "1",
          "1",
@@ -709,8 +735,11 @@ inline T unchecked_factorial_imp(unsigned i, const mpl::int_<0>&)
       static BOOST_MATH_THREAD_LOCAL T factorials[sizeof(factorial_strings) / sizeof(factorial_strings[0])];
       static BOOST_MATH_THREAD_LOCAL int digits = 0;
 
-      if(digits != boost::math::tools::digits<T>())
+      int current_digits = boost::math::tools::digits<T>();
+
+      if(digits != current_digits)
       {
+         digits = current_digits;
          for(unsigned k = 0; k < sizeof(factorials) / sizeof(factorials[0]); ++k)
             factorials[k] = static_cast<T>(boost::math::tools::convert_from_string<T>(factorial_strings[k]));
       }
