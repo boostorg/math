@@ -79,6 +79,13 @@ void expected_results()
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib
+      ".*Solaris.*",                 // platform
+      "real_concept",                // test type(s)
+      ".*",                          // test data group
+      ".*", 60, 15);                  // test function
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
       ".*",                          // platform
       "real_concept",                // test type(s)
       ".*",                          // test data group
