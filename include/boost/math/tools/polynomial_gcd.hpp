@@ -91,6 +91,7 @@ template <class T>
 typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
 subresultant_gcd(polynomial<T> u, polynomial<T> v)
 {
+    using std::swap;
     BOOST_ASSERT(u || v);
     
     if (!u)
@@ -99,6 +100,9 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
         return u;
     
     typedef typename polynomial<T>::size_type N;
+    
+    if (u.degree() < v.degree())
+        swap(u, v);
     
     T const d = detail::reduce_to_primitive(u, v);
     T g = 1, h = 1;
