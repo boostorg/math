@@ -10,11 +10,6 @@
 template mpz_class boost::math::gcd(const mpz_class&, const mpz_class&);
 template mpz_class boost::math::lcm(const mpz_class&, const mpz_class&);
 
-template mpz_class boost::math::detail::gcd_euclidean(const mpz_class, const mpz_class);
-template mpz_class boost::math::detail::gcd_integer(const mpz_class&, const mpz_class&);
-template mpz_class boost::math::detail::lcm_euclidean(const mpz_class&, const mpz_class&);
-template mpz_class boost::math::detail::lcm_integer(const mpz_class&, const mpz_class&);
-
 int main()
 {
 }
