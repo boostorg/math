@@ -109,6 +109,7 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
     polynomial<T> r;
     while (true)
     {
+        BOOST_ASSERT(u.degree() >= v.degree());
         // Pseudo-division.
         r = u % v;
         if (!r)
