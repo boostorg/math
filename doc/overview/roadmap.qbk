@@ -12,6 +12,11 @@ New Features:
 
 * Enabled all the special function code to work correctly with types whose precision can change at runtime.
 
+Patches:
+
+* Fix tgamma_delta_ration for cases where the delta is small compared to the base.
+* Fix misc GCC-4.4 test failures.
+
 [h4 Math-2.4.0 (Boost-1.61)]
 
 New Features:
