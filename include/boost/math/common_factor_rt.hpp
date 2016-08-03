@@ -388,7 +388,11 @@ namespace detail
     inline T lcm_imp(const T& a, const T& b)
     {
        T temp = boost::math::detail::optimal_gcd_select(a, b);
+#if BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
+       return (temp != T(0)) ? T(a / temp * b) : T(0);
+#else
        return temp ? T(a / temp * b) : T(0);
+#endif
     }
 
 } // namespace detail

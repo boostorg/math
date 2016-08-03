@@ -445,7 +445,7 @@ namespace boost{ namespace math{
 //
 // Thread local storage:
 //
-#ifndef BOOST_NO_CXX11_THREAD_LOCAL
+#if !defined(BOOST_NO_CXX11_THREAD_LOCAL) && !defined(BOOST_INTEL)
 #  define BOOST_MATH_THREAD_LOCAL thread_local
 #else
 #  define BOOST_MATH_THREAD_LOCAL
