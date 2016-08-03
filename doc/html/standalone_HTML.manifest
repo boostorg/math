@@ -40,7 +40,7 @@ math_toolkit/next_float/float_advance.html
 math_toolkit/next_float/ulp.html
 math_toolkit/float_comparison.html
 cstdfloat.html
-math_toolkit/overview.html
+math_toolkit/specified_typedefs.html
 math_toolkit/rationale.html
 math_toolkit/exact_typdefs.html
 math_toolkit/minimum_typdefs.html
@@ -48,8 +48,9 @@ math_toolkit/fastest_typdefs.html
 math_toolkit/greatest_typdefs.html
 math_toolkit/macros.html
 math_toolkit/examples.html
+math_toolkit/float128_hints.html
 math_toolkit/float128.html
-math_toolkit/float128/overloading_template_functions_w.html
+math_toolkit/float128/overloading.html
 math_toolkit/float128/exp_function.html
 math_toolkit/float128/typeinfo.html
 constants.html
