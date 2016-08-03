@@ -1420,16 +1420,26 @@ T tgamma_delta_ratio_imp_lanczos(T z, T delta, const Policy& pol, const Lanczos&
    }
    T zgh = static_cast<T>(z + Lanczos::g() - constants::half<T>());
    T result;
-   if(fabs(delta) < 10)
+   if(z + delta == z)
    {
-      result = exp((constants::half<T>() - z) * boost::math::log1p(delta / zgh, pol));
+      if(fabs(delta) < 10)
+         result = exp((constants::half<T>() - z) * boost::math::log1p(delta / zgh, pol));
+      else
+         result = 1;
    }
    else
    {
-      result = pow(zgh / (zgh + delta), z - constants::half<T>());
+      if(fabs(delta) < 10)
+      {
+         result = exp((constants::half<T>() - z) * boost::math::log1p(delta / zgh, pol));
+      }
+      else
+      {
+         result = pow(zgh / (zgh + delta), z - constants::half<T>());
+      }
+      // Split the calculation up to avoid spurious overflow:
+      result *= Lanczos::lanczos_sum(z) / Lanczos::lanczos_sum(T(z + delta));
    }
-   // Split the calculation up to avoid spurious overflow:
-   result *= Lanczos::lanczos_sum(z) / Lanczos::lanczos_sum(T(z + delta));
    result *= pow(constants::e<T>() / (zgh + delta), delta);
    return result;
 }
