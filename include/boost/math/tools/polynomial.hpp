@@ -15,10 +15,12 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/config/suffix.hpp>
 #include <boost/function.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
+#include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/operators.hpp>
 
@@ -191,8 +193,8 @@ std::pair< polynomial<T>, polynomial<T> >
 division(polynomial<T> u, const polynomial<T>& v)
 {
     BOOST_ASSERT(v.size() <= u.size());
-    BOOST_ASSERT(v != zero_element(std::multiplies< polynomial<T> >()));
-    BOOST_ASSERT(u != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_ASSERT(v);
+    BOOST_ASSERT(u);
 
     typedef typename polynomial<T>::size_type N;
     
@@ -245,9 +247,9 @@ template <typename T>
 std::pair< polynomial<T>, polynomial<T> >
 quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 {
-    BOOST_ASSERT(divisor != zero_element(std::multiplies< polynomial<T> >()));
+    BOOST_ASSERT(divisor);
     if (dividend.size() < divisor.size())
-        return std::make_pair(zero_element(std::multiplies< polynomial<T> >()), dividend);
+        return std::make_pair(polynomial<T>(), dividend);
     return detail::division(dividend, divisor);
 }
 
@@ -302,7 +304,7 @@ public:
       }
    }
    
-#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
     polynomial(std::initializer_list<T> l) : polynomial(std::begin(l), std::end(l))
     {
     }
@@ -311,6 +313,7 @@ public:
     operator=(std::initializer_list<T> l)
     {
         m_data.assign(std::begin(l), std::end(l));
+        normalize();
         return *this;
     }
 #endif
@@ -388,7 +391,7 @@ public:
    polynomial& operator %=(const U& /*value*/)
    {
        // We can always divide by a scalar, so there is no remainder:
-       *this = zero_element(std::multiplies<polynomial>());
+       this->set_zero();
        return *this;
    }
 
@@ -411,26 +414,16 @@ public:
    polynomial& operator *=(const polynomial<U>& value)
    {
       // TODO: FIXME: use O(N log(N)) algorithm!!!
-      polynomial const zero = zero_element(std::multiplies<polynomial>());
-      if (value == zero)
+      if (!value)
       {
-          *this = zero;
+          this->set_zero();
           return *this;
       }
-      polynomial base(*this);
-      this->multiplication(value[0]);
-      for(size_type i = 1; i < value.size(); ++i)
-      {
-         polynomial t(base);
-         t.multiplication(value[i]);
-         size_type s = size() - i;
-         for(size_type j = 0; j < s; ++j)
-         {
-            m_data[i+j] += t[j];
-         }
-         for(size_type j = s; j < t.size(); ++j)
-            m_data.push_back(t[j]);
-      }
+      std::vector<T> prod(size() + value.size() - 1, T(0));
+      for (size_type i = 0; i < value.size(); ++i)
+         for (size_type j = 0; j < size(); ++j)
+            prod[i+j] += m_data[j] * value[i];
+      m_data.swap(prod);
       return *this;
    }
 
@@ -448,7 +441,50 @@ public:
        return *this;
    }
 
-   /** Remove zero coefficients 'from the top', that is for which there are no
+   template <typename U>
+   polynomial& operator >>=(U const &n)
+   {
+       BOOST_ASSERT(n <= m_data.size());
+       m_data.erase(m_data.begin(), m_data.begin() + n);
+       return *this;
+   }
+
+   template <typename U>
+   polynomial& operator <<=(U const &n)
+   {
+       m_data.insert(m_data.begin(), n, static_cast<T>(0));
+       normalize();
+       return *this;
+   }
+   
+   // Convenient and efficient query for zero.
+   bool is_zero() const
+   {
+       return m_data.empty();
+   }
+   
+   // Conversion to bool.
+#ifdef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
+   typedef bool (polynomial::*unmentionable_type)() const;
+
+   BOOST_FORCEINLINE operator unmentionable_type() const
+   {
+       return is_zero() ? false : &polynomial::is_zero;
+   }
+#else
+   BOOST_FORCEINLINE explicit operator bool() const
+   {
+       return !m_data.empty();
+   }
+#endif
+
+   // Fast way to set a polynomial to zero.
+   void set_zero()
+   {
+       m_data.clear();
+   }
+    
+    /** Remove zero coefficients 'from the top', that is for which there are no
     *        non-zero coefficients of higher degree. */
    void normalize()
    {
@@ -600,12 +636,64 @@ bool operator == (const polynomial<T> &a, const polynomial<T> &b)
     return a.data() == b.data();
 }
 
+template <typename T, typename U>
+polynomial<T> operator >> (const polynomial<T>& a, const U& b)
+{
+    polynomial<T> result(a);
+    result >>= b;
+    return result;
+}
+
+template <typename T, typename U>
+polynomial<T> operator << (const polynomial<T>& a, const U& b)
+{
+    polynomial<T> result(a);
+    result <<= b;
+    return result;
+}
+
 // Unary minus (negate).
 template <class T>
 polynomial<T> operator - (polynomial<T> a)
 {
     std::transform(a.data().begin(), a.data().end(), a.data().begin(), std::negate<T>());
     return a;
+}
+
+template <class T>
+bool odd(polynomial<T> const &a)
+{
+    return a.size() > 0 && a[0] != static_cast<T>(0);
+}
+
+template <class T>
+bool even(polynomial<T> const &a)
+{
+    return !odd(a);
+}
+
+template <class T>
+polynomial<T> pow(polynomial<T> base, int exp)
+{
+    if (exp < 0)
+        return policies::raise_domain_error(
+                "boost::math::tools::pow<%1%>",
+                "Negative powers are not supported for polynomials.",
+                base, policies::policy<>());
+        // if the policy is ignore_error or errno_on_error, raise_domain_error
+        // will return std::numeric_limits<polynomial<T>>::quiet_NaN(), which
+        // defaults to polynomial<T>(), which is the zero polynomial
+    polynomial<T> result(T(1));
+    if (exp & 1)
+        result = base;
+    /* "Exponentiation by squaring" */
+    while (exp >>= 1)
+    {
+        base *= base;
+        if (exp & 1)
+            result *= base;
+    }
+    return result;
 }
 
 template <class charT, class traits, class T>

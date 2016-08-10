@@ -4,7 +4,7 @@
 <title>Overview</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.4.0">
+<link rel="home" href="../index.html" title="Math Toolkit 2.5.0">
 <link rel="up" href="../cstdfloat.html" title="Chapter&#160;3.&#160;Specified-width floating-point typedefs">
 <link rel="prev" href="../cstdfloat.html" title="Chapter&#160;3.&#160;Specified-width floating-point typedefs">
 <link rel="next" href="rationale.html" title="Rationale">
@@ -50,12 +50,14 @@
       fast types, and the corresponding maximum-width type. The <code class="computeroutput"><span class="keyword">typedef</span></code>s
       are based on underlying built-in types such as <code class="computeroutput"><span class="keyword">float</span></code>,
       <code class="computeroutput"><span class="keyword">double</span></code>, or <code class="computeroutput"><span class="keyword">long</span>
-      <span class="keyword">double</span></code>, or based on other compiler-specific
-      non-standardized types such as <code class="computeroutput"><span class="identifier">__float128</span></code>.
-      The underlying types of these <code class="computeroutput"><span class="keyword">typedef</span></code>s
+      <span class="keyword">double</span></code>, or the proposed <a href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2016.pdf" target="_top">N2016
+      short float type</a>, or based on other compiler-specific non-standardized
+      types such as <code class="computeroutput"><span class="identifier">__float128</span></code>. The
+      underlying types of these <code class="computeroutput"><span class="keyword">typedef</span></code>s
       must conform with the corresponding specifications of binary16, binary32, binary64,
       and binary128 in <a href="http://en.wikipedia.org/wiki/IEEE_floating_point" target="_top">IEEE_floating_point</a>
-      floating-point format.
+      floating-point format, and <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;::</span><span class="identifier">is_iec559</span>
+      <span class="special">==</span> <span class="keyword">true</span></code>.
     </p>
 <p>
       The 128-bit floating-point type (of great interest in scientific and numeric
@@ -65,10 +67,11 @@
     </p>
 <p>
       See <a class="link" href="examples.html#math_toolkit.examples.je_lambda">Jahnke-Emden-Lambda function
-      example</a> for an example using both a CMath function and a Boost.Math
-      function to evaluate a moderately interesting function, the <a href="http://mathworld.wolfram.com/LambdaFunction.html" target="_top">Jahnke-Emden-Lambda
+      example</a> for an example using both a <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cmath</span><span class="special">&gt;</span></code>
+      function and a Boost.Math function to evaluate a moderately interesting function,
+      the <a href="http://mathworld.wolfram.com/LambdaFunction.html" target="_top">Jahnke-Emden-Lambda
       function</a> and <a class="link" href="examples.html#math_toolkit.examples.normal_table">normal
-      distribution</a> an example of a statistical distribution from Boost.Math
+      distribution</a> as an example of a statistical distribution from Boost.Math.
     </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

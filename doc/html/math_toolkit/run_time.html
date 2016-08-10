@@ -4,7 +4,7 @@
 <title>Run-time GCD &amp; LCM Determination</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.4.0">
+<link rel="home" href="../index.html" title="Math Toolkit 2.5.0">
 <link rel="up" href="../gcd_lcm.html" title="Chapter&#160;11.&#160;Integer Utilities (Greatest Common Divisor and Least Common Multiple)">
 <link rel="prev" href="lcm_function_object.html" title="LCM Function Object">
 <link rel="next" href="compile_time.html" title="Compile-time GCD and LCM determination">
@@ -32,17 +32,24 @@
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">IntegerType</span> <span class="special">&gt;</span>
 <span class="identifier">IntegerType</span>  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">gcd</span><span class="special">(</span> <span class="identifier">IntegerType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">IntegerType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">b</span> <span class="special">);</span>
 
+<span class="keyword">template</span> <span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">ForwardIterator</span> <span class="special">&gt;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> <span class="identifier">I</span><span class="special">&gt;</span> <span class="identifier">gcd_range</span><span class="special">(</span><span class="identifier">I</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">I</span> <span class="identifier">last</span><span class="special">);</span>
+
 <span class="keyword">template</span> <span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">IntegerType</span> <span class="special">&gt;</span>
 <span class="identifier">IntegerType</span>  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">lcm</span><span class="special">(</span> <span class="identifier">IntegerType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">IntegerType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">b</span> <span class="special">);</span>
 </pre>
 <p>
       The <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">gcd</span></code>
       function template returns the greatest common (nonnegative) divisor of the
-      two integers passed to it. The boost::math::lcm function template returns the
-      least common (nonnegative) multiple of the two integers passed to it. The function
-      templates are parameterized on the function arguments' IntegerType, which is
-      also the return type. Internally, these function templates use an object of
-      the corresponding version of the <code class="computeroutput"><span class="identifier">gcd_evaluator</span></code>
+      two integers passed to it. <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">gcd_range</span></code> is the iteration of the above gcd
+      algorithm over a range, returning the greatest common divisor of all the elements.
+      The algorithm terminates when the gcd reaches unity or the end of the range.
+      Thus it also returns the iterator after the last element inspected because
+      this may not be equal to the end of the range. The boost::math::lcm function
+      template returns the least common (nonnegative) multiple of the two integers
+      passed to it. The function templates are parameterized on the function arguments'
+      IntegerType, which is also the return type. Internally, these function templates
+      use an object of the corresponding version of the <code class="computeroutput"><span class="identifier">gcd_evaluator</span></code>
       and <code class="computeroutput"><span class="identifier">lcm_evaluator</span></code> class templates,
       respectively.
     </p>
