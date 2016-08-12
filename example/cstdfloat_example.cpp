@@ -20,7 +20,7 @@ The Jahnke-Emden lambda function is described at
 Weisstein, Eric W. "Lambda Function." From MathWorld--A Wolfram Web Resource.
 http://mathworld.wolfram.com/LambdaFunction.html
 
-E. Jahnke and F. Emde, "Tables of Functions with Formulae and Curves,"
+E. Jahnke and F. Emden, "Tables of Functions with Formulae and Curves,"
 Dover, New York, 4th ed., (1945), pages 180-188.
 
 */

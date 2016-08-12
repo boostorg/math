@@ -34,15 +34,20 @@
     </h6>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-          __float128 is the compiler supplied hardware type, it's an C-ish extension
-          to C++ and there is only minimal support for it in normal C++ (no IO streams
-          or <code class="computeroutput"><span class="identifier">numeric_limits</span></code> support,
-          function names in libquadmath all have different names to the <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span></code>
-          ones etc.) So you can program that type directly but it's harder work.
+          __float128 is the (optionally) compiler supplied hardware type, it's an
+          C-ish extension to C++ and there is only minimal support for it in normal
+          C++ (no IO streams or <code class="computeroutput"><span class="identifier">numeric_limits</span></code>
+          support, function names in libquadmath all have different names to the
+          <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span></code>
+          ones etc.) So you can program type <code class="computeroutput"><span class="identifier">__float128</span></code>
+          directly, but it's harder work.
         </li>
 <li class="listitem">
-          Type float128 is a thin wrapper around __float128 and makes it C++ and
-          generic code friendly.
+          Type <code class="computeroutput"><span class="identifier">float128</span></code> uses __float128
+          and makes it C++ and generic code friendly, with all the usual standard
+          <code class="computeroutput"><span class="identifier">iostream</span></code>, <code class="computeroutput"><span class="identifier">numeric_limits</span></code>, <code class="computeroutput"><span class="identifier">complex</span></code>
+          in namspace <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span></code>
+          available, so strongly recommended for C++ use.
         </li>
 </ul></div>
 <h6>

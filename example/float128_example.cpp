@@ -36,7 +36,7 @@
 /*`To make float128 available it is vital to get the dialect and options on the command line correct.
 
 Quad type is forbidden by all the strict C++ standards, so using or adding -std=c++11 and later standards will prevent its use.
-so explicitly use -std=gnu++11, 1y, 14, , 1z or 17 ...
+so explicitly use -std=gnu++11, 1y, 14, 17, or 1z or ...
 
 For GCC 6.1.1, for example, the default is if no C++ language dialect options are given, is -std=gnu++14.
 
@@ -56,6 +56,7 @@ If this is missing, then get errors like:
 Requires compile option
 
   -fext-numeric-literals
+
 If missing, then get errors like:
 
 \modular-boost\libs\math\include/boost/math/cstdfloat/cstdfloat_types.hpp:229:43: error: unable to find numeric literal operator 'operator""Q'
@@ -162,24 +163,16 @@ int main()
 
   // But sadly functions like sqrt are not yet available constexpr for float128.
 
-  //constexpr float128 root_pi_constexpr = sqrt(pi_constexpr);  // Fails - not constexpr (yet).
-  //constexpr float128 root_pi_constexpr = std::sqrt(pi_constexpr);  // Fails - no know conversion for argument 1 from 'const float128'.
+  // constexpr float128 root_pi_constexpr = sqrt(pi_constexpr);  // Fails - not constexpr (yet).
+  // constexpr float128 root_pi_constexpr = std::sqrt(pi_constexpr);  // Fails - no known conversion for argument 1 from 'const float128'.
   // constexpr float128 root_pi_constexpr = sqrt(pi_constexpr); // Call to non-constexpr
-  //constexpr float128 root_pi_constexpr = boost::math::constants::root_pi(); // Missing type for constant.
+  // constexpr float128 root_pi_constexpr = boost::math::constants::root_pi(); // Missing type for constant.
 
   // Best current way to get a constexpr is to use a Boost.Math constant if one is available.
   constexpr float128 root_pi_constexpr = boost::math::constants::root_pi<float128>();
   std::cout << root_pi_constexpr << std::endl; // 1.77245385090551602729816748334114514
 
-  /*
-    inline _GLIBCXX_CONSTEXPR long double
-  sqrt(long double __x)
-  { return __builtin_sqrtl(__x); }
-
-  Need a float128 version of __builtin_sqrt_128.
-  */
-
-  // Note that casts within the sqrt call are NOT NEEDED (nor allowed)
+  // Note that casts within the sqrt call are NOT NEEDED (nor allowed),
   // since all the variables are the correct type to begin with.
   // std::cout << sqrt<float128>(pi3) << std::endl;
   // But note examples of catastrophic (but hard to see) loss of precision below.

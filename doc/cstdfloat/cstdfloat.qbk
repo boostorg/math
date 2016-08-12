@@ -6,7 +6,8 @@
 
 [import ../../example/cstdfloat_example.cpp]
 [import ../../example/normal_tables.cpp]
-[import ../../example/quadmath_snprintf.c]
+[/Removed as unhelpful for C++ users, but might have use as a check that quadmath is available and linked OK.]
+[/import ../../example/quadmath_snprintf.c]
 
 [section:specified_typedefs Overview]
 
@@ -38,6 +39,16 @@ numeric programming) is not required in the Boost header,
 and may not be supplied for all platforms/compilers, because compiler
 support for a 128-bit floating-point type is not mandated by either
 the C standard or the C++ standard.
+
+If 128-bit floating-point is supported, then including `boost/cstdfloat.hpp`
+provides a [*native] 128-bit type, and
+includes other headers in folder `boost/math/cstdfloat` that provide C++
+quad support for __C_math in `<cmath>`, `<limits>`, `<iostream>`, `<complex>`,
+and the available floating-point types.
+
+One can also, more robustly, include `boost/multiprecision/float128.hpp`
+and this provides a thin wrapper selecting the appropriate 128-bit native type
+from `cstdfloat` if available, or else a 128-bit multiprecision type.
 
 See [link math_toolkit.examples.je_lambda Jahnke-Emden-Lambda function example]
 for an example using both a `<cmath>` function and a Boost.Math function
@@ -83,7 +94,7 @@ naming conventions.
 a `typedef` if the underlying type is not provided by the compiler].
 For example, if a compiler does not have an underlying floating-point
 type with 128 bits (highly sought-after in scientific and numeric programming),
-then `float128_t` and its corresponding least and fast types are not
+then `float128_t` and its corresponding least and fast types are [*not]
 provided by `<boost/cstdfloat.hpp`>.]
 
 [warning If `<boost/cstdfloat.hpp>` uses a compiler-specific non-standardized type
@@ -335,16 +346,17 @@ Some sample output for two different platforms is appended to the code at
 [section:float128_hints  Hints on using float128 (and __float128)]
 
 [h5:different_float128 __float128 versus float128]
-* __float128 is the compiler supplied hardware type,
+* __float128 is the (optionally) compiler supplied hardware type,
 it's an C-ish extension to C++ and there is only
 minimal support for it in normal C++
 (no IO streams or `numeric_limits` support,
 function names in libquadmath all have different names to the
 `std::` ones etc.)
-So you can program that type directly but it's harder work.
+So you can program type `__float128` directly, but it's harder work.
 
-* Type float128 is a thin wrapper around __float128 and makes it
-C++ and generic code friendly.
+* Type `float128` uses __float128 and makes it C++ and generic code friendly,
+with all the usual standard `iostream`, `numeric_limits`, `complex` in namspace `std::` available,
+so strongly recommended for C++ use.
 
 [h5 Hints and tips]
 
@@ -364,7 +376,8 @@ and not
 Boost.Math is probably less error prone than declaring your own,
 likewise the special functions etc.
 
-Some examples of what can go horribly and silently wrong are at [@../../example/float128_example.cpp  float128_example.cpp].
+Some examples of what can go horribly and silently wrong are at
+[@../../example/float128_example.cpp  float128_example.cpp].
 
 [endsect]  [/section:float128_hints  Hints on using float128]
 
