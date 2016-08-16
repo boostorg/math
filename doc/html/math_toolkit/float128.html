@@ -87,46 +87,8 @@
       C __float128 quadmath type</a>
     </h5>
 <p>
-      Example of using GCC Quad-Precision Math Library quadmath <code class="computeroutput"><span class="identifier">__float128</span></code>
-      type, taking a square root with sqrtq, and output using quadmath_snprintf.
+      [quadmath_snprintf_1]
     </p>
-<p>
-      From GCC Quad-Precision Math Library, <a href="https://gcc.gnu.org/onlinedocs/libquadmath.pdf" target="_top">3.2
-      quadmath_snprintf, Convert to string</a> (pages 9 and 10).
-    </p>
-<p>
-      Requires GCC linker option <code class="computeroutput"><span class="special">-</span><span class="identifier">lquadmath</span></code>.
-    </p>
-<p>
-      If this linker option is missing then you will get errors like:
-    </p>
-<pre class="programlisting"><span class="special">/</span><span class="identifier">Cpp</span><span class="special">/</span><span class="identifier">float128</span><span class="special">/</span><span class="identifier">quadmath_snprintf</span><span class="special">/</span><span class="identifier">quadmath_snprintf</span><span class="special">.</span><span class="identifier">c</span><span class="special">:</span><span class="number">44</span><span class="special">:</span> <span class="identifier">undefined</span> <span class="identifier">reference</span> <span class="identifier">to</span> <span class="char">'sqrtq'</span><span class="special">.</span>
-<span class="special">/</span><span class="identifier">Cpp</span><span class="special">/</span><span class="identifier">float128</span><span class="special">/</span><span class="identifier">quadmath_snprintf</span><span class="special">/</span><span class="identifier">quadmath_snprintf</span><span class="special">.</span><span class="identifier">c</span><span class="special">:</span><span class="number">45</span><span class="special">:</span> <span class="identifier">undefined</span> <span class="identifier">reference</span> <span class="identifier">to</span> <span class="char">'quadmath_snprintf'</span><span class="special">.</span>
-</pre>
-<p>
-      On one system, the header file (that contains all the <code class="computeroutput"><span class="keyword">extern</span></code>
-      declarations), included, for example:
-    </p>
-<pre class="programlisting"><span class="keyword">extern</span> <span class="identifier">__float128</span> <span class="identifier">sqrtq</span> <span class="special">(</span><span class="identifier">__float128</span><span class="special">)</span> <span class="identifier">__quadmath_throw</span><span class="special">;</span>
-<span class="keyword">extern</span> <span class="identifier">__float128</span> <span class="identifier">strtoflt128</span> <span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*,</span> <span class="keyword">char</span> <span class="special">**)</span> <span class="identifier">__quadmath_throw</span><span class="special">;</span>
-<span class="keyword">extern</span> <span class="keyword">int</span> <span class="identifier">quadmath_snprintf</span> <span class="special">(</span><span class="keyword">char</span> <span class="special">*</span><span class="identifier">str</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">size</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="identifier">format</span><span class="special">,</span> <span class="special">...)</span> <span class="identifier">__quadmath_throw</span><span class="special">;</span>
-</pre>
-<p>
-      An example of a location of <code class="computeroutput"><span class="identifier">quadmath</span><span class="special">.</span><span class="identifier">h</span></code> is
-    </p>
-<pre class="programlisting"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">program</span> <span class="identifier">files</span><span class="special">\</span><span class="identifier">gcc</span><span class="special">-</span><span class="number">6</span><span class="special">-</span><span class="identifier">win64</span><span class="special">\</span><span class="identifier">lib</span><span class="special">\</span><span class="identifier">gcc</span><span class="special">\</span><span class="identifier">x86_64</span><span class="special">-</span><span class="identifier">w64</span><span class="special">-</span><span class="identifier">mingw32</span><span class="special">\</span><span class="number">6.1</span><span class="special">.</span><span class="number">1</span><span class="special">\</span><span class="identifier">include</span><span class="special">\</span><span class="identifier">quadmath</span><span class="special">.</span><span class="identifier">h</span>
-</pre>
-<p>
-      and library at
-    </p>
-<pre class="programlisting"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Program</span> <span class="identifier">Files</span><span class="special">\</span><span class="identifier">gcc</span><span class="special">-</span><span class="number">6</span><span class="special">-</span><span class="identifier">win64</span><span class="special">\</span><span class="identifier">bin</span><span class="special">\</span><span class="identifier">libquadmath</span><span class="special">-</span><span class="number">0.dll</span>
-</pre>
-<p>
-      Command lines used (using <a href="http://www.codeblocks.org" target="_top">CodeBLocks</a>:
-    </p>
-<pre class="programlisting"><span class="identifier">gcc</span><span class="special">.</span><span class="identifier">exe</span> <span class="special">-</span><span class="identifier">Wall</span> <span class="special">-</span><span class="identifier">g</span>  <span class="special">-</span><span class="identifier">c</span> <span class="identifier">J</span><span class="special">:\</span><span class="identifier">Cpp</span><span class="special">\</span><span class="identifier">float128</span><span class="special">\</span><span class="identifier">quadmath_snprintf</span><span class="special">\</span><span class="identifier">main</span><span class="special">.</span><span class="identifier">c</span> <span class="special">-</span><span class="identifier">o</span> <span class="identifier">obj</span><span class="special">\</span><span class="identifier">Debug</span><span class="special">\</span><span class="identifier">main</span><span class="special">.</span><span class="identifier">o</span>
-<span class="identifier">g</span><span class="special">++.</span><span class="identifier">exe</span>  <span class="special">-</span><span class="identifier">o</span> <span class="identifier">bin</span><span class="special">\</span><span class="identifier">Debug</span><span class="special">\</span><span class="identifier">quadmath_snprintf</span><span class="special">.</span><span class="identifier">exe</span> <span class="identifier">obj</span><span class="special">\</span><span class="identifier">Debug</span><span class="special">\</span><span class="identifier">main</span><span class="special">.</span><span class="identifier">o</span>  <span class="special">-</span><span class="identifier">lquadmath</span>
-</pre>
 <p>
       The source code is at <a href="../../../example/quadmath_snprintf.c" target="_top">quadmath_snprintf.c</a>.
     </p>

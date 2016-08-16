@@ -428,6 +428,7 @@ and use the function's name as the link text.]
 [def __random_variate [@http://en.wikipedia.org/wiki/Random_variate random variate]]
 [def __random_variable [@http://en.wikipedia.org/wiki/Random_variable random variable]]
 [def __probability_distribution [@http://en.wikipedia.org/wiki/Probability_distribution probability_distribution]]
+[def __C_math [@http://www.cplusplus.com/reference/cmath/ C math functions]]
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
