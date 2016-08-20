@@ -678,7 +678,7 @@ private:
    //
    // The caches for Bernoulli and tangent numbers, once allocated,
    // these must NEVER EVER reallocate as it breaks our thread
-   // safety gaurantees:
+   // safety guarantees:
    //
    fixed_vector<T> bn, tn;
    std::vector<T> m_intermediates;
