@@ -144,6 +144,8 @@ and over a unique factorization domain (integers).
 Division of polynomials over a field is compatible with
 [@https://en.wikipedia.org/wiki/Euclidean_algorithm Euclidean GCD].
 
+Division of polynomials over a UFD is compatible with the subresultant algorithm for GCD (implemented as subresultant_gcd), but a serious word of warning is required: the intermediate value swell of that algorithm will cause single-precision integral types to overflow very easily. So although the algorithm will work on single-precision integral types, an overload of the gcd function is only provided for polynomials with multi-precision integral types, to prevent nasty surprises. This is done somewhat crudely by disabling the overload for non-POD integral types.
+
 Advanced manipulations: the FFT, factorisation etc are
 not currently provided.  Submissions for these are of course welcome :-)
 
