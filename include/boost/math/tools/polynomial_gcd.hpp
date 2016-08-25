@@ -13,6 +13,7 @@
 
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/common_factor_rt.hpp>
+#include <boost/type_traits/is_pod.hpp>
 
 
 namespace boost{ namespace math{ namespace tools{
@@ -130,7 +131,22 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
             h = tmp / detail::integer_power(h, delta - N(1));
     }
 }
-    
+ 
+ 
+/**
+ * @brief GCD for polynomials with multi-precision integral coefficients.
+ * 
+ * The multi-precision constraint is enforced by disallowing POD integral types.
+ * 
+ * @tparam  T   A multi-precision integral type.
+ */
+template <typename T>
+typename disable_if_c< is_pod<T>::value, polynomial<T> >::type
+gcd(polynomial<T> const &u, polynomial<T> const &v)
+{
+    return subresultant_gcd(u, v);
+}
+ 
 }}} // namespace boost::math::tools
 
 #endif
