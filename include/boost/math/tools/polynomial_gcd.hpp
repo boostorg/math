@@ -84,8 +84,10 @@ namespace detail
 * still potentially several binary orders of magnitude larger than the inputs.
 * Thus, this algorithm should only be used where T is a multi-precision type.
 * 
-* @tparam  T   Polynomial coefficient type.
-* @return      Greatest common divisor of polynomials u and v.
+* @tparam   T   Polynomial coefficient type.
+* @param    u   First polynomial.
+* @param    v   Second polynomial.
+* @return       Greatest common divisor of polynomials u and v.
 */
 template <class T>
 typename enable_if_c< std::numeric_limits<T>::is_integer, polynomial<T> >::type
