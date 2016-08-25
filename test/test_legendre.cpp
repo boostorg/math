@@ -75,6 +75,13 @@ void expected_results()
          "Legendre Polynomials.*Large.*",      // test data group
          "legendre_p", 1000, 200);  // test function
       add_expected_result(
+         "Intel.*",                          // compiler
+         ".*",                          // stdlib
+         ".*",                          // platform
+         largest_type,                  // test type(s)
+         "Legendre Polynomials.*Large.*",      // test data group
+         "legendre_q", 10000, 1000);  // test function
+      add_expected_result(
          ".*",                          // compiler
          ".*",                          // stdlib
          ".*",                          // platform
@@ -127,6 +134,13 @@ void expected_results()
       largest_type,                  // test type(s)
       "Legendre Polynomials.*",      // test data group
       "legendre_q", 100, 50);  // test function
+   add_expected_result(
+      "Intel.*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
+      "Associated Legendre Polynomials.*",      // test data group
+      ".*", 300, 20);  // test function
    add_expected_result(
       ".*",                          // compiler
       ".*",                          // stdlib

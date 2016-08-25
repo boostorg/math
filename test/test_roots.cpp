@@ -248,7 +248,7 @@ void test_inverses(const T& data)
    typedef typename T::value_type row_type;
    typedef Real                   value_type;
 
-   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policies::digits<value_type, boost::math::policies::policy<> >()/2)) * 100;
+   value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policies::digits<value_type, boost::math::policies::policy<> >()/2)) * 150;
    if(boost::math::policies::digits<value_type, boost::math::policies::policy<> >() < 50)
       precision = 1;   // 1% or two decimal digits, all we can hope for when the input is truncated
 

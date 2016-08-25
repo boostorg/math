@@ -38,8 +38,8 @@
     </p>
 <p>
       To provide floating-point <span class="bold"><strong>constants</strong></span> most precisely
-      for a <code class="computeroutput"><span class="identifier">floatmax_t</span></code> type, use
-      the macro BOOST_FLOATMAX_C.
+      representable for a <code class="computeroutput"><span class="identifier">floatmax_t</span></code>
+      type, use the macro <code class="computeroutput"><span class="identifier">BOOST_FLOATMAX_C</span></code>.
     </p>
 <p>
       For example, replace a constant <code class="computeroutput"><span class="number">123.4567890123456789012345678901234567890</span></code>
@@ -53,7 +53,8 @@
       will be equivalent to a <code class="computeroutput"><span class="keyword">long</span> <span class="keyword">double</span></code> suffixed with L, but if <code class="computeroutput"><span class="identifier">floatmax_t</span></code> is <code class="computeroutput"><span class="identifier">float128_t</span></code>
       then the result will be equivalent to a <code class="computeroutput"><span class="identifier">quad</span>
       <span class="identifier">type</span></code> suffixed with Q (assuming, of
-      course, that <code class="computeroutput"><span class="identifier">float128</span></code> is supported).
+      course, that <code class="computeroutput"><span class="identifier">float128_t</span></code> (<code class="computeroutput"><span class="identifier">__float128</span></code> or <code class="computeroutput"><span class="identifier">Quad</span></code>)
+      is supported).
     </p>
 <p>
       If we display with <code class="computeroutput"><span class="identifier">max_digits10</span></code>,
@@ -68,7 +69,7 @@
 <span class="preprocessor">#endif</span>
 </pre>
 <p>
-      then on a 128-bit platform (GCC 4.8.1. with quadmath):
+      then on a 128-bit platform (GCC 4.8.1 or higher with quadmath):
     </p>
 <pre class="programlisting"><span class="identifier">BOOST_FLOAT32_C</span><span class="special">(</span><span class="number">123.4567890123456789012345678901234567890</span><span class="special">)</span> <span class="special">=</span> <span class="number">123.456787</span>
 <span class="identifier">BOOST_FLOAT64_C</span><span class="special">(</span><span class="number">123.4567890123456789012345678901234567890</span><span class="special">)</span> <span class="special">=</span> <span class="number">123.45678901234568</span>
