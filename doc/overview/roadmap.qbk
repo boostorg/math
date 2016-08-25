@@ -6,11 +6,11 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
-[h4 Math-2.5.0 (Boost-1.61)]
+[h4 Math-2.5.0 (Boost-1.62)]
 
 New Features:
 
-* Enabled all the special function code to work correctly with types whose precision can change at runtime.
+* Enabled all the special function code to work correctly with types whose precision can change at runtime: for example type `mpfr_float` from Boost.Multiprecision.
 
 Patches:
 
