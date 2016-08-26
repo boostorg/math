@@ -7,7 +7,6 @@
 #define BOOST_TEST_MAIN
 #include <boost/array.hpp>
 #include <boost/math/tools/polynomial.hpp>
-#include <boost/math/tools/polynomial_gcd.hpp>
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/joint_view.hpp>
