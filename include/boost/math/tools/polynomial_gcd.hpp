@@ -66,6 +66,7 @@ namespace detail
     template <class T>
     T reduce_to_primitive(polynomial<T> &u, polynomial<T> &v)
     {
+        using boost::math::gcd;
         T const u_cont = content(u), v_cont = content(v);
         u /= u_cont;
         v /= v_cont;
@@ -147,6 +148,12 @@ gcd(polynomial<T> const &u, polynomial<T> const &v)
     return subresultant_gcd(u, v);
 }
  
-}}} // namespace boost::math::tools
+}
+//
+// Using declaration so we overload the default implementation in this namespace:
+//
+using boost::math::tools::gcd;
+
+}} // namespace boost::math::tools
 
 #endif
