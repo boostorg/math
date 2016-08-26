@@ -142,7 +142,7 @@ subresultant_gcd(polynomial<T> u, polynomial<T> v)
  * @tparam  T   A multi-precision integral type.
  */
 template <typename T>
-typename disable_if_c< is_pod<T>::value, polynomial<T> >::type
+typename disable_if_c< is_pod<T>::value || !std::numeric_limits<T>::is_integer, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
     return subresultant_gcd(u, v);
