@@ -11,7 +11,7 @@
 
 #include "instantiate.hpp"
 
-int main(int argc, char*[])
+int main(int, char*[])
 {
 #ifdef BOOST_FLOAT128_C
    if(argc > 1000)
