@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <vector>
 #include <boost/math/distributions/lognormal.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/random/mersenne_twister.hpp>

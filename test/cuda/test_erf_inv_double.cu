@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <vector>
 #include <boost/math/special_functions.hpp>
 #include <boost/array.hpp>
 #include "cuda_managed_ptr.hpp"

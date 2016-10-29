@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <vector>
 #include <boost/math/special_functions/jacobi_zeta.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/array.hpp>

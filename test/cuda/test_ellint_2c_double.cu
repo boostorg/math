@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <vector>
 #include <boost/math/special_functions/ellint_2.hpp>
 #include <boost/math/special_functions/relative_difference.hpp>
 #include <boost/array.hpp>
