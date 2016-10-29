@@ -4,7 +4,7 @@
 <title>Synopsis</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.4.0">
+<link rel="home" href="../index.html" title="Math Toolkit 2.5.0">
 <link rel="up" href="../gcd_lcm.html" title="Chapter&#160;11.&#160;Integer Utilities (Greatest Common Divisor and Least Common Multiple)">
 <link rel="prev" href="introduction.html" title="Introduction">
 <link rel="next" href="gcd_function_object.html" title="GCD Function Object">
@@ -38,6 +38,8 @@
 
 <span class="keyword">template</span> <span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">IntegerType</span> <span class="special">&gt;</span>
    <span class="identifier">IntegerType</span>  <span class="identifier">gcd</span><span class="special">(</span> <span class="identifier">IntegerType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">IntegerType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">b</span> <span class="special">);</span>
+<span class="keyword">template</span> <span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">ForwardIterator</span> <span class="special">&gt;</span>
+   <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">iterator_traits</span><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">value_type</span><span class="special">,</span> <span class="identifier">I</span><span class="special">&gt;</span> <span class="identifier">gcd_range</span><span class="special">(</span><span class="identifier">I</span> <span class="identifier">first</span><span class="special">,</span> <span class="identifier">I</span> <span class="identifier">last</span><span class="special">);</span>
 <span class="keyword">template</span> <span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">IntegerType</span> <span class="special">&gt;</span>
    <span class="identifier">IntegerType</span>  <span class="identifier">lcm</span><span class="special">(</span> <span class="identifier">IntegerType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">a</span><span class="special">,</span> <span class="identifier">IntegerType</span> <span class="keyword">const</span> <span class="special">&amp;</span><span class="identifier">b</span> <span class="special">);</span>
 

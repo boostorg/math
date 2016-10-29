@@ -9,7 +9,7 @@
     ]
     [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
-    [version 2.4.0]
+    [version 2.5.0]
 ]
 
 [template mathpart[id title]
@@ -133,6 +133,7 @@ and use the function's name as the link text.]
 [def __multiprecision_root [link math_toolkit.roots.root_finding_examples.multiprecision_root multiprecision root]]
 [def __polynomial_arithmetic [link math_toolkit.roots.polynomial_arithmetic polynomial arithmetic]]
 [def __evaluation [link math_toolkit.roots.rational.polynomial_evaluation polynomial \& rational evaluation]]
+
 [/gammas]
 [def __lgamma [link math_toolkit.sf_gamma.lgamma lgamma]]
 [def __digamma [link math_toolkit.sf_gamma.digamma digamma]]
@@ -260,7 +261,6 @@ and use the function's name as the link text.]
 [def __float_advance [link math_toolkit.next_float.float_advance float_advance]]
 [def __ulp [link math_toolkit.next_float.ulp ulp]]
 
-
 [/powers etc]
 [def __expm1 [link math_toolkit.powers.expm1 expm1]]
 [def __log1p [link math_toolkit.powers.log1p log1p]]
@@ -296,6 +296,8 @@ and use the function's name as the link text.]
 [def __expint [link math_toolkit.expint.expint_i expint]]
 [def __spherical_harmonic [link math_toolkit.sf_poly.sph_harm spherical_harmonic]]
 [def __owens_t [link math_toolkit.owens_t Owens T]]
+[def __constants_intro [link math_toolkit.constants_intro  constants]]
+[def __constants[link math_toolkit.constants  constants]]
 
 [/tools]
 [def __tuple [link math_toolkit.internals.tuples boost::math::tuple]]
@@ -369,9 +371,7 @@ and use the function's name as the link text.]
 [def __promotion_policy [link math_toolkit.pol_ref.internal_promotion internal promotion policy]]
 [def __precision_policy [link math_toolkit.pol_ref.precision_pol precision policy]]
 [def __policy_macros [link math_toolkit.pol_ref.policy_defaults Using Macros to Change the Policy Defaults]]
-[def __random_variate [@http://en.wikipedia.org/wiki/Random_variate random variate]]
-[def __random_variable [@http://en.wikipedia.org/wiki/Random_variable random variable]]
-[def __probability_distribution [@http://en.wikipedia.org/wiki/Probability_distribution probability_distribution]]
+
 
 [def __usual_accessors __cdf, __pdf, __quantile, __hazard,
    __chf, __mean, __median, __mode, __variance, __sd, __skewness,
@@ -424,6 +424,11 @@ and use the function's name as the link text.]
 [def __guard_digits [@http://en.wikipedia.org/wiki/Guard_digit guard digits]]
 [def __SSE2 [@http://en.wikipedia.org/wiki/SSE2 SSE2 instructions]]
 [def __representable [@http://en.wikipedia.org/wiki/Floating_point#Representable_numbers.2C_conversion_and_rounding representable]]
+[def __short_float [@http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2016.pdf N2016 short float type]]
+[def __random_variate [@http://en.wikipedia.org/wiki/Random_variate random variate]]
+[def __random_variable [@http://en.wikipedia.org/wiki/Random_variable random variable]]
+[def __probability_distribution [@http://en.wikipedia.org/wiki/Probability_distribution probability_distribution]]
+[def __C_math [@http://www.cplusplus.com/reference/cmath/ C math functions]]
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']

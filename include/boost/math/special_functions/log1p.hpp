@@ -8,6 +8,8 @@
 
 #ifdef _MSC_VER
 #pragma once
+#pragma warning(push)
+#pragma warning(disable:4702) // Unreachable code (release mode only warning)
 #endif
 
 #include <boost/config/no_tr1/cmath.hpp>
@@ -498,6 +500,10 @@ inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type log1pmx(T x)
 
 } // namespace math
 } // namespace boost
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_MATH_LOG1P_INCLUDED
 

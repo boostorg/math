@@ -25,6 +25,8 @@ programming problems.
 
    template < typename IntegerType >
       IntegerType  gcd( IntegerType const &a, IntegerType const &b );
+   template < typename ForwardIterator >
+      std::pair<typename std::iterator_traits<I>::value_type, I> gcd_range(I first, I last);
    template < typename IntegerType >
       IntegerType  lcm( IntegerType const &a, IntegerType const &b );
 
@@ -112,11 +114,19 @@ specialize on the `lcm_evaluator` class template.
    template < typename IntegerType >
    IntegerType  boost::math::gcd( IntegerType const &a, IntegerType const &b );
 
+   template < typename ForwardIterator >
+   std::pair<typename std::iterator_traits<I>::value_type, I> gcd_range(I first, I last);
+
    template < typename IntegerType >
    IntegerType  boost::math::lcm( IntegerType const &a, IntegerType const &b );
 
 The `boost::math::gcd` function template returns the greatest common
 (nonnegative) divisor of the two integers passed to it.
+`boost::math::gcd_range` is the iteration of the above gcd algorithm over a 
+range, returning the greatest common divisor of all the elements. The algorithm 
+terminates when the gcd reaches unity or the end of the range. Thus it also 
+returns the iterator after the last element inspected because this may not be 
+equal to the end of the range.
 The boost::math::lcm function template returns the least common
 (nonnegative) multiple of the two integers passed to it.
 The function templates are parameterized on the function arguments'

@@ -4,7 +4,7 @@
 <title>Floating-point Comparison</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.4.0">
+<link rel="home" href="../index.html" title="Math Toolkit 2.5.0">
 <link rel="up" href="../utils.html" title="Chapter&#160;2.&#160;Floating Point Utilities">
 <link rel="prev" href="next_float/ulp.html" title="Obtaining the Size of a Unit In the Last Place - ULP">
 <link rel="next" href="../cstdfloat.html" title="Chapter&#160;3.&#160;Specified-width floating-point typedefs">
@@ -111,23 +111,23 @@
       Comparison of Floating-point Values</a>
     </h6>
 <p>
-      <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">relative_distance</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+      <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">relative_difference</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
     </p>
 <pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
-<a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">relative_distance</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">U</span> <span class="identifier">b</span><span class="special">);</span>
+<a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">relative_difference</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">U</span> <span class="identifier">b</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">U</span><span class="special">&gt;</span>
-<a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">epsilon_distance</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">U</span> <span class="identifier">b</span><span class="special">);</span>
+<a class="link" href="result_type.html" title="Calculation of the Type of the Result"><span class="emphasis"><em>calculated-result-type</em></span></a> <span class="identifier">epsilon_difference</span><span class="special">(</span><span class="identifier">T</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">U</span> <span class="identifier">b</span><span class="special">);</span>
 </pre>
 <p>
-      The function <code class="computeroutput"><span class="identifier">relative_distance</span></code>
+      The function <code class="computeroutput"><span class="identifier">relative_difference</span></code>
       returns the relative distance/error <span class="emphasis"><em>E</em></span> between two values
       as defined by:
     </p>
 <pre class="programlisting">E = fabs((a - b) / min(a,b))</pre>
 <p>
       The function <code class="computeroutput"><span class="identifier">epsilon_difference</span></code>
-      is a convenience function that returns <code class="computeroutput"><span class="identifier">relative_distance</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span>
+      is a convenience function that returns <code class="computeroutput"><span class="identifier">relative_difference</span><span class="special">(</span><span class="identifier">a</span><span class="special">,</span>
       <span class="identifier">b</span><span class="special">)</span> <span class="special">/</span> <span class="identifier">eps</span></code> where
       <code class="computeroutput"><span class="identifier">eps</span></code> is the machine epsilon
       for the result type.

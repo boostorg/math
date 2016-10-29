@@ -4,7 +4,7 @@
 <title>Exact-Width Floating-Point typedefs</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.4.0">
+<link rel="home" href="../index.html" title="Math Toolkit 2.5.0">
 <link rel="up" href="../cstdfloat.html" title="Chapter&#160;3.&#160;Specified-width floating-point typedefs">
 <link rel="prev" href="rationale.html" title="Rationale">
 <link rel="next" href="minimum_typdefs.html" title="Minimum-width floating-point typedefs">
@@ -56,33 +56,36 @@
     </h5>
 <p>
       The definition (or not) of a <a class="link" href="macros.html" title="Floating-Point Constant Macros">floating-point
-      constant macro</a> is the way to test if a specific width is available on
-      a platform.
+      constant macro</a> is a way to test if a <span class="bold"><strong>specific
+      width floating-point</strong></span> is available on a platform.
     </p>
 <pre class="programlisting"><span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_FLOAT16_C</span><span class="special">)</span>
-<span class="comment">// Can use boost::float16_t.</span>
+<span class="comment">// Can use boost::float16_t, perhaps a proposed __short_float.</span>
+<span class="comment">// P0192R1, Adding Fundamental Type for Short Float,</span>
+<span class="comment">// Boris Fomitchev, Sergei Nikolaev, Olivier Giroux, Lawrence Crowl, 2016 Feb14</span>
+<span class="comment">// http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2016.pdf</span>
 <span class="preprocessor">#endif</span>
 
 <span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_FLOAT32_C</span><span class="special">)</span>
-<span class="comment">// Can use boost::float32_t.</span>
+<span class="comment">// Can use boost::float32_t, usually type `float`.</span>
 <span class="preprocessor">#endif</span>
 
 <span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_FLOAT64_C</span><span class="special">)</span>
-<span class="comment">// Can use boost::float64_t.</span>
+<span class="comment">// Can use boost::float64_t, usually type `double`, and sometimes also type `long double`.</span>
 <span class="preprocessor">#endif</span>
 
 <span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_FLOAT80_C</span><span class="special">)</span>
-<span class="comment">// Can use boost::float80_t.</span>
+<span class="comment">// Can use boost::float80_t, sometimes type `long double`.</span>
 <span class="preprocessor">#endif</span>
 
 <span class="preprocessor">#if</span> <span class="identifier">defined</span><span class="special">(</span><span class="identifier">BOOST_FLOAT128_C</span><span class="special">)</span>
-<span class="comment">// Can use boost::float128_t.</span>
+<span class="comment">// Can use boost::float128_t. Sometimes type `__float128` or `_Quad`.</span>
 <span class="preprocessor">#endif</span>
 </pre>
 <p>
       This can be used to write code which will compile and run (albeit differently)
       on several platforms. Without these tests, if a width, say <code class="computeroutput"><span class="identifier">float128_t</span></code>
-      is not supported, then compilation would fail. (It is of course, rare for
+      is not supported, then compilation would fail. (It is, of course, rare for
       <code class="computeroutput"><span class="identifier">float64_t</span></code> or <code class="computeroutput"><span class="identifier">float32_t</span></code> not to be supported).
     </p>
 <p>
@@ -92,7 +95,9 @@
 </pre>
 <p>
       and from this one can safely infer the total number of bits because the type
-      must be IEEE754 format, so, for example, if <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">floatmax_t</span><span class="special">&gt;::</span><span class="identifier">digits</span> <span class="special">==</span> <span class="number">113</span></code>, then
+      must be IEEE754 format, <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">floatmax_t</span><span class="special">&gt;::</span><span class="identifier">is_iec559</span>
+      <span class="special">==</span> <span class="keyword">true</span></code>,
+      so, for example, if <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">floatmax_t</span><span class="special">&gt;::</span><span class="identifier">digits</span> <span class="special">==</span> <span class="number">113</span></code>, then
       <code class="computeroutput"><span class="identifier">floatmax_t</span></code> must be<code class="computeroutput"> <span class="identifier">float128_t</span></code>.
     </p>
 <p>
@@ -124,7 +129,12 @@
 </tr>
 <tr><td align="left" valign="top"><p>
         <code class="computeroutput"><span class="identifier">max_digits10</span></code> is not always
-        supported, but can be calculated at compile-time using the Kahan formula.
+        supported, but can be calculated at compile-time using the Kahan formula,
+        <code class="computeroutput"><span class="number">2</span> <span class="special">+</span>
+        <span class="identifier">binary_digits</span> <span class="special">*</span>
+        <span class="number">0.3010</span></code> which can be calculated <span class="bold"><strong>at compile time</strong></span> using <code class="computeroutput"><span class="number">2</span>
+        <span class="special">+</span> <span class="identifier">binary_digits</span>
+        <span class="special">*</span> <span class="number">3010</span><span class="special">/</span><span class="number">10000</span></code>.
       </p></td></tr>
 </table></div>
 <div class="note"><table border="0" summary="Note">
@@ -134,14 +144,14 @@
 </tr>
 <tr><td align="left" valign="top">
 <p>
-        One could test
+        One could test that
       </p>
 <p>
         std::is_same&lt;boost::floatmax_t, boost::float128_t&gt;::value == true
       </p>
 <p>
         but this would fail to compile on a platform where <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">float128_t</span></code>
-        is not defined. So use the MACROs BOOST_FLOATnnn_C.
+        is not defined. So it is better to use the MACROs <code class="computeroutput"><span class="identifier">BOOST_FLOATnnn_C</span></code>.
       </p>
 </td></tr>
 </table></div>
