@@ -107,9 +107,10 @@ int main(void)
     // check the results
     for(int i = 0; i < numElements; ++i)
     {
-        if (boost::math::epsilon_difference(output_vector[i], results[i]) > 10)
+        if (boost::math::epsilon_difference(output_vector[i], results[i]) > 15)
         {
             std::cerr << "Result verification failed at element " << i << "!" << std::endl;
+            std::cerr << "Error found was: " << boost::math::epsilon_difference(output_vector[i], results[i]) << std::endl;
             return EXIT_FAILURE;
         }
     }
