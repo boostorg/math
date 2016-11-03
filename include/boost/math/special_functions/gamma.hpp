@@ -239,14 +239,14 @@ T lgamma_imp(T z, const Policy& pol, const Lanczos& l, int* sign = 0)
    }
    else if (z < tools::root_epsilon<T>())
    {
-     if (0 == z)
-	      return policies::raise_pole_error<T>(function, "Evaluation of lgamma at %1%.", z, pol);
+      if (0 == z)
+         return policies::raise_pole_error<T>(function, "Evaluation of lgamma at %1%.", z, pol);
       if (fabs(z) < 1 / tools::max_value<T>())
          result = -log(fabs(z));
       else
          result = log(fabs(1 / z - constants::euler<T>()));
       if (z < 0)
-		sresult = -1;
+         sresult = -1;
    }
    else if(z < 15)
    {

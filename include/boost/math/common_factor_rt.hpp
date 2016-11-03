@@ -259,7 +259,7 @@ namespace detail
    //
    // The Mixed Binary Euclid Algorithm
    // Sidi Mohamed Sedjelmaci
-   // Electronic Notes in Discrete Mathematics 35 (2009) 169–176
+   // Electronic Notes in Discrete Mathematics 35 (2009) 169-176
    //
    template <class T>
    T mixed_binary_gcd(T u, T v)
@@ -275,7 +275,7 @@ namespace detail
       if(!v)
          return u;
 
-      shifts = std::min(gcd_traits<T>::make_odd(u), gcd_traits<T>::make_odd(v));
+      shifts = (std::min)(gcd_traits<T>::make_odd(u), gcd_traits<T>::make_odd(v));
 
       while(gcd_traits<T>::less(1, v))
       {
@@ -319,7 +319,7 @@ namespace detail
             gcd_traits<SteinDomain>::make_odd(m);
         }
         // m == n
-        m <<= std::min(d_m, d_n);
+        m <<= (std::min)(d_m, d_n);
         return m;
     }
 
