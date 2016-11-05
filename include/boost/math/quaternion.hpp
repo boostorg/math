@@ -1473,29 +1473,28 @@ namespace boost
         template<typename T>
         inline T                                abs(quaternion<T> const & q)
         {
-#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-            using    ::std::abs;
-#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
+            BOOST_MATH_STD_USING_CORE
+
+            const T maxim = sup(q);    // overflow protection
             
-            using    ::std::sqrt;
-            
-            BOOST_QUATERNION_VALARRAY_LOADER
-            
-            T            maxim = (abs(temp).max)();    // overflow protection
-            
-            if    (maxim == static_cast<T>(0))
+            if (maxim == static_cast<T>(0))
             {
-                return(maxim);
+                return maxim;
             }
             else
             {
-                T    mixam = static_cast<T>(1)/maxim;    // prefer multiplications over divisions
+                const T mixam = static_cast<T>(1)/maxim;    // prefer multiplications over divisions
+                T Rc1 = q.R_component_1() * mixam;
+                T Rc2 = q.R_component_2() * mixam;
+                T Rc3 = q.R_component_3() * mixam;
+                T Rc4 = q.R_component_4() * mixam;
                 
-                temp *= mixam;
+                Rc1 *= Rc1;
+                Rc2 *= Rc2;
+                Rc3 *= Rc3;
+                Rc4 *= Rc4;
                 
-                temp *= temp;
-                
-                return(maxim*sqrt(temp.sum()));
+                return maxim*sqrt(Rc1+Rc2+Rc3+Rc4);
             }
             
             //return(sqrt(norm(q)));
