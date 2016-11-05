@@ -11,6 +11,7 @@
 #define BOOST_QUATERNION_HPP
 
 
+#include <algorithm>
 #include <complex>
 #include <iosfwd>                                    // for the "<<" and ">>" operators
 #include <sstream>                                    // for the "<<" operator
@@ -584,74 +585,35 @@ namespace boost
                 return(*this);                                       \
             }
 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-    #define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_2(type)                         \
+#define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_2(type)                         \
             quaternion<type> &        operator /= (::std::complex<type> const & rhs) \
             {                                                                        \
-                using    ::std::valarray;                                            \
-                using    ::std::abs;                                                 \
+                BOOST_MATH_STD_USING_CORE                                            \
+                using ::std::max;                                                    \
                                                                                      \
-                valarray<type>    tr(2);                                             \
+                type    ar = rhs.real();                                             \
+                type    br = rhs.imag();                                             \
                                                                                      \
-                tr[0] = rhs.real();                                                  \
-                tr[1] = rhs.imag();                                                  \
+                const type    maxim = max(abs(ar),abs(br));                          \
+                const type    mixam = static_cast<type>(1)/maxim;                    \
                                                                                      \
-                type            mixam = static_cast<type>(1)/(abs(tr).max)();        \
+                ar *= mixam;                                                         \
+                br *= mixam;                                                         \
                                                                                      \
-                tr *= mixam;                                                         \
+                const type    denominator = ar*ar+br*br;                             \
                                                                                      \
-                valarray<type>    tt(4);                                             \
+                const type    at = (+a*ar+b*br)/denominator*mixam;                   \
+                const type    bt = (-a*br+b*ar)/denominator*mixam;                   \
+                const type    ct = (+c*ar-d*br)/denominator*mixam;                   \
+                const type    dt = (+c*br+d*ar)/denominator*mixam;                   \
                                                                                      \
-                tt[0] = +a*tr[0]+b*tr[1];                                            \
-                tt[1] = -a*tr[1]+b*tr[0];                                            \
-                tt[2] = +c*tr[0]-d*tr[1];                                            \
-                tt[3] = +c*tr[1]+d*tr[0];                                            \
-                                                                                     \
-                tr *= tr;                                                            \
-                                                                                     \
-                tt *= (mixam/tr.sum());                                              \
-                                                                                     \
-                a = tt[0];                                                           \
-                b = tt[1];                                                           \
-                c = tt[2];                                                           \
-                d = tt[3];                                                           \
+                a = at;                                                              \
+                b = bt;                                                              \
+                c = ct;                                                              \
+                d = dt;                                                              \
                                                                                      \
                 return(*this);                                                       \
             }
-#else
-    #define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_2(type)                         \
-            quaternion<type> &        operator /= (::std::complex<type> const & rhs) \
-            {                                                                        \
-                using    ::std::valarray;                                            \
-                                                                                     \
-                valarray<type>    tr(2);                                             \
-                                                                                     \
-                tr[0] = rhs.real();                                                  \
-                tr[1] = rhs.imag();                                                  \
-                                                                                     \
-                type            mixam = static_cast<type>(1)/(abs(tr).max)();        \
-                                                                                     \
-                tr *= mixam;                                                         \
-                                                                                     \
-                valarray<type>    tt(4);                                             \
-                                                                                     \
-                tt[0] = +a*tr[0]+b*tr[1];                                            \
-                tt[1] = -a*tr[1]+b*tr[0];                                            \
-                tt[2] = +c*tr[0]-d*tr[1];                                            \
-                tt[3] = +c*tr[1]+d*tr[0];                                            \
-                                                                                     \
-                tr *= tr;                                                            \
-                                                                                     \
-                tt *= (mixam/tr.sum());                                              \
-                                                                                     \
-                a = tt[0];                                                           \
-                b = tt[1];                                                           \
-                c = tt[2];                                                           \
-                d = tt[3];                                                           \
-                                                                                     \
-                return(*this);                                                       \
-            }
-#endif /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
     
 #if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
     #define    BOOST_QUATERNION_MEMBER_DIV_GENERATOR_3(type)                  \
