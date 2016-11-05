@@ -22,8 +22,6 @@
     #include <locale>                                    // for the "<<" operator
 #endif /* BOOST_NO_STD_LOCALE */
 
-#include <valarray>
-
 
 
 #include <boost/math/special_functions/sinc.hpp>    // for the Sinus cardinal
