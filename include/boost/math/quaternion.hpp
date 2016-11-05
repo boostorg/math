@@ -1461,13 +1461,12 @@ namespace boost
         template<typename T>
         inline T                                l1(quaternion<T> const & q)
         {
-#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-            using    ::std::abs;
-#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
-            
-            BOOST_QUATERNION_VALARRAY_LOADER
-            
-            return(abs(temp).sum());
+            BOOST_MATH_STD_USING_CORE
+
+            return abs(q.R_component_1())
+                       + abs(q.R_component_2())
+                       + abs(q.R_component_3())
+                       + abs(q.R_component_4());
         }
         
         
