@@ -1434,17 +1434,6 @@ namespace boost
         }
         
         
-#define    BOOST_QUATERNION_VALARRAY_LOADER  \
-            using    ::std::valarray;        \
-                                             \
-            valarray<T>    temp(4);          \
-                                             \
-            temp[0] = q.R_component_1();     \
-            temp[1] = q.R_component_2();     \
-            temp[2] = q.R_component_3();     \
-            temp[3] = q.R_component_4();
-        
-        
         template<typename T>
         inline T                                sup(quaternion<T> const & q)
         {
@@ -1499,9 +1488,6 @@ namespace boost
             
             //return(sqrt(norm(q)));
         }
-        
-        
-#undef    BOOST_QUATERNION_VALARRAY_LOADER
         
         
         // Note:    This is the Cayley norm, not the Euclidian norm...
