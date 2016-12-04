@@ -24,7 +24,7 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="math_toolkit.overview"></a><a class="link" href="overview.html" title="Overview">Overview</a>
+<a name="math_toolkit.specified_typedefs"></a><a class="link" href="specified_typedefs.html" title="Overview">Overview</a>
 </h2></div></div></div>
 <p>
       The header <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
@@ -64,6 +64,21 @@
       programming) is not required in the Boost header, and may not be supplied for
       all platforms/compilers, because compiler support for a 128-bit floating-point
       type is not mandated by either the C standard or the C++ standard.
+    </p>
+<p>
+      If 128-bit floating-point is supported, then including <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">cstdfloat</span><span class="special">.</span><span class="identifier">hpp</span></code> provides
+      a <span class="bold"><strong>native</strong></span> 128-bit type, and includes other
+      headers in folder <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">cstdfloat</span></code>
+      that provide C++ quad support for <a href="http://www.cplusplus.com/reference/cmath/" target="_top">C
+      math functions</a> in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">cmath</span><span class="special">&gt;</span></code>,
+      <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">limits</span><span class="special">&gt;</span></code>, <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span></code>,
+      <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">complex</span><span class="special">&gt;</span></code>, and the available floating-point types.
+    </p>
+<p>
+      One can also, more robustly, include <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span><span class="identifier">multiprecision</span><span class="special">/</span><span class="identifier">float128</span><span class="special">.</span><span class="identifier">hpp</span></code> and
+      this provides a thin wrapper selecting the appropriate 128-bit native type
+      from <code class="computeroutput"><span class="identifier">cstdfloat</span></code> if available,
+      or else a 128-bit multiprecision type.
     </p>
 <p>
       See <a class="link" href="examples.html#math_toolkit.examples.je_lambda">Jahnke-Emden-Lambda function
