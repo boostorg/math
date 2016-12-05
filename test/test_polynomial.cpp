@@ -309,28 +309,28 @@ BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE(Stein_gcd_field)
 
-BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(Ex_8_3__1, 2)
-
 BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, pod_floating_point_types, FM2GP_Ex_8_3__1<T> )
 {
     typedef FM2GP_Ex_8_3__1<T> fixture_type;
     polynomial<T> w;
     w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
     w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
-
-BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(Ex_8_3__2, 2)
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, pod_floating_point_types, FM2GP_Ex_8_3__2<T> )
 {
     typedef FM2GP_Ex_8_3__2<T> fixture_type;
     polynomial<T> w;
     w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
     w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
@@ -340,8 +340,10 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial, T, pod_floating_point_types, FM2GP_tr
     typedef FM2GP_trivial<T> fixture_type;
     polynomial<T> w;
     w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
     w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
