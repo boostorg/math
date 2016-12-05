@@ -120,29 +120,40 @@ struct gcd_traits_polynomial<T, typename disable_if_c< std::numeric_limits<T>::i
     inline static void
     subtract(polynomial_type &a, polynomial_type const &b)
     {
-#if 1
-        // Stepanov's implementation; suffers from floating point inaccuracy.
-        using std::floor;
+        using std::modf;
         
+        // We want to use Stepanov's implementation as often as possible because
+        // it results in the smallest coefficients, however, whole numbers take
+        // precedence.
         T const r = constant_coefficient(a) / constant_coefficient(b);
-        a -= r * b;
-        // normalize coefficients so that leading coefficient is whole
-        if (a && floor(a.data().back()) != a.data().back())
-            a /= a.data().back();
-#else
-        using boost::lambda::_1;
-        
-        // Antoine Joux's implementation: huge coefficients.
-        T const tmp = constant_coefficient(a);
-        a *= constant_coefficient(b);
-        a -= tmp * b;
-        if (std::numeric_limits<T>::has_infinity)
+        T r_int;
+        T const r_frac = modf(r, &r_int);
+        // Should we also consider 0.25, 0.125, etc?
+        if (r_frac == T(0) || r_frac == T(0.5))
         {
-        T const &inf(std::numeric_limits<T>::infinity());
-        if (std::find_if(a.data().begin(), a.data().end(), _1 == inf || _1 == -inf) != a.data().end())
-            throw std::domain_error("Floating point overflow.");
-    }
+            // Stepanov's implementation; suffers from floating point inaccuracy
+            // when r does not divide ___ evenly.
+            a -= r * b;
+            // normalize coefficients so that leading coefficient is whole
+            if (a && modf(a.data().back(), &r_int) != T(0))
+                a /= a.data().back();
+        }
+        else
+        {
+            // Antoine Joux's implementation: produces huge coefficients.
+            T const tmp = constant_coefficient(a);
+            a *= constant_coefficient(b);
+            a -= tmp * b;
+#ifndef NDEBUG
+            using boost::lambda::_1;
+            if (std::numeric_limits<T>::has_infinity)
+            {
+                T const &inf(std::numeric_limits<T>::infinity());
+                if (std::find_if(a.data().begin(), a.data().end(), _1 == inf || _1 == -inf) != a.data().end())
+                    throw std::domain_error("Floating point overflow.");
+            }
 #endif
+        }
     }
 };
 
