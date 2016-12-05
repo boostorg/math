@@ -70,6 +70,11 @@ namespace boost {
             a -= b;
          }
          
+         inline static void modulo(T& a, const T& b)
+         {
+             a %= b;
+         }
+         
          enum method_type
          {
             method_euclid = 0,
@@ -244,6 +249,21 @@ namespace boost {
          BOOST_FORCEINLINE static unsigned make_odd(wchar_t& val) { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
       };
 #endif
+      
+    // This is a kludge to prove a point and should be replaced by something
+    // that covers all (PoD) floating point types.
+    template <>
+    struct gcd_traits<double> : public gcd_traits_defaults<double>
+    {
+        typedef double T;
+        
+        inline static void modulo(T& a, const T& b)
+        {
+            using std::fmod;
+            
+            a = fmod(a, b);
+        }        
+    };
 
 template <typename T>
 inline 
@@ -356,7 +376,7 @@ namespace detail
         using std::swap;
         while (b != EuclideanDomain(0))
         {
-            a %= b;
+            gcd_traits<EuclideanDomain>::modulo(a, b);
             swap(a, b);
         }
         return a;
