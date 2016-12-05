@@ -16,43 +16,16 @@
 
 namespace boost { namespace math {
 
-//
-// Special handling for polynomials:
-// Note that gcd_traits_polynomial is templated on the coefficient type T,
-// not on polynomial<T>.
-//
-template <typename T, typename Enabled = void>
-struct gcd_traits_polynomial 
-{};
-
-
-// gcd_traits for Z[x].
+// Common gcd traits for polynomials.
 template <typename T>
-struct gcd_traits_polynomial<T, typename enable_if_c< std::numeric_limits<T>::is_integer >::type > : public gcd_traits_defaults< boost::math::tools::polynomial<T> >
+struct gcd_traits_polynomial_defaults : public gcd_traits_defaults< boost::math::tools::polynomial<T> >
 {
     typedef boost::math::tools::polynomial<T> polynomial_type;
 
-    // Just do a no-op for abs() as we'll normalize() later.
     static polynomial_type
     abs(const polynomial_type &val)
     {
         return leading_coefficient(val) < T(0) ? -val : val;
-    }
-    
-    inline static 
-    void normalize(polynomial_type &x)
-    {
-        using boost::lambda::_1;
-        
-        // This does assume that the coefficients are totally ordered.
-        if (x)
-        {
-            if (leading_coefficient(x) < T(0))
-                x.negate();
-            // Find the first non-zero, because we can't do gcd(0, 0).
-            T const d = gcd_range(find_if(x.data().begin(), x.data().end(), _1 != T(0)), x.data().end()).first;
-            x /= d;
-        }
     }
     
     inline static int make_odd(boost::math::tools::polynomial<T> &x)
@@ -71,6 +44,43 @@ struct gcd_traits_polynomial<T, typename enable_if_c< std::numeric_limits<T>::is
     {
         return a.size() < b.size();
     }
+
+    inline static 
+    void normalize(polynomial_type &x)
+    {
+        using boost::lambda::_1;
+        
+        // This does assume that the coefficients are totally ordered.
+        if (x)
+        {
+            if (leading_coefficient(x) < T(0))
+                x.negate();
+            // Find the first non-zero, because we can't do gcd(0, 0).
+            T const d = gcd_range(find_if(x.data().begin(), x.data().end(), _1 != T(0)), x.data().end()).first;
+            x /= d;
+        }
+    }
+};
+
+
+
+
+//
+// Special handling for polynomials:
+// Note that gcd_traits_polynomial is templated on the coefficient type T,
+// not on polynomial<T>.
+//
+template <typename T, typename Enabled = void>
+struct gcd_traits_polynomial 
+{};
+
+
+// gcd_traits for Z[x].
+template <typename T>
+struct gcd_traits_polynomial<T, typename enable_if_c< std::numeric_limits<T>::is_integer >::type > : public gcd_traits_polynomial_defaults<T>
+{
+    typedef boost::math::tools::polynomial<T> polynomial_type;
+    using gcd_traits_polynomial_defaults<T>::normalize;
     
     inline static void
     subtract(boost::math::tools::polynomial<T> &a, boost::math::tools::polynomial<T> const &b)
@@ -86,37 +96,13 @@ struct gcd_traits_polynomial<T, typename enable_if_c< std::numeric_limits<T>::is
 
 // TODO: Enable for multiprecision floating point types.
 template <typename T>
-struct gcd_traits_polynomial<T, typename disable_if_c< std::numeric_limits<T>::is_integer >::type > : public gcd_traits_defaults< boost::math::tools::polynomial<T> >
+struct gcd_traits_polynomial<T, typename disable_if_c< std::numeric_limits<T>::is_integer >::type > : public gcd_traits_polynomial_defaults<T>
 {
     typedef boost::math::tools::polynomial<T> polynomial_type;
     typedef gcd_traits_defaults< boost::math::tools::polynomial<T> > parent_class;
     using typename parent_class::method_type;
-    static const method_type method = method_type::method_euclid;
-    
-    static polynomial_type
-    abs(const polynomial_type &val)
-    {
-        return leading_coefficient(val) < T(0) ? -val : val;
-    }
-    
-    
-    inline static int make_odd(polynomial_type &x)
-    {
-        unsigned r = 0;
-        while (even(x))
-        {
-            x >>= 1;
-            r++;
-        }
-        return r;
-    }
-    
-    inline static bool
-    less(polynomial_type const &a, polynomial_type const &b)
-    {
-        return a.size() < b.size();
-    }
-    
+    // static const method_type method = method_type::method_euclid;
+
     inline static void
     subtract(polynomial_type &a, polynomial_type const &b)
     {
