@@ -28,7 +28,7 @@ struct gcd_traits_polynomial_defaults : public gcd_traits_defaults< boost::math:
         return leading_coefficient(val) < T(0) ? -val : val;
     }
     
-    inline static int make_odd(boost::math::tools::polynomial<T> &x)
+    inline static int make_odd(polynomial_type &x)
     {
         unsigned r = 0;
         while (even(x))
@@ -40,7 +40,7 @@ struct gcd_traits_polynomial_defaults : public gcd_traits_defaults< boost::math:
     }
     
     inline static bool
-    less(boost::math::tools::polynomial<T> const &a, boost::math::tools::polynomial<T> const &b)
+    less(polynomial_type const &a, polynomial_type const &b)
     {
         return a.size() < b.size();
     }
@@ -83,7 +83,7 @@ struct gcd_traits_polynomial<T, typename enable_if_c< std::numeric_limits<T>::is
     using gcd_traits_polynomial_defaults<T>::normalize;
     
     inline static void
-    subtract(boost::math::tools::polynomial<T> &a, boost::math::tools::polynomial<T> const &b)
+    subtract(polynomial_type &a, polynomial_type const &b)
     {
         // Antoine Joux's implementation: huge coefficients.
         T const tmp = constant_coefficient(a);
@@ -99,7 +99,7 @@ template <typename T>
 struct gcd_traits_polynomial<T, typename disable_if_c< std::numeric_limits<T>::is_integer >::type > : public gcd_traits_polynomial_defaults<T>
 {
     typedef boost::math::tools::polynomial<T> polynomial_type;
-    typedef gcd_traits_defaults< boost::math::tools::polynomial<T> > parent_class;
+    typedef gcd_traits_defaults< polynomial_type > parent_class;
     using typename parent_class::method_type;
     // static const method_type method = method_type::method_euclid;
 
