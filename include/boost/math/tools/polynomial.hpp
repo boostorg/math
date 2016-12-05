@@ -18,7 +18,6 @@
 #include <boost/config/suffix.hpp>
 #include <boost/function.hpp>
 #include <boost/lambda/lambda.hpp>
-#include <boost/math/common_factor_rt.hpp>
 #include <boost/math/tools/rational.hpp>
 #include <boost/math/tools/real_cast.hpp>
 #include <boost/math/policies/error_handling.hpp>
