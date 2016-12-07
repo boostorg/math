@@ -69,7 +69,7 @@ struct gcd_traits_polynomial_defaults : public gcd_traits_defaults< boost::math:
         // precedence.
         T m = constant_coefficient(a);
         gcd_traits<T>::modulo(m, constant_coefficient(b));
-        if (m == 0)
+        if (!m)
         {
             T const r = constant_coefficient(a) / constant_coefficient(b);
             // Stepanov's implementation; suffers from floating point inaccuracy
