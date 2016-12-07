@@ -279,8 +279,10 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE( test_Stein_gcd_1_int, T, integral_test_types, 
     typedef FM2GP_Ex_8_3__1<T> fixture_type;
     polynomial<T> w;
     w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
     w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
@@ -289,8 +291,10 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE( test_Stein_gcd_2_int, T, integral_test_types, 
     typedef FM2GP_Ex_8_3__2<T> fixture_type;
     polynomial<T> w;
     w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
     w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
@@ -299,8 +303,10 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE( test_Stein_gcd_trivial, T, integral_test_types
     typedef FM2GP_trivial<T> fixture_type;
     polynomial<T> w;
     w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
     w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 

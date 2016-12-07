@@ -36,7 +36,10 @@ namespace boost {
       struct gcd_traits_abs_defaults
       {
          inline static const T& abs(const T& val) { return val; }
+         
+         inline static void normalize(T&) {}
       };
+      
       template <class T>
       struct gcd_traits_abs_defaults<T, false>
       {
@@ -45,10 +48,32 @@ namespace boost {
             using std::abs;
             return abs(val);
          }
+         
+         inline static void normalize(T& val) { val = abs(val); }
+      };
+      
+      
+      template <typename T, bool = is_floating_point<T>::value || (std::numeric_limits<T>::is_specialized && !std::numeric_limits<T>::is_integer)>
+      struct gcd_traits_modulo_defaults
+      {
+          inline static void modulo(T& a, const T& b)
+          {
+              using std::fmod;
+              a = fmod(a, b);
+          }        
+      };
+      
+      template <class T>
+      struct gcd_traits_modulo_defaults<T, false>
+      {
+          inline static void modulo(T& a, const T& b)
+          {
+              a %= b;
+          }
       };
 
       template <class T>
-      struct gcd_traits_defaults : public gcd_traits_abs_defaults<T>
+      struct gcd_traits_defaults : public gcd_traits_abs_defaults<T>, gcd_traits_modulo_defaults<T>
       {
          BOOST_FORCEINLINE static unsigned make_odd(T& val)
          {
@@ -60,6 +85,7 @@ namespace boost {
             }
             return r;
          }
+
          inline static bool less(const T& a, const T& b)
          {
             return a < b;
@@ -68,11 +94,6 @@ namespace boost {
          inline static void subtract(T& a, const T& b)
          {
             a -= b;
-         }
-         
-         inline static void modulo(T& a, const T& b)
-         {
-             a %= b;
          }
          
          enum method_type
@@ -88,12 +109,13 @@ namespace boost {
             boost::has_right_shift_assign<T>::value && boost::has_left_shift_assign<T>::value && boost::has_less<T>::value
             ? method_binary : method_euclid;
       };
+      
       //
       // Default gcd_traits just inherits from defaults:
       //
       template <class T>
       struct gcd_traits : public gcd_traits_defaults<T> {};
-      //
+      
       // Some platforms have fast bitscan operations, that allow us to implement
       // make_odd much more efficiently:
       //
@@ -249,21 +271,6 @@ namespace boost {
          BOOST_FORCEINLINE static unsigned make_odd(wchar_t& val) { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
       };
 #endif
-      
-    // This is a kludge to prove a point and should be replaced by something
-    // that covers all (PoD) floating point types.
-    template <>
-    struct gcd_traits<double> : public gcd_traits_defaults<double>
-    {
-        typedef double T;
-        
-        inline static void modulo(T& a, const T& b)
-        {
-            using std::fmod;
-            
-            a = fmod(a, b);
-        }        
-    };
 
 template <typename T>
 inline 
@@ -421,7 +428,9 @@ namespace detail
 template <typename Integer>
 inline Integer gcd(Integer const &a, Integer const &b)
 {
-    return detail::optimal_gcd_select(static_cast<Integer>(gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_traits<Integer>::abs(b)));
+    Integer result = detail::optimal_gcd_select(static_cast<Integer>(gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_traits<Integer>::abs(b)));
+    gcd_traits<Integer>::normalize(result);
+    return result;
 }
 
 template <typename Integer>
