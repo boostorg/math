@@ -169,47 +169,7 @@ T binary_textbook(T u, T v)
    return u + v;
 }
 
-//
-// The Mixed Binary Euclid Algorithm
-// Sidi Mohamed Sedjelmaci
-// Electronic Notes in Discrete Mathematics 35 (2009) 169–176
-//
-template <class T>
-T mixed_binary_gcd(T u, T v)
-{
-   using std::swap;
-   if(u < v)
-      swap(u, v);
 
-   unsigned shifts = 0;
-
-   if(!u)
-      return v;
-   if(!v)
-      return u;
-
-   while(even(u) && even(v))
-   {
-      u >>= 1u;
-      v >>= 1u;
-      ++shifts;
-   }
-
-   while(v > 1)
-   {
-      u %= v;
-      v -= u;
-      if(!u)
-         return v << shifts;
-      if(!v)
-         return u << shifts;
-      while(even(u)) u >>= 1u;
-      while(even(v)) v >>= 1u;
-      if(u < v)
-         swap(u, v);
-   }
-   return (v == 1 ? v : u) << shifts;
-}
 
 template <class T>
 void test_type(const char* name)
@@ -220,7 +180,12 @@ void test_type(const char* name)
 
    for(unsigned i = 0; i < 1000; ++i)
    {
-      data.push_back(std::make_pair(get_prime_products<T>(), get_prime_products<T>()));
+       data.push_back(pair<int_type, int_type>());
+       do
+      {     
+        data.back() = std::make_pair(get_prime_products<T>(), get_prime_products<T>());
+      }
+      while (data.back().first == 0 && data.back().second == 0);
    }
    std::string row_name("gcd<");
    row_name += name;
@@ -342,7 +307,8 @@ inline typename enable_if_c<!is_trivial_cpp_int<cpp_int_backend<MinBits1, MaxBit
    using default_ops::eval_lsb;
    using default_ops::eval_is_zero;
    using default_ops::eval_get_sign;
-
+   using boost::math::detail::mixed_binary_gcd;
+   
    if(a.size() == 1)
    {
       eval_gcd(result, b, *a.limbs());
