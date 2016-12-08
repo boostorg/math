@@ -327,6 +327,8 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, pod_floating_point_types, FM2GP_
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
+// TODO
+// BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(Ex_8_3__2, 6)
 
 BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, pod_floating_point_types, FM2GP_Ex_8_3__2<T> )
 {
