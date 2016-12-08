@@ -277,7 +277,7 @@ inline
 typename enable_if_c<std::numeric_limits<T>::is_integer, bool>::type
 odd(const T& x)
 {
-    return x & 1u;
+    return bool(x & 1u);
 }
 
 template <typename T>
