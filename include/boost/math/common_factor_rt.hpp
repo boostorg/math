@@ -381,7 +381,7 @@ namespace detail
     inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b)
     {
         using std::swap;
-        while (b != EuclideanDomain(0))
+        while (b)
         {
             gcd_traits<EuclideanDomain>::modulo(a, b);
             swap(a, b);
