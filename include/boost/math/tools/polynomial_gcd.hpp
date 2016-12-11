@@ -64,25 +64,23 @@ struct gcd_traits_polynomial_defaults : public gcd_traits_defaults< boost::math:
     inline static void
     subtract(polynomial_type &a, polynomial_type const &b)
     {
-        // We want to use Stepanov's implementation as often as possible because
-        // it results in the smallest coefficients, however, whole numbers take
-        // precedence.
+        // We use Stepanov's implementation when the constant coefficients
+        // divide evenly, and Joux's otherwise.
         T m = constant_coefficient(a);
         gcd_traits<T>::modulo(m, constant_coefficient(b));
         if (!m)
         {
             T const r = constant_coefficient(a) / constant_coefficient(b);
-            // Stepanov's implementation; suffers from floating point inaccuracy
-            // when r does not divide ___ evenly.
             a -= r * b;
         }
         else
         {
-            // Antoine Joux's implementation: produces huge coefficients.
-            T const tmp = constant_coefficient(a);
-            a *= constant_coefficient(b);
-            a -= tmp * b;
-            normalize(a);
+            // Antoine Joux's implementation tempered by coefficient gcd.
+            T const a0 = constant_coefficient(a);
+            T const b0 = constant_coefficient(b);
+            T const gcd_a0b0 = gcd(a0, b0);
+            a *= b0 / gcd_a0b0;
+            a -= (a0 / gcd_a0b0) * b;
         }
     }
 };
