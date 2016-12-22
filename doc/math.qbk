@@ -216,6 +216,9 @@ and use the function's name as the link text.]
 [def __sph_hankel_1  [link math_toolkit.hankel.sph_hankel sph_hankel_1]]
 [def __sph_hankel_2  [link math_toolkit.hankel.sph_hankel sph_hankel_2]]
 
+[/Lambert W function]
+[def __lambert_w [link math_toolkit.sf_lambert_w.lambert_w_function lambert_w]]
+
 [/Airy Functions]
 [def __airy_ai [link math_toolkit.airy.ai airy_ai]]
 [def __airy_bi [link math_toolkit.airy.bi airy_bi]]
@@ -429,6 +432,10 @@ and use the function's name as the link text.]
 [def __random_variable [@http://en.wikipedia.org/wiki/Random_variable random variable]]
 [def __probability_distribution [@http://en.wikipedia.org/wiki/Probability_distribution probability_distribution]]
 [def __C_math [@http://www.cplusplus.com/reference/cmath/ C math functions]]
+[def __Lambert_W [@http://en.wikipedia.org/wiki/Lambert_W_function Lambert W function]]
+[def __CUDA [@https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#c-cplusplus-language-support CUDA NVidia GPU C/C++ language support]]
+[def __Luu_thesis [@http://discovery.ucl.ac.uk/1482128/1/Luu_thesis.pdf Thomas Luu, Thesis, University College London (2015)]]
+
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
@@ -591,6 +598,9 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [endsect] [/section:ellint Elliptic Integrals]
 
 [include sf/jacobi_elliptic.qbk]
+
+[/ Lambert W function]
+[include sf/lambert_w.qbk]
 
 [section:zetas Zeta Functions]
 [include sf/zeta.qbk]

@@ -1,0 +1,111 @@
+[section:lambert_w Lambert W function]
+
+[h4:synopsis Synopsis]
+
+``
+#include <boost/math/special_functions/lambert_w.hpp>
+``
+   namespace boost { namespace math {
+
+   template <class T>
+   ``__sf_result`` lambert_w(T x);
+
+   template <class T, class ``__Policy``>
+   ``__sf_result`` lambert_w(T x, const ``__Policy``&);
+
+   } // namespace boost
+   } // namespace math
+
+[h4:description Description]
+
+The __Lambert_W is the solution of the equation `W e[super W] = x`.
+
+On the x-interval \[0, [inf]\] there is just one real solution.
+On the interval (-1/e, 0) there are two real solutions on two branches called variously W0, W-1, Wp, Wm,
+only one, the so-called principal branch w0, Wp, is provided by this implementation.
+
+The function is described in Wolfram Mathworld [@http://mathworld.wolfram.com/LambertW-Function.html [^Lambert W function] ],
+and the principal value of the Lambert W-function is implemented in the Wolfram Language as ProductLog[z].
+
+__WolframAlpha has provided some reference values for testing.
+For example, the output from [@https://www.wolframalpha.com/input/?i=productlog(1)] is 0.56714329040978387299996866221035554975381578718651.
+
+Also using the [@https://www.wolframalpha.com Wolfram language], [^N\[ProductLog\[-1\], 50] produces the same output.
+
+The final __Policy argument is optional and can be used to control the behaviour of the function:
+how it handles errors, what level of precision to use, etc.
+
+Refer to __policy_section for more details.
+
+[h4:examples Examples]
+
+[import ../../example/lambert_w_example.cpp]
+
+[lambert_w_example_1]
+
+[lambert_w_output_1]
+
+The source of this example is at [@../../example/lambert_w_example.cpp lambert_w_example.cpp]
+
+[h4:accuracy Accuracy]
+
+All the functions usually return values within one ULP (unit in the last place) for the floating-point type.
+Values of x close to the boundary of real values at `x ~= -exp(-1))`,
+about -0.367879 may be less accurate as they near the boundary.
+
+[h4:implemention Implementation]
+
+This real-only implementation is based on an algorithm by__Luu_thesis,
+(see routine 11 on page 98 for his Lambert W algorithm).
+
+This implementation is based on Thomas Luu's code posted at
+[@https://svn.boost.org/trac/boost/ticket/11027 Boost Trac \#11027].
+
+It has been implemented from Luu's algorithm but templated on RealType parameter and result
+and handles both __fundamental (float, double, long double), __multiprecision,
+and also has been tested with the proposed fixed_point type.
+
+The Lambert W has also been discussed in a [@http://lists.boost.org/Archives/boost/2016/09/230819.php Boost thread].
+This also gives link to a prototype version by which also handles complex results [^(x < -exp(-1)], about -0.367879).
+
+[@https://github.com/CzB404/lambert_w/ Balazs Cziraki 2016]
+Physicist, PhD student at Eotvos Lorand University, ELTE TTK Institute of Physics, Budapest.
+has also produces a prototype C++ library that can compute the Lambert W function for floating point
+[*and complex number types].
+This is not implemented here but might be completed in the future.
+
+The implementation details are in [@../../include/boost/math/special_functions/lambert_w.hpp lambert_w.hpp]
+
+[h4:references References]
+
+# NIST Digital Library of Mathematical Functions. [@http://dlmf.nist.gov/4.13.F1].
+
+# [@http://www.orcca.on.ca/LambertW/ Lambert W Poster],
+R. M. Corless, G. H. Gonnet, D. E. G. Hare, D. J. Jeffery and D. E. Knuth,
+On the Lambert W function Advances in Computational Mathematics, Vol 5, (1996) pp 329-359.
+
+Initial guesses based on:
+
+# D.A. Barry, J.-Y. Parlange, L. Li, H. Prommer, C.J. Cunningham, and
+F. Stagnitti. Analytical approximations for real values of the Lambert
+W-function. Mathematics and Computers in Simulation, 53(1):95-103, 2000.
+
+# D.A. Barry, J.-Y. Parlange, L. Li, H. Prommer, C.J. Cunningham, and
+F. Stagnitti. Erratum to analytical approximations for real values of the
+Lambert W-function. Mathematics and Computers in Simulation, 59(6):543-543, 2002.
+
+# C++ __CUDA version of Luu algorithm, [@https://github.com/thomasluu/plog/blob/master/plog.cu plog].
+
+# __Luu_thesis, see routine 11, page 98 for Lambert W algorithm.
+
+# Having Fun with Lambert W(x) Function, Darko Veberic
+University of Nova Gorica, Slovenia IK, Forschungszentrum Karlsruhe, Germany, J. Stefan Institute, Ljubljana, Slovenia.
+
+[endsect] [/section:lambert_w Lambert W function]
+
+[/
+  Copyright 2016 John Maddock, Paul A. Bristow, Thomas Luu.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt
+  or copy at http://www.boost.org/LICENSE_1_0.txt).
+]
