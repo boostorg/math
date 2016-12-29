@@ -33,6 +33,7 @@ project
       <define>BOOST_ALL_NO_LIB=1
       <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
+      <include>../include_private
       <include>$(ntl-path)/include
     ;
 
@@ -46,7 +47,10 @@ else
    lib ntl ;
 }
 
-exe minimax : f.cpp main.cpp ntl ;
+lib mpfr : gmp : <name>mpfr ;
+
+lib gmp : : <name>gmp ;
+
+exe minimax : f.cpp main.cpp ntl mpfr ;
 
 install bin : minimax ;
-
