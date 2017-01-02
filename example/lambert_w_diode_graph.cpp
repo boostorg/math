@@ -5,8 +5,9 @@
 // (See accompanying file LICENSE_1_0.txt or
 //  copy at http ://www.boost.org/LICENSE_1_0.txt).
 
-/*! \brief Graph of using Lambert W function to compute current 
+/*! \brief Graph showing use of Lambert W function to compute current 
 through a diode-connected transistor with preset series resistance.
+
 \details T. C. Banwell and A. Jayakumar,
 Exact analytical solution of current flow through diode with series resistance,
 Electron Letters, 36(4):291-2 (2000)
@@ -23,7 +24,6 @@ The intrinsic emitter resistance re was estimated from the rsat = 0 data to be 0
 The solid curves in Figure 2 are calculated using equation 5 with rsat included with re.
 
 http://www3.imperial.ac.uk/pls/portallive/docs/1/7292572.PDF
-
 
 */
 
@@ -223,7 +223,7 @@ int main()
     data_plot.title("Diode current versus voltage")
       .x_size(400)
       .y_size(300)
-      //.legend_on(false)
+      .legend_on(true)
       .x_label("voltage (V)")
       .y_label("log(current)")
       //.x_label_on(true)
@@ -239,8 +239,9 @@ int main()
       //.y_values_on(true)
       .y_values_rotation(horizontal)
       //.plot_window_on(true)
-      .x_values_precision(4)
-      .y_values_precision(5)
+      .x_values_precision(3)
+      .y_values_precision(3)
+      .coord_precision(4) // Needed to avoid stepping on curves.
       .copyright_holder("Paul A. Bristow")
       .copyright_date("2016")
       //.background_border_color(black);
