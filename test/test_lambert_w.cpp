@@ -48,15 +48,8 @@ using boost::multiprecision::cpp_dec_float_50;
 
 int create_type(0);
 
-template <class T, class T1, class T2>
-inline T create_test_value(long double val, const char*, const T1&, const T2&)
-{ // Construct from long double parameter val (ignoring string/const char* str)
-  create_type = 1;
-  return static_cast<T>(val);
-}
-
-template <class T, class T1, class T2>
-inline T create_test_value(long double val, const char*, const boost::mpl::true_&, const boost::mpl::false_&)
+template <class T, class T2>
+inline T create_test_value(long double val, const char*, const boost::mpl::true_&, const T2&)
 { // Construct from long double parameter val (ignoring string/const char* str)
   create_type = 1;
   return static_cast<T>(val);
