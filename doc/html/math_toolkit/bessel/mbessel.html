@@ -971,22 +971,27 @@
         For I<sub>v</sub> &#160; with v equal to 0, 1 or 0.5 are handled as special cases.
       </p>
 <p>
-        The 0 and 1 cases use minimax rational approximations on finite and infinite
-        intervals. The coefficients are from:
+        The 0 and 1 cases use polynomial approximations on finite and infinite intervals.
+        The approximating forms are based on <a href="http://www.advanpix.com/2015/11/11/rational-approximations-for-the-modified-bessel-function-of-the-first-kind-i0-computations-double-precision/" target="_top">"Rational
+        Approximations for the Modified Bessel Function of the First Kind - I<sub>0</sub>(x)
+        for Computations with Double Precision"</a> by Pavel Holoborodko,
+        extended by us to deal with up to 128-bit precision (with different approximations
+        for each target precision).
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-            J.M. Blair and C.A. Edwards, <span class="emphasis"><em>Stable rational minimax approximations
-            to the modified Bessel functions I_0(x) and I_1(x)</em></span>, Atomic
-            Energy of Canada Limited Report 4928, Chalk River, 1974.
-          </li>
-<li class="listitem">
-            S. Moshier, <span class="emphasis"><em>Methods and Programs for Mathematical Functions</em></span>,
-            Ellis Horwood Ltd, Chichester, 1989.
-          </li>
-</ul></div>
 <p>
-        While the 0.5 case is a simple trigonometric function:
+        <span class="inlinemediaobject"><img src="../../../equations/bessel21.svg"></span>
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/bessel20.svg"></span>
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/bessel17.svg"></span>
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/bessel18.svg"></span>
+      </p>
+<p>
+        The 0.5 case is a simple trigonometric function:
       </p>
 <p>
         I<sub>0.5</sub>(x) = sqrt(2 / &#960;x) * sinh(x)
