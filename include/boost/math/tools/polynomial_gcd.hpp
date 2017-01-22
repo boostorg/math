@@ -61,27 +61,59 @@ struct gcd_traits_polynomial_defaults : public gcd_traits_defaults< boost::math:
         }
     }
 
+    /**
+     * Alexander Stepanov's subtraction normalizes b with the ratio of the 
+     * constant coefficients before subtracting it from a.
+     * 
+     * It does not appear to be reliable due to the floating point arithmetic 
+     * inaccuracy in the division operation.
+     */
+    inline static void
+    Stepanov_subtraction(polynomial_type &a, polynomial_type const &b)
+    {
+        using std::modf;
+        
+        T r = constant_coefficient(a) / constant_coefficient(b);
+        a -= r * b;
+        if (a && modf(a.data().back(), &r))
+            a /= a.data().back();
+    }
+    
+    /**
+     * Joux subtraction multiplies each polynomial by the other's constant
+     * coefficient then subtracts one from the other.
+     * 
+     * Joux, Antoine. Algorithmic cryptanalysis. CRC Press, 2009.
+     */
+    inline static void
+    Joux_subtraction(polynomial_type &a, polynomial_type const &b)
+    {
+        T const a0 = constant_coefficient(a);
+        a *= constant_coefficient(b);
+        a -= a0 * b;        
+    }
+    
+    
+    /**
+     * Factored Joux subtraction first calculates the gcd of the constant 
+     * coefficients and removes that factor before multiplying the polynomials.
+     * The effect is to reduce intermediate value swell.
+     */
+    inline static void
+    factored_Joux_subtraction(polynomial_type &a, polynomial_type const &b)
+    {
+        T const a0 = constant_coefficient(a);
+        T const b0 = constant_coefficient(b);
+        T const gcd_a0b0 = gcd(a0, b0);
+        a *= b0 / gcd_a0b0;
+        a -= a0 / gcd_a0b0 * b;
+    }
+    
+    
     inline static void
     subtract(polynomial_type &a, polynomial_type const &b)
     {
-        // We use Stepanov's implementation when the constant coefficients
-        // divide evenly, and Joux's otherwise.
-        T m = constant_coefficient(a);
-        gcd_traits<T>::modulo(m, constant_coefficient(b));
-        if (!m)
-        {
-            T const r = constant_coefficient(a) / constant_coefficient(b);
-            a -= r * b;
-        }
-        else
-        {
-            // Antoine Joux's implementation tempered by coefficient gcd.
-            T const a0 = constant_coefficient(a);
-            T const b0 = constant_coefficient(b);
-            T const gcd_a0b0 = gcd(a0, b0);
-            a *= b0 / gcd_a0b0;
-            a -= (a0 / gcd_a0b0) * b;
-        }
+        gcd_traits< boost::math::tools::polynomial<T> >::Joux_subtraction(a, b);
     }
 };
 
