@@ -1,4 +1,4 @@
-//  Copyright Jeremy Murphy 2016.
+//  Copyright Jeremy Murphy 2017.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -11,6 +11,9 @@
 #include <boost/math/special_functions/prime.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/tools/polynomial_gcd.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/integer.hpp>
 #include <boost/random.hpp>
 #include <boost/array.hpp>
 #include <boost/type_traits.hpp>
@@ -23,6 +26,8 @@
 #include <type_traits>
 #include <vector>
 #include <functional>
+#include <typeinfo>
+
 #include "fibonacci.hpp"
 #include "../../test/table_type.hpp"
 #include "table_helper.hpp"
@@ -31,8 +36,94 @@
 
 using namespace std;
 using namespace boost::math::tools;
+using boost::math::gcd_traits;
 
 polynomial<double> total_sum(0);
+polynomial<long int> total_sum_int(0);
+typedef boost::multiprecision::cpp_bin_float_quad mp_float_type;
+polynomial<mp_float_type> total_sum_mp(0);
+
+
+template <typename T>
+typename boost::enable_if_c<boost::is_floating_point<T>::value, void>::type
+add_total(polynomial<T> const &x)
+{
+    total_sum += x;
+}
+
+
+template <typename T>
+typename boost::enable_if_c<boost::is_integral<T>::value, void>::type
+add_total(polynomial<T> const &x)
+{
+    total_sum += x;
+}
+
+void add_total(polynomial<mp_float_type> const &x)
+{
+    total_sum_mp += x;
+}
+
+template <typename SteinDomain>
+SteinDomain Stein_gcd_Joux(SteinDomain m, SteinDomain n)
+{
+    using std::swap;
+    BOOST_ASSERT(m || n);
+    if (!m)
+        return n;
+    if (!n)
+        return m;
+    unsigned shifts = std::min(gcd_traits<SteinDomain>::make_odd(m), gcd_traits<SteinDomain>::make_odd(n));
+    // odd(m) && odd(n)
+    while (m != n)
+    {
+        if (gcd_traits<SteinDomain>::less(m, n))
+            swap(n, m);
+        gcd_traits<SteinDomain>::Joux_subtraction(m, n);
+        BOOST_ASSERT(even(m));
+        // With polynomials for example, it is possible that m is now zero.
+        if (!m)
+        {
+            n <<= shifts;
+            return n;
+        }
+        gcd_traits<SteinDomain>::make_odd(m);
+    }
+    // m == n
+    m <<= shifts;
+    return m;
+}
+
+
+template <typename SteinDomain>
+SteinDomain Stein_gcd_factored_Joux(SteinDomain m, SteinDomain n)
+{
+    using std::swap;
+    BOOST_ASSERT(m || n);
+    if (!m)
+        return n;
+    if (!n)
+        return m;
+    unsigned shifts = std::min(gcd_traits<SteinDomain>::make_odd(m), gcd_traits<SteinDomain>::make_odd(n));
+    // odd(m) && odd(n)
+    while (m != n)
+    {
+        if (gcd_traits<SteinDomain>::less(m, n))
+            swap(n, m);
+        gcd_traits<SteinDomain>::factored_Joux_subtraction(m, n);
+        BOOST_ASSERT(even(m));
+        // With polynomials for example, it is possible that m is now zero.
+        if (!m)
+        {
+            n <<= shifts;
+            return n;
+        }
+        gcd_traits<SteinDomain>::make_odd(m);
+    }
+    // m == n
+    m <<= shifts;
+    return m;
+}
 
 
 template <typename Func, class Table>
@@ -55,7 +146,7 @@ double exec_timed_test_foo(Func f, const Table& data, double min_elapsed = 0.5)
             repeats *= 2;
     }
     while(t < min_elapsed);
-    total_sum += sum;
+    add_total(sum);
     return t / repeats;
 }
 
@@ -66,13 +157,17 @@ struct test_function_template
     vector<pair<T, T> > const & data;
     const char* data_name;
     
-    test_function_template(vector<pair<T, T> > const &data, const char* name) : data(data), data_name(name) {}
+    test_function_template(vector<pair<T, T> > const &data, const char* name) : data(data), data_name(name)
+    {
+        cerr << "Testing: " << name << endl;
+    }
     
     template <typename Function>
     void operator()(pair<Function, string> const &f) const
     {
+        cerr << "Algorithm: " << f.second << endl;
         auto result = exec_timed_test_foo(f.first, data);
-        auto table_name = string("gcd method comparison with ") + compiler_name() + string(" on ") + platform_name();
+        auto table_name = string("polynomial gcd method comparison with ") + compiler_name() + string(" on ") + platform_name();
 
         report_execution_time(result, 
                             table_name,
@@ -105,12 +200,38 @@ T get_prime_products()
    return result;
 }
 
+
+// T is integral.
 template <class T>
-T get_uniform_random()
+typename boost::enable_if_c<boost::is_integral<T>::value, T>::type
+get_uniform_random()
 {
-   static boost::random::uniform_int_distribution<T> minmax(std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
-   return minmax(rng);
+    static boost::random::uniform_int_distribution<T> minmax(0, 255);
+    return minmax(rng);
 }
+
+
+// T is floating point, limit to small values so that IVS does not crash test.
+template <class T>
+typename boost::enable_if_c<boost::is_floating_point<T>::value, T>::type
+get_uniform_random()
+{
+    using std::round;
+    static boost::random::uniform_real_distribution<T> minmax(0, 3);
+    return round(minmax(rng));
+}
+
+
+// T is not a POD.
+template <class T>
+typename boost::enable_if_c<!boost::is_pod<T>::value, T>::type
+get_uniform_random()
+{
+    using std::round;
+    static boost::random::uniform_real_distribution<T> minmax(0, 3);
+    return round(minmax(rng));
+}
+
 
 template <class T>
 inline bool even(T const& val)
@@ -126,32 +247,42 @@ gcd_algorithms(OutputIterator output)
     *output++ = std::make_pair(boost::math::detail::Stein_gcd< polynomial<T> >, "Stein_gcd");
 }
 
-
 template <class T, class OutputIterator>
-typename boost::enable_if_c<boost::is_floating_point<T>::value, void>::type
+typename boost::enable_if_c<boost::is_same<T, boost::multiprecision::cpp_int>::value, void>::type
 gcd_algorithms(OutputIterator output)
 {
-    *output++ = std::make_pair(boost::math::detail::Euclid_gcd< polynomial<T> >, "Euclid_gcd");
     *output++ = std::make_pair(boost::math::detail::Stein_gcd< polynomial<T> >, "Stein_gcd");
+    // *output++ = std::make_pair(boost::math::detail::subresultant_gcd< polynomial<T> >, "subresultant gcd");    
+}
+
+
+template <class T, class OutputIterator>
+typename boost::enable_if_c<boost::is_floating_point<T>::value || !std::numeric_limits<T>::is_integer, void>::type
+gcd_algorithms(OutputIterator output)
+{
+    // *output++ = std::make_pair(boost::math::detail::Euclid_gcd< polynomial<T> >, "Euclid_gcd");
+    *output++ = std::make_pair(boost::math::detail::Stein_gcd< polynomial<T> >, "Stein_gcd (Stepanov-factored Joux)");
+    *output++ = std::make_pair(Stein_gcd_factored_Joux< polynomial<T> >, "Stein_gcd (factored Joux)");
+    *output++ = std::make_pair(Stein_gcd_Joux< polynomial<T> >, "Stein_gcd (Joux)");
 }
 
 
 template <class T>
-void test_type(const char* name)
+void test_type(const std::string name)
 {
    using namespace boost::math::detail;
    std::vector<pair< polynomial<T>, polynomial<T> > > data;
 
-   std::cout << "Testing: " << typeid(T).name() << std::endl;
-   
    for(unsigned i = 0; i < 10; ++i)
    {
        data.push_back(pair< polynomial<T>, polynomial<T> >());
-       for (unsigned j = 0; j != 10; j++)
+       for (unsigned j = 0; j != 5; j++)
        {
-           data.back().first.data().push_back(get_prime_products<T>());
-           data.back().second.data().push_back(get_prime_products<T>());
+           data.back().first.data().push_back(get_uniform_random<T>());
+           data.back().second.data().push_back(get_uniform_random<T>());
        }
+       data.back().first.normalize();
+       data.back().second.normalize();
    }
    std::string row_name("gcd<");
    row_name += name;
@@ -235,5 +366,8 @@ T generate_random(unsigned bits_wanted)
 
 int main()
 {
-    test_type< int >("polynomial<int>");
+    // test_type<int>("polynomial<int>");
+    test_type<float>("polynomial<float>");
+    test_type<double>("polynomial<double>");
+    test_type<mp_float_type>("polynomial<cpp_bin_float_quad>");
 }
