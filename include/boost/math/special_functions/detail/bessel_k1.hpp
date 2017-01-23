@@ -69,21 +69,6 @@ namespace boost { namespace math { namespace detail{
    }
 
    template <typename T, class Policy>
-   T bessel_k1_imp(const T& x, const Policy& pol, const mpl::int_<0>&)
-   {
-      if(boost::math::tools::digits<T>() <= 24)
-         return bessel_k1_imp(x, pol, mpl::int_<24>());
-      else if(boost::math::tools::digits<T>() <= 53)
-         return bessel_k1_imp(x, pol, mpl::int_<53>());
-      else if(boost::math::tools::digits<T>() <= 64)
-         return bessel_k1_imp(x, pol, mpl::int_<64>());
-      else if(boost::math::tools::digits<T>() <= 113)
-         return bessel_k1_imp(x, pol, mpl::int_<113>());
-      BOOST_ASSERT(0);
-      return 0;
-   }
-
-   template <typename T, class Policy>
    T bessel_k1_imp(const T& x, const Policy& pol, const mpl::int_<24>&)
    {
       BOOST_MATH_STD_USING
@@ -511,7 +496,22 @@ namespace boost { namespace math { namespace detail{
       }
     }
 
-   template <typename T, class Policy>
+    template <typename T, class Policy>
+    T bessel_k1_imp(const T& x, const Policy& pol, const mpl::int_<0>&)
+    {
+       if(boost::math::tools::digits<T>() <= 24)
+          return bessel_k1_imp(x, pol, mpl::int_<24>());
+       else if(boost::math::tools::digits<T>() <= 53)
+          return bessel_k1_imp(x, pol, mpl::int_<53>());
+       else if(boost::math::tools::digits<T>() <= 64)
+          return bessel_k1_imp(x, pol, mpl::int_<64>());
+       else if(boost::math::tools::digits<T>() <= 113)
+          return bessel_k1_imp(x, pol, mpl::int_<113>());
+       BOOST_ASSERT(0);
+       return 0;
+    }
+
+    template <typename T, class Policy>
    inline T bessel_k1(const T& x, const Policy& pol)
    {
       typedef mpl::int_<

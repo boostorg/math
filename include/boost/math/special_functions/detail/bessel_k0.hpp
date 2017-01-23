@@ -68,21 +68,6 @@ T bessel_k0_imp(const T& x, const Policy&, const mpl::int_<N>&)
 }
 
 template <typename T, class Policy>
-T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<0>&)
-{
-   if(boost::math::tools::digits<T>() <= 24)
-      return bessel_k0_imp(x, pol, mpl::int_<24>());
-   else if(boost::math::tools::digits<T>() <= 53)
-      return bessel_k0_imp(x, pol, mpl::int_<53>());
-   else if(boost::math::tools::digits<T>() <= 64)
-      return bessel_k0_imp(x, pol, mpl::int_<64>());
-   else if(boost::math::tools::digits<T>() <= 113)
-      return bessel_k0_imp(x, pol, mpl::int_<113>());
-   BOOST_ASSERT(0);
-   return 0;
-}
-
-template <typename T, class Policy>
 T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<24>&)
 {
    BOOST_MATH_STD_USING
@@ -467,6 +452,21 @@ T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<113>&)
             return ((tools::evaluate_rational(P, Q, T(1 / x)) + Y) * ex / sqrt(x)) * ex;
          }
       }
+}
+
+template <typename T, class Policy>
+T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<0>&)
+{
+   if(boost::math::tools::digits<T>() <= 24)
+      return bessel_k0_imp(x, pol, mpl::int_<24>());
+   else if(boost::math::tools::digits<T>() <= 53)
+      return bessel_k0_imp(x, pol, mpl::int_<53>());
+   else if(boost::math::tools::digits<T>() <= 64)
+      return bessel_k0_imp(x, pol, mpl::int_<64>());
+   else if(boost::math::tools::digits<T>() <= 113)
+      return bessel_k0_imp(x, pol, mpl::int_<113>());
+   BOOST_ASSERT(0);
+   return 0;
 }
 
 template <typename T, class Policy>

@@ -74,21 +74,6 @@ T bessel_i0_imp(const T& x, const mpl::int_<N>&)
 }
 
 template <typename T>
-T bessel_i0_imp(const T& x, const mpl::int_<0>&)
-{
-   if(boost::math::tools::digits<T>() <= 24)
-      return bessel_i0_imp(x, mpl::int_<24>());
-   else if(boost::math::tools::digits<T>() <= 53)
-      return bessel_i0_imp(x, mpl::int_<53>());
-   else if(boost::math::tools::digits<T>() <= 64)
-      return bessel_i0_imp(x, mpl::int_<64>());
-   else if(boost::math::tools::digits<T>() <= 113)
-      return bessel_i0_imp(x, mpl::int_<113>());
-   BOOST_ASSERT(0);
-   return 0;
-}
-
-template <typename T>
 T bessel_i0_imp(const T& x, const mpl::int_<24>&)
 {
    BOOST_MATH_STD_USING
@@ -529,6 +514,21 @@ T bessel_i0_imp(const T& x, const mpl::int_<113>&)
 }
 
 template <typename T>
+T bessel_i0_imp(const T& x, const mpl::int_<0>&)
+{
+   if(boost::math::tools::digits<T>() <= 24)
+      return bessel_i0_imp(x, mpl::int_<24>());
+   else if(boost::math::tools::digits<T>() <= 53)
+      return bessel_i0_imp(x, mpl::int_<53>());
+   else if(boost::math::tools::digits<T>() <= 64)
+      return bessel_i0_imp(x, mpl::int_<64>());
+   else if(boost::math::tools::digits<T>() <= 113)
+      return bessel_i0_imp(x, mpl::int_<113>());
+   BOOST_ASSERT(0);
+   return 0;
+}
+
+template <typename T>
 inline T bessel_i0(const T& x)
 {
    typedef mpl::int_<
@@ -547,84 +547,6 @@ inline T bessel_i0(const T& x)
    bessel_i0_initializer<T, tag_type>::force_instantiate();
    return bessel_i0_imp(x, tag_type());
 }
-
-#if 0
-
-template <typename T>
-T bessel_i0(T x)
-{
-    bessel_i0_initializer<T>::force_instantiate();
-
-    static const T P1[] = {
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -2.2335582639474375249e+15)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -5.5050369673018427753e+14)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -3.2940087627407749166e+13)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -8.4925101247114157499e+11)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -1.1912746104985237192e+10)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -1.0313066708737980747e+08)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -5.9545626019847898221e+05)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -2.4125195876041896775e+03)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -7.0935347449210549190e+00)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -1.5453977791786851041e-02)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -2.5172644670688975051e-05)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -3.0517226450451067446e-08)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -2.6843448573468483278e-11)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -1.5982226675653184646e-14)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -5.2487866627945699800e-18)),
-    };
-    static const T Q1[] = {
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -2.2335582639474375245e+15)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 7.8858692566751002988e+12)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -1.2207067397808979846e+10)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.0377081058062166144e+07)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -4.8527560179962773045e+03)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.0)),
-    };
-    static const T P2[] = {
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -2.2210262233306573296e-04)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.3067392038106924055e-02)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -4.4700805721174453923e-01)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 5.5674518371240761397e+00)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -2.3517945679239481621e+01)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 3.1611322818701131207e+01)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -9.6090021968656180000e+00)),
-    };
-    static const T Q2[] = {
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -5.5194330231005480228e-04)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 3.2547697594819615062e-02)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -1.1151759188741312645e+00)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.3982595353892851542e+01)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -6.0228002066743340583e+01)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 8.5539563258012929600e+01)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, -3.1446690275135491500e+01)),
-        static_cast<T>(BOOST_MATH_BIG_CONSTANT(T, 64, 1.0)),
-    };
-    T value, factor, r;
-
-    BOOST_MATH_STD_USING
-    using namespace boost::math::tools;
-
-    BOOST_ASSERT(x >= 0); // negative x is handled before we get here
-    if (x == 0)
-    {
-        return static_cast<T>(1);
-    }
-    if (x <= 15)                        // x in (0, 15]
-    {
-        T y = x * x;
-        value = evaluate_polynomial(P1, y) / evaluate_polynomial(Q1, y);
-    }
-    else                                // x in (15, \infty)
-    {
-        T y = T(1 / x) - T(1) / 15;
-        r = evaluate_polynomial(P2, y) / evaluate_polynomial(Q2, y);
-        factor = exp(x) / sqrt(x);
-        value = factor * r;
-    }
-
-    return value;
-}
-#endif
 
 }}} // namespaces
 
