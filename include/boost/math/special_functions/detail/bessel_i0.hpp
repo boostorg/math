@@ -34,9 +34,17 @@ struct bessel_i0_initializer
    {
       init()
       {
-         do_init(boost::mpl::bool_<((tag::value == 0) || (tag::value > 53))>());
+         do_init(tag());
       }
-      static void do_init(const mpl::true_&)
+      static void do_init(const mpl::int_<64>&)
+      {
+         bessel_i0(T(1));
+         bessel_i0(T(8));
+         bessel_i0(T(12));
+         bessel_i0(T(40));
+         bessel_i0(T(101));
+      }
+      static void do_init(const mpl::int_<113>&)
       {
          bessel_i0(T(1));
          bessel_i0(T(10));
@@ -44,7 +52,8 @@ struct bessel_i0_initializer
          bessel_i0(T(40));
          bessel_i0(T(101));
       }
-      static void do_init(const mpl::false_&) {}
+      template <class U>
+      static void do_init(const U&) {}
       void force_instantiate()const {}
    };
    static const init initializer;
