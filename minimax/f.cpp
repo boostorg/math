@@ -334,6 +334,30 @@ mp_type f(const mp_type& x, int variant)
       mp_type xx = 1 / x;
       return boost::math::cyl_bessel_i(1, xx) * sqrt(xx) * exp(-xx);
    }
+   case 36:
+   {
+      // K0 over [0, 1]
+      mp_type xx = sqrt(x);
+      return boost::math::cyl_bessel_k(0, xx) + log(xx) * boost::math::cyl_bessel_i(0, xx);
+   }
+   case 37:
+   {
+      // K0 over [1, INF]
+      mp_type xx = 1 / x;
+      return boost::math::cyl_bessel_k(0, xx) * exp(xx) * sqrt(xx);
+   }
+   case 38:
+   {
+      // K1 over [0, 1]
+      mp_type xx = sqrt(x);
+      return (boost::math::cyl_bessel_k(1, xx) - log(xx) * boost::math::cyl_bessel_i(1, xx) - 1 / xx) / xx;
+   }
+   case 39:
+   {
+      // K1 over [1, INF]
+      mp_type xx = 1 / x;
+      return boost::math::cyl_bessel_k(1, xx) * sqrt(xx) * exp(xx);
+   }
    }
    return 0;
 }
