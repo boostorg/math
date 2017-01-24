@@ -104,6 +104,15 @@ by Pavel Holoborodko, extended by us to deal with up to 128-bit precision (with 
 
 [equation bessel18]
 
+Similarly we have:
+
+[equation bessel22]
+
+[equation bessel23]
+
+[equation bessel24]
+
+[equation bessel25]
 
 The 0.5 case is a simple trigonometric function:
 

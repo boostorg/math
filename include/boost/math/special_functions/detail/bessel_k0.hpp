@@ -1,4 +1,5 @@
 //  Copyright (c) 2006 Xiaogang Zhang
+//  Copyright (c) 2017 John Maddock
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -19,7 +20,16 @@
 
 // Modified Bessel function of the second kind of order zero
 // minimax rational approximations on intervals, see
-// Russon and Blair, Chalk River Report AECL-3461, 1969
+// Russon and Blair, Chalk River Report AECL-3461, 1969,
+// as revised by Pavel Holoborodko in "Rational Approximations 
+// for the Modified Bessel Function of the Second Kind - K0(x) 
+// for Computations with Double Precision", see 
+// http://www.advanpix.com/2015/11/25/rational-approximations-for-the-modified-bessel-function-of-the-second-kind-k0-for-computations-with-double-precision/
+//
+// The actual coefficients used are our own derivation (by JM)
+// since we extend to both greater and lesser precision than the
+// references above.  We can also improve performance WRT to
+// Holoborodko without loss of precision.
 
 namespace boost { namespace math { namespace detail{
 
