@@ -33,10 +33,10 @@
 
 namespace boost { namespace math { namespace detail{
 
-template <typename T, typename Policy>
-T bessel_k0(const T& x, const Policy&);
+template <typename T>
+T bessel_k0(const T& x);
 
-template <class T, class Policy, class tag>
+template <class T, class tag>
 struct bessel_k0_initializer
 {
    struct init
@@ -47,13 +47,13 @@ struct bessel_k0_initializer
       }
       static void do_init(const mpl::int_<113>&)
       {
-         bessel_k0(T(0.5), Policy());
-         bessel_k0(T(1.5), Policy());
+         bessel_k0(T(0.5));
+         bessel_k0(T(1.5));
       }
       static void do_init(const mpl::int_<64>&)
       {
-         bessel_k0(T(0.5), Policy());
-         bessel_k0(T(1.5), Policy());
+         bessel_k0(T(0.5));
+         bessel_k0(T(1.5));
       }
       template <class U>
       static void do_init(const U&){}
@@ -66,19 +66,19 @@ struct bessel_k0_initializer
    }
 };
 
-template <class T, class Policy, class tag>
-const typename bessel_k0_initializer<T, Policy, tag>::init bessel_k0_initializer<T, Policy, tag>::initializer;
+template <class T, class tag>
+const typename bessel_k0_initializer<T, tag>::init bessel_k0_initializer<T, tag>::initializer;
 
 
-template <typename T, class Policy, int N>
-T bessel_k0_imp(const T& x, const Policy&, const mpl::int_<N>&)
+template <typename T, int N>
+T bessel_k0_imp(const T& x, const mpl::int_<N>&)
 {
    BOOST_ASSERT(0);
    return 0;
 }
 
-template <typename T, class Policy>
-T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<24>&)
+template <typename T>
+T bessel_k0_imp(const T& x, const mpl::int_<24>&)
 {
    BOOST_MATH_STD_USING
    if(x <= 1)
@@ -114,7 +114,7 @@ T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<24>&)
          8.457241514e-04f,
          1.530051997e-05f
       };
-      return tools::evaluate_polynomial(P2, x * x) - log(x) * a;
+      return tools::evaluate_polynomial(P2, T(x * x)) - log(x) * a;
    }
    else
    {
@@ -147,8 +147,8 @@ T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<24>&)
    }
 }
 
-template <typename T, class Policy>
-T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<53>&)
+template <typename T>
+T bessel_k0_imp(const T& x, const mpl::int_<53>&)
 {
    BOOST_MATH_STD_USING
    if(x <= 1)
@@ -193,7 +193,7 @@ T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<53>&)
          6.611686391749704310e-12
       };
 
-      return tools::evaluate_polynomial(P2, x * x) - log(x) * a;
+      return tools::evaluate_polynomial(P2, T(x * x)) - log(x) * a;
    }
    else
    {
@@ -237,8 +237,8 @@ T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<53>&)
    }
 }
 
-template <typename T, class Policy>
-T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<64>&)
+template <typename T>
+T bessel_k0_imp(const T& x, const mpl::int_<64>&)
 {
    BOOST_MATH_STD_USING
       if(x <= 1)
@@ -290,7 +290,7 @@ T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<64>&)
             BOOST_MATH_BIG_CONSTANT(T, 64, -1.529444499350703363451e-06),
             BOOST_MATH_BIG_CONSTANT(T, 64, 5.524988589917857531177e-09)
          };
-         return tools::evaluate_rational(P2, Q2, x * x) - log(x) * a;
+         return tools::evaluate_rational(P2, Q2, T(x * x)) - log(x) * a;
       }
       else
       {
@@ -337,8 +337,8 @@ T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<64>&)
       }
 }
 
-template <typename T, class Policy>
-T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<113>&)
+template <typename T>
+T bessel_k0_imp(const T& x, const mpl::int_<113>&)
 {
    BOOST_MATH_STD_USING
       if(x <= 1)
@@ -395,7 +395,7 @@ T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<113>&)
             BOOST_MATH_BIG_CONSTANT(T, 113, 1.277990623924628999539014980773738258e-27)
          };
 
-         return tools::evaluate_polynomial(P2, x * x) - log(x) * a;
+         return tools::evaluate_polynomial(P2, T(x * x)) - log(x) * a;
       }
       else
       {
@@ -464,23 +464,23 @@ T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<113>&)
       }
 }
 
-template <typename T, class Policy>
-T bessel_k0_imp(const T& x, const Policy& pol, const mpl::int_<0>&)
+template <typename T>
+T bessel_k0_imp(const T& x, const mpl::int_<0>&)
 {
    if(boost::math::tools::digits<T>() <= 24)
-      return bessel_k0_imp(x, pol, mpl::int_<24>());
+      return bessel_k0_imp(x, mpl::int_<24>());
    else if(boost::math::tools::digits<T>() <= 53)
-      return bessel_k0_imp(x, pol, mpl::int_<53>());
+      return bessel_k0_imp(x, mpl::int_<53>());
    else if(boost::math::tools::digits<T>() <= 64)
-      return bessel_k0_imp(x, pol, mpl::int_<64>());
+      return bessel_k0_imp(x, mpl::int_<64>());
    else if(boost::math::tools::digits<T>() <= 113)
-      return bessel_k0_imp(x, pol, mpl::int_<113>());
+      return bessel_k0_imp(x, mpl::int_<113>());
    BOOST_ASSERT(0);
    return 0;
 }
 
-template <typename T, class Policy>
-inline T bessel_k0(const T& x, const Policy& pol)
+template <typename T>
+inline T bessel_k0(const T& x)
 {
    typedef mpl::int_<
       std::numeric_limits<T>::digits == 0 ?
@@ -495,8 +495,8 @@ inline T bessel_k0(const T& x, const Policy& pol)
       113 : -1
    > tag_type;
 
-   bessel_k0_initializer<T, Policy, tag_type>::force_instantiate();
-   return bessel_k0_imp(x, pol, tag_type());
+   bessel_k0_initializer<T, tag_type>::force_instantiate();
+   return bessel_k0_imp(x, tag_type());
 }
 
 }}} // namespaces
