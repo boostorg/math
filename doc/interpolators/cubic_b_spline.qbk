@@ -1,0 +1,53 @@
+[/
+Copyright (c) 2017 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:cubic_b Cubic B-spline interpolation]
+
+[section:cubic_b_over Overview of Cubic B-Spline Interpolation]
+
+The cubic b spline routine provided by boost allows fast and accurate interpolation of a function which is known at equally spaced points.
+The cubic b-spline interpolation is preferable to traditional cubic spline interpolation as the global support of cubic polynomials makes the interpolation ill-conditioned.
+
+There are many use cases for interpolating a function at equally spaced points.
+One particularly important example is solving ODE's whose coefficients depend on data determined from experiment or numerically.
+Since most ODE steppers are adaptive, they must be able to sample the coefficients at arbitrary points; not just at the points we know the values of our function.
+
+The routine must be provided the following arguments:
+
+* A vector containing data
+* The length of the vector
+* The start of the functions domain
+* The step size
+
+Optionally, you may provide two additional arguments to the routine, namely the derivative of the function at the left endpoint, and the derivative at the right endpoint.
+If you do not provide these arguments, the routine will estimate them using one-sided finite-difference formulas.
+An example of a valid call is
+
+    __boost::math::cubic_b_spline<double>(f.data(), f.size(), t0, h);
+
+Mathematically, the function we are trying to interpolate has the known values ['f[j] = f(jh+t[sub 0])']
+
+
+[endsect]
+
+[section:cubic_b_spline Header]
+
+[heading Accuracy]
+
+By far the greatest source of error in this routine is the estimation of the derivative at the endpoint.
+If you know the endpoint derivatives, you should certainly provide them; however, in the vast majority of cases,
+this is unknown, and the routine does a reasonable job trying to figure it out.
+
+[heading Testing]
+
+Since the interpolant obeys ['s(x[sub j]) = f(x[sub j])'] at all interpolation points,
+the tests generate random data and evaluate the interpolant at the interpolation points,
+validating that equality with the data holds.
+
+In addition, constant, linear, and quadratic functions are interpolated to ensure that the interpolant behaves as expected.
+
+[endsect]
