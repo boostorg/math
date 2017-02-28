@@ -157,22 +157,20 @@ cubic_b_spline<Real>::cubic_b_spline(const Real* const f, size_t length, Real le
     // This is often very annoying; we'd like to evaluate the interpolant a little bit outside the
     // boundary [a,b] without massive error.
     // A simple way to deal with this is just to subtract the DC component off the signal, so we need the average.
-    Real compensator = 0;
-    for(size_t i = 0; i < length; ++i)
+    // This algorithm for computing the average is recommended in
+    // http://www.heikohoffmann.de/htmlthesis/node134.html
+    Real t = 1;
+    for (size_t i = 0; i < length; ++i)
     {
         if (boost::math::isnan(f[i]))
         {
             std::string err = "This function you are trying to interpolate is a nan at index " + std::to_string(i) + "\n";
             throw std::logic_error(err);
         }
-        // Kahan summation:
-        auto y = f[i] - compensator;
-        auto t = m_avg + y;
-        auto diff = t - m_avg;
-        compensator = diff - y;
-        m_avg = t;
+        m_avg += (f[i] - m_avg) / t;
+        t += 1;
     }
-    m_avg /= length;
+
 
     // Now we must solve an almost-tridiagonal system, which requires O(N) operations.
     // There are, in fact 5 diagonals, but they only differ from zero on the first and last row,
