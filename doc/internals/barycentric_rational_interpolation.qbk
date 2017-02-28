@@ -1,0 +1,45 @@
+[section:barycentric Barycentric Rational Interpolation]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/tools/barycentric_rational_interpolation.hpp>
+``
+
+
+[h4 Description]
+
+Barycentric rational interpolation is a high-precision interpolation routine for non-uniformly spaced samples.
+It requires [bigo](N) time for construction, and [bigo](N) time for each evaluation.
+Linear time evaluation is not optimal; for instance the cubic b spline can be evaluated in constant time.
+However, using the cubic b spline requires uniformly spaced samples, which are not always available.
+
+Use of the routine requires a vector of independent variables x[0], x[1], .... x[n-1] where x[i+1] > x[i],
+and a vector of dependent variables y[0], y[1], ... , y[n-1].
+The call is trivial:
+
+    __boost::math::tools::barycentric_rational<double>(x.data(), y.data(), y.size());
+
+This implicitly calls the constructor with approximation order 3, and hence the accuracy is [bigo](h^4).
+In general, if you require an approximation order d, then the error is [bigo](h^d+1).
+
+Although this algorithm is robust, it can surprise you. The main way this occurs is if there is some i such that x[i] - x[i-1] is many orders of magnitude smaller than x[i+1] - x[i].
+This can cause a large "swing" where the interpolant makes a fast dive to hit y[i], but then flies very high since it is unconstrained until y[i+1], which is far away.
+
+The precise quantification of this idea is encoded in the "local mesh ratio", discussed in Floater's paper on the barycentric rational interpolation.
+
+See
+
+* [@http://www.mn.uio.no/math/english/people/aca/michaelf/papers/rational.pdf Barycentric rational interpolation with no poles and a high rate of interpolation ]
+* Floater, M.S. & Hormann, K. Numer. Math. (2007) 107: 315. doi:10.1007/s00211-007-0093-y
+
+
+[endsect] [/section:barycentric Barycentric Rational Interpolation]
+
+[/
+  Copyright 2017 Nick Thompson
+
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
