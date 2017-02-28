@@ -104,7 +104,6 @@ barycentric_rational<Real>::barycentric_rational(const Real* const x, const Real
     for(int64_t k = 0; k < n; ++k)
     {
         int64_t i_min = std::max(k - (int64_t) approximation_order, (int64_t) 0);
-        //int64_t i_max = std::max(k, (int64_t) n - (int64_t) approximation_order - (int64_t) 1);
         int64_t i_max = k;
         if (k >= n - approximation_order)
         {
