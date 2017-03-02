@@ -6,6 +6,7 @@
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/interpolators/cubic_b_spline.hpp>
+#include <boost/math/interpolators/detail/cubic_b_spline_detail.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #ifdef __GNUC__
 #ifndef __clang__
@@ -23,32 +24,32 @@ void test_b3_spline()
     std::cout << "Testing evaluation of spline basis functions on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     // Outside the support:
     Real eps = std::numeric_limits<Real>::epsilon();
-    BOOST_CHECK_SMALL(boost::math::b3_spline<Real>(2.5), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::b3_spline<Real>(-2.5), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::b3_spline_prime<Real>(2.5), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::b3_spline_prime<Real>(-2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline<Real>(2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline<Real>(-2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(2.5), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(-2.5), (Real) 0);
 
     // On the boundary of support:
-    BOOST_CHECK_SMALL(boost::math::b3_spline<Real>(2), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::b3_spline<Real>(-2), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::b3_spline_prime<Real>(2), (Real) 0);
-    BOOST_CHECK_SMALL(boost::math::b3_spline_prime<Real>(-2), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline<Real>(2), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline<Real>(-2), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(2), (Real) 0);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(-2), (Real) 0);
 
     // Special values:
-    BOOST_CHECK_CLOSE(boost::math::b3_spline<Real>(-1), third<Real>()*half<Real>(), eps);
-    BOOST_CHECK_CLOSE(boost::math::b3_spline<Real>( 1), third<Real>()*half<Real>(), eps);
-    BOOST_CHECK_CLOSE(boost::math::b3_spline<Real>(0), 2*third<Real>(), eps);
+    BOOST_CHECK_CLOSE(boost::math::detail::b3_spline<Real>(-1), third<Real>()*half<Real>(), eps);
+    BOOST_CHECK_CLOSE(boost::math::detail::b3_spline<Real>( 1), third<Real>()*half<Real>(), eps);
+    BOOST_CHECK_CLOSE(boost::math::detail::b3_spline<Real>(0), 2*third<Real>(), eps);
 
-    BOOST_CHECK_CLOSE(boost::math::b3_spline_prime<Real>(-1), half<Real>(), eps);
-    BOOST_CHECK_CLOSE(boost::math::b3_spline_prime<Real>( 1), -half<Real>(), eps);
-    BOOST_CHECK_SMALL(boost::math::b3_spline_prime<Real>(0), eps);
+    BOOST_CHECK_CLOSE(boost::math::detail::b3_spline_prime<Real>(-1), half<Real>(), eps);
+    BOOST_CHECK_CLOSE(boost::math::detail::b3_spline_prime<Real>( 1), -half<Real>(), eps);
+    BOOST_CHECK_SMALL(boost::math::detail::b3_spline_prime<Real>(0), eps);
 
     // Properties: B3 is an even function, B3' is an odd function.
     for (size_t i = 1; i < 200; ++i)
     {
         Real arg = i*0.01;
-        BOOST_CHECK_CLOSE(boost::math::b3_spline<Real>(arg), boost::math::b3_spline<Real>(arg), eps);
-        BOOST_CHECK_CLOSE(boost::math::b3_spline_prime<Real>(-arg), -boost::math::b3_spline_prime<Real>(arg), eps);
+        BOOST_CHECK_CLOSE(boost::math::detail::b3_spline<Real>(arg), boost::math::detail::b3_spline<Real>(arg), eps);
+        BOOST_CHECK_CLOSE(boost::math::detail::b3_spline_prime<Real>(-arg), -boost::math::detail::b3_spline_prime<Real>(arg), eps);
     }
 
 }
