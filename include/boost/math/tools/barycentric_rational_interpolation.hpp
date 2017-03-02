@@ -42,7 +42,7 @@ class barycentric_rational
 public:
     barycentric_rational(const Real* const x, const Real* const y, size_t n, size_t approximation_order = 3);
 
-    Real interpolate_at(Real t) const;
+    Real operator()(Real t) const;
 
     // The barycentric weights are not really that interesting; except to the unit tests!
     Real weight(size_t i) const { return m_w[i]; }
@@ -86,13 +86,13 @@ barycentric_rational<Real>::barycentric_rational(const Real* const x, const Real
         // But if we're going to do a memcpy, we can do some error checking which is inexpensive relative to the copy:
         if(boost::math::isnan(x[i]))
         {
-            auto fmtr = boost::format("x[%1%] is a NAN") % i;
+            boost::format fmtr = boost::format("x[%1%] is a NAN") % i;
             throw std::domain_error(fmtr.str());
         }
 
         if(boost::math::isnan(y[i]))
         {
-            auto fmtr = boost::format("y[%1%] is a NAN") % i;
+            boost::format fmtr = boost::format("y[%1%] is a NAN") % i;
             throw std::domain_error(fmtr.str());
         }
 
@@ -124,7 +124,8 @@ barycentric_rational<Real>::barycentric_rational(const Real* const x, const Real
                 Real diff = m_x[k] - m_x[j];
                 if (abs(diff) < std::numeric_limits<Real>::epsilon())
                 {
-                    auto fmtr = boost::format("Spacing between  x[%1%] and x[%2%] is %3%, which is smaller than the epsilon of %4%") % k % i % diff % boost::typeindex::type_id<Real>().pretty_name();
+                    boost::format fmtr = boost::format("Spacing between  x[%1%] and x[%2%] is %3%, which is smaller than the epsilon of %4%") % k % i % diff % boost::typeindex::type_id<Real>().pretty_name();
+                    std::cout << typeid(fmtr).name() << std::endl;
                     throw std::logic_error(fmtr.str());
                 }
                 inv_product *= diff;
@@ -142,7 +143,7 @@ barycentric_rational<Real>::barycentric_rational(const Real* const x, const Real
 }
 
 template<class Real>
-Real barycentric_rational<Real>::interpolate_at(Real x) const
+Real barycentric_rational<Real>::operator()(Real x) const
 {
     Real numerator = 0;
     Real denominator = 0;

@@ -36,7 +36,7 @@ void test_interpolation_condition()
 
     for (size_t i = 0; i < x.size(); ++i)
     {
-        auto z = interpolator.interpolate_at(x[i]);
+        auto z = interpolator(x[i]);
         BOOST_CHECK_CLOSE(z, y[i], 100*std::numeric_limits<Real>::epsilon());
     }
 }
@@ -63,7 +63,7 @@ void test_interpolation_condition_high_order()
 
     for (size_t i = 0; i < x.size(); ++i)
     {
-        auto z = interpolator.interpolate_at(x[i]);
+        auto z = interpolator(x[i]);
         BOOST_CHECK_CLOSE(z, y[i], 100*std::numeric_limits<Real>::epsilon());
     }
 }
@@ -79,7 +79,7 @@ void test_constant()
     boost::random::uniform_real_distribution<Real> dis(0.1, 1);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
-    Real constant = dis(gen);
+    Real constant = -8;
     x[0] = dis(gen);
     y[0] = constant;
     for (size_t i = 1; i < x.size(); ++i)
@@ -93,8 +93,8 @@ void test_constant()
     for (size_t i = 0; i < x.size(); ++i)
     {
         // Don't evaluate the constant at x[i]; that's already tested in the interpolation condition test.
-        auto z = interpolator.interpolate_at(x[i] + dis(gen));
-        BOOST_CHECK_CLOSE(z, constant, 10000*std::numeric_limits<Real>::epsilon());
+        auto z = interpolator(x[i] + dis(gen));
+        BOOST_CHECK_CLOSE(z, constant, 100*sqrt(std::numeric_limits<Real>::epsilon()));
     }
 }
 
@@ -108,7 +108,7 @@ void test_constant_high_order()
     boost::random::uniform_real_distribution<Real> dis(0.1, 1);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
-    Real constant = dis(gen);
+    Real constant = 5;
     x[0] = dis(gen);
     y[0] = constant;
     for (size_t i = 1; i < x.size(); ++i)
@@ -122,8 +122,8 @@ void test_constant_high_order()
 
     for (size_t i = 0; i < x.size(); ++i)
     {
-        auto z = interpolator.interpolate_at(x[i] + dis(gen));
-        BOOST_CHECK_CLOSE(z, constant, 10000*std::numeric_limits<Real>::epsilon());
+        auto z = interpolator(x[i] + dis(gen));
+        BOOST_CHECK_CLOSE(z, constant, 1000*sqrt(std::numeric_limits<Real>::epsilon()));
     }
 }
 
@@ -151,8 +151,8 @@ void test_runge()
     for (size_t i = 0; i < x.size(); ++i)
     {
         auto t = x[i] + dis(gen);
-        auto z = interpolator.interpolate_at(t);
-        BOOST_CHECK_CLOSE(z, 1/(1+25*t*t), 0.001);
+        auto z = interpolator(t);
+        BOOST_CHECK_CLOSE(z, 1/(1+25*t*t), 0.01);
     }
 }
 
