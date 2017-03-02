@@ -14,7 +14,7 @@
 // four-times continuously differentiable, the error is of O(h^4).
 // In addition, we can differentiate the spline and obtain a good interpolant for f'.
 // The main restriction of this method is that the samples of f must be evenly spaced.
-// Interpolators for non-evenly sampled data are forthcoming.
+// Look for barycentric rational interpolation for non-evenly sampled data.
 // Properties:
 // - s(x_j) = f(x_j)
 // - All cubic polynomials interpolated exactly
@@ -30,48 +30,6 @@
 
 namespace boost{ namespace math{
 
-using boost::math::constants::third;
-using boost::math::constants::half;
-
-template<class Real>
-Real b3_spline(Real x)
-{
-    auto sixth = half<Real>()*third<Real>();
-    using std::abs;
-    auto absx = abs(x);
-    if (absx < 1)
-    {
-        auto y = 2 - absx;
-        auto z = 1 - absx;
-        return sixth*(y*y*y - 4*z*z*z);
-    }
-    if (absx < 2)
-    {
-        auto y = 2 - absx;
-        return sixth*y*y*y;
-    }
-    return (Real) 0;
-}
-
-template<class Real>
-Real b3_spline_prime(Real x)
-{
-    if ( x < 0 )
-    {
-        return -b3_spline_prime(-x);
-    }
-
-    if (x < 1)
-    {
-        return x*(3*half<Real>()*x - 2);
-    }
-    if (x < 2)
-    {
-        return -half<Real>()*(2 - x)*(2 - x);
-    }
-    return (Real) 0;
-}
-
 template <class Real>
 class cubic_b_spline
 {
@@ -82,9 +40,9 @@ public:
                    Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
                    Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
 
-    Real interpolate_at(Real x) const;
+    Real operator()(Real x) const;
 
-    Real interpolate_derivative(Real x) const;
+    Real prime(Real x) const;
 
 private:
     std::vector<Real> m_beta;
@@ -94,11 +52,51 @@ private:
 
 };
 
+template<class Real>
+Real b3_spline(Real x)
+{
+    using std::abs;
+    Real absx = abs(x);
+    if (absx < 1)
+    {
+        Real y = 2 - absx;
+        Real z = 1 - absx;
+        return boost::math::constants::sixth<Real>()*(y*y*y - 4*z*z*z);
+    }
+    if (absx < 2)
+    {
+        Real y = 2 - absx;
+        return boost::math::constants::sixth<Real>()*y*y*y;
+    }
+    return (Real) 0;
+}
+
+template<class Real>
+Real b3_spline_prime(Real x)
+{
+    if (x < 0)
+    {
+        return -b3_spline_prime(-x);
+    }
+
+    if (x < 1)
+    {
+        return x*(3*boost::math::constants::half<Real>()*x - 2);
+    }
+    if (x < 2)
+    {
+        return -boost::math::constants::half<Real>()*(2 - x)*(2 - x);
+    }
+    return (Real) 0;
+}
+
 
 template<class Real>
 cubic_b_spline<Real>::cubic_b_spline(const Real* const f, size_t length, Real left_endpoint, Real step_size,
                                      Real left_endpoint_derivative, Real right_endpoint_derivative) : m_a(left_endpoint), m_avg(0)
 {
+    using boost::math::constants::third;
+
     if (length < 5)
     {
         if (boost::math::isnan(left_endpoint_derivative) || boost::math::isnan(right_endpoint_derivative))
@@ -114,6 +112,10 @@ cubic_b_spline<Real>::cubic_b_spline(const Real* const f, size_t length, Real le
     if (boost::math::isnan(left_endpoint))
     {
         throw std::logic_error("Left endpoint is NAN; this is disallowed.\n");
+    }
+    if (left_endpoint + length*step_size >= std::numeric_limits<Real>::max())
+    {
+        throw std::logic_error("Right endpoint overflows the maximum representable number of the specified precision.\n");
     }
     if (step_size <= 0)
     {
@@ -134,17 +136,17 @@ cubic_b_spline<Real>::cubic_b_spline(const Real* const f, size_t length, Real le
         // For simple functions (linear, quadratic, so on)
         // almost all the error comes from derivative estimation.
         // This does pairwise summation which gives us another digit of accuracy over naive summation.
-        auto t0 = 4*(f[1] + third<Real>()*f[3]);
-        auto t1 = -(25*third<Real>()*f[0] + f[4])/4  - 3*f[2];
+        Real t0 = 4*(f[1] + third<Real>()*f[3]);
+        Real t1 = -(25*third<Real>()*f[0] + f[4])/4  - 3*f[2];
         a1 = m_h_inv*(t0 + t1);
     }
 
     Real b1 = right_endpoint_derivative;
     if (boost::math::isnan(b1))
     {
-        auto n = length - 1;
-        auto t0 = 4*(f[n-3] + third<Real>()*f[n - 1]);
-        auto t1 = -(25*third<Real>()*f[n - 4] + f[n])/4  - 3*f[n - 2];
+        size_t n = length - 1;
+        Real t0 = 4*(f[n-3] + third<Real>()*f[n - 1]);
+        Real t1 = -(25*third<Real>()*f[n - 4] + f[n])/4  - 3*f[n - 2];
 
         b1 = m_h_inv*(t0 + t1);
     }
@@ -215,7 +217,7 @@ cubic_b_spline<Real>::cubic_b_spline(const Real* const f, size_t length, Real le
     // Now do a tridiagonal row reduction the standard way, until just before the last row:
     for (size_t i = 2; i < rhs.size() - 1; ++i)
     {
-        auto diagonal = 4 - super_diagonal[i - 1];
+        Real diagonal = 4 - super_diagonal[i - 1];
         rhs[i] = (rhs[i] - rhs[i - 1])/diagonal;
         super_diagonal[i] /= diagonal;
     }
@@ -224,9 +226,9 @@ cubic_b_spline<Real>::cubic_b_spline(const Real* const f, size_t length, Real le
     // 1 sd[n-3] 0      | rhs[n-3]
     // 0  1     sd[n-2] | rhs[n-2]
     // 1  0     -1      | rhs[n-1]
-    auto final_subdiag = -super_diagonal[rhs.size() - 3];
+    Real final_subdiag = -super_diagonal[rhs.size() - 3];
     rhs[rhs.size() - 1] = (rhs[rhs.size() - 1] - rhs[rhs.size() - 3])/final_subdiag;
-    auto final_diag = -1/final_subdiag;
+    Real final_diag = -1/final_subdiag;
     // Now we're here:
     // 1 sd[n-3] 0         | rhs[n-3]
     // 0  1     sd[n-2]    | rhs[n-2]
@@ -246,12 +248,12 @@ cubic_b_spline<Real>::cubic_b_spline(const Real* const f, size_t length, Real le
 }
 
 template<class Real>
-Real cubic_b_spline<Real>::interpolate_at(Real x) const
+Real cubic_b_spline<Real>::operator()(Real x) const
 {
     // See Kress, 8.40: Since B3 has compact support, we don't have to sum over all terms,
     // just the (at most 5) whose support overlaps the argument.
-    auto z = m_avg;
-    auto t = m_h_inv*(x - m_a) + 1;
+    Real z = m_avg;
+    Real t = m_h_inv*(x - m_a) + 1;
 
     using std::max;
     using std::min;
@@ -269,10 +271,10 @@ Real cubic_b_spline<Real>::interpolate_at(Real x) const
 }
 
 template<class Real>
-Real cubic_b_spline<Real>::interpolate_derivative(Real x) const
+Real cubic_b_spline<Real>::prime(Real x) const
 {
     Real z = 0;
-    auto t = m_h_inv*(x - m_a) + 1;
+    Real t = m_h_inv*(x - m_a) + 1;
 
     using std::max;
     using std::min;

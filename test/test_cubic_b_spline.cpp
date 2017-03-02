@@ -6,9 +6,14 @@
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/interpolators/cubic_b_spline.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#ifdef __GNUC__
+#ifndef __clang__
+#include <boost/multiprecision/float128.hpp>
+#endif
+#endif
 
-
-
+using boost::multiprecision::cpp_bin_float_50;
 using boost::math::constants::third;
 using boost::math::constants::half;
 
@@ -17,7 +22,7 @@ void test_b3_spline()
 {
     std::cout << "Testing evaluation of spline basis functions on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     // Outside the support:
-    auto eps = std::numeric_limits<Real>::epsilon();
+    Real eps = std::numeric_limits<Real>::epsilon();
     BOOST_CHECK_SMALL(boost::math::b3_spline<Real>(2.5), (Real) 0);
     BOOST_CHECK_SMALL(boost::math::b3_spline<Real>(-2.5), (Real) 0);
     BOOST_CHECK_SMALL(boost::math::b3_spline_prime<Real>(2.5), (Real) 0);
@@ -41,7 +46,7 @@ void test_b3_spline()
     // Properties: B3 is an even function, B3' is an odd function.
     for (size_t i = 1; i < 200; ++i)
     {
-        auto arg = i*0.01;
+        Real arg = i*0.01;
         BOOST_CHECK_CLOSE(boost::math::b3_spline<Real>(arg), boost::math::b3_spline<Real>(arg), eps);
         BOOST_CHECK_CLOSE(boost::math::b3_spline_prime<Real>(-arg), -boost::math::b3_spline_prime<Real>(arg), eps);
     }
@@ -53,55 +58,53 @@ void test_b3_spline()
 template<class Real>
 void test_interpolation_condition()
 {
+    using std::sqrt;
     std::cout << "Testing interpolation condition for cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     std::random_device rd;
     std::mt19937 gen(rd());
     boost::random::uniform_real_distribution<Real> dis(1, 10);
-    boost::random::uniform_real_distribution<Real> step_distribution(0.001, 0.01);
     std::vector<Real> v(5000);
     for (size_t i = 0; i < v.size(); ++i)
     {
         v[i] = dis(gen);
     }
 
-    Real step = step_distribution(gen);
-    Real a = dis(gen);
+    Real step = 0.01;
+    Real a = 5;
     boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), a, step);
 
     for (size_t i = 0; i < v.size(); ++i)
     {
-        auto y = spline.interpolate_at(i*step + a);
+        Real y = spline(i*step + a);
         // This seems like a very large tolerance, but I don't know of any other interpolators
         // that will be able to do much better on random data.
-        BOOST_CHECK_CLOSE(y, v[i], 10000000*std::numeric_limits<Real>::epsilon());
+        BOOST_CHECK_CLOSE(y, v[i], 10000*sqrt(std::numeric_limits<Real>::epsilon()));
     }
 
 }
+
 
 template<class Real>
 void test_constant_function()
 {
     std::cout << "Testing that constants are interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    boost::random::uniform_real_distribution<Real> dis(-100, 100);
-    boost::random::uniform_real_distribution<Real> step_distribution(0.0001, 0.1);
     std::vector<Real> v(500);
-    Real constant = dis(gen);
+    Real constant = 50.2;
     for (size_t i = 0; i < v.size(); ++i)
     {
-        v[i] = constant;
+        v[i] = 50.2;
     }
 
-    Real step = step_distribution(gen);
-    Real a = dis(gen);
+    Real step = 0.02;
+    Real a = 5;
     boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), a, step);
 
     for (size_t i = 0; i < v.size(); ++i)
     {
-        auto y = spline.interpolate_at(i*step + a);
-        BOOST_CHECK_CLOSE(y, v[i], 10*std::numeric_limits<Real>::epsilon());
-        auto y_prime = spline.interpolate_derivative(i*step + a);
+        // Do not test at interpolation point; we already know it works there:
+        Real y = spline(i*step + a + 0.001);
+        BOOST_CHECK_CLOSE(y, constant, 10*std::numeric_limits<Real>::epsilon());
+        Real y_prime = spline.prime(i*step + a + 0.002);
         BOOST_CHECK_SMALL(y_prime, 5000*std::numeric_limits<Real>::epsilon());
     }
 
@@ -110,9 +113,9 @@ void test_constant_function()
 
     for (size_t i = 0; i < v.size(); ++i)
     {
-        auto y = spline.interpolate_at(i*step + a);
-        BOOST_CHECK_CLOSE(y, v[i], std::numeric_limits<Real>::epsilon());
-        auto y_prime = spline.interpolate_derivative(i*step + a);
+        Real y = spline(i*step + a + 0.002);
+        BOOST_CHECK_CLOSE(y, constant, std::numeric_limits<Real>::epsilon());
+        Real y_prime = spline.prime(i*step + a + 0.002);
         BOOST_CHECK_SMALL(y_prime, std::numeric_limits<Real>::epsilon());
     }
 }
@@ -121,97 +124,143 @@ void test_constant_function()
 template<class Real>
 void test_affine_function()
 {
+    using std::sqrt;
     std::cout << "Testing that affine functions are interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    boost::random::uniform_real_distribution<Real> dis(-100, 100);
-    boost::random::uniform_real_distribution<Real> step_distribution(0.0001, 0.01);
     std::vector<Real> v(500);
-    Real a = dis(gen);
-    Real b = dis(gen);
-    Real step = step_distribution(gen);
-    Real x0 = dis(gen);
+    Real a = 10;
+    Real b = 8;
+    Real step = 0.005;
 
+    auto f = [a, b](Real x) { return a*x + b; };
     for (size_t i = 0; i < v.size(); ++i)
     {
-        v[i] = a*(i*step - x0) + b;
+        v[i] = f(i*step);
     }
 
+    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), 0, step);
 
-    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
-
-    for (size_t i = 0; i < v.size(); ++i)
+    for (size_t i = 0; i < v.size() - 1; ++i)
     {
-        auto y = spline.interpolate_at(i*step + x0);
-        BOOST_CHECK_CLOSE(y, v[i], 10000*std::numeric_limits<Real>::epsilon());
-        auto y_prime = spline.interpolate_derivative(i*step + x0);
-        BOOST_CHECK_CLOSE(y_prime, a, 10000000*std::numeric_limits<Real>::epsilon());
+        Real arg = i*step + 0.0001;
+        Real y = spline(arg);
+        BOOST_CHECK_CLOSE(y, f(arg), sqrt(std::numeric_limits<Real>::epsilon()));
+        Real y_prime = spline.prime(arg);
+        BOOST_CHECK_CLOSE(y_prime, a, 100*sqrt(std::numeric_limits<Real>::epsilon()));
     }
 
     // Test that correctly specified left and right-derivatives work properly:
-    spline = boost::math::cubic_b_spline<Real>(v.data(), v.size(), x0, step, a, a);
+    spline = boost::math::cubic_b_spline<Real>(v.data(), v.size(), 0, step, a, a);
 
-    for (size_t i = 0; i < v.size(); ++i)
+    for (size_t i = 0; i < v.size() - 1; ++i)
     {
-        auto y = spline.interpolate_at(i*step + x0);
-        BOOST_CHECK_CLOSE(y, v[i], 10000*std::numeric_limits<Real>::epsilon());
-        auto y_prime = spline.interpolate_derivative(i*step + x0);
-        BOOST_CHECK_CLOSE(y_prime, a, 10000000*std::numeric_limits<Real>::epsilon());
+        Real arg = i*step + 0.0001;
+        Real y = spline(arg);
+        BOOST_CHECK_CLOSE(y, f(arg), sqrt(std::numeric_limits<Real>::epsilon()));
+        Real y_prime = spline.prime(arg);
+        BOOST_CHECK_CLOSE(y_prime, a, 100*sqrt(std::numeric_limits<Real>::epsilon()));
     }
 }
+
 
 template<class Real>
 void test_quadratic_function()
 {
+    using std::sqrt;
     std::cout << "Testing that quadratic functions are interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    boost::random::uniform_real_distribution<Real> dis(1, 5);
-    boost::random::uniform_real_distribution<Real> step_distribution(0.0001, 1);
     std::vector<Real> v(500);
-    Real a = dis(gen);
-    Real b = dis(gen);
-    Real c = dis(gen);
-    Real step = step_distribution(gen);
-    Real x0 = dis(gen);
+    Real a = 1.2;
+    Real b = -3.4;
+    Real c = -8.6;
+    Real step = 0.01;
+
+    auto f = [a, b, c](Real x) { return a*x*x + b*x + c; };
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        v[i] = f(i*step);
+    }
+
+    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), 0, step);
+
+    for (size_t i = 0; i < v.size() -1; ++i)
+    {
+        Real arg = i*step + 0.001;
+        Real y = spline(arg);
+        BOOST_CHECK_CLOSE(y, f(arg), 0.1);
+        Real y_prime = spline.prime(arg);
+        BOOST_CHECK_CLOSE(y_prime, 2*a*arg + b, 2.0);
+    }
+}
+
+
+template<class Real>
+void test_trig_function()
+{
+    std::cout << "Testing that sine functions are interpolated correctly by cubic b splines on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::mt19937 gen;
+    std::vector<Real> v(500);
+    Real x0 = 1;
+    Real step = 0.125;
 
     for (size_t i = 0; i < v.size(); ++i)
     {
-        v[i] = a*(i*step - x0)*(i*step - x0) + b*(i*step - x0) + c;
+        v[i] = sin(x0 + step * i);
     }
 
     boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
 
+    boost::random::uniform_real_distribution<Real> absissa(x0, x0 + 499 * step);
+
     for (size_t i = 0; i < v.size(); ++i)
     {
-        auto y = spline.interpolate_at(i*step + x0);
-        BOOST_CHECK_CLOSE(y, v[i], 100000000*std::numeric_limits<Real>::epsilon());
-        auto y_prime = spline.interpolate_derivative(i*step + x0);
-        BOOST_CHECK_CLOSE(y_prime, 2*a*(i*step-x0) + b, 2.0);
+        Real x = absissa(gen);
+        Real y = spline(x);
+        BOOST_CHECK_CLOSE(y, sin(x), 1.0);
+        auto y_prime = spline.prime(x);
+        BOOST_CHECK_CLOSE(y_prime, cos(x), 2.0);
     }
 }
-
 
 BOOST_AUTO_TEST_CASE(test_cubic_b_spline)
 {
     test_b3_spline<float>();
     test_b3_spline<double>();
     test_b3_spline<long double>();
+    test_b3_spline<cpp_bin_float_50>();
 
     test_interpolation_condition<float>();
     test_interpolation_condition<double>();
     test_interpolation_condition<long double>();
+    test_interpolation_condition<cpp_bin_float_50>();
 
     test_constant_function<float>();
     test_constant_function<double>();
     test_constant_function<long double>();
+    test_constant_function<cpp_bin_float_50>();
 
     test_affine_function<float>();
     test_affine_function<double>();
     test_affine_function<long double>();
+    test_affine_function<cpp_bin_float_50>();
 
     test_quadratic_function<float>();
     test_quadratic_function<double>();
     test_quadratic_function<long double>();
+    test_affine_function<cpp_bin_float_50>();
+
+    test_trig_function<float>();
+    test_trig_function<double>();
+    test_trig_function<long double>();
+    test_trig_function<cpp_bin_float_50>();
+
+#ifdef __GNUC__
+#ifndef __clang__
+    test_b3_spline<boost::multiprecision::float128>();
+    test_interpolation_condition<boost::multiprecision::float128>();
+    test_constant_function<boost::multiprecision::float128>();
+    test_affine_function<boost::multiprecision::float128>();
+    test_quadratic_function<boost::multiprecision::float128>();
+    test_trig_function<boost::multiprecision::float128>();
+#endif
+#endif
 
 }

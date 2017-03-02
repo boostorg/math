@@ -9,7 +9,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 [section:cubic_b_over Overview of Cubic B-Spline Interpolation]
 
-The cubic b spline routine provided by boost allows fast and accurate interpolation of a function which is known at equally spaced points.
+The cubic b spline class provided by boost allows fast and accurate interpolation of a function which is known at equally spaced points.
 The cubic b-spline interpolation is preferable to traditional cubic spline interpolation as the global support of cubic polynomials makes the interpolation ill-conditioned.
 
 There are many use cases for interpolating a function at equally spaced points.
@@ -27,10 +27,21 @@ Optionally, you may provide two additional arguments to the routine, namely the 
 If you do not provide these arguments, the routine will estimate them using one-sided finite-difference formulas.
 An example of a valid call is
 
-    __boost::math::cubic_b_spline<double>(f.data(), f.size(), t0, h);
+    __auto spline = boost::math::cubic_b_spline<double>(f.data(), f.size(), t0, h);
 
-Mathematically, the function we are trying to interpolate has the known values ['f[j] = f(jh+t[sub 0])']
+To evaluate the interpolant at a point, we simply use
 
+    __auto y = spline(x);
+
+and to evaluate the derivative we use
+
+    __auto yp = spline.prime(x);
+
+Be aware that the accuracy guarantees on the derivative of the spline are much lower than the guarantees on the original function; see
+
+[@https://link.springer.com/book/10.1007%2F978-1-4612-0599-9 Numerical Analysis, Graduate Texts in Mathematics, 181, Rainer Kress]
+
+for more details.
 
 [endsect]
 
