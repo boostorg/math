@@ -15,6 +15,7 @@
 #include <cmath>
 #include <random>
 #include <boost/random/uniform_real_distribution.hpp>
+#include <boost/math/tools/roots.hpp>
 
 //[cubic_b_spline_example
 
@@ -48,4 +49,43 @@ int main()
         std::cout << "sin(" << x << ") = " << sin(x) << ", spline interpolation gives " << spline(x) << std::endl;
         std::cout << "cos(" << x << ") = " << cos(x) << ", spline derivative interpolation gives " << spline.prime(x) << std::endl;
     }
+
+    // The next example is less trivial:
+    // We will try to figure out when the population of the United States crossed 100 million.
+    // Since the census is taken every 10 years, the data is equally spaced, so we can use the cubic b spline.
+    // Data taken from https://en.wikipedia.org/wiki/United_States_Census
+    // An eye
+    // We'll start at the year 1860:
+    double t0 = 1860;
+    double time_step = 10;
+    std::vector<double> population{31443321,  /* 1860 */
+                                   39818449,  /* 1870 */
+                                   50189209,  /* 1880 */
+                                   62947714,  /* 1890 */
+                                   76212168,  /* 1900 */
+                                   92228496,  /* 1910 */
+                                   106021537, /* 1920 */
+                                   122775046, /* 1930 */
+                                   132164569, /* 1940 */
+                                   150697361, /* 1950 */
+                                   179323175};/* 1960 */
+
+    // An eyeball estimate indicates that the population crossed 100 million around 1915.
+    // Let's see what interpolation says:
+    boost::math::cubic_b_spline<double> p(population.data(), population.size(), t0, 10);
+
+    // Now create a function which has a zero at p = 100,000,000:
+    auto f = [=](double t){ return p(t) - 100000000; };
+
+    // Boost includes a bisection algorithm, which is robust, but not as fast as others (such as toms748)
+    // We'll use it because of it's simplicity:
+
+    boost::math::tools::eps_tolerance<double> tol;
+    auto result =  boost::math::tools::bisect(f, 1910.0, 1920.0, tol);
+    auto time = result.first;
+    auto month = std::round((time - std::floor(time))*12  + 1);
+    auto year = std::floor(time);
+    std::cout << "The population of the United States surpassed 100 million on the ";
+    std::cout << month << "th month of " << year << std::endl;
+
 }
