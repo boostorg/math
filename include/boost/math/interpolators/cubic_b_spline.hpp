@@ -5,7 +5,7 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // This implements the compactly supported cubic b spline algorithm described in
-// "Numerical Analsis, Graduate Texts in Mathematics 181", by Rainer Kress, section 8.3.
+// Kress, Rainer. "Numerical analysis, volume 181 of Graduate Texts in Mathematics." (1998).
 // Splines of compact support are faster to evaluate and are better conditioned than classical cubic splines.
 
 // Let f be the function we are trying to interpolate, and s be the interpolating spline.
