@@ -13,14 +13,15 @@
 
 /*`This example shows how to use barycentric rational interpolation, using Walter Kohn's classic paper
   "Solution of the Schrodinger Equation in Periodic Lattices with an Application to Metallic Lithium"
-  In this paper, Kohn need to repeatedly solve an ODE (the radial Schrodinger equation) given a potential
+  In this paper, Kohn needs to repeatedly solve an ODE (the radial Schrodinger equation) given a potential
   which is only known at non-equally samples data.
 
   If he'd only had the barycentric rational interpolant of boost::math!
-  First, include the header:
+  References:
+  Kohn, W., and N. Rostoker. "Solution of the Schrödinger equation in periodic lattices with an application to metallic lithium." Physical Review 94.5 (1954): 1111.
 */
 
-#include <boost/math/tools/barycentric_rational_interpolation.hpp>
+#include <boost/math/interpolators/barycentric_rational.hpp>
 //] [/barycentric_rational_example]
 
 int main()
@@ -76,7 +77,7 @@ int main()
     r[44] = 3.72, mrV[44] = 2.0001;
 
     // Now we want to interpolate this potential at any r:
-    boost::math::tools::barycentric_rational<double> b(r.data(), mrV.data(), r.size());
+    boost::math::barycentric_rational<double> b(r.data(), mrV.data(), r.size());
 
     for (size_t i = 1; i < 8; ++i)
     {

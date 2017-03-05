@@ -3,46 +3,25 @@
  *  Use, modification and distribution are subject to the
  *  Boost Software License, Version 1.0. (See accompanying file
  *  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
- *
- *  Given N samples (t_i, y_i) which are irregularly spaced, this routine constructs an
- *  interpolant s which is constructed in O(N) time, occupies O(N) space, and can be evaluated in O(N) time.
- *  The interpolation is stable, unless one point is incredibly close to another, and the next point is incredibly far.
- *  The measure of this stability is the "local mesh ratio", which can be queried from the routine.
- *  Pictorially, the following t_i spacing is bad (has a high local mesh ratio)
- *  ||             |      | |                           |
- *  and this t_i spacing is good (has a low local mesh ratio)
- *  |   |      |    |     |    |        |    |  |    |
- *
- *
- *  If f is C^{d+2}, then the interpolant is O(h^(d+1)) accurate, where d is the interpolation order.
- *  A disadvantage of this interpolant is that it does not reproduce rational functions; for example, 1/(1+x^2) is not interpolated exactly.
- *
- *  This routine follows "Barycentric Rational Approximation with no Poles and High Rate of Approximation"
- *  by Michael S. Floater, Kai Hormann
- *  http://www.mn.uio.no/math/english/people/aca/michaelf/papers/rational.pdf
- *  Official Citation:
- *  Floater, M.S. & Hormann, K. Numer. Math. (2007) 107: 315. doi:10.1007/s00211-007-0093-y
- *
- *  Floater's algorithm has been discussed in detail in Numerical Recipes, 3rd edition, section 3.4.1.
  */
 
-#ifndef BOOST_MATH_TOOLS_BARYCENTRIC_RATIONAL_INTERPOLATION_HPP
-#define BOOST_MATH_TOOLS_BARYCENTRIC_RATIONAL_INTERPOLATION_HPP
+#ifndef BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_DETAIL_HPP
+#define BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_DETAIL_HPP
 
 #include <vector>
 #include <boost/type_index.hpp>
 #include <boost/format.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-namespace boost{ namespace math{ namespace tools{
+namespace boost{ namespace math{ namespace detail{
 
 template<class Real>
-class barycentric_rational
+class barycentric_rational_imp
 {
 public:
-    barycentric_rational(const Real* const x, const Real* const y, size_t n, size_t approximation_order = 3);
+    barycentric_rational_imp(const Real* const x, const Real* const y, size_t n, size_t approximation_order = 3);
 
-    Real operator()(Real t) const;
+    Real operator()(Real x) const;
 
     // The barycentric weights are not really that interesting; except to the unit tests!
     Real weight(size_t i) const { return m_w[i]; }
@@ -59,7 +38,7 @@ private:
 };
 
 template<class Real>
-barycentric_rational<Real>::barycentric_rational(const Real* const x, const Real* const y, size_t n, size_t approximation_order)
+barycentric_rational_imp<Real>::barycentric_rational_imp(const Real* const x, const Real* const y, size_t n, size_t approximation_order)
 {
     using std::abs;
 
@@ -143,7 +122,7 @@ barycentric_rational<Real>::barycentric_rational(const Real* const x, const Real
 }
 
 template<class Real>
-Real barycentric_rational<Real>::operator()(Real x) const
+Real barycentric_rational_imp<Real>::operator()(Real x) const
 {
     Real numerator = 0;
     Real denominator = 0;
@@ -171,6 +150,5 @@ Real barycentric_rational<Real>::operator()(Real x) const
  * However, this requires a lot of machinery which is not built into the library at present.
  * So we wait until there is a requirement to interpolate the derivative.
  */
-
 }}}
 #endif
