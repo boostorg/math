@@ -1,0 +1,61 @@
+[/
+Copyright (c) 2017 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:adaptive_trapezoidal Adaptive Trapezoidal Quadrature]
+
+[heading Synopsis]
+
+``
+  #include <boost/math/quadrature/adaptive_trapezoidal.hpp>
+``
+
+[heading Description]
+
+The function __adaptive_trapezoidal calculates the integral of a function /f/ using the surprisingly simple trapezoidal rule.
+If we assume only that the integrand is twice continuously differentiable, we can prove that the error of the composite trapezoidal rule
+is [bigo](h^2).
+Hence halving the interval only cuts the error by about a fourth, which in turn implies that we must evaluate the function many times before an acceptable accuracy can be achieved.
+
+However, the trapezoidal rule has an astonishing property: If the integrand is periodic, and we integrate it over a period, then the trapezoidal rule converges exponentially fast.
+This can be seen by examination of the Euler-Maclaurin formula, which relates a definite integral to its trapezoidal sum and error terms proportional to the derivatives of the function at the endpoints.
+If the derivatives at the endpoints are the same or vanish, then the error very nearly vanishes.
+Hence the trapezoidal rule is essentially optimal for periodic integrands.
+
+In it's simplest form, an integration can be performed by the following code
+
+    __auto f = [](double x) { return 1/(5 - 4*cos(x)); };
+    __double I = boost::math::adaptive_trapezoidal(f, 0, two_pi<double>());
+
+Since the routine is adaptive, step sizes are halved continuously until a tolerance is reached.
+In order to control this tolerance, simply call the routine with an additional argument
+
+    __double I = adaptive_trapezoidal(f, 0, two_pi<double>(), 1e-6);
+
+The routine stops when successive estimates of the integral /I1/ and /I0/ differ by less than the tolerance multiplied by the estimated L1 norm of the function.
+A question arises as to what to do when successive estimates never pass below this threshold.
+The stepsize would be halved until it eventually would be flushed to zero, leading to an infinite loop.
+As such, you may pass an optional argument __max_refinements which controls how many times the interval may be halved before giving up.
+By default, this maximum number of refinement steps is 15, leading to ~30,000 function evaluations.
+For certain problems, this is clearly excessive, so specifying a smaller number is reasonable
+
+    __size_t max_refinements = 10;
+    __double I = adaptive_trapezoidal(f, 0, two_pi<double>(), 1e-6, max_refinements);
+
+Finally, you might wonder what the final error estimate actually was: This is achieved by passing a pointer into the last argument
+
+    __double error_estimate;
+    __double I = adaptive_trapezoidal(f, 0, two_pi<double>(), 1e-6, 10, &error_estimate);
+
+If need be, you can query this value, and if it is unacceptably large, use another method.
+
+
+References:
+
+Stoer, Josef, and Roland Bulirsch. Introduction to numerical analysis. Vol. 12. Springer Science & Business Media, 2013.
+
+
+[endsect]
