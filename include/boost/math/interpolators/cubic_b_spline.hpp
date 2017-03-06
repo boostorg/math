@@ -36,6 +36,7 @@ public:
                    Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
                    Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
 
+    cubic_b_spline() = default;
     Real operator()(Real x) const;
 
     Real prime(Real x) const;

@@ -247,8 +247,7 @@ Real cubic_b_spline_imp<Real>::operator()(Real x) const
     using std::ceil;
 
     size_t k_min = (size_t) max(static_cast<long>(0), static_cast<long>(ceil(t - 2)));
-    size_t k_max = (size_t) min(static_cast<long>(m_beta.size() - 1), static_cast<long>(floor(t + 2)));
-
+    size_t k_max = (size_t) max(min(static_cast<long>(m_beta.size() - 1), static_cast<long>(floor(t + 2))), (long) 0);
     for (size_t k = k_min; k <= k_max; ++k)
     {
         z += m_beta[k]*b3_spline(t - k);

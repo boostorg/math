@@ -1,6 +1,7 @@
 #define BOOST_TEST_MODULE test_cubic_b_spline
 
 #include <random>
+#include <functional>
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
@@ -221,6 +222,65 @@ void test_trig_function()
     }
 }
 
+template<class Real>
+void test_copy_move()
+{
+    std::cout << "Testing that copy/move operation succeed on cubic b spline\n";
+    std::vector<Real> v(500);
+    Real x0 = 1;
+    Real step = 0.125;
+
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        v[i] = sin(x0 + step * i);
+    }
+
+    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
+
+
+    // Default constructor should compile so that splines can be member variables:
+    boost::math::cubic_b_spline<Real> d;
+    d = boost::math::cubic_b_spline<Real>(v.data(), v.size(), x0, step);
+    BOOST_CHECK_CLOSE(d(x0), sin(x0), 0.01);
+    // Passing to lambda should compile:
+    auto f = [=](Real x) { return d(x); };
+    // Make sure this variable is used.
+    BOOST_CHECK_CLOSE(f(x0), sin(x0), 0.01);
+
+    // Move operations should compile.
+    auto s = std::move(spline);
+
+    // Copy operations should compile:
+    boost::math::cubic_b_spline<Real> c = d;
+    BOOST_CHECK_CLOSE(c(x0), sin(x0), 0.01);
+
+    // Test with std::bind:
+    auto h = std::bind(&boost::math::cubic_b_spline<double>::operator(), &s, std::placeholders::_1);
+    BOOST_CHECK_CLOSE(h(x0), sin(x0), 0.01);
+}
+
+template<class Real>
+void test_outside_interval()
+{
+    std::cout << "Testing that the spline can be evaluated outside the interpolation interval\n";
+    std::vector<Real> v(400);
+    Real x0 = 1;
+    Real step = 0.125;
+
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        v[i] = sin(x0 + step * i);
+    }
+
+    boost::math::cubic_b_spline<Real> spline(v.data(), v.size(), x0, step);
+
+    // There's no test here; it simply does it's best to be an extrapolator.
+    //
+    std::ostream cnull(0);
+    cnull << spline(0);
+    cnull << spline(2000);
+}
+
 BOOST_AUTO_TEST_CASE(test_cubic_b_spline)
 {
     test_b3_spline<float>();
@@ -252,6 +312,9 @@ BOOST_AUTO_TEST_CASE(test_cubic_b_spline)
     test_trig_function<double>();
     test_trig_function<long double>();
     test_trig_function<cpp_bin_float_50>();
+
+    test_copy_move<double>();
+    test_outside_interval<double>();
 
 #ifdef __GNUC__
 #ifndef __clang__
