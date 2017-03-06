@@ -306,15 +306,15 @@ BOOST_AUTO_TEST_CASE(test_main)
   { // Avoid pointless re-testing if double and long double are identical (for example, MSVC).
     test_spots(0.0L); // long double
   }
-  // Built-in/fundamental Quad 128-bit type.
+  // Built-in/fundamental Quad 128-bit type, if available.
   #ifdef BOOST_HAS_FLOAT128
   test_spots(static_cast<boost::multiprecision::float128>(0));
 #endif
 
   // Multiprecision types:
   test_spots(static_cast<boost::multiprecision::cpp_dec_float_50>(0));
-  test_spots(static_cast<boost::multiprecision::cpp_bin_float_double_extended>(0));  // Fails GCC gnu++11 and ++14
-  test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0)); // Fails GCC.
+  test_spots(static_cast<boost::multiprecision::cpp_bin_float_double_extended>(0));  // Fails GCC gnu++11 and gnu ++14but OK -std=c++11 and 14.
+  test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0)); // Fails GCC gnu++11 and ++14 but OK -std=c++11 and 14.
 
   // Fixed-point types:
   test_spots(static_cast<boost::fixed_point::negatable<15,-16> >(0));

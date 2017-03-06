@@ -233,6 +233,11 @@ namespace boost
       // Check on range of x.
 
       //std::cout << "-exp(-1) = " << -expminusone<RealType>() << std::endl;
+      // https://www.wolframalpha.com/input/?i=-exp(-1)&wal=header  N[-Exp[-1], 143]
+      // -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527
+      // Add to constants as expminusone
+
+      // onesixth 0.1666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666...
 
       // Special case of -exp(-1)) // -0.3678794411714423215955237701614608674458111310
       // Can't use if (x < -exp(-1)) because 1-bit difference in accuracy of exp means is inconsistent.
