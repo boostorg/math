@@ -50,8 +50,8 @@
 #include <cmath> // exp
 #include <type_traits> // is_integral
 
-
 // Define a temporary constant for exp(-1) for use in checks at the singularity.
+// TODO make this a permanent constant (and also 1/6)
 namespace boost
 { namespace math 
   {
@@ -61,7 +61,6 @@ namespace boost
     }
   } 
 }
-
 
 namespace boost {
   namespace fixed_point {
@@ -183,7 +182,7 @@ T log1p(T x)
     //T dodgy = log1p_dodgy(x);
     double dx = static_cast<double>(x);
     double lp1x = log1p(dx);
-#ifdef BOOST_MATH_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
     std::cout << "true " << lp1x
       << ", log1p_fp " << log1p(x)
       //<< ", dodgy " << dodgy << ", HP " << result
@@ -226,7 +225,7 @@ namespace boost
       // Want to allow fixed_point types too.
       BOOST_STATIC_ASSERT_MSG(!std::is_integral<RealType>::value, "Must be floating-point, not integer type, for example W(1.), not W(1)!");
 
-#ifdef BOOST_MATH_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
       std::cout << std::showpoint << std::endl; // Show all trailing zeros.
       //std::cout.precision(std::numeric_limits<RealType>::max_digits10); // Show all possibly significant digits.
       std::cout.precision(std::numeric_limits<RealType>::digits10); // Show all significant digits.
@@ -291,13 +290,13 @@ namespace boost
         w0 = -1 + sqrt_v * (n2 + sqrt_v) / (n2 + sqrt_v + n1 * sqrt_v); // W0 1st approximation, Line 13, equation 6.40.
       }
 
-      #ifdef BOOST_MATH_INSTRUMENT
+      #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
         // std::cout << "\n1st approximation  = " << w0 << std::endl;
       #endif
 
       int iterations = 0;
       RealType tolerance = 3 * std::numeric_limits<RealType>::epsilon();
-      RealType w1;
+      RealType w1(0);
 
       while (iterations <= 5)
       { // Iterate a few times to refine value using Halley's method.
@@ -334,7 +333,7 @@ namespace boost
           break;
         }
 
-#ifdef BOOST_MATH_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
         std::cout.precision(std::numeric_limits<RealType>::digits10);
         std::cout <<"Iteration #" << iterations << ", w0 " << w0 << ", w1 = " << w1 << ", difference = " << diff << ", relative " << (w0 / w1 - static_cast<RealType>(1)) << std::endl;
         std::cout << "f'(x) = " << diff / (expw0 * (w0 + 1)) << ", f''(x) = " << - diff / ((expw0 * (w0 + 1) - (w0 + 2) * diff / (w0 + w0 + 2))) << std::endl;
@@ -344,11 +343,11 @@ namespace boost
         iterations++;
       } // while
 
-#ifdef BOOST_MATH_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
       std::cout << "Final " << w1 << " after " << iterations << " iterations" << ", difference = " << (w0 / w1 - static_cast<RealType>(1)) << std::endl;
 #endif
       return w1;
-    }
+    } //
 
   } // namespace math
 } // namespace boost

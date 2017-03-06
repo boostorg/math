@@ -1,4 +1,4 @@
-// Copyright Paul A. Bristow 2016.
+// Copyright Paul A. Bristow 2016, 2017.
 // Copyright John Maddock 2016.
 
 // Use, modification and distribution are subject to the
@@ -9,18 +9,19 @@
 // test_lambertw.cpp
 //! \brief Basic sanity tests for Lambert W function plog or productlog using algorithm from Thomas Luu.
 
-// #include <boost/math/tools/test.hpp>
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC
 
-//#define BOOST_MATH_INSTRUMENT  // #define for diagnostic output.
-
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
+#include "test_value.hpp"  // for create_test_value
 
 #include <boost/multiprecision/cpp_dec_float.hpp> // boost::multiprecision::cpp_dec_float_50
 using boost::multiprecision::cpp_dec_float_50;
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/float128.hpp>
+#endif
 
 #include <boost/fixed_point/fixed_point.hpp>
 
@@ -34,91 +35,6 @@ using boost::multiprecision::cpp_dec_float_50;
 #include <typeinfo>
 #include <iostream>
 #include <type_traits>
-
-// BOOST_MATH_TEST_VALUE is used to create a test value of suitable type from a decimal digit string. 
-// Two parameters, both a literal like 1.23 and a decimal digit string const char* like "1.23" must be provided.
-// The decimal value represented must be the same of course, with at least enough precision for long double.
-//   Note there are two gotchas to this approach:
-// * You need all values to be real floating-point values
-// * and *MUST* include a decimal point.
-// * It's slow to compile compared to a simple literal.
-// This is not an issue for a few test values,
-// but it's not generally usable in large tables 
-// where you really need everything to be statically initialized.
-
-int create_type(0);
-
-template <class T, class T2>
-inline T create_test_value(long double val, const char*, const boost::mpl::true_&, const T2&)
-{ // Construct from long double parameter val (ignoring string/const char* str)
-  create_type = 1;
-  return static_cast<T>(val);
-}
-
-template <class T>
-inline T create_test_value(long double, const char* str, const boost::mpl::false_&, const boost::mpl::true_&)
-{ // Construct from decimal digit string const char* @c str (ignoring long double parameter).
-  create_type = 2;
-  return T(str);
-}
-
-template <class T>
-inline T create_test_value(long double, const char* str, const boost::mpl::false_&, const boost::mpl::false_&)
-{ // Create test value using from lexical cast of decimal digit string const char* str.
-  create_type = 3;
-  return boost::lexical_cast<T>(str);
-}
-
-// T real type, x a decimal digits representation of a floating-point, for example: 12.34.
-
-//  x is converted to a long double by appending the letter L (to suit long double fundamental type)
-//  x is also passed as a const char* or string representation 
-//  (to suit most other types that cannot be constructed from long double without possible loss).
-
-// x##L makes a long double version, suffix a letter L to suit long double fundamental type.
-// #x makes a decimal digit string version to suit multiprecision and fixed_point constructors.
-// (Constructing from double or long double could lose precision for multiprecision or fixed-point).
-
-// The matching create_test_value function above is chosen depending on the T1 and T2 mpl bool truths.
-// The string version from #x is used if the precision of T is greater than long double. 
-
-// Example: long double test_value = BOOST_MATH_TEST_VALUE(long double, 9.);
-
-#define BOOST_MATH_TEST_VALUE(T, x) create_test_value<T>(\
-  x##L,\
-  #x,\
-  boost::mpl::bool_<\
-    std::numeric_limits<T>::is_specialized &&\
-      (std::numeric_limits<T>::radix == 2)\
-        && (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits)\
-        && boost::is_convertible<long double, T>::value>(),\
-  boost::mpl::bool_<\
-    boost::is_constructible<T, const char*>::value>()\
-)
-
-template <class T>
-void show()
-{
-  std::cout << std::boolalpha << "Test with type:\n"
-     << typeid(T).name() << std::endl
-    << " is specialized " << std::numeric_limits<T>::is_specialized
-    << ", radix = " << std::numeric_limits<T>::radix
-    << ", digits = " << std::numeric_limits<T>::digits // binary digits,  24 for float, 53 for double ...
-    << ", is_convertible " << boost::is_convertible<long double, T>::value // is convertible long double *to* T.
-    << ", is_constructible " << boost::is_constructible<T, const char*>::value // is constructible *from* string.
-    << std::endl;
-
-  std::cout << " T1 = "
-    << (
-        (std::numeric_limits<T>::is_specialized)
-            && (std::numeric_limits<T>::radix == 2)
-            && (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits)
-            && (boost::is_convertible<long double, T>::value)
-        )
-    << ", T2 = " << (boost::is_constructible<T, const char*>::value)
-    << std::endl;
-} // show
-
 
 static const unsigned int noof_tests = 2;
 
@@ -136,7 +52,57 @@ static const boost::array<const char*, noof_tests> test_data =
 //  } }; // array test_data
 
 
-// 
+//! Show information about build, architecture, address model, platform, ...
+std::string show_versions()
+{
+  std::ostringstream message;
+
+  message << "Program: " << __FILE__ << "\n";
+#ifdef __TIMESTAMP__
+  message << __TIMESTAMP__;
+#endif
+  message << "\nBuildInfo:\n" "  Platform " << BOOST_PLATFORM;
+  // http://stackoverflow.com/questions/1505582/determining-32-vs-64-bit-in-c
+#if defined(__LP64__) || defined(_WIN64) || (defined(__x86_64__) && !defined(__ILP32__) ) || defined(_M_X64) || defined(__ia64) || defined (_M_IA64) || defined(__aarch64__) || defined(__powerpc64__)
+#define IS64BIT 1
+  message << ", 64-bit.";
+#else
+#define IS32BIT 1
+  message << ", 32-bit.";
+#endif
+
+  message << "\n  Compiler " BOOST_COMPILER;
+#ifdef BOOST_MSC_VER
+#ifdef _MSC_FULL_VER
+  message << "\n  MSVC version " << BOOST_STRINGIZE(_MSC_FULL_VER) << ".";
+#endif
+#ifdef __WIN64
+  mess age << "\n WIN64" << std::endl;
+#endif // __WIN64
+#ifdef _WIN32
+  message << "\n WIN32" << std::endl;
+#endif  // __WIN32
+#endif
+#ifdef __GNUC__
+  //PRINT_MACRO(__GNUC__);
+  //PRINT_MACRO(__GNUC_MINOR__);
+  //PRINT_MACRO(__GNUC_PATCH__);
+  std::cout << "GCC " << __VERSION__ << std::endl;
+  //PRINT_MACRO(LONG_MAX);
+#endif // __GNUC__
+
+  message << "\n  STL " << BOOST_STDLIB;
+
+  message << "\n  Boost version " << BOOST_VERSION / 100000 << "." << BOOST_VERSION / 100 % 1000 << "." << BOOST_VERSION % 100;
+
+#ifdef BOOST_HAS_FLOAT128
+  message << ",  BOOST_HAS_FLOAT128" << std::endl;
+#endif
+  message << std::endl;
+  return message.str();
+} // std::string versions()
+
+
 // ProductLog[-0.367879441171442321595523770161460867445811131031767834]
 
 template <class RealType>
@@ -156,7 +122,7 @@ void test_spots(RealType)
 
   using boost::math::productlog;
 
-  using boost::math::constants::expminusone; 
+  using boost::math::constants::expminusone;
   RealType tolerance = boost::math::tools::epsilon<RealType>() * 5; // 5 eps as a fraction.
   std::cout << "Testing type " << typeid(RealType).name() << std::endl;
   std::cout << "Tolerance " << tolerance << std::endl;
@@ -164,15 +130,6 @@ void test_spots(RealType)
   std::cout.precision(std::numeric_limits<RealType>::digits10);
   std::cout << std::showpoint << std::endl; // show trailing significant zeros.
   std::cout << "-exp(-1) = " << -expminusone<RealType>() << std::endl;
-
-  show<RealType>();
-
-    std::cout << " Create type: " 
-    << ((create_type ==1) ? "create from static_cast<T>(val) " :
-        (create_type == 2) ? "construct from T(str)" :
-        (create_type == 3) ? "boost::lexical_cast<T>(str)" :
-         "???")   // ??? create_type == 0 should never happen?
-    << std::endl;
 
   std::cout.precision(std::numeric_limits <RealType>::max_digits10);
 
@@ -234,29 +191,28 @@ void test_spots(RealType)
     BOOST_MATH_TEST_VALUE(RealType, 3.3856301402900501848882443645297268674916941701578),
     // Output from https://www.wolframalpha.com/input/?i=productlog(100)
     tolerance);
-  
+
   // TODO Fails here with really big x.
   /*  BOOST_CHECK_CLOSE_FRACTION(productlog(BOOST_MATH_TEST_VALUE(RealType, 1.0e6)),
     BOOST_MATH_TEST_VALUE(RealType, 11.383358086140052622000156781585004289033774706019),
     // Output from https://www.wolframalpha.com/input/?i=productlog(1e6)
     // tolerance * 1000); // fails exceeds 0.00015258789063
     tolerance * 1000);
-  
-  1>i:/modular-boost/libs/math/test/test_lambert_w.cpp(195): 
-  error : in "test_main": 
-  difference{2877.54} between 
+
+  1>i:/modular-boost/libs/math/test/test_lambert_w.cpp(195):
+  error : in "test_main":
+  difference{2877.54} between
   productlog(create_test_value<RealType>( 1.0e6L, "1.0e6", boost::mpl::bool_< std::numeric_limits<RealType>::is_specialized && (std::numeric_limits<RealType>::radix == 2) && (std::numeric_limits<RealType>::digits <= std::numeric_limits<long double>::digits) && boost::is_convertible<long double, RealType>::value>(), boost::mpl::bool_< boost::is_constructible<RealType, const char*>::value>()))
 {
   32767.399857
 }
-and 
+and
 
 create_test_value<RealType>( 11.383358086140052622000156781585004289033774706019L, "11.383358086140052622000156781585004289033774706019", boost::mpl::bool_< std::numeric_limits<RealType>::is_specialized && (std::numeric_limits<RealType>::radix == 2) && (std::numeric_limits<RealType>::digits <= std::numeric_limits<long double>::digits) && boost::is_convertible<long double, RealType>::value>(), boost::mpl::bool_< boost::is_constructible<RealType, const char*>::value>())
 {
   11.383346558
-} 
+}
 exceeds 0.00015258789063
-
 
   */
 
@@ -292,12 +248,12 @@ exceeds 0.00015258789063
   {
     -0.99845210378072725931829498030640227316856835774851
   }
-  
+
   exceeds 5e-47
   */
 
 
-   /* Goes realy haywire here close to singularity.
+   /* Goes really haywire here close to singularity.
 
   test_value = BOOST_MATH_TEST_VALUE(RealType, -0.367879);
   BOOST_CHECK_CLOSE_FRACTION(productlog(test_value),
@@ -306,15 +262,15 @@ exceeds 0.00015258789063
     // N[productlog(-0.367879), 50] = -0.99845210378072725931829498030640227316856835774851
     tolerance * 100);
 
-  I:/modular-boost/libs/math/test/test_lambert_w.cpp(267): error : in "test_main": 
+  I:/modular-boost/libs/math/test/test_lambert_w.cpp(267): error : in "test_main":
   difference
   {
     2.87298e+26
-  } 
+  }
   between productlog(test_value)
   {
     -2.86853068e+26
-  } 
+  }
   and create_test_value<RealType>( -0.99845210378072725931829498030640227316856835774851L, "-0.99845210378072725931829498030640227316856835774851", boost::mpl::bool_< std::numeric_limits<RealType>::is_specialized && (std::numeric_limits<RealType>::radix == 2) && (std::numeric_limits<RealType>::digits <= std::numeric_limits<long double>::digits) && boost::is_convertible<long double, RealType>::value>(), boost::mpl::bool_< boost::is_constructible<RealType, const char*>::value>())
   {
     -0.998452127
@@ -337,10 +293,11 @@ exceeds 0.00015258789063
 BOOST_AUTO_TEST_CASE(test_main)
 {
   BOOST_MATH_CONTROL_FP;
-
-  std::cout << "Tests run with " << BOOST_COMPILER << ", "
-    << BOOST_STDLIB << ", Boost Platform " << BOOST_PLATFORM << ", MSVC compiler "
-    << BOOST_MSVC_FULL_VER << std::endl;
+  // BOOST_TEST_MESSAGE( output only appears if command line has --log_level="message"
+  // or call set_threshold_level function:
+  boost::unit_test_framework::unit_test_log.set_threshold_level(boost::unit_test_framework::log_messages);
+  BOOST_TEST_MESSAGE("Test Lambert W function.");
+  BOOST_TEST_MESSAGE(show_versions());  // Full version of Boost, STL and compiler info.
 
   // Fundamental built-in types:
   test_spots(0.0F); // float
@@ -349,9 +306,15 @@ BOOST_AUTO_TEST_CASE(test_main)
   { // Avoid pointless re-testing if double and long double are identical (for example, MSVC).
     test_spots(0.0L); // long double
   }
+  // Built-in/fundamental Quad 128-bit type.
+  #ifdef BOOST_HAS_FLOAT128
+  test_spots(static_cast<boost::multiprecision::float128>(0));
+#endif
+
   // Multiprecision types:
   test_spots(static_cast<boost::multiprecision::cpp_dec_float_50>(0));
-  test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0));
+  test_spots(static_cast<boost::multiprecision::cpp_bin_float_double_extended>(0));  // Fails GCC gnu++11 and ++14
+  test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0)); // Fails GCC.
 
   // Fixed-point types:
   test_spots(static_cast<boost::fixed_point::negatable<15,-16> >(0));
