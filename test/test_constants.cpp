@@ -157,6 +157,8 @@ void test_spots(RealType)
    BOOST_CHECK_CLOSE_FRACTION(0.333333333333333333333333333333333333333L, third<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(0.666666666666666666666666666666666666667L, two_thirds<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(0.75L, three_quarters<RealType>(), tolerance);
+   BOOST_CHECK_CLOSE_FRACTION(0.1666666666666666666666666666666666666667L, sixth<RealType>(), tolerance);
+
    // Two and related.
    BOOST_CHECK_CLOSE_FRACTION(sqrt(2.L), root_two<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(sqrt(3.L), root_three<RealType>(), tolerance);
@@ -195,8 +197,8 @@ void test_spots(RealType)
 
    // Euler
    BOOST_CHECK_CLOSE_FRACTION(2.71828182845904523536028747135266249775724709369995L, e<RealType>(), tolerance);
-
    //BOOST_CHECK_CLOSE_FRACTION(exp(-0.5L), exp_minus_half<RealType>(), tolerance);  // See above.
+   BOOST_CHECK_CLOSE_FRACTION(exp(-1.L), exp_minus_one<RealType>(), tolerance); 
    BOOST_CHECK_CLOSE_FRACTION(pow(e<RealType>(), pi<RealType>()), e_pow_pi<RealType>(), tolerance); // See also above.
    BOOST_CHECK_CLOSE_FRACTION(sqrt(e<RealType>()), root_e<RealType>(), tolerance);
    BOOST_CHECK_CLOSE_FRACTION(log10(e<RealType>()), log10_e<RealType>(), tolerance);
