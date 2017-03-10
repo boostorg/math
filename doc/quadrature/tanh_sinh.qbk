@@ -1,0 +1,78 @@
+[/
+Copyright (c) 2017 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:tanh_sinh Tanh-sinh quadrature]
+
+[section:tanh_sinh_over Overview]
+
+The tanh-sinh quadrature provided by boost is a rapidly convergent numerical integration scheme for holomorphic integrands.
+By this we mean that the integrand is the restriction to the real line of a complex-differentiable function which is bounded on the interior of the unit disk /|z| < 1/.
+More precisely, the integrands must lie within a Hardy space.
+If your integrand obeys these conditions, it can be shown that tanh-sinh integration is very nearly optimal, meaning that it requires the fewest function evaluations for a given accuracy of any quadrature algorithm.
+A basic example of how to use the tanh-sinh quadrature is shown below:
+
+    __double tolerance = 100*std::numeric_limits<double>::epsilon();
+    __size_t max_halvings = 15;
+    __tanh_sinh<double> integrator(tolerance, max_halvings);
+    __auto f = [](double x) { return 5*x + 7; };
+    __double error;
+    __double Q = integrator.integrate(f, (double) 0, (double) 1, &error);
+
+Although you have requested a certain tolerance, the routine is not bound to honor it.
+For this reason, you should pass in a pointer to a variable holding the error, which will be populated with the final error estimate.
+The only time that the error estimate will exceed the tolerance is when the maximum number of interval halvings was obtained.
+Since the estimates are generally still quite good, it seems more reasonable to simply state the final error and return an estimate than throw an exception.
+
+One very nice property of tanh-sinh quadrature is that it can handle singularities at the endpoints of the integration domain.
+For instance, the following integrand, singular at both endpoints, can be efficiently evaluated to 100 binary digits:
+
+    __auto f = [](Real x) { return log(x)*log(1-x); };
+    __Real Q = integrator.integrate(f, (Real) 0, (Real) 1);
+
+Although boost's implementation of tanh-sinh quadrature can achieve very high precision, it is not truly arbitrary precision.
+The reason is that vast speed improvements can be obtained by caching the weights and abscissas of the variable transformation
+
+    __tanh(pi<Real>()*sinh(t)/2);
+
+These numbers have been precomputed up to 100 binary digits, so this is roughly the most precision that can be expected from the quadrature.
+We think that this is a reasonable compromise between efficiency, accuracy, and compile time that will satisfy the vast majority of users.
+
+The tanh-sinh quadrature can also handle infinite limits.
+Infinite limits are requested using the standard library's semantics for infinity:
+
+    __auto f = [](double t) { return exp(-t*t/2); };
+    __Q = integrator.integrate(f, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+
+Single-sided infinite limits are also supported.
+
+Now onto the caveats: As stated before, the integrands must lie in a Hardy space to ensure rapid convergence.
+Attempting to integrate a function which is not bounded on the unit disk by tanh-sinh can lead to very slow convergence.
+For example, take the Runge function:
+
+    __auto f1 = [](double t) { return 1/(1+25*t*t); };
+    __Q = integrator.integrate(f1, (double) -1, (double) 1);
+
+This function has poles at \pm i/5, and as such it is not bounded on the unit disk.
+However, the related function
+
+    __auto f2 = [](double t) { return 1/(1+0.04*t*t); };
+    __Q = integrator.integrate(f2, (double) -1, (double) 1);
+
+has poles outside the unit disk (at \pm 5i), and is therefore in the Hardy space.
+The integration is performed 22x faster for the second function!
+If you do not understand the structure of your integrand in the complex plane, do performance testing before deployment.
+
+Finally, oscillatory integrals on infinite intervals are often poorly approximated.
+For instance, the sinc integral is almost hopelessly inaccurate:
+
+    __Q = integrator.integrate(boost::math::sinc_pi<double>, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), &error);
+
+Other methods have been developed for oscillatory integrals, use them if you can. However, another option is to simply check the final error and see if it is acceptable.
+
+
+
+[endsect]
