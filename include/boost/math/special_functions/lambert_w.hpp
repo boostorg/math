@@ -1,5 +1,5 @@
 // Copyright Thomas Luu, 2014
-// Copyright Paul A. Bristow 2016
+// Copyright Paul A. Bristow 2016, 2017
 
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or
@@ -31,50 +31,41 @@
 // https://github.com/thomasluu/plog/blob/master/plog.cu
 // for type double.
 
-//#define BOOST_MATH_INSTRUMENT  // #define for diagnostic output.
+//#define BOOST_MATH_INSTRUMENT_LAMBERT_W  // #define for diagnostic output.
 
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/log1p.hpp>
-#include <boost/math/constants/constants.hpp>
+#include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
 
-#include <boost/fixed_point/fixed_point.hpp> // fixed_point
+#include <boost/fixed_point/fixed_point.hpp> // fixed_point, if required.
 
+// Define the refinement algorithm  NEWTON, 
 #define NEWTON
 
-#ifdef BOOST_MATH_INSTRUMENT
-#  include <iostream>  // Only for testing.
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
+#  include <iostream>  // Only needed for testing.
 #endif
 #include <limits> // numeric_limits Inf Nan ...
-#include <cmath> // exp
-#include <type_traits> // is_integral
-
-// Define a temporary constant for exp(-1) for use in checks at the singularity.
-// TODO make this a permanent constant (and also 1/6)
-namespace boost
-{ namespace math 
-  {
-    namespace constants
-    { // constant exp(-1) = 0.367879441 is where x = -exp(-1) is a singularity.
-      BOOST_DEFINE_MATH_CONSTANT(expminusone, 3.67879441171442321595523770161460867e-01, "0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527");
-    }
-  } 
-}
+#include <cmath> // exp function.
+#include <type_traits> // is_integral trait
 
 namespace boost {
   namespace fixed_point {
 
-    //! \brief Specialization for log1p for fixed_point.
+    //! \brief Specialization for log1p for fixed_point types (in their own fixed_point namespace).
 
-    /*! \details This simple (and fast) approximation gives a result within a few epsilon/ULP of the nearest representable value.
-     This makes it suitable for use as a first approximation by the Lambert W function below.
-     It only uses (and thus relies on for accuracy of) the standard log function.
-     Refinement of the Lambert W estimate using Halley's method
-     seems to get quickly to high accuracy in a very few iterations,
-     so that small inaccuracy in the 1st appproximation are unimportant.
-     It avoid any Taylor series refinements that involve high powers of x
-     that would easily go outside the often limited range of fixed_point types.
+    /*!
+    \details This simple (and fast) approximation gives a result
+      within a few epsilon/ULP of the nearest representable value.
+      This makes it suitable for use as a first approximation by the Lambert W function below.
+      It only uses (and thus relies on for accuracy of) the standard log function.
+      Refinement of the Lambert W estimate using Halley's method
+      seems to get quickly to high accuracy in a very few iterations,
+      so that any small inaccuracy in the 1st appproximation is fairly unimportant.
+      It avoids any Taylor series refinements that involve high powers of x
+      that could easily go outside the often limited range of fixed-point types.
     */
 
     template<const int IntegralRange, const int FractionalResolution, typename RoundMode, typename OverflowMode>
@@ -87,7 +78,7 @@ namespace boost {
       typedef negatable<IntegralRange, FractionalResolution, RoundMode, OverflowMode> local_negatable_type;
 
       local_negatable_type unity(1);
-      // A fixed_point type night not include unity.  Does something sensible happen?
+      // A fixed_point type might not include unity.  Does something sensible happen?
       local_negatable_type u = unity + x;
       if (u == unity)
       { //
@@ -96,7 +87,7 @@ namespace boost {
       else
       {
         local_negatable_type result = log(u) * (x / (u - unity));
-#ifdef BOOST_MATH_INSTRUMENT
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
         std::cout << "log1p fp approx " << result << std::endl;
 #endif
         // For example: x = 0.5, HP 0.78843689, diff -1.52587891e-05
@@ -107,11 +98,13 @@ namespace boost {
   } //namespace fixed_point
 } // namespace boost
 
-
 namespace local
 {
+  // Special versions of log1p that may be useful.
+  
   // log1p_dodgy version seems to work OK, but...
-  /*  J M cautions that "The formula relies on:
+  /*  John Maddock cautions that
+  "The formula relies on:
 
   1) That the operations are not re-ordered.
 
@@ -128,7 +121,7 @@ template<typename T>
 T log1p_dodgy(T x)
 {
   // log(1+x) == (log(1+x) * x) / ((1-x) - 1)
-  T result = -(log(1 + x) * x) / ((1 - x) - 1); // From note in Boost.Math log1p
+  T result = -(log(1 + x) * x) / ((1 - x) - 1); // From note in Boost.Math log1p.
 
   // \boost\libs\math\include\boost\math\special_functions\log1p.hpp
   // Algorithm log1p is part of C99, but is not yet provided by many compilers.
@@ -147,9 +140,10 @@ template<typename T>
 T log1p(T x)
 {
   //! \brief log1p function.
-  //! This is probably faster than using boost::math::log1p (if a little less accurate)
-  //! and should be good enough for computing initial estimate.
-  //! \details Formula from a Note in
+  //! This is probably faster than using boost::math::log1p
+  // (if a little less accurate) and should be good enough for computing initial estimate.
+
+  //! \details Formula for function log1p from a Note in
   // https://github.com/f32c/arduino/blob/master/hardware/fpga/f32c/system/src/math/log1p.c
   // HP - 15C Advanced Functions Handbook, p.193.
   // Assuming log() returns an accurate answer,
@@ -163,8 +157,7 @@ T log1p(T x)
 
   // http://thepeg.hepforge.org/svn/tags/RELEASE_1_0/ThePEG/Utilities/Math.icc
   //   double log1m(double x) { return log1p(-x);}
-  //
-
+  
   // It might be possible to use Newton or Halley's method to refine this approximation?
   // But improvement may not be useful for estimating the Lambert W value because it is close enough
   // for the Halley's method to converge just as well as with a better initial estimate.
@@ -190,11 +183,9 @@ T log1p(T x)
       << std::endl;
     // For example: x = 0.5, dodgy 0.788421631, HP 0.78843689, diff -1.52587891e-05
 #endif
-
     return result;
   }
 }  // template<typename T> T log1p(T x)
-
 } // namespace local
 
 namespace boost
@@ -210,16 +201,16 @@ namespace boost
     {
       BOOST_MATH_STD_USING  // for ADL of std functions.
 
-      using boost::math::log1p;
+      using boost::math::log1p; // Other approximate implementations may also be used.
       using boost::math::constants::root_two; // 1.414 ...
       using boost::math::constants::e; // e(1) = 2.71828...
       using boost::math::constants::one_div_root_two; // 0.707106
-      using boost::math::constants::expminusone; // 0.36787944
+      using boost::math::constants::exp_minus_one; // 0.36787944
 
-      std::cout.precision(std::numeric_limits <RealType>::max_digits10);
+      std::cout.precision(std::numeric_limits <RealType>::max_digits10); // Show all possibly significant digits.
       std::cout << std::showpoint << std::endl; // Show all trailing zeros.
 
-      // Catch the very common mistake of providing an integer value as parameter to productlog.
+      // Catch the very common mistake of providing an integer value as parameter x to productlog.
       // need to ensure it is a floating-point type (of the desired type, float 1.f, double 1., or long double 1.L),
       // or static_cast, for example:  static_cast<float>(1) or static_cast<cpp_dec_float_50>(1).
       // Want to allow fixed_point types too.
@@ -232,37 +223,35 @@ namespace boost
 #endif
       // Check on range of x.
 
-      //std::cout << "-exp(-1) = " << -expminusone<RealType>() << std::endl;
-      // https://www.wolframalpha.com/input/?i=-exp(-1)&wal=header  N[-Exp[-1], 143]
-      // -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527
-      // Add to constants as expminusone
-
-      // onesixth 0.1666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666...
-
-      // Special case of -exp(-1)) // -0.3678794411714423215955237701614608674458111310
-      // Can't use if (x < -exp(-1)) because 1-bit difference in accuracy of exp means is inconsistent.
-      // if (x < static_cast<RealType>(-0.3678794411714423215955237701614608674458111310L) )
-      if (x < -expminusone<RealType>())
-      { // If x <  -0.367879 then W(x) would be complex (not handled with this implementation).
-        // Or might throw an exception?  Use domain error for policy here.
-
-        //std::cout << "Would be Complex " << x << ' ' << static_cast<RealType>(-0.3678794411714423215955237701614608674458111310L) << " return NaN!" << std::endl;
-        return std::numeric_limits<RealType>::quiet_NaN();
-      }
-      //else if (x == static_cast<RealType>(-0.3678794411714423215955237701614608674458111310))
-      else if (x == -expminusone<RealType>() )
-      {
-        //std::cout << "At Singularity " << x << ' ' << static_cast<RealType>(-0.3678794411714423215955237701614608674458111310L) << " returned " << static_cast<RealType>(-1) << std::endl;
-
-        return static_cast<RealType>(-1);
-      }
-
       if (x == 0)
       { // Special case of zero (for speed and to avoid log(0)and /0 etc).
         // TODO check that values very close to zero do not fail?
         return static_cast<RealType>(0);
       }
+      //std::cout << "-exp(-1) = " << -expminusone<RealType>() << std::endl;
+      // https://www.wolframalpha.com/input/?i=-exp(-1)&wal=header  N[-Exp[-1], 143]
+      // -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527
+      // Added to Boost math constants as exp_minus_one
 
+      // Special case of -exp(-1)) // -0.3678794411714423215955237701614608674458111310
+      // Can't use if (x < -exp(-1)) because 1-bit difference in accuracy of exp means is inconsistent.
+      // if (x < static_cast<RealType>(-0.3678794411714423215955237701614608674458111310L) )
+      if (x < -exp_minus_one<RealType>())
+      { // If x < -exp(-1)) then W(x) would be complex (not handled with this implementation).
+        // Or might throw an exception?  Use domain error for policy here.
+
+        // std::cout << "Would be Complex " << x << " so " << static_cast<RealType>(-0.3678794411714423215955237701614608674458111310L) << " return NaN!" << std::endl;
+        //  Would be Complex - 0.36787999999999998 so - 0.36787944117144233 return NaN!
+          // 
+        return std::numeric_limits<RealType>::quiet_NaN();
+      }
+      else if (x == -exp_minus_one<RealType>())
+      {
+        std::cout << "At Singularity " << x << " == " << -exp_minus_one<RealType>() << " returned " << static_cast<RealType>(-1.) << std::endl;
+        // At Singularity -0.36787944117144233 == -0.36787944117144233 returned -1.0000000000000000
+        return static_cast<RealType>(-1);
+      }
+      
       RealType w0;
       // Upper branch W0 is divided in two regions: -1 <= w0_minus <=0 and 0 <= w0_plus.
       if (x > 0)
@@ -310,6 +299,7 @@ namespace boost
         RealType diff = w0 * expw0 - x; // Difference from x.
         if (abs(diff) <= tolerance/4)
         { // Too close for Halley iteration to improve?
+          return w0;
           break; // Avoid oscillating forever around value.
         }
 
@@ -323,7 +313,6 @@ namespace boost
         // so Newton unlikely to be quicker than additional computation cost of 2nd derivative.
         // Might use Newton if near to x ~= -exp(-1) == -0.367879
 
-
         // Halley's method from Luu equation 6.39, line 17.
         // https://en.wikipedia.org/wiki/Halley%27s_method
         // f''(w) = e^w (2 + w) , Wolfram Alpha (d^2 )/(dw^2)(w exp(w) - z) = e^w (w + 2)
@@ -333,7 +322,7 @@ namespace boost
             - diff /
             ((expw0 * (w0 + 1) - (w0 + 2) * diff / (w0 + w0 + 2))); // Luu equation 6.39.
 
-        if (fabs((w0 / w1) - 1) < tolerance)
+        if (fabs((w0 / w1) - static_cast<RealType>(1)) < tolerance)
         { // Reached estimate of Lambert W within tolerance (usually an epsilon or few).
           break;
         }

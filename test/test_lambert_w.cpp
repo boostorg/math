@@ -51,7 +51,6 @@ static const boost::array<const char*, noof_tests> test_data =
 
 //  } }; // array test_data
 
-
 //! Show information about build, architecture, address model, platform, ...
 std::string show_versions()
 {
@@ -122,21 +121,21 @@ void test_spots(RealType)
 
   using boost::math::productlog;
 
-  using boost::math::constants::expminusone;
+  using boost::math::constants::exp_minus_one;
   RealType tolerance = boost::math::tools::epsilon<RealType>() * 5; // 5 eps as a fraction.
   std::cout << "Testing type " << typeid(RealType).name() << std::endl;
   std::cout << "Tolerance " << tolerance << std::endl;
   std::cout << "Precision " << std::numeric_limits<RealType>::digits10 << " decimal digits." << std::endl;
   std::cout.precision(std::numeric_limits<RealType>::digits10);
   std::cout << std::showpoint << std::endl; // show trailing significant zeros.
-  std::cout << "-exp(-1) = " << -expminusone<RealType>() << std::endl;
+  std::cout << "-exp(-1) = " << -exp_minus_one<RealType>() << std::endl;
 
   std::cout.precision(std::numeric_limits <RealType>::max_digits10);
 
   RealType test_value = BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144232159552377016146086744581113103176);
   RealType expected_value = BOOST_MATH_TEST_VALUE(RealType, -1.);
 
-  test_value = -boost::math::constants::expminusone<RealType>(); // -exp(-1) = -0.367879450
+  test_value = -boost::math::constants::exp_minus_one<RealType>(); // -exp(-1) = -0.367879450
   std::cout << "test " << test_value << ", expected productlog = " << expected_value << std::endl;
 
   BOOST_CHECK_CLOSE_FRACTION( // Check -exp(-1) = -0.367879450 = -1
@@ -223,7 +222,7 @@ exceeds 0.00015258789063
 
   // This is very close to the limit of -exp(1) * x
   // (where the result has a non-zero imaginary part).
-  test_value = -expminusone<RealType>();
+  test_value = -exp_minus_one<RealType>();
   test_value += (std::numeric_limits<RealType>::epsilon() * 100);
   expected_value = BOOST_MATH_TEST_VALUE(RealType, -1.0);
 
