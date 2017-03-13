@@ -45,19 +45,18 @@ and to evaluate the derivative we use
 
 Be aware that the accuracy guarantees on the derivative of the spline are much lower than the guarantees on the original function; see
 
-Finally, note that this is an *interpolator*, not an extrapolator.
+Finally, note that this is an [*interpolator], not an extrapolator.
 Therefore, you should strenuously avoid evaluating the spline outside the endpoints.
 However, it is not an error if you do, as often you cannot control where (say) an ODE stepper will evaluate your function.
 As such the interpolant tries to do something reasonable when the function is outside the endpoints.
 For evaluation within one stepsize of the interval, you can assume something somewhat reasonable was returned.
 As you move further away from the endpoints, the interpolant decays to its average on the interval.
 
-
 [@https://link.springer.com/book/10.1007%2F978-1-4612-0599-9 Numerical Analysis, Graduate Texts in Mathematics, 181, Rainer Kress]
 
 for more details.
 
-[endsect]
+[endsect] [/section:cubic_b_over Overview of Cubic B-Spline Interpolation]
 
 [section:cubic_b_spline Header]
 
@@ -75,5 +74,7 @@ validating that equality with the data holds.
 
 In addition, constant, linear, and quadratic functions are interpolated to ensure that the interpolant behaves as expected.
 
-[endsect]
-[endsect]
+[endsect] [/section:cubic_b_spline Header]
+
+[endsect] [/section:cubic_b Cubic B-spline interpolation]
+

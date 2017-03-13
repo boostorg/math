@@ -330,6 +330,9 @@ math_toolkit/roots/root_comparison/root_n_comparison.html
 math_toolkit/roots/root_comparison/elliptic_comparison.html
 math_toolkit/roots/polynomials.html
 math_toolkit/roots/rational.html
+math_toolkit/roots/cubic_b.html
+math_toolkit/roots/cubic_b/cubic_b_over.html
+math_toolkit/roots/cubic_b/cubic_b_spline.html
 internals.html
 math_toolkit/internals_overview.html
 math_toolkit/internals.html
