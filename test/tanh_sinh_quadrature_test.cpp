@@ -366,6 +366,25 @@ void test_left_limit_infinite()
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
 }
 
+
+// A horrible function taken from
+// http://www.chebfun.org/examples/quad/GaussClenCurt.html
+template<class Real>
+void test_horrible()
+{
+    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    Real Q;
+    Real Q_expected;
+    tanh_sinh<Real> integrator;
+
+    auto f = [](Real x) { return x*sin(2*exp(2*sin(2*exp(2*x) ) ) ); };
+    Q = integrator.integrate(f, -1, 1);
+    // The example does not have more digits than this.
+    // If this integration routine is correct, then all the digits here are correct.
+    Q_expected = 0.336732834781728;
+    BOOST_CHECK_CLOSE(Q, Q_expected, 100*std::numeric_limits<float>::epsilon());
+}
+
 BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 {
     //generate_constants();
@@ -450,6 +469,17 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_integration_over_real_line<float128>();
     #endif
     #endif
+
+    test_horrible<float>();
+    test_horrible<double>();
+    test_horrible<long double>();
+
+    #ifdef __GNUC__
+    #ifndef __clang__
+    test_horrible<float128>();
+    #endif
+    #endif
+
 
     test_singular<cpp_bin_float_50>();
     test_singular<cpp_bin_float_100>();
