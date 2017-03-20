@@ -13,6 +13,7 @@
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/math/special_functions/next.hpp>
+#include <boost/math/special_functions/gamma.hpp>
 #ifdef __GNUC__
 #ifndef __clang__
 #include <boost/multiprecision/float128.hpp>
@@ -33,6 +34,7 @@ using std::abs;
 using std::sinh;
 using std::tanh;
 using std::cosh;
+using std::pow;
 using std::string;
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_bin_float_100;
@@ -353,7 +355,7 @@ void test_right_limit_infinite()
 template<class Real>
 void test_left_limit_infinite()
 {
-    std::cout << "Testing right limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing left limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = sqrt(std::numeric_limits<Real>::epsilon());
     Real Q;
     Real Q_expected;
@@ -372,7 +374,8 @@ void test_left_limit_infinite()
 template<class Real>
 void test_horrible()
 {
-    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    std::cout << "Testing Trefenthen's horrible integral on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    Real tol = 1000*std::numeric_limits<Real>::epsilon();
     Real Q;
     Real Q_expected;
     tanh_sinh<Real> integrator;
@@ -383,6 +386,53 @@ void test_horrible()
     // If this integration routine is correct, then all the digits here are correct.
     Q_expected = 0.336732834781728;
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*std::numeric_limits<float>::epsilon());
+}
+
+// Some examples of tough integrals from NR, section 4.5.4:
+template<class Real>
+void test_nr_examples()
+{
+    std::cout << "Testing singular integrals from NR 4.5.4 on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    Real tol = 100*std::numeric_limits<Real>::epsilon();
+    Real Q;
+    Real Q_expected;
+    tanh_sinh<Real> integrator;
+
+    auto f1 = [](Real x) { return sin(x*half<Real>())*pow(x, -3*half<Real>())*exp(-x); };
+    Q = integrator.integrate(f1, 0, std::numeric_limits<Real>::infinity());
+    Q_expected = sqrt(pi<Real>()*(sqrt((Real) 5) - 2));
+    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+
+    auto f2 = [](Real x) { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
+    Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::infinity());
+    Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
+    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+
+    // This integrand, when transformed to the finite interval, hits the endpoint singularity.
+    // I suspect the only way around this is to introduce the exp(pi*sinh(t)) transform for integration on (0, infinity),
+    // which seems a little more stable than the sequence of transformations used to get (0, infinity)->(-1, 1).
+    // The disadvantage is a whole nother set of weights and abscissas, making the compile time longer.
+    /*auto f3 = [](Real x) { return (Real) 1/ sqrt(x)*(1+x); };
+    Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::infinity());
+    Q_expected = pi<Real>();
+    BOOST_CHECK_CLOSE(Q, Q_expected, 100*std::numeric_limits<float>::epsilon());*/
+}
+
+// Test integrand known to fool some termination schemes:
+template<class Real>
+void test_early_termination()
+{
+    std::cout << "Testing Clenshaw & Curtis's example of integrand which fools termination schemes on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    Real tol = 100*std::numeric_limits<Real>::epsilon();
+    Real Q;
+    Real Q_expected;
+    tanh_sinh<Real> integrator;
+
+    auto f1 = [](Real x) { return 23*cosh(x)/ (Real) 25 - cos(x) ; };
+    Q = integrator.integrate(f1, (Real) -1, (Real) 1);
+    Q_expected = 46*sinh((Real) 1)/(Real) 25 - 2*sin((Real) 1);
+    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+
 }
 
 BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
@@ -408,7 +458,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_left_limit_infinite<float128>();
     #endif
     #endif
-
 
     test_detail<float>();
     test_detail<double>();
@@ -458,11 +507,9 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     #endif
     #endif
 
-
     test_integration_over_real_line<float>();
     test_integration_over_real_line<double>();
     test_integration_over_real_line<long double>();
-
 
     #ifdef __GNUC__
     #ifndef __clang__
@@ -484,4 +531,11 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_singular<cpp_bin_float_50>();
     test_singular<cpp_bin_float_100>();
 
+    test_nr_examples<float>();
+    test_nr_examples<double>();
+    test_nr_examples<long double>();
+
+    test_early_termination<float>();
+    test_early_termination<double>();
+    test_early_termination<long double>();
 }

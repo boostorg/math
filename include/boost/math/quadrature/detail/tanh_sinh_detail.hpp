@@ -840,7 +840,7 @@ Real tanh_sinh_detail<Real>::integrate(F f, Real* error)
 
     if (!isnormal(I1))
     {
-        throw std::domain_error("The tanh_sinh integrate evaluated your function at a singular point. Please narrow the bounds of integration or chech your function for singularities.\n");
+        throw std::domain_error("The tanh_sinh quadrature evaluated your function at a singular point. Please narrow the bounds of integration or check your function for singularities.\n");
     }
 
     while (k < m_max_refinements && err > m_tol*IL1)
@@ -878,7 +878,7 @@ Real tanh_sinh_detail<Real>::integrate(F f, Real* error)
         err = abs(I0 - I1);
         if (!isnormal(I1))
         {
-            throw std::domain_error("The tanh_sinh integrate evaluated your function at a singular point. Please narrow the bounds of integration or chech your function for singularities.\n");
+            throw std::domain_error("The tanh_sinh quadrature evaluated your function at a singular point. Please narrow the bounds of integration or check your function for singularities.\n");
         }
     }
 
