@@ -19,7 +19,7 @@ public:
     exp_sinh_detail(Real tol, size_t max_refinements);
 
     template<class F>
-    Real integrate(F f, Real* error = nullptr);
+    Real integrate(const F f, Real* error = nullptr) const;
 
 private:
     Real m_tol;
@@ -88,7 +88,7 @@ exp_sinh_detail<Real>::exp_sinh_detail(Real tol, size_t max_refinements)
 
 template<class Real>
 template<class F>
-Real exp_sinh_detail<Real>::integrate(F f, Real* error)
+Real exp_sinh_detail<Real>::integrate(const F f, Real* error) const
 {
     using std::abs;
     using std::floor;
@@ -136,17 +136,31 @@ Real exp_sinh_detail<Real>::integrate(F f, Real* error)
         Real sum = 0;
         Real absum = 0;
 
+        Real abterm1 = 1;
+        Real eps = std::numeric_limits<Real>::epsilon()*L1_I1;
         for(size_t j = 0; j < m_weights[i].size(); ++j)
         {
-            Real y = f(m_abscissas[i][j]);
+            Real x = m_abscissas[i][j];
+            Real y = f(x);
             sum += y*m_weights[i][j];
-            absum += abs(y)*m_weights[i][j];
+            Real abterm0 = abs(y)*m_weights[i][j];
+            absum += abterm0;
+
+            // We require two consecutive terms to be < eps in case we hit a zero of f.
+            // Numerical experiments indicate that we should start this check at ~30 for floats,
+            // ~60 for doubles, and ~100 for long doubles.
+            // However, starting the check at x = 10 rather than x = 100 will only save two function evaluations.
+            if (x > (Real) 100 && abterm0 < eps && abterm1 < eps)
+            {
+                break;
+            }
+            abterm1 = abterm0;
         }
 
         I1 += sum*h;
         L1_I1 += absum*h;
         err = abs(I0 - I1);
-        //std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
+        // std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
         if (err <= m_tol*L1_I1 || err <= m_tol /* catch the 0 case. */)
         {
             if (error)

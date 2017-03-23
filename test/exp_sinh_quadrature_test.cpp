@@ -67,7 +67,7 @@ void test_right_limit_infinite()
     exp_sinh<Real> integrator(tol, 12);
 
     // Example 12
-    auto f2 = [](Real t) { return exp(-t)/sqrt(t); };
+    const auto f2 = [](Real t) { return exp(-t)/sqrt(t); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::infinity());
     Q_expected = root_pi<Real>();
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
@@ -138,14 +138,15 @@ void test_nr_examples()
     auto f3 = [](Real x) { return (Real) 1/ (sqrt(x)*(1+x)); };
     Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::infinity());
     Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*std::numeric_limits<float>::epsilon());
+    BOOST_CHECK_CLOSE(Q, Q_expected, 1000*std::numeric_limits<float>::epsilon());
 
     auto f4 = [](Real t) { return exp(-t*t*half<Real>()); };
     Q = integrator.integrate(f4, 0, std::numeric_limits<Real>::infinity());
     Q_expected = root_two_pi<Real>()/2;
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
 
-    // This test shows how oscillatory integrals with 1/t decay are approximated very poorly by this method:
+    // This test shows how oscillatory integrals with 1/t decay are approximated very poorly by this method.
+    // In fact |f(x)| <= C/(1+x^(1+eps)) for large x for this method to converge.
     //Q = integrator.integrate(boost::math::sinc_pi<Real>, 0, std::numeric_limits<Real>::infinity());
     //Q_expected = half_pi<Real>();
     //BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
@@ -178,4 +179,10 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_right_limit_infinite<float128>();
     #endif
     #endif
+
+    // Unfortunately this fails with message
+    // boost/multiprecision/detail/functions/trig.hpp(69): fatal error: in "void boost::multiprecision::default_ops::hyp0F1(T&, const T&, const T&)
+    // [with T = boost::multiprecision::backends::cpp_bin_float<50u>]": boost::exception_detail::clone_impl<boost::exception_detail::error_info_injector<std::runtime_error> >:
+    // H0F1 Failed to Converge
+    // test_nr_examples<cpp_bin_float_50>();
 }

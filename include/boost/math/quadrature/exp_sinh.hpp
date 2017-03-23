@@ -27,10 +27,10 @@ template<class Real>
 class exp_sinh
 {
 public:
-    exp_sinh(Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 12);
+    exp_sinh(Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 9);
 
     template<class F>
-    Real integrate(F f, Real a = 0, Real b = std::numeric_limits<Real>::infinity(), Real* error = nullptr);
+    Real integrate(const F f, Real a = 0, Real b = std::numeric_limits<Real>::infinity(), Real* error = nullptr) const;
 
 private:
     std::shared_ptr<detail::exp_sinh_detail<Real>> m_imp;
@@ -44,7 +44,7 @@ exp_sinh<Real>::exp_sinh(Real tol, size_t max_refinements) : m_imp(std::make_sha
 
 template<class Real>
 template<class F>
-Real exp_sinh<Real>::integrate(F f, Real a, Real b, Real* error)
+Real exp_sinh<Real>::integrate(const F f, Real a, Real b, Real* error) const
 {
     using std::isfinite;
     using std::abs;
@@ -58,13 +58,13 @@ Real exp_sinh<Real>::integrate(F f, Real a, Real b, Real* error)
         {
             throw std::domain_error("The function you are trying to integrate does not go to zero at infinity.\n");
         }
-        auto u = [&](Real t) { return f(t + a); };
+        const auto u = [&](Real t) { return f(t + a); };
         return m_imp->integrate(u, error);
     }
 
     if (isfinite(b) && a <= std::numeric_limits<Real>::lowest())
     {
-        auto u = [&](Real t) { return f(b-t);};
+        const auto u = [&](Real t) { return f(b-t);};
         if(abs(u(std::numeric_limits<Real>::max())) > std::numeric_limits<Real>::epsilon())
         {
             throw std::domain_error("The function you are trying to integrate does not go to zero at infinity.\n");
