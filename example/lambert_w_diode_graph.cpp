@@ -28,7 +28,7 @@ http://www3.imperial.ac.uk/pls/portallive/docs/1/7292572.PDF
 */
 
 #include <boost/math/special_functions/lambert_w.hpp>
-using boost::math::productlog;
+using boost::math::lambert_w;
 #include <boost/math/special_functions.hpp>
 using boost::math::isfinite;
 
@@ -107,7 +107,7 @@ double i(double isat, double vd, double vt, double nu)
 double iv(double v, double vt, double rsat, double re, double isat, double nu = 1.)
 {
   // V thermal 0.0257025 = 25 mV
-  // was double i = (nu * vt/r) * productlog((i0 * r) / (nu * vt)); equ 5.
+  // was double i = (nu * vt/r) * lambert_w((i0 * r) / (nu * vt)); equ 5.
 
   rsat = rsat + re;
   double i = nu * vt / rsat;
@@ -122,7 +122,7 @@ double iv(double v, double vt, double rsat, double re, double isat, double nu = 
   double e = exp(eterm);
 //  std::cout << "exp(eterm) = " << e << std::endl;
 
-  double w0 = productlog(x * e);
+  double w0 = lambert_w(x * e);
 //  std::cout << "w0 = " << w0 << std::endl;
   return i * w0 - isat;
 

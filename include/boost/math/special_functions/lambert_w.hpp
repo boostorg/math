@@ -31,30 +31,40 @@
 // https://github.com/thomasluu/plog/blob/master/plog.cu
 // for type double.
 
-//#define BOOST_MATH_INSTRUMENT_LAMBERT_W  // #define for diagnostic output.
+
+#ifndef BOOST_MATH_SF_LAMBERT_W_HPP
+#define BOOST_MATH_SF_LAMBERT_W_HPP
+
+//#define BOOST_MATH_INSTRUMENT_LAMBERT_W  // Only #define for Lambert W diagnostic output.
+
+int total_iterations = 0;
+int total_calls = 0;
+int max_iterations = 0;
 
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
-#include <boost/math/special_functions/log1p.hpp>
+#include <boost/math/special_functions/log1p.hpp> // for log (1 + x)
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
+#include <boost/math/special_functions/next.hpp> // for float_distance
+#include <boost/math/policies/policy.hpp>
 
 #include <boost/fixed_point/fixed_point.hpp> // fixed_point, if required.
-
-// Define the refinement algorithm  NEWTON, 
-#define NEWTON
+#if defined (BOOST_MSVC)
+#  pragma warning(push)
+#  pragma warning(disable: 4127) // conditional expression is constant
+#endif
 
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
 #  include <iostream>  // Only needed for testing.
 #endif
-#include <limits> // numeric_limits Inf Nan ...
+#include <limits> // numeric_limits infinity & NaN, for diagnostic max_digits10 and digits10 ...
 #include <cmath> // exp function.
-#include <type_traits> // is_integral trait
+#include <type_traits> // is_integral trait.
 
 namespace boost {
   namespace fixed_point {
-
-    //! \brief Specialization for log1p for fixed_point types (in their own fixed_point namespace).
+    //! \brief Specialization for log1p for fixed_point types (in its own fixed_point namespace).
 
     /*!
     \details This simple (and fast) approximation gives a result
@@ -63,7 +73,7 @@ namespace boost {
       It only uses (and thus relies on for accuracy of) the standard log function.
       Refinement of the Lambert W estimate using Halley's method
       seems to get quickly to high accuracy in a very few iterations,
-      so that any small inaccuracy in the 1st appproximation is fairly unimportant.
+      so that any small inaccuracy in the 1st approximation is fairly unimportant.
       It avoids any Taylor series refinements that involve high powers of x
       that could easily go outside the often limited range of fixed-point types.
     */
@@ -78,7 +88,7 @@ namespace boost {
       typedef negatable<IntegralRange, FractionalResolution, RoundMode, OverflowMode> local_negatable_type;
 
       local_negatable_type unity(1);
-      // A fixed_point type might not include unity.  Does something sensible happen?
+      // A fixed_point type might not include unity. Does something sensible happen?
       local_negatable_type u = unity + x;
       if (u == unity)
       { //
@@ -101,7 +111,7 @@ namespace boost {
 namespace local
 {
   // Special versions of log1p that may be useful.
-  
+
   // log1p_dodgy version seems to work OK, but...
   /*  John Maddock cautions that
   "The formula relies on:
@@ -137,11 +147,12 @@ T log1p_dodgy(T x)
 } // template<typename T> T log1p(T x)
 
 template<typename T>
+inline
 T log1p(T x)
 {
   //! \brief log1p function.
-  //! This is probably faster than using boost::math::log1p
-  // (if a little less accurate) and should be good enough for computing initial estimate.
+  //! This is probably faster than using boost::math::log1p (if a little less accurate)
+  // but should be good enough for computing Lambert_w initial estimate.
 
   //! \details Formula for function log1p from a Note in
   // https://github.com/f32c/arduino/blob/master/hardware/fpga/f32c/system/src/math/log1p.c
@@ -157,9 +168,9 @@ T log1p(T x)
 
   // http://thepeg.hepforge.org/svn/tags/RELEASE_1_0/ThePEG/Utilities/Math.icc
   //   double log1m(double x) { return log1p(-x);}
-  
-  // It might be possible to use Newton or Halley's method to refine this approximation?
-  // But improvement may not be useful for estimating the Lambert W value because it is close enough
+
+  // It is probably possible to use Newton or Halley's method to refine this approximation,
+  // but improvement is probably not useful for estimating the Lambert W value because it is close enough
   // for the Halley's method to converge just as well as with a better initial estimate.
 
   T unity;
@@ -173,8 +184,8 @@ T log1p(T x)
   {
     T result = log(u) * (x / (u - unity));
     //T dodgy = log1p_dodgy(x);
-    double dx = static_cast<double>(x);
-    double lp1x = log1p(dx);
+    //double dx = static_cast<double>(x);
+    //double lp1x = log1p(dx);
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
     std::cout << "true " << lp1x
       << ", log1p_fp " << log1p(x)
@@ -192,156 +203,260 @@ namespace boost
 {
   namespace math
   {
-    //! \brief Lambert W function.
+
+    namespace detail
+    {
+      //! First approximation of Lambert W function.
+      //! \details Based on Thomas Luu, Thesis (2016) and Barry et al.
+      //! Notes refer to equations, page 96-98 and C++ code from algorithm Routine 11.
+      // Assumes parameter x has been checked before call.
+      // This function might be useful if the user only requires an approximate result quickly.
+      template <typename RealType = double>
+      inline
+      RealType lambert_w_approx(RealType x)
+      {
+        BOOST_MATH_STD_USING  // for ADL of std functions.
+        using boost::math::constants::e; // e(1) = 2.71828...
+        using boost::math::constants::root_two; // 1.414 ...
+        using boost::math::constants::one_div_root_two; // 0.707106
+
+        RealType w0;
+        // Upper branch W0 is divided in two regions: -1 <= w0_minus <=0 and 0 <= w0_plus.
+        if (x > 0)
+        { // Luu Routine 11, line 8, and equation 6.44, from Barry et al.
+          // (1.2 and 2.4 are 'exact' from integer fractions 6/5 and 12/5).
+          w0 = log(static_cast<RealType>(1.2L) * x / log(static_cast<RealType>(2.4L) * x / log1p(static_cast<RealType>(2.4L) * x)));
+          // local::log1p does seem to refine OK with multiprecision.
+        }
+        else
+        { // > -exp(-1) or > -0.367879
+          // so for real result need x > -0.367879 >= 0
+          RealType sqrt_v = root_two<RealType>() * sqrt(static_cast<RealType>(1) + e<RealType>() * x); // nu = sqrt(2 + 2e * z) Line 10.
+          RealType n2 = static_cast<RealType>(3) * root_two<RealType>() + static_cast<RealType>(6); // 3 * sqrt(2) + 6, Line 11.
+                                                                                                    // == 10.242640687119285146
+          RealType n2num = (static_cast<RealType>(2237) + (static_cast<RealType>(1457) * root_two<RealType>())) * e<RealType>()
+            - (static_cast<RealType>(4108) * root_two<RealType>()) - static_cast<RealType>(5764); //  Numerator Line 11.
+
+          RealType n2denom = (static_cast<RealType>(215) + (static_cast<RealType>(199) * root_two<RealType>())) * e<RealType>()
+            - (430 * root_two<RealType>()) - static_cast<RealType>(796); // Denominator Line 11.
+          RealType nn2 = n2num / n2denom; // Line 11 full fraction.
+          nn2 *= sqrt_v; // Line 11 last part.
+          n2 -= nn2; //  Line 11 complete, equation 6.44, from Barry et al (erratum).
+          RealType n1 = (static_cast<RealType>(1) - one_div_root_two<RealType>()) * (n2 + root_two<RealType>()); // Line 12.
+
+          w0 = -1 + sqrt_v * (n2 + sqrt_v) / (n2 + sqrt_v + n1 * sqrt_v); // W0 1st approximation, Line 13, equation 6.40.
+        }
+        return w0;
+      } // template <typename RealType> RealType lambert_w_approx(RealType x)
+
+    //! \brief  Lambert W function implementation.
     //! \details Based on Thomas Luu, Thesis (2016).
     //! Notes refer to equations, page 96-98 and C++ code from algorithm Routine 11.
+      template <typename RealType = double, class Policy = policies::policy<> >
+      RealType lambert_w_imp(RealType x, const Policy& /* pol */)
+      {
+        BOOST_MATH_STD_USING  // for ADL of std functions.
 
-    template <class RealType = double, class Policy = policies::policy<> >
-    RealType productlog(RealType x)
-    {
-      BOOST_MATH_STD_USING  // for ADL of std functions.
+        //using boost::math::log1p; // Other approximate implementations may also be used.
+        using local::log1p;
+        //using boost::math::constants::root_two; // 1.414 ...
+        //using boost::math::constants::e; // e(1) = 2.71828...
+        //using boost::math::constants::one_div_root_two; // 0.707106
+        using boost::math::constants::exp_minus_one; // 0.36787944
+        using boost::math::tools::max_value;
 
-      using boost::math::log1p; // Other approximate implementations may also be used.
-      using boost::math::constants::root_two; // 1.414 ...
-      using boost::math::constants::e; // e(1) = 2.71828...
-      using boost::math::constants::one_div_root_two; // 0.707106
-      using boost::math::constants::exp_minus_one; // 0.36787944
-
-      std::cout.precision(std::numeric_limits <RealType>::max_digits10); // Show all possibly significant digits.
-      std::cout << std::showpoint << std::endl; // Show all trailing zeros.
-
-      // Catch the very common mistake of providing an integer value as parameter x to productlog.
-      // need to ensure it is a floating-point type (of the desired type, float 1.f, double 1., or long double 1.L),
-      // or static_cast, for example:  static_cast<float>(1) or static_cast<cpp_dec_float_50>(1).
-      // Want to allow fixed_point types too.
-      BOOST_STATIC_ASSERT_MSG(!std::is_integral<RealType>::value, "Must be floating-point, not integer type, for example W(1.), not W(1)!");
+        // Catch the very common mistake of providing an integer value as parameter x to lambert_w.
+        // need to ensure it is a floating-point type (of the desired type, float 1.f, double 1., or long double 1.L),
+        // or static_cast, for example:  static_cast<float>(1) or static_cast<cpp_dec_float_50>(1).
+        // Want to allow fixed_point types too.
+        BOOST_STATIC_ASSERT_MSG(!std::is_integral<RealType>::value, "Must be floating-point type (not integer type), for example: W(1.), not W(1)!");
+        total_calls++; // Temporary for testing.
 
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
-      std::cout << std::showpoint << std::endl; // Show all trailing zeros.
-      //std::cout.precision(std::numeric_limits<RealType>::max_digits10); // Show all possibly significant digits.
-      std::cout.precision(std::numeric_limits<RealType>::digits10); // Show all significant digits.
+        std::cout << std::showpoint << std::endl; // Show all trailing zeros.
+        std::cout.precision(std::numeric_limits<RealType>::max_digits10); // Show all possibly significant digits (17 for double).
+        //std::cout.precision(std::numeric_limits<RealType>::digits10); // Show all significant digits (15 for double).
 #endif
-      // Check on range of x.
-
-      if (x == 0)
-      { // Special case of zero (for speed and to avoid log(0)and /0 etc).
-        // TODO check that values very close to zero do not fail?
-        return static_cast<RealType>(0);
-      }
-      //std::cout << "-exp(-1) = " << -expminusone<RealType>() << std::endl;
-      // https://www.wolframalpha.com/input/?i=-exp(-1)&wal=header  N[-Exp[-1], 143]
-      // -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527
-      // Added to Boost math constants as exp_minus_one
-
-      // Special case of -exp(-1)) // -0.3678794411714423215955237701614608674458111310
-      // Can't use if (x < -exp(-1)) because 1-bit difference in accuracy of exp means is inconsistent.
-      // if (x < static_cast<RealType>(-0.3678794411714423215955237701614608674458111310L) )
-      if (x < -exp_minus_one<RealType>())
-      { // If x < -exp(-1)) then W(x) would be complex (not handled with this implementation).
-        // Or might throw an exception?  Use domain error for policy here.
-
-        // std::cout << "Would be Complex " << x << " so " << static_cast<RealType>(-0.3678794411714423215955237701614608674458111310L) << " return NaN!" << std::endl;
-        //  Would be Complex - 0.36787999999999998 so - 0.36787944117144233 return NaN!
-          // 
-        return std::numeric_limits<RealType>::quiet_NaN();
-      }
-      else if (x == -exp_minus_one<RealType>())
-      {
-        std::cout << "At Singularity " << x << " == " << -exp_minus_one<RealType>() << " returned " << static_cast<RealType>(-1.) << std::endl;
-        // At Singularity -0.36787944117144233 == -0.36787944117144233 returned -1.0000000000000000
-        return static_cast<RealType>(-1);
-      }
-      
-      RealType w0;
-      // Upper branch W0 is divided in two regions: -1 <= w0_minus <=0 and 0 <= w0_plus.
-      if (x > 0)
-      { // Luu Routine 11, line 8, and equation 6.44, from Barry et al.
-        // (1.2 and 2.4 are 'exact' from integer fractions 6/5 and 12/5).
-        w0 = log(static_cast<RealType>(1.2L) * x / log(static_cast<RealType>(2.4L) * x / log1p(static_cast<RealType>(2.4L) * x)));
-        //w0 = log(static_cast<RealType>(1.2L) * x / log(static_cast<RealType>(2.4L) * x / local::log1p(static_cast<RealType>(2.4L) * x)));
-        // local::log1p does seem to refine OK with multiprecision.
-      }
-      else
-      { // > -exp(-1) or > -0.367879
-        // so for real result need x > -0.367879 >= 0
-      // Might treat near -exp(-1) == -0.367879 values differently as approximations may not quite converge?
-
-        RealType sqrt_v = root_two<RealType>() * sqrt(static_cast<RealType>(1) + e<RealType>() * x); // nu = sqrt(2 + 2e * z) Line 10.
-
-        RealType n2 = static_cast<RealType>(3) * root_two<RealType>() + static_cast<RealType>(6); // 3 * sqrt(2) + 6, Line 11.
-        // == 10.242640687119285146
-
-        RealType n2num = (static_cast<RealType>(2237) + (static_cast<RealType>(1457) * root_two<RealType>())) * e<RealType>()
-          - (static_cast<RealType>(4108) * root_two<RealType>()) - static_cast<RealType>(5764); //  Numerator Line 11.
-
-        RealType n2denom = (static_cast<RealType>(215) + (static_cast<RealType>(199) * root_two<RealType>())) * e<RealType>()
-          - (430 * root_two<RealType>()) - static_cast<RealType>(796); // Denominator Line 11.
-        RealType nn2 = n2num / n2denom; // Line 11 full fraction.
-        nn2 *= sqrt_v; // Line 11 last part.
-        n2 -= nn2; //  Line 11 complete, equation 6.44, from Barry et al (erratum).
-        RealType n1 = (static_cast<RealType>(1) - one_div_root_two<RealType>()) * (n2 + root_two<RealType>()); // Line 12.
-
-        w0 = -1 + sqrt_v * (n2 + sqrt_v) / (n2 + sqrt_v + n1 * sqrt_v); // W0 1st approximation, Line 13, equation 6.40.
-      }
-
-      #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
-        // std::cout << "\n1st approximation  = " << w0 << std::endl;
-      #endif
-
-      int iterations = 0;
-      RealType tolerance = 3 * std::numeric_limits<RealType>::epsilon();
-      RealType w1(0);
-
-      while (iterations <= 5)
-      { // Iterate a few times to refine value using Halley's method.
-        RealType expw0 = exp(w0); // Compute from best W estimate so far.
-        // Hope that  w0 * expw0 == x;
-        RealType diff = w0 * expw0 - x; // Difference from x.
-        if (abs(diff) <= tolerance/4)
-        { // Too close for Halley iteration to improve?
-          return w0;
-          break; // Avoid oscillating forever around value.
+        // Check on range of x.
+        if (x == 0)
+        { // Special case of zero (for speed and to avoid log(0)and /0 etc).
+          return static_cast<RealType>(0);
         }
+        if (!boost::math::isfinite(x))
+        {  // Check x is finite.
+          return policies::raise_domain_error<RealType>(
+            "boost::math::lambert_w<%1%>",
+            "The parameter %1% is not finite, so the return value is NaN.",
+            x,
+            Policy());
+        } //  (!boost::math::isfinite(x))
 
-        // Newton/Raphson's method https://en.wikipedia.org/wiki/Newton%27s_method
-        // f(w) = w e^w -z = 0  Luu equation 6.37
-        // f'(w) = e^w (1 + w), Wolfram alpha (d)/(dw)(f(w) = w exp(w) - z) = e^w (w + 1)
-        // f(w) / f'(w)
-        // w1 = w0 - (expw0 * (w0 + 1)); // Refine new Newton/Raphson estimate.
-        // Takes typically 6 iterations to converge within tolerance,
-        // whereas Halley usually takes 1 to 3 iterations,
-        // so Newton unlikely to be quicker than additional computation cost of 2nd derivative.
-        // Might use Newton if near to x ~= -exp(-1) == -0.367879
 
-        // Halley's method from Luu equation 6.39, line 17.
-        // https://en.wikipedia.org/wiki/Halley%27s_method
-        // f''(w) = e^w (2 + w) , Wolfram Alpha (d^2 )/(dw^2)(w exp(w) - z) = e^w (w + 2)
-        // f''(w) / f'(w) = (2+w) / (1+w),  Luu equation 6.38.
+        if (x > boost::math::tools::max_value<RealType>() / 4)
+        { // Would throw exception "Error in function boost::math::log1p<double>(double): numeric overflow"
+          return policies::raise_overflow_error<RealType>(
+            "boost::math::lambert_w<%1%>",
+            "The parameter %1% is too large, so the return value is NaN.",
+            x, Policy() );
+          // Exception Error in function boost::math::lambert_w<long double>: The parameter 4.6180304784183997e+307 is too large, so the return value is NaN.
+        }
+        //std::cout << "-exp(-1) = " << -expminusone<RealType>() << std::endl;
+        // https://www.wolframalpha.com/input/?i=-exp(-1)&wal=header  N[-Exp[-1], 143]
+        // -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527
+        // Added to Boost math constants as exp_minus_one
 
-        w1 = w0 // Refine new Halley estimate.
+        // Special case of -exp(-1)) // -0.3678794411714423215955237701614608674458111310
+        // Can't use if (x < -exp(-1)) because 1-bit difference in accuracy of exp means is inconsistent.
+        // if (x < static_cast<RealType>(-0.3678794411714423215955237701614608674458111310L) )
+
+        if (x == -exp_minus_one<RealType>())
+        {  // At Singularity -0.36787944117144233 == -0.36787944117144233 returned -1.0000000000000000
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
+          std::cout << "At Singularity " << x << " == " << -exp_minus_one<RealType>() << " returned " << static_cast<RealType>(-1.) << std::endl;
+#endif
+          return static_cast<RealType>(-1);
+        }
+        else if (x < -exp_minus_one<RealType>()) // -0.3678794411714423215955237701614608674458111310L
+        { // If x < -exp(-1)) then W(x) would be complex (not handled with this implementation).
+          return policies::raise_domain_error<RealType>(
+            "boost::math::lambert_w<%1%>",
+            "The parameter %1% would give a complex result, so the return value is NaN.",
+            x,
+            // "Function boost::math::lambert_w<double>: The parameter -0.36787945032119751 would give a complex result, so the return value is NaN."
+            Policy());
+        }
+       
+        using boost::math::detail::lambert_w_approx;
+        RealType w0 = lambert_w_approx(x);
+        if (!boost::math::isfinite(w0))
+        { // 1st Approximation is not finite, so quit.
+          return std::numeric_limits<RealType>::quiet_NaN();
+        }
+        int iterations = 1;
+        RealType tolerance = 2 * std::numeric_limits<RealType>::epsilon();
+        RealType w1; // Refined estimate.
+        RealType previous_diff = boost::math::tools::max_value<RealType>();
+        do
+        { // Iterate a few times to refine value using Halley's method.
+          // Now inline Halley iteration.
+          // We do this here rather than calling tools::halley_iterate since we can
+          // simplify the expressions algebraically, and don't need most of the error
+          // checking of the boilerplate version as we know in advance that the function
+          // is well behaved...
+
+          RealType expw0 = exp(w0); // Compute from best Lambert W estimate so far.
+          // Hope that  w0 * expw0 == x;
+          RealType diff = (w0 * expw0) - x; // Absolute difference from x.
+          /*
+  #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
+            if(iterations == 0)
+            {
+                std::cout << "Argument x = " << x << ", 1st approximation  = " << w0 << ", " ;
+            }
+            else
+            {
+              std::cout << "Estimate " << w1 << " refined after " << iterations << " iterations, " ;
+            }
+            if (diff != 0)
+            {
+              std::cout << "(w0 * expw0) - x = " << diff << ", relative " << ((w0 / w1) - static_cast<RealType>(1)) << std::endl; // improvement.
+            }
+            else
+            {
+              std::cout << "Exact." << std::endl;
+            }
+  #endif
+         */ // Halley's method from Luu equation 6.39, line 17.
+         // https://en.wikipedia.org/wiki/Halley%27s_method
+         // f''(w) = e^w (2 + w) , Wolfram Alpha (d^2 )/(dw^2)(w exp(w) - z) = e^w (w + 2)
+         // f''(w) / f'(w) = (2+w) / (1+w),  Luu equation 6.38.
+
+          w1 = w0 // Refine  a new estimate using Halleys' method.
             - diff /
             ((expw0 * (w0 + 1) - (w0 + 2) * diff / (w0 + w0 + 2))); // Luu equation 6.39.
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
+          std::cout.precision(std::numeric_limits<RealType>::max_digits10);
+          std::cout << "Iteration #" << iterations << ", w0 " << w0 << ", w1 = " << w1;
 
-        if (fabs((w0 / w1) - static_cast<RealType>(1)) < tolerance)
-        { // Reached estimate of Lambert W within tolerance (usually an epsilon or few).
-          break;
+          if (diff != static_cast<RealType>(0))
+          {
+            std::cout << ", difference = " << w1 - w0
+              << ", relative " << ((w0 / w1) - static_cast<RealType>(1))
+              << ", float distance = " << abs(float_distance((w0 * expw0), x)) << std::endl;
+          }
+          else
+          {
+            std::cout << ", exact." << std::endl;
+          }
+          std::cout << "f'(x) = " << diff / (expw0 * (w0 + 1)) << ", f''(x) = " << -diff / ((expw0 * (w0 + 1) - (w0 + 2) * diff / (w0 + w0 + 2))) << std::endl;
+#endif
+
+          iterations++;
+          if (iterations > max_iterations)
+          {
+            max_iterations = iterations;
+
+          }
+          total_iterations++;
+          if ( // Reached estimate of Lambert W within relative tolerance (usually an epsilon or few).
+            (fabs((w0 / w1) - static_cast<RealType>(1)) < tolerance)
+            || // Latest estimate is not better, or worse, so avoid oscillating result (common when near singularity).
+            (abs(diff) >= abs(previous_diff))
+            )
+          {
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
+            std::cout << "\nReturn refined " << w1 << " after " << iterations << " iterations";
+            if (diff != static_cast<RealType>(0))
+            {
+              std::cout << ", difference = " << ((w0 / w1) - static_cast<RealType>(1));
+              std::cout << ", Float distance = " << boost::math::float_distance<RealType>(w0, w1) << std::endl;
+            }
+            else
+            {
+              std::cout << ", exact." << std::endl;
+            }
+#endif
+            return w1; // OK
+          }
+
+          w0 = w1;
+          previous_diff = diff; // Remember so that can check if new estimate is better.
+        } while (iterations <= 10);
+
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
+        std::cout << "Not within tolerance " << w1 << " after " << iterations << " iterations" << ", difference = " << previous_diff << std::endl;
+#endif
+        if (iterations > max_iterations)
+        {
+          max_iterations = iterations;
+
         }
+        return w1;
+      } // lambert_w_imp
+    } // namespace detail
 
-#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
-        std::cout.precision(std::numeric_limits<RealType>::digits10);
-        std::cout <<"Iteration #" << iterations << ", w0 " << w0 << ", w1 = " << w1 << ", difference = " << diff << ", relative " << (w0 / w1 - static_cast<RealType>(1)) << std::endl;
-        std::cout << "f'(x) = " << diff / (expw0 * (w0 + 1)) << ", f''(x) = " << - diff / ((expw0 * (w0 + 1) - (w0 + 2) * diff / (w0 + w0 + 2))) << std::endl;
-        //std::cout << "Newton new = " << wn << std::endl;
-#endif
-        w0 = w1;
-        iterations++;
-      } // while
+    // User functions.
 
-#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W
-      std::cout << "Final " << w1 << " after " << iterations << " iterations" << ", difference = " << (w0 / w1 - static_cast<RealType>(1)) << std::endl;
-#endif
-      return w1;
-    } //
+    // User defined policy.
+    template <class T, class Policy>
+    inline typename tools::promote_args<T>::type lambert_w(T z, const Policy& pol)
+    {
+      // Don't think we want/need to promote arguments? Produces very odd results at singularity.
+      // typedef typename tools::promote_args<T>::type result_type;
+      //typedef typename policies::evaluation<result_type, Policy>::type value_type;
+      // return static_cast<result_type>(detail::lambert_w_imp(value_type(z), pol));
+      return detail::lambert_w_imp(z, pol);
+    }
+
+    // Default policy.
+    template <class T>
+    inline typename tools::promote_args<T>::type lambert_w(T z)
+    {
+      return lambert_w(z, policies::policy<>());
+    }
+
 
   } // namespace math
 } // namespace boost
+
+#endif // BOOST_MATH_SF_LAMBERT_W_HPP

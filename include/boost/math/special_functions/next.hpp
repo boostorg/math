@@ -339,6 +339,7 @@ T float_distance_imp(const T& a, const T& b, const Policy& pol)
    if(b > upper)
    {
       result = float_distance(upper, b);
+    //  std::cout << "float_distance(upper, b); result " << result << ", floor(result) = " << floor(result) << std::endl;
    }
    //
    // Use compensated double-double addition to avoid rounding
@@ -373,11 +374,18 @@ T float_distance_imp(const T& a, const T& b, const Policy& pol)
       x = -x;
       y = -y;
    }
+   
+   //std::cout << "ldexp(x, expon) " << ldexp(x, expon) << ", ldexp(y, expon) = " << ldexp(y, expon) << std::endl;
    result += ldexp(x, expon) + ldexp(y, expon);
    //
    // Result must be an integer:
-   //
-   BOOST_ASSERT(result == floor(result));
+   //if (result != floor(result))
+   //{ See https://svn.boost.org/trac/boost/ticket/12908
+   //  std::cout << "result " << result << ", floor(result) = " << floor(result) << std::endl;
+   //  std::cout << "Float_distance parameter a " << a << ", b = " << b << std::endl;
+   //}
+   //BOOST_ASSERT(result == floor(result)); 
+   // Reported Trac 
    return result;
 } // float_distance_imp
 

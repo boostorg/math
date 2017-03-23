@@ -27,7 +27,7 @@
 */
 
 #include <boost/math/special_functions/lambert_w.hpp>
-using boost::math::productlog;
+using boost::math::lambert_w;
 
 #include <iostream>
 // using std::cout;
@@ -89,7 +89,7 @@ rsat reverse saturation current
 double iv(double v, double vt, double rsat, double re, double isat, double nu = 1.)
 { 
   // V thermal 0.0257025 = 25 mV
-  // was double i = (nu * vt/r) * productlog((i0 * r) / (nu * vt)); equ 5.
+  // was double i = (nu * vt/r) * lambert_w((i0 * r) / (nu * vt)); equ 5.
 
   rsat = rsat + re; 
   double i = nu * vt / rsat;
@@ -104,7 +104,7 @@ double iv(double v, double vt, double rsat, double re, double isat, double nu = 
   double e = exp(eterm);
   std::cout << "exp(eterm) = " << e << std::endl;
 
-  double w0 = productlog(x * e);
+  double w0 = lambert_w(x * e);
   std::cout << "w0 = " << w0 << std::endl;
   return i * w0 - isat;
 
@@ -121,7 +121,7 @@ int main()
 
     //[lambert_w_diode_example_1
     double x = 0.01;
-    //std::cout << "Lambert W (" << x << ") = " << productlog(x) << std::endl; // 0.00990147
+    //std::cout << "Lambert W (" << x << ") = " << lambert_w(x) << std::endl; // 0.00990147
 
     double nu = 1.0; // Assumed ideal.
     double vt = v_thermal(25); // v thermal, Shockley equation, expect about 25 mV at room temperature.

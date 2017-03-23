@@ -18,14 +18,15 @@
 
 [h4:description Description]
 
-The __Lambert_W is the solution of the equation `W e[super W] = x`.
+The __Lambert_W is the solution of the equation W[dot]e[super W] = x.
+It is also called the Omega function, the inverse function of f(W) = W e[super W].
 
 On the x-interval \[0, [inf]\] there is just one real solution.
-On the interval (-1/e, 0) there are two real solutions on two branches called variously W0, W-1, Wp, Wm,
-only one, the so-called principal branch w0, Wp, is provided by this implementation.
+On the interval (-1/e, 0) there are two real solutions on two branches called variously W0, W-1, Wp, Wm.
+Only one, the so-called principal branch W0 or Wp, is provided by this implementation.
 
-The function is described in Wolfram Mathworld [@http://mathworld.wolfram.com/LambertW-Function.html [^Lambert W function] ],
-and the principal value of the Lambert W-function is implemented in the Wolfram Language as ProductLog[z].
+The function is described in Wolfram Mathworld [@http://mathworld.wolfram.com/LambertW-Function.html [^Lambert W function] ].
+The principal value of the Lambert W-function is implemented in the Wolfram Language as ProductLog[z].
 
 __WolframAlpha has provided some reference values for testing.
 For example, the output from [@https://www.wolframalpha.com/input/?i=productlog(1)] is 0.56714329040978387299996866221035554975381578718651.
@@ -49,9 +50,10 @@ The source of this example is at [@../../example/lambert_w_example.cpp lambert_w
 
 [h4:accuracy Accuracy]
 
-All the functions usually return values within one ULP (unit in the last place) for the floating-point type.
-Values of x close to the boundary of real values at `x ~= -exp(-1))`,
-about -0.367879 may be less accurate as they near the boundary.
+All the functions usually return values within two ULP (unit in the last place) for the floating-point type.
+Values of x close to the boundary of real values at `x ~= -exp(-1))`, about -0.367879,
+approach the singularity result of -1,
+but never more accurate than `1 - sqrt(epsilon)`, for `double`, about 0.99999999.
 
 [h4:implemention Implementation]
 
@@ -62,8 +64,27 @@ This implementation is based on Thomas Luu's code posted at
 [@https://svn.boost.org/trac/boost/ticket/11027 Boost Trac \#11027].
 
 It has been implemented from Luu's algorithm but templated on RealType parameter and result
-and handles both __fundamental (float, double, long double), __multiprecision,
-and also has been tested with the proposed fixed_point type.
+and handles both __fundamental_types (float, double, long double), __multiprecision,
+and also has been tested with a proposed fixed_point type.
+
+A first approximation is computed using the method of Barry et al (see references 5 & 6 below).
+(For users only requiring an accuracy of relative accuracy of 0.02%, this function might suffice).
+
+We considered using [@https://en.wikipedia.org/wiki/Newton%27s_method  Newton/Raphson's method]
+``
+  f(w) = w e^w -z = 0 // Luu equation 6.37
+  f'(w) = e^w (1 + w), Wolfram alpha (d)/(dw)(f(w) = w exp(w) - z) = e^w (w + 1)
+  if (f(w) / f'(w) -1 < tolerance
+  w1 = w0 - (expw0 * (w0 + 1)); // Refine new Newton/Raphson estimate.
+``
+but concluded that since Newton/Raphson's method takes typically 6 iterations to converge within tolerance,
+whereas Halley usually takes only 1 to 3 iterations to achieve an result within 1 __ULP,
+so Newton/Raphson's method unlikely to be quicker
+than the additional cost of computating the 2nd derivative for Halley's method.
+
+The implementation details are in [@../../include/boost/math/special_functions/lambert_w.hpp lambert_w.hpp]
+
+[h5 Other implmentations]
 
 The Lambert W has also been discussed in a [@http://lists.boost.org/Archives/boost/2016/09/230819.php Boost thread].
 This also gives link to a prototype version by which also handles complex results [^(x < -exp(-1)], about -0.367879).
@@ -74,7 +95,6 @@ has also produces a prototype C++ library that can compute the Lambert W functio
 [*and complex number types].
 This is not implemented here but might be completed in the future.
 
-The implementation details are in [@../../include/boost/math/special_functions/lambert_w.hpp lambert_w.hpp]
 
 [h4:references References]
 
@@ -83,6 +103,15 @@ The implementation details are in [@../../include/boost/math/special_functions/l
 # [@http://www.orcca.on.ca/LambertW/ Lambert W Poster],
 R. M. Corless, G. H. Gonnet, D. E. G. Hare, D. J. Jeffery and D. E. Knuth,
 On the Lambert W function Advances in Computational Mathematics, Vol 5, (1996) pp 329-359.
+
+# [@https://people.sc.fsu.edu/~jburkardt/f_src/toms443/toms443.html TOMS443],
+Andrew Barry, S. J. Barry, Patricia Culligan-Hensley,
+Algorithm 743: WAPR - A Fortran routine for calculating real values of the W-function,[br]
+ACM Transactions on Mathematical Software, Volume 21, Number 2, June 1995, pages 172-181.[br]
+BISECT approximates the W function using bisection (GNU licence).
+Original FORTRAN77 version by Andrew Barry, S. J. Barry, Patricia Culligan-Hensley,
+this version by C++ version by John Burkardt.
+# [@https://people.sc.fsu.edu/~jburkardt/f_src/toms743/toms743.html TOMS743] Fortran 90 (updated 2014).
 
 Initial guesses based on:
 
@@ -93,6 +122,8 @@ W-function. Mathematics and Computers in Simulation, 53(1):95-103, 2000.
 # D.A. Barry, J.-Y. Parlange, L. Li, H. Prommer, C.J. Cunningham, and
 F. Stagnitti. Erratum to analytical approximations for real values of the
 Lambert W-function. Mathematics and Computers in Simulation, 59(6):543-543, 2002.
+
+A PDF of the full [@http://www.paper.edu.cn/scholar/downpaper/liling116674-201210-19 paper] is available.
 
 # C++ __CUDA version of Luu algorithm, [@https://github.com/thomasluu/plog/blob/master/plog.cu plog].
 
