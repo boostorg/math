@@ -1,5 +1,5 @@
-#ifndef BOOST_MATH_QUADRATURE_DETAIL_EXP_SINH_DETAIL_HPP
-#define BOOST_MATH_QUADRATURE_DETAIL_EXP_SINH_DETAIL_HPP
+#ifndef BOOST_MATH_QUADRATURE_DETAIL_SINH_SINH_DETAIL_HPP
+#define BOOST_MATH_QUADRATURE_DETAIL_SINH_SINH_DETAIL_HPP
 
 #include <cmath>
 #include <vector>
@@ -10,13 +10,13 @@
 namespace boost{ namespace math{ namespace detail{
 
 
-// Returns the exp-sinh quadrature of a function f over the open interval (0, infinity)
+// Returns the sinh-sinh quadrature of a function f over the entire real line
 
 template<class Real>
-class exp_sinh_detail
+class sinh_sinh_detail
 {
 public:
-    exp_sinh_detail(Real tol, size_t max_refinements);
+    sinh_sinh_detail(Real tol, size_t max_refinements);
 
     template<class F>
     Real integrate(const F f, Real* error = nullptr) const;
@@ -29,24 +29,16 @@ private:
 };
 
 template<class Real>
-exp_sinh_detail<Real>::exp_sinh_detail(Real tol, size_t max_refinements)
+sinh_sinh_detail<Real>::sinh_sinh_detail(Real tol, size_t max_refinements)
 {
-    using std::exp;
     using std::log;
     using std::sqrt;
-    using std::asinh;
     using std::cosh;
     using std::sinh;
-    using std::ceil;
     using boost::math::constants::two_div_pi;
     using boost::math::constants::half_pi;
 
     m_tol = tol;
-    std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
-    // t_min is chosen such that x = exp(pi/2 sinh(-t_max)) = eps/10000.
-    // This is a compromise; using some denormals so as to pick up information about singularities at zero,
-    // while not risking hitting the singularity through roundoff error.
-    const Real t_min = asinh(two_div_pi<Real>()*log(std::numeric_limits<Real>::epsilon()/10000));
 
     // t_max is chosen to make g'(t_max) ~ sqrt(max) (g' grows faster than g).
     // This will allow some flexibility on the users part; they can at least square a number function without overflow.
@@ -58,22 +50,18 @@ exp_sinh_detail<Real>::exp_sinh_detail(Real tol, size_t max_refinements)
     for (size_t i = 0; i < max_refinements; ++i)
     {
         Real h = (Real) 1/ (Real) (1<<i);
-        size_t k = (size_t) ceil((t_max - t_min)/(2*h));
+        size_t k = (size_t) ceil(t_max/(2*h));
         m_abscissas[i].reserve(k);
         m_weights[i].reserve(k);
-        Real arg = t_min;
-        if (i != 0)
-        {
-            arg = t_min + h;
-        }
+        Real arg = h;
 
         while(arg < t_max)
         {
-            Real x = exp(half_pi<Real>()*sinh(arg));
+            Real tmp = half_pi<Real>()*sinh(arg);
+            Real x = sinh(tmp);
             m_abscissas[i].emplace_back(x);
-            Real w = cosh(arg)*half_pi<Real>()*x;
+            Real w = cosh(arg)*half_pi<Real>()*cosh(tmp);
             m_weights[i].emplace_back(w);
-
             if (i != 0)
             {
                 arg = arg + 2*h;
@@ -82,42 +70,44 @@ exp_sinh_detail<Real>::exp_sinh_detail(Real tol, size_t max_refinements)
             {
                 arg = arg + h;
             }
+
         }
+
     }
 }
 
 template<class Real>
 template<class F>
-Real exp_sinh_detail<Real>::integrate(const F f, Real* error) const
+Real sinh_sinh_detail<Real>::integrate(const F f, Real* error) const
 {
     using std::abs;
-    using std::floor;
-    using std::tanh;
-    using std::sinh;
     using std::sqrt;
     using boost::math::constants::half;
     using boost::math::constants::half_pi;
 
-    std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
-
     // Get the party started with two estimates of the integral:
-    Real I0 = 0;
-    Real L1_I0 = 0;
+    Real I0 = f(0)*half_pi<Real>();
+    Real L1_I0 = abs(I0);
     for(size_t i = 0; i < m_abscissas[0].size(); ++i)
     {
-        Real y = f(m_abscissas[0][i]);
-        I0 += y*m_weights[0][i];
-        L1_I0 += abs(y)*m_weights[0][i];
+        Real x = m_abscissas[0][i];
+        Real yp = f(x);
+        Real ym = f(-x);
+        I0 += (yp + ym)*m_weights[0][i];
+        L1_I0 += (abs(yp)+abs(ym))*m_weights[0][i];
     }
 
+    // std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     // std::cout << "First estimate : " << I0 << std::endl;
     Real I1 = I0;
     Real L1_I1 = L1_I0;
     for (size_t i = 0; i < m_abscissas[1].size(); ++i)
     {
-        Real y = f(m_abscissas[1][i]);
-        I1 += y*m_weights[1][i];
-        L1_I1 += abs(y)*m_weights[1][i];
+        Real x= m_abscissas[1][i];
+        Real yp = f(x);
+        Real ym = f(-x);
+        I1 += (yp + ym)*m_weights[1][i];
+        L1_I1 += (abs(yp) + abs(ym))*m_weights[1][i];
     }
 
     I1 *= half<Real>();
@@ -141,15 +131,13 @@ Real exp_sinh_detail<Real>::integrate(const F f, Real* error) const
         for(size_t j = 0; j < m_weights[i].size(); ++j)
         {
             Real x = m_abscissas[i][j];
-            Real y = f(x);
-            sum += y*m_weights[i][j];
-            Real abterm0 = abs(y)*m_weights[i][j];
+            Real yp = f(x);
+            Real ym = f(-x);
+            sum += (yp + ym)*m_weights[i][j];
+            Real abterm0 = (abs(yp) + abs(ym))*m_weights[i][j];
             absum += abterm0;
 
             // We require two consecutive terms to be < eps in case we hit a zero of f.
-            // Numerical experiments indicate that we should start this check at ~30 for floats,
-            // ~60 for doubles, and ~100 for long doubles.
-            // However, starting the check at x = 10 rather than x = 100 will only save two function evaluations.
             if (x > (Real) 100 && abterm0 < eps && abterm1 < eps)
             {
                 break;
@@ -171,7 +159,7 @@ Real exp_sinh_detail<Real>::integrate(const F f, Real* error) const
         }
         if (!isnormal(I1))
         {
-            throw std::domain_error("The exp_sinh quadrature evaluated your function at a singular point. Please ensure your function evaluates to zero at infinity.\n");
+            throw std::domain_error("The sinh_sinh quadrature evaluated your function at a singular point. Please ensure your function evaluates to zero at infinity.\n");
         }
     }
 
