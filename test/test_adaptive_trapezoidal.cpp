@@ -3,6 +3,7 @@
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/quadrature/adaptive_trapezoidal.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
@@ -109,8 +110,30 @@ void test_rational_sin()
     BOOST_CHECK_CLOSE(Q, expected, 100*tol);
 }
 
+template<class Real>
+void test_bessel()
+{
+    using std::sin;
+    using std::cos;
+    using std::sqrt;
+    using boost::math::constants::pi;
+
+    Real error = 0;
+    Real L1 = 0;
+    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    Real order = 50;
+    Real x = 17;
+    auto f1 = [&](Real t) { return cos(order*t - x*sin(t))/pi<Real>();};
+
+    BOOST_REQUIRE_THROW(boost::math::adaptive_trapezoidal(f1, (Real) 0, pi<Real>(), tol, 15, &error, &L1), std::logic_error);
+}
+
 BOOST_AUTO_TEST_CASE(adaptive_trapezoidal)
 {
+    test_bessel<double>();
+
+
+    /*
     test_constant<float>();
     test_constant<double>();
     test_constant<long double>();
@@ -151,4 +174,5 @@ BOOST_AUTO_TEST_CASE(adaptive_trapezoidal)
     test_rational_periodic<boost::multiprecision::float128>();
 #endif
 #endif
+*/
 }

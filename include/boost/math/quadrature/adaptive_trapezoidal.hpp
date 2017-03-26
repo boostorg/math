@@ -22,7 +22,7 @@
 namespace boost{ namespace math{
 
 template<class F, class Real>
-Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 15, Real* error_estimate = nullptr)
+Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 15, Real* error_estimate = nullptr, Real* L1 = nullptr)
 {
     using std::abs;
     using std::isfinite;
@@ -68,6 +68,7 @@ Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limi
         h *= half<Real>();
         Real sum = 0;
         Real absum = 0;
+
         for(size_t j = 1; j < p; j += 2)
         {
             Real y = f(a + j*h);
@@ -78,11 +79,23 @@ Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limi
         IL1 += absum*h;
         ++k;
         error = abs(I0 - I1);
-        if(error_estimate)
-        {
-            *error_estimate = error;
-        }
     }
+
+    if (error_estimate)
+    {
+        *error_estimate = error;
+    }
+
+    if (L1)
+    {
+        *L1 = IL1;
+    }
+
+    if (I1 != (Real) 0 && IL1/abs(I1) > 1.0/std::numeric_limits<Real>::epsilon())
+    {
+        throw std::logic_error("The condition number of the quadrature sum exceeds the inverse of the precision of the type. No correct digits can be expected for the integral.\n");
+    }
+
     return I1;
 }
 
