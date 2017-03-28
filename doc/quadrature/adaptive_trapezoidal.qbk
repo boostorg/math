@@ -20,7 +20,7 @@ If we assume only that the integrand is twice continuously differentiable, we ca
 is [bigo](h^2).
 Hence halving the interval only cuts the error by about a fourth, which in turn implies that we must evaluate the function many times before an acceptable accuracy can be achieved.
 
-However, the trapezoidal rule has an astonishing property: If the integrand is periodic, and we integrate it over a period, then the trapezoidal rule converges exponentially fast.
+However, the trapezoidal rule has an astonishing property: If the integrand is periodic, and we integrate it over a period, then the trapezoidal rule converges faster than any power of the step size /h/.
 This can be seen by examination of the Euler-Maclaurin formula, which relates a definite integral to its trapezoidal sum and error terms proportional to the derivatives of the function at the endpoints.
 If the derivatives at the endpoints are the same or vanish, then the error very nearly vanishes.
 Hence the trapezoidal rule is essentially optimal for periodic integrands.
@@ -36,26 +36,68 @@ In order to control this tolerance, simply call the routine with an additional a
     __double I = adaptive_trapezoidal(f, 0, two_pi<double>(), 1e-6);
 
 The routine stops when successive estimates of the integral /I1/ and /I0/ differ by less than the tolerance multiplied by the estimated L1 norm of the function.
-A question arises as to what to do when successive estimates never pass below this threshold.
+A good choice for the tolerance is [[radic]([epsilon])], which is the default.
+If the integrand is periodic, then the number of digits should double on each interval halving.
+Hence, once the integration routine has estimated that the error is [[radic]([epsilon])], then the actual error should be ~[[epsilon]].
+If the integrand is *not* periodic, then reducing the error to [[radic]([epsilon])] takes much longer, but is nonetheless possible without becoming a major performance bug.
+
+A question arises as to what to do when successive estimates never pass below the tolerance threshold.
 The stepsize would be halved until it eventually would be flushed to zero, leading to an infinite loop.
 As such, you may pass an optional argument __max_refinements which controls how many times the interval may be halved before giving up.
-By default, this maximum number of refinement steps is 15, leading to ~30,000 function evaluations.
-For certain problems, this is clearly excessive, so specifying a smaller number is reasonable
+By default, this maximum number of refinement steps is 10, which should never be hit in double precision unless the function is not periodic.
+However, for higher-precision types, it may be of interest to allow the algorithm to compute more refinements:
 
-    __size_t max_refinements = 10;
+    __size_t max_refinements = 15;
     __double I = adaptive_trapezoidal(f, 0, two_pi<double>(), 1e-6, max_refinements);
 
-Finally, you might wonder what the final error estimate actually was: This is achieved by passing a pointer into the last argument
+Note that the maximum allowed compute time grows exponentially with __max_refinements.
+The routine will not throw an exception if the maximum refinements is achieved without the requested tolerance being attained.
+This is because the value calculated is more often than not still usable.
+However, for applications with high-reliability requirements, the error estimate should be queried.
+This is achieved by passing additional pointers into the routine:
 
     __double error_estimate;
-    __double I = adaptive_trapezoidal(f, 0, two_pi<double>(), 1e-6, 10, &error_estimate);
+    __double L1;
+    __double I = adaptive_trapezoidal(f, 0, two_pi<double>(), tolerance, max_refinements, &error_estimate, &L1);
+    __if (error_estimate > tolerance*L1)
+    __{
+         __double I = some_other_quadrature_method(f, 0, two_pi<double>());
+    __}
 
-If need be, you can query this value, and if it is unacceptably large, use another method.
+The final argument is the L[sub 1] norm of the integral.
+This is computed along with the integral, and is an essential component of the algorithm.
+First, the L[sub 1] norm establishes a scale against which the error can be measured.
+Second, the L[sub 1] norm can be used to evaluate the stability of the computation.
+This can be formulated in a rigorous manner by defining the *condition number of summation*.
+The condition number of summation is defined by
 
+kappa(S[sub n]) := [sigma][sub i][super n] |x[sub i]|/|[sigma][sub i][super n] x[sub i]|
+
+This number measures the backwards-stability of a numerical summation.
+If this number of [bigo](10[super k]), then /k/ additional digits are expected to be lost in addition to digits lost due to floating point rounding error.
+As essentially all numerical quadrature methods are summation methods, then their stability is is controlled by the ratio
+
+    __double kappa = L1/abs(I);
+
+which is easily seen to be equivalent to condition number of summation.
+Hence both the error estimate and the condition number of summation should be analyzed in applications requiring very high precision.
+
+As an example, we consider evaluation of Bessel functions by trapezoidal quadrature.
+The Bessel function of the first kind is defined via
+
+    J[sub n](x) = 1/2[pi] \int[sub [pi]][super [pi]] cos(n t - x sin(t)) dt
+
+The integrand is periodic, so the Euler-Maclauren summation formula guarantees exponential convergence via the trapezoidal quadrature.
+Without careful consideration, it seems this would be a very attractive method to compute Bessel functions.
+However, we see that for large /n/ the integrand oscillates rapidly, taking on positive and negative values, and hence the trapezoidal sums become ill-conditioned.
+In double precision, /x = 17/ and /n = 25/ gives a sum which is so poorly conditioned that zero correct digits are obtained.
+In this case, the routine throw a __boost::math::evaluation_error which explains the poor conditioning.
+However, the error is only thrown when *all* digits are expected to be incorrect, so the user is still responsible for error analysis in many circumstances.
 
 References:
 
-Stoer, Josef, and Roland Bulirsch. Introduction to numerical analysis. Vol. 12. Springer Science & Business Media, 2013.
+Stoer, Josef, and Roland Bulirsch. ['Introduction to numerical analysis. Vol. 12.], Springer Science & Business Media, 2013.
 
+Higham, Nicholas J. ['Accuracy and stability of numerical algorithms.] Society for industrial and applied mathematics, 2002.
 
 [endsect]

@@ -22,9 +22,7 @@ void test_constant()
     std::cout << "Testing constants are integrated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
 
     auto f = [](Real x) { return boost::math::constants::half<Real>(); };
-
     Real Q = boost::math::adaptive_trapezoidal<decltype(f), Real>(f, (Real) 0.0, (Real) 10.0);
-
     BOOST_CHECK_CLOSE(Q, 5.0, 100*std::numeric_limits<Real>::epsilon());
 }
 
@@ -124,8 +122,7 @@ void test_bessel()
     Real order = 50;
     Real x = 17;
     auto f1 = [&](Real t) { return cos(order*t - x*sin(t))/pi<Real>();};
-
-    BOOST_REQUIRE_THROW(boost::math::adaptive_trapezoidal(f1, (Real) 0, pi<Real>(), tol, 15, &error, &L1), std::logic_error);
+    BOOST_REQUIRE_THROW(boost::math::adaptive_trapezoidal(f1, (Real) 0, pi<Real>(), tol, 15, &error, &L1), boost::math::evaluation_error);
 }
 
 BOOST_AUTO_TEST_CASE(adaptive_trapezoidal)
@@ -133,7 +130,6 @@ BOOST_AUTO_TEST_CASE(adaptive_trapezoidal)
     test_bessel<double>();
 
 
-    /*
     test_constant<float>();
     test_constant<double>();
     test_constant<long double>();
@@ -174,5 +170,5 @@ BOOST_AUTO_TEST_CASE(adaptive_trapezoidal)
     test_rational_periodic<boost::multiprecision::float128>();
 #endif
 #endif
-*/
+
 }

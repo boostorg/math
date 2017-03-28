@@ -17,12 +17,14 @@
 
 #include <cmath>
 #include <limits>
+#include <stdexcept>
+#include <boost/format.hpp>
 #include <boost/math/constants/constants.hpp>
 
 namespace boost{ namespace math{
 
 template<class F, class Real>
-Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 15, Real* error_estimate = nullptr, Real* L1 = nullptr)
+Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 10, Real* error_estimate = nullptr, Real* L1 = nullptr)
 {
     using std::abs;
     using std::isfinite;
@@ -53,11 +55,11 @@ Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limi
     // The recursion is:
     // I_k = 1/2 I_{k-1} + 1/2^k \sum_{j=1; j odd, j < 2^k} f(a + j(b-a)/2^k)
     size_t k = 2;
-    // We want to go through at least 5 levels so we have sampled the function at least 33 times.
+    // We want to go through at least 4 levels so we have sampled the function at least 10 times.
     // Otherwise, we could terminate prematurely and miss essential features.
-    // This is of course possible anyway, but 33 samples seems to be a reasonable compromise.
+    // This is of course possible anyway, but 10 samples seems to be a reasonable compromise.
     Real error = abs(I0 - I1);
-    while (k < 5 || (k < max_refinements && error > tol*IL1) )
+    while (k < 4 || (k < max_refinements && error > tol*IL1) )
     {
         I0 = I1;
         IL0 = IL1;
@@ -75,6 +77,7 @@ Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limi
             sum += y;
             absum += abs(y);
         }
+
         I1 += sum*h;
         IL1 += absum*h;
         ++k;
@@ -93,7 +96,10 @@ Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limi
 
     if (I1 != (Real) 0 && IL1/abs(I1) > 1.0/std::numeric_limits<Real>::epsilon())
     {
-        throw std::logic_error("The condition number of the quadrature sum exceeds the inverse of the precision of the type. No correct digits can be expected for the integral.\n");
+        Real cond = IL1/abs(I1);
+        Real inv_prec = 1.0/std::numeric_limits<Real>::epsilon();
+        boost::basic_format<char> err_msg = boost::format("\nThe condition number of the quadrature sum is %1%, which exceeds the inverse of the precision of the type %2%.\nNo correct digits can be expected for the integral.\n") % cond % inv_prec;
+        throw boost::math::evaluation_error(err_msg.str());
     }
 
     return I1;
