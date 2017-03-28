@@ -5,17 +5,17 @@ Boost Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ]
 
-[section:tanh_sinh Tanh-sinh quadrature]
+[section:double_exponential Double-exponential quadrature]
 
 [section:tanh_sinh_over Overview]
 
-The tanh-sinh quadrature provided by boost is a rapidly convergent numerical integration scheme for holomorphic integrands.
+The tanh-sinh quadrature routine provided by boost is a rapidly convergent numerical integration scheme for holomorphic integrands.
 By this we mean that the integrand is the restriction to the real line of a complex-differentiable function which is bounded on the interior of the unit disk /|z| < 1/.
 More precisely, the integrands must lie within a Hardy space.
-If your integrand obeys these conditions, it can be shown that tanh-sinh integration is very nearly optimal, meaning that it requires the fewest function evaluations for a given accuracy of any quadrature algorithm.
+If your integrand obeys these conditions, it can be shown that tanh-sinh integration is optimal, meaning that it requires the fewest function evaluations for a given accuracy of any quadrature algorithm for a random element from the Hardy space.
 A basic example of how to use the tanh-sinh quadrature is shown below:
 
-    __double tolerance = 100*std::numeric_limits<double>::epsilon();
+    __double tolerance = sqrt(std::numeric_limits<double>::epsilon());
     __size_t max_halvings = 15;
     __tanh_sinh<double> integrator(tolerance, max_halvings);
     __auto f = [](double x) { return 5*x + 7; };
@@ -41,13 +41,6 @@ The reason is that vast speed improvements can be obtained by caching the weight
 These numbers have been precomputed up to 100 binary digits, so this is roughly the most precision that can be expected from the quadrature.
 We think that this is a reasonable compromise between efficiency, accuracy, and compile time that will satisfy the vast majority of users.
 
-The tanh-sinh quadrature can also handle infinite limits.
-Infinite limits are requested using the standard library's semantics for infinity:
-
-    __auto f = [](double t) { return exp(-t*t/2); };
-    __Q = integrator.integrate(f, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
-
-Single-sided infinite limits are also supported.
 
 Now onto the caveats: As stated before, the integrands must lie in a Hardy space to ensure rapid convergence.
 Attempting to integrate a function which is not bounded on the unit disk by tanh-sinh can lead to very slow convergence.
@@ -66,13 +59,45 @@ has poles outside the unit disk (at \pm 5i), and is therefore in the Hardy space
 The integration is performed 22x faster for the second function!
 If you do not understand the structure of your integrand in the complex plane, do performance testing before deployment.
 
-Finally, oscillatory integrals on infinite intervals are often poorly approximated.
-For instance, the sinc integral is almost hopelessly inaccurate:
+Like the trapezoidal quadrature, the tanh-sinh quadrature produces an estimate of the L[sub 1] norm of the integral along with the requested integral.
+This is to establish a scale for the integral, as well as to provide an estimate of the condition number of the summation.
+This can be queries as follows:
 
-    __Q = integrator.integrate(boost::math::sinc_pi<double>, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), &error);
 
-Other methods have been developed for oscillatory integrals, use them if you can. However, another option is to simply check the final error and see if it is acceptable.
+    __double tolerance = sqrt(std::numeric_limits<double>::epsilon());
+    __size_t max_halvings = 15;
+    __tanh_sinh<double> integrator(tolerance, max_halvings);
+    __auto f = [](double x) { return 5*x + 7; };
+    __double error;
+    __double L1;
+    __double Q = integrator.integrate(f, (double) 0, (double) 1, &error, &L1);
+    __double condition_number = L1/std::abs(Q);
 
+If the condition number is large, the integral computed by the routine is worthless.
+
+Although the tanh-sinh quadrature can compute integral over infinite domains by variable transformations, these transformations can create a very poorly behaved integrand.
+For this reason, double-exponential variable transformations have been provided that allow stable computation over infinite domains.
+
+The sinh-sinh quadrature allows computation over the entire real line, and is called as follows:
+
+    __sinh_sinh<double> integrator;
+    __auto f = [](double x) { return exp(-x*x); };
+    __double error;
+    __double L1;
+    __double Q = integrator.integrate(f, &error, &L1);
+
+Note that the limits of integration are understood to be (-infinity, infinity).
+
+For half-infinite intervals, the exp-sinh quadrature is provided:
+
+    __exp_sinh<double> integrator;
+    __auto f = [](double x) { return exp(-3*x); };
+    __double error;
+    __double L1;
+    __double Q = integrator.integrate(f, (Real) 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+
+Both the sinh-sinh and exp-sinh quadratures are truly arbitrary precision, and require the abscissas and weights to be computed at runtime.
+Hence make sure to reuse the integrator.
 
 
 [endsect]

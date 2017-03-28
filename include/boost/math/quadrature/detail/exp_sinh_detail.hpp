@@ -6,6 +6,7 @@
 #include <typeinfo>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/next.hpp>
+#include <boost/format.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -19,7 +20,7 @@ public:
     exp_sinh_detail(Real tol, size_t max_refinements);
 
     template<class F>
-    Real integrate(const F f, Real* error = nullptr) const;
+    Real integrate(const F f, Real* error, Real* L1) const;
 
 private:
     Real m_tol;
@@ -88,7 +89,7 @@ exp_sinh_detail<Real>::exp_sinh_detail(Real tol, size_t max_refinements)
 
 template<class Real>
 template<class F>
-Real exp_sinh_detail<Real>::integrate(const F f, Real* error) const
+Real exp_sinh_detail<Real>::integrate(const F f, Real* error, Real* L1) const
 {
     using std::abs;
     using std::floor;
@@ -97,6 +98,13 @@ Real exp_sinh_detail<Real>::integrate(const F f, Real* error) const
     using std::sqrt;
     using boost::math::constants::half;
     using boost::math::constants::half_pi;
+
+    Real y_max = f(std::numeric_limits<Real>::max());
+    if(abs(y_max) > std::numeric_limits<Real>::epsilon() || !isfinite(y_max))
+    {
+        boost::basic_format<char> err_msg = boost::format("\nThe function you are trying to integrate does not go to zero at infinity, and instead evaluates to %1% at x=%2%.\n") % y_max % std::numeric_limits<Real>::max();
+        throw std::domain_error(err_msg.str());
+    }
 
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
 
@@ -161,18 +169,32 @@ Real exp_sinh_detail<Real>::integrate(const F f, Real* error) const
         L1_I1 += absum*h;
         err = abs(I0 - I1);
         // std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
-        if (err <= m_tol*L1_I1 || err <= m_tol /* catch the 0 case. */)
+        if (!isfinite(I1))
         {
-            if (error)
-            {
-                *error = err;
-            }
-            return I1;
+            throw std::domain_error("The exp_sinh quadrature evaluated your function at a singular point. Please ensure your function evaluates to a finite number of its entire domain.\n");
         }
-        if (!isnormal(I1))
+        if (err <= m_tol*L1_I1 || err <= std::numeric_limits<Real>::epsilon() /* catch the 0 case. */)
         {
-            throw std::domain_error("The exp_sinh quadrature evaluated your function at a singular point. Please ensure your function evaluates to zero at infinity.\n");
+            break;
         }
+    }
+
+    if (error)
+    {
+        *error = err;
+    }
+
+    if(L1)
+    {
+        *L1 = L1_I1;
+    }
+
+    if(L1_I1 != (Real) 0 && L1_I1/abs(I1) > 1/std::numeric_limits<Real>::epsilon())
+    {
+        Real cond = abs(I1)/L1_I1;
+        Real inv_prec = 1.0/std::numeric_limits<Real>::epsilon();
+        boost::basic_format<char> err_msg = boost::format("\nThe condition number of the quadrature sum is %1%, which exceeds the inverse of the precision of the type %2%.\nNo correct digits can be expected for the integral.\n") % cond % inv_prec;
+        throw boost::math::evaluation_error(err_msg.str());
     }
 
     return I1;
