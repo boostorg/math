@@ -41,10 +41,10 @@ template<class Real>
 class tanh_sinh
 {
 public:
-    tanh_sinh(Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 20);
+    tanh_sinh(Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 15);
 
     template<class F>
-    Real integrate(F f, Real a, Real b, Real* error = nullptr);
+    Real integrate(F f, Real a, Real b, Real* error = nullptr, Real* L1 = nullptr) const;
 
 private:
     std::shared_ptr<detail::tanh_sinh_detail<Real>> m_imp;
@@ -58,7 +58,7 @@ tanh_sinh<Real>::tanh_sinh(Real tol, size_t max_refinements) : m_imp(std::make_s
 
 template<class Real>
 template<class F>
-Real tanh_sinh<Real>::integrate(F f, Real a, Real b, Real* error)
+Real tanh_sinh<Real>::integrate(F f, Real a, Real b, Real* error, Real* L1) const
 {
     using std::isfinite;
     using boost::math::constants::half;
@@ -72,29 +72,47 @@ Real tanh_sinh<Real>::integrate(F f, Real a, Real b, Real* error)
         }
         Real avg = (a+b)*half<Real>();
         Real diff = (b-a)*half<Real>();
-        auto u = [=](Real z) { return f(avg + diff*z); };
-        return diff*m_imp->integrate(u, error);
+        auto u = [&](Real z) { return f(avg + diff*z); };
+        Real Q = diff*m_imp->integrate(u, error, L1);
+
+        if(L1)
+        {
+            *L1 *= diff;
+        }
+        return Q;
     }
 
     // Infinite limits:
     if (a <= std::numeric_limits<Real>::lowest() && b >= std::numeric_limits<Real>::max())
     {
-        auto u = [=](Real t) { auto t_sq = t*t; auto inv = 1/(1 - t_sq); return f(t*inv)*(1+t_sq)*inv*inv; };
-        return m_imp->integrate(u, error);
+        auto u = [&](Real t) { auto t_sq = t*t; auto inv = 1/(1 - t_sq); return f(t*inv)*(1+t_sq)*inv*inv; };
+        return m_imp->integrate(u, error, L1);
     }
 
     // Right limit is infinite:
     if (isfinite(a) && b >= std::numeric_limits<Real>::max())
     {
-        auto u = [=](Real t) { auto z = 1/(t+1); auto arg = 2*z + a - 1; return f(arg)*z*z; };
-        return 2*m_imp->integrate(u, error);
+        auto u = [&](Real t) { auto z = 1/(t+1); auto arg = 2*z + a - 1; return f(arg)*z*z; };
+        Real Q = 2*m_imp->integrate(u, error, L1);
+        if(L1)
+        {
+            *L1 *= 2;
+        }
+
+        return Q;
     }
 
     if (isfinite(b) && a <= std::numeric_limits<Real>::lowest())
     {
-        auto u = [=](Real t) { return f(b-t);};
-        auto v = [=](Real t) { auto z = 1/(t+1); auto arg = 2*z - 1; return u(arg)*z*z; };
-        return 2*m_imp->integrate(v, error);
+        auto u = [&](Real t) { return f(b-t);};
+        auto v = [&](Real t) { auto z = 1/(t+1); auto arg = 2*z - 1; return u(arg)*z*z; };
+
+        Real Q = 2*m_imp->integrate(v, error, L1);
+        if (L1)
+        {
+            *L1 *= 2;
+        }
+        return Q;
     }
 
     throw std::logic_error("The domain of integration is not sensible; please check the bounds.\n");

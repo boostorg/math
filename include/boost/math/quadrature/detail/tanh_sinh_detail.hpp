@@ -5,7 +5,7 @@
 #include <vector>
 #include <typeinfo>
 #include <boost/math/constants/constants.hpp>
-#include <boost/math/special_functions/next.hpp>
+
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -16,10 +16,10 @@ template<class Real>
 class tanh_sinh_detail
 {
 public:
-    tanh_sinh_detail(Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 15);
+    tanh_sinh_detail(Real tol, size_t max_refinements);
 
     template<class F>
-    Real integrate(F f, Real* error = nullptr);
+    Real integrate(F f, Real* error, Real* L1) const;
 
 private:
     Real m_tol;
@@ -750,7 +750,7 @@ tanh_sinh_detail<Real>::tanh_sinh_detail(Real tol, size_t max_refinements)
 
 template<class Real>
 template<class F>
-Real tanh_sinh_detail<Real>::integrate(F f, Real* error)
+Real tanh_sinh_detail<Real>::integrate(F f, Real* error, Real* L1) const
 {
     using std::abs;
     using std::floor;
@@ -761,7 +761,7 @@ Real tanh_sinh_detail<Real>::integrate(F f, Real* error)
     using boost::math::constants::half_pi;
     Real h = 1;
     Real I0 = half_pi<Real>()*f(0);
-    Real IL0 = abs(I0);
+    Real L1_I0 = abs(I0);
     for(size_t i = 1; i <= m_t_max; ++i)
     {
         Real x = m_abscissas[0][i];
@@ -769,11 +769,13 @@ Real tanh_sinh_detail<Real>::integrate(F f, Real* error)
         Real yp = f(x);
         Real ym = f(-x);
         I0 += (yp + ym)*w;
-        IL0 += (abs(yp) + abs(ym))*w;
+        L1_I0 += (abs(yp) + abs(ym))*w;
     }
-
+    // Uncomment to understand the convergence rate:
+    // std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
+    // std::cout << "First estimate : " << I0 << std::endl;
     Real I1 = half<Real>()*I0;
-    Real IL1 = abs(I1);
+    Real L1_I1 = half<Real>()*L1_I0;
     h /= 2;
     Real sum = 0;
     Real absum = 0;
@@ -788,18 +790,21 @@ Real tanh_sinh_detail<Real>::integrate(F f, Real* error)
         absum += (abs(yp) + abs(ym))*w;
     }
     I1 += sum*h;
-    IL1 += sum*h;
+    L1_I1 += absum*h;
+    Real err = abs(I0 - I1);
+
+    // std::cout << "Second estimate: " << I1 << " Error estimate at level " << 1 << " = " << err << std::endl;
 
     size_t k = 2;
-    Real err = abs(I0 - I1);
+
     while (k < 4 || (k < m_weights.size() && k < m_max_refinements) )
     {
         I0 = I1;
-        IL0 = IL1;
+        L1_I0 = L1_I1;
 
         I1 = half<Real>()*I0;
-        IL1 = half<Real>()*IL0;
-        h = (Real) 1/ (Real) (1 << k);
+        L1_I1 = half<Real>()*L1_I0;
+        h *= half<Real>();
         Real sum = 0;
         Real absum = 0;
         auto const& abscissa_row = m_abscissas[k];
@@ -825,31 +830,31 @@ Real tanh_sinh_detail<Real>::integrate(F f, Real* error)
         }
 
         I1 += sum*h;
-        IL1 += absum*h;
+        L1_I1 += absum*h;
         ++k;
         err = abs(I0 - I1);
-        if (err <= m_tol*IL1)
+        // std::cout << "Estimate:        " << I1 << " Error estimate at level " << k  << " = " << err << std::endl;
+
+        if (!isfinite(I1))
         {
-            if (error)
-            {
-                *error = err;
-            }
-            return I1;
+            throw std::domain_error("The tanh_sinh quadrature evaluated your function at a singular point. Please narrow the bounds of integration or check your function for singularities.\n");
         }
+
+        if (err <= m_tol*L1_I1)
+        {
+            break;
+        }
+
     }
 
-    if (!isnormal(I1))
-    {
-        throw std::domain_error("The tanh_sinh quadrature evaluated your function at a singular point. Please narrow the bounds of integration or check your function for singularities.\n");
-    }
-
-    while (k < m_max_refinements && err > m_tol*IL1)
+    // Since we are out of precomputed abscissas and weights, switch to computing abscissas and weights on the fly.
+    while (k < m_max_refinements && err > m_tol*L1_I1)
     {
         I0 = I1;
-        IL0 = IL1;
+        L1_I0 = L1_I1;
 
         I1 = half<Real>()*I0;
-        IL1 = half<Real>()*IL0;
+        L1_I1 = half<Real>()*L1_I0;
         h *= half<Real>();
         Real sum = 0;
         Real absum = 0;
@@ -873,12 +878,19 @@ Real tanh_sinh_detail<Real>::integrate(F f, Real* error)
         }
 
         I1 += sum*h;
-        IL1 += absum*h;
+        L1_I1 += absum*h;
         ++k;
         err = abs(I0 - I1);
-        if (!isnormal(I1))
+
+        // std::cout << "Estimate:        " << I1 << " Error estimate at level " << k  << " = " << err << std::endl;
+        if (!isfinite(I1))
         {
             throw std::domain_error("The tanh_sinh quadrature evaluated your function at a singular point. Please narrow the bounds of integration or check your function for singularities.\n");
+        }
+
+        if (err <= m_tol*L1_I1)
+        {
+            break;
         }
     }
 
@@ -886,6 +898,12 @@ Real tanh_sinh_detail<Real>::integrate(F f, Real* error)
     {
         *error = err;
     }
+
+    if (L1)
+    {
+        *L1 = L1_I1;
+    }
+
     return I1;
 }
 
