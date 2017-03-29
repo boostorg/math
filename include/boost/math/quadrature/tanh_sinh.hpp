@@ -44,7 +44,7 @@ public:
     tanh_sinh(Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 15);
 
     template<class F>
-    Real integrate(F f, Real a, Real b, Real* error = nullptr, Real* L1 = nullptr) const;
+    Real integrate(const F f, Real a, Real b, Real* error = nullptr, Real* L1 = nullptr) const;
 
 private:
     std::shared_ptr<detail::tanh_sinh_detail<Real>> m_imp;
@@ -58,7 +58,7 @@ tanh_sinh<Real>::tanh_sinh(Real tol, size_t max_refinements) : m_imp(std::make_s
 
 template<class Real>
 template<class F>
-Real tanh_sinh<Real>::integrate(F f, Real a, Real b, Real* error, Real* L1) const
+Real tanh_sinh<Real>::integrate(const F f, Real a, Real b, Real* error, Real* L1) const
 {
     using std::isfinite;
     using boost::math::constants::half;

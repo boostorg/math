@@ -19,7 +19,7 @@ public:
     tanh_sinh_detail(Real tol, size_t max_refinements);
 
     template<class F>
-    Real integrate(F f, Real* error, Real* L1) const;
+    Real integrate(const F f, Real* error, Real* L1) const;
 
 private:
     Real m_tol;
@@ -750,7 +750,7 @@ tanh_sinh_detail<Real>::tanh_sinh_detail(Real tol, size_t max_refinements)
 
 template<class Real>
 template<class F>
-Real tanh_sinh_detail<Real>::integrate(F f, Real* error, Real* L1) const
+Real tanh_sinh_detail<Real>::integrate(const F f, Real* error, Real* L1) const
 {
     using std::abs;
     using std::floor;

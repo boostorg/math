@@ -106,7 +106,7 @@ Real exp_sinh_detail<Real>::integrate(const F f, Real* error, Real* L1) const
         throw std::domain_error(err_msg.str());
     }
 
-    std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
+    // std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
 
     // Get the party started with two estimates of the integral:
     Real I0 = 0;

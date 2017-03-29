@@ -30,7 +30,7 @@ public:
     sinh_sinh(Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 9);
 
     template<class F>
-    Real integrate(const F f, Real* error = nullptr) const;
+    Real integrate(const F f, Real* error = nullptr, Real* L1 = nullptr) const;
 
 private:
     std::shared_ptr<detail::sinh_sinh_detail<Real>> m_imp;
@@ -44,15 +44,9 @@ sinh_sinh<Real>::sinh_sinh(Real tol, size_t max_refinements) : m_imp(std::make_s
 
 template<class Real>
 template<class F>
-Real sinh_sinh<Real>::integrate(const F f, Real* error) const
+Real sinh_sinh<Real>::integrate(const F f, Real* error, Real* L1) const
 {
-    using std::abs;
-    using boost::math::detail::sinh_sinh_detail;
-    if(abs(f(std::numeric_limits<Real>::max())) > std::numeric_limits<Real>::epsilon() || abs(f(std::numeric_limits<Real>::lowest())) > std::numeric_limits<Real>::epsilon())
-    {
-        throw std::domain_error("The function you are trying to integrate does not go to zero at infinity.\n");
-    }
-    return m_imp->integrate(f, error);
+    return m_imp->integrate(f, error, L1);
 }
 
 }}

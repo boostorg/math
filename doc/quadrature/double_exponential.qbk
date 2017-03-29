@@ -16,15 +16,16 @@ If your integrand obeys these conditions, it can be shown that tanh-sinh integra
 A basic example of how to use the tanh-sinh quadrature is shown below:
 
     __double tolerance = sqrt(std::numeric_limits<double>::epsilon());
-    __size_t max_halvings = 15;
-    __tanh_sinh<double> integrator(tolerance, max_halvings);
+    __size_t max_interval_halvings = 8;
+    __tanh_sinh<double> integrator(tolerance, max_interval_halvings);
     __auto f = [](double x) { return 5*x + 7; };
     __double error;
-    __double Q = integrator.integrate(f, (double) 0, (double) 1, &error);
+    __double L1_norm
+    __double Q = integrator.integrate(f, (double) 0, (double) 1, &error, &L1_norm);
 
 Although you have requested a certain tolerance, the routine is not bound to honor it.
 For this reason, you should pass in a pointer to a variable holding the error, which will be populated with the final error estimate.
-The only time that the error estimate will exceed the tolerance is when the maximum number of interval halvings was obtained.
+The only time that the error estimate will exceed the tolerance is when the maximum number of interval halvings was attained.
 Since the estimates are generally still quite good, it seems more reasonable to simply state the final error and return an estimate than throw an exception.
 
 One very nice property of tanh-sinh quadrature is that it can handle singularities at the endpoints of the integration domain.
@@ -73,10 +74,15 @@ This can be queries as follows:
     __double Q = integrator.integrate(f, (double) 0, (double) 1, &error, &L1);
     __double condition_number = L1/std::abs(Q);
 
-If the condition number is large, the integral computed by the routine is worthless.
+If the condition number is large, the computed integral is worthless.
+Occasionally, the condition number will be so large that a `boost::math::evaluation_error` will be thrown.
+However, the class is very conservative; throwing only when the condition number is so large that the integral is essentially guaranteed to be worthless (when it exceeds the reciprocal of the unit roundoff).
+
+Often, the computation is very poor well before the condition number exceeds this threshold,
+so it is the responsibility of the user to check the L[sub 1] norm computation and evaluate whether it is acceptable.
 
 Although the tanh-sinh quadrature can compute integral over infinite domains by variable transformations, these transformations can create a very poorly behaved integrand.
-For this reason, double-exponential variable transformations have been provided that allow stable computation over infinite domains.
+For this reason, double-exponential variable transformations have been provided that allow stable computation over infinite domains; these being the exp-sinh and sinh-sinh quadrature.
 
 The sinh-sinh quadrature allows computation over the entire real line, and is called as follows:
 
@@ -96,8 +102,9 @@ For half-infinite intervals, the exp-sinh quadrature is provided:
     __double L1;
     __double Q = integrator.integrate(f, (Real) 0, std::numeric_limits<Real>::infinity(), &error, &L1);
 
+Either the left limit or the right limit must be infinite; and not both.
 Both the sinh-sinh and exp-sinh quadratures are truly arbitrary precision, and require the abscissas and weights to be computed at runtime.
-Hence make sure to reuse the integrator.
+This means that the call to the constructor is expensive, so make sure to reuse the object for multiple integrations (if, say you are assembling a stiffness matrix).
 
 
 [endsect]
