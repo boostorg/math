@@ -159,8 +159,10 @@ namespace boost {
       { BOOST_FORCEINLINE static signed make_odd(signed char& val){ signed result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
       template <> struct gcd_traits<char> : public gcd_traits_defaults<char> 
       { BOOST_FORCEINLINE static unsigned make_odd(char& val){ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
       template <> struct gcd_traits<wchar_t> : public gcd_traits_defaults<wchar_t> 
       { BOOST_FORCEINLINE static unsigned make_odd(wchar_t& val){ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+#endif
 #ifdef _M_X64
       template <> struct gcd_traits<__int64> : public gcd_traits_defaults<__int64> 
       { BOOST_FORCEINLINE static unsigned make_odd(__int64& val){ unsigned result = gcd_traits<unsigned __int64>::find_lsb(val); val >>= result; return result; } };
@@ -247,10 +249,12 @@ namespace boost {
       {
          BOOST_FORCEINLINE static unsigned make_odd(char& val) { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
       };
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
       template <> struct gcd_traits<wchar_t> : public gcd_traits_defaults<wchar_t>
       {
          BOOST_FORCEINLINE static unsigned make_odd(wchar_t& val) { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
       };
+#endif
 #endif
 
 namespace detail
