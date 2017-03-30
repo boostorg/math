@@ -7,6 +7,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/array.hpp>
 #include <boost/math/tools/polynomial.hpp>
+#include <boost/math/tools/polynomial_gcd.hpp>
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/joint_view.hpp>
@@ -15,10 +16,16 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/tuple/tuple.hpp>
+
 #include <utility>
 
+using namespace boost::math;
 using namespace boost::math::tools;
 using namespace std;
+using boost::math::detail::Stein_gcd;
+using boost::math::detail::Euclid_gcd;
+
 
 template <typename T>
 struct answer
@@ -146,37 +153,290 @@ BOOST_AUTO_TEST_CASE( test_division_over_ufd )
 }
 
 
-BOOST_AUTO_TEST_CASE( test_gcd )
-{
-    /* NOTE: Euclidean gcd is not yet customized to return THE greatest 
-     * common polynomial divisor. If d is THE greatest common divisior of u and
-     * v, then gcd(u, v) will return d or -d according to the algorithm.
-     * By convention, it should return d, as for example Maxima and Wolfram 
-     * Alpha do.
-     * This test is an example of the fact that it returns -d.
-     */
-    boost::array<double, 9> const d8 = {{105, 278, -88, -56, 16}};
-    boost::array<double, 7> const d6 = {{70, 232, -44, -64, 16}};
-    boost::array<double, 7> const d2 = {{-35, 24, -4}};
-    polynomial<double> const u(d8.begin(), d8.end());
-    polynomial<double> const v(d6.begin(), d6.end());
-    polynomial<double> const w(d2.begin(), d2.end());
-    polynomial<double> const d = boost::math::gcd(u, v);
-    BOOST_CHECK_EQUAL(w, d);
-}
+typedef boost::mpl::list<int, long> pod_integral_test_types;
 
-// Sanity checks to make sure I didn't break it.
 typedef boost::mpl::list<int, long
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
-   , boost::multiprecision::cpp_int
+    , boost::multiprecision::cpp_int
 #endif
 > integral_test_types;
-typedef boost::mpl::list<double
+
+typedef boost::mpl::list<double> pod_floating_point_types;
+typedef boost::mpl::joint_view<pod_integral_test_types, pod_floating_point_types> pod_test_types;
+
+typedef boost::mpl::list<
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
-   , boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50
+boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50
 #endif
-> non_integral_test_types;
+> mp_floating_point_types;
+
+typedef boost::mpl::list<
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50
+#endif
+> mp_non_integral_test_types;
+
+typedef boost::mpl::joint_view<pod_floating_point_types, mp_floating_point_types> floating_point_types;
+typedef boost::mpl::joint_view<pod_floating_point_types, mp_non_integral_test_types> non_integral_test_types;
 typedef boost::mpl::joint_view<integral_test_types, non_integral_test_types> all_test_types;
+
+// Test data.
+/*
+typedef boost::tuple< boost::array<int, 5>, boost::array<int, 5>, boost::array<int, 3> > test_datum;
+
+std::vector<test_datum> make_test_data()
+{
+    std::vector< test_datum > test_data;
+    boost::array<int, 5> x_data = {{105, 278, -88, -56, 16}};
+    boost::array<int, 5> y_data = {{70, 232, -44, -64, 16}};
+    boost::array<int, 3> z_data = {{35, -24, 4}};
+    test_data.push_back(boost::make_tuple(x_data, y_data, z_data));
+
+    return test_data;
+}
+
+std::vector<test_datum> foo = make_test_data();
+*/
+
+template <typename T>
+struct FM2GP_Ex_8_3__1
+{
+    polynomial<T> x;
+    polynomial<T> y;
+    polynomial<T> z;
+    
+    FM2GP_Ex_8_3__1()
+    {
+        boost::array<T, 5> const x_data = {{105, 278, -88, -56, 16}};
+        boost::array<T, 5> const y_data = {{70, 232, -44, -64, 16}};
+        boost::array<T, 3> const z_data = {{35, -24, 4}};
+        x = polynomial<T>(x_data.begin(), x_data.end());
+        y = polynomial<T>(y_data.begin(), y_data.end());
+        z = polynomial<T>(z_data.begin(), z_data.end());
+    }
+};
+
+template <typename T>
+struct FM2GP_Ex_8_3__2
+{
+    polynomial<T> x;
+    polynomial<T> y;
+    polynomial<T> z;
+    
+    FM2GP_Ex_8_3__2()
+    {
+        boost::array<T, 5> const x_data = {{1, -6, -8, 6, 7}};
+        boost::array<T, 5> const y_data = {{1, -5, -2, 15, 11}};
+        boost::array<T, 3> const z_data = {{1, 2, 1}};
+        x = polynomial<T>(x_data.begin(), x_data.end());
+        y = polynomial<T>(y_data.begin(), y_data.end());
+        z = polynomial<T>(z_data.begin(), z_data.end());
+    }
+};
+
+
+template <typename T>
+struct FM2GP_mixed
+{
+    polynomial<T> x;
+    polynomial<T> y;
+    polynomial<T> z;
+    
+    FM2GP_mixed()
+    {
+        boost::array<T, 4> const x_data = {{-2.2, -3.3, 0, 1}};
+        boost::array<T, 3> const y_data = {{-4.4, 0, 1}};
+        boost::array<T, 2> const z_data= {{-2, 1}};
+        x = polynomial<T>(x_data.begin(), x_data.end());
+        y = polynomial<T>(y_data.begin(), y_data.end());
+        z = polynomial<T>(z_data.begin(), z_data.end());
+    }
+};
+
+
+template <typename T>
+struct FM2GP_trivial
+{
+    polynomial<T> x;
+    polynomial<T> y;
+    polynomial<T> z;
+    
+    FM2GP_trivial()
+    {
+        boost::array<T, 4> const x_data = {{-2, -3, 0, 1}};
+        boost::array<T, 3> const y_data = {{-4, 0, 1}};
+        boost::array<T, 2> const z_data= {{-2, 1}};
+        x = polynomial<T>(x_data.begin(), x_data.end());
+        y = polynomial<T>(y_data.begin(), y_data.end());
+        z = polynomial<T>(z_data.begin(), z_data.end());
+    }
+};
+
+BOOST_AUTO_TEST_SUITE(Stein_gcd_ufd)
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( test_Stein_gcd_1_int, T, integral_test_types, FM2GP_Ex_8_3__1<T> )
+{
+    typedef FM2GP_Ex_8_3__1<T> fixture_type;
+    polynomial<T> w;
+    w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( test_Stein_gcd_2_int, T, integral_test_types, FM2GP_Ex_8_3__2<T> )
+{
+    typedef FM2GP_Ex_8_3__2<T> fixture_type;
+    polynomial<T> w;
+    w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( test_Stein_gcd_trivial, T, integral_test_types, FM2GP_trivial<T> )
+{
+    typedef FM2GP_trivial<T> fixture_type;
+    polynomial<T> w;
+    w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+BOOST_AUTO_TEST_SUITE(Stein_gcd_field)
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, pod_floating_point_types, FM2GP_Ex_8_3__1<T> )
+{
+    typedef FM2GP_Ex_8_3__1<T> fixture_type;
+    polynomial<T> w;
+    w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+// TODO
+// BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(Ex_8_3__2, 6)
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, pod_floating_point_types, FM2GP_Ex_8_3__2<T> )
+{
+    typedef FM2GP_Ex_8_3__2<T> fixture_type;
+    polynomial<T> w;
+    w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial, T, pod_floating_point_types, FM2GP_trivial<T> )
+{
+    typedef FM2GP_trivial<T> fixture_type;
+    polynomial<T> w;
+    w = Stein_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = Stein_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+BOOST_AUTO_TEST_SUITE(Euclid_gcd_field)
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, floating_point_types, FM2GP_Ex_8_3__1<T> )
+{
+    typedef FM2GP_Ex_8_3__1<T> fixture_type;
+    polynomial<T> w;
+    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::x, fixture_type::y));
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::y, fixture_type::x));
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, floating_point_types, FM2GP_Ex_8_3__2<T> )
+{
+    typedef FM2GP_Ex_8_3__2<T> fixture_type;
+    polynomial<T> w;
+    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::x, fixture_type::y));
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::y, fixture_type::x));
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial, T, floating_point_types, FM2GP_trivial<T> )
+{
+    typedef FM2GP_trivial<T> fixture_type;
+    polynomial<T> w;
+    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::x, fixture_type::y));
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = gcd_traits< polynomial<T> >::abs(Euclid_gcd(fixture_type::y, fixture_type::x));
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+BOOST_AUTO_TEST_SUITE(Euclid_gcd_ufd)
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, integral_test_types, FM2GP_Ex_8_3__1<T> )
+{
+    typedef FM2GP_Ex_8_3__1<T> fixture_type;
+    polynomial<T> w;
+    w = Euclid_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = Euclid_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, integral_test_types, FM2GP_Ex_8_3__2<T> )
+{
+    typedef FM2GP_Ex_8_3__2<T> fixture_type;
+    polynomial<T> w;
+    w = Euclid_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = Euclid_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial, T, integral_test_types, FM2GP_trivial<T> )
+{
+    typedef FM2GP_trivial<T> fixture_type;
+    polynomial<T> w;
+    w = Euclid_gcd(fixture_type::x, fixture_type::y);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = Euclid_gcd(fixture_type::y, fixture_type::x);
+    gcd_traits< polynomial<T> >::normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
 {

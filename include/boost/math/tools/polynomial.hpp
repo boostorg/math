@@ -24,6 +24,7 @@
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/operators.hpp>
 
+#include <limits>
 #include <vector>
 #include <ostream>
 #include <algorithm>
@@ -444,8 +445,7 @@ public:
    template <typename U>
    polynomial& operator >>=(U const &n)
    {
-       BOOST_ASSERT(n <= m_data.size());
-       m_data.erase(m_data.begin(), m_data.begin() + n);
+       m_data.erase(m_data.begin(), m_data.begin() + std::min(size_type(n), m_data.size()));
        return *this;
    }
 
@@ -490,6 +490,12 @@ public:
    {
        using namespace boost::lambda;
        m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
+   }
+   
+   // Negate in-place.
+   void negate()
+   {
+       std::transform(data().begin(), data().end(), data().begin(), std::negate<T>());
    }
 
 private:
@@ -696,6 +702,7 @@ polynomial<T> pow(polynomial<T> base, int exp)
     return result;
 }
 
+
 template <class charT, class traits, class T>
 inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT, traits>& os, const polynomial<T>& poly)
 {
@@ -709,11 +716,23 @@ inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT,
    return os;
 }
 
+
+template <typename T>
+T constant_coefficient(polynomial<T> const &x)
+{
+    return x ? x.data().front() : T(0);
+}
+
+// Trivial but useful convenience function referred to simply as l() in Knuth.
+template <class T>
+T leading_coefficient(polynomial<T> const &x)
+{
+    BOOST_ASSERT(x);
+    return x.data().back();
+}
+
 } // namespace tools
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_POLYNOMIAL_HPP
-
-
-

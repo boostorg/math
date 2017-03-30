@@ -36,7 +36,10 @@ namespace boost {
       struct gcd_traits_abs_defaults
       {
          inline static const T& abs(const T& val) { return val; }
+         
+         inline static void normalize(T&) {}
       };
+      
       template <class T>
       struct gcd_traits_abs_defaults<T, false>
       {
@@ -45,10 +48,32 @@ namespace boost {
             using std::abs;
             return abs(val);
          }
+         
+         inline static void normalize(T& val) { val = abs(val); }
+      };
+      
+      
+      template <typename T, bool = is_floating_point<T>::value || (std::numeric_limits<T>::is_specialized && !std::numeric_limits<T>::is_integer)>
+      struct gcd_traits_modulo_defaults
+      {
+          inline static void modulo(T& a, const T& b)
+          {
+              using std::fmod;
+              a = fmod(a, b);
+          }        
+      };
+      
+      template <class T>
+      struct gcd_traits_modulo_defaults<T, false>
+      {
+          inline static void modulo(T& a, const T& b)
+          {
+              a %= b;
+          }
       };
 
       template <class T>
-      struct gcd_traits_defaults : public gcd_traits_abs_defaults<T>
+      struct gcd_traits_defaults : public gcd_traits_abs_defaults<T>, gcd_traits_modulo_defaults<T>
       {
          BOOST_FORCEINLINE static unsigned make_odd(T& val)
          {
@@ -60,11 +85,17 @@ namespace boost {
             }
             return r;
          }
+
          inline static bool less(const T& a, const T& b)
          {
             return a < b;
          }
 
+         inline static void subtract(T& a, const T& b)
+         {
+            a -= b;
+         }
+         
          enum method_type
          {
             method_euclid = 0,
@@ -78,25 +109,13 @@ namespace boost {
             boost::has_right_shift_assign<T>::value && boost::has_left_shift_assign<T>::value && boost::has_less<T>::value
             ? method_binary : method_euclid;
       };
+      
       //
       // Default gcd_traits just inherits from defaults:
       //
       template <class T>
       struct gcd_traits : public gcd_traits_defaults<T> {};
-      //
-      // Special handling for polynomials:
-      //
-      namespace tools {
-         template <class T>
-         class polynomial;
-      }
-
-      template <class T>
-      struct gcd_traits<boost::math::tools::polynomial<T> > : public gcd_traits_defaults<T>
-      {
-         static const boost::math::tools::polynomial<T>& abs(const boost::math::tools::polynomial<T>& val) { return val; }
-      };
-      //
+      
       // Some platforms have fast bitscan operations, that allow us to implement
       // make_odd much more efficiently:
       //
@@ -257,6 +276,23 @@ namespace boost {
 #endif
 #endif
 
+template <typename T>
+inline 
+typename enable_if_c<std::numeric_limits<T>::is_integer, bool>::type
+odd(const T& x)
+{
+    return bool(x & 1u);
+}
+
+template <typename T>
+inline 
+typename enable_if_c<std::numeric_limits<T>::is_integer, bool>::type
+even(const T& x)
+{
+    return !odd(x);
+}
+      
+      
 namespace detail
 {
     
@@ -281,7 +317,7 @@ namespace detail
 
       shifts = (std::min)(gcd_traits<T>::make_odd(u), gcd_traits<T>::make_odd(v));
 
-      while(gcd_traits<T>::less(1, v))
+      while(u != v)
       {
          u %= v;
          v -= u;
@@ -294,36 +330,48 @@ namespace detail
          if(gcd_traits<T>::less(u, v))
             swap(u, v);
       }
-      return (v == 1 ? v : u) << shifts;
+      u <<= shifts;
+      return u;
    }
 
     /** Stein gcd (aka 'binary gcd')
      * 
      * From Mathematics to Generic Programming, Alexander Stepanov, Daniel Rose
+     * 
+     * What can we say about the Stein Domain? 
+     * - It must have zero.
+     * - It must have parity: being exclusively even or odd.
+     * - It must have a smallest prime (2 for integers, x for polynomials, etc).
+     * - It must have shift operations that add or remove factors of the smallest prime.
+     * - It does not work for negative integers.
      */
     template <typename SteinDomain>
     SteinDomain Stein_gcd(SteinDomain m, SteinDomain n)
     {
         using std::swap;
-        BOOST_ASSERT(m >= 0);
-        BOOST_ASSERT(n >= 0);
-        if (m == SteinDomain(0))
+        BOOST_ASSERT(m || n);
+        if (!m)
             return n;
-        if (n == SteinDomain(0))
+        if (!n)
             return m;
-        // m > 0 && n > 0
-        int d_m = gcd_traits<SteinDomain>::make_odd(m);
-        int d_n = gcd_traits<SteinDomain>::make_odd(n);
+        unsigned shifts = std::min(gcd_traits<SteinDomain>::make_odd(m), gcd_traits<SteinDomain>::make_odd(n));
         // odd(m) && odd(n)
         while (m != n)
         {
-            if (n > m)
+            if (gcd_traits<SteinDomain>::less(m, n))
                 swap(n, m);
-            m -= n;
+            gcd_traits<SteinDomain>::subtract(m, n);
+            BOOST_ASSERT(even(m));
+            // With polynomials for example, it is possible that m is now zero.
+            if (!m)
+            {
+                n <<= shifts;
+                return n;
+            }
             gcd_traits<SteinDomain>::make_odd(m);
         }
         // m == n
-        m <<= (std::min)(d_m, d_n);
+        m <<= shifts;
         return m;
     }
 
@@ -337,9 +385,9 @@ namespace detail
     inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b)
     {
         using std::swap;
-        while (b != EuclideanDomain(0))
+        while (b)
         {
-            a %= b;
+            gcd_traits<EuclideanDomain>::modulo(a, b);
             swap(a, b);
         }
         return a;
@@ -384,7 +432,9 @@ namespace detail
 template <typename Integer>
 inline Integer gcd(Integer const &a, Integer const &b)
 {
-    return detail::optimal_gcd_select(static_cast<Integer>(gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_traits<Integer>::abs(b)));
+    Integer result = detail::optimal_gcd_select(static_cast<Integer>(gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_traits<Integer>::abs(b)));
+    gcd_traits<Integer>::normalize(result);
+    return result;
 }
 
 template <typename Integer>
