@@ -11,11 +11,13 @@
 #include <boost/core/enable_if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/type_traits.hpp>
-
+#include <boost/math/algorithm.hpp>
 #include <boost/config.hpp>  // for BOOST_NESTED_TEMPLATE, etc.
 #include <boost/limits.hpp>  // for std::numeric_limits
 #include <climits>           // for CHAR_MIN
+#include <iterator>
 #include <boost/detail/workaround.hpp>
+#include <boost/math/algebraic_traits.hpp>
 #include <iterator>
 #include <algorithm>
 #include <limits>
@@ -387,11 +389,37 @@ inline Integer gcd(Integer const &a, Integer const &b)
     return detail::optimal_gcd_select(static_cast<Integer>(gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_traits<Integer>::abs(b)));
 }
 
+
+// Proof-of-concept only.
+template <typename T>
+struct gcd_evaluator
+{
+    T operator()(T const &x, T const &y) const
+    {
+        return gcd(x, y);
+    }
+};
+
+
 template <typename Integer>
 inline Integer lcm(Integer const &a, Integer const &b)
 {
    return detail::lcm_imp(static_cast<Integer>(gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_traits<Integer>::abs(b)));
 }
+
+template <typename T>
+struct algebraic_traits<gcd_evaluator, T>
+{
+    BOOST_STATIC_CONSTEXPR
+    T zero_element() { return T(1); }
+    
+    BOOST_STATIC_CONSTEXPR
+    bool is_commutative() { return true; }
+    
+    BOOST_STATIC_CONSTEXPR
+    bool is_associative() { return true; }
+};
+
 
 /**
  * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
@@ -412,14 +440,8 @@ gcd_range(I first, I last)
 {
     BOOST_ASSERT(first != last);
     typedef typename std::iterator_traits<I>::value_type T;
-    
-    T d = *first++;
-    while (d != T(1) && first != last)
-    {
-        d = gcd(d, *first);
-        first++;
-    }
-    return std::make_pair(d, first);
+    I const init(first++);
+    return accumulate_if(first, last, *init, gcd_evaluator<T>());
 }
 
 }  // namespace math
