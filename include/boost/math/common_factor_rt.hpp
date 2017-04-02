@@ -9,8 +9,6 @@
 
 #include <boost/assert.hpp>
 #include <boost/core/enable_if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/type_traits.hpp>
 
 #include <boost/config.hpp>  // for BOOST_NESTED_TEMPLATE, etc.
 #include <boost/limits.hpp>  // for std::numeric_limits
@@ -19,6 +17,9 @@
 #include <iterator>
 #include <algorithm>
 #include <limits>
+#ifndef BOOST_NO_CXX11_HDR_TYPE_TRAITS
+#include <type_traits>
+#endif
 
 #if (defined(BOOST_MSVC) || (defined(__clang__) && defined(__c2__)) || (defined(BOOST_INTEL) && defined(_MSC_VER))) && (defined(_M_IX86) || defined(_M_X64))
 #include <intrin.h>
@@ -32,7 +33,21 @@
 namespace boost {
    namespace math {
 
-      template <class T, bool a = is_unsigned<T>::value || (std::numeric_limits<T>::is_specialized && !std::numeric_limits<T>::is_signed)>
+      //
+      // Special handling for polynomials:
+      //
+      namespace tools {
+         template <class T>
+         class polynomial;
+      }
+
+      namespace gcd_detail{
+
+      template <class T, bool a = 
+#ifndef BOOST_NO_CXX11_HDR_TYPE_TRAITS
+         std::is_unsigned<T>::value || 
+#endif
+         (std::numeric_limits<T>::is_specialized && !std::numeric_limits<T>::is_signed)>
       struct gcd_traits_abs_defaults
       {
          inline static const T& abs(const T& val) { return val; }
@@ -46,6 +61,30 @@ namespace boost {
             return abs(val);
          }
       };
+
+      struct any_convert
+      {
+         template <class T>
+         any_convert(const T&);
+      };
+
+      struct unlikely_size
+      {
+         char buf[9973];
+      };
+
+      unlikely_size operator % (any_convert, any_convert);
+      unlikely_size operator < (any_convert, any_convert);
+      unlikely_size operator <<= (any_convert, any_convert);
+      unlikely_size operator >>= (any_convert, any_convert);
+
+      enum method_type
+      {
+         method_euclid = 0,
+         method_binary = 1,
+         method_mixed = 2,
+      };
+
 
       template <class T>
       struct gcd_traits_defaults : public gcd_traits_abs_defaults<T>
@@ -65,17 +104,17 @@ namespace boost {
             return a < b;
          }
 
-         enum method_type
-         {
-            method_euclid = 0,
-            method_binary = 1,
-            method_mixed = 2,
-         };
+         static T& get_value();
+
+         static const bool has_operator_mod = sizeof(get_value() % get_value()) != sizeof(unlikely_size);
+         static const bool has_operator_less = sizeof(get_value() < get_value()) != sizeof(unlikely_size);
+         static const bool has_operator_left_shift_equal = sizeof(get_value() <<= 2) != sizeof(unlikely_size);
+         static const bool has_operator_right_shift_equal = sizeof(get_value() >>= 2) != sizeof(unlikely_size);
 
          static const method_type method =
-            boost::has_right_shift_assign<T>::value && boost::has_left_shift_assign<T>::value && boost::has_less<T>::value && boost::has_modulus<T>::value
+            has_operator_right_shift_equal && has_operator_left_shift_equal && has_operator_less && has_operator_mod
             ? method_mixed :
-            boost::has_right_shift_assign<T>::value && boost::has_left_shift_assign<T>::value && boost::has_less<T>::value
+            has_operator_right_shift_equal && has_operator_left_shift_equal && has_operator_less
             ? method_binary : method_euclid;
       };
       //
@@ -83,16 +122,16 @@ namespace boost {
       //
       template <class T>
       struct gcd_traits : public gcd_traits_defaults<T> {};
-      //
-      // Special handling for polynomials:
-      //
-      namespace tools {
-         template <class T>
-         class polynomial;
-      }
+
+      template <>
+      struct gcd_traits<float> { static const method_type method = method_euclid; };
+      template <>
+      struct gcd_traits<double> { static const method_type method = method_euclid; };
+      template <>
+      struct gcd_traits<long double> { static const method_type method = method_euclid; };
 
       template <class T>
-      struct gcd_traits<boost::math::tools::polynomial<T> > : public gcd_traits_defaults<T>
+      struct gcd_traits<boost::math::tools::polynomial<T> > : public gcd_traits<T>
       {
          static const boost::math::tools::polynomial<T>& abs(const boost::math::tools::polynomial<T>& val) { return val; }
       };
@@ -257,9 +296,6 @@ namespace boost {
 #endif
 #endif
 
-namespace detail
-{
-    
    //
    // The Mixed Binary Euclid Algorithm
    // Sidi Mohamed Sedjelmaci
@@ -347,30 +383,30 @@ namespace detail
 
 
     template <typename T>
-    inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == gcd_traits<T>::method_mixed, T>::type
+    inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == method_mixed, T>::type
        optimal_gcd_select(T const &a, T const &b)
     {
-       return detail::mixed_binary_gcd(a, b);
+       return gcd_detail::mixed_binary_gcd(a, b);
     }
 
     template <typename T>
-    inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == gcd_traits<T>::method_binary, T>::type
+    inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == method_binary, T>::type
        optimal_gcd_select(T const &a, T const &b)
     {
-       return detail::Stein_gcd(a, b);
+       return gcd_detail::Stein_gcd(a, b);
     }
 
     template <typename T>
-    inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == gcd_traits<T>::method_euclid, T>::type
+    inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == method_euclid, T>::type
        optimal_gcd_select(T const &a, T const &b)
     {
-       return detail::Euclid_gcd(a, b);
+       return gcd_detail::Euclid_gcd(a, b);
     }
 
     template <class T>
     inline T lcm_imp(const T& a, const T& b)
     {
-       T temp = boost::math::detail::optimal_gcd_select(a, b);
+       T temp = boost::math::gcd_detail::optimal_gcd_select(a, b);
 #if BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
        return (temp != T(0)) ? T(a / temp * b) : T(0);
 #else
@@ -384,13 +420,13 @@ namespace detail
 template <typename Integer>
 inline Integer gcd(Integer const &a, Integer const &b)
 {
-    return detail::optimal_gcd_select(static_cast<Integer>(gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_traits<Integer>::abs(b)));
+    return gcd_detail::optimal_gcd_select(static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(b)));
 }
 
 template <typename Integer>
 inline Integer lcm(Integer const &a, Integer const &b)
 {
-   return detail::lcm_imp(static_cast<Integer>(gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_traits<Integer>::abs(b)));
+   return gcd_detail::lcm_imp(static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(b)));
 }
 
 /**
