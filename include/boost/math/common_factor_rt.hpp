@@ -458,6 +458,40 @@ gcd_range(I first, I last)
     return std::make_pair(d, first);
 }
 
+template < typename IntegerType >
+struct gcd_evaluator
+#ifdef BOOST_NO_CXX11_HDR_FUNCTIONAL
+   : public std::binary_function<IntegerType, IntegerType, IntegerType>
+#endif
+{
+#ifndef BOOST_NO_CXX11_HDR_FUNCTIONAL
+   typedef IntegerType first_argument_type;
+   typedef IntegerType second_argument_type;
+   typedef IntegerType result_type;
+#endif
+   IntegerType operator()(IntegerType const &a, IntegerType const &b)const
+   {
+      return boost::math::gcd(a, b);
+   }
+};
+
+template < typename IntegerType >
+struct lcm_evaluator
+#ifdef BOOST_NO_CXX11_HDR_FUNCTIONAL
+   : public std::binary_function<IntegerType, IntegerType, IntegerType>
+#endif
+{
+#ifndef BOOST_NO_CXX11_HDR_FUNCTIONAL
+   typedef IntegerType first_argument_type;
+   typedef IntegerType second_argument_type;
+   typedef IntegerType result_type;
+#endif
+   IntegerType operator()(IntegerType const &a, IntegerType const &b)const
+   {
+      return boost::math::lcm(a, b);
+   }
+};
+
 }  // namespace math
 }  // namespace boost
 

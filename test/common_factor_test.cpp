@@ -23,6 +23,8 @@
 #include <boost/mpl/list.hpp>            // for boost::mpl::list
 #include <boost/operators.hpp>
 #include <boost/test/unit_test.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int.hpp>
 
 #include <istream>  // for std::basic_istream
 #include <limits>   // for std::numeric_limits
@@ -268,6 +270,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_int_test, T, signed_test_types )
 {
 #ifndef BOOST_MSVC
     using boost::math::gcd;
+    using boost::math::gcd_evaluator;
 #else
     using namespace boost::math;
 #endif
@@ -289,6 +292,23 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_int_test, T, signed_test_types )
     BOOST_CHECK_EQUAL( gcd<T>(  3,   7), static_cast<T>( 1) );
     BOOST_CHECK_EQUAL( gcd<T>(  8,   9), static_cast<T>( 1) );
     BOOST_CHECK_EQUAL( gcd<T>(  7,  49), static_cast<T>( 7) );
+    // Again with function object:
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(1, -1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(-1, 1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(1, 1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(-1, -1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(0, 0), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(7, 0), static_cast<T>(7));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(0, 9), static_cast<T>(9));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(-7, 0), static_cast<T>(7));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(0, -9), static_cast<T>(9));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(42, 30), static_cast<T>(6));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(6, -9), static_cast<T>(3));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(-10, -10), static_cast<T>(10));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(-25, -10), static_cast<T>(5));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(3, 7), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(8, 9), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(7, 49), static_cast<T>(7));
 }
 
 // GCD on unmarked signed integer type
@@ -364,9 +384,23 @@ BOOST_AUTO_TEST_CASE( gcd_static_test )
     BOOST_CHECK( (static_gcd< 7, 49>::value) == 7 );
 }
 
-// TODO: non-built-in signed and unsigned integer tests, with and without
-// numeric_limits specialization; polynominal tests; note any changes if
-// built-ins switch to binary-GCD algorithm
+BOOST_AUTO_TEST_CASE(gcd_method_test)
+{
+   // Verify that the 3 different methods all yield the same result:
+   boost::random::mt19937 gen;
+   boost::random::uniform_int_distribution<int> d(0, ((std::numeric_limits<int>::max)() / 2));
+
+   for (unsigned int i = 0; i < 10000; ++i)
+   {
+      int v1 = d(gen);
+      int v2 = d(gen);
+      int g = boost::math::gcd_detail::Euclid_gcd(v1, v2);
+      BOOST_CHECK(v1 % g == 0);
+      BOOST_CHECK(v2 % g == 0);
+      BOOST_CHECK_EQUAL(g, boost::math::gcd_detail::mixed_binary_gcd(v1, v2));
+      BOOST_CHECK_EQUAL(g, boost::math::gcd_detail::Stein_gcd(v1, v2));
+   }
+}
 
 BOOST_AUTO_TEST_SUITE_END()
 
@@ -379,6 +413,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_int_test, T, signed_test_types )
 {
 #ifndef BOOST_MSVC
     using boost::math::lcm;
+    using boost::math::lcm_evaluator;
 #else
     using namespace boost::math;
 #endif
@@ -400,6 +435,23 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_int_test, T, signed_test_types )
     BOOST_CHECK_EQUAL( lcm<T>(  3,   7), static_cast<T>(21) );
     BOOST_CHECK_EQUAL( lcm<T>(  8,   9), static_cast<T>(72) );
     BOOST_CHECK_EQUAL( lcm<T>(  7,  49), static_cast<T>(49) );
+    // Again with function object:
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(1, -1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(-1, 1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(1, 1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(-1, -1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(0, 0), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(6, 0), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(0, 7), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(-5, 0), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(0, -4), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(18, 30), static_cast<T>(90));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(-6, 9), static_cast<T>(18));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(-10, -10), static_cast<T>(10));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(25, -10), static_cast<T>(50));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(3, 7), static_cast<T>(21));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(8, 9), static_cast<T>(72));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(7, 49), static_cast<T>(49));
 }
 
 // LCM on unmarked signed integer type
