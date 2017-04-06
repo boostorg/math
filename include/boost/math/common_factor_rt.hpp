@@ -31,15 +31,11 @@
 #endif
 
 namespace boost {
-   namespace math {
 
-      //
-      // Special handling for polynomials:
-      //
-      namespace tools {
-         template <class T>
-         class polynomial;
-      }
+   template <class I>
+   class rational;
+
+   namespace math {
 
       namespace gcd_detail{
 
@@ -123,18 +119,6 @@ namespace boost {
       template <class T>
       struct gcd_traits : public gcd_traits_defaults<T> {};
 
-      template <>
-      struct gcd_traits<float> { static const method_type method = method_euclid; };
-      template <>
-      struct gcd_traits<double> { static const method_type method = method_euclid; };
-      template <>
-      struct gcd_traits<long double> { static const method_type method = method_euclid; };
-
-      template <class T>
-      struct gcd_traits<boost::math::tools::polynomial<T> > : public gcd_traits<T>
-      {
-         static const boost::math::tools::polynomial<T>& abs(const boost::math::tools::polynomial<T>& val) { return val; }
-      };
       //
       // Some platforms have fast bitscan operations, that allow us to implement
       // make_odd much more efficiently:
@@ -428,7 +412,20 @@ inline Integer lcm(Integer const &a, Integer const &b)
 {
    return gcd_detail::lcm_imp(static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(b)));
 }
+//
+// Special handling for rationals:
+//
+template <typename Integer>
+inline boost::rational<Integer> gcd(boost::rational<Integer> const &a, boost::rational<Integer> const &b)
+{
+   return boost::rational<Integer>(gcd(a.numerator(), b.numerator()), lcm(a.denominator(), b.denominator()));
+}
 
+template <typename Integer>
+inline boost::rational<Integer> lcm(boost::rational<Integer> const &a, boost::rational<Integer> const &b)
+{
+   return boost::rational<Integer>(lcm(a.numerator(), b.numerator()), integer::gcd(a.denominator(), b.denominator()));
+}
 /**
  * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
  * Chapter 4.5.2, Algorithm C: Greatest common divisor of n integers.
