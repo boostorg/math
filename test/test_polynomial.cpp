@@ -465,6 +465,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
 // NOTE: Slightly unexpected: this unit test passes even when T = char.
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
 {
+   if (std::numeric_limits<T>::digits < 32)
+      return;   // Invokes undefined behaviour
     polynomial<T> a(d3a.begin(), d3a.end());
     polynomial<T> const one(T(1));
     boost::array<double, 7> const d3a_sqr = {{100, -120, -44, 108, -20, -24, 9}};
