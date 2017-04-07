@@ -99,19 +99,7 @@ namespace boost {
          {
             return a < b;
          }
-
-         static T& get_value();
-
-         static const bool has_operator_mod = sizeof(get_value() % get_value()) != sizeof(unlikely_size);
-         static const bool has_operator_less = sizeof(get_value() < get_value()) != sizeof(unlikely_size);
-         static const bool has_operator_left_shift_equal = sizeof(get_value() <<= 2) != sizeof(unlikely_size);
-         static const bool has_operator_right_shift_equal = sizeof(get_value() >>= 2) != sizeof(unlikely_size);
-
-         static const method_type method =
-            has_operator_right_shift_equal && has_operator_left_shift_equal && has_operator_less && has_operator_mod
-            ? method_mixed :
-            has_operator_right_shift_equal && has_operator_left_shift_equal && has_operator_less
-            ? method_binary : method_euclid;
+         static const method_type method = std::numeric_limits<T>::is_specialized && std::numeric_limits<T>::is_integer ? method_mixed : method_euclid;
       };
       //
       // Default gcd_traits just inherits from defaults:
@@ -424,7 +412,7 @@ inline boost::rational<Integer> gcd(boost::rational<Integer> const &a, boost::ra
 template <typename Integer>
 inline boost::rational<Integer> lcm(boost::rational<Integer> const &a, boost::rational<Integer> const &b)
 {
-   return boost::rational<Integer>(lcm(a.numerator(), b.numerator()), integer::gcd(a.denominator(), b.denominator()));
+   return boost::rational<Integer>(lcm(a.numerator(), b.numerator()), gcd(a.denominator(), b.denominator()));
 }
 /**
  * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998
