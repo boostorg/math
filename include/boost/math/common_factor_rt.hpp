@@ -58,22 +58,6 @@ namespace boost {
          }
       };
 
-      struct any_convert
-      {
-         template <class T>
-         any_convert(const T&);
-      };
-
-      struct unlikely_size
-      {
-         char buf[9973];
-      };
-
-      unlikely_size operator % (any_convert, any_convert);
-      unlikely_size operator < (any_convert, any_convert);
-      unlikely_size operator <<= (any_convert, any_convert);
-      unlikely_size operator >>= (any_convert, any_convert);
-
       enum method_type
       {
          method_euclid = 0,
