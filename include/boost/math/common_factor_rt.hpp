@@ -30,6 +30,12 @@
 #pragma warning(disable:4127 4244)  // Conditional expression is constant
 #endif
 
+#if !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS) && !defined(BOOST_NO_CXX11_NOEXCEPT)
+#define BOOST_GCD_NOEXCEPT(T) noexcept(std::is_arithmetic<T>::value)
+#else
+#define BOOST_GCD_NOEXCEPT(T)
+#endif
+
 namespace boost {
 
    template <class I>
@@ -39,6 +45,31 @@ namespace boost {
 
       namespace gcd_detail{
 
+         //
+         // some helper functions which really should be constexpr already, but sadly aren't:
+         //
+#ifndef BOOST_NO_CXX14_CONSTEXPR
+         template <class T>
+         inline constexpr auto constexpr_swap(T&a, T& b) BOOST_GCD_NOEXCEPT(T) -> decltype(a.swap(b))
+         {
+            return a.swap(b);
+         }
+         template <class T, class U>
+         inline constexpr void constexpr_swap(T&a, U& b...) BOOST_GCD_NOEXCEPT(T)
+         {
+            T t(static_cast<T&&>(a));
+            a = static_cast<T&&>(b);
+            b = static_cast<T&&>(t);
+         }
+#else
+         template <class T>
+         inline void constexpr_swap(T&a, T& b) BOOST_GCD_NOEXCEPT(T)
+         {
+            using std::swap;
+            swap(a, b);
+         }
+#endif
+
       template <class T, bool a = 
 #ifndef BOOST_NO_CXX11_HDR_TYPE_TRAITS
          std::is_unsigned<T>::value || 
@@ -46,15 +77,15 @@ namespace boost {
          (std::numeric_limits<T>::is_specialized && !std::numeric_limits<T>::is_signed)>
       struct gcd_traits_abs_defaults
       {
-         inline static const T& abs(const T& val) { return val; }
+         inline static BOOST_CXX14_CONSTEXPR const T& abs(const T& val) BOOST_GCD_NOEXCEPT(T) { return val; }
       };
       template <class T>
       struct gcd_traits_abs_defaults<T, false>
       {
-         inline static T abs(const T& val)
+         inline static T BOOST_CXX14_CONSTEXPR abs(const T& val) BOOST_GCD_NOEXCEPT(T)
          {
-            using std::abs;
-            return abs(val);
+            // This sucks, but std::abs is not constexpr :(
+            return val < 0 ? -val : val;
          }
       };
 
@@ -69,17 +100,21 @@ namespace boost {
       template <class T>
       struct gcd_traits_defaults : public gcd_traits_abs_defaults<T>
       {
-         BOOST_FORCEINLINE static unsigned make_odd(T& val)
+         BOOST_FORCEINLINE static BOOST_CXX14_CONSTEXPR unsigned make_odd(T& val) BOOST_GCD_NOEXCEPT(T)
          {
             unsigned r = 0;
             while(!(val & 1u))
             {
+#ifdef _MSC_VER  // VC++ can't handle operator >>= in constexpr code for some reason
+               val = val >> 1;
+#else
                val >>= 1;
+#endif
                ++r;
             }
             return r;
          }
-         inline static bool less(const T& a, const T& b)
+         inline static BOOST_CXX14_CONSTEXPR bool less(const T& a, const T& b) BOOST_GCD_NOEXCEPT(T)
          {
             return a < b;
          }
@@ -91,22 +126,24 @@ namespace boost {
       template <class T>
       struct gcd_traits : public gcd_traits_defaults<T> {};
 
+#ifdef BOOST_NO_CXX14_CONSTEXPR
       //
       // Some platforms have fast bitscan operations, that allow us to implement
-      // make_odd much more efficiently:
+      // make_odd much more efficiently, unfortunately we can't use these if we want
+      // the functions to be constexpr as the compiler intrinsics aren't constexpr.
       //
 #if (defined(BOOST_MSVC) || (defined(__clang__) && defined(__c2__)) || (defined(BOOST_INTEL) && defined(_MSC_VER))) && (defined(_M_IX86) || defined(_M_X64))
 #pragma intrinsic(_BitScanForward,)
       template <>
       struct gcd_traits<unsigned long> : public gcd_traits_defaults<unsigned long>
       {
-         BOOST_FORCEINLINE static unsigned find_lsb(unsigned long val)
+         BOOST_FORCEINLINE static unsigned find_lsb(unsigned long val) BOOST_NOEXCEPT
          {
             unsigned long result;
             _BitScanForward(&result, val);
             return result;
          }
-         BOOST_FORCEINLINE static unsigned make_odd(unsigned long& val)
+         BOOST_FORCEINLINE static unsigned make_odd(unsigned long& val) BOOST_NOEXCEPT
          {
             unsigned result = find_lsb(val);
             val >>= result;
@@ -119,13 +156,13 @@ namespace boost {
       template <>
       struct gcd_traits<unsigned __int64> : public gcd_traits_defaults<unsigned __int64>
       {
-         BOOST_FORCEINLINE static unsigned find_lsb(unsigned __int64 mask)
+         BOOST_FORCEINLINE static unsigned find_lsb(unsigned __int64 mask) BOOST_NOEXCEPT
          {
             unsigned long result;
             _BitScanForward64(&result, mask);
             return result;
          }
-         BOOST_FORCEINLINE static unsigned make_odd(unsigned __int64& val)
+         BOOST_FORCEINLINE static unsigned make_odd(unsigned __int64& val) BOOST_NOEXCEPT
          {
             unsigned result = find_lsb(val);
             val >>= result;
@@ -139,28 +176,28 @@ namespace boost {
       // are called, all values are > 0.
       //
       template <> struct gcd_traits<long> : public gcd_traits_defaults<long> 
-      { BOOST_FORCEINLINE static unsigned make_odd(long& val){ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+      { BOOST_FORCEINLINE static unsigned make_odd(long& val)BOOST_NOEXCEPT{ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
       template <> struct gcd_traits<unsigned int> : public gcd_traits_defaults<unsigned int> 
-      { BOOST_FORCEINLINE static unsigned make_odd(unsigned int& val){ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+      { BOOST_FORCEINLINE static unsigned make_odd(unsigned int& val)BOOST_NOEXCEPT{ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
       template <> struct gcd_traits<int> : public gcd_traits_defaults<int> 
-      { BOOST_FORCEINLINE static unsigned make_odd(int& val){ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+      { BOOST_FORCEINLINE static unsigned make_odd(int& val)BOOST_NOEXCEPT{ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
       template <> struct gcd_traits<unsigned short> : public gcd_traits_defaults<unsigned short> 
-      { BOOST_FORCEINLINE static unsigned make_odd(unsigned short& val){ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+      { BOOST_FORCEINLINE static unsigned make_odd(unsigned short& val)BOOST_NOEXCEPT{ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
       template <> struct gcd_traits<short> : public gcd_traits_defaults<short> 
-      { BOOST_FORCEINLINE static unsigned make_odd(short& val){ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+      { BOOST_FORCEINLINE static unsigned make_odd(short& val)BOOST_NOEXCEPT{ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
       template <> struct gcd_traits<unsigned char> : public gcd_traits_defaults<unsigned char> 
-      { BOOST_FORCEINLINE static unsigned make_odd(unsigned char& val){ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+      { BOOST_FORCEINLINE static unsigned make_odd(unsigned char& val)BOOST_NOEXCEPT{ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
       template <> struct gcd_traits<signed char> : public gcd_traits_defaults<signed char> 
-      { BOOST_FORCEINLINE static signed make_odd(signed char& val){ signed result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+      { BOOST_FORCEINLINE static signed make_odd(signed char& val)BOOST_NOEXCEPT{ signed result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
       template <> struct gcd_traits<char> : public gcd_traits_defaults<char> 
-      { BOOST_FORCEINLINE static unsigned make_odd(char& val){ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+      { BOOST_FORCEINLINE static unsigned make_odd(char& val)BOOST_NOEXCEPT{ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
       template <> struct gcd_traits<wchar_t> : public gcd_traits_defaults<wchar_t> 
-      { BOOST_FORCEINLINE static unsigned make_odd(wchar_t& val){ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
+      { BOOST_FORCEINLINE static unsigned make_odd(wchar_t& val)BOOST_NOEXCEPT{ unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; } };
 #endif
 #ifdef _M_X64
       template <> struct gcd_traits<__int64> : public gcd_traits_defaults<__int64> 
-      { BOOST_FORCEINLINE static unsigned make_odd(__int64& val){ unsigned result = gcd_traits<unsigned __int64>::find_lsb(val); val >>= result; return result; } };
+      { BOOST_FORCEINLINE static unsigned make_odd(__int64& val)BOOST_NOEXCEPT{ unsigned result = gcd_traits<unsigned __int64>::find_lsb(val); val >>= result; return result; } };
 #endif
 
 #elif defined(BOOST_GCC) || defined(__clang__) || (defined(BOOST_INTEL) && defined(__GNUC__))
@@ -168,11 +205,11 @@ namespace boost {
       template <>
       struct gcd_traits<unsigned> : public gcd_traits_defaults<unsigned>
       {
-         BOOST_FORCEINLINE static unsigned find_lsb(unsigned mask)
+         BOOST_FORCEINLINE static unsigned find_lsb(unsigned mask)BOOST_NOEXCEPT
          {
             return __builtin_ctz(mask);
          }
-         BOOST_FORCEINLINE static unsigned make_odd(unsigned& val)
+         BOOST_FORCEINLINE static unsigned make_odd(unsigned& val)BOOST_NOEXCEPT
          {
             unsigned result = find_lsb(val);
             val >>= result;
@@ -182,11 +219,11 @@ namespace boost {
       template <>
       struct gcd_traits<unsigned long> : public gcd_traits_defaults<unsigned long>
       {
-         BOOST_FORCEINLINE static unsigned find_lsb(unsigned long mask)
+         BOOST_FORCEINLINE static unsigned find_lsb(unsigned long mask)BOOST_NOEXCEPT
          {
             return __builtin_ctzl(mask);
          }
-         BOOST_FORCEINLINE static unsigned make_odd(unsigned long& val)
+         BOOST_FORCEINLINE static unsigned make_odd(unsigned long& val)BOOST_NOEXCEPT
          {
             unsigned result = find_lsb(val);
             val >>= result;
@@ -196,11 +233,11 @@ namespace boost {
       template <>
       struct gcd_traits<boost::ulong_long_type> : public gcd_traits_defaults<boost::ulong_long_type>
       {
-         BOOST_FORCEINLINE static unsigned find_lsb(boost::ulong_long_type mask)
+         BOOST_FORCEINLINE static unsigned find_lsb(boost::ulong_long_type mask)BOOST_NOEXCEPT
          {
             return __builtin_ctzll(mask);
          }
-         BOOST_FORCEINLINE static unsigned make_odd(boost::ulong_long_type& val)
+         BOOST_FORCEINLINE static unsigned make_odd(boost::ulong_long_type& val)BOOST_NOEXCEPT
          {
             unsigned result = find_lsb(val);
             val >>= result;
@@ -214,55 +251,54 @@ namespace boost {
       //
       template <> struct gcd_traits<boost::long_long_type> : public gcd_traits_defaults<boost::long_long_type>
       {
-         BOOST_FORCEINLINE static unsigned make_odd(boost::long_long_type& val) { unsigned result = gcd_traits<boost::ulong_long_type>::find_lsb(val); val >>= result; return result; }
+         BOOST_FORCEINLINE static unsigned make_odd(boost::long_long_type& val)BOOST_NOEXCEPT { unsigned result = gcd_traits<boost::ulong_long_type>::find_lsb(val); val >>= result; return result; }
       };
       template <> struct gcd_traits<long> : public gcd_traits_defaults<long>
       {
-         BOOST_FORCEINLINE static unsigned make_odd(long& val) { unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; }
+         BOOST_FORCEINLINE static unsigned make_odd(long& val)BOOST_NOEXCEPT { unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; }
       };
       template <> struct gcd_traits<int> : public gcd_traits_defaults<int>
       {
-         BOOST_FORCEINLINE static unsigned make_odd(int& val) { unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; }
+         BOOST_FORCEINLINE static unsigned make_odd(int& val)BOOST_NOEXCEPT { unsigned result = gcd_traits<unsigned long>::find_lsb(val); val >>= result; return result; }
       };
       template <> struct gcd_traits<unsigned short> : public gcd_traits_defaults<unsigned short>
       {
-         BOOST_FORCEINLINE static unsigned make_odd(unsigned short& val) { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
+         BOOST_FORCEINLINE static unsigned make_odd(unsigned short& val)BOOST_NOEXCEPT { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
       };
       template <> struct gcd_traits<short> : public gcd_traits_defaults<short>
       {
-         BOOST_FORCEINLINE static unsigned make_odd(short& val) { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
+         BOOST_FORCEINLINE static unsigned make_odd(short& val)BOOST_NOEXCEPT { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
       };
       template <> struct gcd_traits<unsigned char> : public gcd_traits_defaults<unsigned char>
       {
-         BOOST_FORCEINLINE static unsigned make_odd(unsigned char& val) { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
+         BOOST_FORCEINLINE static unsigned make_odd(unsigned char& val)BOOST_NOEXCEPT { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
       };
       template <> struct gcd_traits<signed char> : public gcd_traits_defaults<signed char>
       {
-         BOOST_FORCEINLINE static signed make_odd(signed char& val) { signed result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
+         BOOST_FORCEINLINE static signed make_odd(signed char& val)BOOST_NOEXCEPT { signed result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
       };
       template <> struct gcd_traits<char> : public gcd_traits_defaults<char>
       {
-         BOOST_FORCEINLINE static unsigned make_odd(char& val) { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
+         BOOST_FORCEINLINE static unsigned make_odd(char& val)BOOST_NOEXCEPT { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
       };
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
       template <> struct gcd_traits<wchar_t> : public gcd_traits_defaults<wchar_t>
       {
-         BOOST_FORCEINLINE static unsigned make_odd(wchar_t& val) { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
+         BOOST_FORCEINLINE static unsigned make_odd(wchar_t& val)BOOST_NOEXCEPT { unsigned result = gcd_traits<unsigned>::find_lsb(val); val >>= result; return result; }
       };
 #endif
 #endif
-
+#endif // BOOST_NO_CXX14_CONSTEXPR
    //
    // The Mixed Binary Euclid Algorithm
    // Sidi Mohamed Sedjelmaci
    // Electronic Notes in Discrete Mathematics 35 (2009) 169-176
    //
    template <class T>
-   T mixed_binary_gcd(T u, T v)
+   BOOST_CXX14_CONSTEXPR T mixed_binary_gcd(T u, T v) BOOST_GCD_NOEXCEPT(T)
    {
-      using std::swap;
       if(gcd_traits<T>::less(u, v))
-         swap(u, v);
+         constexpr_swap(u, v);
 
       unsigned shifts = 0;
 
@@ -284,7 +320,7 @@ namespace boost {
          gcd_traits<T>::make_odd(u);
          gcd_traits<T>::make_odd(v);
          if(gcd_traits<T>::less(u, v))
-            swap(u, v);
+            constexpr_swap(u, v);
       }
       return (v == 1 ? v : u) << shifts;
    }
@@ -294,9 +330,8 @@ namespace boost {
      * From Mathematics to Generic Programming, Alexander Stepanov, Daniel Rose
      */
     template <typename SteinDomain>
-    SteinDomain Stein_gcd(SteinDomain m, SteinDomain n)
+    BOOST_CXX14_CONSTEXPR SteinDomain Stein_gcd(SteinDomain m, SteinDomain n) BOOST_GCD_NOEXCEPT(SteinDomain)
     {
-        using std::swap;
         BOOST_ASSERT(m >= 0);
         BOOST_ASSERT(n >= 0);
         if (m == SteinDomain(0))
@@ -310,7 +345,7 @@ namespace boost {
         while (m != n)
         {
             if (n > m)
-                swap(n, m);
+               constexpr_swap(n, m);
             m -= n;
             gcd_traits<SteinDomain>::make_odd(m);
         }
@@ -326,41 +361,40 @@ namespace boost {
      * 
      */
     template <typename EuclideanDomain>
-    inline EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b)
+    inline BOOST_CXX14_CONSTEXPR EuclideanDomain Euclid_gcd(EuclideanDomain a, EuclideanDomain b) BOOST_GCD_NOEXCEPT(EuclideanDomain)
     {
-        using std::swap;
         while (b != EuclideanDomain(0))
         {
             a %= b;
-            swap(a, b);
+            constexpr_swap(a, b);
         }
         return a;
     }
 
 
     template <typename T>
-    inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == method_mixed, T>::type
-       optimal_gcd_select(T const &a, T const &b)
+    inline BOOST_CXX14_CONSTEXPR BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == method_mixed, T>::type
+       optimal_gcd_select(T const &a, T const &b) BOOST_GCD_NOEXCEPT(T)
     {
        return gcd_detail::mixed_binary_gcd(a, b);
     }
 
     template <typename T>
-    inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == method_binary, T>::type
-       optimal_gcd_select(T const &a, T const &b)
+    inline BOOST_CXX14_CONSTEXPR BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == method_binary, T>::type
+       optimal_gcd_select(T const &a, T const &b) BOOST_GCD_NOEXCEPT(T)
     {
        return gcd_detail::Stein_gcd(a, b);
     }
 
     template <typename T>
-    inline BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == method_euclid, T>::type
-       optimal_gcd_select(T const &a, T const &b)
+    inline BOOST_CXX14_CONSTEXPR BOOST_DEDUCED_TYPENAME enable_if_c<gcd_traits<T>::method == method_euclid, T>::type
+       optimal_gcd_select(T const &a, T const &b) BOOST_GCD_NOEXCEPT(T)
     {
        return gcd_detail::Euclid_gcd(a, b);
     }
 
     template <class T>
-    inline T lcm_imp(const T& a, const T& b)
+    inline BOOST_CXX14_CONSTEXPR T lcm_imp(const T& a, const T& b) BOOST_GCD_NOEXCEPT(T)
     {
        T temp = boost::math::gcd_detail::optimal_gcd_select(a, b);
 #if BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
@@ -374,13 +408,13 @@ namespace boost {
 
 
 template <typename Integer>
-inline Integer gcd(Integer const &a, Integer const &b)
+inline BOOST_CXX14_CONSTEXPR Integer gcd(Integer const &a, Integer const &b) BOOST_GCD_NOEXCEPT(Integer)
 {
     return gcd_detail::optimal_gcd_select(static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(b)));
 }
 
 template <typename Integer>
-inline Integer lcm(Integer const &a, Integer const &b)
+inline BOOST_CXX14_CONSTEXPR Integer lcm(Integer const &a, Integer const &b) BOOST_GCD_NOEXCEPT(Integer)
 {
    return gcd_detail::lcm_imp(static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(b)));
 }
@@ -413,7 +447,7 @@ inline boost::rational<Integer> lcm(boost::rational<Integer> const &a, boost::ra
  */
 template <typename I>
 std::pair<typename std::iterator_traits<I>::value_type, I>
-gcd_range(I first, I last)
+gcd_range(I first, I last) BOOST_GCD_NOEXCEPT(I)
 {
     BOOST_ASSERT(first != last);
     typedef typename std::iterator_traits<I>::value_type T;
