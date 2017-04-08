@@ -7,13 +7,37 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 [section:cubic_b Cubic B-spline interpolation]
 
-[section:cubic_b_over Overview of Cubic B-Spline Interpolation]
+[heading Synopsis]
+``
+  #include <boost/math/special_functions/airy.hpp>
+``
 
-The cubic b spline class provided by boost allows fast and accurate interpolation of a function which is known at equally spaced points.
-The cubic b-spline interpolation is preferable to traditional cubic spline interpolation as the global support of cubic polynomials makes the interpolation ill-conditioned.
+  namespace boost { namespace math {
+
+    template <class Real>
+    class cubic_b_spline
+    {
+    public:
+
+        cubic_b_spline(const Real* const f, size_t length, Real left_endpoint, Real step_size,
+                       Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
+                       Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
+
+        Real operator()(Real x) const;
+
+        Real prime(Real x) const;
+
+  }} // namespaces
+
+
+[section:cubic_b_over Cubic B-Spline Interpolation]
+
+The cubic B-spline class provided by boost allows fast and accurate interpolation of a function which is known at equally spaced points.
+The cubic B-spline interpolation is numerically stable as it uses compactly supported basis functions constructed via iterative convolution.
+Traditional cubic spline interpolation is ill-conditioned as the global support of cubic polynomials causes small changes far from the evaluation point exert a large influence on the calculated value.
 
 There are many use cases for interpolating a function at equally spaced points.
-One particularly important example is solving ODE's whose coefficients depend on data determined from experiment or numerically.
+One particularly important example is solving ODE's whose coefficients depend on data determined from experiment or numerical simulation.
 Since most ODE steppers are adaptive, they must be able to sample the coefficients at arbitrary points; not just at the points we know the values of our function.
 
 The constructor must be provided the following arguments:
@@ -27,49 +51,47 @@ Optionally, you may provide two additional arguments to the constructor, namely 
 If you do not provide these arguments, they will be estimated using one-sided finite-difference formulas.
 An example of a valid call to the constructor is
 
-    __auto spline = boost::math::cubic_b_spline<double>(f.data(), f.size(), t0, h);
+    std::vector<double> f{0.01, -0.02, 0.3, 0.8, 1.9, -8.78, -22.6};
+    double t0 = 0;
+    double h = 0.01;
+    boost::math::cubic_b_spline<double> spline(f.data(), f.size(), t0, h);
 
-(which requests the derivatives to be estimated) or
+The endpoints are estimated using a one-sided finite-difference formula. If you know the derivative at the endpoint, you may pass it to the constructor via
 
-    __auto spline = boost::math::cubic_b_spline<double>(f.data(), f.size(), t0, h, a_prime, b_prime);
+    boost::math::cubic_b_spline<double> spline(f.data(), f.size(), t0, h, a_prime, b_prime);
 
-which explicitly provides the endpoint derivatives.
 
 To evaluate the interpolant at a point, we simply use
 
-    __auto y = spline(x);
+    double y = spline(x);
 
-and to evaluate the derivative we use
+and to evaluate the derivative of the interpolant we use
 
-    __auto yp = spline.prime(x);
+    double yp = spline.prime(x);
 
-Be aware that the accuracy guarantees on the derivative of the spline are much lower than the guarantees on the original function; see
+Be aware that the accuracy guarantees on the derivative of the spline are much lower than the guarantees on the original function, see [@http://www.springer.com/us/book/9780387984087 Numerical Analysis, Graduate Texts in Mathematics, 181, Rainer Kress] for details.
 
 Finally, note that this is an *interpolator*, not an extrapolator.
 Therefore, you should strenuously avoid evaluating the spline outside the endpoints.
 However, it is not an error if you do, as often you cannot control where (say) an ODE stepper will evaluate your function.
-As such the interpolant tries to do something reasonable when the function is outside the endpoints.
+As such the interpolant tries to do something reasonable when the passed a value outside the endpoints.
 For evaluation within one stepsize of the interval, you can assume something somewhat reasonable was returned.
 As you move further away from the endpoints, the interpolant decays to its average on the interval.
 
 
-[@https://link.springer.com/book/10.1007%2F978-1-4612-0599-9 Numerical Analysis, Graduate Texts in Mathematics, 181, Rainer Kress]
+[heading Complexity and Performance]
 
-for more details.
-
-[endsect]
-
-[section:cubic_b_spline Header]
+The call to the constructor requires [bigo](/n/) operations, where /n/ is the number of points to interpolate.
+Each call the the interpolant is [bigo](1) (constant time).
+On the author's Intel Xeon E3-1230, this takes 21ns as long as the vector is small enough to fit in cache.
 
 [heading Accuracy]
 
-By far the greatest source of error is the estimation of the derivative at the endpoint.
-If you know the endpoint derivatives, you should certainly provide them; however, in the vast majority of cases,
-this is unknown, and the constructor does a reasonable job trying to figure it out.
+Let /h/ be the stepsize. If /f/ is four-times continuously differentiable, then the interpolant is ['[bigo](h[super 4])] accurate and the derivative is ['[bigo](h[super 3])] accurate.
 
 [heading Testing]
 
-Since the interpolant obeys ['s(x[sub j]) = f(x[sub j])'] at all interpolation points,
+Since the interpolant obeys ['s(x[sub j]) = f(x[sub j])] at all interpolation points,
 the tests generate random data and evaluate the interpolant at the interpolation points,
 validating that equality with the data holds.
 
