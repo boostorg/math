@@ -418,6 +418,19 @@ inline BOOST_CXX14_CONSTEXPR Integer lcm(Integer const &a, Integer const &b) BOO
 {
    return gcd_detail::lcm_imp(static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(b)));
 }
+
+template <typename Integer, typename... Args>
+inline BOOST_CXX14_CONSTEXPR Integer gcd(Integer const &a, Integer const &b, Args const&... args) BOOST_GCD_NOEXCEPT(Integer)
+{
+   return gcd(a, gcd(b, args...));
+}
+
+template <typename Integer, typename... Args>
+inline BOOST_CXX14_CONSTEXPR Integer lcm(Integer const &a, Integer const &b, Args const&... args) BOOST_GCD_NOEXCEPT(Integer)
+{
+   return lcm(a, lcm(b, args...));
+}
+
 //
 // Special handling for rationals:
 //
@@ -456,6 +469,21 @@ gcd_range(I first, I last) BOOST_GCD_NOEXCEPT(I)
     while (d != T(1) && first != last)
     {
         d = gcd(d, *first);
+        first++;
+    }
+    return std::make_pair(d, first);
+}
+template <typename I>
+std::pair<typename std::iterator_traits<I>::value_type, I>
+lcm_range(I first, I last) BOOST_GCD_NOEXCEPT(I)
+{
+    BOOST_ASSERT(first != last);
+    typedef typename std::iterator_traits<I>::value_type T;
+    
+    T d = *first++;
+    while (d != T(1) && first != last)
+    {
+        d = lcm(d, *first);
         first++;
     }
     return std::make_pair(d, first);

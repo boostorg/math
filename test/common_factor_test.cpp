@@ -529,4 +529,98 @@ BOOST_AUTO_TEST_CASE( lcm_static_test )
 
 // TODO: see GCD to-do
 
+BOOST_AUTO_TEST_CASE(variadics)
+{
+   unsigned i[] = { 44, 56, 76, 88 };
+   BOOST_CHECK_EQUAL(boost::math::gcd_range(i, i + 4).first, 4);
+   BOOST_CHECK_EQUAL(boost::math::gcd_range(i, i + 4).second, i + 4);
+   BOOST_CHECK_EQUAL(boost::math::gcd(i[0], i[1], i[2], i[3]), 4);
+   BOOST_CHECK_EQUAL(boost::math::lcm_range(i, i + 4).first, 11704);
+   BOOST_CHECK_EQUAL(boost::math::lcm_range(i, i + 4).second, i + 4);
+   BOOST_CHECK_EQUAL(boost::math::lcm(i[0], i[1], i[2], i[3]), 11704);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
+
+//
+// Compile time checks come last:
+//
+#ifndef BOOST_NO_CXX14_CONSTEXPR
+
+void test_constexpr1()
+{
+   constexpr const boost::int64_t i = 347 * 463 * 727;
+   constexpr const boost::int64_t j = 191 * 347 * 281;
+
+   constexpr const boost::int64_t k = boost::math::gcd(i, j);
+   constexpr const boost::int64_t l = boost::math::lcm(i, j);
+
+   static_assert(k == 347, "Expected result not found in constexpr gcd.");
+   static_assert(l == 6268802158037, "Expected result not found in constexpr lcm.");
+}
+
+void test_constexpr2()
+{
+   constexpr const boost::uint64_t i = 347 * 463 * 727;
+   constexpr const boost::uint64_t j = 191 * 347 * 281;
+
+   constexpr const boost::uint64_t k = boost::math::gcd(i, j);
+   constexpr const boost::uint64_t l = boost::math::lcm(i, j);
+
+   static_assert(k == 347, "Expected result not found in constexpr gcd.");
+   static_assert(l == 6268802158037, "Expected result not found in constexpr lcm.");
+}
+
+void test_constexpr3()
+{
+   constexpr const boost::uint64_t i = 347 * 463 * 727;
+   constexpr const boost::uint64_t j = 191 * 347 * 281;
+
+   constexpr const boost::uint64_t k = boost::math::gcd_detail::Euclid_gcd(i, j);
+
+   static_assert(k == 347, "Expected result not found in constexpr gcd.");
+}
+
+void test_constexpr4()
+{
+   constexpr const boost::uint64_t i = 347 * 463 * 727;
+   constexpr const boost::uint64_t j = 191 * 347 * 281;
+
+   constexpr const boost::uint64_t k = boost::math::gcd_detail::mixed_binary_gcd(i, j);
+
+   static_assert(k == 347, "Expected result not found in constexpr gcd.");
+}
+
+void test_constexpr5()
+{
+   constexpr const boost::uint64_t i = 347 * 463 * 727;
+   constexpr const boost::uint64_t j = 191 * 347 * 281;
+
+   constexpr const boost::uint64_t k = boost::math::gcd_detail::Stein_gcd(i, j);
+
+   static_assert(k == 347, "Expected result not found in constexpr gcd.");
+}
+#endif
+
+#ifndef BOOST_NO_CXX11_NOEXCEPT
+
+void test_noexcept()
+{
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned char>(2), static_cast<unsigned char>(4))), "Expected a noexcept function.");
+#ifndef _MSC_VER
+   // This generates an internal compiler error if enabled as well as the following test:
+   static_assert(noexcept(boost::math::gcd(static_cast<char>(2), static_cast<char>(4))), "Expected a noexcept function.");
+#endif
+   static_assert(noexcept(boost::math::gcd(static_cast<signed char>(2), static_cast<signed char>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<short>(2), static_cast<short>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned short>(2), static_cast<unsigned short>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<int>(2), static_cast<int>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned int>(2), static_cast<unsigned int>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<long>(2), static_cast<long>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned long>(2), static_cast<unsigned long>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<long long>(2), static_cast<long long>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned long long>(2), static_cast<unsigned long long>(4))), "Expected a noexcept function.");
+}
+
+#endif
+
