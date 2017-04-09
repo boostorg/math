@@ -75,6 +75,7 @@ exp_sinh_detail<Real>::exp_sinh_detail(Real tol, size_t max_refinements)
             Real w = cosh(arg)*half_pi<Real>()*x;
             m_weights[i].emplace_back(w);
 
+            // TODO: Repeatedly adding h is the incorrect method; it accumalates roundoff error.
             if (i != 0)
             {
                 arg = arg + 2*h;

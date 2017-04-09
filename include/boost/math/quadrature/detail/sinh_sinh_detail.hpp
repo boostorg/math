@@ -64,6 +64,8 @@ sinh_sinh_detail<Real>::sinh_sinh_detail(Real tol, size_t max_refinements)
             m_abscissas[i].emplace_back(x);
             Real w = cosh(arg)*half_pi<Real>()*cosh(tmp);
             m_weights[i].emplace_back(w);
+
+            // TODO: Repeated addition of h accumulates roundoff error.
             if (i != 0)
             {
                 arg = arg + 2*h;
