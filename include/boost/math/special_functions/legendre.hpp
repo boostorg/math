@@ -68,6 +68,46 @@ T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
    return p1;
 }
 
+template <class T, class Policy>
+T legendre_p_prime_imp(unsigned l, T x, const Policy& pol)
+{
+    if (l == 0)
+    {
+        return 0;
+    }
+    T p0 = 1;
+    T p1 = x;
+    T p_prime;
+    bool odd = l & 1;
+    // If the order is odd, we sum all the even polynomials:
+    if (odd)
+    {
+        p_prime = p0;
+    }
+    else // Otherwise we sum the odd polynomials * (2n+1)
+    {
+        p_prime = 3*p1;
+    }
+
+    unsigned n = 1;
+    while(n < l - 1)
+    {
+       std::swap(p0, p1);
+       p1 = boost::math::legendre_next(n, x, p0, p1);
+       ++n;
+       if (odd)
+       {
+          p_prime += (2*n+1)*p1;
+          odd = false;
+       }
+       else
+       {
+           odd = true;
+       }
+    }
+    return p_prime;
+}
+
 } // namespace detail
 
 template <class T, class Policy>
@@ -82,12 +122,33 @@ inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename 
    return policies::checked_narrowing_cast<result_type, Policy>(detail::legendre_imp(l, static_cast<value_type>(x), pol, false), function);
 }
 
+
+template <class T, class Policy>
+inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
+   legendre_p_prime(int l, T x, const Policy& pol)
+{
+   typedef typename tools::promote_args<T>::type result_type;
+   typedef typename policies::evaluation<result_type, Policy>::type value_type;
+   static const char* function = "boost::math::legendre_p_prime<%1%>(unsigned, %1%)";
+   if(l < 0)
+      return policies::checked_narrowing_cast<result_type, Policy>(detail::legendre_p_prime_imp(-l-1, static_cast<value_type>(x), pol), function);
+   return policies::checked_narrowing_cast<result_type, Policy>(detail::legendre_p_prime_imp(l, static_cast<value_type>(x), pol), function);
+}
+
 template <class T>
-inline typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type
    legendre_p(int l, T x)
 {
    return boost::math::legendre_p(l, x, policies::policy<>());
 }
+
+template <class T>
+inline typename tools::promote_args<T>::type
+   legendre_p_prime(int l, T x)
+{
+   return boost::math::legendre_p_prime(l, x, policies::policy<>());
+}
+
 
 template <class T, class Policy>
 inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
@@ -99,7 +160,7 @@ inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename 
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type 
+inline typename tools::promote_args<T>::type
    legendre_q(unsigned l, T x)
 {
    return boost::math::legendre_q(l, x, policies::policy<>());
@@ -107,7 +168,7 @@ inline typename tools::promote_args<T>::type
 
 // Recurrence for associated polynomials:
 template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline typename tools::promote_args<T1, T2, T3>::type
    legendre_next(unsigned l, unsigned m, T1 x, T2 Pl, T3 Plm1)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -189,6 +250,3 @@ inline typename tools::promote_args<T>::type
 } // namespace boost
 
 #endif // BOOST_MATH_SPECIAL_LEGENDRE_HPP
-
-
-

@@ -181,6 +181,10 @@ namespace boost
    template <class T>
    typename tools::promote_args<T>::type
          legendre_p(int l, T x);
+   template <class T>
+   typename tools::promote_args<T>::type
+          legendre_p_prime(int l, T x);
+
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
    template <class T, class Policy>
    typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
@@ -1593,5 +1597,3 @@ template <class OutputIterator, class T>\
 
 
 #endif // BOOST_MATH_SPECIAL_MATH_FWD_HPP
-
-
