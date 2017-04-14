@@ -15,6 +15,7 @@
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/array.hpp>
 #include "functor.hpp"
 
@@ -257,4 +258,82 @@ void test_legendre_p_prime()
         }
         ++n;
     }
+}
+
+template<class Real>
+void test_legendre_p_zeros()
+{
+    using std::sqrt;
+    using std::abs;
+    using boost::math::legendre_p_zeros;
+    using boost::math::legendre_p;
+    Real tol = std::numeric_limits<Real>::epsilon();
+
+    // Check the trivial cases:
+    BOOST_CHECK_CLOSE_FRACTION(legendre_p_zeros<Real>(2, 0), (Real) 1/ sqrt(3), tol);
+
+    // The first zero of the odd Legendre Polynomials is obviously zero.
+    for (int n = 1; n < 5000; n += 2)
+    {
+        BOOST_CHECK_SMALL(legendre_p_zeros<Real>(n, 0), tol);
+    }
+
+    // Don't take the tolerances too seriously.
+    // The other test shows that the zeros are estimated more accurately than the function!
+    for (int n = 1; n < 130; ++n)
+    {
+        Real previous_zero = legendre_p_zeros<Real>(n, 0);
+        if (!(n & 1))
+        {
+            // Zero is not a zero of the odd Legendre polynomials
+            BOOST_CHECK(previous_zero > 0);
+            BOOST_CHECK_SMALL(legendre_p(n, previous_zero), 550*tol);
+        }
+        for (int k = 1; k < ceil(n*boost::math::constants::half<Real>()); ++k)
+        {
+            Real next_zero = legendre_p_zeros<Real>(n, k);
+            BOOST_CHECK(next_zero > previous_zero);
+
+            std::string err = "Tolerance failed for (n, k) = (" + std::to_string(n) + "," + std::to_string(k) + ")\n";
+            if (n < 40)
+            {
+                BOOST_CHECK_MESSAGE( abs(legendre_p(n, next_zero)) < 100*tol,
+                                     err);
+            }
+            else
+            {
+              BOOST_CHECK_MESSAGE( abs(legendre_p(n, next_zero)) < 1000*tol,
+                                   err);
+            }
+            previous_zero = next_zero;
+        }
+        // The zeros of orthogonal polynomials are contained strictly in (a, b).
+        BOOST_CHECK(previous_zero < 1);
+    }
+    return;
+}
+
+int test_legendre_p_zeros_double_ulp(int min_x, int max_n)
+{
+    using std::abs;
+    using boost::math::legendre_p_zeros;
+    using boost::math::float_distance;
+    using boost::multiprecision::cpp_bin_float_quad;
+
+    double max_float_distance = 0;
+    for (int n = min_x; n < max_n; ++n)
+    {
+        for (int k = 1; k < ceil(n*boost::math::constants::half<double>()); ++k)
+        {
+            double double_zero = legendre_p_zeros<double>(n, k);
+            cpp_bin_float_quad quad_zero = legendre_p_zeros<cpp_bin_float_quad>(n, k);
+            double d = abs(float_distance(double_zero, (double) quad_zero));
+            if (d > max_float_distance)
+            {
+                max_float_distance = d;
+            }
+        }
+    }
+
+    return (int) max_float_distance;
 }

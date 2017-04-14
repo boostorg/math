@@ -222,4 +222,13 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_legendre_p_prime<float>();
    test_legendre_p_prime<double>();
    test_legendre_p_prime<long double>();
+
+   int distance = test_legendre_p_zeros_double_ulp(1, 107);
+   BOOST_CHECK(distance <= 1);
+   // This test is very expensive; the total runtime grows cubically with n.
+   //distance = test_legendre_p_zeros_double_ulp(108, 350);
+   //BOOST_CHECK(distance <= 2);
+   test_legendre_p_zeros<float>();
+   test_legendre_p_zeros<double>();
+   test_legendre_p_zeros<long double>();
 }

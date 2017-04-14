@@ -185,6 +185,13 @@ namespace boost
    typename tools::promote_args<T>::type
           legendre_p_prime(int l, T x);
 
+
+   template <class T, class Policy>
+   inline T legendre_p_zeros(int l, int k, const Policy& pol);
+
+   template <class T>
+   inline T legendre_p_zeros(int l, int k);
+
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
    template <class T, class Policy>
    typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type

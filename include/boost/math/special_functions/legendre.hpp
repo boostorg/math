@@ -11,8 +11,10 @@
 #pragma once
 #endif
 
+#include <utility>
 #include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/factorials.hpp>
+#include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/config.hpp>
 
 namespace boost{
@@ -69,10 +71,14 @@ T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
 }
 
 template <class T, class Policy>
-T legendre_p_prime_imp(unsigned l, T x, const Policy& pol)
+T legendre_p_prime_imp(unsigned l, T x, const Policy& pol, T* Pn = nullptr)
 {
     if (l == 0)
     {
+        if (Pn)
+        {
+           *Pn = 1;
+        }
         return 0;
     }
     T p0 = 1;
@@ -105,7 +111,91 @@ T legendre_p_prime_imp(unsigned l, T x, const Policy& pol)
            odd = true;
        }
     }
+    // This allows us to evaluate the derivative and the function for the same cost.
+    if (Pn)
+    {
+        std::swap(p0, p1);
+        *Pn = boost::math::legendre_next(n, x, p0, p1);
+    }
     return p_prime;
+}
+
+template <class T, class Policy>
+T legendre_p_zeros_imp(int n_in, int k_in, const Policy& pol)
+{
+    using std::cos;
+    using std::sin;
+    using std::floor;
+    using std::ceil;
+    using std::sqrt;
+    using boost::math::constants::pi;
+    using boost::math::constants::half;
+    using boost::math::tools::newton_raphson_iterate;
+
+    static const char* function = "boost::math::legrendre_p_zeros<%1%>(int, int)";
+    if (n_in == 0)
+    {
+       return policies::raise_domain_error<T>(
+          function,
+          "The %1%-th Legendre polynomial has no zeros.\n",  n_in, pol);
+    }
+    // If n is odd, and k is zero, then the root is zero.
+    // Taking this branch as a special case is reasonable, because
+    // the root bracketing gives us an interval [0, 0] with floating point rounding
+    // error on both positive and negative. This can lead to weird behavior, such as
+    // upper_bound < lower_bound.
+    if ( (n_in & 1) && k_in == 0)
+    {
+        return (T) 0;
+    }
+
+    if (n_in == 2 && k_in == 0)
+    {
+        return (T) 1/sqrt(3);
+    }
+
+    T n = n_in;
+    T k = k_in;
+    T half_n = ceil(n*half<T>());
+    if (k > half_n - 1)
+    {
+        return policies::raise_domain_error<T>(function,
+         "k must be in range {0, 1, ..., ceil(n/2) - 1},"
+         " requested root %1% of a Legendre polynomial.\n",
+         k, pol);
+    }
+
+    // Bracket the root: Szego:
+    // Gabriel Szego, Inequalities for the Zeros of Legendre Polynomials and Related Functions, Transactions of the American Mathematical Society, Vol. 39, No. 1 (1936)
+    T theta_nk =  ((half_n - half<T>()*half<T>() - k)*pi<T>())/(n+half<T>());
+    T lower_bound = cos( (half_n - k)*pi<T>()/(n + 1));
+    T cos_nk = cos(theta_nk);
+    T upper_bound = cos_nk;
+    // First guess follows from:
+    //  F. G. Tricomi, Sugli zeri dei polinomi sferici ed ultrasferici, Ann. Mat. Pura Appl., 31 (1950), pp. 93–97;
+    T inv_n_sq = (T) 1/(n*n);
+    T sin_nk = sin(theta_nk);
+    T x_nk_guess = (1 - inv_n_sq/8 + inv_n_sq /(8*n) - (inv_n_sq*inv_n_sq/384)*(39  - 28 / (sin_nk*sin_nk) ) )*cos_nk;
+
+    boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
+
+    auto f = [&] (T x) { T Pn;
+                         T Pn_prime = detail::legendre_p_prime_imp(n_in, x, pol, &Pn);
+                         return std::pair<T, T>(Pn, Pn_prime); };
+
+    const T x_nk = newton_raphson_iterate(f, x_nk_guess,
+                                          lower_bound, upper_bound,
+                                          policies::digits<T, Policy>(),
+                                          number_of_iterations);
+
+    if(number_of_iterations >= policies::get_max_root_iterations<Policy>())
+    {
+       return policies::raise_evaluation_error<T>(function, "Unable to locate root in a reasonable time:"
+          "  Current best guess is %1%", x_nk, Policy());
+    }
+    BOOST_ASSERT(lower_bound < x_nk);
+    BOOST_ASSERT(upper_bound > x_nk);
+    return x_nk;
 }
 
 } // namespace detail
@@ -149,6 +239,21 @@ inline typename tools::promote_args<T>::type
    return boost::math::legendre_p_prime(l, x, policies::policy<>());
 }
 
+template <class T, class Policy>
+inline T legendre_p_zeros(int l, int k, const Policy& pol)
+{
+    if(l < 0)
+        return detail::legendre_p_zeros_imp<T>(-l-1, k, pol);
+
+    return detail::legendre_p_zeros_imp<T>(l, k, pol);
+}
+
+
+template <class T>
+inline T legendre_p_zeros(int l, int k)
+{
+   return boost::math::legendre_p_zeros<T>(l, k, policies::policy<>());
+}
 
 template <class T, class Policy>
 inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
