@@ -418,11 +418,12 @@ inline BOOST_CXX14_CONSTEXPR Integer lcm(Integer const &a, Integer const &b) BOO
 {
    return gcd_detail::lcm_imp(static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(a)), static_cast<Integer>(gcd_detail::gcd_traits<Integer>::abs(b)));
 }
-
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
 template <typename Integer, typename... Args>
 inline BOOST_CXX14_CONSTEXPR Integer gcd(Integer const &a, Integer const &b, Args const&... args) BOOST_GCD_NOEXCEPT(Integer)
 {
-   return gcd(a, gcd(b, args...));
+   Integer t = gcd(b, args...);
+   return t == 1 ? 1 : gcd(a, t);
 }
 
 template <typename Integer, typename... Args>
@@ -430,7 +431,7 @@ inline BOOST_CXX14_CONSTEXPR Integer lcm(Integer const &a, Integer const &b, Arg
 {
    return lcm(a, lcm(b, args...));
 }
-
+#endif
 //
 // Special handling for rationals:
 //

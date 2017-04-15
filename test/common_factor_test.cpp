@@ -536,10 +536,12 @@ BOOST_AUTO_TEST_CASE(variadics)
    unsigned i[] = { 44, 56, 76, 88 };
    BOOST_CHECK_EQUAL(boost::math::gcd_range(i, i + 4).first, 4);
    BOOST_CHECK_EQUAL(boost::math::gcd_range(i, i + 4).second, i + 4);
-   BOOST_CHECK_EQUAL(boost::math::gcd(i[0], i[1], i[2], i[3]), 4);
    BOOST_CHECK_EQUAL(boost::math::lcm_range(i, i + 4).first, 11704);
    BOOST_CHECK_EQUAL(boost::math::lcm_range(i, i + 4).second, i + 4);
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+   BOOST_CHECK_EQUAL(boost::math::gcd(i[0], i[1], i[2], i[3]), 4);
    BOOST_CHECK_EQUAL(boost::math::lcm(i[0], i[1], i[2], i[3]), 11704);
+#endif
 }
 
 // Test case from Boost.Rational, need to make sure we don't break the rational lib:
