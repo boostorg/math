@@ -435,15 +435,15 @@ inline BOOST_CXX14_CONSTEXPR Integer lcm(Integer const &a, Integer const &b, Arg
 // Special handling for rationals:
 //
 template <typename Integer>
-inline boost::rational<Integer> gcd(boost::rational<Integer> const &a, boost::rational<Integer> const &b)
+inline typename boost::enable_if_c<std::numeric_limits<Integer>::is_specialized, boost::rational<Integer> >::type gcd(boost::rational<Integer> const &a, boost::rational<Integer> const &b)
 {
-   return boost::rational<Integer>(gcd(a.numerator(), b.numerator()), lcm(a.denominator(), b.denominator()));
+   return boost::rational<Integer>(static_cast<Integer>(gcd(a.numerator(), b.numerator())), static_cast<Integer>(lcm(a.denominator(), b.denominator())));
 }
 
 template <typename Integer>
-inline boost::rational<Integer> lcm(boost::rational<Integer> const &a, boost::rational<Integer> const &b)
+inline typename boost::enable_if_c<std::numeric_limits<Integer>::is_specialized, boost::rational<Integer> >::type lcm(boost::rational<Integer> const &a, boost::rational<Integer> const &b)
 {
-   return boost::rational<Integer>(lcm(a.numerator(), b.numerator()), gcd(a.denominator(), b.denominator()));
+   return boost::rational<Integer>(static_cast<Integer>(lcm(a.numerator(), b.numerator())), static_cast<Integer>(gcd(a.denominator(), b.denominator())));
 }
 /**
  * Knuth, The Art of Computer Programming: Volume 2, Third edition, 1998

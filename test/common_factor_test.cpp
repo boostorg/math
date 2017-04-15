@@ -25,6 +25,8 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_int.hpp>
+#include <boost/rational.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
 
 #include <istream>  // for std::basic_istream
 #include <limits>   // for std::numeric_limits
@@ -119,7 +121,7 @@ typedef ::boost::mpl::list<signed char, short, int, long,
 #elif defined(BOOST_HAS_MS_INT64)
  __int64,
 #endif
- MyInt1>  signed_test_types;
+ MyInt1, boost::multiprecision::cpp_int>  signed_test_types;
 typedef ::boost::mpl::list<unsigned char, unsigned short, unsigned,
  unsigned long,
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
@@ -128,7 +130,7 @@ typedef ::boost::mpl::list<unsigned char, unsigned short, unsigned,
 #elif defined(BOOST_HAS_MS_INT64)
  unsigned __int64,
 #endif
- MyUnsigned1, MyUnsigned2>  unsigned_test_types;
+ MyUnsigned1, MyUnsigned2 /*, boost::multiprecision::uint256_t*/>  unsigned_test_types;
 
 }  // namespace
 
@@ -539,6 +541,17 @@ BOOST_AUTO_TEST_CASE(variadics)
    BOOST_CHECK_EQUAL(boost::math::lcm_range(i, i + 4).second, i + 4);
    BOOST_CHECK_EQUAL(boost::math::lcm(i[0], i[1], i[2], i[3]), 11704);
 }
+
+// Test case from Boost.Rational, need to make sure we don't break the rational lib:
+BOOST_AUTO_TEST_CASE_TEMPLATE(gcd_and_lcm_on_rationals, T, signed_test_types)
+{
+   typedef boost::rational<T> rational;
+   BOOST_CHECK_EQUAL(boost::math::gcd(rational(1, 4), rational(1, 3)),
+      rational(1, 12));
+   BOOST_CHECK_EQUAL(boost::math::lcm(rational(1, 4), rational(1, 3)),
+      rational(1));
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
 
