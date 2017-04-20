@@ -23,6 +23,10 @@
 #include <boost/mpl/list.hpp>            // for boost::mpl::list
 #include <boost/operators.hpp>
 #include <boost/test/unit_test.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_int.hpp>
+#include <boost/rational.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
 
 #include <istream>  // for std::basic_istream
 #include <limits>   // for std::numeric_limits
@@ -117,7 +121,7 @@ typedef ::boost::mpl::list<signed char, short, int, long,
 #elif defined(BOOST_HAS_MS_INT64)
  __int64,
 #endif
- MyInt1>  signed_test_types;
+ MyInt1, boost::multiprecision::cpp_int>  signed_test_types;
 typedef ::boost::mpl::list<unsigned char, unsigned short, unsigned,
  unsigned long,
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
@@ -126,7 +130,7 @@ typedef ::boost::mpl::list<unsigned char, unsigned short, unsigned,
 #elif defined(BOOST_HAS_MS_INT64)
  unsigned __int64,
 #endif
- MyUnsigned1, MyUnsigned2>  unsigned_test_types;
+ MyUnsigned1, MyUnsigned2 /*, boost::multiprecision::uint256_t*/>  unsigned_test_types;
 
 }  // namespace
 
@@ -268,6 +272,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_int_test, T, signed_test_types )
 {
 #ifndef BOOST_MSVC
     using boost::math::gcd;
+    using boost::math::gcd_evaluator;
 #else
     using namespace boost::math;
 #endif
@@ -289,6 +294,23 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_int_test, T, signed_test_types )
     BOOST_CHECK_EQUAL( gcd<T>(  3,   7), static_cast<T>( 1) );
     BOOST_CHECK_EQUAL( gcd<T>(  8,   9), static_cast<T>( 1) );
     BOOST_CHECK_EQUAL( gcd<T>(  7,  49), static_cast<T>( 7) );
+    // Again with function object:
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(1, -1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(-1, 1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(1, 1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(-1, -1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(0, 0), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(7, 0), static_cast<T>(7));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(0, 9), static_cast<T>(9));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(-7, 0), static_cast<T>(7));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(0, -9), static_cast<T>(9));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(42, 30), static_cast<T>(6));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(6, -9), static_cast<T>(3));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(-10, -10), static_cast<T>(10));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(-25, -10), static_cast<T>(5));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(3, 7), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(8, 9), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(gcd_evaluator<T>()(7, 49), static_cast<T>(7));
 }
 
 // GCD on unmarked signed integer type
@@ -364,9 +386,23 @@ BOOST_AUTO_TEST_CASE( gcd_static_test )
     BOOST_CHECK( (static_gcd< 7, 49>::value) == 7 );
 }
 
-// TODO: non-built-in signed and unsigned integer tests, with and without
-// numeric_limits specialization; polynominal tests; note any changes if
-// built-ins switch to binary-GCD algorithm
+BOOST_AUTO_TEST_CASE(gcd_method_test)
+{
+   // Verify that the 3 different methods all yield the same result:
+   boost::random::mt19937 gen;
+   boost::random::uniform_int_distribution<int> d(0, ((std::numeric_limits<int>::max)() / 2));
+
+   for (unsigned int i = 0; i < 10000; ++i)
+   {
+      int v1 = d(gen);
+      int v2 = d(gen);
+      int g = boost::math::gcd_detail::Euclid_gcd(v1, v2);
+      BOOST_CHECK(v1 % g == 0);
+      BOOST_CHECK(v2 % g == 0);
+      BOOST_CHECK_EQUAL(g, boost::math::gcd_detail::mixed_binary_gcd(v1, v2));
+      BOOST_CHECK_EQUAL(g, boost::math::gcd_detail::Stein_gcd(v1, v2));
+   }
+}
 
 BOOST_AUTO_TEST_SUITE_END()
 
@@ -379,6 +415,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_int_test, T, signed_test_types )
 {
 #ifndef BOOST_MSVC
     using boost::math::lcm;
+    using boost::math::lcm_evaluator;
 #else
     using namespace boost::math;
 #endif
@@ -400,6 +437,23 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_int_test, T, signed_test_types )
     BOOST_CHECK_EQUAL( lcm<T>(  3,   7), static_cast<T>(21) );
     BOOST_CHECK_EQUAL( lcm<T>(  8,   9), static_cast<T>(72) );
     BOOST_CHECK_EQUAL( lcm<T>(  7,  49), static_cast<T>(49) );
+    // Again with function object:
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(1, -1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(-1, 1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(1, 1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(-1, -1), static_cast<T>(1));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(0, 0), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(6, 0), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(0, 7), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(-5, 0), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(0, -4), static_cast<T>(0));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(18, 30), static_cast<T>(90));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(-6, 9), static_cast<T>(18));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(-10, -10), static_cast<T>(10));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(25, -10), static_cast<T>(50));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(3, 7), static_cast<T>(21));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(8, 9), static_cast<T>(72));
+    BOOST_CHECK_EQUAL(lcm_evaluator<T>()(7, 49), static_cast<T>(49));
 }
 
 // LCM on unmarked signed integer type
@@ -477,4 +531,116 @@ BOOST_AUTO_TEST_CASE( lcm_static_test )
 
 // TODO: see GCD to-do
 
+BOOST_AUTO_TEST_CASE(variadics)
+{
+   unsigned i[] = { 44, 56, 76, 88 };
+   BOOST_CHECK_EQUAL(boost::math::gcd_range(i, i + 4).first, 4);
+   BOOST_CHECK_EQUAL(boost::math::gcd_range(i, i + 4).second, i + 4);
+   BOOST_CHECK_EQUAL(boost::math::lcm_range(i, i + 4).first, 11704);
+   BOOST_CHECK_EQUAL(boost::math::lcm_range(i, i + 4).second, i + 4);
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+   BOOST_CHECK_EQUAL(boost::math::gcd(i[0], i[1], i[2], i[3]), 4);
+   BOOST_CHECK_EQUAL(boost::math::lcm(i[0], i[1], i[2], i[3]), 11704);
+#endif
+}
+
+// Test case from Boost.Rational, need to make sure we don't break the rational lib:
+BOOST_AUTO_TEST_CASE_TEMPLATE(gcd_and_lcm_on_rationals, T, signed_test_types)
+{
+   typedef boost::rational<T> rational;
+   BOOST_CHECK_EQUAL(boost::math::gcd(rational(1, 4), rational(1, 3)),
+      rational(1, 12));
+   BOOST_CHECK_EQUAL(boost::math::lcm(rational(1, 4), rational(1, 3)),
+      rational(1));
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
+
+//
+// Compile time checks come last:
+//
+#ifndef BOOST_NO_CXX14_CONSTEXPR
+
+void test_constexpr1()
+{
+   constexpr const boost::int64_t i = 347 * 463 * 727;
+   constexpr const boost::int64_t j = 191 * 347 * 281;
+
+   constexpr const boost::int64_t k = boost::math::gcd(i, j);
+   constexpr const boost::int64_t l = boost::math::lcm(i, j);
+
+   static_assert(k == 347, "Expected result not found in constexpr gcd.");
+   static_assert(l == 6268802158037, "Expected result not found in constexpr lcm.");
+}
+
+void test_constexpr2()
+{
+   constexpr const boost::uint64_t i = 347 * 463 * 727;
+   constexpr const boost::uint64_t j = 191 * 347 * 281;
+
+   constexpr const boost::uint64_t k = boost::math::gcd(i, j);
+   constexpr const boost::uint64_t l = boost::math::lcm(i, j);
+
+   static_assert(k == 347, "Expected result not found in constexpr gcd.");
+   static_assert(l == 6268802158037, "Expected result not found in constexpr lcm.");
+}
+
+void test_constexpr3()
+{
+   constexpr const boost::uint64_t i = 347 * 463 * 727;
+   constexpr const boost::uint64_t j = 191 * 347 * 281;
+
+   constexpr const boost::uint64_t k = boost::math::gcd_detail::Euclid_gcd(i, j);
+
+   static_assert(k == 347, "Expected result not found in constexpr gcd.");
+}
+
+void test_constexpr4()
+{
+   constexpr const boost::uint64_t i = 347 * 463 * 727;
+   constexpr const boost::uint64_t j = 191 * 347 * 281;
+
+   constexpr const boost::uint64_t k = boost::math::gcd_detail::mixed_binary_gcd(i, j);
+
+   static_assert(k == 347, "Expected result not found in constexpr gcd.");
+}
+
+void test_constexpr5()
+{
+   constexpr const boost::uint64_t i = 347 * 463 * 727;
+   constexpr const boost::uint64_t j = 191 * 347 * 281;
+
+   constexpr const boost::uint64_t k = boost::math::gcd_detail::Stein_gcd(i, j);
+
+   static_assert(k == 347, "Expected result not found in constexpr gcd.");
+}
+#endif
+
+#if !defined(BOOST_NO_CXX11_NOEXCEPT) && !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS)
+//
+// These tests don't pass with GCC-4.x:
+//
+#if !defined(BOOST_GCC) || (BOOST_GCC >= 50000)
+
+void test_noexcept(unsigned char a, unsigned char b)
+{
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned char>(a), static_cast<unsigned char>(b))), "Expected a noexcept function.");
+#ifndef _MSC_VER
+   // This generates an internal compiler error if enabled as well as the following test:
+   static_assert(noexcept(boost::math::gcd(static_cast<char>(a), static_cast<char>(b))), "Expected a noexcept function.");
+#endif
+   static_assert(noexcept(boost::math::gcd(static_cast<signed char>(a), static_cast<signed char>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<short>(a), static_cast<short>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned short>(a), static_cast<unsigned short>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<int>(a), static_cast<int>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned int>(a), static_cast<unsigned int>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<long>(a), static_cast<long>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned long>(a), static_cast<unsigned long>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<long long>(a), static_cast<long long>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned long long>(a), static_cast<unsigned long long>(b))), "Expected a noexcept function.");
+}
+
+#endif
+#endif
+

@@ -713,6 +713,11 @@ inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT,
 } // namespace math
 } // namespace boost
 
+//
+// Polynomial specific overload of gcd algorithm:
+//
+#include <boost/math/tools/polynomial_gcd.hpp>
+
 #endif // BOOST_MATH_TOOLS_POLYNOMIAL_HPP
 
 
