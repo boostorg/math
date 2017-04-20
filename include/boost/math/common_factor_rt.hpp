@@ -50,6 +50,11 @@ namespace boost {
          //
 #ifndef BOOST_NO_CXX14_CONSTEXPR
          template <class T>
+         inline constexpr T constexpr_min(T const& a, T const& b) BOOST_GCD_NOEXCEPT(T)
+         {
+            return a < b ? a : b;
+         }
+         template <class T>
          inline constexpr auto constexpr_swap(T&a, T& b) BOOST_GCD_NOEXCEPT(T) -> decltype(a.swap(b))
          {
             return a.swap(b);
@@ -62,6 +67,11 @@ namespace boost {
             b = static_cast<T&&>(t);
          }
 #else
+         template <class T>
+         inline T constexpr_min(T const& a, T const& b) BOOST_GCD_NOEXCEPT(T)
+         {
+            return a < b ? a : b;
+         }
          template <class T>
          inline void constexpr_swap(T&a, T& b) BOOST_GCD_NOEXCEPT(T)
          {
@@ -307,7 +317,7 @@ namespace boost {
       if(!v)
          return u;
 
-      shifts = (std::min)(gcd_traits<T>::make_odd(u), gcd_traits<T>::make_odd(v));
+      shifts = constexpr_min(gcd_traits<T>::make_odd(u), gcd_traits<T>::make_odd(v));
 
       while(gcd_traits<T>::less(1, v))
       {
@@ -350,7 +360,7 @@ namespace boost {
             gcd_traits<SteinDomain>::make_odd(m);
         }
         // m == n
-        m <<= (std::min)(d_m, d_n);
+        m <<= constexpr_min(d_m, d_n);
         return m;
     }
 

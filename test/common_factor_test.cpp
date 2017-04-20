@@ -617,25 +617,30 @@ void test_constexpr5()
 }
 #endif
 
-#ifndef BOOST_NO_CXX11_NOEXCEPT
+#if !defined(BOOST_NO_CXX11_NOEXCEPT) && !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS)
+//
+// These tests don't pass with GCC-4.x:
+//
+#if !defined(BOOST_GCC) || (BOOST_GCC >= 50000)
 
-void test_noexcept()
+void test_noexcept(unsigned char a, unsigned char b)
 {
-   static_assert(noexcept(boost::math::gcd(static_cast<unsigned char>(2), static_cast<unsigned char>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned char>(a), static_cast<unsigned char>(b))), "Expected a noexcept function.");
 #ifndef _MSC_VER
    // This generates an internal compiler error if enabled as well as the following test:
-   static_assert(noexcept(boost::math::gcd(static_cast<char>(2), static_cast<char>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<char>(a), static_cast<char>(b))), "Expected a noexcept function.");
 #endif
-   static_assert(noexcept(boost::math::gcd(static_cast<signed char>(2), static_cast<signed char>(4))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<short>(2), static_cast<short>(4))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<unsigned short>(2), static_cast<unsigned short>(4))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<int>(2), static_cast<int>(4))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<unsigned int>(2), static_cast<unsigned int>(4))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<long>(2), static_cast<long>(4))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<unsigned long>(2), static_cast<unsigned long>(4))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<long long>(2), static_cast<long long>(4))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<unsigned long long>(2), static_cast<unsigned long long>(4))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<signed char>(a), static_cast<signed char>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<short>(a), static_cast<short>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned short>(a), static_cast<unsigned short>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<int>(a), static_cast<int>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned int>(a), static_cast<unsigned int>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<long>(a), static_cast<long>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned long>(a), static_cast<unsigned long>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<long long>(a), static_cast<long long>(b))), "Expected a noexcept function.");
+   static_assert(noexcept(boost::math::gcd(static_cast<unsigned long long>(a), static_cast<unsigned long long>(b))), "Expected a noexcept function.");
 }
 
+#endif
 #endif
 
