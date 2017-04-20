@@ -15,7 +15,6 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
-#include <boost/config/suffix.hpp>
 #include <boost/function.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/math/tools/rational.hpp>
