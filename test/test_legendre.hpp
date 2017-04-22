@@ -263,35 +263,61 @@ void test_legendre_p_prime()
 template<class Real>
 void test_legendre_p_zeros()
 {
+    std::cout << "Testing Legendre zeros on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     using std::sqrt;
     using std::abs;
     using boost::math::legendre_p_zeros;
     using boost::math::legendre_p;
+    using boost::math::constants::third;
     Real tol = std::numeric_limits<Real>::epsilon();
 
     // Check the trivial cases:
-    BOOST_CHECK_CLOSE_FRACTION(legendre_p_zeros<Real>(2, 0), (Real) 1/ sqrt(3), tol);
+    auto zeros = legendre_p_zeros<Real>(1);
+    BOOST_ASSERT(zeros.size() == 1);
+    BOOST_CHECK_SMALL(zeros[0], tol);
 
-    // The first zero of the odd Legendre Polynomials is obviously zero.
-    for (int n = 1; n < 5000; n += 2)
-    {
-        BOOST_CHECK_SMALL(legendre_p_zeros<Real>(n, 0), tol);
-    }
+    zeros = legendre_p_zeros<Real>(2);
+    BOOST_ASSERT(zeros.size() == 1);
+    BOOST_CHECK_CLOSE_FRACTION(zeros[0], (Real) 1/ sqrt(static_cast<Real>(3)), tol);
+
+    zeros = legendre_p_zeros<Real>(3);
+    BOOST_ASSERT(zeros.size() == 2);
+    BOOST_CHECK_SMALL(zeros[0], tol);
+    BOOST_CHECK_CLOSE_FRACTION(zeros[1], sqrt(static_cast<Real>(3)/static_cast<Real>(5)), tol);
+
+    zeros = legendre_p_zeros<Real>(4);
+    BOOST_ASSERT(zeros.size() == 2);
+    BOOST_CHECK_CLOSE_FRACTION(zeros[0], sqrt( (15-2*sqrt(static_cast<Real>(30)))/static_cast<Real>(35) ), tol);
+    BOOST_CHECK_CLOSE_FRACTION(zeros[1], sqrt( (15+2*sqrt(static_cast<Real>(30)))/static_cast<Real>(35) ), tol);
+
+
+    zeros = legendre_p_zeros<Real>(5);
+    BOOST_ASSERT(zeros.size() == 3);
+    BOOST_CHECK_SMALL(zeros[0], tol);
+    BOOST_CHECK_CLOSE_FRACTION(zeros[1], third<Real>()*sqrt( (35 - 2*sqrt(static_cast<Real>(70)))/static_cast<Real>(7) ), 2*tol);
+    BOOST_CHECK_CLOSE_FRACTION(zeros[2], third<Real>()*sqrt( (35 + 2*sqrt(static_cast<Real>(70)))/static_cast<Real>(7) ), 2*tol);
 
     // Don't take the tolerances too seriously.
     // The other test shows that the zeros are estimated more accurately than the function!
-    for (int n = 1; n < 130; ++n)
+    for (int n = 6; n < 130; ++n)
     {
-        Real previous_zero = legendre_p_zeros<Real>(n, 0);
-        if (!(n & 1))
+        zeros = legendre_p_zeros<Real>(n);
+        if (n & 1)
+        {
+            BOOST_CHECK(zeros.size() == (n-1)/2 +1);
+            BOOST_CHECK_SMALL(zeros[0], tol);
+        }
+        else
         {
             // Zero is not a zero of the odd Legendre polynomials
-            BOOST_CHECK(previous_zero > 0);
-            BOOST_CHECK_SMALL(legendre_p(n, previous_zero), 550*tol);
+            BOOST_CHECK(zeros.size() == n/2);
+            BOOST_CHECK(zeros[0] > 0);
+            BOOST_CHECK_SMALL(legendre_p(n, zeros[0]), 550*tol);
         }
-        for (int k = 1; k < ceil(n*boost::math::constants::half<Real>()); ++k)
+        Real previous_zero = zeros[0];
+        for (int k = 1; k < zeros.size(); ++k)
         {
-            Real next_zero = legendre_p_zeros<Real>(n, k);
+            Real next_zero = zeros[k];
             BOOST_CHECK(next_zero > previous_zero);
 
             std::string err = "Tolerance failed for (n, k) = (" + std::to_string(n) + "," + std::to_string(k) + ")\n";
@@ -315,6 +341,7 @@ void test_legendre_p_zeros()
 
 int test_legendre_p_zeros_double_ulp(int min_x, int max_n)
 {
+    std::cout << "Testing ULP distance for Legendre zeros.\n";
     using std::abs;
     using boost::math::legendre_p_zeros;
     using boost::math::float_distance;
@@ -323,11 +350,12 @@ int test_legendre_p_zeros_double_ulp(int min_x, int max_n)
     double max_float_distance = 0;
     for (int n = min_x; n < max_n; ++n)
     {
-        for (int k = 1; k < ceil(n*boost::math::constants::half<double>()); ++k)
+        auto double_zeros = legendre_p_zeros<double>(n);
+        auto quad_zeros   = legendre_p_zeros<cpp_bin_float_quad>(n);
+        BOOST_ASSERT(quad_zeros.size() == double_zeros.size());
+        for (int k = 0; k < double_zeros.size(); ++k)
         {
-            double double_zero = legendre_p_zeros<double>(n, k);
-            cpp_bin_float_quad quad_zero = legendre_p_zeros<cpp_bin_float_quad>(n, k);
-            double d = abs(float_distance(double_zero, (double) quad_zero));
+            double d = abs(float_distance(double_zeros[k], (double) quad_zeros[k]));
             if (d > max_float_distance)
             {
                 max_float_distance = d;

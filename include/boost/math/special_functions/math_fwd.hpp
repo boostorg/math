@@ -23,6 +23,7 @@
 #pragma once
 #endif
 
+#include <vector>
 #include <boost/math/special_functions/detail/round_fwd.hpp>
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/policies/policy.hpp>
@@ -187,10 +188,10 @@ namespace boost
 
 
    template <class T, class Policy>
-   inline T legendre_p_zeros(int l, int k, const Policy& pol);
+   inline std::vector<T> legendre_p_zeros(int l, const Policy& pol);
 
    template <class T>
-   inline T legendre_p_zeros(int l, int k);
+   inline std::vector<T> legendre_p_zeros(int l);
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
    template <class T, class Policy>

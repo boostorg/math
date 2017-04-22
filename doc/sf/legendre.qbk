@@ -21,10 +21,10 @@
    ``__sf_result`` legendre_p_prime(int n, T x, const ``__Policy``&);
 
    template <class T, class ``__Policy``>
-   T legendre_p_zeros(int l, int k, const ``__Policy``&);
+   std::vector<T> legendre_p_zeros(int l, const ``__Policy``&);
 
    template <class T>
-   T legendre_p_zeros(int l, int k);
+   std::vector<T> legendre_p_zeros(int l);
 
    template <class T>
    ``__sf_result`` legendre_p(int n, int m, T x);
@@ -85,23 +85,21 @@ Legendre Polynomials:
 Returns the derivatives of the Legendre polynomials.
 
     template <class T, class ``__Policy``>
-    T legendre_p_zeros(int l, int k, const ``__Policy``&);
+    std::vector<T> legendre_p_zeros(int l, const ``__Policy``&);
 
     template <class T>
-    T legendre_p_zeros(int l, int k);
+    std::vector<T> legendre_p_zeros(int l);
 
 The zeros of the Legendre polynomials are calculated by Newton's method using an initial guess given by Tricomi with root bracketing provided by Szego.
-Although the use of Newton's method is believed to be less robust than (say) the Golub & Welsch algorithm,
-all zeros are computed to 1 ULP up to `l = 100`, and 2 ULP up to `l = 350` in double precision.
 
 Since the Legendre polynomials are alternatively even and odd, only the non-negative zeros are returned.
-For the odd Legendre polynomials, the identity `legendre_p_zeros<double>(2*l+1, 0) == 0` holds.
-The rest of the zeros are returned in increasing order, so that `legendre_p_zeros<double>(l, k) < legendre_p_zeros<double>(l, k+1)`.
-For each `l`, `k` may take the values 0 to `ceil(l*0.5)`, as the other zeros are symmetric about zero.
+For the odd Legendre polynomials, the first zero is always zero.
+The rest of the zeros are returned in increasing order.
 
-Note that the arguments to the routine are integers, and the output is a real-type. Hence the template argument is mandatory.
+Note that the argument to the routine is an integer, and the output is a floating-point type.
+Hence the template argument is mandatory.
 The time to extract a single root is linear in `l` (this is scaling to evaluate the Legendre polynomials), so recovering all roots is [bigo](`l`[super 2]).
-Algorithms with better linear scaling [@ http://dx.doi.org/10.1137/06067016X exist] for recovering all roots, but they are complicated.
+Algorithms with linear scaling [@ http://dx.doi.org/10.1137/06067016X exist] for recovering all roots, but requires tooling not currently built into boost.math.
 This implementation proceeds under the assumption that calculating zeros of these functions will not be a bottleneck for any workflow.
 
    template <class T>
