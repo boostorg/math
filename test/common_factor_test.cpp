@@ -386,24 +386,6 @@ BOOST_AUTO_TEST_CASE( gcd_static_test )
     BOOST_CHECK( (static_gcd< 7, 49>::value) == 7 );
 }
 
-BOOST_AUTO_TEST_CASE(gcd_method_test)
-{
-   // Verify that the 3 different methods all yield the same result:
-   boost::random::mt19937 gen;
-   boost::random::uniform_int_distribution<int> d(0, ((std::numeric_limits<int>::max)() / 2));
-
-   for (unsigned int i = 0; i < 10000; ++i)
-   {
-      int v1 = d(gen);
-      int v2 = d(gen);
-      int g = boost::math::gcd_detail::Euclid_gcd(v1, v2);
-      BOOST_CHECK(v1 % g == 0);
-      BOOST_CHECK(v2 % g == 0);
-      BOOST_CHECK_EQUAL(g, boost::math::gcd_detail::mixed_binary_gcd(v1, v2));
-      BOOST_CHECK_EQUAL(g, boost::math::gcd_detail::Stein_gcd(v1, v2));
-   }
-}
-
 BOOST_AUTO_TEST_SUITE_END()
 
 
@@ -556,91 +538,4 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(gcd_and_lcm_on_rationals, T, signed_test_types)
 
 
 BOOST_AUTO_TEST_SUITE_END()
-
-//
-// Compile time checks come last:
-//
-#ifndef BOOST_NO_CXX14_CONSTEXPR
-
-void test_constexpr1()
-{
-   constexpr const boost::int64_t i = 347 * 463 * 727;
-   constexpr const boost::int64_t j = 191 * 347 * 281;
-
-   constexpr const boost::int64_t k = boost::math::gcd(i, j);
-   constexpr const boost::int64_t l = boost::math::lcm(i, j);
-
-   static_assert(k == 347, "Expected result not found in constexpr gcd.");
-   static_assert(l == 6268802158037, "Expected result not found in constexpr lcm.");
-}
-
-void test_constexpr2()
-{
-   constexpr const boost::uint64_t i = 347 * 463 * 727;
-   constexpr const boost::uint64_t j = 191 * 347 * 281;
-
-   constexpr const boost::uint64_t k = boost::math::gcd(i, j);
-   constexpr const boost::uint64_t l = boost::math::lcm(i, j);
-
-   static_assert(k == 347, "Expected result not found in constexpr gcd.");
-   static_assert(l == 6268802158037, "Expected result not found in constexpr lcm.");
-}
-
-void test_constexpr3()
-{
-   constexpr const boost::uint64_t i = 347 * 463 * 727;
-   constexpr const boost::uint64_t j = 191 * 347 * 281;
-
-   constexpr const boost::uint64_t k = boost::math::gcd_detail::Euclid_gcd(i, j);
-
-   static_assert(k == 347, "Expected result not found in constexpr gcd.");
-}
-
-void test_constexpr4()
-{
-   constexpr const boost::uint64_t i = 347 * 463 * 727;
-   constexpr const boost::uint64_t j = 191 * 347 * 281;
-
-   constexpr const boost::uint64_t k = boost::math::gcd_detail::mixed_binary_gcd(i, j);
-
-   static_assert(k == 347, "Expected result not found in constexpr gcd.");
-}
-
-void test_constexpr5()
-{
-   constexpr const boost::uint64_t i = 347 * 463 * 727;
-   constexpr const boost::uint64_t j = 191 * 347 * 281;
-
-   constexpr const boost::uint64_t k = boost::math::gcd_detail::Stein_gcd(i, j);
-
-   static_assert(k == 347, "Expected result not found in constexpr gcd.");
-}
-#endif
-
-#if !defined(BOOST_NO_CXX11_NOEXCEPT) && !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS)
-//
-// These tests don't pass with GCC-4.x:
-//
-#if !defined(BOOST_GCC) || (BOOST_GCC >= 50000)
-
-void test_noexcept(unsigned char a, unsigned char b)
-{
-   static_assert(noexcept(boost::math::gcd(static_cast<unsigned char>(a), static_cast<unsigned char>(b))), "Expected a noexcept function.");
-#ifndef _MSC_VER
-   // This generates an internal compiler error if enabled as well as the following test:
-   static_assert(noexcept(boost::math::gcd(static_cast<char>(a), static_cast<char>(b))), "Expected a noexcept function.");
-#endif
-   static_assert(noexcept(boost::math::gcd(static_cast<signed char>(a), static_cast<signed char>(b))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<short>(a), static_cast<short>(b))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<unsigned short>(a), static_cast<unsigned short>(b))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<int>(a), static_cast<int>(b))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<unsigned int>(a), static_cast<unsigned int>(b))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<long>(a), static_cast<long>(b))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<unsigned long>(a), static_cast<unsigned long>(b))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<long long>(a), static_cast<long long>(b))), "Expected a noexcept function.");
-   static_assert(noexcept(boost::math::gcd(static_cast<unsigned long long>(a), static_cast<unsigned long long>(b))), "Expected a noexcept function.");
-}
-
-#endif
-#endif
 

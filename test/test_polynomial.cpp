@@ -20,7 +20,7 @@
 using namespace boost::math;
 using namespace boost::math::tools;
 using namespace std;
-using boost::math::gcd_detail::Euclid_gcd;
+using boost::integer::gcd_detail::Euclid_gcd;
 using boost::math::tools::subresultant_gcd;
 
 template <typename T>
