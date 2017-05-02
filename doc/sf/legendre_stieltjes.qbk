@@ -3,7 +3,7 @@
 [h4 Synopsis]
 
     ``
-    #include <boost/math/special_functions/legendre_p_stieltjes.hpp>
+    #include <boost/math/special_functions/legendre_stieltjes.hpp>
     ``
 
     namespace boost{ namespace math{
@@ -63,3 +63,9 @@ Example usage:
     double norm = std::sqrt(E.norm_sq());
 
 [endsect]
+[/
+  Copyright 2017 Nick Thompson
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
