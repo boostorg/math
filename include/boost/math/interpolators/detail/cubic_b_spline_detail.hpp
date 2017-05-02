@@ -100,7 +100,7 @@ cubic_b_spline_imp<Real>::cubic_b_spline_imp(const Real* const f, size_t length,
     {
         throw std::logic_error("Left endpoint is NAN; this is disallowed.\n");
     }
-    if (left_endpoint + length*step_size >= std::numeric_limits<Real>::max())
+    if (left_endpoint + length*step_size >= (std::numeric_limits<Real>::max)())
     {
         throw std::logic_error("Right endpoint overflows the maximum representable number of the specified precision.\n");
     }
