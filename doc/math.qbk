@@ -131,8 +131,8 @@ and use the function's name as the link text.]
 [def __fifth_root [link math_toolkit.roots.root_finding_examples.5th_root_eg fifth root]]
 [def __nth_root [link math_toolkit.roots.root_finding_examples.nth_root nth root]]
 [def __multiprecision_root [link math_toolkit.roots.root_finding_examples.multiprecision_root multiprecision root]]
-[def __polynomial_arithmetic [link math_toolkit.roots.polynomial_arithmetic polynomial arithmetic]]
-[def __evaluation [link math_toolkit.roots.rational.polynomial_evaluation polynomial \& rational evaluation]]
+[def __polynomial_arithmetic [link math_toolkit.polynomial_arithmetic polynomial arithmetic]]
+[def __evaluation [link math_toolkit.rational.polynomial_evaluation polynomial \& rational evaluation]]
 
 [/gammas]
 [def __lgamma [link math_toolkit.sf_gamma.lgamma lgamma]]
@@ -618,14 +618,14 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include quaternion/math-quaternion.qbk]
 [include octonion/math-octonion.qbk]
 [include gcd/math-gcd.qbk]
-[include interpolators/cubic_b_spline.qbk]
 
 [mathpart rooting Tools: Root Finding \& Minimization Algorithms, Polynomial  Arithmetic \& Evaluation]
 [section:roots Root finding]
 [include roots/roots_overview.qbk]
+[endsect] [/section:roots Root finding]
 [include internals/polynomial.qbk]
 [include internals/rational.qbk]
-[endsect] [/section:roots Root finding]
+[include interpolators/cubic_b_spline.qbk]
 
 [endmathpart] [/mathpart roots Root Finding Algorithms]
 
