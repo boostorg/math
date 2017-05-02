@@ -272,6 +272,19 @@ BOOST_FIXTURE_TEST_CASE_TEMPLATE( gcd_interface, T, mp_integral_test_types, FM2G
     BOOST_CHECK_EQUAL(w, fixture_type::z);
 }
 
+// This test is just to show that gcd<polynomial<T>>(u, v) is defined (and works) when T is floating point.
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( gcd_float_interface, T, non_integral_test_types, FM2GP_Ex_8_3__1<T> )
+{
+    typedef FM2GP_Ex_8_3__1<T> fixture_type;
+    polynomial<T> w;
+    w = gcd(fixture_type::x, fixture_type::y);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = gcd(fixture_type::y, fixture_type::x);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
 // The following tests call subresultant_gcd explicitly to remove any ambiguity
 // and to permit testing on single-precision integral types.
 BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, large_integral_test_types, FM2GP_Ex_8_3__1<T> )

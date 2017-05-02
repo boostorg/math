@@ -16,7 +16,29 @@
 #include <boost/type_traits/is_pod.hpp>
 
 
-namespace boost{ namespace math{ namespace tools{
+namespace boost{ 
+   
+   namespace integer {
+
+      namespace gcd_detail {
+
+         template <class T>
+         struct gcd_traits;
+
+         template <class T>
+         struct gcd_traits<boost::math::tools::polynomial<T> >
+         {
+            inline static const boost::math::tools::polynomial<T>& abs(const boost::math::tools::polynomial<T>& val) { return val; }
+
+            static const method_type method = method_euclid;
+         };
+
+      }
+}
+   
+   
+   
+namespace math{ namespace tools{
     
 /* From Knuth, 4.6.1:
 * 
@@ -163,7 +185,7 @@ template <typename T>
 typename enable_if_c<!std::numeric_limits<T>::is_integer && (std::numeric_limits<T>::min_exponent != std::numeric_limits<T>::max_exponent) && !std::numeric_limits<T>::is_exact, polynomial<T> >::type
 gcd(polynomial<T> const &u, polynomial<T> const &v)
 {
-   return boost::math::gcd_detail::Euclid_gcd(u, v);
+   return boost::integer::gcd_detail::Euclid_gcd(u, v);
 }
 
 }
@@ -172,6 +194,16 @@ gcd(polynomial<T> const &u, polynomial<T> const &v)
 //
 using boost::math::tools::gcd;
 
-}} // namespace boost::math::tools
+}
+
+namespace integer
+{
+   //
+   // Using declaration so we overload the default implementation in this namespace:
+   //
+   using boost::math::tools::gcd;
+}
+
+} // namespace boost::math::tools
 
 #endif
