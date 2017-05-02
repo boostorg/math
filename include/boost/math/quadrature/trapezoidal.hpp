@@ -24,7 +24,7 @@
 namespace boost{ namespace math{
 
 template<class F, class Real>
-Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 10, Real* error_estimate = nullptr, Real* L1 = nullptr)
+Real trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 10, Real* error_estimate = nullptr, Real* L1 = nullptr)
 {
     using std::abs;
     using std::isfinite;
@@ -94,7 +94,9 @@ Real adaptive_trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limi
         *L1 = IL1;
     }
 
-    if (I1 != (Real) 0 && IL1/abs(I1) > 1.0/std::numeric_limits<Real>::epsilon())
+    // The condition abs(I) > eps is a poor man's way of mollifying the condition number.
+    // Recall that no number is close to zero, so it makes no sense to throw when the I1 is very close to zero.
+    if (abs(I1) > std::numeric_limits<Real>::epsilon() && IL1/abs(I1) > 1.0/std::numeric_limits<Real>::epsilon())
     {
         Real cond = IL1/abs(I1);
         Real inv_prec = 1.0/std::numeric_limits<Real>::epsilon();

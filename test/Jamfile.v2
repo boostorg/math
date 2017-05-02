@@ -757,6 +757,7 @@ run test_sign.cpp ../../test/build//boost_unit_test_framework ;
 run test_skew_normal.cpp ../../test/build//boost_unit_test_framework ;
 run test_tgamma_ratio.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_toms748_solve.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework ;
 run test_triangular.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_uniform.cpp pch ../../test/build//boost_unit_test_framework ;

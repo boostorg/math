@@ -1,17 +1,18 @@
-#define BOOST_TEST_MODULE adaptive_trapezoidal
+/*
+ * Copyright Nick Thompson, 2017
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
+ * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ */
+#define BOOST_TEST_MODULE trapezoidal
 
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/special_functions/bessel.hpp>
-#include <boost/math/quadrature/adaptive_trapezoidal.hpp>
+#include <boost/math/quadrature/trapezoidal.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
-#ifdef __GNUC__
-#ifndef __clang__
-#include <boost/multiprecision/float128.hpp>
-#endif
-#endif
 
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_bin_float_100;
@@ -22,7 +23,7 @@ void test_constant()
     std::cout << "Testing constants are integrated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
 
     auto f = [](Real x) { return boost::math::constants::half<Real>(); };
-    Real Q = boost::math::adaptive_trapezoidal<decltype(f), Real>(f, (Real) 0.0, (Real) 10.0);
+    Real Q = boost::math::trapezoidal<decltype(f), Real>(f, (Real) 0.0, (Real) 10.0);
     BOOST_CHECK_CLOSE(Q, 5.0, 100*std::numeric_limits<Real>::epsilon());
 }
 
@@ -37,7 +38,7 @@ void test_rational_periodic()
     auto f = [](Real x) { return 1/(5 - 4*cos(x)); };
 
     Real tol = 100*std::numeric_limits<Real>::epsilon();
-    Real Q = boost::math::adaptive_trapezoidal(f, (Real) 0.0, two_pi<Real>(), tol);
+    Real Q = boost::math::trapezoidal(f, (Real) 0.0, two_pi<Real>(), tol);
 
     BOOST_CHECK_CLOSE(Q, two_pi<Real>()*third<Real>(), 200*tol);
 }
@@ -54,7 +55,7 @@ void test_bump_function()
         return (Real) exp(-(Real) 1/(1-x*x));
     };
     Real tol = 100*std::numeric_limits<Real>::epsilon();
-    Real Q = boost::math::adaptive_trapezoidal(f, (Real) -1, (Real) 1, tol);
+    Real Q = boost::math::trapezoidal(f, (Real) -1, (Real) 1, tol);
     // This is all the digits Mathematica gave me!
     BOOST_CHECK_CLOSE(Q, 0.443994, 1e-4);
 }
@@ -65,7 +66,7 @@ void test_zero_function()
     std::cout << "Testing that zero functions are integrated correctly by trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto f = [](Real x) { return (Real) 0;};
     Real tol = 100*std::numeric_limits<Real>::epsilon();
-    Real Q = boost::math::adaptive_trapezoidal(f, (Real) -1, (Real) 1, tol);
+    Real Q = boost::math::trapezoidal(f, (Real) -1, (Real) 1, tol);
     BOOST_CHECK_SMALL(Q, 100*tol);
 }
 
@@ -75,7 +76,7 @@ void test_sinsq()
     std::cout << "Testing that sin(x)^2 is integrated correctly by the trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto f = [](Real x) { return sin(10*x)*sin(10*x); };
     Real tol = 100*std::numeric_limits<Real>::epsilon();
-    Real Q = boost::math::adaptive_trapezoidal(f, (Real) 0, (Real) boost::math::constants::pi<Real>(), tol);
+    Real Q = boost::math::trapezoidal(f, (Real) 0, (Real) boost::math::constants::pi<Real>(), tol);
     BOOST_CHECK_CLOSE(Q, boost::math::constants::half_pi<Real>(), 100*tol);
 
 }
@@ -89,7 +90,7 @@ void test_slowly_converging()
 
     Real tol = sqrt(sqrt(std::numeric_limits<Real>::epsilon()));
     Real error_estimate;
-    Real Q = boost::math::adaptive_trapezoidal(f, (Real) 0, (Real) 1, tol, 15, &error_estimate);
+    Real Q = boost::math::trapezoidal(f, (Real) 0, (Real) 1, tol, 15, &error_estimate);
     BOOST_CHECK_CLOSE(Q, boost::math::constants::half_pi<Real>()/2, 1000*tol);
 }
 
@@ -104,32 +105,12 @@ void test_rational_sin()
 
     Real expected = two_pi<Real>()*a/pow(a*a - 1, 1.5);
     Real tol = 100*std::numeric_limits<Real>::epsilon();
-    Real Q = boost::math::adaptive_trapezoidal(f, (Real) 0, (Real) boost::math::constants::two_pi<Real>(), tol);
+    Real Q = boost::math::trapezoidal(f, (Real) 0, (Real) boost::math::constants::two_pi<Real>(), tol);
     BOOST_CHECK_CLOSE(Q, expected, 100*tol);
 }
 
-template<class Real>
-void test_bessel()
+BOOST_AUTO_TEST_CASE(trapezoidal)
 {
-    using std::sin;
-    using std::cos;
-    using std::sqrt;
-    using boost::math::constants::pi;
-
-    Real error = 0;
-    Real L1 = 0;
-    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
-    Real order = 50;
-    Real x = 17;
-    auto f1 = [&](Real t) { return cos(order*t - x*sin(t))/pi<Real>();};
-    BOOST_REQUIRE_THROW(boost::math::adaptive_trapezoidal(f1, (Real) 0, pi<Real>(), tol, 15, &error, &L1), boost::math::evaluation_error);
-}
-
-BOOST_AUTO_TEST_CASE(adaptive_trapezoidal)
-{
-    test_bessel<double>();
-
-
     test_constant<float>();
     test_constant<double>();
     test_constant<long double>();
@@ -163,12 +144,5 @@ BOOST_AUTO_TEST_CASE(adaptive_trapezoidal)
     test_rational_sin<float>();
     test_rational_sin<double>();
     test_rational_sin<long double>();
-
-#ifdef __GNUC__
-#ifndef __clang__
-    test_constant<boost::multiprecision::float128>();
-    test_rational_periodic<boost::multiprecision::float128>();
-#endif
-#endif
 
 }
