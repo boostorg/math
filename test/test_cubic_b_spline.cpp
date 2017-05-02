@@ -9,11 +9,6 @@
 #include <boost/math/interpolators/cubic_b_spline.hpp>
 #include <boost/math/interpolators/detail/cubic_b_spline_detail.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#ifdef __GNUC__
-#ifndef __clang__
-#include <boost/multiprecision/float128.hpp>
-#endif
-#endif
 
 using boost::multiprecision::cpp_bin_float_50;
 using boost::math::constants::third;
@@ -315,16 +310,4 @@ BOOST_AUTO_TEST_CASE(test_cubic_b_spline)
 
     test_copy_move<double>();
     test_outside_interval<double>();
-
-#ifdef __GNUC__
-#ifndef __clang__
-    test_b3_spline<boost::multiprecision::float128>();
-    test_interpolation_condition<boost::multiprecision::float128>();
-    test_constant_function<boost::multiprecision::float128>();
-    test_affine_function<boost::multiprecision::float128>();
-    test_quadratic_function<boost::multiprecision::float128>();
-    test_trig_function<boost::multiprecision::float128>();
-#endif
-#endif
-
 }
