@@ -689,6 +689,7 @@ run test_nc_t.cpp  pch ../../test/build//boost_unit_test_framework
           <toolset>intel:<pch>off
         : test_nc_t_real_concept ;
 run test_normal.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_numerical_differentiation.cpp ../../test/build//boost_unit_test_framework ;
 run test_owens_t.cpp ../../test/build//boost_unit_test_framework ;
 run test_pareto.cpp ../../test/build//boost_unit_test_framework ;
 run test_polygamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;

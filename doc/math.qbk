@@ -603,6 +603,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include sf/inv_hyper.qbk]
 
 [include sf/owens_t.qbk]
+[include sf/numerical_differentiation.qbk]
 
 [endmathpart] [/section:special Special Functions]
 
@@ -659,6 +660,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include background/lanczos.qbk]
 [include background/remez.qbk]
 [include background/references.qbk]
+
 
 [section:logs_and_tables Error logs and tables]
 
