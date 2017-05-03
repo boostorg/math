@@ -11,6 +11,7 @@
 #  define BOOST_MATH_ASSERT_UNDEFINED_POLICY false
 #endif
 
+#include <ostream>
 #include <boost/math/distributions.hpp>
 
 #include <boost/math/special_functions.hpp>
@@ -54,6 +55,7 @@ void instantiate(RealType)
    using namespace boost;
    using namespace boost::math;
    using namespace boost::math::concepts;
+   std::ostream cnull(0);
 #ifdef TEST_GROUP_1
    function_requires<DistributionConcept<arcsine_distribution<RealType> > >();
    function_requires<DistributionConcept<bernoulli_distribution<RealType> > >();
@@ -159,7 +161,9 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::hypergeometric > >();
 #endif
 #endif
-   int i;
+   int i = 1;
+   // Deal with unused variable warnings:
+   cnull << i;
    RealType v1(0.5), v2(0.5), v3(0.5);
    boost::detail::dummy_constructor dc;
    boost::output_iterator_archetype<RealType> oi(dc);
@@ -918,16 +922,24 @@ void instantiate_mixed(RealType)
 {
    using namespace boost;
    using namespace boost::math;
+   std::ostream cnull(0);
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
    int i = 1;
+   cnull << i;
    long l = 1;
+   cnull << l;
    short s = 1;
+   cnull << s;
    float fr = 0.5F;
+   cnull << fr;
    double dr = 0.5;
+   cnull << dr;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    long double lr = 0.5L;
+   cnull << lr;
 #else
    double lr = 0.5L;
+   cnull << lr;
 #endif
 #ifdef TEST_GROUP_7
    boost::math::tgamma(i);
@@ -1376,4 +1388,3 @@ void instantiate_mixed(RealType)
 
 
 #endif // BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP
-
