@@ -821,6 +821,7 @@ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
 
 lib compile_test_main : compile_test/main.cpp ;
 
+run  compile_test/cubic_spline_incl_test.cpp compile_test_main ;
 run  compile_test/common_factor_rt_inc_test.cpp compile_test_main ;
 run  compile_test/common_factor_ct_inc_test.cpp compile_test_main ;
 run  compile_test/compl_abs_incl_test.cpp compile_test_main ;
@@ -937,6 +938,7 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_inc_test.cpp ;
+compile  compile_test/cubic_spline_concept_test.cpp ;
 
 run ../test/common_factor_test.cpp
     ../../test/build//boost_unit_test_framework ;

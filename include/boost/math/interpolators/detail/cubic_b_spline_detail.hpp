@@ -10,6 +10,7 @@
 #include <limits>
 #include <cmath>
 #include <vector>
+#include <memory>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
@@ -86,7 +87,7 @@ cubic_b_spline_imp<Real>::cubic_b_spline_imp(BidiIterator f, BidiIterator end_p,
 {
     using boost::math::constants::third;
 
-    unsigned length = end_p - f;
+    std::size_t length = end_p - f;
 
     if (length < 5)
     {
@@ -249,9 +250,10 @@ Real cubic_b_spline_imp<Real>::operator()(Real x) const
     using std::max;
     using std::min;
     using std::ceil;
+    using std::floor;
 
-    size_t k_min = (size_t) max(static_cast<long>(0), static_cast<long>(ceil(t - 2)));
-    size_t k_max = (size_t) max(min(static_cast<long>(m_beta.size() - 1), static_cast<long>(floor(t + 2))), (long) 0);
+    size_t k_min = (size_t) max(static_cast<long>(0), boost::math::ltrunc(ceil(t - 2)));
+    size_t k_max = (size_t) max(min(static_cast<long>(m_beta.size() - 1), boost::math::ltrunc(floor(t + 2))), (long) 0);
     for (size_t k = k_min; k <= k_max; ++k)
     {
         z += m_beta[k]*b3_spline(t - k);
@@ -269,9 +271,10 @@ Real cubic_b_spline_imp<Real>::prime(Real x) const
     using std::max;
     using std::min;
     using std::ceil;
+    using std::floor;
 
-    size_t k_min = (size_t) max(static_cast<long>(0), static_cast<long>(ceil(t - 2)));
-    size_t k_max = (size_t) min(static_cast<long>(m_beta.size() - 1), static_cast<long>(floor(t + 2)));
+    size_t k_min = (size_t) max(static_cast<long>(0), boost::math::ltrunc(ceil(t - 2)));
+    size_t k_max = (size_t) min(static_cast<long>(m_beta.size() - 1), boost::math::ltrunc(floor(t + 2)));
 
     for (size_t k = k_min; k <= k_max; ++k)
     {
