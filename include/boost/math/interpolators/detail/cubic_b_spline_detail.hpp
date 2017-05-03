@@ -22,7 +22,8 @@ class cubic_b_spline_imp
 public:
     // If you don't know the value of the derivative at the endpoints, leave them as nans and the routine will estimate them.
     // f[0] = f(a), f[length -1] = b, step_size = (b - a)/(length -1).
-    cubic_b_spline_imp(const Real* const f, size_t length, Real left_endpoint, Real step_size,
+    template <class BidiIterator>
+    cubic_b_spline_imp(BidiIterator f, BidiIterator end_p, Real left_endpoint, Real step_size,
                        Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
                        Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
 
@@ -39,7 +40,7 @@ private:
 
 
 
-template<class Real>
+template <class Real>
 Real b3_spline(Real x)
 {
     using std::abs;
@@ -78,11 +79,14 @@ Real b3_spline_prime(Real x)
 }
 
 
-template<class Real>
-cubic_b_spline_imp<Real>::cubic_b_spline_imp(const Real* const f, size_t length, Real left_endpoint, Real step_size,
+template <class Real>
+template <class BidiIterator>
+cubic_b_spline_imp<Real>::cubic_b_spline_imp(BidiIterator f, BidiIterator end_p, Real left_endpoint, Real step_size,
                                              Real left_endpoint_derivative, Real right_endpoint_derivative) : m_a(left_endpoint), m_avg(0)
 {
     using boost::math::constants::third;
+
+    unsigned length = end_p - f;
 
     if (length < 5)
     {

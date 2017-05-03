@@ -115,6 +115,31 @@ void test_constant_function()
         Real y_prime = spline.prime(i*step + a + 0.002);
         BOOST_CHECK_SMALL(y_prime, std::numeric_limits<Real>::epsilon());
     }
+
+    //
+    // Again with iterator constructor:
+    //
+    boost::math::cubic_b_spline<Real> spline2(v.begin(), v.end(), a, step);
+
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+       // Do not test at interpolation point; we already know it works there:
+       Real y = spline2(i*step + a + 0.001);
+       BOOST_CHECK_CLOSE(y, constant, 10 * std::numeric_limits<Real>::epsilon());
+       Real y_prime = spline2.prime(i*step + a + 0.002);
+       BOOST_CHECK_SMALL(y_prime, 5000 * std::numeric_limits<Real>::epsilon());
+    }
+
+    // Test that correctly specified left and right-derivatives work properly:
+    spline2 = boost::math::cubic_b_spline<Real>(v.begin(), v.end(), a, step, 0, 0);
+
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+       Real y = spline2(i*step + a + 0.002);
+       BOOST_CHECK_CLOSE(y, constant, std::numeric_limits<Real>::epsilon());
+       Real y_prime = spline2.prime(i*step + a + 0.002);
+       BOOST_CHECK_SMALL(y_prime, std::numeric_limits<Real>::epsilon());
+    }
 }
 
 

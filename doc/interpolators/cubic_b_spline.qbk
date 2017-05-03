@@ -19,6 +19,10 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     {
     public:
 
+	    template <class BidiIterator>
+        cubic_b_spline(BidiIterator a, BidiIterator b, Real left_endpoint, Real step_size,
+                       Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
+                       Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
         cubic_b_spline(const Real* const f, size_t length, Real left_endpoint, Real step_size,
                        Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
                        Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
@@ -41,10 +45,13 @@ There are many use cases for interpolating a function at equally spaced points.
 One particularly important example is solving ODE's whose coefficients depend on data determined from experiment or numerical simulation.
 Since most ODE steppers are adaptive, they must be able to sample the coefficients at arbitrary points; not just at the points we know the values of our function.
 
-The constructor must be provided the following arguments:
+The first two arguments to the constructor are either:
 
-* A vector containing data
-* The length of the vector
+* A pair of bidirectional iterators into the data, or
+* A pointer to the data, and a length of the data array.
+
+These are then followed by:
+
 * The start of the functions domain
 * The step size
 
@@ -55,11 +62,11 @@ An example of a valid call to the constructor is
     std::vector<double> f{0.01, -0.02, 0.3, 0.8, 1.9, -8.78, -22.6};
     double t0 = 0;
     double h = 0.01;
-    boost::math::cubic_b_spline<double> spline(f.data(), f.size(), t0, h);
+    boost::math::cubic_b_spline<double> spline(f.begin(), f.end(), t0, h);
 
 The endpoints are estimated using a one-sided finite-difference formula. If you know the derivative at the endpoint, you may pass it to the constructor via
 
-    boost::math::cubic_b_spline<double> spline(f.data(), f.size(), t0, h, a_prime, b_prime);
+    boost::math::cubic_b_spline<double> spline(f.begin(), f.end(), t0, h, a_prime, b_prime);
 
 
 To evaluate the interpolant at a point, we simply use
