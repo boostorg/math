@@ -326,22 +326,22 @@ BOOST_AUTO_TEST_CASE( gcd_unmarked_int_test )
     // then does an absolute-value on the result.  Signed types that are not
     // marked as such (due to no std::numeric_limits specialization) may be off
     // by a sign.
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   1,  -1 )), MyInt2( 1) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(  -1,   1 )), MyInt2( 1) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   1,   1 )), MyInt2( 1) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(  -1,  -1 )), MyInt2( 1) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   0,   0 )), MyInt2( 0) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   7,   0 )), MyInt2( 7) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   0,   9 )), MyInt2( 9) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(  -7,   0 )), MyInt2( 7) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   0,  -9 )), MyInt2( 9) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(  42,  30 )), MyInt2( 6) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   6,  -9 )), MyInt2( 3) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>( -10, -10 )), MyInt2(10) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>( -25, -10 )), MyInt2( 5) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   3,   7 )), MyInt2( 1) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   8,   9 )), MyInt2( 1) );
-    BOOST_CHECK_EQUAL( abs(gcd<MyInt2>(   7,  49 )), MyInt2( 7) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(1), static_cast<MyInt2>(-1) )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(-1), static_cast<MyInt2>(1) )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(1), static_cast<MyInt2>(1) )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(-1), static_cast<MyInt2>(-1) )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(0), static_cast<MyInt2>(0) )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(7), static_cast<MyInt2>(0) )), MyInt2( 7) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(0), static_cast<MyInt2>(9) )), MyInt2( 9) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(-7), static_cast<MyInt2>(0) )), MyInt2( 7) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(0), static_cast<MyInt2>(-9) )), MyInt2( 9) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(42), static_cast<MyInt2>(30))), MyInt2( 6) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(6), static_cast<MyInt2>(-9) )), MyInt2( 3) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(-10), static_cast<MyInt2>(-10) )), MyInt2(10) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(-25), static_cast<MyInt2>(-10) )), MyInt2( 5) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(3), static_cast<MyInt2>(7) )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(8), static_cast<MyInt2>(9) )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(gcd(static_cast<MyInt2>(7), static_cast<MyInt2>(49) )), MyInt2( 7) );
 }
 
 // GCD on unsigned integer types
@@ -451,22 +451,22 @@ BOOST_AUTO_TEST_CASE( lcm_unmarked_int_test )
     // then does an absolute-value on the result.  Signed types that are not
     // marked as such (due to no std::numeric_limits specialization) may be off
     // by a sign.
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   1,  -1 )), MyInt2( 1) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  -1,   1 )), MyInt2( 1) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   1,   1 )), MyInt2( 1) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  -1,  -1 )), MyInt2( 1) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   0,   0 )), MyInt2( 0) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   6,   0 )), MyInt2( 0) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   0,   7 )), MyInt2( 0) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  -5,   0 )), MyInt2( 0) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   0,  -4 )), MyInt2( 0) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  18,  30 )), MyInt2(90) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  -6,   9 )), MyInt2(18) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>( -10, -10 )), MyInt2(10) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(  25, -10 )), MyInt2(50) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   3,   7 )), MyInt2(21) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   8,   9 )), MyInt2(72) );
-    BOOST_CHECK_EQUAL( abs(lcm<MyInt2>(   7,  49 )), MyInt2(49) );
+    BOOST_CHECK_EQUAL( abs(lcm(   static_cast<MyInt2>(1), static_cast<MyInt2>(-1) )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(-1), static_cast<MyInt2>(1) )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(1), static_cast<MyInt2>(1) )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(-1), static_cast<MyInt2>(-1) )), MyInt2( 1) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(0), static_cast<MyInt2>(0) )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(6), static_cast<MyInt2>(0) )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(0), static_cast<MyInt2>(7) )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(-5), static_cast<MyInt2>(0) )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(0), static_cast<MyInt2>(-4) )), MyInt2( 0) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(18), static_cast<MyInt2>(30) )), MyInt2(90) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(-6), static_cast<MyInt2>(9) )), MyInt2(18) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(-10), static_cast<MyInt2>(-10) )), MyInt2(10) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(25), static_cast<MyInt2>(-10) )), MyInt2(50) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(3), static_cast<MyInt2>(7) )), MyInt2(21) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(8), static_cast<MyInt2>(9) )), MyInt2(72) );
+    BOOST_CHECK_EQUAL( abs(lcm(static_cast<MyInt2>(7), static_cast<MyInt2>(49) )), MyInt2(49) );
 }
 
 // LCM on unsigned integer types
