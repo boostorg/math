@@ -82,7 +82,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(const Real* const x, co
     m_w.resize(n, 0);
     for(int64_t k = 0; k < n; ++k)
     {
-        int64_t i_min = std::max(k - (int64_t) approximation_order, (int64_t) 0);
+        int64_t i_min = (std::max)(k - (int64_t) approximation_order, (int64_t) 0);
         int64_t i_max = k;
         if (k >= n - approximation_order)
         {
@@ -92,7 +92,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(const Real* const x, co
         for(int64_t i = i_min; i <= i_max; ++i)
         {
             Real inv_product = 1;
-            int64_t j_max = std::min(i + approximation_order, n - 1);
+            int64_t j_max = (std::min)(static_cast<int64_t>(i + approximation_order), static_cast<int64_t>(n - 1));
             for(int64_t j = i; j <= j_max; ++j)
             {
                 if (j == k)
