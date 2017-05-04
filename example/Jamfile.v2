@@ -124,4 +124,7 @@ explicit root_elliptic_finding ;
 explicit root_finding_algorithms ;
 explicit root_n_finding_algorithms ;
 
+run barycentric_interpolation_example.cpp ;
+run cubic_b_spline_example.cpp ;
+
 

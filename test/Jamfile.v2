@@ -102,6 +102,7 @@ run test_arcsine.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_bernoulli.cpp ../../test/build//boost_unit_test_framework ;
 run test_constants.cpp ../../test/build//boost_unit_test_framework ;
 run test_print_info_on_type.cpp ;
+run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework ;
 run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no ;
 run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_y.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
