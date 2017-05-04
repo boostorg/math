@@ -3,8 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-#include <boost/math/interpolators/cubic_b_spline.hpp>
 #include <boost/math/concepts/std_real_concept.hpp>
+#include <boost/math/interpolators/cubic_b_spline.hpp>
 
 void compile_and_link_test()
 {
