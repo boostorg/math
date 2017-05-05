@@ -98,7 +98,6 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator start_x, 
                 if (abs(diff) < std::numeric_limits<Real>::epsilon())
                 {
                     boost::format fmtr = boost::format("Spacing between  x[%1%] and x[%2%] is %3%, which is smaller than the epsilon of %4%") % k % i % diff % boost::typeindex::type_id<Real>().pretty_name();
-                    std::cout << typeid(fmtr).name() << std::endl;
                     throw std::logic_error(fmtr.str());
                 }
                 inv_product *= diff;
