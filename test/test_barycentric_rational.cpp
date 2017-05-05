@@ -21,7 +21,7 @@ void test_interpolation_condition()
     std::cout << "Testing interpolation condition for barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     std::random_device rd;
     std::mt19937 gen(rd());
-    boost::random::uniform_real_distribution<Real> dis(0.1, 1);
+    boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
     x[0] = dis(gen);
@@ -47,7 +47,7 @@ void test_interpolation_condition_high_order()
     std::cout << "Testing interpolation condition in high order for barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
     std::random_device rd;
     std::mt19937 gen(rd());
-    boost::random::uniform_real_distribution<Real> dis(0.1, 1);
+    boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
     x[0] = dis(gen);
@@ -76,7 +76,7 @@ void test_constant()
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    boost::random::uniform_real_distribution<Real> dis(0.1, 1);
+    boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
     Real constant = -8;
@@ -105,7 +105,7 @@ void test_constant_high_order()
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    boost::random::uniform_real_distribution<Real> dis(0.1, 1);
+    boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
     Real constant = 5;
@@ -135,7 +135,7 @@ void test_runge()
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    boost::random::uniform_real_distribution<Real> dis(0.005, 0.01);
+    boost::random::uniform_real_distribution<Real> dis(0.005f, 0.01f);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
     x[0] = -2;
@@ -174,7 +174,7 @@ void test_weights()
         y[i] = 1/(1+25*x[i]*x[i]);
     }
 
-    boost::math::detail::barycentric_rational_imp<Real> interpolator(x.data(), y.data(), y.size(), 0);
+    boost::math::detail::barycentric_rational_imp<Real> interpolator(x.data(), x.data() + x.size(), y.data(), 0);
 
     for (size_t i = 0; i < x.size(); ++i)
     {
@@ -190,7 +190,7 @@ void test_weights()
     }
 
     // d = 1:
-    interpolator = boost::math::detail::barycentric_rational_imp<Real>(x.data(), y.data(), y.size(), 1);
+    interpolator = boost::math::detail::barycentric_rational_imp<Real>(x.data(), x.data() + x.size(), y.data(), 1);
 
     for (size_t i = 1; i < x.size() -1; ++i)
     {

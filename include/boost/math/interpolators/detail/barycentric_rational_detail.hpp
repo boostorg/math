@@ -19,7 +19,8 @@ template<class Real>
 class barycentric_rational_imp
 {
 public:
-    barycentric_rational_imp(const Real* const x, const Real* const y, size_t n, size_t approximation_order = 3);
+    template <class InputIterator>
+    barycentric_rational_imp(InputIterator start_x, InputIterator end_x, InputIterator start_y, size_t approximation_order = 3);
 
     Real operator()(Real x) const;
 
@@ -37,46 +38,39 @@ private:
     std::vector<Real> m_w;
 };
 
-template<class Real>
-barycentric_rational_imp<Real>::barycentric_rational_imp(const Real* const x, const Real* const y, size_t n, size_t approximation_order)
+template <class Real>
+template <class InputIterator>
+barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator start_x, InputIterator end_x, InputIterator start_y, size_t approximation_order)
 {
     using std::abs;
 
-    if (approximation_order >= n)
+    std::ptrdiff_t n = std::distance(start_x, end_x);
+
+    if (approximation_order >= (std::size_t)n)
     {
         throw std::domain_error("Approximation order must be < data length.");
-    }
-
-    if (x == nullptr)
-    {
-        throw std::domain_error("Independent variable passed to barycentric_rational is a nullptr");
-    }
-
-    if (y == nullptr)
-    {
-        throw std::domain_error("Dependent variable passed to barycentric_rational is a nullptr");
     }
 
     // Big sad memcpy to make sure the object is easy to use.
     m_x.resize(n);
     m_y.resize(n);
-    for(size_t i = 0; i < n; ++i)
+    for(unsigned i = 0; start_x < end_x; ++start_x, ++start_y, ++i)
     {
         // But if we're going to do a memcpy, we can do some error checking which is inexpensive relative to the copy:
-        if(boost::math::isnan(x[i]))
+        if(boost::math::isnan(*start_x))
         {
             boost::format fmtr = boost::format("x[%1%] is a NAN") % i;
             throw std::domain_error(fmtr.str());
         }
 
-        if(boost::math::isnan(y[i]))
+        if(boost::math::isnan(*start_y))
         {
             boost::format fmtr = boost::format("y[%1%] is a NAN") % i;
             throw std::domain_error(fmtr.str());
         }
 
-        m_x[i] = x[i];
-        m_y[i] = y[i];
+        m_x[i] = *start_x;
+        m_y[i] = *start_y;
     }
 
     m_w.resize(n, 0);
@@ -84,7 +78,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(const Real* const x, co
     {
         int64_t i_min = (std::max)(k - (int64_t) approximation_order, (int64_t) 0);
         int64_t i_max = k;
-        if (k >= n - approximation_order)
+        if (k >= n - (std::ptrdiff_t)approximation_order)
         {
             i_max = n - approximation_order - 1;
         }

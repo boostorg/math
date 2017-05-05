@@ -36,17 +36,27 @@ class barycentric_rational
 public:
     barycentric_rational(const Real* const x, const Real* const y, size_t n, size_t approximation_order = 3);
 
+    template <class InputIterator>
+    barycentric_rational(InputIterator start_x, InputIterator end_x, InputIterator start_y, size_t approximation_order = 3);
+
     Real operator()(Real x) const;
 
 private:
     std::shared_ptr<detail::barycentric_rational_imp<Real>> m_imp;
 };
 
-template<class Real>
+template <class Real>
 barycentric_rational<Real>::barycentric_rational(const Real* const x, const Real* const y, size_t n, size_t approximation_order):
- m_imp(std::make_shared<detail::barycentric_rational_imp<Real>>(x, y, n, approximation_order))
+ m_imp(std::make_shared<detail::barycentric_rational_imp<Real>>(x, x + n, y, approximation_order))
 {
     return;
+}
+
+template <class Real>
+template <class InputIterator>
+barycentric_rational<Real>::barycentric_rational(InputIterator start_x, InputIterator end_x, InputIterator start_y, size_t approximation_order)
+ : m_imp(std::make_shared<detail::barycentric_rational_imp<Real>>(start_x, end_x, start_y, approximation_order))
+{
 }
 
 template<class Real>
