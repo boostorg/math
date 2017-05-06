@@ -625,8 +625,10 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [endsect] [/section:roots Root finding]
 [include internals/polynomial.qbk]
 [include internals/rational.qbk]
+[section:interpolate Interpolation Functions]
 [include interpolators/cubic_b_spline.qbk]
 [include interpolators/barycentric_rational_interpolation.qbk]
+[endsect]
 
 [endmathpart] [/mathpart roots Root Finding Algorithms]
 

@@ -6,6 +6,11 @@
 // Basic sanity check that header <boost/math/special_functions/gamma.hpp>
 // #includes all the files that it needs to.
 //
+
+#ifdef _MSC_VER
+#pragma warning(disable:4459)
+#endif
+
 #include <boost/math/interpolators/barycentric_rational.hpp>
 //
 // Note this header includes no other headers, this is

@@ -35,7 +35,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
   }} // namespaces
 
 
-[section:cubic_b_over Cubic B-Spline Interpolation]
+[heading Cubic B-Spline Interpolation]
 
 The cubic B-spline class provided by boost allows fast and accurate interpolation of a function which is known at equally spaced points.
 The cubic B-spline interpolation is numerically stable as it uses compactly supported basis functions constructed via iterative convolution.
@@ -105,5 +105,12 @@ validating that equality with the data holds.
 
 In addition, constant, linear, and quadratic functions are interpolated to ensure that the interpolant behaves as expected.
 
-[endsect]
+[heading Example]
+
+[import ../../example/cubic_b_spline_example.cpp]
+
+[cubic_b_spline_example]
+
+[cubic_b_spline_example_out]
+
 [endsect]

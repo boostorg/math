@@ -19,8 +19,8 @@ template<class Real>
 class barycentric_rational_imp
 {
 public:
-    template <class InputIterator>
-    barycentric_rational_imp(InputIterator start_x, InputIterator end_x, InputIterator start_y, size_t approximation_order = 3);
+    template <class InputIterator1, class InputIterator2>
+    barycentric_rational_imp(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order = 3);
 
     Real operator()(Real x) const;
 
@@ -39,8 +39,8 @@ private:
 };
 
 template <class Real>
-template <class InputIterator>
-barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator start_x, InputIterator end_x, InputIterator start_y, size_t approximation_order)
+template <class InputIterator1, class InputIterator2>
+barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order)
 {
     using std::abs;
 
@@ -54,7 +54,7 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator start_x, 
     // Big sad memcpy to make sure the object is easy to use.
     m_x.resize(n);
     m_y.resize(n);
-    for(unsigned i = 0; start_x < end_x; ++start_x, ++start_y, ++i)
+    for(unsigned i = 0; start_x != end_x; ++start_x, ++start_y, ++i)
     {
         // But if we're going to do a memcpy, we can do some error checking which is inexpensive relative to the copy:
         if(boost::math::isnan(*start_x))

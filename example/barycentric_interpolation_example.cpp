@@ -22,13 +22,15 @@
 */
 
 #include <boost/math/interpolators/barycentric_rational.hpp>
-//] [/barycentric_rational_example]
 
 int main()
 {
     // The lithium potential is given in Kohn's paper, Table I:
     std::vector<double> r(45);
     std::vector<double> mrV(45);
+
+    // We'll skip the code for filling the above vectors with data for now...
+    //<-
 
     r[0] = 0.02; mrV[0] = 5.727;
     r[1] = 0.04, mrV[1] = 5.544;
@@ -75,6 +77,7 @@ int main()
     r[42] = 3.40, mrV[42] = 2.0004;
     r[43] = 3.56, mrV[43] = 2.0002;
     r[44] = 3.72, mrV[44] = 2.0001;
+    //->
 
     // Now we want to interpolate this potential at any r:
     boost::math::barycentric_rational<double> b(r.data(), mrV.data(), r.size());
@@ -85,3 +88,4 @@ int main()
         std::cout <<  "(r, V) = (" << r << ", " << -b(r)/r << ")\n";
     }
 }
+//] [/barycentric_rational_example]

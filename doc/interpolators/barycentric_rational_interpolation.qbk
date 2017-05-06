@@ -18,8 +18,8 @@ namespace boost{ namespace math{
     class barycentric_rational
     {
     public:
-	    template <class InputIterator>
-        barycentric_rational(InputIterator start_x, InputIterator end_x, InputIterator start_y, size_t approximation_order = 3);
+	    template <class InputIterator1, class InputIterator2>
+        barycentric_rational(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order = 3);
         barycentric_rational(const Real* const x, const Real* const y, size_t n, size_t approximation_order = 3);
 
         Real operator()(Real x) const;
@@ -59,5 +59,17 @@ This is to be expected; all interpolants perform better in the opposite regime, 
 
 
 The reference used for implementation of this algorithm is [@https://web.archive.org/save/_embed/http://www.mn.uio.no/math/english/people/aca/michaelf/papers/rational.pdf Barycentric rational interpolation with no poles and a high rate of interpolation].
+
+[heading Examples]
+
+[import ../../example/barycentric_interpolation_example.cpp]
+[import ../../example/barycentric_interpolation_example_2.cpp]
+
+[barycentric_rational_example]
+
+[barycentric_rational_example2]
+
+[barycentric_rational_example2_out]
+
 
 [endsect] [/section:barycentric Barycentric Rational Interpolation]

@@ -36,8 +36,8 @@ class barycentric_rational
 public:
     barycentric_rational(const Real* const x, const Real* const y, size_t n, size_t approximation_order = 3);
 
-    template <class InputIterator>
-    barycentric_rational(InputIterator start_x, InputIterator end_x, InputIterator start_y, size_t approximation_order = 3);
+    template <class InputIterator1, class InputIterator2>
+    barycentric_rational(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order = 3, typename boost::disable_if_c<boost::is_integral<InputIterator2>::value>::type* = 0);
 
     Real operator()(Real x) const;
 
@@ -53,8 +53,8 @@ barycentric_rational<Real>::barycentric_rational(const Real* const x, const Real
 }
 
 template <class Real>
-template <class InputIterator>
-barycentric_rational<Real>::barycentric_rational(InputIterator start_x, InputIterator end_x, InputIterator start_y, size_t approximation_order)
+template <class InputIterator1, class InputIterator2>
+barycentric_rational<Real>::barycentric_rational(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order, typename boost::disable_if_c<boost::is_integral<InputIterator2>::value>::type*)
  : m_imp(std::make_shared<detail::barycentric_rational_imp<Real>>(start_x, end_x, start_y, approximation_order))
 {
 }

@@ -23,8 +23,6 @@
 */
 #include <boost/math/interpolators/cubic_b_spline.hpp>
 
-//] [/airy_zeros_example_1]
-
 int main()
 {
     // We begin with an array of samples:
@@ -77,15 +75,73 @@ int main()
     // Now create a function which has a zero at p = 100,000,000:
     auto f = [=](double t){ return p(t) - 100000000; };
 
-    // Boost includes a bisection algorithm, which is robust, but not as fast as others (such as toms748)
-    // We'll use it because of it's simplicity:
+    // Boost includes a bisection algorithm, which is robust, though not as fast as some others 
+    // we provide, but lets try that first.  We need a termination condition for it, which
+    // takes the two endpoints of the range and returns either true (stop) or false (keep going),
+    // we could use a predefined one such as boost::math::tools::eps_tolerance<double>, but that
+    // won't stop until we have full double precision which is overkill, since we just need the 
+    // endpoint to yield the same month.  While we're at it, we'll keep track of the number of
+    // iterations required too, though this is strictly optional:
 
-    boost::math::tools::eps_tolerance<double> tol;
-    auto result =  boost::math::tools::bisect(f, 1910.0, 1920.0, tol);
-    auto time = result.first;
+    auto termination = [](double left, double right) 
+    {
+       double left_month = std::round((left - std::floor(left)) * 12 + 1);
+       double right_month = std::round((right - std::floor(right)) * 12 + 1);
+       return (left_month == right_month) && (std::floor(left) == std::floor(right)); 
+    };
+    std::uintmax_t iterations = 1000;
+    auto result =  boost::math::tools::bisect(f, 1910.0, 1920.0, termination, iterations);
+    auto time = result.first;  // termination condition ensures that both endpoints yield the same result
     auto month = std::round((time - std::floor(time))*12  + 1);
     auto year = std::floor(time);
     std::cout << "The population of the United States surpassed 100 million on the ";
     std::cout << month << "th month of " << year << std::endl;
+    std::cout << "Found in " << iterations << " iterations" << std::endl;
+
+    // Since the cubic B spline offers the first derivative, we could equally have used Newton iterations,
+    // this takes "number of bits correct" as a termination condition - 20 should be plenty for what we need,
+    // and once again, we track how many iterations are taken:
+
+    auto f_n = [=](double t) { return std::make_pair(p(t) - 100000000, p.prime(t)); };
+    iterations = 1000;
+    time = boost::math::tools::newton_raphson_iterate(f_n, 1910.0, 1900.0, 2000.0, 20, iterations);
+    month = std::round((time - std::floor(time))*12  + 1);
+    year = std::floor(time);
+    std::cout << "The population of the United States surpassed 100 million on the ";
+    std::cout << month << "th month of " << year << std::endl;
+    std::cout << "Found in " << iterations << " iterations" << std::endl;
 
 }
+
+//] [/cubic_b_spline_example]
+
+//[cubic_b_spline_example_out
+/*` Program output is:
+[pre
+sin(4.07362) = -0.802829, spline interpolation gives - 0.802829
+cos(4.07362) = -0.596209, spline derivative interpolation gives - 0.596209
+sin(0.677385) = 0.626758, spline interpolation gives 0.626758
+cos(0.677385) = 0.779214, spline derivative interpolation gives 0.779214
+sin(4.52896) = -0.983224, spline interpolation gives - 0.983224
+cos(4.52896) = -0.182402, spline derivative interpolation gives - 0.182402
+sin(4.17504) = -0.85907, spline interpolation gives - 0.85907
+cos(4.17504) = -0.511858, spline derivative interpolation gives - 0.511858
+sin(0.634934) = 0.593124, spline interpolation gives 0.593124
+cos(0.634934) = 0.805111, spline derivative interpolation gives 0.805111
+sin(4.84434) = -0.991307, spline interpolation gives - 0.991307
+cos(4.84434) = 0.131567, spline derivative interpolation gives 0.131567
+sin(4.56688) = -0.989432, spline interpolation gives - 0.989432
+cos(4.56688) = -0.144997, spline derivative interpolation gives - 0.144997
+sin(1.10517) = 0.893541, spline interpolation gives 0.893541
+cos(1.10517) = 0.448982, spline derivative interpolation gives 0.448982
+sin(3.1618) = -0.0202022, spline interpolation gives - 0.0202022
+cos(3.1618) = -0.999796, spline derivative interpolation gives - 0.999796
+sin(1.54084) = 0.999551, spline interpolation gives 0.999551
+cos(1.54084) = 0.0299566, spline derivative interpolation gives 0.0299566
+The population of the United States surpassed 100 million on the 11th month of 1915
+Found in 12 iterations
+The population of the United States surpassed 100 million on the 11th month of 1915
+Found in 3 iterations
+]
+*/
+//]
