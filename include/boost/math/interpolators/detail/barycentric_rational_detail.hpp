@@ -9,9 +9,9 @@
 #define BOOST_MATH_INTERPOLATORS_BARYCENTRIC_RATIONAL_DETAIL_HPP
 
 #include <vector>
-#include <boost/type_index.hpp>
-#include <boost/format.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/core/demangle.hpp>
 
 namespace boost{ namespace math{ namespace detail{
 
@@ -59,14 +59,14 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
         // But if we're going to do a memcpy, we can do some error checking which is inexpensive relative to the copy:
         if(boost::math::isnan(*start_x))
         {
-            boost::format fmtr = boost::format("x[%1%] is a NAN") % i;
-            throw std::domain_error(fmtr.str());
+            std::string msg = std::string("x[") + boost::lexical_cast<std::string>(i) + "] is a NAN";
+            throw std::domain_error(msg);
         }
 
         if(boost::math::isnan(*start_y))
         {
-            boost::format fmtr = boost::format("y[%1%] is a NAN") % i;
-            throw std::domain_error(fmtr.str());
+           std::string msg = std::string("y[") + boost::lexical_cast<std::string>(i) + "] is a NAN";
+           throw std::domain_error(msg);
         }
 
         m_x[i] = *start_x;
@@ -97,8 +97,12 @@ barycentric_rational_imp<Real>::barycentric_rational_imp(InputIterator1 start_x,
                 Real diff = m_x[k] - m_x[j];
                 if (abs(diff) < std::numeric_limits<Real>::epsilon())
                 {
-                    boost::format fmtr = boost::format("Spacing between  x[%1%] and x[%2%] is %3%, which is smaller than the epsilon of %4%") % k % i % diff % boost::typeindex::type_id<Real>().pretty_name();
-                    throw std::logic_error(fmtr.str());
+                   std::string msg = std::string("Spacing between  x[")
+                      + boost::lexical_cast<std::string>(k) + std::string("] and x[")
+                      + boost::lexical_cast<std::string>(i) + std::string("] is ")
+                      + boost::lexical_cast<std::string>(diff) + std::string(", which is smaller than the epsilon of ")
+                      + boost::core::demangle(typeid(Real).name());
+                    throw std::logic_error(msg);
                 }
                 inv_product *= diff;
             }
