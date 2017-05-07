@@ -7,6 +7,7 @@
 
 # bring in the rules for testing
 import testing ;
+import ../../config/checks/config : requires ;
 
 project
     : requirements
@@ -124,7 +125,8 @@ explicit root_elliptic_finding ;
 explicit root_finding_algorithms ;
 explicit root_n_finding_algorithms ;
 
-run barycentric_interpolation_example.cpp ;
-run cubic_b_spline_example.cpp ;
+run barycentric_interpolation_example.cpp : : : [ requires cxx11_smart_ptr ] ;
+run barycentric_interpolation_example_2.cpp : : : [ requires cxx11_smart_ptr ] ;
+run cubic_b_spline_example.cpp : : : [ requires cxx11_smart_ptr ] ;
 
 

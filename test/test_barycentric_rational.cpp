@@ -7,10 +7,9 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/interpolators/barycentric_rational.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#ifdef __GNUC__
-#ifndef __clang__
+
+#ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp>
-#endif
 #endif
 
 using boost::multiprecision::cpp_bin_float_50;
