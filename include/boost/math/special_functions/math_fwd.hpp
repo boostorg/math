@@ -23,6 +23,7 @@
 #pragma once
 #endif
 
+#include <vector>
 #include <boost/math/special_functions/detail/round_fwd.hpp>
 #include <boost/math/tools/promotion.hpp> // for argument promotion.
 #include <boost/math/policies/policy.hpp>
@@ -181,6 +182,17 @@ namespace boost
    template <class T>
    typename tools::promote_args<T>::type
          legendre_p(int l, T x);
+   template <class T>
+   typename tools::promote_args<T>::type
+          legendre_p_prime(int l, T x);
+
+
+   template <class T, class Policy>
+   inline std::vector<T> legendre_p_zeros(int l, const Policy& pol);
+
+   template <class T>
+   inline std::vector<T> legendre_p_zeros(int l);
+
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
    template <class T, class Policy>
    typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
@@ -1593,5 +1605,3 @@ template <class OutputIterator, class T>\
 
 
 #endif // BOOST_MATH_SPECIAL_MATH_FWD_HPP
-
-
