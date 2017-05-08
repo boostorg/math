@@ -74,7 +74,15 @@ T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
 template <class T, class Policy>
 T legendre_p_prime_imp(unsigned l, T x, const Policy& pol, T* Pn = nullptr)
 {
-    if (l == 0)
+   static const char* function = "boost::math::legrendre_p_prime<%1%>(unsigned, %1%)";
+   // Error handling:
+   if ((x < -1) || (x > 1))
+      return policies::raise_domain_error<T>(
+         function,
+         "The Legendre Polynomial is defined for"
+         " -1 <= x <= 1, but got x = %1%.", x, pol);
+   
+   if (l == 0)
     {
         if (Pn)
         {

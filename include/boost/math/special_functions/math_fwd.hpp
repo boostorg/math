@@ -197,6 +197,9 @@ namespace boost
    template <class T, class Policy>
    typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
          legendre_p(int l, T x, const Policy& pol);
+   template <class T, class Policy>
+   inline typename boost::enable_if_c<policies::is_policy<Policy>::value, typename tools::promote_args<T>::type>::type
+      legendre_p_prime(int l, T x, const Policy& pol);
 #endif
    template <class T>
    typename tools::promote_args<T>::type
@@ -1156,6 +1159,10 @@ namespace boost
    template <class T>\
    inline typename boost::math::tools::promote_args<T>::type \
    legendre_p(int l, T x){ return ::boost::math::legendre_p(l, x, Policy()); }\
+\
+   template <class T>\
+   inline typename boost::math::tools::promote_args<T>::type \
+   legendre_p_prime(int l, T x){ return ::boost::math::legendre_p(l, x, Policy()); }\
 \
    template <class T>\
    inline typename boost::math::tools::promote_args<T>::type \

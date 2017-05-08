@@ -222,6 +222,7 @@ void instantiate(RealType)
    boost::math::legendre_p(1, v1);
    boost::math::legendre_p(1, 0, v1);
    boost::math::legendre_q(1, v1);
+   boost::math::legendre_p_prime(1, v1);
    boost::math::legendre_next(2, v1, v2, v3);
    boost::math::legendre_next(2, 2, v1, v2, v3);
    boost::math::laguerre(1, v1);
@@ -416,6 +417,7 @@ void instantiate(RealType)
    boost::math::powm1(v1 * 1, v2 + 0);
    boost::math::legendre_p(1, v1 * 1);
    boost::math::legendre_p(1, 0, v1 * 1);
+   boost::math::legendre_p_prime(1, v1 * 1);
    boost::math::legendre_q(1, v1 * 1);
    boost::math::legendre_next(2, v1 * 1, v2 + 0, v3 / 1);
    boost::math::legendre_next(2, 2, v1 * 1, v2 + 0, v3 / 1);
@@ -592,6 +594,7 @@ void instantiate(RealType)
    boost::math::powm1(v1, v2, pol);
    boost::math::legendre_p(1, v1, pol);
    boost::math::legendre_p(1, 0, v1, pol);
+   boost::math::legendre_p_prime(1, v1 * 1, pol);
    boost::math::legendre_q(1, v1, pol);
    boost::math::legendre_next(2, v1, v2, v3);
    boost::math::legendre_next(2, 2, v1, v2, v3);
@@ -787,6 +790,7 @@ void instantiate(RealType)
    test::powm1(v1, v2);
    test::legendre_p(1, v1);
    test::legendre_p(1, 0, v1);
+   test::legendre_p_prime(1, v1 * 1);
    test::legendre_q(1, v1);
    test::legendre_next(2, v1, v2, v3);
    test::legendre_next(2, 2, v1, v2, v3);
