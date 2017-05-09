@@ -72,7 +72,13 @@ T legendre_imp(unsigned l, T x, const Policy& pol, bool second = false)
 }
 
 template <class T, class Policy>
-T legendre_p_prime_imp(unsigned l, T x, const Policy& pol, T* Pn = nullptr)
+T legendre_p_prime_imp(unsigned l, T x, const Policy& pol, T* Pn 
+#ifdef BOOST_NO_CXX11_NULLPTR
+   = 0
+#else
+   = nullptr
+#endif
+)
 {
    static const char* function = "boost::math::legrendre_p_prime<%1%>(unsigned, %1%)";
    // Error handling:
@@ -130,6 +136,22 @@ T legendre_p_prime_imp(unsigned l, T x, const Policy& pol, T* Pn = nullptr)
 }
 
 template <class T, class Policy>
+struct legendre_p_zero_func
+{
+   int n;
+   const Policy& pol;
+
+   legendre_p_zero_func(int n_, const Policy& p) : n(n_), pol(p) {}
+
+   std::pair<T, T> operator()(T x) const
+   { 
+      T Pn;
+      T Pn_prime = detail::legendre_p_prime_imp(n, x, pol, &Pn);
+      return std::pair<T, T>(Pn, Pn_prime); 
+   };
+};
+
+template <class T, class Policy>
 std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
 {
     using std::cos;
@@ -161,7 +183,7 @@ std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
     }
     T half_n = ceil(n*half<T>());
 
-    while (k < zeros.size())
+    while (k < (int)zeros.size())
     {
         // Bracket the root: Szego:
         // Gabriel Szego, Inequalities for the Zeros of Legendre Polynomials and Related Functions, Transactions of the American Mathematical Society, Vol. 39, No. 1 (1936)
@@ -177,9 +199,7 @@ std::vector<T> legendre_p_zeros_imp(int n, const Policy& pol)
 
         boost::uintmax_t number_of_iterations = policies::get_max_root_iterations<Policy>();
 
-        auto f = [&] (T x) { T Pn;
-                             T Pn_prime = detail::legendre_p_prime_imp(n, x, pol, &Pn);
-                             return std::pair<T, T>(Pn, Pn_prime); };
+        legendre_p_zero_func<T, Policy> f(n, pol);
 
         const T x_nk = newton_raphson_iterate(f, x_nk_guess,
                                               lower_bound, upper_bound,

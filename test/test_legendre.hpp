@@ -272,7 +272,7 @@ void test_legendre_p_zeros()
     Real tol = std::numeric_limits<Real>::epsilon();
 
     // Check the trivial cases:
-    auto zeros = legendre_p_zeros<Real>(1);
+    std::vector<Real> zeros = legendre_p_zeros<Real>(1);
     BOOST_ASSERT(zeros.size() == 1);
     BOOST_CHECK_SMALL(zeros[0], tol);
 
@@ -320,7 +320,7 @@ void test_legendre_p_zeros()
             Real next_zero = zeros[k];
             BOOST_CHECK(next_zero > previous_zero);
 
-            std::string err = "Tolerance failed for (n, k) = (" + std::to_string(n) + "," + std::to_string(k) + ")\n";
+            std::string err = "Tolerance failed for (n, k) = (" + boost::lexical_cast<std::string>(n) + "," + boost::lexical_cast<std::string>(k) + ")\n";
             if (n < 40)
             {
                 BOOST_CHECK_MESSAGE( abs(legendre_p(n, next_zero)) < 100*tol,
@@ -350,12 +350,12 @@ int test_legendre_p_zeros_double_ulp(int min_x, int max_n)
     double max_float_distance = 0;
     for (int n = min_x; n < max_n; ++n)
     {
-        auto double_zeros = legendre_p_zeros<double>(n);
-        auto quad_zeros   = legendre_p_zeros<cpp_bin_float_quad>(n);
+        std::vector<double> double_zeros = legendre_p_zeros<double>(n);
+        std::vector<cpp_bin_float_quad> quad_zeros   = legendre_p_zeros<cpp_bin_float_quad>(n);
         BOOST_ASSERT(quad_zeros.size() == double_zeros.size());
-        for (int k = 0; k < double_zeros.size(); ++k)
+        for (int k = 0; k < (int)double_zeros.size(); ++k)
         {
-            double d = abs(float_distance(double_zeros[k], (double) quad_zeros[k]));
+            double d = abs(float_distance(double_zeros[k], quad_zeros[k].convert_to<double>()));
             if (d > max_float_distance)
             {
                 max_float_distance = d;
