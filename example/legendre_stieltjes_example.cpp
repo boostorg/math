@@ -8,8 +8,6 @@
 #include <string>
 #include <boost/math/constants/constants.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
-#include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/special_functions/legendre_stieltjes.hpp>
 
 using boost::math::legendre_p;
@@ -17,7 +15,7 @@ using boost::math::legendre_p_zeros;
 using boost::math::legendre_p_prime;
 using boost::math::legendre_stieltjes;
 using boost::multiprecision::cpp_bin_float_quad;
-using boost::multiprecision::cpp_dec_float_100;
+using boost::multiprecision::cpp_bin_float_100;
 
 template<class Real>
 void gauss_konrod_rule(size_t order)
@@ -80,21 +78,21 @@ void gauss_konrod_rule(size_t order)
 int main()
 {
     std::cout << "Gauss-Konrod 7-15 Rule:\n";
-    gauss_konrod_rule<cpp_dec_float_100>(7);
+    gauss_konrod_rule<cpp_bin_float_100>(7);
 
     std::cout << "\n\nGauss-Konrod 10-21 Rule:\n";
-    gauss_konrod_rule<cpp_dec_float_100>(10);
+    gauss_konrod_rule<cpp_bin_float_100>(10);
 
     std::cout << "\n\nGauss-Konrod 15-31 Rule:\n";
-    gauss_konrod_rule<cpp_dec_float_100>(15);
+    gauss_konrod_rule<cpp_bin_float_100>(15);
 
     std::cout << "\n\nGauss-Konrod 20-41 Rule:\n";
-    gauss_konrod_rule<cpp_dec_float_100>(20);
+    gauss_konrod_rule<cpp_bin_float_100>(20);
 
     std::cout << "\n\nGauss-Konrod 25-51 Rule:\n";
-    gauss_konrod_rule<cpp_dec_float_100>(25);
+    gauss_konrod_rule<cpp_bin_float_100>(25);
 
     std::cout << "\n\nGauss-Konrod 30-61 Rule:\n";
-    gauss_konrod_rule<cpp_dec_float_100>(30);
+    gauss_konrod_rule<cpp_bin_float_100>(30);
 
 }

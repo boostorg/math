@@ -19,7 +19,7 @@
 #include <iostream>
 #include <vector>
 #include <boost/math/tools/roots.hpp>
-#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/math/special_functions/legendre.hpp>
 
 namespace boost{
 namespace math{
@@ -35,9 +35,9 @@ public:
            throw std::domain_error("The Legendre-Stieltjes polynomial is defined for order m > 0.\n");
         }
         m_m = m;
-        int64_t n = m - 1;
-        int64_t q;
-        int64_t r;
+        std::ptrdiff_t n = m - 1;
+        std::ptrdiff_t q;
+        std::ptrdiff_t r;
         bool odd = n & 1;
         if (odd)
         {
@@ -56,15 +56,15 @@ public:
         // Make sure using the zero index is a bug:
         m_a[0] = std::numeric_limits<Real>::quiet_NaN();
 
-        for (int64_t k = 1; k < r; ++k)
+        for (std::ptrdiff_t k = 1; k < r; ++k)
         {
             Real ratio = 1;
             m_a[r - k] = 0;
-            for (int64_t i = r + 1 - k; i <= r; ++i)
+            for (std::ptrdiff_t i = r + 1 - k; i <= r; ++i)
             {
                 // See Patterson, equation 12
-                int64_t num = (n - q + 2*(i + k - 1))*(n + q + 2*(k - i + 1))*(n-1-q+2*(i-k))*(2*(k+i-1) -1 -q -n);
-                int64_t den = (n - q + 2*(i - k))*(2*(k + i - 1) - q - n)*(n + 1 + q + 2*(k - i))*(n - 1 - q + 2*(i + k));
+                std::ptrdiff_t num = (n - q + 2*(i + k - 1))*(n + q + 2*(k - i + 1))*(n-1-q+2*(i-k))*(2*(k+i-1) -1 -q -n);
+                std::ptrdiff_t den = (n - q + 2*(i - k))*(2*(k + i - 1) - q - n)*(n + 1 + q + 2*(k - i))*(n - 1 - q + 2*(i + k));
                 ratio *= static_cast<Real>(num)/static_cast<Real>(den);
                 m_a[r - k] -= ratio*m_a[i];
             }
@@ -170,14 +170,14 @@ public:
             k = 0;
         }
 
-        while (k < stieltjes_zeros.size())
+        while (k < (int)stieltjes_zeros.size())
         {
             Real lower_bound;
             Real upper_bound;
             if (m_m & 1)
             {
                 lower_bound = legendre_zeros[k - 1];
-                if (k == legendre_zeros.size())
+                if (k == (int)legendre_zeros.size())
                 {
                     upper_bound = 1;
                 }
@@ -189,7 +189,7 @@ public:
             else
             {
                 lower_bound = legendre_zeros[k];
-                if (k == legendre_zeros.size() - 1)
+                if (k == (int)legendre_zeros.size() - 1)
                 {
                     upper_bound = 1;
                 }
