@@ -563,7 +563,7 @@ run test_laplace.cpp ../../test/build//boost_unit_test_framework ;
 run test_inv_hyp.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
-run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework ;
+run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations ] ;
 run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework ;
 run test_logistic_dist.cpp ../../test/build//boost_unit_test_framework ;
 run test_lognormal.cpp ../../test/build//boost_unit_test_framework ;
@@ -896,7 +896,7 @@ run  compile_test/sf_hypot_incl_test.cpp compile_test_main ;
 run  compile_test/sf_laguerre_incl_test.cpp compile_test_main ;
 compile  compile_test/sf_lanczos_incl_test.cpp ;
 run  compile_test/sf_legendre_incl_test.cpp compile_test_main ;
-run  compile_test/sf_legendre_stieltjes_incl_test.cpp compile_test_main ;
+run  compile_test/sf_legendre_stieltjes_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations ] ;
 run  compile_test/sf_log1p_incl_test.cpp compile_test_main ;
 compile  compile_test/sf_math_fwd_incl_test.cpp ;
 run  compile_test/sf_modf_incl_test.cpp compile_test_main ;
@@ -944,7 +944,7 @@ compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_inc_test.cpp ;
 compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
 compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
-compile  compile_test/sf_legendre_stieltjes_concept_test.cpp  ;
+compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations ]  ;
 
 run ../test/common_factor_test.cpp
     ../../test/build//boost_unit_test_framework ;
