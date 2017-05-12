@@ -20,7 +20,7 @@
 #include <memory>
 #include <boost/math/quadrature/detail/exp_sinh_detail.hpp>
 
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace quadrature {
 
 
 template<class Real>
@@ -49,7 +49,7 @@ Real exp_sinh<Real>::integrate(const F& f, Real a, Real b, Real* error, Real* L1
     using std::isfinite;
     using std::abs;
     using boost::math::constants::half;
-    using boost::math::detail::exp_sinh_detail;
+    using boost::math::quadrature::detail::exp_sinh_detail;
 
     // Right limit is infinite:
     if (isfinite(a) && b >= std::numeric_limits<Real>::max())
@@ -84,5 +84,5 @@ Real exp_sinh<Real>::integrate(const F& f, Real a, Real b, Real* error, Real* L1
 }
 
 
-}}
+}}}
 #endif

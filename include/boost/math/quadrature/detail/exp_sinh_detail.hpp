@@ -14,7 +14,7 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/format.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+namespace boost{ namespace math{ namespace quadrature { namespace detail{
 
 
 // Returns the exp-sinh quadrature of a function f over the open interval (0, infinity)
@@ -207,5 +207,5 @@ Real exp_sinh_detail<Real>::integrate(const F& f, Real* error, Real* L1) const
     return I1;
 }
 
-}}}
+}}}}
 #endif

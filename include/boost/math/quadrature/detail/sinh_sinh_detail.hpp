@@ -15,7 +15,7 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/next.hpp>
 
-namespace boost{ namespace math{ namespace detail{
+namespace boost{ namespace math{ namespace quadrature { namespace detail{
 
 
 // Returns the sinh-sinh quadrature of a function f over the entire real line
@@ -198,5 +198,5 @@ Real sinh_sinh_detail<Real>::integrate(const F f, Real* error, Real* L1) const
     return I1;
 }
 
-}}}
+}}}}
 #endif

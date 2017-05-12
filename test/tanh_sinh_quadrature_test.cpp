@@ -41,8 +41,8 @@ using boost::multiprecision::cpp_bin_float_100;
 using boost::multiprecision::cpp_dec_float_50;
 using boost::multiprecision::cpp_dec_float_100;
 using boost::multiprecision::cpp_bin_float_quad;
-using boost::math::tanh_sinh;
-using boost::math::detail::tanh_sinh_detail;
+using boost::math::quadrature::tanh_sinh;
+using boost::math::quadrature::detail::tanh_sinh_detail;
 using boost::math::constants::pi;
 using boost::math::constants::half_pi;
 using boost::math::constants::two_div_pi;
@@ -151,8 +151,8 @@ void test_detail()
     Real err;
     Real L1;
     Real Q = integrator.integrate(f, &err, &L1);
-    BOOST_CHECK_CLOSE(Q, 2*third<Real>(), 100*tol);
-    BOOST_CHECK_CLOSE(L1, 2*third<Real>(), 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, 2*third<Real>(), tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, 2*third<Real>(), tol);
 }
 
 
@@ -166,8 +166,8 @@ void test_linear()
     Real error;
     Real L1;
     Real Q = integrator.integrate(f, (Real) 0, (Real) 1, &error, &L1);
-    BOOST_CHECK_CLOSE(Q, 9.5, 100*tol);
-    BOOST_CHECK_CLOSE(L1, 9.5, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, 9.5, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, 9.5, tol);
 }
 
 
@@ -181,8 +181,8 @@ void test_quadratic()
     Real error;
     Real L1;
     Real Q = integrator.integrate(f, (Real) 0, (Real) 1, &error, &L1);
-    BOOST_CHECK_CLOSE(Q, (Real) 17 + half<Real>()*third<Real>(), 100*tol);
-    BOOST_CHECK_CLOSE(L1, (Real) 17 + half<Real>()*third<Real>(), 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, (Real) 17 + half<Real>()*third<Real>(), tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, (Real) 17 + half<Real>()*third<Real>(), tol);
 }
 
 
@@ -198,8 +198,8 @@ void test_singular()
     Real Q = integrator.integrate(f, (Real) 0, (Real) 1, &error, &L1);
     Real Q_expected = 2 - pi<Real>()*pi<Real>()*half<Real>()*third<Real>();
 
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 }
 
 
@@ -217,19 +217,19 @@ void test_ca()
     auto f1 = [](Real x) { return atan(x)/(x*(x*x + 1)) ; };
     Real Q = integrator.integrate(f1, (Real) 0, (Real) 1, &error, &L1);
     Real Q_expected = pi<Real>()*ln_two<Real>()/8 + catalan<Real>()*half<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f2 = [](Real x) { Real t0 = x*x + 1; Real t1 = sqrt(t0); return atan(t1)/(t0*t1); };
     Q = integrator.integrate(f2, (Real) 0 , (Real) 1, &error, &L1);
     Q_expected = pi<Real>()/4 - pi<Real>()/root_two<Real>() + 3*atan(root_two<Real>())/root_two<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f5 = [](Real t) { return t*t*log(t)/((t*t - 1)*(t*t*t*t + 1)); };
     Q = integrator.integrate(f5, (Real) 0 , (Real) 1);
     Q_expected = pi<Real>()*pi<Real>()*(2 - root_two<Real>())/32;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
 
     // Oh it suffers on this one.
@@ -237,22 +237,22 @@ void test_ca()
     Q = integrator.integrate(f6, (Real) 0 , (Real) 1, &error, &L1);
     Q_expected = 2;
 
-    BOOST_CHECK_CLOSE(Q, Q_expected, 5000*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 5000*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 50*tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, 50*tol);
 
 
     // Although it doesn't get to the requested tolerance on this integral, the error bounds can be queried and are reasonable:
     auto f7 = [](Real t) { return sqrt(tan(t)); };
     Q = integrator.integrate(f7, (Real) 0 , (Real) half_pi<Real>(), &error, &L1);
     Q_expected = pi<Real>()/root_two<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f8 = [](Real t) { return log(cos(t)); };
     Q = integrator.integrate(f8, (Real) 0 , half_pi<Real>(), &error, &L1);
     Q_expected = -pi<Real>()*ln_two<Real>()*half<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, -Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, -Q_expected, tol);
 }
 
 
@@ -269,38 +269,38 @@ void test_three_quadrature_schemes_examples()
     auto f1 = [](Real t) { return t*log1p(t); };
     Q = integrator.integrate(f1, (Real) 0 , (Real) 1);
     Q_expected = half<Real>()*half<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
 
     // Example 2:
     auto f2 = [](Real t) { return t*t*atan(t); };
     Q = integrator.integrate(f2, (Real) 0 , (Real) 1);
     Q_expected = (pi<Real>() -2 + 2*ln_two<Real>())/12;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // Example 3:
     auto f3 = [](Real t) { return exp(t)*cos(t); };
     Q = integrator.integrate(f3, (Real) 0, half_pi<Real>());
     Q_expected = expm1(half_pi<Real>())*half<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // Example 4:
     auto f4 = [](Real x) { Real t0 = sqrt(x*x + 2); return atan(t0)/(t0*(x*x+1)); };
     Q = integrator.integrate(f4, (Real) 0 , (Real) 1);
     Q_expected = 5*pi<Real>()*pi<Real>()/96;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // Example 5:
     auto f5 = [](Real t) { return sqrt(t)*log(t); };
     Q = integrator.integrate(f5, (Real) 0 , (Real) 1);
     Q_expected = -4/ (Real) 9;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // Example 6:
     auto f6 = [](Real t) { return sqrt(1 - t*t); };
     Q = integrator.integrate(f6, (Real) 0 , (Real) 1);
     Q_expected = pi<Real>()/4;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 }
 
 
@@ -318,14 +318,14 @@ void test_integration_over_real_line()
     auto f1 = [](Real t) { return 1/(1+t*t);};
     Q = integrator.integrate(f1, -std::numeric_limits<Real>::infinity(), std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f2 = [](Real t) { return exp(-t*t*half<Real>()); };
     Q = integrator.integrate(f2, -std::numeric_limits<Real>::infinity(), std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = root_two_pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     // This test shows how oscillatory integrals are approximated very poorly by this method:
     //std::cout << "Testing sinc integral: \n";
@@ -338,8 +338,8 @@ void test_integration_over_real_line()
     auto f4 = [](Real t) { return 1/cosh(t);};
     Q = integrator.integrate(f4, -std::numeric_limits<Real>::infinity(), std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
 }
 
@@ -410,10 +410,9 @@ void test_horrible()
 
     auto f = [](Real x) { return x*sin(2*exp(2*sin(2*exp(2*x) ) ) ); };
     Q = integrator.integrate(f, (Real) -1, (Real) 1, &error, &L1);
-    // The example does not have more digits than this.
-    // If this integration routine is correct, then all the digits here are correct.
-    Q_expected = 0.336732834781728;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    // NIntegrate[x*Sin[2*Exp[2*Sin[2*Exp[2*x]]]], {x, -1, 1}, WorkingPrecision -> 130, MaxRecursion -> 100]
+    Q_expected = boost::lexical_cast<Real>("0.33673283478172753598559003181355241139806404130031017259552729882281");
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 }
 
 // Some examples of tough integrals from NR, section 4.5.4:
@@ -431,12 +430,12 @@ void test_nr_examples()
     auto f1 = [](Real x) { return sin(x*half<Real>())*pow(x, -3*half<Real>())*exp(-x); };
     Q = integrator.integrate(f1, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = sqrt(pi<Real>()*(sqrt((Real) 5) - 2));
-    BOOST_CHECK_CLOSE(Q, Q_expected, 1000*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10*tol);
 
     auto f2 = [](Real x) { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::infinity());
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
 }
 
@@ -455,7 +454,7 @@ void test_early_termination()
     auto f1 = [](Real x) { return 23*cosh(x)/ (Real) 25 - cos(x) ; };
     Q = integrator.integrate(f1, (Real) -1, (Real) 1, &error, &L1);
     Q_expected = 46*sinh((Real) 1)/(Real) 25 - 2*sin((Real) 1);
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
 }
 
@@ -475,7 +474,7 @@ void test_crc()
     auto f1 = [](Real x) { Real t = log(1/x); return x*x*t*t*t; };
     Q = integrator.integrate(f1, (Real) 0, (Real) 1, &error, &L1);
     Q_expected = (Real) 2/ (Real) 27;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // CRC 636:
     //auto f2 = [](Real x) { return sqrt(cos(x)); };

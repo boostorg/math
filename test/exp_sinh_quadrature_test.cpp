@@ -33,7 +33,6 @@ using std::pow;
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_bin_float_100;
 using boost::multiprecision::cpp_bin_float_quad;
-using boost::math::exp_sinh;
 using boost::math::constants::pi;
 using boost::math::constants::half_pi;
 using boost::math::constants::two_div_pi;
@@ -46,7 +45,7 @@ using boost::math::constants::ln_two;
 using boost::math::constants::root_two;
 using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
-
+using boost::math::quadrature::exp_sinh;
 
 template<class Real>
 void test_right_limit_infinite()
@@ -63,20 +62,20 @@ void test_right_limit_infinite()
     const auto f2 = [](Real t) { return exp(-t)/sqrt(t); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = root_pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     // The integrand is strictly positive, so it coincides with the value of the integral:
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f3 = [](Real t) { Real z = exp(-t); if (z == 0) { return z; } return z*cos(t); };
     Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = half<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     auto f4 = [](Real t) { return 1/(1+t*t); };
     Q = integrator.integrate(f4, 1, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = pi<Real>()/4;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 }
 
 template<class Real>
@@ -94,8 +93,8 @@ void test_left_limit_infinite()
     auto f1 = [](Real t) { return 1/(1+t*t);};
     Q = integrator.integrate(f1, -std::numeric_limits<Real>::infinity(), 0, &error, &L1);
     Q_expected = half_pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 }
 
 
@@ -119,14 +118,14 @@ void test_nr_examples()
     auto f0 = [](Real x) { return (Real) 0; };
     Q = integrator.integrate(f0, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = 0;
-    BOOST_CHECK_CLOSE(Q, 0, 100*tol);
-    BOOST_CHECK_CLOSE(L1, 0, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, 0, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, 0, tol);
 
     auto f = [](Real x) { return 1/(1+x*x); };
     Q = integrator.integrate(f, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = half_pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f1 = [](Real x) {
         Real z1 = exp(-x);
@@ -146,32 +145,32 @@ void test_nr_examples()
     Q_expected = sqrt(pi<Real>()*(sqrt((Real) 5) - 2));
 
     // The integrand is oscillatory; the accuracy is low.
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     auto f2 = [](Real x) { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f3 = [](Real x) { return (Real) 1/ (sqrt(x)*(1+x)); };
     Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = pi<Real>();
 
-    BOOST_CHECK_CLOSE(Q, Q_expected, 1000*std::numeric_limits<float>::epsilon());
-    BOOST_CHECK_CLOSE(L1, Q_expected, 1000*std::numeric_limits<float>::epsilon());
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10*std::numeric_limits<float>::epsilon());
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, 10*std::numeric_limits<float>::epsilon());
 
     auto f4 = [](Real t) { return exp(-t*t*half<Real>()); };
     Q = integrator.integrate(f4, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = root_two_pi<Real>()/2;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f5 = [](Real t) { return 1/cosh(t);};
     Q = integrator.integrate(f5, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = half_pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 }
 
 // Definite integrals found in the CRC Handbook of Mathematical Formulas
@@ -195,7 +194,7 @@ void test_crc()
     auto f0 = [](Real x) { return log(x)*exp(-x); };
     Q = integrator.integrate(f0, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = -boost::math::constants::euler<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // Test the integral representation of the gamma function:
     auto f1 = [](Real t) { Real x = exp(-t);
@@ -208,7 +207,7 @@ void test_crc()
 
     Q = integrator.integrate(f1, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = boost::math::tgamma(12);
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // Integral representation of the modified bessel function:
     // K_5(12)
@@ -222,7 +221,7 @@ void test_crc()
     };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = boost::math::cyl_bessel_k<int, Real>(5, 12);
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     // Laplace transform of cos(at)
     Real a = 20;
     Real s = 1;
@@ -239,7 +238,7 @@ void test_crc()
     Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = s/(a*a+s*s);
     // Since the integrand is oscillatory, we increase the tolerance:
-    BOOST_CHECK_CLOSE(Q, Q_expected, 10000*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 100*tol);
 
     // Laplace transform of J_0(t):
     auto f4 = [&](Real t) {
@@ -253,12 +252,12 @@ void test_crc()
 
     Q = integrator.integrate(f4, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = 1/sqrt(1+s*s);
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     auto f6 = [](Real t) { return exp(-t*t)*log(t);};
     Q = integrator.integrate(f6, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = -boost::math::constants::root_pi<Real>()*(boost::math::constants::euler<Real>() + 2*ln_two<Real>())/4;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 }
 
 

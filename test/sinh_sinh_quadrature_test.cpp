@@ -36,7 +36,7 @@ using std::cosh;
 using std::pow;
 using std::string;
 using boost::multiprecision::cpp_bin_float_quad;
-using boost::math::sinh_sinh;
+using boost::math::quadrature::sinh_sinh;
 using boost::math::constants::pi;
 using boost::math::constants::pi_sqr;
 using boost::math::constants::half_pi;
@@ -67,33 +67,33 @@ void test_nr_examples()
     auto f0 = [](Real x) { return (Real) 0; };
     Q = integrator.integrate(f0, &error, &L1);
     Q_expected = 0;
-    BOOST_CHECK_CLOSE(Q, 0, 100*tol);
-    BOOST_CHECK_CLOSE(L1, 0, 100*tol);
+    BOOST_CHECK_SMALL(Q, tol);
+    BOOST_CHECK_SMALL(L1, tol);
 
     // In spite of the poles at \pm i, we still get a doubling of the correct digits at each level of refinement.
     auto f1 = [](Real t) { return 1/(1+t*t); };
     Q = integrator.integrate(f1, &error, &L1);
     Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f2 = [](Real x) { return exp(-x*x); };
     Q = integrator.integrate(f2, &error, &L1);
     Q_expected = root_pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f5 = [](Real t) { return 1/cosh(t);};
     Q = integrator.integrate(f5, &error, &L1);
     Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     // This oscillatory integral has rapid convergence because the oscillations get swamped by the exponential growth of the denominator.
     auto f8 = [](Real t) { return cos(t)/cosh(t);};
     Q = integrator.integrate(f8, &error, &L1);
     Q_expected = pi<Real>()/cosh(half_pi<Real>());
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
 }
 
@@ -119,8 +119,8 @@ void test_crc()
     };
     Q = integrator.integrate(f0, &error, &L1);
     Q_expected = pi_sqr<Real>()/2;
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-    BOOST_CHECK_CLOSE(L1, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
 
     // CRC Definite integral 695:
@@ -132,7 +132,7 @@ void test_crc()
     };
     Q = integrator.integrate(f1, &error, &L1);
     Q_expected = pi<Real>()*tanh(half_pi<Real>());
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 }
 
 
@@ -141,11 +141,10 @@ BOOST_AUTO_TEST_CASE(sinh_sinh_quadrature_test)
     test_nr_examples<float>();
     test_nr_examples<double>();
     test_nr_examples<long double>();
-    test_nr_examples<cpp_bin_float_quad>();
+    //test_nr_examples<cpp_bin_float_quad>();
 
     test_crc<float>();
     test_crc<double>();
     test_crc<long double>();
-    test_crc<cpp_bin_float_quad>();
-
+    //test_crc<cpp_bin_float_quad>();
 }

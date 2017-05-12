@@ -13,7 +13,7 @@
 #include <boost/math/constants/constants.hpp>
 
 
-namespace boost{ namespace math{ namespace detail{
+namespace boost{ namespace math{ namespace quadrature { namespace detail{
 
 
 // Returns the tanh-sinh quadrature of a function f over the open interval (-1, 1)
@@ -913,5 +913,5 @@ Real tanh_sinh_detail<Real>::integrate(const F f, Real* error, Real* L1) const
     return I1;
 }
 
-}}}
+}}}}
 #endif

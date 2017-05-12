@@ -20,7 +20,7 @@
 #include <memory>
 #include <boost/math/quadrature/detail/sinh_sinh_detail.hpp>
 
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace quadrature {
 
 
 template<class Real>
@@ -49,5 +49,5 @@ Real sinh_sinh<Real>::integrate(const F f, Real* error, Real* L1) const
     return m_imp->integrate(f, error, L1);
 }
 
-}}
+}}}
 #endif

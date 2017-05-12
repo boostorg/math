@@ -34,7 +34,7 @@
 #include <memory>
 #include <boost/math/quadrature/detail/tanh_sinh_detail.hpp>
 
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace quadrature {
 
 
 template<class Real>
@@ -62,7 +62,7 @@ Real tanh_sinh<Real>::integrate(const F f, Real a, Real b, Real* error, Real* L1
 {
     using std::isfinite;
     using boost::math::constants::half;
-    using boost::math::detail::tanh_sinh_detail;
+    using boost::math::quadrature::detail::tanh_sinh_detail;
 
     if (isfinite(a) && isfinite(b))
     {
@@ -119,5 +119,5 @@ Real tanh_sinh<Real>::integrate(const F f, Real a, Real b, Real* error, Real* L1
 }
 
 
-}}
+}}}
 #endif
