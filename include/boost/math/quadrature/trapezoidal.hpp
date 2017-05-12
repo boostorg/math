@@ -12,16 +12,15 @@
  * are much more efficient methods in this case, including Romberg, Simpson, and double exponential quadrature.
  */
 
-#ifndef BOOST_MATH_QUADRATURE_ADAPTIVE_TRAPEZOIDAL_HPP
-#define BOOST_MATH_QUADRATURE_ADAPTIVE_TRAPEZOIDAL_HPP
+#ifndef BOOST_MATH_QUADRATURE_TRAPEZOIDAL_HPP
+#define BOOST_MATH_QUADRATURE_TRAPEZOIDAL_HPP
 
 #include <cmath>
 #include <limits>
 #include <stdexcept>
-#include <boost/format.hpp>
 #include <boost/math/constants/constants.hpp>
 
-namespace boost{ namespace math{
+namespace boost{ namespace math{ namespace quadrature {
 
 template<class F, class Real>
 Real trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 10, Real* error_estimate = nullptr, Real* L1 = nullptr)
@@ -94,18 +93,8 @@ Real trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>:
         *L1 = IL1;
     }
 
-    // The condition abs(I) > eps is a poor man's way of mollifying the condition number.
-    // Recall that no number is close to zero, so it makes no sense to throw when the I1 is very close to zero.
-    if (abs(I1) > std::numeric_limits<Real>::epsilon() && IL1/abs(I1) > 1.0/std::numeric_limits<Real>::epsilon())
-    {
-        Real cond = IL1/abs(I1);
-        Real inv_prec = 1.0/std::numeric_limits<Real>::epsilon();
-        boost::basic_format<char> err_msg = boost::format("\nThe condition number of the quadrature sum is %1%, which exceeds the inverse of the precision of the type %2%.\nNo correct digits can be expected for the integral.\n") % cond % inv_prec;
-        throw boost::math::evaluation_error(err_msg.str());
-    }
-
     return I1;
 }
 
-}}
+}}}
 #endif

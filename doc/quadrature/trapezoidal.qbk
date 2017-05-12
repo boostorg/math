@@ -12,7 +12,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 ``
     #include <boost/math/quadrature/trapezoidal.hpp>
-    namespace boost{ namespace math{
+    namespace boost{ namespace math{ namespace quadrature {
 
     template<class F, class Real>
     Real trapezoidal(F f, Real a, Real b,
@@ -20,18 +20,21 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                      size_t max_refinements = 10,
                      Real* error_estimate = nullptr,
                      Real* L1 = nullptr);
-    }} // namespaces
+    }}} // namespaces
 ``
 
 [heading Description]
 
 The functional `trapezoidal` calculates the integral of a function /f/ using the surprisingly simple trapezoidal rule.
-If we assume only that the integrand is twice continuously differentiable, we can prove that the error of the composite trapezoidal rule
+If we assume only that the integrand is twice continuously differentiable,
+we can prove that the error of the composite trapezoidal rule
 is [bigo](h[super 2]).
-Hence halving the interval only cuts the error by about a fourth, which in turn implies that we must evaluate the function many times before an acceptable accuracy can be achieved.
+Hence halving the interval only cuts the error by about a fourth,
+which in turn implies that we must evaluate the function many times before an acceptable accuracy can be achieved.
 
 However, the trapezoidal rule has an astonishing property:
-If the integrand is periodic, and we integrate it over a period, then the trapezoidal rule converges faster than any power of the step size /h/.
+If the integrand is periodic, and we integrate it over a period,
+then the trapezoidal rule converges faster than any power of the step size /h/.
 This can be seen by examination of the [@https://en.wikipedia.org/wiki/Euler-Maclaurin_formula Euler-Maclaurin summation formula],
 which relates a definite integral to its trapezoidal sum and error terms proportional to the derivatives of the function at the endpoints.
 If the derivatives at the endpoints are the same or vanish, then the error very nearly vanishes.
@@ -43,8 +46,9 @@ For details, see [@http://epubs.siam.org/doi/pdf/10.1137/130932132 Trefethen's] 
 
 In its simplest form, an integration can be performed by the following code
 
+    using boost::math::quadrature::trapezoidal;
     auto f = [](double x) { return 1/(5 - 4*cos(x)); };
-    double I = boost::math::trapezoidal(f, 0, boost::math::constants::two_pi<double>());
+    double I = trapezoidal(f, 0, boost::math::constants::two_pi<double>());
 
 Since the routine is adaptive, step sizes are halved continuously until a tolerance is reached.
 In order to control this tolerance, simply call the routine with an additional argument
@@ -60,16 +64,19 @@ If the integrand is *not* periodic, then reducing the error to [radic][epsilon] 
 A question arises as to what to do when successive estimates never pass below the tolerance threshold.
 The stepsize would be halved until it eventually would be flushed to zero, leading to an infinite loop.
 As such, you may pass an optional argument `max_refinements` which controls how many times the interval may be halved before giving up.
-By default, this maximum number of refinement steps is 10, which should never be hit in double precision unless the function is not periodic.
-However, for higher-precision types, it may be of interest to allow the algorithm to compute more refinements:
+By default, this maximum number of refinement steps is 10,
+which should never be hit in double precision unless the function is not periodic.
+However, for higher-precision types,
+it may be of interest to allow the algorithm to compute more refinements:
 
     size_t max_refinements = 15;
-    long double I = trapezoidal(f, 0, two_pi<long double>(), 1e-6L, max_refinements);
+    long double I = trapezoidal(f, 0, two_pi<long double>(), 1e-9L, max_refinements);
 
 Note that the maximum allowed compute time grows exponentially with `max_refinements`.
 The routine will not throw an exception if the maximum refinements is achieved without the requested tolerance being attained.
 This is because the value calculated is more often than not still usable.
-However, for applications with high-reliability requirements, the error estimate should be queried.
+However, for applications with high-reliability requirements,
+the error estimate should be queried.
 This is achieved by passing additional pointers into the routine:
 
     double error_estimate;
@@ -89,10 +96,12 @@ The condition number of summation is defined by
 
 [kappa](S[sub n]) := [Sigma][sub i][super n] |x[sub i]|/|[Sigma][sub i][super n] x[sub i]|
 
-If this number of ~10[super k], then /k/ additional digits are expected to be lost in addition to digits lost due to floating point rounding error.
-As all numerical quadrature methods reduce to summation, their stability is controlled by the ratio \u222B |f| dt/|\u222B f dt |,
+If this number of ~10[super k],
+then /k/ additional digits are expected to be lost in addition to digits lost due to floating point rounding error.
+As all numerical quadrature methods reduce to summation,
+their stability is controlled by the ratio \u222B |f| dt/|\u222B f dt |,
 which is easily seen to be equivalent to condition number of summation when evaluated numerically.
-Hence both the error estimate and the condition number of summation should be analyzed in applications requiring very high precision.
+Hence both the error estimate and the condition number of summation should be analyzed in applications requiring very high precision and reliability.
 
 As an example, we consider evaluation of Bessel functions by trapezoidal quadrature.
 The Bessel function of the first kind is defined via
@@ -101,10 +110,10 @@ J[sub n](x) = 1/2\u03A0 \u222B[sub -\u03A0][super \u03A0] cos(n t - x sin(t)) dt
 
 The integrand is periodic, so the Euler-Maclaurin summation formula guarantees exponential convergence via the trapezoidal quadrature.
 Without careful consideration, it seems this would be a very attractive method to compute Bessel functions.
-However, we see that for large /n/ the integrand oscillates rapidly, taking on positive and negative values, and hence the trapezoidal sums become ill-conditioned.
+However, we see that for large /n/ the integrand oscillates rapidly,
+taking on positive and negative values,
+and hence the trapezoidal sums become ill-conditioned.
 In double precision, /x = 17/ and /n = 25/ gives a sum which is so poorly conditioned that zero correct digits are obtained.
-In this case, the routine throw a `boost::math::evaluation_error` which explains the poor conditioning.
-However, the error is only thrown when *all* digits are expected to be incorrect, so the user is still responsible for error analysis in many circumstances.
 
 References:
 
@@ -116,9 +125,3 @@ Higham, Nicholas J. ['Accuracy and stability of numerical algorithms.] Society f
 
 
 [endsect]
-[/
-Copyright Nick Thompson, 2017
-Use, modification and distribution are subject to the
-Boost Software License, Version 1.0. (See accompanying file
-LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-]
