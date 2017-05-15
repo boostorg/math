@@ -968,6 +968,7 @@ run test_nonfinite_trap.cpp ../../test/build//boost_unit_test_framework : : : <e
 run test_signed_zero.cpp ../../test/build//boost_unit_test_framework ;
 
 run complex_test.cpp ../../test/build//boost_unit_test_framework ;
+run numerical_differentiation_test.cpp ../../test/build//boost_unit_test_framework ;
 run test_polynomial.cpp ../../test/build//boost_unit_test_framework ;
 run test_gcd.cpp ../../test/build//boost_unit_test_framework ;
 
