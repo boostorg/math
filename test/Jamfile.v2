@@ -102,6 +102,7 @@ run test_arcsine.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_bernoulli.cpp ../../test/build//boost_unit_test_framework ;
 run test_constants.cpp ../../test/build//boost_unit_test_framework ;
 run test_print_info_on_type.cpp ;
+run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ;
 run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no ;
 run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_y.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
@@ -221,6 +222,7 @@ run test_cauchy.cpp ../../test/build//boost_unit_test_framework ;
 run test_cbrt.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_chi_squared.cpp ../../test/build//boost_unit_test_framework ;
 run test_classify.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr ] ;
 run test_difference.cpp ../../test/build//boost_unit_test_framework ;
 run test_digamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_dist_overloads.cpp ../../test/build//boost_unit_test_framework ;
@@ -562,6 +564,7 @@ run test_inv_hyp.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run chebyshev_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations ] ;
 run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework ;
 run test_logistic_dist.cpp ../../test/build//boost_unit_test_framework ;
 run test_lognormal.cpp ../../test/build//boost_unit_test_framework ;
@@ -821,6 +824,10 @@ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
 
 lib compile_test_main : compile_test/main.cpp ;
 
+run  compile_test/cubic_spline_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr ] ;
+run  compile_test/barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr ] ;
+run  compile_test/common_factor_rt_inc_test.cpp compile_test_main ;
+run  compile_test/common_factor_ct_inc_test.cpp compile_test_main ;
 run  compile_test/compl_abs_incl_test.cpp compile_test_main ;
 run  compile_test/compl_acos_incl_test.cpp compile_test_main ;
 run  compile_test/compl_acosh_incl_test.cpp compile_test_main ;
@@ -890,6 +897,7 @@ run  compile_test/sf_hypot_incl_test.cpp compile_test_main ;
 run  compile_test/sf_laguerre_incl_test.cpp compile_test_main ;
 compile  compile_test/sf_lanczos_incl_test.cpp ;
 run  compile_test/sf_legendre_incl_test.cpp compile_test_main ;
+run  compile_test/sf_legendre_stieltjes_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations ] ;
 run  compile_test/sf_log1p_incl_test.cpp compile_test_main ;
 compile  compile_test/sf_math_fwd_incl_test.cpp ;
 run  compile_test/sf_modf_incl_test.cpp compile_test_main ;
@@ -935,6 +943,9 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_inc_test.cpp ;
+compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
+compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
+compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations ]  ;
 
 run ../test/common_factor_test.cpp
     ../../test/build//boost_unit_test_framework ;

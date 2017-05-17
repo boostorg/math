@@ -7,8 +7,8 @@
 #include <gmpxx.h>
 #include <boost/math/common_factor.hpp>
 
-template mpz_class boost::math::gcd(const mpz_class&, const mpz_class&);
-template mpz_class boost::math::lcm(const mpz_class&, const mpz_class&);
+template mpz_class boost::integer::gcd(const mpz_class&, const mpz_class&);
+template mpz_class boost::integer::lcm(const mpz_class&, const mpz_class&);
 
 int main()
 {

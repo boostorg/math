@@ -293,17 +293,6 @@ math_toolkit/acknowledgements.html
 math_toolkit/oct_history.html
 math_toolkit/oct_todo.html
 gcd_lcm.html
-math_toolkit/introduction.html
-math_toolkit/synopsis.html
-math_toolkit/gcd_function_object.html
-math_toolkit/lcm_function_object.html
-math_toolkit/run_time.html
-math_toolkit/compile_time.html
-math_toolkit/gcd_header.html
-math_toolkit/demo.html
-math_toolkit/rationale0.html
-math_toolkit/gcd_history.html
-math_toolkit/gcd_credits.html
 rooting.html
 math_toolkit/roots.html
 math_toolkit/roots/roots_noderiv.html

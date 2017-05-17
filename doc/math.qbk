@@ -9,7 +9,7 @@
     ]
     [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
-    [version 2.5.1]
+    [version 2.5.2]
 ]
 
 [template mathpart[id title]
@@ -131,8 +131,8 @@ and use the function's name as the link text.]
 [def __fifth_root [link math_toolkit.roots.root_finding_examples.5th_root_eg fifth root]]
 [def __nth_root [link math_toolkit.roots.root_finding_examples.nth_root nth root]]
 [def __multiprecision_root [link math_toolkit.roots.root_finding_examples.multiprecision_root multiprecision root]]
-[def __polynomial_arithmetic [link math_toolkit.roots.polynomial_arithmetic polynomial arithmetic]]
-[def __evaluation [link math_toolkit.roots.rational.polynomial_evaluation polynomial \& rational evaluation]]
+[def __polynomial_arithmetic [link math_toolkit.polynomial_arithmetic polynomial arithmetic]]
+[def __evaluation [link math_toolkit.rational.polynomial_evaluation polynomial \& rational evaluation]]
 
 [/gammas]
 [def __lgamma [link math_toolkit.sf_gamma.lgamma lgamma]]
@@ -565,6 +565,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [section:sf_poly Polynomials]
 [include sf/legendre.qbk]
+[include sf/legendre_stieltjes.qbk]
 [include sf/laguerre.qbk]
 [include sf/hermite.qbk]
 [include sf/chebyshev.qbk]
@@ -624,9 +625,13 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [mathpart rooting Tools: Root Finding \& Minimization Algorithms, Polynomial  Arithmetic \& Evaluation]
 [section:roots Root finding]
 [include roots/roots_overview.qbk]
+[endsect] [/section:roots Root finding]
 [include internals/polynomial.qbk]
 [include internals/rational.qbk]
-[endsect] [/section:roots Root finding]
+[section:interpolate Interpolation Functions]
+[include interpolators/cubic_b_spline.qbk]
+[include interpolators/barycentric_rational_interpolation.qbk]
+[endsect]
 
 [endmathpart] [/mathpart roots Root Finding Algorithms]
 
