@@ -22,6 +22,9 @@
 
 namespace boost{ namespace math{ namespace quadrature {
 
+// How do we get rid of this without breaking the concept test?
+using std::sqrt;
+
 template<class F, class Real>
 Real trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 10, Real* error_estimate = nullptr, Real* L1 = nullptr)
 {
