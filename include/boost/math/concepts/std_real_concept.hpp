@@ -226,6 +226,8 @@ inline boost::math::concepts::std_real_concept sqrt(boost::math::concepts::std_r
 { return std::sqrt(a.value()); }
 inline boost::math::concepts::std_real_concept tanh(boost::math::concepts::std_real_concept a)
 { return std::tanh(a.value()); }
+inline boost::math::concepts::std_real_concept nextafter(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
+{ return std::nextafter(a, b); };
 
 } // namespace std
 
@@ -399,7 +401,3 @@ using concepts::llround;
 } // namespace boost
 
 #endif // BOOST_MATH_STD_REAL_CONCEPT_HPP
-
-
-
-
