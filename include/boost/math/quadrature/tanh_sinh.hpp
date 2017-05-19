@@ -36,6 +36,8 @@
 
 namespace boost{ namespace math{ namespace quadrature {
 
+// TODO: Get rid of this using declaration without breaking the concepts test!
+using std::sqrt;
 
 template<class Real>
 class tanh_sinh

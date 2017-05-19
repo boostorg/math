@@ -43,6 +43,7 @@ sinh_sinh_detail<Real>::sinh_sinh_detail(Real tol, size_t max_refinements)
     using std::sqrt;
     using std::cosh;
     using std::sinh;
+    using std::ceil;
     using boost::math::constants::two_div_pi;
     using boost::math::constants::half_pi;
 

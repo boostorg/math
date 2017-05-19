@@ -117,14 +117,13 @@ Real exp_sinh_detail<Real>::integrate(const F& f, Real* error, Real* L1) const
         throw std::domain_error(err_msg.str());
     }
 
-    std::cout << std::setprecision(5*std::numeric_limits<Real>::digits10);
+    //std::cout << std::setprecision(5*std::numeric_limits<Real>::digits10);
 
     // Get the party started with two estimates of the integral:
     Real I0 = 0;
     Real L1_I0 = 0;
     for(size_t i = 0; i < m_abscissas[0].size(); ++i)
     {
-        Real x = m_abscissas[0][i];
         Real y = f(m_abscissas[0][i]);
         I0 += y*m_weights[0][i];
         L1_I0 += abs(y)*m_weights[0][i];
@@ -135,10 +134,7 @@ Real exp_sinh_detail<Real>::integrate(const F& f, Real* error, Real* L1) const
     Real L1_I1 = L1_I0;
     for (size_t i = 0; i < m_abscissas[1].size(); ++i)
     {
-        Real x = m_abscissas[1][i];
-        //std::cout <<  " x = " << x << std::endl;
         Real y = f(m_abscissas[1][i]);
-        //std::cout << "f(x) = " << y << std::endl;
         I1 += y*m_weights[1][i];
         L1_I1 += abs(y)*m_weights[1][i];
     }

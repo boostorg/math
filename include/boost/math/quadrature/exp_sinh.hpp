@@ -22,6 +22,8 @@
 
 namespace boost{ namespace math{ namespace quadrature {
 
+// Without this, the concepts check fails! How do we get rid of it?
+using std::sqrt;
 
 template<class Real>
 class exp_sinh
