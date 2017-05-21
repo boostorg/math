@@ -555,6 +555,8 @@ template <typename T>
 inline T bessel_i1(const T& x)
 {
    typedef mpl::int_<
+      (std::numeric_limits<T>::radix != 2) ?
+      -1 :
       std::numeric_limits<T>::digits == 0 ?
       0 :
       std::numeric_limits<T>::digits <= 24 ?
