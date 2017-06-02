@@ -221,7 +221,7 @@ T float_prior_imp(const T& val, const Policy& pol)
    }
 
    T remain = frexp(val, &expon);
-   if(remain == 0.5)
+   if(remain == 0.5f)
       --expon; // when val is a power of two we must reduce the exponent
    T diff = ldexp(T(1), expon - tools::digits<T>());
    if(diff == 0)
@@ -331,19 +331,23 @@ T float_distance_imp(const T& a, const T& b, const Policy& pol)
    frexp(((boost::math::fpclassify)(a) == (int)FP_SUBNORMAL) ? tools::min_value<T>() : a, &expon);
    T upper = ldexp(T(1), expon);
    T result = T(0);
-   expon = tools::digits<T>() - expon;
    //
    // If b is greater than upper, then we *must* split the calculation
    // as the size of the ULP changes with each order of magnitude change:
    //
    if(b > upper)
    {
-      result = float_distance(upper, b);
+      int expon2;
+      frexp(b, &expon2);
+      T upper2 = ldexp(T(0.5), expon2);
+      result = float_distance(upper2, b);
+      result += (expon2 - expon - 1) * ldexp(T(1), tools::digits<T>() - 1);
    }
    //
    // Use compensated double-double addition to avoid rounding
    // errors in the subtraction:
    //
+   expon = tools::digits<T>() - expon;
    T mb, x, y, z;
    if(((boost::math::fpclassify)(a) == (int)FP_SUBNORMAL) || (b - a < tools::min_value<T>()))
    {
