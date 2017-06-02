@@ -563,6 +563,7 @@ run test_laplace.cpp ../../test/build//boost_unit_test_framework ;
 run test_inv_hyp.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run chebyshev_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations ] ;
 run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework ;
 run test_logistic_dist.cpp ../../test/build//boost_unit_test_framework ;

@@ -1,0 +1,82 @@
+[/
+  Copyright 2017, Nick Thompson
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:chebyshev Chebyshev Polynomials]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/chebyshev.hpp>
+``
+
+   namespace boost{ namespace math{
+
+   template<class Real>
+   Real chebyshev_next(Real const & x, Real const & Tn, Real const & Tn_1);
+
+   template<class Real>
+   Real chebyshev_t(unsigned n, Real const & x);
+
+   template<class Real>
+   Real chebyshev_u(unsigned n, Real const & x);
+
+   template<class Real>
+   Real chebyshev_t_prime(unsigned n, Real const & x);
+
+   }} // namespaces
+
+
+["Real analysts cannot do without Fourier, complex analysts cannot do without Laurent, and numerical analysts cannot do without Chebyshev"]--Lloyd N. Trefethen
+
+The Chebyshev polynomials of the first kind are defined by the recurrence T[sub n+1](x) = 2xT[sub n](x) - T[sub n-1](x), n > 0, where T[sub 0](x) = 1 and T[sub 1](x) = x.
+These can be calculated in Boost using the following simple code
+
+    double x = 0.5;
+    double T12 = boost::math::chebyshev_t(12, x);
+
+Calculation of derivatives is also straightforward:
+
+    double T12_prime = boost::math::chebyshev_t_prime(12, x);
+
+The complexity of evaluation of the /n/-th Chebyshev polynomial by these functions is linear.
+So they are unsuitable for use in calculation of (say) a Chebyshev series, as a sum of linear scaling functions scales quadratically.
+Though there are very sophisticated algorithms for the evaluation of Chebyshev series, a linear time algorithm is presented below:
+
+    double x = 0.5;
+    std::vector<double> a{14.2, -13.7, 82.3, 96};
+    double T0 = 1;
+    double T1 = x;
+    double f = a[0]*T0;
+    unsigned l = 1;
+    while(l < a.size())
+    {
+       f += a[l]*T1;
+       std::swap(T0, T1);
+       T1 = boost::math::chebyshev_next(x, T0, T1);
+       ++l;
+    }
+    // Pipe the result to cout:
+    std::cout << f << std::endl;
+
+This uses the `chebyshev_next` function to evaluate each term of the Chebyshev series in constant time.
+
+
+Chebyshev polynomials of the second kind can be evaluated via `chebyshev_u`:
+
+    double x = -0.23;
+    double U1 = boost::math::chebyshev_u(1, x);
+
+The evaluation of Chebyshev polynomials by a three-term recurrence is known to be
+[@https://link.springer.com/article/10.1007/s11075-014-9925-x mixed forward-backward stable] for /x/ \u220A \[-1, 1\].
+However, the author does not know of a similar result for /x/ outside \[-1, 1\].
+For this reason, evaluation of Chebyshev polynomials outside of \[-1, 1\] is strongly discouraged.
+That said, small rounding errors in the course of a computation will often lead to this situation,
+and termination of the computation due to these small problems is very discouraging.
+For this reason, `chebyshev_t` and `chebyshev_u` have code paths for /x > 1/ and /x < -1/ which do not use three-term recurrences.
+These code paths are /much slower/, and should be avoided if at all possible.
+
+[endsect]
