@@ -1,0 +1,509 @@
+# Copyright 2016, 2017 Peter Dimov
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at http://boost.org/LICENSE_1_0.txt)
+
+language: cpp
+
+sudo: false
+
+python: "2.7"
+
+os:
+  - linux
+  - osx
+
+branches:
+  only:
+    - master
+    - develop
+
+env:
+  matrix:
+    - BOGUS_JOB=true
+
+matrix:
+
+  exclude:
+    - env: BOGUS_JOB=true
+
+  include:
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=arithmetic_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE=arithmetic_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++14 TEST_SUITE=arithmetic_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z TEST_SUITE=arithmetic_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=cpp_int_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE=cpp_int_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++14 TEST_SUITE=cpp_int_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z TEST_SUITE=cpp_int_tests
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=functions_and_limits
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE=functions_and_limits
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++14 TEST_SUITE=functions_and_limits
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=gnu++14 TEST_SUITE=functions_and_limits
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z TEST_SUITE=functions_and_limits
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=conversions
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE=conversions
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++14 TEST_SUITE=conversions
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=gnu++14 TEST_SUITE=conversions
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z TEST_SUITE=conversions
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=misc
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE=misc
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++14 TEST_SUITE=misc
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=gnu++14 TEST_SUITE=misc
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z TEST_SUITE=misc
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++03 TEST_SUITE=compile_fail
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++11 TEST_SUITE=compile_fail
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++14 TEST_SUITE=compile_fail
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-6 CXXSTD=c++1z TEST_SUITE=compile_fail
+      addons:
+        apt:
+          packages:
+            - g++-6
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-5 CXXSTD=c++14 TEST_SUITE=arithmetic_tests
+      addons:
+        apt:
+          packages:
+            - g++-5
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-5 CXXSTD=c++14 TEST_SUITE=cpp_int_tests
+      addons:
+        apt:
+          packages:
+            - g++-5
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-5 CXXSTD=c++14 TEST_SUITE=functions_and_limits
+      addons:
+        apt:
+          packages:
+            - g++-5
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-5 CXXSTD=c++14 TEST_SUITE=conversions
+      addons:
+        apt:
+          packages:
+            - g++-5
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-5 CXXSTD=c++14 TEST_SUITE=misc
+      addons:
+        apt:
+          packages:
+            - g++-5
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env: TOOLSET=gcc COMPILER=g++-5 CXXSTD=c++14 TEST_SUITE=compile_fail
+      addons:
+        apt:
+          packages:
+            - g++-5
+            - libgmp-dev
+            - libmpfr-dev
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=arithmetic_tests
+      osx_image: xcode8.1
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=cpp_int_tests
+      osx_image: xcode8.1
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=functions_and_limits
+      osx_image: xcode8.1
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=conversions
+      osx_image: xcode8.1
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
+      osx_image: xcode8.1
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=compile_fail
+      osx_image: xcode8.1
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=arithmetic_tests
+      osx_image: xcode8.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=cpp_int_tests
+      osx_image: xcode8.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=functions_and_limits
+      osx_image: xcode8.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=conversions
+      osx_image: xcode8.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
+      osx_image: xcode8.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=compile_fail
+      osx_image: xcode8.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=arithmetic_tests
+      osx_image: xcode7.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=cpp_int_tests
+      osx_image: xcode7.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=functions_and_limits
+      osx_image: xcode7.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=conversions
+      osx_image: xcode7.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
+      osx_image: xcode7.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=compile_fail
+      osx_image: xcode7.3
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=arithmetic_tests
+      osx_image: xcode6.4
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=cpp_int_tests
+      osx_image: xcode6.4
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=functions_and_limits
+      osx_image: xcode6.4
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=conversions
+      osx_image: xcode6.4
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
+      osx_image: xcode6.4
+
+    - os: osx
+      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=compile_fail
+      osx_image: xcode6.4
+
+install:
+  - cd ..
+  - git clone -b $TRAVIS_BRANCH --depth 1 https://github.com/boostorg/boost.git boost-root
+  - cd boost-root
+  - git submodule update --init tools/build
+  - git submodule update --init libs/config
+  - git submodule update --init tools/boostdep
+  - cp -r $TRAVIS_BUILD_DIR/* libs/math
+  - python tools/boostdep/depinst/depinst.py math
+  - ./bootstrap.sh
+  - ./b2 headers
+
+script:
+  - |-
+    echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD ;" > ~/user-config.jam
+  - (cd libs/config/test && ../../../b2 config_info_travis_install toolset=$TOOLSET && ./config_info_travis)
+  - (cd libs/math/test && ../../../b2 -j3 toolset=$TOOLSET $TEST_SUITE define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER)
+
+notifications:
+  email:
+    on_success: always
