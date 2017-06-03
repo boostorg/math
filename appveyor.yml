@@ -46,6 +46,8 @@ install:
   - cd boost-root
   - git submodule update --init tools/build
   - git submodule update --init libs/config
+  - git submodule update --init libs/format
+  - git submodule update --init libs/numeric
   - xcopy /s /e /q %APPVEYOR_BUILD_FOLDER% libs\math
   - git submodule update --init tools/boostdep
   - python tools/boostdep/depinst/depinst.py math
