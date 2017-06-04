@@ -151,7 +151,7 @@ void test_runge()
     {
         auto t = x[i] + dis(gen);
         auto z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, 1/(1+25*t*t), 0.01);
+        BOOST_CHECK_CLOSE(z, 1/(1+25*t*t), 0.02);
     }
 }
 
@@ -236,14 +236,12 @@ BOOST_AUTO_TEST_CASE(barycentric_rational)
     test_runge<long double>();
     test_runge<cpp_bin_float_50>();
 
-    #ifdef __GNUC__
-        #ifndef __clang__
-        test_interpolation_condition<boost::multiprecision::float128>();
+#ifdef BOOST_HAS_FLOAT128
+    test_interpolation_condition<boost::multiprecision::float128>();
         test_constant<boost::multiprecision::float128>();
         test_constant_high_order<boost::multiprecision::float128>();
         test_interpolation_condition_high_order<boost::multiprecision::float128>();
         test_runge<boost::multiprecision::float128>();
-        #endif
-    #endif
+#endif
 
 }
