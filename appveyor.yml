@@ -58,7 +58,7 @@ build: off
 
 test_script:
   - cd libs\config\test
-  - ..\..\..\b2 config_info_travis_install toolset=%TOOLSET%
+  - ..\..\..\b2 config_info_travis_install %ARGS%
   - config_info_travis
   - cd ..\..\math\test
-  - ..\..\..\b2 -j3 toolset=%TOOLSET% define=CI_SUPPRESS_KNOWN_ISSUES
+  - ..\..\..\b2 -j3 %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES

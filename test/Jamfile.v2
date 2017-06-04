@@ -947,9 +947,6 @@ compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_pt
 compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
 compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations ]  ;
 
-run ../test/common_factor_test.cpp
-    ../../test/build//boost_unit_test_framework ;
-
 run octonion_test.cpp
     ../../test/build//boost_unit_test_framework ;
 
@@ -980,7 +977,6 @@ compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : 
 compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off ;
 compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off ;
 compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] <debug-symbols>off ;
-compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] <debug-symbols>off <exception-handling>off:<build>no ;
 
 # Temporary tests for support of max_digits10
 # run ztest_max_digits10.cpp ;
@@ -1322,7 +1318,6 @@ tools_toms748_inc_test
 cubic_spline_concept_test
 barycentric_rational_concept_test
 sf_legendre_stieltjes_concept_test
-common_factor_test
 octonion_test
 quaternion_test
 quaternion_mult_incl_test
@@ -1342,7 +1337,6 @@ ntl_concept_check
 mpfr_concept_check
 mpreal_concept_check
 e_float_concept_check
-test_common_factor_gmpxx
 float128_tests
 ;
 
