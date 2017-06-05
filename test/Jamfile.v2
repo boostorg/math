@@ -222,7 +222,7 @@ run test_cauchy.cpp ../../test/build//boost_unit_test_framework ;
 run test_cbrt.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_chi_squared.cpp ../../test/build//boost_unit_test_framework ;
 run test_classify.cpp pch ../../test/build//boost_unit_test_framework ;
-run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr ] ;
+run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
 run test_difference.cpp ../../test/build//boost_unit_test_framework ;
 run test_digamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_dist_overloads.cpp ../../test/build//boost_unit_test_framework ;
@@ -562,8 +562,8 @@ run test_jacobi.cpp pch_light ../../test/build//boost_unit_test_framework ;
 run test_laplace.cpp ../../test/build//boost_unit_test_framework ;
 run test_inv_hyp.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
-run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
-run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ;
+run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ;
+run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ;
 run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework ;
 run test_logistic_dist.cpp ../../test/build//boost_unit_test_framework ;
 run test_lognormal.cpp ../../test/build//boost_unit_test_framework ;
@@ -824,8 +824,8 @@ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
 
 lib compile_test_main : compile_test/main.cpp ;
 
-run  compile_test/cubic_spline_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr ] ;
-run  compile_test/barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr ] ;
+run  compile_test/cubic_spline_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
+run  compile_test/barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
 run  compile_test/common_factor_rt_inc_test.cpp compile_test_main ;
 run  compile_test/common_factor_ct_inc_test.cpp compile_test_main ;
 run  compile_test/compl_abs_incl_test.cpp compile_test_main ;
@@ -943,9 +943,9 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_inc_test.cpp ;
-compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
-compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
-compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations ]  ;
+compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
+compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
+compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas ]  ;
 
 run octonion_test.cpp
     ../../test/build//boost_unit_test_framework ;
@@ -966,7 +966,7 @@ run test_nonfinite_trap.cpp ../../test/build//boost_unit_test_framework : : : <e
 run test_signed_zero.cpp ../../test/build//boost_unit_test_framework ;
 
 run complex_test.cpp ../../test/build//boost_unit_test_framework ;
-run test_polynomial.cpp ../../test/build//boost_unit_test_framework ;
+run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>-bigobj ;
 run test_gcd.cpp ../../test/build//boost_unit_test_framework ;
 
 compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no ;

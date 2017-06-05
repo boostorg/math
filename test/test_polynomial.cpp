@@ -228,8 +228,10 @@ typedef boost::mpl::list<char, short, int, long> sp_integral_test_types;
 typedef boost::mpl::list<int, long> large_sp_integral_test_types;
 
 typedef boost::mpl::list<
+#if !(defined(CI_SUPPRESS_KNOWN_ISSUES) && defined(__MINGW32__)) // Object file too large
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
    boost::multiprecision::cpp_int
+#endif
 #endif
 > mp_integral_test_types;
 

@@ -14,6 +14,7 @@
 #include <iterator>
 #include <cmath>
 #include <random>
+#include <cstdint>
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/math/tools/roots.hpp>
 

@@ -63,7 +63,7 @@ run geometric_examples.cpp : : : <exception-handling>off:<build>no ;
 run hyperexponential_snips.cpp ;
 run hyperexponential_more_snips.cpp ;
 run inverse_chi_squared_example.cpp ;
-run legendre_stieltjes_example.cpp : : : [ requires cxx11_auto_declarations ] ;
+run legendre_stieltjes_example.cpp : : : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas ] ;
 # run inverse_chi_squared_find_df_example.cpp ;
 run inverse_gamma_example.cpp ;
 run inverse_gamma_distribution_example.cpp : : : <exception-handling>off:<build>no ;
@@ -128,6 +128,6 @@ explicit root_n_finding_algorithms ;
 
 run barycentric_interpolation_example.cpp : : : [ requires cxx11_smart_ptr ] ;
 run barycentric_interpolation_example_2.cpp : : : [ requires cxx11_smart_ptr ] ;
-run cubic_b_spline_example.cpp : : : [ requires cxx11_smart_ptr ] ;
+run cubic_b_spline_example.cpp : : : [ requires cxx11_smart_ptr cxx11_hdr_random cxx11_defaulted_functions ] ;
 
 

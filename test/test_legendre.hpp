@@ -237,7 +237,7 @@ void test_legendre_p_prime()
         BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p_prime<T>(8,  x), expected, tolerance);
         BOOST_CHECK_CLOSE_FRACTION(::boost::math::legendre_p_prime<T>(-9,  x), expected, tolerance);
 
-        x += static_cast<T>(1)/static_cast<T>(pow(2, 4));
+        x += static_cast<T>(1)/static_cast<T>(pow(T(2), T(4)));
     }
 
     int n = 0;
