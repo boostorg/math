@@ -30,12 +30,22 @@ environment:
       ARGS: --toolset=msvc-14.1 address-model=32
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=64 cxxflags=-std:c++latest
-    - ARGS: --toolset=gcc address-model=64
+    - ARGS: --toolset=gcc address-model=64 float128_tests
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
+    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z float128_tests
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
-    - ARGS: --toolset=gcc address-model=32
-      PATH: C:\mingw-w64\i686-5.3.0-posix-dwarf-rt_v4-rev0\mingw32\bin;%PATH%
+    - ARGS: --toolset=gcc address-model=64 special_fun
+      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z special_fun
+      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    - ARGS: --toolset=gcc address-model=64 distribution_tests
+      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z distribution_tests
+      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    - ARGS: --toolset=gcc address-model=64 misc
+      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z misc
+      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
 
 install:
