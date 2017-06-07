@@ -151,7 +151,7 @@ void test_runge()
     {
         auto t = x[i] + dis(gen);
         auto z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, 1/(1+25*t*t), 0.02);
+        BOOST_CHECK_CLOSE(z, 1/(1+25*t*t), 0.03);
     }
 }
 
