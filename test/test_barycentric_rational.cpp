@@ -18,8 +18,7 @@ template<class Real>
 void test_interpolation_condition()
 {
     std::cout << "Testing interpolation condition for barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(4);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
@@ -44,8 +43,7 @@ template<class Real>
 void test_interpolation_condition_high_order()
 {
     std::cout << "Testing interpolation condition in high order for barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(5);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
@@ -73,8 +71,7 @@ void test_constant()
 {
     std::cout << "Testing that constants are interpolated correctly using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(6);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
@@ -102,8 +99,7 @@ void test_constant_high_order()
 {
     std::cout << "Testing that constants are interpolated correctly in high order using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(7);
     boost::random::uniform_real_distribution<Real> dis(0.1f, 1);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
@@ -132,8 +128,7 @@ void test_runge()
 {
     std::cout << "Testing interpolation of Runge's 1/(1+25x^2) function using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(8);
     boost::random::uniform_real_distribution<Real> dis(0.005f, 0.01f);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
@@ -160,8 +155,7 @@ void test_weights()
 {
     std::cout << "Testing weights are calculated correctly using barycentric interpolation on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    std::mt19937 gen(9);
     boost::random::uniform_real_distribution<Real> dis(0.005, 0.01);
     std::vector<Real> x(500);
     std::vector<Real> y(500);
