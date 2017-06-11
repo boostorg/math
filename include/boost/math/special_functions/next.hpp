@@ -27,14 +27,42 @@
 
 namespace boost{ namespace math{
 
+   namespace concepts {
+
+      struct real_concept;
+      struct std_real_concept;
+
+   }
+
 namespace detail{
 
 template <class T>
+struct has_hidden_guard_digits;
+template <>
+struct has_hidden_guard_digits<float> : public mpl::false_ {};
+template <>
+struct has_hidden_guard_digits<double> : public mpl::false_ {};
+template <>
+struct has_hidden_guard_digits<long double> : public mpl::false_ {};
+#ifdef BOOST_HAS_FLOAT128
+template <>
+struct has_hidden_guard_digits<__float128> : public mpl::false_ {};
+#endif
+template <>
+struct has_hidden_guard_digits<boost::math::concepts::real_concept> : public mpl::false_ {};
+template <>
+struct has_hidden_guard_digits<boost::math::concepts::std_real_concept> : public mpl::false_ {};
+
+template <class T, bool b>
+struct has_hidden_guard_digits_10 : public mpl::false_ {};
+template <class T>
+struct has_hidden_guard_digits_10<T, true> : public mpl::bool_<(std::numeric_limits<T>::digits10 != std::numeric_limits<T>::max_digits10)> {};
+
+template <class T>
 struct has_hidden_guard_digits 
-   : public mpl::bool_
-   <std::numeric_limits<T>::is_specialized
-   && (std::numeric_limits<T>::radix == 10)
-   && (std::numeric_limits<T>::digits10 != std::numeric_limits<T>::max_digits10)>
+   : public has_hidden_guard_digits_10<T, 
+   std::numeric_limits<T>::is_specialized
+   && (std::numeric_limits<T>::radix == 10) >
 {};
 
 template <class T>
@@ -236,7 +264,7 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_next(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   return detail::float_next_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<T>::type()), mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   return detail::float_next_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
 #if 0 //def BOOST_MSVC
@@ -368,7 +396,7 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_prior(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   return detail::float_prior_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<T>::type()), mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   return detail::float_prior_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
 #if 0 //def BOOST_MSVC
@@ -631,7 +659,7 @@ template <class T, class U, class Policy>
 inline typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
-   return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<T>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<T>::type()), mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
 template <class T, class U>
@@ -815,7 +843,7 @@ template <class T, class Policy>
 inline typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
-   return detail::float_advance_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<T>::type()), distance, mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
+   return detail::float_advance_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), distance, mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
 template <class T>
