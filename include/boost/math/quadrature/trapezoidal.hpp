@@ -19,29 +19,28 @@
 #include <limits>
 #include <stdexcept>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/math/policies/error_handling.hpp>
 
 namespace boost{ namespace math{ namespace quadrature {
 
-// How do we get rid of this without breaking the concept test?
-using std::sqrt;
-
-template<class F, class Real>
-Real trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 10, Real* error_estimate = nullptr, Real* L1 = nullptr)
+template<class F, class Real, class Policy>
+Real trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Real* error_estimate, Real* L1, const Policy& pol)
 {
+    static const char* function = "boost::math::quadrature::trapezoidal<%1%>(F, %1%, %1%, %1%)";
     using std::abs;
-    using std::isfinite;
     using boost::math::constants::half;
     if(a >= b)
     {
-        throw std::domain_error("a < b for integration over the region [a, b] is required.\n");
+        return boost::math::policies::raise_domain_error(function, "a < b for integration over the region [a, b] is required, but got a = %1%.\n", a, pol);
     }
-    if (!isfinite(a))
+    if (!(boost::math::isfinite)(a))
     {
-        throw std::domain_error("Left endpoint of integration must be finite for adaptive trapezoidal integration.\n");
+       return boost::math::policies::raise_domain_error(function, "Left endpoint of integration must be finite for adaptive trapezoidal integration but got a = %1%.\n", a, pol);
     }
-    if (!isfinite(b))
+    if (!(boost::math::isfinite)(b))
     {
-        throw std::domain_error("Right endpoint of integration must be finite for adaptive trapedzoidal integration.\n");
+       return boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapedzoidal integration but got b = %1%.\n", b, pol);
     }
 
     Real ya = f(a);
@@ -56,7 +55,7 @@ Real trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>:
 
     // The recursion is:
     // I_k = 1/2 I_{k-1} + 1/2^k \sum_{j=1; j odd, j < 2^k} f(a + j(b-a)/2^k)
-    size_t k = 2;
+    std::size_t k = 2;
     // We want to go through at least 4 levels so we have sampled the function at least 10 times.
     // Otherwise, we could terminate prematurely and miss essential features.
     // This is of course possible anyway, but 10 samples seems to be a reasonable compromise.
@@ -68,12 +67,12 @@ Real trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>:
 
         I1 = half<Real>()*I0;
         IL1 = half<Real>()*IL0;
-        size_t p = 1 << k;
+        std::size_t p = static_cast<std::size_t>(1u) << k;
         h *= half<Real>();
         Real sum = 0;
         Real absum = 0;
 
-        for(size_t j = 1; j < p; j += 2)
+        for(std::size_t j = 1; j < p; j += 2)
         {
             Real y = f(a + j*h);
             sum += y;
@@ -97,6 +96,12 @@ Real trapezoidal(F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>:
     }
 
     return I1;
+}
+
+template<class F, class Real>
+Real trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 10, Real* error_estimate = nullptr, Real* L1 = nullptr)
+{
+   return trapezoidal(f, a, b, tol, max_refinements, error_estimate, L1, boost::math::policies::policy<>());
 }
 
 }}}
