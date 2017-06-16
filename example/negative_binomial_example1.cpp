@@ -246,7 +246,7 @@ Probability of selling his quota of 5 bars
 on or before the 30th house is 0.99849
 ]
 
-/*`So the risk of failing even after visiting all the houses is 1 - this probability,
+So the risk of failing even after visiting all the houses is 1 - this probability,
   ``1 - cdf(nb, all_houses - sales_quota``
 But using this expression may cause serious inaccuracy,
 so it would be much better to use the complement of the cdf:
@@ -511,9 +511,3 @@ House for 5th (last) sale.  Probability (%)
 30                              0.99849
 
 */
-
-
-
-
-
-

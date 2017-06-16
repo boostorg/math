@@ -159,7 +159,9 @@ void instantiate(RealType)
    function_requires<DistributionConcept<dist_test::hypergeometric > >();
 #endif
 #endif
-   int i;
+   int i = 1;
+   // Deal with unused variable warnings:
+   (void)i;
    RealType v1(0.5), v2(0.5), v3(0.5);
    boost::detail::dummy_constructor dc;
    boost::output_iterator_archetype<RealType> oi(dc);
@@ -924,14 +926,21 @@ void instantiate_mixed(RealType)
    using namespace boost::math;
 #ifndef BOOST_MATH_INSTANTIATE_MINIMUM
    int i = 1;
+   (void)i;
    long l = 1;
+   (void)l;
    short s = 1;
+   (void)s;
    float fr = 0.5F;
+   (void)fr;
    double dr = 0.5;
+   (void)dr;
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    long double lr = 0.5L;
+   (void)lr;
 #else
    double lr = 0.5L;
+   (void)lr;
 #endif
 #ifdef TEST_GROUP_7
    boost::math::tgamma(i);
@@ -1380,4 +1389,3 @@ void instantiate_mixed(RealType)
 
 
 #endif // BOOST_LIBS_MATH_TEST_INSTANTIATE_HPP
-
