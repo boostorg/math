@@ -13,10 +13,11 @@
 //
 #include "test_compile_result.hpp"
 
+double func(double x) { return x; }
+
 void compile_and_link_test()
 {
-    auto f = [](double x) { return x; };
     double a = 0;
     double b = 1;
-    check_result<double>(boost::math::quadrature::trapezoidal(f, a, b));
+    check_result<double>(boost::math::quadrature::trapezoidal(func, a, b));
 }

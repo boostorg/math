@@ -97,10 +97,22 @@ Real trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
 
     return I1;
 }
-
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
+// Template argument dedcution failure otherwise:
+template<class F, class Real>
+Real trapezoidal(F f, Real a, Real b, Real tol = 0, std::size_t max_refinements = 10, Real* error_estimate = 0, Real* L1 = 0)
+#elif !defined(BOOST_NO_CXX11_NULLPTR)
 template<class F, class Real>
 Real trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 10, Real* error_estimate = nullptr, Real* L1 = nullptr)
+#else
+template<class F, class Real>
+Real trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 10, Real* error_estimate = 0, Real* L1 = 0)
+#endif
 {
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1600)
+   if (tol == 0)
+      tol = boost::math::tools::root_epsilon<Real>();
+#endif
    return trapezoidal(f, a, b, tol, max_refinements, error_estimate, L1, boost::math::policies::policy<>());
 }
 

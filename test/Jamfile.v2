@@ -762,7 +762,7 @@ run test_sign.cpp ../../test/build//boost_unit_test_framework ;
 run test_skew_normal.cpp ../../test/build//boost_unit_test_framework ;
 run test_tgamma_ratio.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_toms748_solve.cpp pch ../../test/build//boost_unit_test_framework ;
-run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework ;
+run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_lambdas ] ;
 run test_triangular.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_uniform.cpp pch ../../test/build//boost_unit_test_framework ;
@@ -1334,6 +1334,9 @@ test_basic_nonfinite
 test_lexical_cast
 test_nonfinite_trap
 test_signed_zero
+test_trapezoidal
+trapezoidal_incl_test
+trapezoidal_concept_test
 complex_test
 test_polynomial
 test_gcd

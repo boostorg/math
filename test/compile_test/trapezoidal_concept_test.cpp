@@ -7,10 +7,14 @@
 #include <boost/math/quadrature/trapezoidal.hpp>
 
 
+boost::math::concepts::std_real_concept func(boost::math::concepts::std_real_concept x)
+{
+   return x;
+}
+
 void compile_and_link_test()
 {
    boost::math::concepts::std_real_concept a = 0;
    boost::math::concepts::std_real_concept b = 1;
-   auto f = [](boost::math::concepts::std_real_concept x) { return x; };
-   boost::math::quadrature::trapezoidal(f, a, b);
+   boost::math::quadrature::trapezoidal(func, a, b);
 }

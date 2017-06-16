@@ -23,7 +23,7 @@ void test_constant()
 {
     std::cout << "Testing constants are integrated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
 
-    auto f = [](Real) { return boost::math::constants::half<Real>(); };
+    auto f = [](Real)->Real { return boost::math::constants::half<Real>(); };
     Real Q = trapezoidal<decltype(f), Real>(f, (Real) 0.0, (Real) 10.0);
     BOOST_CHECK_CLOSE(Q, 5.0, 100*std::numeric_limits<Real>::epsilon());
 }
@@ -36,7 +36,7 @@ void test_rational_periodic()
     using boost::math::constants::third;
     std::cout << "Testing that rational periodic functions are integrated correctly by trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
-    auto f = [](Real x) { return 1/(5 - 4*cos(x)); };
+    auto f = [](Real x)->Real { return 1/(5 - 4*cos(x)); };
 
     Real tol = 100*boost::math::tools::epsilon<Real>();
     Real Q = trapezoidal(f, (Real) 0.0, two_pi<Real>(), tol);
@@ -48,7 +48,7 @@ template<class Real>
 void test_bump_function()
 {
     std::cout << "Testing that bump functions are integrated correctly by trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    auto f = [](Real x) {
+    auto f = [](Real x)->Real {
         if( x>= 1 || x <= -1)
         {
             return (Real) 0;
@@ -66,7 +66,7 @@ template<class Real>
 void test_zero_function()
 {
     std::cout << "Testing that zero functions are integrated correctly by trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    auto f = [](Real) { return (Real) 0;};
+    auto f = [](Real)->Real { return (Real) 0;};
     Real tol = 100* boost::math::tools::epsilon<Real>();
     Real Q = trapezoidal(f, (Real) -1, (Real) 1, tol);
     BOOST_CHECK_SMALL(Q, 100*tol);
@@ -76,7 +76,7 @@ template<class Real>
 void test_sinsq()
 {
     std::cout << "Testing that sin(x)^2 is integrated correctly by the trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    auto f = [](Real x) { return sin(10*x)*sin(10*x); };
+    auto f = [](Real x)->Real { return sin(10*x)*sin(10*x); };
     Real tol = 100* boost::math::tools::epsilon<Real>();
     Real Q = trapezoidal(f, (Real) 0, (Real) boost::math::constants::pi<Real>(), tol);
     BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::constants::half_pi<Real>(), tol);
@@ -89,7 +89,7 @@ void test_slowly_converging()
     using std::sqrt;
     std::cout << "Testing that non-periodic functions are correctly integrated by the trapezoidal rule, even if slowly, on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     // This function is not periodic, so it should not be fast to converge:
-    auto f = [](Real x) { return sqrt(1 - x*x); };
+    auto f = [](Real x)->Real { using std::sqrt;  return sqrt(1 - x*x); };
 
     Real tol = sqrt(sqrt(boost::math::tools::epsilon<Real>()));
     Real error_estimate;
@@ -106,7 +106,7 @@ void test_rational_sin()
     using boost::math::constants::half;
     std::cout << "Testing that a rational sin function is integrated correctly by the trapezoidal rule on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real a = 5;
-    auto f = [=](Real x) { using std::sin;  Real t = a + sin(x); return 1.0f / (t*t); };
+    auto f = [=](Real x)->Real { using std::sin;  Real t = a + sin(x); return 1.0f / (t*t); };
 
     Real expected = two_pi<Real>()*a/pow(a*a - 1, 3*half<Real>());
     Real tol = 100* boost::math::tools::epsilon<Real>();
