@@ -10,7 +10,6 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 [heading Synopsis]
 
-``
     #include <boost/math/quadrature/trapezoidal.hpp>
     namespace boost{ namespace math{ namespace quadrature {
 
@@ -20,8 +19,12 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
                      size_t max_refinements = 10,
                      Real* error_estimate = nullptr,
                      Real* L1 = nullptr);
+    
+	template<class F, class Real, class ``__Policy``>
+    Real trapezoidal(F f, Real a, Real b, Real tol, size_t max_refinements, 
+	                 Real* error_estimate, Real* L1, const ``__Policy``& pol);
+
     }}} // namespaces
-``
 
 [heading Description]
 
@@ -114,6 +117,8 @@ However, we see that for large /n/ the integrand oscillates rapidly,
 taking on positive and negative values,
 and hence the trapezoidal sums become ill-conditioned.
 In double precision, /x = 17/ and /n = 25/ gives a sum which is so poorly conditioned that zero correct digits are obtained.
+
+[optional_policy]
 
 References:
 
