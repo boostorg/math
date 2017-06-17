@@ -762,6 +762,7 @@ run test_sign.cpp ../../test/build//boost_unit_test_framework ;
 run test_skew_normal.cpp ../../test/build//boost_unit_test_framework ;
 run test_tgamma_ratio.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_toms748_solve.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_lambdas ] ;
 run test_triangular.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_uniform.cpp pch ../../test/build//boost_unit_test_framework ;
@@ -928,6 +929,7 @@ run  compile_test/sf_jacobi_incl_test.cpp compile_test_main ;
 run  compile_test/sf_owens_t_incl_test.cpp compile_test_main ;
 run  compile_test/dist_skew_norm_incl_test.cpp compile_test_main ;
 run  compile_test/constants_incl_test.cpp compile_test_main ;
+run  compile_test/trapezoidal_incl_test.cpp compile_test_main ;
 compile  compile_test/test_traits.cpp ;
 compile  compile_test/tools_config_inc_test.cpp ;
 compile  compile_test/tools_fraction_inc_test.cpp ;
@@ -947,6 +949,10 @@ compile  compile_test/tools_toms748_inc_test.cpp ;
 compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
 compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
 compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas ]  ;
+compile  compile_test/trapezoidal_concept_test.cpp ;
+compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
+compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
+compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations ]  ;
 
 run octonion_test.cpp
     ../../test/build//boost_unit_test_framework ;
@@ -1328,6 +1334,9 @@ test_basic_nonfinite
 test_lexical_cast
 test_nonfinite_trap
 test_signed_zero
+test_trapezoidal
+trapezoidal_incl_test
+trapezoidal_concept_test
 complex_test
 test_polynomial
 test_gcd
