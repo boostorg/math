@@ -115,11 +115,11 @@ void test_nr_examples()
     Real error;
     exp_sinh<Real> integrator(tol, 12);
 
-    auto f0 = [](Real x) { return (Real) 0; };
+    auto f0 = [](Real) { return (Real) 0; };
     Q = integrator.integrate(f0, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
     Q_expected = 0;
-    BOOST_CHECK_CLOSE_FRACTION(Q, 0, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, 0, tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, 0.0f, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, 0.0f, tol);
 
     auto f = [](Real x) { return 1/(1+x*x); };
     Q = integrator.integrate(f, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
@@ -206,7 +206,7 @@ void test_crc()
     };
 
     Q = integrator.integrate(f1, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
-    Q_expected = boost::math::tgamma(12);
+    Q_expected = boost::math::tgamma(12.0f);
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // Integral representation of the modified bessel function:

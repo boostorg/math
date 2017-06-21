@@ -36,46 +36,39 @@
 
 namespace boost{ namespace math{ namespace quadrature {
 
-// TODO: Get rid of this using declaration without breaking the concepts test!
-using std::sqrt;
-
-template<class Real>
+template<class Real, class Policy = policies::policy<> >
 class tanh_sinh
 {
 public:
-    tanh_sinh(Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 15);
+    tanh_sinh(Real tol = tools::root_epsilon<Real>(), size_t max_refinements = 15)
+    : m_imp(std::make_shared<detail::tanh_sinh_detail<Real, Policy>>(tol, max_refinements)) {}
 
     template<class F>
     Real integrate(const F f, Real a, Real b, Real* error = nullptr, Real* L1 = nullptr) const;
 
 private:
-    std::shared_ptr<detail::tanh_sinh_detail<Real>> m_imp;
+    std::shared_ptr<detail::tanh_sinh_detail<Real, Policy>> m_imp;
 };
 
-template<class Real>
-tanh_sinh<Real>::tanh_sinh(Real tol, size_t max_refinements) : m_imp(std::make_shared<detail::tanh_sinh_detail<Real>>(tol, max_refinements))
-{
-    return;
-}
-
-template<class Real>
+template<class Real, class Policy>
 template<class F>
-Real tanh_sinh<Real>::integrate(const F f, Real a, Real b, Real* error, Real* L1) const
+Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, Real* L1) const
 {
-    using std::isfinite;
     using boost::math::constants::half;
     using boost::math::quadrature::detail::tanh_sinh_detail;
 
-    if (isfinite(a) && isfinite(b))
+    static const char* function = "tanh_sinh<%1%>::integrate";
+
+    if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
     {
         if (b <= a)
         {
-            throw std::domain_error("Arguments to integrate are in wrong order; integration over [a,b] must have b > a.\n");
+           return policies::raise_domain_error(function, "Arguments to integrate are in wrong order; integration over [a,b] must have b > a.", a, Policy());
         }
         Real avg = (a+b)*half<Real>();
         Real diff = (b-a)*half<Real>();
         auto u = [&](Real z) { return f(avg + diff*z); };
-        Real Q = diff*m_imp->integrate(u, error, L1);
+        Real Q = diff*m_imp->integrate(u, error, L1, function);
 
         if(L1)
         {
@@ -85,17 +78,17 @@ Real tanh_sinh<Real>::integrate(const F f, Real a, Real b, Real* error, Real* L1
     }
 
     // Infinite limits:
-    if (a <= std::numeric_limits<Real>::lowest() && b >= std::numeric_limits<Real>::max())
+    if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
     {
         auto u = [&](Real t) { auto t_sq = t*t; auto inv = 1/(1 - t_sq); return f(t*inv)*(1+t_sq)*inv*inv; };
-        return m_imp->integrate(u, error, L1);
+        return m_imp->integrate(u, error, L1, function);
     }
 
     // Right limit is infinite:
-    if (isfinite(a) && b >= std::numeric_limits<Real>::max())
+    if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
     {
         auto u = [&](Real t) { auto z = 1/(t+1); auto arg = 2*z + a - 1; return f(arg)*z*z; };
-        Real Q = 2*m_imp->integrate(u, error, L1);
+        Real Q = 2*m_imp->integrate(u, error, L1, function);
         if(L1)
         {
             *L1 *= 2;
@@ -104,12 +97,12 @@ Real tanh_sinh<Real>::integrate(const F f, Real a, Real b, Real* error, Real* L1
         return Q;
     }
 
-    if (isfinite(b) && a <= std::numeric_limits<Real>::lowest())
+    if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
     {
         auto u = [&](Real t) { return f(b-t);};
         auto v = [&](Real t) { auto z = 1/(t+1); auto arg = 2*z - 1; return u(arg)*z*z; };
 
-        Real Q = 2*m_imp->integrate(v, error, L1);
+        Real Q = 2*m_imp->integrate(v, error, L1, function);
         if (L1)
         {
             *L1 *= 2;
@@ -117,7 +110,7 @@ Real tanh_sinh<Real>::integrate(const F f, Real a, Real b, Real* error, Real* L1
         return Q;
     }
 
-    throw std::logic_error("The domain of integration is not sensible; please check the bounds.\n");
+    return policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
 }
 
 

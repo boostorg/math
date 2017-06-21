@@ -64,7 +64,7 @@ void test_nr_examples()
     Real error;
     sinh_sinh<Real> integrator(tol, 10);
 
-    auto f0 = [](Real x) { return (Real) 0; };
+    auto f0 = [](Real) { return (Real) 0; };
     Q = integrator.integrate(f0, &error, &L1);
     Q_expected = 0;
     BOOST_CHECK_SMALL(Q, tol);

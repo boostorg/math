@@ -20,6 +20,18 @@
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/beta.hpp>
+#include <boost/math/special_functions/ellint_rc.hpp>
+#include <boost/math/special_functions/ellint_rj.hpp>
+
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6)
+#  define TEST1
+#  define TEST2
+#  define TEST3
+#  define TEST4
+#  define TEST5
+#  define TEST6
+#endif
 
 using std::expm1;
 using std::atan;
@@ -146,11 +158,11 @@ void test_detail()
 {
     std::cout << "Testing tanh_sinh_detail on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = sqrt(std::numeric_limits<Real>::epsilon());
-    tanh_sinh_detail<Real> integrator(tol, 20);
+    tanh_sinh_detail<Real, boost::math::policies::policy<> > integrator(tol, 20);
     auto f = [](Real x) { return x*x; };
     Real err;
     Real L1;
-    Real Q = integrator.integrate(f, &err, &L1);
+    Real Q = integrator.integrate(f, &err, &L1, 0);
     BOOST_CHECK_CLOSE_FRACTION(Q, 2*third<Real>(), tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, 2*third<Real>(), tol);
 }
@@ -483,73 +495,116 @@ void test_crc()
     //BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
 }
 
+template <class Real>
+void test_sf()
+{
+   using std::sqrt;
+   // Test some special functions that we already know how to evaluate:
+   std::cout << "Testing special functions on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+   Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+   tanh_sinh<Real> integrator;
+   // incomplete beta:
+   if (std::numeric_limits<Real>::digits < 120) // Otherwise too slow
+   {
+      BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([](Real x) { return boost::math::ibeta_derivative(100, 15, x); }, 0, Real(0.25)), boost::math::ibeta(100, 15, Real(0.25)), tol);
+   }
+
+   Real x = 2, y = 3, z = 0.5, p = 0.25;
+   // This one has much larger (10^-9) error than exp_sinh quadrature:
+   //BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([&](Real t) { return 1 / (sqrt(t + x) * (t + y)); }, 0, std::numeric_limits<Real>::infinity()) / 2, boost::math::ellint_rc(x, y), tol);
+
+   BOOST_CHECK_CLOSE_FRACTION((Real(3) / 2) * integrator.integrate([&](Real t) { return 1 / (sqrt((t + x) * (t + y) * (t + z)) * (t + p)); }, 0, std::numeric_limits<Real>::infinity()), boost::math::ellint_rj(x, y, z, p), tol);
+
+   z = 5.5;
+   BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([&](Real t) { using std::pow; using std::exp; return t > 10000 ? 0 : pow(t, z - 1) * exp(-t); }, 0, std::numeric_limits<Real>::infinity()),
+      boost::math::tgamma(z), tol);
+   BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([](Real t) {  using std::exp; return exp(-t*t); }, -std::numeric_limits<Real>::infinity(), std::numeric_limits<Real>::infinity()), 
+      boost::math::constants::root_pi<Real>(), tol);
+}
+
 BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 {
     //generate_constants();
+
+#ifdef TEST1
+
     test_detail<float>();
-    test_detail<double>();
-    test_detail<long double>();
-
     test_right_limit_infinite<float>();
-    test_right_limit_infinite<double>();
-    test_right_limit_infinite<long double>();
-
-
     test_left_limit_infinite<float>();
-    test_left_limit_infinite<double>();
-    test_left_limit_infinite<long double>();
-
-
     test_linear<float>();
-    test_linear<double>();
-    test_linear<long double>();
-    test_linear<cpp_bin_float_quad>();
-
     test_quadratic<float>();
-    test_quadratic<double>();
-    test_quadratic<long double>();
-    test_quadratic<cpp_bin_float_quad>();
-
-
     test_singular<float>();
-    test_singular<double>();
-    test_singular<long double>();
-    test_singular<cpp_bin_float_50>();
-    test_singular<cpp_bin_float_100>();
-
-
     test_ca<float>();
-    test_ca<double>();
-    test_ca<long double>();
-    test_ca<cpp_bin_float_quad>();
-
     test_three_quadrature_schemes_examples<float>();
-    test_three_quadrature_schemes_examples<double>();
-    test_three_quadrature_schemes_examples<long double>();
-    test_three_quadrature_schemes_examples<cpp_bin_float_quad>();
-
-    test_integration_over_real_line<float>();
-    test_integration_over_real_line<double>();
-    test_integration_over_real_line<long double>();
-
     test_horrible<float>();
-    test_horrible<double>();
-    test_horrible<long double>();
-    test_horrible<cpp_bin_float_quad>();
-
+    test_integration_over_real_line<float>();
     test_nr_examples<float>();
-    test_nr_examples<double>();
-    test_nr_examples<long double>();
-    //test_nr_examples<cpp_bin_float_quad>();
-
     test_early_termination<float>();
-    test_early_termination<double>();
-    test_early_termination<long double>();
-    test_early_termination<cpp_bin_float_quad>();
-
     test_crc<float>();
-    test_crc<double>();
-    test_crc<long double>();
-    test_crc<cpp_bin_float_quad>();
 
+#endif
+#ifdef TEST2
+
+    test_detail<double>();
+    test_right_limit_infinite<double>();
+    test_left_limit_infinite<double>();
+    test_linear<double>();
+    test_quadratic<double>();
+    test_singular<double>();
+    test_ca<double>();
+    test_three_quadrature_schemes_examples<double>();
+    test_horrible<double>();
+    test_integration_over_real_line<double>();
+    test_nr_examples<double>();
+    test_early_termination<double>();
+    test_crc<double>();
+    test_sf<double>();
+
+#endif
+
+#ifdef TEST3
+
+    test_detail<long double>();
+    test_right_limit_infinite<long double>();
+    test_left_limit_infinite<long double>();
+    test_linear<long double>();
+    test_quadratic<long double>();
+    test_singular<long double>();
+    test_ca<long double>();
+    test_three_quadrature_schemes_examples<long double>();
+    test_horrible<long double>();
+    test_integration_over_real_line<long double>();
+    test_nr_examples<long double>();
+    test_early_termination<long double>();
+    test_crc<long double>();
+    test_sf<long double>();
+
+#endif
+
+#ifdef TEST4
+
+    test_linear<cpp_bin_float_quad>();
+    test_quadratic<cpp_bin_float_quad>();
+    test_ca<cpp_bin_float_quad>();
+    test_three_quadrature_schemes_examples<cpp_bin_float_quad>();
+    test_horrible<cpp_bin_float_quad>();
+    test_nr_examples<cpp_bin_float_quad>();
+    test_early_termination<cpp_bin_float_quad>();
+    test_crc<cpp_bin_float_quad>();
+    test_sf<cpp_bin_float_quad>();
+
+#endif
+#ifdef TEST5
+
+    test_sf<cpp_bin_float_50>();
+    test_sf<cpp_bin_float_100>();
+    test_sf<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<150> > >();
+
+#endif
+#ifdef TEST6
+
+    //test_linear<cpp_dec_float_100>();
+    //test_quadratic<cpp_dec_float_100>();
+
+#endif
 }

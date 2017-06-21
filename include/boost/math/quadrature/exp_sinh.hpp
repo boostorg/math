@@ -22,67 +22,58 @@
 
 namespace boost{ namespace math{ namespace quadrature {
 
-// Without this, the concepts check fails! How do we get rid of it?
-using std::sqrt;
-
-template<class Real>
+template<class Real, class Policy = policies::policy<> >
 class exp_sinh
 {
 public:
-    exp_sinh(Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 9);
+   exp_sinh(Real tol = boost::math::tools::root_epsilon<Real>(), size_t max_refinements = 9)
+      : m_imp(std::make_shared<detail::exp_sinh_detail<Real, Policy>>(tol, max_refinements)) {}
 
     template<class F>
     Real integrate(const F& f, Real a = 0, Real b = std::numeric_limits<Real>::infinity(), Real* error = nullptr, Real* L1 = nullptr) const;
 
 private:
-    std::shared_ptr<detail::exp_sinh_detail<Real>> m_imp;
+    std::shared_ptr<detail::exp_sinh_detail<Real, Policy>> m_imp;
 };
 
-template<class Real>
-exp_sinh<Real>::exp_sinh(Real tol, size_t max_refinements) : m_imp(std::make_shared<detail::exp_sinh_detail<Real>>(tol, max_refinements))
-{
-    return;
-}
-
-template<class Real>
+template<class Real, class Policy>
 template<class F>
-Real exp_sinh<Real>::integrate(const F& f, Real a, Real b, Real* error, Real* L1) const
+Real exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, Real* error, Real* L1) const
 {
-    using std::isfinite;
     using std::abs;
     using boost::math::constants::half;
     using boost::math::quadrature::detail::exp_sinh_detail;
 
+    static const char* function = "boost::math::quadrature::exp_sinh<%1%>::integrate";
+
+    // Neither limit may be a NaN:
+    if((boost::math::isnan)(a) || (boost::math::isnan)(b))
+       return policies::raise_domain_error(function, "NaN supplied as one limit of integration - sorry I don't know what to do", a, Policy());
     // Right limit is infinite:
-    if (isfinite(a) && b >= std::numeric_limits<Real>::max())
+    if ((boost::math::isfinite)(a) && (b >= boost::math::tools::max_value<Real>()))
     {
         // If a = 0, don't use an additional level of indirection:
         if (a == (Real) 0)
         {
-            return m_imp->integrate(f, error, L1);
+            return m_imp->integrate(f, error, L1, function);
         }
         const auto u = [&](Real t) { return f(t + a); };
-        return m_imp->integrate(u, error, L1);
+        return m_imp->integrate(u, error, L1, function);
     }
 
-    if (isfinite(b) && a <= std::numeric_limits<Real>::lowest())
+    if ((boost::math::isfinite)(b) && a <= -boost::math::tools::max_value<Real>())
     {
         const auto u = [&](Real t) { return f(b-t);};
-        return m_imp->integrate(u, error, L1);
-    }
-
-    if (isfinite(a) && isfinite(b))
-    {
-        throw std::domain_error("Use tanh_sinh quadrature for integration over finite domains; exp_sinh is for half infinite integrals.\n");
+        return m_imp->integrate(u, error, L1, function);
     }
 
     // Infinite limits:
-    if (a <= std::numeric_limits<Real>::lowest() && b >= std::numeric_limits<Real>::max())
+    if ((a <= -boost::math::tools::max_value<Real>()) && (b >= boost::math::tools::max_value<Real>()))
     {
-        throw std::domain_error("Use sinh_sinh quadrature for integration over the whole real line; exp_sinh is for half infinite integrals.\n");
+        return policies::raise_domain_error(function, "Use sinh_sinh quadrature for integration over the whole real line; exp_sinh is for half infinite integrals.", a, Policy());
     }
-
-    throw std::domain_error("The domain of integration is not sensible; please check the bounds.\n");
+    // If we get to here then both ends must necessarily be finite:
+    return policies::raise_domain_error(function, "Use tanh_sinh quadrature for integration over finite domains; exp_sinh is for half infinite integrals.", a, Policy());
 }
 
 

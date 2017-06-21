@@ -768,6 +768,24 @@ run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boo
 run test_uniform.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_weibull.cpp ../../test/build//boost_unit_test_framework ;
 run test_zeta.cpp ../../test/build//boost_unit_test_framework test_instances//test_instances pch_light ;
+run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+	 tanh_sinh_quadrature_test_1 ;
+run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+	 tanh_sinh_quadrature_test_2 ;
+run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+	 tanh_sinh_quadrature_test_3 ;
+run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : release <define>TEST4 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+	 tanh_sinh_quadrature_test_4 ;
+run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : release <define>TEST5 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+	 tanh_sinh_quadrature_test_5 ;
+run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : <define>TEST6 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+	 tanh_sinh_quadrature_test_6 ;
 
 run test_policy.cpp ../../test/build//boost_unit_test_framework ;
 run test_policy_2.cpp ../../test/build//boost_unit_test_framework ;

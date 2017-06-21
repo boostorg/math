@@ -22,34 +22,22 @@
 
 namespace boost{ namespace math{ namespace quadrature {
 
-// TODO: Get rid of this using declaration without breaking the concepts test!
-using std::sqrt;
-
-template<class Real>
+template<class Real, class Policy = boost::math::policies::policy<> >
 class sinh_sinh
 {
 public:
-    sinh_sinh(Real tol = sqrt(std::numeric_limits<Real>::epsilon()), size_t max_refinements = 9);
+    sinh_sinh(Real tol = boost::math::tools::root_epsilon<Real>(), size_t max_refinements = 9)
+        : m_imp(std::make_shared<detail::sinh_sinh_detail<Real, Policy> >(tol, max_refinements)) {}
 
     template<class F>
-    Real integrate(const F f, Real* error = nullptr, Real* L1 = nullptr) const;
+    Real integrate(const F f, Real* error = nullptr, Real* L1 = nullptr) const
+    {
+        return m_imp->integrate(f, error, L1);
+    }
 
 private:
-    std::shared_ptr<detail::sinh_sinh_detail<Real>> m_imp;
+    std::shared_ptr<detail::sinh_sinh_detail<Real, Policy>> m_imp;
 };
-
-template<class Real>
-sinh_sinh<Real>::sinh_sinh(Real tol, size_t max_refinements) : m_imp(std::make_shared<detail::sinh_sinh_detail<Real>>(tol, max_refinements))
-{
-    return;
-}
-
-template<class Real>
-template<class F>
-Real sinh_sinh<Real>::integrate(const F f, Real* error, Real* L1) const
-{
-    return m_imp->integrate(f, error, L1);
-}
 
 }}}
 #endif
