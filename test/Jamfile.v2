@@ -102,6 +102,7 @@ run test_arcsine.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_bernoulli.cpp ../../test/build//boost_unit_test_framework ;
 run test_constants.cpp ../../test/build//boost_unit_test_framework ;
 run test_print_info_on_type.cpp ;
+run test_barycentric_rational.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ;
 run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no ;
 run test_bessel_j.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_bessel_y.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
@@ -221,6 +222,7 @@ run test_cauchy.cpp ../../test/build//boost_unit_test_framework ;
 run test_cbrt.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_chi_squared.cpp ../../test/build//boost_unit_test_framework ;
 run test_classify.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
 run test_difference.cpp ../../test/build//boost_unit_test_framework ;
 run test_digamma.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_dist_overloads.cpp ../../test/build//boost_unit_test_framework ;
@@ -560,8 +562,8 @@ run test_jacobi.cpp pch_light ../../test/build//boost_unit_test_framework ;
 run test_laplace.cpp ../../test/build//boost_unit_test_framework ;
 run test_inv_hyp.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
-run test_lambert_w.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
-run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
+run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ;
+run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ;
 run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework ;
 run test_logistic_dist.cpp ../../test/build//boost_unit_test_framework ;
 run test_lognormal.cpp ../../test/build//boost_unit_test_framework ;
@@ -594,7 +596,9 @@ run test_negative_binomial.cpp ../../test/build//boost_unit_test_framework
           <define>TEST_REAL_CONCEPT
           <toolset>intel:<pch>off
         : test_negative_binomial_real_concept ;
-run test_next.cpp pch ../../test/build//boost_unit_test_framework ;
+# Needs to run in release mode, as it's rather slow:
+run test_next.cpp pch ../../test/build//boost_unit_test_framework : : : release ;
+run test_next_decimal.cpp pch ../../test/build//boost_unit_test_framework : : : release ;
 run test_nc_chi_squared.cpp  pch ../../test/build//boost_unit_test_framework
         : # command line
         : # input files
@@ -758,6 +762,7 @@ run test_sign.cpp ../../test/build//boost_unit_test_framework ;
 run test_skew_normal.cpp ../../test/build//boost_unit_test_framework ;
 run test_tgamma_ratio.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_toms748_solve.cpp pch ../../test/build//boost_unit_test_framework ;
+run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_lambdas ] ;
 run test_triangular.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_trig.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ;
 run test_uniform.cpp pch ../../test/build//boost_unit_test_framework ;
@@ -821,6 +826,10 @@ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
 
 lib compile_test_main : compile_test/main.cpp ;
 
+run  compile_test/cubic_spline_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
+run  compile_test/barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
+run  compile_test/common_factor_rt_inc_test.cpp compile_test_main ;
+run  compile_test/common_factor_ct_inc_test.cpp compile_test_main ;
 run  compile_test/compl_abs_incl_test.cpp compile_test_main ;
 run  compile_test/compl_acos_incl_test.cpp compile_test_main ;
 run  compile_test/compl_acosh_incl_test.cpp compile_test_main ;
@@ -890,6 +899,7 @@ run  compile_test/sf_hypot_incl_test.cpp compile_test_main ;
 run  compile_test/sf_laguerre_incl_test.cpp compile_test_main ;
 compile  compile_test/sf_lanczos_incl_test.cpp ;
 run  compile_test/sf_legendre_incl_test.cpp compile_test_main ;
+run  compile_test/sf_legendre_stieltjes_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations ] ;
 run  compile_test/sf_log1p_incl_test.cpp compile_test_main ;
 compile  compile_test/sf_math_fwd_incl_test.cpp ;
 run  compile_test/sf_modf_incl_test.cpp compile_test_main ;
@@ -919,6 +929,7 @@ run  compile_test/sf_jacobi_incl_test.cpp compile_test_main ;
 run  compile_test/sf_owens_t_incl_test.cpp compile_test_main ;
 run  compile_test/dist_skew_norm_incl_test.cpp compile_test_main ;
 run  compile_test/constants_incl_test.cpp compile_test_main ;
+run  compile_test/trapezoidal_incl_test.cpp compile_test_main ;
 compile  compile_test/test_traits.cpp ;
 compile  compile_test/tools_config_inc_test.cpp ;
 compile  compile_test/tools_fraction_inc_test.cpp ;
@@ -935,9 +946,13 @@ compile  compile_test/tools_stats_inc_test.cpp ;
 compile  compile_test/tools_test_data_inc_test.cpp ;
 compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_inc_test.cpp ;
-
-run ../test/common_factor_test.cpp
-    ../../test/build//boost_unit_test_framework ;
+compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
+compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
+compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas ]  ;
+compile  compile_test/trapezoidal_concept_test.cpp ;
+compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
+compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
+compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations ]  ;
 
 run octonion_test.cpp
     ../../test/build//boost_unit_test_framework ;
@@ -958,7 +973,7 @@ run test_nonfinite_trap.cpp ../../test/build//boost_unit_test_framework : : : <e
 run test_signed_zero.cpp ../../test/build//boost_unit_test_framework ;
 
 run complex_test.cpp ../../test/build//boost_unit_test_framework ;
-run test_polynomial.cpp ../../test/build//boost_unit_test_framework ;
+run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>-bigobj ;
 run test_gcd.cpp ../../test/build//boost_unit_test_framework ;
 
 compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no ;
@@ -969,7 +984,6 @@ compile ntl_concept_check.cpp : [ check-target-builds ../config//has_ntl_rr : : 
 compile mpfr_concept_check.cpp : [ check-target-builds ../config//has_mpfr_class : : <build>no ] <debug-symbols>off ;
 compile mpreal_concept_check.cpp : [ check-target-builds ../config//has_mpreal : : <build>no ] <debug-symbols>off ;
 compile e_float_concept_check.cpp : [ check-target-builds ../config//has_e_float : : <build>no ] <debug-symbols>off ;
-compile test_common_factor_gmpxx.cpp : [ check-target-builds ../config//has_gmpxx : : <build>no ] <debug-symbols>off <exception-handling>off:<build>no ;
 
 # Temporary tests for support of max_digits10
 # run ztest_max_digits10.cpp ;
@@ -999,3 +1013,344 @@ rule get_float128_tests
 }
 
 test-suite float128_tests : [ get_float128_tests ] ;
+
+alias special_fun :
+hypot_test
+pow_test
+log1p_expm1_test
+powm1_sqrtp1m1_test
+special_functions_test
+test_airy
+test_bessel_j
+test_bessel_y
+test_bessel_i
+test_bessel_k
+test_bessel_j_prime
+test_bessel_y_prime
+test_bessel_i_prime
+test_bessel_k_prime
+test_beta
+test_bessel_airy_zeros
+test_carlson_1
+test_carlson_2
+test_carlson_3
+test_carlson_4
+test_cbrt
+test_digamma
+test_ellint_1
+test_ellint_2
+test_ellint_3
+test_ellint_d
+test_jacobi_zeta
+test_heuman_lambda
+test_erf
+test_expint
+test_factorials
+test_gamma
+test_hankel
+test_hermite
+test_ibeta_float
+test_ibeta_double
+test_ibeta_long_double
+test_ibeta_real_concept1
+test_ibeta_real_concept2
+test_ibeta_real_concept3
+test_ibeta_real_concept4
+test_ibeta_derivative_float
+test_ibeta_derivative_double
+test_ibeta_derivative_long_double
+test_ibeta_derivative_real_concept1
+test_ibeta_derivative_real_concept2
+test_ibeta_derivative_real_concept3
+test_ibeta_derivative_real_concept4
+test_ibeta_inv_float
+test_ibeta_inv_double
+test_ibeta_inv_long_double
+test_ibeta_inv_real_concept1
+test_ibeta_inv_real_concept2
+test_ibeta_inv_real_concept3
+test_ibeta_inv_real_concept4
+test_ibeta_inv_ab_float
+test_ibeta_inv_ab_double
+test_ibeta_inv_ab_long_double
+test_ibeta_inv_ab_real_concept1
+test_ibeta_inv_ab_real_concept2
+test_ibeta_inv_ab_real_concept3
+test_igamma
+test_igamma_inv_float
+test_igamma_inv_double
+test_igamma_inv_long_double
+test_igamma_inv_real_concept
+test_igamma_inva_float
+test_igamma_inva_double
+test_igamma_inva_long_double
+test_igamma_inva_real_concept
+test_jacobi
+test_laguerre
+test_legendre
+test_owens_t
+test_polygamma
+test_trigamma
+test_spherical_harmonic
+test_tgamma_ratio
+test_zeta
+;
+
+alias distribution_tests :
+test_arcsine
+test_beta_dist
+test_bernoulli
+test_binomial_float
+test_binomial_double
+test_binomial_long_double
+test_binomial_real_concept0
+test_binomial_real_concept1
+test_binomial_real_concept2
+test_binomial_real_concept3
+test_binomial_real_concept4
+test_binomial_real_concept5
+test_binomial_real_concept6
+test_cauchy
+test_chi_squared
+test_dist_overloads
+test_exponential_dist
+test_extreme_value
+test_find_location
+test_find_scale
+test_fisher_f
+test_gamma_dist
+test_geometric
+test_hyperexponential_dist
+test_hypergeometric_dist0
+test_hypergeometric_dist1
+test_hypergeometric_dist2
+test_hypergeometric_dist3
+test_hypergeometric_dist4
+test_hypergeometric_dist5
+test_inverse_chi_squared_distribution
+test_inverse_gamma_distribution
+test_inverse_gaussian
+test_laplace
+test_logistic_dist
+test_lognormal
+test_negative_binomial_float
+test_negative_binomial_double
+test_negative_binomial_long_double
+test_negative_binomial_real_concept
+test_nc_chi_squared_float
+test_nc_chi_squared_double
+test_nc_chi_squared_long_double
+test_nc_chi_squared_real_concept
+test_nc_beta_float
+test_nc_beta_double
+test_nc_beta_long_double
+test_nc_beta_real_concept1
+test_nc_beta_real_concept2
+test_nc_f
+test_nc_t_float
+test_nc_t_double
+test_nc_t_long_double
+test_nc_t_real_concept
+test_normal
+test_pareto
+test_poisson_float
+test_poisson_double
+test_poisson_long_double
+test_poisson_real_concept
+test_rayleigh
+test_students_t
+test_skew_normal
+test_triangular
+test_uniform
+test_weibull
+;
+
+alias misc :
+test_constants
+test_print_info_on_type
+test_barycentric_rational
+test_constant_generate
+test_bernoulli_constants
+test_classify
+test_cubic_b_spline
+test_difference
+test_error_handling
+test_instantiate1
+legendre_stieltjes_test
+test_ldouble_simple
+test_minima
+test_next
+test_next_decimal
+test_rationals
+test_real_concept
+test_remez
+test_roots
+test_root_iterations
+test_root_finding_concepts
+test_round
+test_sign
+test_toms748_solve
+test_trig
+test_policy
+test_policy_2
+test_policy_3
+test_policy_4
+test_policy_5
+test_policy_6
+test_policy_7
+test_policy_8
+test_policy_9
+test_policy_sf
+test_tr1
+test_tr1_long_double
+test_tr1_c
+test_tr1_c_long_double
+test_long_double_support
+cubic_spline_incl_test
+barycentric_rational_incl_test
+common_factor_rt_inc_test
+common_factor_ct_inc_test
+compl_abs_incl_test
+compl_acos_incl_test
+compl_acosh_incl_test
+compl_asin_incl_test
+compl_asinh_incl_test
+compl_atan_incl_test
+compl_atanh_incl_test
+dist_bernoulli_incl_test
+dist_beta_incl_test
+dist_cauchy_incl_test
+dist_binomial_incl_test
+dist_chi_squared_incl_test
+dist_complement_incl_test
+dist_exponential_incl_test
+dist_extreme_val_incl_test
+dist_find_location_incl_test
+dist_find_scale_incl_test
+dist_fisher_f_incl_test
+dist_gamma_incl_test
+dist_inv_gamma_incl_test
+dist_inv_chi_sq_incl_test
+dist_hyperexponential_incl_test
+dist_hypergeo_incl_test
+dist_laplace_incl_test
+dist_logistic_incl_test
+dist_lognormal_incl_test
+dist_neg_binom_incl_test
+dist_nc_chi_squ_incl_test
+dist_nc_beta_incl_test
+dist_nc_f_incl_test
+dist_nc_t_incl_test
+dist_normal_incl_test
+dist_poisson_incl_test
+dist_students_t_incl_test
+dist_triangular_incl_test
+dist_uniform_incl_test
+dist_weibull_incl_test
+distribution_concept_check
+sf_beta_incl_test
+sf_bernoulli_incl_test
+sf_bessel_incl_test
+sf_bessel_deriv_incl_test
+sf_binomial_incl_test
+sf_cbrt_incl_test
+sf_cos_pi_incl_test
+sf_digamma_incl_test
+sf_polygamma_incl_test
+sf_ellint_1_incl_test
+sf_ellint_2_incl_test
+sf_ellint_3_incl_test
+sf_ellint_d_incl_test
+sf_jacobi_zeta_incl_test
+sf_heuman_lambda_incl_test
+sf_ellint_rc_incl_test
+sf_ellint_rd_incl_test
+sf_ellint_rf_incl_test
+sf_ellint_rj_incl_test
+sf_ellint_rg_incl_test
+sf_erf_incl_test
+sf_expint_incl_test
+sf_expm1_incl_test
+sf_factorials_incl_test
+sf_fpclassify_incl_test
+sf_gamma_incl_test
+sf_hermite_incl_test
+sf_hypot_incl_test
+sf_laguerre_incl_test
+sf_lanczos_incl_test
+sf_legendre_incl_test
+sf_legendre_stieltjes_incl_test
+sf_log1p_incl_test
+sf_math_fwd_incl_test
+sf_modf_incl_test
+sf_next_incl_test
+sf_powm1_incl_test
+sf_relative_distance_incl_test
+sf_round_incl_test
+sf_sign_incl_test
+sf_sin_pi_incl_test
+sf_sinc_incl_test
+sf_sinhc_incl_test
+sf_sph_harm_incl_test
+sf_sqrt1pm1_incl_test
+sf_trunc_incl_test
+sf_ulp_incl_test
+sf_zeta_incl_test
+std_real_concept_check
+cstdfloat_concept_check_1
+cstdfloat_concept_check_2
+cstdfloat_concept_check_3
+cstdfloat_concept_check_4
+sf_airy_incl_test
+sf_hankel_incl_test
+sf_jacobi_incl_test
+sf_owens_t_incl_test
+dist_skew_norm_incl_test
+constants_incl_test
+test_traits
+tools_config_inc_test
+tools_fraction_inc_test
+tools_minima_inc_test
+tools_polynomial_inc_test
+tools_precision_inc_test
+tools_rational_inc_test
+tools_real_cast_inc_test
+tools_remez_inc_test
+tools_roots_inc_test
+tools_series_inc_test
+tools_solve_inc_test
+tools_stats_inc_test
+tools_test_data_inc_test
+tools_test_inc_test
+tools_toms748_inc_test
+cubic_spline_concept_test
+barycentric_rational_concept_test
+sf_legendre_stieltjes_concept_test
+octonion_test
+quaternion_test
+quaternion_mult_incl_test
+test_legacy_nonfinite
+test_basic_nonfinite
+test_lexical_cast
+test_nonfinite_trap
+test_signed_zero
+test_trapezoidal
+trapezoidal_incl_test
+trapezoidal_concept_test
+complex_test
+test_polynomial
+test_gcd
+multiprc_concept_check_1
+multiprc_concept_check_2
+multiprc_concept_check_3
+multiprc_concept_check_4
+ntl_concept_check
+mpfr_concept_check
+mpreal_concept_check
+e_float_concept_check
+float128_tests
+;
+
+
+
+
