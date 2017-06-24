@@ -10,6 +10,7 @@
 #include <limits>
 #include <functional>
 #include <boost/type_index.hpp>
+#include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/quadrature/sinh_sinh.hpp>
@@ -56,7 +57,7 @@ template<class Real>
 void test_nr_examples()
 {
     std::cout << "Testing type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    Real tol = sqrt(boost::math::tools::epsilon<Real>());
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
@@ -102,7 +103,7 @@ template<class Real>
 void test_crc()
 {
     std::cout << "Testing CRC formulas on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    Real tol = sqrt(boost::math::tools::epsilon<Real>());
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
@@ -141,10 +142,12 @@ BOOST_AUTO_TEST_CASE(sinh_sinh_quadrature_test)
     test_nr_examples<float>();
     test_nr_examples<double>();
     test_nr_examples<long double>();
-    //test_nr_examples<cpp_bin_float_quad>();
+    test_nr_examples<cpp_bin_float_quad>();
+    test_nr_examples<boost::math::concepts::real_concept>();
 
     test_crc<float>();
     test_crc<double>();
     test_crc<long double>();
-    //test_crc<cpp_bin_float_quad>();
+    test_crc<cpp_bin_float_quad>();
+    test_crc<boost::math::concepts::real_concept>();
 }

@@ -58,7 +58,7 @@ sinh_sinh_detail<Real, Policy>::sinh_sinh_detail(Real tol, size_t max_refinement
     for (size_t i = 0; i < max_refinements; ++i)
     {
         Real h = (Real) 1/ (Real) (1<<i);
-        size_t k = (size_t) ceil(t_max/(2*h));
+        size_t k = (size_t) boost::math::lltrunc(ceil(t_max/(2*h)));
         m_abscissas[i].reserve(k);
         m_weights[i].reserve(k);
         // We don't add 0 to the abscissas; that's treated as a special case.
@@ -101,7 +101,7 @@ Real sinh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1)
            "The function you are trying to integrate does not go to zero at infinity, and instead evaluates to %1%", y_max, Policy());
     }
 
-    Real y_min = f(std::numeric_limits<Real>::lowest());
+    Real y_min = f(-boost::math::tools::max_value<Real>());
     if(abs(y_min) > boost::math::tools::epsilon<Real>() || !(boost::math::isfinite)(y_min))
     {
         return policies::raise_domain_error(function,
@@ -151,7 +151,7 @@ Real sinh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1)
         Real absum = 0;
 
         Real abterm1 = 1;
-        Real eps = std::numeric_limits<Real>::epsilon()*L1_I1;
+        Real eps = boost::math::tools::epsilon<Real>()*L1_I1;
         for(size_t j = 0; j < m_weights[i].size(); ++j)
         {
             Real x = m_abscissas[i][j];

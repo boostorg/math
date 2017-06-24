@@ -769,23 +769,33 @@ run test_uniform.cpp pch ../../test/build//boost_unit_test_framework ;
 run test_weibull.cpp ../../test/build//boost_unit_test_framework ;
 run test_zeta.cpp ../../test/build//boost_unit_test_framework test_instances//test_instances pch_light ;
 run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+     : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] : 
 	 tanh_sinh_quadrature_test_1 ;
 run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+     : : : <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] : 
 	 tanh_sinh_quadrature_test_2 ;
 run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+     : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] : 
 	 tanh_sinh_quadrature_test_3 ;
 run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST4 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+     : : : release <define>TEST4 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] : 
 	 tanh_sinh_quadrature_test_4 ;
 run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : release <define>TEST5 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+     : : : release <define>TEST5 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] : 
 	 tanh_sinh_quadrature_test_5 ;
 run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : <define>TEST6 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] : 
+     : : : <define>TEST6 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] : 
 	 tanh_sinh_quadrature_test_6 ;
+run sinh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] ;
+run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] : exp_sinh_quadrature_test_1 ;
+run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : release <define>TEST2 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] : exp_sinh_quadrature_test_2 ;
+run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : <define>TEST3 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] : exp_sinh_quadrature_test_3 ;
+
+
 
 run test_policy.cpp ../../test/build//boost_unit_test_framework ;
 run test_policy_2.cpp ../../test/build//boost_unit_test_framework ;
@@ -886,9 +896,9 @@ run  compile_test/dist_triangular_incl_test.cpp compile_test_main ;
 run  compile_test/dist_uniform_incl_test.cpp compile_test_main ;
 run  compile_test/dist_weibull_incl_test.cpp compile_test_main ;
 run  compile_test/distribution_concept_check.cpp ;
-run  compile_test/exp_sinh_incl_test.cpp compile_test_main ;
-run  compile_test/sinh_sinh_incl_test.cpp compile_test_main ;
-run  compile_test/tanh_sinh_incl_test.cpp compile_test_main ;
+run  compile_test/exp_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] ;
+run  compile_test/sinh_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] ;
+run  compile_test/tanh_sinh_incl_test.cpp compile_test_main : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] ;
 run  compile_test/sf_beta_incl_test.cpp compile_test_main ;
 run  compile_test/sf_bernoulli_incl_test.cpp compile_test_main ;
 run  compile_test/sf_bessel_incl_test.cpp compile_test_main ;
@@ -969,11 +979,11 @@ compile  compile_test/tools_test_inc_test.cpp ;
 compile  compile_test/tools_toms748_inc_test.cpp ;
 compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
 compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
-compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas ]  ;
+compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas cxx11_auto_declarations ]  ;
 compile  compile_test/trapezoidal_concept_test.cpp ;
-compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
-compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
-compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations ]  ;
+compile  compile_test/exp_sinh_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] ;
+compile  compile_test/sinh_sinh_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] ;
+compile  compile_test/tanh_sinh_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr ] ;
 
 run octonion_test.cpp
     ../../test/build//boost_unit_test_framework ;

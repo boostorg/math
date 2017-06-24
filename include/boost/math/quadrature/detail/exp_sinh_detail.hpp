@@ -68,7 +68,7 @@ exp_sinh_detail<Real, Policy>::exp_sinh_detail(Real tol, size_t max_refinements)
     for (size_t i = 0; i < max_refinements; ++i)
     {
         Real h = (Real) 1/ (Real) (1<<i);
-        size_t k = (size_t) ceil((t_max - t_min)/(2*h));
+        size_t k = (size_t) boost::math::lltrunc(ceil((t_max - t_min)/(2*h)));
         m_abscissas[i].reserve(k);
         m_weights[i].reserve(k);
         Real arg = t_min;

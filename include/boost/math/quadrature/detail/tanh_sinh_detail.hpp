@@ -12,6 +12,7 @@
 #include <typeinfo>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/detail/tanh_sinh_constants.hpp>
+#include <boost/math/special_functions/next.hpp>
 
 
 namespace boost{ namespace math{ namespace quadrature { namespace detail{

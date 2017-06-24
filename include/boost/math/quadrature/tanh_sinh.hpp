@@ -59,57 +59,60 @@ Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
 
     static const char* function = "tanh_sinh<%1%>::integrate";
 
-    if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
+    if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
     {
-        if (b <= a)
-        {
-           return policies::raise_domain_error(function, "Arguments to integrate are in wrong order; integration over [a,b] must have b > a.", a, Policy());
-        }
-        Real avg = (a+b)*half<Real>();
-        Real diff = (b-a)*half<Real>();
-        auto u = [&](Real z) { return f(avg + diff*z); };
-        Real Q = diff*m_imp->integrate(u, error, L1, function);
 
-        if(L1)
-        {
-            *L1 *= diff;
-        }
-        return Q;
+       // Infinite limits:
+       if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
+       {
+          auto u = [&](Real t) { auto t_sq = t*t; auto inv = 1 / (1 - t_sq); return f(t*inv)*(1 + t_sq)*inv*inv; };
+          return m_imp->integrate(u, error, L1, function);
+       }
+
+       // Right limit is infinite:
+       if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
+       {
+          auto u = [&](Real t) { auto z = 1 / (t + 1); auto arg = 2 * z + a - 1; return f(arg)*z*z; };
+          Real Q = 2 * m_imp->integrate(u, error, L1, function);
+          if (L1)
+          {
+             *L1 *= 2;
+          }
+
+          return Q;
+       }
+
+       if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
+       {
+          auto u = [&](Real t) { return f(b - t); };
+          auto v = [&](Real t) { auto z = 1 / (t + 1); auto arg = 2 * z - 1; return u(arg)*z*z; };
+
+          Real Q = 2 * m_imp->integrate(v, error, L1, function);
+          if (L1)
+          {
+             *L1 *= 2;
+          }
+          return Q;
+       }
+
+       if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
+       {
+          if (b <= a)
+          {
+             return policies::raise_domain_error(function, "Arguments to integrate are in wrong order; integration over [a,b] must have b > a.", a, Policy());
+          }
+          Real avg = (a + b)*half<Real>();
+          Real diff = (b - a)*half<Real>();
+          auto u = [&](Real z) { return f(avg + diff*z); };
+          Real Q = diff*m_imp->integrate(u, error, L1, function);
+
+          if (L1)
+          {
+             *L1 *= diff;
+          }
+          return Q;
+       }
     }
-
-    // Infinite limits:
-    if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
-    {
-        auto u = [&](Real t) { auto t_sq = t*t; auto inv = 1/(1 - t_sq); return f(t*inv)*(1+t_sq)*inv*inv; };
-        return m_imp->integrate(u, error, L1, function);
-    }
-
-    // Right limit is infinite:
-    if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
-    {
-        auto u = [&](Real t) { auto z = 1/(t+1); auto arg = 2*z + a - 1; return f(arg)*z*z; };
-        Real Q = 2*m_imp->integrate(u, error, L1, function);
-        if(L1)
-        {
-            *L1 *= 2;
-        }
-
-        return Q;
-    }
-
-    if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
-    {
-        auto u = [&](Real t) { return f(b-t);};
-        auto v = [&](Real t) { auto z = 1/(t+1); auto arg = 2*z - 1; return u(arg)*z*z; };
-
-        Real Q = 2*m_imp->integrate(v, error, L1, function);
-        if (L1)
-        {
-            *L1 *= 2;
-        }
-        return Q;
-    }
-
     return policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
 }
 

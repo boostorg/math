@@ -10,6 +10,7 @@
 #include <limits>
 #include <functional>
 #include <boost/random/uniform_real_distribution.hpp>
+#include <boost/math/concepts/real_concept.hpp>
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -47,11 +48,17 @@ using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
 using boost::math::quadrature::exp_sinh;
 
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3)
+#  define TEST1
+#  define TEST2
+#  define TEST3
+#endif
+
 template<class Real>
 void test_right_limit_infinite()
 {
     std::cout << "Testing right limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    Real tol = sqrt(boost::math::tools::epsilon<Real>());
     Real Q;
     Real Q_expected;
     Real error;
@@ -60,19 +67,19 @@ void test_right_limit_infinite()
 
     // Example 12
     const auto f2 = [](Real t) { return exp(-t)/sqrt(t); };
-    Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = root_pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     // The integrand is strictly positive, so it coincides with the value of the integral:
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f3 = [](Real t) { Real z = exp(-t); if (z == 0) { return z; } return z*cos(t); };
-    Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = half<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     auto f4 = [](Real t) { return 1/(1+t*t); };
-    Q = integrator.integrate(f4, 1, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f4, 1, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = pi<Real>()/4;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
@@ -82,7 +89,7 @@ template<class Real>
 void test_left_limit_infinite()
 {
     std::cout << "Testing left limit infinite for 1/(1+t^2) on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    Real tol = sqrt(boost::math::tools::epsilon<Real>());
     Real Q;
     Real Q_expected;
     Real error;
@@ -91,7 +98,7 @@ void test_left_limit_infinite()
 
     // Example 11:
     auto f1 = [](Real t) { return 1/(1+t*t);};
-    Q = integrator.integrate(f1, -std::numeric_limits<Real>::infinity(), 0, &error, &L1);
+    Q = integrator.integrate(f1, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), 0, &error, &L1);
     Q_expected = half_pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
@@ -107,7 +114,7 @@ void test_nr_examples()
     using std::exp;
     using std::sqrt;
     std::cout << "Testing type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    Real tol = sqrt(boost::math::tools::epsilon<Real>());
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
@@ -116,13 +123,13 @@ void test_nr_examples()
     exp_sinh<Real> integrator(tol, 12);
 
     auto f0 = [](Real) { return (Real) 0; };
-    Q = integrator.integrate(f0, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f0, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = 0;
     BOOST_CHECK_CLOSE_FRACTION(Q, 0.0f, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, 0.0f, tol);
 
     auto f = [](Real x) { return 1/(1+x*x); };
-    Q = integrator.integrate(f, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = half_pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
@@ -141,33 +148,33 @@ void test_nr_examples()
         return sin(x*half<Real>())*z2;
     };
 
-    Q = integrator.integrate(f1, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f1, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = sqrt(pi<Real>()*(sqrt((Real) 5) - 2));
 
     // The integrand is oscillatory; the accuracy is low.
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     auto f2 = [](Real x) { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
-    Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f3 = [](Real x) { return (Real) 1/ (sqrt(x)*(1+x)); };
-    Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = pi<Real>();
 
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10*std::numeric_limits<float>::epsilon());
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, 10*std::numeric_limits<float>::epsilon());
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10*boost::math::tools::epsilon<Real>());
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, 10*boost::math::tools::epsilon<Real>());
 
     auto f4 = [](Real t) { return exp(-t*t*half<Real>()); };
-    Q = integrator.integrate(f4, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f4, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = root_two_pi<Real>()/2;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f5 = [](Real t) { return 1/cosh(t);};
-    Q = integrator.integrate(f5, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f5, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = half_pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
@@ -183,7 +190,7 @@ void test_crc()
     using std::sqrt;
     using std::log;
     std::cout << "Testing integral from CRC handbook on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    Real tol = sqrt(boost::math::tools::epsilon<Real>());
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
@@ -192,7 +199,7 @@ void test_crc()
     exp_sinh<Real> integrator(tol, 14);
 
     auto f0 = [](Real x) { return log(x)*exp(-x); };
-    Q = integrator.integrate(f0, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f0, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = -boost::math::constants::euler<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
@@ -205,7 +212,7 @@ void test_crc()
         return pow(t, (Real) 12 - 1)*x;
     };
 
-    Q = integrator.integrate(f1, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f1, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = boost::math::tgamma(12.0f);
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
@@ -219,7 +226,7 @@ void test_crc()
         }
         return x*cosh(5*t);
     };
-    Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = boost::math::cyl_bessel_k<int, Real>(5, 12);
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     // Laplace transform of cos(at)
@@ -235,7 +242,7 @@ void test_crc()
     };
 
     // For high oscillation frequency, the quadrature sum is ill-conditioned.
-    Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = s/(a*a+s*s);
     // Since the integrand is oscillatory, we increase the tolerance:
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 100*tol);
@@ -250,12 +257,12 @@ void test_crc()
         return boost::math::cyl_bessel_j(0, t)*x;
     };
 
-    Q = integrator.integrate(f4, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f4, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = 1/sqrt(1+s*s);
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     auto f6 = [](Real t) { return exp(-t*t)*log(t);};
-    Q = integrator.integrate(f6, 0, std::numeric_limits<Real>::infinity(), &error, &L1);
+    Q = integrator.integrate(f6, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = -boost::math::constants::root_pi<Real>()*(boost::math::constants::euler<Real>() + 2*ln_two<Real>())/4;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 }
@@ -263,23 +270,34 @@ void test_crc()
 
 BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 {
-    test_left_limit_infinite<float>();
+#ifdef TEST1
+
+   test_left_limit_infinite<float>();
     test_left_limit_infinite<double>();
     test_left_limit_infinite<long double>();
-    test_left_limit_infinite<cpp_bin_float_quad>();
-
     test_right_limit_infinite<float>();
     test_right_limit_infinite<double>();
     test_right_limit_infinite<long double>();
-    test_right_limit_infinite<cpp_bin_float_quad>();
-
     test_nr_examples<float>();
     test_nr_examples<double>();
     test_nr_examples<long double>();
-    //test_nr_examples<cpp_bin_float_quad>();
-
     test_crc<float>();
     test_crc<double>();
     test_crc<long double>();
-    //test_crc<cpp_bin_float_quad>();
+    
+#endif
+#ifdef TEST2
+
+    test_left_limit_infinite<cpp_bin_float_quad>();
+    test_right_limit_infinite<cpp_bin_float_quad>();
+    test_nr_examples<cpp_bin_float_quad>();
+    test_crc<cpp_bin_float_quad>();
+#endif
+
+#ifdef TEST3
+    test_left_limit_infinite<boost::math::concepts::real_concept>();
+    test_right_limit_infinite<boost::math::concepts::real_concept>();
+    test_nr_examples<boost::math::concepts::real_concept>();
+    test_crc<boost::math::concepts::real_concept>();
+#endif
 }
