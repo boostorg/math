@@ -40,8 +40,10 @@ class tanh_sinh_detail
 #endif
       (std::numeric_limits<Real>::digits <= 334) ? 334 :
       0> base_type;
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
    using base_type::m_abscissas;
    using base_type::m_weights;
+#endif
 public:
     tanh_sinh_detail(Real tol, size_t max_refinements);
 

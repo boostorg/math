@@ -375,9 +375,8 @@ namespace boost {
                   },
             };
 
-
             template<class Real, int precision>
-            const std::vector<std::vector<Real>> tanh_sinh_detail_constants<Real, precision>::m_weights{
+            const std::vector<std::vector<Real>> tanh_sinh_detail_constants<Real, precision>::m_weights = {
                {
                   g_prime(0),
                   g_prime(1),
@@ -716,10 +715,15 @@ namespace boost {
             };
 
             template<class Real>
-            class tanh_sinh_detail_constants<Real, 23>
+            class tanh_sinh_detail_constants<Real, 24>
             {
             public:
-               const std::vector<std::vector<Real>> m_abscissas{
+               static const std::vector<std::vector<Real>> m_abscissas;
+               static const std::vector<std::vector<Real>> m_weights;
+            };
+
+            template<class Real>
+            const std::vector<std::vector<Real> > tanh_sinh_detail_constants<Real, 24>::m_abscissas = {
                   {
                      0.000000000000f,
                      0.951367964072f,
@@ -1057,7 +1061,8 @@ namespace boost {
                   },
                };
 
-               const std::vector<std::vector<Real>> m_weights{
+            template<class Real>
+            const std::vector<std::vector<Real> > tanh_sinh_detail_constants<Real, 24>::m_weights = {
                   {
                      1.570796326794f,
                      0.230022394514f,
@@ -1394,13 +1399,17 @@ namespace boost {
                      0.000000000000f,
                   },
                };
-            };
 
             template<class Real>
             class tanh_sinh_detail_constants<Real, 64>
             {
             public:
-               const std::vector<std::vector<Real>> m_abscissas{
+               static const std::vector<std::vector<Real>> m_abscissas;
+               static const std::vector<std::vector<Real>> m_weights;
+            };
+
+            template<class Real>
+            const std::vector<std::vector<Real>> tanh_sinh_detail_constants<Real, 64>::m_abscissas = {
                   {
                      0.000000000000000000000000000000L,
                      0.951367964072746945727055362904L,
@@ -1738,7 +1747,8 @@ namespace boost {
                   },
                };
 
-               const std::vector<std::vector<Real>> m_weights{
+               template<class Real>
+               const std::vector<std::vector<Real>> tanh_sinh_detail_constants<Real, 64>::m_weights = {
                   {
                      1.570796326794896619231321691639L,
                      0.230022394514788685000412470422L,
@@ -2075,13 +2085,17 @@ namespace boost {
                      0.000000000000000000000000000000L,
                   },
                };
-            };
 #ifdef BOOST_HAS_FLOAT128
             template<class Real>
             class tanh_sinh_detail_constants<Real, 113>
             {
             public:
-               const std::vector<std::vector<Real>> m_abscissas{
+               static const std::vector<std::vector<Real>> m_abscissas;
+               static const std::vector<std::vector<Real>> m_weights;
+            };
+
+            template<class Real>
+            const std::vector<std::vector<Real>> tanh_sinh_detail_constants<Real, 113>::m_abscissas = {
                   {
                      0.0000000000000000000000000000000000000000Q,
                      0.9513679640727469457270553629046396674927Q,
@@ -2419,7 +2433,8 @@ namespace boost {
                   },
                };
 
-               const std::vector<std::vector<Real>> m_weights{
+               template<class Real>
+               const std::vector<std::vector<Real>> tanh_sinh_detail_constants<Real, 113>::m_weights = {
                   {
                      1.5707963267948966192313216916397514420985Q,
                      0.2300223945147886850004124704223216653038Q,
@@ -2756,25 +2771,29 @@ namespace boost {
                      0.0000000000000000000000000000000000000000Q,
                   },
                };
-            };
 #endif
             template<class Real>
             class tanh_sinh_detail_constants<Real, 334>
             {
-               Real convert_from_string(const char* s, mpl::true_ const&)
+               static Real convert_from_string(const char* s, mpl::true_ const&)
                {
                   return Real(s);
                }
-               Real convert_from_string(const char* s, mpl::false_ const&)
+               static Real convert_from_string(const char* s, mpl::false_ const&)
                {
                   return boost::lexical_cast<Real>(s);
                }
-               Real convert_from_string(const char* s)
+               static Real convert_from_string(const char* s)
                {
                   return convert_from_string(s, boost::is_constructible<Real, const char*>());
                }
             public:
-               const std::vector<std::vector<Real>> m_abscissas{
+               static const std::vector<std::vector<Real>> m_abscissas;
+               static const std::vector<std::vector<Real>> m_weights;
+            };
+
+            template<class Real>
+            const std::vector<std::vector<Real>> tanh_sinh_detail_constants<Real, 334>::m_abscissas = {
                   {
                      convert_from_string("0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"), // g(0)
                      convert_from_string("0.951367964072746945727055362904639667492765811307212865380079106867050650113429723656597692697291568999499"), // g(1)
@@ -3112,7 +3131,8 @@ namespace boost {
                   },
                };
 
-               const std::vector<std::vector<Real>> m_weights{
+               template<class Real>
+               const std::vector<std::vector<Real>> tanh_sinh_detail_constants<Real, 334>::m_weights = {
                   {
                      convert_from_string("1.570796326794896619231321691639751442098584699687552910487472296153908203143104499314017412671058533991074"), // g'(0)
                      convert_from_string("0.230022394514788685000412470422321665303851255802659059205889049267344079034811721955914622224110769925389"), // g'(1)
@@ -3449,7 +3469,6 @@ namespace boost {
                      convert_from_string("0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000097834582"), // g'(4.984375)
                   },
                };
-            };
 
          }
       }
