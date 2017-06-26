@@ -80,8 +80,8 @@ tanh_sinh_detail<Real, Policy>::tanh_sinh_detail(Real tol, size_t max_refinement
      using boost::math::constants::half_pi;
      using boost::math::constants::two_div_pi;
 
-     auto g = [](Real t) { return tanh(half_pi<Real>()*sinh(t)); };
-     auto g_inv = [](Real x) { return asinh(two_div_pi<Real>()*atanh(x)); };
+     auto g = [](Real t)->Real { return tanh(half_pi<Real>()*sinh(t)); };
+     auto g_inv = [](Real x)->Real { return asinh(two_div_pi<Real>()*atanh(x)); };
 
      Real x = float_prior((Real) 1);
      m_t_max = g_inv(x);

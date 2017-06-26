@@ -786,8 +786,11 @@ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
 run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : <define>TEST6 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : 
 	 tanh_sinh_quadrature_test_6 ;
+run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : release <define>TEST7 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : 
+	 tanh_sinh_quadrature_test_7 ;
 run sinh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
-     : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ;
+     : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ;
 run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : <define>TEST1 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : exp_sinh_quadrature_test_1 ;
 run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework

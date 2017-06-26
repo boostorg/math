@@ -29,13 +29,14 @@
 #pragma warning(disable:4127)  // Conditional expression is constant
 #endif
 
-#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7)
 #  define TEST1
 #  define TEST2
 #  define TEST3
 #  define TEST4
 #  define TEST5
 #  define TEST6
+#  define TEST7
 #endif
 
 using std::expm1;
@@ -509,7 +510,7 @@ void test_sf()
    Real tol = sqrt(boost::math::tools::epsilon<Real>());
    tanh_sinh<Real> integrator;
    // incomplete beta:
-   if (std::numeric_limits<Real>::digits < 120) // Otherwise too slow
+   if (std::numeric_limits<Real>::digits10 < 37) // Otherwise too slow
    {
       BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([](Real x) { return boost::math::ibeta_derivative(100, 15, x); }, 0, Real(0.25)), boost::math::ibeta(100, 15, Real(0.25)), tol);
    }
@@ -518,10 +519,10 @@ void test_sf()
    // This one has a higher than expected error rate, even though exp_sinh quadrature is just fine:
    //BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([&](Real t) { return 1 / (sqrt(t + x) * (t + y)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()) / 2, boost::math::ellint_rc(x, y), tol);
 
-   BOOST_CHECK_CLOSE_FRACTION((Real(3) / 2) * integrator.integrate([&](Real t) { return 1 / (sqrt((t + x) * (t + y) * (t + z)) * (t + p)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()), boost::math::ellint_rj(x, y, z, p), tol);
+   BOOST_CHECK_CLOSE_FRACTION(Real((Real(3) / 2) * integrator.integrate([&](Real t) { return 1 / (sqrt((t + x) * (t + y) * (t + z)) * (t + p)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>())), boost::math::ellint_rj(x, y, z, p), tol);
 
    z = 5.5;
-   BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([&](Real t) { using std::pow; using std::exp; return t > 10000 ? 0 : pow(t, z - 1) * exp(-t); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()),
+   BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([&](Real t) { using std::pow; using std::exp; return t > 10000 ? Real(0) : Real(pow(t, z - 1) * exp(-t)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()),
       boost::math::tgamma(z), tol);
    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([](Real t) {  using std::exp; return exp(-t*t); }, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()),
       boost::math::constants::root_pi<Real>(), tol);
@@ -588,8 +589,12 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 
 #ifdef TEST4
 
+    test_detail<cpp_bin_float_quad>();
+    test_right_limit_infinite<cpp_bin_float_quad>();
+    test_left_limit_infinite<cpp_bin_float_quad>();
     test_linear<cpp_bin_float_quad>();
     test_quadratic<cpp_bin_float_quad>();
+    test_singular<cpp_bin_float_quad>();
     test_ca<cpp_bin_float_quad>();
     test_three_quadrature_schemes_examples<cpp_bin_float_quad>();
     test_horrible<cpp_bin_float_quad>();
@@ -623,5 +628,8 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_crc<boost::math::concepts::real_concept>();
     test_sf<boost::math::concepts::real_concept>();
 
+#endif
+#ifdef TEST7
+    test_sf<cpp_dec_float_50>();
 #endif
 }

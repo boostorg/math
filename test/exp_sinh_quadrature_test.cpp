@@ -48,10 +48,11 @@ using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
 using boost::math::quadrature::exp_sinh;
 
-#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4)
 #  define TEST1
 #  define TEST2
 #  define TEST3
+#  define TEST4
 #endif
 
 template<class Real>
@@ -73,12 +74,12 @@ void test_right_limit_infinite()
     // The integrand is strictly positive, so it coincides with the value of the integral:
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
-    auto f3 = [](Real t) { Real z = exp(-t); if (z == 0) { return z; } return z*cos(t); };
+    auto f3 = [](Real t)->Real { Real z = exp(-t); if (z == 0) { return z; } return z*cos(t); };
     Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = half<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
-    auto f4 = [](Real t) { return 1/(1+t*t); };
+    auto f4 = [](Real t)->Real { return 1/(1+t*t); };
     Q = integrator.integrate(f4, 1, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = pi<Real>()/4;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -134,7 +135,7 @@ void test_nr_examples()
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
-    auto f1 = [](Real x) {
+    auto f1 = [](Real x)->Real {
         Real z1 = exp(-x);
         if (z1 == 0)
         {
@@ -154,13 +155,13 @@ void test_nr_examples()
     // The integrand is oscillatory; the accuracy is low.
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
-    auto f2 = [](Real x) { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
+    auto f2 = [](Real x)->Real { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
-    auto f3 = [](Real x) { return (Real) 1/ (sqrt(x)*(1+x)); };
+    auto f3 = [](Real x)->Real { return (Real) 1/ (sqrt(x)*(1+x)); };
     Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = pi<Real>();
 
@@ -204,7 +205,7 @@ void test_crc()
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // Test the integral representation of the gamma function:
-    auto f1 = [](Real t) { Real x = exp(-t);
+    auto f1 = [](Real t)->Real { Real x = exp(-t);
         if(x == 0)
         {
             return (Real) 0;
@@ -218,7 +219,7 @@ void test_crc()
 
     // Integral representation of the modified bessel function:
     // K_5(12)
-    auto f2 = [](Real t) {
+    auto f2 = [](Real t)->Real {
         Real x = exp(-12*cosh(t));
         if (x == 0)
         {
@@ -232,7 +233,7 @@ void test_crc()
     // Laplace transform of cos(at)
     Real a = 20;
     Real s = 1;
-    auto f3 = [&](Real t) {
+    auto f3 = [&](Real t)->Real {
         Real x = exp(-s*t);
         if (x == 0)
         {
@@ -248,7 +249,7 @@ void test_crc()
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 100*tol);
 
     // Laplace transform of J_0(t):
-    auto f4 = [&](Real t) {
+    auto f4 = [&](Real t)->Real {
         Real x = exp(-s*t);
         if (x == 0)
         {
@@ -271,8 +272,7 @@ void test_crc()
 BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 {
 #ifdef TEST1
-
-   test_left_limit_infinite<float>();
+    test_left_limit_infinite<float>();
     test_left_limit_infinite<double>();
     test_left_limit_infinite<long double>();
     test_right_limit_infinite<float>();
@@ -284,10 +284,8 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_crc<float>();
     test_crc<double>();
     test_crc<long double>();
-    
 #endif
 #ifdef TEST2
-
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_nr_examples<cpp_bin_float_quad>();
@@ -299,5 +297,12 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_right_limit_infinite<boost::math::concepts::real_concept>();
     test_nr_examples<boost::math::concepts::real_concept>();
     test_crc<boost::math::concepts::real_concept>();
+#endif
+
+#ifdef TEST4
+    test_left_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
+    test_right_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
+    test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
+    test_crc<boost::multiprecision::cpp_dec_float_50>();
 #endif
 }

@@ -112,7 +112,8 @@ void test_crc()
     sinh_sinh<Real> integrator(tol, 10);
 
     // CRC Definite integral 698:
-    auto f0 = [](Real x) {
+    auto f0 = [](Real x)->Real {
+      using std::sinh;
       if(x == 0) {
         return (Real) 1;
       }
@@ -125,7 +126,8 @@ void test_crc()
 
 
     // CRC Definite integral 695:
-    auto f1 = [](Real x) {
+    auto f1 = [](Real x)->Real {
+      using std::sin; using std::sinh;
       if(x == 0) {
         return (Real) 1;
       }
@@ -144,10 +146,12 @@ BOOST_AUTO_TEST_CASE(sinh_sinh_quadrature_test)
     test_nr_examples<long double>();
     test_nr_examples<cpp_bin_float_quad>();
     test_nr_examples<boost::math::concepts::real_concept>();
+    test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
 
     test_crc<float>();
     test_crc<double>();
     test_crc<long double>();
     test_crc<cpp_bin_float_quad>();
     test_crc<boost::math::concepts::real_concept>();
+    test_crc<boost::multiprecision::cpp_dec_float_50>();
 }

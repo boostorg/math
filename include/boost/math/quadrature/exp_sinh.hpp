@@ -57,13 +57,13 @@ Real exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, Real* error, 
         {
             return m_imp->integrate(f, error, L1, function);
         }
-        const auto u = [&](Real t) { return f(t + a); };
+        const auto u = [&](Real t)->Real { return f(t + a); };
         return m_imp->integrate(u, error, L1, function);
     }
 
     if ((boost::math::isfinite)(b) && a <= -boost::math::tools::max_value<Real>())
     {
-        const auto u = [&](Real t) { return f(b-t);};
+        const auto u = [&](Real t)->Real { return f(b-t);};
         return m_imp->integrate(u, error, L1, function);
     }
 
