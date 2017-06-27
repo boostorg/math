@@ -17,8 +17,11 @@
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <utility>
 
+using namespace boost::math;
 using namespace boost::math::tools;
 using namespace std;
+using boost::integer::gcd_detail::Euclid_gcd;
+using boost::math::tools::subresultant_gcd;
 
 template <typename T>
 struct answer
@@ -146,37 +149,184 @@ BOOST_AUTO_TEST_CASE( test_division_over_ufd )
 }
 
 
-BOOST_AUTO_TEST_CASE( test_gcd )
+template <typename T>
+struct FM2GP_Ex_8_3__1
 {
-    /* NOTE: Euclidean gcd is not yet customized to return THE greatest 
-     * common polynomial divisor. If d is THE greatest common divisior of u and
-     * v, then gcd(u, v) will return d or -d according to the algorithm.
-     * By convention, it should return d, as for example Maxima and Wolfram 
-     * Alpha do.
-     * This test is an example of the fact that it returns -d.
-     */
-    boost::array<double, 9> const d8 = {{105, 278, -88, -56, 16}};
-    boost::array<double, 7> const d6 = {{70, 232, -44, -64, 16}};
-    boost::array<double, 7> const d2 = {{-35, 24, -4}};
-    polynomial<double> const u(d8.begin(), d8.end());
-    polynomial<double> const v(d6.begin(), d6.end());
-    polynomial<double> const w(d2.begin(), d2.end());
-    polynomial<double> const d = boost::math::gcd(u, v);
-    BOOST_CHECK_EQUAL(w, d);
-}
+    polynomial<T> x;
+    polynomial<T> y;
+    polynomial<T> z;
+    
+    FM2GP_Ex_8_3__1()
+    {
+        boost::array<T, 5> const x_data = {{105, 278, -88, -56, 16}};
+        boost::array<T, 5> const y_data = {{70, 232, -44, -64, 16}};
+        boost::array<T, 3> const z_data = {{35, -24, 4}};
+        x = polynomial<T>(x_data.begin(), x_data.end());
+        y = polynomial<T>(y_data.begin(), y_data.end());
+        z = polynomial<T>(z_data.begin(), z_data.end());
+    }
+};
+
+template <typename T>
+struct FM2GP_Ex_8_3__2
+{
+    polynomial<T> x;
+    polynomial<T> y;
+    polynomial<T> z;
+    
+    FM2GP_Ex_8_3__2()
+    {
+        boost::array<T, 5> const x_data = {{1, -6, -8, 6, 7}};
+        boost::array<T, 5> const y_data = {{1, -5, -2, 15, 11}};
+        boost::array<T, 3> const z_data = {{1, 2, 1}};
+        x = polynomial<T>(x_data.begin(), x_data.end());
+        y = polynomial<T>(y_data.begin(), y_data.end());
+        z = polynomial<T>(z_data.begin(), z_data.end());
+    }
+};
+
+
+template <typename T>
+struct FM2GP_mixed
+{
+    polynomial<T> x;
+    polynomial<T> y;
+    polynomial<T> z;
+    
+    FM2GP_mixed()
+    {
+        boost::array<T, 4> const x_data = {{-2.2, -3.3, 0, 1}};
+        boost::array<T, 3> const y_data = {{-4.4, 0, 1}};
+        boost::array<T, 2> const z_data= {{-2, 1}};
+        x = polynomial<T>(x_data.begin(), x_data.end());
+        y = polynomial<T>(y_data.begin(), y_data.end());
+        z = polynomial<T>(z_data.begin(), z_data.end());
+    }
+};
+
+
+template <typename T>
+struct FM2GP_trivial
+{
+    polynomial<T> x;
+    polynomial<T> y;
+    polynomial<T> z;
+    
+    FM2GP_trivial()
+    {
+        boost::array<T, 4> const x_data = {{-2, -3, 0, 1}};
+        boost::array<T, 3> const y_data = {{-4, 0, 1}};
+        boost::array<T, 2> const z_data= {{-2, 1}};
+        x = polynomial<T>(x_data.begin(), x_data.end());
+        y = polynomial<T>(y_data.begin(), y_data.end());
+        z = polynomial<T>(z_data.begin(), z_data.end());
+    }
+};
 
 // Sanity checks to make sure I didn't break it.
-typedef boost::mpl::list<int, long
+typedef boost::mpl::list<char, short, int, long> sp_integral_test_types;
+typedef boost::mpl::list<int, long> large_sp_integral_test_types;
+
+typedef boost::mpl::list<
+#if !(defined(CI_SUPPRESS_KNOWN_ISSUES) && defined(__MINGW32__)) // Object file too large
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
-   , boost::multiprecision::cpp_int
+   boost::multiprecision::cpp_int
 #endif
-> integral_test_types;
-typedef boost::mpl::list<double
+#endif
+> mp_integral_test_types;
+
+typedef boost::mpl::joint_view<sp_integral_test_types, mp_integral_test_types> integral_test_types;
+typedef boost::mpl::joint_view<large_sp_integral_test_types, mp_integral_test_types> large_integral_test_types;
+
+typedef boost::mpl::list<double, long double
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
    , boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50
 #endif
 > non_integral_test_types;
+
 typedef boost::mpl::joint_view<integral_test_types, non_integral_test_types> all_test_types;
+
+
+template <typename T>
+void normalize(polynomial<T> &p)
+{
+    if (leading_coefficient(p) < T(0))
+        std::transform(p.data().begin(), p.data().end(), p.data().begin(), std::negate<T>());
+}
+
+/**
+ * Note that we do not expect 'pure' gcd algorithms to normalize the result.
+ * However, the usual public interface function gcd() will do that.
+ */
+
+BOOST_AUTO_TEST_SUITE(test_subresultant_gcd)
+
+// This test is just to show that gcd<polynomial<T>>(u, v) is defined (and works) when T is integral and multiprecision.
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( gcd_interface, T, mp_integral_test_types, FM2GP_Ex_8_3__1<T> )
+{
+    typedef FM2GP_Ex_8_3__1<T> fixture_type;
+    polynomial<T> w;
+    w = gcd(fixture_type::x, fixture_type::y);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = gcd(fixture_type::y, fixture_type::x);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+// This test is just to show that gcd<polynomial<T>>(u, v) is defined (and works) when T is floating point.
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( gcd_float_interface, T, non_integral_test_types, FM2GP_Ex_8_3__1<T> )
+{
+    typedef FM2GP_Ex_8_3__1<T> fixture_type;
+    polynomial<T> w;
+    w = gcd(fixture_type::x, fixture_type::y);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = gcd(fixture_type::y, fixture_type::x);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+// The following tests call subresultant_gcd explicitly to remove any ambiguity
+// and to permit testing on single-precision integral types.
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__1, T, large_integral_test_types, FM2GP_Ex_8_3__1<T> )
+{
+    typedef FM2GP_Ex_8_3__1<T> fixture_type;
+    polynomial<T> w;
+    w = subresultant_gcd(fixture_type::x, fixture_type::y);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = subresultant_gcd(fixture_type::y, fixture_type::x);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( Ex_8_3__2, T, large_integral_test_types, FM2GP_Ex_8_3__2<T> )
+{
+    typedef FM2GP_Ex_8_3__2<T> fixture_type;
+    polynomial<T> w;
+    w = subresultant_gcd(fixture_type::x, fixture_type::y);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = subresultant_gcd(fixture_type::y, fixture_type::x);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+BOOST_FIXTURE_TEST_CASE_TEMPLATE( trivial_int, T, large_integral_test_types, FM2GP_trivial<T> )
+{
+    typedef FM2GP_trivial<T> fixture_type;
+    polynomial<T> w;
+    w = subresultant_gcd(fixture_type::x, fixture_type::y);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+    w = subresultant_gcd(fixture_type::y, fixture_type::x);
+    normalize(w);
+    BOOST_CHECK_EQUAL(w, fixture_type::z);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
 {
@@ -243,6 +393,25 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_non_integral_arithmetic_relations, T, non_int
     BOOST_CHECK_EQUAL(a * T(0.5), a / T(2));
 }
 
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
+{
+    boost::array<polynomial<T>, 4> const q={{
+        polynomial<T>(d8.begin(), d8.end()), 
+        polynomial<T>(d8b.begin(), d8b.end()),
+        polynomial<T>(d3a.begin(), d3a.end()),
+        polynomial<T>(d3b.begin(), d3b.end())
+    }};
+    for (std::size_t i = 0; i < q.size(); i++)
+    {
+        BOOST_CHECK_EQUAL(q[i], content(q[i]) * primitive_part(q[i]));
+        BOOST_CHECK_EQUAL(primitive_part(q[i]), primitive_part(q[i], content(q[i])));
+    }
+
+    polynomial<T> const zero;
+    BOOST_CHECK_EQUAL(primitive_part(zero), zero);
+    BOOST_CHECK_EQUAL(content(zero), T(0));
+}
+
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_self_multiply_assign, T, all_test_types )
 {
     polynomial<T> a(d3a.begin(), d3a.end());
@@ -259,6 +428,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_self_multiply_assign, T, all_test_types )
 
     BOOST_CHECK_EQUAL(a, b*b*b*b);
 }
+
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_right_shift, T, all_test_types )
 {
@@ -307,9 +477,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_odd_even, T, all_test_types)
     BOOST_CHECK_EQUAL(even(b), true);
 }
 
-
+// NOTE: Slightly unexpected: this unit test passes even when T = char.
 BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
 {
+   if (std::numeric_limits<T>::digits < 32)
+      return;   // Invokes undefined behaviour
     polynomial<T> a(d3a.begin(), d3a.end());
     polynomial<T> const one(T(1));
     boost::array<double, 7> const d3a_sqr = {{100, -120, -44, 108, -20, -24, 9}};
@@ -349,4 +521,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_set_zero, T, all_test_types)
     BOOST_CHECK_EQUAL(a, zero);
     a.set_zero(); // Ensure that setting zero to zero is a no-op.
     BOOST_CHECK_EQUAL(a, zero);
+}
+
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_leading_coefficient, T, all_test_types)
+{
+    polynomial<T> const zero;
+    BOOST_CHECK_EQUAL(leading_coefficient(zero), T(0));
+    polynomial<T> a(d0a.begin(), d0a.end());
+    BOOST_CHECK_EQUAL(leading_coefficient(a), T(d0a.back()));
 }

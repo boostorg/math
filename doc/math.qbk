@@ -1,13 +1,13 @@
 [book Math Toolkit
     [quickbook 1.6]
-    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2014 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Johan Råde, Gautam Sewani, Benjamin Sobotta, Thijs van den Berg, Daryle Walker and Xiaogang Zhang]
+    [copyright 2006, 2007, 2008, 2009, 2010, 2012, 2013, 2014, 2017 Nikhar Agrawal, Anton Bikineev, Paul A. Bristow, Marco Guazzone, Christopher Kormanyos, Hubert Holin, Bruno Lalande, John Maddock, Jeremy Murphy, Johan Råde, Gautam Sewani, Benjamin Sobotta, Nicholas Thompson, Thijs van den Berg, Daryle Walker and Xiaogang Zhang]
     [/purpose ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
         [@http://www.boost.org/LICENSE_1_0.txt])
     ]
-    [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
+    [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
     [version 2.5.2]
 ]
@@ -131,8 +131,8 @@ and use the function's name as the link text.]
 [def __fifth_root [link math_toolkit.roots.root_finding_examples.5th_root_eg fifth root]]
 [def __nth_root [link math_toolkit.roots.root_finding_examples.nth_root nth root]]
 [def __multiprecision_root [link math_toolkit.roots.root_finding_examples.multiprecision_root multiprecision root]]
-[def __polynomial_arithmetic [link math_toolkit.roots.polynomial_arithmetic polynomial arithmetic]]
-[def __evaluation [link math_toolkit.roots.rational.polynomial_evaluation polynomial \& rational evaluation]]
+[def __polynomial_arithmetic [link math_toolkit.polynomial_arithmetic polynomial arithmetic]]
+[def __evaluation [link math_toolkit.rational.polynomial_evaluation polynomial \& rational evaluation]]
 
 [/gammas]
 [def __lgamma [link math_toolkit.sf_gamma.lgamma lgamma]]
@@ -565,6 +565,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [section:sf_poly Polynomials]
 [include sf/legendre.qbk]
+[include sf/legendre_stieltjes.qbk]
 [include sf/laguerre.qbk]
 [include sf/hermite.qbk]
 [include sf/spherical_harmonic.qbk]
@@ -619,13 +620,19 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include octonion/math-octonion.qbk]
 [include gcd/math-gcd.qbk]
 
-[mathpart rooting Tools: Root Finding \& Minimization Algorithms, Polynomial  Arithmetic \& Evaluation]
+[mathpart rooting Tools: Root Finding \& Minimization Algorithms, Polynomial  Arithmetic \& Evaluation, Interpolation \& Quadrature]
 [section:roots Root finding]
 [include roots/roots_overview.qbk]
+[endsect] [/section:roots Root finding]
 [include internals/polynomial.qbk]
 [include internals/rational.qbk]
-[endsect] [/section:roots Root finding]
-
+[section:interpolate Interpolation Functions]
+[include interpolators/cubic_b_spline.qbk]
+[include interpolators/barycentric_rational_interpolation.qbk]
+[endsect]
+[section:quadrature Quadrature]
+[include quadrature/trapezoidal.qbk]
+[endsect]
 [endmathpart] [/mathpart roots Root Finding Algorithms]
 
 [mathpart internals Internal Details: Series, Rationals and Continued Fractions, Testing, and Development Tools]
@@ -659,6 +666,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include background/lanczos.qbk]
 [include background/remez.qbk]
 [include background/references.qbk]
+
 
 [section:logs_and_tables Error logs and tables]
 

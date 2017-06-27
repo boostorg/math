@@ -169,52 +169,18 @@ T binary_textbook(T u, T v)
    return u + v;
 }
 
-//
-// The Mixed Binary Euclid Algorithm
-// Sidi Mohamed Sedjelmaci
-// Electronic Notes in Discrete Mathematics 35 (2009) 169–176
-//
-template <class T>
-T mixed_binary_gcd(T u, T v)
+template <typename Integer>
+inline BOOST_CXX14_CONSTEXPR Integer gcd_default(Integer a, Integer b) BOOST_GCD_NOEXCEPT(Integer)
 {
-   using std::swap;
-   if(u < v)
-      swap(u, v);
-
-   unsigned shifts = 0;
-
-   if(!u)
-      return v;
-   if(!v)
-      return u;
-
-   while(even(u) && even(v))
-   {
-      u >>= 1u;
-      v >>= 1u;
-      ++shifts;
-   }
-
-   while(v > 1)
-   {
-      u %= v;
-      v -= u;
-      if(!u)
-         return v << shifts;
-      if(!v)
-         return u << shifts;
-      while(even(u)) u >>= 1u;
-      while(even(v)) v >>= 1u;
-      if(u < v)
-         swap(u, v);
-   }
-   return (v == 1 ? v : u) << shifts;
+   using boost::math::gcd;
+   return gcd(a, b);
 }
+
 
 template <class T>
 void test_type(const char* name)
 {
-   using namespace boost::math::detail;
+   using namespace boost::math::gcd_detail;
    typedef T int_type;
    std::vector<pair<int_type, int_type> > data;
 
@@ -227,12 +193,13 @@ void test_type(const char* name)
    row_name += "> (random prime number products)";
    
    typedef pair< function<int_type(int_type, int_type)>, string> f_test;
-   array<f_test, 5> test_functions{ { 
-      { Stein_gcd<int_type>, "Stein_gcd" } ,
+   array<f_test, 6> test_functions{ { 
+      { gcd_default<int_type>, "gcd" },
       { Euclid_gcd<int_type>, "Euclid_gcd" },
+      { Stein_gcd<int_type>, "Stein_gcd" } ,
+      { mixed_binary_gcd<int_type>, "mixed_binary_gcd" }, 
       { binary_textbook<int_type>, "Stein_gcd_textbook" },
       { euclid_textbook<int_type>, "gcd_euclid_textbook" },
-      { mixed_binary_gcd<int_type>, "mixed_binary_gcd" } 
    } };
    for_each(begin(test_functions), end(test_functions), test_function_template<int_type>(data, row_name.c_str()));
 
@@ -325,6 +292,7 @@ N gcd_stein(N m, N n)
    return m << std::min(d_m, d_n);
 }
 
+
 boost::multiprecision::cpp_int big_gcd(const boost::multiprecision::cpp_int& a, const boost::multiprecision::cpp_int& b)
 {
    return boost::multiprecision::gcd(a, b);
@@ -405,13 +373,13 @@ inline typename enable_if_c<!is_trivial_cpp_int<cpp_int_backend<MinBits1, MaxBit
       if(vp->size() <= 2)
       {
          if(vp->size() == 1)
-            *up = mixed_binary_gcd(*vp->limbs(), *up->limbs());
+            *up = boost::math::gcd_detail::mixed_binary_gcd(*vp->limbs(), *up->limbs());
          else
          {
             double_limb_type i, j;
             i = vp->limbs()[0] | (static_cast<double_limb_type>(vp->limbs()[1]) << sizeof(limb_type) * CHAR_BIT);
             j = (up->size() == 1) ? *up->limbs() : up->limbs()[0] | (static_cast<double_limb_type>(up->limbs()[1]) << sizeof(limb_type) * CHAR_BIT);
-            u = mixed_binary_gcd(i, j);
+            u = boost::math::gcd_detail::mixed_binary_gcd(i, j);
          }
          break;
       }
@@ -506,4 +474,5 @@ int main()
     test_n_bits(0, "consecutive first 1000 fibonacci numbers", &fibonacci_numbers_cpp_int_permution_1());
     test_n_bits(0, "permutations of first 1000 fibonacci numbers", &fibonacci_numbers_cpp_int_permution_2());
     */
+    return 0;
 }

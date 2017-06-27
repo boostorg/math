@@ -245,7 +245,6 @@ template <class Real, class T>
 void test_inverses(const T& data)
 {
    using namespace std;
-   typedef typename T::value_type row_type;
    typedef Real                   value_type;
 
    value_type precision = static_cast<value_type>(ldexp(1.0, 1-boost::math::policies::digits<value_type, boost::math::policies::policy<> >()/2)) * 150;
@@ -267,8 +266,8 @@ void test_inverses(const T& data)
          BOOST_CHECK_EQUAL(inverse_ibeta_newton(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(0));
          BOOST_CHECK_EQUAL(inverse_ibeta_bisect(Real(data[i][0]), Real(data[i][1]), Real(data[i][5])), value_type(0));
       }
-      else if((1 - data[i][5] > 0.001) 
-         && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<value_type>()) 
+      else if((1 - data[i][5] > 0.001)
+         && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<value_type>())
          && (fabs(data[i][5]) > 2 * boost::math::tools::min_value<double>()))
       {
          value_type inv = inverse_ibeta_halley(Real(data[i][0]), Real(data[i][1]), Real(data[i][5]));
@@ -320,8 +319,5 @@ void test_beta(T, const char* /* name */)
 BOOST_AUTO_TEST_CASE( test_main )
 {
    test_beta(0.1, "double");
-   
+
 }
-
-
-
