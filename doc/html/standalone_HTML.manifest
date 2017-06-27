@@ -178,6 +178,7 @@ math_toolkit/sf_erf/error_function.html
 math_toolkit/sf_erf/error_inv.html
 math_toolkit/sf_poly.html
 math_toolkit/sf_poly/legendre.html
+math_toolkit/sf_poly/legendre_stieltjes.html
 math_toolkit/sf_poly/laguerre.html
 math_toolkit/sf_poly/hermite.html
 math_toolkit/sf_poly/sph_harm.html
@@ -317,8 +318,13 @@ math_toolkit/roots/root_comparison.html
 math_toolkit/roots/root_comparison/cbrt_comparison.html
 math_toolkit/roots/root_comparison/root_n_comparison.html
 math_toolkit/roots/root_comparison/elliptic_comparison.html
-math_toolkit/roots/polynomials.html
-math_toolkit/roots/rational.html
+math_toolkit/polynomials.html
+math_toolkit/rational.html
+math_toolkit/interpolate.html
+math_toolkit/interpolate/cubic_b.html
+math_toolkit/interpolate/barycentric.html
+math_toolkit/quadrature.html
+math_toolkit/quadrature/trapezoidal.html
 internals.html
 math_toolkit/internals_overview.html
 math_toolkit/internals.html
