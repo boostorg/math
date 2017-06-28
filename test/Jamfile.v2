@@ -973,7 +973,9 @@ run test_nonfinite_trap.cpp ../../test/build//boost_unit_test_framework : : : <e
 run test_signed_zero.cpp ../../test/build//boost_unit_test_framework ;
 
 run complex_test.cpp ../../test/build//boost_unit_test_framework ;
-run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <toolset>msvc:<cxxflags>-bigobj ;
+run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST1 : test_polynomial_1 ;
+run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST2 : test_polynomial_2 ;
+run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST3 : test_polynomial_3 ;
 run test_gcd.cpp ../../test/build//boost_unit_test_framework ;
 
 compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no ;

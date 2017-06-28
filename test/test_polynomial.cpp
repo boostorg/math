@@ -17,6 +17,12 @@
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <utility>
 
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3)
+#  define TEST1
+#  define TEST2
+#  define TEST3
+#endif
+
 using namespace boost::math;
 using namespace boost::math::tools;
 using namespace std;
@@ -50,6 +56,8 @@ boost::array<int, 9> const d8b = {{0, 2, 8, -3, -3, 0, 1, 0, 1}};
 boost::array<int, 7> const d6 = {{21, -9, -4, 0, 5, 0, 3}};
 boost::array<int, 3> const d2 = {{-6, 0, 9}};
 boost::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
+
+#ifdef TEST1
 
 
 BOOST_AUTO_TEST_CASE( test_construction )
@@ -148,6 +156,7 @@ BOOST_AUTO_TEST_CASE( test_division_over_ufd )
     BOOST_CHECK_EQUAL(aa % aa, zero);
 }
 
+#endif
 
 template <typename T>
 struct FM2GP_Ex_8_3__1
@@ -224,25 +233,39 @@ struct FM2GP_trivial
 };
 
 // Sanity checks to make sure I didn't break it.
-typedef boost::mpl::list<char, short, int, long> sp_integral_test_types;
-typedef boost::mpl::list<int, long> large_sp_integral_test_types;
-
+#ifdef TEST1
+typedef boost::mpl::list<char, short, int, long> integral_test_types;
+typedef boost::mpl::list<int, long> large_integral_test_types;
+typedef boost::mpl::list<> mp_integral_test_types;
+#elif defined(TEST2)
 typedef boost::mpl::list<
-#if !(defined(CI_SUPPRESS_KNOWN_ISSUES) && defined(__MINGW32__)) // Object file too large
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
    boost::multiprecision::cpp_int
 #endif
+> integral_test_types;
+typedef integral_test_types large_integral_test_types;
+typedef large_integral_test_types mp_integral_test_types;
+#elif defined(TEST3)
+typedef boost::mpl::list<> large_integral_test_types;
+typedef boost::mpl::list<> integral_test_types;
+typedef large_integral_test_types mp_integral_test_types;
 #endif
-> mp_integral_test_types;
 
-typedef boost::mpl::joint_view<sp_integral_test_types, mp_integral_test_types> integral_test_types;
-typedef boost::mpl::joint_view<large_sp_integral_test_types, mp_integral_test_types> large_integral_test_types;
-
-typedef boost::mpl::list<double, long double
+#ifdef TEST1
+typedef boost::mpl::list<double, long double> non_integral_test_types;
+#elif defined(TEST2)
+typedef boost::mpl::list<
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
-   , boost::multiprecision::cpp_rational, boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50
+   boost::multiprecision::cpp_rational
 #endif
 > non_integral_test_types;
+#elif defined(TEST3)
+typedef boost::mpl::list<
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1500)
+   boost::multiprecision::cpp_bin_float_single, boost::multiprecision::cpp_dec_float_50
+#endif
+> non_integral_test_types;
+#endif
 
 typedef boost::mpl::joint_view<integral_test_types, non_integral_test_types> all_test_types;
 
