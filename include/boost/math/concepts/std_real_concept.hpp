@@ -226,6 +226,13 @@ inline boost::math::concepts::std_real_concept sqrt(boost::math::concepts::std_r
 { return std::sqrt(a.value()); }
 inline boost::math::concepts::std_real_concept tanh(boost::math::concepts::std_real_concept a)
 { return std::tanh(a.value()); }
+inline bool isfinite(boost::math::concepts::std_real_concept a)
+{ return std::isfinite(a.value()); }
+inline boost::math::concepts::std_real_concept asinh(boost::math::concepts::std_real_concept a)
+{ return std::asinh(a.value()); }
+inline boost::math::concepts::std_real_concept atanh(boost::math::concepts::std_real_concept a)
+{ return std::atanh(a.value()); }
+
 
 } // namespace std
 
