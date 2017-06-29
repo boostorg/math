@@ -66,6 +66,14 @@ environment:
       TEST_SUITE: misc
       PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
 
+    - ARGS: --toolset=gcc address-model=64 
+      TEST_SUITE: ../example//examples
+      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+    
+    - ARGS: --toolset=gcc address-model=64 cxxflags=-std=gnu++1z
+      TEST_SUITE: ../example//examples
+      PATH: C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1\mingw64\bin;%PATH%
+
 
 install:
   - cd ..
