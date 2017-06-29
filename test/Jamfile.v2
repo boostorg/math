@@ -950,9 +950,6 @@ compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_pt
 compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ] ;
 compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas ]  ;
 compile  compile_test/trapezoidal_concept_test.cpp ;
-compile  compile_test/cubic_spline_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
-compile  compile_test/barycentric_rational_concept_test.cpp :  [ requires cxx11_smart_ptr ] ;
-compile  compile_test/sf_legendre_stieltjes_concept_test.cpp : [ requires cxx11_auto_declarations ]  ;
 
 run octonion_test.cpp
     ../../test/build//boost_unit_test_framework ;
@@ -1340,7 +1337,9 @@ test_trapezoidal
 trapezoidal_incl_test
 trapezoidal_concept_test
 complex_test
-test_polynomial
+test_polynomial_1
+test_polynomial_2
+test_polynomial_3
 test_gcd
 multiprc_concept_check_1
 multiprc_concept_check_2
