@@ -27,6 +27,9 @@
    template<class Real>
    Real chebyshev_t_prime(unsigned n, Real const & x);
 
+   template<class Real>
+   Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, Real x);
+
    }} // namespaces
 
 
@@ -44,7 +47,8 @@ Calculation of derivatives is also straightforward:
 
 The complexity of evaluation of the /n/-th Chebyshev polynomial by these functions is linear.
 So they are unsuitable for use in calculation of (say) a Chebyshev series, as a sum of linear scaling functions scales quadratically.
-Though there are very sophisticated algorithms for the evaluation of Chebyshev series, a linear time algorithm is presented below:
+Though there are very sophisticated algorithms for the evaluation of Chebyshev series,
+a linear time algorithm is presented below:
 
     double x = 0.5;
     std::vector<double> a{14.2, -13.7, 82.3, 96};
@@ -63,7 +67,15 @@ Though there are very sophisticated algorithms for the evaluation of Chebyshev s
     std::cout << f << std::endl;
 
 This uses the `chebyshev_next` function to evaluate each term of the Chebyshev series in constant time.
+However, this naive algorithm has a catastrophic loss of precision as /x/ approaches 1.
+A method to mitigate this way given by [@http://www.ams.org/journals/mcom/1955-09-051/S0025-5718-1955-0071856-0/S0025-5718-1955-0071856-0.pdf Clenshaw],
+and is implemented in boost as
 
+    double x = 0.5;
+    std::vector<double> a{14.2, -13.7, 82.3, 96};
+    chebyshev_clenshaw_recurrence(a.data(), a.size(), Real x);
+
+(N.B.: There is factor of /2/ difference in our definition of the first coefficient in the Chebyshev series from Clenshaw's original work.)
 
 Chebyshev polynomials of the second kind can be evaluated via `chebyshev_u`:
 
