@@ -57,6 +57,12 @@ boost::array<int, 7> const d6 = {{21, -9, -4, 0, 5, 0, 3}};
 boost::array<int, 3> const d2 = {{-6, 0, 9}};
 boost::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
 
+BOOST_AUTO_TEST_CASE(trivial)
+{
+   /* We have one empty test case here, so that there is always something for Boost.Test to do even if the tests below are #if'ed out */
+}
+
+
 #ifdef TEST1
 
 
