@@ -483,8 +483,41 @@ void test_crc()
     //BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
 }
 
+
+template<class Real>
+void test_beta_function()
+{
+    using std::pow;
+    std::cout << "Testing beta function on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    Real Q;
+    Real Q_expected;
+    Real error;
+    Real L1;
+    tanh_sinh<Real> integrator;
+
+    Real a = 0.05;
+    Real b = 3;
+    auto f1 = [&](Real t) { return pow(t, a - 1)*pow(1-t, b - 1); };
+    Q = integrator.integrate(f1, (Real) 0, (Real) 1, &error, &L1);
+    std::cout << "Error estimate: " << error << std::endl;
+    std::cout << "L1 estimate = " << L1 << std::endl;
+
+    // NIntegrate[x^(-19/20)*(1 - x)^2, {x, 0, 1}, WorkingPrecision -> 130, MaxRecursion -> 100]
+    Q_expected = boost::lexical_cast<Real>("18.5830429732868757259001161440185830429732868757259001161440185830429\
+7328687572590011614401858304297328687572590011614401858304297");
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+}
+
+
 BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 {
+    test_beta_function<float>();
+    test_beta_function<double>();
+    test_beta_function<long double>();
+    test_beta_function<cpp_bin_float_quad>();
+    test_beta_function<cpp_bin_float_50>();
+    test_beta_function<cpp_bin_float_100>();
     //generate_constants();
     test_detail<float>();
     test_detail<double>();
