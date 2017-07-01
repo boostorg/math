@@ -127,7 +127,7 @@ test-suite examples :
    [ explicit root_n_finding_algorithms  ]
 
    [ run barycentric_interpolation_example.cpp : : : [ requires cxx11_smart_ptr ]  ]
-   [ run barycentric_interpolation_example_2.cpp : : : [ requires cxx11_smart_ptr ]  ]
+   [ run barycentric_interpolation_example_2.cpp : : : [ requires cxx11_smart_ptr cxx11_function_template_default_args ]  ]
    [ run cubic_b_spline_example.cpp : : : [ requires cxx11_smart_ptr cxx11_hdr_random cxx11_defaulted_functions ]  ]
 ;
 
