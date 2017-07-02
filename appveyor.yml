@@ -23,7 +23,7 @@ environment:
     - ARGS: --toolset=msvc-14.0 address-model=32
     - ARGS: --toolset=msvc-12.0 address-model=64
     - ARGS: --toolset=msvc-14.0 address-model=64
-    - ARGS: --toolset=msvc-14.0 address-model=64 cxxflags=-std:c++latest
+    #- ARGS: --toolset=msvc-14.0 address-model=64 cxxflags=-std:c++latest
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=64
@@ -31,8 +31,8 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=32
     
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      ARGS: --toolset=msvc-14.1 address-model=64 cxxflags=-std:c++latest
+    #- APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    #  ARGS: --toolset=msvc-14.1 address-model=64 cxxflags=-std:c++latest
     
     - ARGS: --toolset=gcc address-model=64
       TEST_SUITE: float128_tests
