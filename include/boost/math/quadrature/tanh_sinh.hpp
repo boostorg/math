@@ -54,6 +54,7 @@ template<class Real, class Policy>
 template<class F>
 Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, Real* L1) const
 {
+    BOOST_MATH_STD_USING
     using boost::math::constants::half;
     using boost::math::quadrature::detail::tanh_sinh_detail;
 
@@ -65,14 +66,14 @@ Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
        // Infinite limits:
        if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
        {
-          auto u = [&](Real t)->Real { auto t_sq = t*t; auto inv = 1 / (1 - t_sq); return f(t*inv)*(1 + t_sq)*inv*inv; };
+          auto u = [&](Real t, Real tc)->Real { auto t_sq = t*t; auto inv = 1 / (1 - t_sq); return f(t*inv)*(1 + t_sq)*inv*inv; };
           return m_imp->integrate(u, error, L1, function);
        }
 
        // Right limit is infinite:
        if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
        {
-          auto u = [&](Real t)->Real { auto z = 1 / (t + 1); auto arg = 2 * z + a - 1; return f(arg)*z*z; };
+          auto u = [&](Real t, Real tc)->Real { auto z = 1 / (t + 1); auto arg = 2 * z + a - 1; return f(arg)*z*z; };
           Real Q = 2 * m_imp->integrate(u, error, L1, function);
           if (L1)
           {
@@ -85,7 +86,7 @@ Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
        if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
        {
           auto u = [&](Real t)->Real { return f(b - t); };
-          auto v = [&](Real t)->Real { auto z = 1 / (t + 1); auto arg = 2 * z - 1; return u(arg)*z*z; };
+          auto v = [&](Real t, Real tc)->Real { auto z = 1 / (t + 1); auto arg = 2 * z - 1; return u(arg)*z*z; };
 
           Real Q = 2 * m_imp->integrate(v, error, L1, function);
           if (L1)
@@ -103,8 +104,28 @@ Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
           }
           Real avg = (a + b)*half<Real>();
           Real diff = (b - a)*half<Real>();
-          auto u = [&](Real z) { return f(avg + diff*z); };
-          Real Q = diff*m_imp->integrate(u, error, L1, function);
+          Real avg_over_diff_m1 = a / diff;
+          Real avg_over_diff_p1 = b / diff;
+          bool have_small_left = fabs(a) < 0.5f;
+          bool have_small_right = fabs(b) < 0.5f;
+          Real left_min_complement = float_next(avg_over_diff_m1) - avg_over_diff_m1;
+          if (left_min_complement < tools::min_value<Real>())
+             left_min_complement = tools::min_value<Real>();
+          Real right_min_complement = avg_over_diff_p1 - float_prior(avg_over_diff_p1);
+          if (right_min_complement < tools::min_value<Real>())
+             right_min_complement = tools::min_value<Real>();
+          auto u = [&](Real z, Real zc)->Real
+          { 
+             if (have_small_left && (z < -0.5))
+                return f(diff * (avg_over_diff_m1 - zc));
+             if (have_small_right && (z > 0.5))
+                return f(diff * (avg_over_diff_p1 - zc));
+             Real position = avg + diff*z;
+             BOOST_ASSERT(position != a);
+             BOOST_ASSERT(position != b);
+             return f(position);
+          };
+          Real Q = diff*m_imp->integrate(u, error, L1, function, left_min_complement, right_min_complement);
 
           if (L1)
           {
