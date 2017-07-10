@@ -22,30 +22,24 @@ namespace boost{ namespace math{ namespace quadrature { namespace detail{
 
 template<class Real, class Policy>
 class tanh_sinh_detail 
-   //: public tanh_sinh_detail_constants<Real, 
-   //    !std::numeric_limits<Real>::is_specialized || (std::numeric_limits<Real>::radix != 2) ? 0 :
-   //    (std::numeric_limits<Real>::digits <= 24) ? 24 :
-   //    (std::numeric_limits<Real>::digits <= 64) ? 64 : 
+   : public tanh_sinh_detail_constants<Real, 
+       !std::numeric_limits<Real>::is_specialized || (std::numeric_limits<Real>::radix != 2) ? 0 :
+       (std::numeric_limits<Real>::digits <= 24) ? 24 :
+       (std::numeric_limits<Real>::digits <= 64) ? 64 : 
 #ifdef BOOST_HAS_FLOAT128
-   //    (std::numeric_limits<Real>::digits <= 113) ? 113 : 
+       (std::numeric_limits<Real>::digits <= 113) ? 113 : 
 #endif
-   //    (std::numeric_limits<Real>::digits <= 334) ? 334 :
-   //    0>
+       (std::numeric_limits<Real>::digits <= 334) ? 334 :
+       0>
 {
-   //typedef tanh_sinh_detail_constants<Real, !std::numeric_limits<Real>::is_specialized || (std::numeric_limits<Real>::radix != 2) ? 0 :
-   //   std::numeric_limits<Real>::digits <= std::numeric_limits<float>::digits ? 24 : 
-   //   (std::numeric_limits<Real>::digits <= 64) ? 64 : 
+   typedef tanh_sinh_detail_constants<Real, !std::numeric_limits<Real>::is_specialized || (std::numeric_limits<Real>::radix != 2) ? 0 :
+      std::numeric_limits<Real>::digits <= std::numeric_limits<float>::digits ? 24 : 
+      (std::numeric_limits<Real>::digits <= 64) ? 64 : 
 #ifdef BOOST_HAS_FLOAT128
-   //   (std::numeric_limits<Real>::digits <= 113) ? 113 :
+      (std::numeric_limits<Real>::digits <= 113) ? 113 :
 #endif
-   //   (std::numeric_limits<Real>::digits <= 334) ? 334 :
-   //   0> base_type;
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
-   //using base_type::m_abscissas;
-   //using base_type::m_weights;
-#endif
-   std::vector<std::vector<Real>> m_abscissas;
-   std::vector<std::vector<Real>> m_weights;
+      (std::numeric_limits<Real>::digits <= 334) ? 334 :
+      0> base_type;
 public:
     tanh_sinh_detail(Real tol, size_t max_refinements);
 
@@ -54,100 +48,10 @@ public:
 
 private:
     Real m_tol;
-    Real m_t_max;
-    size_t m_max_refinements, m_inital_row_length;
 };
 
 template<class Real, class Policy>
-tanh_sinh_detail<Real, Policy>::tanh_sinh_detail(Real tol, size_t max_refinements)
-{
-    m_tol = tol;
-    m_max_refinements = max_refinements;
-    m_inital_row_length = 6;
-    /*
-     * Our goal is to calculate t_max such that tanh(pi/2 sinh(t_max)) < 1 in the requested precision.
-     * What follows is a good estimate for t_max, but in fact we can get closer by starting with this estimate
-     * and then calculating tanh(pi/2 sinh(t_max + eps)) until it = 1 (the second to last is t_max).
-     * However, this is computationally expensive, so we can't do it.
-     * An alternative is to cache the value of t_max for various types (float, double, long double, float128, cpp_bin_float_50, cpp_bin_float_100)
-     * and then simply use them, but unfortunately the values will be platform dependent.
-     * As such we are then susceptible to the catastrophe where we evaluate the function at x = 1, when we have promised we wouldn't do that.
-     * Other authors solve this problem by computing the abscissas in double the requested precision, and then returning the result at the request precision.
-     * This seems to be overkill to me, but presumably it's an option if we find integrals on which this method struggles.
-     */
-
-     using std::tanh;
-     using std::sinh;
-     using std::asinh;
-     using std::atanh;
-     using boost::math::constants::half_pi;
-     using boost::math::constants::pi;
-     using boost::math::constants::two_div_pi;
-
-     auto g = [](Real t) { return tanh(half_pi<Real>()*sinh(t)); };
-     auto w = [](Real t) { Real cs = cosh(half_pi<Real>() * sinh(t));  return half_pi<Real>() * cosh(t) / (cs * cs); };
-     auto gc = [](Real t) { Real u2 = half_pi<Real>() * sinh(t);  return 1 / (exp(u2) *cosh(u2)); };
-     auto g_inv = [](Real x)->Real { return asinh(two_div_pi<Real>()*atanh(x)); };
-     auto gc_inv = [](Real x) 
-     {
-        Real l = log(sqrt((2 - x) / x));
-        return log((sqrt(4 * l * l + pi<Real>() * pi<Real>()) + 2 * l) / pi<Real>());
-     };
-     /*
-     Real x = float_prior((Real) 1);
-     m_t_max = g_inv(x);
-     while(!(boost::math::isnormal)(m_t_max))
-     {
-         // Although you might suspect that we could be in this loop essentially for ever, in point of fact it is only called once
-         // even for 100 digit accuracy, and isn't called at all up to float128.
-         x = float_prior(x);
-         m_t_max = g_inv(x);
-     }
-     // This occurs once on 100 digit arithmetic:
-     while(!(g(m_t_max) < (Real) 1))
-     {
-         x = float_prior(x);
-         m_t_max = g_inv(x);
-     }
-     */
-     //std::cout << g_inv(float_prior((Real)1)) << " " << gc_inv(1 - float_prior((Real)1)) << std::endl;
-     m_t_max = m_inital_row_length; //  gc_inv(tools::epsilon<Real>() * tools::epsilon<Real>());
-     Real t_crossover = gc_inv(Real(0.5f));
-     //std::cout << gc(m_t_max) << std::endl;
-
-     m_abscissas.assign(m_max_refinements + 1, std::vector<Real>());
-     m_weights.assign(m_max_refinements + 1, std::vector<Real>());
-     //
-     // First row is special:
-     //
-     Real h = m_t_max / m_inital_row_length;
-
-     std::vector<Real> temp(m_inital_row_length + 1, Real(0));
-     for (unsigned i = 0; i < m_inital_row_length; ++i)
-     {
-        Real t = h * i;
-        temp[i] = t < t_crossover ? g(t) : -gc(t);
-     }
-     temp[m_inital_row_length] = gc(m_t_max);
-     m_abscissas[0].swap(temp);
-     temp.assign(m_inital_row_length + 1, Real(0));
-     for (unsigned i = 0; i < m_inital_row_length; ++i)
-        temp[i] = w(Real(h * i));
-     temp[m_inital_row_length] = w(m_t_max);
-     m_weights[0].swap(temp);
-
-     for (std::size_t row = 1; row <= m_max_refinements; ++row)
-     {
-        h /= 2;
-
-        for (Real pos = h; pos < m_t_max; pos += 2 * h)
-           temp.push_back(pos < t_crossover ? g(pos) : -gc(pos));
-        m_abscissas[row].swap(temp);
-        for (Real pos = h; pos < m_t_max; pos += 2 * h)
-           temp.push_back(w(pos));
-        m_weights[row].swap(temp);
-     }
-}
+tanh_sinh_detail<Real, Policy>::tanh_sinh_detail(Real tol, std::size_t max_refinements) : tanh_sinh_detail_constants(max_refinements), m_tol(tol) {}
 
 template<class Real, class Policy>
 template<class F>
@@ -240,8 +144,9 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
         h *= half<Real>();
         Real sum = 0;
         Real absum = 0;
-        auto const& abscissa_row = m_abscissas[k];
-        auto const& weight_row = m_weights[k];
+        auto const& abscissa_row = this->get_abscissa_row(k);
+        auto const& weight_row = this->get_weight_row(k);
+        std::size_t first_complement_index = this->get_first_complement_index(k);
         //
         // At the start of each new row we need to update the max left/right indexes
         // at which we can evaluate f(x_i).  The new logical position is simply twice
@@ -278,13 +183,17 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
             Real x = abscissa_row[j];
             Real xc = x;
             Real w = weight_row[j];
-            if ((boost::math::signbit)(x))
+            if (j >= first_complement_index)
             {
                // We have stored x - 1:
+               BOOST_ASSERT(x < 0);
                x = 1 + xc;
             }
             else
+            {
+               BOOST_ASSERT(x >= 0);
                xc = x - 1;
+            }
 
             Real yp = j > max_right_index ? 0 : f(x, -xc);
             Real ym = j > max_left_index ? 0 : f(-x, xc);
@@ -336,5 +245,5 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
     return I1;
 }
 
-}}}}
+}}}}  // namespaces
 #endif
