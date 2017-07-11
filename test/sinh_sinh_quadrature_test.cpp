@@ -65,33 +65,33 @@ void test_nr_examples()
     Real error;
     sinh_sinh<Real> integrator(tol, 10);
 
-    auto f0 = [](Real) { return (Real) 0; };
+    auto f0 = [](Real)->Real { return (Real) 0; };
     Q = integrator.integrate(f0, &error, &L1);
     Q_expected = 0;
     BOOST_CHECK_SMALL(Q, tol);
     BOOST_CHECK_SMALL(L1, tol);
 
     // In spite of the poles at \pm i, we still get a doubling of the correct digits at each level of refinement.
-    auto f1 = [](Real t) { return 1/(1+t*t); };
+    auto f1 = [](const Real& t) { return 1/(1+t*t); };
     Q = integrator.integrate(f1, &error, &L1);
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
-    auto f2 = [](Real x) { return exp(-x*x); };
+    auto f2 = [](const Real& x) { return exp(-x*x); };
     Q = integrator.integrate(f2, &error, &L1);
     Q_expected = root_pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
-    auto f5 = [](Real t) { return 1/cosh(t);};
+    auto f5 = [](const Real& t) { return 1/cosh(t);};
     Q = integrator.integrate(f5, &error, &L1);
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     // This oscillatory integral has rapid convergence because the oscillations get swamped by the exponential growth of the denominator.
-    auto f8 = [](Real t) { return cos(t)/cosh(t);};
+    auto f8 = [](const Real& t) { return cos(t)/cosh(t);};
     Q = integrator.integrate(f8, &error, &L1);
     Q_expected = pi<Real>()/cosh(half_pi<Real>());
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
