@@ -445,7 +445,10 @@ void test_nr_examples()
     Real L1;
     tanh_sinh<Real> integrator(tol, 15);
 
-    auto f1 = [](Real x)->Real { return sin(x*half<Real>())*pow(x, -3*half<Real>())*exp(-x); };
+    auto f1 = [](Real x)->Real 
+    { 
+       return (sin(x * half<Real>()) * exp(-x) / x) / sqrt(x); 
+    };
     Q = integrator.integrate(f1, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = sqrt(pi<Real>()*(sqrt((Real) 5) - 2));
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10*tol);

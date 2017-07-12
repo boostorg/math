@@ -48,11 +48,12 @@ using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
 using boost::math::quadrature::exp_sinh;
 
-#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5)
 #  define TEST1
 #  define TEST2
 #  define TEST3
 #  define TEST4
+#  define TEST5
 #endif
 
 template<class Real>
@@ -302,6 +303,8 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 #ifdef TEST4
     test_left_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
     test_right_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
+#endif
+#ifdef TEST5
     test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
     test_crc<boost::multiprecision::cpp_dec_float_50>();
 #endif

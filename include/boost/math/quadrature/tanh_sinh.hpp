@@ -66,15 +66,40 @@ Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
        // Infinite limits:
        if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
        {
-          auto u = [&](Real t, Real /*tc*/)->Real { auto t_sq = t*t; auto inv = 1 / (1 - t_sq); return f(t*inv)*(1 + t_sq)*inv*inv; };
-          return m_imp->integrate(u, error, L1, function);
+          auto u = [&](const Real& t, const Real& tc)->Real 
+          { 
+             Real t_sq = t*t; 
+             Real inv, tsp1;
+             if (t > 0.5f)
+                inv = 1 / ((2 - tc) * tc);
+             else if(t < -0.5)
+                inv = 1 / ((2 + tc) * -tc);
+             else
+                inv = 1 / (1 - t_sq);
+             return f(t*inv)*(1 + t_sq)*inv*inv; 
+          };
+          Real limit = sqrt(tools::min_value<Real>()) * 4;
+          return m_imp->integrate(u, error, L1, function, limit, limit);
        }
 
        // Right limit is infinite:
        if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
        {
-          auto u = [&](Real t, Real /*tc*/)->Real { auto z = 1 / (t + 1); auto arg = 2 * z + a - 1; return f(arg)*z*z; };
-          Real Q = 2 * m_imp->integrate(u, error, L1, function);
+          auto u = [&](const Real& t, const Real& tc)->Real 
+          { 
+             Real z, arg;
+             if (t > -0.5f)
+                z = 1 / (t + 1);
+             else
+                z = -1 / tc;
+             if (t < 0.5)
+                arg = 2 * z + a - 1;
+             else
+                arg = a + tc / (2 - tc);
+             return f(arg)*z*z; 
+          };
+          Real left_limit = sqrt(tools::min_value<Real>()) * 4;
+          Real Q = 2 * m_imp->integrate(u, error, L1, function, left_limit, tools::min_value<Real>());
           if (L1)
           {
              *L1 *= 2;
@@ -85,10 +110,23 @@ Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
 
        if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
        {
-          auto u = [&](Real t)->Real { return f(b - t); };
-          auto v = [&](Real t, Real /*tc*/)->Real { auto z = 1 / (t + 1); auto arg = 2 * z - 1; return u(arg)*z*z; };
+          auto v = [&](const Real& t, const Real& tc)->Real 
+          { 
+             Real z;
+             if (t > -0.5)
+                z = 1 / (t + 1);
+             else
+                z = -1 / tc;
+             Real arg;
+             if (t < 0.5)
+                arg = 2 * z - 1;
+             else
+                arg = tc / (2 - tc);
+             return f(b - arg) * z * z;
+          };
 
-          Real Q = 2 * m_imp->integrate(v, error, L1, function);
+          Real left_limit = sqrt(tools::min_value<Real>()) * 4;
+          Real Q = 2 * m_imp->integrate(v, error, L1, function, left_limit, tools::min_value<Real>());
           if (L1)
           {
              *L1 *= 2;
