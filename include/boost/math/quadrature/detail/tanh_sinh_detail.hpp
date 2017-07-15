@@ -9,8 +9,8 @@
 
 #include <cmath>
 #include <vector>
-#include <atomic>
-#include <mutex>
+#include <boost/math/tools/atomic.hpp>
+#include <boost/detail/lightweight_mutex.hpp>
 #include <typeinfo>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/next.hpp>
@@ -39,7 +39,7 @@ class tanh_sinh_detail
 #endif
       0;
 public:
-    tanh_sinh_detail(const Real& tol, size_t max_refinements, const Real& min_complement) : m_tol(tol), m_max_refinements(max_refinements)
+    tanh_sinh_detail(const Real& tol, size_t max_refinements, const Real& min_complement) : m_max_refinements(max_refinements), m_tol(tol)
     {
        typedef mpl::int_<initializer_selector> tag_type;
        init(min_complement, tag_type());
@@ -51,23 +51,41 @@ public:
 private:
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
    {
+#ifndef BOOST_MATH_NO_ATOMIC_INT
       if (m_committed_refinements.load() < n)
          extend_refinements();
       BOOST_ASSERT(m_committed_refinements.load() >= n);
+#else
+      if (m_committed_refinements < n)
+         extend_refinements();
+      BOOST_ASSERT(m_committed_refinements >= n);
+#endif
       return m_abscissas[n];
    }
    const std::vector<Real>& get_weight_row(std::size_t n)const
    {
+#ifndef BOOST_MATH_NO_ATOMIC_INT
       if (m_committed_refinements.load() < n)
          extend_refinements();
       BOOST_ASSERT(m_committed_refinements.load() >= n);
+#else
+      if (m_committed_refinements < n)
+         extend_refinements();
+      BOOST_ASSERT(m_committed_refinements >= n);
+#endif
       return m_weights[n];
    }
    std::size_t get_first_complement_index(std::size_t n)const
    {
+#ifndef BOOST_MATH_NO_ATOMIC_INT
       if (m_committed_refinements.load() < n)
          extend_refinements();
       BOOST_ASSERT(m_committed_refinements.load() >= n);
+#else
+      if (m_committed_refinements < n)
+         extend_refinements();
+      BOOST_ASSERT(m_committed_refinements >= n);
+#endif
       return m_first_complements[n];
    }
 
@@ -81,16 +99,25 @@ private:
    void prune_to_min_complement(const Real& m);
    void extend_refinements()const
    {
-      std::lock_guard<std::mutex> guard(m_lock);
+      boost::detail::lightweight_mutex::scoped_lock guard(m_mutex);
       //
       // Check some other thread hasn't got here after we read the atomic variable, but before we got here:
       //
+#ifndef BOOST_MATH_NO_ATOMIC_INT
       if (m_committed_refinements.load() >= m_max_refinements)
          return;
+#else
+      if (m_committed_refinements >= m_max_refinements)
+         return;
+#endif
 
       using std::ldexp;
       ++m_committed_refinements;
+#ifndef BOOST_MATH_NO_ATOMIC_INT
       std::size_t row = m_committed_refinements.load();
+#else
+      std::size_t row = m_committed_refinements;
+#endif
       Real h = ldexp(Real(1), -static_cast<int>(row));
       std::size_t first_complement = 0;
       for (Real pos = h; pos < m_t_max; pos += 2 * h)
@@ -138,9 +165,13 @@ private:
    mutable std::vector<std::vector<Real>> m_weights;
    mutable std::vector<std::size_t>       m_first_complements;
    std::size_t                       m_max_refinements, m_inital_row_length;
-   mutable std::atomic_size_t        m_committed_refinements;
+#ifndef BOOST_MATH_NO_ATOMIC_INT
+   mutable atomic_unsigned_type      m_committed_refinements;
+#else
+   mutable unsigned                  m_committed_refinements;
+#endif
    Real m_tol, m_t_max, m_t_crossover;
-   mutable std::mutex m_lock;
+   mutable boost::detail::lightweight_mutex m_mutex;
 };
 
 template<class Real, class Policy>
@@ -385,7 +416,11 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    temp[m_inital_row_length] = weight_at_t(m_t_max);
    m_weights[0].swap(temp);
 
+#ifndef BOOST_MATH_NO_ATOMIC_INT
    for (std::size_t row = 1; row <= m_committed_refinements.load(); ++row)
+#else
+   for (std::size_t row = 1; row <= m_committed_refinements; ++row)
+#endif
    {
       h /= 2;
       first_complement = 0;
@@ -407,6 +442,10 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
 template<class Real, class Policy>
 void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<1>&)
 {
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverflow"
+#endif
    m_inital_row_length = 4;
    m_abscissas.reserve(m_max_refinements + 1);
    m_weights.reserve(m_max_refinements + 1);
@@ -451,6 +490,10 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    m_t_crossover = t_from_abscissa_complement(Real(0.5f));
 
    prune_to_min_complement(min_complement);
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 }
 
 template<class Real, class Policy>
@@ -505,6 +548,10 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
 template<class Real, class Policy>
 void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<3>&)
 {
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverflow"
+#endif
    m_inital_row_length = 9;
    m_abscissas.reserve(m_max_refinements + 1);
    m_weights.reserve(m_max_refinements + 1);
@@ -549,6 +596,9 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    m_t_crossover = t_from_abscissa_complement(Real(0.5));
 
    prune_to_min_complement(min_complement);
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 }
 
 #ifdef BOOST_HAS_FLOAT128
@@ -617,7 +667,7 @@ void tanh_sinh_detail<Real, Policy>::prune_to_min_complement(const Real& m)
    {
       for (unsigned row = 0; (row < m_abscissas.size()) && m_abscissas[row].size(); ++row)
       {
-         std::vector<Real>::iterator pos = std::lower_bound(m_abscissas[row].begin(), m_abscissas[row].end(), m, [](const Real& a, const Real& b) { return fabs(a) > fabs(b); });
+         typename std::vector<Real>::iterator pos = std::lower_bound(m_abscissas[row].begin(), m_abscissas[row].end(), m, [](const Real& a, const Real& b) { return fabs(a) > fabs(b); });
          if (pos != m_abscissas[row].end())
          {
             m_abscissas[row].erase(pos, m_abscissas[row].end());
