@@ -40,8 +40,8 @@ template<class Real, class Policy = policies::policy<> >
 class tanh_sinh
 {
 public:
-    tanh_sinh(Real tol = tools::root_epsilon<Real>(), size_t max_refinements = 15)
-    : m_imp(std::make_shared<detail::tanh_sinh_detail<Real, Policy>>(tol, max_refinements)) {}
+    tanh_sinh(const Real& tol = tools::root_epsilon<Real>(), size_t max_refinements = 15, const Real& min_complement = tools::min_value<Real>() * 4)
+    : m_imp(std::make_shared<detail::tanh_sinh_detail<Real, Policy>>(tol, max_refinements, min_complement)) {}
 
     template<class F>
     Real integrate(const F f, Real a, Real b, Real* error = nullptr, Real* L1 = nullptr) const;
@@ -69,7 +69,7 @@ Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
           auto u = [&](const Real& t, const Real& tc)->Real 
           { 
              Real t_sq = t*t; 
-             Real inv, tsp1;
+             Real inv;
              if (t > 0.5f)
                 inv = 1 / ((2 - tc) * tc);
              else if(t < -0.5)

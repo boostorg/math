@@ -22,7 +22,7 @@ namespace boost{ namespace math{ namespace quadrature { namespace detail{
 template<class Real, class Policy>
 class tanh_sinh_detail 
 {
-   static const int initializer_selector =
+   static const int initializer_selector = 
       !std::numeric_limits<Real>::is_specialized || (std::numeric_limits<Real>::radix != 2) ?
       0 :
       (std::numeric_limits<Real>::digits < 30) && (std::numeric_limits<Real>::max_exponent <= 128) ?
@@ -37,10 +37,10 @@ class tanh_sinh_detail
 #endif
       0;
 public:
-    tanh_sinh_detail(Real tol, size_t max_refinements, std::size_t initial_commit = 4) : m_tol(tol), m_max_refinements(max_refinements), m_committed_refinements(initial_commit)
+    tanh_sinh_detail(const Real& tol, size_t max_refinements, const Real& min_complement) : m_tol(tol), m_max_refinements(max_refinements)
     {
        typedef mpl::int_<initializer_selector> tag_type;
-       init(tag_type());
+       init(min_complement, tag_type());
     }
 
     template<class F>
@@ -69,13 +69,14 @@ private:
       return m_first_complements[n];
    }
 
-   void init(const mpl::int_<0>&);
-   void init(const mpl::int_<1>&);
-   void init(const mpl::int_<2>&);
-   void init(const mpl::int_<3>&);
+   void init(const Real& min_complement, const mpl::int_<0>&);
+   void init(const Real& min_complement, const mpl::int_<1>&);
+   void init(const Real& min_complement, const mpl::int_<2>&);
+   void init(const Real& min_complement, const mpl::int_<3>&);
 #ifdef BOOST_HAS_FLOAT128
-   void init(const mpl::int_<4>&);
+   void init(const Real& min_complement, const mpl::int_<4>&);
 #endif
+   void prune_to_min_complement(const Real& m);
    void extend_refinements()const
    {
       using std::ldexp;
@@ -326,7 +327,7 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
 }
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<0>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<0>&)
 {
    using std::tanh;
    using std::sinh;
@@ -336,7 +337,14 @@ void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<0>&)
    using boost::math::constants::pi;
    using boost::math::constants::two_div_pi;
 
-   m_inital_row_length = itrunc(t_from_abscissa_complement(tools::min_value<Real>() * 4));
+   m_committed_refinements = 4;
+   //
+   // Initial row length is one step to the right of the abscissa value
+   // that would go to the full extent of the requested range, we need this
+   // to ensure full precision as otherwise we chop off quite a chunk of the
+   // range in *subsequent* rows.
+   //
+   m_inital_row_length = itrunc(ceil(t_from_abscissa_complement(min_complement)));
    std::size_t first_complement = 0;
    m_t_max = m_inital_row_length;
    m_t_crossover = t_from_abscissa_complement(Real(0.5f));
@@ -386,7 +394,7 @@ void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<0>&)
 }
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<1>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<1>&)
 {
    m_inital_row_length = 4;
    m_abscissas.reserve(m_max_refinements + 1);
@@ -416,8 +424,6 @@ void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<1>&)
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 
-   while (m_abscissas.size() <= m_committed_refinements)
-      extend_refinements();
    m_committed_refinements = m_abscissas.size() - 1;
 
    if (m_max_refinements >= m_abscissas.size())
@@ -430,12 +436,14 @@ void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<1>&)
    {
       m_max_refinements = m_abscissas.size() - 1;
    }
-   m_t_max = m_inital_row_length;
+   m_t_max = static_cast<Real>(m_inital_row_length);
    m_t_crossover = t_from_abscissa_complement(Real(0.5f));
+
+   prune_to_min_complement(min_complement);
 }
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<2>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<2>&)
 {
    m_inital_row_length = 5;
    m_abscissas.reserve(m_max_refinements + 1);
@@ -465,8 +473,6 @@ void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<2>&)
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 
-   while (m_abscissas.size() <= m_committed_refinements)
-      extend_refinements();
    m_committed_refinements = m_abscissas.size() - 1;
 
    if (m_max_refinements >= m_abscissas.size())
@@ -479,12 +485,14 @@ void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<2>&)
    {
       m_max_refinements = m_abscissas.size() - 1;
    }
-   m_t_max = m_inital_row_length;
+   m_t_max = static_cast<Real>(m_inital_row_length);
    m_t_crossover = t_from_abscissa_complement(Real(0.5));
+
+   prune_to_min_complement(min_complement);
 }
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<3>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<3>&)
 {
    m_inital_row_length = 9;
    m_abscissas.reserve(m_max_refinements + 1);
@@ -514,8 +522,6 @@ void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<3>&)
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 
-   while (m_abscissas.size() <= m_committed_refinements)
-      extend_refinements();
    m_committed_refinements = m_abscissas.size() - 1;
 
    if (m_max_refinements >= m_abscissas.size())
@@ -528,14 +534,16 @@ void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<3>&)
    {
       m_max_refinements = m_abscissas.size() - 1;
    }
-   m_t_max = m_inital_row_length;
+   m_t_max = static_cast<Real>(m_inital_row_length);
    m_t_crossover = t_from_abscissa_complement(Real(0.5));
+
+   prune_to_min_complement(min_complement);
 }
 
 #ifdef BOOST_HAS_FLOAT128
 
 template<class Real, class Policy>
-void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<4>&)
+void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<4>&)
 {
    m_inital_row_length = 9;
    m_abscissas.reserve(m_max_refinements + 1);
@@ -565,8 +573,6 @@ void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<4>&)
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 
-   while (m_abscissas.size() <= m_committed_refinements)
-      extend_refinements();
    m_committed_refinements = m_abscissas.size() - 1;
 
    if (m_max_refinements >= m_abscissas.size())
@@ -579,11 +585,36 @@ void tanh_sinh_detail<Real, Policy>::init(const mpl::int_<4>&)
    {
       m_max_refinements = m_abscissas.size() - 1;
    }
-   m_t_max = m_inital_row_length;
+   m_t_max = static_cast<Real>(m_inital_row_length);
    m_t_crossover = t_from_abscissa_complement(Real(0.5));
+
+   prune_to_min_complement(min_complement);
 }
 
 #endif // BOOST_HAS_FLOAT128
+
+template<class Real, class Policy>
+void tanh_sinh_detail<Real, Policy>::prune_to_min_complement(const Real& m)
+{
+   //
+   // If our tables were constructed from pre-computed data, then they will have more values stored than we can ever use,
+   // and although the table size at this stage won't be too large, if we calculate down to m_max_levels then they will
+   // grow by a huge amount - doubling in size at each step - so lets prune them down, removing values which will never
+   // be used:
+   //
+   if (m > tools::min_value<Real>() * 4)
+   {
+      for (unsigned row = 0; (row < m_abscissas.size()) && m_abscissas[row].size(); ++row)
+      {
+         std::vector<Real>::iterator pos = std::lower_bound(m_abscissas[row].begin(), m_abscissas[row].end(), m, [](const Real& a, const Real& b) { return fabs(a) > fabs(b); });
+         if (pos != m_abscissas[row].end())
+         {
+            m_abscissas[row].erase(pos, m_abscissas[row].end());
+            m_weights[row].erase(m_weights[row].begin() + m_abscissas[row].size(), m_weights[row].end());
+         }
+      }
+   }
+}
 
 }}}}  // namespaces
 

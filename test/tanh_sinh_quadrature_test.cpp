@@ -164,7 +164,7 @@ void test_detail()
 {
     std::cout << "Testing tanh_sinh_detail on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = sqrt(boost::math::tools::epsilon<Real>());
-    tanh_sinh_detail<Real, boost::math::policies::policy<> > integrator(tol, 20);
+    tanh_sinh_detail<Real, boost::math::policies::policy<> > integrator(tol, 20, boost::math::tools::epsilon<Real>());
     auto f = [](const Real& x, const Real&) { return x*x; };
     Real err;
     Real L1;
