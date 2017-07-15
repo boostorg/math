@@ -9,6 +9,8 @@
 
 #include <cmath>
 #include <vector>
+#include <atomic>
+#include <mutex>
 #include <typeinfo>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/next.hpp>
@@ -49,23 +51,23 @@ public:
 private:
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
    {
-      if (m_committed_refinements < n)
+      if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_ASSERT(m_committed_refinements.load() >= n);
       return m_abscissas[n];
    }
    const std::vector<Real>& get_weight_row(std::size_t n)const
    {
-      if (m_committed_refinements < n)
+      if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_ASSERT(m_committed_refinements.load() >= n);
       return m_weights[n];
    }
    std::size_t get_first_complement_index(std::size_t n)const
    {
-      if (m_committed_refinements < n)
+      if (m_committed_refinements.load() < n)
          extend_refinements();
-      BOOST_ASSERT(m_committed_refinements >= n);
+      BOOST_ASSERT(m_committed_refinements.load() >= n);
       return m_first_complements[n];
    }
 
@@ -79,9 +81,16 @@ private:
    void prune_to_min_complement(const Real& m);
    void extend_refinements()const
    {
+      std::lock_guard<std::mutex> guard(m_lock);
+      //
+      // Check some other thread hasn't got here after we read the atomic variable, but before we got here:
+      //
+      if (m_committed_refinements.load() >= m_max_refinements)
+         return;
+
       using std::ldexp;
       ++m_committed_refinements;
-      std::size_t row = m_committed_refinements;
+      std::size_t row = m_committed_refinements.load();
       Real h = ldexp(Real(1), -static_cast<int>(row));
       std::size_t first_complement = 0;
       for (Real pos = h; pos < m_t_max; pos += 2 * h)
@@ -129,8 +138,9 @@ private:
    mutable std::vector<std::vector<Real>> m_weights;
    mutable std::vector<std::size_t>       m_first_complements;
    std::size_t                       m_max_refinements, m_inital_row_length;
-   mutable std::size_t               m_committed_refinements;
+   mutable std::atomic_size_t        m_committed_refinements;
    Real m_tol, m_t_max, m_t_crossover;
+   mutable std::mutex m_lock;
 };
 
 template<class Real, class Policy>
@@ -333,6 +343,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    using std::sinh;
    using std::asinh;
    using std::atanh;
+   using std::ceil;
    using boost::math::constants::half_pi;
    using boost::math::constants::pi;
    using boost::math::constants::two_div_pi;
@@ -374,7 +385,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    temp[m_inital_row_length] = weight_at_t(m_t_max);
    m_weights[0].swap(temp);
 
-   for (std::size_t row = 1; row <= m_committed_refinements; ++row)
+   for (std::size_t row = 1; row <= m_committed_refinements.load(); ++row)
    {
       h /= 2;
       first_complement = 0;
