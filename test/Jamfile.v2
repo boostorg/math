@@ -996,6 +996,10 @@ test-suite misc :
    [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release <define>TEST7 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : 
 	 tanh_sinh_quadrature_test_7 ]
+   [ run  tanh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
+     : : : release <define>TEST8 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : 
+	 tanh_sinh_quadrature_test_8 ]
+
    [ run sinh_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework
      : : : release [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ run exp_sinh_quadrature_test.cpp ../../test/build//boost_unit_test_framework

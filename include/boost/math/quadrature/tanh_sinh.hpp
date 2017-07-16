@@ -44,7 +44,9 @@ public:
     : m_imp(std::make_shared<detail::tanh_sinh_detail<Real, Policy>>(tol, max_refinements, min_complement)) {}
 
     template<class F>
-    Real integrate(const F f, Real a, Real b, Real* error = nullptr, Real* L1 = nullptr) const;
+    auto integrate(const F f, Real a, Real b, Real* error = nullptr, Real* L1 = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
+    template<class F>
+    auto integrate(const F f, Real a, Real b, Real* error = nullptr, Real* L1 = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
 
 private:
     std::shared_ptr<detail::tanh_sinh_detail<Real, Policy>> m_imp;
@@ -52,7 +54,7 @@ private:
 
 template<class Real, class Policy>
 template<class F>
-Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, Real* L1) const
+auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, Real* L1) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const
 {
     BOOST_MATH_STD_USING
     using boost::math::constants::half;
@@ -175,6 +177,45 @@ Real tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
     return policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
 }
 
+template<class Real, class Policy>
+template<class F>
+auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, Real* L1) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const
+{
+   BOOST_MATH_STD_USING
+      using boost::math::constants::half;
+   using boost::math::quadrature::detail::tanh_sinh_detail;
+
+   static const char* function = "tanh_sinh<%1%>::integrate";
+
+   if ((boost::math::isfinite)(a) && (boost::math::isfinite)(b))
+   {
+      if (b <= a)
+      {
+         return policies::raise_domain_error(function, "Arguments to integrate are in wrong order; integration over [a,b] must have b > a.", a, Policy());
+      }
+      auto u = [&](Real z, Real zc)->Real
+      {
+         if (z < 0)
+            return f((a - b) * zc / 2 + a, (b - a) * zc / 2);
+         else
+            return f((a - b) * zc / 2 + b, (b - a) * zc / 2);
+      };
+      //Real avg = (a + b)*half<Real>();
+      Real diff = (b - a)*half<Real>();
+      //Real avg_over_diff_m1 = a / diff;
+      //Real avg_over_diff_p1 = b / diff;
+      Real left_min_complement = tools::min_value<Real>() * 4;
+      Real right_min_complement = tools::min_value<Real>() * 4;
+      Real Q = diff*m_imp->integrate(u, error, L1, function, left_min_complement, right_min_complement);
+
+      if (L1)
+      {
+         *L1 *= diff;
+      }
+      return Q;
+   }
+   return policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
+}
 
 }}}
 #endif

@@ -474,7 +474,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 
-   m_committed_refinements = m_abscissas.size() - 1;
+   m_committed_refinements = static_cast<atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 
    if (m_max_refinements >= m_abscissas.size())
    {
