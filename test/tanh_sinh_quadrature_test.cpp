@@ -537,7 +537,7 @@ void test_sf()
 
    Real x = 2, y = 3, z = 0.5, p = 0.25;
    // Elliptic integral RC:
-   Real Q = integrator.integrate([&](Real t) { return 1 / (sqrt(t + x) * (t + y)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()) / 2;
+   Real Q = integrator.integrate([&](const Real& t) { return 1 / (sqrt(t + x) * (t + y)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()) / 2;
    BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::ellint_rc(x, y), tol);
    // Elliptic Integral RJ:
    BOOST_CHECK_CLOSE_FRACTION(Real((Real(3) / 2) * integrator.integrate([&](Real t)->Real { return 1 / (sqrt((t + x) * (t + y) * (t + z)) * (t + p)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>())), boost::math::ellint_rj(x, y, z, p), tol);
@@ -550,7 +550,7 @@ void test_sf()
    // tgamma expressed as an integral:
    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([&](Real t)->Real { using std::pow; using std::exp; return t > 10000 ? Real(0) : Real(pow(t, z - 1) * exp(-t)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()),
       boost::math::tgamma(z), tol);
-   BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([](Real t)->Real {  using std::exp; return exp(-t*t); }, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()),
+   BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([](const Real& t) {  using std::exp; return exp(-t*t); }, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()),
       boost::math::constants::root_pi<Real>(), tol);
 }
 
@@ -717,7 +717,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 
 #endif
 #ifdef TEST7
-    //test_sf<cpp_dec_float_50>();
+    test_sf<cpp_dec_float_50>();
 #endif
 #if defined(TEST8) && defined(BOOST_HAS_FLOAT128)
 
