@@ -667,7 +667,7 @@ void tanh_sinh_detail<Real, Policy>::prune_to_min_complement(const Real& m)
    {
       for (unsigned row = 0; (row < m_abscissas.size()) && m_abscissas[row].size(); ++row)
       {
-         typename std::vector<Real>::iterator pos = std::lower_bound(m_abscissas[row].begin(), m_abscissas[row].end(), m, [](const Real& a, const Real& b) { return fabs(a) > fabs(b); });
+         typename std::vector<Real>::iterator pos = std::lower_bound(m_abscissas[row].begin(), m_abscissas[row].end(), m, [](const Real& a, const Real& b) { using std::fabs; return fabs(a) > fabs(b); });
          if (pos != m_abscissas[row].end())
          {
             m_abscissas[row].erase(pos, m_abscissas[row].end());
