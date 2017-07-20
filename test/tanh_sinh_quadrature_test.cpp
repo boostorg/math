@@ -83,87 +83,104 @@ using boost::math::constants::root_two;
 using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
 
-template<typename Real>
-Real g(Real t)
+template <class T>
+void print_levels(const T& v, const char* suffix)
 {
-    return tanh(half_pi<Real>()*sinh(t));
+   std::cout << "{\n";
+   for (unsigned i = 0; i < v.size(); ++i)
+   {
+      std::cout << "      { ";
+      for (unsigned j = 0; j < v[i].size(); ++j)
+      {
+         std::cout << v[i][j] << suffix << ", ";
+      }
+      std::cout << "},\n";
+   }
+   std::cout << "   };\n";
 }
 
-template<typename Real>
-Real g_prime(Real t)
+template <class T>
+void print_complement_indexes(const T& v)
 {
-
-    Real denom = cosh(half_pi<Real>()*sinh(t));
-    return half_pi<Real>()*cosh(t)/(denom*denom);
+   typedef typename T::value_type value_type;
+   std::cout << "\n   {";
+   for (unsigned i = 0; i < v.size(); ++i)
+   {
+      unsigned index = 0;
+      while (v[i][index] >= 0)
+         ++index;
+      std::cout << index << ", ";
+   }
+   std::cout << "};\n";
 }
 
-void print_xt(cpp_dec_float_100 x, cpp_dec_float_100 t)
+template <class T>
+void print_levels(const std::pair<T, T>& p, const char* suffix = "")
 {
-    std::cout << std::setprecision(std::numeric_limits<cpp_dec_float_100>::digits10 + 5) << std::fixed;
-    std::cout << std::fixed << "            lexical_cast<Real>(\"" << x << "\"), // g(" << std::defaultfloat << t << ")\n";
+   std::cout << "   static const std::vector<std::vector<Real> > abscissa = ";
+   print_levels(p.first, suffix);
+   std::cout << "   static const std::vector<std::vector<Real> > weights = ";
+   print_levels(p.second, suffix);
+   std::cout << "   static const std::vector<unsigned > indexes = ";
+   print_complement_indexes(p.first);
 }
 
-void print_xt_prime(cpp_dec_float_100 x, cpp_dec_float_100 t)
+template <class Real>
+std::pair<std::vector<std::vector<Real>>, std::vector<std::vector<Real>> > generate_constants(unsigned max_index, unsigned max_rows)
 {
-    std::cout << std::setprecision(std::numeric_limits<cpp_dec_float_100>::digits10 + 5) << std::fixed;
-    std::cout << std::fixed << "            lexical_cast<Real>(\"" << x << "\"), // g'(" << std::defaultfloat << t << ")\n";
-}
+   using boost::math::constants::half_pi;
+   using boost::math::constants::two_div_pi;
+   using boost::math::constants::pi;
+   auto g = [](Real t) { return tanh(half_pi<Real>()*sinh(t)); };
+   auto w = [](Real t) { Real cs = cosh(half_pi<Real>() * sinh(t));  return half_pi<Real>() * cosh(t) / (cs * cs); };
+   auto gc = [](Real t) { Real u2 = half_pi<Real>() * sinh(t);  return 1 / (exp(u2) *cosh(u2)); };
+   auto g_inv = [](float x)->float { return asinh(two_div_pi<float>()*atanh(x)); };
+   auto gc_inv = [](float x)
+   {
+      float l = log(sqrt((2 - x) / x));
+      return log((sqrt(4 * l * l + pi<float>() * pi<float>()) + 2 * l) / pi<float>());
+   };
 
+   std::vector<std::vector<Real>> abscissa, weights;
 
-void generate_constants()
-{
+   std::vector<Real> temp;
 
-    std::cout << "    static constexpr const std::vector<std::vector<Real>> abscissas{\n";
-    std::cout << "        {\n";
-    print_xt(g<cpp_dec_float_100>(0), 0);
-    print_xt(g<cpp_dec_float_100>(1), 1);
-    print_xt(g<cpp_dec_float_100>(2), 2);
-    print_xt(g<cpp_dec_float_100>(3), 3);
-    print_xt(g<cpp_dec_float_100>(4), 4);
-    print_xt(g<cpp_dec_float_100>(5), 5);
-    std::cout << "        },\n";
-    size_t k = 1;
-    while(k < 9)
-    {
-        cpp_dec_float_100 h =  (cpp_dec_float_100) 1/ (cpp_dec_float_100) (1 << k);
+   float t_crossover = gc_inv(0.5f);
 
-        std::cout << "        {\n";
-        for(cpp_dec_float_100 t = h; t <= 5; t += 2*h)
-        {
-            auto x = g<cpp_dec_float_100>(t);
-            print_xt(x, t);
-        }
-        std::cout << "        },\n";
-        ++k;
-    }
-    std::cout << "};\n";
+   Real h = 1;
+   for (unsigned i = 0; i < max_index; ++i)
+   {
+      temp.push_back((i < t_crossover) ? g(i * h) : -gc(i * h));
+   }
+   abscissa.push_back(temp);
+   temp.clear();
 
+   for (unsigned i = 0; i < max_index; ++i)
+   {
+      temp.push_back(w(i * h));
+   }
+   weights.push_back(temp);
+   temp.clear();
 
-    std::cout << "    static constexpr const std::vector<std::vector<Real>> weights{\n";
-    std::cout << "        {\n";
-    print_xt_prime(g_prime<cpp_dec_float_100>(0), 0);
-    print_xt_prime(g_prime<cpp_dec_float_100>(1), 1);
-    print_xt_prime(g_prime<cpp_dec_float_100>(2), 2);
-    print_xt_prime(g_prime<cpp_dec_float_100>(3), 3);
-    print_xt_prime(g_prime<cpp_dec_float_100>(4), 4);
-    print_xt_prime(g_prime<cpp_dec_float_100>(5), 5);
-    std::cout << "        },\n";
-    k = 1;
-    while(k < 9)
-    {
-        cpp_dec_float_100 h =  (cpp_dec_float_100) 1/ (cpp_dec_float_100) (1 << k);
+   for (unsigned row = 1; row < max_rows; ++row)
+   {
+      h /= 2;
+      for (Real t = h; t < max_index - 1; t += 2 * h)
+         temp.push_back((t < t_crossover) ? g(t) : -gc(t));
+      abscissa.push_back(temp);
+      temp.clear();
+   }
+   h = 1;
+   for (unsigned row = 1; row < max_rows; ++row)
+   {
+      h /= 2;
+      for (Real t = h; t < max_index - 1; t += 2 * h)
+         temp.push_back(w(t));
+      weights.push_back(temp);
+      temp.clear();
+   }
 
-        std::cout << "        {\n";
-        for(cpp_dec_float_100 t = h; t <= 5; t += 2*h)
-        {
-            auto x = g_prime<cpp_dec_float_100>(t);
-            print_xt_prime(x, t);
-        }
-        std::cout << "        },\n";
-        ++k;
-    }
-    std::cout << "    };\n";
-
+   return std::make_pair(abscissa, weights);
 }
 
 template <class Real>
@@ -615,7 +632,9 @@ void test_2_arg()
 
 BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 {
-    //generate_constants();
+   // Uncomment to generate pre-computed coefficients:
+   //std::cout << std::setprecision(35);
+   //print_levels(generate_constants<cpp_bin_float_100>(10, 8), "L");
 
 #ifdef TEST1
 
