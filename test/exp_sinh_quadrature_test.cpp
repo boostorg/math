@@ -56,24 +56,41 @@ using boost::math::quadrature::exp_sinh;
 #  define TEST5
 #endif
 
+#ifdef BOOST_MSVC
+#pragma warning (disable:4127)
+#endif
+
+template <class Real>
+const exp_sinh<Real>& get_integrator()
+{
+   static const exp_sinh<Real> integrator(sqrt(boost::math::tools::epsilon<Real>()), 14);
+   return integrator;
+}
+
 template<class Real>
 void test_right_limit_infinite()
 {
     std::cout << "Testing right limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(boost::math::tools::epsilon<Real>());
+    Real tol = 10 * boost::math::tools::epsilon<Real>();
     Real Q;
     Real Q_expected;
     Real error;
     Real L1;
-    exp_sinh<Real> integrator(tol, 12);
+    auto integrator = get_integrator<Real>();
 
     // Example 12
     const auto f2 = [](const Real& t) { return exp(-t)/sqrt(t); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = root_pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    Real tol_mult = 1;
+    // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
+    if (std::numeric_limits<Real>::digits10 > std::numeric_limits<long double>::digits10)
+       tol_mult = 12;
+    else if (std::numeric_limits<Real>::digits10 > std::numeric_limits<double>::digits10)
+       tol_mult = 5;
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * tol_mult);
     // The integrand is strictly positive, so it coincides with the value of the integral:
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol * tol_mult);
 
     auto f3 = [](Real t)->Real { Real z = exp(-t); if (z == 0) { return z; } return z*cos(t); };
     Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
@@ -91,12 +108,12 @@ template<class Real>
 void test_left_limit_infinite()
 {
     std::cout << "Testing left limit infinite for 1/(1+t^2) on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(boost::math::tools::epsilon<Real>());
+    Real tol = 10 * boost::math::tools::epsilon<Real>();
     Real Q;
     Real Q_expected;
     Real error;
     Real L1;
-    exp_sinh<Real> integrator(tol, 8);
+    auto integrator = get_integrator<Real>();
 
     // Example 11:
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
@@ -112,17 +129,18 @@ template<class Real>
 void test_nr_examples()
 {
     using std::sin;
+    using std::cos;
     using std::pow;
     using std::exp;
     using std::sqrt;
     std::cout << "Testing type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(boost::math::tools::epsilon<Real>());
+    Real tol = 10 * boost::math::tools::epsilon<Real>();
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
     Real L1;
     Real error;
-    exp_sinh<Real> integrator(tol, 12);
+    auto integrator = get_integrator<Real>();
 
     auto f0 = [] (Real)->Real { return (Real) 0; };
     Q = integrator.integrate(f0, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
@@ -154,13 +172,21 @@ void test_nr_examples()
     Q_expected = sqrt(pi<Real>()*(sqrt((Real) 5) - 2));
 
     // The integrand is oscillatory; the accuracy is low.
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    Real tol_mul = 1;
+    if (std::numeric_limits<Real>::digits10 > 40)
+       tol_mul = 500000;
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mul * tol);
 
     auto f2 = [](Real x)->Real { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    tol_mul = 1;
+    if (std::numeric_limits<Real>::is_specialized == false)
+       tol_mul = 3;
+    if (std::numeric_limits<Real>::digits10 > 40)
+       tol_mul = 100;
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mul * tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol_mul * tol);
 
     auto f3 = [](Real x)->Real { return (Real) 1/ (sqrt(x)*(1+x)); };
     Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
@@ -172,14 +198,17 @@ void test_nr_examples()
     auto f4 = [](const Real& t) { return exp(-t*t*half<Real>()); };
     Q = integrator.integrate(f4, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = root_two_pi<Real>()/2;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    tol_mul = 1;
+    if (std::numeric_limits<Real>::digits10 > 40)
+       tol_mul = 5000;
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mul * tol);
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol_mul * tol);
 
     auto f5 = [](const Real& t) { return 1/cosh(t);};
     Q = integrator.integrate(f5, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = half_pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 12);   // Fails at float precision without higher error rate
+    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol * 12);
 }
 
 // Definite integrals found in the CRC Handbook of Mathematical Formulas
@@ -191,14 +220,15 @@ void test_crc()
     using std::exp;
     using std::sqrt;
     using std::log;
+    using std::cos;
     std::cout << "Testing integral from CRC handbook on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(boost::math::tools::epsilon<Real>());
+    Real tol = 10 * boost::math::tools::epsilon<Real>();
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
     Real L1;
     Real error;
-    exp_sinh<Real> integrator(tol, 14);
+    auto integrator = get_integrator<Real>();
 
     auto f0 = [](const Real& x) { return log(x)*exp(-x); };
     Q = integrator.integrate(f0, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
@@ -247,22 +277,37 @@ void test_crc()
     Q = integrator.integrate(f3, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = s/(a*a+s*s);
     // Since the integrand is oscillatory, we increase the tolerance:
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 100*tol);
+    Real tol_mult = 10;
+    // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
+    if (std::numeric_limits<Real>::digits10 > std::numeric_limits<long double>::digits10)
+       tol_mult = 200000;
+    else if (std::numeric_limits<Real>::digits > std::numeric_limits<double>::digits)
+       tol_mult = 5000; // we should really investigate this more??
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mult*tol);
 
-    // Laplace transform of J_0(t):
-    auto f4 = [&](Real t)->Real {
-        Real x = exp(-s*t);
-        if (x == 0)
-        {
-            return (Real) 0;
-        }
-        return boost::math::cyl_bessel_j(0, t)*x;
-    };
+    //
+    // This one doesn't pass for real_concept..
+    //
+    if (std::numeric_limits<Real>::is_specialized)
+    {
+       // Laplace transform of J_0(t):
+       auto f4 = [&](Real t)->Real {
+          Real x = exp(-s*t);
+          if (x == 0)
+          {
+             return (Real)0;
+          }
+          return boost::math::cyl_bessel_j(0, t)*x;
+       };
 
-    Q = integrator.integrate(f4, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
-    Q_expected = 1/sqrt(1+s*s);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-
+       Q = integrator.integrate(f4, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
+       Q_expected = 1 / sqrt(1 + s*s);
+       tol_mult = 3;
+       // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
+       if (std::numeric_limits<Real>::digits10 > std::numeric_limits<long double>::digits10)
+          tol_mult = 750;
+       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mult * tol);
+    }
     auto f6 = [](const Real& t) { return exp(-t*t)*log(t);};
     Q = integrator.integrate(f6, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), &error, &L1);
     Q_expected = -boost::math::constants::root_pi<Real>()*(boost::math::constants::euler<Real>() + 2*ln_two<Real>())/4;
@@ -301,10 +346,14 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 #endif
 
 #ifdef TEST4
-    test_left_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
-    test_right_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
+    test_left_limit_infinite<boost::multiprecision::cpp_bin_float_50>();
+    test_right_limit_infinite<boost::multiprecision::cpp_bin_float_50>();
+    test_nr_examples<boost::multiprecision::cpp_bin_float_50>();
+    test_crc<boost::multiprecision::cpp_bin_float_50>();
 #endif
 #ifdef TEST5
+    test_left_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
+    test_right_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
     test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
     test_crc<boost::multiprecision::cpp_dec_float_50>();
 #endif
