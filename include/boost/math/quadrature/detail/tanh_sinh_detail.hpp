@@ -99,7 +99,9 @@ private:
    void prune_to_min_complement(const Real& m);
    void extend_refinements()const
    {
+#ifndef BOOST_MATH_NO_ATOMIC_INT
       boost::detail::lightweight_mutex::scoped_lock guard(m_mutex);
+#endif
       //
       // Check some other thread hasn't got here after we read the atomic variable, but before we got here:
       //
@@ -166,12 +168,12 @@ private:
    mutable std::vector<std::size_t>       m_first_complements;
    std::size_t                       m_max_refinements, m_inital_row_length;
 #ifndef BOOST_MATH_NO_ATOMIC_INT
-   mutable atomic_unsigned_type      m_committed_refinements;
+   mutable boost::math::detail::atomic_unsigned_type      m_committed_refinements;
+   mutable boost::detail::lightweight_mutex m_mutex;
 #else
    mutable unsigned                  m_committed_refinements;
 #endif
    Real m_tol, m_t_max, m_t_crossover;
-   mutable boost::detail::lightweight_mutex m_mutex;
 };
 
 template<class Real, class Policy>
@@ -474,7 +476,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 
-   m_committed_refinements = static_cast<atomic_unsigned_integer_type>(m_abscissas.size() - 1);
+   m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 
    if (m_max_refinements >= m_abscissas.size())
    {
