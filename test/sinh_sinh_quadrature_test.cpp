@@ -51,7 +51,86 @@ using boost::math::constants::ln_two;
 using boost::math::constants::root_two;
 using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
+//
+// Code for generating the coefficients:
+//
+template <class T>
+void print_levels(const T& v, const char* suffix)
+{
+   std::cout << "{\n";
+   for (unsigned i = 0; i < v.size(); ++i)
+   {
+      std::cout << "      { ";
+      for (unsigned j = 0; j < v[i].size(); ++j)
+      {
+         std::cout << v[i][j] << suffix << ", ";
+      }
+      std::cout << "},\n";
+   }
+   std::cout << "   };\n";
+}
 
+template <class T>
+void print_levels(const std::pair<T, T>& p, const char* suffix = "")
+{
+   std::cout << "   static const std::vector<std::vector<Real> > abscissa = ";
+   print_levels(p.first, suffix);
+   std::cout << "   static const std::vector<std::vector<Real> > weights = ";
+   print_levels(p.second, suffix);
+}
+
+template <class Real, class TargetType>
+std::pair<std::vector<std::vector<Real>>, std::vector<std::vector<Real>> > generate_constants(unsigned max_rows)
+{
+   using boost::math::constants::half_pi;
+   using boost::math::constants::two_div_pi;
+   using boost::math::constants::pi;
+   auto g = [](Real t) { return sinh(half_pi<Real>()*sinh(t)); };
+   auto w = [](Real t) { return cosh(t)*half_pi<Real>()*cosh(half_pi<Real>()*sinh(t)); };
+
+   std::vector<std::vector<Real>> abscissa, weights;
+
+   std::vector<Real> temp;
+
+   Real t_max = log(2 * two_div_pi<Real>()*log(2 * two_div_pi<Real>()*sqrt(boost::math::tools::max_value<TargetType>())));
+
+   std::cout << "m_t_max = " << t_max << ";\n";
+
+   Real h = 1;
+   for (Real t = 1; t < t_max; t += h)
+   {
+      temp.push_back(g(t));
+   }
+   abscissa.push_back(temp);
+   temp.clear();
+
+   for (Real t = 1; t < t_max; t += h)
+   {
+      temp.push_back(w(t * h));
+   }
+   weights.push_back(temp);
+   temp.clear();
+
+   for (unsigned row = 1; row < max_rows; ++row)
+   {
+      h /= 2;
+      for (Real t = h; t < t_max; t += 2 * h)
+         temp.push_back(g(t));
+      abscissa.push_back(temp);
+      temp.clear();
+   }
+   h = 1;
+   for (unsigned row = 1; row < max_rows; ++row)
+   {
+      h /= 2;
+      for (Real t = h; t < t_max; t += 2 * h)
+         temp.push_back(w(t));
+      weights.push_back(temp);
+      temp.clear();
+   }
+
+   return std::make_pair(abscissa, weights);
+}
 
 template<class Real>
 void test_nr_examples()
@@ -141,6 +220,17 @@ void test_crc()
 
 BOOST_AUTO_TEST_CASE(sinh_sinh_quadrature_test)
 {
+    //
+    // Uncomment the following to print out the coefficients:
+    //
+    /*
+    std::cout << std::scientific << std::setprecision(8);
+    print_levels(generate_constants<cpp_bin_float_100, float>(8), "f");
+    std::cout << std::setprecision(18);
+    print_levels(generate_constants<cpp_bin_float_100, double>(8), "");
+    std::cout << std::setprecision(35);
+    print_levels(generate_constants<cpp_bin_float_100, cpp_bin_float_quad>(8), "L");
+    */
     test_nr_examples<float>();
     test_nr_examples<double>();
     test_nr_examples<long double>();
