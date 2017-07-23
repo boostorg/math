@@ -60,6 +60,96 @@ using boost::math::quadrature::exp_sinh;
 #pragma warning (disable:4127)
 #endif
 
+//
+// Coefficient generation code:
+//
+template <class T>
+void print_levels(const T& v, const char* suffix)
+{
+   std::cout << "{\n";
+   for (unsigned i = 0; i < v.size(); ++i)
+   {
+      std::cout << "      { ";
+      for (unsigned j = 0; j < v[i].size(); ++j)
+      {
+         std::cout << v[i][j] << suffix << ", ";
+      }
+      std::cout << "},\n";
+   }
+   std::cout << "   };\n";
+}
+
+template <class T>
+void print_levels(const std::pair<T, T>& p, const char* suffix = "")
+{
+   std::cout << "   static const std::vector<std::vector<Real> > abscissa = ";
+   print_levels(p.first, suffix);
+   std::cout << "   static const std::vector<std::vector<Real> > weights = ";
+   print_levels(p.second, suffix);
+}
+
+template <class Real, class TargetType>
+std::pair<std::vector<std::vector<Real>>, std::vector<std::vector<Real>> > generate_constants(unsigned max_rows)
+{
+   using boost::math::constants::half_pi;
+   using boost::math::constants::two_div_pi;
+   using boost::math::constants::pi;
+   auto g = [](Real t) { return exp(half_pi<Real>()*sinh(t)); };
+   auto w = [](Real t) { return cosh(t)*half_pi<Real>()*exp(half_pi<Real>()*sinh(t)); };
+
+   std::vector<std::vector<Real>> abscissa, weights;
+
+   std::vector<Real> temp;
+
+   Real tmp = (Real(boost::math::tools::log_min_value<TargetType>()) + log(Real(boost::math::tools::epsilon<TargetType>())))*0.5f;
+   Real t_min = asinh(two_div_pi<Real>()*tmp);
+   // truncate t_min to an exact binary value:
+   t_min = floor(t_min * 128) / 128;
+
+   std::cout << "m_t_min = " << t_min << ";\n";
+
+   // t_max is chosen to make g'(t_max) ~ sqrt(max) (g' grows faster than g).
+   // This will allow some flexibility on the users part; they can at least square a number function without overflow.
+   // But there is no unique choice; the further out we can evaluate the function, the better we can do on slowly decaying integrands.
+   const Real t_max = log(2 * two_div_pi<Real>()*log(2 * two_div_pi<Real>()*sqrt(Real(boost::math::tools::max_value<TargetType>()))));
+
+   Real h = 1;
+   for (Real t = t_min; t < t_max; t += h)
+   {
+      temp.push_back(g(t));
+   }
+   abscissa.push_back(temp);
+   temp.clear();
+
+   for (Real t = t_min; t < t_max; t += h)
+   {
+      temp.push_back(w(t * h));
+   }
+   weights.push_back(temp);
+   temp.clear();
+
+   for (unsigned row = 1; row < max_rows; ++row)
+   {
+      h /= 2;
+      for (Real t = t_min + h; t < t_max; t += 2 * h)
+         temp.push_back(g(t));
+      abscissa.push_back(temp);
+      temp.clear();
+   }
+   h = 1;
+   for (unsigned row = 1; row < max_rows; ++row)
+   {
+      h /= 2;
+      for (Real t = t_min + h; t < t_max; t += 2 * h)
+         temp.push_back(w(t));
+      weights.push_back(temp);
+      temp.clear();
+   }
+
+   return std::make_pair(abscissa, weights);
+}
+
+
 template <class Real>
 const exp_sinh<Real>& get_integrator()
 {
@@ -317,6 +407,20 @@ void test_crc()
 
 BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 {
+   //
+   // Uncomment to generate the coefficients:
+   //
+
+   /*
+   std::cout << std::scientific << std::setprecision(8);
+   print_levels(generate_constants<cpp_bin_float_100, float>(8), "f");
+   std::cout << std::setprecision(18);
+   print_levels(generate_constants<cpp_bin_float_100, double>(8), "");
+   std::cout << std::setprecision(35);
+   print_levels(generate_constants<cpp_bin_float_100, cpp_bin_float_quad>(8), "L");
+   */
+
+
 #ifdef TEST1
     test_left_limit_infinite<float>();
     test_left_limit_infinite<double>();
