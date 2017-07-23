@@ -21,6 +21,7 @@
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/type_traits/is_class.hpp>
 
 using std::exp;
 using std::cos;
@@ -369,11 +370,12 @@ void test_crc()
     // Since the integrand is oscillatory, we increase the tolerance:
     Real tol_mult = 10;
     // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
-    if (std::numeric_limits<Real>::digits10 > std::numeric_limits<long double>::digits10)
-       tol_mult = 200000;
-    else if (std::numeric_limits<Real>::digits > std::numeric_limits<double>::digits)
-       tol_mult = 5000; // we should really investigate this more??
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mult*tol);
+    if (!boost::is_class<Real>::value)
+    {
+       if (std::numeric_limits<Real>::digits10 > std::numeric_limits<double>::digits10)
+          tol_mult = 5000; // we should really investigate this more??
+       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mult*tol);
+    }
 
     //
     // This one doesn't pass for real_concept..
