@@ -6,17 +6,16 @@
 
 #define BOOST_TEST_MODULE tanh_sinh_quadrature_test
 
-#include <random>
-#include <limits>
-#include <functional>
-#include <boost/random/uniform_real_distribution.hpp>
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
+
+#if !defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_TRAILING_RESULT_TYPES) && !defined(BOOST_NO_SFINAE_EXPR)
+
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
-#include <boost/math/quadrature/detail/tanh_sinh_detail.hpp>
 #include <boost/math/quadrature/tanh_sinh.hpp>
-#include <boost/math/special_functions/sinc.hpp>
+//#include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/math/special_functions/next.hpp>
@@ -782,3 +781,10 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 
 #endif
 }
+
+#else
+
+int main() { return 0; }
+
+#endif
+

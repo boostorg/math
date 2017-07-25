@@ -6,17 +6,18 @@
 
 #define BOOST_TEST_MODULE sinh_sinh_quadrature_test
 
-#include <random>
-#include <limits>
-#include <functional>
-#include <boost/type_index.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/quadrature/sinh_sinh.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
+// MSVC-12 has problems if we include 2 different multiprecision types in the same program,
+// basically random things stop compiling, even though they work fine in isolation :(
 #include <boost/multiprecision/cpp_dec_float.hpp>
+#endif
 
 using std::expm1;
 using std::exp;
@@ -244,12 +245,16 @@ BOOST_AUTO_TEST_CASE(sinh_sinh_quadrature_test)
     test_nr_examples<long double>();
     test_nr_examples<cpp_bin_float_quad>();
     test_nr_examples<boost::math::concepts::real_concept>();
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
     test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
+#endif
 
     test_crc<float>();
     test_crc<double>();
     test_crc<long double>();
     test_crc<cpp_bin_float_quad>();
     test_crc<boost::math::concepts::real_concept>();
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
     test_crc<boost::multiprecision::cpp_dec_float_50>();
+#endif
 }

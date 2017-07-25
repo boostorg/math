@@ -6,12 +6,7 @@
 
 #define BOOST_TEST_MODULE exp_sinh_quadrature_test
 
-#include <random>
-#include <limits>
-#include <functional>
-#include <boost/random/uniform_real_distribution.hpp>
 #include <boost/math/concepts/real_concept.hpp>
-#include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/quadrature/exp_sinh.hpp>
@@ -50,12 +45,14 @@ using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
 using boost::math::quadrature::exp_sinh;
 
-#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7)
 #  define TEST1
 #  define TEST2
 #  define TEST3
 #  define TEST4
 #  define TEST5
+#  define TEST6
+#  define TEST7
 #endif
 
 #ifdef BOOST_MSVC
@@ -454,39 +451,43 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
 
 #ifdef TEST1
     test_left_limit_infinite<float>();
-    test_left_limit_infinite<double>();
-    test_left_limit_infinite<long double>();
     test_right_limit_infinite<float>();
-    test_right_limit_infinite<double>();
-    test_right_limit_infinite<long double>();
     test_nr_examples<float>();
-    test_nr_examples<double>();
-    test_nr_examples<long double>();
     test_crc<float>();
-    test_crc<double>();
-    test_crc<long double>();
 #endif
 #ifdef TEST2
+    test_left_limit_infinite<double>();
+    test_right_limit_infinite<double>();
+    test_nr_examples<double>();
+    test_crc<double>();
+#endif
+#ifdef TEST3
+    test_left_limit_infinite<long double>();
+    test_right_limit_infinite<long double>();
+    test_nr_examples<long double>();
+    test_crc<long double>();
+#endif
+#ifdef TEST4
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_nr_examples<cpp_bin_float_quad>();
     test_crc<cpp_bin_float_quad>();
 #endif
 
-#ifdef TEST3
+#ifdef TEST5
     test_left_limit_infinite<boost::math::concepts::real_concept>();
     test_right_limit_infinite<boost::math::concepts::real_concept>();
     test_nr_examples<boost::math::concepts::real_concept>();
     test_crc<boost::math::concepts::real_concept>();
 #endif
 
-#ifdef TEST4
+#ifdef TEST6
     test_left_limit_infinite<boost::multiprecision::cpp_bin_float_50>();
     test_right_limit_infinite<boost::multiprecision::cpp_bin_float_50>();
     test_nr_examples<boost::multiprecision::cpp_bin_float_50>();
     test_crc<boost::multiprecision::cpp_bin_float_50>();
 #endif
-#ifdef TEST5
+#ifdef TEST7
     test_left_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
     test_right_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
     test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
