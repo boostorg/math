@@ -39,14 +39,14 @@ class tanh_sinh_detail
 #endif
       0;
 public:
-    tanh_sinh_detail(const Real& tol, size_t max_refinements, const Real& min_complement) : m_max_refinements(max_refinements), m_tol(tol)
+    tanh_sinh_detail(size_t max_refinements, const Real& min_complement) : m_max_refinements(max_refinements)
     {
        typedef mpl::int_<initializer_selector> tag_type;
        init(min_complement, tag_type());
     }
 
     template<class F>
-    Real integrate(const F f, Real* error, Real* L1, const char* function, Real left_min_complement = tools::epsilon<Real>(), Real right_min_complement = tools::epsilon<Real>()) const;
+    Real integrate(const F f, Real* error, Real* L1, const char* function, Real left_min_complement, Real right_min_complement, Real tolerance) const;
 
 private:
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
@@ -173,12 +173,12 @@ private:
 #else
    mutable unsigned                  m_committed_refinements;
 #endif
-   Real m_tol, m_t_max, m_t_crossover;
+   Real m_t_max, m_t_crossover;
 };
 
 template<class Real, class Policy>
 template<class F>
-Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1, const char* function, Real left_min_complement, Real right_min_complement) const
+Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1, const char* function, Real left_min_complement, Real right_min_complement, Real tolerance) const
 {
     using std::abs;
     using std::fabs;
@@ -350,7 +350,7 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
         // parameters.  We could keep hunting until we find something, but that would handicap
         // integrals which really are zero.... so a compromise then!
         //
-        if ((k > 4) && (err <= m_tol*L1_I1))
+        if ((k > 4) && (err <= tolerance*L1_I1))
         {
             break;
         }
@@ -529,7 +529,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 
-   m_committed_refinements = m_abscissas.size() - 1;
+   m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 
    if (m_max_refinements >= m_abscissas.size())
    {
@@ -582,7 +582,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 
-   m_committed_refinements = m_abscissas.size() - 1;
+   m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 
    if (m_max_refinements >= m_abscissas.size())
    {
@@ -636,7 +636,7 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
       1, 0, 1, 1, 3, 5, 11, 22,
    };
 
-   m_committed_refinements = m_abscissas.size() - 1;
+   m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
 
    if (m_max_refinements >= m_abscissas.size())
    {

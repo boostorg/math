@@ -40,13 +40,18 @@ template<class Real, class Policy = policies::policy<> >
 class tanh_sinh
 {
 public:
-    tanh_sinh(const Real& tol = tools::root_epsilon<Real>(), size_t max_refinements = 15, const Real& min_complement = tools::min_value<Real>() * 4)
-    : m_imp(std::make_shared<detail::tanh_sinh_detail<Real, Policy>>(tol, max_refinements, min_complement)) {}
+    tanh_sinh(size_t max_refinements = 15, const Real& min_complement = tools::min_value<Real>() * 4)
+    : m_imp(std::make_shared<detail::tanh_sinh_detail<Real, Policy>>(max_refinements, min_complement)) {}
 
     template<class F>
-    auto integrate(const F f, Real a, Real b, Real* error = nullptr, Real* L1 = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
+    auto integrate(const F f, Real a, Real b, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
     template<class F>
-    auto integrate(const F f, Real a, Real b, Real* error = nullptr, Real* L1 = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
+    auto integrate(const F f, Real a, Real b, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
+
+    template<class F>
+    auto integrate(const F f, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
+    template<class F>
+    auto integrate(const F f, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
 
 private:
     std::shared_ptr<detail::tanh_sinh_detail<Real, Policy>> m_imp;
@@ -54,7 +59,7 @@ private:
 
 template<class Real, class Policy>
 template<class F>
-auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, Real* L1) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const
+auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real tolerance, Real* error, Real* L1) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const
 {
     BOOST_MATH_STD_USING
     using boost::math::constants::half;
@@ -81,7 +86,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
              return f(t*inv)*(1 + t_sq)*inv*inv; 
           };
           Real limit = sqrt(tools::min_value<Real>()) * 4;
-          return m_imp->integrate(u, error, L1, function, limit, limit);
+          return m_imp->integrate(u, error, L1, function, limit, limit, tolerance);
        }
 
        // Right limit is infinite:
@@ -101,7 +106,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
              return f(arg)*z*z; 
           };
           Real left_limit = sqrt(tools::min_value<Real>()) * 4;
-          Real Q = 2 * m_imp->integrate(u, error, L1, function, left_limit, tools::min_value<Real>());
+          Real Q = 2 * m_imp->integrate(u, error, L1, function, left_limit, tools::min_value<Real>(), tolerance);
           if (L1)
           {
              *L1 *= 2;
@@ -128,7 +133,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
           };
 
           Real left_limit = sqrt(tools::min_value<Real>()) * 4;
-          Real Q = 2 * m_imp->integrate(v, error, L1, function, left_limit, tools::min_value<Real>());
+          Real Q = 2 * m_imp->integrate(v, error, L1, function, left_limit, tools::min_value<Real>(), tolerance);
           if (L1)
           {
              *L1 *= 2;
@@ -165,7 +170,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
              BOOST_ASSERT(position != b);
              return f(position);
           };
-          Real Q = diff*m_imp->integrate(u, error, L1, function, left_min_complement, right_min_complement);
+          Real Q = diff*m_imp->integrate(u, error, L1, function, left_min_complement, right_min_complement, tolerance);
 
           if (L1)
           {
@@ -179,7 +184,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
 
 template<class Real, class Policy>
 template<class F>
-auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, Real* L1) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const
+auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real tolerance, Real* error, Real* L1) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const
 {
    BOOST_MATH_STD_USING
       using boost::math::constants::half;
@@ -200,13 +205,10 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
          else
             return f((a - b) * zc / 2 + b, (b - a) * zc / 2);
       };
-      //Real avg = (a + b)*half<Real>();
       Real diff = (b - a)*half<Real>();
-      //Real avg_over_diff_m1 = a / diff;
-      //Real avg_over_diff_p1 = b / diff;
       Real left_min_complement = tools::min_value<Real>() * 4;
       Real right_min_complement = tools::min_value<Real>() * 4;
-      Real Q = diff*m_imp->integrate(u, error, L1, function, left_min_complement, right_min_complement);
+      Real Q = diff*m_imp->integrate(u, error, L1, function, left_min_complement, right_min_complement, tolerance);
 
       if (L1)
       {
@@ -217,5 +219,27 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real* error, 
    return policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
 }
 
-}}}
+template<class Real, class Policy>
+template<class F>
+auto tanh_sinh<Real, Policy>::integrate(const F f, Real tolerance, Real* error, Real* L1) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const
+{
+   using boost::math::quadrature::detail::tanh_sinh_detail;
+   static const char* function = "tanh_sinh<%1%>::integrate";
+   Real min_complement = tools::epsilon<Real>();
+   return m_imp->integrate([&](const Real& arg, const Real&) { return f(arg); }, error, L1, function, min_complement, min_complement, tolerance);
+}
+
+template<class Real, class Policy>
+template<class F>
+auto tanh_sinh<Real, Policy>::integrate(const F f, Real tolerance, Real* error, Real* L1) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const
+{
+   using boost::math::quadrature::detail::tanh_sinh_detail;
+   static const char* function = "tanh_sinh<%1%>::integrate";
+   Real min_complement = tools::min_value<Real>() * 4;
+   return m_imp->integrate(f, error, L1, function, min_complement, min_complement, tolerance);
+}
+
+}
+}
+}
 #endif

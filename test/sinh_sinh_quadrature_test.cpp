@@ -136,45 +136,52 @@ template<class Real>
 void test_nr_examples()
 {
     std::cout << "Testing type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(boost::math::tools::epsilon<Real>());
+    Real integration_limit = sqrt(boost::math::tools::epsilon<Real>());
+    Real tol = 10 * boost::math::tools::epsilon<Real>();
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
     Real L1;
     Real error;
-    sinh_sinh<Real> integrator(tol, 10);
+    sinh_sinh<Real> integrator(10);
 
     auto f0 = [](Real)->Real { return (Real) 0; };
-    Q = integrator.integrate(f0, &error, &L1);
+    Q = integrator.integrate(f0, integration_limit, &error, &L1);
     Q_expected = 0;
     BOOST_CHECK_SMALL(Q, tol);
     BOOST_CHECK_SMALL(L1, tol);
 
     // In spite of the poles at \pm i, we still get a doubling of the correct digits at each level of refinement.
     auto f1 = [](const Real& t) { return 1/(1+t*t); };
-    Q = integrator.integrate(f1, &error, &L1);
+    Q = integrator.integrate(f1, integration_limit, &error, &L1);
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f2 = [](const Real& x) { return exp(-x*x); };
-    Q = integrator.integrate(f2, &error, &L1);
+    Q = integrator.integrate(f2, integration_limit, &error, &L1);
     Q_expected = root_pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
     auto f5 = [](const Real& t) { return 1/cosh(t);};
-    Q = integrator.integrate(f5, &error, &L1);
+    Q = integrator.integrate(f5, integration_limit, &error, &L1);
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
-    // This oscillatory integral has rapid convergence because the oscillations get swamped by the exponential growth of the denominator.
+    // This oscillatory integral has rapid convergence because the oscillations get swamped by the exponential growth of the denominator,
+    // none the less the error is slightly higher than for the other cases:
+    tol *= 10;
     auto f8 = [](const Real& t) { return cos(t)/cosh(t);};
-    Q = integrator.integrate(f8, &error, &L1);
+    Q = integrator.integrate(f8, integration_limit, &error, &L1);
     Q_expected = pi<Real>()/cosh(half_pi<Real>());
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-
+    // Try again with progressively fewer arguments:
+    Q = integrator.integrate(f8, integration_limit);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    Q = integrator.integrate(f8);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 }
 
 // Test formulas for in the CRC Handbook of Mathematical functions, 32nd edition.
@@ -182,13 +189,14 @@ template<class Real>
 void test_crc()
 {
     std::cout << "Testing CRC formulas on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(boost::math::tools::epsilon<Real>());
+    Real integration_limit = sqrt(boost::math::tools::epsilon<Real>());
+    Real tol = 10 * boost::math::tools::epsilon<Real>();
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     Real Q;
     Real Q_expected;
     Real L1;
     Real error;
-    sinh_sinh<Real> integrator(tol, 10);
+    sinh_sinh<Real> integrator(10);
 
     // CRC Definite integral 698:
     auto f0 = [](Real x)->Real {
@@ -198,7 +206,7 @@ void test_crc()
       }
       return x/sinh(x);
     };
-    Q = integrator.integrate(f0, &error, &L1);
+    Q = integrator.integrate(f0, integration_limit, &error, &L1);
     Q_expected = pi_sqr<Real>()/2;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
@@ -212,7 +220,7 @@ void test_crc()
       }
       return (Real) sin(x)/sinh(x);
     };
-    Q = integrator.integrate(f1, &error, &L1);
+    Q = integrator.integrate(f1, integration_limit, &error, &L1);
     Q_expected = pi<Real>()*tanh(half_pi<Real>());
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 }

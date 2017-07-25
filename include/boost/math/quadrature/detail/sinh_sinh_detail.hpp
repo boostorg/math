@@ -38,10 +38,10 @@ class sinh_sinh_detail
 #endif
       0;
 public:
-    sinh_sinh_detail(Real tol, size_t max_refinements);
+    sinh_sinh_detail(size_t max_refinements);
 
     template<class F>
-    Real integrate(const F f, Real* error, Real* L1) const;
+    Real integrate(const F f, Real tolerance, Real* error, Real* L1) const;
 
 private:
 private:
@@ -120,7 +120,7 @@ private:
       }
    }
 
-   Real m_tol, m_t_max;
+   Real m_t_max;
 
    mutable std::vector<std::vector<Real>> m_abscissas;
    mutable std::vector<std::vector<Real>> m_weights;
@@ -134,15 +134,15 @@ private:
 };
 
 template<class Real, class Policy>
-sinh_sinh_detail<Real, Policy>::sinh_sinh_detail(Real tol, size_t max_refinements)
-   : m_tol(tol), m_abscissas(max_refinements), m_weights(max_refinements), m_max_refinements(max_refinements)
+sinh_sinh_detail<Real, Policy>::sinh_sinh_detail(size_t max_refinements)
+   : m_abscissas(max_refinements), m_weights(max_refinements), m_max_refinements(max_refinements)
 {
    init(mpl::int_<initializer_selector>());
 }
 
 template<class Real, class Policy>
 template<class F>
-Real sinh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1) const
+Real sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* error, Real* L1) const
 {
     using std::abs;
     using std::sqrt;
@@ -241,7 +241,7 @@ Real sinh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1)
                "If you are sure your function has no singularities, please submit a bug against boost.math\n";
             return policies::raise_evaluation_error(function, err_msg, I1, Policy());
         }
-        if (err <= m_tol*L1_I1)
+        if (err <= tolerance*L1_I1)
         {
             break;
         }

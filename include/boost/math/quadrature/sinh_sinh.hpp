@@ -26,13 +26,13 @@ template<class Real, class Policy = boost::math::policies::policy<> >
 class sinh_sinh
 {
 public:
-    sinh_sinh(Real tol = boost::math::tools::root_epsilon<Real>(), size_t max_refinements = 9)
-        : m_imp(std::make_shared<detail::sinh_sinh_detail<Real, Policy> >(tol, max_refinements)) {}
+    sinh_sinh(size_t max_refinements = 9)
+        : m_imp(std::make_shared<detail::sinh_sinh_detail<Real, Policy> >(max_refinements)) {}
 
     template<class F>
-    Real integrate(const F f, Real* error = nullptr, Real* L1 = nullptr) const
+    Real integrate(const F f, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr) const
     {
-        return m_imp->integrate(f, error, L1);
+        return m_imp->integrate(f, tol, error, L1);
     }
 
 private:

@@ -38,10 +38,10 @@ class exp_sinh_detail
 #endif
       0;
 public:
-    exp_sinh_detail(Real tol, size_t max_refinements);
+    exp_sinh_detail(size_t max_refinements);
 
     template<class F>
-    Real integrate(const F& f, Real* error, Real* L1, const char* function) const;
+    Real integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance) const;
 
 private:
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
@@ -135,15 +135,15 @@ private:
 };
 
 template<class Real, class Policy>
-exp_sinh_detail<Real, Policy>::exp_sinh_detail(Real tol, size_t max_refinements) 
-   : m_tol(tol), m_abscissas(max_refinements), m_weights(max_refinements),
+exp_sinh_detail<Real, Policy>::exp_sinh_detail(size_t max_refinements) 
+   : m_abscissas(max_refinements), m_weights(max_refinements),
    m_max_refinements(max_refinements)
 {
    init(mpl::int_<initializer_selector>());
 }
 template<class Real, class Policy>
 template<class F>
-Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function) const
+Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance) const
 {
     using std::abs;
     using std::floor;
@@ -229,7 +229,7 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         {
             return policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and resulted in %1%. Please ensure your function evaluates to a finite number of its entire domain.", I1, Policy());
         }
-        if (err <= m_tol*L1_I1)
+        if (err <= tolerance*L1_I1)
         {
             break;
         }
