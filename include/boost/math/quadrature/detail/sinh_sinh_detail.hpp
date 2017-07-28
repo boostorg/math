@@ -41,7 +41,7 @@ public:
     sinh_sinh_detail(size_t max_refinements);
 
     template<class F>
-    Real integrate(const F f, Real tolerance, Real* error, Real* L1) const;
+    Real integrate(const F f, Real tolerance, Real* error, Real* L1, std::size_t* levels) const;
 
 private:
 private:
@@ -142,7 +142,7 @@ sinh_sinh_detail<Real, Policy>::sinh_sinh_detail(size_t max_refinements)
 
 template<class Real, class Policy>
 template<class F>
-Real sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* error, Real* L1) const
+Real sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* error, Real* L1, std::size_t* levels) const
 {
     using std::abs;
     using std::sqrt;
@@ -195,8 +195,9 @@ Real sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* 
     L1_I1 *= half<Real>();
     Real err = abs(I0 - I1);
     // std::cout << "Second estimate: " << I1 << " Error estimate at level " << 1 << " = " << err << std::endl;
-
-    for(size_t i = 2; i <= m_max_refinements; ++i)
+    
+    size_t i = 2;
+    for(; i <= m_max_refinements; ++i)
     {
         I0 = I1;
         L1_I0 = L1_I1;
@@ -255,6 +256,11 @@ Real sinh_sinh_detail<Real, Policy>::integrate(const F f, Real tolerance, Real* 
     if (L1)
     {
         *L1 = L1_I1;
+    }
+
+    if (levels)
+    {
+       *levels = i;
     }
 
     return I1;

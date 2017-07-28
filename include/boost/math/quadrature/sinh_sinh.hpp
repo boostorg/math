@@ -30,9 +30,9 @@ public:
         : m_imp(std::make_shared<detail::sinh_sinh_detail<Real, Policy> >(max_refinements)) {}
 
     template<class F>
-    Real integrate(const F f, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr) const
+    Real integrate(const F f, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const
     {
-        return m_imp->integrate(f, tol, error, L1);
+        return m_imp->integrate(f, tol, error, L1, levels);
     }
 
 private:

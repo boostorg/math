@@ -46,7 +46,7 @@ public:
     }
 
     template<class F>
-    Real integrate(const F f, Real* error, Real* L1, const char* function, Real left_min_complement, Real right_min_complement, Real tolerance) const;
+    Real integrate(const F f, Real* error, Real* L1, const char* function, Real left_min_complement, Real right_min_complement, Real tolerance, std::size_t* levels) const;
 
 private:
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
@@ -178,7 +178,7 @@ private:
 
 template<class Real, class Policy>
 template<class F>
-Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1, const char* function, Real left_min_complement, Real right_min_complement, Real tolerance) const
+Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1, const char* function, Real left_min_complement, Real right_min_complement, Real tolerance, std::size_t* levels) const
 {
     using std::abs;
     using std::fabs;
@@ -364,6 +364,11 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
     if (L1)
     {
         *L1 = L1_I1;
+    }
+
+    if (levels)
+    {
+       *levels = k;
     }
 
     return I1;

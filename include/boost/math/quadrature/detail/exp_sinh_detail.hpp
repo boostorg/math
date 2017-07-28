@@ -41,7 +41,7 @@ public:
     exp_sinh_detail(size_t max_refinements);
 
     template<class F>
-    Real integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance) const;
+    Real integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const;
 
 private:
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
@@ -143,7 +143,7 @@ exp_sinh_detail<Real, Policy>::exp_sinh_detail(size_t max_refinements)
 }
 template<class Real, class Policy>
 template<class F>
-Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance) const
+Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const
 {
     using std::abs;
     using std::floor;
@@ -186,7 +186,8 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     Real err = abs(I0 - I1);
     //std::cout << "Second estimate: " << I1 << " Error estimate at level " << 1 << " = " << err << std::endl;
 
-    for(size_t i = 2; i < m_abscissas.size(); ++i)
+    size_t i = 2;
+    for(; i < m_abscissas.size(); ++i)
     {
         I0 = I1;
         L1_I0 = L1_I1;
@@ -243,6 +244,11 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     if(L1)
     {
         *L1 = L1_I1;
+    }
+
+    if (levels)
+    {
+       *levels = i;
     }
 
     return I1;

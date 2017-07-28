@@ -30,9 +30,9 @@ public:
       : m_imp(std::make_shared<detail::exp_sinh_detail<Real, Policy>>(max_refinements)) {}
 
     template<class F>
-    Real integrate(const F& f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr) const;
+    Real integrate(const F& f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const;
     template<class F>
-    Real integrate(const F& f, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr) const;
+    Real integrate(const F& f, Real tol = boost::math::tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) const;
 
 private:
     std::shared_ptr<detail::exp_sinh_detail<Real, Policy>> m_imp;
@@ -40,7 +40,7 @@ private:
 
 template<class Real, class Policy>
 template<class F>
-Real exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, Real tolerance, Real* error, Real* L1) const
+Real exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, Real tolerance, Real* error, Real* L1, std::size_t* levels) const
 {
     using std::abs;
     using boost::math::constants::half;
@@ -57,16 +57,16 @@ Real exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, Real toleranc
         // If a = 0, don't use an additional level of indirection:
         if (a == (Real) 0)
         {
-            return m_imp->integrate(f, error, L1, function, tolerance);
+            return m_imp->integrate(f, error, L1, function, tolerance, levels);
         }
         const auto u = [&](Real t)->Real { return f(t + a); };
-        return m_imp->integrate(u, error, L1, function, tolerance);
+        return m_imp->integrate(u, error, L1, function, tolerance, levels);
     }
 
     if ((boost::math::isfinite)(b) && a <= -boost::math::tools::max_value<Real>())
     {
         const auto u = [&](Real t)->Real { return f(b-t);};
-        return m_imp->integrate(u, error, L1, function, tolerance);
+        return m_imp->integrate(u, error, L1, function, tolerance, levels);
     }
 
     // Infinite limits:
@@ -80,7 +80,7 @@ Real exp_sinh<Real, Policy>::integrate(const F& f, Real a, Real b, Real toleranc
 
 template<class Real, class Policy>
 template<class F>
-Real exp_sinh<Real, Policy>::integrate(const F& f, Real tolerance, Real* error, Real* L1) const
+Real exp_sinh<Real, Policy>::integrate(const F& f, Real tolerance, Real* error, Real* L1, std::size_t* levels) const
 {
     using std::abs;
     using boost::math::constants::half;
@@ -88,7 +88,7 @@ Real exp_sinh<Real, Policy>::integrate(const F& f, Real tolerance, Real* error, 
 
     static const char* function = "boost::math::quadrature::exp_sinh<%1%>::integrate";
 
-    return m_imp->integrate(f, error, L1, function, tolerance);
+    return m_imp->integrate(f, error, L1, function, tolerance, levels);
 }
 
 
