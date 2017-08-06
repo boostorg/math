@@ -409,8 +409,8 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    for (std::size_t i = 0; i < m_inital_row_length; ++i)
    {
       Real t = h * i;
-      if ((first_complement < 0) && (t < m_t_crossover))
-         first_complement = i;
+      if (t < m_t_crossover)
+         ++first_complement;
       temp[i] = t < m_t_crossover ? abscissa_at_t(t) : -abscissa_complement_at_t(t);
    }
    temp[m_inital_row_length] = -abscissa_complement_at_t(m_t_max);
