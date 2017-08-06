@@ -101,7 +101,6 @@ void print_levels(const T& v, const char* suffix)
 template <class T>
 void print_complement_indexes(const T& v)
 {
-   typedef typename T::value_type value_type;
    std::cout << "\n   {";
    for (unsigned i = 0; i < v.size(); ++i)
    {
@@ -193,21 +192,6 @@ template <class Real>
 Real get_convergence_tolerance()
 {
    return boost::math::tools::root_epsilon<Real>();
-}
-
-
-template<class Real>
-void test_detail()
-{
-    std::cout << "Testing tanh_sinh_detail on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    Real tol = sqrt(boost::math::tools::epsilon<Real>());
-    tanh_sinh_detail<Real, boost::math::policies::policy<> > integrator(20, boost::math::tools::epsilon<Real>());
-    auto f = [](const Real& x, const Real&) { return x*x; };
-    Real err;
-    Real L1;
-    Real Q = integrator.integrate(f, &err, &L1, 0, boost::math::tools::epsilon<Real>(), boost::math::tools::epsilon<Real>(), tol);
-    BOOST_CHECK_CLOSE_FRACTION(Q, 2*third<Real>(), tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, 2*third<Real>(), tol);
 }
 
 
@@ -588,7 +572,7 @@ template <class Real>
 void test_2_arg()
 {
    BOOST_MATH_STD_USING
-   std::cout << "Testing 2 argument functiors on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+   std::cout << "Testing 2 argument functors on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
    Real tol = 10 * boost::math::tools::epsilon<Real>();
 
    auto integrator = get_integrator<Real>();
@@ -658,7 +642,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 
 #ifdef TEST1
 
-    test_detail<float>();
     test_right_limit_infinite<float>();
     test_left_limit_infinite<float>();
     test_linear<float>();
@@ -676,7 +659,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 #ifdef TEST2
 
-    test_detail<double>();
     test_right_limit_infinite<double>();
     test_left_limit_infinite<double>();
     test_linear<double>();
@@ -696,7 +678,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 
 #ifdef TEST3
 
-    test_detail<long double>();
     test_right_limit_infinite<long double>();
     test_left_limit_infinite<long double>();
     test_linear<long double>();
@@ -716,7 +697,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 
 #ifdef TEST4
 
-    test_detail<cpp_bin_float_quad>();
     test_right_limit_infinite<cpp_bin_float_quad>();
     test_left_limit_infinite<cpp_bin_float_quad>();
     test_linear<cpp_bin_float_quad>();
@@ -741,7 +721,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 #ifdef TEST6
 
-    test_detail<boost::math::concepts::real_concept>();
     test_right_limit_infinite<boost::math::concepts::real_concept>();
     test_left_limit_infinite<boost::math::concepts::real_concept>();
     test_linear<boost::math::concepts::real_concept>();
@@ -763,7 +742,6 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #endif
 #if defined(TEST8) && defined(BOOST_HAS_FLOAT128)
 
-    test_detail<boost::multiprecision::float128>();
     test_right_limit_infinite<boost::multiprecision::float128>();
     test_left_limit_infinite<boost::multiprecision::float128>();
     test_linear<boost::multiprecision::float128>();

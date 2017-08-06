@@ -194,9 +194,10 @@ void test_right_limit_infinite()
     Q = integrator.integrate(f3, 10, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = boost::lexical_cast<Real>("-6.6976341310426674140007086979326069121526743314567805278252392932e-6");
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10 * tol);
+    // Integrating through zero risks precision loss:
     Q = integrator.integrate(f3, -10, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = boost::lexical_cast<Real>("-15232.3213626280525704332288302799653087046646639974940243044623285817777006");
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, std::numeric_limits<Real>::digits10 > 30 ? 1000 * tol : tol);
 
     auto f4 = [](Real t)->Real { return 1/(1+t*t); };
     Q = integrator.integrate(f4, 1, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);

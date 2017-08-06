@@ -15,7 +15,6 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/next.hpp>
 
-
 namespace boost{ namespace math{ namespace quadrature { namespace detail{
 
 
@@ -446,13 +445,17 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    }
 }
 
+#ifdef __GNUC__
+// Selective warning disabling via:
+// #pragma GCC diagnostic ignored "-Wliteral-range"
+// #pragma GCC diagnostic ignored "-Woverflow"
+// Seems not to work, so we're left with this:
+#pragma GCC system_header
+#endif
+
 template<class Real, class Policy>
 void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<1>&)
 {
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Woverflow"
-#endif
    m_inital_row_length = 4;
    m_abscissas.reserve(m_max_refinements + 1);
    m_weights.reserve(m_max_refinements + 1);
@@ -498,9 +501,6 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
 
    prune_to_min_complement(min_complement);
 
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 }
 
 template<class Real, class Policy>
@@ -555,10 +555,6 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
 template<class Real, class Policy>
 void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl::int_<3>&)
 {
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Woverflow"
-#endif
    m_inital_row_length = 9;
    m_abscissas.reserve(m_max_refinements + 1);
    m_weights.reserve(m_max_refinements + 1);
@@ -603,9 +599,6 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    m_t_crossover = t_from_abscissa_complement(Real(0.5));
 
    prune_to_min_complement(min_complement);
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 }
 
 #ifdef BOOST_HAS_FLOAT128
