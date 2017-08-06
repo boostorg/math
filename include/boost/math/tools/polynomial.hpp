@@ -254,12 +254,11 @@ quotient_remainder(const polynomial<T>& dividend, const polynomial<T>& divisor)
 
 
 template <class T>
-class polynomial :
-    equality_comparable< polynomial<T>,
-    dividable< polynomial<T>,
-    dividable2< polynomial<T>, T,
-    modable< polynomial<T>,
-    modable2< polynomial<T>, T > > > > >
+class polynomial : ordered_euclidean_ring_operators< polynomial<T> >
+    /* Provides operators +, -, *, /, % for two polynomials (using member += etc.);
+     * operators >, <=, >= using operator < ; and operator != using operator ==.
+     * Note that polynomials are not actually a euclidean ring when T is not
+     * a field type, in particular, if T is integral. */
 {
 public:
    // typedefs:
@@ -295,7 +294,7 @@ public:
       : m_data(p.m_data) { }
 
    template <class U>
-   polynomial(const polynomial<U>& p)
+   explicit polynomial(const polynomial<U>& p)
    {
       for(unsigned i = 0; i < p.size(); ++i)
       {
@@ -387,30 +386,37 @@ public:
    }
 
    template <class U>
-   polynomial& operator %=(const U& /*value*/)
+   polynomial& operator %=(const U& value)
    {
-       // We can always divide by a scalar, so there is no remainder:
-       this->set_zero();
+       // In the case that T is integral, this preserves the semantics
+       // p == r*(p/r) + (p % r), for polynomial<T> p and U r.
+       if (std::numeric_limits<T>::is_integer)
+       {
+           modulus(value);
+           normalize();
+       }
+       else
+       {
+           set_zero();
+       }
        return *this;
    }
 
-   template <class U>
-   polynomial& operator +=(const polynomial<U>& value)
+   polynomial& operator +=(const polynomial& value)
    {
       addition(value);
       normalize();
       return *this;
    }
 
-   template <class U>
-   polynomial& operator -=(const polynomial<U>& value)
+   polynomial& operator -=(const polynomial& value)
    {
        subtraction(value);
        normalize();
        return *this;
    }
-   template <class U>
-   polynomial& operator *=(const polynomial<U>& value)
+
+   polynomial& operator *=(const polynomial& value)
    {
       // TODO: FIXME: use O(N log(N)) algorithm!!!
       if (!value)
@@ -426,31 +432,28 @@ public:
       return *this;
    }
 
-   template <typename U>
-   polynomial& operator /=(const polynomial<U>& value)
+   polynomial& operator /=(const polynomial& value)
    {
        *this = quotient_remainder(*this, value).first;
        return *this;
    }
 
-   template <typename U>
-   polynomial& operator %=(const polynomial<U>& value)
+   polynomial& operator %=(const polynomial& value)
    {
        *this = quotient_remainder(*this, value).second;
        return *this;
    }
 
-   template <typename U>
-   polynomial& operator >>=(U const &n)
+   polynomial& operator >>=(int n)
    {
-       BOOST_ASSERT(n <= m_data.size());
+       BOOST_ASSERT(n >= 0 && static_cast<unsigned>(n) <= m_data.size());
        m_data.erase(m_data.begin(), m_data.begin() + n);
        return *this;
    }
 
-   template <typename U>
-   polynomial& operator <<=(U const &n)
+   polynomial& operator <<=(int n)
    {
+       BOOST_ASSERT(n >= 0);
        m_data.insert(m_data.begin(), n, static_cast<T>(0));
        normalize();
        return *this;
@@ -553,64 +556,59 @@ private:
         return *this;
     }
 
+    template <class U>
+    polynomial& modulus(const U& value)
+    {
+       typedef typename std::vector<T>::iterator iter;
+       for (iter it = m_data.begin(); it != m_data.end(); ++it)
+           *it -= T(value * T(*it / value));
+       return *this;
+    }
+    
     std::vector<T> m_data;
 };
 
 
-template <class T>
-inline polynomial<T> operator + (const polynomial<T>& a, const polynomial<T>& b)
+template <class T, class U>
+inline polynomial<T> operator + (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result += b;
-   return result;
-}
-
-template <class T>
-inline polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b)
-{
-   polynomial<T> result(a);
-   result -= b;
-   return result;
-}
-
-template <class T>
-inline polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b)
-{
-   polynomial<T> result(a);
-   result *= b;
-   return result;
+   a += b;
+   return a;
 }
 
 template <class T, class U>
-inline polynomial<T> operator + (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator - (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result += b;
-   return result;
+   a -= b;
+   return a;
 }
 
 template <class T, class U>
-inline polynomial<T> operator - (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator * (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result -= b;
-   return result;
+   a *= b;
+   return a;
 }
 
 template <class T, class U>
-inline polynomial<T> operator * (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator / (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result *= b;
-   return result;
+   a /= b;
+   return a;
+}
+
+template <class T, class U>
+inline polynomial<T> operator % (polynomial<T> a, const U& b)
+{
+   a %= b;
+   return a;
 }
 
 template <class U, class T>
-inline polynomial<T> operator + (const U& a, const polynomial<T>& b)
+inline polynomial<T> operator + (const U& a, polynomial<T> b)
 {
-   polynomial<T> result(b);
-   result += a;
-   return result;
+   b += a;
+   return b;
 }
 
 template <class U, class T>
@@ -622,51 +620,57 @@ inline polynomial<T> operator - (const U& a, const polynomial<T>& b)
 }
 
 template <class U, class T>
-inline polynomial<T> operator * (const U& a, const polynomial<T>& b)
+inline polynomial<T> operator * (const U& a, polynomial<T> b)
 {
-   polynomial<T> result(b);
-   result *= a;
-   return result;
+   b *= a;
+   return b;
 }
 
 template <class T>
-bool operator == (const polynomial<T> &a, const polynomial<T> &b)
+inline bool operator == (const polynomial<T> &a, const polynomial<T> &b)
 {
     return a.data() == b.data();
 }
 
-template <typename T, typename U>
-polynomial<T> operator >> (const polynomial<T>& a, const U& b)
+template <class T>
+inline bool operator < (const polynomial<T> &a, const polynomial<T> &b)
 {
-    polynomial<T> result(a);
-    result >>= b;
-    return result;
+    if (a.size() != b.size())
+        return a.size() < b.size();
+    return std::lexicographical_compare(a.data().rbegin(), a.data().rend(),
+                                        b.data().rbegin(), b.data().rend());
 }
 
-template <typename T, typename U>
-polynomial<T> operator << (const polynomial<T>& a, const U& b)
+template <typename T>
+inline polynomial<T> operator >> (polynomial<T> a, int b)
 {
-    polynomial<T> result(a);
-    result <<= b;
-    return result;
+    a >>= b;
+    return a;
+}
+
+template <typename T>
+inline polynomial<T> operator << (polynomial<T> a, int b)
+{
+    a <<= b;
+    return a;
 }
 
 // Unary minus (negate).
 template <class T>
-polynomial<T> operator - (polynomial<T> a)
+inline polynomial<T> operator - (polynomial<T> a)
 {
     std::transform(a.data().begin(), a.data().end(), a.data().begin(), std::negate<T>());
     return a;
 }
 
 template <class T>
-bool odd(polynomial<T> const &a)
+inline bool odd(polynomial<T> const &a)
 {
     return a.size() > 0 && a[0] != static_cast<T>(0);
 }
 
 template <class T>
-bool even(polynomial<T> const &a)
+inline bool even(polynomial<T> const &a)
 {
     return !odd(a);
 }

@@ -532,6 +532,63 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_pow, T, all_test_types )
     BOOST_CHECK_EQUAL(pow(one, 137), one);
 }
 
+BOOST_AUTO_TEST_CASE( test_mixed_consistency )
+{
+    polynomial<int> const a(d3a.begin(), d3a.end()); //3x^3 - 4x^2 - 6x + 10
+
+    BOOST_CHECK_EQUAL(a * 0.66667, a / 1.5);
+
+    polynomial<int> b(a);
+    b /= 1.5;
+    BOOST_CHECK_EQUAL(b, a / 1.5);
+
+}
+
+BOOST_AUTO_TEST_CASE( test_int_remainder )
+{
+    polynomial<int> const a(d3a.begin(), d3a.end()); //3x^3 - 4x^2 - 6x + 10
+    boost::array<int, 4> const x3c = {{0,0,0,1}};
+    boost::array<int, 4> const rem3c = {{1, 0, -1, 0}};
+    polynomial<int> x3(x3c.begin(), x3c.end());
+    polynomial<int> rem3(rem3c.begin(), rem3c.end());
+
+    BOOST_CHECK_EQUAL(a, 2*(a / 2) + (a % 2));
+    BOOST_CHECK_EQUAL(a, 3*(a / 3) + (a % 3));
+
+    BOOST_CHECK_EQUAL(a % 2, x3);
+    BOOST_CHECK_EQUAL(a % 3, rem3);
+}
+
+BOOST_AUTO_TEST_CASE( test_ordering )
+{
+    boost::array<double, 3> const g2c = {{-6, 1, 9}};
+    boost::array<polynomial<double>, 7> polys = {{
+      polynomial<double>(d2.begin(), d2.end()),   // 9x^2 - 6
+      polynomial<double>(g2c.begin(), g2c.end()), // 9x^2 + x - 6
+      polynomial<double>(d3b.begin(), d3b.end()), //  x^3 + 6x^2 + 5x - 7
+      polynomial<double>(d3a.begin(), d3a.end()), // 3x^3 - 4x^2 - 6x + 10
+      polynomial<double>(d6.begin(), d6.end()),   // 3x^6 + 5x^4 - 4x^2 - 9x + 21
+      polynomial<double>(d8.begin(), d8.end()), // x^8 + x^6 - 3x^4 - 3x^3 + 8x^2 + 2x - 5
+      polynomial<double>(d8b.begin(), d8b.end()) // x^8 + x^6 - 3x^4 - 3x^3 + 8x^2 + 2x
+    }};
+
+    for (unsigned i = 0; i < polys.size(); ++i)
+    {
+        BOOST_CHECK(!(polys[i] < polys[i]));
+        BOOST_CHECK(polys[i] <= polys[i]);
+        BOOST_CHECK(polys[i] >= polys[i]);
+        BOOST_CHECK(!(polys[i] > polys[i]));
+        for (unsigned j = i + 1; j < polys.size(); ++j)
+        {
+            BOOST_CHECK(polys[i] <= polys[j]);
+            BOOST_CHECK(!(polys[i] >= polys[j]));
+            BOOST_CHECK(polys[i] < polys[j]);
+            BOOST_CHECK(polys[j] > polys[i]);
+            BOOST_CHECK(polys[j] >= polys[i]);
+            BOOST_CHECK(!(polys[j] <= polys[i]));
+        }
+    }
+}
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_bool, T, all_test_types)
 {
