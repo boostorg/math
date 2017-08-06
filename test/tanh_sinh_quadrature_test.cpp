@@ -15,7 +15,7 @@
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/quadrature/tanh_sinh.hpp>
-//#include <boost/math/special_functions/sinc.hpp>
+#include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/math/special_functions/next.hpp>
@@ -66,6 +66,7 @@ using boost::multiprecision::cpp_bin_float_100;
 using boost::multiprecision::cpp_dec_float_50;
 using boost::multiprecision::cpp_dec_float_100;
 using boost::multiprecision::cpp_bin_float_quad;
+using boost::math::sinc_pi;
 using boost::math::quadrature::tanh_sinh;
 using boost::math::quadrature::detail::tanh_sinh_detail;
 using boost::math::constants::pi;
@@ -201,9 +202,9 @@ void test_linear()
     std::cout << "Testing linear functions are integrated properly by tanh_sinh on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = 10*boost::math::tools::epsilon<Real>();
     auto integrator = get_integrator<Real>();
-    auto f = [](const Real& x) 
-    { 
-       return 5*x + 7; 
+    auto f = [](const Real& x)
+    {
+       return 5*x + 7;
     };
     Real error;
     Real L1;
@@ -473,9 +474,9 @@ void test_nr_examples()
     Real L1;
     auto integrator = get_integrator<Real>();
 
-    auto f1 = [](Real x)->Real 
-    { 
-       return (sin(x * half<Real>()) * exp(-x) / x) / sqrt(x); 
+    auto f1 = [](Real x)->Real
+    {
+       return (sin(x * half<Real>()) * exp(-x) / x) / sqrt(x);
     };
     Q = integrator.integrate(f1, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = sqrt(pi<Real>()*(sqrt((Real) 5) - 2));
@@ -528,10 +529,58 @@ void test_crc()
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // CRC 636:
-    //auto f2 = [](Real x) { return sqrt(cos(x)); };
-    //Q = integrator.integrate(f2, (Real) 0, (Real) pi<Real>(), &error, &L1);
-    //Q_expected = pow(two_pi<Real>(), 3*half<Real>())/pow(tgamma(0.25), 2);
-    //BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    auto f2 = [](Real x)->Real { return sqrt(cos(x)); };
+    Q = integrator.integrate(f2, (Real) 0, (Real) half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+    Q_expected = pow(two_pi<Real>(), 3*half<Real>())/pow(tgamma((Real) 1/ (Real) 4), 2);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+
+    // CRC Section 5.5, integral 585:
+    for (int n = 0; n < 3; ++n) {
+        for (int m = 0; m < 3; ++m) {
+            auto f = [&](Real x)->Real { return pow(x, m)*pow(log(1/x), n); };
+            Q = integrator.integrate(f, (Real) 0, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
+            // Calculation of the tgamma function is not exact, giving spurious failures.
+            // Casting to cpp_bin_float_100 beforehand fixes most of them.
+            cpp_bin_float_100 np1 = n + 1;
+            cpp_bin_float_100 mp1 = m + 1;
+            Q_expected = static_cast<Real>(tgamma(np1)/pow(mp1, np1));
+            BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 3*tol);
+        }
+    }
+
+    // CRC Section 5.5, integral 591
+    // The parameter p allows us to control the strength of the singularity.
+    // Rapid convergence is not guaranteed for this function, as the branch cut makes it non-analytic on a disk.
+    for (Real p = -0.99; p < 1; p += 0.1) {
+        auto f = [&](Real x)->Real { return pow(x, p)/pow(1-x, p); };
+        Q = integrator.integrate(f, (Real) 0, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = 1/sinc_pi(p*pi<Real>());
+        //BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    }
+
+    // CRC Section 5.5, integral 635
+    for (int m = 0; m < 10; ++m) {
+        auto f = [&](Real x)->Real { return 1/(1 + pow(tan(x), m)); };
+        Q = integrator.integrate(f, (Real) 0, (Real) half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = half_pi<Real>()/2;
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 2*tol);
+    }
+
+    // CRC Section 5.5, integral 637:
+    for (Real h = 0.01; h < 1; h += 0.1) {
+        auto f = [&](Real x)->Real { return pow(tan(x), h); };
+        Q = integrator.integrate(f, (Real) 0, half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+        Q_expected = half_pi<Real>()/cos(h*half_pi<Real>());
+        //BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    }
+
+    // CRC Section 5.5, integral 670:
+
+    auto f3 = [](Real x)->Real { return sqrt(log(1/x)); };
+    Q = integrator.integrate(f3, (Real) 0, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
+    Q_expected = root_pi<Real>()/2;
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+
 }
 
 template <class Real>
@@ -583,36 +632,36 @@ void test_2_arg()
    // which have all the interesting behaviour near the 2 singularities
    // and all converge, see: http://www.wolframalpha.com/input/?i=integrate+(x+*+(1-x))%5E-1%2FN+from+0+to+1
    //
-   Real Q = integrator.integrate([&](const Real& t, const Real & tc)->Real 
-   { 
-      return tc < 0 ? 1 / sqrt(t * (1-t)) : 1 / sqrt(t * tc); 
+   Real Q = integrator.integrate([&](const Real& t, const Real & tc)->Real
+   {
+      return tc < 0 ? 1 / sqrt(t * (1-t)) : 1 / sqrt(t * tc);
    }, 0, 1);
    BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::constants::pi<Real>(), tol);
-   Q = integrator.integrate([&](const Real& t, const Real & tc)->Real 
-   { 
+   Q = integrator.integrate([&](const Real& t, const Real & tc)->Real
+   {
       return tc < 0 ? 1 / boost::math::cbrt(t * (1-t)) : 1 / boost::math::cbrt(t * tc);
    }, 0, 1);
    BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::pow<2>(boost::math::tgamma(Real(2) / 3)) / boost::math::tgamma(Real(4) / 3), tol * 3);
    //
    // We can do the same thing with ((1+x)(1-x))^-N ; N < 1
    //
-   Q = integrator.integrate([&](const Real& t, const Real & tc)->Real 
-   { 
+   Q = integrator.integrate([&](const Real& t, const Real & tc)->Real
+   {
       return t < 0 ? 1 / sqrt(-tc * (1-t)) : 1 / sqrt((t + 1) * tc);
    }, -1, 1);
    BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::constants::pi<Real>(), tol);
-   Q = integrator.integrate([&](const Real& t, const Real & tc)->Real 
-   { 
+   Q = integrator.integrate([&](const Real& t, const Real & tc)->Real
+   {
       return t < 0 ? 1 / sqrt(-tc * (1-t)) : 1 / sqrt((t + 1) * tc);
    });
    BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::constants::pi<Real>(), tol);
-   Q = integrator.integrate([&](const Real& t, const Real & tc)->Real 
-   { 
+   Q = integrator.integrate([&](const Real& t, const Real & tc)->Real
+   {
       return t < 0 ? 1 / boost::math::cbrt(-tc * (1-t)) : 1 / boost::math::cbrt((t + 1) * tc);
    }, -1, 1);
    BOOST_CHECK_CLOSE_FRACTION(Q, sqrt(boost::math::constants::pi<Real>()) * boost::math::tgamma(Real(2) / 3) / boost::math::tgamma(Real(7) / 6), tol * 10);
-   Q = integrator.integrate([&](const Real& t, const Real & tc)->Real 
-   { 
+   Q = integrator.integrate([&](const Real& t, const Real & tc)->Real
+   {
       return t < 0 ? 1 / boost::math::cbrt(-tc * (1-t)) : 1 / boost::math::cbrt((t + 1) * tc);
    });
    BOOST_CHECK_CLOSE_FRACTION(Q, sqrt(boost::math::constants::pi<Real>()) * boost::math::tgamma(Real(2) / 3) / boost::math::tgamma(Real(7) / 6), tol * 10);
@@ -765,4 +814,3 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 int main() { return 0; }
 
 #endif
-
