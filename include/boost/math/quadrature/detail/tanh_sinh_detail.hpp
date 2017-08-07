@@ -113,6 +113,7 @@ private:
 #endif
 
       using std::ldexp;
+      using std::ceil;
       ++m_committed_refinements;
 #ifndef BOOST_MATH_NO_ATOMIC_INT
       std::size_t row = m_committed_refinements.load();
@@ -121,6 +122,9 @@ private:
 #endif
       Real h = ldexp(Real(1), -static_cast<int>(row));
       std::size_t first_complement = 0;
+      std::size_t n = boost::math::itrunc(ceil((m_t_max - h) / (2 * h)));
+      m_abscissas[row].reserve(n);
+      m_weights[row].reserve(n);
       for (Real pos = h; pos < m_t_max; pos += 2 * h)
       {
          if (pos < m_t_crossover)
@@ -349,7 +353,7 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
         // parameters.  We could keep hunting until we find something, but that would handicap
         // integrals which really are zero.... so a compromise then!
         //
-        if ((k > 4) && (err <= tolerance*L1_I1))
+        if (err <= tolerance*L1_I1)
         {
             break;
         }

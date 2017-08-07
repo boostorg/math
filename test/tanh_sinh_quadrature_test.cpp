@@ -319,7 +319,7 @@ void test_three_quadrature_schemes_examples()
     auto f2 = [](const Real& t) { return t*t*atan(t); };
     Q = integrator.integrate(f2, (Real) 0 , (Real) 1);
     Q_expected = (pi<Real>() -2 + 2*ln_two<Real>())/12;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 2 * tol);
 
     // Example 3:
     auto f3 = [](const Real& t) { return exp(t)*cos(t); };
@@ -525,7 +525,7 @@ void test_crc()
     auto f1 = [](Real x)->Real { Real t = log(1/x); return x*x*t*t*t; };
     Q = integrator.integrate(f1, (Real) 0, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = (Real) 2/ (Real) 27;
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 3 * tol);
 
     // CRC 636:
     //auto f2 = [](Real x) { return sqrt(cos(x)); };
@@ -546,7 +546,20 @@ void test_sf()
    // incomplete beta:
    if (std::numeric_limits<Real>::digits10 < 37) // Otherwise too slow
    {
-      BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([](Real x)->Real { return boost::math::ibeta_derivative(100, 15, x); }, 0, Real(0.25)), boost::math::ibeta(100, 15, Real(0.25)), tol * 10);
+      Real a(100), b(15);
+      auto f = [&](Real x)->Real { return boost::math::ibeta_derivative(a, b, x); };
+      BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f, 0, Real(0.25)), boost::math::ibeta(100, 15, Real(0.25)), tol * 10);
+      // Check some really extreme versions:
+      a = 1000;
+      b = 500;
+      BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f, 0, 1), Real(1), tol * 10);
+      //
+      // This is as extreme as we can get in this domain: otherwise the function has all it's 
+      // area so close to zero we never get in there no matter how many levels we go down:
+      //
+      a = Real(1) / 15;
+      b = 30;
+      BOOST_CHECK_CLOSE_FRACTION(integrator.integrate(f, 0, 1), Real(1), tol * 25);
    }
 
    Real x = 2, y = 3, z = 0.5, p = 0.25;
