@@ -260,6 +260,11 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
     Real I1 = I0;
     Real L1_I1 = L1_I0;
     Real err = 0;
+    //
+    // thrash_count is a heuristic - it counts how many time the error has actually increased
+    // rather than descreased, if this gets too high we abort...
+    //
+    unsigned thrash_count = 0;
 
     while (k < 4 || (k < m_weights.size() && k < m_max_refinements) )
     {
@@ -337,12 +342,26 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
         I1 += sum*h;
         L1_I1 += absum*h;
         ++k;
+        Real last_err = err;
         err = abs(I0 - I1);
         // std::cout << "Estimate:        " << I1 << " Error estimate at level " << k  << " = " << err << std::endl;
 
         if (!(boost::math::isfinite)(I1))
         {
             return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point at got %1%. Please narrow the bounds of integration or check your function for singularities.", I1, Policy());
+        }
+        //
+        // If the error is increasing, and we're past level 4, something bad is very likely happening:
+        //
+        if ((err > last_err) && (k > 4) && (++thrash_count > 1))
+        {
+           // We could raise an evaluation_error, but since we likely have some sort of result, just return the last one
+           // (ie before the error started going up)
+           I1 = I0;
+           L1_I1 = L1_I0;
+           --k;
+           err = last_err;
+           break;
         }
         //
         // Termination condition:
