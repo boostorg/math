@@ -212,6 +212,9 @@
 [template plusmn[]'''&#xB1;'''] [/ plus-minus sign = plus-or-minus sign ]
 [template micro[]'''&#xB5;'''] [/ micro sign ]
 [template cedil[]'''&#xB8;'''] [/  cedilla = spacing cedilla  ]
+[template ccedil[]'''&#xE7;'''] [/  small c with cedilla ]
+[template Ccedil[]'''&#xE7;'''] [/  capial C with cedilla ]
+
 [template ordm[]'''&#xBA;'''] [/ masculine ordinal indicator ]
 [template ordf[]'''&#xAA;'''] [/ feminine ordinal indicator ]
 [template laquo[]'''&#xAB;'''] [/ left-pointing double angle quotation mark = left pointing guillemet ]

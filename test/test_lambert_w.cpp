@@ -20,7 +20,7 @@
 #include <boost/multiprecision/cpp_dec_float.hpp> // boost::multiprecision::cpp_dec_float_50
 using boost::multiprecision::cpp_dec_float_50;
 
-#include <boost/multiprecision/cpp_bin_float.hpp> 
+#include <boost/multiprecision/cpp_bin_float.hpp>
 
 #ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp> // Not available for MSVC.
@@ -28,7 +28,7 @@ using boost::multiprecision::cpp_dec_float_50;
 
 #include <boost/fixed_point/fixed_point.hpp>
 
-//#define BOOST_MATH_INSTRUMENT_LAMBERT_W  // #define only for Lambert_w diagnostic output.
+          fine BOOST_MATH_INSTRUMENT_LAMBERT_W  // #define only for Lambert_w diagnostic output.
 #include <boost/math/special_functions/lambert_w.hpp> // For Lambert W lambert_w function.
 using boost::math::lambert_w;
 #include <boost/math/special_functions/fpclassify.hpp> // isnan, ifinite.
@@ -159,7 +159,7 @@ void test_spots(RealType)
   RealType singular_value = -exp_minus_one<RealType>();
   // -exp(-1) = -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527
   // lambert_w[-0.367879441171442321595523770161460867445811131031767834] == -1
-  //           -0.36787945032119751 
+  //           -0.36787945032119751
   RealType minus_one_value = BOOST_MATH_TEST_VALUE(RealType, -1.);
   //std::cout << "singular_value " << singular_value << ", expected Lambert W = " << minus_one_value << std::endl;
 
@@ -248,7 +248,7 @@ void test_spots(RealType)
   // 'boost::multiprecision::detail::expression<boost::multiprecision::detail::negate,boost::multiprecision::number<boost::multiprecision::backends::cpp_dec_float<50,int32_t,void>,boost::multiprecision::et_on>,void,void,void>'
   // : no appropriate default constructor available
   // TODO ???????????
-/* 
+/*
   if (std::numeric_limits<RealType>::is_specialized)
   { // Check +/- values near to zero.
     BOOST_CHECK_CLOSE_FRACTION(lambert_w(std::numeric_limits<RealType>::epsilon()),
@@ -259,7 +259,7 @@ void test_spots(RealType)
         BOOST_MATH_TEST_VALUE(RealType, 0.0),
         tolerance);
   } // is_specialized
-  
+
   // Check infinite if possible.
   if (std::numeric_limits<RealType>::has_infinity)
   {
@@ -315,7 +315,7 @@ BOOST_AUTO_TEST_CASE(test_types)
   //  test_spots(0.0L); // long double
   //}
   // Built-in/fundamental Quad 128-bit type, if available.
-  #ifdef BOOST_HAS_FLOAT128
+#ifdef BOOST_HAS_FLOAT128
   test_spots(static_cast<boost::multiprecision::float128>(0));
 #endif
 
@@ -326,7 +326,7 @@ BOOST_AUTO_TEST_CASE(test_types)
 
   // Fixed-point types:
 
-  // Some fail 0.1 to 1.0 ??? 
+  // Some fail 0.1 to 1.0 ???
   //test_spots(static_cast<boost::fixed_point::negatable<15,-16> >(0));
   // fixed_point::negatable<15,-16> has range 1.52587891e-05 to 32768, epsilon 3.05175781e-05
 
@@ -350,7 +350,7 @@ BOOST_AUTO_TEST_CASE(test_range_of_values)
   // So this section just tests a single type, say IEEE 64-bit double, for a range of spot values.
 
   typedef double RealType;
-  
+
   int epsilons = 2;
   RealType tolerance = boost::math::tools::epsilon<RealType>() * epsilons; // 2 eps as a fraction.
   std::cout << "Tolerance " << epsilons  << " * epsilon == " << tolerance << std::endl;
@@ -358,7 +358,7 @@ BOOST_AUTO_TEST_CASE(test_range_of_values)
   BOOST_CHECK_CLOSE_FRACTION(lambert_w(BOOST_MATH_TEST_VALUE(RealType, 1.0e-6)),
     BOOST_MATH_TEST_VALUE(RealType, 9.9999900000149999733333854165586669000967020964243e-7),
     // Output from https://www.wolframalpha.com/input/ N[lambert_w[1e-6],50])
-    tolerance);  
+    tolerance);
   BOOST_CHECK_CLOSE_FRACTION(lambert_w(BOOST_MATH_TEST_VALUE(RealType, 0.0001)),
     BOOST_MATH_TEST_VALUE(RealType, 0.000099990001499733385405869000452213835767629477903460),
     // Output from https://www.wolframalpha.com/input/ N[lambert_w[0.001],50])
@@ -436,14 +436,14 @@ BOOST_AUTO_TEST_CASE(test_range_of_values)
     BOOST_MATH_TEST_VALUE(RealType, 11.383358086140052622000156781585004289033774706019),
     // Output from https://www.wolframalpha.com/input/?i=lambert_w(1e6)
     tolerance); //
- 
+
   // Tests for double only near the max and the singularity where Lambert_w estimates are less precise.
-  // 
+  //
   if (std::numeric_limits<RealType>::is_specialized)
   {
     // Check near std::numeric_limits<>::max() for type.
 
-    //std::cout << std::setprecision(std::numeric_limits<RealType>::max_digits10) 
+    //std::cout << std::setprecision(std::numeric_limits<RealType>::max_digits10)
     //  << (std::numeric_limits<double>::max)() // == 1.7976931348623157e+308
     //  << " " << (std::numeric_limits<double>::max)() / 4  // == 4.4942328371557893e+307
     //  << std::endl;

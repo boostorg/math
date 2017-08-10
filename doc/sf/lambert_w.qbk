@@ -57,7 +57,22 @@ but never more accurate than `1 - sqrt(epsilon)`, for `double`, about 0.99999999
 
 [h4:implemention Implementation]
 
-This real-only implementation is based on an algorithm by__Luu_thesis,
+There are many previous implementations with increasing accuracy and speed.
+
+For most of the range of arguments, some initial approximation is followed by a single refinement,
+often using Halley or similar method, gives a useful precision.
+For the most precise results possible, for C++ the nearest representation,
+iterative refinements using Halley's method are needed,
+perhaps using a higher precision type for intermediate computation,
+finally casting back to the smaller desired result type.
+This scheme is used, for example, using arbitrary precision arithmetic by Maple and Wolfram.
+
+For argument values near the singularity and near zero, other approximations are often used,
+possibly followed by refinement.
+
+
+
+One real-only implementation is based on an algorithm by__Luu_thesis,
 (see routine 11 on page 98 for his Lambert W algorithm).
 
 This implementation is based on Thomas Luu's code posted at
@@ -81,6 +96,37 @@ but concluded that since Newton/Raphson's method takes typically 6 iterations to
 whereas Halley usually takes only 1 to 3 iterations to achieve an result within 1 __ULP,
 so Newton/Raphson's method unlikely to be quicker
 than the additional cost of computating the 2nd derivative for Halley's method.
+
+[h4:faster_implementation Implementing Faster Algorithms]
+
+Many applications of the Lambert W function make repeated evaluations for Monte Carlo methods,
+for which applications, speed is important.
+Luu and Chapeau-Blondeau and Monir provide typical usage examples.
+
+A more recent paper by Fukushima makes important observation that much of the execution time of all
+previous iterative algorithms was spent evaluating transcendental functions, mainly exp.
+He has put a lot of work into avoiding any slow transcendental functions using lookup tables,
+bisection followed by a single Schroeder refinement.
+Theoretical and practical tests confirm that this gives results with a known error bound.
+
+For types more precise than double, he shows that it is best to use the double estimate
+as a starting point for refinement using Halley or other methods.
+
+For the less well-behaved regions for arguments near zero and near the singularity at -1/e,
+some series functions are provided.
+
+However, though these give results within several epsilon of the nearest representable result,
+they do not get as close as is possible further refinement, usually within one or two epsilon.
+
+So, as usual, there is a compromise between execution speed and accuracy.
+
+To allow users more control, this implementation provides the best possible accuracy by default,
+(Boost.Math generally prefers accuracy over speed)
+but will stop at intermediate stages if the precision specifies in the policy has been met,
+perhaps halving the execution time.
+
+
+
 
 The implementation details are in [@../../include/boost/math/special_functions/lambert_w.hpp lambert_w.hpp]
 
@@ -117,7 +163,7 @@ Initial guesses based on:
 
 # D.A. Barry, J.-Y. Parlange, L. Li, H. Prommer, C.J. Cunningham, and
 F. Stagnitti. Analytical approximations for real values of the Lambert
-W-function. Mathematics and Computers in Simulation, 53(1):95-103, 2000.
+W-function. Mathematics and Computers in Simulation, 53(1), 95-103 (2000).
 
 # D.A. Barry, J.-Y. Parlange, L. Li, H. Prommer, C.J. Cunningham, and
 F. Stagnitti. Erratum to analytical approximations for real values of the
@@ -131,6 +177,12 @@ A PDF of the full [@http://www.paper.edu.cn/scholar/downpaper/liling116674-20121
 
 # Having Fun with Lambert W(x) Function, Darko Veberic
 University of Nova Gorica, Slovenia IK, Forschungszentrum Karlsruhe, Germany, J. Stefan Institute, Ljubljana, Slovenia.
+
+# Fran[ccedil]ois Chapeau-Blondeau and Abdelilah Monir, Numerical Evaluation of the Lambert W Function and Application to Generation of Generalized
+Gaussian Noise With Exponent 1/2, IEEE Transactions on Signal Processing, 50(9) (2002) 2160 - 2165.
+
+# Toshio Fukushima, Precise and fast computation of Lambert W-functions without transcendental function evaluations, Journal of Computational and Applied
+Mathematics, 244 (2013) 77-89.
 
 [endsect] [/section:lambert_w Lambert W function]
 
