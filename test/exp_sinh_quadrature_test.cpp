@@ -16,6 +16,7 @@
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/math/special_functions/next.hpp>
 #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/sinc.hpp>
 #include <boost/type_traits/is_class.hpp>
 
 using std::exp;
@@ -431,6 +432,42 @@ void test_crc()
     Q = integrator.integrate(f6, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = -boost::math::constants::root_pi<Real>()*(boost::math::constants::euler<Real>() + 2*ln_two<Real>())/4;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+
+    // CRC Section 5.5, integral 591
+    // The parameter p allows us to control the strength of the singularity.
+    // Rapid convergence is not guaranteed for this function, as the branch cut makes it non-analytic on a disk.
+    // This converges only when our test type has an extended exponent range as all the area of the integral
+    // occurs so close to 0 (or 1) that we need abscissa values exceptionally small to find it.
+    // "There's a lot of room at the bottom".
+    // This version is transformed via argument substitution (exp(-x) for x) so that the integral is spread
+    // over (0, INF).
+    tol *= boost::math::tools::digits<Real>() > 100 ? 100000 : 75;
+    for (Real pn = 99; pn > 0; pn -= 10) {
+       Real p = pn / 100;
+       auto f = [&](Real x)->Real
+       {
+          return exp(-x * (1 - p) + p * log(-boost::math::expm1(-x)));
+       };
+       Q = integrator.integrate(f, get_convergence_tolerance<Real>(), &error, &L1);
+       Q_expected = 1 / boost::math::sinc_pi(p*pi<Real>());
+       /*
+       std::cout << std::setprecision(std::numeric_limits<Real>::max_digits10) << p << std::endl;
+       std::cout << std::setprecision(std::numeric_limits<Real>::max_digits10) << Q << std::endl;
+       std::cout << std::setprecision(std::numeric_limits<Real>::max_digits10) << Q_expected << std::endl;
+       std::cout << fabs((Q - Q_expected) / Q_expected) << std::endl;
+       */
+       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    }
+    // and for p < 1:
+    for (Real p = -0.99; p < 0; p += 0.1) {
+       auto f = [&](Real x)->Real
+       {
+          return exp(-p * log(-boost::math::expm1(-x)) - (1 + p) * x);
+       };
+       Q = integrator.integrate(f, get_convergence_tolerance<Real>(), &error, &L1);
+       Q_expected = 1 / boost::math::sinc_pi(p*pi<Real>());
+       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    }
 }
 
 

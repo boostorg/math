@@ -531,19 +531,20 @@ void test_crc()
     // CRC 636:
     auto f2 = [](Real x)->Real { return sqrt(cos(x)); };
     Q = integrator.integrate(f2, (Real) 0, (Real) half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = pow(two_pi<Real>(), 3*half<Real>())/pow(tgamma((Real) 1/ (Real) 4), 2);
+    //Q_expected = pow(two_pi<Real>(), 3*half<Real>())/pow(boost::math::tgamma((Real) 1/ (Real) 4), 2);
+    Q_expected = boost::lexical_cast<Real>("1.198140234735592207439922492280323878227212663215651558263674952946405214143915670835885556489793389375907225");
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // CRC Section 5.5, integral 585:
     for (int n = 0; n < 3; ++n) {
         for (int m = 0; m < 3; ++m) {
-            auto f = [&](Real x)->Real { return pow(x, m)*pow(log(1/x), n); };
+            auto f = [&](Real x)->Real { return pow(x, Real(m))*pow(log(1/x), Real(n)); };
             Q = integrator.integrate(f, (Real) 0, (Real) 1, get_convergence_tolerance<Real>(), &error, &L1);
             // Calculation of the tgamma function is not exact, giving spurious failures.
             // Casting to cpp_bin_float_100 beforehand fixes most of them.
             cpp_bin_float_100 np1 = n + 1;
             cpp_bin_float_100 mp1 = m + 1;
-            Q_expected = static_cast<Real>(tgamma(np1)/pow(mp1, np1));
+            Q_expected = boost::lexical_cast<Real>((tgamma(np1)/pow(mp1, np1)).str());
             BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
         }
     }
@@ -551,6 +552,10 @@ void test_crc()
     // CRC Section 5.5, integral 591
     // The parameter p allows us to control the strength of the singularity.
     // Rapid convergence is not guaranteed for this function, as the branch cut makes it non-analytic on a disk.
+    // This converges only when our test type has an extended exponent range as all the area of the integral
+    // occurs so close to 0 (or 1) that we need abscissa values exceptionally small to find it.
+    // "There's a lot of room at the bottom".
+    // We also use a 2 argument functor so that 1-x is evaluated accurately:
     if (std::numeric_limits<Real>::max_exponent > std::numeric_limits<double>::max_exponent)
     {
        for (Real p = -0.99; p < 1; p += 0.1) {
@@ -564,20 +569,97 @@ void test_crc()
           BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10 * tol);
        }
     }
+    // There is an alternative way to evaluate the above integral: by noticing that all the area of the integral
+    // is near zero for p < 0 and near 1 for p > 0 we can substitute exp(-x) for x and remap the integral to the
+    // domain (0, INF).  Internally we need to expand out the terms and evaluate using logs to avoid spurous overflow, 
+    // this gives us
+    // for p > 0:
+    for (Real p = 0.99; p > 0; p -= 0.1) {
+       auto f = [&](Real x)->Real
+       {
+          return exp(-x * (1 - p) + p * log(-boost::math::expm1(-x)));
+       };
+       Q = integrator.integrate(f, 0, boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+       Q_expected = 1 / sinc_pi(p*pi<Real>());
+       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10 * tol);
+    }
+    // and for p < 1:
+    for (Real p = -0.99; p < 0; p += 0.1) {
+       auto f = [&](Real x)->Real
+       {
+          return exp(-p * log(-boost::math::expm1(-x)) - (1 + p) * x);
+       };
+       Q = integrator.integrate(f, 0, boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+       Q_expected = 1 / sinc_pi(p*pi<Real>());
+       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10 * tol);
+    }
+
     // CRC Section 5.5, integral 635
     for (int m = 0; m < 10; ++m) {
         auto f = [&](Real x)->Real { return 1/(1 + pow(tan(x), m)); };
-        Q = integrator.integrate(f, (Real) 0, (Real) half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+        Q = integrator.integrate(f, (Real) 0, half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = half_pi<Real>()/2;
         BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     }
 
     // CRC Section 5.5, integral 637:
-    for (Real h = 0.01; h < 1; h += 0.1) {
-        auto f = [&](Real x)->Real { return pow(tan(x), h); };
+    //
+    // When h gets very close to 1, the strength of the singularity gradually increases until we
+    // no longer have enough exponent range to evaluate the integral....
+    // We also have to use the 2-argument functor version of the integrator to avoid
+    // cancellation error, since the singularity is near PI/2.
+    //
+    Real limit = std::numeric_limits<Real>::max_exponent > std::numeric_limits<double>::max_exponent
+       ? .95f : .85f;
+    for (Real h = 0.01; h < limit; h += 0.1) {
+        auto f = [&](Real x, Real xc)->Real { return xc > 0 ? pow(1/tan(xc), h) : pow(tan(x), h); };
         Q = integrator.integrate(f, (Real) 0, half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = half_pi<Real>()/cos(h*half_pi<Real>());
-        //BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
+    }
+    // CRC Section 5.5, integral 637:
+    //
+    // Over again, but with argument transformation, we want:
+    //
+    // Integral of tan(x)^h over (0, PI/2)
+    //
+    // Note that the bulk of the area is next to the singularity at PI/2,
+    // so we'll start by replacing x by PI/2 - x, and that tan(PI/2 - x) == 1/tan(x)
+    // so we now have:
+    //
+    // Integral of 1/tan(x)^h over (0, PI/2)
+    //
+    // Which is almost the ideal form, except that when h is very close to 1
+    // we run out of exponent range in evaluating the integral arbitrarily close to 0.
+    // So now we substitute exp(-x) for x: this stretches out the range of the
+    // integral to (-log(PI/2), +INF) with the singularity at +INF giving:
+    //
+    // Integral of exp(-x)/tan(exp(-x))^h over (-log(PI/2), +INF)
+    //
+    // We just need a way to evaluate the function without spurious under/overflow
+    // in the exp terms.  Note that for small x: tan(x) ~= x, so making this
+    // substitution and evaluating by logs we have:
+    //
+    // exp(-x)/tan(exp(-x))^h ~= exp((h - 1) * x)  for x > -log(epsion);
+    //
+    // Here's how that looks in code:
+    //
+    for (Real i = 80; i < 100; ++i) {
+       Real h = i / 100;
+       auto f = [&](Real x)->Real 
+       { 
+          if (x > -log(boost::math::tools::epsilon<Real>()))
+             return exp((h - 1) * x);
+          else
+          {
+             Real et = exp(-x);
+             // Need to deal with numeric instability causing et to be greater than PI/2:
+             return et >= boost::math::constants::half_pi<Real>() ? 0 : et * pow(1 / tan(et), h);
+          }
+       };
+       Q = integrator.integrate(f, -log(half_pi<Real>()), boost::math::tools::max_value<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
+       Q_expected = half_pi<Real>() / cos(h*half_pi<Real>());
+       BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 5 * tol);
     }
 
     // CRC Section 5.5, integral 670:
