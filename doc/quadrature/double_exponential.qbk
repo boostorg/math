@@ -372,6 +372,59 @@ both integrators thrash around trying to reach the target accuracy, but never ac
 simple expedient of breaking the integral into two domains: (a, 0) and (0, b) and integrating each seperately using the tanh-sinh
 integrator, works just fine.
 
+Finally, some endpoint singularities are too strong to be handled by tanh_sinh or equivalent methods, for example consider integrating
+the function:
+
+   double p = some_value;
+   tanh_sinh<double> integrator;
+   auto f = [&](double x){ return pow(tan(x), p); };
+   auto Q = integrator.integrate(f, 0, constants::half_pi<double>());
+
+The first problem with this function, is that the singularity is at [pi]/2, so if we're integrating over (0, [pi]/2) then we can never
+approach closer to the singularity than [epsilon], and for p less than but close to 1, we need to get ['very] close to the singularity
+to find all the area under the function.  If we recall the identity [^tan([pi]/2 - x) == 1/tan(x)] then we can rewrite the function like this:
+
+   auto f = [&](double x){ return pow(tan(x), -p); };
+
+And now the singularity is at the origin and we can get much closer to it when evaluating the integral: all we have done is swap the
+integral endpoints over.
+
+This actually works just fine for p < 0.95, but after that the tanh_sinh integrator starts thrashing around and is unable to
+converge on the integral.  The problem is actually a lack of exponent range: if we simply swap type double for something
+with a greater exponent range (an 80-bit long double or a quad precision type), then we can get to at least p = 0.99.  If we want to go
+beyond that, or stick with type double, then we have to get smart.
+
+The easiest method is to notice that for small x, then [^tan(x) [cong] x], and so we are simply integrating x[super -p].  Therefore we can use
+this approximation over (0, small), and integrate numerically from (small, [pi]/2), using [epsilon] as a suitable crossover point
+seems sensible:
+
+   double p = some_value;
+   double crossover = std::numeric_limits<double>::epsilon();
+   tanh_sinh<double> integrator;
+   auto f = [&](double x){ return pow(tan(x), p); };
+   auto Q = integrator.integrate(f, crossover, constants::half_pi<double>()) + pow(crossover, 1 - p) / (1 - p);
+
+There is an alternative, more complex method, which is applicable when we are dealing with expressions which can be simplified
+by evaluating by logs.  Let's suppose that as in this case, all the area under the graph is infinitely close to zero, now inagine
+that we could expand that region out over a much larger range of abscissa values: that's exactly what happens if we perform
+argument substitution, replacing `x` by `exp(-x)` (note that we must also multiply by the derivative of `exp(-x)`).  
+Now the singularity at zero is moved to +[infin], and the [pi]/2 bound to
+-log([pi]/2).  Initially our argument substituted function looks like:
+
+   auto f = [&](double x){ return exp(-x) * pow(tan(exp(-x)), -p); };
+
+Which is hardly any better, as we still run out of exponent range just as before.  However, if we replace `tan(exp(-x))` by `exp(-x)` for suitably
+small `exp(-x)`, and therefore [^x > -log([epsilon])], we can greatly simplify the expression and evaluate by logs:
+
+   auto f = [&](double x)
+   {
+      static const double crossover = -log(std::numeric_limits<double>::epsilon());
+      return x > crossover ? exp((p - 1) * x) : exp(-x) * pow(tan(exp(-x)), -p); 
+   };
+
+This form integrates just fine over (-log([pi]/2), +[infin]) using either the tanh_sinh or exp_sinh classes.
+
+
 [endsect]
 
 [section:de_refes References]
