@@ -32,7 +32,8 @@
 #pragma warning(disable:4127)  // Conditional expression is constant
 #endif
 
-#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7) && !defined(TEST8)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7) && !defined(TEST8)\
+    && !defined(TEST1A) && !defined(TEST2A) && !defined(TEST3A) && !defined(TEST6A)
 #  define TEST1
 #  define TEST2
 #  define TEST3
@@ -41,6 +42,10 @@
 #  define TEST6
 #  define TEST7
 #  define TEST8
+#  define TEST1A
+#  define TEST2A
+#  define TEST3A
+#  define TEST6A
 #endif
 
 using std::expm1;
@@ -806,13 +811,14 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_horrible<float>();
     test_integration_over_real_line<float>();
     test_nr_examples<float>();
+#endif
+#ifdef TEST1A
     test_early_termination<float>();
     test_crc<float>();
     test_2_arg<float>();
 
 #endif
 #ifdef TEST2
-
     test_right_limit_infinite<double>();
     test_left_limit_infinite<double>();
     test_linear<double>();
@@ -824,10 +830,11 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_integration_over_real_line<double>();
     test_nr_examples<double>();
     test_early_termination<double>();
-    test_crc<double>();
     test_sf<double>();
     test_2_arg<double>();
-
+#endif
+#ifdef TEST2A
+    test_crc<double>();
 #endif
 
 #ifdef TEST3
@@ -843,9 +850,11 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_integration_over_real_line<long double>();
     test_nr_examples<long double>();
     test_early_termination<long double>();
-    test_crc<long double>();
     test_sf<long double>();
     test_2_arg<long double>();
+#endif
+#ifdef TEST3A
+    test_crc<long double>();
 
 #endif
 
@@ -886,9 +895,11 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_integration_over_real_line<boost::math::concepts::real_concept>();
     test_nr_examples<boost::math::concepts::real_concept>();
     test_early_termination<boost::math::concepts::real_concept>();
-    test_crc<boost::math::concepts::real_concept>();
     test_sf<boost::math::concepts::real_concept>();
     test_2_arg<boost::math::concepts::real_concept>();
+#endif
+#ifdef TEST6A
+    test_crc<boost::math::concepts::real_concept>();
 
 #endif
 #ifdef TEST7

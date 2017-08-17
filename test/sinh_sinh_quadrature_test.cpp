@@ -158,8 +158,11 @@ void test_nr_examples()
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1900)
+    auto f2 = [](const Real& x) { return x > boost::math::tools::log_max_value<Real>() ? 0 : exp(-x*x); };
+#else
     auto f2 = [](const Real& x) { return exp(-x*x); };
+#endif
     Q = integrator.integrate(f2, integration_limit, &error, &L1);
     Q_expected = root_pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
