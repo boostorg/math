@@ -159,7 +159,7 @@ void test_nr_examples()
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 #if defined(BOOST_MSVC) && (BOOST_MSVC < 1900)
-    auto f2 = [](const Real& x) { return x > boost::math::tools::log_max_value<Real>() ? 0 : exp(-x*x); };
+    auto f2 = [](const Real& x) { return fabs(x) > boost::math::tools::log_max_value<Real>() ? 0 : exp(-x*x); };
 #else
     auto f2 = [](const Real& x) { return exp(-x*x); };
 #endif
