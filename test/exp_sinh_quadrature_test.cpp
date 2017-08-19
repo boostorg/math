@@ -296,7 +296,7 @@ void test_nr_examples()
        tol_mul = 500000;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mul * tol);
 
-    auto f2 = [](Real x)->Real { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
+    auto f2 = [](Real x)->Real { return x > boost::math::tools::log_max_value<Real>() ? Real(0) : Real(pow(x, -(Real) 2/(Real) 7)*exp(-x*x)); };
     Q = integrator.integrate(f2, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
     tol_mul = 1;
@@ -349,7 +349,7 @@ void test_crc()
     Real error;
     auto integrator = get_integrator<Real>();
 
-    auto f0 = [](const Real& x) { return log(x)*exp(-x); };
+    auto f0 = [](const Real& x) { return x > boost::math::tools::log_max_value<Real>() ? Real(0) : Real(log(x)*exp(-x)); };
     Q = integrator.integrate(f0, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = -boost::math::constants::euler<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -428,7 +428,7 @@ void test_crc()
           tol_mult = 750;
        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mult * tol);
     }
-    auto f6 = [](const Real& t) { return exp(-t*t)*log(t);};
+    auto f6 = [](const Real& t) { return t > boost::math::tools::log_max_value<Real>() ? Real(0) : Real(exp(-t*t)*log(t));};
     Q = integrator.integrate(f6, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = -boost::math::constants::root_pi<Real>()*(boost::math::constants::euler<Real>() + 2*ln_two<Real>())/4;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -462,7 +462,7 @@ void test_crc()
     for (Real p = -0.99; p < 0; p += 0.1) {
        auto f = [&](Real x)->Real
        {
-          return exp(-p * log(-boost::math::expm1(-x)) - (1 + p) * x);
+          return x > 1000 * boost::math::tools::log_max_value<Real>() ? Real(0) : Real(exp(-p * log(-boost::math::expm1(-x)) - (1 + p) * x));
        };
        Q = integrator.integrate(f, get_convergence_tolerance<Real>(), &error, &L1);
        Q_expected = 1 / boost::math::sinc_pi(p*pi<Real>());
