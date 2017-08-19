@@ -446,7 +446,7 @@ void test_crc()
        Real p = pn / 100;
        auto f = [&](Real x)->Real
        {
-          return x > 1000 * boost::math::tools::log_max_value<Real>() ? 0 : exp(-x * (1 - p) + p * log(-boost::math::expm1(-x)));
+          return x > 1000 * boost::math::tools::log_max_value<Real>() ? Real(0) : Real(exp(-x * (1 - p) + p * log(-boost::math::expm1(-x))));
        };
        Q = integrator.integrate(f, get_convergence_tolerance<Real>(), &error, &L1);
        Q_expected = 1 / boost::math::sinc_pi(p*pi<Real>());
