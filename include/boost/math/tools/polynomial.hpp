@@ -318,7 +318,7 @@ public:
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    // move:
-   polynomial(polynomial&& p)
+   polynomial(polynomial&& p) BOOST_NOEXCEPT
       : m_data(std::move(p.m_data)) { }
 #endif
 
@@ -387,7 +387,7 @@ public:
 
    // operators:
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-   polynomial& operator =(polynomial&& p)
+   polynomial& operator =(polynomial&& p) BOOST_NOEXCEPT
    {
        m_data = std::move(p.m_data);
        return *this;
