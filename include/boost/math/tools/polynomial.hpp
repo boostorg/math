@@ -290,6 +290,12 @@ public:
           m_data.push_back(point);
    }
 
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+   // move:
+   polynomial(polynomial&& p)
+      : m_data(std::move(p.m_data)) { }
+#endif
+
    // copy:
    polynomial(const polynomial& p)
       : m_data(p.m_data) { }
@@ -319,26 +325,26 @@ public:
 
 
    // access:
-   size_type size()const { return m_data.size(); }
-   size_type degree()const
+   size_type size() const { return m_data.size(); }
+   size_type degree() const
    {
        if (size() == 0)
            throw std::logic_error("degree() is undefined for the zero polynomial.");
        return m_data.size() - 1;
-    }
+   }
    value_type& operator[](size_type i)
    {
       return m_data[i];
    }
-   const value_type& operator[](size_type i)const
+   const value_type& operator[](size_type i) const
    {
       return m_data[i];
    }
-   T evaluate(T z)const
+   T evaluate(T z) const
    {
       return m_data.size() > 0 ? boost::math::tools::evaluate_polynomial(&m_data[0], z, m_data.size()) : 0;
    }
-   std::vector<T> chebyshev()const
+   std::vector<T> chebyshev() const
    {
       return polynomial_to_chebyshev(m_data);
    }
@@ -354,6 +360,19 @@ public:
    }
 
    // operators:
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+   polynomial& operator =(polynomial&& p)
+   {
+       m_data = std::move(p.m_data);
+       return *this;
+   }
+#endif
+   polynomial& operator =(const polynomial& p)
+   {
+       m_data = p.m_data;
+       return *this;
+   }
+
    template <class U>
    polynomial& operator +=(const U& value)
    {
@@ -409,20 +428,25 @@ public:
        normalize();
        return *this;
    }
+
+   template <typename U, typename V>
+   void multiply(const polynomial<U>& a, const polynomial<V>& b) {
+       if (!a || !b)
+       {
+           this->set_zero();
+           return;
+       }
+       std::vector<T> prod(a.size() + b.size() - 1, T(0));
+       for (unsigned i = 0; i < a.size(); ++i)
+           for (unsigned j = 0; j < b.size(); ++j)
+               prod[i+j] += a.m_data[i] * b.m_data[j];
+       m_data.swap(prod);
+   }
+
    template <class U>
    polynomial& operator *=(const polynomial<U>& value)
    {
-      // TODO: FIXME: use O(N log(N)) algorithm!!!
-      if (!value)
-      {
-          this->set_zero();
-          return *this;
-      }
-      std::vector<T> prod(size() + value.size() - 1, T(0));
-      for (size_type i = 0; i < value.size(); ++i)
-         for (size_type j = 0; j < size(); ++j)
-            prod[i+j] += m_data[j] * value[i];
-      m_data.swap(prod);
+      this->multiply(*this, value);
       return *this;
    }
 
@@ -564,6 +588,26 @@ inline polynomial<T> operator + (const polynomial<T>& a, const polynomial<T>& b)
    result += b;
    return result;
 }
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+template <class T>
+inline polynomial<T> operator + (polynomial<T>&& a, const polynomial<T>& b)
+{
+   a += b;
+   return a;
+}
+template <class T>
+inline polynomial<T> operator + (const polynomial<T>& a, polynomial<T>&& b)
+{
+   b += a;
+   return b;
+}
+template <class T>
+inline polynomial<T> operator + (polynomial<T>&& a, polynomial<T>&& b)
+{
+   a += b;
+   return a;
+}
+#endif
 
 template <class T>
 inline polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b)
@@ -572,61 +616,75 @@ inline polynomial<T> operator - (const polynomial<T>& a, const polynomial<T>& b)
    result -= b;
    return result;
 }
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+template <class T>
+inline polynomial<T> operator - (polynomial<T>&& a, const polynomial<T>& b)
+{
+   a -= b;
+   return a;
+}
+template <class T>
+inline polynomial<T> operator - (const polynomial<T>& a, polynomial<T>&& b)
+{
+   b -= a;
+   return -b;
+}
+template <class T>
+inline polynomial<T> operator - (polynomial<T>&& a, polynomial<T>&& b)
+{
+   a -= b;
+   return a;
+}
+#endif
 
 template <class T>
 inline polynomial<T> operator * (const polynomial<T>& a, const polynomial<T>& b)
 {
-   polynomial<T> result(a);
-   result *= b;
+   polynomial<T> result;
+   result.multiply(a, b);
    return result;
 }
 
 template <class T, class U>
-inline polynomial<T> operator + (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator + (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result += b;
-   return result;
+   a += b;
+   return a;
 }
 
 template <class T, class U>
-inline polynomial<T> operator - (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator - (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result -= b;
-   return result;
+   a -= b;
+   return a;
 }
 
 template <class T, class U>
-inline polynomial<T> operator * (const polynomial<T>& a, const U& b)
+inline polynomial<T> operator * (polynomial<T> a, const U& b)
 {
-   polynomial<T> result(a);
-   result *= b;
-   return result;
+   a *= b;
+   return a;
 }
 
 template <class U, class T>
-inline polynomial<T> operator + (const U& a, const polynomial<T>& b)
+inline polynomial<T> operator + (const U& a, polynomial<T> b)
 {
-   polynomial<T> result(b);
-   result += a;
-   return result;
+   b += a;
+   return b;
 }
 
 template <class U, class T>
-inline polynomial<T> operator - (const U& a, const polynomial<T>& b)
+inline polynomial<T> operator - (const U& a, polynomial<T> b)
 {
-   polynomial<T> result(a);
-   result -= b;
-   return result;
+   b -= a;
+   return -b;
 }
 
 template <class U, class T>
-inline polynomial<T> operator * (const U& a, const polynomial<T>& b)
+inline polynomial<T> operator * (const U& a, polynomial<T> b)
 {
-   polynomial<T> result(b);
-   result *= a;
-   return result;
+   b *= a;
+   return b;
 }
 
 template <class T>
@@ -636,19 +694,17 @@ bool operator == (const polynomial<T> &a, const polynomial<T> &b)
 }
 
 template <typename T, typename U>
-polynomial<T> operator >> (const polynomial<T>& a, const U& b)
+polynomial<T> operator >> (polynomial<T> a, const U& b)
 {
-    polynomial<T> result(a);
-    result >>= b;
-    return result;
+    a >>= b;
+    return a;
 }
 
 template <typename T, typename U>
-polynomial<T> operator << (const polynomial<T>& a, const U& b)
+polynomial<T> operator << (polynomial<T> a, const U& b)
 {
-    polynomial<T> result(a);
-    result <<= b;
-    return result;
+    a <<= b;
+    return a;
 }
 
 // Unary minus (negate).
