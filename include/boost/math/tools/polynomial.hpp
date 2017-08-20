@@ -505,13 +505,13 @@ private:
     template <class U>
     polynomial& addition(const U& value)
     {
-        return addition(value, detail::identity<U>(), std::plus<U>());
+        return addition(value, detail::identity<T>(), std::plus<T>());
     }
 
     template <class U>
     polynomial& subtraction(const U& value)
     {
-        return addition(value, std::negate<U>(), std::minus<U>());
+        return addition(value, std::negate<T>(), std::minus<T>());
     }
 
     template <class U, class R1, class R2>
