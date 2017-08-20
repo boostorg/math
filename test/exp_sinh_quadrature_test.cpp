@@ -314,7 +314,7 @@ void test_nr_examples()
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10*boost::math::tools::epsilon<Real>());
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, 10*boost::math::tools::epsilon<Real>());
 
-    auto f4 = [](const Real& t) { return exp(-t*t*half<Real>()); };
+    auto f4 = [](const Real& t) { return  t > boost::math::tools::log_max_value<Real>() ? Real(0) : Real(exp(-t*t*half<Real>())); };
     Q = integrator.integrate(f4, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = root_two_pi<Real>()/2;
     tol_mul = 1;
