@@ -370,12 +370,12 @@ void test_crc()
     // Integral representation of the modified bessel function:
     // K_5(12)
     auto f2 = [](Real t)->Real {
-        Real x = exp(-12*cosh(t));
-        if (x == 0)
+        Real x = 12*cosh(t);
+        if (x > boost::math::tools::log_max_value<Real>())
         {
             return (Real) 0;
         }
-        return x*cosh(5*t);
+        return exp(-x)*cosh(5*t);
     };
     Q = integrator.integrate(f2, get_convergence_tolerance<Real>(), &error, &L1);
     Q_expected = boost::math::cyl_bessel_k<int, Real>(5, 12);
@@ -384,12 +384,12 @@ void test_crc()
     Real a = 20;
     Real s = 1;
     auto f3 = [&](Real t)->Real {
-        Real x = exp(-s*t);
-        if (x == 0)
+        Real x = s * t;
+        if (x > boost::math::tools::log_max_value<Real>())
         {
             return (Real) 0;
         }
-        return cos(a*t)*x;
+        return cos(a * t) * exp(-x);
     };
 
     // For high oscillation frequency, the quadrature sum is ill-conditioned.
@@ -412,12 +412,12 @@ void test_crc()
     {
        // Laplace transform of J_0(t):
        auto f4 = [&](Real t)->Real {
-          Real x = exp(-s*t);
-          if (x == 0)
+          Real x = s * t;
+          if (x > boost::math::tools::log_max_value<Real>())
           {
              return (Real)0;
           }
-          return boost::math::cyl_bessel_j(0, t)*x;
+          return boost::math::cyl_bessel_j(0, t) * exp(-x);
        };
 
        Q = integrator.integrate(f4, get_convergence_tolerance<Real>(), &error, &L1);
