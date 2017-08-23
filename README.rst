@@ -62,10 +62,12 @@ The following instructions will hopefully help the user get started.
         boost$ ./b2
 
 - To build the documentation, you must install some dependencies:
+
     .. code:: bash
 
         boost/libs/math/doc$ sudo apt install xsltproc docbook-xsl docbook-xml
         boost/libs/math/doc$ ../../../b2 release
+
 This will build the `boost::math` documentation into `doc/index.html` and hence can be viewed with any browser. In addition, `doc/math.pdf` should contain the same information.
 
 - Write your feature. For the purposes of this contributing guide, we will test if a floating point number is an integer. In this case, place the file `is_float_int.hpp` in (say) the `include/boost/math/tools` directory.
@@ -103,6 +105,7 @@ The former uses argument-dependent lookup to determine which version of `floor` 
 - Write a unit test. Place `is_float_int_test.cpp` in the `test` directory. This test should verify that your code works for many cases and many types.
 
     .. code:: cpp
+
         /*
          * Copyright Nick Thompson, 2017
          * Use, modification and distribution are subject to the
