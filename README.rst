@@ -42,118 +42,116 @@ The following instructions will hopefully help the user get started.
 
 - Remove the math submodule from the boost superproject, and clone your fork into its location.
 
-.. code:: bash
+    .. code:: bash
 
-    boost$ cd libs
-    boost/libs$ rm -rf math; git clone https://github.com/MY-USERNAME/math.git
-    boost/libs$ cd math;
+        boost$ cd libs
+        boost/libs$ rm -rf math; git clone https://github.com/MY-USERNAME/math.git
+        boost/libs$ cd math;
 
 - To keep your fork synced to the master, add an upstream:
 
-.. code:: bash
+    .. code:: bash
 
-    boost/libs/math$ git remote add upstream https://github.com/boostorg/math.git
+        boost/libs/math$ git remote add upstream https://github.com/boostorg/math.git
 
 - Ensure boost builds successfully:
 
-.. code:: bash
+    .. code:: bash
 
-    boost$ ./bootstrap.sh
-    boost$ ./b2
+        boost$ ./bootstrap.sh
+        boost$ ./b2
 
 - To build the documentation, you must install some dependencies:
 
-.. code:: bash
+    .. code:: bash
 
-    boost/libs/math/doc$ sudo apt install xsltproc docbook-xsl docbook-xml
-    boost/libs/math/doc$ ../../../b2 release
+        boost/libs/math/doc$ sudo apt install xsltproc docbook-xsl docbook-xml
+        boost/libs/math/doc$ ../../../b2 release
 
-This will build the `boost::math` documentation into `index.html` in the `doc` folder and hence can be viewed with any browser.
-In addition, `math.pdf` should contain the same information.
+    This will build the `boost::math` documentation into `doc/index.html` and hence can be viewed with any browser. In addition, `doc/math.pdf` should contain the same information.
 
-- Write your feature. For the purposes of this contributing guide, we will test if a floating point number is an integer.
-In this case, place the file `is_float_int.hpp` in (say) the `include/boost/math/tools` directory.
+- Write your feature. For the purposes of this contributing guide, we will test if a floating point number is an integer. In this case, place the file `is_float_int.hpp` in (say) the `include/boost/math/tools` directory.
 
-.. code:: cpp
+    .. code:: cpp
 
-    /*
-     *  Copyright John Maddock, Nick Thompson, 2017
-     *  Use, modification and distribution are subject to the
-     *  Boost Software License, Version 1.0. (See accompanying file
-     *  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-     */
-    #ifndef BOOST_MATH_TOOLS_IS_FLOAT_INT_HPP
-    #define BOOST_MATH_TOOLS_IS_FLOAT_INT_HPP
+        /*
+         *  Copyright John Maddock, Nick Thompson, 2017
+         *  Use, modification and distribution are subject to the
+         *  Boost Software License, Version 1.0. (See accompanying file
+         *  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+         */
+        #ifndef BOOST_MATH_TOOLS_IS_FLOAT_INT_HPP
+        #define BOOST_MATH_TOOLS_IS_FLOAT_INT_HPP
 
-    namespace boost { namespace math {
+        namespace boost { namespace math {
 
-    template<class Real>
-    bool is_float_integer(Real x) {
-        using std::floor;
-        if (floor(x) == x) {
-            return true;
+        template<class Real>
+        bool is_float_integer(Real x) {
+            using std::floor;
+            if (floor(x) == x) {
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
-    }}
-    #endif
+        }}
+        #endif
 
-A few things to note: All contributions to boost are released under the boost license, and as such you must include a copyright and license statement at the beginning of the file.
-Next are the standard include guards, and namespaces.
-Note that we write `using std::floor` and `floor(x) == x` instead of `std::floor(x) == x`.
-This is because the latter form does not work with boost multiprecision types.
-The former uses argument-dependent lookup to determine which version of `floor` (the one from `cmath` or the version from `boost::multiprecision`) should be used.
+    A few things to note: All contributions to boost are released under the boost license, and as such you must include a copyright and license statement at the beginning of the file.
+    Next are the standard include guards, and namespaces.
+    Note that we write `using std::floor` and `floor(x) == x` instead of `std::floor(x) == x`.
+    This is because the latter form does not work with boost multiprecision types.
+    The former uses argument-dependent lookup to determine which version of `floor` (the one from `cmath` or the version from `boost::multiprecision`) should be used.
 
 - Write a unit test. Place `is_float_int_test.cpp` in the `test` directory. This test should verify that your code works for many cases and many types.
 
-.. code:: cpp
-    /*
-     * Copyright Nick Thompson, 2017
-     * Use, modification and distribution are subject to the
-     * Boost Software License, Version 1.0. (See accompanying file
-     * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-     */
-    #define BOOST_TEST_MODULE test_is_float_int
+    .. code:: cpp
+        /*
+         * Copyright Nick Thompson, 2017
+         * Use, modification and distribution are subject to the
+         * Boost Software License, Version 1.0. (See accompanying file
+         * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+         */
+        #define BOOST_TEST_MODULE test_is_float_int
 
-    #include <boost/test/included/unit_test.hpp>
-    #include <boost/test/floating_point_comparison.hpp>
-    #include <boost/math/concepts/real_concept.hpp>
-    #include <boost/math/tools/is_float_int.hpp>
-    #include <boost/multiprecision/cpp_bin_float.hpp>
-    #include <boost/multiprecision/cpp_dec_float.hpp>
+        #include <boost/test/included/unit_test.hpp>
+        #include <boost/test/floating_point_comparison.hpp>
+        #include <boost/math/concepts/real_concept.hpp>
+        #include <boost/math/tools/is_float_int.hpp>
+        #include <boost/multiprecision/cpp_bin_float.hpp>
+        #include <boost/multiprecision/cpp_dec_float.hpp>
 
-    using boost::math::is_float_int;
-    using boost::multiprecision::cpp_bin_float_50;
-    using boost::multiprecision::cpp_bin_float_100;
+        using boost::math::is_float_int;
+        using boost::multiprecision::cpp_bin_float_50;
+        using boost::multiprecision::cpp_bin_float_100;
 
-    template<class Real>
-    void test_one()
-    {
-        std::cout << "Testing type " << boost::typeindex::type_id<Real>().pretty_name()  << " works with is_float_int\n";
+        template<class Real>
+        void test_one()
+        {
+            std::cout << "Testing type " << boost::typeindex::type_id<Real>().pretty_name()  << " works with is_float_int\n";
 
-        Real x = 1;
-        BOOST_CHECK(is_float_int(x));
-        x = 1.5;
-        BOOST_CHECK(!is_float_int(x));
-    }
+            Real x = 1;
+            BOOST_CHECK(is_float_int(x));
+            x = 1.5;
+            BOOST_CHECK(!is_float_int(x));
+        }
 
-    BOOST_AUTO_TEST_CASE(test_is_float_int)
-    {
-        // Standard floating-point types:
-        test_one<float>();
-        test_one<double>();
-        test_one<long double>();
-        // Ensure extended precision types work:
-        test_one<boost::math::concepts::real_concept>();
-        test_one<cpp_bin_float_50>();
-        test_one<cpp_bin_float_100>();
-    }
+        BOOST_AUTO_TEST_CASE(test_is_float_int)
+        {
+            // Standard floating-point types:
+            test_one<float>();
+            test_one<double>();
+            test_one<long double>();
+            // Ensure extended precision types work:
+            test_one<boost::math::concepts::real_concept>();
+            test_one<cpp_bin_float_50>();
+            test_one<cpp_bin_float_100>();
+        }
 
-This test must be added to `test/Jamfile.v2` to start working with the CI system:
+    This test must be added to `test/Jamfile.v2` to start working with the CI system:
 
-.. code: bash
+    .. code: bash
 
-    [ run is_float_int_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
+        [ run is_float_int_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
 
 
 - Write a compile test. A unit test may bring in other header files which define certain functions in the feature file.
