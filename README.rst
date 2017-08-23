@@ -62,13 +62,11 @@ The following instructions will hopefully help the user get started.
         boost$ ./b2
 
 - To build the documentation, you must install some dependencies:
-
     .. code:: bash
 
         boost/libs/math/doc$ sudo apt install xsltproc docbook-xsl docbook-xml
         boost/libs/math/doc$ ../../../b2 release
-
-    This will build the `boost::math` documentation into `doc/index.html` and hence can be viewed with any browser. In addition, `doc/math.pdf` should contain the same information.
+This will build the `boost::math` documentation into `doc/index.html` and hence can be viewed with any browser. In addition, `doc/math.pdf` should contain the same information.
 
 - Write your feature. For the purposes of this contributing guide, we will test if a floating point number is an integer. In this case, place the file `is_float_int.hpp` in (say) the `include/boost/math/tools` directory.
 
@@ -96,11 +94,11 @@ The following instructions will hopefully help the user get started.
         }}
         #endif
 
-    A few things to note: All contributions to boost are released under the boost license, and as such you must include a copyright and license statement at the beginning of the file.
-    Next are the standard include guards, and namespaces.
-    Note that we write `using std::floor` and `floor(x) == x` instead of `std::floor(x) == x`.
-    This is because the latter form does not work with boost multiprecision types.
-    The former uses argument-dependent lookup to determine which version of `floor` (the one from `cmath` or the version from `boost::multiprecision`) should be used.
+A few things to note: All contributions to boost are released under the boost license, and as such you must include a copyright and license statement at the beginning of the file.
+Next are the standard include guards, and namespaces.
+Note that we write `using std::floor` and `floor(x) == x` instead of `std::floor(x) == x`.
+This is because the latter form does not work with boost multiprecision types.
+The former uses argument-dependent lookup to determine which version of `floor` (the one from `cmath` or the version from `boost::multiprecision`) should be used.
 
 - Write a unit test. Place `is_float_int_test.cpp` in the `test` directory. This test should verify that your code works for many cases and many types.
 
@@ -147,7 +145,7 @@ The following instructions will hopefully help the user get started.
             test_one<cpp_bin_float_100>();
         }
 
-    This test must be added to `test/Jamfile.v2` to start working with the CI system:
+This test must be added to `test/Jamfile.v2` to start working with the CI system:
 
     .. code: bash
 
