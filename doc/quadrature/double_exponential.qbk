@@ -22,12 +22,20 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     class tanh_sinh
     {
     public:
-        tanh_sinh(size_t max_refinements = 15);
+        tanh_sinh(size_t max_refinements = 15, const Real& min_complement = tools::min_value<Real>() * 4)
 
         template<class F>
-        Real integrate(const F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), Real* error = nullptr, Real* L1 = nullptr, size_t* levels = nullptr) const;
+        auto integrate(const F f, Real a, Real b, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
+        
         template<class F>
-        Real integrate(const F f, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), Real* error = nullptr, Real* L1 = nullptr, size_t* levels = nullptr) const;
+        auto integrate(const F f, Real a, Real b, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
+
+        template<class F>
+        auto integrate(const F f, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
+    
+        template<class F>
+        auto integrate(const F f, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
+
     }
 
     template<class Real>
@@ -55,13 +63,15 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 }}
 ``
 
-These three integration routines provide robust general purpose quadrature routines, each has a "native" range over which
-quadrature is performed, but two of these (tanh_sinh and exp_sinh) also have auxilliary ranges which are handled via a change
-of argument on the function being integrated.  
+These three integration routines provide robust general purpose quadrature, each having a "native" range over which
+quadrature is performed.
+For example, the `sinh_sinh` quadrature integrates over the entire real line, the `tanh_sinh` over (-1, 1), and the `exp_sinh` over (0, \u221E).
+The latter integrators also have auxilliary ranges which are handled via a change of variables on the function being integrated,
+so that the `tanh_sinh` can handle integration over (a, b), and `exp_sinh` over (a, \u221E) and(-\u221E, b).
 
 The `integrate` methods which do not specify a range always integrate over the native range of the method, and generally
 are the most efficient and produce the smallest code, on the other hand the methods which do specify the bounds of integration
-are the most general, and use argument transformations which are generally very robust.  The following table summerizes
+are the most general, and use argument transformations which are generally very robust.  The following table summarizes
 the ranges supported by each method:
 
 [table
@@ -82,12 +92,20 @@ the ranges supported by each method:
     class tanh_sinh
     {
     public:
-        tanh_sinh(size_t max_refinements = 15);
+         tanh_sinh(size_t max_refinements = 15, const Real& min_complement = tools::min_value<Real>() * 4)
 
-        template<class F>
-        Real integrate(const F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), Real* error = nullptr, Real* L1 = nullptr, size_t* levels = nullptr) const;
-        template<class F>
-        Real integrate(const F f, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), Real* error = nullptr, Real* L1 = nullptr, size_t* levels = nullptr) const;
+         template<class F>
+         auto integrate(const F f, Real a, Real b, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
+    
+         template<class F>
+         auto integrate(const F f, Real a, Real b, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
+
+         template<class F>
+         auto integrate(const F f, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
+         
+         template<class F>
+         auto integrate(const F f, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
+
     }
 
 The tanh-sinh quadrature routine provided by boost is a rapidly convergent numerical integration scheme for holomorphic integrands.
@@ -101,16 +119,16 @@ A basic example of how to use the tanh-sinh quadrature is shown below:
     auto f = [](double x) { return 5*x + 7; };
     // Integrate over native bounds of (-1,1):
     double Q = integrator.integrate(f);
-    // Integrate over (0,1) instead:
+    // Integrate over (0,1.1) instead:
     Q = integrator.integrate(f, 0.0, 1.1);
 
 The basic idea of tanh-sinh quadrature is that a variable transformation can cause the endpoint derivatives to decay rapidly.
 When the derivatives at the endpoints decay much faster than the Bernoulli numbers grow,
-the Euler-Maclaurin summation formula tells us that simple trapezoidal quadrature converges exponentially fast.
-That means the precision of the result should be doubling with each new level of integration, so the termination condition for
-integration is usually set to the square root of machine epsilon.  Most typical well behaved integrals should converge
-to full machine precision with this termination condition, and in 6 or fewer levels at double precision, or 7 or fewer
-levels for quad precision.
+the Euler-Maclaurin summation formula tells us that simple trapezoidal quadrature converges faster than any power of /h/.
+That means the number of correct digits of the result should roughly double with each new level of integration (halving of /h/),
+Hence the default termination condition for integration is usually set to the square root of machine epsilon. 
+Most well-behaved integrals should converge to full machine precision with this termination condition,
+and in 6 or fewer levels at double precision, or 7 or fewer levels for quad precision.
 
 
 One very nice property of tanh-sinh quadrature is that it can handle singularities at the endpoints of the integration domain.
@@ -133,12 +151,12 @@ However, the related function
     Q = integrator.integrate(f2, (double) -1, (double) 1);
 
 has poles outside the unit disk (at \u00B1 5\u2148), and is therefore in the Hardy space.
-The integration is performed 22x faster for the second function!
+Our benchmarks show that the second integration is performed 22x faster than the first!
 If you do not understand the structure of your integrand in the complex plane, do performance testing before deployment.
 
 Like the trapezoidal quadrature, the tanh-sinh quadrature produces an estimate of the L[sub 1] norm of the integral along with the requested integral.
-This is to establish a scale against which to measure the tolerance, and provides an estimate of the condition number of the summation.
-This can be queries as follows:
+This is to establish a scale against which to measure the tolerance, and to provide an estimate of the condition number of the summation.
+This can be queried as follows:
 
 
     tanh_sinh<double> integrator;
@@ -150,11 +168,12 @@ This can be queries as follows:
     double Q = integrator.integrate(f, 0.0, 1.0, termination, &error, &L1, &levels);
     double condition_number = L1/std::abs(Q);
 
-If the condition number is large, the computed integral is worthless: typically one can assume that Q has lost one digit of precision for each order
-of magnitude of the condition number.  The returned error term is not the actual error in the result, it is the absolute difference between the last
-two approximations, and for well behaved integrals, the actual error should be very much smaller than this.
+If the condition number is large, the computed integral is worthless: typically one can assume that Q has lost one digit of precision 
+when the condition number of O(10^Q).
+The returned error term is not the actual error in the result, but merely an a posteriori error estimate.
+It is the absolute difference between the last two approximations, and for well behaved integrals, the actual error should be very much smaller than this.
 The following table illustrates how the errors and conditioning vary for few sample integrals, in each case the termination condition was set
-to the square root of epsilon, and all tests were conducted with type double:
+to the square root of epsilon, and all tests were conducted in double precision:
 
 [table
 [[Integral][Range][Error][Actual measured error][Levels][Condition Number][Comments]]
@@ -162,11 +181,11 @@ to the square root of epsilon, and all tests were conducted with type double:
 [[`log(x) * log(x)`][0, 1)][0][0][5][1][This is an example of an integral that Gaussian integrators fail to handle.]]
 [[`exp(-x) / sqrt(x)`][(0,+[infin])][8.0e-10][1.1e-15][5][1][Gaussian integrators typically fail to handle the singularities at the endpoints of this one.]]
 [[`x * sin(2 * exp(2 * sin(2 * exp(2 * x))))`][(-1,1)][7.2e-16][4.9e-17][9][1.89][This is a truely horrible integral that oscillates wildly and 
-         unpredictably with some very sharp "spikes" in it's graph.  The higher number of levels used reflects the difficulty in reaching into some of the more extreme features.]]
+         unpredictably with some very sharp "spikes" in it's graph.  The higher number of levels used reflects the difficulty of sampling the more extreme features.]]
 [[`x == 0 ? 1 : sin(x) / x`][(-[infin], [infin])][3.0e-1][4.0e-1][15][159][This highly oscillatory integral isn't handled at all well by tanh-sinh quadrature: there is so much 
       cancellation in the sum that the result is essentially worthless.  The argument transformation of the infinite integral behaves somewhat badly as well, in fact
       we do ['slightly] better integrating over 2 symmetrical and large finite limits.]]
-[[`sqrt(x / (1 - x * x))`][(0,1)][1e-8][1e-8][5][1][This an example of an integral that has all it's area close to a non-zero endpoint, the problem here is that
+[[`sqrt(x / (1 - x * x))`][(0,1)][1e-8][1e-8][5][1][This an example of an integral that has all its area close to a non-zero endpoint, the problem here is that
       the function being integrated returns "garbage" values for x very close to 1.  We can easily fix this issue by passing a 2 argument functor to the integrator:
       the second argument gives the distance to the nearest endpoint, and we can use that information to return accurate values, and thus fix the integral calculation.]]
 [[`x < 0.5 ? sqrt(x) / sqrt(1 - x * x) : sqrt(x / ((x + 1) * (xc)))`][(0,1)][0][0][5][1][This is the 2-argument version of the previous integral, the second
@@ -182,9 +201,9 @@ For this reason, double-exponential variable transformations have been provided 
 
 Tanh-sinh quadrature has a unique feature which makes it well suited to handling integrals with either singularities or large features of interest
 near one or both endpoints, it turns out that when we calculate and store the abscissa values at which we will be evaluating the function, we can equally
-well calculate the difference between the abscissa value and the nearest endpoint.  This makes it possible to perform quadrature arbitrarily close to
-an endpoint, without suffering cancellation error.  Note however, that we never actually reach the endpoint, so any endpoint singularity will always
-be excluded from the quadrature.
+well calculate the difference between the abscissa value and the nearest endpoint.
+This makes it possible to perform quadrature arbitrarily close to an endpoint, without suffering cancellation error.
+Note however, that we never actually reach the endpoint, so any endpoint singularity will always be excluded from the quadrature.
 
 The tanh_sinh integration routine will use this additional information internally when performing range transformation, so that for example,
 if one end of the range is zero (or infinite) then our transformations will get arbitrarily close to the endpoint without precision loss.
@@ -199,8 +218,8 @@ there is a very real risk of loss of precision.  For example:
 Results in very low accuracy as all the area of the integral is near 1, and the `1 - x * x` term suffers from cancellation error here.
 
 However, both of tanh_sinh's integration routines will automatically handle 2 argument functors: in this case the first argument is the abscissa value as
-before, while the second is the distance to the nearest endpoint, ie `a - x` or `b - x` if we are integrating over (a,b).  You can always differentiate
-between these 2 cases because the second argument will be negative if we are nearer to the left endpoint.
+before, while the second is the distance to the nearest endpoint, ie `a - x` or `b - x` if we are integrating over (a,b).
+You can always differentiate between these 2 cases because the second argument will be negative if we are nearer to the left endpoint.
 
 Knowing this, we can rewrite our lambda expression to take advantage of this additional information:
 
@@ -208,7 +227,7 @@ Knowing this, we can rewrite our lambda expression to take advantage of this add
     auto f = [](double x, double xc) { return x <= 0.5 ? sqrt(x) / sqrt(1 - x * x) : sqrt(x / ((x + 1) * (xc))); };
     double Q = integrator.integrate(f, 0.0, 1.0);
 
-Not only is this form accurate to full machine precision, but it converges on the result faster too.
+Not only is this form accurate to full machine precision, but it converges to the result faster as well.
 
 [endsect]
 
@@ -233,8 +252,6 @@ The sinh-sinh quadrature allows computation over the entire real line, and is ca
     double Q = integrator.integrate(f, &error, &L1);
 
 Note that the limits of integration are understood to be (-\u221E, \u221E).
-
-Endpoint singularities are supported by sinh-sinh.
 
 [endsect]
 
@@ -283,8 +300,8 @@ If you request that the error be ~[epsilon], this tolerance might never be achie
 dividing the interval in half in order to increase the precision of the integrand, only to be thwarted by floating point roundoff.
 
 If for some reason, the default value doesn't quite achieve full precision, then you could try something a little smaller such as
-[radic][epsilon]/4 or [epsilon][super 2/3].  However, more likely, you need to check that your function to be integrated is able to
-return accurate values, and that there are no other issues with your integration scheme.
+[radic][epsilon]/4 or [epsilon][super 2/3].
+However, more likely, you need to check that your function to be integrated is able to return accurate values, and that there are no other issues with your integration scheme.
 
 [endsect]
 
