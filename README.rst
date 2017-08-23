@@ -1,7 +1,7 @@
 boost math
 ==========
 
-boost math is a suite of tools useful for scientific computing.
+boost math is a suite of tools useful for scientific computing and numerical analysis.
 The tools provided include evaluation of special functions, statistical distributions,
 regular and irregular interpolation, numerical integration, polynomial evaluation, and root-finding,
 all at arbitrary precision.
@@ -36,9 +36,9 @@ The following instructions will hopefully help the user get started.
 
 - Clone boost:
 
-.. code:: bash
+    .. code:: bash
 
-    $ git clone --recursive https://github.com/boostorg/boost.git
+        $ git clone --recursive https://github.com/boostorg/boost.git
 
 - Remove the math submodule from the boost superproject, and clone your fork into its location.
 
