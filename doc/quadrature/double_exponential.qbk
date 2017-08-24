@@ -25,18 +25,20 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         tanh_sinh(size_t max_refinements = 15, const Real& min_complement = tools::min_value<Real>() * 4)
 
         template<class F>
-        auto integrate(const F f, Real a, Real b, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
-        
-        template<class F>
-        auto integrate(const F f, Real a, Real b, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
+        Real integrate(const F f, Real a, Real b, 
+                       Real tolerance = tools::root_epsilon<Real>(), 
+                       Real* error = nullptr, 
+                       Real* L1 = nullptr, 
+                       std::size_t* levels = nullptr)
 
         template<class F>
-        auto integrate(const F f, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
-    
-        template<class F>
-        auto integrate(const F f, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
+        Real integrate(const F f, Real 
+                       tolerance = tools::root_epsilon<Real>(), 
+                       Real* error = nullptr, 
+                       Real* L1 = nullptr, 
+                       std::size_t* levels = nullptr)
 
-    }
+    };
 
     template<class Real>
     class exp_sinh
@@ -45,10 +47,18 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         exp_sinh(size_t max_refinements = 9);
 
         template<class F>
-        Real integrate(const F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), Real* error = nullptr, Real* L1 = nullptr, size_t* levels = nullptr) const;
+        Real integrate(const F f, Real a, Real b, 
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
+                       Real* error = nullptr, 
+                       Real* L1 = nullptr, 
+                       size_t* levels = nullptr) const;
         template<class F>
-        Real integrate(const F f, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), Real* error = nullptr, Real* L1 = nullptr, size_t* levels = nullptr) const;
-    }
+        Real integrate(const F f, 
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
+                       Real* error = nullptr, 
+                       Real* L1 = nullptr, 
+                       size_t* levels = nullptr) const;
+    };
 
     template<class Real>
     class sinh_sinh
@@ -57,8 +67,12 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         sinh_sinh(size_t max_refinements = 9);
 
         template<class F>
-        Real integrate(const F f, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), Real* error = nullptr, Real* L1 = nullptr, size_t* levels = nullptr) const;
-    }
+        Real integrate(const F f, 
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
+                       Real* error = nullptr, 
+                       Real* L1 = nullptr, 
+                       size_t* levels = nullptr) const;
+    };
 
 }}
 ``
@@ -92,21 +106,23 @@ the ranges supported by each method:
     class tanh_sinh
     {
     public:
-         tanh_sinh(size_t max_refinements = 15, const Real& min_complement = tools::min_value<Real>() * 4)
+        tanh_sinh(size_t max_refinements = 15, const Real& min_complement = tools::min_value<Real>() * 4)
 
-         template<class F>
-         auto integrate(const F f, Real a, Real b, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
-    
-         template<class F>
-         auto integrate(const F f, Real a, Real b, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
+        template<class F>
+        Real integrate(const F f, Real a, Real b, 
+                       Real tolerance = tools::root_epsilon<Real>(), 
+                       Real* error = nullptr, 
+                       Real* L1 = nullptr, 
+                       std::size_t* levels = nullptr)
 
-         template<class F>
-         auto integrate(const F f, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>()))) const;
-         
-         template<class F>
-         auto integrate(const F f, Real tolerance = tools::root_epsilon<Real>(), Real* error = nullptr, Real* L1 = nullptr, std::size_t* levels = nullptr) ->decltype(Real(std::declval<F>()(std::declval<Real>(), std::declval<Real>()))) const;
+        template<class F>
+        Real integrate(const F f, Real 
+                       tolerance = tools::root_epsilon<Real>(), 
+                       Real* error = nullptr, 
+                       Real* L1 = nullptr, 
+                       std::size_t* levels = nullptr)
 
-    }
+    };
 
 The tanh-sinh quadrature routine provided by boost is a rapidly convergent numerical integration scheme for holomorphic integrands.
 By this we mean that the integrand is the restriction to the real line of a complex-differentiable function which is bounded on the interior of the unit disk /|z| < 1/,
@@ -240,8 +256,12 @@ Not only is this form accurate to full machine precision, but it converges to th
         sinh_sinh(size_t max_refinements = 9);
 
         template<class F>
-        Real integrate(const F f, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), Real* error = nullptr, Real* L1 = nullptr, size_t* levels = nullptr) const;
-    }
+        Real integrate(const F f, 
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
+                       Real* error = nullptr, 
+                       Real* L1 = nullptr, 
+                       size_t* levels = nullptr) const;
+    };
 
 The sinh-sinh quadrature allows computation over the entire real line, and is called as follows:
 
@@ -264,10 +284,18 @@ Note that the limits of integration are understood to be (-\u221E, \u221E).
         exp_sinh(size_t max_refinements = 9);
 
         template<class F>
-        Real integrate(const F f, Real a, Real b, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), Real* error = nullptr, Real* L1 = nullptr, size_t* levels = nullptr) const;
+        Real integrate(const F f, Real a, Real b, 
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
+                       Real* error = nullptr, 
+                       Real* L1 = nullptr, 
+                       size_t* levels = nullptr) const;
         template<class F>
-        Real integrate(const F f, Real tol = sqrt(std::numeric_limits<Real>::epsilon()), Real* error = nullptr, Real* L1 = nullptr, size_t* levels = nullptr) const;
-    }
+        Real integrate(const F f, 
+                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()), 
+                       Real* error = nullptr, 
+                       Real* L1 = nullptr, 
+                       size_t* levels = nullptr) const;
+    };
 
 For half-infinite intervals, the exp-sinh quadrature is provided:
 

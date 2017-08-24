@@ -30,13 +30,23 @@
 <span class="keyword">class</span> <span class="identifier">tanh_sinh</span>
 <span class="special">{</span>
 <span class="keyword">public</span><span class="special">:</span>
-    <span class="identifier">tanh_sinh</span><span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">max_refinements</span> <span class="special">=</span> <span class="number">15</span><span class="special">);</span>
+    <span class="identifier">tanh_sinh</span><span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">max_refinements</span> <span class="special">=</span> <span class="number">15</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Real</span><span class="special">&amp;</span> <span class="identifier">min_complement</span> <span class="special">=</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">min_value</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;()</span> <span class="special">*</span> <span class="number">4</span><span class="special">)</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-    <span class="identifier">Real</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">()),</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+    <span class="identifier">Real</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">a</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">b</span><span class="special">,</span>
+                   <span class="identifier">Real</span> <span class="identifier">tolerance</span> <span class="special">=</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">root_epsilon</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;(),</span>
+                   <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
+                   <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
+                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span>
+
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">F</span><span class="special">&gt;</span>
-    <span class="identifier">Real</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span> <span class="identifier">tol</span> <span class="special">=</span> <span class="identifier">sqrt</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;::</span><span class="identifier">epsilon</span><span class="special">()),</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span> <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span> <span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
-<span class="special">}</span>
+    <span class="identifier">Real</span> <span class="identifier">integrate</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">,</span> <span class="identifier">Real</span>
+                   <span class="identifier">tolerance</span> <span class="special">=</span> <span class="identifier">tools</span><span class="special">::</span><span class="identifier">root_epsilon</span><span class="special">&lt;</span><span class="identifier">Real</span><span class="special">&gt;(),</span>
+                   <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">error</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
+                   <span class="identifier">Real</span><span class="special">*</span> <span class="identifier">L1</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">,</span>
+                   <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">*</span> <span class="identifier">levels</span> <span class="special">=</span> <span class="keyword">nullptr</span><span class="special">)</span>
+
+<span class="special">};</span>
 </pre>
 <p>
           The tanh-sinh quadrature routine provided by boost is a rapidly convergent
@@ -54,7 +64,7 @@
 <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[](</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="number">5</span><span class="special">*</span><span class="identifier">x</span> <span class="special">+</span> <span class="number">7</span><span class="special">;</span> <span class="special">};</span>
 <span class="comment">// Integrate over native bounds of (-1,1):</span>
 <span class="keyword">double</span> <span class="identifier">Q</span> <span class="special">=</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">f</span><span class="special">);</span>
-<span class="comment">// Integrate over (0,1) instead:</span>
+<span class="comment">// Integrate over (0,1.1) instead:</span>
 <span class="identifier">Q</span> <span class="special">=</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">f</span><span class="special">,</span> <span class="number">0.0</span><span class="special">,</span> <span class="number">1.1</span><span class="special">);</span>
 </pre>
 <p>
@@ -62,12 +72,13 @@
           can cause the endpoint derivatives to decay rapidly. When the derivatives
           at the endpoints decay much faster than the Bernoulli numbers grow, the
           Euler-Maclaurin summation formula tells us that simple trapezoidal quadrature
-          converges exponentially fast. That means the precision of the result should
-          be doubling with each new level of integration, so the termination condition
-          for integration is usually set to the square root of machine epsilon. Most
-          typical well behaved integrals should converge to full machine precision
-          with this termination condition, and in 6 or fewer levels at double precision,
-          or 7 or fewer levels for quad precision.
+          converges faster than any power of <span class="emphasis"><em>h</em></span>. That means the
+          number of correct digits of the result should roughly double with each
+          new level of integration (halving of <span class="emphasis"><em>h</em></span>), Hence the
+          default termination condition for integration is usually set to the square
+          root of machine epsilon. Most well-behaved integrals should converge to
+          full machine precision with this termination condition, and in 6 or fewer
+          levels at double precision, or 7 or fewer levels for quad precision.
         </p>
 <p>
           One very nice property of tanh-sinh quadrature is that it can handle singularities
@@ -96,15 +107,15 @@
 </pre>
 <p>
           has poles outside the unit disk (at &#177; 5&#8520;), and is therefore
-          in the Hardy space. The integration is performed 22x faster for the second
-          function! If you do not understand the structure of your integrand in the
-          complex plane, do performance testing before deployment.
+          in the Hardy space. Our benchmarks show that the second integration is
+          performed 22x faster than the first! If you do not understand the structure
+          of your integrand in the complex plane, do performance testing before deployment.
         </p>
 <p>
           Like the trapezoidal quadrature, the tanh-sinh quadrature produces an estimate
           of the L<sub>1</sub> norm of the integral along with the requested integral. This is
-          to establish a scale against which to measure the tolerance, and provides
-          an estimate of the condition number of the summation. This can be queries
+          to establish a scale against which to measure the tolerance, and to provide
+          an estimate of the condition number of the summation. This can be queried
           as follows:
         </p>
 <pre class="programlisting"><span class="identifier">tanh_sinh</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">integrator</span><span class="special">;</span>
@@ -118,14 +129,14 @@
 </pre>
 <p>
           If the condition number is large, the computed integral is worthless: typically
-          one can assume that Q has lost one digit of precision for each order of
-          magnitude of the condition number. The returned error term is not the actual
-          error in the result, it is the absolute difference between the last two
-          approximations, and for well behaved integrals, the actual error should
-          be very much smaller than this. The following table illustrates how the
-          errors and conditioning vary for few sample integrals, in each case the
-          termination condition was set to the square root of epsilon, and all tests
-          were conducted with type double:
+          one can assume that Q has lost one digit of precision when the condition
+          number of O(10^Q). The returned error term is not the actual error in the
+          result, but merely an a posteriori error estimate. It is the absolute difference
+          between the last two approximations, and for well behaved integrals, the
+          actual error should be very much smaller than this. The following table
+          illustrates how the errors and conditioning vary for few sample integrals,
+          in each case the termination condition was set to the square root of epsilon,
+          and all tests were conducted in double precision:
         </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -329,7 +340,7 @@
                     This is a truely horrible integral that oscillates wildly and
                     unpredictably with some very sharp "spikes" in it's
                     graph. The higher number of levels used reflects the difficulty
-                    in reaching into some of the more extreme features.
+                    of sampling the more extreme features.
                   </p>
                 </td>
 </tr>
@@ -415,7 +426,7 @@
                 </td>
 <td>
                   <p>
-                    This an example of an integral that has all it's area close to
+                    This an example of an integral that has all its area close to
                     a non-zero endpoint, the problem here is that the function being
                     integrated returns "garbage" values for x very close
                     to 1. We can easily fix this issue by passing a 2 argument functor
