@@ -1,0 +1,43 @@
+[/
+Copyright (c) 2017 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:gauss_kronrod Gauss-Kronrod Quadrature]
+
+Gauss-Kronrod quadrature is an extension of Gaussian quadrature which provides an a posteriori error estimate for the integral.
+
+The idea behind Gaussian quadrature is to choose /n/ nodes and weights in such a way that polynomials of order /2n-1/ are integrated exactly.
+However, integration of polynomials is trivial, so it is rarely done via numerical methods.
+Instead, transcendental and numerically defined functions are integrated via Gaussian quadrature, and the defining problem becomes how to estimate the remainder.
+Gaussian quadrature alone (without some form on interval splitting) cannot answer this question.
+
+It is possible to compute a Gaussian quadrature of order /n/ and another of order (say) /2n+1/, and use the difference as an error estimate.
+However, this is not optimal, as the zeros of the Legendre polynomials (nodes of the Gaussian quadrature) never the same for different orders, so /3n+1/ function evaluations must be performed.
+Kronrod considered the problem of how to interleave nodes into a Gaussian quadrature in such a way that all previous function evaluations can be reused, while increasing the order of polynomials that can be integrated exactly.
+This allows an a posteriori error estimate to be provided while still preserving exponential convergence.
+Kronrod discovered that by adding /n+1/ nodes (computed from the zeros of the Legendre-Stieltjes polynomials) to a Gaussian quadrature of order /n/, he could integrate polynomials of order /3n+1/.
+
+[section:caveats Caveats]
+
+Although this code allows a user to use any floating point type, the nodes and weights have only been computed to 100 decimal digits.
+We think this should be acceptable for most use cases; if more digits are needed we recommend the user switch to `tanh_sinh` quadrature,
+which is truly arbitrary precision.
+
+For essentially all analytic integrands bounded on the domain, the error estimates provided by the routine are woefully pessimistic.
+In fact, in this case the error is very nearly equal to the error of the Gaussian quadrature formula of order /n/,
+whereas the Kronrod extension converges exponentially beyond the Gaussian estimate.
+Very sophisticated method exist to estimate the error, but all require the integrand to lie in a particular function space.
+A more sophisticated a posteriori error estimate for an element of a particular function space is left to the user.
+
+
+[section:gk_refes References]
+
+* Kronrod, Aleksandr Semenovish (1965), ['Nodes and weights of quadrature formulas. Sixteen-place tables], New York: Consultants Bureau
+* Dirk P. Laurie, ['Calculation of Gauss-Kronrod Quadrature Rules], Mathematics of Computation, Volume 66, Number 219, 1997
+* Gonnet, Pedro, ['A Review of Error Estimation in Adaptive Quadrature], https://arxiv.org/pdf/1003.4629.pdf
+
+[endsect]
+[endsect]
