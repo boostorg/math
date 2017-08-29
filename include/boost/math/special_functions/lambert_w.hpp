@@ -1,4 +1,4 @@
-// Copyright Paul A. Bristow 2016.
+// Copyright Paul A. Bristow 2016, 2017.
 
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or
@@ -23,6 +23,7 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W0 // W1 branch diagnostics.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY // Halley refinement diagnostics.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER // Schroeder refinement diagnostics.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS // Number of terms used for near-singularity series.
+BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN // higher than built-in precision types approximation and refinement.
 
 */
 
@@ -48,8 +49,11 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS // Number of terms used for near-singulari
 #include <boost/math/tools/rational.hpp>  // evaluate_polynomial.
 // http://www.boost.org/doc/libs/1_64_0/libs/math/doc/html/math_toolkit/roots/rational.html
 #include <boost/mpl/int.hpp>
+#include <boost/type_traits/is_integral.hpp>
 
-//// i:\modular-boost\libs\math\test\test_value.hpp
+//#include "test_value.hpp"  // for create_test_value and macro BOOST_MATH_TEST_VALUE.
+#include "J:\Cpp\Misc\lambert_w_pb_spot_tests\test_value.hpp" // Temporary kludge.
+
 
 #include <limits>
 #include <cmath>
@@ -387,13 +391,13 @@ namespace detail
   T lambert_w0_small_z(const T z, const Policy&, boost::mpl::int_<1> const&)
   {
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
-    std::cout << "double lambert_w0_small_z called with z = " << z << " using " << 17 << " terms of precision "
+    std::cout << "double lambert_w0_small_z called with z = " << z << " using " << 17 << " terms of precision, "
       << std::numeric_limits<double>::max_digits10 << " decimal digits. " << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
     T  result =
-      z*(1.L - // j1 z^1
-        z*(1.L -  // j2 z^2
-          z*(1.5L - // 3/2 // j3 z^3
+      z*(1. - // j1 z^1
+        z*(1. -  // j2 z^2
+          z*(1.5 - // 3/2 // j3 z^3
             z*(2.6666666666666666667 -  // 8/3 // j4
               z*(5.2083333333333333333 - // -125/24 // j5
                 z*(10.8 - // j6
@@ -443,7 +447,7 @@ namespace detail
                                         z*(341422.050665838363317L - // z^18
                                           z*(855992.9659966075514633L - // z^19
                                             z*(2.154990206091088289321e6L - // z^20
-                                              z*5.4455529223144624316423e6L // z^21
+                                              z*5.4455529223144624316423e6L   // z^21
                                               ))))))))))))))))))));
 
     return result;
@@ -664,9 +668,9 @@ namespace detail
   // whereas while_do does a test first,
   // perhaps avoiding an iteration if already within tolerance.
 
-  template<typename T = double>
+  template<typename T = double, class Policy>
   inline
-  T halley_update(T w0, const T z)
+  T halley_update(T w0, const T z, const Policy&)
   {
     // Iterate a few times to refine value using Halley's method.
     // Inline Halley iteration, rather than calling boost::math::tools::halley_iterate
@@ -680,9 +684,13 @@ namespace detail
     using boost::math::constants::exp_minus_one; // 0.36787944
     using boost::math::tools::max_value;
 
-    T tolerance = std::numeric_limits<T>::epsilon();
+   // T tolerance = std::numeric_limits<T>::epsilon();
+   T tolerance = boost::math::policies::get_epsilon<T, Policy>();
+
+// TODO should get_precision here.
     int iterations = 0;
     int iterations_required = 6;
+    int max_iterations = 10;
 
     T w1 = w0; // Refined estimate.
     T previous_diff = boost::math::tools::max_value<T>();
@@ -693,7 +701,13 @@ namespace detail
     // std::cout << "w = " << w0 << ", z = " << z << ", exp(w) = " << expw0 << ", diff = " << diff << std::endl;
 
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY
+    std::streamsize precision = std::cout.precision(std::numeric_limits<T>::max_digits10);  // Save.
+    std::cout.precision(std::numeric_limits<T>::max_digits10); // Show all posssibly significant digits.
+    std::ios::fmtflags flags(std::cout.flags()); // Save.
+    std::cout.setf(std::ios_base::showpoint); // Include any trailing zeros.
     std::cout << "w = " << w0 << ", z = " << z << ", exp(w) = " << expw0 << ", diff = " << diff << std::endl;
+    std::cout.precision(precision); // Restore.
+    std::cout.flags(flags);
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY
 if (diff == 0)  // Exact result - common.
     {
@@ -722,10 +736,10 @@ if (diff == 0)  // Exact result - common.
 
       diff = (w1 * exp(w1)) - z;
 
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY
       T dis = boost::math::float_distance<T>(w0, w1);
       int d = static_cast<int>(dis);
-#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY
-      std::cout << "float Distance = " << d << std::endl;
+      std::cout << "float_distance = " << d << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY
 
       if (diff == 0) // Exact.
@@ -743,7 +757,7 @@ if (diff == 0)  // Exact result - common.
       w0 = w1;
       expw0 = exp(w0);
     }
-    while ((iterations < iterations_required) || (iterations <= 10)); // Absolute limit during testing - looping if need this.
+    while ((iterations < iterations_required) || (iterations <= max_iterations)); // Absolute limit during testing - looping if need this.
 
     return w1;
   } // T halley_update(T w0, const T z)
@@ -842,7 +856,7 @@ if (diff == 0)  // Exact result - common.
     std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
     using boost::math::float_distance;
     T fd = float_distance<T>(w, y);
-    std::cout << "Distance = " << fd << std::endl;
+    std::cout << "Pre-Schroder Distance = " << static_cast<int>(fd) << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
 
     const T f0 = w - y; // f0 = w - y.
@@ -856,8 +870,8 @@ if (diff == 0)  // Exact result - common.
         f00 * (6 * y * y  +  8 * f1 * y  +  f0y)); // Fukushima Page 81, equation 21 from equation 20.
 
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
-    std::cout << "Schroeder refining " << w << "  " << y << " to  " << result << ", difference " << w - result << std::endl;
-    std::cout.precision(saved_precision);
+    std::cout << "Schroeder refined " << w << "  " << y << " to  " << result << ", difference " << w - result << std::endl;
+    std::cout.precision(saved_precision); // Restore.
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
 
     return result;
@@ -883,6 +897,16 @@ if (diff == 0)  // Exact result - common.
   template<typename T, class Policy>
   T lambert_w0_imp(const T z, const Policy& pol)
   {
+    // Catch providing an integer value as parameter x to lambert_w, for example, lambert_w(1).
+    // Need to ensure it is a floating-point type (of the desired type, float 1.F, double 1., or long double 1.L),
+    // or static_casted integer, for example:  static_cast<float>(1) or static_cast<cpp_dec_float_50>(1).
+    // Want to allow fixed_point types too, so do not just test for floating-point.
+    // Integral types should be promoted to double by user Lambert w functions.
+    BOOST_STATIC_ASSERT_MSG(!std::is_integral<T>::value, "Must be floating-point or fixed type (not integer type), for example: W(1.), not W(1)!");
+
+    // If integral type provided to user functionlambert_w0 or _wm1,
+    // then should already have been promoted to double.
+
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0
     {
       std::size_t saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
@@ -911,6 +935,14 @@ if (diff == 0)  // Exact result - common.
       std::cout << "At singularity. " << std::endl; // within epsilon/0.36
       return static_cast<T>(-1);
     }
+    else if (z < -boost::math::constants::exp_minus_one<T>()) // z < -1/e so out of range of W0 branch (should using W1 branch.
+    {
+      const char* function = "boost::math::lambert_w0<RealType>(<RealType>)";
+      return policies::raise_domain_error(function, 
+        "Argument z = %1 out of range (-1/e <= z < (std::numeric_limits<T>::max)()) for Lambert W0 branch (use W-1 branch?).", 
+        z, pol);
+      // TODO doesn't show value of z??  have error handling.hpp
+    }
     else if (z < static_cast<T>(-0.35))
     { // Near singularity/branch point at z = -0.36787944...
       const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
@@ -926,15 +958,13 @@ if (diff == 0)  // Exact result - common.
         //  T y = z * exp(-w_series);
         //  T s_result = schroeder_update(w_series, y);
         //}
+        // neither does Halley
+        //T y = z * exp(-w_series);
+        //return halley_update(w_series, y);
         return w_series;
       }
     } //  z < -0.35
-    else if (z < -boost::math::constants::exp_minus_one<T>()) // z < -1/e so out of range of W0 branch.
-    {
-      // TODO use error policy here.
-      std::cerr << "(lambert_w0) Argument out of range, z = " << z << std::endl;
-      return std::numeric_limits<T>::quiet_NaN();
-    } // z < -1/e
+ // z < -1/e
     else // Argument z is in the 'normal' range and float or double precision, so use Lookup, Bracket, Schroeder (and Halley).
     {
 
@@ -1001,25 +1031,17 @@ if (diff == 0)  // Exact result - common.
         using boost::math::policies::digits10;
         using boost::math::policies::digits2;
         using boost::math::policies::policy;
-
-#if defined(_MSC_VER)
-#pragma warning(push) // Save warning settings.
-#pragma warning(disable : 4244) // warning C4244: 'initializing': conversion from 'double' to 'result_type',
-#endif
-        // Compute a 50 bit approximate W0.
-        T result = lambert_w0_imp<double>(static_cast<double>(z), policy<digits2<50> >());
-#if defined(_MSC_VER)
-#pragma warning(pop) // Restore warnings to previous state.
-#endif
-#ifdef  BOOST_MATH_INSTRUMENT_LAMBERT_W0
-        std::cout << "Approximation double = " << result << std::endl;
+        // Compute a 50-bit precision approximate W0 in a double (no Halley refinement).
+        T double_approx = static_cast<T>(lambert_w0_imp<double>(static_cast<double>(z), policy<digits2<50> >()));
+#ifdef  BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN
+        std::cout << "Argument Type " << typeid(T).name() << " approximation double = " << result << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0
         // Perform additional Halley refinement(s) to ensure that
         // get a near as possible to correct result (usually +/- one epsilon).
-        result = halley_update(result, z);
-#ifdef  BOOST_MATH_INSTRUMENT_LAMBERT_W0
+        T result = halley_update(double_approx, z, pol);
+#ifdef  BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN
         std::cout.precision(std::numeric_limits<T>::max_digits10);
-        std::cout << "Result T-precision Halley refinement =    " << result << std::endl;
+        std::cout << "Result " << typeid(T).name() << " precision Halley refinement =    " << result << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0
         return result;
       } // digits > 53
@@ -1156,7 +1178,7 @@ if (diff == 0)  // Exact result - common.
           else // Perform additional Halley refinement(s) to ensure that
           // get a near as possible to correct result (usually +/- epsilon).
           {
-            result = halley_update(result, z);
+            result = halley_update(result, z, pol);
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0
             std::cout.precision(std::numeric_limits<T>::max_digits10);
             std::cout << "Halley refinement estimate =    " << result << std::endl;
@@ -1175,6 +1197,16 @@ if (diff == 0)  // Exact result - common.
   template<typename T, class Policy>
   T lambert_wm1_imp(const T z, const Policy& /* pol */)
   {
+    // Catch providing an integer value as parameter x to lambert_w, for example, lambert_w(1).
+    // Need to ensure it is a floating-point type (of the desired type, float 1.F, double 1., or long double 1.L),
+    // or static_casted integer, for example:  static_cast<float>(1) or static_cast<cpp_dec_float_50>(1).
+    // Want to allow fixed_point types too, so do not just test for floating-point.
+    // Integral types should be promoted to double by user Lambert w functions.
+    // If integral type provided to user function lambert_w0 or _wm1,
+    // then should already have been promoted to double.
+
+    BOOST_STATIC_ASSERT_MSG(!std::is_integral<T>::value, "Must be floating-point or fixed type (not integer type), for example: W(1.), not W(1)!");
+
     BOOST_MATH_STD_USING // Aid argument dependent lookup (ADL) of abs.
 
     // else z is too large for the w-1 branch.
@@ -1312,12 +1344,11 @@ if (diff == 0)  // Exact result - common.
     return result;
   } // template<typename T = double> T lambert_wm1_imp(const T z)
 
-} // namespace detail
+} // namespace detail ////////////////////////////////////////////////////////////
 
-   //User Lambert W functions.
-  // W0 branch, -1/e < z < max(z)
+  // User Lambert W functions.
 
-using boost::math::tools::promote_arg;
+  //! W0 branch, -1/e < z < max(z)
 
   //! Lambert W0 using User-defined policy.
   template <class T, class Policy>
@@ -1329,7 +1360,7 @@ using boost::math::tools::promote_arg;
     // without doing any other internal promotion like float to double.
     typedef typename tools::promote_args<T>::type result_type;
     return detail::lambert_w0_imp(result_type(z), pol); //
-  }
+  } // lambert_w0(T z, const Policy& pol)
 
   //! Lambert W0 using default policy.
   template <class T>
@@ -1337,29 +1368,33 @@ using boost::math::tools::promote_arg;
   typename tools::promote_args<T>::type
   lambert_w0(T z)
   {
-    return detail::lambert_w0_imp(z, policies::policy<>());
+    typedef typename tools::promote_args<T>::type result_type;
+    return detail::lambert_w0_imp(result_type(z), policies::policy<>());
+  } // lambert_w0(T z)
+
+
+  //! W-1 branch (-max(z) < z <= -1/e).
+
+  //! Lambert W1 using User-defined policy.
+  template <class T, class Policy>
+  inline typename tools::promote_args<T>::type
+  lambert_wm1(T z, const Policy& pol)
+  {
+    // Promote integer or expression template arguments to double,
+    // without doing any other internal promotion like float to double.
+    typedef typename tools::promote_args<T>::type result_type;
+    return detail::lambert_wm1_imp(result_type(z), pol); //
   }
 
-  ////! W-1 branch (-max(z) < z <= -1/e).
-
-  ////! Lambert W1 using User-defined policy.
-  //template <class T, class Policy>
-  //inline typename tools::promote_args<T>::type
-  //lambert_wm1(T z, const Policy& pol)
-  //{
-  //  // Promote integer or expression template arguments to double,
-  //  // without doing any other internal promotion like float to double.
-  //  typedef typename tools::promote_args<T>::type result_type;
-  //  return detail::lambert_wm1_imp(result_type(z), pol); //
-  //}
-
-  //// Lambert W1 using default policy.
-  //template <class T>
-  //inline typename
-  //tools::promote_args<T>::type lambert_wm1(T z)
-  //{
-  //  return lambert_wm1(z, policies::policy<>());
-  //}
+  // Lambert W1 using default policy.
+  template <class T>
+  inline
+  typename tools::promote_args<T>::type
+  lambert_wm1(T z)
+  {
+    typedef typename tools::promote_args<T>::type result_type;
+    return detail::lambert_wm1(result_type(z), policies::policy<>());
+  } // lambert_wm1(T z)
 
   } // namespace math
 } // namespace boost
