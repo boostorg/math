@@ -113,6 +113,26 @@ inline bool check_x(
 } // bool check_x
 
 template <class RealType, class Policy>
+inline bool check_x_not_NaN(
+  const char* function,
+  RealType x,
+  RealType* result,
+  const Policy& pol)
+{
+  // Note that this test catches only NaN.
+  // Some distributions permit x to be infinite, leaving this test to catch any NaNs.
+  // See Normal, Logistic, Laplace and Cauchy for example.
+  if ((boost::math::isnan)(x))
+  {
+    *result = policies::raise_domain_error<RealType>(
+      function,
+      "Random variate x is %1%, but must be finite or + or - infinity!", x, pol);
+    return false;
+  }
+  return true;
+} // bool check_x_not_NaN
+
+template <class RealType, class Policy>
 inline bool check_x_gt0(
       const char* function,
       RealType x,
