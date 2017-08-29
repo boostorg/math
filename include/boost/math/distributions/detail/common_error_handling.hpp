@@ -14,6 +14,11 @@
 // using boost::math::isfinite;
 // using boost::math::isnan;
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4702) // unreachable code (return after domain_error throw).
+#endif
+
 namespace boost{ namespace math{ namespace detail
 {
 
@@ -210,5 +215,9 @@ inline bool check_finite(
 } // namespace detail
 } // namespace math
 } // namespace boost
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 #endif // BOOST_MATH_DISTRIBUTIONS_COMMON_ERROR_HANDLING_HPP

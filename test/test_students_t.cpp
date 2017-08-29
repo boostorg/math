@@ -24,9 +24,9 @@
 
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
 #include <boost/math/tools/test.hpp> // for real_concept
+#include "test_out_of_range.hpp"
 #include <boost/math/distributions/students_t.hpp>
     using boost::math::students_t_distribution;
-#include <boost/math/distributions/detail/test_out_of_range.hpp>
 
 #include <iostream>
    using std::cout;
