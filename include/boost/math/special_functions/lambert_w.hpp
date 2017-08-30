@@ -54,7 +54,6 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN // higher than built-in precision t
 //#include "test_value.hpp"  // for create_test_value and macro BOOST_MATH_TEST_VALUE.
 #include "J:\Cpp\Misc\lambert_w_pb_spot_tests\test_value.hpp" // Temporary kludge.
 
-
 #include <limits>
 #include <cmath>
 #include <limits>
@@ -77,7 +76,7 @@ namespace detail
   // T. Fukushima / Journal of Computational and Applied Mathematics 244 (2013) Page 85, Table 3.
   // Wolfram command used to obtain 40 series terms at 50 decimal digit precision was
   // N[InverseSeries[Series[Sqrt[2(p Exp[1 + p] + 1)], { p,-1,40 }]], 50]
-  // -1+p-p^2/3+(11 p^3)/72-(43 p^4)/540+(769 p^5)/17280-(221 p^6)/8505+(680863 p^7)/43545600 ... 
+  // -1+p-p^2/3+(11 p^3)/72-(43 p^4)/540+(769 p^5)/17280-(221 p^6)/8505+(680863 p^7)/43545600 ...
   // Made these constants full precision for any T using original fractions from Table 3.
   // Decimal values of specifications for built-in floating-point types below
   // are at least 21 digits precision == max_digits10 for long double.
@@ -89,7 +88,7 @@ namespace detail
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES
       std::size_t saved_precision = std::cout.precision(3);
       std::cout << "Singularity_series Lambert_w p argument = " << p << std::endl;
-      std::cout 
+      std::cout
         //<< "Argument Type = " << typeid(T).name()
         //<< ", max_digits10 = " << std::numeric_limits<T>::max_digits10
         //<< ", epsilon = " << std::numeric_limits<T>::epsilon()
@@ -148,7 +147,7 @@ namespace detail
        // -T(5.5442032085673591366657251660804575198155559225316E-6L) // j26
       // 21 to 26 Added for long double.
       }; // static const T q[]
-      
+
       /*
       // Temporary copy of original double values for comparison and these are reproduced well.
       static const T q[] =
@@ -205,14 +204,14 @@ namespace detail
         else if (ap < 0.0766)
         { // Near singularity.
           terms = 10;
-        } 
+        }
         std::streamsize saved_precision = std::cout.precision(3);
         std::cout << "abs(p) = " << ap << ", terms = " << terms << std::endl;
         std::cout.precision(saved_precision);
       }
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS
 
-    if (ap < 0.01159) 
+    if (ap < 0.01159)
     { // Only 6 near-singularity series terms are useful.
       return
         -1 +
@@ -240,7 +239,7 @@ namespace detail
                           p*q[10]
                           )))))))));
     }
-    else 
+    else
     { // Use all 20 near-singularity series terms.
       return
         -1 +
@@ -360,7 +359,7 @@ namespace detail
   //! Specialization of float (32-bit) series expansion used for small z (abs(z) < 0.05).
   // Only 9 Coefficients are computed to 21 decimal digits precision, ample for 32-bit float used by most platforms.
   // Taylor series coefficients used are computed by Wolfram to 50 decimal digits using instruction
-  // N[InverseSeries[Series[z Exp[z],{z,0,34}]],50], 
+  // N[InverseSeries[Series[z Exp[z],{z,0,34}]],50],
   // as proposed by Tosio Fukushima and implemented by Darko Veberic.
 
   template <class T, class Policy>
@@ -380,7 +379,7 @@ namespace detail
                   z*(23.343055555555555556F - // j7
                     z*(52.012698412698412698F - // j8
                       z*118.62522321428571429F)))))))); // j9
-  } // template <class T>   T lambert_w0_small_z(T x, mpl::int_<0> const&)  
+  } // template <class T>   T lambert_w0_small_z(T x, mpl::int_<0> const&)
 
     //! Specialization of long double (80-bit double extended) series expansion used for small z (abs(z) < 0.05).
     // 17 Coefficients are computed to 21 decimal digits precision suitable for 64-bit double used by most platforms.
@@ -512,7 +511,7 @@ namespace detail
       //T t = pow(z, k) * pow(T(k), -1 + k) / factorial<T>(k); // (z^k * k(k-1)^k) / k!
       T result = term * pow(T(k), -1 + k); // term * k^(k-1)
                                            // std::cout << " k = " << k << ", term = " << term << ", result = " << result << std::endl;
-      return result; // 
+      return result; //
     }
   private:
     int k;
@@ -554,7 +553,7 @@ namespace detail
       -static_cast<T>(7909306972uLL) / 868725uLL, // z^14
       static_cast<T>(320361328125uLL) / 14350336uLL, // z^15
       -static_cast<T>(35184372088832uLL) / 638512875uLL, // z^16
-      static_cast<T>(2862423051509815793uLL) / 20922789888000uLL, // z^17 term 
+      static_cast<T>(2862423051509815793uLL) / 20922789888000uLL, // z^17 term
       -static_cast<T>(5083731656658uLL) / 14889875uLL,
       // z^18 term. = 136808.86090394293563342215789305735851647769682393
 
@@ -566,7 +565,7 @@ namespace detail
       // See note below calling the functor to compute another term,
       // sufficient for 80-bit long double precision.
       // Wolfram -341422.05066583836331735491399356945575432970390954 z^19 term.
-      // (5480386857784802185939 z^19)/6402373705728000 
+      // (5480386857784802185939 z^19)/6402373705728000
       // But now this variant is not used to compute long double
       // as specializations are provided above.
     }; // static const T coeff[]
@@ -610,14 +609,14 @@ namespace detail
     // Size of coeff found from N
     //std::cout << "evaluate_polynomial(coeff, z); == " << result << std::endl;
     //std::cout << "result = " << result << std::endl;
-    // It's an artefact of the way I wrote the functor: *after* evaluating N 
-    // terms, its internal state has k = N and term = (-1)^N z^N.  So after 
-    // evaluating 18 terms, we initialize the functor to the term we've just 
+    // It's an artefact of the way I wrote the functor: *after* evaluating N
+    // terms, its internal state has k = N and term = (-1)^N z^N.  So after
+    // evaluating 18 terms, we initialize the functor to the term we've just
     // evaluated, and then when it's called, it increments itself to the next term.
     // So 18!is 6402373705728000, which is where that comes from.
 
     // The 19th coefficient of the polynomial is actually, 19 ^ 18 / 19!=
-    // 104127350297911241532841 / 121645100408832000 which after removing GCDs 
+    // 104127350297911241532841 / 121645100408832000 which after removing GCDs
     // reduces down to Wolfram rational 5480386857784802185939 / 6402373705728000.
     // Wolfram z^19 term +(5480386857784802185939 z^19) /6402373705728000
     // +855992.96599660755146336302506332246623424823099755 z^19
@@ -640,11 +639,11 @@ namespace detail
                                                                                // max_iter = 0;
     result = sum_series(s, get_epsilon<T, Policy>(), max_iter, result);
     // result == evaluate_polynomial.
-    //sum_series(Functor& func, int bits, boost::uintmax_t& max_terms, const U& init_value) 
+    //sum_series(Functor& func, int bits, boost::uintmax_t& max_terms, const U& init_value)
     // std::cout << "sum_series(s, get_epsilon<T, Policy>(), max_iter, result); = " << result << std::endl;
 
     //T epsilon = get_epsilon<T, Policy>();
-    //std::cout << "epilson from policy = " << epsilon << std::endl; 
+    //std::cout << "epilson from policy = " << epsilon << std::endl;
     // epilson from policy = 1.93e-34 for T == quad
     //  5.35e-51 for t = cpp_bin_float_50
 
@@ -938,8 +937,8 @@ if (diff == 0)  // Exact result - common.
     else if (z < -boost::math::constants::exp_minus_one<T>()) // z < -1/e so out of range of W0 branch (should using W1 branch.
     {
       const char* function = "boost::math::lambert_w0<RealType>(<RealType>)";
-      return policies::raise_domain_error(function, 
-        "Argument z = %1 out of range (-1/e <= z < (std::numeric_limits<T>::max)()) for Lambert W0 branch (use W-1 branch?).", 
+      return policies::raise_domain_error(function,
+        "Argument z = %1 out of range (-1/e <= z < (std::numeric_limits<T>::max)()) for Lambert W0 branch (use W-1 branch?).",
         z, pol);
       // TODO doesn't show value of z??  have error handling.hpp
     }
@@ -1026,7 +1025,7 @@ if (diff == 0)  // Exact result - common.
       { // T is more precise than 64-bit double (or long double, or ?),
         // so compute an approximate value using only Schroeder refinement,
         // (avoiding any double-precision Halley refinement from policy double_digits2<50> 53 - 3 = 50
-        // because are next going to use Halley refinement at full/high precision using this as an approximation). 
+        // because are next going to use Halley refinement at full/high precision using this as an approximation).
         using boost::math::policies::precision;
         using boost::math::policies::digits10;
         using boost::math::policies::digits2;
@@ -1047,7 +1046,7 @@ if (diff == 0)  // Exact result - common.
       } // digits > 53
       else // T is double or less precision.
       {
-        // Use a lookup table to find the nearest integral values as starting point for Bisection. 
+        // Use a lookup table to find the nearest integral values as starting point for Bisection.
 
         // Test sequence is n is (0, 1, 2, 4, 8, 16, 32, 64) for W0 branch.
         // Since z is probably quite small, start with lowest (n = 0).
@@ -1377,7 +1376,8 @@ if (diff == 0)  // Exact result - common.
 
   //! Lambert W1 using User-defined policy.
   template <class T, class Policy>
-  inline typename tools::promote_args<T>::type
+  inline
+  typename tools::promote_args<T>::type
   lambert_wm1(T z, const Policy& pol)
   {
     // Promote integer or expression template arguments to double,
@@ -1393,7 +1393,7 @@ if (diff == 0)  // Exact result - common.
   lambert_wm1(T z)
   {
     typedef typename tools::promote_args<T>::type result_type;
-    return detail::lambert_wm1(result_type(z), policies::policy<>());
+    return detail::lambert_wm1_imp(result_type(z), policies::policy<>());
   } // lambert_wm1(T z)
 
   } // namespace math
