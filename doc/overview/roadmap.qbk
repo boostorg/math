@@ -6,6 +6,20 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
+[h4 Math-2.6.0 (Boost-1.65)]
+
+New Features:
+
+* Add [link math_toolkit.interpolate.cubic_b cubic B-Spline interpolation functions], with thanks to Nick Thompson.
+* Add [link math_toolkit.interpolate.barycentric barycentric rational interpolation functions], with thanks to Nick Thompson.
+* Add [link math_toolkit.quadrature.trapezoidal adaptive trapezoidal quadrature], with thanks to Nick Thompson.
+* Add [link math_toolkit.sf_poly.legendre support for the zeros and derivatives of Legendre polynomials], with thanks to Nick Thompson.
+
+Patches:
+
+* Improve polynomial GCD algorithms, with thanks to Jeremy Murphy.
+* Removed gcd/lcm routines from Boost.Math - these are now in Boost.Integer.
+
 [h4 Math-2.5.2 (Boost-1.64)]
 
 Patches:

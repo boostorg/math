@@ -846,6 +846,12 @@
 
 
 [/sections:]
+[template section_Polynomial_Arithmetic_Microsoft_Visual_C_version_14_1_Windows_x64_[]
+[section:section_Polynomial_Arithmetic_Microsoft_Visual_C_version_14_1_Windows_x64_ Polynomial Arithmetic (Microsoft Visual C++ version 14.1, Windows x64)]
+[table_Polynomial_Arithmetic_Microsoft_Visual_C_version_14_1_Windows_x64_]
+[endsect]
+]
+
 [template section_gcd_method_comparison_with_Microsoft_Visual_C_version_14_1_on_Windows_x64[]
 [section:section_gcd_method_comparison_with_Microsoft_Visual_C_version_14_1_on_Windows_x64 gcd method comparison with Microsoft Visual C++ version 14.1 on Windows x64]
 [table_gcd_method_comparison_with_Microsoft_Visual_C_version_14_1_on_Windows_x64]
@@ -1033,6 +1039,7 @@
 [section_Library_Comparison_with_GNU_C_version_5_3_0_on_linux]
 [section_Library_Comparison_with_Intel_C_C_0x_mode_version_1600_on_Windows_x64]
 [section_Library_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[section_Polynomial_Arithmetic_Microsoft_Visual_C_version_14_1_Windows_x64_]
 [section_Polynomial_Method_Comparison_with_GNU_C_version_5_3_0_on_Windows_x64]
 [section_Polynomial_Method_Comparison_with_GNU_C_version_5_3_0_on_linux]
 [section_Polynomial_Method_Comparison_with_Intel_C_C_0x_mode_version_1600_on_Windows_x64]
@@ -1064,6 +1071,7 @@
 [table_Library_Comparison_with_GNU_C_version_5_3_0_on_linux]
 [table_Library_Comparison_with_Intel_C_C_0x_mode_version_1600_on_Windows_x64]
 [table_Library_Comparison_with_Microsoft_Visual_C_version_14_0_on_Windows_x64]
+[table_Polynomial_Arithmetic_Microsoft_Visual_C_version_14_1_Windows_x64_]
 [table_Polynomial_Method_Comparison_with_GNU_C_version_5_3_0_on_Windows_x64]
 [table_Polynomial_Method_Comparison_with_GNU_C_version_5_3_0_on_linux]
 [table_Polynomial_Method_Comparison_with_Intel_C_C_0x_mode_version_1600_on_Windows_x64]
@@ -1081,6 +1089,29 @@
 
 
 [/tables:]
+[template table_Polynomial_Arithmetic_Microsoft_Visual_C_version_14_1_Windows_x64_[]
+[table:table_Polynomial_Arithmetic_Microsoft_Visual_C_version_14_1_Windows_x64_ Polynomial Arithmetic (Microsoft Visual C++ version 14.1, Windows x64)
+[[Function][boost::uint64_t][double][cpp_int]]
+[[operator *][[role green 1.00[br](710ns)]][[role green 1.07[br](759ns)]][[role red 12.64[br](8975ns)]]]
+[[operator * (int)][[role green 1.00[br](118ns)]][[role green 1.11[br](131ns)]][[role red 5.21[br](615ns)]]]
+[[operator *=][[role green 1.00[br](360231ns)]][[role green 1.03[br](372550ns)]][[role red 14.15[br](5097344ns)]]]
+[[operator *= (int)][[role green 1.00[br](17401ns)]][[role green 1.05[br](18297ns)]][[role red 19.63[br](341517ns)]]]
+[[operator +][[role green 1.00[br](256ns)]][[role green 1.05[br](269ns)]][[role red 3.39[br](867ns)]]]
+[[operator + (int)][[role green 1.00[br](100ns)]][[role green 1.06[br](106ns)]][[role red 3.20[br](320ns)]]]
+[[operator +=][[role green 1.00[br](17ns)]][[role green 1.12[br](19ns)]][[role red 20.29[br](345ns)]]]
+[[operator += (int)][[role blue 1.75[br](7ns)]][[role green 1.00[br](4ns)]][[role red 32.50[br](130ns)]]]
+[[operator -][[role green 1.00[br](262ns)]][[role green 1.03[br](270ns)]][[role red 3.72[br](974ns)]]]
+[[operator - (int)][[role green 1.00[br](99ns)]][[role green 1.08[br](107ns)]][[role red 3.17[br](314ns)]]]
+[[operator -=][[role green 1.00[br](16ns)]][[role green 1.13[br](18ns)]][[role red 21.06[br](337ns)]]]
+[[operator -= (int)][[role blue 1.50[br](6ns)]][[role green 1.00[br](4ns)]][[role red 27.75[br](111ns)]]]
+[[operator /][[role blue 1.44[br](828ns)]][[role green 1.00[br](577ns)]][[role red 44.51[br](25683ns)]]]
+[[operator / (int)][[role blue 1.43[br](268ns)]][[role green 1.00[br](187ns)]][[role red 5.86[br](1096ns)]]]
+[[operator /=][[role green 1.06[br](19ns)]][[role green 1.00[br](18ns)]][[role red 162.72[br](2929ns)]]]
+[[operator /= (int)][[role green 1.00[br](6857ns)]][[role red 7.34[br](50323ns)]][[role red 356.98[br](2447829ns)]]]
+]
+]
+
+
 [template table_gcd_method_comparison_with_Microsoft_Visual_C_version_14_1_on_Windows_x64[]
 [table:table_gcd_method_comparison_with_Microsoft_Visual_C_version_14_1_on_Windows_x64 gcd method comparison with Microsoft Visual C++ version 14.1 on Windows x64
 [[Function][gcd

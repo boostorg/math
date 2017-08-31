@@ -28,7 +28,7 @@ using namespace boost::multiprecision;
 
 typedef number<cpp_dec_float<50>, et_on> test_type;
 
-#if !(defined(CI_SUPPRESS_KNOWN_ISSUES) && BOOST_WORKAROUND(BOOST_GCC, <= 60200))
+#if !(defined(CI_SUPPRESS_KNOWN_ISSUES) && defined(BOOST_GCC))
 
 void foo()
 {

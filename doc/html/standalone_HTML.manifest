@@ -326,6 +326,20 @@ math_toolkit/interpolate/cubic_b.html
 math_toolkit/interpolate/barycentric.html
 math_toolkit/quadrature.html
 math_toolkit/quadrature/trapezoidal.html
+<<<<<<< HEAD
+=======
+math_toolkit/quadrature/double_exponential.html
+math_toolkit/quadrature/double_exponential/de_overview.html
+math_toolkit/quadrature/double_exponential/de_tanh_sinh.html
+math_toolkit/quadrature/double_exponential/de_tanh_sinh_2_arg.html
+math_toolkit/quadrature/double_exponential/de_sinh_sinh.html
+math_toolkit/quadrature/double_exponential/de_exp_sinh.html
+math_toolkit/quadrature/double_exponential/de_tol.html
+math_toolkit/quadrature/double_exponential/de_levels.html
+math_toolkit/quadrature/double_exponential/de_thread.html
+math_toolkit/quadrature/double_exponential/de_caveats.html
+math_toolkit/quadrature/double_exponential/de_refes.html
+>>>>>>> origin/develop
 internals.html
 math_toolkit/internals_overview.html
 math_toolkit/internals.html
