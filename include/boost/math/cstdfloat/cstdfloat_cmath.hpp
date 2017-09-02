@@ -536,13 +536,11 @@
     using boost::math::cstdfloat::detail::ldexp;
     using boost::math::cstdfloat::detail::frexp;
     using boost::math::cstdfloat::detail::fabs;
-<<<<<<< HEAD
-   // using boost::math::cstdfloat::detail::abs;
-=======
+
 #if !(defined(_GLIBCXX_USE_FLOAT128) && defined(__GNUC__) && (__GNUC__ >= 7))
     using boost::math::cstdfloat::detail::abs;
 #endif
->>>>>>> origin/develop
+
     using boost::math::cstdfloat::detail::floor;
     using boost::math::cstdfloat::detail::ceil;
     using boost::math::cstdfloat::detail::sqrt;
