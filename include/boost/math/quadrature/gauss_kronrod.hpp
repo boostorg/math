@@ -1,4 +1,5 @@
 //  Copyright John Maddock 2017.
+// Copyright Nick Thompson 2017.
 //  Use, modification and distribution are subject to the
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -1803,7 +1804,7 @@ private:
       if (pL1)
          *pL1 = L1;
       if (error)
-         *error = (std::max)(fabs(kronrod_result - gauss_result), fabs(kronrod_result * tools::epsilon<Real>() * 2));
+         *error = (std::max)(static_cast<Real>(fabs(kronrod_result - gauss_result)), static_cast<Real>(fabs(kronrod_result * tools::epsilon<Real>() * 2)));
       return kronrod_result;
    }
 
@@ -1817,10 +1818,11 @@ private:
    template <class F>
    static value_type recursive_adaptive_integrate(const recursive_info<F>* info, Real a, Real b, unsigned max_levels, Real abs_tol, Real* error, Real* L1)
    {
+      using std::fabs;
       Real error_local;
       Real mean = (b + a) / 2;
       Real scale = (b - a) / 2;
-      auto ff = [&](const Real& x)
+      auto ff = [&](const Real& x)->Real
       {
          return info->f(scale * x + mean);
       };

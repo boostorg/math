@@ -17,10 +17,13 @@
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/multiprecision/debug_adaptor.hpp>
 
-#if !defined(TEST1) && !defined(TEST2)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3)
 #  define TEST1
 #  define TEST2
+#  define TEST3
 #endif
 
 #ifdef _MSC_VER
@@ -60,6 +63,9 @@ using boost::math::constants::root_two;
 using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
 using boost::multiprecision::cpp_bin_float_quad;
+using boost::multiprecision::cpp_dec_float_50;
+using boost::multiprecision::debug_adaptor;
+using boost::multiprecision::number;
 
 //
 // Error rates depend only on the number of points in the approximation, not the type being tested,
@@ -306,20 +312,20 @@ void test_three_quadrature_schemes_examples()
     Real Q_expected;
 
     // Example 1:
-    auto f1 = [](const Real& t) { return t*boost::math::log1p(t); };
+    auto f1 = [](const Real& t)->Real { return t*boost::math::log1p(t); };
     Q = gauss_kronrod<Real, Points>::integrate(f1, 0 , 1, 0);
     Q_expected = half<Real>()*half<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
 
     // Example 2:
-    auto f2 = [](const Real& t) { return t*t*atan(t); };
+    auto f2 = [](const Real& t)->Real { return t*t*atan(t); };
     Q = gauss_kronrod<Real, Points>::integrate(f2, 0 , 1, 0);
     Q_expected = (pi<Real>() -2 + 2*ln_two<Real>())/12;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 2 * tol);
 
     // Example 3:
-    auto f3 = [](const Real& t) { return exp(t)*cos(t); };
+    auto f3 = [](const Real& t)->Real { return exp(t)*cos(t); };
     Q = gauss_kronrod<Real, Points>::integrate(f3, 0, half_pi<Real>(), 0);
     Q_expected = boost::math::expm1(half_pi<Real>())*half<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -332,13 +338,13 @@ void test_three_quadrature_schemes_examples()
 
     tol = expected_error<Points>(test_three_quad_error_id_2);
     // Example 5:
-    auto f5 = [](const Real& t) { return sqrt(t)*log(t); };
+    auto f5 = [](const Real& t)->Real { return sqrt(t)*log(t); };
     Q = gauss_kronrod<Real, Points>::integrate(f5, 0 , 1, 0);
     Q_expected = -4/ (Real) 9;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 
     // Example 6:
-    auto f6 = [](const Real& t) { return sqrt(1 - t*t); };
+    auto f6 = [](const Real& t)->Real { return sqrt(1 - t*t); };
     Q = gauss_kronrod<Real, Points>::integrate(f6, 0 , 1, 0);
     Q_expected = pi<Real>()/4;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -457,15 +463,17 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<cpp_bin_float_quad, 51>();
     test_right_limit_infinite<cpp_bin_float_quad, 51>();
     test_left_limit_infinite<cpp_bin_float_quad, 51>();
-
+#endif
+#ifdef TEST3
+    // Need at least one set of tests with expression templates turned on:
     std::cout << "Testing 61 point approximation:\n";
-    test_linear<cpp_bin_float_quad, 61>();
-    test_quadratic<cpp_bin_float_quad, 61>();
-    test_ca<cpp_bin_float_quad, 61>();
-    test_three_quadrature_schemes_examples<cpp_bin_float_quad, 61>();
-    test_integration_over_real_line<cpp_bin_float_quad, 61>();
-    test_right_limit_infinite<cpp_bin_float_quad, 61>();
-    test_left_limit_infinite<cpp_bin_float_quad, 61>();
+    test_linear<cpp_dec_float_50, 61>();
+    test_quadratic<cpp_dec_float_50, 61>();
+    test_ca<cpp_dec_float_50, 61>();
+    test_three_quadrature_schemes_examples<cpp_dec_float_50, 61>();
+    test_integration_over_real_line<cpp_dec_float_50, 61>();
+    test_right_limit_infinite<cpp_dec_float_50, 61>();
+    test_left_limit_infinite<cpp_dec_float_50, 61>();
 #endif
 }
 

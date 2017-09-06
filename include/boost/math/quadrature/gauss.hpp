@@ -14,20 +14,28 @@
 #include <boost/math/special_functions/legendre.hpp>
 #include <boost/math/constants/constants.hpp>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
+
 namespace boost { namespace math{ namespace quadrature{ namespace detail{
 
 template <class T>
 struct gauss_constant_category
 {
    static const unsigned value =
-      (std::numeric_limits<T>::is_specialized == 0) || (std::numeric_limits<T>::radix != 2) ? 999 :
-      (std::numeric_limits<T>::digits <= std::numeric_limits<float>::digits) && boost::is_convertible<float, T>::value ? 0 :
-      (std::numeric_limits<T>::digits <= std::numeric_limits<double>::digits) && boost::is_convertible<double, T>::value ? 1 :
-      (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && boost::is_convertible<long double, T>::value ? 2 :
+      (std::numeric_limits<T>::is_specialized == 0) ? 999 :
+      (std::numeric_limits<T>::radix == 2) ?
+      (
+         (std::numeric_limits<T>::digits <= std::numeric_limits<float>::digits) && boost::is_convertible<float, T>::value ? 0 :
+         (std::numeric_limits<T>::digits <= std::numeric_limits<double>::digits) && boost::is_convertible<double, T>::value ? 1 :
+         (std::numeric_limits<T>::digits <= std::numeric_limits<long double>::digits) && boost::is_convertible<long double, T>::value ? 2 :
 #ifdef BOOST_HAS_FLOAT128
-      (std::numeric_limits<T>::digits <= 113) && boost::is_constructible<__float128, T>::value ? 3 :
+         (std::numeric_limits<T>::digits <= 113) && boost::is_constructible<__float128, T>::value ? 3 :
 #endif
-      (std::numeric_limits<T>::digits10 <= 110) ? 4 : 999;
+         (std::numeric_limits<T>::digits10 <= 110) ? 4 : 999
+      ) : (std::numeric_limits<T>::digits10 <= 110) ? 4 : 999;
 };
 
 template <class Real, unsigned N, unsigned Category>
@@ -1258,6 +1266,10 @@ public:
 } // namespace quadrature
 } // namespace math
 } // namespace boost
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_MATH_QUADRATURE_GAUSS_HPP
 
