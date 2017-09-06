@@ -4,7 +4,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE tanh_sinh_quadrature_test
+#define BOOST_TEST_MODULE Gauss Kronrod_quadrature_test
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
@@ -17,6 +17,11 @@
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+
+#if !defined(TEST1) && !defined(TEST2)
+#  define TEST1
+#  define TEST2
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(disable:4127)  // Conditional expression is constant
@@ -80,6 +85,28 @@ double expected_error(unsigned)
 
 template <>
 double expected_error<15>(unsigned id)
+{
+   switch (id)
+   {
+   case test_ca_error_id:
+      return 1e-7;
+   case test_ca_error_id_2:
+      return 2e-5;
+   case test_three_quad_error_id:
+      return 1e-8;
+   case test_three_quad_error_id_2:
+      return 3.5e-3;
+   case test_integration_over_real_line_error_id:
+      return 6e-3;
+   case test_right_limit_infinite_error_id:
+   case test_left_limit_infinite_error_id:
+      return 1e-5;
+   }
+   return 0;  // placeholder, all tests will fail
+}
+
+template <>
+double expected_error<17>(unsigned id)
 {
    switch (id)
    {
@@ -166,6 +193,50 @@ double expected_error<41>(unsigned id)
    return 0;  // placeholder, all tests will fail
 }
 
+template <>
+double expected_error<51>(unsigned id)
+{
+   switch (id)
+   {
+   case test_ca_error_id:
+      return 5e-33;
+   case test_ca_error_id_2:
+      return 1e-8;
+   case test_three_quad_error_id:
+      return 1e-32;
+   case test_three_quad_error_id_2:
+      return 3e-4;
+   case test_integration_over_real_line_error_id:
+      return 1e-14;
+   case test_right_limit_infinite_error_id:
+   case test_left_limit_infinite_error_id:
+      return 3e-19;
+   }
+   return 0;  // placeholder, all tests will fail
+}
+
+template <>
+double expected_error<61>(unsigned id)
+{
+   switch (id)
+   {
+   case test_ca_error_id:
+      return 5e-34;
+   case test_ca_error_id_2:
+      return 5e-9;
+   case test_three_quad_error_id:
+      return 4e-34;
+   case test_three_quad_error_id_2:
+      return 1e-4;
+   case test_integration_over_real_line_error_id:
+      return 1e-16;
+   case test_right_limit_infinite_error_id:
+   case test_left_limit_infinite_error_id:
+      return 3e-23;
+   }
+   return 0;  // placeholder, all tests will fail
+}
+
 
 template<class Real, unsigned Points>
 void test_linear()
@@ -186,7 +257,7 @@ void test_linear()
 template<class Real, unsigned Points>
 void test_quadratic()
 {
-    std::cout << "Testing quadratic functions are integrated properly by tanh_sinh on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing quadratic functions are integrated properly by Gauss Kronrod on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real error;
 
@@ -289,19 +360,12 @@ void test_integration_over_real_line()
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-
-    auto f4 = [](const Real& t) { return 1/cosh(t);};
-    Q = gauss_kronrod<Real, Points>::integrate(f4, -boost::math::tools::max_value<Real>(), boost::math::tools::max_value<Real>(), 0, 0, &error, &L1);
-    Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-
 }
 
 template<class Real, unsigned Points>
 void test_right_limit_infinite()
 {
-    std::cout << "Testing right limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing right limit infinite for Gauss Kronrod in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = expected_error<Points>(test_right_limit_infinite_error_id);
     Real Q;
     Real Q_expected;
@@ -323,7 +387,7 @@ void test_right_limit_infinite()
 template<class Real, unsigned Points>
 void test_left_limit_infinite()
 {
-    std::cout << "Testing left limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing left limit infinite for Gauss Kronrod in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = expected_error<Points>(test_left_limit_infinite_error_id);
     Real Q;
     Real Q_expected;
@@ -337,6 +401,8 @@ void test_left_limit_infinite()
 
 BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 {
+#ifdef TEST1
+    std::cout << "Testing 15 point approximation:\n";
     test_linear<double, 15>();
     test_quadratic<double, 15>();
     test_ca<double, 15>();
@@ -344,7 +410,18 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<double, 15>();
     test_right_limit_infinite<double, 15>();
     test_left_limit_infinite<double, 15>();
+    
+    //  test one case where we do not have pre-computed constants:
+    std::cout << "Testing 17 point approximation:\n";
+    test_linear<double, 17>();
+    test_quadratic<double, 17>();
+    test_ca<double, 17>();
+    test_three_quadrature_schemes_examples<double, 17>();
+    test_integration_over_real_line<double, 17>();
+    test_right_limit_infinite<double, 17>();
+    test_left_limit_infinite<double, 17>();
 
+    std::cout << "Testing 21 point approximation:\n";
     test_linear<cpp_bin_float_quad, 21>();
     test_quadratic<cpp_bin_float_quad, 21>();
     test_ca<cpp_bin_float_quad, 21>();
@@ -353,6 +430,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_right_limit_infinite<cpp_bin_float_quad, 21>();
     test_left_limit_infinite<cpp_bin_float_quad, 21>();
 
+    std::cout << "Testing 31 point approximation:\n";
     test_linear<cpp_bin_float_quad, 31>();
     test_quadratic<cpp_bin_float_quad, 31>();
     test_ca<cpp_bin_float_quad, 31>();
@@ -360,7 +438,9 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<cpp_bin_float_quad, 31>();
     test_right_limit_infinite<cpp_bin_float_quad, 31>();
     test_left_limit_infinite<cpp_bin_float_quad, 31>();
-
+#endif
+#ifdef TEST2
+    std::cout << "Testing 41 point approximation:\n";
     test_linear<cpp_bin_float_quad, 41>();
     test_quadratic<cpp_bin_float_quad, 41>();
     test_ca<cpp_bin_float_quad, 41>();
@@ -368,6 +448,25 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<cpp_bin_float_quad, 41>();
     test_right_limit_infinite<cpp_bin_float_quad, 41>();
     test_left_limit_infinite<cpp_bin_float_quad, 41>();
+
+    std::cout << "Testing 51 point approximation:\n";
+    test_linear<cpp_bin_float_quad, 51>();
+    test_quadratic<cpp_bin_float_quad, 51>();
+    test_ca<cpp_bin_float_quad, 51>();
+    test_three_quadrature_schemes_examples<cpp_bin_float_quad, 51>();
+    test_integration_over_real_line<cpp_bin_float_quad, 51>();
+    test_right_limit_infinite<cpp_bin_float_quad, 51>();
+    test_left_limit_infinite<cpp_bin_float_quad, 51>();
+
+    std::cout << "Testing 61 point approximation:\n";
+    test_linear<cpp_bin_float_quad, 61>();
+    test_quadratic<cpp_bin_float_quad, 61>();
+    test_ca<cpp_bin_float_quad, 61>();
+    test_three_quadrature_schemes_examples<cpp_bin_float_quad, 61>();
+    test_integration_over_real_line<cpp_bin_float_quad, 61>();
+    test_right_limit_infinite<cpp_bin_float_quad, 61>();
+    test_left_limit_infinite<cpp_bin_float_quad, 61>();
+#endif
 }
 
 #else

@@ -4,7 +4,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_TEST_MODULE tanh_sinh_quadrature_test
+#define BOOST_TEST_MODULE adaptive_gauss_kronrod_quadrature_test
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
@@ -17,6 +17,11 @@
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+
+#if !defined(TEST1) && !defined(TEST2)
+#  define TEST1
+#  define TEST2
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(disable:4127)  // Conditional expression is constant
@@ -77,12 +82,14 @@ void test_linear()
     Real Q = gauss_kronrod<Real, Points>::integrate(f, (Real) 0, (Real) 1, 15, get_termination_condition<Real>(), &error, &L1);
     BOOST_CHECK_CLOSE_FRACTION(Q, 9.5, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, 9.5, tol);
+    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    BOOST_CHECK_GE(fabs(error), fabs(Q - 9.5));
 }
 
 template<class Real, unsigned Points>
 void test_quadratic()
 {
-    std::cout << "Testing quadratic functions are integrated properly by tanh_sinh on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing quadratic functions are integrated properly by gauss-kronrod on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real error;
 
@@ -91,6 +98,8 @@ void test_quadratic()
     Real Q = gauss_kronrod<Real, Points>::integrate(f, 0, 1, 15, get_termination_condition<Real>(), &error, &L1);
     BOOST_CHECK_CLOSE_FRACTION(Q, (Real) 17 + half<Real>()*third<Real>(), tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, (Real) 17 + half<Real>()*third<Real>(), tol);
+    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    BOOST_CHECK_GE(fabs(error), fabs(Q - ((Real)17 + half<Real>()*third<Real>())));
 }
 
 // Examples taken from
@@ -108,12 +117,16 @@ void test_ca()
     Real Q_expected = pi<Real>()*ln_two<Real>()/8 + catalan<Real>()*half<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    BOOST_CHECK_GE(fabs(error), fabs(Q - Q_expected));
 
     auto f2 = [](Real x)->Real { Real t0 = x*x + 1; Real t1 = sqrt(t0); return atan(t1)/(t0*t1); };
     Q = gauss_kronrod<Real, Points>::integrate(f2, 0 , 1, 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = pi<Real>()/4 - pi<Real>()/root_two<Real>() + 3*atan(root_two<Real>())/root_two<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
+    BOOST_CHECK_GE(fabs(error), fabs(Q - Q_expected));
 
     auto f5 = [](Real t)->Real { return t*t*log(t)/((t*t - 1)*(t*t*t*t + 1)); };
     Q = gauss_kronrod<Real, Points>::integrate(f5, 0, 1, 25);
@@ -171,19 +184,21 @@ void test_integration_over_real_line()
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
 
     auto f4 = [](const Real& t) { return 1/cosh(t);};
     Q = gauss_kronrod<Real, Points>::integrate(f4, -boost::math::tools::max_value<Real>(), boost::math::tools::max_value<Real>(), 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
+    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
 
 }
 
 template<class Real, unsigned Points>
 void test_right_limit_infinite()
 {
-    std::cout << "Testing right limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing right limit infinite for Gauss-Kronrod in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real Q;
     Real Q_expected;
@@ -195,17 +210,19 @@ void test_right_limit_infinite()
     Q = gauss_kronrod<Real, Points>::integrate(f1, 0, boost::math::tools::max_value<Real>(), 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = half_pi<Real>();
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
 
     auto f4 = [](const Real& t) { return 1/(1+t*t); };
     Q = gauss_kronrod<Real, Points>::integrate(f4, 1, boost::math::tools::max_value<Real>(), 15, get_termination_condition<Real>(), &error, &L1);
     Q_expected = pi<Real>()/4;
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_LE(fabs(error / Q), get_termination_condition<Real>());
 }
 
 template<class Real, unsigned Points>
 void test_left_limit_infinite()
 {
-    std::cout << "Testing left limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing left limit infinite for Gauss-Kronrod in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real Q;
     Real Q_expected;
@@ -214,11 +231,13 @@ void test_left_limit_infinite()
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
     Q = gauss_kronrod<Real, Points>::integrate(f1, -boost::math::tools::max_value<Real>(), 0);
     Q_expected = half_pi<Real>();
-    BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+    BOOST_CHECK_CLOSE(Q, Q_expected, 300*tol);
 }
 
 BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 {
+#ifdef TEST1
+    std::cout << "Testing with 15 point Gauss-Kronrod rule:\n";
     test_linear<double, 15>();
     test_quadratic<double, 15>();
     test_ca<double, 15>();
@@ -227,6 +246,17 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_right_limit_infinite<double, 15>();
     test_left_limit_infinite<double, 15>();
 
+    //  test one case where we do not have pre-computed constants:
+    std::cout << "Testing with 17 point Gauss-Kronrod rule:\n";
+    test_linear<double, 17>();
+    test_quadratic<double, 17>();
+    test_ca<double, 17>();
+    test_three_quadrature_schemes_examples<double, 17>();
+    test_integration_over_real_line<double, 17>();
+    test_right_limit_infinite<double, 17>();
+    test_left_limit_infinite<double, 17>();
+
+    std::cout << "Testing with 21 point Gauss-Kronrod rule:\n";
     test_linear<cpp_bin_float_quad, 21>();
     test_quadratic<cpp_bin_float_quad, 21>();
     test_ca<cpp_bin_float_quad, 21>();
@@ -235,6 +265,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_right_limit_infinite<cpp_bin_float_quad, 21>();
     test_left_limit_infinite<cpp_bin_float_quad, 21>();
 
+    std::cout << "Testing with 31 point Gauss-Kronrod rule:\n";
     test_linear<cpp_bin_float_quad, 31>();
     test_quadratic<cpp_bin_float_quad, 31>();
     test_ca<cpp_bin_float_quad, 31>();
@@ -242,7 +273,9 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<cpp_bin_float_quad, 31>();
     test_right_limit_infinite<cpp_bin_float_quad, 31>();
     test_left_limit_infinite<cpp_bin_float_quad, 31>();
-
+#endif
+#ifdef TEST2
+    std::cout << "Testing with 41 point Gauss-Kronrod rule:\n";
     test_linear<cpp_bin_float_quad, 41>();
     test_quadratic<cpp_bin_float_quad, 41>();
     test_ca<cpp_bin_float_quad, 41>();
@@ -250,6 +283,25 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<cpp_bin_float_quad, 41>();
     test_right_limit_infinite<cpp_bin_float_quad, 41>();
     test_left_limit_infinite<cpp_bin_float_quad, 41>();
+
+    std::cout << "Testing with 51 point Gauss-Kronrod rule:\n";
+    test_linear<cpp_bin_float_quad, 51>();
+    test_quadratic<cpp_bin_float_quad, 51>();
+    test_ca<cpp_bin_float_quad, 51>();
+    test_three_quadrature_schemes_examples<cpp_bin_float_quad, 51>();
+    test_integration_over_real_line<cpp_bin_float_quad, 51>();
+    test_right_limit_infinite<cpp_bin_float_quad, 51>();
+    test_left_limit_infinite<cpp_bin_float_quad, 51>();
+
+    std::cout << "Testing with 61 point Gauss-Kronrod rule:\n";
+    test_linear<cpp_bin_float_quad, 61>();
+    test_quadratic<cpp_bin_float_quad, 61>();
+    test_ca<cpp_bin_float_quad, 61>();
+    test_three_quadrature_schemes_examples<cpp_bin_float_quad, 61>();
+    test_integration_over_real_line<cpp_bin_float_quad, 61>();
+    test_right_limit_infinite<cpp_bin_float_quad, 61>();
+    test_left_limit_infinite<cpp_bin_float_quad, 61>();
+#endif
 }
 
 #else

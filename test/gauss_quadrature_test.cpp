@@ -101,6 +101,28 @@ double expected_error<7>(unsigned id)
 }
 
 template <>
+double expected_error<9>(unsigned id)
+{
+   switch (id)
+   {
+   case test_ca_error_id:
+      return 1e-7;
+   case test_ca_error_id_2:
+      return 2e-5;
+   case test_three_quad_error_id:
+      return 1e-8;
+   case test_three_quad_error_id_2:
+      return 3.5e-3;
+   case test_integration_over_real_line_error_id:
+      return 6e-3;
+   case test_right_limit_infinite_error_id:
+   case test_left_limit_infinite_error_id:
+      return 1e-5;
+   }
+   return 0;  // placeholder, all tests will fail
+}
+
+template <>
 double expected_error<10>(unsigned id)
 {
    switch (id)
@@ -162,6 +184,50 @@ double expected_error<20>(unsigned id)
    case test_right_limit_infinite_error_id:
    case test_left_limit_infinite_error_id:
       return 1e-15;
+   }
+   return 0;  // placeholder, all tests will fail
+}
+
+template <>
+double expected_error<25>(unsigned id)
+{
+   switch (id)
+   {
+   case test_ca_error_id:
+      return 5e-33;
+   case test_ca_error_id_2:
+      return 1e-8;
+   case test_three_quad_error_id:
+      return 1e-32;
+   case test_three_quad_error_id_2:
+      return 3e-4;
+   case test_integration_over_real_line_error_id:
+      return 1e-14;
+   case test_right_limit_infinite_error_id:
+   case test_left_limit_infinite_error_id:
+      return 3e-19;
+   }
+   return 0;  // placeholder, all tests will fail
+}
+
+template <>
+double expected_error<30>(unsigned id)
+{
+   switch (id)
+   {
+   case test_ca_error_id:
+      return 2e-34;
+   case test_ca_error_id_2:
+      return 5e-9;
+   case test_three_quad_error_id:
+      return 4e-34;
+   case test_three_quad_error_id_2:
+      return 1e-4;
+   case test_integration_over_real_line_error_id:
+      return 1e-16;
+   case test_right_limit_infinite_error_id:
+   case test_left_limit_infinite_error_id:
+      return 3e-23;
    }
    return 0;  // placeholder, all tests will fail
 }
@@ -285,13 +351,6 @@ void test_integration_over_real_line()
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-
-    auto f4 = [](const Real& t) { return 1/cosh(t);};
-    Q = gauss<Real, Points>::integrate(f4, -boost::math::tools::max_value<Real>(), boost::math::tools::max_value<Real>(), &L1);
-    Q_expected = pi<Real>();
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
-    BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
-
 }
 
 template<class Real, unsigned Points>
@@ -340,6 +399,14 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_right_limit_infinite<double, 7>();
     test_left_limit_infinite<double, 7>();
 
+    test_linear<double, 9>();
+    test_quadratic<double, 9>();
+    test_ca<double, 9>();
+    test_three_quadrature_schemes_examples<double, 9>();
+    test_integration_over_real_line<double, 9>();
+    test_right_limit_infinite<double, 9>();
+    test_left_limit_infinite<double, 9>();
+
     test_linear<cpp_bin_float_quad, 10>();
     test_quadratic<cpp_bin_float_quad, 10>();
     test_ca<cpp_bin_float_quad, 10>();
@@ -363,6 +430,22 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<cpp_bin_float_quad, 20>();
     test_right_limit_infinite<cpp_bin_float_quad, 20>();
     test_left_limit_infinite<cpp_bin_float_quad, 20>();
+
+    test_linear<cpp_bin_float_quad, 25>();
+    test_quadratic<cpp_bin_float_quad, 25>();
+    test_ca<cpp_bin_float_quad, 25>();
+    test_three_quadrature_schemes_examples<cpp_bin_float_quad, 25>();
+    test_integration_over_real_line<cpp_bin_float_quad, 25>();
+    test_right_limit_infinite<cpp_bin_float_quad, 25>();
+    test_left_limit_infinite<cpp_bin_float_quad, 25>();
+
+    test_linear<cpp_bin_float_quad, 30>();
+    test_quadratic<cpp_bin_float_quad, 30>();
+    test_ca<cpp_bin_float_quad, 30>();
+    test_three_quadrature_schemes_examples<cpp_bin_float_quad, 30>();
+    test_integration_over_real_line<cpp_bin_float_quad, 30>();
+    test_right_limit_infinite<cpp_bin_float_quad, 30>();
+    test_left_limit_infinite<cpp_bin_float_quad, 30>();
 }
 
 #else
