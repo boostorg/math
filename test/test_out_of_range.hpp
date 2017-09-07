@@ -37,8 +37,8 @@ because these are specific to each distribution.
 
 //! \tparam Distro distribution class name, for example: @c students_t_distribution<RealType>.
 //! \tparam Infinite only true if support includes infinity (default false means do not allow infinity).
-template <class Distro, bool Infinite = false>
-void check_support(const Distro& d)
+template <class Distro>
+void check_support(const Distro& d, bool Infinite = false)
 { // Checks that support and function calls are within expected limits.
    typedef typename Distro::value_type value_type;
    if (Infinite == false)

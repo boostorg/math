@@ -723,7 +723,7 @@ void test_spots(RealType)
   // if df = +infinity is allowed, must use new version that allows skipping infinity tests.
   // Infinite == true
 
-  check_support<students_t_distribution<RealType>, true >(students_t_distribution<RealType>(1));
+  check_support<students_t_distribution<RealType> >(students_t_distribution<RealType>(1), true);
 
 } // template <class RealType>void test_spots(RealType)
 
