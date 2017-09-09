@@ -38,6 +38,8 @@ struct gauss_constant_category
       ) : (std::numeric_limits<T>::digits10 <= 110) ? 4 : 999;
 };
 
+#ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
+
 template <class Real, unsigned N, unsigned Category>
 class gauss_detail
 {
@@ -64,6 +66,13 @@ public:
       return data;
    }
 };
+
+#else
+
+template <class Real, unsigned N, unsigned Category>
+class gauss_detail;
+
+#endif
 
 template <class T>
 class gauss_detail<T, 7, 0>

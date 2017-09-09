@@ -20,6 +20,8 @@
 
 namespace boost { namespace math{ namespace quadrature{ namespace detail{
 
+#ifndef BOOST_MATH_GAUSS_NO_COMPUTE_ON_DEMAND
+
 template <class Real, unsigned N, unsigned tag>
 class gauss_kronrod_detail
 {
@@ -70,6 +72,13 @@ public:
       return data;
    }
 };
+
+#else
+
+template <class Real, unsigned N, unsigned tag>
+class gauss_kronrod_detail;
+
+#endif
 
 template <class T>
 class gauss_kronrod_detail<T, 15, 0>
