@@ -6,8 +6,8 @@
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 
-template <class T, class TargetType>
-void print_gauss_constants(const char*, const char* suffix, int prec, int tag)
+template <class T>
+void print_gauss_constants(const char* suffix, int prec, int tag)
 {
    auto ab = T::abscissa();
    auto w = T::weights();
@@ -39,8 +39,8 @@ void print_gauss_constants(const char*, const char* suffix, int prec, int tag)
       "   };\n\n";
 }
 
-template <class T, class TargetType>
-void print_gauss_kronrod_constants(const char*, const char* suffix, int prec, int tag)
+template <class T>
+void print_gauss_kronrod_constants(const char* suffix, int prec, int tag)
 {
    auto ab = T::abscissa();
    auto w = T::weights();
@@ -80,78 +80,78 @@ int main()
 {
    typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<250> > mp_type;
 
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 7>, double>("float", "f", 9, 0);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 7>, double>("double", "", 17, 1);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 7>, double>("long double", "L", 35, 2);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 7>, double>("__float128", "Q", 35, 3);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 7>, double>("", "", 115, 4);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 7> >("f", 9, 0);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 7> >("", 17, 1);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 7> >("L", 35, 2);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 7> >("Q", 35, 3);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 7> >("", 115, 4);
 
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 10>, double>("float", "f", 9, 0);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 10>, double>("double", "", 17, 1);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 10>, double>("long double", "L", 35, 2);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 10>, double>("__float128", "Q", 35, 3);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 10>, double>("", "", 115, 4);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 10> >("f", 9, 0);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 10> >("", 17, 1);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 10> >("L", 35, 2);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 10> >("Q", 35, 3);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 10> >("", 115, 4);
 
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 15>, double>("float", "f", 9, 0);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 15>, double>("double", "", 17, 1);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 15>, double>("long double", "L", 35, 2);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 15>, double>("__float128", "Q", 35, 3);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 15>, double>("", "", 115, 4);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 15> >("f", 9, 0);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 15> >("", 17, 1);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 15> >("L", 35, 2);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 15> >("Q", 35, 3);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 15> >("", 115, 4);
 
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 20>, double>("float", "f", 9, 0);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 20>, double>("double", "", 17, 1);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 20>, double>("long double", "L", 35, 2);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 20>, double>("__float128", "Q", 35, 3);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 20>, double>("", "", 115, 4);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 20> >("f", 9, 0);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 20> >("", 17, 1);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 20> >("L", 35, 2);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 20> >("Q", 35, 3);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 20> >("", 115, 4);
 
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 25>, double>("float", "f", 9, 0);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 25>, double>("double", "", 17, 1);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 25>, double>("long double", "L", 35, 2);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 25>, double>("__float128", "Q", 35, 3);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 25>, double>("", "", 115, 4);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 25> >("f", 9, 0);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 25> >("", 17, 1);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 25> >("L", 35, 2);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 25> >("Q", 35, 3);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 25> >("", 115, 4);
 
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 30>, double>("float", "f", 9, 0);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 30>, double>("double", "", 17, 1);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 30>, double>("long double", "L", 35, 2);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 30>, double>("__float128", "Q", 35, 3);
-   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 30>, double>("", "", 115, 4);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 30> >("f", 9, 0);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 30> >("", 17, 1);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 30> >("L", 35, 2);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 30> >("Q", 35, 3);
+   print_gauss_constants<boost::math::quadrature::gauss<mp_type, 30> >("", 115, 4);
 
 
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 15>, double>("float", "f", 9, 0);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 15>, double>("double", "", 17, 1);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 15>, double>("long double", "L", 35, 2);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 15>, double>("__float128", "Q", 35, 3);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 15>, double>("", "", 115, 4);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 15> >("f", 9, 0);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 15> >("", 17, 1);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 15> >("L", 35, 2);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 15> >("Q", 35, 3);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 15> >("", 115, 4);
 
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 21>, double>("float", "f", 9, 0);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 21>, double>("double", "", 17, 1);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 21>, double>("long double", "L", 35, 2);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 21>, double>("__float128", "Q", 35, 3);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 21>, double>("", "", 115, 4);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 21> >("f", 9, 0);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 21> >("", 17, 1);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 21> >("L", 35, 2);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 21> >("Q", 35, 3);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 21> >("", 115, 4);
 
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 31>, double>("float", "f", 9, 0);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 31>, double>("double", "", 17, 1);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 31>, double>("long double", "L", 35, 2);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 31>, double>("__float128", "Q", 35, 3);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 31>, double>("", "", 115, 4);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 31> >("f", 9, 0);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 31> >("", 17, 1);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 31> >("L", 35, 2);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 31> >("Q", 35, 3);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 31> >("", 115, 4);
 
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 41>, double>("float", "f", 9, 0);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 41>, double>("double", "", 17, 1);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 41>, double>("long double", "L", 35, 2);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 41>, double>("__float128", "Q", 35, 3);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 41>, double>("", "", 115, 4);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 41> >("f", 9, 0);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 41> >("", 17, 1);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 41> >("L", 35, 2);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 41> >("Q", 35, 3);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 41> >("", 115, 4);
 
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 51>, double>("float", "f", 9, 0);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 51>, double>("double", "", 17, 1);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 51>, double>("long double", "L", 35, 2);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 51>, double>("__float128", "Q", 35, 3);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 51>, double>("", "", 115, 4);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 51> >("f", 9, 0);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 51> >("", 17, 1);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 51> >("L", 35, 2);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 51> >("Q", 35, 3);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 51> >("", 115, 4);
 
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 61>, double>("float", "f", 9, 0);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 61>, double>("double", "", 17, 1);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 61>, double>("long double", "L", 35, 2);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 61>, double>("__float128", "Q", 35, 3);
-   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 61>, double>("", "", 115, 4);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 61> >("f", 9, 0);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 61> >("", 17, 1);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 61> >("L", 35, 2);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 61> >("Q", 35, 3);
+   print_gauss_kronrod_constants<boost::math::quadrature::gauss_kronrod<mp_type, 61> >("", 115, 4);
 
    return 0;
 }
