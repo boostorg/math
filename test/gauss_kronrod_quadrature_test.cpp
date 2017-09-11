@@ -20,8 +20,9 @@
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/multiprecision/debug_adaptor.hpp>
 
-#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3)
+#if !defined(TEST1) && !defined(TEST1A) && !defined(TEST2) && !defined(TEST3)
 #  define TEST1
+#  define TEST1A
 #  define TEST2
 #  define TEST3
 #endif
@@ -426,7 +427,8 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<double, 17>();
     test_right_limit_infinite<double, 17>();
     test_left_limit_infinite<double, 17>();
-
+#endif
+#ifdef TEST1A
     std::cout << "Testing 21 point approximation:\n";
     test_linear<cpp_bin_float_quad, 21>();
     test_quadratic<cpp_bin_float_quad, 21>();

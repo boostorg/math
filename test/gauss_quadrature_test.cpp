@@ -22,6 +22,11 @@
 #pragma warning(disable:4127)  // Conditional expression is constant
 #endif
 
+#if !defined(TEST1) && !defined(TEST2)
+#  define TEST1
+#  define TEST2
+#endif
+
 using std::expm1;
 using std::atan;
 using std::tan;
@@ -391,6 +396,7 @@ void test_left_limit_infinite()
 
 BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 {
+#ifdef TEST1
     test_linear<double, 7>();
     test_quadratic<double, 7>();
     test_ca<double, 7>();
@@ -414,7 +420,8 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<cpp_bin_float_quad, 10>();
     test_right_limit_infinite<cpp_bin_float_quad, 10>();
     test_left_limit_infinite<cpp_bin_float_quad, 10>();
-
+#endif
+#ifdef TEST2
     test_linear<cpp_bin_float_quad, 15>();
     test_quadratic<cpp_bin_float_quad, 15>();
     test_ca<cpp_bin_float_quad, 15>();
@@ -446,6 +453,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<cpp_bin_float_quad, 30>();
     test_right_limit_infinite<cpp_bin_float_quad, 30>();
     test_left_limit_infinite<cpp_bin_float_quad, 30>();
+#endif
 }
 
 #else
