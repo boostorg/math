@@ -1,0 +1,145 @@
+[/
+  Copyright 2017, Nick Thompson
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:chebyshev Chebyshev Polynomials]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/chebyshev.hpp>
+``
+
+   namespace boost{ namespace math{
+
+   template<class Real>
+   Real chebyshev_next(Real const & x, Real const & Tn, Real const & Tn_1);
+
+   template<class Real>
+   Real chebyshev_t(unsigned n, Real const & x);
+
+   template<class Real>
+   Real chebyshev_u(unsigned n, Real const & x);
+
+   template<class Real>
+   Real chebyshev_t_prime(unsigned n, Real const & x);
+
+   template<class Real>
+   Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, Real x);
+
+   }} // namespaces
+
+
+["Real analysts cannot do without Fourier, complex analysts cannot do without Laurent, and numerical analysts cannot do without Chebyshev"]--Lloyd N. Trefethen
+
+The Chebyshev polynomials of the first kind are defined by the recurrence T[sub n+1](x) = 2xT[sub n](x) - T[sub n-1](x), n > 0,
+where T[sub 0](x) = 1 and T[sub 1](x) = x.
+These can be calculated in Boost using the following simple code
+
+    double x = 0.5;
+    double T12 = boost::math::chebyshev_t(12, x);
+
+Calculation of derivatives is also straightforward:
+
+    double T12_prime = boost::math::chebyshev_t_prime(12, x);
+
+The complexity of evaluation of the /n/-th Chebyshev polynomial by these functions is linear.
+So they are unsuitable for use in calculation of (say) a Chebyshev series, as a sum of linear scaling functions scales quadratically.
+Though there are very sophisticated algorithms for the evaluation of Chebyshev series,
+a linear time algorithm is presented below:
+
+    double x = 0.5;
+    std::vector<double> a{14.2, -13.7, 82.3, 96};
+    double T0 = 1;
+    double T1 = x;
+    double f = a[0]*T0;
+    unsigned l = 1;
+    while(l < a.size())
+    {
+       f += a[l]*T1;
+       std::swap(T0, T1);
+       T1 = boost::math::chebyshev_next(x, T0, T1);
+       ++l;
+    }
+    // Pipe the result to cout:
+    std::cout << f << std::endl;
+
+This uses the `chebyshev_next` function to evaluate each term of the Chebyshev series in constant time.
+However, this naive algorithm has a catastrophic loss of precision as /x/ approaches 1.
+A method to mitigate this way given by [@http://www.ams.org/journals/mcom/1955-09-051/S0025-5718-1955-0071856-0/S0025-5718-1955-0071856-0.pdf Clenshaw],
+and is implemented in boost as
+
+    double x = 0.5;
+    std::vector<double> a{14.2, -13.7, 82.3, 96};
+    chebyshev_clenshaw_recurrence(a.data(), a.size(), Real x);
+
+N.B.: There is factor of /2/ difference in our definition of the first coefficient in the Chebyshev series from Clenshaw's original work.
+This is because two traditions exist in notation for the Chebyshev series expanion,
+
+/f(x) \approx \sum_{n=0}^{N-1} a_{n}T_{n}(x)/
+
+and
+
+/f(x) \approx c_{0}/2 + \sum_{n=1}^{N-1} c_{n}T_{n}(x)/
+
+*boost math always uses the second convention, with the factor of 1/2 on the first coefficient.*
+
+Chebyshev polynomials of the second kind can be evaluated via `chebyshev_u`:
+
+    double x = -0.23;
+    double U1 = boost::math::chebyshev_u(1, x);
+
+The evaluation of Chebyshev polynomials by a three-term recurrence is known to be
+[@https://link.springer.com/article/10.1007/s11075-014-9925-x mixed forward-backward stable] for /x/ \u220A \[-1, 1\].
+However, the author does not know of a similar result for /x/ outside \[-1, 1\].
+For this reason, evaluation of Chebyshev polynomials outside of \[-1, 1\] is strongly discouraged.
+That said, small rounding errors in the course of a computation will often lead to this situation,
+and termination of the computation due to these small problems is very discouraging.
+For this reason, `chebyshev_t` and `chebyshev_u` have code paths for /x > 1/ and /x < -1/ which do not use three-term recurrences.
+These code paths are /much slower/, and should be avoided if at all possible.
+
+[endsect]
+
+[section:chebyshev Chebyshev Transform]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/chebyshev_transform.hpp>
+``
+
+   namespace boost{ namespace math{
+
+   template<class Real>
+   class chebyshev_transform
+   {
+   public:
+       template<class F>
+       chebyshev_transform(const F& f, Real a, Real b, Real tol=500*std::numeric_limits<Real>::epsilon());
+
+       Real operator()(Real x) const
+
+       Real integrate() const
+
+       const std::vector<Real>& coefficients() const
+
+       Real prime(Real x) const
+   };
+
+   }}// end namespaces
+
+
+The Chebyshev transform takes a function /f/ and returns a nearly-best approximation to /f/ in terms of Chebyshev polynomials.
+The idea of "nearly-best" can be made rigorous; see "Approximation Theory and Approximation Practice" for details.
+
+There are many possible uses for the Chebyshev transform.
+The numerical integration routine and stable numerical differentiation are obvious examples, but the decrease in complexity of function evaluation is another use.
+For example, suppose you find that a program is spending too much time evaluating a particular function /f/, even though the application does not require high accuracy.
+Using the Chebyshev transform, you can project the function onto just a few Chebyshev polynomials by setting the `tol` parameter higher and hence you can evaluate /f/ much faster.
+
+The Chebyshev transform works by creating a vector of values by evaluating the input function at the Chebyshev points, and then performing a discrete cosine transform on the resulting vector.
+In order to do this efficiently, we have used FFTW3. So to compile, you must have `FFTW3` installed, and link with `-lfftw3` for double precision, `-lfftw3f` for float precision, and `-lfftw3l` for long double precision.
+After the coefficients of the Chebyshev series are known, the routine goes back through them and filters out all the coefficients whose absolute ratio to the largest coefficient are less than the tolerance requested in the constructor.
