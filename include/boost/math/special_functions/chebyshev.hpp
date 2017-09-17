@@ -99,19 +99,19 @@ Real chebyshev_t_prime(unsigned n, Real const & x)
  * Numerical methods for special functions.
  * Society for Industrial and Applied Mathematics, 2007.
  * https://www.siam.org/books/ot99/OT99SampleChapter.pdf
- * However, our definition of c0 differs . . .
+ * However, our definition of c0 differs by a factor of 1/2, as stated in the docs. . .
  */
 template<class Real>
 inline Real chebyshev_clenshaw_recurrence(const Real* const c, size_t length, Real x)
 {
     using boost::math::constants::half;
-    if (length < 2) {
-      if (length == 0) {
-        return 0;
-      }
-      if (length == 1) {
+    if (length < 2)
+    {
+        if (length == 0)
+        {
+            return 0;
+        }
         return c[0]/2;
-      }
     }
     Real b2 = 0;
     Real b1 = c[length -1];

@@ -119,16 +119,6 @@ public:
           return (m_b - m_a)*Q;
     }
 
-    // Integral from a <= x1 <= x2 <= b
-    Real integrate(Real x1, Real x2) const
-    {
-        if (x1 < m_a || x2 > m_b)
-        {
-            throw std::domain_error("Cannot integrate outside boundary of interpolation.\n");
-        }
-        return std::numeric_limits<Real>::quiet_Nan();
-    }
-
     const std::vector<Real>& coefficients() const
     {
         return m_coeffs;
@@ -136,15 +126,27 @@ public:
 
     Real prime(Real x) const
     {
-        // T_{n+1} = 2*x*T_{n} - T_{n-1}
-        using boost::math::constants::half;
-        Real yp = 0;
         Real z = (2*x - m_a - m_b)/(m_b - m_a);
-        for (size_t i = 1; i < m_coeffs.size(); ++i)
+        Real dzdx = 2/(m_b - m_a);
+        if (m_coeffs.size() < 2)
         {
-            yp += m_coeffs[i]*chebyshev_t_prime(i, z);
+            return 0;
         }
-        return 2*yp/(m_b - m_a);
+        Real b2 = 0;
+        Real d2 = 0;
+        Real b1 = m_coeffs[m_coeffs.size() -1];
+        Real d1 = 0;
+        for(size_t j = m_coeffs.size() - 2; j >= 1; --j)
+        {
+            Real tmp1 = 2*z*b1 - b2 + m_coeffs[j];
+            Real tmp2 = 2*z*d1 - d2 + 2*b1;
+            b2 = b1;
+            b1 = tmp1;
+
+            d2 = d1;
+            d1 = tmp2;
+        }
+        return dzdx*(z*d1 - d2 + b1);
     }
 
     void print_coefficients() const

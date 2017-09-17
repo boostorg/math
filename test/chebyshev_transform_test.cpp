@@ -46,19 +46,19 @@ void test_sin_chebyshev_transform()
         Real c = cos(x);
         if (abs(s) < tol)
         {
-            BOOST_CHECK_SMALL(cheb(x), 10*tol);
-            BOOST_CHECK_CLOSE_FRACTION(c, cheb.prime(x), 10*tol);
+            BOOST_CHECK_SMALL(cheb(x), 100*tol);
+            BOOST_CHECK_CLOSE_FRACTION(c, cheb.prime(x), 100*tol);
         }
         else
         {
-            BOOST_CHECK_CLOSE_FRACTION(s, cheb(x), 10*tol);
+            BOOST_CHECK_CLOSE_FRACTION(s, cheb(x), 100*tol);
             if (abs(c) < tol)
             {
-                BOOST_CHECK_SMALL(cheb.prime(x), 10*tol);
+                BOOST_CHECK_SMALL(cheb.prime(x), 100*tol);
             }
             else
             {
-                BOOST_CHECK_CLOSE_FRACTION(c, cheb.prime(x), 10*tol);
+                BOOST_CHECK_CLOSE_FRACTION(c, cheb.prime(x), 100*tol);
             }
         }
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
@@ -66,27 +66,32 @@ void test_sin_chebyshev_transform()
 
     Real Q = cheb.integrate();
 
-    BOOST_CHECK_CLOSE_FRACTION(1 - cos(static_cast<Real>(1)), Q, 10*tol);
+    BOOST_CHECK_CLOSE_FRACTION(1 - cos(static_cast<Real>(1)), Q, 100*tol);
 }
 
 
 template<class Real>
 void test_sinc_chebyshev_transform()
 {
+    using std::cos;
+    using std::sin;
+    using std::abs;
     using boost::math::sinc_pi;
     using boost::math::chebyshev_transform;
     using boost::math::constants::half_pi;
 
-    Real tol = 100*std::numeric_limits<Real>::epsilon();
+    Real tol = 500*std::numeric_limits<Real>::epsilon();
     auto f = [](Real x) { return boost::math::sinc_pi(x); };
     Real a = 0;
     Real b = 1;
-    chebyshev_transform<Real> cheb(f, a, b);
+    chebyshev_transform<Real> cheb(f, a, b, tol/50);
 
     Real x = a;
     while (x < b)
     {
         Real s = sinc_pi(x);
+        Real ds = (cos(x)-sinc_pi(x))/x;
+        if (x == 0) { ds = 0; }
         if (s < tol)
         {
             BOOST_CHECK_SMALL(cheb(x), tol);
@@ -94,6 +99,15 @@ void test_sinc_chebyshev_transform()
         else
         {
             BOOST_CHECK_CLOSE_FRACTION(s, cheb(x), tol);
+        }
+
+        if (abs(ds) < tol)
+        {
+            BOOST_CHECK_SMALL(cheb.prime(x), tol);
+        }
+        else
+        {
+            BOOST_CHECK_CLOSE_FRACTION(ds, cheb.prime(x), tol);
         }
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
@@ -129,15 +143,15 @@ void test_atap_examples()
     Real b = 1;
     //chebyshev_transform<Real> cheb1(f1, a, b);
     //chebyshev_transform<Real> cheb2(f2, a, b, tol);
-    chebyshev_transform<Real> cheb3(f3, a, b, tol);
+    //chebyshev_transform<Real> cheb3(f3, a, b, tol);
 
     Real x = a;
     while (x < b)
     {
-        Real s = f1(x);
+        //Real s = f1(x);
         //BOOST_CHECK_CLOSE_FRACTION(s, cheb1(x), tol);
         //BOOST_CHECK_CLOSE_FRACTION(f2(x), cheb2(x), tol);
-        BOOST_CHECK_CLOSE_FRACTION(f3(x), cheb3(x), tol);
+        //BOOST_CHECK_CLOSE_FRACTION(f3(x), cheb3(x), 100*tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 }
@@ -153,8 +167,10 @@ void test_chebyshev_chebyshev_transform()
     BOOST_CHECK_CLOSE_FRACTION(cheb0.coefficients()[0], 2, tol);
 
     Real x = -1;
-    while (x < 1) {
+    while (x < 1)
+    {
         BOOST_CHECK_CLOSE_FRACTION(cheb0(x), 1, tol);
+        BOOST_CHECK_SMALL(cheb0.prime(x), tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 
@@ -174,11 +190,11 @@ void test_chebyshev_chebyshev_transform()
         {
             BOOST_CHECK_CLOSE_FRACTION(cheb1(x), x, tol);
         }
+        BOOST_CHECK_CLOSE_FRACTION(cheb1.prime(x), 1, tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 
 
-    // T_1 = x:
     auto t2 = [](Real x) { return 2*x*x-1; };
     chebyshev_transform<Real> cheb2(t2, -1, 1);
     BOOST_CHECK_CLOSE_FRACTION(cheb2.coefficients()[2], 1, tol);
@@ -187,6 +203,14 @@ void test_chebyshev_chebyshev_transform()
     while (x < 1)
     {
         BOOST_CHECK_CLOSE_FRACTION(cheb2(x), t2(x), tol);
+        if (x != 0)
+        {
+            BOOST_CHECK_CLOSE_FRACTION(cheb2.prime(x), 4*x, tol);
+        }
+        else
+        {
+            BOOST_CHECK_SMALL(cheb2.prime(x), tol);
+        }
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
 }
