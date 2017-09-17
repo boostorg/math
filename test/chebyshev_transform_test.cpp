@@ -107,7 +107,7 @@ void test_sinc_chebyshev_transform()
         }
         else
         {
-            BOOST_CHECK_CLOSE_FRACTION(ds, cheb.prime(x), tol);
+            BOOST_CHECK_CLOSE_FRACTION(ds, cheb.prime(x), 100*tol);
         }
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }

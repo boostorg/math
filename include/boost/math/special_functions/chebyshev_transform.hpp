@@ -6,7 +6,6 @@
 #ifndef BOOST_MATH_SPECIAL_CHEBYSHEV_TRANSFORM_HPP
 #define BOOST_MATH_SPECIAL_CHEBYSHEV_TRANSFORM_HPP
 #include <cmath>
-#include <typeinfo>
 #include <type_traits>
 #include <fftw3.h>
 #include <boost/math/constants/constants.hpp>
@@ -19,11 +18,10 @@ class chebyshev_transform
 {
 public:
     template<class F>
-    chebyshev_transform(const F& f, Real a, Real b, Real tol=500*std::numeric_limits<Real>::epsilon()): m_a(a), m_b(b)
+    chebyshev_transform(const F& f, Real a, Real b,
+                        Real tol=500*std::numeric_limits<Real>::epsilon(),
+                        typename std::enable_if<std::is_same<double, Real>::value>::type* = nullptr): m_a(a), m_b(b)
     {
-        static_assert(std::is_same<Real, float>::value || std::is_same<Real, double>::value
-                   || std::is_same<Real, long double>::value,
-                      "The Chebyshev transform only support float, double, and long double.\n");
         if (a >= b)
         {
             throw std::domain_error("a < b is required.\n");
@@ -38,62 +36,32 @@ public:
         std::vector<Real> vf(n);
         m_coeffs.resize(n);
 
-
-        // A C++17ism to make it so we can use different fftw_plans at compile time.
-        // Is there a better way?
-        if constexpr (std::is_same<Real, double>::value) {
-            fftw_plan plan = fftw_plan_r2r_1d(n, vf.data(), m_coeffs.data(), FFTW_REDFT10, FFTW_ESTIMATE);
-            Real inv_n = 1/static_cast<Real>(n);
-            for(size_t j = 0; j < n; ++j)
-            {
-                Real y = cos(pi<Real>()*(j+half<Real>())/static_cast<Real>(n));
-                vf[j] = f(y*bma + bpa)*inv_n;
-            }
-
-            fftw_execute_r2r(plan, vf.data(), m_coeffs.data());
-
-            Real max_coeff = 0;
-            for (auto const & coeff : m_coeffs)
-            {
-                if (abs(coeff) > max_coeff)
-                {
-                    max_coeff = abs(coeff);
-                }
-            }
-            size_t j = m_coeffs.size() - 1;
-            while (abs(m_coeffs[j])/max_coeff < tol)
-            {
-                --j;
-            }
-            m_coeffs.resize(j+1);
+        fftw_plan plan = fftw_plan_r2r_1d(n, vf.data(), m_coeffs.data(), FFTW_REDFT10, FFTW_ESTIMATE);
+        Real inv_n = 1/static_cast<Real>(n);
+        for(size_t j = 0; j < n; ++j)
+        {
+            Real y = cos(pi<Real>()*(j+half<Real>())*inv_n);
+            vf[j] = f(y*bma + bpa)*inv_n;
         }
-        // This is a way to get it to work generically on different precision types:
-        /*else if constexpr (std::is_same<Real, float>::value) {
-            fftwf_plan plan = fftwf_plan_r2r_1d(n, vf.data(), m_coeffs.data(), FFTW_REDFT10, FFTW_ESTIMATE);
-            Real inv_n = 1/static_cast<Real>(n);
-            for(size_t j = 0; j < n; ++j)
-            {
-                Real y = cos(pi<Real>()*(j+half<Real>())/static_cast<Real>(n));
-                vf[j] = f(y*bma + bpa)*inv_n;
-            }
 
-            fftwf_execute_r2r(plan, vf.data(), m_coeffs.data());
+        fftw_execute_r2r(plan, vf.data(), m_coeffs.data());
 
-            Real max_coeff = 0;
-            for (auto const & coeff : m_coeffs)
+        Real max_coeff = 0;
+        for (auto const & coeff : m_coeffs)
+        {
+            if (abs(coeff) > max_coeff)
             {
-                if (abs(coeff) > max_coeff)
-                {
-                    max_coeff = abs(coeff);
-                }
+                max_coeff = abs(coeff);
             }
-            size_t j = m_coeffs.size() - 1;
-            while (abs(m_coeffs[j])/max_coeff < 10*std::numeric_limits<Real>::epsilon())
-            {
-                --j;
-            }
-        }*/
+        }
+        size_t j = m_coeffs.size() - 1;
+        while (abs(m_coeffs[j])/max_coeff < tol)
+        {
+            --j;
+        }
+        m_coeffs.resize(j+1);
 
+        fftw_destroy_plan(plan);
     }
 
     Real operator()(Real x) const
