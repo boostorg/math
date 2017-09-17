@@ -35,8 +35,8 @@
 
 ["Real analysts cannot do without Fourier, complex analysts cannot do without Laurent, and numerical analysts cannot do without Chebyshev]--Lloyd N. Trefethen
 
-The Chebyshev polynomials of the first kind are defined by the recurrence /T[sub n+1](x) := 2xT[sub n](x) - T[sub n-1](x)/, /n > 0/,
-where /T[sub 0](x) := 1/ and /T[sub 1](x) := x/.
+The Chebyshev polynomials of the first kind are defined by the recurrence /T/[sub n+1](/x/) := /2xT/[sub n](/x/) - /T/[sub n-1](/x/), /n > 0/,
+where /T/[sub 0](/x/) := 1 and /T/[sub 1](/x/) := /x/.
 These can be calculated in Boost using the following simple code
 
     double x = 0.5;
@@ -78,11 +78,11 @@ and is implemented in boost as
 N.B.: There is factor of /2/ difference in our definition of the first coefficient in the Chebyshev series from Clenshaw's original work.
 This is because two traditions exist in notation for the Chebyshev series expansion,
 
-/f(x) \u2248 \u2211[sub n=0][super N-1] a[sub n]T[sub n](x)/
+/f/(/x/) \u2248 \u2211[sub n=0][super N-1] /a/[sub n]/T/[sub n](/x/)
 
 and
 
-/f(x) \u2248 c[sub 0]/2 + \u2211[sub n=1][super N-1] c[sub n]T[sub n](x)/
+/f/(/x/) \u2248 /c/[sub 0]/2 + \u2211[sub n=1][super N-1] /c/[sub n]/T/[sub n](/x/)
 
 ['*boost math always uses the second convention, with the factor of 1/2 on the first coefficient.*]
 
@@ -140,7 +140,7 @@ The API is given below.
 
 
 The Chebyshev transform takes a function /f/ and returns a /near-minimax/ approximation to /f/ in terms of Chebyshev polynomials.
-By /near-minimax/, we mean that the resulting Chebyshev polynomial is "very close" the polynomial /p[sub n]/  which minimizes the uniform norm of /f - p[sub n]/.
+By /near-minimax/, we mean that the resulting Chebyshev polynomial is "very close" the polynomial /p/[sub n]  which minimizes the uniform norm of /f/ - /p/[sub n].
 The notion of "very close" can be made rigorous; see Trefethen's "Approximation Theory and Approximation Practice" for details.
 
 The Chebyshev transform works by creating a vector of values by evaluating the input function at the Chebyshev points, and then performing a discrete cosine transform on the resulting vector.
