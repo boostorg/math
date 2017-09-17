@@ -11,16 +11,16 @@
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
-<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="http://www.boost.org/doc/libs/release/boost.png"></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/release/index.html">Home</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/release/libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
-<td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/release/more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="cbrt_comparison.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../root_comparison.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="elliptic_comparison.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="cbrt_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../root_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="elliptic_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
@@ -31,7 +31,7 @@
           A second example compares four generalized nth-root finding algorithms
           for various n-th roots (5, 7 and 13) of a single value 28.0, for four floating-point
           types, <code class="computeroutput"><span class="keyword">float</span></code>, <code class="computeroutput"><span class="keyword">double</span></code>, <code class="computeroutput"><span class="keyword">long</span>
-          <span class="keyword">double</span></code> and a <a href="../../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
+          <span class="keyword">double</span></code> and a <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
           type <code class="computeroutput"><span class="identifier">cpp_bin_float_50</span></code>.
           In each case the target accuracy was set using our "recomended"
           accuracy limits (or at least limits that make a good starting point - which
@@ -5219,14 +5219,14 @@
               by the complexity of the root finding method.
             </li>
 <li class="listitem">
-              For a <a href="../../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
+              For a <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
               floating-point type, the <a class="link" href="../roots_deriv.html#math_toolkit.roots.roots_deriv.newton">Newton-Raphson
               iteration</a> is a clear winner with a several-fold gain over <a href="http://portal.acm.org/citation.cfm?id=210111" target="_top">TOMS Algorithm 748:
               enclosing zeros of continuous functions</a>, and again no improvement
               from the second-derivative algorithms.
             </li>
 <li class="listitem">
-              The run-time of 50 decimal-digit <a href="../../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
+              The run-time of 50 decimal-digit <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
               is about 30-fold greater than <code class="computeroutput"><span class="keyword">double</span></code>.
             </li>
 <li class="listitem">
@@ -5236,7 +5236,7 @@
               Algorithm 748: enclosing zeros of continuous functions</a>.
             </li>
 <li class="listitem">
-              The goodness of the 'guess' is especially crucial for <a href="../../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
+              The goodness of the 'guess' is especially crucial for <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
               Separate experiments show that evaluating the 'guess' using <code class="computeroutput"><span class="keyword">double</span></code> allows convergence to the final
               exact result in one or two iterations. So in this contrived example,
               crudely dividing the exponent by N for a 'guess', it would be far better
@@ -5252,7 +5252,7 @@
             </li>
 <li class="listitem">
               Using MSVC, there was some improvement using 64-bit, markedly for
-              <a href="../../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
+              <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
             </li>
 <li class="listitem">
               The GCC compiler 4.9.1 using 64-bit was at least five-folder faster
@@ -5263,7 +5263,7 @@
           Clearly, your mileage <span class="bold"><strong>will vary</strong></span>, but in
           summary, <a class="link" href="../roots_deriv.html#math_toolkit.roots.roots_deriv.newton">Newton-Raphson
           iteration</a> seems the first choice of algorithm, and effort to find
-          a good 'guess' the first speed-up target, especially for <a href="../../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
+          a good 'guess' the first speed-up target, especially for <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
           And of course, compiler optimisation is crucial for speed.
         </p>
 </div>
@@ -5281,7 +5281,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="cbrt_comparison.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../root_comparison.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="elliptic_comparison.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="cbrt_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../root_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="elliptic_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

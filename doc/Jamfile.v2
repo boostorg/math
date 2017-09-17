@@ -16,7 +16,7 @@ boostbook standalone
         math
     :
         # Path for links to Boost:
-        <xsl:param>boost.root=../../../..
+        <xsl:param>boost.root=http://www.boost.org/doc/libs/release
         <xsl:param>html.stylesheet=math.css
         
         # Some general style settings:

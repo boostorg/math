@@ -11,16 +11,16 @@
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
-<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
-<td align="center"><a href="../../../../../../../index.html">Home</a></td>
-<td align="center"><a href="../../../../../../../libs/libraries.htm">Libraries</a></td>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="http://www.boost.org/doc/libs/release/boost.png"></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/release/index.html">Home</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/release/libs/libraries.htm">Libraries</a></td>
 <td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
 <td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
-<td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/release/more/index.htm">More</a></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../root_comparison.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../root_comparison.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="root_n_comparison.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../root_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../root_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="root_n_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
@@ -29,8 +29,8 @@
 </h4></div></div></div>
 <p>
           In the table below, the cube root of 28 was computed for three <a href="http://en.cppreference.com/w/cpp/language/types" target="_top">fundamental
-          types</a> floating-point types, and one <a href="../../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
-          type <a href="../../../../../../../libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html" target="_top">cpp_bin_float</a>
+          types</a> floating-point types, and one <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
+          type <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html" target="_top">cpp_bin_float</a>
           using 50 decimal digit precision, using four algorithms.
         </p>
 <p>
@@ -39,7 +39,7 @@
 <pre class="programlisting"><span class="identifier">cpp_bin_float_100</span> <span class="identifier">full_answer</span> <span class="special">(</span><span class="string">"3.036588971875662519420809578505669635581453977248111123242141654169177268411884961770250390838097895"</span><span class="special">);</span>
 </pre>
 <p>
-          Times were measured using <a href="../../../../../../../libs/timer/doc/index.html" target="_top">Boost.Timer</a>
+          Times were measured using <a href="http://www.boost.org/doc/libs/release/libs/timer/doc/index.html" target="_top">Boost.Timer</a>
           using <code class="computeroutput"><span class="keyword">class</span> <span class="identifier">cpu_timer</span></code>.
         </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -57,7 +57,7 @@
 <li class="listitem">
               <span class="emphasis"><em>Dis</em></span> is the distance from the nearest representation
               of the 'exact' root in bits. Distance from the 'exact' answer is measured
-              by using function <a href="../../../../../../../libs/math/doc/html/math_toolkit/next_float/float_distance.html" target="_top">Boost.Math
+              by using function <a href="http://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/next_float/float_distance.html" target="_top">Boost.Math
               float_distance</a>. One or two bits distance means that all results
               are effectively 'correct'. Zero means 'exact' - the nearest <a href="http://en.wikipedia.org/wiki/Floating_point#Representable_numbers.2C_conversion_and_rounding" target="_top">representable</a>
               value for the floating-point type.
@@ -152,7 +152,7 @@
 <li class="listitem">
               The C++ Standard cube root function <a href="http://en.cppreference.com/w/cpp/numeric/math/cbrt" target="_top">std::cbrt</a>
               is only defined for built-in or fundamental types, so cannot be used
-              with any User-Defined floating-point types like <a href="../../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
+              with any User-Defined floating-point types like <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
               This, and that the cube function is so impeccably-behaved, allows the
               implementer to use many tricks to achieve a fast computation. On some
               platforms,<code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cbrt</span></code> appeared several times as quick
@@ -175,7 +175,7 @@
             </li>
 <li class="listitem">
               <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cbrt</span></code> allows use with <span class="emphasis"><em>any
-              user-defined floating-point type</em></span>, conveniently <a href="../../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
+              user-defined floating-point type</em></span>, conveniently <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
               It too can take some advantage of the good-behaviour of the cube function,
               compared to the more general implementation in the nth root-finding
               examples. For example, it uses a polynomial approximation to generate
@@ -203,7 +203,7 @@
 <li class="listitem">
               For <a href="http://en.cppreference.com/w/cpp/language/types" target="_top">fundamental
               types</a>, there was little to choose between the three derivative
-              methods, but for <a href="../../../../../../../libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html" target="_top">cpp_bin_float</a>,
+              methods, but for <a href="http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html" target="_top">cpp_bin_float</a>,
               <a class="link" href="../roots_deriv.html#math_toolkit.roots.roots_deriv.newton">Newton-Raphson
               iteration</a> was twice as fast. Note that the cube-root is an extreme
               test case as the cost of calling the functor is so cheap that the runtimes
@@ -1583,7 +1583,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../root_comparison.html"><img src="../../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../root_comparison.html"><img src="../../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="root_n_comparison.html"><img src="../../../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../root_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../root_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="root_n_comparison.html"><img src="http://www.boost.org/doc/libs/release/doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
