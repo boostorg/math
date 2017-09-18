@@ -141,7 +141,7 @@ void test_atap_examples()
     auto f4 = [](Real x) { return 1/(1+1000*(x+half<Real>())*(x+half<Real>())) + 1/sqrt(1+1000*(x-.5)*(x-0.5));};
     Real a = -1;
     Real b = 1;
-    //chebyshev_transform<Real> cheb1(f1, a, b);
+    chebyshev_transform<Real> cheb1(f1, a, b);
     //chebyshev_transform<Real> cheb2(f2, a, b, tol);
     //chebyshev_transform<Real> cheb3(f3, a, b, tol);
 
@@ -149,7 +149,7 @@ void test_atap_examples()
     while (x < b)
     {
         //Real s = f1(x);
-        //BOOST_CHECK_CLOSE_FRACTION(s, cheb1(x), tol);
+        BOOST_CHECK_CLOSE_FRACTION(f1(x), cheb1(x), 1.3e-5);
         //BOOST_CHECK_CLOSE_FRACTION(f2(x), cheb2(x), tol);
         //BOOST_CHECK_CLOSE_FRACTION(f3(x), cheb3(x), 100*tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
