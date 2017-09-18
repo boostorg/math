@@ -32,16 +32,18 @@ public:
         using std::abs;
         Real bma = (b-a)*half<Real>();
         Real bpa = (b+a)*half<Real>();
-        size_t n = 4096;
+        size_t n = 256;
         std::vector<Real> vf(n);
         m_coeffs.resize(n);
 
         fftw_plan plan = fftw_plan_r2r_1d(n, vf.data(), m_coeffs.data(), FFTW_REDFT10, FFTW_ESTIMATE);
         Real inv_n = 1/static_cast<Real>(n);
-        for(size_t j = 0; j < n; ++j)
+        for(size_t j = 0; j < n/2; ++j)
         {
+            // Use symmetry cos((j+1/2)pi/n) = - cos((n-1-j+1/2)pi/n)
             Real y = cos(pi<Real>()*(j+half<Real>())*inv_n);
             vf[j] = f(y*bma + bpa)*inv_n;
+            vf[n-1-j]= f(bpa-y*bma)*inv_n;
         }
 
         fftw_execute_r2r(plan, vf.data(), m_coeffs.data());
