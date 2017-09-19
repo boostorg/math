@@ -20,6 +20,7 @@ public:
     template<class F>
     chebyshev_transform(const F& f, Real a, Real b,
                         Real tol=500*std::numeric_limits<Real>::epsilon(),
+                        size_t max_refinements=15,
                         typename std::enable_if<std::is_same<double, Real>::value>::type* = nullptr): m_a(a), m_b(b)
     {
         if (a >= b)
@@ -33,49 +34,11 @@ public:
         Real bma = (b-a)*half<Real>();
         Real bpa = (b+a)*half<Real>();
         size_t n = 256;
-        std::vector<Real> vf(n);
-        m_coeffs.resize(n);
+        std::vector<Real> vf;
 
-        fftw_plan plan = fftw_plan_r2r_1d(n, vf.data(), m_coeffs.data(), FFTW_REDFT10, FFTW_ESTIMATE);
-        Real inv_n = 1/static_cast<Real>(n);
-        for(size_t j = 0; j < n/2; ++j)
+        size_t refinements = 0;
+        while(refinements < max_refinements)
         {
-            // Use symmetry cos((j+1/2)pi/n) = - cos((n-1-j+1/2)pi/n)
-            Real y = cos(pi<Real>()*(j+half<Real>())*inv_n);
-            vf[j] = f(y*bma + bpa)*inv_n;
-            vf[n-1-j]= f(bpa-y*bma)*inv_n;
-        }
-
-        fftw_execute_r2r(plan, vf.data(), m_coeffs.data());
-
-        Real max_coeff = 0;
-        for (auto const & coeff : m_coeffs)
-        {
-            if (abs(coeff) > max_coeff)
-            {
-                max_coeff = abs(coeff);
-            }
-        }
-        size_t j = m_coeffs.size() - 1;
-        while (abs(m_coeffs[j])/max_coeff < tol)
-        {
-            --j;
-        }
-        // If ten coefficients are eliminated, the we say we've done all
-        // we need to do:
-        if (n - j > 10)
-        {
-            m_coeffs.resize(j+1);
-            fftw_destroy_plan(plan);
-            return;
-        }
-
-        // Otherwise, we need to refine the grid:
-        size_t max_refinements = 15;
-        size_t refinements = 1;
-        while(refinements < max_refinements) {
-            n = 2*n;
-
             vf.resize(n);
             m_coeffs.resize(n);
 
@@ -90,7 +53,7 @@ public:
             }
 
             fftw_execute_r2r(plan, vf.data(), m_coeffs.data());
-
+            fftw_destroy_plan(plan);
             Real max_coeff = 0;
             for (auto const & coeff : m_coeffs)
             {
@@ -104,16 +67,17 @@ public:
             {
                 --j;
             }
-
+            // If ten coefficients are eliminated, the we say we've done all
+            // we need to do:
             if (n - j > 10)
             {
                 m_coeffs.resize(j+1);
-                fftw_destroy_plan(plan);
                 return;
             }
+
+            n *= 2;
             ++refinements;
         }
-
     }
 
     Real operator()(Real x) const
