@@ -84,7 +84,7 @@ This is achieved by passing additional pointers into the routine:
 
     double error_estimate;
     double L1;
-    double I = adaptive_trapezoidal(f, 0, two_pi<double>(), tolerance, max_refinements, &error_estimate, &L1);
+    double I = trapezoidal(f, 0, two_pi<double>(), tolerance, max_refinements, &error_estimate, &L1);
     if (error_estimate > tolerance*L1)
     {
          double I = some_other_quadrature_method(f, 0, two_pi<double>());
