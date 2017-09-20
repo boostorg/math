@@ -4,6 +4,7 @@
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
+
 #define BOOST_TEST_MODULE chebyshev_test
 
 #include <boost/type_index.hpp>
@@ -30,7 +31,7 @@ void test_polynomials()
     Real tol = 100*std::numeric_limits<Real>::epsilon();
     while (x < 2)
     {
-        BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(0, x), 1, tol);
+        BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(0, x), Real(1), tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(1, x), x, tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(2, x), 2*x*x - 1, tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(3, x), x*(4*x*x-3), tol);
@@ -43,7 +44,7 @@ void test_polynomials()
     tol = 10*tol;
     while (x < 2)
     {
-        BOOST_CHECK_CLOSE_FRACTION(chebyshev_u(0, x), 1, tol);
+        BOOST_CHECK_CLOSE_FRACTION(chebyshev_u(0, x), Real(1), tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_u(1, x), 2*x, tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_u(2, x), 4*x*x - 1, tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_u(3, x), 4*x*(2*x*x - 1), tol);
@@ -61,8 +62,8 @@ void test_derivatives()
     Real tol = 1000*std::numeric_limits<Real>::epsilon();
     while (x < 2)
     {
-        BOOST_CHECK_CLOSE_FRACTION(chebyshev_t_prime(0, x), 0, tol);
-        BOOST_CHECK_CLOSE_FRACTION(chebyshev_t_prime(1, x), 1, tol);
+        BOOST_CHECK_CLOSE_FRACTION(chebyshev_t_prime(0, x), Real(0), tol);
+        BOOST_CHECK_CLOSE_FRACTION(chebyshev_t_prime(1, x), Real(1), tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t_prime(2, x), 4*x, tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t_prime(3, x), 3*(4*x*x - 1), tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t_prime(4, x), 16*x*(2*x*x - 1), tol);
@@ -90,6 +91,8 @@ void test_clenshaw_recurrence()
 
     Real x = -1;
     Real tol = 10*std::numeric_limits<Real>::epsilon();
+    if (tol > std::numeric_limits<float>::epsilon())
+       tol *= 100;   // float results have much larger error rates.
     while (x <= 1)
     {
         Real y = chebyshev_clenshaw_recurrence(c0.data(), c0.size(), x);
