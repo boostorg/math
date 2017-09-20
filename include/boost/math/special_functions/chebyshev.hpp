@@ -8,6 +8,14 @@
 #include <cmath>
 #include <boost/math/constants/constants.hpp>
 
+#if (__cplusplus > 201103) || (defined(_CPPLIB_VER) && (_CPPLIB_VER >= 610))
+#  define BOOST_MATH_CHEB_USE_STD_ACOSH
+#endif
+
+#ifndef BOOST_MATH_CHEB_USE_STD_ACOSH
+#  include <boost/math/special_functions/acosh.hpp>
+#endif
+
 namespace boost { namespace math {
 
 template<class Real>
@@ -18,11 +26,15 @@ inline Real chebyshev_next(Real const & x, Real const & Tn, Real const & Tn_1)
 
 namespace detail {
 
-template<class Real, bool second=false>
+template<class Real, bool second>
 inline Real chebyshev_imp(unsigned n, Real const & x)
 {
-    using std::cosh;
+#ifdef BOOST_MATH_CHEB_USE_STD_ACOSH
     using std::acosh;
+#else
+   using boost::math::acosh;
+#endif
+    using std::cosh;
     using std::pow;
     Real T0 = 1;
     Real T1;
@@ -31,7 +43,7 @@ inline Real chebyshev_imp(unsigned n, Real const & x)
         if (x > 1 || x < -1)
         {
             Real t = sqrt(x*x -1);
-            return (pow(x+t, n+1) - pow(x-t, n+1))/(2*t);
+            return static_cast<Real>((pow(x+t, n+1) - pow(x-t, n+1))/(2*t));
         }
         T1 = 2*x;
     }

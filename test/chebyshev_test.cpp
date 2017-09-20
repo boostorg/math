@@ -14,6 +14,7 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+#include <boost/array.hpp>
 
 using boost::multiprecision::cpp_bin_float_quad;
 using boost::multiprecision::cpp_bin_float_50;
@@ -77,17 +78,17 @@ template<class Real>
 void test_clenshaw_recurrence()
 {
     using boost::math::chebyshev_clenshaw_recurrence;
-    std::vector<Real> c0{2, 0, 0, 0, 0};
+    boost::array<Real, 5> c0 = { {2, 0, 0, 0, 0} };
     // Check the size = 1 case:
-    std::vector<Real> c01{2};
+    boost::array<Real, 1> c01 = { {2} };
     // Check the size = 2 case:
-    std::vector<Real> c02{2, 0};
-    std::vector<Real> c1{0, 1, 0, 0};
-    std::vector<Real> c2{0, 0, 1, 0};
-    std::vector<Real> c3{0, 0, 0, 1, 0};
-    std::vector<Real> c4{0, 0, 0, 0, 1};
-    std::vector<Real> c5{0, 0, 0, 0, 0, 1};
-    std::vector<Real> c6{0, 0, 0, 0, 0, 0, 1};
+    boost::array<Real, 2> c02 = { {2, 0} };
+    boost::array<Real, 4> c1 = { {0, 1, 0, 0} };
+    boost::array<Real, 4> c2 = { {0, 0, 1, 0} };
+    boost::array<Real, 5> c3 = { {0, 0, 0, 1, 0} };
+    boost::array<Real, 5> c4 = { {0, 0, 0, 0, 1} };
+    boost::array<Real, 6> c5 = { {0, 0, 0, 0, 0, 1} };
+    boost::array<Real, 7> c6 = { {0, 0, 0, 0, 0, 0, 1} };
 
     Real x = -1;
     Real tol = 10*std::numeric_limits<Real>::epsilon();
