@@ -30,13 +30,15 @@ void test_polynomials()
 
     Real x = -2;
     Real tol = 100*std::numeric_limits<Real>::epsilon();
+    if (tol > std::numeric_limits<float>::epsilon())
+       tol *= 10;   // float results have much larger error rates.
     while (x < 2)
     {
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(0, x), Real(1), tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(1, x), x, tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(2, x), 2*x*x - 1, tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(3, x), x*(4*x*x-3), tol);
-        BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(4, x), 8*x*x*x*x - 8*x*x + 1, tol);
+        BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(4, x), 8*x*x*(x*x - 1) + 1, tol);
         BOOST_CHECK_CLOSE_FRACTION(chebyshev_t(5, x), x*(16*x*x*x*x - 20*x*x + 5), tol);
         x += 1/static_cast<Real>(1<<7);
     }
