@@ -107,7 +107,7 @@ void test_sinc_chebyshev_transform()
         }
         else
         {
-            BOOST_CHECK_CLOSE_FRACTION(ds, cheb.prime(x), 100*tol);
+            BOOST_CHECK_CLOSE_FRACTION(ds, cheb.prime(x), 300*tol);
         }
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
@@ -142,15 +142,22 @@ void test_atap_examples()
     Real a = -1;
     Real b = 1;
     chebyshev_transform<Real> cheb1(f1, a, b);
-    //chebyshev_transform<Real> cheb2(f2, a, b, tol);
+    chebyshev_transform<Real> cheb2(f2, a, b, tol);
     //chebyshev_transform<Real> cheb3(f3, a, b, tol);
 
     Real x = a;
     while (x < b)
     {
         //Real s = f1(x);
-        BOOST_CHECK_CLOSE_FRACTION(f1(x), cheb1(x), 1.3e-5);
-        //BOOST_CHECK_CLOSE_FRACTION(f2(x), cheb2(x), tol);
+        if (sizeof(Real) == sizeof(float))
+        {
+           BOOST_CHECK_CLOSE_FRACTION(f1(x), cheb1(x), 4e-3);
+        }
+        else
+        {
+           BOOST_CHECK_CLOSE_FRACTION(f1(x), cheb1(x), 1.3e-5);
+        }
+        BOOST_CHECK_CLOSE_FRACTION(f2(x), cheb2(x), 4e-3);
         //BOOST_CHECK_CLOSE_FRACTION(f3(x), cheb3(x), 100*tol);
         x += static_cast<Real>(1)/static_cast<Real>(1 << 7);
     }
@@ -162,7 +169,7 @@ void test_chebyshev_chebyshev_transform()
 {
     Real tol = 500*std::numeric_limits<Real>::epsilon();
     // T_0 = 1:
-    auto t0 = [](Real x) { return 1; };
+    auto t0 = [](Real) { return 1; };
     chebyshev_transform<Real> cheb0(t0, -1, 1);
     BOOST_CHECK_CLOSE_FRACTION(cheb0.coefficients()[0], 2, tol);
 
@@ -217,7 +224,11 @@ void test_chebyshev_chebyshev_transform()
 
 BOOST_AUTO_TEST_CASE(chebyshev_transform_test)
 {
-    //test_chebyshev_chebyshev_transform<float>();
+    test_chebyshev_chebyshev_transform<float>();
+    test_sin_chebyshev_transform<float>();
+    test_atap_examples<float>();
+    test_sinc_chebyshev_transform<float>();
+
     test_chebyshev_chebyshev_transform<double>();
     test_sin_chebyshev_transform<double>();
     test_atap_examples<double>();
