@@ -14,6 +14,7 @@ lib quadmath ;
 lib fftw3 ;
 lib fftw3f ;
 lib fftw3l ;
+lib fftw3q ;
 
 obj has_long_double_support : has_long_double_support.cpp ;
 obj has_mpfr_class : has_mpfr_class.cpp :
@@ -41,3 +42,5 @@ explicit has_e_float ;
 explicit has_float128 ;
 explicit has_intel_quad ;
 explicit has_128bit_floatmax_t ;
+explicit has_fftw3 ;
+

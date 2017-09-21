@@ -6,6 +6,7 @@
  */
 #define BOOST_TEST_MODULE chebyshev_transform_test
 
+#include <boost/cstdfloat.hpp>
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -14,6 +15,13 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4)
+#  define TEST1
+#  define TEST2
+#  define TEST3
+#  define TEST4
+#endif
 
 using boost::multiprecision::cpp_bin_float_quad;
 using boost::multiprecision::cpp_bin_float_50;
@@ -103,7 +111,7 @@ void test_sinc_chebyshev_transform()
 
         if (abs(ds) < tol)
         {
-            BOOST_CHECK_SMALL(cheb.prime(x), tol);
+            BOOST_CHECK_SMALL(cheb.prime(x), 5 * tol);
         }
         else
         {
@@ -224,13 +232,32 @@ void test_chebyshev_chebyshev_transform()
 
 BOOST_AUTO_TEST_CASE(chebyshev_transform_test)
 {
+#ifdef TEST1
     test_chebyshev_chebyshev_transform<float>();
     test_sin_chebyshev_transform<float>();
     test_atap_examples<float>();
     test_sinc_chebyshev_transform<float>();
-
+#endif
+#ifdef TEST2
     test_chebyshev_chebyshev_transform<double>();
     test_sin_chebyshev_transform<double>();
     test_atap_examples<double>();
     test_sinc_chebyshev_transform<double>();
+#endif
+#ifdef TEST3
+    test_chebyshev_chebyshev_transform<long double>();
+    test_sin_chebyshev_transform<long double>();
+    test_atap_examples<long double>();
+    test_sinc_chebyshev_transform<long double>();
+#endif
+#ifdef TEST4
+#ifdef BOOST_HAS_FLOAT128
+    test_chebyshev_chebyshev_transform<__float128>();
+    test_sin_chebyshev_transform<__float128>();
+    test_atap_examples<__float128>();
+    test_sinc_chebyshev_transform<__float128>();
+#endif
+#endif
 }
+
+

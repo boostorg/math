@@ -11,6 +11,10 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/chebyshev.hpp>
 
+#ifdef BOOST_HAS_FLOAT128
+#include <quadmath.h>
+#endif
+
 namespace boost { namespace math {
 
 template<class Real>
@@ -25,7 +29,11 @@ public:
        typedef mpl::int_ <
           boost::is_same<float, Real>::value ? 0 :
           boost::is_same<double, Real>::value ? 1 :
-          boost::is_same<long double, Real>::value ? 2 : -1
+          boost::is_same<long double, Real>::value ? 2 : 
+#ifdef BOOST_HAS_FLOAT128
+          boost::is_same<__float128, Real>::value ? 3 : 
+#endif
+          -1
        > tag_type;
        init(f, a, b, tol, max_refinements, tag_type());
     }
@@ -148,6 +156,126 @@ public:
             ++refinements;
         }
     }
+
+    template<class F>
+    void init(const F& f, Real a, Real b, Real tol, size_t max_refinements, const mpl::int_<2>&)
+    {
+        if (a >= b)
+        {
+            throw std::domain_error("a < b is required.\n");
+        }
+        using boost::math::constants::half;
+        using boost::math::constants::pi;
+        using std::cos;
+        using std::abs;
+        Real bma = (b-a)*half<Real>();
+        Real bpa = (b+a)*half<Real>();
+        size_t n = 256;
+        std::vector<Real> vf;
+
+        size_t refinements = 0;
+        while(refinements < max_refinements)
+        {
+            vf.resize(n);
+            m_coeffs.resize(n);
+
+            fftwl_plan plan = fftwl_plan_r2r_1d(static_cast<int>(n), vf.data(), m_coeffs.data(), FFTW_REDFT10, FFTW_ESTIMATE);
+            Real inv_n = 1/static_cast<Real>(n);
+            for(size_t j = 0; j < n/2; ++j)
+            {
+                // Use symmetry cos((j+1/2)pi/n) = - cos((n-1-j+1/2)pi/n)
+                Real y = cos(pi<Real>()*(j+half<Real>())*inv_n);
+                vf[j] = f(y*bma + bpa)*inv_n;
+                vf[n-1-j]= f(bpa-y*bma)*inv_n;
+            }
+
+            fftwl_execute_r2r(plan, vf.data(), m_coeffs.data());
+            fftwl_destroy_plan(plan);
+            Real max_coeff = 0;
+            for (auto const & coeff : m_coeffs)
+            {
+                if (abs(coeff) > max_coeff)
+                {
+                    max_coeff = abs(coeff);
+                }
+            }
+            size_t j = m_coeffs.size() - 1;
+            while (abs(m_coeffs[j])/max_coeff < tol)
+            {
+                --j;
+            }
+            // If ten coefficients are eliminated, the we say we've done all
+            // we need to do:
+            if (n - j > 10)
+            {
+                m_coeffs.resize(j+1);
+                return;
+            }
+
+            n *= 2;
+            ++refinements;
+        }
+    }
+
+#ifdef BOOST_HAS_FLOAT128
+    template<class F>
+    void init(const F& f, __float128 a, __float128 b, __float128 tol, size_t max_refinements, const mpl::int_<3>&)
+    {
+        if (a >= b)
+        {
+            throw std::domain_error("a < b is required.\n");
+        }
+        using boost::math::constants::half;
+        using boost::math::constants::pi;
+        Real bma = (b-a)*half<Real>();
+        Real bpa = (b+a)*half<Real>();
+        size_t n = 256;
+        std::vector<Real> vf;
+
+        size_t refinements = 0;
+        while(refinements < max_refinements)
+        {
+            vf.resize(n);
+            m_coeffs.resize(n);
+
+            fftwq_plan plan = fftwq_plan_r2r_1d(static_cast<int>(n), vf.data(), m_coeffs.data(), FFTW_REDFT10, FFTW_ESTIMATE);
+            Real inv_n = 1/static_cast<Real>(n);
+            for(size_t j = 0; j < n/2; ++j)
+            {
+                // Use symmetry cos((j+1/2)pi/n) = - cos((n-1-j+1/2)pi/n)
+                Real y = cosq(pi<Real>()*(j+half<Real>())*inv_n);
+                vf[j] = f(y*bma + bpa)*inv_n;
+                vf[n-1-j]= f(bpa-y*bma)*inv_n;
+            }
+
+            fftwq_execute_r2r(plan, vf.data(), m_coeffs.data());
+            fftwq_destroy_plan(plan);
+            Real max_coeff = 0;
+            for (auto const & coeff : m_coeffs)
+            {
+                if (fabsq(coeff) > max_coeff)
+                {
+                    max_coeff = fabsq(coeff);
+                }
+            }
+            size_t j = m_coeffs.size() - 1;
+            while (abs(m_coeffs[j])/max_coeff < tol)
+            {
+                --j;
+            }
+            // If ten coefficients are eliminated, the we say we've done all
+            // we need to do:
+            if (n - j > 10)
+            {
+                m_coeffs.resize(j+1);
+                return;
+            }
+
+            n *= 2;
+            ++refinements;
+        }
+    }
+#endif
 
     Real operator()(Real x) const
     {
