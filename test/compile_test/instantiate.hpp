@@ -234,6 +234,11 @@ void instantiate(RealType)
    boost::math::laguerre_next(2, 1, v1, v2, v3);
    boost::math::hermite(1, v1);
    boost::math::hermite_next(2, v1, v2, v3);
+   boost::math::chebyshev_next(v1, v2, v3);
+   boost::math::chebyshev_t(1, v1);
+   boost::math::chebyshev_u(1, v1);
+   boost::math::chebyshev_t_prime(1, v1);
+   boost::math::chebyshev_clenshaw_recurrence(&v1, 0, v2);
    boost::math::spherical_harmonic_r(2, 1, v1, v2);
    boost::math::spherical_harmonic_i(2, 1, v1, v2);
    boost::math::ellint_1(v1);
@@ -430,6 +435,11 @@ void instantiate(RealType)
    boost::math::laguerre_next(2, 1, v1 * 1, v2 + 0, v3 / 1);
    boost::math::hermite(1, v1 * 1);
    boost::math::hermite_next(2, v1 * 1, v2 + 0, v3 / 1);
+   boost::math::chebyshev_next(2 * v1, 1 + v2, 3 * v3);
+   boost::math::chebyshev_t(1, 2 * v1);
+   boost::math::chebyshev_u(1, 2 * v1);
+   boost::math::chebyshev_t_prime(1, 2 * v1);
+   boost::math::chebyshev_clenshaw_recurrence(&v1, 0, 2 * v2);
    boost::math::spherical_harmonic_r(2, 1, v1 * 1, v2 + 0);
    boost::math::spherical_harmonic_i(2, 1, v1 * 1, v2 + 0);
    boost::math::ellint_1(v1 * 1);
@@ -606,6 +616,9 @@ void instantiate(RealType)
    boost::math::laguerre_next(2, 1, v1, v2, v3);
    boost::math::hermite(1, v1, pol);
    boost::math::hermite_next(2, v1, v2, v3);
+   boost::math::chebyshev_t(1, v1, pol);
+   boost::math::chebyshev_u(1, v1, pol);
+   boost::math::chebyshev_t_prime(1, v1, pol);
    boost::math::spherical_harmonic_r(2, 1, v1, v2, pol);
    boost::math::spherical_harmonic_i(2, 1, v1, v2, pol);
    boost::math::ellint_1(v1, pol);
@@ -802,6 +815,11 @@ void instantiate(RealType)
    test::laguerre_next(2, 1, v1, v2, v3);
    test::hermite(1, v1);
    test::hermite_next(2, v1, v2, v3);
+   test::chebyshev_next(v1, v2, v3);
+   test::chebyshev_t(1, v1);
+   test::chebyshev_u(1, v1);
+   test::chebyshev_t_prime(1, v1);
+   test::chebyshev_clenshaw_recurrence(&v1, 0, v2);
    test::spherical_harmonic_r(2, 1, v1, v2);
    test::spherical_harmonic_i(2, 1, v1, v2);
    test::ellint_1(v1);
@@ -1016,6 +1034,9 @@ void instantiate_mixed(RealType)
    boost::math::laguerre(2, 1, i);
    boost::math::laguerre(2u, 1u, s);
    boost::math::hermite(1, s);
+   boost::math::chebyshev_t(1, i);
+   boost::math::chebyshev_u(1, i);
+   boost::math::chebyshev_t_prime(1, i);
    boost::math::spherical_harmonic_r(2, 1, s, i);
    boost::math::spherical_harmonic_i(2, 1, fr, lr);
    boost::math::ellint_1(i);
@@ -1164,6 +1185,9 @@ void instantiate_mixed(RealType)
    boost::math::laguerre(2, 1, i, pol);
    boost::math::laguerre(2u, 1u, s, pol);
    boost::math::hermite(1, s, pol);
+   boost::math::chebyshev_t(1, i, pol);
+   boost::math::chebyshev_u(1, i, pol);
+   boost::math::chebyshev_t_prime(1, i, pol);
    boost::math::spherical_harmonic_r(2, 1, s, i, pol);
    boost::math::spherical_harmonic_i(2, 1, fr, lr, pol);
    boost::math::ellint_1(i, pol);
@@ -1315,6 +1339,9 @@ void instantiate_mixed(RealType)
    test::laguerre(2, 1, i);
    test::laguerre(2u, 1u, s);
    test::hermite(1, s);
+   test::chebyshev_t(1, i);
+   test::chebyshev_u(1, i);
+   test::chebyshev_t_prime(1, s);
    test::spherical_harmonic_r(2, 1, s, i);
    test::spherical_harmonic_i(2, 1, fr, lr);
    test::ellint_1(i);
