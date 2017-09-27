@@ -6,6 +6,12 @@ Currently open bug reports can be viewed
 All bug reports including closed ones can be viewed
 [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=math&col=id&col=summary&col=status&col=type&col=milestone&col=component&order=priority here].
 
+[h4 Math-2.7.0 (Boost-1.66)]
+
+* Add Gauss and Gauss-Kronrod quadrature routines.
+* Add double-exponential (tanh-sinh, exp-sinh and sinh-sinh) quadrature routines.
+* Add Chebyshev polynomial evaluation, roots, integration, differentiation, and interpolation routines.
+
 [h4 Math-2.6.0 (Boost-1.65)]
 
 New Features:
