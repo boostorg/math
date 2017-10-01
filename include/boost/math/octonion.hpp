@@ -20,89 +20,89 @@ namespace boost
     {
     
 #define    BOOST_OCTONION_ACCESSOR_GENERATOR(type)                      \
-            type                        real() const                    \
+            BOOST_CONSTEXPR type                 real() const           \
             {                                                           \
                 return(a);                                              \
             }                                                           \
                                                                         \
-            octonion<type>                unreal() const                \
+            BOOST_CONSTEXPR octonion<type>       unreal() const         \
             {                                                           \
                 return( octonion<type>(static_cast<type>(0),b,c,d,e,f,g,h));   \
             }                                                           \
                                                                         \
-            type                            R_component_1() const       \
+            BOOST_CONSTEXPR type                 R_component_1() const  \
             {                                                           \
                 return(a);                                              \
             }                                                           \
                                                                         \
-            type                            R_component_2() const       \
+            BOOST_CONSTEXPR type                 R_component_2() const  \
             {                                                           \
                 return(b);                                              \
             }                                                           \
                                                                         \
-            type                            R_component_3() const       \
+            BOOST_CONSTEXPR type                 R_component_3() const  \
             {                                                           \
                 return(c);                                              \
             }                                                           \
                                                                         \
-            type                            R_component_4() const       \
+            BOOST_CONSTEXPR type                 R_component_4() const  \
             {                                                           \
                 return(d);                                              \
             }                                                           \
                                                                         \
-            type                            R_component_5() const       \
+            BOOST_CONSTEXPR type                 R_component_5() const  \
             {                                                           \
                 return(e);                                              \
             }                                                           \
                                                                         \
-            type                            R_component_6() const       \
+            BOOST_CONSTEXPR type                 R_component_6() const  \
             {                                                           \
                 return(f);                                              \
             }                                                           \
                                                                         \
-            type                            R_component_7() const       \
+            BOOST_CONSTEXPR type                 R_component_7() const  \
             {                                                           \
                 return(g);                                              \
             }                                                           \
                                                                         \
-            type                            R_component_8() const       \
+            BOOST_CONSTEXPR type                 R_component_8() const  \
             {                                                           \
                 return(h);                                              \
             }                                                           \
                                                                         \
-            ::std::complex<type>            C_component_1() const       \
+            BOOST_CONSTEXPR ::std::complex<type> C_component_1() const  \
             {                                                           \
                 return(::std::complex<type>(a,b));                      \
             }                                                           \
                                                                         \
-            ::std::complex<type>            C_component_2() const       \
+            BOOST_CONSTEXPR ::std::complex<type> C_component_2() const  \
             {                                                           \
                 return(::std::complex<type>(c,d));                      \
             }                                                           \
                                                                         \
-            ::std::complex<type>            C_component_3() const       \
+            BOOST_CONSTEXPR ::std::complex<type> C_component_3() const  \
             {                                                           \
                 return(::std::complex<type>(e,f));                      \
             }                                                           \
                                                                         \
-            ::std::complex<type>            C_component_4() const       \
+            BOOST_CONSTEXPR ::std::complex<type> C_component_4() const  \
             {                                                           \
                 return(::std::complex<type>(g,h));                      \
             }                                                           \
                                                                         \
-            ::boost::math::quaternion<type>    H_component_1() const    \
+            BOOST_CONSTEXPR ::boost::math::quaternion<type> H_component_1() const \
             {                                                           \
                 return(::boost::math::quaternion<type>(a,b,c,d));       \
             }                                                           \
                                                                         \
-            ::boost::math::quaternion<type>    H_component_2() const    \
+            BOOST_CONSTEXPR ::boost::math::quaternion<type> H_component_2() const \
             {                                                           \
                 return(::boost::math::quaternion<type>(e,f,g,h));       \
             }
         
     
 #define    BOOST_OCTONION_MEMBER_ASSIGNMENT_GENERATOR(type)                                         \
-            template<typename X>                                                                    \
+            template<typename X> BOOST_CXX14_CONSTEXPR                                              \
             octonion<type> &        operator = (octonion<X> const & a_affecter)                     \
             {                                                                                       \
                 a = static_cast<type>(a_affecter.R_component_1());                                  \
@@ -117,6 +117,7 @@ namespace boost
                 return(*this);                                                                      \
             }                                                                                       \
                                                                                                     \
+            BOOST_CXX14_CONSTEXPR                                                                   \
             octonion<type> &        operator = (octonion<type> const & a_affecter)                  \
             {                                                                                       \
                 a = a_affecter.a;                                                                   \
@@ -131,6 +132,7 @@ namespace boost
                 return(*this);                                                                      \
             }                                                                                       \
                                                                                                     \
+            BOOST_CXX14_CONSTEXPR                                                                   \
             octonion<type> &        operator = (type const & a_affecter)                            \
             {                                                                                       \
                 a = a_affecter;                                                                     \
@@ -140,6 +142,7 @@ namespace boost
                 return(*this);                                                                      \
             }                                                                                       \
                                                                                                     \
+            BOOST_CXX14_CONSTEXPR                                                                   \
             octonion<type> &        operator = (::std::complex<type> const & a_affecter)            \
             {                                                                                       \
                 a = a_affecter.real();                                                              \
@@ -150,6 +153,7 @@ namespace boost
                 return(*this);                                                                      \
             }                                                                                       \
                                                                                                     \
+            BOOST_CXX14_CONSTEXPR                                                                   \
             octonion<type> &        operator = (::boost::math::quaternion<type> const & a_affecter) \
             {                                                                                       \
                 a = a_affecter.R_component_1();                                                     \
@@ -184,7 +188,7 @@ namespace boost
             // constructor for O seen as R^8
             // (also default constructor)
             
-            explicit                octonion(   T const & requested_a = T(),
+            explicit BOOST_CONSTEXPR octonion(  T const & requested_a = T(),
                                                 T const & requested_b = T(),
                                                 T const & requested_c = T(),
                                                 T const & requested_d = T(),
@@ -207,7 +211,7 @@ namespace boost
             
             // constructor for H seen as C^4
                 
-            explicit                octonion(   ::std::complex<T> const & z0,
+            explicit BOOST_CONSTEXPR octonion(  ::std::complex<T> const & z0,
                                                 ::std::complex<T> const & z1 = ::std::complex<T>(),
                                                 ::std::complex<T> const & z2 = ::std::complex<T>(),
                                                 ::std::complex<T> const & z3 = ::std::complex<T>())
@@ -226,7 +230,7 @@ namespace boost
             
             // constructor for O seen as H^2
                 
-            explicit                octonion(   ::boost::math::quaternion<T> const & q0,
+            explicit BOOST_CONSTEXPR octonion(  ::boost::math::quaternion<T> const & q0,
                                                 ::boost::math::quaternion<T> const & q1 = ::boost::math::quaternion<T>())
             :   a(q0.R_component_1()),
                 b(q0.R_component_2()),
@@ -248,7 +252,7 @@ namespace boost
             // templated copy constructor
             
             template<typename X>
-            explicit                octonion(octonion<X> const & a_recopier)
+            explicit BOOST_CONSTEXPR octonion(octonion<X> const & a_recopier)
             :   a(static_cast<T>(a_recopier.R_component_1())),
                 b(static_cast<T>(a_recopier.R_component_2())),
                 c(static_cast<T>(a_recopier.R_component_3())),
@@ -288,6 +292,7 @@ namespace boost
             //            and "q /= rhs;" means "q = q * inverse_of(rhs);";
             //            octonion multiplication is also *NOT* associative
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator += (T const & rhs)
             {
                 T    at = a + rhs;    // exception guard
@@ -298,6 +303,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator += (::std::complex<T> const & rhs)
             {
                 T    at = a + rhs.real();    // exception guard
@@ -310,6 +316,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator += (::boost::math::quaternion<T> const & rhs)
             {
                 T    at = a + rhs.R_component_1();    // exception guard
@@ -326,7 +333,7 @@ namespace boost
             }
             
             
-            template<typename X>
+            template<typename X>     BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator += (octonion<X> const & rhs)
             {
                 T    at = a + static_cast<T>(rhs.R_component_1());    // exception guard
@@ -352,6 +359,7 @@ namespace boost
             
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator -= (T const & rhs)
             {
                 T    at = a - rhs;    // exception guard
@@ -362,6 +370,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator -= (::std::complex<T> const & rhs)
             {
                 T    at = a - rhs.real();    // exception guard
@@ -374,6 +383,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator -= (::boost::math::quaternion<T> const & rhs)
             {
                 T    at = a - rhs.R_component_1();    // exception guard
@@ -390,7 +400,7 @@ namespace boost
             }
             
             
-            template<typename X>
+            template<typename X>     BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator -= (octonion<X> const & rhs)
             {
                 T    at = a - static_cast<T>(rhs.R_component_1());    // exception guard
@@ -415,6 +425,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator *= (T const & rhs)
             {
                 T    at = a * rhs;    // exception guard
@@ -439,6 +450,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator *= (::std::complex<T> const & rhs)
             {
                 T    ar = rhs.real();
@@ -466,6 +478,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator *= (::boost::math::quaternion<T> const & rhs)
             {
                 T    ar = rhs.R_component_1();
@@ -495,7 +508,7 @@ namespace boost
             }
             
             
-            template<typename X>
+            template<typename X>     BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator *= (octonion<X> const & rhs)
             {
                 T    ar = static_cast<T>(rhs.R_component_1());
@@ -529,6 +542,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator /= (T const & rhs)
             {
                 T    at = a / rhs;    // exception guard
@@ -553,6 +567,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator /= (::std::complex<T> const & rhs)
             {
                 T    ar = rhs.real();
@@ -582,6 +597,7 @@ namespace boost
             }
             
             
+            BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator /= (::boost::math::quaternion<T> const & rhs)
             {
                 T    ar = rhs.R_component_1();
@@ -613,7 +629,7 @@ namespace boost
             }
             
             
-            template<typename X>
+            template<typename X>     BOOST_CXX14_CONSTEXPR
             octonion<T> &            operator /= (octonion<X> const & rhs)
             {
                 T    ar = static_cast<T>(rhs.R_component_1());
@@ -682,7 +698,7 @@ namespace boost
         
         
 #define    BOOST_OCTONION_CONSTRUCTOR_GENERATOR(type)                                                                               \
-            explicit                    octonion(   type const & requested_a = static_cast<type>(0),                                \
+            explicit BOOST_CONSTEXPR    octonion(   type const & requested_a = static_cast<type>(0),                                \
                                                     type const & requested_b = static_cast<type>(0),                                \
                                                     type const & requested_c = static_cast<type>(0),                                \
                                                     type const & requested_d = static_cast<type>(0),                                \
@@ -701,7 +717,7 @@ namespace boost
             {                                                                                                                       \
             }                                                                                                                       \
                                                                                                                                     \
-            explicit                    octonion(   ::std::complex<type> const & z0,                                                \
+            explicit BOOST_CONSTEXPR    octonion(   ::std::complex<type> const & z0,                                                \
                                                     ::std::complex<type> const & z1 = ::std::complex<type>(),                       \
                                                     ::std::complex<type> const & z2 = ::std::complex<type>(),                       \
                                                     ::std::complex<type> const & z3 = ::std::complex<type>())                       \
@@ -716,7 +732,7 @@ namespace boost
             {                                                                                                                       \
             }                                                                                                                       \
                                                                                                                                     \
-            explicit                    octonion(   ::boost::math::quaternion<type> const & q0,                                     \
+            explicit BOOST_CONSTEXPR    octonion(   ::boost::math::quaternion<type> const & q0,                                     \
                                                     ::boost::math::quaternion<type> const & q1 = ::boost::math::quaternion<type>()) \
             :   a(q0.R_component_1()),                                                                                              \
                 b(q0.R_component_2()),                                                                                              \
@@ -731,6 +747,7 @@ namespace boost
         
     
 #define    BOOST_OCTONION_MEMBER_ADD_GENERATOR_1(type)                  \
+            BOOST_CXX14_CONSTEXPR                                       \
             octonion<type> &            operator += (type const & rhs)  \
             {                                                           \
                 a += rhs;                                               \
@@ -739,6 +756,7 @@ namespace boost
             }
     
 #define    BOOST_OCTONION_MEMBER_ADD_GENERATOR_2(type)                                  \
+            BOOST_CXX14_CONSTEXPR                                                       \
             octonion<type> &            operator += (::std::complex<type> const & rhs)  \
             {                                                                           \
                 a += rhs.real();                                                        \
@@ -748,6 +766,7 @@ namespace boost
             }
     
 #define    BOOST_OCTONION_MEMBER_ADD_GENERATOR_3(type)                                              \
+            BOOST_CXX14_CONSTEXPR                                                                   \
             octonion<type> &            operator += (::boost::math::quaternion<type> const & rhs)   \
             {                                                                                       \
                 a += rhs.R_component_1();                                                           \
@@ -759,7 +778,7 @@ namespace boost
             }
     
 #define    BOOST_OCTONION_MEMBER_ADD_GENERATOR_4(type)                          \
-            template<typename X>                                                \
+            template<typename X>        BOOST_CXX14_CONSTEXPR                   \
             octonion<type> &            operator += (octonion<X> const & rhs)   \
             {                                                                   \
                 a += static_cast<type>(rhs.R_component_1());                    \
@@ -775,6 +794,7 @@ namespace boost
             }
     
 #define    BOOST_OCTONION_MEMBER_SUB_GENERATOR_1(type)                  \
+            BOOST_CXX14_CONSTEXPR                                       \
             octonion<type> &            operator -= (type const & rhs)  \
             {                                                           \
                 a -= rhs;                                               \
@@ -783,6 +803,7 @@ namespace boost
             }
     
 #define    BOOST_OCTONION_MEMBER_SUB_GENERATOR_2(type)                                  \
+            BOOST_CXX14_CONSTEXPR                                                       \
             octonion<type> &            operator -= (::std::complex<type> const & rhs)  \
             {                                                                           \
                 a -= rhs.real();                                                        \
@@ -792,6 +813,7 @@ namespace boost
             }
     
 #define    BOOST_OCTONION_MEMBER_SUB_GENERATOR_3(type)                                              \
+            BOOST_CXX14_CONSTEXPR                                                                   \
             octonion<type> &            operator -= (::boost::math::quaternion<type> const & rhs)   \
             {                                                                                       \
                 a -= rhs.R_component_1();                                                           \
@@ -803,7 +825,7 @@ namespace boost
             }
     
 #define    BOOST_OCTONION_MEMBER_SUB_GENERATOR_4(type)                        \
-            template<typename X>                                              \
+            template<typename X>        BOOST_CXX14_CONSTEXPR                 \
             octonion<type> &            operator -= (octonion<X> const & rhs) \
             {                                                                 \
                 a -= static_cast<type>(rhs.R_component_1());                  \
@@ -819,6 +841,7 @@ namespace boost
             }
     
 #define    BOOST_OCTONION_MEMBER_MUL_GENERATOR_1(type)                   \
+            BOOST_CXX14_CONSTEXPR                                        \
             octonion<type> &            operator *= (type const & rhs)   \
             {                                                            \
                 a *= rhs;                                                \
@@ -834,6 +857,7 @@ namespace boost
             }
     
 #define    BOOST_OCTONION_MEMBER_MUL_GENERATOR_2(type)                                  \
+            BOOST_CXX14_CONSTEXPR                                                       \
             octonion<type> &            operator *= (::std::complex<type> const & rhs)  \
             {                                                                           \
                 type    ar = rhs.real();                                                \
@@ -860,7 +884,8 @@ namespace boost
                 return(*this);                                                          \
             }
     
-#define    BOOST_OCTONION_MEMBER_MUL_GENERATOR_3(type)                                                    \
+#define    BOOST_OCTONION_MEMBER_MUL_GENERATOR_3(type)                                              \
+            BOOST_CXX14_CONSTEXPR                                                                   \
             octonion<type> &            operator *= (::boost::math::quaternion<type> const & rhs)   \
             {                                                                                       \
                 type    ar = rhs.R_component_1();                                                   \
@@ -890,7 +915,7 @@ namespace boost
             }
     
 #define    BOOST_OCTONION_MEMBER_MUL_GENERATOR_4(type)                          \
-            template<typename X>                                                \
+            template<typename X>        BOOST_CXX14_CONSTEXPR                   \
             octonion<type> &            operator *= (octonion<X> const & rhs)   \
             {                                                                   \
                 type    ar = static_cast<type>(rhs.R_component_1());            \
@@ -931,6 +956,7 @@ namespace boost
 // (painfully) explicit.
     
 #define    BOOST_OCTONION_MEMBER_DIV_GENERATOR_1(type)                  \
+            BOOST_CXX14_CONSTEXPR                                       \
             octonion<type> &            operator /= (type const & rhs)  \
             {                                                           \
                 a /= rhs;                                               \
@@ -1258,7 +1284,7 @@ namespace boost
             // UNtemplated copy constructor
             // (this is taken care of by the compiler itself)
             
-            // explicit copy constructors (precision-loosing converters)
+            // explicit copy constructors (precision-losing converters)
             
             explicit                    octonion(octonion<double> const & a_recopier)
             {
@@ -1327,7 +1353,7 @@ namespace boost
                 *this = detail::octonion_type_converter<double, float>(a_recopier);
             }
             
-            // explicit copy constructors (precision-loosing converters)
+            // explicit copy constructors (precision-losing converters)
             
             explicit                    octonion(octonion<long double> const & a_recopier)
             {
@@ -1480,37 +1506,37 @@ namespace boost
         }
         
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_1_L(op)                                                                              \
-        template<typename T>                                                                                                      \
+        template<typename T>                      BOOST_CXX14_CONSTEXPR                                                           \
         inline octonion<T>                        operator op (T const & lhs, octonion<T> const & rhs)                            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
         
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_1_R(op)                                                                              \
-        template<typename T>                                                                                                      \
+        template<typename T>                      BOOST_CXX14_CONSTEXPR                                                           \
         inline octonion<T>                        operator op (octonion<T> const & lhs, T const & rhs)                            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
         
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_2_L(op)                                                                              \
-        template<typename T>                                                                                                      \
+        template<typename T>                      BOOST_CXX14_CONSTEXPR                                                           \
         inline octonion<T>                        operator op (::std::complex<T> const & lhs, octonion<T> const & rhs)            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
         
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_2_R(op)                                                                              \
-        template<typename T>                                                                                                      \
+        template<typename T>                      BOOST_CXX14_CONSTEXPR                                                           \
         inline octonion<T>                        operator op (octonion<T> const & lhs, ::std::complex<T> const & rhs)            \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
         
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_3_L(op)                                                                              \
-        template<typename T>                                                                                                      \
+        template<typename T>                      BOOST_CXX14_CONSTEXPR                                                           \
         inline octonion<T>                        operator op (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs) \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
         
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_3_R(op)                                                                              \
-        template<typename T>                                                                                                      \
+        template<typename T>                      BOOST_CXX14_CONSTEXPR                                                           \
         inline octonion<T>                        operator op (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs) \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
         
 #define    BOOST_OCTONION_OPERATOR_GENERATOR_4(op)                                                                                \
-        template<typename T>                                                                                                      \
+        template<typename T>                      BOOST_CXX14_CONSTEXPR                                                           \
         inline octonion<T>                        operator op (octonion<T> const & lhs, octonion<T> const & rhs)                  \
         BOOST_OCTONION_OPERATOR_GENERATOR_BODY(op)
         
@@ -1543,21 +1569,21 @@ namespace boost
 #undef    BOOST_OCTONION_OPERATOR_GENERATOR_BODY
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline octonion<T>                        operator + (octonion<T> const & o)
         {
             return(o);
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline octonion<T>                        operator - (octonion<T> const & o)
         {
             return(octonion<T>(-o.R_component_1(),-o.R_component_2(),-o.R_component_3(),-o.R_component_4(),-o.R_component_5(),-o.R_component_6(),-o.R_component_7(),-o.R_component_8()));
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (T const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1573,7 +1599,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (octonion<T> const & lhs, T const & rhs)
         {
             return(
@@ -1589,7 +1615,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (::std::complex<T> const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1605,7 +1631,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (octonion<T> const & lhs, ::std::complex<T> const & rhs)
         {
             return(
@@ -1621,7 +1647,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1637,7 +1663,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs)
         {
             return(
@@ -1653,7 +1679,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator == (octonion<T> const & lhs, octonion<T> const & rhs)
         {
             return(
@@ -1674,31 +1700,31 @@ namespace boost
             return(!(lhs == rhs));            \
         }
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (T const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (octonion<T> const & lhs, T const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (::std::complex<T> const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (octonion<T> const & lhs, ::std::complex<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (::boost::math::quaternion<T> const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (octonion<T> const & lhs, ::boost::math::quaternion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline bool                                operator != (octonion<T> const & lhs, octonion<T> const & rhs)
         BOOST_OCTONION_NOT_EQUAL_GENERATOR
         
@@ -3880,14 +3906,14 @@ namespace boost
         
         // values
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline T                                real(octonion<T> const & o)
         {
             return(o.real());
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline octonion<T>                        unreal(octonion<T> const & o)
         {
             return(o.unreal());
@@ -3972,14 +3998,14 @@ namespace boost
         
         // Note:    This is the Cayley norm, not the Euclidian norm...
         
-        template<typename T>
+        template<typename T> BOOST_CXX14_CONSTEXPR
         inline T                                norm(octonion<T> const & o)
         {
             return(real(o*conj(o)));
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CONSTEXPR
         inline octonion<T>                        conj(octonion<T> const & o)
         {
             return(octonion<T>( +o.R_component_1(),
@@ -4190,7 +4216,7 @@ namespace boost
         }
         
         
-        template<typename T>
+        template<typename T> BOOST_CXX14_CONSTEXPR
         octonion<T>                                pow(octonion<T> const & o,
                                                     int n)
         {
