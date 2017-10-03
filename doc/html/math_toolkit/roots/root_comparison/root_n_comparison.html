@@ -5203,10 +5203,11 @@
 <li class="listitem">
               Perhaps surprisingly, there is little difference between the various
               algorithms for <a href="http://en.cppreference.com/w/cpp/language/types" target="_top">fundamental
-              types</a> floating-point types. Using the first derivatives (<a class="link" href="../roots_deriv.html#math_toolkit.roots.roots_deriv.newton">Newton-Raphson iteration</a>)
-              is usually the best, but while the improvement over the no-derivative
-              <a href="http://portal.acm.org/citation.cfm?id=210111" target="_top">TOMS Algorithm
-              748: enclosing zeros of continuous functions</a> is considerable
+              (built-in) types</a> floating-point types. Using the first derivatives
+              (<a class="link" href="../roots_deriv.html#math_toolkit.roots.roots_deriv.newton">Newton-Raphson
+              iteration</a>) is usually the best, but while the improvement over
+              the no-derivative <a href="http://portal.acm.org/citation.cfm?id=210111" target="_top">TOMS
+              Algorithm 748: enclosing zeros of continuous functions</a> is considerable
               in number of iterations, but little in execution time. This reflects
               the fact that the function we are finding the root for is trivial to
               evaluate, so runtimetimes are dominated by the time taken by the boilerplate

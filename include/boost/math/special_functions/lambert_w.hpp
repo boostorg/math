@@ -15,9 +15,8 @@ and on a C/C++ version by Darko Veberic, darko.veberic@ijs.si
 based on the algorithm and a FORTRAN version of Toshio Fukushima.
 
 Some macros that will show some (or much) diagnostic values if #defined.
-#define BOOST_MATH_INSTRUMENT_LAMBERT_W0_INTEGRAL
 
-#define -able macros
+#define-able macros
 BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
 BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES // lambert_w_singularity_series
 BOOST_MATH_INSTRUMENT_LAMBERT_W0 // W0 branch diagnostics.
@@ -27,8 +26,9 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER // Schroeder refinement diagnostics.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS // Number of terms used for near-singularity series.
 BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN // higher than built-in precision types approximation and refinement.
 BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION // Show bisection only estimate.
-BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES
-BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS
+BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES // Show evaluation of series near branch singularity.
+BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of series for small z.
+#define BOOST_MATH_INSTRUMENT_LAMBERT_W0_LOOKUP // Show results from lookup table.
 */
 
 //#ifndef BOOST_MATH_SF_LAMBERT_W_HPP
@@ -968,12 +968,11 @@ if (diff == 0)  // Exact result - common.
       }
     } //  z < -0.35
  // z < -1/e
-    else // Argument z is in the 'normal' range and float or double precision, so use Lookup, Bracket, Schroeder (and Halley).
+    else // Argument z is in the 'normal' range and float or double precision, so use Lookup, Bracket, Bisection and Schroeder (and Halley).
     {
 
       ///////////////////////////////////////////////////////////
-      // TODO take this table out as a templated function,
-      // so that can see effect of choice of T.
+      // TODO take this table out as a templated function, to avoid multithread init problems.
       // (Would like to avoid initializing table of static data?
       // but cannot avoid - always computed at load time).
       // See Fukushima section 2.2, page 81.
@@ -982,7 +981,7 @@ if (diff == 0)  // Exact result - common.
       static T e[66]; // lambert_w[k] for W-1 branch. 2.718 1 0.3678 0.1353 0.04978 ... 4.359e-28 1.603e-28
       static T g[65]; // lambert_w[k] for W0 branch. 0 2.7182 14.77 60.2566 ... 1.445e+29 3.990e+29
       // Defining lookup table sqrts of 1/e.
-      static T a[12]; // 0.6065 0.7788 ... 0.9997 sqrt of previous elements.
+      static T a[12]; // 0.6065 0.7788 ... 0.9997, sqrt of previous elements.
       static T b[12]; // 0.5 0.25 0.125 ...  0.0002441, Half of previous element.
 
       if (!e[0])
@@ -1054,7 +1053,7 @@ if (diff == 0)  // Exact result - common.
 
         // Test sequence is n is (0, 1, 2, 4, 8, 16, 32, 64) for W0 branch.
         // Since z is probably quite small, start with lowest (n = 0).
-        int n; // indexing W0 lookup table g of z
+        int n; // Indexing W0 lookup table g of z.
         for (n = 0; n <= 2; ++n)
         { // Try 1st few.
           if (g[n] > z)
@@ -1099,7 +1098,9 @@ if (diff == 0)  // Exact result - common.
 
       bisect:
         --n; // g[n] is nearest below, so n is integer value of W, and
-        // g[n+1] is upper integral value. These are used to start bisection.
+        // g[n+1] is upper integral value. These are used as initial values for bisection.
+
+
 
         // typedef typename policies::precision<T, Policy>::type prec;
         //std::cout << "digits2 = " << digits2 << std::endl;  //  digits = 24 for float.
@@ -1112,18 +1113,18 @@ if (diff == 0)  // Exact result - common.
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0
         int d10 = policies::digits_base10<T, Policy>(); // policy template parameter digits10
         std::cout << "digits10 = " << d10 << ", digits2 = " << d2 // For example: digits10 = 1, digits2 = 5
-          //<< ", epsilon " << epsilon
           << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0
+
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_LOOKUP
+          std::cout << "Result lookup W(" << z <<  ") bisection between g[" << n - 1 << "] = " << g[n - 1] << " and g[" << n << "] = " << g[n]
+            << ", bisect mean = " << (g[n - 1] + g[n]) / 2 << std::endl;
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_LOOKUP
 
         if (d2 <= 7)
         { // Only 7 binary digits precision required to hold integer size of g[65],
           // so just return the mean of two nearby integral values.
           // This is a *very* approximate estimate, and perhaps not very useful?
-#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_INTEGRALS
-          std::cout << "Result Integer W(" << z <<  ") bisection between g[" << n - 1 << "] = " << g[n - 1] << " and g[" << n << "] = " << g[n]
-            << ", bisect mean = " << (g[n - 1] + g[n]) / 2 << std::endl;
-#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_INTEGRALS
           return static_cast<T>((g[n - 1] + g[n]) / 2);
         }
         // Compute the number of bisections (jmax) that ensure that result is close enough that
