@@ -495,6 +495,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(arithmetic_test, T, test_types)
    q1 = boost::lexical_cast<boost::math::quaternion<T>>("(34,56,20,2)");
    check_exact_quaternion_result(q1, 34, 56, 20, 2);
 
+   q1 = q4 + 1;
+   q1.swap(q4);
+   check_exact_quaternion_result(q1, 34, 56, 20, 2);
+   check_exact_quaternion_result(q4, 35, 56, 20, 2);
+   swap(q1, q4);
+   check_exact_quaternion_result(q1, 35, 56, 20, 2);
+   check_exact_quaternion_result(q4, 34, 56, 20, 2);
+
    BOOST_CHECK_EQUAL(real(q4), 34);
    check_exact_quaternion_result(unreal(q1), 0, 56, 20, 2);
    BOOST_CHECK_EQUAL(sup(q4), 56);

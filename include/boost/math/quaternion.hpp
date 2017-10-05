@@ -138,6 +138,15 @@ namespace boost
                return(::std::complex<T>(c, d));
             }
 
+            void swap(quaternion& o)
+            {
+               using std::swap;
+               swap(a, o.a);
+               swap(b, o.b);
+               swap(c, o.c);
+               swap(d, o.d);
+            }
+
             // assignment operators
             
             template<typename X>
@@ -386,7 +395,10 @@ namespace boost
            T a, b, c, d;
             
         };
-        
+
+// swap:
+template <class T>
+void swap(quaternion<T>& a, quaternion<T>& b) { a.swap(b); }
         
 // operator+
 template <class T1, class T2>
