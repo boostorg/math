@@ -17,6 +17,8 @@
 
 #include <boost/config.hpp> // for BOOST_NO_STD_LOCALE
 #include <boost/detail/workaround.hpp>
+#include <boost/type_traits/is_convertible.hpp>
+#include <boost/utility/enable_if.hpp>
 #ifndef    BOOST_NO_STD_LOCALE
     #include <locale>                                    // for the "<<" operator
 #endif /* BOOST_NO_STD_LOCALE */
@@ -411,13 +413,13 @@ namespace boost
             
         };
         
-        
+#if 0    
         // declaration of quaternion specialization
         
         template<>    class quaternion<float>;
         template<>    class quaternion<double>;
         template<>    class quaternion<long double>;
-        
+#endif   
         
         // helper templates for converting copy constructors (declaration)
         
@@ -754,7 +756,7 @@ namespace boost
         BOOST_QUATERNION_MEMBER_MUL_GENERATOR(type)            \
         BOOST_QUATERNION_MEMBER_DIV_GENERATOR(type)
         
-        
+#if 0  
         template<>
         class quaternion<float>
         {
@@ -939,7 +941,7 @@ namespace boost
             
         };
         
-        
+#endif   
 #undef    BOOST_QUATERNION_MEMBER_ALGEBRAIC_GENERATOR
 #undef    BOOST_QUATERNION_MEMBER_ADD_GENERATOR
 #undef    BOOST_QUATERNION_MEMBER_SUB_GENERATOR
@@ -1010,11 +1012,147 @@ namespace boost
         BOOST_QUATERNION_OPERATOR_GENERATOR_3(op)
         
         
-        BOOST_QUATERNION_OPERATOR_GENERATOR(+)
-        BOOST_QUATERNION_OPERATOR_GENERATOR(-)
-        BOOST_QUATERNION_OPERATOR_GENERATOR(*)
-        BOOST_QUATERNION_OPERATOR_GENERATOR(/)
+        //BOOST_QUATERNION_OPERATOR_GENERATOR(+)
+        //BOOST_QUATERNION_OPERATOR_GENERATOR(-)
+        //BOOST_QUATERNION_OPERATOR_GENERATOR(*)
+        //BOOST_QUATERNION_OPERATOR_GENERATOR(/)
 
+// operator+
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type 
+operator + (const quaternion<T1>& a, const T2& b)
+{
+   return quaternion<T1>(static_cast<T1>(a.R_component_1() + b), a.R_component_2(), a.R_component_3(), a.R_component_4());
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
+operator + (const T1& a, const quaternion<T2>& b)
+{
+   return quaternion<T2>(static_cast<T2>(b.R_component_1() + a), b.R_component_2(), b.R_component_3(), b.R_component_4());
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
+operator + (const quaternion<T1>& a, const std::complex<T2>& b)
+{
+   return quaternion<T1>(a.R_component_1() + std::real(b), a.R_component_2() + std::imag(b), a.R_component_3(), a.R_component_4());
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
+operator + (const std::complex<T1>& a, const quaternion<T2>& b)
+{
+   return quaternion<T1>(b.R_component_1() + real(a), b.R_component_2() + imag(a), b.R_component_3(), b.R_component_4());
+}
+template <class T>
+inline quaternion<T> operator + (const quaternion<T>& a, const quaternion<T>& b)
+{
+   return quaternion<T>(a.R_component_1() + b.R_component_1(), a.R_component_2() + b.R_component_2(), a.R_component_3() + b.R_component_3(), a.R_component_4() + b.R_component_4());
+}
+// operator-
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
+operator - (const quaternion<T1>& a, const T2& b)
+{
+   return quaternion<T1>(static_cast<T1>(a.R_component_1() - b), a.R_component_2(), a.R_component_3(), a.R_component_4());
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
+operator - (const T1& a, const quaternion<T2>& b)
+{
+   return quaternion<T2>(static_cast<T2>(a - b.R_component_1()), -b.R_component_2(), -b.R_component_3(), -b.R_component_4());
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
+operator - (const quaternion<T1>& a, const std::complex<T2>& b)
+{
+   return quaternion<T1>(a.R_component_1() - std::real(b), a.R_component_2() - std::imag(b), a.R_component_3(), a.R_component_4());
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
+operator - (const std::complex<T1>& a, const quaternion<T2>& b)
+{
+   return quaternion<T1>(real(a) - b.R_component_1(), imag(a) - b.R_component_2(), -b.R_component_3(), -b.R_component_4());
+}
+template <class T>
+inline quaternion<T> operator - (const quaternion<T>& a, const quaternion<T>& b)
+{
+   return quaternion<T>(a.R_component_1() - b.R_component_1(), a.R_component_2() - b.R_component_2(), a.R_component_3() - b.R_component_3(), a.R_component_4() - b.R_component_4());
+}
+
+// operator*
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
+operator * (const quaternion<T1>& a, const T2& b)
+{
+   return quaternion<T1>(static_cast<T1>(a.R_component_1() * b), a.R_component_2() * b, a.R_component_3() * b, a.R_component_4() * b);
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
+operator * (const T1& a, const quaternion<T2>& b)
+{
+   return quaternion<T2>(static_cast<T2>(a * b.R_component_1()), a * b.R_component_2(), a * b.R_component_3(), a * b.R_component_4());
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
+operator * (const quaternion<T1>& a, const std::complex<T2>& b)
+{
+   quaternion<T1> result(a);
+   result *= b;
+   return result;
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
+operator * (const std::complex<T1>& a, const quaternion<T2>& b)
+{
+   quaternion<T1> result(a);
+   result *= b;
+   return result;
+}
+template <class T>
+inline quaternion<T> operator * (const quaternion<T>& a, const quaternion<T>& b)
+{
+   quaternion<T> result(a);
+   result *= b;
+   return result;
+}
+
+// operator/
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
+operator / (const quaternion<T1>& a, const T2& b)
+{
+   return quaternion<T1>(static_cast<T1>(a.R_component_1() / b), a.R_component_2() / b, a.R_component_3() / b, a.R_component_4() / b);
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
+operator / (const T1& a, const quaternion<T2>& b)
+{
+   quaternion<T2> result(a);
+   result /= b;
+   return result;
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T2, T1>::value, quaternion<T1> >::type
+operator / (const quaternion<T1>& a, const std::complex<T2>& b)
+{
+   quaternion<T1> result(a);
+   result /= b;
+   return result;
+}
+template <class T1, class T2>
+inline typename boost::enable_if_c<boost::is_convertible<T1, T2>::value, quaternion<T2> >::type
+operator / (const std::complex<T1>& a, const quaternion<T2>& b)
+{
+   quaternion<T2> result(a);
+   result /= b;
+   return result;
+}
+template <class T>
+inline quaternion<T> operator / (const quaternion<T>& a, const quaternion<T>& b)
+{
+   quaternion<T> result(a);
+   result /= b;
+   return result;
+}
 
 #undef    BOOST_QUATERNION_OPERATOR_GENERATOR
         
@@ -1028,9 +1166,9 @@ namespace boost
         
         
         template<typename T>
-        inline quaternion<T>                    operator + (quaternion<T> const & q)
+        inline const quaternion<T>&             operator + (quaternion<T> const & q)
         {
-            return(q);
+            return q;
         }
         
         
@@ -1041,8 +1179,8 @@ namespace boost
         }
         
         
-        template<typename T>
-        inline bool                                operator == (T const & lhs, quaternion<T> const & rhs)
+        template<typename R, typename T>
+        inline typename boost::enable_if_c<boost::is_convertible<R, T>::value, bool>::type operator == (R const & lhs, quaternion<T> const & rhs)
         {
             return    (
                         (rhs.R_component_1() == lhs)&&
@@ -1053,15 +1191,10 @@ namespace boost
         }
         
         
-        template<typename T>
-        inline bool                                operator == (quaternion<T> const & lhs, T const & rhs)
+        template<typename T, typename R>
+        inline typename boost::enable_if_c<boost::is_convertible<R, T>::value, bool>::type operator == (quaternion<T> const & lhs, R const & rhs)
         {
-            return    (
-                        (lhs.R_component_1() == rhs)&&
-                        (lhs.R_component_2() == static_cast<T>(0))&&
-                        (lhs.R_component_3() == static_cast<T>(0))&&
-                        (lhs.R_component_4() == static_cast<T>(0))
-                    );
+           return rhs == lhs;
         }
         
         
@@ -1080,12 +1213,7 @@ namespace boost
         template<typename T>
         inline bool                                operator == (quaternion<T> const & lhs, ::std::complex<T> const & rhs)
         {
-            return    (
-                        (lhs.R_component_1() == rhs.real())&&
-                        (lhs.R_component_2() == rhs.imag())&&
-                        (lhs.R_component_3() == static_cast<T>(0))&&
-                        (lhs.R_component_4() == static_cast<T>(0))
-                    );
+           return rhs == lhs;
         }
         
         
@@ -1099,34 +1227,12 @@ namespace boost
                         (rhs.R_component_4() == lhs.R_component_4())
                     );
         }
-        
-        
-#define    BOOST_QUATERNION_NOT_EQUAL_GENERATOR  \
-        {                                        \
-            return(!(lhs == rhs));               \
-        }
-        
-        template<typename T>
-        inline bool                                operator != (T const & lhs, quaternion<T> const & rhs)
-        BOOST_QUATERNION_NOT_EQUAL_GENERATOR
-        
-        template<typename T>
-        inline bool                                operator != (quaternion<T> const & lhs, T const & rhs)
-        BOOST_QUATERNION_NOT_EQUAL_GENERATOR
-        
-        template<typename T>
-        inline bool                                operator != (::std::complex<T> const & lhs, quaternion<T> const & rhs)
-        BOOST_QUATERNION_NOT_EQUAL_GENERATOR
-        
-        template<typename T>
-        inline bool                                operator != (quaternion<T> const & lhs, ::std::complex<T> const & rhs)
-        BOOST_QUATERNION_NOT_EQUAL_GENERATOR
-        
-        template<typename T>
-        inline bool                                operator != (quaternion<T> const & lhs, quaternion<T> const & rhs)
-        BOOST_QUATERNION_NOT_EQUAL_GENERATOR
-        
-#undef    BOOST_QUATERNION_NOT_EQUAL_GENERATOR
+                
+        template<typename R, typename T> inline bool operator != (R const & lhs, quaternion<T> const & rhs) { return !(lhs == rhs); }
+        template<typename T, typename R> inline bool operator != (quaternion<T> const & lhs, R const & rhs) { return !(lhs == rhs); }
+        template<typename T> inline bool operator != (::std::complex<T> const & lhs, quaternion<T> const & rhs) { return !(lhs == rhs); }
+        template<typename T> inline bool operator != (quaternion<T> const & lhs, ::std::complex<T> const & rhs) { return !(lhs == rhs); }
+        template<typename T> inline bool operator != (quaternion<T> const & lhs, quaternion<T> const & rhs) { return !(lhs == rhs); }
         
         
         // Note:    we allow the following formats, whith a, b, c, and d reals
@@ -1432,57 +1538,30 @@ namespace boost
         {
             return(q.unreal());
         }
-        
-        
-#define    BOOST_QUATERNION_VALARRAY_LOADER  \
-            using    ::std::valarray;        \
-                                             \
-            valarray<T>    temp(4);          \
-                                             \
-            temp[0] = q.R_component_1();     \
-            temp[1] = q.R_component_2();     \
-            temp[2] = q.R_component_3();     \
-            temp[3] = q.R_component_4();
-        
-        
+                
         template<typename T>
         inline T                                sup(quaternion<T> const & q)
         {
-#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
             using    ::std::abs;
-#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
-            
-            BOOST_QUATERNION_VALARRAY_LOADER
-            
-            return((abs(temp).max)());
+            return std::max(std::max(abs(q.R_component_1()), abs(q.R_component_2())), std::max(abs(q.R_component_3()), abs(q.R_component_4())));
         }
         
         
         template<typename T>
         inline T                                l1(quaternion<T> const & q)
         {
-#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-            using    ::std::abs;
-#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
-            
-            BOOST_QUATERNION_VALARRAY_LOADER
-            
-            return(abs(temp).sum());
+           using    ::std::abs;
+           return abs(q.R_component_1()) + abs(q.R_component_2()) + abs(q.R_component_3()) + abs(q.R_component_4());
         }
         
         
         template<typename T>
         inline T                                abs(quaternion<T> const & q)
         {
-#ifdef    BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
             using    ::std::abs;
-#endif    /* BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP */
-            
             using    ::std::sqrt;
             
-            BOOST_QUATERNION_VALARRAY_LOADER
-            
-            T            maxim = (abs(temp).max)();    // overflow protection
+            T            maxim = sup(q);    // overflow protection
             
             if    (maxim == static_cast<T>(0))
             {
@@ -1492,18 +1571,21 @@ namespace boost
             {
                 T    mixam = static_cast<T>(1)/maxim;    // prefer multiplications over divisions
                 
-                temp *= mixam;
+                T a = q.R_component_1() * mixam;
+                T b = q.R_component_2() * mixam;
+                T c = q.R_component_3() * mixam;
+                T d = q.R_component_4() * mixam;
+
+                a *= a;
+                b *= b;
+                c *= c;
+                d *= d;
                 
-                temp *= temp;
-                
-                return(maxim*sqrt(temp.sum()));
+                return(maxim * sqrt(a + b + c + d));
             }
             
             //return(sqrt(norm(q)));
         }
-        
-        
-#undef    BOOST_QUATERNION_VALARRAY_LOADER
         
         
         // Note:    This is the Cayley norm, not the Euclidian norm...
