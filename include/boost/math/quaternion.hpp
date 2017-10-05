@@ -69,8 +69,17 @@ namespace boost
             
             
             // UNtemplated copy constructor
-            // (this is taken care of by the compiler itself)
-            
+            quaternion(quaternion const & a_recopier)
+               : a(a_recopier.R_component_1()),
+               b(a_recopier.R_component_2()),
+               c(a_recopier.R_component_3()),
+               d(a_recopier.R_component_4()) {}
+            quaternion(quaternion && a_recopier)
+               : a(std::move(a_recopier.R_component_1())),
+               b(std::move(a_recopier.R_component_2())),
+               c(std::move(a_recopier.R_component_3())),
+               d(std::move(a_recopier.R_component_4())) {}
+
             
             // templated copy constructor
             
@@ -169,7 +178,17 @@ namespace boost
 
                return(*this);
             }
+#ifndef BOOST_NO_RVALUE_REFERENCES
+            quaternion<T> &        operator = (quaternion<T> && a_affecter)
+            {
+               a = std::move(a_affecter.a);
+               b = std::move(a_affecter.b);
+               c = std::move(a_affecter.c);
+               d = std::move(a_affecter.d);
 
+               return(*this);
+            }
+#endif
             quaternion<T> &        operator = (T const & a_affecter)
             {
                a = a_affecter;
