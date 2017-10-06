@@ -141,6 +141,23 @@ template    class ::boost::math::quaternion<int>;
 template class boost::math::quaternion<int>;
 #endif /* !BOOST_WORKAROUND(__GNUC__) */
 
+template <class T>
+struct other_type
+{
+   typedef double type;
+};
+template<>
+struct other_type<double>
+{
+   typedef float type;
+};
+template<>
+struct other_type<float>
+{
+   typedef short type;
+};
+
+
 template <class T, class U>
 void test_compare(const T& a, const U& b, bool eq)
 {
@@ -214,8 +231,6 @@ template <class T>
 void check_complex_ops_imp()
 {
    T tol = std::numeric_limits<T>::epsilon() * 200;
-
-   typedef typename other_type<T>::type other_type;
 
    ::std::complex<T>                   c0(5, 6);
 
@@ -295,22 +310,6 @@ template<>
 void check_complex_ops<double>() { check_complex_ops_imp<double>(); }
 template<>
 void check_complex_ops<long double>() { check_complex_ops_imp<long double>(); }
-
-template <class T>
-struct other_type
-{
-   typedef double type;
-};
-template<>
-struct other_type<double>
-{
-   typedef float type;
-};
-template<>
-struct other_type<float>
-{
-   typedef short type;
-};
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(arithmetic_test, T, test_types)
 {
@@ -492,7 +491,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(arithmetic_test, T, test_types)
    test_compare(q1, q3, false);
 
    BOOST_CHECK_EQUAL(boost::lexical_cast<std::string>(q4), "(34,56,20,2)");
-   q1 = boost::lexical_cast<boost::math::quaternion<T>>("(34,56,20,2)");
+   q1 = boost::lexical_cast<boost::math::quaternion<T> >("(34,56,20,2)");
    check_exact_quaternion_result(q1, 34, 56, 20, 2);
 
    q1 = q4 + 1;

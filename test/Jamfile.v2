@@ -961,6 +961,7 @@ test-suite misc :
    [ compile  compile_test/trapezoidal_concept_test.cpp  ]
    [ run octonion_test.cpp
        ../../test/build//boost_unit_test_framework ]
+   [ run quaternion_constexpr_test.cpp ]
    [ run quaternion_test.cpp
        ../../test/build//boost_unit_test_framework ]
    [ run quaternion_mult_incl_test.cpp
