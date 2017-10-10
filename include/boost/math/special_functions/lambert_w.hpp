@@ -31,8 +31,8 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #define BOOST_MATH_INSTRUMENT_LAMBERT_W0_LOOKUP // Show results from lookup table.
 */
 
-//#ifndef BOOST_MATH_SF_LAMBERT_W_HPP
-//#define BOOST_MATH_SF_LAMBERT_W_HPP
+#ifndef BOOST_MATH_SF_LAMBERT_W_HPP
+#define BOOST_MATH_SF_LAMBERT_W_HPP
 
 #ifdef _MSC_VER
 #  pragma warning (disable: 4127) // warning C4127: conditional expression is constant
@@ -1406,4 +1406,4 @@ if (diff == 0)  // Exact result - common.
   } // namespace math
 } // namespace boost
 
-//#endif //  #ifndef BOOST_MATH_SF_LAMBERT_W_HPP
+#endif //  #ifndef BOOST_MATH_SF_LAMBERT_W_HPP

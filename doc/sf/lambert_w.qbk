@@ -377,6 +377,36 @@ only provides the precision of the built-in type, like `double`, only 17 decimal
 
 Fukushima used 20 series terms and it was confirmed that using more terms does not usefully increase accuracy.
 
+[h4:testing Testing]
+
+Initial testing of the algorithm was done using a small number of spot tests.
+
+After it was established that the underlying algorithm (including unlimited Halley refinements with a tight terminating criterion) was correct,
+some tables of Lambert W values were computed using a 100 decimal digit precision __multiprecision `cpp_dec_float_100` type and saved as
+a C++ program that will initialise arrays of values of z arguments and lambert_W0 (`lambert_w_mp_high_values.ipp` and `lambert_w_mp_low_values.ipp` ).
+
+(A few of these pairs were checked against values computed by Wolfram Alpha to try to guard against mistakes;
+all those tested agreed to the penultimate decimal place, so they can be considered reliable to at least 98 decimal digits precision).
+
+A macro `BOOST_MATH_TEST_VALUE` was used to allow tests with any real type, both __fundamental_types and __multiprecision.
+(This is necessary because __fundamental_types have a constructor from floating-point literals like 3.1459F, 3.1459 or 3.1459L
+whereas __multiprecision types may lose precision unless constructed from decimal digits strings like "3.1459").
+
+The 100-decimal digits precision pairs were then used to assess the precision of less-precise types, including
+__multiprecision `cpp_bin_float_quad` and `cpp_bin_float_50`.  `static_cast`ing from the high precision types should
+give the closest representable value of the less-precise type; this is then be used to assess the precision of
+the Lambert W algorithm.  For __fundamental_types, the precision requirement set by the __Policy mean that the algorithm
+may stop refinement after bisection, or Schroeder or Halley refinements.
+
+With the default __Policy, that includes iterative Halley refinement, tests confirm that over nearly all the range of z arguments,
+nearly all estimates are the nearest __representable value, a minority are within 1 __ulp and only a very few 2 ULP.
+
+For the range of z arguments over the range -0.35 to 0.5, a different algorithm is used, but the same
+technique of evaluating reference values using a __multiprecision `cpp_dec_float_100` was used.
+For extremely small z arguments, near zero, and those extremely near the singularity at the branch point,
+precision can be much lower, as might be expected.
+
+
 [h5 Other implementations]
 
 The Lambert W has also been discussed in a [@http://lists.boost.org/Archives/boost/2016/09/230819.php Boost thread].
