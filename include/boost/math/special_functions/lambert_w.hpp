@@ -18,7 +18,6 @@ Some macros that will show some (or much) diagnostic values if #defined.
 
 #define-able macros
 BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
-BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES // lambert_w_singularity_series
 BOOST_MATH_INSTRUMENT_LAMBERT_W0 // W0 branch diagnostics.
 BOOST_MATH_INSTRUMENT_LAMBERT_W0 // W1 branch diagnostics.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY // Halley refinement diagnostics.
@@ -42,7 +41,6 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
 #include <boost/math/tools/promotion.hpp>
-//#include <boost/math/special_functions/math_fwd.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/log1p.hpp> // for log (1 + x)
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
@@ -51,29 +49,72 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #include <boost/math/tools/series.hpp> // series functor.
 #include <boost/math/tools/polynomial.hpp>  // polynomial.
 #include <boost/math/tools/rational.hpp>  // evaluate_polynomial.
-// http://www.boost.org/doc/libs/1_64_0/libs/math/doc/html/math_toolkit/roots/rational.html
 #include <boost/mpl/int.hpp>
 #include <boost/type_traits/is_integral.hpp>
-
-//#include "test_value.hpp"  // for create_test_value and macro BOOST_MATH_TEST_VALUE.
-#include "J:\Cpp\Misc\lambert_w_pb_spot_tests\test_value.hpp" // Temporary kludge.
 
 #include <limits>
 #include <cmath>
 #include <limits>
 #include <exception>
 
-//for testing
+// Needed for testing and diagnostics only.
 #include <iostream>
 #include <typeinfo>
-#include <boost/math/special_functions/next.hpp>  // for float_distance
+#include <boost/math/special_functions/next.hpp>  // For float_distance.
+//#include <boost/math/test/test_value.hpp> // For create_test_value and macro BOOST_MATH_TEST_VALUE.
+
 
 namespace boost
 {
 namespace math
 {
-namespace detail
-{
+  namespace detail
+  {
+    namespace lambert_w_lookup
+    {
+
+      typedef double lookup_t; // Type for lookup table (double or float?)
+
+      BOOST_STATIC_CONSTEXPR std::size_t noof_wm1s = 66;
+      BOOST_STATIC_CONSTEXPR lookup_t e[noof_wm1s] = // lambert_w[k] for W-1 branch. 2.7182 1. 0.3678 0.1353 0.04978 ... 4.359e-28 1.603e-28
+      {
+        2.7182818284590452, 1., 0.36787944117144232, 0.13533528323661269, 0.049787068367863943, 0.01831563888873418, 0.0067379469990854671,
+        0.0024787521766663584, 0.00091188196555451621, 0.00033546262790251184, 0.00012340980408667955, 4.5399929762484852e-05, 1.6701700790245659e-05,
+        6.1442123533282098e-06, 2.2603294069810543e-06, 8.3152871910356788e-07, 3.0590232050182579e-07, 1.1253517471925911e-07, 4.1399377187851667e-08,
+        1.5229979744712628e-08, 5.6027964375372675e-09, 2.0611536224385578e-09, 7.5825604279119067e-10, 2.7894680928689248e-10, 1.026187963170189e-10,
+        3.7751345442790977e-11, 1.3887943864964021e-11, 5.1090890280633247e-12, 1.8795288165390833e-12, 6.914400106940203e-13, 2.5436656473769229e-13,
+        9.3576229688401746e-14, 3.4424771084699765e-14, 1.2664165549094176e-14, 4.6588861451033974e-15, 1.713908431542013e-15, 6.3051167601469894e-16,
+        2.3195228302435694e-16, 8.5330476257440658e-17, 3.1391327920480296e-17, 1.1548224173015786e-17, 4.248354255291589e-18, 1.5628821893349888e-18,
+        5.7495222642935598e-19, 2.1151310375910805e-19, 7.7811322411337965e-20, 2.8625185805493936e-20, 1.0530617357553812e-20, 3.8739976286871871e-21,
+        1.4251640827409351e-21, 5.2428856633634639e-22, 1.9287498479639178e-22, 7.0954741622847041e-23, 2.6102790696677048e-23, 9.602680054508676e-24,
+        3.532628572200807e-24, 1.2995814250075031e-24, 4.7808928838854691e-25, 1.7587922024243116e-25, 6.4702349256454603e-26, 2.3802664086944006e-26,
+        8.7565107626965203e-27, 3.2213402859925161e-27, 1.185064864233981e-27, 4.359610000063081e-28, 1.6038108905486378e-28
+      };
+
+      BOOST_STATIC_CONSTEXPR size_t noof_w0s = 65;
+      BOOST_STATIC_CONSTEXPR lookup_t g[noof_w0s] = // lambert_w[k] for W0 branch. 0 2.7182 14.77 60.2566 ... 1.445e+29 3.990e+29.
+      { 0., 2.7182818284590452, 14.7781121978613, 60.256610769563003, 218.39260013257696, 742.06579551288302, 2420.5727609564107, 7676.4321089992102,
+        23847.663896333826, 72927.755348178456, 220264.65794806717, 658615.558867176, 1953057.4970280471, 5751374.0961159665, 16836459.978306875, 49035260.58708166,
+        142177768.32812596, 410634196.81078007, 1181879444.4719492, 3391163718.300558, 9703303908.1958056, 27695130424.147509, 78868082614.895014, 224130479263.72476,
+        635738931116.24334, 1800122483434.6468, 5088969845149.8079, 14365302496248.563, 40495197800161.305, 114008694617177.22, 320594237445733.86,
+        900514339622670.18, 2526814725845782.2, 7083238132935230.1, 19837699245933466., 55510470830970076., 1.5520433569614703e+17, 4.3360826779369662e+17,
+        1.2105254067703227e+18, 3.3771426165357561e+18, 9.4154106734807994e+18, 2.6233583234732253e+19, 7.3049547543861044e+19, 2.032970971338619e+20,
+        5.6547040503180956e+20, 1.5720421975868293e+21, 4.3682149334771265e+21, 1.2132170565093317e+22, 3.3680332378068632e+22, 9.3459982052259885e+22,
+        2.5923527642935362e+23, 7.1876803203773879e+23, 1.99212416037262e+24, 5.5192924995054165e+24, 1.5286067837683347e+25, 4.2321318958281094e+25,
+        1.1713293177672778e+26, 3.2408603996214814e+26, 8.9641258264226028e+26, 2.4787141382364034e+27, 6.8520443388941057e+27, 1.8936217407781711e+28,
+        5.2317811346197018e+28, 1.4450833904658542e+29, 3.9904954117194348e+29
+      };
+
+      BOOST_STATIC_CONSTEXPR std::size_t noof_sqrts = 12;
+      BOOST_STATIC_CONSTEXPR lookup_t a[noof_sqrts] = // 0.6065 0.7788, 0.8824 ... 0.9997, sqrt of previous elements.
+      {
+        0.60653065971263342, 0.77880078307140487, 0.8824969025845954, 0.93941306281347579, 0.96923323447634408, 0.98449643700540841,
+        0.99221793826024351, 0.99610136947011749, 0.99804878110747547, 0.99902391418197566, 0.99951183793988937, 0.99975588917489722
+      };
+      BOOST_STATIC_CONSTEXPR  lookup_t b[noof_sqrts] = // 0.5 0.25 0.125, 0.0625 ...  0.0002441, halves of previous elements.
+      { 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.015625, 0.0078125, 0.00390625, 0.001953125, 0.0009765625, 0.00048828125, 0.000244140625 };
+    } // namespace Lambert_w_lookup
+
   //! Series expansion used near the singularity/branch point z = -exp(-1) = -3.6787944.
   // Some integer constants overflow so use largest size available.
   // Wolfram InverseSeries[Series[sqrt[2(p Exp[1 + p] + 1)], {p,-1, 20}]]
@@ -665,13 +706,14 @@ namespace detail
   // Halley refinement, if required, for precision in policy.
   // Only perform this if the most precise value possible (usually within one epsilon) is desired.
   // The previous Fukushima Schroeder refinement usually gives within several epsilon.
-  // Halley refinement need to perform some evaluations of the exp function, and
+  // Halley refinement needs to perform some evaluations of the exp function, and
   // may nearly double the execution time.
-  // However Boost.Math prioritizes accuracy over speed, so this extra step is done by the default policy.
+  // However Boost.Math prioritizes accuracy over speed,
+  // so this extra step is taken by the default policy.
 
-  // Two version, do_while always makes one interation before testing,
-  // whereas while_do does a test first,
-  // perhaps avoiding an iteration if already within tolerance.
+  // Two versions:
+  //  do_while always makes one iteration before testing against a tolerance,
+  //  while_do does a test first, perhaps avoiding an iteration if already within tolerance.
 
   template<typename T = double, class Policy>
   inline
@@ -689,11 +731,9 @@ namespace detail
     using boost::math::constants::exp_minus_one; // 0.36787944
     using boost::math::tools::max_value;
 
-   // T tolerance = std::numeric_limits<T>::epsilon();
-   //
-   T tolerance = boost::math::policies::get_epsilon<T, Policy>();
+     T tolerance = boost::math::policies::get_epsilon<T, Policy>();
 
-// TODO should get_precision here.
+    // TODO should get_precision here.
     int iterations = 0;
     int iterations_required = 6;
     int max_iterations = 10;
@@ -832,7 +872,8 @@ if (diff == 0)  // Exact result - common.
     }
     while (
       (iterations < min_iterations) || // do minimum iterations.
-      (iterations >= max_iterations) // Absolute max limit during testing - looping if need this.
+      (iterations >= max_iterations) // Absolute max limit during testing
+           // (unexpected looping if need this).
     );
 
     return w1; //
@@ -847,7 +888,7 @@ if (diff == 0)  // Exact result - common.
   //! \param y bracketing value from bisection.
   //! \returns Refined estimate of Lambert w.
 
-  // Schroeder refinement, called if required by precision policy.
+  // Schroeder refinement, called unless not required by precision policy.
   template<typename T = double>
   inline
   T schroeder_update(const T w, const T y)
@@ -887,13 +928,15 @@ if (diff == 0)  // Exact result - common.
   template<typename T>
   inline void print_collection(const T& coll, std::string name, std::string sep)
   {
+    std::streamsize precision = std::cout.precision();
+    std::cout.precision(std::numeric_limits<lookup_t>::max_digits10);
     std::cout << name << ": ";
 
     for (auto it = std::begin(coll); it != std::end(coll); ++it)
     {
       std::cout << *(it) << sep;
     }
-
+    std::cout.precision(precision); // Restore.
     std::cout << std::endl;
   } // print_collection
 
@@ -917,11 +960,34 @@ if (diff == 0)  // Exact result - common.
       std::cout << "Argument Type = " << typeid(T).name()
         << ", max_digits10 = " << std::numeric_limits<T>::max_digits10
         << std::setprecision(3) << ", epsilon = " << std::numeric_limits<T>::epsilon() << std::endl;
-      std::cout.precision(saved_precision);
+      std::cout.precision(saved_precision); // Restore precision.
     }
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0
 
     // Test for edge and corner cases first,
+
+    if (boost::math::isnan(z))
+    {
+      const char* function = "boost::math::lambert_w0<RealType>(<RealType>)";
+      return policies::raise_domain_error(function,
+        "Argument z is NaN!",
+        z, pol);
+    }
+    if (boost::math::isinf(z))
+    {
+      const char* function = "boost::math::lambert_w0<RealType>(<RealType>)";
+      return policies::raise_domain_error(function,
+        "Argument z is infinite!",
+        z, pol);
+    }
+    if (z > (std::numeric_limits<T>::max)()/4)
+    { // TODO not sure this is right - what is largest possible for which can compute Lambert_w?
+      const char* function = "boost::math::lambert_w0<RealType>(<RealType>)";
+      return policies::raise_domain_error(function,
+        "Argument z %1% is too big!",
+        z, pol);
+      // Or could we return a suitable large value, computed from RealType T?
+    }
 
     BOOST_MATH_STD_USING // Aid argument dependent lookup of abs.
     if (abs(z) <= static_cast<T>(0.05))
@@ -935,16 +1001,17 @@ if (diff == 0)  // Exact result - common.
     }
     else if (z == -boost::math::constants::exp_minus_one<T>())
     { // At singularity, so return exactly minus one.
-      std::cout << "At singularity. " << std::endl; // within epsilon/0.36
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES
+      std::cout << "At singularity. " << std::endl; // within epsilon of branch singularity 0.36.
+#endif
       return static_cast<T>(-1);
     }
-    else if (z < -boost::math::constants::exp_minus_one<T>()) // z < -1/e so out of range of W0 branch (should using W1 branch.
+    else if (z < -boost::math::constants::exp_minus_one<T>()) // z < -1/e so out of range of W0 branch (should using W1 branch instead).
     {
       const char* function = "boost::math::lambert_w0<RealType>(<RealType>)";
       return policies::raise_domain_error(function,
-        "Argument z = %1 out of range (-1/e <= z < (std::numeric_limits<T>::max)()) for Lambert W0 branch (use W-1 branch?).",
+        "Argument z = %1% out of range (-1/e <= z < (std::numeric_limits<T>::max)()) for Lambert W0 branch (use W-1 branch?).",
         z, pol);
-      // TODO doesn't show value of z??  have error handling.hpp
     }
     else if (z < static_cast<T>(-0.35))
     { // Near singularity/branch point at z = -0.36787944...
@@ -972,56 +1039,80 @@ if (diff == 0)  // Exact result - common.
     {
 
       ///////////////////////////////////////////////////////////
-      // TODO take this table out as a templated function, to avoid multithread init problems.
+      // TODO take this table out as a templated function,
+      // to avoid potential multithreading initialization problems.
       // (Would like to avoid initializing table of static data?
       // but cannot avoid - always computed at load time).
+      // This data is not used if z is small or z < -0.35 near branch point,
+      // so this code is good at avoiding unnecessary initialisation.
       // See Fukushima section 2.2, page 81.
-      // Defining Lambert W function values of integral arguments used for bisection.
-      //  e and g have space for 64 bit reals.
-      static T e[66]; // lambert_w[k] for W-1 branch. 2.718 1 0.3678 0.1353 0.04978 ... 4.359e-28 1.603e-28
-      static T g[65]; // lambert_w[k] for W0 branch. 0 2.7182 14.77 60.2566 ... 1.445e+29 3.990e+29
+      // Defining integral parts of Lambert W function values to be used for bisection.
+      // e and g have space for 64-bit reals.
+
+      /*
+      static const size_t noof_wm1s = 66;
+      static T e[noof_wm1s]; // lambert_w[k] for W-1 branch. 2.7182 1. 0.3678 0.1353 0.04978 ... 4.359e-28 1.603e-28
+      static const size_t noof_w0s = 65;
+      static T g[noof_w0s]; // lambert_w[k] for W0 branch. 0 2.7182 14.77 60.2566 ... 1.445e+29 3.990e+29.
+      // lambert_w0(2.77182) == 1.;
+      // lambert_w0(14.7700) == 2.;
+      // lambert_w0(2.77182) == 3.;
+      // ...
+      // lambert_w0(3.990e+29) == 64.
+      // 3.990e+29 == g[64];
+
       // Defining lookup table sqrts of 1/e.
-      static T a[12]; // 0.6065 0.7788 ... 0.9997, sqrt of previous elements.
-      static T b[12]; // 0.5 0.25 0.125 ...  0.0002441, Half of previous element.
+      static const size_t noof_sqrts = 12;
+      static T a[noof_sqrts]; // 0.6065 0.7788, 0.8824 ... 0.9997, sqrt of previous elements.
+      static T b[noof_sqrts]; // 0.5 0.25 0.125, 0.0625 ...  0.0002441, halves of previous elements.
 
       if (!e[0])
-      { // Fill static data on first use. (But may never be used?)
-        // Fukushima calls array f[k] = ke^k  (0 <= k <= 64
-        // and g[k] -ke^-k (1 <= k <= 64 for g)
+      { // Fill static data on first use.
+        // Fukushima calls array F[k] = ke^k  (0 <= k <= 64 for f)
+        // and G[k] -ke^-k (1 <= k <= 64 for g)
 
         T ej = 1; // F[k] for W-1 branch.
-        e[0] = boost::math::constants::e<T>();
+        e[0] = boost::math::constants::e<T>(); // e = 2.7182
         e[1] = 1;
-
-        g[0] = 0;// F[k] for W0 branch.
-        for (int j = 1, jj = 2; jj < 66; ++jj)
+        g[0] = 0; // G[k] for W0 branch.
+        for (int j = 1, jj = 2; jj != noof_wm1s; ++jj)
         {
-          ej *= boost::math::constants::e<T>();
-          e[jj] = e[j] * boost::math::constants::exp_minus_one<T>(); // exp(-1) - 1/e exp_minus_one 0.36787944.
-          g[j] = j * ej;
+          e[jj] = e[j] * boost::math::constants::exp_minus_one<T>(); // For W-1 branch.
+          // exp(-1) - 1/e exp_minus_one = 0.36787944.
+          ej *= boost::math::constants::e<T>(); // 2.7182
+          g[j] = j * ej; // For W0 branch.
           j = jj;
-        }
+        } // for
+
         // a[0] = sqrt(e1);
         // TODO compile time constant sqrt(1/e) - add to math constants, and add to documentation too.
+        // This would be slightly more accurate - conversion from long double could lose precision,
+        // but might not matter if using Schroeder and/or Halley?
+        // a[0] = boost::math::constants::sqrt_one_div_e<T>();
         a[0] = static_cast<T>(0.606530659712633423603799534991180453441918135487186955682L);
-        b[0] = static_cast<T>(0.5);
-        for (int j = 0, jj = 1; jj < 12; ++jj)
+        b[0] = static_cast<T>(0.5); // Exactly representable.
+        for (int j = 0, jj = 1; jj != noof_sqrts; ++jj)
         {
           a[jj] = sqrt(a[j]); //  Sqrt of previous element. sqrt(1/e),sqrt(sqrt(1/e)) ...
         //  b[jj] = b[j] * static_cast<T>(0.5);  // Half previous element.
           b[jj] = b[j] / 2;  // Half previous element (/2 will be optimised better?).
-
           j = jj;
         }
-        //print_collection(e, "e", " ");
-        // 2.71828175 1 0.36787945 0.135335296 0.0497870743 0.0183156412 0.00673794793 ... 1.60381359e-28
-        //print_collection(g, "g", " ");
-        //print_collection(a, "a", " ");
-        //print_collection(b, "b", " ");
+        print_collection(e, "e", " "); // 2.71828175 1 0.36787945 0.135335296 0.0497870743 0.0183156412 0.00673794793 ... 1.60381359e-28
+        print_collection(g, "g", " ");
+        print_collection(a, "a", " ");
+        print_collection(b, "b", " ");
+
         // Values saved as Fukushima bisection static arrays.txt
         // These might be stored as constants in data?
+        //e: 2.71828 1 0.367879 0.135335 0.0497871 0.0183156 0.00673795 0.00247875 0.000911882 0.000335463 0.00012341 4.53999e-05 1.67017e-05 6.14421e-06 2.26033e-06 8.31529e-07 3.05902e-07 1.12535e-07 4.13994e-08 1.523e-08 5.6028e-09 2.06115e-09 7.58256e-10 2.78947e-10 1.02619e-10 3.77514e-11 1.3888e-11 5.10909e-12 1.87953e-12 6.91441e-13 2.54367e-13 9.35763e-14 3.44248e-14 1.26642e-14 4.65889e-15 1.71391e-15 6.30512e-16 2.31952e-16 8.53305e-17 3.13914e-17 1.15482e-17 4.24836e-18 1.56288e-18 5.74953e-19 2.11513e-19 7.78114e-20 2.86252e-20 1.05306e-20 3.874e-21 1.42517e-21 5.24289e-22 1.92875e-22 7.09548e-23 2.61028e-23 9.60269e-24 3.53263e-24 1.29958e-24 4.7809e-25 1.75879e-25 6.47024e-26 2.38027e-26 8.75652e-27 3.22135e-27 1.18507e-27 4.35962e-28 1.60381e-28
+        //g : 0 2.71828 14.7781 60.2566 218.393 742.066 2420.57 7676.43 23847.7 72927.7 220265 658615 1.95306e+06 5.75137e+06 1.68365e+07 4.90352e+07 1.42178e+08 4.10634e+08 1.18188e+09 3.39116e+09 9.7033e+09 2.76951e+10 7.8868e+10 2.2413e+11 6.35738e+11 1.80012e+12 5.08897e+12 1.43653e+13 4.04952e+13 1.14009e+14 3.20594e+14 9.00514e+14 2.52681e+15 7.08323e+15 1.98377e+16 5.55104e+16 1.55204e+17 4.33608e+17 1.21052e+18 3.37714e+18 9.4154e+18 2.62336e+19 7.30495e+19 2.03297e+20 5.6547e+20 1.57204e+21 4.36821e+21 1.21322e+22 3.36803e+22 9.34599e+22 2.59235e+23 7.18767e+23 1.99212e+24 5.51929e+24 1.5286e+25 4.23213e+25 1.17133e+26 3.24086e+26 8.96411e+26 2.47871e+27 6.85203e+27 1.89362e+28 5.23177e+28 1.44508e+29 3.99049e+29
+        //a : 0.606531 0.778801 0.882497 0.939413 0.969233 0.984496 0.992218 0.996101 0.998049 0.999024 0.999512 0.999756
+        //b : 0.5 0.25 0.125 0.0625 0.03125 0.015625 0.0078125 0.00390625 0.00195313 0.000976563 0.000488281 0.000244141
+
 
       }  //  if (!e[0]) end of static data fill.
+      */
       ///////////////////////////////////////////////////////////////////////////
 
       if (std::numeric_limits<T>::digits > 53)
@@ -1049,11 +1140,11 @@ if (diff == 0)  // Exact result - common.
       } // digits > 53
       else // T is double or less precision.
       {
-        // Use a lookup table to find the nearest integral values as starting point for Bisection.
-
+        // Use a lookup table to find the nearest integer part of Lambert W as starting point for Bisection.
+        using namespace boost::math::detail::lambert_w_lookup;
         // Test sequence is n is (0, 1, 2, 4, 8, 16, 32, 64) for W0 branch.
         // Since z is probably quite small, start with lowest (n = 0).
-        int n; // Indexing W0 lookup table g of z.
+        int n; // Indexing W0 lookup table g[n] of z.
         for (n = 0; n <= 2; ++n)
         { // Try 1st few.
           if (g[n] > z)
@@ -1064,20 +1155,19 @@ if (diff == 0)  // Exact result - common.
         n = 2;
         for (int j = 1; j <= 5; ++j)
         {
-          n *= 2; // Try big steps.
-          if (g[n] > z)
+          n *= 2; // Try bigger steps.
+          if (g[n] > z) // z <= g[n]
           {
             goto overshot; //
           }
         } // for
-        // else z too large :-(
-        const char* function = "boost::math::lambert_w0<RealType>(<RealType>)";
-        return policies::raise_domain_error(function,
-          "Argument z = %1 too large.",
+        // get here if
+        std::cout << "Too big " << z << std::endl;
+        //// else z too large :-(
+        //const char* function = "boost::math::lambert_w0<RealType>(<RealType>)";
+        return policies::raise_domain_error("boost::math::lambert_w0<RealType>(<RealType>)",
+          "Argument z = %1% is too large!",
           z, pol);
-
-        // std::cerr << "lambert_w0 argument too large, z = " << z << std::endl;
-        //return std::numeric_limits<T>::quiet_NaN();
 
       overshot:
         {
@@ -1097,10 +1187,10 @@ if (diff == 0)  // Exact result - common.
         }
 
       bisect:
-        --n; // g[n] is nearest below, so n is integer value of W, and
-        // g[n+1] is upper integral value. These are used as initial values for bisection.
+        --n; // g[n] is nearest below, so n is integer part of W,
+        // and g[n+1] is next integral part of W.
 
-
+        // These are used as initial values for bisection.
 
         // typedef typename policies::precision<T, Policy>::type prec;
         //std::cout << "digits2 = " << digits2 << std::endl;  //  digits = 24 for float.
@@ -1132,27 +1222,29 @@ if (diff == 0)  // Exact result - common.
         int jmax = 8; //  Assume minimum number of bisections will be needed (most common case).
         if (z <= -0.36)
         { // Very near singularity, so need several more bisections.
-          jmax = 12;
+          jmax = noof_sqrts;
         }
         else if (z <= -0.3)
-        { // Near singularity, so need few more bisections.
+        { // Near singularity, so need a few more bisections.
           jmax = 11;
         }
         else if (n <= 0)
-        { // Very small z so need 3 more bisections.
+        { // Very small z, so need 3 more bisections.
           jmax = 10;
         }
         else if (n <= 1)
-        { // Small z so need just 1 extra bisection.
+        { // Small z, so need just 1 extra bisection.
           jmax = 9;
         }
+        lookup_t dz = static_cast<lookup_t>(z); // Only use double precision for bisection.
+
         // Perform the jmax fractional bisections for necessary precision.
-        T y = z * e[n + 1]; //
-        T w = static_cast<T>(n);  // Integral Lambert W estimate.
+        lookup_t y = dz * e[n + 1]; //
+        lookup_t w = static_cast<lookup_t>(n);  // Integral Lambert W estimate.
         for (int j = 0; j < jmax; ++j)
         {
-          const T wj = w + b[j]; // Add 1/2, 1/4, 1/8 ...
-          const T yj = y * a[j]; // sqrt(1/e), ...
+          const lookup_t wj = w + b[j]; // Add 1/2, 1/4, 1/8 ...
+          const lookup_t yj = y * a[j]; // Multiply by sqrt(1/e), ...
           if (wj < yj)
           {
             w = wj;
@@ -1167,11 +1259,11 @@ if (diff == 0)  // Exact result - common.
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
           std::cout << "Bisection estimate =            " << w << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
-          return w; // Bisection only.
+          return static_cast<T>(w); // Bisection only.
         }
         else // More than 10 digits2 wanted so continue with Fukushima's Schroeder refinement.
         {
-          T result = schroeder_update(w, y);
+          T result = static_cast<T>(schroeder_update(w, y));
           if (d2 <= (std::numeric_limits<T>::digits - 3))
           { // Only enough digits2 required, so just return the Schroeder refined value.
             // For example, for float, if (d2 <= 22) then
@@ -1241,11 +1333,12 @@ if (diff == 0)  // Exact result - common.
     // Create static arrays of Lambert W function for Wm1
     // with lambert_w values of integers.
     // Used for bisection of W-1 branch.
+    static const size_t noof_sqrts = 12;
 
     static T e[64];
     static T g[64];
-    static T a[12];
-    static T b[12];
+    static T a[noof_sqrts];
+    static T b[noof_sqrts];
 
     if (!e[0])
     {
@@ -1262,7 +1355,7 @@ if (diff == 0)  // Exact result - common.
       }
       a[0] = sqrt(boost::math::constants::e<T>());
       b[0] = static_cast<T>(0.5);
-      for (int j = 0, jj = 1; jj < 12; ++jj)
+      for (int j = 0, jj = 1; jj < noof_sqrts; ++jj)
       {
         a[jj] = sqrt(a[j]);
         b[jj] = b[j] * static_cast<T>(0.5);
@@ -1311,7 +1404,7 @@ if (diff == 0)  // Exact result - common.
     std::cout << "digits2 = " << d2 << std::endl;  //  digits = 24 for float.
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W1
     if (d2 < 5)
-    { // Only a very few digits2 required, so just return the floor integral value.
+    { // Only a very few digits2 required, so just return the floor integral part of Lambert_w.
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W1
       std::cout << "between g[" << n << "] = " << g[n] << " < " << z << " < " << g[n + 1] << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W1
@@ -1381,7 +1474,7 @@ if (diff == 0)  // Exact result - common.
 
   //! W-1 branch (-max(z) < z <= -1/e).
 
-  //! Lambert W1 using User-defined policy.
+  //! Lambert W-1 using User-defined policy.
   template <class T, class Policy>
   inline
   typename tools::promote_args<T>::type
@@ -1393,7 +1486,7 @@ if (diff == 0)  // Exact result - common.
     return detail::lambert_wm1_imp(result_type(z), pol); //
   }
 
-  // Lambert W1 using default policy.
+  //! Lambert W-1 using default policy.
   template <class T>
   inline
   typename tools::promote_args<T>::type

@@ -272,6 +272,10 @@ they do not get as close as is often possible with further refinement, usually t
 For types more precise than `double`, Fukushima shows that it is best to use the `double` estimate
 as a starting point followed by refinement using __halley iterations or other methods.
 
+For this reason, the lookup tables and `bisection` are only carried out at low precision,
+usually `double`, chosen by the `typedef double lookup_t`.  Unlike the FORTRAN version,
+the lookup tables of Lambert_W of integral values are precomputed as C++ static arrays.
+
 For the less well-behaved regions for ['z] arguments near zero and near the branch singularity at -1/e,
 some series functions are provided.
 
