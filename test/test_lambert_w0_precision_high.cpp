@@ -15,7 +15,7 @@
 #include <boost/exception/exception.hpp>  // boost::exception
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
 #include <boost/math/special_functions/next.hpp>
-//#include "test_value.hpp"  // for create_test_value and macro BOOST_MATH_TEST_VALUE.
+#include "test_value.hpp"  // for create_test_value and macro BOOST_MATH_TEST_VALUE.
 
 #include <boost/multiprecision/cpp_dec_float.hpp> // boost::multiprecision::cpp_dec_float_50
 using boost::multiprecision::cpp_dec_float_50; // 50 decimal digits type.
@@ -51,9 +51,7 @@ using boost::lexical_cast;
 // Include 'Known good' Lambert w values using N[productlog(-0.3), 100]
 // evaluated to full precision of RealType (up to 100 decimal digits).
 // Checked for a few z values using WolframAlpha command: N[productlog(-0.3), 100]
-//#include "J:\Cpp\Misc\lambert_w_1000_test_values\lambert_w_mp_values.ipp"
-#include "J:\Cpp\Misc\lambert_w_high_reference_values\lambert_w_mp_high_values.ipp"
-// #include "lambert_w_mp_values.ipp"
+#include "lambert_w_high_reference_values.ipp"
 
 // Optional functions to list z arguments and reference lambert w values.
 template<typename RealType>
@@ -229,7 +227,7 @@ int main()
   {
     std::cout << "Lambert W tests,\n"
       << noof_tests <<
-      " single spot tests comparing with 100 decimal digits precision reference values." << std::endl;
+      " tests comparing with 100 decimal digits precision reference values." << std::endl;
     std::cout.precision(std::numeric_limits<double>::max_digits10);
     std::cout << std::showpoint << std::endl; // Trailing zeros.
 

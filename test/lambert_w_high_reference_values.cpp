@@ -7,18 +7,18 @@
 
 // Write a C++ file \lambert_w_mp_hi_values.ipp
 // containing arrays of z arguments and 100 decimal digit precision lambert_w0(z) reference values.
-// These can be used in tests of precision of less-precise types like 
+// These can be used in tests of precision of less-precise types like
 // built-in float, double, long double and quad and cpp_dec_float_50.
 
 // These cover the range from 0.5 to (std::numeric_limits<>::max)();
-// The Fukushima algorithm changes from a series function for all z > 0.5. 
+// The Fukushima algorithm changes from a series function for all z > 0.5.
 
 // Multiprecision types:
 //#include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp> // boost::multiprecision::cpp_dec_float_100
 using  boost::multiprecision::cpp_dec_float_100;
 
-#include <boost/math/special_functions/lambert_w.hpp> // 
+#include <boost/math/special_functions/lambert_w.hpp> //
 using boost::math::lambert_w0;
 using boost::math::lambert_wm1;
 
@@ -38,9 +38,9 @@ using std::ofstream;
 const long double eps = std::numeric_limits<long double>::epsilon();
 
 // Creates if no file exists, & uses default overwrite/ ios::replace.
-const char filename[] = "lambert_w_high_reference_values.ipp"; // 
+const char filename[] = "lambert_w_high_reference_values.ipp"; //
 std::ofstream fout(filename, std::ios::out);
-                                             
+
 typedef cpp_dec_float_100 RealType;  // 100 decimal digits for the value fed to macro BOOST_MATH_TEST_VALUE.
 // Could also use cpp_dec_float_50 or cpp_bin_float types.
 
@@ -63,10 +63,10 @@ int main()
   try
   {
     int output_precision = std::numeric_limits<RealType>::digits10;
-    // cpp_dec_float_100 is ample precision and 
+    // cpp_dec_float_100 is ample precision and
     // has several extra bits internally so max_digits10 are not needed.
     fout.precision(output_precision);
-    fout << std::showpoint << std::endl; // Don't show trailing zeros.
+    fout << std::showpoint << std::endl; // Do show trailing zeros.
 
     // Intro for RealType values.
     std::cout << "Lambert W test values written to file " << filename << std::endl;
@@ -130,7 +130,7 @@ int main()
     {
       fout
         << "  zs<RealType>[" << index << "] = BOOST_MATH_TEST_VALUE(RealType, "
-        << z // Since start with converting a float may get lots of usefully random digits. 
+        << z // Since start with converting a float may get lots of usefully random digits.
         << ");"
         << std::endl;
 

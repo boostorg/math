@@ -109,15 +109,15 @@
                 be stored as tables of floating point values instead. If mixed arithmetic
                 is slow then add:
               </p>
-              <p>
-                #define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
-              </p>
+              <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+                    define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
+                  </li></ol></div>
               <p>
                 to boost/math/tools/user.hpp, otherwise the default of:
               </p>
-              <p>
-                #define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
-              </p>
+              <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+                    define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
+                  </li></ol></div>
               <p>
                 Set in boost/math/config.hpp is fine, and may well result in smaller
                 code.
