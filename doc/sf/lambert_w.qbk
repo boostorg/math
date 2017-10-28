@@ -6,20 +6,19 @@
 #include <boost/math/special_functions/lambert_w.hpp>
 
 ``
-
    namespace boost { namespace math {
 
    template <class T>
    ``__sf_result`` lambert_w0(T z); // W0 branch, default precision.
 
    template <class T, class ``__Policy``>
-   ``__sf_result`` lambert_w0(T z, const ``__Policy``&); // W0 policy controlled precision.
+   ``__sf_result`` lambert_w0(T z, const ``__Policy``&); // W0 with policy controlled precision.
 
     template <class T>
    ``__sf_result`` lambert_wm1(T z); // W-1 branch.
 
    template <class T, class ``__Policy``>
-   ``__sf_result`` lambert_wm1(T z, const ``__Policy``&); // W-1 policy controlled precision.
+   ``__sf_result`` lambert_wm1(T z, const ``__Policy``&); // W-1 with policy controlled precision.
 
   } // namespace boost
   } // namespace math
@@ -33,6 +32,16 @@ On the z-interval \[0, [infin]\] there is just one real solution.
 On the interval (-1/e, 0) there are two real solutions on two branches called variously W0, W+, W-1, Wp, Wm, W-.
 The principal branches called `lambert_W0` and `lambert_Wm1` are provided by this real-only implementation.
 
+[h5:applications Applications of the Lambert W function]
+
+The Lambert W function has a myriad of applications.
+Corless et al. provide a comprehensive description of the range of applications,
+from the mathematical like interated exponentiation and asymptoptic roots of trinomials,
+the range of a jet plane, enzyme kinetics, water movement in soil,
+epidemics, and diode current (an example replicated [@../../example/lambert_w_diode.cpp here]).
+Since the publication of their landmark paper, there have been many more applications, and
+also many new implementations of the function, upon which this implementation builds.
+
 The function is described in Wolfram Mathworld as
 [@http://mathworld.wolfram.com/LambertW-Function.html [^Lambert W function]].
 The principal value of the Lambert W-function is implemented in the Wolfram Language as ['ProductLog\[z\]].
@@ -45,10 +54,16 @@ Also the [@https://www.wolframalpha.com Wolfram language] command:  [^N\[Product
 
 produces the same output to 50 decimal digit precision.
 
+The two real branches W0 and W-1 (not complex) are computed with the functions `lambert_w0` and `lambert_wm2`
+from the first [^z] argument.
+
 The final __Policy argument is optional and can be used to control the behaviour of the function:
 how it handles errors, what level of precision is wanted, etc.
+By default, the best possible precision is computed.
 
 Refer to __policy_section for more details and see examples below.
+
+The symbolic algebra program __Maple also computes Lambert W to an arbitrary precision.
 
 [h4:examples Examples]
 
@@ -156,7 +171,7 @@ as a first approximation followed by Halley refinement,
 so that there is is little point trying to control precision.
 Higher precisions are always going to be [*very much slower].
 
-For more examples of controlling precision, see [@../../include/boost/math/example/lambert_w_precision.cpp lambert_w_precision.cpp].
+For more examples of controlling precision, see [@../../example/lambert_w_precision.cpp lambert_w_precision.cpp].
 
 The implementation details of algorithm switch points are in
 [@../../include/boost/math/special_functions/lambert_w.hpp lambert_w.hpp]
@@ -176,17 +191,9 @@ or defined on the project compile command-line:  `/DBOOST_MATH_INSTRUMENT_LAMBER
 
 or defined in a jamfile.v2:  `<define>BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS`
 
-``
-  BOOST_MATH_INSTRUMENT_LAMBERT_W0 // W0 branch diagnostics.
-  BOOST_MATH_INSTRUMENT_LAMBERT_W1 // W1 branch diagnostics.
-  BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY // Halley refinement diagnostics.
-  BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER // Schroeder refinement diagnostics.
-  BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS // Number of terms used for near-singularity series.
-  BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN // Higher than built-in precision types approximation and refinement.
-  BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION // Show bisection only estimate.
-  BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES  // Show result of estimates where z is near singularity where branches meet.
-  BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS   // Show result of estimates where small z is near zero.
-``
+[import ../../include/boost/math/special_functions/lambert_w.hpp]
+
+[boost_math_instrument_lambert_w_macros]
 
 [h4:edge_cases Edge and Corner cases]
 
@@ -217,9 +224,7 @@ Denormalized values of z are not supported (because not all floating-point types
 and anyway it only covers a tiny fraction of the range of possible z arguments values.
 
 
-
-
-[h4:implemention Implementation]
+[h4:implementation Implementation]
 
 There are many previous implementations with increasing accuracy and speed. See references below.
 
@@ -311,20 +316,35 @@ To allow users to vary the precision from `float` to `long double` these are com
 
 The FORTRAN version and translation only permits the z argument to be the largest
 items in these lookup arrays, `wm0s[64] = 3.99049`, producing an error message and returning `NaN`.
-So 64 is the largest possible value returned from the `lambert_w0` function.
+So 64 is the largest possible value ever returned from the `lambert_w0` function.
 This is far from the `std::numeric_limits<>::max()` for even `float`s.
+Therefore this implementation uses an approximation or 'guess' and Halley's method to refine the result.
+Logarithmic approximation is discussed at length by R.M.Corless at el.
+Here we use the first two terms of equation 4.19:
 
-For the less well-behaved regions for Lambert W0 ['z] arguments near zero,
-and near the branch singularity at -1/e, some series functions are provided.
+  T lz = log(z);
+  T llz = log(lz);
+  guess = lz - llz + (llz / lz);
 
-For Lambert W-1 branch, tiny values very near zero where W > 64 cannot be computed using the lookup table.
+This gives a useful precision, and this guess can be returned by setting the precision to `digits2 == 11` or less.
+
+  using boost::math::policies::digits2;
+  double z = z = 4.e+29;
+  r = lambert_w0(z, policy<digits2<11> >());
+  // lambert_wm1(3.9999999999999997e+29, policy<digits2<11> >() ) = 64.001325187470187
+
+Analogously, for Lambert W-1 branch, tiny values very near zero, W > 64 cannot be computed using the lookup table.
 For this region, an approximation followed by a few (usually 3) Halley refinements.
 See __lambert_w_wm1_near_zero.
 
 So, as usual, there are compromises to consider between execution speed and accuracy.
-This implementation allows users to get closer than Fukushima, at some small loss of speed
-(but does not guarantee the nearest representable result)
-or to get faster but less precise evalutions controlled by __precision_policy.
+This implementation allows users to get closer to zero (W-1) or larger (W0) than Fukushima,
+at some small loss of speed (but does not guarantee the nearest representable result)
+or to get faster but less precise evaluations controlled by __precision_policy.
+
+For the less well-behaved regions for Lambert W0 ['z] arguments near zero,
+and near the branch singularity at -1/e, some series functions are used.
+
 
 [h4:small_z  Small values of argument z near zero]
 
@@ -484,8 +504,10 @@ and will give a message like:
   Argument z = -4.9406564584124654e-324 is too small
   (z < -std::numeric_limits<T>::min so denormalized) for Lambert W-1 branch!
 
-Denormalized values of z are not supported (because not all floating-point types denormalize),
+Denormalized values of z are not supported for Lambert  W-1 (because not all floating-point types denormalize),
 and anyway it only covers a tiny fraction of the range of possible z arguments values.
+A domain_error exception is thrown.  (This behaviour might be changed to return infinity, as for z == 0.
+
 
 
 

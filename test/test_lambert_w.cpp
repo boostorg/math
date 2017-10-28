@@ -26,13 +26,13 @@ using boost::multiprecision::cpp_dec_float_50;
 #include <boost/multiprecision/cpp_bin_float.hpp>
 //#include <boost/fixed_point/fixed_point.hpp> // If available.
 #include <boost/math/special_functions/fpclassify.hpp> // isnan, ifinite.
-#include "test_value.hpp"  // Macro BOOST_MATH_TEST_VALUE  for create_test_value.
-
-//#define BOOST_MATH_INSTRUMENT_LAMBERT_W  // #define only for much Lambert_w diagnostic output.
-// See lambert_w.hpp for list of instrumentation macros.
+#include <boost/math/tools/test_value.hpp>
+#include <boost/math/policies/policy.hpp>
+using boost::math::policies::digits2;
 #include <boost/math/special_functions/lambert_w.hpp> // For Lambert W lambert_w function.
 using boost::math::lambert_w0;
 using boost::math::lambert_wm1;
+
 
 #include <limits>
 #include <cmath>
@@ -243,7 +243,12 @@ void test_spots(RealType)
     BOOST_CHECK_THROW(lambert_wm1(std::numeric_limits<RealType>::quiet_NaN()), std::domain_error);
   }
 
-  // Some tests of Lambert W-1 branch.
+  if (std::numeric_limits<RealType>::has_denorm == true)
+  { // Might also return infinity like z == 0?
+    BOOST_CHECK_THROW(lambert_wm1(std::numeric_limits<RealType>::denorm_min()), std::domain_error);
+  }
+
+    // Some tests of Lambert W-1 branch.
 
     BOOST_CHECK_CLOSE_FRACTION(  // Check -exp(-1) ~= -0.367879450 == -1 at the singularity branch point.
     lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527)),
@@ -325,8 +330,7 @@ void test_spots(RealType)
 
   if (std::numeric_limits<RealType>::has_infinity)
   {
-    BOOST_CHECK_EQUAL(lambert_wm1(0.L), -std::numeric_limits<RealType>::infinity());
-
+    BOOST_CHECK_EQUAL(lambert_wm1(0), -std::numeric_limits<RealType>::infinity());
   }
   if (std::numeric_limits<RealType>::has_quiet_NaN)
   {
@@ -334,6 +338,24 @@ void test_spots(RealType)
     // Error in function boost::math::lambert_w0<RealType>(<RealType>): Argument z is NaN!
     BOOST_CHECK_THROW(lambert_wm1(std::numeric_limits<RealType>::quiet_NaN()), std::domain_error);
   }
+
+  // Just right and Too big for lookup 
+ 
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 3.9904954117194348e+29)),
+    BOOST_MATH_TEST_VALUE(RealType, 64.0),
+    tolerance);
+// Just too big, so using log approx and Halley refinement.
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 4e+29)),
+    BOOST_MATH_TEST_VALUE(RealType, 64.002342375637950350970694519073803643686041499677),
+    tolerance);
+  // reduced precision
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 4e+29), policy<digits2<11> >()),
+    BOOST_MATH_TEST_VALUE(RealType, 64.002342375637950350970694519073803643686041499677),
+   // tolerance * 1e10); // Fails
+    0.00002);  // 0.00001 fails.
+
+
 
 
     //  N[productlog(-1, -10 ^ -26), 50]    = -31.067172842017230842039496250208586707880448763222

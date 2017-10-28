@@ -14,6 +14,9 @@ and its author's FORTRAN code,
 and on a C/C++ version by Darko Veberic, darko.veberic@ijs.si
 based on the algorithm and a FORTRAN version of Toshio Fukushima.
 
+// TODO use this to insert into lmabert_w.qbk
+
+//[boost_math_instrument_lambert_w_macros
 Some macros that will show some (or much) diagnostic values if #defined.
 
 #define-able macros
@@ -24,6 +27,7 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY // Halley refinement diagnostics.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY_W0 // Halley refinement diagnostics only for W0 branch.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY_WM1 // Halley refinement diagnostics only for W-1 branch.
 BOOST_MATH_INSTRUMENT_LAMBERT_WM1_TINY // K > 64, z > -1.0264389699511303e-26
+BOOST_MATH_INSTRUMENT_LAMBERT_W0_HUGE // K > 64, z > 3.9904954117194348e+29
 BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER // Schroeder refinement diagnostics.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS // Number of terms used for near-singularity series.
 BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN // higher than built-in precision types approximation and refinement.
@@ -31,6 +35,7 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION // Show bisection only estimate.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES // Show evaluation of series near branch singularity.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of series for small z.
 #define BOOST_MATH_INSTRUMENT_LAMBERT_W0_LOOKUP // Show results from lookup table.
+//] [/boost_math_instrument_lambert_w_macros]
 */
 
 #ifndef BOOST_MATH_SF_LAMBERT_W_HPP
@@ -935,7 +940,14 @@ if (diff == 0)  // Exact result - common.
     const char* function = "boost::math::lambert_w0<RealType>(<RealType>)"; // Used for error messages.
 
     // Test for edge and corner cases first:
-    if (boost::math::isnan(z))
+    // denormal is probably OK for W0 branch ?
+  /*  if (!boost::math::isnormal(z))
+    {
+      return policies::raise_domain_error(function,
+        "Argument z is denormalized!",
+        z, pol);
+    }
+ */   if (boost::math::isnan(z))
     {
       return policies::raise_domain_error(function,
         "Argument z is NaN!",
@@ -1011,7 +1023,48 @@ if (diff == 0)  // Exact result - common.
  // z < -1/e
     else // Argument z is in the 'normal' range and float or double precision, so use Lookup, Bracket, Bisection and Schroeder (and Halley).
     {
+      if (z > lambert_w_lookup::w0s[63]) // g[63] =  3.9904954117194348e+29 
+      { // so cannot use lookup table.
+        T guess; // bisect largest possible g[63] Gk[=64] (for lookup_t type)
+         // 
+         // R.M.Corless, G.H.Gonnet, D.E.G.Hare, D.J.Jeffrey, and D.E.Knuth, “On the Lambert W function, ” Adv.Comput.Math., vol. 5, pp. 329–359, 1996.
+         // François Chapeau-Blondeau and Abdelilah Monir
+         // Numerical Evaluation of the Lambert W Function
+         // IEEE Transactions On Signal Processing, VOL. 50, NO. 9, Sep 2002
+         // https://pdfs.semanticscholar.org/7a5a/76a9369586dd0dd34dda156d8f2779d1fd59.pdf
+         // Estimate Lambert W using ln(z)  ...
+         // This is roughly the power of ten * ln(10) ~= 2.3, n ~= 10^n  
+         //  and improve by adding a second term ln(ln(z))
+        T lz = log(z);
+        T llz = log(lz);
+        guess = lz - llz + (llz / lz); // Corless equation 4.19, page 349 and Chapeau-Blondeau equation 20, page 2162.
+      #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_HUGE
+        std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
+        std::cout << "z = " << z << ", guess = " << guess << ", ln(z) = " << lz << ", ln(-ln(z) = " << llz << ", llz/lz = " << (llz / lz) << std::endl;
 
+        // z = 3.9999999999999997e+29, guess = 64.001325187470187, ln(z) = 68.161262057947212, ln(-ln(z) = 4.2218763984580194, llz/lz = 0.061939527980993024
+        // After 3 Halley iterations: lambert_w0(3.9999999999999997e+29) = 64.002342375637951
+
+        int d10 = policies::digits_base10<T, Policy>(); // policy template parameter digits10
+        int d2 = policies::digits<T, Policy>(); // digits base 2 from policy.
+        std::cout << "digits10 = " << d10 << ", digits2 = " << d2 // For example: digits10 = 1, digits2 = 5
+          << std::endl;
+        std::cout.precision(saved_precision);
+      #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_HUGE
+        if (policies::digits<T, Policy>() < 12)
+        { // For the worst case near w = 64, the error in the 'guess' is ~0.008, ratio ~ 0.0001 or 1 in 10,000 digits 10 ~= 4, or digits2 ~= 12.
+          return guess;
+        }
+        // else refine for higher precision.
+        T result = halley_update(guess, z, pol);
+        return result;
+
+        // Or could throw an exception here.
+        //// G[k=64] == g[63] == 
+        //return policies::raise_domain_error(function, 3.9999999999999997e+29
+        //  "Argument z = %1% is too small (< 3.9904954117194348e+29) !", 
+        //  z, pol);
+      }
       ///////////////////////////////////////////////////////////
       // TODO take this table out as a templated function,
       // to avoid potential multithreading initialization problems.
@@ -1285,14 +1338,23 @@ if (diff == 0)  // Exact result - common.
 
     BOOST_MATH_STD_USING // Aid argument dependent lookup (ADL) of abs.
 
-    using boost::math::tools::max_value;
+      using boost::math::tools::max_value;
 
     const char* function = "boost::math::lambert_wm1<RealType>(<RealType>)"; // Used for error messages.
 
     if (z == static_cast<T>(0))
     { // z is exactly zero.return -std::numeric_limits<T>::infinity();
       return -std::numeric_limits<T>::infinity();
-    } 
+    }
+    if (std::numeric_limits<T>::has_denorm)
+    { // All real types except arbitrary precision.
+      if( !boost::math::isnormal(z))
+      { // Almost zero - might also just return infinity like z == 0?
+      return policies::raise_domain_error(function,
+        "Argument z =  %1% is denormalized! (must be z > (std::numeric_limits<RealType>::min)() or z == 0)",
+        z, pol);
+      }
+    }
     if (z > static_cast<T>(0))
     { // 
       return policies::raise_domain_error(function,
@@ -1429,8 +1491,8 @@ if (z > g[63])
       // IEEE Transactions On Signal Processing, VOL. 50, NO. 9, Sep 2002
       // https://pdfs.semanticscholar.org/7a5a/76a9369586dd0dd34dda156d8f2779d1fd59.pdf
       // Estimate Lambert W using ln(-z)  ...
-// This is roughly the power of ten * ln(10) ~= 2.3.   n ~= 10^n  
-//  and improve by adding a second term -ln(ln(-z))
+      // This is roughly the power of ten * ln(10) ~= 2.3.   n ~= 10^n  
+      //  and improve by adding a second term -ln(ln(-z))
       T lz = log(-z);
       T llz = log(-lz);
       guess = lz - llz + (llz/lz); // Chapeau-Blondeau equation 20, page 2162.
@@ -1457,9 +1519,6 @@ if (z > g[63])
       //  "Argument z = %1% is too small (< -1.02643897e-26) !",
       //  z, pol);
     }
-
-
-
     // Use a lookup table to find the nearest integer part of Lambert W as starting point for Bisection.
     // Bracketing sequence  n = (2, 4, 8, 16, 32, 64) for W-1 branch.
     // Since z is probably quite small, start with lowest n (=2).
