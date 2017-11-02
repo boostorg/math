@@ -41,12 +41,19 @@ DEFINE_TYPE_NAME(long double);
 DEFINE_TYPE_NAME(boost::multiprecision::cpp_bin_float_quad);
 DEFINE_TYPE_NAME(boost::multiprecision::number<boost::multiprecision::cpp_dec_float<25> >);
 
-
-#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
-typedef boost::mpl::list<float,double,long double, boost::multiprecision::cpp_bin_float_quad, boost::multiprecision::number<boost::multiprecision::cpp_dec_float<25> > >  test_types;
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1900)
+#  define CPP_DEC_FLOAT_TEST
 #else
-typedef boost::mpl::list<float,double, boost::multiprecision::cpp_bin_float_quad, boost::multiprecision::number<boost::multiprecision::cpp_dec_float<25> > >  test_types;
+#  define CPP_DEC_FLOAT_TEST , boost::multiprecision::number<boost::multiprecision::cpp_dec_float<25> >
 #endif
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+#  define LD_TEST , long double
+#else
+#  define LD_TEST
+#endif
+
+
+typedef boost::mpl::list<float,double LD_TEST, boost::multiprecision::cpp_bin_float_quad CPP_DEC_FLOAT_TEST >  test_types;
 
 // Apple GCC 4.0 uses the "double double" format for its long double,
 // which means that epsilon is VERY small but useless for
