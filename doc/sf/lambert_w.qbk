@@ -199,15 +199,23 @@ or defined in a jamfile.v2:  `<define>BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS`
 
 [h5:w0_edges w0 Branch]
 
+The range mathematically is -exp(-1) <= z <= 0, but numerically,
+
+* `z == -exp<T>(-1)` (for the type T) returns exactly -1.
+* `z < -exp<T>(-1)` throws a `domain_error`, and/or return `NaN` according to the policy.
+Provides that there is a `catch` clause, an error message (similar to that below) will report.
+* `z == (std::numeric_limits<T>::max)()` returns W for the floating_point type T, (for example, for `double`, 703.22703310477018L)
+* `z == std::numeric_limits<T>::infinity()`  returns infinity (if available).
+
 [h5:wm1_edges w-1 Branch]
 
-The range mathematically is -exp(-1) <= z <=0, but numerically,
+The range mathematically is -exp(-1) <= z <= 0, but numerically,
 
 * `z == -exp<T>(-1)` (for the type T) returns exactly -1.
 * `z == 0` returns infinity (or the nearest equivalent if `std::has_infinity == false`).
-* `z == std::numeric_limits<T>::min()` returns the maximum possible value of Lambert W for the type T.[br]
-For example, for `double`: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634[br]
-and for `float`: lambert_wm1(-1.17549435e-38) = -91.8567734
+* `z == std::numeric_limits<T>::min()` returns the maximum possible value of Lambert W for the type T. [br]
+For example, for `double`: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634 [br]
+and for `float`: lambert_wm1(-1.17549435e-38) = -91.8567734 [br]
 
 * `z < std::numeric_limits<T>::min()`, means that z is denormalized (if `std::numeric_limits<T>::has_denorm_min == true`),
 for example:
@@ -220,8 +228,9 @@ and will give a message like:
   Argument z = -4.9406564584124654e-324 is too small
   (z < -std::numeric_limits<T>::min so denormalized) for Lambert W-1 branch!
 
-Denormalized values of z are not supported (because not all floating-point types denormalize),
+Denormalized values of z are not supported for Lambert  W-1 (because not all floating-point types denormalize),
 and anyway it only covers a tiny fraction of the range of possible z arguments values.
+A domain_error exception is thrown.  (This behaviour might be changed to return infinity, as for z == 0.
 
 
 [h4:implementation Implementation]
@@ -303,6 +312,33 @@ with a known small error bound over nearly all the range of ['z] argument.
 
 However, though these give results within several epsilon of the nearest representable result,
 they do not get as close as is often possible with further refinement, usually to within one or two epsilon.
+A mean difference was computed to express the typical error and is often about 0.5 epsilon.
+
+For speed during the bisection, Fukushima produces lookup tables of powers of e and z for integral Lambert W.
+There are 64 elements in these tables. The FORTRAN version (and the C++ translation by Veberic)
+computed these (once) as `static` data. This is slower, may cause trouble with multithreading, and
+is slightly inaccurate because of rounding errors from repeated(64) multiplications. In this implementation
+the values are computed using __multiprecision 50 decimal digit and output as arrays 37 decimal digit long literals.
+
+  std::cout.precision(std::numeric_limits<cpp_bin_float_quad>::max_digits10);
+
+The arrays are as const and static as possible, using BOOST_STATIC_CONSTEXPR macro.
+(See [@../test/lambert_w_lookup_table_generator.cpp  lambert_w_lookup_table_generator.cpp]
+The precision was chosen to ensure that if used as `long double` arrays,
+then the values output to
+[@ ../include/boost/math/special_functions/lambert_w_lookup_table.ipp lambert_w_lookup_table.ipp]
+will be the nearest representable value for the type chose by a `typedef` in
+[@..include/boost/math/special_functions/lambert_w.hpp lambert_w.hpp].
+
+  typedef double lookup_t; // Type for lookup table (`double` or `float`, or even `long double`?)
+
+This is to allow for future use at higher precision, up to platforms that use 128-bit
+(hardware or software) for `long double`.
+
+The accuracy of the tables was confirmed using __wolfram and agrees at the 37th decimal place,
+so ensuring that the value is read into even `long double` to the nearest representation.
+
+[h5:higher_precision Higher precision]
 
 For types more precise than `double`, Fukushima shows that it is best to use the `double` estimate
 as a starting point followed by refinement using __halley iterations or other methods.
@@ -445,7 +481,8 @@ Fukushima implmentation used 20 series terms and it was confirmed that using mor
 
 [h5:wm1_near_zero Lambert W-1 arguments values very near zero.]
 
-The lookup tables of Fukushima have only 64 elements, so that the z argument nearest zero is -1.0264389699511303e-26,
+The lookup tables of Fukushima have only 64 elements,
+so that the z argument nearest zero is -1.0264389699511303e-26,
 that corresponds to a maximum Lambert W-1 value of 64.0.
 His implementation did not cater for z argument values that are smaller (nearer to zero),
 but this implementation adds code to accept smaller (but not denormalised) values of z.
@@ -478,36 +515,6 @@ the computational cost of the log functions was easily paid by far fewer iterati
    double z = z = -1e-26;
    double r = lambert_wm1(z, policy<digits2<11> >());
    // lambert_wm1(-1.0000000000000000e-26) = -64.026509628385895
-
-[h4:edge_cases Edge and Corner cases]
-
-[h5:w0_edges w0 Branch]
-
-[h5:wm1_edges w-1 Branch]
-
-The range mathematically is -exp(-1) <= z <=0, but numerically,
-
-* `z == -exp<T>(-1)` (for the type T) returns exactly -1.
-* `z == 0` returns infinity (or the nearest equivalent if `std::has_infinity == false`).
-* `z == std::numeric_limits<T>::min()` returns the maximum possible value of Lambert W for the type T. [br]
-For example, for `double`: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634 [br]
-and for `float`: lambert_wm1(-1.17549435e-38) = -91.8567734 [br]
-
-* `z < std::numeric_limits<T>::min()`, means that z is denormalized (if `std::numeric_limits<T>::has_denorm_min == true`),
-for example:
-
-  r = lambert_wm1(std::numeric_limits<double>::denorm_min());
-
-and will give a message like:
-
-  Error in function boost::math::lambert_wm1<RealType>(<RealType>):
-  Argument z = -4.9406564584124654e-324 is too small
-  (z < -std::numeric_limits<T>::min so denormalized) for Lambert W-1 branch!
-
-Denormalized values of z are not supported for Lambert  W-1 (because not all floating-point types denormalize),
-and anyway it only covers a tiny fraction of the range of possible z arguments values.
-A domain_error exception is thrown.  (This behaviour might be changed to return infinity, as for z == 0.
-
 
 
 
