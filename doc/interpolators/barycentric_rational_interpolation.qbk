@@ -11,7 +11,7 @@
 [heading Synopsis]
 
 ``
-#include <boost/math/tools/barycentric_rational_interpolation.hpp>
+#include <boost/math/interpolators/barycentric_rational.hpp>
 
 namespace boost{ namespace math{
     template<class Real>
@@ -40,13 +40,13 @@ Use of the class requires a vector of independent variables x[0], x[1], .... x[n
 and a vector of dependent variables y[0], y[1], ... , y[n-1].
 The call is trivial:
 
-    boost::math::tools::barycentric_rational<double> interpolant(x.data(), y.data(), y.size());
+    boost::math::barycentric_rational<double> interpolant(x.data(), y.data(), y.size());
 
 This implicitly calls the constructor with approximation order 3, and hence the accuracy is [bigo](h[super 4]).
 In general, if you require an approximation order /d/, then the error is [bigo](h[super d+1]).
 A call to the constructor with an explicit approximation order could be
 
-    boost::math::tools::barycentric_rational<double> interpolant(x.data(), y.data(), y.size(), 5);
+    boost::math::barycentric_rational<double> interpolant(x.data(), y.data(), y.size(), 5);
 
 To evaluate the interpolant, simply use
 
