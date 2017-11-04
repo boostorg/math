@@ -21,15 +21,15 @@ namespace boost{ namespace math{ namespace quadrature { namespace detail{
 // Returns the tanh-sinh quadrature of a function f over the open interval (-1, 1)
 
 template<class Real, class Policy>
-class tanh_sinh_detail 
+class tanh_sinh_detail
 {
-   static const int initializer_selector = 
+   static const int initializer_selector =
       !std::numeric_limits<Real>::is_specialized || (std::numeric_limits<Real>::radix != 2) ?
       0 :
       (std::numeric_limits<Real>::digits < 30) && (std::numeric_limits<Real>::max_exponent <= 128) ?
-      1 : 
+      1 :
       (std::numeric_limits<Real>::digits <= std::numeric_limits<double>::digits) && (std::numeric_limits<Real>::max_exponent <= std::numeric_limits<double>::max_exponent) ?
-      2 : 
+      2 :
       (std::numeric_limits<Real>::digits <= std::numeric_limits<long double>::digits) && (std::numeric_limits<Real>::max_exponent <= 16384) ?
       3 :
 #ifdef BOOST_HAS_FLOAT128
@@ -165,7 +165,7 @@ private:
       return log((sqrt(4 * l * l + constants::pi<Real>() * constants::pi<Real>()) + 2 * l) / constants::pi<Real>());
    };
 
-   
+
    mutable std::vector<std::vector<Real>> m_abscissas;
    mutable std::vector<std::vector<Real>> m_weights;
    mutable std::vector<std::size_t>       m_first_complements;
@@ -199,17 +199,17 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
     // max_left_index is the actual position in the current row that has a logical index
     // no higher than max_left_position.  Remember that since we only store odd numbered
     // indexes in each row, this may actually be one position to the left of max_left_position
-    // in the case that is even.  Then, if we only evaluate f(-x_i) for abscissa values 
+    // in the case that is even.  Then, if we only evaluate f(-x_i) for abscissa values
     // i <= max_left_index we will never evaluate f(-x_i) at the left endpoint.
     // max_right_position and max_right_index are defained similarly for the right boundary
     // and are used to guard evaluation of f(x_i).
     //
     // max_left_position and max_right_position start off as the last element in row zero:
-    // 
+    //
     std::size_t max_left_position(m_abscissas[0].size() - 1);
     std::size_t max_left_index, max_right_position(max_left_position), max_right_index;
     //
-    // Decrement max_left_position and max_right_position until the complement 
+    // Decrement max_left_position and max_right_position until the complement
     // of the abscissa value is greater than the smallest permitted (as specified
     // by the function caller):
     //
@@ -219,7 +219,7 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
        --max_right_position;
     //
     // Assumption: left_min_complement/right_min_complement are sufficiently small that we only
-    // ever decrement through the stored values that are complements (the negative ones), and 
+    // ever decrement through the stored values that are complements (the negative ones), and
     // never ever hit the true abscissa values (positive stored values).
     //
     BOOST_ASSERT(m_abscissas[0][max_left_position] < 0);
@@ -285,7 +285,7 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
         // the old value.  The new max index is one position to the left of the new
         // logical value (remmember each row contains only odd numbered positions).
         // Then we have to make a single check, to see if one position to the right
-        // is also in bounds (this is the new abscissa value in this row which is 
+        // is also in bounds (this is the new abscissa value in this row which is
         // known to be in between a value known to be in bounds, and one known to be
         // not in bounds).
         // Thus, we filter which abscissa values generate a call to f(x_i), with a single
@@ -348,7 +348,7 @@ Real tanh_sinh_detail<Real, Policy>::integrate(const F f, Real* error, Real* L1,
 
         if (!(boost::math::isfinite)(I1))
         {
-            return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point at got %1%. Please narrow the bounds of integration or check your function for singularities.", I1, Policy());
+            return policies::raise_evaluation_error(function, "The tanh_sinh quadrature evaluated your function at a singular point and got %1%. Please narrow the bounds of integration or check your function for singularities.", I1, Policy());
         }
         //
         // If the error is increasing, and we're past level 4, something bad is very likely happening:
