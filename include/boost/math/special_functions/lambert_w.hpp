@@ -1650,9 +1650,9 @@ namespace math
         jmax = 10;
       }
       // Bracketing, Fukushima section 2.3, page 82:
-      // (Avoid using exponential function for speed).
-      // Only use lookup_t precision, default double, for bisection (for speed).
-      // Use Halley refinement for higher precisions.
+      // (Avoiding using exponential function for speed).
+      // Only use @c lookup_t precision, default double, for bisection (again for speed),
+      // and use later Halley refinement for higher precisions.
       using lambert_w_lookup::halves;
       using lambert_w_lookup::sqrtwm1s;
       lookup_t w = -static_cast<lookup_t>(n); // Equation 25,
@@ -1673,7 +1673,7 @@ namespace math
         // so just return the nearest bisection.
         // (Might make this test depend on size of T?)
       #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
-        std::cout << "Bisection estimate =            " << w << " " << y << std::endl;
+        std::cout << "Bisection estimates =            " << w << " " << y << std::endl;
       #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
         return static_cast<T>(w); // Bisection only.
       }

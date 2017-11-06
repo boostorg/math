@@ -5,12 +5,12 @@
 // (See accompanying file LICENSE_1_0.txt or
 //  copy at http ://www.boost.org/LICENSE_1_0.txt).
 
-/*! \brief Graph showing use of Lambert W function to compute current 
+/*! \brief Graph showing use of Lambert W function to compute current
 through a diode-connected transistor with preset series resistance.
 
 \details T. C. Banwell and A. Jayakumar,
 Exact analytical solution of current flow through diode with series resistance,
-Electron Letters, 36(4):291-2 (2000)
+Electron Letters, 36(4):291-2 (2000).
 DOI:  dx.doi.org/10.1049/el:20000301
 
 The current through a diode connected NPN bipolar junction transistor (BJT)
@@ -28,13 +28,11 @@ http://www3.imperial.ac.uk/pls/portallive/docs/1/7292572.PDF
 */
 
 #include <boost/math/special_functions/lambert_w.hpp>
-using boost::math::lambert_w;
+using boost::math::lambert_w0;
 #include <boost/math/special_functions.hpp>
 using boost::math::isfinite;
-
 #include <boost/svg_plot/svg_2d_plot.hpp>
 using namespace boost::svg;
-
 
 #include <iostream>
 // using std::cout;
@@ -52,38 +50,34 @@ using std::map;
 using std::multiset;
 #include <limits>
 using std::numeric_limits;
-
-#include <boost/math/special_functions.hpp>
-  using boost::math::isfinite;
-
+#include <cmath> //
 
 /*!
 Compute thermal voltage as a function of temperature,
 about 25 mV at room temperature.
 https://en.wikipedia.org/wiki/Boltzmann_constant#Role_in_semiconductor_physics:_the_thermal_voltage
 
-\param temperature Temperature (degrees centigrade).
+\param temperature Temperature (degrees Celsius).
 */
 const double v_thermal(double temperature)
 {
-  constexpr const double boltzmann_k = 1.38e-23; // joules/kelvin.
-  const double charge_q = 1.6021766208e-19; // Charge of an electron (columb).
+  BOOST_CONSTEXPR const double boltzmann_k = 1.38e-23; // joules/kelvin.
+  BOOST_CONSTEXPR double charge_q = 1.6021766208e-19; // Charge of an electron (columb).
   double temp = +273; // Degrees C to K.
   return boltzmann_k * temp / charge_q;
 } // v_thermal
 
   /*!
-  Banwell & Jayakumar, equation 2
+  Banwell & Jayakumar, equation 2, page 291.
   */
 double i(double isat, double vd, double vt, double nu)
 {
   double i = isat * (exp(vd / (nu * vt)) - 1);
   return i;
-} // 
+} //
 
   /*!
-
-  Banwell & Jayakumar, Equation 4.
+  Banwell & Jayakumar, Equation 4, page 291.
   i current flow = isat
   v voltage source.
   isat reverse saturation current in equation 4.
@@ -102,8 +96,9 @@ double i(double isat, double vd, double vt, double nu)
   \param nu Ideality factor (default = unity).
 
   \returns I amp as function of V volt.
-
   */
+
+//[lambert_w_diode_graph_2
 double iv(double v, double vt, double rsat, double re, double isat, double nu = 1.)
 {
   // V thermal 0.0257025 = 25 mV
@@ -122,11 +117,13 @@ double iv(double v, double vt, double rsat, double re, double isat, double nu = 
   double e = exp(eterm);
 //  std::cout << "exp(eterm) = " << e << std::endl;
 
-  double w0 = lambert_w(x * e);
+  double w0 = lambert_w0(x * e);
 //  std::cout << "w0 = " << w0 << std::endl;
   return i * w0 - isat;
-
 } // double iv
+
+//] [\lambert_w_diode_graph_2]
+
 
 std::array<double, 5> rss = { 0., 2.18, 10., 51., 249 };  // series resistance (ohm).
 std::array<double, 7> vds = { 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 };  // Diode voltage.
@@ -138,8 +135,7 @@ int main()
   {
     std::cout << "Lambert W diode current example." << std::endl;
 
-    //[lambert_w_diode_graph_1
-
+//[lambert_w_diode_graph_1
     double nu = 1.0; // Assumed ideal.
     double vt = v_thermal(25); // v thermal, Shockley equation, expect about 25 mV at room temperature.
     double boltzmann_k = 1.38e-23; // joules/kelvin
@@ -150,50 +146,49 @@ int main()
     double rsat = 0.;
     double isat = 25.e-15; //  25 fA;
     std::cout << "Isat = " << isat << std::endl;
-
     double re = 0.3;  // Estimated from slope of straight section of graph (equation 6).
-
     double v = 0.9;
     double icalc = iv(v, vt, 249., re, isat);
-
     std::cout << "voltage = " << v << ", current = " << icalc << ", " << log(icalc) << std::endl; // voltage = 0.9, current = 0.00108485, -6.82631
+//] [/lambert_w_diode_graph_1]
 
-   //] [/lambert_w_diode_graph_1]
+    // Plot a few measured data points.
+    std::map<const double, double> zero_data;  // Extrapolated from slope of measurements with no external resistor.
+    zero_data[0.3] = -19.65;
+    zero_data[0.4] = -15.75;
+    zero_data[0.5] = -11.86;
+    zero_data[0.6] = -7.97;
+    zero_data[0.7] = -4.08;
+    zero_data[0.8] = -0.0195;
+    zero_data[0.9] =  3.9;
 
-
-    // plot a few measured data points.
-    std::map<const double, double> zero_data;   // rss[0] // Zero series resistor.
-
-    //zero_data[0.3] = -19.65;
-    //zero_data[0.4] = -15.75;
-    //zero_data[0.5] = -11.86;
-    //zero_data[0.6] = -7.97;
-    //zero_data[0.7] = -4.08;
-    //zero_data[0.8] = -0.0195;
-    //zero_data[0.9] = 3.9;
+    std::map<const double, double>  measured_zero_data; // No external series resistor.
+    measured_zero_data[0.3] = -19.65;
+    measured_zero_data[0.4] = -15.75;
+    measured_zero_data[0.5] = -11.86;
+    measured_zero_data[0.6] = -7.97;
+    measured_zero_data[0.7] = -4.2;
+    measured_zero_data[0.72] = -3.5;
+    measured_zero_data[0.74] = -2.8;
+    measured_zero_data[0.76] = -2.3;
+    measured_zero_data[0.78] = -2.0;
+    // Measured from Fig 2 as raw data not available.
 
     double step = 0.1;
-
     for (int i = 0; i < vds.size(); i++)
     {
       zero_data[vds[i]] = lni[i];
       std::cout << lni[i] << "  " << vds[i] << std::endl;
     }
-
-    /*
-   */ 
-     step = 0.01;
+    step = 0.01;
 
     std::map<const double, double> data_2;
-
     for (double v = 0.3; v < 1.; v += step)
     {
       double current = iv(v, vt, 2., re, isat);
       data_2[v] = log(current);
-
-     // std::cout << "v " << v << ", current = " << current << " log current = " << log(current) << std::endl;
+      // std::cout << "v " << v << ", current = " << current << " log current = " << log(current) << std::endl;
     }
-
     std::map<const double, double> data_10;
     for (double v = 0.3; v < 1.; v += step)
     {
@@ -208,8 +203,6 @@ int main()
       data_51[v] = log(current);
      // std::cout << "v " << v << ", current = " << current << " log current = " << log(current) << std::endl;
     }
-   
- 
     std::map<const double, double> data_249;
     for (double v = 0.3; v < 1.; v += step)
     {
@@ -225,7 +218,7 @@ int main()
       .y_size(300)
       .legend_on(true)
       .x_label("voltage (V)")
-      .y_label("log(current)")
+      .y_label("log(current) (A)")
       //.x_label_on(true)
       //.y_label_on(true)
       //.xy_values_on(false)
@@ -247,15 +240,15 @@ int main()
       //.background_border_color(black);
       ;
 
-    data_plot.plot(zero_data, "Rs=0").fill_color(black).shape(square).size(3).line_on(true).line_width(1);
-    data_plot.plot(data_2, "Rs=2").line_color(blue).shape(none).line_on(true).bezier_on(false).line_width(1);
-    data_plot.plot(data_10, "Rs=10").line_color(purple).shape(none).line_on(true).bezier_on(false).line_width(1);
-    data_plot.plot(data_51, "Rs=51").line_color(green).shape(none).line_on(true).line_width(1);
-    data_plot.plot(data_249, "Rs=249").line_color(red).shape(none).line_on(true).line_width(0.5);
-    data_plot.write("./diode_IV_plot");
+    data_plot.plot(zero_data, "I0(V)").fill_color(lightgray).shape(none).size(3).line_on(true).line_width(0.5);
+    data_plot.plot(measured_zero_data, "Rs=0 &#x3A9;").fill_color(lightgray).shape(square).size(3).line_on(true).line_width(0.5);
+    data_plot.plot(data_2, "Rs=2 &#x3A9;").line_color(blue).shape(none).line_on(true).bezier_on(false).line_width(1);
+    data_plot.plot(data_10, "Rs=10 &#x3A9;").line_color(purple).shape(none).line_on(true).bezier_on(false).line_width(1);
+    data_plot.plot(data_51, "Rs=51 &#x3A9;").line_color(green).shape(none).line_on(true).line_width(1);
+    data_plot.plot(data_249, "Rs=249 &#x3A9;").line_color(red).shape(none).line_on(true).line_width(1);
+    data_plot.write("./diode_iv_plot");
 
     // bezier_on(true);
-
   }
   catch (std::exception& ex)
   {
@@ -269,7 +262,17 @@ int main()
 
    //[lambert_w_output_1
    Output:
-
+   Lambert W diode current example.
+   V thermal 0.0257025
+   Isat = 2.5e-14
+   voltage = 0.9, current = 0.00108485, -6.82631
+   -19.65  0.3
+   -15.75  0.4
+   -11.86  0.5
+   -7.97  0.6
+   -4.08  0.7
+   -0.0195  0.8
+   3.6  0.9
 
    //] [/lambert_w_output_1]
    */

@@ -170,10 +170,10 @@ int main()
     fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_sqrts = " << noof_sqrts << ";" << std::endl;
     fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_halves = " << noof_halves << ";" << std::endl; // Common to both branches.
 
-    BOOST_STATIC_CONSTEXPR std::size_t noof_w0zs = 65; // F[k] 0 <= k <= 64.
-    BOOST_STATIC_CONSTEXPR std::size_t noof_w0es = 66; // f[0] = F[0], f[64] = F[64] 
-    BOOST_STATIC_CONSTEXPR std::size_t noof_wm1zs = 64; // G[k] 1 <= k <= 64. (W-1 = 0 would be z = -infinity, so not stored in array)
-    BOOST_STATIC_CONSTEXPR std::size_t noof_wm1es = 64; // g[0] == G[1], g[63] = G64]
+    BOOST_STATIC_CONSTEXPR std::size_t noof_w0zs = 65; // F[k] 0 <= k <= 64. f[0] = F[0], f[64] = F[64]
+    BOOST_STATIC_CONSTEXPR std::size_t noof_w0es = 66; //  noof_w0zs +1 for gratuitous extra power.
+    BOOST_STATIC_CONSTEXPR std::size_t noof_wm1zs = 64; // G[k] 1 <= k <= 64. (W-1 = 0 would be z = -infinity, so not stored in array) g[0] == G[1], g[63] = G[64]
+    BOOST_STATIC_CONSTEXPR std::size_t noof_wm1es = 64; // 
 
     fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_w0es = " << noof_w0zs << ";" << std::endl;
     fout << "BOOST_STATIC_CONSTEXPR std::size_t  noof_w0zs = " << noof_w0zs << ";" << std::endl;
@@ -194,15 +194,15 @@ int main()
     using boost::math::constants::e;
     using boost::math::constants::exp_minus_one;
 
-    {  // F[k] and e^W for W0 branch.
+    {  // z values for integral W F[k] and powers for W0 branch.
       table_lookup_t ej = 1; //
-      w0es[0] = e<table_lookup_t>(); // e = 2.7182 // exp(-1) - 1/e exp_minus_one = 0.36787944.
-      w0es[1] = 1; // e
-      w0zs[0] = 0; // F[0] for W0 branch.
-      for (int j = 1, jj = 2; jj != noof_w0zs + 1; ++jj)
+      w0es[0] = e<table_lookup_t>(); // e = 2.7182 exp(-1) - 1/e exp_minus_one = 0.36787944.
+      w0es[1] = 1; // e^0
+      w0zs[0] = 0; // F[0] = 0 or W0 branch. 
+      for (int j = 1, jj = 2; jj != noof_w0es; ++jj)
       {
         w0es[jj] = w0es[j] * exp_minus_one<table_lookup_t>(); // previous * 0.36787944.
-        ej *= e<table_lookup_t>(); // 2.7182
+        ej *= e<table_lookup_t>(); // * 2.7182
         w0zs[j] = j * ej; // For W0 branch.
         j = jj; // Previous.
       } // for
@@ -224,7 +224,7 @@ int main()
     //   =  63.99999999999999999999999999999999547
     //   = 64.0 to 34 decimal digits, so exact. :-) 
 
-    { // G[k] and e^-k for W-1 branch.
+    { // z values for integral powers G[k] and e^-k for W-1 branch.
       // Fukushima indexing of G (k-1) differs by 1 from(k).
       // G[0] = -infinity, so his first item in array g[0] is -0.3678 which is G[1]
       // and last is g[63] = G[64] = 1.026e-26
@@ -299,8 +299,8 @@ int main()
       sqrtwm1s[j+1] = sqrt(sqrtwm1s[j]); //  Sqrt of previous element. sqrt(1/e), sqrt(sqrt(1/e)) ...
     } // for j
 
-
-    // Output values as C++ arrays, as static and constexpr as possible.
+    // Output values as C++ arrays,
+    // using BOOST_STATIC_CONSTEXPR as static and constexpr as possible for platform.
     fout << std::noshowpoint; // Do show NOT trailing zeros for halves and sqrts values.
 
     fout <<
@@ -360,9 +360,10 @@ int main()
       // Two W0 arrays
 
       fout << // W0 e values.
-        "\n" "BOOST_STATIC_CONSTEXPR lookup_t w0es[noof_w0es] = " // 
-        "\n" "{ // Fukushima e powers array e[1] = 2.718, 1.  ... e[64] = 4.3596100000630809736231248158884615452e-28." << "\n  ";
-      for (int i = 0; i != noof_w0es; i++)
+        // Fukushima code generates an extra unused power, but it is not output by using noof_w0zs instead of noof_w0es.
+        "\n" "BOOST_STATIC_CONSTEXPR lookup_t w0es[noof_w0zs] = " // 
+        "\n" "{ // Fukushima e powers array e[0] = 2.718, 1., e[2] = e^-1 = 0.135, e[3] = e^-2 = 0.133 ... e[64] = 4.3596100000630809736231248158884615452e-28." << "\n  ";
+      for (int i = 0; i != noof_w0zs; i++) 
       {
         fout << w0es[i] << 'L';
         if (i != noof_w0es - 1)
@@ -397,7 +398,7 @@ int main()
 
       fout << // W-1 e values.
         "\n" "BOOST_STATIC_CONSTEXPR lookup_t wm1es[noof_wm1es] = " // 
-        "\n" "{ // Fukushima e array e[1] = e[1] = 2.718 ... e[64] = 4.60718e+28." << "\n  ";
+        "\n" "{ // Fukushima e array e[0] = e^1 = 2.718, e[1] = e^2 = 7.39 ... e[64] = 4.60718e+28." << "\n  ";
       for (int i = 0; i != noof_wm1es; i++)
       {
         fout << wm1es[i] << 'L';

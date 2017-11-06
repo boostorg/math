@@ -32,6 +32,14 @@ On the z-interval \[0, [infin]\] there is just one real solution.
 On the interval (-1/e, 0) there are two real solutions on two branches called variously W0, W+, W-1, Wp, Wm, W-.
 The principal branches called `lambert_W0` and `lambert_Wm1` are provided by this real-only implementation.
 
+[import ../../example/lambert_w_graph.cpp]
+
+In the graphs below, the red line is the W0 branch, and the blue line the W-1 branch.
+
+[graph lambert_w_graph]
+
+[graph lambert_w_graph_big_w]
+
 [h5:applications Applications of the Lambert W function]
 
 The Lambert W function has a myriad of applications.
@@ -105,6 +113,48 @@ and to control what action to take on errors:
 [lambert_w_simple_examples_out_of_range]
 
 The full source of these examples is at [@../../example/lambert_w_example.cpp lambert_w_example.cpp]
+
+[h5:diode_resistance Diode Resistance Example]
+
+[import ../../example/lambert_w_diode_graph.cpp]
+
+A typical example of a practical application is estimating the current flow
+through a diode with series resistance from a paper by Banwell and Jayakumar.
+
+Having the Lambert_w function available makes it simple to reproduce the plot Fig 2 in their paper
+comparing estimates using with Lambert W function and some actual measurements.
+The colored curves show the effect of various series resistance on the current
+compared to an extrapolated line in grey with no internal (or external) resistance.
+
+Two formulae relating the diode current and effect of series resistance can be combined,
+but yield an otherwise intractable equation relating the current versus voltage
+with a varying series resistance.
+A generalized equation was found in terms of the Lambert W function:
+
+Banwell and Jakaumar equation 5
+
+[sixemspace][space] I(V) = [mu] V[sub T]/ R [sub S] [dot] W[sub 0](I[sub 0] R[sub S] / ([mu] V[sub T]))
+
+using these variables
+
+[lambert_w_diode_graph_1]
+
+can be rendered in C++
+
+[lambert_w_diode_graph_2]
+
+to reproduce their Fig 2:
+
+[graph diode_iv_plot]
+
+The plotted points for no external series resistance
+(derived from their published plot as the raw data are not publicly available)
+are used to extrapolate back to estimate the intrinsic emitter resistance as 0.3 ohm.
+Its effect is visible when the straight line from low voltages starts to curve.
+
+See [@../../example/lambert_w_diode_graph.cpp  lambert_w_diode_graph.cpp]
+for details of the calculation.
+
 
 [h4:precision Controlling the compromise between Precision and Speed]
 
@@ -234,6 +284,8 @@ A domain_error exception is thrown.  (This behaviour might be changed to return 
 
 
 [h4:implementation Implementation]
+
+['First be right, then be fast.]
 
 There are many previous implementations with increasing accuracy and speed. See references below.
 
@@ -608,6 +660,10 @@ Gaussian Noise With Exponent 1/2, IEEE Transactions on Signal Processing, 50(9) 
 
 # Toshio Fukushima, Precise and fast computation of Lambert W-functions without transcendental function evaluations, Journal of Computational and Applied
 Mathematics, 244 (2013) 77-89.
+
+# T.C. Banwell and A. Jayakumar, Electronic Letter, Feb 2000, 36(4), pages 291-2.
+Exact analytical solution for current flow through diode with series resistance.
+[@http://dx.doi.org/10.1049/el:20000301]
 
 [endsect] [/section:lambert_w Lambert W function]
 
