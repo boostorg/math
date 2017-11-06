@@ -568,6 +568,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [include sf/legendre_stieltjes.qbk]
 [include sf/laguerre.qbk]
 [include sf/hermite.qbk]
+[include sf/chebyshev.qbk]
 [include sf/spherical_harmonic.qbk]
 [endsect] [/section:sf_poly Polynomials]
 
@@ -632,6 +633,9 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [endsect]
 [section:quadrature Quadrature]
 [include quadrature/trapezoidal.qbk]
+[include quadrature/gauss.qbk]
+[include quadrature/gauss_kronrod.qbk]
+[include quadrature/double_exponential.qbk]
 [endsect]
 [endmathpart] [/mathpart roots Root Finding Algorithms]
 
@@ -713,7 +717,3 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
-
-
-
-

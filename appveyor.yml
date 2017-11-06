@@ -96,4 +96,4 @@ test_script:
   - ..\..\..\b2 config_info_travis_install %ARGS%
   - config_info_travis
   - cd ..\..\math\test
-  - ..\..\..\b2 -j3 %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES %TEST_SUITE%
+  - ..\..\..\b2 -j3 --hash %ARGS% define=CI_SUPPRESS_KNOWN_ISSUES %TEST_SUITE%

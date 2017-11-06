@@ -51,7 +51,7 @@ In its simplest form, an integration can be performed by the following code
 
     using boost::math::quadrature::trapezoidal;
     auto f = [](double x) { return 1/(5 - 4*cos(x)); };
-    double I = trapezoidal(f, 0, boost::math::constants::two_pi<double>());
+    double I = trapezoidal(f, 0.0, boost::math::constants::two_pi<double>());
 
 Since the routine is adaptive, step sizes are halved continuously until a tolerance is reached.
 In order to control this tolerance, simply call the routine with an additional argument
@@ -73,7 +73,7 @@ However, for higher-precision types,
 it may be of interest to allow the algorithm to compute more refinements:
 
     size_t max_refinements = 15;
-    long double I = trapezoidal(f, 0, two_pi<long double>(), 1e-9L, max_refinements);
+    long double I = trapezoidal(f, 0.0L, two_pi<long double>(), 1e-9L, max_refinements);
 
 Note that the maximum allowed compute time grows exponentially with `max_refinements`.
 The routine will not throw an exception if the maximum refinements is achieved without the requested tolerance being attained.
@@ -84,7 +84,7 @@ This is achieved by passing additional pointers into the routine:
 
     double error_estimate;
     double L1;
-    double I = adaptive_trapezoidal(f, 0, two_pi<double>(), tolerance, max_refinements, &error_estimate, &L1);
+    double I = trapezoidal(f, 0.0, two_pi<double>(), tolerance, max_refinements, &error_estimate, &L1);
     if (error_estimate > tolerance*L1)
     {
          double I = some_other_quadrature_method(f, 0, two_pi<double>());
