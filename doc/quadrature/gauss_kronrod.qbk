@@ -23,7 +23,7 @@ This allows an a posteriori error estimate to be provided while still preserving
 Kronrod discovered that by adding /n+1/ nodes (computed from the zeros of the Legendre-Stieltjes polynomials) to a Gaussian quadrature of order /n/, he could integrate polynomials of order /3n+1/.
 
 The integration routines provided here will perform either adaptive or non-adaptive quadrature, they should be chosen for the integration of smooth functions
-with no end point singularities.  For difficult functions, or those with end point singularities, please refer to the [link math_toolkit.quadrature.double_exponential double-exponential integration schemes].
+with no end point singularities.  For difficult functions, or those with end point singularities, please refer to the [link math_toolkit.double_exponential double-exponential integration schemes].
 
 `#include <boost/math/quadrature/gauss_kronrod.hpp>`
 
@@ -107,7 +107,7 @@ A more sophisticated a posteriori error estimate for an element of a particular 
 
 These routines are deliberately kept relatively simple: when they work, they work very well and very rapidly.  However, no effort
 has been made to make these routines work well with end-point singularities or other "difficult" integrals.  In such cases please
-use one of the [link math_toolkit.quadrature.double_exponential double-exponential integration schemes] which are generally much more robust.
+use one of the [link math_toolkit.double_exponential double-exponential integration schemes] which are generally much more robust.
 
 [heading References]
 
