@@ -9,7 +9,7 @@
  *
  * References:
  *
- * 1) Tanaka, Ken’ichiro, et al. "Function classes for double exponential integration formulas." Numerische Mathematik 111.4 (2009): 631-655.
+ * 1) Tanaka, Ken'ichiro, et al. "Function classes for double exponential integration formulas." Numerische Mathematik 111.4 (2009): 631-655.
  */
 
 #ifndef BOOST_MATH_QUADRATURE_SINH_SINH_HPP

@@ -25,7 +25,7 @@
 #include <boost/math/special_functions/sinc.hpp>    // for the Sinus cardinal
 #include <boost/math/special_functions/sinhc.hpp>    // for the Hyperbolic Sinus cardinal
 
-#if defined(BOOST_NO_CXX11_NOEXCEPT) || defined(BOOST_NO_RVALUE_REFERENCES) || defined(BOOST_NO_SFINAE_EXPR)
+#if defined(BOOST_NO_CXX11_NOEXCEPT) || defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || defined(BOOST_NO_SFINAE_EXPR)
 #include <boost/type_traits/is_pod.hpp>
 #endif
 
@@ -36,7 +36,7 @@ namespace boost
 
       namespace detail {
 
-#if !defined(BOOST_NO_CXX11_NOEXCEPT) && !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_SFINAE_EXPR)
+#if !defined(BOOST_NO_CXX11_NOEXCEPT) && !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_SFINAE_EXPR)
 
          template <class T>
          struct is_trivial_arithmetic_type_imp
@@ -116,7 +116,7 @@ namespace boost
                b(a_recopier.R_component_2()),
                c(a_recopier.R_component_3()),
                d(a_recopier.R_component_4()) {}
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
             BOOST_CONSTEXPR quaternion(quaternion && a_recopier)
                : a(std::move(a_recopier.R_component_1())),
                b(std::move(a_recopier.R_component_2())),
@@ -225,7 +225,7 @@ namespace boost
 
                return(*this);
             }
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
             BOOST_CXX14_CONSTEXPR quaternion<T> &        operator = (quaternion<T> && a_affecter)
             {
                a = std::move(a_affecter.a);
@@ -958,7 +958,7 @@ inline BOOST_CXX14_CONSTEXPR quaternion<T> operator / (const quaternion<T>& a, c
         inline T sup(quaternion<T> const & q)
         {
             using    ::std::abs;
-            return std::max(std::max(abs(q.R_component_1()), abs(q.R_component_2())), std::max(abs(q.R_component_3()), abs(q.R_component_4())));
+            return (std::max)((std::max)(abs(q.R_component_1()), abs(q.R_component_2())), (std::max)(abs(q.R_component_3()), abs(q.R_component_4())));
         }
         
         
