@@ -22,14 +22,23 @@ namespace boost { namespace math { namespace detail {
    template <class T>
    struct hypergeometric_0F1_cf
    {
+      //
+      // We start this continued fraction at b on index -1 
+      // and treat the -1 and 0 cases as special cases.
+      // We do this to avoid adding the continued fraction result
+      // to 1 so that we can accurately evaluate for small results
+      // as well as large ones.  See http://functions.wolfram.com/07.17.10.0002.01
+      //
       T b, z;
       int k;
-      hypergeometric_0F1_cf(T b_, T z_) : b(b_), z(z_), k(0) {}
+      hypergeometric_0F1_cf(T b_, T z_) : b(b_), z(z_), k(-2) {}
       typedef std::pair<T, T> result_type;
 
       result_type operator()()
       {
          ++k;
+         if (k <= 0)
+            return std::make_pair(z / b, 1);
          return std::make_pair(-z / ((k + 1) * (b + k)), 1 + z / ((k + 1) * (b + k)));
       }
    };
@@ -39,9 +48,9 @@ namespace boost { namespace math { namespace detail {
    {
       hypergeometric_0F1_cf<T> evaluator(b, z);
       boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>();
-      T cf = tools::continued_fraction_a(evaluator, policies::get_epsilon<T, Policy>(), max_iter);
+      T cf = tools::continued_fraction_b(evaluator, policies::get_epsilon<T, Policy>(), max_iter);
       policies::check_series_iterations<T>(function, max_iter, pol);
-      return 1 + z / (b * (1 + cf));
+      return cf;
    }
 
 

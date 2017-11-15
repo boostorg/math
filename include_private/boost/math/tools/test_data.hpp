@@ -110,8 +110,8 @@ inline parameter_info<T> make_power_param(T basis, int start_exponent, int end_e
 namespace detail{
 
 template <class Seq, class Item, int N>
-inline void unpack_and_append_tuple(Seq& s,
-                                    const Item& data,
+inline void unpack_and_append_tuple(Seq&,
+                                    const Item&,
                                     const boost::integral_constant<int, N>&,
                                     const boost::false_type&)
 {
