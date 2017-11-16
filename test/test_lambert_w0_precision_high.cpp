@@ -15,7 +15,7 @@
 #include <boost/exception/exception.hpp>  // boost::exception
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
 #include <boost/math/special_functions/next.hpp>
-#include "test_value.hpp"  // for create_test_value and macro BOOST_MATH_TEST_VALUE.
+#include <boost/math/tools/test_value.hpp>  // for create_test_value and macro BOOST_MATH_TEST_VALUE.
 
 #include <boost/multiprecision/cpp_dec_float.hpp> // boost::multiprecision::cpp_dec_float_50
 using boost::multiprecision::cpp_dec_float_50; // 50 decimal digits type.

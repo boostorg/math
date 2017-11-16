@@ -15,7 +15,7 @@
 #include <boost/exception/exception.hpp>  // boost::exception
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
 #include <boost/math/special_functions/next.hpp>
-#include "test_value.hpp"  // for create_test_value and macro BOOST_MATH_TEST_VALUE.
+#include <boost/math/tools/test_value.hpp>  // for create_test_value and macro BOOST_MATH_TEST_VALUE.
 
 // Built-in/fundamental Quad 128-bit type, if available.
 #ifdef BOOST_HAS_FLOAT128

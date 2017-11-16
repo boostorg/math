@@ -14,7 +14,8 @@
   The current through a diode connected NPN bipolar junction transistor (BJT) 
   type 2N2222 (See https://en.wikipedia.org/wiki/2N2222 and 
   https://www.fairchildsemi.com/datasheets/PN/PN2222.pdf Datasheet)
-  was measured, for a voltage between 0.3 to 1 volt, see Fig 2 for a log plot, showing a knee visible at about 0.6 V.
+  was measured, for a voltage between 0.3 to 1 volt, see Fig 2 for a log plot,
+  showing a knee visible at about 0.6 V.
 
   The transistor parameter isat was estimated to be 25 fA and the ideality factor = 1.0.
   The intrinsic emitter resistance re was estimated from the rsat = 0 data to be 0.3 ohm.
@@ -22,12 +23,10 @@
   The solid curves in Figure 2 are calculated using equation 5 with rsat included with re.
 
   http://www3.imperial.ac.uk/pls/portallive/docs/1/7292572.PDF
-
-
 */
 
 #include <boost/math/special_functions/lambert_w.hpp>
-using boost::math::lambert_w;
+using boost::math::lambert_w0;
 
 #include <iostream>
 // using std::cout;
@@ -37,7 +36,6 @@ using boost::math::lambert_w;
 #include <string>
 #include <array>
 #include <vector>
-
 
 /*!
 Compute thermal voltage as a function of temperature,
@@ -104,7 +102,7 @@ double iv(double v, double vt, double rsat, double re, double isat, double nu = 
   double e = exp(eterm);
   std::cout << "exp(eterm) = " << e << std::endl;
 
-  double w0 = lambert_w(x * e);
+  double w0 = lambert_w0(x * e);
   std::cout << "w0 = " << w0 << std::endl;
   return i * w0 - isat;
 
@@ -140,22 +138,27 @@ int main()
     double icalc = iv(v, vt, 249., re, isat);
 
     std::cout << "voltage = " << v << ", current = " << icalc << ", " << log(icalc) << std::endl; // voltage = 0.9, current = 0.00108485, -6.82631
-
  //] [/lambert_w_diode_example_1]
   }
   catch (std::exception& ex)
   {
     std::cout << ex.what() << std::endl;
   }
-
-
 }  // int main()
 
-   /*
-
-   //[lambert_w_output_1
+/*
    Output:
+//[lambert_w_output_1
+   Lambert W diode current example.
+   V thermal 0.0257025
+   Isat = 2.5e-14
+   nu * vt / rsat = 0.000103099
+   isat * rsat / (nu * vt) = 2.42486e-10
+   (v + isat * rsat) / (nu * vt) = 35.016
+   exp(eterm) = 1.61167e+15
+   w0 = 10.5225
+   voltage = 0.9, current = 0.00108485, -6.82631
 
+//] [/lambert_w_output_1]
+*/
 
-   //] [/lambert_w_output_1]
-   */

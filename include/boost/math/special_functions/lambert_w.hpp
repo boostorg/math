@@ -5,11 +5,12 @@
 //  copy at http ://www.boost.org/LICENSE_1_0.txt).
 
 /*
-Implementation of the Fukushima algorithm for the Lambert W real-only function.
+Implementation of the Fukushima algorithm for the Lambert W0 and W-1 real-only functions.
 
 This code is based on the algorithm by
-Toshio Fukushima, "Precise and fast computation of Lambert W-functions without
-transcendental function evaluations", J. Comp. Appl. Math. 244 (2013) 77-89,
+Toshio Fukushima, 
+"Precise and fast computation of Lambert W-functions without transcendental function evaluations",
+J. Comp. Appl. Math. 244 (2013) 77-89,
 and its author's FORTRAN code,
 and on a C/C++ version by Darko Veberic, darko.veberic@ijs.si
 based on the algorithm and a FORTRAN version of Toshio Fukushima.
@@ -75,7 +76,7 @@ BOOST_MATH_INSTRUMENT_LAMBERT_WM1_LOOKUP // Show results from W-1 lookup table.
 typedef double lookup_t; // Type for lookup table (double or float, or even long double?)
 
 //#include "J:\Cpp\Misc\lambert_w_lookup_table_generator\lambert_w_lookup_table.ipp"
- #include "lambert_w_lookup_table.ipp" // boost.Math version.
+ #include "lambert_w_lookup_table.ipp" // Boost.Math version.
 
 namespace boost
 {
@@ -84,17 +85,14 @@ namespace math
   namespace detail
   {
 
-  //! Series expansion used near the singularity/branch point z = -exp(-1) = -3.6787944.
-  // Some integer constants overflow so use largest integer size available (LL).
-  // Wolfram InverseSeries[Series[sqrt[2(p Exp[1 + p] + 1)], {p,-1, 20}]]
-  // T. Fukushima / Journal of Computational and Applied Mathematics 244 (2013) Page 85, Table 3.
-  // Wolfram command used to obtain 40 series terms at 50 decimal digit precision was
-  // N[InverseSeries[Series[Sqrt[2(p Exp[1 + p] + 1)], { p,-1,40 }]], 50]
-  // -1+p-p^2/3+(11 p^3)/72-(43 p^4)/540+(769 p^5)/17280-(221 p^6)/8505+(680863 p^7)/43545600 ...
-  // Made these constants full precision for any T using original fractions from Table 3.
-  // Decimal values of specifications for built-in floating-point types below
-  // are at least 21 digits precision == max_digits10 for long double.
-  // Longer decimal digits strings are rationals evaluated using Wolfram.
+  //! \brief Series expansion used near the singularity/branch point z = -exp(-1) = -3.6787944.
+  //! Wolfram InverseSeries[Series[sqrt[2(p Exp[1 + p] + 1)], {p,-1, 20}]]
+  //! Wolfram command used to obtain 40 series terms at 50 decimal digit precision was
+  //! N[InverseSeries[Series[Sqrt[2(p Exp[1 + p] + 1)], { p,-1,40 }]], 50]
+  //! -1+p-p^2/3+(11 p^3)/72-(43 p^4)/540+(769 p^5)/17280-(221 p^6)/8505+(680863 p^7)/43545600 ...
+  //! Decimal values of specifications for built-in floating-point types below
+  //! are at least 21 digits precision == max_digits10 for long double.
+  //! Longer decimal digits strings are rationals evaluated using Wolfram.
 
     template<typename T = double>
     T lambert_w_singularity_series(const T p)
@@ -112,7 +110,7 @@ namespace math
 
       static const T q[] =
       {
-        -T(1), // j0
+        -static_cast<T>(1), // j0
         +T(1), // j1
         -T(1) / 3, // 1/3  j2
         +T(11) / 72, // 0.152777777777777778, // 11/72 j3
@@ -151,7 +149,7 @@ namespace math
         // so must use BOOST_MATH_TEST_VALUE(T, ) format in hope of using suffix Q for quad or decimal digits string for others.
          //-T(0.000058113607504413816772205464778828177256611844221913L), // j20  N[2853534237182741069/49102686267859224000000, 50] 0.000058113607504413816772205464778828177256611844221913
         BOOST_MATH_TEST_VALUE(T, -0.000058113607504413816772205464778828177256611844221913) // j20  - last used by Fukushima
-        // more terms don't seem to give any improvement (worse in fact) and are not use for many z values.
+        // More terms don't seem to give any improvement (worse in fact) and are not use for many z values.
         //BOOST_MATH_TEST_VALUE(T, +0.000039076684867439051635395583044527492132109160553593), // j21
         //BOOST_MATH_TEST_VALUE(T, -0.000026338064747231098738584082718649443078703982217219), // j22
         //BOOST_MATH_TEST_VALUE(T, +0.000017790345805079585400736282075184540383274460464169), // j23
@@ -163,7 +161,7 @@ namespace math
       }; // static const T q[]
 
       /*
-      // Temporary copy of original double values for comparison and these are reproduced well.
+      // Temporary copy of original double values for comparison; these are reproduced well.
       static const T q[] =
       {
         -1L,  // j0
@@ -191,41 +189,34 @@ namespace math
       */
 
       // Decide how many series terms to use, increasing as z approaches the singularity,
-      // balancing run time and computational noise from round-off.
+      // balancing run-time versus computational noise from round-off.
       // In practice, we truncate the series expansion at a certain order.
       // If the order is too large, not only does the amount of computation increase,
       // but also the round-off errors accumulate.
       // See Fukushima equation 35, page 85 for logic of choice of number of series terms.
 
-      // TODO remove temporary check on different between double and quad values. worst 1e-17
-      //std::cout << "q[21]" << std::endl;
-      //for (int i = 0; i != 21; i++)
-      //{
-      //  std::cout << i << " " << q[i] << " " << q[i] - double_q[i] << std::endl;
-      //}
-
       BOOST_MATH_STD_USING // Aid argument dependent lookup (ADL) of abs.
 
-      const T ap = abs(p);
+      const T absp = abs(p);
 
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS
       {
         int terms = 20; // Default to using all terms.
-        if (ap < 0.001150)
+        if (absp < 0.001150)
         { // Very near singularity.
           terms = 6;
         }
-        else if (ap < 0.0766)
+        else if (absp < 0.0766)
         { // Near singularity.
           terms = 10;
         }
         std::streamsize saved_precision = std::cout.precision(3);
-        std::cout << "abs(p) = " << ap << ", terms = " << terms << std::endl;
+        std::cout << "abs(p) = " << absp << ", terms = " << terms << std::endl;
         std::cout.precision(saved_precision);
       }
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS
 
-    if (ap < 0.01159)
+    if (absp < 0.01159)
     { // Only 6 near-singularity series terms are useful.
       return
         -1 +
@@ -237,7 +228,7 @@ namespace math
                   p*q[6]
                   )))));
     }
-    else if (ap < 0.0766) // Use 10 near-singularity series terms.
+    else if (absp < 0.0766) // Use 10 near-singularity series terms.
     { // Use 10 near-singularity series terms.
       return
         -1 +
@@ -291,7 +282,7 @@ namespace math
 
   /////////////////////////////////////////////////////////////////////////////////////////////
 
-  //! Series expansion used near zero (abs(z) < 0.05).
+  //! \brief Series expansion used near zero (abs(z) < 0.05).
   //! \details 
   //! Coefficients of the inverted series expansion of the Lambert W function around z = 0.
   //! Tosio Fukushima always uses all 17 terms of a Taylor series computed using Wolfram with
@@ -302,7 +293,8 @@ namespace math
   //! are 21 digits precision == max_digits10 for long double.
   //! Care Some coefficients might overflow some fixed_point types.
 
-  //! This version is intended to allow use by user-defined types like Boost.Multiprecision quad and cpp_dec_float types.
+  //! This version is intended to allow use by user-defined types
+  //! like Boost.Multiprecision quad and cpp_dec_float types.
   //! The three specializations below for built-in float, double 
   //! (and perhaps long double) will be chosen in preference for these types.
 
@@ -612,7 +604,7 @@ namespace math
        341422.05066583836331735491399356945575432970390954  z^19  Wolfram value differs at 36 decimal digit, as expected.
        */
 
-    using boost::math::policies::get_epsilon;
+    using boost::math::policies::get_epsilon; // for type T.
     using boost::math::tools::sum_series;
     using boost::math::tools::evaluate_polynomial;
     // http://www.boost.org/doc/libs/release/libs/math/doc/html/math_toolkit/roots/rational.html
@@ -650,9 +642,11 @@ namespace math
     //std::cout.precision(saved_precision);
 
     boost::uintmax_t max_iter = policies::get_max_series_iterations<Policy>(); // Max iterations from policy.
+  #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+    std::cout << "max iter from policy = " << max_iter << std::endl;
+    // //   max iter from policy = 1000000 is default.
+  #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
 
-                                                                               //std::cout << "max iter from policy = " << max_iter << std::endl; //   max iter from policy = 1000000
-                                                                               // max_iter = 0;
     result = sum_series(s, get_epsilon<T, Policy>(), max_iter, result);
     // result == evaluate_polynomial.
     //sum_series(Functor& func, int bits, boost::uintmax_t& max_terms, const U& init_value)
@@ -690,28 +684,27 @@ namespace math
   inline
   T halley_update(T w0, const T z, const Policy&)
   {
-    // Iterate a few times to refine value using Halley's method.
+    // Only if necessary, iterate a few times to refine estimate using Halley's method.
     // Inline Halley iteration, rather than calling boost::math::tools::halley_iterate
     // since we can simplify the expressions algebraically,
     // and don't need most of the error checking of the boilerplate version
     // as we know in advance that the function is reasonably well-behaved,
-    // (and in any case the derivatives require evaluation of Lambert W!)
+    // (and in any case the derivatives require evaluation of Lambert W!).
+
+    //! So also do-while version.
 
     BOOST_MATH_STD_USING // Aid argument dependent (ADL) lookup of abs.
 
     using boost::math::constants::exp_minus_one; // 0.36787944
     using boost::math::tools::max_value;
 
-    T tolerance = boost::math::policies::get_epsilon<T, Policy>();
-
-    // TODO should get_precision here.
     int iterations = 0;
-    int iterations_required = 6;
-    int max_iterations = 20;
+   // int iterations_required = 6; // 
+    int max_iterations = 20; // Only as a check on looping.
 
-    T w1 = w0; // Refined estimate.
+    T tolerance = boost::math::policies::get_epsilon<T, Policy>();
     T previous_diff = boost::math::tools::max_value<T>();
-
+    T w1 = w0; // Refined estimate.
     T expw0 = exp(w0); // Compute z == W * exp(W); from best Lambert W estimate so far.
     // Hope that  w0 * expw0 == z;
     T diff = (w0 * expw0) - z; // Difference from argument z.
@@ -721,6 +714,14 @@ namespace math
     std::ios::fmtflags flags(std::cout.flags()); // Save.
     std::cout.setf(std::ios_base::showpoint); // Include any trailing zeros.
     std::cout << "w = " << w0 << ", z = " << z << ", w * exp(w) = " << w0 * expw0 << ", diff = " << diff << std::endl;
+    if (diff == 0)
+    {
+      std::cout << "Exact, so no Halley refinement from " << w0 << std::endl;
+    }
+    else if(abs(diff) <= tolerance)
+    {
+      std::cout << "Within tolerance, so no Halley refinement from " << w0 << std::endl;
+    }
     std::cout.precision(precision); // Restore.
     std::cout.flags(flags);
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY
@@ -728,12 +729,17 @@ namespace math
     {
       return w0;
     }
-    // Refine.
+    // relative does NOT work well, so check for improvement in diff instead.
+    //else if ((abs(diff) / w0) <= tolerance) 
+    //{
+    //  return w0;
+    //}
+    // else Refine.
     do
     {
       iterations++;
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY
-      std::cout << iterations << " Halley iterations." << std::endl;
+      std::cout << "Halley iteration #" << iterations << "."<< std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY
       previous_diff = diff; // Remember so that can check if any new estimate is better.
 
@@ -775,11 +781,16 @@ namespace math
       w0 = w1;
       expw0 = exp(w0);
     }
-    while ((iterations < iterations_required) || (iterations <= max_iterations)); // Absolute limit during testing - is looping if need this.
+   // while ((iterations < iterations_required) || (iterations <= max_iterations)); // Absolute limit during testing - is looping if need this.
+    while (iterations <= max_iterations); // Absolute limit during testing - is looping if need this.
 
     return w1;
   } // T halley_update(T w0, const T z)
 
+
+  //! Halley update version that does one update without a check, 
+  //! and then more updates as necessary.
+  // TODO Might use a template parameter to avoid duplication?
   template<typename T = double>
   inline
   T halley_update_do_while(T w0, const T z)
@@ -792,6 +803,7 @@ namespace math
     int iterations = 0;
     int min_iterations = 1; // Specify a minimum number of iterations to perform.
     int max_iterations = 6; // Should not be needed, but include to avoid risk of looping forever.
+    // (Might be necessary to increase this?)
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY
     std::cout << "At least = " << min_iterations << " Halley iterations." << std::endl;
     std::cout << "(But not more than " << max_iterations << " Halley iterations.)" << std::endl;
@@ -799,8 +811,6 @@ namespace math
 
     T w1; // Refined estimate.
     T previous_diff = boost::math::tools::max_value<T>();
-
-    // TODO perform check first with while( diff small) do {refinement}
     do
     { // Iterate a few times to refine value using Halley's method.
       // Inline Halley iteration, rather than calling boost::math::tools::halley_iterate
@@ -847,14 +857,14 @@ namespace math
       (iterations >= max_iterations) // Absolute max limit during testing
            // (unexpected looping if need this).
     );
-
     return w1; //
   } // Halley do while
 
-  //! Schroeder method, fifth-order update formula, see T. Fukushima page 80-81, and
+  //! \brief Schroeder method, fifth-order update formula,
+  //! \details See T. Fukushima page 80-81, and
   //! A. Householder, The Numerical Treatment of a Single Nonlinear Equation,
   //! McGraw-Hill, New York, 1970, section 4.4.
-  //! Switch to schroeder_update after a pre-computed jb/jmax bisections,
+  //! Fukushima algorithm switches to @c schroeder_update after pre-computed bisections,
   //! chosen to ensure that the result will be achieve the +/- 10 epsilon target.
   //! \param w Lambert w estimate from bisection.
   //! \param y bracketing value from bisection.
@@ -865,29 +875,31 @@ namespace math
   inline
   T schroeder_update(const T w, const T y)
   {
-    // Compute derivatives using Schroeder refinement, Fukushima equations 18, page 6.
+    // Compute derivatives using 5th order Schroeder refinement.
     // Since this is the final step, it will always use the highest precision type T.
-    // Called: result = schroeder_update(w, y);
+    // Example of Call:
+    //   result = schroeder_update(w, y);
+    //where
     // w is estimate of Lambert W (from bisection or series).
-    // y is z * e^-w
+    // y is z * e^-w. 
 
     BOOST_MATH_STD_USING // Aid argument dependent lookup of abs.
     #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
     std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
     using boost::math::float_distance;
     T fd = float_distance<T>(w, y);
-    std::cout << "Bisect (Pre-Schroder) Distance = ";
+    std::cout << "Schroder ";
     if (abs(fd) < 214748000.)
     {
-      std::cout << static_cast<int>(fd);
+      std::cout << " Distance = "<< static_cast<int>(fd);
     }
     else
     {
-      std::cout << "big.";
+      std::cout << "Difference w - y = " << (w - y) << ".";
     }
     std::cout << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
-
+    //  Fukushima equation 18, page 6.
     const T f0 = w - y; // f0 = w - y.
     const T f1 = 1 + y; // f1 = df/dW
     const T f00 = f0 * f0;
@@ -899,28 +911,12 @@ namespace math
         f00 * (6 * y * y  +  8 * f1 * y  +  f0y)); // Fukushima Page 81, equation 21 from equation 20.
 
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
-    std::cout << "Schroeder refined " << w << "  " << y << " to  " << result << ", difference " << w - result << std::endl;
+    std::cout << "Schroeder refined " << w << "  " << y << ", difference  " << w-y  << ", change " << w - result << ", to result " << result << std::endl;
     std::cout.precision(saved_precision); // Restore.
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
 
     return result;
   } // template<typename T = double> T schroeder_update(const T w, const T y)
-
-  // Temporary to list out the static arrays.
-  template<typename T>
-  inline void print_collection(const T& coll, std::string name, std::string sep)
-  {
-    std::streamsize precision = std::cout.precision();
-    std::cout.precision(std::numeric_limits<lookup_t>::max_digits10);
-    std::cout << name << ": ";
-
-    for (auto it = std::begin(coll); it != std::end(coll); ++it)
-    {
-      std::cout << *(it) << sep;
-    }
-    std::cout.precision(precision); // Restore.
-    std::cout << std::endl;
-  } // print_collection
 
   /////////////  namespace detail implementations of Lambert W for W0 and W-1 branches.
 
@@ -933,8 +929,9 @@ namespace math
     // or static_casted integer, for example:  static_cast<float>(1) or static_cast<cpp_dec_float_50>(1).
     // Want to allow fixed_point types too, so do not just test for floating-point.
     // Integral types should been promoted to double by user Lambert w functions.
-    BOOST_STATIC_ASSERT_MSG(!std::is_integral<T>::value, "Must be floating-point or fixed type (not integer type), for example: lambert_w0(1.), not lambert_w0(1)!");
-
+    BOOST_STATIC_ASSERT_MSG(!std::is_integral<T>::value,
+      "Must be floating-point or fixed type (not integer type), for example: lambert_w0(1.), not lambert_w0(1)!");
+     
     const char* function = "boost::math::lambert_w0<RealType>(<RealType>)"; // Used for error messages.
 
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0
@@ -949,14 +946,7 @@ namespace math
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0
 
     // Check for edge and corner cases first:
-    // denormal is probably OK for W0 branch ?
-  /*  if (!boost::math::isnormal(z))
-    {
-      return policies::raise_domain_error(function,
-        "Argument z is denormalized!",
-        z, pol);
-    }
- */
+
     if (boost::math::isnan(z))
     {
       return policies::raise_domain_error(function,
@@ -1010,16 +1000,24 @@ namespace math
          // http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/boost_multiprecision/intro.html
          // Taking care to avoid trouble from expression templates.
         T w_series = lambert_w_singularity_series(T(sqrt(p2)));
-        //Schroeder does not improve result - differences about 5e-15, so do NOT use refinement step below.
+        // Neither Halley nor Schroeder do not improve result for builtin,
+        // differences about 5e-15, so do NOT use refinement step below unless multiprecision.
+        // 
         //int d2 = policies::digits<T, Policy>(); // Precision as digits base 2 from policy.
         //if (d2 > (std::numeric_limits<T>::digits - 6))
         //{ // If more (fullest) accuracy required, then use refinement.
         //  T y = z * exp(-w_series);
         //  T s_result = schroeder_update(w_series, y);
         //}
-        // neither does Halley
-        //T y = z * exp(-w_series);
-        //return halley_update(w_series, y);
+        if (std::numeric_limits<T>::digits > 53)
+        { // Multiprecision, so try a refinement:
+          w_series = halley_update(w_series, z, pol);
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN
+          std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
+          std::cout << "Halley updated to " << w_series << std::endl;
+          std::cout.precision(saved_precision);
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN
+        }
         return w_series;
       }
     } //  z < -0.35
@@ -1041,7 +1039,7 @@ namespace math
          //  and improve by adding a second term ln(ln(z))
         T lz = log(z);
         T llz = log(lz);
-        guess = lz - llz + (llz / lz); // Corless equation 4.19, page 349 and Chapeau-Blondeau equation 20, page 2162.
+        guess = lz - llz + (llz / lz); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
       #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_HUGE
         std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
         std::cout << "z = " << z << ", guess = " << guess << ", ln(z) = " << lz << ", ln(-ln(z) = " << llz << ", llz/lz = " << (llz / lz) << std::endl;
@@ -1071,85 +1069,6 @@ namespace math
       } // Too big for lookup table.
 
       // Argument z is in the 'normal' range and float or double precision, so use Lookup, Bracket, Bisection and Schroeder (and Halley).
-
-
-      ///////////////////////////////////////////////////////////
-      // TODO take this table out as a templated function,
-      // to avoid potential multithreading initialization problems.
-      // (Would like to avoid initializing table of static data?
-      // but cannot avoid - always computed at load time).
-      // This data is not used if z is small or z < -0.35 near branch point,
-      // so this code is good at avoiding unnecessary initialisation.
-      // See Fukushima section 2.2, page 81.
-      // Defining integral parts of Lambert W function values to be used for bisection.
-      // e and g have space for 64-bit reals.
-
-      /*
-      static const size_t noof_wm1zs = 66;
-      static T e[noof_wm1zs]; // lambert_w[k] for W-1 branch. 2.7182 1. 0.3678 0.1353 0.04978 ... 4.359e-28 1.603e-28
-      static const size_t noof_w0zs = 65;
-      static T g[noof_w0zs]; // lambert_w[k] for W0 branch. 0 2.7182 14.77 60.2566 ... 1.445e+29 3.990e+29.
-      // lambert_w0(2.77182) == 1.;
-      // lambert_w0(14.7700) == 2.;
-      // lambert_w0(2.77182) == 3.;
-      // ...
-      // lambert_w0(3.990e+29) == 64.
-      // 3.990e+29 == g[64];
-
-      // Defining lookup table sqrts of 1/e.
-      static const size_t noof_sqrts = 12;
-      static T a[noof_sqrts]; // 0.6065 0.7788, 0.8824 ... 0.9997, sqrt of previous elements.
-      static T b[noof_sqrts]; // 0.5 0.25 0.125, 0.0625 ...  0.0002441, halves of previous elements.
-
-      if (!e[0])
-      { // Fill static data on first use.
-        // Fukushima calls array F[k] = ke^k  (0 <= k <= 64 for f)
-        // and G[k] -ke^-k (1 <= k <= 64 for g)
-
-        T ej = 1; // F[k] for W-1 branch.
-        e[0] = boost::math::constants::e<T>(); // e = 2.7182
-        e[1] = 1;
-        g[0] = 0; // G[k] for W0 branch.
-        for (int j = 1, jj = 2; jj != noof_wm1zs; ++jj)
-        {
-          e[jj] = e[j] * boost::math::constants::exp_minus_one<T>(); // For W-1 branch.
-          // exp(-1) - 1/e exp_minus_one = 0.36787944.
-          ej *= boost::math::constants::e<T>(); // 2.7182
-          g[j] = j * ej; // For W0 branch.
-          j = jj;
-        } // for
-
-        // a[0] = sqrt(e1);
-        // TODO compile time constant sqrt(1/e) - add to math constants, and add to documentation too.
-        // This would be slightly more accurate - conversion from long double could lose precision,
-        // but might not matter if using Schroeder and/or Halley?
-        // a[0] = boost::math::constants::sqrt_one_div_e<T>();
-        a[0] = static_cast<T>(0.606530659712633423603799534991180453441918135487186955682L);
-        b[0] = static_cast<T>(0.5); // Exactly representable.
-        for (int j = 0, jj = 1; jj != noof_sqrts; ++jj)
-        {
-          a[jj] = sqrt(a[j]); //  Sqrt of previous element. sqrt(1/e),sqrt(sqrt(1/e)) ...
-        //  b[jj] = b[j] * static_cast<T>(0.5);  // Half previous element.
-          b[jj] = b[j] / 2;  // Half previous element (/2 will be optimised better?).
-          j = jj;
-        }
-        print_collection(e, "e", " "); // 2.71828175 1 0.36787945 0.135335296 0.0497870743 0.0183156412 0.00673794793 ... 1.60381359e-28
-        print_collection(g, "g", " ");
-        print_collection(a, "a", " ");
-        print_collection(b, "b", " ");
-
-        // Values saved as Fukushima bisection static arrays.txt
-        // These might be stored as constants in data?
-        //e: 2.71828 1 0.367879 0.135335 0.0497871 0.0183156 0.00673795 0.00247875 0.000911882 0.000335463 0.00012341 4.53999e-05 1.67017e-05 6.14421e-06 2.26033e-06 8.31529e-07 3.05902e-07 1.12535e-07 4.13994e-08 1.523e-08 5.6028e-09 2.06115e-09 7.58256e-10 2.78947e-10 1.02619e-10 3.77514e-11 1.3888e-11 5.10909e-12 1.87953e-12 6.91441e-13 2.54367e-13 9.35763e-14 3.44248e-14 1.26642e-14 4.65889e-15 1.71391e-15 6.30512e-16 2.31952e-16 8.53305e-17 3.13914e-17 1.15482e-17 4.24836e-18 1.56288e-18 5.74953e-19 2.11513e-19 7.78114e-20 2.86252e-20 1.05306e-20 3.874e-21 1.42517e-21 5.24289e-22 1.92875e-22 7.09548e-23 2.61028e-23 9.60269e-24 3.53263e-24 1.29958e-24 4.7809e-25 1.75879e-25 6.47024e-26 2.38027e-26 8.75652e-27 3.22135e-27 1.18507e-27 4.35962e-28 1.60381e-28
-        //g : 0 2.71828 14.7781 60.2566 218.393 742.066 2420.57 7676.43 23847.7 72927.7 220265 658615 1.95306e+06 5.75137e+06 1.68365e+07 4.90352e+07 1.42178e+08 4.10634e+08 1.18188e+09 3.39116e+09 9.7033e+09 2.76951e+10 7.8868e+10 2.2413e+11 6.35738e+11 1.80012e+12 5.08897e+12 1.43653e+13 4.04952e+13 1.14009e+14 3.20594e+14 9.00514e+14 2.52681e+15 7.08323e+15 1.98377e+16 5.55104e+16 1.55204e+17 4.33608e+17 1.21052e+18 3.37714e+18 9.4154e+18 2.62336e+19 7.30495e+19 2.03297e+20 5.6547e+20 1.57204e+21 4.36821e+21 1.21322e+22 3.36803e+22 9.34599e+22 2.59235e+23 7.18767e+23 1.99212e+24 5.51929e+24 1.5286e+25 4.23213e+25 1.17133e+26 3.24086e+26 8.96411e+26 2.47871e+27 6.85203e+27 1.89362e+28 5.23177e+28 1.44508e+29 3.99049e+29
-        //a : 0.606531 0.778801 0.882497 0.939413 0.969233 0.984496 0.992218 0.996101 0.998049 0.999024 0.999512 0.999756
-        //b : 0.5 0.25 0.125 0.0625 0.03125 0.015625 0.0078125 0.00390625 0.00195313 0.000976563 0.000488281 0.000244141
-
-
-      }  //  if (!e[0]) end of static data fill.
-      */
-      ///////////////////////////////////////////////////////////////////////////
-
       if (std::numeric_limits<T>::digits > 53)
       { // T is more precise than 64-bit double (or long double, or ?),
         // so recurse to compute an approximate double value using only one Schroeder refinement,
@@ -1162,16 +1081,16 @@ namespace math
         // Compute a 50-bit precision approximate W0 in a double (no Halley refinement).
         T double_approx = static_cast<T>(lambert_w0_imp<double>(static_cast<double>(z), policy<digits2<50> >()));
 #ifdef  BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN
-        std::cout << "Argument Type " << typeid(T).name() << " approximation double = " << result << std::endl;
+        std::cout << "Argument Type " << typeid(T).name() << " approximation double = " << double_approx << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_NOT_BUILTIN
         // Perform additional few Halley refinement(s) to ensure that
         // get a near as possible to correct result (usually +/- one epsilon).
         T result = halley_update(double_approx, z, pol);
-#ifdef  BOOST_MATH_INSTRUMENT_LAMBERT_W0
+#ifdef  BOOST_MATH_INSTRUMENT_LAMBERT_W0__NOT_BUILTIN
         std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
         std::cout << "Result " << typeid(T).name() << " precision Halley refinement = " << result << std::endl;
         std::cout.precision(saved_precision);
-#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0__NOT_BUILTIN
         return result;
       } // digits > 53  - higher precision than double.
       else // T is double or less precision.
@@ -1231,7 +1150,7 @@ namespace math
         // These are used as initial values for bisection.
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_LOOKUP
           std::cout << "Result lookup W0(" << z <<  ") bisection between w0zs[" << n << "] = " << w0zs[n] << " and w0zs[" << n << "] = " << w0zs[n+1]
-            << ", bisect mean = " << (w0zs[n - 1] + w0zs[n]) / 2 << std::endl;
+            << ", bisect mean = " << ( w0zs[n] + w0zs[n + 1]) / 2 << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_LOOKUP
 
         // Check precision specified by policy in case can return early.
@@ -1244,39 +1163,44 @@ namespace math
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_PRECISION
         if (d2 <= 7)
         { // Only 7 binary digits precision required to hold integer size of w0zs[65],
-          // so just return the mean of two nearby integral values.
+          // so just return the mean of the two nearby integral values.
           // This is a *very* approximate estimate, and perhaps not very useful?
-          return static_cast<T>((w0zs[n - 1] + w0zs[n]) / 2);
+          return static_cast<T>((w0zs[n] + w0zs[n+1]) / 2);
         }
 
-        // Compute the number of bisections (jmax) that ensure that result is close enough that
+        // Compute the number of bisections that ensure that result is close enough that
         // a single 5th order Schroeder update is sufficient to achieve near double (53-bit) accuracy.
-        int jmax = 8; //  Assume minimum number of bisections will be needed (most common case).
+        int bisections = 8; //  Assume minimum number of bisections will be needed (most common case).
         if (z <= -0.36)
         { // Very near singularity, so need several more bisections.
-          jmax = noof_sqrts;
+          bisections = noof_sqrts; // 12
         }
         else if (z <= -0.3)
         { // Near singularity, so need a few more bisections.
-          jmax = 11;
+          bisections = 11;
         }
         else if (n <= 0)
         { // Very small z, so need 3 more bisections.
-          jmax = 10;
+          bisections = 10;
         }
         else if (n <= 1)
         { // Small z, so need just 1 extra bisection.
-          jmax = 9;
+          bisections = 9;
         }
+       // bisections += 2; // Try a few extras to see if this gets closer to 'best possible result'. Probably not.
+// But would need more halfs and sqrts to test worst case?
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
+        std::cout << "n = " << n << ", so " << bisections << " bisections." << std::endl;
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
         lookup_t dz = static_cast<lookup_t>(z);
         // Only use lookup_t precision, default double, for bisection.
         // Use Halley refinement for higher precisions.
-        // Perform the jmax fractional bisections for necessary precision.
+        // Perform the bisections fractional bisections for necessary precision.
         // Avoid using exponential function for speed.
         lookup_t w = static_cast<lookup_t>(n);  // Fukushima Equation 25, Integral Lambert W.
        // lookup_t y = dz * e[n + 1]; // Fukushima Integral +1 Lambert W.
         lookup_t y = dz * static_cast<lookup_t>(w0es[n + 1]); // Fukushima Equation 26, Integral +1 Lambert W.
-        for (int j = 0; j < jmax; ++j)
+        for (int j = 0; j < bisections; ++j)
         { // Equation 27.
           const lookup_t wj = w + static_cast<lookup_t>(halves[j]); // Add 1/2, 1/4, 1/8 ...
           const lookup_t yj = y * static_cast<lookup_t>(sqrtw0s[j]); // Multiply by sqrt(1/e), ...
@@ -1285,15 +1209,19 @@ namespace math
             w = wj;
             y = yj;
           }
-        } // for jmax
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
+          std::cout  << "#" << std::setw(2) << j << "  w = " << w << ", y =  " << y << std::endl;
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
+        } // for bisections
 
-        if (d2 <= 10)
-        { // Only 10 digits2 required (== digits10 = 3 decimal digits precision),
-          // so just return the nearest bisection.
-          // (Might make this test depend on size of T?)
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
           std::cout << "Bisection estimate =            " << w << " " << y << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
+
+        if (d2 <= 10)
+        { // Only 10 digits2 required (== digits10 ~= 3 decimal digits precision),
+          // so just return the nearest bisection.
+          // (Might make this test depend on size of T?)
           return static_cast<T>(w); // Bisection only.
         }
         else // More than 10 digits2 wanted, so continue with Fukushima's Schroeder refinement.
@@ -1303,9 +1231,9 @@ namespace math
           { // Only enough digits2 required, so just return the Schroeder refined value.
             // For example, for float, if (d2 <= 22) then
             // digits-3 returns Schroeder result if up to 3 bits might be wrong.
-#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
             std::cout << "Schroeder refinement estimate = " << result << std::endl;
-#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
             return result; // Schroeder only.
           }
           else // Perform additional Halley refinement(s) to ensure that
@@ -1322,12 +1250,11 @@ namespace math
         } // more than 10 digits2
       }
     } // normal range and precision.
-    throw std::logic_error("No result from lambert_w0_imp!  (Please report).");  // Should never get here.
+    throw std::logic_error("No result from lambert_w0_imp!  (Please report!)");  // Should never get here.
   } //  T lambert_w0_imp(const T z, const Policy& /* pol */)
 
   //! Lambert W for W-1 branch, -max(z) < z <= -1/e.
   // TODO is -max(z) allowed?
-  // TODO check changes to W0 branch have also been made here.
   template<typename T, class Policy>
   T lambert_wm1_imp(const T z, const Policy&  pol)
   {
@@ -1338,22 +1265,28 @@ namespace math
     // Integral types should be promoted to double by user Lambert w functions.
     // If integral type provided to user function lambert_w0 or lambert_wm1,
     // then should already have been promoted to double.
-    BOOST_STATIC_ASSERT_MSG(!std::is_integral<T>::value, "Must be floating-point or fixed type (not integer type), for example: lambert_wm1(1.), not lambert_wm1(1)!");
+    BOOST_STATIC_ASSERT_MSG(!std::is_integral<T>::value,
+      "Must be floating-point or fixed type (not integer type), for example: lambert_wm1(1.), not lambert_wm1(1)!");
 
     BOOST_MATH_STD_USING // Aid argument dependent lookup (ADL) of abs.
-
-      using boost::math::tools::max_value;
 
     const char* function = "boost::math::lambert_wm1<RealType>(<RealType>)"; // Used for error messages.
 
     if (z == static_cast<T>(0))
-    { // z is exactly zero.return -std::numeric_limits<T>::infinity();
-      return -std::numeric_limits<T>::infinity();
+    { // z is exactly zero so return -std::numeric_limits<T>::infinity();
+      if (std::numeric_limits<T>::has_infinity)
+      {
+        return -std::numeric_limits<T>::infinity();
+      }
+      else
+      { 
+        return -tools::max_value<T>();
+      }
     }
     if (std::numeric_limits<T>::has_denorm)
     { // All real types except arbitrary precision.
       if (!boost::math::isnormal(z))
-      { // Almost zero - might also just return infinity like z == 0?
+      { // Almost zero - might also just return infinity like z == 0 or max_value?
         return policies::raise_domain_error(function,
           "Argument z =  %1% is denormalized! (must be z > (std::numeric_limits<RealType>::min)() or z == 0)",
           z, pol);
@@ -1362,7 +1295,7 @@ namespace math
     if (z > static_cast<T>(0))
     { //
       return policies::raise_domain_error(function,
-        "Argument z = %1% is out of range (z > 0) for Lambert W-1 branch! (Try Lambert W0 branch?)",
+        "Argument z = %1% is out of range (z <= 0) for Lambert W-1 branch! (Try Lambert W0 branch?)",
         z, pol);
     }
     if (z > -(std::numeric_limits<T>::min)())
@@ -1384,91 +1317,40 @@ namespace math
         "Argument z = %1% is out of range (z < -exp(-1) = -3.6787944... <= 0) for Lambert W-1 (or W0) branch!",
         z, pol);
     }
-    if (z < -0.35)
-    { // Close to singularity/branch point but on w-1 branch.  TODO.
+    if (z < static_cast<T>(-0.35))
+    { // Close to singularity/branch point z = -0.3678794411714423215955237701614608727 but on W-1 branch. 
       const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
-      if (p2 > 0)
-      {
-        return lambert_w_singularity_series(-sqrt(p2));
-        // TODO Halley refinement options here.
-      }
       if (p2 == 0)
       { // At the singularity at branch point.
         return -1;
       }
+      if (p2 > 0)
+      {
+        T w_series = lambert_w_singularity_series(T(-sqrt(p2)));
+        if (std::numeric_limits<T>::digits > 53)
+        { // Multiprecision, so try a Halley refinement.
+          w_series = halley_update(w_series, z, pol);
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
+          std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
+          std::cout << "Halley updated to " << w_series << std::endl;
+          std::cout.precision(saved_precision);
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
+        }
+        return w_series;
+      }
+      // Should not get here.
       return policies::raise_domain_error(function,
-        "Argument z = %1% is out of range!",
+        "Argument z = %1% is out of range for Lambert W-1 branch. (Should not get here - please report!)",
         z, pol);
+
+      //return policies::raise_domain_error(function,
+      //  "Argument z = %1% is out of range!",
+      //  z, pol);
     } // if (z < -0.35)
 
-    /*
-    // Create static arrays of Lambert Wm1 function
-    // TODO these are NOT the same size or values as the w0 constant array values?????
-
-    // double LambertW0(const double z)
-    // static double e[66];
-    // static double g[65];
-    // static double a[12];
-    // static double b[12];
-
-    // Create static arrays of Lambert W function for Wm1
-    // with lambert_w values of integers.
-    // Used for bisection of W-1 branch.
-    static const size_t noof_sqrts = 12; // and halves
-    // F[k] is 0 <= k <= 64 so size is 65 (but is 64 below????).
-    // G[k] is 1 <= k <= 64 so size is 64
-    // So e and F are not the same!
-
-    static const size_t noof_wm1zs = 64;
-
-    static lookup_t e[noof_wm1zs]; // e[0] to e[63]
-    static lookup_t g[noof_wm1zs]; // g[0] == Gk when k = 1,  to g[63] == Gk=64
-    static lookup_t a[noof_sqrts];
-    static lookup_t b[noof_sqrts];
-
-    if (!e[0])
-    {
-      const lookup_t e1 = 1 / boost::math::constants::e<lookup_t>();
-      lookup_t ej = e1; // 1/e= 0.36787945
-      e[0] = boost::math::constants::e<lookup_t>();
-      g[0] = -e1;
-      for (int j = 0, jj = 1; jj < 64; ++jj)
-      { // jj is j+1
-        ej *= e1;
-        e[jj] = e[j] * boost::math::constants::e<lookup_t>();
-        g[jj] = -(jj + 1) * ej;
-        j = jj;
-      }
-      a[0] = sqrt(boost::math::constants::e<lookup_t>());
-      b[0] = static_cast<lookup_t>(0.5);
-      for (int j = 0, jj = 1; jj < noof_sqrts; ++jj)
-      {
-        a[jj] = sqrt(a[j]);
-     //   b[jj] = b[j] * static_cast<lookup_t>(0.5);
-        b[jj] = b[j] / 2; // More efficient for multiprecision?
-        j = jj;
-      }  // for j
-
-
-//std::cout << " W-1 e[0] = " << e[0] << ", e[1] = " << e[1] << "... e[63] = " << e[63]  << std::endl;
-// W-1 e[0] = 2.71828175, e[1] = 7.38905573... e[63] = 6.23513822e+27
-// W-1 e[0] = 2.7182818284590451, e[1] = 7.3890560989306495... e[63] = 6.235149080811597e+27, e[64] = 58265.164084420219
-//std::cout << " W-1 g[0] = " << g[0] << ", g[1] = " << g[1] << "... g[63] = " << g[63]  << std::endl;
-// W-1 g[0] = -0.36787945 k=1, -1e^-1 = -0.3678794 ,
-//  g[1] = -0.270670593  ... g[63] = -1.0264407e-26
-// W-1 g[0] = -0.36787944117144233, g[1] = -0.2706705664732254... g[63] = -1.0264389699511303e-26
-      // TODO temporary output.
-      //std::cout << "lambert_wm1 version of arrays - NOT same as w0 version." << std::endl;
-     // print_collection(e, "e", " "); // e[0] = 2.71828175, e[1] = 1, e[2] = 0.36787945, 0.135335296 0.0497870743 0.0183156412 0.00673794793 ... e[63] = 2.293783159, e[64]= 6.235149080e+27
-     // print_collection(g, "g", " "); // g[0] = -0.3678794, g[1] = -0.2706705...  , g[63] = -1.026438e-26
-      //print_collection(a, "a", " ");
-      //print_collection(b, "b", " ");
-    } // if (!e[0])
-// static arrays filled.
-*/
     using lambert_w_lookup::wm1es;
     using lambert_w_lookup::wm1zs;
-    using  lambert_w_lookup::noof_wm1zs; // size == 64 
+    using lambert_w_lookup::noof_wm1zs; // size == 64 
 
     // std::cout <<" Wm1zs[63] (== G[64]) = " << " " << wm1zs[63] << std::endl; // Wm1zs[63] (== G[64]) =  -1.0264389699511283e-26
     // Check that z argument value is not smaller than lookup_table G[64] 
@@ -1486,7 +1368,8 @@ namespace math
       // N[productlog(-1, -2.2250738585072014e-308 * 10^-308 ), 50] = -1424.8544521230553853558132180518404363617968042942
       // N[productlog(-1, -1.4325445274604020119111357113179868158* 10^-27), 37] = -65.99999999999999999999999999999999955
 
-      // R.M.Corless, G.H.Gonnet, D.E.G.Hare, D.J.Jeffrey, and D.E.Knuth, “On the Lambert W function, ” Adv.Comput.Math., vol. 5, pp. 329–359, 1996.
+      // R.M.Corless, G.H.Gonnet, D.E.G.Hare, D.J.Jeffrey, and D.E.Knuth,
+      // “On the Lambert W function, ” Adv.Comput.Math., vol. 5, pp. 329–359, 1996.
       // François Chapeau-Blondeau and Abdelilah Monir
       // Numerical Evaluation of the Lambert W Function
       // IEEE Transactions On Signal Processing, VOL. 50, NO. 9, Sep 2002
@@ -1536,7 +1419,7 @@ namespace math
       // Compute a 50-bit precision approximate W0 in a double (no Halley refinement).
       T double_approx = static_cast<T>(lambert_wm1_imp<double>(static_cast<double>(z), policy<digits2<50> >()));
     #ifdef  BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
-      std::cout << "Argument Type " << typeid(T).name() << " approximation double = " << result << std::endl;
+      std::cout << "Argument Type " << typeid(T).name() << " approximation double = " << double_approx << std::endl;
     #endif // BOOST_MATH_INSTRUMENT_LAMBERT_WM1
       // Perform additional Halley refinement(s) to ensure that
       // get a near as possible to correct result (usually +/- one epsilon).
@@ -1568,12 +1451,10 @@ namespace math
         }
       }
       // else z < g[63] == -1.0264389699511303e-26, so Lambert W-1 integer part > 64.
-   // Might assign the lower bracket to -1.0264389699511303e-26 and upper to (std::numeric_limits<T>::min)()
-  // and jump to schroeder to halley? But that would only allow use with lookup_t precision.
+      // This should not now occur (should be caught by test and code above) so should be a logic_error?
       return policies::raise_domain_error(function,
         "Argument z = %1% is too small (< -1.026439e-26) (logic error - please report!)",
         z, pol);
-        // This should not now occur (should be caught by test above) so should be a logic_error?
     overshot:
       {
         int nh = n / 2;
@@ -1632,22 +1513,22 @@ namespace math
         return static_cast<T>((wm1zs[n] + wm1zs[n + 1]) / 2);
       } // d2 < 7
 
-      // Compute jmax is the number of bisections computed from n,
+      // Compute bisections is the number of bisections computed from n,
       // such that a single application of the fifth-order Schroeder update formula
       // after the bisections is enough to evaluate Lambert W-1 with (near?) 53-bit accuracy.
       // Fukushima established these by trial and error?
-      int jmax = 11; //  Assume maximum number of bisections will be needed (most common case).
+      int bisections = 11; //  Assume maximum number of bisections will be needed (most common case).
       if (n >= 8)
       {
-        jmax = 8;
+        bisections = 8;
       }
       else if (n >= 3)
       {
-        jmax = 9;
+        bisections = 9;
       }
       else if (n >= 2)
       {
-        jmax = 10;
+        bisections = 10;
       }
       // Bracketing, Fukushima section 2.3, page 82:
       // (Avoiding using exponential function for speed).
@@ -1657,8 +1538,8 @@ namespace math
       using lambert_w_lookup::sqrtwm1s;
       lookup_t w = -static_cast<lookup_t>(n); // Equation 25,
       lookup_t y = static_cast<lookup_t>(z * wm1es[n - 1]); // Equation 26,
-      // Perform the jmax fractional bisections for necessary precision.
-      for (int j = 0; j < jmax; ++j)
+      // Perform the bisections fractional bisections for necessary precision.
+      for (int j = 0; j < bisections; ++j)
       { // Equation 27.
         lookup_t wj = w - halves[j]; // Subtract 1/2, 1/4, 1/8 ...
         lookup_t yj = y * sqrtwm1s[j]; // Multiply by sqrt(1/e), ...
@@ -1672,9 +1553,9 @@ namespace math
       { // Only 10 digits2 required (== digits10 = 3 decimal digits precision),
         // so just return the nearest bisection.
         // (Might make this test depend on size of T?)
-      #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
-        std::cout << "Bisection estimates =            " << w << " " << y << std::endl;
-      #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_BISECTION
+      #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_BISECTION
+        std::cout << "W-1 Bisection estimates =            " << w << " " << y << std::endl;
+      #endif // BOOST_MATH_INSTRUMENT_LAMBERT_WM1_BISECTION
         return static_cast<T>(w); // Bisection only.
       }
       else // More than 10 digits2 precision wanted, so continue with Fukushima's Schroeder refinement.
@@ -1684,9 +1565,9 @@ namespace math
         { // Only enough digits2 required, so just return the Schroeder refined value.
           // For example, for float, if (d2 <= 22) then
           // digits-3 returns Schroeder result up to 3 bits might be wrong.
-        #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0
+        #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1
           std::cout << "Schroeder refinement estimate = " << result << std::endl;
-        #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0
+        #endif // BOOST_MATH_INSTRUMENT_LAMBERT_WM1
           return result; // Schroeder only.
         }
       else // Perform additional Halley refinement(s) to ensure that

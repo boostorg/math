@@ -31,10 +31,10 @@ using boost::multiprecision::cpp_dec_float_100; // 100 decimal digits type.
 using boost::multiprecision::cpp_bin_float_double_extended;
 using boost::multiprecision::cpp_bin_float_double;
 using boost::multiprecision::cpp_bin_float_quad;
-
-
 // For lambert_w function.
 #include <boost/math/special_functions/lambert_w.hpp>
+// using boost::math::lambert_w0;
+// using boost::math::lambert_wm1;
 
 #include <iostream>
 // using std::cout;
@@ -158,14 +158,15 @@ int main()
     }
 
     { 
-//[lambert_w_precision_1
       // Test evaluation of Lambert W at varying precisions specified using a policy with digits10 increasing from 1 to 9.
       // For float this covers the full precision range as max_digits10 = 9.
       float z = 10.F;
       std::cout << "\nTest evaluation of float Lambert W (" << z << ") at varying precisions"
         "\nspecified using a policy with digits10 increasing from 1 to 9. "
         << std::endl;
-      std::cout << std::setprecision(3) << "std::numeric_limits<float>::epsilon() = " << std::numeric_limits<float>::epsilon() << std::endl;
+//[lambert_w_precision_1
+      std::cout << std::setprecision(3) << "std::numeric_limits<float>::epsilon() = "
+        << std::numeric_limits<float>::epsilon() << std::endl;
       std::cout.precision(std::numeric_limits<float>::max_digits10);
 
       std::cout << "Lambert W (" << z << ", digits10<0>) = " << lambert_w0(z, policy<digits10<0> >()) << std::endl;
@@ -200,6 +201,11 @@ int main()
       Lambert W (1.00000000, digits10<9>) = 0.567143261
       Lambert W (1.00000000) = 0.567143261
 
+//] [/lambert_w_precision_output_1]
+
+//     z = 10.F needs Halley to get the last bit or two correct.
+//[lambert_w_precision_output_1a
+
       z = 10.F needs Halley to get the last bit or two correct.
       Lambert W (10.0000000, digits10<1>) = 1.35914087 << bisection.
       Lambert W (10.0000000, digits10<2>) = 1.35914087
@@ -211,7 +217,7 @@ int main()
       Lambert W (10.0000000, digits10<8>) = 1.74552810
       Lambert W (10.0000000, digits10<9>) = 1.74552810
       Lambert W (10.0000000)              = 1.74552810
-//] [/lambert_w_precision_output_1]
+//] [/lambert_w_precision_output_1a]
     */
     }
     { // similar example using float but specifying with digits2
@@ -261,8 +267,8 @@ int main()
         Lambert W (10.0000000, digits2<7>) = 1.35914087
         Lambert W (10.0000000, digits2<8>) = 1.35914087
         Lambert W (10.0000000, digits2<9>) = 1.35914087
-        Lambert W (10.0000000, digits2<10>) = 1.74414063 << Schroeder
-        Lambert W (10.0000000, digits2<11>) = 1.74552798
+        Lambert W (10.0000000, digits2<10>) = 1.74414063 << Bisection.
+        Lambert W (10.0000000, digits2<11>) = 1.74552798 << Schroeder.
         Lambert W (10.0000000, digits2<12>) = 1.74552798
         Lambert W (10.0000000, digits2<13>) = 1.74552798
         Lambert W (10.0000000, digits2<14>) = 1.74552798
@@ -273,7 +279,7 @@ int main()
         Lambert W (10.0000000, digits2<19>) = 1.74552798
         Lambert W (10.0000000, digits2<20>) = 1.74552798
         Lambert W (10.0000000, digits2<21>) = 1.74552798
-        Lambert W (10.0000000, digits2<22>) = 1.74552810 << Halley
+        Lambert W (10.0000000, digits2<22>) = 1.74552810 << Halley.
         Lambert W (10.0000000, digits2<23>) = 1.74552810
         Lambert W (10.0000000, digits2<24>) = 1.74552810
         Lambert W (10.0000000) = 1.74552810 << default policy precision.
