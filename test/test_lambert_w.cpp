@@ -143,7 +143,7 @@ void test_spots(RealType)
   int epsilons = 1;
   if (std::numeric_limits<RealType>::digits > 53)
   { // Multiprecision types.
-    epsilons *= 8;
+    epsilons *= 8; // (Perhaps needed because need slightly longer (55) reference values?).
   }
   RealType tolerance = boost::math::tools::epsilon<RealType>() * epsilons; // 2 eps as a fraction.
   std::cout << "Tolerance " << epsilons << " * epsilon == " << tolerance << std::endl;
@@ -153,7 +153,7 @@ void test_spots(RealType)
   std::cout.setf(std::ios_base::showpoint);  // show trailing significant zeros.
   std::cout << "-exp(-1) = " << -exp_minus_one<RealType>() << std::endl;
 
-  // Test at singularity.  Three tests because some failed previously - bug now gone?
+  // Test at singularity.  
   //RealType test_value = BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527);
   RealType singular_value = -exp_minus_one<RealType>();
   // -exp(-1) = -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527
@@ -182,6 +182,7 @@ void test_spots(RealType)
   // For example: N[lambert_w[1], 50] outputs:
   // 0.56714329040978387299996866221035554975381578718651
 
+  // At branch junction singularity.
   BOOST_CHECK_CLOSE_FRACTION(  // Check -exp(-1) ~= -0.367879450 == -1
     lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527)),
     BOOST_MATH_TEST_VALUE(RealType, -1.),
@@ -289,9 +290,9 @@ void test_spots(RealType)
     BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.34)),
       BOOST_MATH_TEST_VALUE(RealType, -1.4512014851325470735077533710339268100722032730024),
      10 * tolerance); // tolerance OK for quad
-    // 
+    //
 
-    // Decreasing z until near zero.
+    // Decreasing z until near zero (small z) .
     //N[productlog(-1, -0.3), 50] = -1.7813370234216276119741702815127452608215583564545
     BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.3)),
      BOOST_MATH_TEST_VALUE(RealType, -1.7813370234216276119741702815127452608215583564545),
@@ -369,7 +370,7 @@ void test_spots(RealType)
     // Just below z for F[64]
     BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 3.99045411719434e+29)),
      BOOST_MATH_TEST_VALUE(RealType, 63.999989810930513468726486827408823607175844852495), tolerance);
-    // Fails for quad_float -1.22277013397850595265 
+    // Fails for quad_float -1.22277013397850595265
     //                      -1.22277013397850595319
 
   // Just too big, so using log approx and Halley refinement.
@@ -382,9 +383,9 @@ void test_spots(RealType)
     BOOST_MATH_TEST_VALUE(RealType, 64.002342375637950350970694519073803643686041499677),
     0.00002);  // 0.00001 fails.
 
-  // Similar too near zero tests for W-1 branch 
+  // Similar too near zero tests for W-1 branch
   // lambert_wm1(-1.0264389699511283e-26) = -64.000000000000000
-  // Exactly z for W=-64 
+  // Exactly z for W=-64
   BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -1.026438969951128225904695701851094643838952857740385870e-26)),
     BOOST_MATH_TEST_VALUE(RealType, -64.000000000000000000000000000000000000),
    2 * tolerance);
@@ -423,7 +424,7 @@ void test_spots(RealType)
 
   BOOST_CHECK_THROW(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -1e30)), std::domain_error);
 
-  // Too negative 
+  // Too negative
   BOOST_CHECK_THROW(lambert_wm1(-0.5), std::domain_error);
 
   // This fails for fixed_point type used for other tests because out of range?

@@ -41,9 +41,9 @@ In the graphs below, the red line is the W0 branch, and the blue line the W-1 br
 
 [graph lambert_w_graph_big_w]
 
-There is a singularity where the branches meet at argument [^z = -1/e] and [^W = -1 = -0.367879].
+There is a singularity where the branches meet at argument [^z = -1/e] [cong] [^ -0.367879...] and [^W = -1].
 
-This implementation computes the two real branches W0 and W-1 (not complex)
+This implementation computes the two real (not complex) branches W0 and W-1
 with the functions `lambert_w0` and `lambert_wm2` from the first [^z] argument.
 
 The final __Policy argument is optional and can be used to control the behaviour of the function:
@@ -74,7 +74,7 @@ Some examples follow:
 
 [lambert_w_simple_examples_0]
 
-Other floating-point types can be used too, here float.
+Other floating-point types can be used too, here `float`.
 It is convenient to use function `show_value`
 to display all potentially significant decimal digits
 for the type.
@@ -82,7 +82,7 @@ for the type.
 [lambert_w_simple_examples_1]
 
 Example of an integer argument to lambert_w,
-showing that an integer is correctly promoted to a `double`.
+showing that an 'int' literal is correctly promoted to a `double`.
 
 [lambert_w_simple_examples_2]
 
@@ -91,20 +91,21 @@ Using multiprecision types to get much higher precision is painless.
 [lambert_w_simple_examples_3]
 
 [warning When using multiprecision, take great care not to
-construct or assign non-integers from `double` silently losing precision.]
+construct or assign non-integers from `double`, `float`... silently losing precision.]
 
-Using multiprecision types to get multiprecision precision wrong!
+Using multiprecision types to get multiprecision precision wrong is all too easy!
 
 [lambert_w_simple_examples_4]
-Note the spurious non-zero decimal digits appearing after digit 17 in the argument 0.9000000000000000...!
+
+[note See spurious non-zero decimal digits appearing after digit 17 in the argument 0.9000000000000000...!]
 
 See the correct result constructing from a decimal digit string "0.9":
 
 [lambert_w_simple_examples_4a]
 
-Note the expected zeros for all places up to 50, and the correct result!
+Note the expected zeros for all places up to 50 - and the correct result!
 
-(It is just as easy to compute much higher precisions,
+(It is just as easy to compute even higher precisions,
 at least to thousands of decimal digits, but not shown here for brevity.
 See [@../../example/lambert_w_simple_examples.cpp lambert_w_simple_examples.cpp]
 ).
@@ -122,7 +123,7 @@ and to control what action to take on errors:
 [lambert_w_simple_examples_error_message_1]
 
 Show error reporting if pass a value to `lambert_w0` that is out of range,
-and probably was meant to be passed to `lambert_m1` instead.
+and probably was meant to be passed to `lambert_wm1` instead.
 
 [lambert_w_simple_examples_out_of_range]
 
@@ -135,25 +136,26 @@ The full source of these examples is at [@../../example/lambert_w_simple_example
 A typical example of a practical application is estimating the current flow
 through a diode with series resistance from a paper by Banwell and Jayakumar.
 
-Having the Lambert_w function available makes it simple to reproduce the plot Fig 2 in their paper
-comparing estimates using with Lambert W function and some actual measurements.
+Having the Lambert W function available makes it simple to reproduce the plot
+in their paper (Fig 2) comparing estimates using with Lambert W function
+and some actual measurements.
 The colored curves show the effect of various series resistance on the current
 compared to an extrapolated line in grey with no internal (or external) resistance.
 
 Two formulae relating the diode current and effect of series resistance can be combined,
 but yield an otherwise intractable equation relating the current versus voltage
-with a varying series resistance, but was reformulated as a
+with a varying series resistance. This was reformulated as a
 generalized equation in terms of the Lambert W function:
 
 Banwell and Jakaumar equation 5
 
 [sixemspace][space] I(V) = [mu] V[sub T]/ R [sub S] [dot] W[sub 0](I[sub 0] R[sub S] / ([mu] V[sub T]))
 
-using these variables
+Using these variables
 
 [lambert_w_diode_graph_1]
 
-can be rendered in C++
+the formula can be rendered in C++
 
 [lambert_w_diode_graph_2]
 
@@ -178,7 +180,8 @@ The principal value of the Lambert W-function is implemented in the Wolfram Lang
 
 __WolframAlpha has provided some reference values for testing.
 
-For example, the output from [@https://www.wolframalpha.com/input/?i=productlog(1)] is 0.56714329040978387299996866221035554975381578718651...
+For example, the output from [@https://www.wolframalpha.com/input/?i=productlog(1)]
+is 0.56714329040978387299996866221035554975381578718651...
 
 Also the [@https://www.wolframalpha.com Wolfram language] command:  [^N\[ProductLog\[-1\], 50\]]
 
@@ -221,7 +224,7 @@ but may be slightly more intuitive than specifying precision in bits.
 To show the various stages the example below shows `float` evaluation of Lambert W at varying precisions
 specified using a policy with `digits10` increasing from 1 to 9.
 
-For float, this covers the full precision range as `max_digits10 = 9`.
+For `float`, this covers the full precision range as `max_digits10 = 9`:
 
 [lambert_w_precision_1]
 
@@ -230,7 +233,7 @@ The output for ['z = 1.F] is:
 [lambert_w_precision_output_1]
 
 showing no improvement from the Halley refinement, but for  ['z = 10.F]
-needs Halley refinement to get the last bit or two correct.
+we need a Halley refinement (or few) to get the last bit or two correct.
 
 [lambert_w_precision_output_1a]
 
@@ -307,7 +310,7 @@ and for `float`: lambert_wm1(-1.17549435e-38) = -91.8567734 [br]
 * `z < std::numeric_limits<T>::min()`, means that z is denormalized (if `std::numeric_limits<T>::has_denorm_min == true`),
 for example:
 
-  r = lambert_wm1(std::numeric_limits<double>::denorm_min());
+`r = lambert_wm1(std::numeric_limits<double>::denorm_min());`
 
 and will give a message like:
 
@@ -352,7 +355,7 @@ For speed, several implementations avoid evaluation of a test
 using the exponential function calculating that a single refinement step will suffice,
 but these rarely get to the best result possible.
 
-For the most precise results possible, for C++, close to the nearest representation for the type,
+For the most precise results possible, for C++, closest to the nearest representation for the type,
 it is usually necessary to use a higher precision type for intermediate computation,
 finally casting back to the smaller desired result type.
 This strategy is used by Maple and Wolfram, for example, using arbitrary precision arithmetic,
@@ -399,7 +402,8 @@ We also considered using __newton method.
 but concluded that since Newton/Raphson's method takes typically 6 iterations to converge within tolerance,
 whereas Halley usually takes only 1 to 3 iterations to achieve an result within 1 __ulp,
 so Newton/Raphson's method unlikely to be quicker
-than the additional cost of computating the 2nd derivative for Halley's method.
+than the additional cost of computating the 2nd derivative for Halley's method,
+in this case requiring an expensive exponential function evaluation on each step.
 
 [h4:faster_implementation Implementing Faster Algorithms]
 
@@ -424,7 +428,8 @@ with a known small error bound (several __ulp) over nearly all the range of ['z]
 However, though these give results within several __epsilon of the nearest representable result,
 they do not get as close as is very often possible with further refinement,
 usually to within one or two __epsilon.
-A mean difference was computed to express the typical error and is often about 0.5 epsilon.
+A mean difference was computed to express the typical error and is often about 0.5 epsilon,
+the theoretical minimum.
 
 For speed during the bisection, Fukushima produces lookup tables of powers of e and z for integral Lambert W.
 There are 64 elements in these tables. The FORTRAN version (and the C++ translation by Veberic)
@@ -450,7 +455,7 @@ This is to allow for future use at higher precision, up to platforms that use 12
 (hardware or software) for `long double`.
 
 The accuracy of the tables was confirmed using __WolframAlpha and agrees at the 37th decimal place,
-so ensuring that the value is read into even `long double` to the nearest representation.
+so ensuring that the value is read into even 128-bit `long double` to the nearest representation.
 
 [h5:higher_precision Higher precision]
 
@@ -487,7 +492,7 @@ This gives a useful precision, and this guess can be returned by setting the pre
   r = lambert_w0(z, policy<digits2<11> >());
   // lambert_wm1(3.9999999999999997e+29, policy<digits2<11> >() ) = 64.001325187470187
 
-Analogously, for Lambert W-1 branch, tiny values very near zero, W > 64 cannot be computed using the lookup table.
+Similarly, for Lambert W-1 branch, tiny values very near zero, W > 64 cannot be computed using the lookup table.
 For this region, an approximation followed by a few (usually 3) Halley refinements.
 See __lambert_w_wm1_near_zero.
 

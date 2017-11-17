@@ -210,13 +210,15 @@ int main()
         overflow_error<ignore_error>
       > throw_policy;
 
-      std::cout << "Lambert W (" << z << ") = " << lambert_w0(z) << std::endl; // 0.23675531078855930
-      std::cout << "\nLambert W (" << z << ", throw_policy()) = " << lambert_w0(z, throw_policy()) << std::endl;
+      std::cout << "Lambert W (" << z << ") = " << lambert_w0(z) 
+        << std::endl; // 0.23675531078855930
+      std::cout << "\nLambert W (" << z << ", throw_policy()) = " 
+        << lambert_w0(z, throw_policy()) << std::endl;
     //] //[/lambert_w_simple_example_error_policies]
     }
     {
-      // Show error reporting if pass a value to lambert_w0 that is out of range,
-      // and probably was meant to be passed to lambert_m1 instead.
+      // Show error reporting from passing a value to lambert_w0 that is out of range,
+      // and probably was meant to be passed to lambert_wm1 instead.
 //[lambert_w_simple_examples_out_of_range
       double z = -1.;
       double r = lambert_w0(z);
