@@ -67,7 +67,7 @@
       an = detail::hypergeometric_13_3_7_coefficient_next(anm3, anm2, a, b, 3u);
 
       jvm1 = boost::math::cyl_bessel_j(v_current, sqrt_2zb_minus_4za);
-      v_current++;
+      ++v_current;
       jv = detail::hypergeometric_bessel_j_recurrence_next(jvm1, v_current, sqrt_2zb_minus_4za);
 
       term = jvm1;

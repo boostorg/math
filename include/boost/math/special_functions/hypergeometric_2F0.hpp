@@ -8,15 +8,14 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _BOOST_HYPERGEOMETRIC_1F0_HPP_
-  #define _BOOST_HYPERGEOMETRIC_1F0_HPP_
+#ifndef _BOOST_HYPERGEOMETRIC_2F0_HPP_
+  #define _BOOST_HYPERGEOMETRIC_2F0_HPP_
 
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/special_functions/hermite.hpp>
-
 
 namespace boost { namespace math { namespace detail {
 

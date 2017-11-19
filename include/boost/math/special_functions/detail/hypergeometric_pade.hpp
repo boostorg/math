@@ -16,7 +16,7 @@
   // Luke: C ---------- SUBROUTINE R1F1P(CP, Z, A, B, N) ----------
   // Luke: C ----- PADE APPROXIMATION OF 1F1( 1 ; CP ; -Z ) -------
   template <class T, class Policy>
-  inline T hypergeometric_1f1_pade(const T& cp, const T& zp, const Policy& pol)
+  inline T hypergeometric_1f1_pade(const T& cp, const T& zp, const Policy& )
   {
     BOOST_MATH_STD_USING
 

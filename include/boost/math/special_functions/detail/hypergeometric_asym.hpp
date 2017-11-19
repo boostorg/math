@@ -11,13 +11,10 @@
 #ifndef BOOST_MATH_HYPERGEOMETRIC_ASYM_HPP
   #define BOOST_MATH_HYPERGEOMETRIC_ASYM_HPP
 
-  #include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/special_functions/hypergeometric_2f0.hpp>
 
   namespace boost { namespace math {
-
-  // forward declaration of used function 2f0
-  template <class T1, class T2, class T3, class Policy>
-  inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_2f0(T1 a1, T2 a2, T3 z, const Policy& /* pol */);
 
   namespace detail {
 
@@ -38,7 +35,7 @@
       T(boost::math::tgamma(b, pol) / boost::math::tgamma(a, pol));
     const T prefix_a = (exp(z) * gamma_ratio) * pow(z, (a - b));
 
-    return prefix_a * boost::math::hypergeometric_2f0(b - a, 1 - a, 1 / z, pol);
+    return prefix_a * boost::math::hypergeometric_2F0(b - a, 1 - a, 1 / z, pol);
   }
 
   // assumes b and (b - a) are not non-positive integers
@@ -60,7 +57,7 @@
       boost::math::tgamma(b) / boost::math::tgamma((b_minus_a), pol);
     const T prefix_b = gamma_ratio / pow(-z, a);
 
-    return prefix_b * boost::math::hypergeometric_2f0(a, 1 - b_minus_a, -1 / z, pol);
+    return prefix_b * boost::math::hypergeometric_2F0(a, 1 - b_minus_a, -1 / z, pol);
   }
 
   // experimental range
@@ -69,8 +66,8 @@
   {
     BOOST_MATH_STD_USING
 
-    const T the_max_of_one_and_b_minus_a  ((std::max)(T(1), fabs(b - a)));
-    const T the_max_of_one_and_one_minus_a((std::max)(T(1), fabs(1 - a)));
+    const T the_max_of_one_and_b_minus_a  ((std::max)(T(1), T(fabs(b - a))));
+    const T the_max_of_one_and_one_minus_a((std::max)(T(1), T(fabs(1 - a))));
 
     const T the_product_of_these_maxima(the_max_of_one_and_b_minus_a * the_max_of_one_and_one_minus_a);
 

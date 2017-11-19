@@ -22,7 +22,7 @@
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
-#include <boost/math/special_functions/hypergeometric_2f0.hpp>
+#include <boost/math/special_functions/hypergeometric_1f1.hpp>
 
 template <class Real, class T>
 void do_test_2F0(const T& data, const char* type_name, const char* test_name)
@@ -33,7 +33,7 @@ void do_test_2F0(const T& data, const char* type_name, const char* test_name)
 #if defined(BOOST_MATH_NO_DEDUCED_FUNCTION_POINTERS)
    pg funcp = boost::math::hypergeometric_0F1<value_type, value_type>;
 #else
-   pg funcp = boost::math::hypergeometric_2F0;
+   pg funcp = boost::math::hypergeometric_1F1;
 #endif
 
    boost::math::tools::test_result<value_type> result;
@@ -48,7 +48,7 @@ void do_test_2F0(const T& data, const char* type_name, const char* test_name)
       data,
       bind_func<Real>(funcp, 0, 1, 2),
       extract_result<Real>(3));
-   handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric_0F1", test_name);
+   handle_test_result(result, data[result.worst()], result.worst(), type_name, "hypergeometric_1F1", test_name);
    std::cout << std::endl;
 }
 
@@ -59,45 +59,15 @@ void do_test_2F0(const T& data, const char* type_name, const char* test_name)
 template <class T>
 void test_spots1(T, const char* type_name)
 {
-#include "hypergeometric_2f0.ipp"
+#include "hypergeometric_1f1.ipp"
 
-   do_test_2F0<T>(hypergeometric_2f0, type_name, "Random non-integer a2, |z| < 1");
+   do_test_2F0<T>(hypergeometric_1f1, type_name, "Integer a values");
 
-#include "hypergeometric_2f0_large_z.ipp"
-
-   do_test_2F0<T>(hypergeometric_2f0_large_z, type_name, "Random non-integer a2, |z| > 1");
-}
-
-template <class T>
-void test_spots2(T, const char* type_name)
-{
-#include "hypergeometric_2f0_integer_a2.ipp"
-
-   do_test_2F0<T>(hypergeometric_2f0_integer_a2, type_name, "Integer a2, |z| > 1");
-
-#include "hypergeometric_2f0_half.ipp"
-
-   do_test_2F0<T>(hypergeometric_2f0_half, type_name, "a1 = a2 + 0.5");
 }
 
 template <class T>
 void test_spots(T z, const char* type_name)
 {
    test_spots1(z, type_name);
-   test_spots2(z, type_name);
-
-   T a1 = 1;
-   T a2 = 0.1f;
-   z = -1;
-   if (std::numeric_limits<T>::has_infinity)
-   {
-      BOOST_CHECK((boost::math::isinf)(boost::math::hypergeometric_2F0(a1, a2, z)));
-      z = 1;
-      BOOST_CHECK((boost::math::isinf)(boost::math::hypergeometric_2F0(a1, a2, z)));
-      a2 = -2.4f;
-      BOOST_CHECK((boost::math::isinf)(boost::math::hypergeometric_2F0(a1, a2, z)));
-      a1 = -0.5f;
-      BOOST_CHECK((boost::math::isinf)(boost::math::hypergeometric_2F0(a1, a2, z)));
-   }
 }
 
