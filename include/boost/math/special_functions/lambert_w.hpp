@@ -1272,6 +1272,22 @@ namespace math
 
     const char* function = "boost::math::lambert_wm1<RealType>(<RealType>)"; // Used for error messages.
 
+    // Check for edge and corner cases first:
+
+    if (boost::math::isnan(z))
+    {
+      return policies::raise_domain_error(function,
+        "Argument z is NaN!",
+        z, pol);
+    } // isnan
+
+    if (boost::math::isinf(z))
+    {
+      return policies::raise_domain_error(function,
+        "Argument z is infinite!",
+        z, pol);
+    } // isinf
+
     if (z == static_cast<T>(0))
     { // z is exactly zero so return -std::numeric_limits<T>::infinity();
       if (std::numeric_limits<T>::has_infinity)
@@ -1287,11 +1303,12 @@ namespace math
     { // All real types except arbitrary precision.
       if (!boost::math::isnormal(z))
       { // Almost zero - might also just return infinity like z == 0 or max_value?
-        return policies::raise_domain_error(function,
+        return policies::raise_overflow_error(function,
           "Argument z =  %1% is denormalized! (must be z > (std::numeric_limits<RealType>::min)() or z == 0)",
           z, pol);
       }
     }
+
     if (z > static_cast<T>(0))
     { //
       return policies::raise_domain_error(function,
@@ -1302,7 +1319,7 @@ namespace math
     { // z is denormalized, so cannot be computed.
       // -std::numeric_limits<T>::min() is smallest for type T,
       // for example, for double: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634
-      return policies::raise_domain_error(function,
+      return policies::raise_overflow_error(function,
         "Argument z = %1% is too small (z < -std::numeric_limits<T>::min so denormalized) for Lambert W-1 branch!",
         z, pol);
     }

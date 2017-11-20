@@ -254,7 +254,7 @@ void test_spots(RealType)
   // denorm - but might be == min or zero?
   if (std::numeric_limits<RealType>::has_denorm == true)
   { // Might also return infinity like z == 0?
-    BOOST_CHECK_THROW(lambert_wm1(std::numeric_limits<RealType>::denorm_min()), std::domain_error);
+    BOOST_CHECK_THROW(lambert_wm1(std::numeric_limits<RealType>::denorm_min()), std::overflow_error);
   }
 
     // Tests of Lambert W-1 branch.
@@ -694,8 +694,6 @@ BOOST_AUTO_TEST_CASE(test_range_of_double_values)
       BOOST_MATH_TEST_VALUE(RealType, -714.96865723796647086868547560654825435542227693935),
     // N[productlog[-1, -2.2250738585072014e-308],50] =  -714.96865723796647086868547560654825435542227693935
       tolerance);
-
-
 
     // For z = 0, W = -infinity
     if (std::numeric_limits<RealType>::has_infinity)

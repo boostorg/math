@@ -240,7 +240,8 @@ int main()
       //.background_border_color(black);
       ;
 
-    data_plot.plot(zero_data, "I0(V)").fill_color(lightgray).shape(none).size(3).line_on(true).line_width(0.5);
+    // &#x2080; = subscript zero.
+    data_plot.plot(zero_data, "I&#x2080;(V)").fill_color(lightgray).shape(none).size(3).line_on(true).line_width(0.5);
     data_plot.plot(measured_zero_data, "Rs=0 &#x3A9;").fill_color(lightgray).shape(square).size(3).line_on(true).line_width(0.5);
     data_plot.plot(data_2, "Rs=2 &#x3A9;").line_color(blue).shape(none).line_on(true).bezier_on(false).line_width(1);
     data_plot.plot(data_10, "Rs=10 &#x3A9;").line_color(purple).shape(none).line_on(true).bezier_on(false).line_width(1);
