@@ -1,0 +1,144 @@
+[/
+Copyright (c) 2017 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+
+[section:naive_monte_carlo Naive Monte Carlo Integration]
+
+[heading Synopsis]
+
+    #include <boost/math/quadrature/naive_monte_carlo.hpp>
+    namespace boost{ namespace math{ namespace quadrature {
+
+    template<class Real, class F>
+    class naive_monte_carlo
+    {
+    public:
+        naive_monte_carlo(const F& f,
+                          std::vector<std::pair<Real, Real>> const & bounds,
+                          Real error_goal,
+                          size_t threads = std::thread::hardware_concurrency());
+
+        std::future<Real> integrate();
+
+        void cancel();
+
+        Real current_error_estimate() const;
+
+        std::chrono::duration<Real> estimated_time_to_completion() const;
+
+        void update_target_error(Real new_target_error);
+
+        Real progress() const;
+
+        Real current_estimate() const;
+
+        size_t calls() const;
+    }}} // namespaces
+
+[heading Description]
+
+The class `naive_monte_carlo` performs Monte-Carlo integration on a function /f/ on a domain [Omega].
+The theoretical background of Monte-Carlo integration is nicely discussed in [@https://en.wikipedia.org/??????? Wikipedia],
+and as such will not be discussed here.
+However, despite being "naive", it is a mistake to assume that naive Monte-Carlo integration is not powerful.
+The simplicity of the method affords a robustness not easily provided by more sophisticated tools.
+The multithreaded nature of the routine allows us to compute a large number of sample points with great speed,
+and hence the slow convergence is mitigated by exploiting the full power of modern hardware.
+
+The naive Monte-Carlo integration provided by Boost exemplifies the programming techniques needed to cope with high-performance computing.
+For instance, since the convergence is only 1/sqrt(N),
+the compute time is very sensitive to the error goal.
+Users can easily specify an error goal which causes computation to last months-or just a few seconds.
+Without progress reporting, this situation is disorienting and causes the users to behave in a paranoid manner.
+Even with progress reporting, a user might need to cancel a job due to shifting priorities of the employing institution,
+and as such cancellation must be supported.
+A cancelled job which returns no results is wasted, so the cancellation must be graceful,
+returning the best estimate of the result thus far.
+In addition, a task might finish, and the user may well decide to try for a lower error bound.
+Hence restarting without loss of the preceding computation is must be supported.
+Finally, on an HPC system, we generally wish to use all available threads.
+But if the computation is performed on a users workstation,
+then employing every thread will cause the users browser, email, or music apps to become unresponsive,
+so leaving a single thread available for other apps is appreciated.
+
+All these use cases are supported, so let's get to the code:
+
+    // Define a function to integration:
+    auto g = [&](std::vector<double> const & x)
+    {
+      double A = 1.0 / (M_PI * M_PI * M_PI);
+      return A / (1.0 - cos(x[0])*cos(x[1])*cos(x[2]));
+    };
+    vector<pair<double, double>> bounds{{0, M_PI}, {0, M_PI}, {0, M_PI}};
+    double error_goal = 0.001
+    naive_monte_carlo<double, decltype(g)> mc(g, bounds, error_goal);
+
+    std::future<double> task = mc.integrate();
+    while (task.wait_for(std::chrono::seconds(1)) != std::future_status::ready)
+    {
+        // The user must decide on a reasonable way to display the progress
+        display_progress(mc.progress(),
+                         mc.current_error_estimate(),
+                         mc.current_estimate(),
+                         mc.estimated_time_to_completion());
+        if (some_signal_heard())
+        {
+            mc.cancel();
+            std::cout << "\nCancelling because this is too slow!\n";
+        }
+    }
+    display_progress(mc.progress(),
+                     mc.current_error_estimate(),
+                     mc.current_estimate(),
+                     mc.estimated_time_to_completion());
+    double y = task.get();
+
+First off, we define the function we wish to integrate.
+This function must accept a `std::vector<Real> const &`, and return a `Real`.
+Next, we define the domain of integration.
+Currently, only finite integration bounds are supported,
+so if the user wishes to integrate a function over an infinite domain,
+a variable transformation must be performed.
+The call
+
+    naive_monte_carlo<double, decltype(g)> mc(g, bounds, error_goal);
+
+creates an instance of the monte carlo integrator.
+This is also where the number of threads can be set, for instance
+
+    naive_monte_carlo<double, decltype(g)> mc(g, bounds, error_goal, std::thread::hardware_concurrency() - 1);
+
+might be more appropriate for running on a user's hardware (the default taking all the threads).
+The call to `integrate()` does not return the value of the integral, but rather a `std::future<Real>`.
+This allows us to do progress reporting from the master thread via
+
+    while (task.wait_for(std::chrono::seconds(1)) != std::future_status::ready)
+    {
+        // some reasonable method of displaying progress, based on the requirements of your app.
+        display_progress(mc.progress(),
+                         mc.current_error_estimate(),
+                         mc.current_estimate(),
+                         mc.estimated_time_to_completion());
+    }
+
+The file `example/naive_monte_carlo_example.cpp` has an implementation of `display_progress` which is reasonable for command line apps.
+In addition, we can call `mc.cancel()` in this loop to stop the integration.
+Calling `task.get()` returns the current estimate.
+Once the future is ready, we can get the value of the integral via
+
+    double result = task.get();
+
+At this point, the user may wish to reduce the error goal.
+This is achieved by
+
+    double new_target_error = 0.0005;
+    mc.update_target_error(new_target_error);
+    task = mc.integrate();
+    // display progress, if you wish:
+    y = task.get();
+
+[endsect]
