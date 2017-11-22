@@ -135,10 +135,10 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
     test_nan<float>();
     test_pi<float>();
     test_pi<double>();
-    test_pi<long double>();
+    //test_pi<long double>();
     test_constant<float>();
     test_constant<double>();
-    test_constant<long double>();
+    //test_constant<long double>();
     test_cancel_and_restart<float>();
     test_exception_from_integrand<float>();
 }
