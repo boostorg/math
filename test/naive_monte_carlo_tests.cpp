@@ -97,11 +97,16 @@ void test_exception_from_integrand()
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0001);
 
     auto task = mc.integrate();
-    try {
+    bool caught_exception = false;
+    try
+    {
       Real result = task.get();
-    } catch(std::exception const & e) {
-      std::cout << e.what() << std::endl;
     }
+    catch(std::exception const & e)
+    {
+        caught_exception = true;
+    }
+    BOOST_CHECK(caught_exception);
 }
 
 
