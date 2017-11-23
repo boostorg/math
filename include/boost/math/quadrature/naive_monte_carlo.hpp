@@ -95,6 +95,11 @@ public:
         m_done = true;
     }
 
+    Real variance() const
+    {
+        return m_variance.load();
+    }
+
     Real current_error_estimate() const
     {
         return m_volume*sqrt(m_variance.load()/m_total_calls.load());
@@ -148,18 +153,22 @@ private:
         }
         do {
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
-            Real variance = 0;
             size_t total_calls = 0;
+            for (size_t i = 0; i < m_num_threads; ++i)
+            {
+                total_calls += m_thread_calls[i];
+            }
+            Real variance = 0;
             Real avg = 0;
             for (size_t i = 0; i < m_num_threads; ++i)
             {
-                avg += (m_thread_averages[i] - avg)/(i+1);
                 size_t t_calls = m_thread_calls[i];
-                total_calls += t_calls;
-                variance += m_thread_Ss[i]/(t_calls-1);
+                // Will this overflow? Not hard to remove . . .
+                avg += m_thread_averages[i]*( (Real) t_calls/ (Real) total_calls);
+                variance += m_thread_Ss[i];
             }
             m_avg = avg;
-            m_variance = variance;
+            m_variance = variance/(total_calls - 1);
             m_total_calls = total_calls;
             // Allow cancellation:
             if (m_done)
@@ -177,18 +186,22 @@ private:
             std::rethrow_exception(m_exception);
         }
         // Incorporate their work into the final estimate:
-        Real variance = 0;
         size_t total_calls = 0;
+        for (size_t i = 0; i < m_num_threads; ++i)
+        {
+            total_calls += m_thread_calls[i];
+        }
+        Real variance = 0;
         Real avg = 0;
         for (size_t i = 0; i < m_num_threads; ++i)
         {
-            avg += (m_thread_averages[i] - avg)/(i+1);
             size_t t_calls = m_thread_calls[i];
-            total_calls += t_calls;
-            variance += m_thread_Ss[i]/(t_calls-1);
+            // Will this overflow? Not hard to remove . . .
+            avg += m_thread_averages[i]*( (Real) t_calls/ (Real) total_calls);
+            variance += m_thread_Ss[i];
         }
         m_avg = avg;
-        m_variance = variance;
+        m_variance = variance/(total_calls - 1);
         m_total_calls = total_calls;
 
         return m_avg.load()*m_volume;

@@ -135,6 +135,26 @@ void test_cancel_and_restart()
     BOOST_CHECK_CLOSE_FRACTION(y, exact, 0.1);
 }
 
+template<class Real>
+void test_variance()
+{
+    std::cout << "Testing that variance computed by naive Monte-Carlo integration converges to integral formula on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    Real exact_variance = (Real) 1/(Real) 12;
+    auto g = [&](std::vector<Real> const & x)
+    {
+        return x[0];
+    };
+    vector<pair<Real, Real>> bounds{{0, 1}};
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
+
+    auto task = mc.integrate();
+    double y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 0.5, 0.01);
+    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.01);
+}
+
+
+
 BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 {
     test_nan<float>();
@@ -146,4 +166,6 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
     //test_constant<long double>();
     test_cancel_and_restart<float>();
     test_exception_from_integrand<float>();
+    test_variance<float>();
+    test_variance<double>();
 }
