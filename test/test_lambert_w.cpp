@@ -10,12 +10,16 @@
 //! \brief Basic sanity tests for Lambert W function plog productlog
 //! or lambert_w using algorithm informed by Thomas Luu, Veberic and Tosio Fukushima.
 
+#include <boost/config.hpp>   // for BOOST_MSVC definition.
+#include <boost/version.hpp>   // for BOOST_MSVC versions.
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
+
+// Boost macros
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
-
 #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
+
 #include <boost/array.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/type_traits/is_constructible.hpp>
@@ -96,7 +100,7 @@ std::cout << "MINGW64 " << __MINGW32_MAJOR_VERSION << __MINGW32_MINOR_VERSION <<
   message << "\n  STL " << BOOST_STDLIB;
   message << "\n  Boost version " << BOOST_VERSION / 100000 << "." << BOOST_VERSION / 100 % 1000 << "." << BOOST_VERSION % 100;
 
-#ifdef BOOST_HAS_FLOAT128
+#ifdef BOOST_HAS_FLOAT
   message << ",  BOOST_HAS_FLOAT128" << std::endl;
 #endif
   message << std::endl;
@@ -153,7 +157,7 @@ void test_spots(RealType)
   std::cout.setf(std::ios_base::showpoint);  // show trailing significant zeros.
   std::cout << "-exp(-1) = " << -exp_minus_one<RealType>() << std::endl;
 
-  // Test at singularity.  
+  // Test at singularity.
   //RealType test_value = BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527);
   RealType singular_value = -exp_minus_one<RealType>();
   // -exp(-1) = -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527

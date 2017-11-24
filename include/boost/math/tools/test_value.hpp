@@ -31,6 +31,13 @@
 #include <boost/type_traits/is_constructible.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
+// Built-in/fundamental GCC float128 or Intel Quad 128-bit type, if available.
+#ifdef __GNUC__
+#include <boost/multiprecision/float128.hpp> // Not available for MSVC.
+// sets BOOST_MP_USE_FLOAT128 for GCC
+using boost::multiprecision::float128;
+#endif //# __GNUC__ and NOT _MSC_VER
+
 #ifdef BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE
 // global int create_type(0); must be defined before including this file.
 #endif
