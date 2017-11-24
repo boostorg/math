@@ -51,7 +51,7 @@
 <p>
         We'll come back to what can go inside the implementation later, but first
         lets look at the user layer. This consists of two overloads of the function,
-        with and without a <a class="link" href="../../policy.html" title="Chapter&#160;15.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument:
+        with and without a <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument:
       </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span><span class="special">{</span>
 
@@ -184,7 +184,7 @@
             or root finding should use one of the <a class="link" href="../internals_overview.html" title="Overview">boiler-plate
             functions</a>. In any case, after any iterative method, you should
             verify that the number of iterations did not exceed the maximum specified
-            in the <a class="link" href="../../policy.html" title="Chapter&#160;15.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> type, and if it did terminate
+            in the <a class="link" href="../../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> type, and if it did terminate
             as a result of exceeding the maximum, then the appropriate error handler
             should be called (see existing code for examples).
           </li>

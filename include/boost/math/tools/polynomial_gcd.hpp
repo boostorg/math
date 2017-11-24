@@ -44,7 +44,7 @@ namespace math{ namespace tools{
 * 
 * We may write any nonzero polynomial u(x) from R[x] where R is a UFD as
 *
-*      u(x) = cont(u) · pp(u(x))
+*      u(x) = cont(u) . pp(u(x))
 *
 * where cont(u), the content of u, is an element of S, and pp(u(x)), the primitive
 * part of u(x), is a primitive polynomial over S. 
