@@ -278,6 +278,13 @@ public:
        normalize();
    }
 
+   
+   explicit polynomial(std::vector<T> const &data)
+   : m_data(data)
+   {
+       normalize();
+   }
+   
    template <class I>
    polynomial(I first, I last)
    : m_data(first, last)
