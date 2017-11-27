@@ -1085,8 +1085,8 @@ test-suite misc :
      [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] : adaptive_gauss_quadrature_test_3 ]
 
    [ run naive_monte_carlo_tests.cpp ]
-   [ compile compile_test/naive_monte_carlo_incl_test.cpp ]
-   [ compile compile_test/naive_monte_carlo_concept_test.cpp ]
+   [ compile compile_test/naive_monte_carlo_incl_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread ] ]
+   [ compile compile_test/naive_monte_carlo_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread ] ]
 
    [ compile compile_test/gauss_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ compile compile_test/gauss_kronrod_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
