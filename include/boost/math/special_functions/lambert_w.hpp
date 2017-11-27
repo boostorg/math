@@ -854,7 +854,7 @@ namespace math
     }
     while (
       (iterations < min_iterations) || // do minimum iterations.
-      (iterations >= max_iterations) // Absolute max limit during testing
+      (iterations <= max_iterations) // Absolute max limit during testing
            // (unexpected looping if need this).
     );
     return w1; //
