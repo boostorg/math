@@ -11,6 +11,7 @@
 #include <boost/math/special_functions.hpp>
 #include <boost/math/special_functions/zeta.hpp>
 #include <boost/math/special_functions/expint.hpp>
+#include <boost/math/special_functions/lambert_w.hpp>
 
 #include <cmath>
 
@@ -357,6 +358,29 @@ mp_type f(const mp_type& x, int variant)
       // K1 over [1, INF]
       mp_type xx = 1 / x;
       return boost::math::cyl_bessel_k(1, xx) * sqrt(xx) * exp(xx);
+   }
+   case 40:
+      return boost::math::lambert_w0(x);
+   case 41:
+   {
+      if (x == 0)
+         return 1;
+      return boost::math::lambert_w0(x) / x;
+   }
+   case 42:
+   {
+      static const mp_type e1 = exp(mp_type(-1));
+      return x / -boost::math::lambert_w0(-e1 + x);
+   }
+   case 43:
+   {
+      mp_type xx = 1 / x;
+      return 1 / boost::math::lambert_w0(xx);
+   }
+   case 44:
+   {
+      // OK for -0.28 < w < 0.05 only:
+      return -1 / boost::math::lambert_wm1(-x);
    }
    }
    return 0;
