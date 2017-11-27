@@ -13,12 +13,14 @@
 
    template <class T, class ``__Policy``>
    ``__sf_result`` lambert_w0(T z, const ``__Policy``&); // W0 with policy controlled precision.
+   // Use `lambert_w0(z, policy<digits2<50> >())` // If speed is more important than the last-digit precision.
 
     template <class T>
    ``__sf_result`` lambert_wm1(T z); // W-1 branch.
 
    template <class T, class ``__Policy``>
    ``__sf_result`` lambert_wm1(T z, const ``__Policy``&); // W-1 with policy controlled precision.
+   // Use `lambert_wm1(z, policy<digits2<50> >())` // If speed is more important than the last-digit precision.
 
   } // namespace boost
   } // namespace math
@@ -97,20 +99,26 @@ Using multiprecision types to get multiprecision precision wrong is all too easy
 
 [lambert_w_simple_examples_4]
 
-[note See spurious non-zero decimal digits appearing after digit 17 in the argument 0.9000000000000000...!]
+[note See spurious non-seven decimal digits appearing after digit #17 in the argument 0.7777777777777777...!]
 
-See the correct result constructing from a decimal digit string "0.9":
+And similarly constructing from a literal `double 0.9`, with more random digits after digit number 17.
 
 [lambert_w_simple_examples_4a]
 
-Note the expected zeros for all places up to 50 - and the correct result!
+Note how the `cpp_float_dec_50` result is only as correct as from a `double = 0.9`.
+
+Now see the correct result for all 50 decimal digits constructing from a decimal digit string "0.9":
+
+[lambert_w_simple_examples_4b]
+
+Note the expected zeros for all places up to 50 - and the correct Lambert W result!
 
 (It is just as easy to compute even higher precisions,
 at least to thousands of decimal digits, but not shown here for brevity.
 See [@../../example/lambert_w_simple_examples.cpp lambert_w_simple_examples.cpp]
 ).
 
-Policies can be used to control precision (a little less precision gives a significant speedup):
+Policies can be used to control precision (a tiny less precision gives a significant speedup):
 
 [lambert_w_simple_examples_precision_policies]
 
@@ -122,7 +130,7 @@ and to control what action to take on errors:
 
 [lambert_w_simple_examples_error_message_1]
 
-Show error reporting if pass a value to `lambert_w0` that is out of range,
+Show error reporting if passing a value to `lambert_w0` that is out of range,
 and probably was meant to be passed to `lambert_wm1` instead.
 
 [lambert_w_simple_examples_out_of_range]
@@ -289,29 +297,26 @@ The implementation details of algorithm switch points are in
 
 [h5:w0_edges w0 Branch]
 
-The range mathematically is -exp(-1) <= z <= 0, but numerically,
+The range mathematically is -1/e <= z <= +[infin], but numerically, (for the type T)
 
-* `z == -exp<T>(-1)` (for the type T) returns exactly -1.
-* `z < -exp<T>(-1)` throws a `domain_error`, and/or return `NaN` according to the policy.
-Provides that there is a `catch` clause, an error message (similar to that below) will report.
+* `z == -1/e` returns exactly -1.
+* `z < -1/e` throws a `domain_error`, and/or returns `NaN` according to the policy.
+Provided that there is a `catch` clause, an error message (similar to that below) will be reported.
 * `z == (std::numeric_limits<T>::max)()` returns W for the floating_point type T, (for example, for `double`, 703.22703310477018L)
-* `z == std::numeric_limits<T>::infinity()`  returns infinity (if available).
+* `z == std::numeric_limits<T>::infinity()`  returns +[infin] (if available).
 
 [h5:wm1_edges w-1 Branch]
 
-The range mathematically is -exp(-1) <= z <= 0, but numerically,
+The range mathematically is -1/e <= z <= 0, but numerically,
 
-* `z == -exp<T>(-1)` (for the type T) returns exactly -1.
-* `z == 0` returns infinity (or the nearest equivalent if `std::has_infinity == false`).
-* `z == std::numeric_limits<T>::min()` returns the maximum possible value of Lambert W for the type T. [br]
+* `z == -1/e` (for the type T) returns exactly -1.
+* `z == 0` returns -[infin] (or the nearest equivalent if `std::has_infinity == false`).
+* `z == std::numeric_limits<T>::min()` returns the maximum (most negative) possible value of Lambert W for the type T. [br]
 For example, for `double`: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634 [br]
 and for `float`: lambert_wm1(-1.17549435e-38) = -91.8567734 [br]
 
-* `z < std::numeric_limits<T>::min()`, means that z is denormalized (if `std::numeric_limits<T>::has_denorm_min == true`),
-for example:
-
-`r = lambert_wm1(std::numeric_limits<double>::denorm_min());`
-
+* `z < std::numeric_limits<T>::min()`, means that z is zero or denormalized (if `std::numeric_limits<T>::has_denorm_min == true`),
+for example: `r = lambert_wm1(std::numeric_limits<double>::denorm_min());` and an overflow_error exception is thrown.
 and will give a message like:
 
   Error in function boost::math::lambert_wm1<RealType>(<RealType>):
@@ -320,7 +325,10 @@ and will give a message like:
 
 Denormalized values of z are not supported for Lambert  W-1 (because not all floating-point types denormalize),
 and anyway it only covers a tiny fraction of the range of possible z arguments values.
-A domain_error exception is thrown.  (This behaviour might be changed to return infinity, as for z == 0).
+
+[h4:compilers Compilers]
+
+The code has been tested on VS 15.4.4 and GCC 7.1.0 but it is expected to work on all C++ compilers.
 
 [h5:diagnostics Diagnostics Macros]
 

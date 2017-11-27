@@ -97,25 +97,26 @@ int main()
     using boost::math::policies::ignore_error;
     using boost::math::policies::throw_on_error;
 
-    //[lambert_w_simple_examples_0
+  { 
+//[lambert_w_simple_examples_0
     std::cout.precision(std::numeric_limits<double>::max_digits10);
-      // Show all potentially significant decimal digits.
-    std::cout << std::showpoint << std::endl; // Show trailing zeros too.
-    {
-      double z = 10.;
-      double r;
-      r = lambert_w0(z); // Default policy for double: digits10 = 17, digits2 = 53
-      std::cout << "lambert_w0(z) = " << r << std::endl;
-        // lambert_w0(z) = 1.7455280027406992
-    //] [/lambert_w_simple_examples_0]
-    }
-   {
+    // Show all potentially significant decimal digits,
+    std::cout << std::showpoint << std::endl; 
+    // and show trailing zeros too.
+ 
+    double z = 10.;
+    double r;
+    r = lambert_w0(z); // Default policy for double: digits10 = 17, digits2 = 53
+    std::cout << "lambert_w0(z) = " << r << std::endl;
+    // lambert_w0(z) = 1.7455280027406992
+//] [/lambert_w_simple_examples_0]
+  }
+  {
     // Other floating-point types can be used too, here float.
     // It is convenient to use function `show_value`
     // to display all potentially significant decimal digits
     // for the type.  
     //[lambert_w_simple_examples_1
-
     float z = 10.F;
     float r;
     r = lambert_w0(z); // Default policy digits10 = 7, digits2 = 24
@@ -124,7 +125,7 @@ int main()
     std::cout << ") = "; show_value(r);
     std::cout << std::endl; // lambert_w0(10.0000000) = 1.74552810
    //] //[/lambert_w_simple_examples_1]
-    }
+  }
    { 
      // Example of an integer argument to lambert_w,
      // showing that an integer is correctly promoted to a double.
@@ -133,16 +134,20 @@ int main()
      double r = lambert_w0(10); // int argument "10" that should be promoted to double argument.
      std::cout << "lambert_w0(10) = " << r << std::endl; // lambert_w0(10) = 1.7455280027406992
      double rp = lambert_w0(10, policy<>()); // int argument "10" that should be promoted to double argument,
-     // for simplicity using (default policy.
+     // for simplicity using default policy.
      std::cout << "lambert_w0(10, policy<>()) = " << rp << std::endl;
-     // lambert_w0(10) = 1.7455280027406992
+     // lambert_w0(10, policy<>()) = 1.7455280027406992
+     auto rr = lambert_w0(10); // C++11 needed.
+     std::cout << "lambert_w0(10) = " << rp << std::endl;
+     // lambert_w0(10) = 1.7455280027406992 too, showing that rr has been promoted to double.
 //] //[/lambert_w_simple_examples_2]
-    }
+   }
    {
      // Using multiprecision types to get much higher precision is painless.
      //[lambert_w_simple_examples_3
      cpp_dec_float_50 z("10"); 
-     // Note construction using a decimal digit string "10", not a double literal 10.
+     // Note construction using a decimal digit string "10", 
+     // not a floating-point double literal 10.
      cpp_dec_float_50 r;
      r = lambert_w0(z); 
      std::cout << "lambert_w0("; show_value(z);
@@ -155,22 +160,42 @@ int main()
    // Using multiprecision types to get multiprecision precision wrong!
    {
      //[lambert_w_simple_examples_4
-     cpp_dec_float_50 z(0.9); // Will convert to double, losing precision beyond decimal place 17!
+     cpp_dec_float_50 z(0.7777777777777777777777777777777777777777777777777777777777777777777777777);
+     // Compiler evaluates the nearest double-precision binary representation,
+     // from the max_digits10 of the floating_point literal double 0.7777777777777777777777777777...,
+     // so any extra digits in the multiprecision type 
+     // beyond max_digits10 (usually 17) are random and meaningless.
      cpp_dec_float_50 r;
      r = lambert_w0(z);
      std::cout << "lambert_w0(";
      show_value(z);
      std::cout << ") = "; show_value(r);
      std::cout << std::endl;
-     // lambert_w0(0.90000000000000002220446049250313080847263336181640625000000000000000000000000000) 
-     // = 0.52983296563343442067798493880332411646762461354815017917592839379740431483218821
-     std::cout << "lambert_w0(0.9) = " << lambert_w0(static_cast<double>(z))  //  0.52983296563343441
-       << std::endl;
+     // lambert_w0(0.77777777777777779011358916250173933804035186767578125000000000000000000000000000)
+     //   = 0.48086152073210493501934682309060873341910109230469724725005039758139532634080894
      //] //[/lambert_w_simple_examples_4]
    }
    {
-     // Using multiprecision types to get multiprecision precision right!
      //[lambert_w_simple_examples_4a
+     cpp_dec_float_50 z(0.9); // Construct from floating_point literal double 0.9.
+     cpp_dec_float_50 r;
+     r = lambert_w0(0.9);
+     std::cout << "lambert_w0(";
+     show_value(z);
+     std::cout << ") = "; show_value(r);
+     std::cout << std::endl;
+     // lambert_w0(0.90000000000000002220446049250313080847263336181640625000000000000000000000000000)
+     //   = 0.52983296563343440510607251781038939952850341796875000000000000000000000000000000
+     std::cout << "lambert_w0(0.9) = " << lambert_w0(static_cast<double>(0.9))
+     // lambert_w0(0.9) 
+     //   = 0.52983296563343441
+       << std::endl;
+     //] //[/lambert_w_simple_examples_4a]
+   }
+   {
+     // Using multiprecision types to get multiprecision precision right!
+     //[lambert_w_simple_examples_4b
+
      cpp_dec_float_50 z("0.9"); // Construct from decimal digit string.
      cpp_dec_float_50 r;
      r = lambert_w0(z);
@@ -180,7 +205,7 @@ int main()
      std::cout << std::endl;
      // 0.90000000000000000000000000000000000000000000000000000000000000000000000000000000)
      // = 0.52983296563343441213336643954546304857788132269804249284012528304239956432480864
-     //] //[/lambert_w_simple_examples_4a]
+     //] //[/lambert_w_simple_examples_4b]
    }
    // Getting extreme precision (1000 decimal digits) Lambert W values.
    {

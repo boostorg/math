@@ -63,7 +63,7 @@ xmlns ="http://www.w3.org/2000/svg"
 <g id="legendPoints"><g stroke="rgb(0,0,0)" fill="rgb(211,211,211)" stroke-width="0.5"><rect x="308.3" y="102" width="3" height="3"/></g>
 </g>
 <g id="legendText">
-<text x="309.8" y="75.5" font-size="14" font-family="Lucida Sans Unicode">I0(V)</text>
+<text x="309.8" y="75.5" font-size="14" font-family="Lucida Sans Unicode">I&#x2080;(V)</text>
 <text x="330.8" y="103.5" font-size="14" font-family="Lucida Sans Unicode">Rs=0 &#x3A9;</text>
 <text x="309.8" y="131.5" font-size="14" font-family="Lucida Sans Unicode">Rs=2 &#x3A9;</text>
 <text x="309.8" y="159.5" font-size="14" font-family="Lucida Sans Unicode">Rs=10 &#x3A9;</text>
