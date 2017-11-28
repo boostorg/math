@@ -9,6 +9,7 @@
 #include <boost/math/quadrature/naive_monte_carlo.hpp>
 
 using boost::math::concepts::std_real_concept;
+using boost::math::quadrature::naive_monte_carlo;
 
 void compile_and_link_test()
 {
