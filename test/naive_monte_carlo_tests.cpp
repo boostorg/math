@@ -5,6 +5,7 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 #define BOOST_TEST_MODULE naive_monte_carlo_test
+#include <ostream>
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -101,6 +102,9 @@ void test_exception_from_integrand()
     try
     {
       Real result = task.get();
+      // Get rid of unused variable warning:
+      std::ostream cnull(0);
+      cnull << result;
     }
     catch(std::exception const & e)
     {

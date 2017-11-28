@@ -260,11 +260,13 @@ private:
         }
     }
 
+    const F& m_f;
+    size_t m_num_threads;
+    std::atomic<Real> m_error_goal;
+    std::atomic<bool> m_done;
     std::vector<Real> m_lbs;
     std::vector<Real> m_dxs;
     Real m_volume;
-    std::atomic<Real> m_error_goal;
-    size_t m_num_threads;
     std::atomic<size_t> m_total_calls;
     // I wanted these to be vectors rather than maps,
     // but you can't resize a vector of atomics.
@@ -273,10 +275,8 @@ private:
     std::map<size_t, std::atomic<Real>> m_thread_Ss;
     std::atomic<Real> m_avg;
     std::map<size_t, std::atomic<Real>> m_thread_averages;
-    std::atomic<bool> m_done;
     std::chrono::time_point<std::chrono::system_clock> m_start;
     std::exception_ptr m_exception;
-    const F& m_f;
 };
 }}}
 #endif
