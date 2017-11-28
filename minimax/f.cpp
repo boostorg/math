@@ -379,8 +379,8 @@ mp_type f(const mp_type& x, int variant)
    }
    case 44:
    {
-      // OK for -0.28 < w < 0.05 only:
-      return -1 / boost::math::lambert_wm1(-x);
+      mp_type ex = exp(x);
+      return boost::math::lambert_w0(ex) - x;
    }
    }
    return 0;
