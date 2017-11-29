@@ -29,13 +29,14 @@ public:
                       Real error_goal,
                       size_t threads = std::thread::hardware_concurrency()): m_f{f}, m_num_threads{threads}
     {
+        using std::isfinite;
         size_t n = bounds.size();
         m_lbs.resize(n);
         m_dxs.resize(n);
         m_volume = 1;
         for (size_t i = 0; i < n; ++i)
         {
-            if (!(std::isfinite(bounds[i].first) && std::isfinite(bounds[i].second)))
+            if (!(isfinite(bounds[i].first) && isfinite(bounds[i].second)))
             {
                 throw std::domain_error("The routine only support bounded domains. Rescaling infinite domains must be done by the user.\n");
             }
@@ -102,6 +103,7 @@ public:
 
     Real current_error_estimate() const
     {
+        using std::sqrt;
         return m_volume*sqrt(m_variance.load()/m_total_calls.load());
     }
 

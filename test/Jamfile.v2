@@ -416,10 +416,10 @@ test-suite special_fun :
    [ run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
    [ run chebyshev_test.cpp  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3f : : : <define>TEST1 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_1 ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3 : : : <define>TEST2 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_2 ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3l : : : <define>TEST3 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_3 ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3q ../config//quadmath : : : <define>TEST4 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] : chebyshev_transform_test_4 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3f : : : <define>TEST1 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ requires cxx11_auto_declarations ] : chebyshev_transform_test_1 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3 : : : <define>TEST2 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ requires cxx11_auto_declarations ] : chebyshev_transform_test_2 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3l : : : <define>TEST3 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ requires cxx11_auto_declarations ] : chebyshev_transform_test_3 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3q ../config//quadmath : : : <define>TEST4 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] [ requires cxx11_auto_declarations ] : chebyshev_transform_test_4 ]
 
    [ run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework  ]
    # Needs to run in release mode, as it's rather slow:

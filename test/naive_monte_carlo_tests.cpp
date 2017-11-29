@@ -5,6 +5,7 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 #define BOOST_TEST_MODULE naive_monte_carlo_test
+#include <cmath>
 #include <ostream>
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
@@ -12,10 +13,12 @@
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/naive_monte_carlo.hpp>
 
+using std::abs;
 using std::vector;
 using std::pair;
 using boost::math::constants::pi;
 using boost::math::quadrature::naive_monte_carlo;
+
 
 template<class Real>
 void test_pi()
@@ -120,7 +123,7 @@ void test_cancel_and_restart()
     std::cout << "Testing that cancellation and restarting works on naive Monte-Carlo integration on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real exact = 1.3932039296856768591842462603255;
     Real A = 1.0 / (pi<Real>() * pi<Real>() * pi<Real>());
-    auto g = [&](std::vector<Real> const & x)
+    auto g = [&](std::vector<Real> const & x)->Real
     {
         return A / (1.0 - cos(x[0])*cos(x[1])*cos(x[2]));
     };
@@ -144,7 +147,7 @@ void test_variance()
 {
     std::cout << "Testing that variance computed by naive Monte-Carlo integration converges to integral formula on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real exact_variance = (Real) 1/(Real) 12;
-    auto g = [&](std::vector<Real> const & x)
+    auto g = [&](std::vector<Real> const & x)->Real
     {
         return x[0];
     };
