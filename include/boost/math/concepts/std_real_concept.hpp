@@ -175,6 +175,8 @@ inline boost::math::concepts::std_real_concept atan2(boost::math::concepts::std_
 { return std::atan2(a.value(), b.value()); }
 inline boost::math::concepts::std_real_concept ceil(boost::math::concepts::std_real_concept a)
 { return std::ceil(a.value()); }
+inline bool isfinite(boost::math::concepts::std_real_concept a)
+{ return std::isfinite(a.value()); }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline boost::math::concepts::std_real_concept fmod(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
 { return fmodl(a.value(), b.value()); }
