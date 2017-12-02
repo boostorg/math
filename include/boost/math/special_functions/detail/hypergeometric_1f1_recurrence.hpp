@@ -99,7 +99,7 @@
   inline T hypergeometric_1f1_imp(const T& a, const T& b, const T& z, const Policy& pol);
 
   template <class T, class Policy>
-  inline T hypergeometric_1f1_backward_recurrence_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1f1_backward_recurrence_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function)
   {
     BOOST_MATH_STD_USING // modf, frexp, fabs, pow
 
@@ -126,6 +126,9 @@
       ak = b - 1;
       integer_part -= (boost::math::lltrunc(ceil(b)) - 1);
     }
+
+    if (-integer_part > policies::get_max_series_iterations<Policy>())
+       return policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", std::numeric_limits<T>::quiet_NaN(), pol);
 
     T first = detail::hypergeometric_1f1_imp(ak, b, z, pol);
     --ak;
