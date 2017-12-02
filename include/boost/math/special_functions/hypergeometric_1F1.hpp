@@ -129,7 +129,7 @@ namespace boost { namespace math { namespace detail {
       if (series_is_divergent)
       {
          if((a < 0) && (b > 0))
-         return detail::hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol);
+            return detail::hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol);
 
          if (detail::hypergeometric_1f1_is_a_small_enough(a))
          {

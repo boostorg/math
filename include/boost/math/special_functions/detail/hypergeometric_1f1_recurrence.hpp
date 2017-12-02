@@ -106,6 +106,14 @@
     boost::intmax_t integer_part = 0;
     const T bk = modf(b, &integer_part);
     T ak = modf(a, &integer_part);
+    //
+    // We need ak-1 positive to avoid infinite recursion below:
+    //
+    if (0 != ak)
+    {
+       ak += 2;
+       integer_part -= 2;
+    }
 
     int exp_of_a = 0; frexp(a, &exp_of_a);
     int exp_of_b = 0; frexp(b, &exp_of_b);

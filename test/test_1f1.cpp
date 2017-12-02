@@ -37,6 +37,14 @@ void expected_results()
       "Integer a values",                   // test data group
       ".*", 14000, 600);               // test function
 
+   add_expected_result(
+      ".*",                          // compiler
+      ".*",                          // stdlib
+      ".*",                          // platform
+      largest_type,                  // test type(s)
+      "Small.*",                   // test data group
+      ".*", 2000, 200);               // test function
+
    //
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.

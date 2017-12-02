@@ -63,6 +63,9 @@ void test_spots1(T, const char* type_name)
 
    do_test_2F0<T>(hypergeometric_1f1, type_name, "Integer a values");
 
+#include "hypergeometric_1f1_small_random.ipp"
+
+   do_test_2F0<T>(hypergeometric_1f1_small_random, type_name, "Small random values");
 }
 
 template <class T>
