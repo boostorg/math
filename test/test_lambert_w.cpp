@@ -6,7 +6,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// test_lambertw.cpp
+// test_lambert_w.cpp
 //! \brief Basic sanity tests for Lambert W function plog productlog
 //! or lambert_w using algorithm informed by Thomas Luu, Veberic and Tosio Fukushima.
 
@@ -34,8 +34,10 @@ using boost::multiprecision::cpp_dec_float_50;
 #include <boost/math/policies/policy.hpp>
 using boost::math::policies::digits2;
 #include <boost/math/special_functions/lambert_w.hpp> // For Lambert W lambert_w function.
-using boost::math::lambert_w0;
+//using boost::math::lambert_w0; // Use jm version instead
 using boost::math::lambert_wm1;
+
+#include "C:\Users\Paul\Desktop\lambert_w0.hpp"  // JM latest providing jm_lambert_w0 and jm_lambert_wm1
 
 #include <limits>
 #include <cmath>
