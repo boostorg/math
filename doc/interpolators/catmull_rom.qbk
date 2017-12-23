@@ -14,15 +14,17 @@
 #include <boost/math/interpolators/catmull_rom.hpp>
 
 namespace boost{ namespace math{
-    template<class Real, class Point>
+    template<class Real, class Point, size_t dimension>
     class catmull_rom
     {
     public:
-        catmull_rom(const Real* const points, size_t num_points, size_t dimension, bool closed = false, Real alpha = (Real) 1/ (Real) 2)
+        catmull_rom(const Real* const points, size_t num_points, bool closed = false, Real alpha = (Real) 1/ (Real) 2)
 
         Real operator()(Real s) const;
 
         Real max_parameter() const;
+
+        Real parameter_at_point(size_t i) const;
 
         Point prime(Real s) const;
     };

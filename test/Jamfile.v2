@@ -824,6 +824,7 @@ test-suite misc :
    [ run test_constant_generate.cpp : : : release <define>USE_CPP_FLOAT=1 <exception-handling>off:<build>no  ]
    [ run test_classify.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
+   [ run catmull_rom_test.cpp ../../test/build//boost_unit_test_framework ]
    [ run test_error_handling.cpp ../../test/build//boost_unit_test_framework  ]
    [ run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
    [ run test_minima.cpp pch ../../test/build//boost_unit_test_framework  ]
