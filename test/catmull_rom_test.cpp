@@ -7,6 +7,7 @@
 #define BOOST_TEST_MODULE catmull_rom_test
 
 #include <array>
+#include <random>
 #include <boost/cstdfloat.hpp>
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
@@ -15,6 +16,7 @@
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
+using std::abs;
 using boost::multiprecision::cpp_bin_float_50;
 using boost::math::catmull_rom;
 
@@ -33,7 +35,6 @@ void test_alpha_distance()
 
     d = boost::math::detail::alpha_distance<Real, std::array<Real, 3>, 3>(v1, v2, 1);
     BOOST_CHECK_CLOSE_FRACTION(d, 1, tol);
-
 
     v2[0] = 2;
     d = boost::math::detail::alpha_distance<Real, std::array<Real, 3>, 3>(v1, v2, alpha);
@@ -101,19 +102,73 @@ void test_linear()
         BOOST_CHECK_SMALL(p[2], tol);
 
         auto tangent = cr.prime(s);
-        // TODO: Fix the tangent vector!
-        //BOOST_CHECK_CLOSE_FRACTION(p[0], 1, tol);
-        BOOST_CHECK_SMALL(p[1], tol);
-        BOOST_CHECK_SMALL(p[2], tol);
+        BOOST_CHECK_CLOSE_FRACTION(tangent[0], 1, tol);
+        BOOST_CHECK_SMALL(tangent[1], tol);
+        BOOST_CHECK_SMALL(tangent[2], tol);
     }
 
 }
 
-template<class Real>
+template<class Real, size_t dimension>
 void test_affine_invariance()
 {
-    std::cout << "Testing that the Catmull-Rom spline is affine invariant.\n";
+    std::cout << "Testing that the Catmull-Rom spline is affine invariant in dimension "
+              << dimension << " on type "
+              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
+    Real tol = 1000*std::numeric_limits<Real>::epsilon();
+    std::vector<std::array<Real, dimension>> v(100);
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    Real inv_denom = (Real) 100/( (Real) gen.max() + (Real) 2);
+    for(size_t j = 0; j < dimension; ++j)
+    {
+        v[0][j] = gen()*inv_denom;
+    }
+
+    for (size_t i = 1; i < v.size(); ++i)
+    {
+        for(size_t j = 0; j < dimension; ++j)
+        {
+            v[i][j] = v[i-1][j] + gen()*inv_denom;
+        }
+    }
+    std::array<Real, dimension> affine_shift;
+    for (size_t j = 0; j < dimension; ++j)
+    {
+        affine_shift[j] = gen()*inv_denom;
+    }
+
+    catmull_rom<Real, std::array<Real, dimension>, dimension> cr1(v.data(), v.size());
+
+    for(size_t i = 0; i< v.size(); ++i)
+    {
+        for(size_t j = 0; j < dimension; ++j)
+        {
+            v[i][j] += affine_shift[j];
+        }
+    }
+
+    catmull_rom<Real, std::array<Real, dimension>, dimension> cr2(v.data(), v.size());
+
+    BOOST_CHECK_CLOSE_FRACTION(cr1.max_parameter(), cr2.max_parameter(), tol);
+
+    Real ds = cr1.max_parameter()/1024;
+    for (Real s = 0; s < cr1.max_parameter(); s += ds)
+    {
+        auto p0 = cr1(s);
+        auto p1 = cr2(s);
+        auto tangent0 = cr1.prime(s);
+        auto tangent1 = cr2.prime(s);
+        for (size_t j = 0; j < dimension; ++j)
+        {
+            BOOST_CHECK_CLOSE_FRACTION(p0[j] + affine_shift[j], p1[j], tol);
+            if (abs(tangent0[j]) > tol)
+            {
+                BOOST_CHECK_CLOSE_FRACTION(tangent0[j], tangent1[j], 20*tol);
+            }
+        }
+    }
 }
 
 template<class Real>
@@ -133,7 +188,23 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
     test_linear<double>();
     test_linear<long double>();
     test_linear<cpp_bin_float_50>();
-    /*
-    test_affine_invariance<float>();
-    test_data_representations<float>();*/
+
+    test_affine_invariance<float, 1>();
+    test_affine_invariance<float, 2>();
+    test_affine_invariance<float, 3>();
+    test_affine_invariance<float, 4>();
+
+    test_affine_invariance<double, 1>();
+    test_affine_invariance<double, 2>();
+    test_affine_invariance<double, 3>();
+    test_affine_invariance<double, 4>();
+
+    test_affine_invariance<long double, 1>();
+    test_affine_invariance<long double, 2>();
+    test_affine_invariance<long double, 3>();
+    test_affine_invariance<long double, 4>();
+    test_affine_invariance<cpp_bin_float_50, 1>();
+    test_affine_invariance<cpp_bin_float_50, 2>();
+    test_affine_invariance<cpp_bin_float_50, 3>();
+    test_affine_invariance<cpp_bin_float_50, 4>();
 }

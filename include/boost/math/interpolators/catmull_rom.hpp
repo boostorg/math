@@ -62,6 +62,7 @@ private:
 template<class Real, class Point, size_t dimension>
 catmull_rom<Real, Point, dimension>::catmull_rom(const Point* const points, size_t num_pnts, bool closed, Real alpha)
 {
+    static_assert(dimension > 0, "The dimension of the Catmull-Rom spline must be > 0\n");
     if (num_pnts < 4)
     {
         throw std::domain_error("The Catmull-Rom curve requires at least 4 points.\n");
