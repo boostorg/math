@@ -222,6 +222,69 @@ void test_affine_invariance()
 }
 
 template<class Real>
+void test_helix()
+{
+    std::cout << "Testing that the Catmull-Rom spline interpolates helices correctly on type "
+              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+
+    Real tol = 1000*std::numeric_limits<Real>::epsilon();
+    std::vector<std::array<Real, 3>> v(1000*sizeof(Real));
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
+        v[i] = {cos(theta), sin(theta), theta};
+    }
+    catmull_rom<Real, std::array<Real, 3>, 3> helix(v.data(), v.size());
+
+    // Interpolation condition:
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        Real s = helix.parameter_at_point(i);
+        auto p = helix(s);
+        Real t = p[2];
+
+        Real x = p[0];
+        Real y = p[1];
+        if (abs(x) < tol)
+        {
+            BOOST_CHECK_SMALL(cos(t), tol);
+        }
+        if (abs(y) < tol)
+        {
+            BOOST_CHECK_SMALL(sin(t), tol);
+        }
+        else
+        {
+            BOOST_CHECK_CLOSE_FRACTION(x, cos(t), tol);
+            BOOST_CHECK_CLOSE_FRACTION(y, sin(t), tol);
+        }
+    }
+
+    Real max_s = helix.max_parameter();
+    for(Real s = helix.parameter_at_point(1); s < max_s; s += 0.01)
+    {
+        auto p = helix(s);
+        Real x = p[0];
+        Real y = p[1];
+        Real t = p[2];
+        BOOST_CHECK_CLOSE_FRACTION(x*x+y*y, (Real) 1, (Real) 0.01);
+        if (abs(x) < 0.01)
+        {
+            BOOST_CHECK_SMALL(cos(t),  (Real) 0.01);
+        }
+        if (abs(y) < 0.01)
+        {
+            BOOST_CHECK_SMALL(sin(t), (Real) 0.01);
+        }
+        else
+        {
+            BOOST_CHECK_CLOSE_FRACTION(x, cos(t), (Real) 0.01);
+            BOOST_CHECK_CLOSE_FRACTION(y, sin(t), (Real) 0.01);
+        }
+    }
+}
+
+template<class Real>
 void test_data_representations()
 {
     std::cout << "Testing that the Catmull-Rom spline works with multiple data representations.\n";
@@ -243,6 +306,9 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
     test_circle<double>();
     test_circle<long double>();
     test_circle<cpp_bin_float_50>();
+
+    test_helix<float>();
+    test_helix<double>();
 
     test_affine_invariance<float, 1>();
     test_affine_invariance<float, 2>();
