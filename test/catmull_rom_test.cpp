@@ -51,7 +51,7 @@ void test_alpha_distance()
 template<class Real>
 void test_linear()
 {
-    std::cout << "Testing that the Catmull-Rom spline interpolates linear functions correctly in dimension on type "
+    std::cout << "Testing that the Catmull-Rom spline interpolates linear functions correctly on type "
               << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
     Real tol = 10*std::numeric_limits<Real>::epsilon();
@@ -110,6 +110,53 @@ void test_linear()
         BOOST_CHECK_SMALL(tangent[2], tol);
     }
 
+}
+
+template<class Real>
+void test_circle()
+{
+    std::cout << "Testing that the Catmull-Rom spline interpolates circles correctly on type "
+              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+
+    Real tol = 10*std::numeric_limits<Real>::epsilon();
+    std::vector<std::array<Real, 2>> v(20*sizeof(Real));
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
+        v[i] = {cos(theta), sin(theta)};
+    }
+    catmull_rom<Real, std::array<Real, 2>, 2> circle(v.data(), v.size(), true);
+
+    // Interpolation condition:
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        Real s = circle.parameter_at_point(i);
+        auto p = circle(s);
+        Real x = p[0];
+        Real y = p[1];
+        if (abs(x) < std::numeric_limits<Real>::epsilon())
+        {
+            BOOST_CHECK_SMALL(v[i][0], tol);
+        }
+        if (abs(y) < std::numeric_limits<Real>::epsilon())
+        {
+            BOOST_CHECK_SMALL(v[i][1], tol);
+        }
+        else
+        {
+            BOOST_CHECK_CLOSE_FRACTION(x, v[i][0], tol);
+            BOOST_CHECK_CLOSE_FRACTION(y, v[i][1], tol);
+        }
+    }
+
+    Real max_s = circle.max_parameter();
+    for(Real s = 0; s < max_s; s += 0.01)
+    {
+        auto p = circle(s);
+        Real x = p[0];
+        Real y = p[1];
+        BOOST_CHECK_CLOSE_FRACTION(x*x+y*y, 1, 0.001);
+    }
 }
 
 template<class Real, size_t dimension>
@@ -191,6 +238,11 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
     test_linear<double>();
     test_linear<long double>();
     test_linear<cpp_bin_float_50>();
+
+    test_circle<float>();
+    test_circle<double>();
+    test_circle<long double>();
+    test_circle<cpp_bin_float_50>();
 
     test_affine_invariance<float, 1>();
     test_affine_invariance<float, 2>();
