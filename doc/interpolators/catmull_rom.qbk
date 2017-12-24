@@ -109,6 +109,43 @@ However, its direction is meaningful, so the user may wish to normalize this res
 
 [import ../../example/catmull_rom_example.cpp]
 
+[heading Performance]
+
+The following performance numbers were generated for a call to the Catmull-Rom interpolation method.
+The number that follows the slash is the number of points passed to the interpolant.
+
+
+Run on 2700 MHz CPU
+CPU Caches:
+  L1 Data 32K (x2)
+  L1 Instruction 32K (x2)
+  L2 Unified 262K (x2)
+  L3 Unified 3145K (x1)
+---------------------------------------------------------
+Benchmark                              Time           CPU
+---------------------------------------------------------
+BM_CatmullRom<double>/4               20 ns         20 ns
+BM_CatmullRom<double>/8               21 ns         21 ns
+BM_CatmullRom<double>/16              23 ns         23 ns
+BM_CatmullRom<double>/32              24 ns         24 ns
+BM_CatmullRom<double>/64              27 ns         27 ns
+BM_CatmullRom<double>/128             27 ns         27 ns
+BM_CatmullRom<double>/256             30 ns         30 ns
+BM_CatmullRom<double>/512             32 ns         31 ns
+BM_CatmullRom<double>/1024            33 ns         33 ns
+BM_CatmullRom<double>/2048            34 ns         34 ns
+BM_CatmullRom<double>/4096            36 ns         36 ns
+BM_CatmullRom<double>/8192            38 ns         38 ns
+BM_CatmullRom<double>/16384           39 ns         39 ns
+BM_CatmullRom<double>/32768           40 ns         40 ns
+BM_CatmullRom<double>/65536           45 ns         44 ns
+BM_CatmullRom<double>/131072          46 ns         46 ns
+BM_CatmullRom<double>/262144          50 ns         50 ns
+BM_CatmullRom<double>/524288          53 ns         52 ns
+BM_CatmullRom<double>/1048576         58 ns         57 ns
+BM_CatmullRom<double>_BigO          2.97 lgN       2.97 lgN
+BM_CatmullRom<double>_RMS             19 %         19 %
+
 [section:catmull_rom_refs References]
 
 * Cem Yuksel, Scott Schaefer, and John Keyser, ['Parameterization and applications of Catmull–Rom curves], Computer-Aided Design 43 (2011) 747–755.

@@ -115,60 +115,54 @@ Point catmull_rom<Real, Point, dimension>::operator()(Real s) const
     //Now *it >= s. We want the index such that m_s[i] <= s < m_s[i+1]:
     size_t i = std::distance(m_s.begin(), it - 1);
     // We'll keep the assert in here a while until we feel good that we've understood this algorithm.
-    assert(m_s[i] <= s && s < m_s[i+1]);
-    Point A1;
+    //assert(m_s[i] <= s && s < m_s[i+1]);
+
+    // Only denom21 is used twice:
+    Real denom21 = 1/(m_s[i+1] - m_s[i]);
+    Real s0s = m_s[i-1] - s;
+    Real s1s = m_s[i] - s;
+    Real s2s = m_s[i+1] - s;
+    Real s3s = m_s[i+2] - s;
+
+    Point A1_or_A3;
     Real denom = 1/(m_s[i] - m_s[i-1]);
-    Real k1 = (m_s[i]-s)*denom;
-    Real k2 = (s - m_s[i-1])*denom;
-    for (size_t j = 0; j < dimension; ++j)
+    for(size_t j = 0; j < dimension; ++j)
     {
-        A1[j] = k1*m_pnts[i-1][j] + k2*m_pnts[i][j];
+        A1_or_A3[j] = denom*(s1s*m_pnts[i-1][j] - s0s*m_pnts[i][j]);
     }
 
-    Point A2;
-    denom = 1/(m_s[i+1] - m_s[i]);
-    k1 = (m_s[i+1]-s)*denom;
-    k2 = (s - m_s[i])*denom;
-    for (size_t j = 0; j < dimension; ++j)
+    Point A2_or_B2;
+    for(size_t j = 0; j < dimension; ++j)
     {
-        A2[j] = k1*m_pnts[i][j] + k2*m_pnts[i+1][j];
+        A2_or_B2[j] = denom21*(s2s*m_pnts[i][j] - s1s*m_pnts[i+1][j]);
     }
 
-    Point B1;
-    for (size_t j = 0; j < dimension; ++j)
+    Point B1_or_C;
+    denom = 1/(m_s[i+1] - m_s[i-1]);
+    for(size_t j = 0; j < dimension; ++j)
     {
-        B1[j] = k1*A1[j] + k2*A2[j];
+        B1_or_C[j] = denom*(s2s*A1_or_A3[j] - s0s*A2_or_B2[j]);
     }
 
-    Point A3;
     denom = 1/(m_s[i+2] - m_s[i+1]);
-    k1 = (m_s[i+2]-s)*denom;
-    k2 = (s - m_s[i+1])*denom;
-    for (size_t j = 0; j < dimension; ++j)
+    for(size_t j = 0; j < dimension; ++j)
     {
-        A3[j] = k1*m_pnts[i+1][j] + k2*m_pnts[i+2][j];
+        A1_or_A3[j] = denom*(s3s*m_pnts[i+1][j] - s2s*m_pnts[i+2][j]);
     }
 
     Point B2;
     denom = 1/(m_s[i+2] - m_s[i]);
-    k1 = (m_s[i+2]-s)*denom;
-    k2 = (s - m_s[i])*denom;
-    for (size_t j = 0; j < dimension; ++j)
+    for(size_t j = 0; j < dimension; ++j)
     {
-        B2[j] = k1*A2[j] + k2*A3[j];
+        B2[j] = denom*(s3s*A2_or_B2[j] - s1s*A1_or_A3[j]);
     }
 
-    Point C;
-    denom = 1/(m_s[i+1] - m_s[i]);
-    k1 = (m_s[i+1]-s)*denom;
-    k2 = (s - m_s[i])*denom;
-    for (size_t j = 0; j < dimension; ++j)
+    for(size_t j = 0; j < dimension; ++j)
     {
-        C[j] = k1*B1[j] + k2*B2[j];
+        B1_or_C[j] = denom21*(s2s*B1_or_C[j] - s1s*B2[j]);
     }
 
-
-    return C;
+    return B1_or_C;
 }
 
 template<class Real, class Point, size_t dimension>

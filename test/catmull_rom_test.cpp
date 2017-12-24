@@ -51,6 +51,9 @@ void test_alpha_distance()
 template<class Real>
 void test_linear()
 {
+    std::cout << "Testing that the Catmull-Rom spline interpolates linear functions correctly in dimension on type "
+              << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+
     Real tol = 10*std::numeric_limits<Real>::epsilon();
     std::vector<std::array<Real, 3>> v(4);
     v[0] = {0,0,0};
