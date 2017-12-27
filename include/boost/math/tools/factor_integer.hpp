@@ -24,9 +24,11 @@ template<class Integer>
 Integer pollard_rho(Integer n, size_t num_threads = std::thread::hardware_concurrency())
 {
     // Algorithm 5.23 of "The Joy of Factoring":
-    std::atomic<bool> done{false};
-    std::atomic<Integer> divisor{0};
-    auto f = [&n, &done, &divisor]()->void
+    using std::atomic;
+    atomic<bool> done{false};
+    Integer divisor = 0;
+    atomic<Integer*> divisor_ptr{&divisor};
+    auto f = [&n, &done, &divisor_ptr]()->void
     {
         boost::integer::gcd_evaluator<Integer>  gcd;
         std::random_device rd;
@@ -62,7 +64,7 @@ Integer pollard_rho(Integer n, size_t num_threads = std::thread::hardware_concur
             return;
         }
         done = true;
-        divisor = g;
+        *divisor_ptr = g;
         return;
     };
 
@@ -78,7 +80,7 @@ Integer pollard_rho(Integer n, size_t num_threads = std::thread::hardware_concur
     std::for_each(threads.begin(), threads.end(),
                   std::mem_fn(&std::thread::join));
 
-    return divisor;
+    return *divisor_ptr;
 }
 
 template<class Integer>

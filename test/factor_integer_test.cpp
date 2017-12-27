@@ -9,8 +9,13 @@
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/math/tools/factor_integer.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
 
 using boost::math::pollard_rho;
+
+using boost::multiprecision::int128_t;
+using boost::multiprecision::uint256_t;
+using boost::multiprecision::uint1024_t;
 
 template<class Z>
 void test_small_integers()
@@ -32,10 +37,6 @@ void test_small_integers()
             p *= std::pow(f.first, f.second);
         }
         BOOST_CHECK_EQUAL(p, i);
-        if (i % 100000 == 0)
-        {
-            std::cout << "All numbers up to i = " << i << " have been tested\n";
-        }
     }
 
 }
@@ -105,11 +106,61 @@ void test_pollard_rho()
         factor2 = i/factor1;
         BOOST_CHECK_EQUAL(factor1*factor2, i);
     }
+
+    i = static_cast<Z>(99432527)*static_cast<Z>(1177212722617);
+    factor1 = pollard_rho(i);
+    if (factor1 == 0)
+    {
+        std::cout << "Pollard rho failed on i = " << i << "\n";
+    }
+    else
+    {
+        factor2 = i/factor1;
+        BOOST_CHECK_EQUAL(factor1*factor2, i);
+    }
+    i = static_cast<Z>(146481287)*static_cast<Z>(241741417);
+    factor1 = pollard_rho(i);
+    if (factor1 == 0)
+    {
+        std::cout << "Pollard rho failed on i = " << i << "\n";
+    }
+    else
+    {
+        factor2 = i/factor1;
+        BOOST_CHECK_EQUAL(factor1*factor2, i);
+    }
+    i = (static_cast<Z>(1) << 67) - 1;
+    factor1 = pollard_rho(i);
+    if (factor1 == 0)
+    {
+        std::cout << "Pollard rho failed on i = " << i << "\n";
+    }
+    else
+    {
+        factor2 = i/factor1;
+        BOOST_CHECK_EQUAL(factor1*factor2, i);
+    }
+
+    /*i = (static_cast<Z>(1) << 251) - static_cast<Z>(1);
+    i /= 503;
+    i /= 54217;
+    std::cout << "Factoring " << i << std::endl;
+    factor1 = pollard_rho(i);
+    if (factor1 == 0)
+    {
+        std::cout << "Pollard rho failed on i = " << i << "\n";
+    }
+    else
+    {
+        factor2 = i/factor1;
+        BOOST_CHECK_EQUAL(factor1*factor2, i);
+        std::cout << factor1 << "*" << factor2 << std::endl;
+    }*/
 }
 
 
 BOOST_AUTO_TEST_CASE(factor_test)
 {
     //test_small_integers<uint32_t>();
-    test_pollard_rho<uint64_t>();
+    test_pollard_rho<uint256_t>();
 }
