@@ -8,6 +8,7 @@
 #ifndef BOOST_MATH_TOOLS_FACTOR_INTEGER_HPP
 #define BOOST_MATH_TOOLS_FACTOR_INTEGER_HPP
 
+#include <iostream>
 #include <cmath>
 #include <utility>
 #include <vector>
@@ -39,25 +40,46 @@ Integer pollard_rho(Integer n, size_t num_threads = std::thread::hardware_concur
         Integer A = s;
         Integer B = s;
         Integer g = 1;
+        Integer iterations = 0;
         while (g == 1)
         {
-            A = (A*A + b) % n;
-            Integer tmp =  (B*B + b) % n;
-            B = (tmp*tmp + b) % n;
-            if (A > B)
+            Integer C = 1;
+            for(size_t i = 0; i < 100; ++i)
             {
-                g = gcd(A - B, n);
+                ++iterations;
+                A = (A*A + b) % n;
+                Integer tmp =  (B*B + b) % n;
+                B = (tmp*tmp + b) % n;
+                if (A > B)
+                {
+                    tmp = A - B;
+                }
+                else
+                {
+                    tmp = B - A;
+                }
+                Integer tmpC = (C*tmp) % n;
+                if (tmpC != 0)
+                {
+                    C = tmpC;
+                }
+                else
+                {
+                    Integer p1 = gcd(tmp, n);
+                    if (p1 > 1 && p1 < n)
+                    {
+                        C = p1;
+                    }
+                    break;
+                }
+                if (done)
+                {
+                    return;
+                }
             }
-            else
-            {
-                g = gcd(B - A, n);
-            }
-            if (done)
-            {
-                return;
-            }
+            g = gcd(C, n);
         }
-
+        //std::cout << "Iterations to factor " << n << " before completion: " << iterations << std::endl;
         if (g == n)
         {
             // Failure: Sad!
