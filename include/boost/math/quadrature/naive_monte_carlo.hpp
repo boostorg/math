@@ -20,7 +20,7 @@
 
 namespace boost { namespace math { namespace quadrature {
 
-template<class Real, class F>
+template<class Real, class F, class Policy = boost::math::policies::policy<>>
 class naive_monte_carlo
 {
 public:
@@ -34,15 +34,18 @@ public:
         m_lbs.resize(n);
         m_dxs.resize(n);
         m_volume = 1;
+        static const char* function = "boost::math::quadrature::naive_monte_carlo<%1%>";
         for (size_t i = 0; i < n; ++i)
         {
             if (!(isfinite(bounds[i].first) && isfinite(bounds[i].second)))
             {
-                throw std::domain_error("The routine only support bounded domains. Rescaling infinite domains must be done by the user.\n");
+                boost::math::policies::raise_domain_error(function, "The routine only support bounded domains. Rescaling infinite domains must be done by the user.\n", bounds[i].first, Policy());
+                return;
             }
             if (bounds[i].second <= bounds[i].first)
             {
-                throw std::domain_error("The upper bound is <= the lower bound.\n");
+                boost::math::policies::raise_domain_error(function, "The upper bound is <= the lower bound.\n", bounds[i].second, Policy());
+                return;
             }
             m_lbs[i] = bounds[i].first;
             m_dxs[i] = bounds[i].second - m_lbs[i];
@@ -185,6 +188,7 @@ private:
                       std::mem_fn(&std::thread::join));
         if (m_exception)
         {
+            // How do we rethrow an exception with policies?
             std::rethrow_exception(m_exception);
         }
         // Incorporate their work into the final estimate:
