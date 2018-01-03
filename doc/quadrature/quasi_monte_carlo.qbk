@@ -1,0 +1,38 @@
+[/
+Copyright (c) 2018 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+
+[section:quasi_monte_carlo Quasi Monte Carlo Quadrature]
+
+[heading Synopsis]
+
+    #include <boost/math/quadrature/quasi_monte_carlo.hpp>
+    namespace boost{ namespace math{
+
+    template<class F, class Real>
+    Real quasi_monte_carlo(F& f);
+    }} // namespaces
+
+[heading Description]
+
+The functional `quasi_monte_carlo` calculates the integral of a function /f/ using randomized quasi Monte-Carlo integration.
+Some explanation is needed to unpack the language of "randomized quasi-Monte Carlo integration".
+A traditional Monte Carlo integration uses a pseudo-random sequence of quadrature nodes to produce an estimate of the integral.
+Pseudo-random numbers (which, for our purposes can be thought of as truly random) seem to form "clumps"-small volumes which have a surprising number of quadrature nodes.
+Random sampling of the domain has many good properties, but so does uniform coverage.
+An attempt to merge the these two ideas leads us to the notion of low-discrepancy sequences.
+
+
+References:
+
+Kocis, Ladislav, and William J. Whiten., ['Computational investigations of low-discrepancy sequences.], ACM Transactions on Mathematical Software (TOMS) 23.2 (1997): 266-294.
+
+Owen, Art B., ['A randomized Halton algorithm in R], to appear (http://statweb.stanford.edu/~owen/reports/rhalton.pdf).
+
+Niederreiter, Harald. ['Random number generation and quasi-Monte Carlo methods], Society for Industrial and Applied Mathematics, 1992.
+
+[endsect]
