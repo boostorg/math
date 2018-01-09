@@ -37,23 +37,25 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         Real current_estimate() const;
 
         size_t calls() const;
+    };
     }}} // namespaces
 
 [heading Description]
 
 The class `naive_monte_carlo` performs Monte-Carlo integration on a function /f/ on a domain [Omega].
-The theoretical background of Monte-Carlo integration is nicely discussed in [@https://en.wikipedia.org/??????? Wikipedia],
+The theoretical background of Monte-Carlo integration is nicely discussed in [@https://en.wikipedia.org/wiki/Monte_Carlo_integration Wikipedia],
 and as such will not be discussed here.
-However, despite being "naive", it is a mistake to assume that naive Monte-Carlo integration is not powerful.
-The simplicity of the method affords a robustness not easily provided by more sophisticated tools.
+However, despite being "naive",
+it is a mistake to assume that naive Monte-Carlo integration is not powerful,
+as the simplicity of the method affords a robustness not easily provided by more sophisticated tools.
 The multithreaded nature of the routine allows us to compute a large number of sample points with great speed,
 and hence the slow convergence is mitigated by exploiting the full power of modern hardware.
 
 The naive Monte-Carlo integration provided by Boost exemplifies the programming techniques needed to cope with high-performance computing.
-For instance, since the convergence is only 1/sqrt(N),
+For instance, since the convergence is only [bigo](N[super -1/2]),
 the compute time is very sensitive to the error goal.
 Users can easily specify an error goal which causes computation to last months-or just a few seconds.
-Without progress reporting, this situation is disorienting and causes the users to behave in a paranoid manner.
+Without progress reporting, this situation is disorienting and causes the user to behave in a paranoid manner.
 Even with progress reporting, a user might need to cancel a job due to shifting priorities of the employing institution,
 and as such cancellation must be supported.
 A cancelled job which returns no results is wasted, so the cancellation must be graceful,
@@ -68,19 +70,19 @@ so leaving a single thread available for other apps is appreciated.
 All these use cases are supported, so let's get to the code:
 
     // Define a function to integration:
-    auto g = [&](std::vector<double> const & x)
+    auto g = [](std::vector<double> const & x)
     {
-      double A = 1.0 / (M_PI * M_PI * M_PI);
+      constexpr const double A = 1.0 / (M_PI * M_PI * M_PI);
       return A / (1.0 - cos(x[0])*cos(x[1])*cos(x[2]));
     };
-    vector<pair<double, double>> bounds{{0, M_PI}, {0, M_PI}, {0, M_PI}};
+    std::vector<std::pair<double, double>> bounds{{0, M_PI}, {0, M_PI}, {0, M_PI}};
     double error_goal = 0.001
     naive_monte_carlo<double, decltype(g)> mc(g, bounds, error_goal);
 
     std::future<double> task = mc.integrate();
     while (task.wait_for(std::chrono::seconds(1)) != std::future_status::ready)
     {
-        // The user must decide on a reasonable way to display the progress
+        // The user must decide on a reasonable way to display the progress depending on their environment:
         display_progress(mc.progress(),
                          mc.current_error_estimate(),
                          mc.current_estimate(),

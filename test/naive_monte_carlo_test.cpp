@@ -122,7 +122,7 @@ void test_cancel_and_restart()
 {
     std::cout << "Testing that cancellation and restarting works on naive Monte-Carlo integration on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real exact = 1.3932039296856768591842462603255;
-    Real A = 1.0 / (pi<Real>() * pi<Real>() * pi<Real>());
+    constexpr const Real A = 1.0 / (pi<Real>() * pi<Real>() * pi<Real>());
     auto g = [&](std::vector<Real> const & x)->Real
     {
         return A / (1.0 - cos(x[0])*cos(x[1])*cos(x[2]));
@@ -155,9 +155,38 @@ void test_variance()
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
 
     auto task = mc.integrate();
-    double y = task.get();
+    Real y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, 0.5, 0.01);
-    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.01);
+    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.05);
+}
+
+template<class Real, size_t dimension>
+void test_product()
+{
+    std::cout << "Testing that product functions are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    auto g = [&](std::vector<Real> const & x)->Real
+    {
+        double y = 1;
+        for (size_t i = 0; i < x.size(); ++i)
+        {
+            y *= 2*x[i];
+        }
+        return y;
+    };
+
+    vector<pair<Real, Real>> bounds(dimension);
+    for (size_t i = 0; i < dimension; ++i)
+    {
+        bounds[i] = std::make_pair<Real, Real>(0, 1);
+    }
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
+
+    auto task = mc.integrate();
+    Real y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    using std::pow;
+    Real exact_variance = pow(4.0/3.0, dimension) - 1;
+    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.05);
 }
 
 
@@ -167,12 +196,22 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
     test_nan<float>();
     test_pi<float>();
     test_pi<double>();
-    //test_pi<long double>();
+    test_pi<long double>();
     test_constant<float>();
     test_constant<double>();
-    //test_constant<long double>();
+    test_constant<long double>();
     test_cancel_and_restart<float>();
     test_exception_from_integrand<float>();
     test_variance<float>();
     test_variance<double>();
+    test_product<float, 1>();
+    test_product<float, 2>();
+    test_product<float, 3>();
+    test_product<float, 4>();
+    test_product<float, 5>();
+    test_product<float, 6>();
+    test_product<double, 1>();
+    test_product<double, 2>();
+    test_product<double, 3>();
+    test_product<double, 4>();
 }
