@@ -14,17 +14,24 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     namespace boost{ namespace math{
 
     template<class F, class Real>
-    Real quasi_monte_carlo(F& f);
+    class quasi_monte_carlo
+    {
+
+    };
     }} // namespaces
 
 [heading Description]
 
 The functional `quasi_monte_carlo` calculates the integral of a function /f/ using randomized quasi Monte-Carlo integration.
-Some explanation is needed to unpack the language of "randomized quasi-Monte Carlo integration".
+Some explanation is needed to unpack the phrase "randomized quasi-Monte Carlo integration".
 A traditional Monte Carlo integration uses a pseudo-random sequence of quadrature nodes to produce an estimate of the integral.
-Pseudo-random numbers (which, for our purposes can be thought of as truly random) seem to form "clumps"-small volumes which have a surprising number of quadrature nodes.
-Random sampling of the domain has many good properties, but so does uniform coverage.
-An attempt to merge the these two ideas leads us to the notion of low-discrepancy sequences.
+Pseudo-random numbers (which, for our purposes can be thought of as truly random) tend to form "clumps"-small volumes which have a surprising number of quadrature nodes.
+
+[" . . . a detailed analysis reveals that, in
+Monte Carlo integration, it is not so much the true randomness of the samples
+that is relevant, but rather that the samples should be spread in a uniform
+manner over the integration domain.]--Harald Niederreiter
+
 
 
 References:
