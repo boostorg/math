@@ -27,23 +27,23 @@ void test_alpha_distance()
     std::array<Real, 3> v1 = {0,0,0};
     std::array<Real, 3> v2 = {1,0,0};
     Real alpha = 0.5;
-    Real d = boost::math::detail::alpha_distance<Real, std::array<Real, 3>, 3>(v1, v2, alpha);
+    Real d = boost::math::detail::alpha_distance<std::array<Real, 3>>(v1, v2, alpha);
     BOOST_CHECK_CLOSE_FRACTION(d, 1, tol);
 
-    d = boost::math::detail::alpha_distance<Real, std::array<Real, 3>, 3>(v1, v2, 0);
+    d = boost::math::detail::alpha_distance<std::array<Real, 3>>(v1, v2, 0.0);
     BOOST_CHECK_CLOSE_FRACTION(d, 1, tol);
 
-    d = boost::math::detail::alpha_distance<Real, std::array<Real, 3>, 3>(v1, v2, 1);
+    d = boost::math::detail::alpha_distance<std::array<Real, 3>>(v1, v2, 1.0);
     BOOST_CHECK_CLOSE_FRACTION(d, 1, tol);
 
     v2[0] = 2;
-    d = boost::math::detail::alpha_distance<Real, std::array<Real, 3>, 3>(v1, v2, alpha);
+    d = boost::math::detail::alpha_distance<std::array<Real, 3>>(v1, v2, alpha);
     BOOST_CHECK_CLOSE_FRACTION(d, pow(2, (Real)1/ (Real) 2), tol);
 
-    d = boost::math::detail::alpha_distance<Real, std::array<Real, 3>, 3>(v1, v2, 0);
+    d = boost::math::detail::alpha_distance<std::array<Real, 3>>(v1, v2, 0.0);
     BOOST_CHECK_CLOSE_FRACTION(d, 1, tol);
 
-    d = boost::math::detail::alpha_distance<Real, std::array<Real, 3>, 3>(v1, v2, 1);
+    d = boost::math::detail::alpha_distance<std::array<Real, 3>>(v1, v2, 1.0);
     BOOST_CHECK_CLOSE_FRACTION(d, 2, tol);
 }
 
@@ -60,7 +60,7 @@ void test_linear()
     v[1] = {1,0,0};
     v[2] = {2,0,0};
     v[3] = {3,0,0};
-    catmull_rom<Real, std::array<Real, 3>, 3> cr(v.data(), v.size());
+    catmull_rom<std::array<Real, 3>> cr(v.data(), v.size());
 
     // Test that the interpolation condition is obeyed:
     BOOST_CHECK_CLOSE_FRACTION(cr.max_parameter(), 3, tol);
@@ -125,7 +125,7 @@ void test_circle()
         Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
         v[i] = {cos(theta), sin(theta)};
     }
-    catmull_rom<Real, std::array<Real, 2>, 2> circle(v.data(), v.size(), true);
+    catmull_rom<std::array<Real, 2>> circle(v.data(), v.size(), true);
 
     // Interpolation condition:
     for (size_t i = 0; i < v.size(); ++i)
@@ -159,6 +159,7 @@ void test_circle()
     }
 }
 
+
 template<class Real, size_t dimension>
 void test_affine_invariance()
 {
@@ -189,7 +190,7 @@ void test_affine_invariance()
         affine_shift[j] = gen()*inv_denom;
     }
 
-    catmull_rom<Real, std::array<Real, dimension>, dimension> cr1(v.data(), v.size());
+    catmull_rom<std::array<Real, dimension>> cr1(v.data(), v.size());
 
     for(size_t i = 0; i< v.size(); ++i)
     {
@@ -199,7 +200,7 @@ void test_affine_invariance()
         }
     }
 
-    catmull_rom<Real, std::array<Real, dimension>, dimension> cr2(v.data(), v.size());
+    catmull_rom<std::array<Real, dimension>> cr2(v.data(), v.size());
 
     BOOST_CHECK_CLOSE_FRACTION(cr1.max_parameter(), cr2.max_parameter(), tol);
 
@@ -234,7 +235,7 @@ void test_helix()
         Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
         v[i] = {cos(theta), sin(theta), theta};
     }
-    catmull_rom<Real, std::array<Real, 3>, 3> helix(v.data(), v.size());
+    catmull_rom<std::array<Real, 3>> helix(v.data(), v.size());
 
     // Interpolation condition:
     for (size_t i = 0; i < v.size(); ++i)
@@ -306,6 +307,7 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
     test_circle<double>();
     test_circle<long double>();
     test_circle<cpp_bin_float_50>();
+
 
     test_helix<float>();
     test_helix<double>();
