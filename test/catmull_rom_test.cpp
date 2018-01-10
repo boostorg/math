@@ -213,9 +213,9 @@ void test_affine_invariance()
         for (size_t j = 0; j < dimension; ++j)
         {
             BOOST_CHECK_CLOSE_FRACTION(p0[j] + affine_shift[j], p1[j], tol);
-            if (abs(tangent0[j]) > tol)
+            if (abs(tangent0[j]) > 5000*tol)
             {
-                BOOST_CHECK_CLOSE_FRACTION(tangent0[j], tangent1[j], 20*tol);
+                BOOST_CHECK_CLOSE_FRACTION(tangent0[j], tangent1[j], 5000*tol);
             }
         }
     }
@@ -227,8 +227,8 @@ void test_helix()
     std::cout << "Testing that the Catmull-Rom spline interpolates helices correctly on type "
               << boost::typeindex::type_id<Real>().pretty_name() << "\n";
 
-    Real tol = 1000*std::numeric_limits<Real>::epsilon();
-    std::vector<std::array<Real, 3>> v(1000*sizeof(Real));
+    Real tol = 0.001;
+    std::vector<std::array<Real, 3>> v(2000*sizeof(Real));
     for (size_t i = 0; i < v.size(); ++i)
     {
         Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
@@ -270,16 +270,16 @@ void test_helix()
         BOOST_CHECK_CLOSE_FRACTION(x*x+y*y, (Real) 1, (Real) 0.01);
         if (abs(x) < 0.01)
         {
-            BOOST_CHECK_SMALL(cos(t),  (Real) 0.01);
+            BOOST_CHECK_SMALL(cos(t),  (Real) 0.05);
         }
         if (abs(y) < 0.01)
         {
-            BOOST_CHECK_SMALL(sin(t), (Real) 0.01);
+            BOOST_CHECK_SMALL(sin(t), (Real) 0.05);
         }
         else
         {
-            BOOST_CHECK_CLOSE_FRACTION(x, cos(t), (Real) 0.01);
-            BOOST_CHECK_CLOSE_FRACTION(y, sin(t), (Real) 0.01);
+            BOOST_CHECK_CLOSE_FRACTION(x, cos(t), (Real) 0.05);
+            BOOST_CHECK_CLOSE_FRACTION(y, sin(t), (Real) 0.05);
         }
     }
 }

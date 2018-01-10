@@ -45,7 +45,7 @@ Catmull-Rom splines enjoy the following nice properties:
 The `catmull_rom` class provided by boost creates a cubic Catmull-Rom spline from an array of points in any dimension.
 Since there are numerous ways to represent a point in /n/-dimensional space,
 the class attempts to be flexible by templating on the point type.
-The requirement of the point type is that it must have a dereference operator defined (e.g., `p[0]` is not a syntax error),
+The requirement of the point type is that it must have a dereference operator defined (i.e., `p[0]` is not a syntax error),
 it must be able to be dereferenced up to `dimension -1`, and `p[i]` is of type `Real`.
 The basic usage is shown here:
 
@@ -58,7 +58,7 @@ The basic usage is shown here:
     // Interpolate at s = 0.1:
     auto point = cr(0.1);
 
-The spline can be either open or *closed*, meaning that there is some /t/ such /P(t) = P(0)/.
+The spline can be either open or *closed*, closed meaning that there is some /t/ such that /P(t) = P(0)/.
 The default is open, but this can be easily changed:
 
     // closed = true
@@ -115,36 +115,36 @@ The following performance numbers were generated for a call to the Catmull-Rom i
 The number that follows the slash is the number of points passed to the interpolant.
 
 
-Run on 2700 MHz CPU
-CPU Caches:
-  L1 Data 32K (x2)
-  L1 Instruction 32K (x2)
-  L2 Unified 262K (x2)
-  L3 Unified 3145K (x1)
----------------------------------------------------------
-Benchmark                              Time           CPU
----------------------------------------------------------
-BM_CatmullRom<double>/4               20 ns         20 ns
-BM_CatmullRom<double>/8               21 ns         21 ns
-BM_CatmullRom<double>/16              23 ns         23 ns
-BM_CatmullRom<double>/32              24 ns         24 ns
-BM_CatmullRom<double>/64              27 ns         27 ns
-BM_CatmullRom<double>/128             27 ns         27 ns
-BM_CatmullRom<double>/256             30 ns         30 ns
-BM_CatmullRom<double>/512             32 ns         31 ns
-BM_CatmullRom<double>/1024            33 ns         33 ns
-BM_CatmullRom<double>/2048            34 ns         34 ns
-BM_CatmullRom<double>/4096            36 ns         36 ns
-BM_CatmullRom<double>/8192            38 ns         38 ns
-BM_CatmullRom<double>/16384           39 ns         39 ns
-BM_CatmullRom<double>/32768           40 ns         40 ns
-BM_CatmullRom<double>/65536           45 ns         44 ns
-BM_CatmullRom<double>/131072          46 ns         46 ns
-BM_CatmullRom<double>/262144          50 ns         50 ns
-BM_CatmullRom<double>/524288          53 ns         52 ns
-BM_CatmullRom<double>/1048576         58 ns         57 ns
-BM_CatmullRom<double>_BigO          2.97 lgN       2.97 lgN
-BM_CatmullRom<double>_RMS             19 %         19 %
+    Run on 2700 MHz CPU
+    CPU Caches:
+      L1 Data 32K (x2)
+      L1 Instruction 32K (x2)
+      L2 Unified 262K (x2)
+      L3 Unified 3145K (x1)
+    ---------------------------------------------------------
+    Benchmark                              Time           CPU
+    ---------------------------------------------------------
+    BM_CatmullRom<double>/4               20 ns         20 ns
+    BM_CatmullRom<double>/8               21 ns         21 ns
+    BM_CatmullRom<double>/16              23 ns         23 ns
+    BM_CatmullRom<double>/32              24 ns         24 ns
+    BM_CatmullRom<double>/64              27 ns         27 ns
+    BM_CatmullRom<double>/128             27 ns         27 ns
+    BM_CatmullRom<double>/256             30 ns         30 ns
+    BM_CatmullRom<double>/512             32 ns         31 ns
+    BM_CatmullRom<double>/1024            33 ns         33 ns
+    BM_CatmullRom<double>/2048            34 ns         34 ns
+    BM_CatmullRom<double>/4096            36 ns         36 ns
+    BM_CatmullRom<double>/8192            38 ns         38 ns
+    BM_CatmullRom<double>/16384           39 ns         39 ns
+    BM_CatmullRom<double>/32768           40 ns         40 ns
+    BM_CatmullRom<double>/65536           45 ns         44 ns
+    BM_CatmullRom<double>/131072          46 ns         46 ns
+    BM_CatmullRom<double>/262144          50 ns         50 ns
+    BM_CatmullRom<double>/524288          53 ns         52 ns
+    BM_CatmullRom<double>/1048576         58 ns         57 ns
+    BM_CatmullRom<double>_BigO          2.97 lgN       2.97 lgN
+    BM_CatmullRom<double>_RMS             19 %         19 %
 
 [section:catmull_rom_refs References]
 
