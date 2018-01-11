@@ -1,5 +1,5 @@
 /*
- * Copyright Nick Thompson, 2017
+ * Copyright Nick Thompson, 2018
  * Use, modification and distribution are subject to the
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -20,6 +20,13 @@
 
 namespace boost { namespace math { namespace quadrature {
 
+namespace detail {
+  enum class limit_classification {FINITE,
+                                   LOWER_BOUND_INFINITE,
+                                   UPPER_BOUND_INFINITE,
+                                   DOUBLE_INFINITE};
+}
+
 template<class Real, class F, class Policy = boost::math::policies::policy<>>
 class naive_monte_carlo
 {
@@ -27,30 +34,78 @@ public:
     naive_monte_carlo(const F& f,
                       std::vector<std::pair<Real, Real>> const & bounds,
                       Real error_goal,
-                      size_t threads = std::thread::hardware_concurrency()): m_f{f}, m_num_threads{threads}
+                      size_t threads = std::thread::hardware_concurrency()): m_num_threads{threads}
     {
         using std::isfinite;
+        using std::numeric_limits;
         size_t n = bounds.size();
         m_lbs.resize(n);
         m_dxs.resize(n);
+        m_limit_types.resize(n);
         m_volume = 1;
         static const char* function = "boost::math::quadrature::naive_monte_carlo<%1%>";
         for (size_t i = 0; i < n; ++i)
         {
-            if (!(isfinite(bounds[i].first) && isfinite(bounds[i].second)))
-            {
-                boost::math::policies::raise_domain_error(function, "The routine only support bounded domains. Rescaling infinite domains must be done by the user.\n", bounds[i].first, Policy());
-                return;
-            }
             if (bounds[i].second <= bounds[i].first)
             {
                 boost::math::policies::raise_domain_error(function, "The upper bound is <= the lower bound.\n", bounds[i].second, Policy());
                 return;
             }
-            m_lbs[i] = bounds[i].first;
-            m_dxs[i] = bounds[i].second - m_lbs[i];
-            m_volume *= m_dxs[i];
+            if (bounds[i].first == -numeric_limits<Real>::infinity())
+            {
+                if (bounds[i].second == numeric_limits<Real>::infinity())
+                {
+                    m_limit_types[i] = detail::limit_classification::DOUBLE_INFINITE;
+                }
+                else
+                {
+                    m_limit_types[i] = detail::limit_classification::LOWER_BOUND_INFINITE;
+                    // Ok ok this is bad:
+                    m_lbs[i] = bounds[i].second;
+                    m_dxs[i] = std::numeric_limits<Real>::quiet_NaN();
+                }
+            }
+            else if (bounds[i].second == numeric_limits<Real>::infinity())
+            {
+                m_limit_types[i] = detail::limit_classification::UPPER_BOUND_INFINITE;
+                m_lbs[i] = bounds[i].first;
+                m_dxs[i] = std::numeric_limits<Real>::quiet_NaN();
+            }
+            else
+            {
+                m_limit_types[i] = detail::limit_classification::FINITE;
+                m_lbs[i] = bounds[i].first;
+                m_dxs[i] = bounds[i].second - m_lbs[i];
+                m_volume *= m_dxs[i];
+            }
         }
+
+        m_f = [this, &f](std::vector<Real> & x)->Real
+        {
+            Real coeff = m_volume;
+            for (size_t i = 0; i < x.size(); ++i)
+            {
+                if (m_limit_types[i] == detail::limit_classification::FINITE)
+                {
+                    x[i] = m_lbs[i] + x[i]*m_dxs[i];
+                }
+                else if (m_limit_types[i] == detail::limit_classification::UPPER_BOUND_INFINITE)
+                {
+                    Real t = x[i];
+                    Real z = 1/(1-t);
+                    coeff *= (z*z);
+                    x[i] = m_lbs[i] + t*z;
+                }
+                else if (m_limit_types[i] == detail::limit_classification::LOWER_BOUND_INFINITE)
+                {
+                    Real t = x[i];
+                    Real z = 1/t;
+                    coeff *= (z*z);
+                    x[i] = m_lbs[i] + (t-1)*z;
+                }
+            }
+            return coeff*f(x);
+        };
 
         // If we don't do a single function call in the constructor,
         // we can't do a restart.
@@ -68,7 +123,8 @@ public:
         {
             for (size_t j = 0; j < m_lbs.size(); ++j)
             {
-                x[j] = m_lbs[j] + (gen()+1)*inv_denom*m_dxs[j];
+                // I worry that in float precision, this can be rounded to zero and we'll hit a nan.
+                x[j] = (gen()+1)*inv_denom;
             }
             Real y = m_f(x);
             m_thread_averages.emplace(i, y);
@@ -107,7 +163,7 @@ public:
     Real current_error_estimate() const
     {
         using std::sqrt;
-        return m_volume*sqrt(m_variance.load()/m_total_calls.load());
+        return sqrt(m_variance.load()/m_total_calls.load());
     }
 
     std::chrono::duration<Real> estimated_time_to_completion() const
@@ -138,7 +194,7 @@ public:
 
     Real current_estimate() const
     {
-        return m_avg.load()*m_volume;
+        return m_avg.load();
     }
 
     size_t calls() const
@@ -210,7 +266,7 @@ private:
         m_variance = variance/(total_calls - 1);
         m_total_calls = total_calls;
 
-        return m_avg.load()*m_volume;
+        return m_avg.load();
     }
 
     void m_thread_monte(size_t thread_index)
@@ -242,7 +298,7 @@ private:
                 {
                     for (size_t i = 0; i < m_lbs.size(); ++i)
                     {
-                        x[i] = m_lbs[i] + (gen()+1)*inv_denom*m_dxs[i];
+                        x[i] = (gen()+1)*inv_denom;
                     }
                     Real f = m_f(x);
                     ++k;
@@ -266,12 +322,13 @@ private:
         }
     }
 
-    const F& m_f;
+    std::function<Real(std::vector<Real> &)> m_f;
     size_t m_num_threads;
     std::atomic<Real> m_error_goal;
     std::atomic<bool> m_done;
     std::vector<Real> m_lbs;
     std::vector<Real> m_dxs;
+    std::vector<detail::limit_classification> m_limit_types;
     Real m_volume;
     std::atomic<size_t> m_total_calls;
     // I wanted these to be vectors rather than maps,
