@@ -231,6 +231,27 @@ void test_lower_bound_infinite()
     BOOST_CHECK_CLOSE_FRACTION(y, M_PI/2, 0.01);
 }
 
+template<class Real>
+void test_double_infinite()
+{
+    std::cout << "Testing that double infinite bounds are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    auto g = [](std::vector<Real> const & x)->Real
+    {
+        return 1.0/(x[0]*x[0] + 1.0);
+    };
+
+    vector<pair<Real, Real>> bounds(1);
+    for (size_t i = 0; i < bounds.size(); ++i)
+    {
+        bounds[i] = std::make_pair<Real, Real>(-std::numeric_limits<Real>::infinity(), std::numeric_limits<Real>::infinity());
+    }
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
+
+    auto task = mc.integrate();
+    Real y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, M_PI, 0.01);
+}
+
 
 BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 {
@@ -259,4 +280,6 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
     test_upper_bound_infinite<double>();
     test_lower_bound_infinite<float>();
     test_lower_bound_infinite<double>();
+    test_double_infinite<float>();
+    test_double_infinite<double>();
 }

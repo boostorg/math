@@ -103,6 +103,14 @@ public:
                     coeff *= (z*z);
                     x[i] = m_lbs[i] + (t-1)*z;
                 }
+                else
+                {
+                    Real t = 2*x[i] - 1;
+                    Real tsq = t*t;
+                    Real z = 1/(1-tsq);
+                    coeff *= 2*(1+tsq)*z*z;
+                    x[i] = t*z;
+                }
             }
             return coeff*f(x);
         };
