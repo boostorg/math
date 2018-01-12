@@ -31,12 +31,11 @@ template<class Real, class F, class Policy = boost::math::policies::policy<>>
 class naive_monte_carlo
 {
 public:
-    naive_monte_carlo(const F& f,
+    naive_monte_carlo(const F& integrand,
                       std::vector<std::pair<Real, Real>> const & bounds,
                       Real error_goal,
                       size_t threads = std::thread::hardware_concurrency()): m_num_threads{threads}
     {
-        using std::isfinite;
         using std::numeric_limits;
         size_t n = bounds.size();
         m_lbs.resize(n);
@@ -62,14 +61,14 @@ public:
                     m_limit_types[i] = detail::limit_classification::LOWER_BOUND_INFINITE;
                     // Ok ok this is bad:
                     m_lbs[i] = bounds[i].second;
-                    m_dxs[i] = std::numeric_limits<Real>::quiet_NaN();
+                    m_dxs[i] = numeric_limits<Real>::quiet_NaN();
                 }
             }
             else if (bounds[i].second == numeric_limits<Real>::infinity())
             {
                 m_limit_types[i] = detail::limit_classification::UPPER_BOUND_INFINITE;
                 m_lbs[i] = bounds[i].first;
-                m_dxs[i] = std::numeric_limits<Real>::quiet_NaN();
+                m_dxs[i] = numeric_limits<Real>::quiet_NaN();
             }
             else
             {
@@ -80,7 +79,7 @@ public:
             }
         }
 
-        m_f = [this, &f](std::vector<Real> & x)->Real
+        m_integrand = [this, &integrand](std::vector<Real> & x)->Real
         {
             Real coeff = m_volume;
             for (size_t i = 0; i < x.size(); ++i)
@@ -115,7 +114,7 @@ public:
                     x[i] = t*z;
                 }
             }
-            return coeff*f(x);
+            return coeff*integrand(x);
         };
 
         // If we don't do a single function call in the constructor,
@@ -125,22 +124,19 @@ public:
         std::mt19937_64 gen(rd());
         Real inv_denom = (Real) 1/( (Real) gen.max() + (Real) 2);
 
-        if (m_num_threads == 0)
-        {
-            m_num_threads = 1;
-        }
+        m_num_threads = std::max(m_num_threads, (size_t) 1);
         Real avg = 0;
         for (size_t i = 0; i < m_num_threads; ++i)
         {
             for (size_t j = 0; j < m_lbs.size(); ++j)
             {
                 x[j] = (gen()+1)*inv_denom;
-                while (x[j] < std::numeric_limits<Real>::epsilon() || x[j] > 1 - std::numeric_limits<Real>::epsilon())
+                while (x[j] < numeric_limits<Real>::epsilon() || x[j] > 1 - numeric_limits<Real>::epsilon())
                 {
                     x[j] = (gen()+1)*inv_denom;
                 }
             }
-            Real y = m_f(x);
+            Real y = m_integrand(x);
             m_thread_averages.emplace(i, y);
             m_thread_calls.emplace(i, 1);
             m_thread_Ss.emplace(i, 0);
@@ -153,7 +149,7 @@ public:
         m_start = std::chrono::system_clock::now();
         m_done = false;
         m_total_calls = m_num_threads;
-        m_variance = std::numeric_limits<Real>::max();
+        m_variance = numeric_limits<Real>::max();
     }
 
     std::future<Real> integrate()
@@ -283,6 +279,7 @@ private:
 
     void m_thread_monte(size_t thread_index)
     {
+        using std::numeric_limits;
         try
         {
             std::vector<Real> x(m_lbs.size());
@@ -312,12 +309,12 @@ private:
                     for (size_t i = 0; i < m_lbs.size(); ++i)
                     {
                         x[i] = (gen()+1)*inv_denom;
-                        while (x[i] < std::numeric_limits<Real>::epsilon() || x[i] > 1 - std::numeric_limits<Real>::epsilon())
+                        while (x[i] < numeric_limits<Real>::epsilon() || x[i] > 1 - numeric_limits<Real>::epsilon())
                         {
                             x[i] = (gen()+1)*inv_denom;
                         }
                     }
-                    Real f = m_f(x);
+                    Real f = m_integrand(x);
                     ++k;
                     Real term = (f - M1)/k;
                     Real y1 = term - compensator;
@@ -339,7 +336,7 @@ private:
         }
     }
 
-    std::function<Real(std::vector<Real> &)> m_f;
+    std::function<Real(std::vector<Real> &)> m_integrand;
     size_t m_num_threads;
     std::atomic<Real> m_error_goal;
     std::atomic<bool> m_done;

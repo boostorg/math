@@ -1,5 +1,5 @@
 [/
-Copyright (c) 2017 Nick Thompson
+Copyright (c) 2018 Nick Thompson
 Use, modification and distribution are subject to the
 Boost Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -17,7 +17,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     class naive_monte_carlo
     {
     public:
-        naive_monte_carlo(const F& f,
+        naive_monte_carlo(const F& integrand,
                           std::vector<std::pair<Real, Real>> const & bounds,
                           Real error_goal,
                           size_t threads = std::thread::hardware_concurrency());
