@@ -4,8 +4,8 @@
  * Boost Software License, Version 1.0. (See accompanying file
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
-#ifndef NAIVE_MONTE_CARLO_HPP
-#define NAIVE_MONTE_CARLO_HPP
+#ifndef BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
+#define BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
 #include <algorithm>
 #include <vector>
 #include <atomic>
@@ -85,6 +85,8 @@ public:
             Real coeff = m_volume;
             for (size_t i = 0; i < x.size(); ++i)
             {
+                // Variable transformation are listed at:
+                // https://en.wikipedia.org/wiki/Numerical_integration
                 if (m_limit_types[i] == detail::limit_classification::FINITE)
                 {
                     x[i] = m_lbs[i] + x[i]*m_dxs[i];
@@ -251,12 +253,10 @@ private:
         } while (this->current_error_estimate() > m_error_goal);
         // Error bound met; signal the threads:
         m_done = true;
-        // Wait for each one to finish:
         std::for_each(threads.begin(), threads.end(),
                       std::mem_fn(&std::thread::join));
         if (m_exception)
         {
-            // How do we rethrow an exception with policies?
             std::rethrow_exception(m_exception);
         }
         // Incorporate their work into the final estimate:
@@ -294,8 +294,7 @@ private:
             // {
             //     std::cout << "OMG! we have no entropy.\n";
             // }
-            auto seed = rd();
-            std::mt19937_64 gen(seed);
+            std::mt19937_64 gen(rd());
             Real inv_denom = (Real) 1/( (Real) gen.max() + (Real) 2);
             Real M1 = m_thread_averages[thread_index];
             Real S = m_thread_Ss[thread_index];
@@ -305,6 +304,8 @@ private:
             while (!m_done)
             {
                 int j = 0;
+                // If we don't have a certain number of calls before an update, we can easily terminate prematurely
+                // because the variance estimate is way too low.
                 int magic_calls_before_update = 2048;
                 while (j++ < magic_calls_before_update)
                 {
@@ -357,5 +358,6 @@ private:
     std::chrono::time_point<std::chrono::system_clock> m_start;
     std::exception_ptr m_exception;
 };
+
 }}}
 #endif
