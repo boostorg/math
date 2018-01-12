@@ -107,7 +107,8 @@ public:
                 {
                     Real t = 2*x[i] - 1;
                     Real tsq = t*t;
-                    Real z = 1/(1-tsq);
+                    Real z = 1/(1-t);
+                    z /= (1+t);
                     coeff *= 2*(1+tsq)*z*z;
                     x[i] = t*z;
                 }
@@ -131,8 +132,11 @@ public:
         {
             for (size_t j = 0; j < m_lbs.size(); ++j)
             {
-                // I worry that in float precision, this can be rounded to zero and we'll hit a nan.
                 x[j] = (gen()+1)*inv_denom;
+                while (x[j] < std::numeric_limits<Real>::epsilon() || x[j] > 1 - std::numeric_limits<Real>::epsilon())
+                {
+                    x[j] = (gen()+1)*inv_denom;
+                }
             }
             Real y = m_f(x);
             m_thread_averages.emplace(i, y);
@@ -307,6 +311,10 @@ private:
                     for (size_t i = 0; i < m_lbs.size(); ++i)
                     {
                         x[i] = (gen()+1)*inv_denom;
+                        while (x[i] < std::numeric_limits<Real>::epsilon() || x[i] > 1 - std::numeric_limits<Real>::epsilon())
+                        {
+                            x[i] = (gen()+1)*inv_denom;
+                        }
                     }
                     Real f = m_f(x);
                     ++k;
