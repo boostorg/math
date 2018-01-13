@@ -130,11 +130,11 @@ public:
         {
             for (size_t j = 0; j < m_lbs.size(); ++j)
             {
-                x[j] = (gen()+1)*inv_denom;
-                while (x[j] < numeric_limits<Real>::epsilon() || x[j] > 1 - numeric_limits<Real>::epsilon())
+                do
                 {
                     x[j] = (gen()+1)*inv_denom;
                 }
+                while (x[j] < numeric_limits<Real>::epsilon() || x[j] > 1 - numeric_limits<Real>::epsilon());
             }
             Real y = m_integrand(x);
             m_thread_averages.emplace(i, y);
@@ -308,11 +308,11 @@ private:
                 {
                     for (size_t i = 0; i < m_lbs.size(); ++i)
                     {
-                        x[i] = (gen()+1)*inv_denom;
-                        while (x[i] < numeric_limits<Real>::epsilon() || x[i] > 1 - numeric_limits<Real>::epsilon())
+                        do
                         {
                             x[i] = (gen()+1)*inv_denom;
                         }
+                        while (x[i] < numeric_limits<Real>::epsilon() || x[i] > 1 - numeric_limits<Real>::epsilon());
                     }
                     Real f = m_integrand(x);
                     ++k;
