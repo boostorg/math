@@ -14,28 +14,10 @@
 #include <limits>
 #include <cmath>
 #include <random>
+#include <boost/math/tools/van_der_corput.hpp>
 #include <boost/math/tools/sieve_of_eratosthenes.hpp>
 
 namespace boost { namespace math {
-
-template<class Real, class Z>
-Real van_der_corput(Z x, Z b)
-{
-    static_assert(std::numeric_limits<Z>::is_integer,
-                  "The van der Corput function takes integers as arguments and returns real values.\n");
-    Real r = 0;
-    Real v = 1;
-    Real inv_b = static_cast<Real>(1) / static_cast<Real>(b);
-
-    while (x > 0)
-    {
-        v *= inv_b;
-        r += v*static_cast<Real>(x % b);
-        x /= b;
-    }
-    return r;
-}
-
 
 template<class Real>
 class halton_sequence {
@@ -78,7 +60,8 @@ public:
         {
             m_leap = 1;
         }
-        // The first few iterations of the Halton sequence have very poor properties.
+        // The first few iterations of the Halton sequence have very poor properties,
+        // so we set the iteration to large-ish number.
         m_iteration = m_leap*m_primes.back();
     }
 
@@ -105,6 +88,7 @@ public:
             *it++ = van_der_corput<Real, size_t>(count, *prime_it++);
             ++i;
         }
+        // Is this assertion necessary, or should the user be required to "do the right thing"?
         assert(i == m_dimension);
     }
 
