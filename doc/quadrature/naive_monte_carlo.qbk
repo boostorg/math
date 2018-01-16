@@ -43,7 +43,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [heading Description]
 
 The class `naive_monte_carlo` performs Monte-Carlo integration on a function /f/ on a domain [Omega].
-The theoretical background of Monte-Carlo integration is nicely discussed in [@https://en.wikipedia.org/wiki/Monte_Carlo_integration Wikipedia],
+The theoretical background of Monte-Carlo integration is nicely discussed at [@https://en.wikipedia.org/wiki/Monte_Carlo_integration Wikipedia],
 and as such will not be discussed here.
 However, despite being "naive",
 it is a mistake to assume that naive Monte-Carlo integration is not powerful,
@@ -102,9 +102,7 @@ All these use cases are supported, so let's get to the code:
 First off, we define the function we wish to integrate.
 This function must accept a `std::vector<Real> const &`, and return a `Real`.
 Next, we define the domain of integration.
-Currently, only finite integration bounds are supported,
-so if the user wishes to integrate a function over an infinite domain,
-a variable transformation must be performed.
+Infinite domains are indicated by the bound `std::numeric_limits<Real>::infinity()`.
 The call
 
     naive_monte_carlo<double, decltype(g)> mc(g, bounds, error_goal);
