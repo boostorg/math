@@ -252,6 +252,35 @@ void test_double_infinite()
     BOOST_CHECK_CLOSE_FRACTION(y, M_PI, 0.01);
 }
 
+template<class Real, size_t dimension>
+void test_radovic()
+{
+    // See: Generalized Halton Sequences in 2008: A Comparative Study, function g1:
+    std::cout << "Testing that the Radovic function is integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    auto g = [](std::vector<Real> const & x)->Real
+    {
+        using std::abs;
+        Real alpha = 0.01;
+        Real z = 1;
+        for (size_t i = 0; i < dimension; ++i)
+        {
+            z *= (abs(4*x[i]-2) + alpha)/(1+alpha);
+        }
+        return z;
+    };
+
+    vector<pair<Real, Real>> bounds(dimension);
+    for (size_t i = 0; i < bounds.size(); ++i)
+    {
+        bounds[i] = std::make_pair<Real, Real>(0, 1);
+    }
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
+
+    auto task = mc.integrate();
+    Real y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+}
+
 
 BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 {
@@ -282,4 +311,12 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
     test_lower_bound_infinite<double>();
     test_double_infinite<float>();
     test_double_infinite<double>();
+    test_radovic<float, 1>();
+    test_radovic<float, 2>();
+    test_radovic<float, 3>();
+    test_radovic<double, 1>();
+    test_radovic<double, 2>();
+    test_radovic<double, 3>();
+    test_radovic<double, 4>();
+    test_radovic<double, 5>();
 }
