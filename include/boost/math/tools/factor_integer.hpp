@@ -16,13 +16,14 @@
 #include <thread>
 #include <atomic>
 #include <algorithm>
+#include <boost/optional.hpp>
 #include <boost/math/special_functions/prime.hpp>
 #include <boost/integer/common_factor_rt.hpp>
 
-namespace boost { namespace math {
+namespace boost::math {
 
 template<class Integer>
-Integer pollard_rho(Integer n, size_t num_threads = std::thread::hardware_concurrency())
+boost::optional<Integer> pollard_rho(Integer n, size_t num_threads = std::thread::hardware_concurrency())
 {
     // Algorithm 5.23 of "The Joy of Factoring":
     using std::atomic;
@@ -102,6 +103,10 @@ Integer pollard_rho(Integer n, size_t num_threads = std::thread::hardware_concur
     std::for_each(threads.begin(), threads.end(),
                   std::mem_fn(&std::thread::join));
 
+    if (*divisor_ptr == 0)
+    {
+        return {};
+    }
     return *divisor_ptr;
 }
 
@@ -139,6 +144,6 @@ std::vector<std::pair<Integer, Integer>> trial_division(Integer n)
     return pairs;
 }
 
-}}
+}
 
 #endif
