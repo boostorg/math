@@ -36,5 +36,32 @@ Real van_der_corput(Z x, Z base)
     return r;
 }
 
+template<class Real, class Z, class Policy = policies::policy<>>
+Real modified_van_der_corput(Z x, Z base, Z admissible_integer)
+{
+    static_assert(std::numeric_limits<Z>::is_integer,
+                  "The van der Corput function takes integers as arguments and returns real values.\n");
+    if (base < 2 || x < 0 || admissible_integer < 0)
+    {
+        static const char* function = "boost::math::modified_van_der_corput<%1%>";
+        boost::math::policies::raise_domain_error<Real>(
+              function, "Base must be >= 2 and argument >= 0, but got base %1%", base, Policy());
+    }
+    Real r = 0;
+    Real v = 1;
+    Real inv_b = static_cast<Real>(1) / static_cast<Real>(base);
+
+    Z k = admissible_integer;
+    while (x > 0)
+    {
+        v *= inv_b;
+        Z z = (k*x) % base;
+        k *= admissible_integer;
+        r += v*static_cast<Real>(z);
+        x /= base;
+    }
+    return r;
+}
+
 }}
 #endif
