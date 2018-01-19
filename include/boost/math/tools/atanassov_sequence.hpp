@@ -47,6 +47,11 @@ public:
       assert(i == m_dimension);
   }
 
+  size_t get_dimension() const
+  {
+      return m_dimension;
+  }
+
 private:
   size_t m_dimension;
   std::atomic<size_t> m_iteration;
