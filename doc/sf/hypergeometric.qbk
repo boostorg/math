@@ -1,0 +1,122 @@
+
+[section:hypergeometric Hypergeometric Functions]
+
+[section:hyper_geometric_1f0 Hypergeometric 1F0]
+
+   template <class T1, class T2>
+   ``__sf_result`` hypergeometric_1f0(T1 a, T2 z);
+
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` hypergeometric_1f0(T1 a, T2 z, const ``__Policy``&);
+
+[h4 Description]
+
+The function hypergeometric_1f0 returns the result of:
+
+[equation hyper_1f0]
+
+The return type of these functions is computed using the __arg_promotion_rules
+when T1 and T2 are different types.
+
+[optional_policy]
+
+The functions return the result of __domain_error whenever the result is
+undefined or complex.  This occurs for `z == 1` or `1 - z < 0` and `a` not an integer.
+
+[h4 Implementation]
+
+Implementation is trivially via:
+
+[sub 1]F[sub 0](a, z) = (1-z)[super -a]
+
+
+[endsect]
+
+[section:hypergeometric_0f1 Hypergeometric 0F1]
+
+   template <class T1, class T2>
+   ``__sf_result`` hypergeometric_0f1(T1 b, T2 z);
+
+   template <class T1, class T2, class ``__Policy``>
+   ``__sf_result`` hypergeometric_0f1(T1 b, T2 z, const ``__Policy``&);
+
+[h4 Description]
+
+The function hypergeometric_0f1 returns the result of:
+
+[equation hyper_0f1]
+
+The return type of these functions is computed using the __arg_promotion_rules
+when T1 and T2 are different types.
+
+[optional_policy]
+
+The functions return the result of __domain_error whenever the result is
+undefined or complex.  This occurs only when `b` is an integer <= 0.
+
+[h4 Implementation]
+
+The function is implemented via it's defining series whenever that series is non-divergent.
+
+For a divergent series we use the continued fraction as long as the result is not too small:
+
+[equation hyper_0f1_cf]
+
+Otherwise one of the Bessel function relations:
+
+[equation hyper_0f1_bessel_j]
+
+[equation hyper_0f1_bessel_i]
+
+[endsect]
+
+[section:hyper_geometric_1f0 Hypergeometric 2F0]
+
+   template <class T1, class T2, class T3>
+   ``__sf_result`` hypergeometric_2f0(T1 a1, T2 a2, T3 z);
+
+   template <class T1, class T2, class T3, class ``__Policy``>
+   ``__sf_result`` hypergeometric_2f0(T1 a1, T2 a2, T3 z, const ``__Policy``&);
+
+[h4 Description]
+
+The function hypergeometric_2f0 returns the result of:
+
+[equation hyper_2f0]
+
+The return type of these functions is computed using the __arg_promotion_rules
+when T1 and T2 are different types.
+
+[optional_policy]
+
+The functions return the result of __domain_error whenever the result is
+undefined or complex.  The valid domain for this function occurs only when one of `a1` or 
+`a2` is a negative integer: ie the polynomial case.
+
+[h4 Implementation]
+
+When a1 == a2 - 0.5 then the function is implemented in terms of the Hermite polynomial:
+
+[equation hyper_2f0_hermite]
+
+When both a1 and a2 are integers then the function is implemented in terms of the associated-Laguerre polynomial:
+
+[equation hyper_2f0_laguerre]
+
+Otherwise if the defining series would be divergent, then we use the continued fraction form:
+
+[equation hyper_2f0_cf]
+
+Otherwise we use the defining series.
+
+[endsect]
+
+
+[endsect]
+
+[/ 
+  Copyright 2017 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
