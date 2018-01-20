@@ -6,31 +6,84 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ]
 
 
-[section:quasi_monte_carlo Quasi Monte Carlo Quadrature]
+[section:randomized_quasi_monte_carlo Randomized Quasi-Monte Carlo Integration]
 
 [heading Synopsis]
 
-    #include <boost/math/quadrature/quasi_monte_carlo.hpp>
+    #include <boost/math/quadrature/randomized_quasi_monte_carlo.hpp>
     namespace boost{ namespace math{
 
     template<class F, class Real>
-    class quasi_monte_carlo
+    class randomized_quasi_monte_carlo
     {
+        randomized_quasi_monte_carlo(const F& integrand,
+                                     std::vector<std::pair<Real, Real>> const & bounds,
+                                     Real error_goal,
+                                     size_t threads = std::thread::hardware_concurrency())
 
+        std::future<Real> integrate();
+
+        void cancel();
+
+        void update_target_error(Real new_target_error);
+
+        Real current_estimate() const;
+
+        Real current_error_estimate() const;
+
+        size_t calls() const;
     };
     }} // namespaces
 
 [heading Description]
 
-The functional `quasi_monte_carlo` calculates the integral of a function /f/ using randomized quasi Monte-Carlo integration.
+The functional `randomized_quasi_monte_carlo` calculates the integral of a function /f/ using randomized quasi-Monte Carlo integration.
 Some explanation is needed to unpack the phrase "randomized quasi-Monte Carlo integration".
 A traditional Monte Carlo integration uses a pseudo-random sequence of quadrature nodes to produce an estimate of the integral.
 Pseudo-random numbers (which, for our purposes can be thought of as truly random) tend to form "clumps"-small volumes which have a surprising number of quadrature nodes.
+
 
 [" . . . a detailed analysis reveals that, in
 Monte Carlo integration, it is not so much the true randomness of the samples
 that is relevant, but rather that the samples should be spread in a uniform
 manner over the integration domain.]--Harald Niederreiter
+
+Since true randomness of the nodes is not relevant, researchers have constructed "low-discrepancy sequences".
+These are sequences which may appear random, but in each subvolume of the sampled volume, there are roughly the same number of points.
+Low-discrepancy sequences implemented in Boost include the Atanassov sequence and the leaped Halton sequence.
+Other famous low-discrepancy sequences include the Neiderreiter-Xing and the Sobol sequence.
+
+The quasi-Monte Carlo method averages samples of a function from a low-discrepancy sequence.
+Unfortunately, the quasi-Monte Carlo method cannot estimate its own error, making it difficult to use.
+However, by averaging n quasi-Monte Carlo estimates (along with some form of randomization to the quasi-random sequence so as to avoid doing the same computation over and over),
+we can produce a real-time error estimate, and in addition we may accelerate convergence.
+Owen has demonstrated that randomized quasi-Monte Carlo integration is never much *worse* than naive Monte-Carlo integration,
+and in certain cases (the integrand being /d/-times Holder continuous), the convergence is accelerated to [bigo](log(N)[super (d-1)/2]/N[super 3/2]).
+N.B.: Because the convergence rate depends on properties of the integrand not accessible to the routine, *progress reporting is not supported*.
+However, the user can query the error estimate at any time in a threadsafe manner.
+
+In the implementation of the randomized quasi-Monte Carlo algorithm provided by Boost, each thread computes a quasi-Monte Carlo estimate using a permuted-coordinate Atanassov sequence with a Cranley-Patterson rotation.
+The error is estimated as the square root of the variance of each thread's estimate, and as such a minimum of two threads are consumed by the routine.
+*Calls to the integrand must be threadsafe*.
+
+An example to estimate pi is shown below:
+
+    auto g = [](std::vector<Real> const & x)->Real
+    {
+        Real r = x[0]*x[0]+x[1]*x[1];
+        if (r <= 1)
+        {
+            return 4;
+        }
+        return 0;
+    };
+
+    std::vector<std::pair<Real, Real>> bounds{{0, 1}, {0, 1}};
+    randomized_quasi_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0005);
+
+    auto task = mc.integrate();
+    Real pi_estimated = task.get();
+
 
 
 
@@ -40,6 +93,14 @@ Kocis, Ladislav, and William J. Whiten., ['Computational investigations of low-d
 
 Owen, Art B., ['A randomized Halton algorithm in R], to appear (http://statweb.stanford.edu/~owen/reports/rhalton.pdf).
 
+Owen, Art B. ['Quasi-monte carlo sampling], Monte Carlo Ray Tracing: Siggraph 1 (2003): 69-88.
+
+Owen, Art B. ['Scrambled net variance for integrals of smooth functions], The Annals of Statistics 25.4 (1997): 1541-1562.
+
 Niederreiter, Harald. ['Random number generation and quasi-Monte Carlo methods], Society for Industrial and Applied Mathematics, 1992.
+
+Lemieux, Christiane. ['Monte carlo and quasi-monte carlo sampling], (2009).
+
+
 
 [endsect]

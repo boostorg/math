@@ -36,9 +36,9 @@ class randomized_quasi_monte_carlo
 {
 public:
     randomized_quasi_monte_carlo(const F& integrand,
-                       std::vector<std::pair<Real, Real>> const & bounds,
-                       Real error_goal,
-                       size_t threads = std::thread::hardware_concurrency()): m_num_threads{threads}
+                                 std::vector<std::pair<Real, Real>> const & bounds,
+                                 Real error_goal,
+                                 size_t threads = std::thread::hardware_concurrency()): m_num_threads{threads}
      {
          using std::numeric_limits;
          // Each thread produces an "observation", and these are averaged to produce the error estimate.
