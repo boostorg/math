@@ -52,6 +52,8 @@ enum parameter_type
    random_in_range = 0,
    periodic_in_range = 1,
    power_series = 2,
+   single_value = 3,
+   plus_minus_value = 4,
    dummy_param = 0x80
 };
 
@@ -74,6 +76,10 @@ parameter_type& operator |= (parameter_type& a, parameter_type b)
 //
 // If type == power_series then
 // n1 and n2 are the endpoints of the exponents (closed range) and z1 is the basis.
+//
+// If type == single_value then z1 contains the single value to add.
+//
+// If type == plus_minus_value then test at +-z1
 //
 // If type & dummy_param then this data is ignored and not stored in the output, it
 // is passed to the generator function however which can do with it as it sees fit.
@@ -104,6 +110,20 @@ template <class T>
 inline parameter_info<T> make_power_param(T basis, int start_exponent, int end_exponent)
 {
    parameter_info<T> result = { power_series, basis, 0, start_exponent, end_exponent };
+   return result;
+}
+
+template <class T>
+inline parameter_info<T> make_single_param(T val)
+{
+   parameter_info<T> result = { single_value, val };
+   return result;
+}
+
+template <class T>
+inline parameter_info<T> make_plus_minus_param(T val)
+{
+   parameter_info<T> result = { plus_minus_value, val };
    return result;
 }
 
@@ -420,6 +440,17 @@ void test_data<T>::create_test_points(std::set<T>& points, const parameter_info<
          }
       }
       break;
+   case single_value:
+   {
+      points.insert(truncate_to_float(real_cast<float>(arg1.z1)));
+      break;
+   }
+   case plus_minus_value:
+   {
+      points.insert(truncate_to_float(real_cast<float>(arg1.z1)));
+      points.insert(truncate_to_float(-real_cast<float>(arg1.z1)));
+      break;
+   }
    default:
       BOOST_ASSERT(0 == "Invalid parameter_info object");
       // Assert will fail if get here.

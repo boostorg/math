@@ -3,6 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_MATH_MAX_SERIES_ITERATION_POLICY 10000000
+
 #include <boost/math/special_functions/hypergeometric_1f1.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/lexical_cast.hpp>
@@ -27,15 +29,26 @@ struct hypergeometric_1f1_gen
    }
 };
 
-struct hypergeometric_2f0_gen_spec1
+struct hypergeometric_1f1_gen_2
 {
-   boost::math::tuple<mp_t, mp_t, mp_t, mp_t> operator()(mp_t a1, mp_t z)
+   mp_t operator()(mp_t a1, mp_t a2, mp_t z)
    {
-      mp_t result = boost::math::detail::hypergeometric_2f0_generic_series(a1, a1 + 0.5, z, boost::math::policies::policy<>());
-      std::cout << a1 << " " << a1 + 0.5 << " " << z << " " << result << std::endl;
-      return boost::math::make_tuple(a1, a1 + 0.5, z, result);
+      mp_t result = boost::math::detail::hypergeometric_1f1_generic_series(a1, a2, z, boost::math::policies::policy<>());
+      std::cout << a1 << " " << a2 << " " << z << " " << result << std::endl;
+      if (fabs(result) > (std::numeric_limits<double>::max)())
+      {
+         std::cout << "Discarding result as too large\n";
+         throw std::domain_error("");
+      }
+      if (static_cast<double>(result) == 1)
+      {
+         std::cout << "Discarding result as unity\n";
+         throw std::domain_error("");  // uninteresting result.
+      }
+      return result;
    }
 };
+
 
 int main(int, char* [])
 {
@@ -48,12 +61,57 @@ int main(int, char* [])
    std::string line;
    bool cont;
 
-#if 0
-   arg1 = make_periodic_param(mp_t(-20), mp_t(-1), 19);
-   arg2 = make_random_param(mp_t(-5), mp_t(5), 8);
-   arg1.type |= dummy_param;
-   arg2.type |= dummy_param;
-   data.insert(hypergeometric_2f0_gen_spec1(), arg1, arg2);
+#if 1
+   std::vector<mp_t> v;
+   random_ns::mt19937 rnd;
+   random_ns::uniform_real_distribution<float> ur_a(0, 1);
+
+   mp_t p = ur_a(rnd);
+   p *= 1e6;
+   v.push_back(p);
+   v.push_back(-p);
+   p = ur_a(rnd);
+   p *= 1e5;
+   v.push_back(p);
+   v.push_back(-p);
+   p = ur_a(rnd);
+   p *= 1e4;
+   v.push_back(p);
+   v.push_back(-p);
+   p = ur_a(rnd);
+   p *= 1e3;
+   v.push_back(p);
+   v.push_back(-p);
+   p = ur_a(rnd);
+   p *= 1e2;
+   v.push_back(p);
+   v.push_back(-p);
+   p = ur_a(rnd);
+   p *= 1e-5;
+   v.push_back(p);
+   v.push_back(-p);
+   p = ur_a(rnd);
+   p *= 1e-12;
+   v.push_back(p);
+   v.push_back(-p);
+   p = ur_a(rnd);
+   p *= 1e-30;
+   v.push_back(p);
+   v.push_back(-p);
+
+   for (unsigned i = 0; i < v.size(); ++i)
+   {
+      for (unsigned j = 0; j < v.size(); ++j)
+      {
+         for (unsigned k = 0; k < v.size(); ++k)
+         {
+            arg1 = make_single_param(v[i]);
+            arg2 = make_single_param(v[j] * 3 / 2);
+            arg3 = make_single_param(v[k] * 5 / 4);
+            data.insert(hypergeometric_1f1_gen_2(), arg1, arg2, arg3);
+         }
+      }
+   }
 
 
 #else

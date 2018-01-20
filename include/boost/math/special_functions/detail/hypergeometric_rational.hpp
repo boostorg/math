@@ -67,7 +67,7 @@
       result = a4 / b4;
 
       // condition for interruption
-      if ((fabs(result) * boost::math::tools::epsilon<T>()) > fabs(result - prev_result))
+      if ((fabs(result) * boost::math::tools::epsilon<T>()) > fabs(result - prev_result) / fabs(result))
         break;
 
       b1 = b2; b2 = b3; b3 = b4;

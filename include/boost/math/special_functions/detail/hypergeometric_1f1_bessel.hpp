@@ -107,13 +107,40 @@
 
   // function for 13_3_7 evaluation
   template <class T, class Policy>
-  inline T hypergeometric_1f1_13_3_7_series(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1f1_13_3_7_series(const T& a, const T& b, const T& z, const Policy& pol, const char* function)
   {
     BOOST_MATH_STD_USING
 
     const T sqrt_bz_div_2_minus_az = sqrt(((b * z) / 2) - (a * z));
-    const T prefix = ((boost::math::tgamma(b, pol) * sqrt_bz_div_2_minus_az) /
-        pow(sqrt_bz_div_2_minus_az, b)) * exp(z / 2);
+
+    bool use_logs = false;
+    if ((b > max_factorial<T>::value) && (b * b > tools::log_max_value<T>()))
+       use_logs = true;
+    if(z / 2 > tools::log_max_value<T>())
+       use_logs = true;
+    
+    T prefix;
+    int sign = 1;
+    try
+    {
+       prefix = boost::math::tgamma(b, pol);
+    }
+    catch (std::overflow_error const&)
+    {
+       use_logs = true;
+    }
+    if(!use_logs && !(boost::math::isfinite)(prefix))
+       use_logs = true;
+
+    if (!use_logs)
+    {
+       prefix *= (sqrt_bz_div_2_minus_az / pow(sqrt_bz_div_2_minus_az, b)) * exp(z / 2);
+    }
+    else
+    {
+       prefix = boost::math::lgamma(b, &sign, pol) + (b - 1) * log(sqrt_bz_div_2_minus_az);
+       prefix += z / 2;
+    }
 
     detail::hypergeometric_1f1_13_3_7_series_term<T> s(a, b, z);
     boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
@@ -124,7 +151,18 @@
     T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
 #endif
     boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_13_3_7_series<%1%>(%1%,%1%,%1%)", max_iter, pol);
-    return prefix * result;
+
+    if (use_logs)
+    {
+       result = log(result) + prefix;
+       if (result > tools::log_max_value<T>())
+          return sign * policies::raise_overflow_error<T>(function, 0, pol);
+       result = sign * exp(result);
+    }
+    else
+       result *= prefix;
+
+    return result;
   }
 
   // term class of Abramowitz & Stegun 13_3_8 formula

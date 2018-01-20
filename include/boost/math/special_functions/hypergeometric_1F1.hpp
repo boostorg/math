@@ -19,6 +19,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_1f1_recurrence.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_pade.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1f1_bessel.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1f1_scaled_series.hpp>
 
 namespace boost { namespace math { namespace detail {
 
@@ -94,7 +95,7 @@ namespace boost { namespace math { namespace detail {
          }
       }
 
-      if (fabs(b) >= fabs(100 * z)) // TODO: extend to multuiprecision
+      if ((fabs(a * z / b) < 3.5) && (fabs(z * 100) < fabs(b)))
          return detail::hypergeometric_1f1_rational(a, b, z, pol);
 
       if (z < -1)
@@ -105,7 +106,17 @@ namespace boost { namespace math { namespace detail {
          // Let's otherwise make z positive (almost always)
          // by Kummer's transformation
          // (we also don't transform if z belongs to [-1,0])
-         return exp(z) * detail::hypergeometric_1f1_imp<T>(b_minus_a, b, -z, pol);
+         if (z > -tools::log_max_value<T>() / 4)
+            return exp(z) * detail::hypergeometric_1f1_imp<T>(b_minus_a, b, -z, pol);
+         else
+         {
+            //
+            // z is so large that we can't easily apply Kummer's relation,
+            // use a scaled series when appropriate:
+            //
+            if (-z * (b - a) * b > 0)
+               return hypergeometric_1f1_scaled_series(T(b - a), b, T(-z), pol, function);
+         }
       }
       //
       // Check for initial divergence:
@@ -116,11 +127,25 @@ namespace boost { namespace math { namespace detail {
       // then it's because both a and b are negative, so check for later
       // divergence as well:
       //
-      if ((a < 0) && (b < 0) && (b > a))
+      if (!series_is_divergent && (a < 0) && (b < 0) && (b > a))
       {
-         T n = -floor(b);
-         series_is_divergent = (a + n) * z / ((b + n) * n) < -1;
+         //
+         // We need to exclude situations where we're over the initial "hump"
+         // in the series terms (ie series has already converged by the time
+         // b crosses the origin:
+         //
+         T fa = fabs(a);
+         T fb = fabs(b);
+         T convergence_point = sqrt((a - 1) * (a - b)) - a;
+         if (-b < convergence_point)
+         {
+            T n = -floor(b);
+            series_is_divergent = (a + n) * z / ((b + n) * n) < -1;
+         }
       }
+      if (series_is_divergent && (b < -1) && (b > -5))
+         series_is_divergent = false;  // don't bother with divergence, series will be OK
+      
       //
       // Test for alternating series due to negative a, 
       // in particular, see if the series is initially divergent
@@ -128,17 +153,17 @@ namespace boost { namespace math { namespace detail {
       //
       if (series_is_divergent)
       {
-         if((a < 0) && (b > 0))
-            return detail::hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol);
+         if((a < 0) && (b > -1))
+            return detail::hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol, function);
 
          if (detail::hypergeometric_1f1_is_a_small_enough(a))
          {
             // TODO: this part has to be researched deeper
             const bool b_is_negative_and_greater_than_z = b < 0 ? (fabs(b) > fabs(z) ? 1 : 0) : 0;
             if ((a == ceil(a)) && !b_is_negative_and_greater_than_z)
-               return detail::hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol);
-            else if ((2 * (z  * (b - (2 * a)))) > 0) // TODO: see when this methd is bad in opposite to usual taylor
-               return detail::hypergeometric_1f1_13_3_7_series(a, b, z, pol);
+               return detail::hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+            else if ((z > 0) && (2 * (z  * (b - (2 * a)))) > 0) // TODO: see when this methd is bad in opposite to usual taylor
+               return detail::hypergeometric_1f1_13_3_7_series(a, b, z, pol, function);
             else if (b < a)
                return detail::hypergeometric_1f1_backward_recurrence_for_negative_b(a, b, z, pol);
          }
