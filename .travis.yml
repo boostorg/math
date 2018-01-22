@@ -546,26 +546,6 @@ matrix:
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=special_fun
-      osx_image: xcode8.1
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=distribution_tests
-      osx_image: xcode8.1
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
-      osx_image: xcode8.1
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=float128_tests
-      osx_image: xcode8.1
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../example//examples
-      osx_image: xcode8.1
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=special_fun
       osx_image: xcode8.3
 
     - os: osx
@@ -584,45 +564,6 @@ matrix:
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../example//examples
       osx_image: xcode8.3
 
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=special_fun
-      osx_image: xcode7.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=distribution_tests
-      osx_image: xcode7.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
-      osx_image: xcode7.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=float128_tests
-      osx_image: xcode7.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../example//examples
-      osx_image: xcode7.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=special_fun
-      osx_image: xcode6.4
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=distribution_tests
-      osx_image: xcode6.4
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
-      osx_image: xcode6.4
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=float128_tests
-      osx_image: xcode6.4
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../example//examples
-      osx_image: xcode6.4
 
 install:
   - cd ..
