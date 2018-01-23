@@ -14,6 +14,10 @@
 #include <boost/math/special_functions/lambert_w.hpp>
 using boost::math::lambert_w0;
 using boost::math::lambert_wm1;
+
+#include "c:\Users\Paul\Desktop\lambert_w0.hpp" // for jm_tests
+using boost::math::jm_lambert_w0;
+
 #include <boost/math/special_functions.hpp>
 using boost::math::isfinite;
 #include <boost/svg_plot/svg_2d_plot.hpp>
@@ -54,23 +58,28 @@ int main()
     std::map<const double, double> w0s_big;   // Lambert W0 branch values for large z and W.
     std::map<const double, double> wm1s_big;   // Lambert W-1 branch values for small z and large -W.
 
+    std::cout.precision(std::numeric_limits<double>::max_digits10);
+
+ //   for (double z = -0.3678794411714423215955237701614608727; z < 2.8; z += 0.001)
     int count = 0;
-    for (double z = -0.3678794411714423215955237701614608727; z < 2.8; z += 0.01)
+    for (double z = -0.36787944117144232159552377016146086744581113103176804; z < 1.; z += 0.001)
     {
-      double w0 = lambert_w0(z);
+      double w0 = jm_lambert_w0(z);
+      //double w0 = lambert_w0(z);
       w0s[z] = w0;
+      std::cout << "z " << z << ", w = " << w0 << std::endl;
       count++;
     }
     std::cout << "points " << count << std::endl;
 
-    count = 0;
-    for (double z = -0.3678794411714423215955237701614608727; z  < -0.001; z += 0.001)
-    {
-      double wm1 = lambert_wm1(z);
-      wm1s[z] = wm1;
-      count++;
-    }
-    std::cout << "points " << count << std::endl;
+    //count = 0;
+    //for (double z = -0.3678794411714423215955237701614608727; z  < -0.001; z += 0.001)
+    //{
+    //  double wm1 = lambert_wm1(z);
+    //  wm1s[z] = wm1;
+    //  count++;
+    //}
+    //std::cout << "points " << count << std::endl;
 
 
     svg_2d_plot data_plot;
@@ -114,17 +123,17 @@ int main()
     }
     std::cout << "points " << count << std::endl;
 
-    count = 0;
-    for (double z = -0.3678794411714423215955237701614608727; z < -0.001; z += 0.001)
-    {
-      double wm1 = lambert_wm1(z);
-      wm1s_big[z] = wm1;
-      count++;
-    }
-    std::cout << "points " << count << std::endl;
+    //count = 0;
+    //for (double z = -0.3678794411714423215955237701614608727; z < -0.001; z += 0.001)
+    //{
+    //  double wm1 = lambert_wm1(z);
+    //  wm1s_big[z] = wm1;
+    //  count++;
+    //}
+    //std::cout << "points " << count << std::endl;
 
     data_plot.plot(w0s, "W0 branch").line_color(red).shape(none).line_on(true).bezier_on(false).line_width(1);
-    data_plot.plot(wm1s, "W-1 branch").line_color(blue).shape(none).line_on(true).bezier_on(false).line_width(1);
+ //   data_plot.plot(wm1s, "W-1 branch").line_color(blue).shape(none).line_on(true).bezier_on(false).line_width(1);
     data_plot.write("./lambert_w_graph");
 
     data_plot2.title("Lambert W function for larger z.")
@@ -156,7 +165,7 @@ int main()
 
     data_plot2.plot(w0s_big, "W0 branch").line_color(red).shape(none).line_on(true).bezier_on(false).line_width(1);
     //data_plot2.plot(wm1s_big, "W-1 branch").line_color(blue).shape(none).line_on(true).bezier_on(false).line_width(1);
-    data_plot2.write("./lambert_w_graph_big_W");
+    data_plot2.write("./lambert_w_graph_big_w");
 
     // bezier_on(true); // ???
   }

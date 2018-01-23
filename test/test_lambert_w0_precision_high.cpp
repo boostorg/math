@@ -6,6 +6,8 @@
 
 // Test evaluations of Lambert W function and comparison with reference values > 0.5 computed at 100 decimal digits precision.
 
+// ALso used to test JM_lambert_w0 
+
 //#define BOOST_MATH_LAMBERT_W_TEST_OUTPUT // Define to output all values of argument z and lambert W and differences.
 
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
@@ -33,6 +35,9 @@ using boost::multiprecision::cpp_bin_float_quad;
 // #define BOOST_MATH_INSTRUMENT_LAMBERT_W  // #define only for (much) diagnostic output.
                                                
 #include <boost/math/special_functions/lambert_w.hpp>// For lambert_w0 and _wm1 functions.
+
+#include "C:\Users\Paul\Desktop\lambert_w0.hpp"  // JM series version 2.
+// using boost::math::jm_lambert_w0;
 
 #include <boost/type_traits/is_constructible.hpp>
 #include <boost/array.hpp>
@@ -88,6 +93,7 @@ float test_zws()
   init_zws<RealType>(); // Test z arguments and Lambert W reference values.
 
   using boost::math::lambert_w0;
+  using boost::math::jm_lambert_w0;
   using boost::math::lambert_wm1;
   using boost::math::float_distance;
 
@@ -101,7 +107,7 @@ float test_zws()
   for (size_t i = 0; i != noof_tests; i++)
   {
     RealType z = zs<RealType>[i];
-    RealType w = lambert_w0<RealType>(z); // Only for float or double!
+    RealType w = jm_lambert_w0<RealType>(z); // Only for float or double!
     RealType kw = ws<RealType>[i];  // 'Known good' 100 decimal digits.
 
     RealType fd = float_distance<RealType>(w, kw);
@@ -140,6 +146,7 @@ float test_zws()
 template<typename RealType>
 int test_spot(RealType z)
 {
+  using boost::math::jm_lambert_w0;
   using boost::math::lambert_w0;
   using boost::math::float_distance;
 
@@ -161,6 +168,7 @@ template<typename RealType>
 int compare_spot(RealType z, RealType w)
 {
   using boost::math::lambert_w0;
+  using boost::math::jm_lambert_w0;
   using boost::math::lambert_wm1;
   using boost::math::nextafter;
   using boost::math::float_next;

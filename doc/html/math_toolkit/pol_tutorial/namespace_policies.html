@@ -176,12 +176,12 @@ errno = 33
         that now the macro BOOST_MATH_DECLARE_DISTRIBUTIONS accepts two parameters:
         the floating point type to use, and the policy type to apply. For example:
       </p>
-<pre class="programlisting"><span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span><span class="special">(</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">mypolicy</span><span class="special">)</span>
+<pre class="programlisting"><span class="identifier">BOOST_MATH_DECLARE_DISTRIBUTIONS</span><span class="special">(</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">)</span>
 </pre>
 <p>
         Results a set of typedefs being defined like this:
       </p>
-<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">mypolicy</span><span class="special">&gt;</span> <span class="identifier">normal</span><span class="special">;</span>
+<pre class="programlisting"><span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">normal_distribution</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">my_policy</span><span class="special">&gt;</span> <span class="identifier">normal</span><span class="special">;</span>
 </pre>
 <p>
         The name of each typedef is the same as the name of the distribution class

@@ -6,6 +6,8 @@
 
 // Test evaluations of Lambert W function and comparison with reference values computed at 100 decimal digits precision.
 
+// Alos uses JM version 2 comparing with PB/fukushima lambert_w0 before it is incorporated.
+
 //#define BOOST_MATH_LAMBERT_W_TEST_OUTPUT // Define to output all values of argument z and lambert W and differences.
 
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
@@ -39,6 +41,10 @@ using boost::multiprecision::cpp_bin_float_50; // 50 decimal digits type.
 
 // For lambert_w function.
 #include <boost/math/special_functions/lambert_w.hpp>
+
+#include "C:\Users\Paul\Desktop\lambert_w0.hpp"  // JM series version 2 for testing.
+// using boost::math::jm_lambert_w0;
+
 using boost::multiprecision::cpp_bin_float_double_extended;
 using boost::multiprecision::cpp_bin_float_double;
 using boost::multiprecision::cpp_bin_float_quad;
@@ -149,9 +155,10 @@ template<typename RealType>
 int test_spot(RealType z)
 {
   using boost::math::lambert_w0;
+  using boost::math::jm_lambert_w0;
   using boost::math::float_distance;
 
-  RealType lw = lambert_w0<RealType>(z);
+  RealType lw = jm_lambert_w0<RealType>(z);
   RealType rlw = static_cast<RealType>(lambert_w0<cpp_dec_float_50>(z));
 
   std::cout.precision(std::numeric_limits<RealType>::max_digits10); // or
@@ -168,7 +175,8 @@ int test_spot(RealType z)
 template<typename RealType>
 int compare_spot(RealType z, RealType w)
 {
-  using boost::math::lambert_w0;
+ // using boost::math::lambert_w0;
+  using boost::math::jm_lambert_w0;
   using boost::math::lambert_wm1;
   using boost::math::nextafter;
   using boost::math::float_next;
@@ -187,7 +195,7 @@ int compare_spot(RealType z, RealType w)
   // std::cout.precision(std::numeric_limits<RealType>::max_digits10);
   std::cout.precision(std::numeric_limits<RealType>::digits10);
 
-  RealType lw = lambert_w0<RealType>(z);
+  RealType lw = jm_lambert_w0<RealType>(z);
   RealType flw = w;
 
   std::cout << lw << "\n" << flw << std::endl;

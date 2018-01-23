@@ -919,7 +919,7 @@ namespace math
   } // template<typename T = double> T schroeder_update(const T w, const T y)
 
   /////////////  namespace detail implementations of Lambert W for W0 and W-1 branches.
-
+ 
   //! Compute Lambert W for W0 (or W+) branch.
   template<typename T, class Policy>
   T lambert_w0_imp(const T z, const Policy& pol)
@@ -1251,7 +1251,8 @@ namespace math
       }
     } // normal range and precision.
     throw std::logic_error("No result from lambert_w0_imp!  (Please report!)");  // Should never get here.
-  } //  T lambert_w0_imp(const T z, const Policy& /* pol */)
+  } //  T lambert_w0_imp(const T z, const Policy& pol)
+ 
 
   //! Lambert W for W-1 branch, -max(z) < z <= -1/e.
   // TODO is -max(z) allowed?

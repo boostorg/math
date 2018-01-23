@@ -134,7 +134,7 @@ int main()
      double r = lambert_w0(10); // int argument "10" that should be promoted to double argument.
      std::cout << "lambert_w0(10) = " << r << std::endl; // lambert_w0(10) = 1.7455280027406992
      double rp = lambert_w0(10, policy<>()); // int argument "10" that should be promoted to double argument,
-     // for simplicity using default policy.
+     // for simplicity using default boost::math::policy.
      std::cout << "lambert_w0(10, policy<>()) = " << rp << std::endl;
      // lambert_w0(10, policy<>()) = 1.7455280027406992
      auto rr = lambert_w0(10); // C++11 needed.

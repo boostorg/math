@@ -13,14 +13,13 @@
 
    template <class T, class ``__Policy``>
    ``__sf_result`` lambert_w0(T z, const ``__Policy``&); // W0 with policy controlled precision.
-   // Use `lambert_w0(z, policy<digits2<50> >())` // If speed is more important than the last-digit precision.
 
     template <class T>
    ``__sf_result`` lambert_wm1(T z); // W-1 branch.
 
    template <class T, class ``__Policy``>
    ``__sf_result`` lambert_wm1(T z, const ``__Policy``&); // W-1 with policy controlled precision.
-   // Use `lambert_wm1(z, policy<digits2<50> >())` // If speed is more important than the last-digit precision.
+   // Use `lambert_wm1(z, policy<digits2<50> >())` // If speed is more important than last-digit precision.
 
   } // namespace boost
   } // namespace math
@@ -35,9 +34,9 @@ On the z-interval \[0, [infin]\] there is just one real solution.
 On the interval (-1/e, 0) there are two real solutions on two branches called variously W0, W+, W-1, Wp, Wm, W-.
 Two principal branches functions called `lambert_W0` and `lambert_Wm1` are provided by this real-only implementation.
 
-[import ../../example/lambert_w_graph.cpp]
-
 In the graphs below, the red line is the W0 branch, and the blue line the W-1 branch.
+
+[import ../../example/lambert_w_graph.cpp]
 
 [graph lambert_w_graph]
 
@@ -47,6 +46,10 @@ There is a singularity where the branches meet at argument [^z = -1/e] [cong] [^
 
 This implementation computes the two real (not complex) branches W0 and W-1
 with the functions `lambert_w0` and `lambert_wm2` from the first [^z] argument.
+
+For C++ types `float` the maximum z argument `(std::numeric_limits<>::max)()`
+Lambert_w0(3.2e+38) = 84.29,
+and for `double`, lambert_w0(1.797e+308) = 703.3.
 
 The final __Policy argument is optional and can be used to control the behaviour of the function:
 how it handles errors and what level of precision can be traded for speed.
@@ -79,7 +82,7 @@ Some examples follow:
 Other floating-point types can be used too, here `float`.
 It is convenient to use function `show_value`
 to display all potentially significant decimal digits
-for the type.
+(`std::numeric_limits<>::max_digits10`) for the type.
 
 [lambert_w_simple_examples_1]
 
@@ -95,7 +98,7 @@ Using multiprecision types to get much higher precision is painless.
 [warning When using multiprecision, take great care not to
 construct or assign non-integers from `double`, `float`... silently losing precision.]
 
-Using multiprecision types to get multiprecision precision wrong is all too easy!
+Using multiprecision types, it is all too easy to get multiprecision precision wrong!
 
 [lambert_w_simple_examples_4]
 
@@ -303,7 +306,11 @@ The range mathematically is -1/e <= z <= +[infin], but numerically, (for the typ
 * `z < -1/e` throws a `domain_error`, and/or returns `NaN` according to the policy.
 Provided that there is a `catch` clause, an error message (similar to that below) will be reported.
 * `z == (std::numeric_limits<T>::max)()` returns W for the floating_point type T, (for example, for `double`, 703.22703310477018L)
-* `z == std::numeric_limits<T>::infinity()`  returns +[infin] (if available).
+* `z == std::numeric_limits<T>::infinity()`  throws a `overflow_error`.
+
+(An argument z passed as infinity probably indicates an error has already occured,
+but if it is desired to return infinity,
+this case can be handled before calling `lambert_w0`).
 
 [h5:wm1_edges w-1 Branch]
 
@@ -328,7 +335,7 @@ and anyway it only covers a tiny fraction of the range of possible z arguments v
 
 [h4:compilers Compilers]
 
-The code has been tested on VS 15.4.4 and GCC 7.1.0 but it is expected to work on all C++ compilers.
+The code has been tested on VS 15.5.2, Clang 5.0.0 and GCC 7.1.0 but it is expected to work on all C++ compilers.
 
 [h5:diagnostics Diagnostics Macros]
 
@@ -413,6 +420,13 @@ so Newton/Raphson's method unlikely to be quicker
 than the additional cost of computating the 2nd derivative for Halley's method,
 in this case requiring an expensive exponential function evaluation on each step.
 
+
+
+[h4:compact_implementation Implementing Compact Algorithms]
+
+The most compact algorithm can probably be implemented using the log approximation of Corless et al.
+followed by Halley iteration (but is also slowest and least precise near zero and near the branch singularity).
+
 [h4:faster_implementation Implementing Faster Algorithms]
 
 More recently, the Tosio Fukushima has developed an even faster algorithm,
@@ -438,6 +452,10 @@ they do not get as close as is very often possible with further refinement,
 usually to within one or two __epsilon.
 A mean difference was computed to express the typical error and is often about 0.5 epsilon,
 the theoretical minimum.
+
+A disadvantage is that the distribution of differences from the references value is reasonably random and unbiased,
+whereas the Schroeder stage is significantly biased.
+
 
 For speed during the bisection, Fukushima produces lookup tables of powers of e and z for integral Lambert W.
 There are 64 elements in these tables. The FORTRAN version (and the C++ translation by Veberic)
@@ -539,7 +557,8 @@ are 21 digits precision == `std::numeric_limits<T>::max_digits10` for `long doub
 Specializations for `lambert_w0_small_z` are provided for
 `float`, `double`, `long double`, `float128` and for __multiprecision types like .
 
-The tag_type selection is based on the value `std::numeric_limits<T>::max_digits10`.
+The tag_type selection is based on the value `std::numeric_limits<T>::max_digits10`
+(and [*not] on the floating-point type T).
 This distinguishes between `long double` types that commonly vary between 64 and 80-bits,
 and also compilers that have a `float` type using 64 bits and/or `long double` using 128-bits.
 
@@ -645,6 +664,16 @@ the computational cost of the log functions was easily paid by far fewer iterati
    double z = z = -1e-26;
    double r = lambert_wm1(z, policy<digits2<11> >());
    // lambert_wm1(-1.0000000000000000e-26) = -64.026509628385895
+
+[h5:halley]
+
+After obtaining a double approximation, for `double` and quad 128-bit precision,
+a single iteration should suffice because
+Halley iteration should triple the precision with each step
+(as long as the function is well behaved - and it is),
+and since we have at least half of the bits correct already,
+one Halley step is ample to get to 128-bit precision.
+
 
 
 [h4:testing Testing]
