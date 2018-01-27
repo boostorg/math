@@ -11,7 +11,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 [heading Synopsis]
 
     #include <boost/math/quadrature/naive_monte_carlo.hpp>
-    namespace boost{ namespace math{ namespace quadrature {
+    namespace boost { namespace math { namespace quadrature {
 
     template<class Real, class F>
     class naive_monte_carlo
@@ -69,7 +69,7 @@ so leaving a single thread available for other apps is appreciated.
 
 All these use cases are supported, so let's get to the code:
 
-    // Define a function to integration:
+    // Define a function to integrate:
     auto g = [](std::vector<double> const & x)
     {
       constexpr const double A = 1.0 / (M_PI * M_PI * M_PI);
@@ -93,10 +93,6 @@ All these use cases are supported, so let's get to the code:
             std::cout << "\nCancelling because this is too slow!\n";
         }
     }
-    display_progress(mc.progress(),
-                     mc.current_error_estimate(),
-                     mc.current_estimate(),
-                     mc.estimated_time_to_completion());
     double y = task.get();
 
 First off, we define the function we wish to integrate.
@@ -138,7 +134,6 @@ This is achieved by
     double new_target_error = 0.0005;
     mc.update_target_error(new_target_error);
     task = mc.integrate();
-    // display progress, if you wish:
     y = task.get();
 
 [endsect]
