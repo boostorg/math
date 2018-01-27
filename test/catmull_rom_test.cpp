@@ -285,15 +285,78 @@ void test_helix()
     }
 }
 
+
+template<class Real>
+class mypoint3d
+{
+public:
+    // Must define a value_type:
+    typedef Real value_type;
+
+    // Regular constructor:
+    mypoint3d(Real x, Real y, Real z)
+    {
+        m_vec[0] = x;
+        m_vec[1] = y;
+        m_vec[2] = z;
+    }
+
+    // Must define a default constructor:
+    mypoint3d() {}
+
+    // Must define array access:
+    Real operator[](size_t i) const
+    {
+        return m_vec[i];
+    }
+
+    // Array element assignment:
+    Real& operator[](size_t i)
+    {
+        return m_vec[i];
+    }
+
+
+private:
+    std::array<Real, 3>  m_vec;
+};
+
+
+// Must define the free function "size()":
+template<class Real>
+constexpr size_t size(const mypoint3d<Real>& c)
+{
+    return 3;
+}
+
 template<class Real>
 void test_data_representations()
 {
     std::cout << "Testing that the Catmull-Rom spline works with multiple data representations.\n";
+    mypoint3d<Real> p0(0.1, 0.2, 0.3);
+    mypoint3d<Real> p1(0.2, 0.3, 0.4);
+    mypoint3d<Real> p2(0.3, 0.4, 0.5);
+    mypoint3d<Real> p3(0.4, 0.5, 0.6);
+    mypoint3d<Real> p4(0.5, 0.6, 0.7);
+    mypoint3d<Real> p5(0.6, 0.7, 0.8);
+    std::vector<mypoint3d<Real>> v{p0, p1, p2, p3, p4, p5};
+    catmull_rom<mypoint3d<Real>> cat(v.data(), v.size());
+
+    Real tol = 0.001;
+    auto p = cat(cat.parameter_at_point(0));
+    BOOST_CHECK_CLOSE_FRACTION(p[0], p0[0], tol);
+    BOOST_CHECK_CLOSE_FRACTION(p[1], p0[1], tol);
+    BOOST_CHECK_CLOSE_FRACTION(p[2], p0[2], tol);
+    p = cat(cat.parameter_at_point(1));
+    BOOST_CHECK_CLOSE_FRACTION(p[0], p1[0], tol);
+    BOOST_CHECK_CLOSE_FRACTION(p[1], p1[1], tol);
+    BOOST_CHECK_CLOSE_FRACTION(p[2], p1[2], tol);
 }
 
 BOOST_AUTO_TEST_CASE(catmull_rom_test)
 {
-    test_alpha_distance<float>();
+    test_data_representations<float>();
+    /*test_alpha_distance<float>();
     test_alpha_distance<double>();
     test_alpha_distance<long double>();
     test_alpha_distance<cpp_bin_float_50>();
@@ -329,5 +392,5 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
     test_affine_invariance<cpp_bin_float_50, 1>();
     test_affine_invariance<cpp_bin_float_50, 2>();
     test_affine_invariance<cpp_bin_float_50, 3>();
-    test_affine_invariance<cpp_bin_float_50, 4>();
+    test_affine_invariance<cpp_bin_float_50, 4>();*/
 }

@@ -27,7 +27,7 @@ int main()
         spiral_points[i] = {theta*cos(theta), theta*sin(theta)};
     }
 
-    auto archimedean = catmull_rom<double, std::array<double,2>, 2>(spiral_points.data(), spiral_points.size());
+    auto archimedean = catmull_rom<std::array<double,2>>(std::move(spiral_points));
     double max_s = archimedean.max_parameter();
     std::cout << "Max s = " << max_s << std::endl;
     for (double s = 0; s < max_s; s += 0.01)

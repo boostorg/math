@@ -10,7 +10,7 @@
 #define BOOST_MATH_INTERPOLATORS_CATMULL_ROM
 
 #include <cmath>
-#include <cassert>
+#include <vector>
 #include <algorithm>
 #include <iterator>
 
@@ -39,6 +39,8 @@ class catmull_rom
 public:
 
     catmull_rom(const Point* const points, size_t num_pnts, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2);
+
+    catmull_rom(std::vector<Point>&& points, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2) : catmull_rom(points.data(), points.size(), closed, alpha) {}
 
     typename Point::value_type max_parameter() const
     {
@@ -116,8 +118,6 @@ Point catmull_rom<Point>::operator()(const typename Point::value_type s) const
     auto it = std::upper_bound(m_s.begin(), m_s.end(), s);
     //Now *it >= s. We want the index such that m_s[i] <= s < m_s[i+1]:
     size_t i = std::distance(m_s.begin(), it - 1);
-    // We'll keep the assert in here a while until we feel good that we've understood this algorithm.
-    //assert(m_s[i] <= s && s < m_s[i+1]);
 
     // Only denom21 is used twice:
     typename Point::value_type denom21 = 1/(m_s[i+1] - m_s[i]);
@@ -180,8 +180,6 @@ Point catmull_rom<Point>::prime(const typename Point::value_type s) const
     auto it = std::upper_bound(m_s.begin(), m_s.end(), s);
     //Now *it >= s. We want the index such that m_s[i] <= s < m_s[i+1]:
     size_t i = std::distance(m_s.begin(), it - 1);
-    // We'll keep the assert in here a while until we feel good that we've understood this algorithm.
-    assert(m_s[i] <= s && s < m_s[i+1]);
     Point A1;
     typename Point::value_type denom = 1/(m_s[i] - m_s[i-1]);
     typename Point::value_type k1 = (m_s[i]-s)*denom;
