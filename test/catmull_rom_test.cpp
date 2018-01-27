@@ -169,8 +169,7 @@ void test_affine_invariance()
 
     Real tol = 1000*std::numeric_limits<Real>::epsilon();
     std::vector<std::array<Real, dimension>> v(100);
-    std::random_device rd;
-    std::mt19937_64 gen(rd());
+    std::mt19937_64 gen(438232);
     Real inv_denom = (Real) 100/( (Real) gen.max() + (Real) 2);
     for(size_t j = 0; j < dimension; ++j)
     {
@@ -356,7 +355,7 @@ void test_data_representations()
 BOOST_AUTO_TEST_CASE(catmull_rom_test)
 {
     test_data_representations<float>();
-    /*test_alpha_distance<float>();
+    test_alpha_distance<float>();
     test_alpha_distance<double>();
     test_alpha_distance<long double>();
     test_alpha_distance<cpp_bin_float_50>();
@@ -392,5 +391,5 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
     test_affine_invariance<cpp_bin_float_50, 1>();
     test_affine_invariance<cpp_bin_float_50, 2>();
     test_affine_invariance<cpp_bin_float_50, 3>();
-    test_affine_invariance<cpp_bin_float_50, 4>();*/
+    test_affine_invariance<cpp_bin_float_50, 4>();
 }
