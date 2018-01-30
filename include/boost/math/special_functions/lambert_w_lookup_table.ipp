@@ -1,23 +1,24 @@
+// Copyright Paul A. Bristow 2017.
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt
+// or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 // I:/modular-boost/libs/math/include/boost/math/special_functions/lambert_w_lookup_table.ipp
-// A collection of 128-bit precision integral Lambert W values computed using 37 decimal digits precision.
+
+// A collection of 128-bit precision integral z argument Lambert W values computed using 37 decimal digits precision.
 // C++ floating-point precision is 128-bit long double.
 // Output as 53 decimal digits, suffixed L.
 
 // C++ floating-point type is provided by lambert_w.hpp typedef.
 // For example: typedef lookup_t double; (or float or long double)
 
-// Written by I:\modular-boost\libs\math\test\lambert_w_lookup_table_generator.cpp Fri Nov  3 11:56:21 2017
-
-// Copyright Paul A. Bristow 2017.
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt
-// or copy at http://www.boost.org/LICENSE_1_0.txt)
+// Written by I:\modular-boost\libs\math\test\lambert_w_lookup_table_generator.cpp Thu Jan 25 16:52:07 2018
 
 // Sizes of arrays of z values for Lambert W[0], W[1] ... W[64]"nand W[-1], W[-2] ... W[-64].
 
 namespace boost {
 namespace math {
-namespace detail {
+namespace lambert_w_detail {
 namespace lambert_w_lookup
 { 
 BOOST_STATIC_CONSTEXPR std::size_t  noof_sqrts = 12;

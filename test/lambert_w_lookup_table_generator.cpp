@@ -9,8 +9,15 @@
 //! to 34 decimal digits precision to cater for platforms that have 128-bit long double.
 //! The function bisection can then use any built-in floating-point type,
 //! which may have different precision and speed on different platforms.
-// The actual builtin floating-point type of the arrays is chosen by a typedef in lambert_W.hpp,
-// by default, for example: typedef double lookup_t; 
+//! The actual builtin floating-point type of the arrays is chosen by a 
+//! typedef in \modular-boost\libs\math\include\boost\math\special_functions\lambert_w.hpp
+//! by default, for example: typedef double lookup_t; 
+
+
+// This includes lookup tables for both branches W0 and W-1.
+// Only W-1 is needed by current code that uses JM rational Polynomials,
+// but W0 is kept (for now) to allow comparison with the previous FKDVPB version
+// that uses lookup for W0 branch as well as W-1. 
 
 #include <boost/config.hpp>
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
@@ -106,14 +113,14 @@ a: 1.6487212181091309 1.2840254306793213 1.1331484317779541 1.0644944906234741 1
 // These are common to both W0 and W-1
 b: 0.5 0.25 0.125 0.0625 0.03125 0.015625 0.0078125 0.00390625 0.001953125 0.0009765625 0.00048828125 0.000244140625
 
-
 */
 
 // Creates if no file exists, & uses default overwrite/ ios::replace.
-const char filename[] = // "lambert_w_lookup_table.ipp";
-"I:/modular-boost/libs/math/include/boost/math/special_functions/lambert_w_lookup_table.ipp";
+//const char filename[] = // "lambert_w_lookup_table.ipp";  // Write to same folder as generator:
+//"I:/modular-boost/libs/math/include/boost/math/special_functions/lambert_w_lookup_table.ipp";
+const char filename[] = "lambert_w_lookup_table.ipp";
 
-std::ofstream fout(filename, std::ios::out);
+std::ofstream fout(filename, std::ios::out); // File output stream.
 
 // 128-bit precision type (so that full precision if long double type uses 128-bit).
 // typedef cpp_bin_float_quad table_lookup_t; // Output using max_digits10 for 37 decimal digit precision.
@@ -126,7 +133,7 @@ typedef cpp_bin_float_50 table_lookup_t; // Compute tables to 50 decimla digit p
 
 int main()
 {
-  std::cout << "Lambert W table lookup values to file." << std::endl;
+  std::cout << "Lambert W table lookup values." << std::endl;
   if (!fout.is_open())
   {  // File failed to open OK.
     std::cerr << "Open file " << filename << " failed!" << std::endl;
@@ -139,8 +146,13 @@ int main()
     int output_precision = std::numeric_limits<cpp_bin_float_quad>::max_digits10; // 37 decimal digits.
     fout.precision(output_precision);
     fout <<
-      "// " << filename << "\n"
-      "// A collection of 128-bit precision integral Lambert W values computed using "
+      "// Copyright Paul A. Bristow 2017." 	"\n"
+      "// Distributed under the Boost Software License, Version 1.0." "\n"
+      "// (See accompanying file LICENSE_1_0.txt" "\n"
+      "// or copy at http://www.boost.org/LICENSE_1_0.txt)" "\n"
+      "\n"
+      "// " << filename << "\n\n"
+      "// A collection of 128-bit precision integral z argument Lambert W values computed using "
       << output_precision << " decimal digits precision.\n"
       "// C++ floating-point precision is 128-bit long double.\n"
       "// Output as "
@@ -152,18 +164,12 @@ int main()
 
       "\n"
       "// Written by " << __FILE__ << " " << __TIMESTAMP__ << "\n"
-
-      "\n"
-      "// Copyright Paul A. Bristow 2017." 	"\n"
-      "// Distributed under the Boost Software License, Version 1.0." "\n"
-      "// (See accompanying file LICENSE_1_0.txt" "\n"
-      "// or copy at http://www.boost.org/LICENSE_1_0.txt)" "\n"
       << std::endl;
 
     fout << "// Sizes of arrays of z values for Lambert W[0], W[1] ... W[64]"
       "\"n""and W[-1], W[-2] ... W[-64]." << std::endl;
 
-    fout << "\nnamespace boost {\nnamespace math {\nnamespace detail {\nnamespace lambert_w_lookup\n{ \n";
+    fout << "\nnamespace boost {\nnamespace math {\nnamespace lambert_w_detail {\nnamespace lambert_w_lookup\n{ \n";
 
     BOOST_STATIC_CONSTEXPR std::size_t noof_sqrts = 12;
     BOOST_STATIC_CONSTEXPR std::size_t noof_halves = 12;
@@ -430,13 +436,12 @@ int main()
       }
       fout << "\n}; // wm1zs" << std::endl;
 
-      fout << "} // namespace lambert_w_lookup\n} // namespace detail\n} // namespace math\n} // namespace boost" << std::endl;
+      fout << "} // namespace lambert_w_lookup\n} // namespace lambert_w_detail\n} // namespace math\n} // namespace boost" << std::endl;
     }
     catch (std::exception& ex)
     {
       std::cout << "Exception " << ex.what() << std::endl;
     }
-
     fout.close();
     return 0;
 
@@ -446,10 +451,7 @@ int main()
 
 Original arrays as output by Veberic/Fukushima code:
 
-
 w0 branch
-
-
 
 W-1 branch 
 

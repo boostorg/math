@@ -359,6 +359,7 @@ mp_type f(const mp_type& x, int variant)
       mp_type xx = 1 / x;
       return boost::math::cyl_bessel_k(1, xx) * sqrt(xx) * exp(xx);
    }
+   // Lambert W0
    case 40:
       return boost::math::lambert_w0(x);
    case 41:
