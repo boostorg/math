@@ -16,8 +16,6 @@
 #  pragma warning (disable: 4127) // warning C4127: conditional expression is constant.
 #endif // _MSC_VER
 
-//#include <boost/math/special_functions/lambert_w.hpp>
-
 /*
 Implementation of an algorithm for the Lambert W0 and W-1 real-only functions.
 
@@ -83,7 +81,7 @@ typedef double lookup_t; // Type for lookup table (double or float, or even long
 
 //#include "J:\Cpp\Misc\lambert_w_lookup_table_generator\lambert_w_lookup_table.ipp"
 // #include "lambert_w_lookup_table.ipp" // Boost.Math version.
-#include <boost\math\special_functions\lambert_w_lookup_table.ipp>
+#include <boost/math/special_functions/lambert_w_lookup_table.ipp>
 
 namespace boost {
 namespace math {
@@ -1649,8 +1647,8 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // N[productlog(-1, -1.4325445274604020119111357113179868158* 10^-27), 37] = -65.99999999999999999999999999999999955
 
     // R.M.Corless, G.H.Gonnet, D.E.G.Hare, D.J.Jeffrey, and D.E.Knuth,
-    // “On the Lambert W function, ” Adv.Comput.Math., vol. 5, pp. 329–359, 1996.
-    // François Chapeau-Blondeau and Abdelilah Monir
+    // On the Lambert W function, Adv.Comput.Math., vol. 5, pp. 329-359, 1996.
+    // Francois Chapeau-Blondeau and Abdelilah Monir
     // Numerical Evaluation of the Lambert W Function
     // IEEE Transactions On Signal Processing, VOL. 50, NO. 9, Sep 2002
     // https://pdfs.semanticscholar.org/7a5a/76a9369586dd0dd34dda156d8f2779d1fd59.pdf
@@ -1862,7 +1860,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
         return result; // Halley
       } // schroeder or Schroeder and Halley.
     } // more than 10 digits2
-  } 
+  }
 } // template<typename T = double> T lambert_wm1_imp(const T z)
 } // namespace lambert_w_detail
 

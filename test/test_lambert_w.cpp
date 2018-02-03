@@ -13,7 +13,9 @@
 #include <boost/config.hpp>   // for BOOST_MSVC definition.
 #include <boost/version.hpp>   // for BOOST_MSVC versions.
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
-
+#include <boost/math/constants/constants.hpp> // for integral tests
+#include <boost/math/quadrature/tanh_sinh.hpp> // for integral tests
+#include <boost/math/quadrature/exp_sinh.hpp> // for integral tests
 // Boost macros
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
@@ -891,5 +893,35 @@ BOOST_AUTO_TEST_CASE(test_range_of_double_values)
   */
 
 
+template<class Real>
+void test_integrals()
+{
+    // Integral of the Lambert W function:
+    // https://en.wikipedia.org/wiki/Lambert_W_function
+    using boost::math::quadrature::tanh_sinh;
+    using boost::math::quadrature::exp_sinh;
+    using std::sqrt;
+    Real tol = std::numeric_limits<Real>::epsilon();
+    tanh_sinh<Real> ts;
+    Real a = 0;
+    Real b = boost::math::constants::e<Real>();
+    Real x = ts.integrate<decltype(lambert_w0<Real>)>(lambert_w0, a, b);
+    BOOST_CHECK_CLOSE_FRACTION(x, boost::math::constants::e<Real>() -1, tol);
+
+    exp_sinh<Real> es;
+    auto f = [](Real x)->Real { return lambert_w0<Real>(x)/(x*sqrt(x)); };
+    x = es.integrate(f);
+    BOOST_CHECK_CLOSE_FRACTION(x, 2*boost::math::constants::root_two_pi<Real>(), tol);
 
 
+    f = [](Real x)->Real { return lambert_w0<Real>(1/(x*x)); };
+    x = es.integrate(f);
+    BOOST_CHECK_CLOSE_FRACTION(x, boost::math::constants::root_two_pi<Real>(), tol);
+}
+
+BOOST_AUTO_TEST_CASE(test_integrals)
+{
+    test_integrals<float>();
+    test_integrals<double>();
+    test_integrals<long double>();
+}
