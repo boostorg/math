@@ -1,0 +1,71 @@
+[/
+Copyright (c) 2018 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:fourier_integrals Fourier Integral]
+
+[section:de_overview Overview]
+
+[heading Synopsis]
+
+``
+    #include <boost/math/quadrature/ooura_fourier_integrals.hpp>
+    namespace boost { namespace math { namespace quadrature {
+
+    template<class F, class Real>
+    Real ooura_fourier_sin(F const & integrand, const Real omega, const Real tolerance = tools::root_epsilon<Real>());
+
+    template<class F, class Real>
+    Real ooura_fourier_cos(F const & integrand, const Real omega, const Real tolerance = tools::root_epsilon<Real>());
+
+    }}}
+``
+
+Ooura's Fourier integrals compute the oscillatory integrals of the form
+
+\u222B[sub 0][super \u03A0] f(t)sin( \u03C9 t) dt
+
+and
+
+\u222B[sub 0][super \u03A0] f(t)cos( \u03C9 t) dt
+
+These integrals arise from computing continuous Fourier transform of odd and even functions, respectively.
+Oscillatory integrals are known to cause standard quadrature methods to suffer, so these routines are provided to cope with the most common oscillatory use case.
+
+The overly-verbose names `ooura_fourier_sin` and `ooura_fourier_cos` are used because no oscillatory quadrature method has yet been designed that is free of failure modes.
+The `ooura_fourier_sin` and `ooura_fourier_cos` converge rapidly as long as the integrand is complex analytic and has no poles near the positive real axis.
+Other oscillatory quadrature methods, such as Filon's method, might be of use when these conditions are not fulfilled.
+
+The basic usage is shown below:
+
+```
+auto f = [](double x) { return 1/x; };
+double omega = 1;
+double Is = ooura_fourier_sin<decltype(f), double>(f, omega);
+```
+
+In this case, the computed value should be \u03A0/2.
+
+A classical cosine transform is presented below:
+
+```
+auto f = [](double x) { return 1/(x*x+1); };
+double omega = 1;
+double Ic = ooura_fourier_cos<decltype(f), double>(f, omega);
+```
+
+The value of `Ic` should be \u03A0/e.
+
+[endsect]
+
+
+
+[section:ooura_integral_refs References]
+
+* Ooura, Takuya, and Masatake Mori, ['A robust double exponential formula for Fourier-type integrals.] Journal of computational and applied mathematics 112.1-2 (1999): 229-241.
+
+[endsect]
+[endsect]
