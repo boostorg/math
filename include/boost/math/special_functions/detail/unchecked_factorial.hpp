@@ -34,7 +34,7 @@ struct max_factorial;
 template <>
 inline float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
 {
-   static const boost::array<float, 35> factorials = {{
+   BOOST_STATIC_CONSTEXPR boost::array<float, 35> factorials = {{
       1.0F,
       1.0F,
       2.0F,
@@ -85,7 +85,7 @@ struct max_factorial<float>
 template <>
 inline long double unchecked_factorial<long double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(long double))
 {
-   static const boost::array<long double, 171> factorials = {{
+   BOOST_STATIC_CONSTEXPR boost::array<long double, 171> factorials = {{
       1L,
       1L,
       2L,
@@ -273,7 +273,7 @@ struct max_factorial<long double>
 template <>
 inline BOOST_MATH_FLOAT128_TYPE unchecked_factorial<BOOST_MATH_FLOAT128_TYPE>(unsigned i)
 {
-   static const boost::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
+   BOOST_STATIC_CONSTEXPR boost::array<BOOST_MATH_FLOAT128_TYPE, 171> factorials = { {
       1,
       1,
       2,
@@ -508,7 +508,7 @@ inline T unchecked_factorial_imp(unsigned i, const mpl::int_<N>&)
 
    unchecked_factorial_initializer<T>::force_instantiate();
 
-   static const boost::array<T, 101> factorials = {{
+   BOOST_STATIC_CONSTEXPR boost::array<T, 101> factorials = {{
       T(boost::math::tools::convert_from_string<T>("1")),
       T(boost::math::tools::convert_from_string<T>("1")),
       T(boost::math::tools::convert_from_string<T>("2")),
@@ -628,7 +628,7 @@ inline T unchecked_factorial_imp(unsigned i, const mpl::int_<0>&)
 #ifdef BOOST_NO_CXX11_THREAD_LOCAL
    unchecked_factorial_initializer<T>::force_instantiate();
 #endif
-   static const char* const factorial_strings[] = {
+   BOOST_STATIC_CONSTEXPR char* const factorial_strings[] = {
          "1",
          "1",
          "2",

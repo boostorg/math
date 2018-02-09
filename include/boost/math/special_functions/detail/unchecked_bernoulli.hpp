@@ -56,7 +56,7 @@ struct max_bernoulli_index<4>
 template <class T>
 struct bernoulli_imp_variant
 {
-   static const unsigned value = 
+   BOOST_STATIC_CONSTEXPR unsigned value =
       (std::numeric_limits<T>::max_exponent == 128)
       && (std::numeric_limits<T>::radix == 2)
       && (std::numeric_limits<T>::digits <= std::numeric_limits<float>::digits)
@@ -85,7 +85,7 @@ namespace detail{
 template <class T>
 inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<0>& )
 {
-   static const boost::array<boost::int64_t, 1 + max_bernoulli_b2n<T>::value> numerators =
+   BOOST_STATIC_CONSTEXPR boost::array<boost::int64_t, 1 + max_bernoulli_b2n<T>::value> numerators =
    {{
       boost::int64_t(            +1LL),
       boost::int64_t(            +1LL),
@@ -107,7 +107,7 @@ inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<0>& )
       boost::int64_t(+2577687858367LL)
    }};
 
-   static const boost::array<boost::int64_t, 1 + max_bernoulli_b2n<T>::value> denominators =
+   BOOST_STATIC_CONSTEXPR boost::array<boost::int64_t, 1 + max_bernoulli_b2n<T>::value> denominators =
    {{
       boost::int64_t(      1LL),
       boost::int64_t(      6LL),
@@ -134,7 +134,7 @@ inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<0>& )
 template <class T>
 inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<1>& )
 {
-   static const boost::array<float, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
+   BOOST_STATIC_CONSTEXPR boost::array<float, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
    {{
       +1.00000000000000000000000000000000000000000F,
       +0.166666666666666666666666666666666666666667F,
@@ -178,7 +178,7 @@ inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<1>& )
 template <class T>
 inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<2>& )
 {
-   static const boost::array<double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
+   BOOST_STATIC_CONSTEXPR boost::array<double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
    {{
       +1.00000000000000000000000000000000000000000,
       +0.166666666666666666666666666666666666666667,
@@ -318,7 +318,7 @@ inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<2>& )
 template <class T>
 inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<3>& )
 {
-   static const boost::array<long double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
+   BOOST_STATIC_CONSTEXPR boost::array<long double, 1 + max_bernoulli_b2n<T>::value> bernoulli_data =
    {{
       +1.00000000000000000000000000000000000000000L,
       +0.166666666666666666666666666666666666666667L,
@@ -651,7 +651,7 @@ inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<4>& )
    // Special case added for multiprecision types that have no conversion from long long,
    // there are very few such types, but mpfr_class is one.
    //
-   static const boost::array<boost::int32_t, 1 + max_bernoulli_b2n<T>::value> numerators =
+   BOOST_STATIC_CONSTEXPR boost::array<boost::int32_t, 1 + max_bernoulli_b2n<T>::value> numerators =
    {{
       boost::int32_t(            +1LL),
       boost::int32_t(            +1LL),
@@ -667,7 +667,7 @@ inline T unchecked_bernoulli_imp(std::size_t n, const mpl::int_<4>& )
       boost::int32_t(       +854513LL),
    }};
 
-   static const boost::array<boost::int32_t, 1 + max_bernoulli_b2n<T>::value> denominators =
+   BOOST_STATIC_CONSTEXPR boost::array<boost::int32_t, 1 + max_bernoulli_b2n<T>::value> denominators =
    {{
       boost::int32_t(      1LL),
       boost::int32_t(      6LL),
