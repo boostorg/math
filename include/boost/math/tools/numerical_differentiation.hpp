@@ -14,9 +14,6 @@
  * sqrt(2eps(|f(x+h) +f(x)||f''(x)|)).
  * In fact it is not necessary to compute the ratio (|f(x+h)| + |f(x)|)/|f''(x)|; the error bound of ~\sqrt{\epsilon} still holds if we set it to one.
  *
- * However, this analysis holds under the assumption that f can be computed within 1 ULP for any x.
- * This is often incorrect, so in the computation of the error we assume more generously that the function can be evaluated to within \pm 3 ULP.
- *
  *
  * For more details on this method of analysis, see
  *
@@ -42,9 +39,28 @@
  */
 
 #include <complex>
-#include <boost/math/constants/constants.hpp>
 
-namespace boost { namespace math { namespace tools {
+// Make sure everyone is informed that C++17 is required:
+namespace boost::math::tools {
+
+namespace detail {
+    template<class Real>
+    Real make_xph_representable(Real x, Real h)
+    {
+        using std::nextafter;
+        using std::numeric_limits;
+        // Redefine h so that x + h is representable. Not using this trick leads to large error.
+        // The compiler flag -ffast-math evaporates these operations . . .
+        Real temp = x + h;
+        h = temp - x;
+        // Handle the case x + h == x:
+        if (h == 0)
+        {
+            h = nextafter(x, numeric_limits<Real>::max()) - x;
+        }
+        return h;
+    }
+}
 
 template<class F, class Real>
 Real complex_step_derivative(const F f, Real x)
@@ -68,29 +84,18 @@ Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
     using std::sqrt;
     using std::pow;
     using std::abs;
-    using std::max;
-    using std::nextafter;
-    using boost::math::constants::half;
+    using std::numeric_limits;
 
-    const Real eps = std::numeric_limits<Real>::epsilon();
-    // TODO: static if in C++17!
+    const Real eps = numeric_limits<Real>::epsilon();
     // Error bound ~eps^1/2
-    if (order == 1)
+    if constexpr (order == 1)
     {
         // Note that this estimate of h differs from the best estimate by a factor of sqrt((|f(x)| + |f(x+h)|)/|f''(x)|).
         // Since this factor is invariant under the scaling f -> kf, then we are somewhat justified in approximating it by 1.
         // This approximation will get better as we move to higher orders of accuracy.
         Real h = 2*sqrt(eps);
+        h = detail::make_xph_representable(x, h);
 
-        // Redefine h so that x + h is representable. Not using this trick leads to large error.
-        // The compiler flag -ffast-math evaporates these operations . . .
-        Real temp = x + h;
-        h = temp - x;
-        // Handle the case x + h == x:
-        if (h == 0)
-        {
-            h = nextafter(x, std::numeric_limits<Real>::max()) - x;
-        }
         Real yh = f(x+h);
         Real y0 = f(x);
         Real diff = yh - y0;
@@ -98,24 +103,20 @@ Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
         {
             Real ym = f(x-h);
             Real ypph = abs(yh - 2*y0 + ym)/h;
-            // h*|f''(x)|*0.5 + (|f(x+h)+|f(x)|)*3*eps/h, where 3 allows for the function to be evaluated to \pm 3 ULP.
-            *error = ypph*half<Real>() + (abs(yh) + abs(y0))*3*eps/h;
+            // h*|f''(x)|*0.5 + (|f(x+h)+|f(x)|)*eps/h
+            *error = ypph/2 + (abs(yh) + abs(y0))*eps/h;
         }
         return diff/h;
     }
 
     // Error bound ~eps^2/3
-    if (order == 2)
+    if constexpr (order == 2)
     {
         // See the previous discussion to understand determination of h and the error bound.
         // Series[(f[x+h] - f[x-h])/(2*h), {h, 0, 4}]
-        Real h = pow(3*eps, boost::math::constants::third<Real>());
-        Real temp = x + h;
-        h = temp - x;
-        if (h == 0)
-        {
-            h = nextafter(x, std::numeric_limits<Real>::max()) - x;
-        }
+        Real h = pow(3*eps, static_cast<Real>(1)/static_cast<Real>(3));
+        h = detail::make_xph_representable(x, h);
+
         Real yh = f(x+h);
         Real ymh = f(x-h);
         Real diff = yh - ymh;
@@ -123,22 +124,17 @@ Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
         {
             Real yth = f(x+2*h);
             Real ymth = f(x-2*h);
-            *error = 3*eps*(abs(yh) + abs(ymh))/(2*h) + abs((yth - ymth)*half<Real>() - diff)/(6*h);
+            *error = eps*(abs(yh) + abs(ymh))/(2*h) + abs((yth - ymth)/2 - diff)/(6*h);
         }
 
         return diff/(2*h);
     }
 
     // Error bound ~eps^4/5
-    if (order == 4)
+    if constexpr (order == 4)
     {
         Real h = pow(11.25*eps, (Real) 1/ (Real) 5);
-        Real temp = x + h;
-        h = temp - x;
-        if (h == 0)
-        {
-            h = nextafter(x, std::numeric_limits<Real>::max()) - x;
-        }
+        h = detail::make_xph_representable(x, h);
         Real ymth = f(x-2*h);
         Real yth = f(x+2*h);
         Real yh = f(x+h);
@@ -149,27 +145,22 @@ Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
         {
             // Mathematica code to extrace the remainder:
             // Series[(f[x-2*h]+ 8*f[x+h] - 8*f[x-h] - f[x+2*h])/(12*h), {h, 0, 7}]
-            Real y_three_h = f(x+3*h);
-            Real y_m_three_h = f(x-3*h);
+            Real y_three_h = f(x + 3*h);
+            Real y_m_three_h = f(x - 3*h);
             // Error from fifth derivative:
-            *error = abs(half<Real>()*(y_three_h - y_m_three_h) + 2*(ymth - yth) + 5*half<Real>()*(yh - ymh) )/(30*h);
-            // Error from function evaluation, assuming 3ULP:
-            *error += 3*eps*(abs(yth) + abs(ymth) + 8*(abs(ymh) + abs(yh)))/(12*h);
+            *error = abs((y_three_h - y_m_three_h)/2 + 2*(ymth - yth) + 5*(yh - ymh)/2 )/(30*h);
+            // Error from function evaluation:
+            *error += eps*(abs(yth) + abs(ymth) + 8*(abs(ymh) + abs(yh)))/(12*h);
         }
         return (y2+8*y1)/(12*h);
     }
 
     // Error bound ~eps^6/7
-    if (order == 6)
+    if constexpr (order == 6)
     {
         // Error: h^6f^(7)(x)/140 + 5|f(x)|eps/h
         Real h = pow(eps/168, (Real) 1/ (Real) 7);
-        Real temp = x + h;
-        h = temp - x;
-        if (h == 0)
-        {
-            h = nextafter(x, std::numeric_limits<Real>::max()) - x;
-        }
+        h = detail::make_xph_representable(x, h);
 
         Real yh = f(x+h);
         Real ymh = f(x-h);
@@ -183,7 +174,7 @@ Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
             // Sum[(-1)^i*Binomial[7, i]*(f[x+(3-i)*h] + f[x+(4-i)*h])/2, {i, 0, 7}]
             // Mathematica to demonstrate that this is a finite difference formula for 7th derivative:
             // Series[(f[x+4*h]-f[x-4*h] + 6*(f[x-3*h] - f[x+3*h]) + 14*(f[x-h] - f[x+h] + f[x+2*h] - f[x-2*h]))/2, {h, 0, 15}]
-            Real y7 = half<Real>()*(f(x+4*h) - f(x-4*h) - 6*y3 - 14*y1 - 14*y2);
+            Real y7 = (f(x+4*h) - f(x-4*h) - 6*y3 - 14*y1 - 14*y2)/2;
             *error = abs(y7)/(140*h) + 5*(abs(yh) + abs(ymh))*eps/h;
         }
         return (y3 + 9*y2 + 45*y1)/(60*h);
@@ -191,19 +182,14 @@ Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
 
     // Error bound ~eps^8/9.
     // In double precision, we only expect to lose two digits of precision while using this formula, at the cost of 8 function evaluations.
-    if (order == 8)
+    if constexpr (order == 8)
     {
         // Error: h^8|f^(9)(x)|/630 + 7|f(x)|eps/h assuming 7 unstabilized additions.
         // Mathematica code to get the error:
         // Series[(f[x+h]-f[x-h])*(4/5) + (1/5)*(f[x-2*h] - f[x+2*h]) + (4/105)*(f[x+3*h] - f[x-3*h]) + (1/280)*(f[x-4*h] - f[x+4*h]), {h, 0, 9}]
         // If we used Kahan summation, we could get the max error down to h^8|f^(9)(x)|/630 + |f(x)|eps/h.
         Real h = pow(551.25*eps, (Real)1 / (Real) 9);
-        Real temp = x + h;
-        h = temp - x;
-        if (h == 0)
-        {
-            h = nextafter(x, std::numeric_limits<Real>::max()) - x;
-        }
+        h = detail::make_xph_representable(x, h);
 
         Real yh = f(x+h);
         Real ymh = f(x-h);
@@ -221,14 +207,14 @@ Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
             // Sum[(-1)^i*Binomial[9, i]*(f[x+(4-i)*h] + f[x+(5-i)*h])/2, {i, 0, 9}]
             // Mathematica to demonstrate that this is a finite difference formula for 7th derivative:
             // Series[(f[x+5*h]-f[x- 5*h])/2 + 4*(f[x-4*h] - f[x+4*h]) + 27*(f[x+3*h] - f[x-3*h])/2 + 24*(f[x-2*h]  - f[x+2*h]) + 21*(f[x+h] - f[x-h]), {h, 0, 15}]
-            Real f9 = (f(x+5*h) - f(x-5*h))*half<Real>() + 4*y4 + 27*half<Real>()*y3 + 24*y2 + 21*y1;
+            Real f9 = (f(x+5*h) - f(x-5*h))/2 + 4*y4 + 27*y3/2 + 24*y2 + 21*y1;
             *error = abs(f9)/(630*h) + 7*(abs(yh)+abs(ymh))*eps/h;
         }
         return (tmp1 + tmp2)/(105*h);
     }
-
-    throw std::logic_error("Order higher than 8 is not implemented.\n");
+    // This cannot be hit due to the static_assert, but eliminates the compiler warning 'control reaches end of non-void function'
+    throw std::domain_error("Order higher than 8 is not implemented.\n");
 }
 
-}}}
+}
 #endif
