@@ -1971,11 +1971,7 @@ lambert_wm1_prime(T z)
 {
     using std::numeric_limits;
     typedef typename tools::promote_args<T>::type result_type;
-    if (z == 0)
-    {
-        return static_cast<result_type>(1);
-    }
-    if (z == - boost::math::constants::exp_minus_one<result_type>())
+    if (z == 0 || z == - boost::math::constants::exp_minus_one<result_type>())
     {
         return -numeric_limits<result_type>::infinity();
     }
@@ -1986,4 +1982,4 @@ lambert_wm1_prime(T z)
 
 }} //boost::math namespaces
 
-#endif // #ifdef BOOST_MATH_LAMBERTW0_HPP
+#endif // #ifdef BOOST_MATH_LAMBERTW_HPP
