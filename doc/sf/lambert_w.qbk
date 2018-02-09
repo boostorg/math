@@ -11,11 +11,17 @@
    template <class T>
    ``__sf_result`` lambert_w0(T z); // W0 branch, default precision.
 
+   template <class T>
+   ``__sf_result`` lambert_w0_prime(T z); // W0 branch derivative
+
    template <class T, class ``__Policy``>
    ``__sf_result`` lambert_w0(T z, const ``__Policy``&); // W0 with policy controlled precision.
 
-    template <class T>
+   template <class T>
    ``__sf_result`` lambert_wm1(T z); // W-1 branch.
+
+   template <class T>
+   ``__sf_result`` lambert_wm1_prime(T z); //W -1 branch derivative
 
    template <class T, class ``__Policy``>
    ``__sf_result`` lambert_wm1(T z, const ``__Policy``&); // W-1 with policy controlled precision.
@@ -32,7 +38,7 @@ It is also called the Omega function, the inverse function of ['f(W) = W e[super
 
 On the z-interval \[0, [infin]\] there is just one real solution.
 On the interval (-1/e, 0) there are two real solutions on two branches called variously W0, W+, W-1, Wp, Wm, W-.
-Two principal branches functions called `lambert_W0` and `lambert_Wm1` are provided by this real-only implementation.
+Two principal branches functions called `lambert_w0` and `lambert_wm1` are provided by Boost's real-only implementation.
 
 In the graphs below, the red line is the W0 branch, and the blue line the W-1 branch.
 
@@ -45,7 +51,7 @@ In the graphs below, the red line is the W0 branch, and the blue line the W-1 br
 There is a singularity where the branches meet at argument [^z = -1/e] [cong] [^ -0.367879...] and [^W = -1].
 
 This implementation computes the two real (not complex) branches W0 and W-1
-with the functions `lambert_w0` and `lambert_wm2` from the first [^z] argument.
+with the functions `lambert_w0` and `lambert_wm1` from the first [^z] argument.
 
 For C++ types `float` the maximum z argument `(std::numeric_limits<>::max)()`
 Lambert_w0(3.2e+38) = 84.29,
@@ -61,7 +67,7 @@ Refer to __policy_section for more details and see examples below.
 
 The Lambert W function has a myriad of applications.
 Corless et al. provide a comprehensive description of the range of applications,
-from the mathematical, like interated exponentiation and asymptotic roots of trinomials,
+from the mathematical, like iterated exponentiation and asymptotic roots of trinomials,
 to the real-world such as the range of a jet plane, enzyme kinetics, water movement in soil,
 epidemics, and diode current (an example replicated [@../../example/lambert_w_diode.cpp here]).
 Since the publication of their landmark paper, there have been many more applications, and
@@ -414,10 +420,10 @@ We also considered using __newton method.
   if (f(w) / f'(w) -1 < tolerance
   w1 = w0 - (expw0 * (w0 + 1)); // Refine new Newton/Raphson estimate.
 ``
-but concluded that since Newton/Raphson's method takes typically 6 iterations to converge within tolerance,
+but concluded that since the Newton-Raphson method takes typically 6 iterations to converge within tolerance,
 whereas Halley usually takes only 1 to 3 iterations to achieve an result within 1 __ulp,
-so Newton/Raphson's method unlikely to be quicker
-than the additional cost of computating the 2nd derivative for Halley's method,
+so the Newton-Raphson method is unlikely to be quicker
+than the additional cost of computing the 2nd derivative for Halley's method,
 in this case requiring an expensive exponential function evaluation on each step.
 
 
@@ -514,7 +520,7 @@ Here we use the first two terms of equation 4.19:
 This gives a useful precision, and this guess can be returned by setting the precision to `digits2 == 11` or less.
 
   using boost::math::policies::digits2;
-  double z = z = 4.e+29;
+  double z = 4.e+29;
   r = lambert_w0(z, policy<digits2<11> >());
   // lambert_wm1(3.9999999999999997e+29, policy<digits2<11> >() ) = 64.001325187470187
 

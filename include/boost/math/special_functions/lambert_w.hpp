@@ -1939,6 +1939,51 @@ lambert_wm1(T z)
 } // lambert_wm1(T z)
 
 
+template <class T>
+typename tools::promote_args<T>::type
+lambert_w0_prime(T z)
+{
+    typedef typename tools::promote_args<T>::type result_type;
+    using std::numeric_limits;
+    if (z == 0)
+    {
+        return static_cast<result_type>(1);
+    }
+
+    // This is the sensible choice if we regard the Lambert-W function as complex analytic.
+    // Of course on the real line, it's just undefined.
+    if (z == - boost::math::constants::exp_minus_one<result_type>())
+    {
+        return numeric_limits<result_type>::infinity();
+    }
+    // if z < -1/e, we'll let lambert_w0 do the error handling:
+    result_type w = lambert_w0(result_type(z));
+    // If w ~ -1, then presumably this can get inaccurate.
+    // Is there an accurate way to evaluate 1 + W(-1/e + eps)? Yes: This is discussed in the Princeton Companion to Applied Mathmatics, 'The Lambert-W function', Section 1.3: Series and Generating Functions.
+    // 1 + W(-1/e + x) ~ sqrt(2ex). I am not convinced this formula is more accurate than the naive one.
+    // However, for z != -1/e, we never get rounded to w = -1 in any precision I've tested (up to cpp_bin_float_100).
+    return w/(z*(1+w));
+}
+
+template <class T>
+typename tools::promote_args<T>::type
+lambert_wm1_prime(T z)
+{
+    using std::numeric_limits;
+    typedef typename tools::promote_args<T>::type result_type;
+    if (z == 0)
+    {
+        return static_cast<result_type>(1);
+    }
+    if (z == - boost::math::constants::exp_minus_one<result_type>())
+    {
+        return -numeric_limits<result_type>::infinity();
+    }
+    result_type w = lambert_wm1(z);
+    return w/(z*(1+w));
+}
+
+
 }} //boost::math namespaces
 
 #endif // #ifdef BOOST_MATH_LAMBERTW0_HPP

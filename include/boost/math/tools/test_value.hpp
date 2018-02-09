@@ -32,7 +32,7 @@
 #include <boost/type_traits/is_convertible.hpp>
 
 // Built-in/fundamental GCC float128 or Intel Quad 128-bit type, if available.
-#ifdef __GNUC__
+#ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp> // Not available for MSVC.
 // sets BOOST_MP_USE_FLOAT128 for GCC
 using boost::multiprecision::float128;
@@ -123,5 +123,3 @@ inline T create_test_value(largest_float, const char* str, const boost::mpl::fal
     boost::is_constructible<T, const char*>::value>()\
 )
 #endif // TEST_VALUE_HPP
-
-
