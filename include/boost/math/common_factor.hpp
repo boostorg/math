@@ -5,12 +5,19 @@
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org for updates, documentation, and revision history. 
+//  See http://www.boost.org for updates, documentation, and revision history.
 
 #ifndef BOOST_MATH_COMMON_FACTOR_HPP
 #define BOOST_MATH_COMMON_FACTOR_HPP
 
 #include <boost/math/common_factor_ct.hpp>
 #include <boost/math/common_factor_rt.hpp>
+
+#if _MSC_VER
+    #pragma message ("boost/math/common_factor.hpp has been moved to boost/integer/common_factor.hpp; boost/math/common_factor.hpp will be removed in a future release.\n")
+#elif __GNUC__
+    #warning ("boost/math/common_factor.hpp has been moved to boost/integer/common_factor.hpp; boost/math/common_factor.hpp will be removed in a future release.\n")
+#endif
+
 
 #endif  // BOOST_MATH_COMMON_FACTOR_HPP

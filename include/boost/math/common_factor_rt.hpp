@@ -9,16 +9,20 @@
 
 #include <boost/integer/common_factor_rt.hpp>
 
+#if _MSC_VER
+    #pragma message ("The gcd and lcm have been moved to boost/integer/common_factor_rt.hpp; boost/math/common_factor_rt.hpp will be removed in a future release.\n")
+#elif __GNUC__
+    #warning ("The gcd and lcm have been moved to boost/integer/common_factor_rt.hpp; boost/math/common_factor_rt.hpp will be removed in a future release.\n")
+#endif
+
 namespace boost {
    namespace math {
-
       using boost::integer::gcd;
       using boost::integer::lcm;
       using boost::integer::gcd_range;
       using boost::integer::lcm_range;
       using boost::integer::gcd_evaluator;
       using boost::integer::lcm_evaluator;
-
    }
 }
 
