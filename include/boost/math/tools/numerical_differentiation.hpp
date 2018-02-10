@@ -1,3 +1,8 @@
+//  (C) Copyright Nick Thompson 2018.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #ifndef BOOST_MATH_TOOLS_NUMERICAL_DIFFERENTIATION_HPP
 #define BOOST_MATH_TOOLS_NUMERICAL_DIFFERENTIATION_HPP
 
@@ -29,7 +34,8 @@
  * 1) Fornberg, Bengt. "Generation of finite difference formulas on arbitrarily spaced grids." Mathematics of computation 51.184 (1988): 699-706.
  *
  *
- * The second algorithm is, IMO, miraculous. However, it requires that your function can be evaluated at complex arguments.
+ * The second algorithm, the complex step derivative, is not ill-conditioned.
+ * However, it requires that your function can be evaluated at complex arguments.
  * The idea is that f(x+ih) = f(x) +ihf'(x) - h^2f''(x) + ... so f'(x) \approx Im[f(x+ih)]/h.
  * No subtractive cancellation occurs. The error is ~ eps|f'(x)| + eps^2|f'''(x)|/6; hard to beat that.
  *
@@ -56,7 +62,7 @@ namespace detail {
         // Handle the case x + h == x:
         if (h == 0)
         {
-            h = nextafter(x, numeric_limits<Real>::max()) - x;
+            h = nextafter(x, (numeric_limits<Real>::max)()) - x;
         }
         return h;
     }
@@ -70,8 +76,9 @@ Real complex_step_derivative(const F f, Real x)
     // This idea was tested over a few billion test cases and found the make the error *much* worse.
     // Even 2eps and eps/2 made the error worse, which was surprising.
     using std::complex;
-    constexpr const Real step = std::numeric_limits<Real>::epsilon();
-    constexpr const Real inv_step = 1/std::numeric_limits<Real>::epsilon();
+    using std::numeric_limits;
+    constexpr const Real step = (numeric_limits<Real>::epsilon)();
+    constexpr const Real inv_step = 1/(numeric_limits<Real>::epsilon)();
     return f(complex<Real>(x, step)).imag()*inv_step;
 }
 
@@ -86,7 +93,7 @@ Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
     using std::abs;
     using std::numeric_limits;
 
-    const Real eps = numeric_limits<Real>::epsilon();
+    const Real eps = (numeric_limits<Real>::epsilon)();
     // Error bound ~eps^1/2
     if constexpr (order == 1)
     {
@@ -143,7 +150,7 @@ Real finite_difference_derivative(const F f, Real x, Real* error = nullptr)
         Real y1 = yh - ymh;
         if (error)
         {
-            // Mathematica code to extrace the remainder:
+            // Mathematica code to extract the remainder:
             // Series[(f[x-2*h]+ 8*f[x+h] - 8*f[x-h] - f[x+2*h])/(12*h), {h, 0, 7}]
             Real y_three_h = f(x + 3*h);
             Real y_m_three_h = f(x - 3*h);
