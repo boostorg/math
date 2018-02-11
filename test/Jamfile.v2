@@ -1087,6 +1087,10 @@ test-suite misc :
    [ compile compile_test/gauss_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
    [ compile compile_test/gauss_kronrod_concept_test.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax ] ]
 
+   [ run test_numerical_differentiation.cpp ../../test/build//boost_unit_test_framework ]
+   [ run  compile_test/numerical_differentiation_incl_test.cpp compile_test_main ]
+   [ compile  compile_test/numerical_differentiation_concept_test.cpp ]
+
 ;
 
 
