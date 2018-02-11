@@ -86,7 +86,7 @@ In practice we have found that /k=6/ seems to be a good compromise between the t
 
 
 Given all the caveats which must be kept in mind for successful use of finite-difference differentiation, it is reasonable to try to avoid it if possible.
-Boost provides two possibilities: The Chebyshev transform (discussed elsewhere) and the complex step derivative.
+Boost provides two possibilities: The Chebyshev transform (see [link math_toolkit.sf_poly.chebyshev here]) and the complex step derivative.
 If your function is the restriction to the real line of a holomorphic function which takes real values at real argument, then the *complex step derivative* can be used.
 The idea is very simple: Since /f/ is complex-differentiable, ['f(x+\u2148 h) = f(x) + \u2148 hf'(x) - h[super 2]f''(x) + [bigo](h[super 3])].
 As long as /f(x)/ \u2208 \u211D, then ['f'(x) = \u2111 f(x+\u2148 h)/h + [bigo](h[super 2])].
