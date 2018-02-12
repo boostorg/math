@@ -34,6 +34,7 @@ public:
     naive_monte_carlo(const F& integrand,
                       std::vector<std::pair<Real, Real>> const & bounds,
                       Real error_goal,
+                      bool singular = true,
                       size_t threads = std::thread::hardware_concurrency()): m_num_threads{threads}
     {
         using std::numeric_limits;
@@ -67,14 +68,37 @@ public:
             else if (bounds[i].second == numeric_limits<Real>::infinity())
             {
                 m_limit_types[i] = detail::limit_classification::UPPER_BOUND_INFINITE;
-                m_lbs[i] = bounds[i].first;
+                if (singular)
+                {
+                    m_lbs[i] = std::nextafter(bounds[i].first, std::numeric_limits<Real>::max());
+                }
+                else
+                {
+                    m_lbs[i] = bounds[i].first;
+                }
                 m_dxs[i] = numeric_limits<Real>::quiet_NaN();
             }
             else
             {
                 m_limit_types[i] = detail::limit_classification::FINITE;
-                m_lbs[i] = bounds[i].first;
-                m_dxs[i] = bounds[i].second - m_lbs[i];
+                if (singular)
+                {
+                    if (bounds[i].first == 0)
+                    {
+                        m_lbs[i] = std::numeric_limits<Real>::epsilon();
+                    }
+                    else
+                    {
+                        m_lbs[i] = std::nextafter(bounds[i].first, std::numeric_limits<Real>::max());
+                    }
+
+                    m_dxs[i] = std::nextafter(bounds[i].second, std::numeric_limits<Real>::lowest()) - m_lbs[i];
+                }
+                else
+                {
+                    m_lbs[i] = bounds[i].first;
+                    m_dxs[i] = bounds[i].second - bounds[i].first;
+                }
                 m_volume *= m_dxs[i];
             }
         }
@@ -122,7 +146,7 @@ public:
         std::vector<Real> x(m_lbs.size());
         std::random_device rd;
         std::mt19937_64 gen(rd());
-        Real inv_denom = (Real) 1/( (Real) gen.max() + (Real) 2);
+        Real inv_denom = 1/static_cast<Real>(gen.max());
 
         m_num_threads = std::max(m_num_threads, (size_t) 1);
         Real avg = 0;
@@ -130,11 +154,7 @@ public:
         {
             for (size_t j = 0; j < m_lbs.size(); ++j)
             {
-                do
-                {
-                    x[j] = (gen()+1)*inv_denom;
-                }
-                while (x[j] < numeric_limits<Real>::epsilon() || x[j] > 1 - numeric_limits<Real>::epsilon());
+                x[j] = gen()*inv_denom;
             }
             Real y = m_integrand(x);
             m_thread_averages.emplace(i, y);
@@ -292,7 +312,7 @@ private:
             //     std::cout << "OMG! we have no entropy.\n";
             // }
             std::mt19937_64 gen(rd());
-            Real inv_denom = (Real) 1/( (Real) gen.max() + (Real) 2);
+            Real inv_denom = (Real) 1/(Real) gen.max();
             Real M1 = m_thread_averages[thread_index];
             Real S = m_thread_Ss[thread_index];
             // Kahan summation is required. See the implementation discussion.
@@ -308,11 +328,7 @@ private:
                 {
                     for (size_t i = 0; i < m_lbs.size(); ++i)
                     {
-                        do
-                        {
-                            x[i] = (gen()+1)*inv_denom;
-                        }
-                        while (x[i] < numeric_limits<Real>::epsilon() || x[i] > 1 - numeric_limits<Real>::epsilon());
+                            x[i] = gen()*inv_denom;
                     }
                     Real f = m_integrand(x);
                     ++k;
