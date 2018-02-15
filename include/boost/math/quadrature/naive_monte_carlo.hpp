@@ -8,7 +8,7 @@
 #define BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
 #include <algorithm>
 #include <vector>
-#include <atomic>
+#include <boost/atomic.hpp>
 #include <functional>
 #include <future>
 #include <thread>
@@ -354,20 +354,20 @@ private:
 
     std::function<Real(std::vector<Real> &)> m_integrand;
     size_t m_num_threads;
-    std::atomic<Real> m_error_goal;
-    std::atomic<bool> m_done;
+    boost::atomic<Real> m_error_goal;
+    boost::atomic<bool> m_done;
     std::vector<Real> m_lbs;
     std::vector<Real> m_dxs;
     std::vector<detail::limit_classification> m_limit_types;
     Real m_volume;
-    std::atomic<size_t> m_total_calls;
+    boost::atomic<size_t> m_total_calls;
     // I wanted these to be vectors rather than maps,
     // but you can't resize a vector of atomics.
-    std::map<size_t, std::atomic<size_t>> m_thread_calls;
-    std::atomic<Real> m_variance;
-    std::map<size_t, std::atomic<Real>> m_thread_Ss;
-    std::atomic<Real> m_avg;
-    std::map<size_t, std::atomic<Real>> m_thread_averages;
+    std::map<size_t, boost::atomic<size_t>> m_thread_calls;
+    boost::atomic<Real> m_variance;
+    std::map<size_t, boost::atomic<Real>> m_thread_Ss;
+    boost::atomic<Real> m_avg;
+    std::map<size_t, boost::atomic<Real>> m_thread_averages;
     std::chrono::time_point<std::chrono::system_clock> m_start;
     std::exception_ptr m_exception;
 };
