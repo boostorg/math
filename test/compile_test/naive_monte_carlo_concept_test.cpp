@@ -5,6 +5,8 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#if !defined(_MSC_VER) || (_MSC_VER >= 1900)
+
 #include <boost/math/concepts/std_real_concept.hpp>
 #include <boost/math/quadrature/naive_monte_carlo.hpp>
 
@@ -23,3 +25,9 @@ void compile_and_link_test()
    auto task = mc.integrate();
    task.get();
 }
+
+#else
+void compile_and_link_test()
+{
+}
+#endif

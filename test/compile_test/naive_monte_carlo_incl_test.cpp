@@ -9,6 +9,8 @@
 #pragma warning(disable:4459)
 #endif
 
+#if !defined(_MSC_VER) || (_MSC_VER >= 1900)
+
 #include <boost/math/quadrature/naive_monte_carlo.hpp>
 #include "test_compile_result.hpp"
 
@@ -25,3 +27,9 @@ void compile_and_link_test()
     auto task = mc.integrate();
     check_result<double>(task.get());
 }
+
+#else
+void compile_and_link_test()
+{
+}
+#endif
