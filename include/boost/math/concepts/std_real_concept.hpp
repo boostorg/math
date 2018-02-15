@@ -175,8 +175,6 @@ inline boost::math::concepts::std_real_concept atan2(boost::math::concepts::std_
 { return std::atan2(a.value(), b.value()); }
 inline boost::math::concepts::std_real_concept ceil(boost::math::concepts::std_real_concept a)
 { return std::ceil(a.value()); }
-inline bool isfinite(boost::math::concepts::std_real_concept a)
-{ return std::isfinite(a.value()); }
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 inline boost::math::concepts::std_real_concept fmod(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
 { return fmodl(a.value(), b.value()); }
@@ -228,6 +226,8 @@ inline boost::math::concepts::std_real_concept sqrt(boost::math::concepts::std_r
 { return std::sqrt(a.value()); }
 inline boost::math::concepts::std_real_concept tanh(boost::math::concepts::std_real_concept a)
 { return std::tanh(a.value()); }
+inline boost::math::concepts::std_real_concept (nextafter)(boost::math::concepts::std_real_concept a, boost::math::concepts::std_real_concept b)
+{ return (boost::math::nextafter)(a, b); }
 //
 // C++11 ism's
 // Note that these must not actually call the std:: versions as that precludes using this
@@ -239,6 +239,10 @@ inline boost::math::concepts::std_real_concept acosh(boost::math::concepts::std_
 { return boost::math::acosh(a.value(), boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>())); }
 inline boost::math::concepts::std_real_concept atanh(boost::math::concepts::std_real_concept a)
 { return boost::math::atanh(a.value(), boost::math::policies::make_policy(boost::math::policies::overflow_error<boost::math::policies::ignore_error>())); }
+inline bool (isfinite)(boost::math::concepts::std_real_concept a)
+{
+   return (boost::math::isfinite)(a.value());
+}
 
 
 } // namespace std
