@@ -17,6 +17,7 @@
 #include <random>
 #include <chrono>
 #include <map>
+#include <boost/math/policies/error_handling.hpp>
 
 namespace boost { namespace math { namespace quadrature {
 
@@ -70,7 +71,7 @@ public:
                 m_limit_types[i] = detail::limit_classification::UPPER_BOUND_INFINITE;
                 if (singular)
                 {
-                    m_lbs[i] = std::nextafter(bounds[i].first, std::numeric_limits<Real>::max());
+                    m_lbs[i] = std::nextafter(bounds[i].first, (std::numeric_limits<Real>::max)());
                 }
                 else
                 {
@@ -89,7 +90,7 @@ public:
                     }
                     else
                     {
-                        m_lbs[i] = std::nextafter(bounds[i].first, std::numeric_limits<Real>::max());
+                        m_lbs[i] = std::nextafter(bounds[i].first, (std::numeric_limits<Real>::max)());
                     }
 
                     m_dxs[i] = std::nextafter(bounds[i].second, std::numeric_limits<Real>::lowest()) - m_lbs[i];
@@ -146,9 +147,9 @@ public:
         std::vector<Real> x(m_lbs.size());
         std::random_device rd;
         std::mt19937_64 gen(rd());
-        Real inv_denom = 1/static_cast<Real>(gen.max());
+        Real inv_denom = 1/static_cast<Real>((gen.max)());
 
-        m_num_threads = std::max(m_num_threads, (size_t) 1);
+        m_num_threads = (std::max)(m_num_threads, (size_t) 1);
         Real avg = 0;
         for (size_t i = 0; i < m_num_threads; ++i)
         {
@@ -159,7 +160,7 @@ public:
             Real y = m_integrand(x);
             m_thread_averages.emplace(i, y);
             m_thread_calls.emplace(i, 1);
-            m_thread_Ss.emplace(i, 0);
+            m_thread_Ss.emplace(i, Real(0));
             avg += y;
         }
         avg /= m_num_threads;
@@ -169,7 +170,7 @@ public:
         m_start = std::chrono::system_clock::now();
         m_done = false;
         m_total_calls = m_num_threads;
-        m_variance = numeric_limits<Real>::max();
+        m_variance = (numeric_limits<Real>::max)();
     }
 
     std::future<Real> integrate()
@@ -312,7 +313,7 @@ private:
             //     std::cout << "OMG! we have no entropy.\n";
             // }
             std::mt19937_64 gen(rd());
-            Real inv_denom = (Real) 1/(Real) gen.max();
+            Real inv_denom = (Real) 1/(Real) (gen.max)();
             Real M1 = m_thread_averages[thread_index];
             Real S = m_thread_Ss[thread_index];
             // Kahan summation is required. See the implementation discussion.
