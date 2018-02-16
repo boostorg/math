@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
-<link rel="up" href="../quadrature.html" title="Chapter&#160;11.&#160;Quadrature">
+<link rel="up" href="../quadrature.html" title="Chapter&#160;11.&#160;Quadrature and Differentiation">
 <link rel="prev" href="gauss.html" title="Gauss-Legendre quadrature">
 <link rel="next" href="double_exponential.html" title="Double-exponential quadrature">
 </head>
@@ -67,7 +67,7 @@
 <p>
       <code class="computeroutput"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">quadrature</span><span class="special">/</span><span class="identifier">gauss_kronrod</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
     </p>
-<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;19.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Real</span><span class="special">,</span> <span class="keyword">unsigned</span> <span class="identifier">N</span><span class="special">,</span> <span class="keyword">class</span> <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">::</span><span class="identifier">policy</span><span class="special">&lt;&gt;</span> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">gauss_kronrod</span>
 <span class="special">{</span>
    <span class="keyword">static</span> <span class="keyword">const</span> <span class="identifier">RandomAccessContainer</span><span class="special">&amp;</span> <span class="identifier">abscissa</span><span class="special">();</span>
