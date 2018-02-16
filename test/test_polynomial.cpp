@@ -24,6 +24,7 @@
 #endif
 
 using namespace boost::math;
+using boost::integer::gcd;
 using namespace boost::math::tools;
 using namespace std;
 using boost::integer::gcd_detail::Euclid_gcd;
