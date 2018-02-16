@@ -88,7 +88,7 @@ namespace detail
     template <class T>
     T reduce_to_primitive(polynomial<T> &u, polynomial<T> &v)
     {
-        using boost::math::gcd;
+        using boost::integer::gcd;
         T const u_cont = content(u), v_cont = content(v);
         u /= u_cont;
         v /= v_cont;
