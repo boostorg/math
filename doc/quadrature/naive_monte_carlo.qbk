@@ -20,6 +20,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         naive_monte_carlo(const F& integrand,
                           std::vector<std::pair<Real, Real>> const & bounds,
                           Real error_goal,
+                          bool singular = true,
                           size_t threads = std::thread::hardware_concurrency());
 
         std::future<Real> integrate();
@@ -61,10 +62,10 @@ and as such cancellation must be supported.
 A cancelled job which returns no results is wasted, so the cancellation must be graceful,
 returning the best estimate of the result thus far.
 In addition, a task might finish, and the user may well decide to try for a lower error bound.
-Hence restarting without loss of the preceding computation is must be supported.
+Hence restarting without loss of the preceding effort must be supported.
 Finally, on an HPC system, we generally wish to use all available threads.
 But if the computation is performed on a users workstation,
-then employing every thread will cause the users browser, email, or music apps to become unresponsive,
+employing every thread will cause the browser, email, or music apps to become unresponsive,
 so leaving a single thread available for other apps is appreciated.
 
 All these use cases are supported, so let's get to the code:
@@ -106,7 +107,7 @@ The call
 creates an instance of the monte carlo integrator.
 This is also where the number of threads can be set, for instance
 
-    naive_monte_carlo<double, decltype(g)> mc(g, bounds, error_goal, std::thread::hardware_concurrency() - 1);
+    naive_monte_carlo<double, decltype(g)> mc(g, bounds, error_goal, true, std::thread::hardware_concurrency() - 1);
 
 might be more appropriate for running on a user's hardware (the default taking all the threads).
 The call to `integrate()` does not return the value of the integral, but rather a `std::future<Real>`.
@@ -135,5 +136,23 @@ This is achieved by
     mc.update_target_error(new_target_error);
     task = mc.integrate();
     y = task.get();
+
+There is one additional "advanced" parameter: Whether or not the integrand is singular on the boundary.
+If the integrand is *not* singular on the boundary, then the integrand is evaluated over the closed set \u220F[sub i] [ /a/[sub /i/], /b/[sub /i/] ].
+If the integrand is singular (the default) then the integrand is evaluated over the closed set \u220F[sub i] [ /a(1+[epsilon])/, /b(1-[epsilon])/ ].
+(Note that there is sadly no such thing as an open set in floating point arithmetic.)
+When does the difference matter?
+Recall the stricture to never peel a high-dimensional orange, because when you do, nothing is left.
+The same idea applied here.
+The fraction of the volume within a distance [epsilon] of the boundary is approximately [epsilon]/d/, where /d/ is the number of dimensions.
+If the number of dimensions is large and the precision of the type is low, then it is possible that no correct digits will be obtained.
+If the integrand is singular on the boundary, you have no options; you simply must resort to higher precision computations.
+If the integrand is not singular on the boundary, then you can tell this to the integration routine via
+
+    naive_monte_carlo<double, decltype(g)> mc(g, bounds, error_goal, /*singular = */ false);
+
+and this problem will not be encountered.
+In practice, you will need ~1,000 dimensions for this to be relevant in 16 bit floating point, ~100,000 dimensions in 32 bit floating point,
+and an astronomical number of dimensions in double precision.
 
 [endsect]
