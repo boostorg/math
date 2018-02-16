@@ -16,6 +16,7 @@
 #include <boost/config.hpp>
 #include <boost/array.hpp>
 #include <boost/type_traits/is_floating_point.hpp>
+#include <boost/type_traits/is_fundamental.hpp>
 
 #include "table_type.hpp"
 // Copy of i:\modular-boost\libs\math\test\table_type.hpp
