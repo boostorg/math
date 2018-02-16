@@ -54,7 +54,7 @@ namespace math{ namespace tools{
 template <class T>
 T content(polynomial<T> const &x)
 {
-    return x ? gcd_range(x.data().begin(), x.data().end()).first : T(0);
+    return x ? boost::integer::gcd_range(x.data().begin(), x.data().end()).first : T(0);
 }
 
 // Knuth, 4.6.1
