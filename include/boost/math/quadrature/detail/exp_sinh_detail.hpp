@@ -228,7 +228,7 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         //std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
         if (!isfinite(I1))
         {
-            return policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and resulted in %1%. Please ensure your function evaluates to a finite number of its entire domain.", I1, Policy());
+            return policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and returned %1%. Please ensure your function evaluates to a finite number over its entire domain.", I1, Policy());
         }
         if (err <= tolerance*L1_I1)
         {
