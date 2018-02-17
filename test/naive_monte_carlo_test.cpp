@@ -309,43 +309,67 @@ void test_radovic()
 
 BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 {
+#if !defined(TEST) || TEST == 1
     test_finite_singular_boundary<double>();
     test_finite_singular_boundary<float>();
     test_nan<float>();
+#endif
+#if !defined(TEST) || TEST == 2
     test_pi<float>();
     test_pi<double>();
     test_pi<long double>();
+#endif
+#if !defined(TEST) || TEST == 3
     test_constant<float>();
     test_constant<double>();
     test_constant<long double>();
+#endif
+#if !defined(TEST) || TEST == 4
     test_cancel_and_restart<float>();
     test_exception_from_integrand<float>();
     test_variance<float>();
+#endif
+#if !defined(TEST) || TEST == 5
     test_variance<double>();
     test_product<float, 1>();
     test_product<float, 2>();
+#endif
+#if !defined(TEST) || TEST == 6
     test_product<float, 3>();
     test_product<float, 4>();
     test_product<float, 5>();
+#endif
+#if !defined(TEST) || TEST == 7
     test_product<float, 6>();
     test_product<double, 1>();
     test_product<double, 2>();
+#endif
+#if !defined(TEST) || TEST == 8
     test_product<double, 3>();
     test_product<double, 4>();
     test_upper_bound_infinite<float>();
+#endif
+#if !defined(TEST) || TEST == 9
     test_upper_bound_infinite<double>();
     test_lower_bound_infinite<float>();
     test_lower_bound_infinite<double>();
+#endif
+#if !defined(TEST) || TEST == 10
     test_double_infinite<float>();
     test_double_infinite<double>();
     test_radovic<float, 1>();
+#endif
+#if !defined(TEST) || TEST == 11
     test_radovic<float, 2>();
     test_radovic<float, 3>();
     test_radovic<double, 1>();
+#endif
+#if !defined(TEST) || TEST == 12
     test_radovic<double, 2>();
     test_radovic<double, 3>();
     test_radovic<double, 4>();
     test_radovic<double, 5>();
+#endif
 }
 #else
 BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
