@@ -6,6 +6,7 @@
  */
 #ifndef BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
 #define BOOST_MATH_QUADRATURE_NAIVE_MONTE_CARLO_HPP
+#include <sstream>
 #include <algorithm>
 #include <vector>
 #include <boost/atomic.hpp>
@@ -28,7 +29,7 @@ namespace detail {
                                    DOUBLE_INFINITE};
 }
 
-template<class Real, class F, class Policy = boost::math::policies::policy<>>
+template<class Real, class F, class RNG = std::mt19937_64, class Policy = boost::math::policies::policy<>>
 class naive_monte_carlo
 {
 public:
@@ -36,9 +37,11 @@ public:
                       std::vector<std::pair<Real, Real>> const & bounds,
                       Real error_goal,
                       bool singular = true,
-                      size_t threads = std::thread::hardware_concurrency()): m_num_threads{threads}
+                      size_t threads = std::thread::hardware_concurrency(),
+                      size_t seed = 0): m_num_threads{threads}, m_seed{seed}
     {
         using std::numeric_limits;
+        using std::sqrt;
         size_t n = bounds.size();
         m_lbs.resize(n);
         m_dxs.resize(n);
@@ -61,7 +64,7 @@ public:
                 else
                 {
                     m_limit_types[i] = detail::limit_classification::LOWER_BOUND_INFINITE;
-                    // Ok ok this is bad:
+                    // Ok ok this is bad to use the second bound as the lower limit and then reflect.
                     m_lbs[i] = bounds[i].second;
                     m_dxs[i] = numeric_limits<Real>::quiet_NaN();
                 }
@@ -71,6 +74,8 @@ public:
                 m_limit_types[i] = detail::limit_classification::UPPER_BOUND_INFINITE;
                 if (singular)
                 {
+                    // I've found that it's easier to sample on a closed set and perturb the boundary
+                    // than to try to sample very close to the boundary.
                     m_lbs[i] = std::nextafter(bounds[i].first, (std::numeric_limits<Real>::max)());
                 }
                 else
@@ -111,6 +116,7 @@ public:
             {
                 // Variable transformation are listed at:
                 // https://en.wikipedia.org/wiki/Numerical_integration
+                // However, we've made some changes to these so that we can evaluate on a compact domain.
                 if (m_limit_types[i] == detail::limit_classification::FINITE)
                 {
                     x[i] = m_lbs[i] + x[i]*m_dxs[i];
@@ -118,25 +124,23 @@ public:
                 else if (m_limit_types[i] == detail::limit_classification::UPPER_BOUND_INFINITE)
                 {
                     Real t = x[i];
-                    Real z = 1/(1-t);
-                    coeff *= (z*z);
+                    Real z = 1/(1 + numeric_limits<Real>::epsilon() - t);
+                    coeff *= (z*z)*(1 + numeric_limits<Real>::epsilon());
                     x[i] = m_lbs[i] + t*z;
                 }
                 else if (m_limit_types[i] == detail::limit_classification::LOWER_BOUND_INFINITE)
                 {
                     Real t = x[i];
-                    Real z = 1/t;
+                    Real z = 1/(t+sqrt((numeric_limits<Real>::min)()));
                     coeff *= (z*z);
                     x[i] = m_lbs[i] + (t-1)*z;
                 }
                 else
                 {
-                    Real t = 2*x[i] - 1;
-                    Real tsq = t*t;
-                    Real z = 1/(1-t);
-                    z /= (1+t);
-                    coeff *= 2*(1+tsq)*z*z;
-                    x[i] = t*z;
+                    Real t1 = 1/(1+numeric_limits<Real>::epsilon() - x[i]);
+                    Real t2 = 1/(x[i]+numeric_limits<Real>::epsilon());
+                    x[i] = (2*x[i]-1)*t1*t2/4;
+                    coeff *= (t1*t1+t2*t2)/4;
                 }
             }
             return coeff*integrand(x);
@@ -145,9 +149,16 @@ public:
         // If we don't do a single function call in the constructor,
         // we can't do a restart.
         std::vector<Real> x(m_lbs.size());
-        std::random_device rd;
-        std::mt19937_64 gen(rd());
-        Real inv_denom = 1/static_cast<Real>((gen.max)());
+
+        // If the seed is zero, that tells us to choose a random seed for the user:
+        if (seed == 0)
+        {
+            std::random_device rd;
+            seed = rd();
+        }
+
+        RNG gen(seed);
+        Real inv_denom = 1/static_cast<Real>(((gen.max)()-(gen.min)()));
 
         m_num_threads = (std::max)(m_num_threads, (size_t) 1);
         Real avg = 0;
@@ -155,7 +166,7 @@ public:
         {
             for (size_t j = 0; j < m_lbs.size(); ++j)
             {
-                x[j] = gen()*inv_denom;
+                x[j] = (gen()-(gen.min)())*inv_denom;
             }
             Real y = m_integrand(x);
             m_thread_averages.emplace(i, y);
@@ -183,6 +194,9 @@ public:
 
     void cancel()
     {
+        // If seed = 0 (meaning have the routine pick the seed), this leaves the seed the same.
+        // If seed != 0, then the seed is changed, so a restart doesn't do the exact same thing.
+        m_seed = m_seed*m_seed;
         m_done = true;
     }
 
@@ -239,12 +253,24 @@ private:
     {
         m_start = std::chrono::system_clock::now();
         std::vector<std::thread> threads(m_num_threads);
+        size_t seed;
+        // If the user tells us to pick a seed, pick a seed:
+        if (m_seed == 0)
+        {
+            std::random_device rd;
+            seed = rd();
+        }
+        else // use the seed we are given:
+        {
+            seed = m_seed;
+        }
+        RNG gen(seed);
         for (size_t i = 0; i < threads.size(); ++i)
         {
-            threads[i] = std::thread(&naive_monte_carlo::m_thread_monte, this, i);
+            threads[i] = std::thread(&naive_monte_carlo::m_thread_monte, this, i, gen());
         }
         do {
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
             size_t total_calls = 0;
             for (size_t i = 0; i < m_num_threads; ++i)
             {
@@ -287,7 +313,7 @@ private:
         for (size_t i = 0; i < m_num_threads; ++i)
         {
             size_t t_calls = m_thread_calls[i];
-            // Will this overflow? Not hard to remove . . .
+            // Averages weighted by the number of calls the thread made:
             avg += m_thread_averages[i]*( (Real) t_calls/ (Real) total_calls);
             variance += m_thread_Ss[i];
         }
@@ -298,40 +324,51 @@ private:
         return m_avg.load();
     }
 
-    void m_thread_monte(size_t thread_index)
+    void m_thread_monte(size_t thread_index, size_t seed)
     {
         using std::numeric_limits;
         try
         {
             std::vector<Real> x(m_lbs.size());
-            std::random_device rd;
-            // Should we do something different if we have no entropy?
-            // Apple LLVM version 9.0.0 (clang-900.0.38) has no entropy,
-            // but rd() returns a reasonable random sequence.
-            // if (rd.entropy() == 0)
-            // {
-            //     std::cout << "OMG! we have no entropy.\n";
-            // }
-            std::mt19937_64 gen(rd());
-            Real inv_denom = (Real) 1/(Real) (gen.max)();
+            RNG gen(seed);
+            Real inv_denom = (Real) 1/(Real)( (gen.max)() - (gen.min)()  );
             Real M1 = m_thread_averages[thread_index];
             Real S = m_thread_Ss[thread_index];
-            // Kahan summation is required. See the implementation discussion.
+            // Kahan summation is required or the value of the integrand will go on a random walk during long computations.
+            // See the implementation discussion.
+            // The idea is that the unstabilized additions have error sigma(f)/sqrt(N) + epsilon*N, which diverges faster than it converges!
+            // Kahan summation turns this to sigma(f)/sqrt(N) + epsilon^2*N, and the random walk occurs on a timescale of 10^14 years (on current hardware)
             Real compensator = 0;
             size_t k = m_thread_calls[thread_index];
             while (!m_done)
             {
                 int j = 0;
                 // If we don't have a certain number of calls before an update, we can easily terminate prematurely
-                // because the variance estimate is way too low.
+                // because the variance estimate is way too low. This magic number is a reasonable compromise, as 1/sqrt(2048) = 0.02,
+                // so it should recover 2 digits if the integrand isn't poorly behaved, and if it is, it should discover that before premature termination.
+                // Of course if the user has 64 threads, then this number is probably excessive.
                 int magic_calls_before_update = 2048;
                 while (j++ < magic_calls_before_update)
                 {
                     for (size_t i = 0; i < m_lbs.size(); ++i)
                     {
-                            x[i] = gen()*inv_denom;
+                        x[i] = (gen() - (gen.min)())*inv_denom;
                     }
                     Real f = m_integrand(x);
+                    using std::isfinite;
+                    if (!isfinite(f))
+                    {
+                        // The call to m_integrand transform x, so this error message states the correct node.
+                        std::stringstream os;
+                        os << "Your integrand was evaluated at {";
+                        for (size_t i = 0; i < x.size() -1; ++i)
+                        {
+                             os << x[i] << ", ";
+                        }
+                        os << x[x.size() -1] << "}, and returned " << f << std::endl;
+                        static const char* function = "boost::math::quadrature::naive_monte_carlo<%1%>";
+                        boost::math::policies::raise_domain_error(function, os.str().c_str(), /*this is a dummy arg to make it compile*/ 7.2, Policy());
+                    }
                     ++k;
                     Real term = (f - M1)/k;
                     Real y1 = term - compensator;
@@ -355,6 +392,7 @@ private:
 
     std::function<Real(std::vector<Real> &)> m_integrand;
     size_t m_num_threads;
+    size_t m_seed;
     boost::atomic<Real> m_error_goal;
     boost::atomic<bool> m_done;
     std::vector<Real> m_lbs;

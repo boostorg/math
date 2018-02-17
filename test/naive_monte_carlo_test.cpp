@@ -39,8 +39,8 @@ void test_pi()
     };
 
     std::vector<std::pair<Real, Real>> bounds{{Real(0), Real(1)}, {Real(0), Real(1)}};
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0005);
-
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0005,
+                                            /*singular =*/ false,/* threads = */ 1, /* seed = */ 17);
     auto task = mc.integrate();
     Real pi_estimated = task.get();
     if (abs(pi_estimated - pi<Real>())/pi<Real>() > 0.005)
@@ -61,7 +61,8 @@ void test_constant()
     };
 
     std::vector<std::pair<Real, Real>> bounds{{Real(0), Real(1)}, { Real(0), Real(1)}};
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0001);
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0001,
+                                            /* singular = */ false, /* threads = */ 1, /* seed = */ 87);
 
     auto task = mc.integrate();
     Real one = task.get();
@@ -70,23 +71,6 @@ void test_constant()
     BOOST_CHECK(mc.calls() > 1000);
 }
 
-template<class Real>
-void test_nan()
-{
-    std::cout << "Testing that a reasonable action is performed by the Monte-Carlo integrator when singularities are hit on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
-    auto g = [](std::vector<Real> const &)->Real
-    {
-      return std::numeric_limits<Real>::quiet_NaN();
-    };
-
-    std::vector<std::pair<Real, Real>> bounds{{Real(0), Real(1)}, {Real(0), Real(1)}};
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0001);
-
-    auto task = mc.integrate();
-    Real result = task.get();
-    // I think this is reasonable, but should it throw an exception?
-    BOOST_CHECK(std::isnan(result));
-}
 
 template<class Real>
 void test_exception_from_integrand()
@@ -132,7 +116,7 @@ void test_cancel_and_restart()
         return A / (1.0 - cos(x[0])*cos(x[1])*cos(x[2]));
     };
     vector<pair<Real, Real>> bounds{{ Real(0), pi<Real>()}, { Real(0), pi<Real>()}, { Real(0), pi<Real>()}};
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.05);
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.05, true, 1, 888889);
 
     auto task = mc.integrate();
     mc.cancel();
@@ -159,7 +143,7 @@ void test_finite_singular_boundary()
         return pow(log(1.0/x[0]), 2) + log1p(-x[0]);
     };
     vector<pair<Real, Real>> bounds{{Real(0), Real(1)}};
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.01);
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.01, true, 1, 1922);
 
     auto task = mc.integrate();
 
@@ -177,7 +161,7 @@ void test_variance()
         return x[0];
     };
     vector<pair<Real, Real>> bounds{{ Real(0), Real(1)}};
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, false, 1, 12341);
 
     auto task = mc.integrate();
     Real y = task.get();
@@ -204,7 +188,36 @@ void test_product()
     {
         bounds[i] = std::make_pair<Real, Real>(0, 1);
     }
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, false, 1, 13999);
+
+    auto task = mc.integrate();
+    Real y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    using std::pow;
+    Real exact_variance = pow(4.0/3.0, dimension) - 1;
+    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.1);
+}
+
+template<class Real, size_t dimension>
+void test_alternative_rng()
+{
+    std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    auto g = [&](std::vector<Real> const & x)->Real
+    {
+        double y = 1;
+        for (size_t i = 0; i < x.size(); ++i)
+        {
+            y *= 2*x[i];
+        }
+        return y;
+    };
+
+    vector<pair<Real, Real>> bounds(dimension);
+    for (size_t i = 0; i < dimension; ++i)
+    {
+        bounds[i] = std::make_pair<Real, Real>(0, 1);
+    }
+    naive_monte_carlo<Real, decltype(g), std::mt19937> mc(g, bounds, (Real) 0.001, false, 1, 1882);
 
     auto task = mc.integrate();
     Real y = task.get();
@@ -228,8 +241,7 @@ void test_upper_bound_infinite()
     {
         bounds[i] = std::make_pair<Real, Real>(0, std::numeric_limits<Real>::infinity());
     }
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
-
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, true, 1, 8765);
     auto task = mc.integrate();
     Real y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, boost::math::constants::half_pi<Real>(), 0.01);
@@ -249,11 +261,32 @@ void test_lower_bound_infinite()
     {
         bounds[i] = std::make_pair<Real, Real>(-std::numeric_limits<Real>::infinity(), 0);
     }
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, true, 1, 1208);
 
     auto task = mc.integrate();
     Real y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, boost::math::constants::half_pi<Real>(), 0.01);
+}
+
+template<class Real>
+void test_lower_bound_infinite2()
+{
+    std::cout << "Testing that infinite lower bounds (2) are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    auto g = [](std::vector<Real> const & x)->Real
+    {
+        // If x[0] = inf, this should blow up:
+        return (x[0]*x[0])/(x[0]*x[0]*x[0]*x[0] + 1.0);
+    };
+
+    vector<pair<Real, Real>> bounds(1);
+    for (size_t i = 0; i < bounds.size(); ++i)
+    {
+        bounds[i] = std::make_pair<Real, Real>(-std::numeric_limits<Real>::infinity(), 0);
+    }
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, true, 1, 1208);
+    auto task = mc.integrate();
+    Real y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, boost::math::constants::half_pi<Real>()/boost::math::constants::root_two<Real>(), 0.01);
 }
 
 template<class Real>
@@ -270,7 +303,7 @@ void test_double_infinite()
     {
         bounds[i] = std::make_pair<Real, Real>(-std::numeric_limits<Real>::infinity(), std::numeric_limits<Real>::infinity());
     }
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, true, 1, 1776);
 
     auto task = mc.integrate();
     Real y = task.get();
@@ -299,7 +332,7 @@ void test_radovic()
     {
         bounds[i] = std::make_pair<Real, Real>(0, 1);
     }
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001);
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, false, 1, 1982);
 
     auto task = mc.integrate();
     Real y = task.get();
@@ -312,7 +345,6 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #if !defined(TEST) || TEST == 1
     test_finite_singular_boundary<double>();
     test_finite_singular_boundary<float>();
-    test_nan<float>();
 #endif
 #if !defined(TEST) || TEST == 2
     test_pi<float>();
@@ -347,12 +379,13 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #if !defined(TEST) || TEST == 8
     test_product<double, 3>();
     test_product<double, 4>();
-    test_upper_bound_infinite<float>();
 #endif
 #if !defined(TEST) || TEST == 9
+    test_upper_bound_infinite<float>();
     test_upper_bound_infinite<double>();
     test_lower_bound_infinite<float>();
     test_lower_bound_infinite<double>();
+    test_lower_bound_infinite2<float>();
 #endif
 #if !defined(TEST) || TEST == 10
     test_double_infinite<float>();
@@ -369,7 +402,10 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
     test_radovic<double, 3>();
     test_radovic<double, 4>();
     test_radovic<double, 5>();
+    test_alternative_rng<float, 3>();
+    test_alternative_rng<double, 3>();
 #endif
+
 }
 #else
 BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
