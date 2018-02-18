@@ -349,12 +349,12 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #if !defined(TEST) || TEST == 2
     test_pi<float>();
     test_pi<double>();
-    test_pi<long double>();
+    //test_pi<long double>();
 #endif
 #if !defined(TEST) || TEST == 3
     test_constant<float>();
     test_constant<double>();
-    test_constant<long double>();
+    //test_constant<long double>();
 #endif
 #if !defined(TEST) || TEST == 4
     test_cancel_and_restart<float>();

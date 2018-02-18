@@ -9,7 +9,7 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
-#include <boost/atomic.hpp>
+#include <atomic>
 #include <functional>
 #include <future>
 #include <thread>
@@ -29,7 +29,7 @@ namespace detail {
                                    DOUBLE_INFINITE};
 }
 
-template<class Real, class F, class RNG = std::mt19937_64, class Policy = boost::math::policies::policy<>>
+template<class Real, class F, class RandomNumberGenerator = std::mt19937_64, class Policy = boost::math::policies::policy<>>
 class naive_monte_carlo
 {
 public:
@@ -157,7 +157,7 @@ public:
             seed = rd();
         }
 
-        RNG gen(seed);
+        RandomNumberGenerator gen(seed);
         Real inv_denom = 1/static_cast<Real>(((gen.max)()-(gen.min)()));
 
         m_num_threads = (std::max)(m_num_threads, (size_t) 1);
@@ -264,7 +264,7 @@ private:
         {
             seed = m_seed;
         }
-        RNG gen(seed);
+        RandomNumberGenerator gen(seed);
         for (size_t i = 0; i < threads.size(); ++i)
         {
             threads[i] = std::thread(&naive_monte_carlo::m_thread_monte, this, i, gen());
@@ -330,7 +330,7 @@ private:
         try
         {
             std::vector<Real> x(m_lbs.size());
-            RNG gen(seed);
+            RandomNumberGenerator gen(seed);
             Real inv_denom = (Real) 1/(Real)( (gen.max)() - (gen.min)()  );
             Real M1 = m_thread_averages[thread_index];
             Real S = m_thread_Ss[thread_index];
@@ -393,20 +393,20 @@ private:
     std::function<Real(std::vector<Real> &)> m_integrand;
     size_t m_num_threads;
     size_t m_seed;
-    boost::atomic<Real> m_error_goal;
-    boost::atomic<bool> m_done;
+    std::atomic<Real> m_error_goal;
+    std::atomic<bool> m_done;
     std::vector<Real> m_lbs;
     std::vector<Real> m_dxs;
     std::vector<detail::limit_classification> m_limit_types;
     Real m_volume;
-    boost::atomic<size_t> m_total_calls;
+    std::atomic<size_t> m_total_calls;
     // I wanted these to be vectors rather than maps,
     // but you can't resize a vector of atomics.
-    std::map<size_t, boost::atomic<size_t>> m_thread_calls;
-    boost::atomic<Real> m_variance;
-    std::map<size_t, boost::atomic<Real>> m_thread_Ss;
-    boost::atomic<Real> m_avg;
-    std::map<size_t, boost::atomic<Real>> m_thread_averages;
+    std::map<size_t, std::atomic<size_t>> m_thread_calls;
+    std::atomic<Real> m_variance;
+    std::map<size_t, std::atomic<Real>> m_thread_Ss;
+    std::atomic<Real> m_avg;
+    std::map<size_t, std::atomic<Real>> m_thread_averages;
     std::chrono::time_point<std::chrono::system_clock> m_start;
     std::exception_ptr m_exception;
 };
