@@ -416,10 +416,10 @@ test-suite special_fun :
    [ run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
    [ run chebyshev_test.cpp  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3f : : : <define>TEST1 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ requires cxx11_auto_declarations ] : chebyshev_transform_test_1 ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3 : : : <define>TEST2 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ requires cxx11_auto_declarations ] : chebyshev_transform_test_2 ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3l : : : <define>TEST3 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ requires cxx11_auto_declarations ] : chebyshev_transform_test_3 ]
-   [ run chebyshev_transform_test.cpp ../config//fftw3q ../config//quadmath : : : <define>TEST4 [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] [ requires cxx11_auto_declarations ] : chebyshev_transform_test_4 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3f : : : <define>TEST1 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_1 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3 : : : <define>TEST2 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_2 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3l : : : <define>TEST3 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_3 ]
+   [ run chebyshev_transform_test.cpp ../config//fftw3q ../config//quadmath : : : <define>TEST4 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] [ check-target-builds ../config//has_float128 "__float128" : : <build>no ] : chebyshev_transform_test_4 ]
 
    [ run test_ldouble_simple.cpp ../../test/build//boost_unit_test_framework  ]
    # Needs to run in release mode, as it's rather slow:
@@ -868,8 +868,6 @@ test-suite misc :
       : : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ]
    [ run  compile_test/cubic_spline_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
    [ run  compile_test/barycentric_rational_incl_test.cpp compile_test_main : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
-   [ run  compile_test/common_factor_rt_inc_test.cpp compile_test_main  ]
-   [ run  compile_test/common_factor_ct_inc_test.cpp compile_test_main  ]
    [ run  compile_test/compl_abs_incl_test.cpp compile_test_main  ]
    [ run  compile_test/compl_acos_incl_test.cpp compile_test_main  ]
    [ run  compile_test/compl_acosh_incl_test.cpp compile_test_main  ]
@@ -973,7 +971,6 @@ test-suite misc :
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST2 : test_polynomial_2  ]
    [ run test_polynomial.cpp ../../test/build//boost_unit_test_framework : : : <define>TEST3 : test_polynomial_3  ]
    [ run polynomial_concept_check.cpp ]
-   [ run test_gcd.cpp ../../test/build//boost_unit_test_framework  ]
 
    [ compile multiprc_concept_check_1.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no  ]
    [ compile multiprc_concept_check_2.cpp : <debug-symbols>off <toolset>msvc:<cxxflags>/bigobj release <exception-handling>off:<build>no  ]
