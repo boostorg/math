@@ -13,7 +13,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     #include <boost/math/quadrature/naive_monte_carlo.hpp>
     namespace boost { namespace math { namespace quadrature {
 
-    template<class Real, class F>
+    template<class Real, class F, class RNG = std::mt19937_64, class Policy = boost::math::policies::policy<>>
     class naive_monte_carlo
     {
     public:
@@ -154,5 +154,11 @@ If the integrand is not singular on the boundary, then you can tell this to the 
 and this problem will not be encountered.
 In practice, you will need ~1,000 dimensions for this to be relevant in 16 bit floating point, ~100,000 dimensions in 32 bit floating point,
 and an astronomical number of dimensions in double precision.
+
+Finally, alternative random number generators may be provided to the class.
+The default random number generator is the standard library `std::mt19937_64`.
+However, here is an example which uses the 32-bit Mersenne twister random number generator instead:
+
+    naive_monte_carlo<Real, decltype(g), std::mt19937> mc(g, bounds, (Real) 0.001);
 
 [endsect]
