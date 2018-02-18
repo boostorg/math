@@ -43,7 +43,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 [heading Description]
 
-The class `naive_monte_carlo` performs Monte-Carlo integration on a function /f/ on a domain [Omega].
+The class `naive_monte_carlo` performs Monte-Carlo integration on a square integrable function /f/ on a domain [Omega].
 The theoretical background of Monte-Carlo integration is nicely discussed at [@https://en.wikipedia.org/wiki/Monte_Carlo_integration Wikipedia],
 and as such will not be discussed here.
 However, despite being "naive",
@@ -124,6 +124,7 @@ This allows us to do progress reporting from the master thread via
 
 The file `example/naive_monte_carlo_example.cpp` has an implementation of `display_progress` which is reasonable for command line apps.
 In addition, we can call `mc.cancel()` in this loop to stop the integration.
+Progress reporting is especially useful if you accidently pass in an integrand which is not square integrable-the variance increases without bound, and the progress decreases from some noisy initial value down to zero with time.
 Calling `task.get()` returns the current estimate.
 Once the future is ready, we can get the value of the integral via
 
