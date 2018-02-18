@@ -124,7 +124,7 @@ This allows us to do progress reporting from the master thread via
 
 The file `example/naive_monte_carlo_example.cpp` has an implementation of `display_progress` which is reasonable for command line apps.
 In addition, we can call `mc.cancel()` in this loop to stop the integration.
-Progress reporting is especially useful if you accidently pass in an integrand which is not square integrable-the variance increases without bound, and the progress decreases from some noisy initial value down to zero with time.
+Progress reporting is especially useful if you accidentally pass in an integrand which is not square integrable-the variance increases without bound, and the progress decreases from some noisy initial value down to zero with time.
 Calling `task.get()` returns the current estimate.
 Once the future is ready, we can get the value of the integral via
 
