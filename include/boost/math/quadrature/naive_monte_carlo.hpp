@@ -161,6 +161,10 @@ public:
         Real inv_denom = 1/static_cast<Real>(((gen.max)()-(gen.min)()));
 
         m_num_threads = (std::max)(m_num_threads, (size_t) 1);
+        m_thread_calls.reset(new boost::atomic<size_t>[threads]);
+        m_thread_Ss.reset(new boost::atomic<Real>[threads]);
+        m_thread_averages.reset(new boost::atomic<Real>[threads]);
+
         Real avg = 0;
         for (size_t i = 0; i < m_num_threads; ++i)
         {
@@ -169,9 +173,9 @@ public:
                 x[j] = (gen()-(gen.min)())*inv_denom;
             }
             Real y = m_integrand(x);
-            m_thread_averages.emplace(i, y);
-            m_thread_calls.emplace(i, 1);
-            m_thread_Ss.emplace(i, Real(0));
+            m_thread_averages[i] = y;
+            m_thread_calls[i] = 1;
+            m_thread_Ss[i] = 0;
             avg += y;
         }
         avg /= m_num_threads;
@@ -402,11 +406,11 @@ private:
     boost::atomic<size_t> m_total_calls;
     // I wanted these to be vectors rather than maps,
     // but you can't resize a vector of atomics.
-    std::map<size_t, boost::atomic<size_t>> m_thread_calls;
+    std::unique_ptr<boost::atomic<size_t>[]> m_thread_calls;
     boost::atomic<Real> m_variance;
-    std::map<size_t, boost::atomic<Real>> m_thread_Ss;
+    std::unique_ptr<boost::atomic<Real>[]> m_thread_Ss;
     boost::atomic<Real> m_avg;
-    std::map<size_t, boost::atomic<Real>> m_thread_averages;
+    std::unique_ptr<boost::atomic<Real>[]> m_thread_averages;
     std::chrono::time_point<std::chrono::system_clock> m_start;
     std::exception_ptr m_exception;
 };

@@ -11,8 +11,6 @@
 #include <boost/type_index.hpp>
 #include <boost/test/included/unit_test.hpp>
 
-#if !defined(_MSC_VER) || (_MSC_VER >= 1900)
-
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/quadrature/naive_monte_carlo.hpp>
@@ -407,8 +405,3 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #endif
 
 }
-#else
-BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
-{
-}
-#endif
