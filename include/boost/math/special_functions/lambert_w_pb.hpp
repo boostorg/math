@@ -8,7 +8,7 @@
 Implementation of the Fukushima algorithm for the Lambert W0 and W-1 real-only functions.
 
 This code is based on the algorithm by
-Toshio Fukushima, 
+Toshio Fukushima,
 "Precise and fast computation of Lambert W-functions without transcendental function evaluations",
 J. Comp. Appl. Math. 244 (2013) 77-89,
 and its author's FORTRAN code,
@@ -39,8 +39,8 @@ BOOST_MATH_INSTRUMENT_LAMBERT_WM1_LOOKUP // Show results from W-1 lookup table.
 //] [/boost_math_instrument_lambert_w_macros]
 */
 
-#ifndef BOOST_MATH_SF_LAMBERT_W_HPP
-#define BOOST_MATH_SF_LAMBERT_W_HPP
+#ifndef BOOST_MATH_FKDVPB_LAMBERT_W_HPP
+#define BOOST_MATH_FKDVPB_LAMBERT_W_HPP
 
 #ifdef _MSC_VER
 #  pragma warning (disable: 4127) // warning C4127: conditional expression is constant
@@ -75,8 +75,8 @@ BOOST_MATH_INSTRUMENT_LAMBERT_WM1_LOOKUP // Show results from W-1 lookup table.
 
 typedef double lookup_t; // Type for lookup table (double or float, or even long double?)
 
-//#include "J:\Cpp\Misc\lambert_w_lookup_table_generator\lambert_w_lookup_table.ipp"
- #include "lambert_w_lookup_table.ipp" // Boost.Math version.
+#include "J:\Cpp\Misc\lambert_w_lookup_table_generator\lambert_w_lookup_table.ipp" // BOTH w0 and wm1 version in namespace detail.
+// #include "lambert_w_lookup_table.ipp" // Boost.Math version.  Only Wm1 needed using namespace lambert_w_detail
 
 namespace boost
 {
@@ -84,6 +84,7 @@ namespace math
 {
   namespace detail
   {
+
 
   //! \brief Series expansion used near the singularity/branch point z = -exp(-1) = -3.6787944.
   //! Wolfram InverseSeries[Series[sqrt[2(p Exp[1 + p] + 1)], {p,-1, 20}]]
@@ -283,7 +284,7 @@ namespace math
   /////////////////////////////////////////////////////////////////////////////////////////////
 
   //! \brief Series expansion used near zero (abs(z) < 0.05).
-  //! \details 
+  //! \details
   //! Coefficients of the inverted series expansion of the Lambert W function around z = 0.
   //! Tosio Fukushima always uses all 17 terms of a Taylor series computed using Wolfram with
   //!   InverseSeries[Series[z Exp[z],{z,0,17}]]
@@ -295,7 +296,7 @@ namespace math
 
   //! This version is intended to allow use by user-defined types
   //! like Boost.Multiprecision quad and cpp_dec_float types.
-  //! The three specializations below for built-in float, double 
+  //! The three specializations below for built-in float, double
   //! (and perhaps long double) will be chosen in preference for these types.
 
   //! This version uses rationals computed by Wolfram as far as possible,
@@ -321,7 +322,7 @@ namespace math
   //! It assumes that max_digits10 is defined correctly or this might fail to make the correct selection.
   //! causing very small differences in computing lambert_w that would be very difficult to detect and diagnose.
   //! Cannot switch on @c std::numeric_limits<>::max() because comparison values may overflow the compiler limit.
-  //! Cannot switch on @c std::numeric_limits<long double>::max_exponent10() 
+  //! Cannot switch on @c std::numeric_limits<long double>::max_exponent10()
   //! because both 80 and 128 bit floating-point implmentations use 11 bits for the exponent.
   //! So must rely on @c std::numeric_limits<long double>::max_digits10.
 
@@ -699,7 +700,7 @@ namespace math
     using boost::math::tools::max_value;
 
     int iterations = 0;
-   // int iterations_required = 6; // 
+   // int iterations_required = 6; //
     int max_iterations = 20; // Only as a check on looping.
 
     T tolerance = boost::math::policies::get_epsilon<T, Policy>();
@@ -730,7 +731,7 @@ namespace math
       return w0;
     }
     // relative does NOT work well, so check for improvement in diff instead.
-    //else if ((abs(diff) / w0) <= tolerance) 
+    //else if ((abs(diff) / w0) <= tolerance)
     //{
     //  return w0;
     //}
@@ -788,7 +789,7 @@ namespace math
   } // T halley_update(T w0, const T z)
 
 
-  //! Halley update version that does one update without a check, 
+  //! Halley update version that does one update without a check,
   //! and then more updates as necessary.
   // TODO Might use a template parameter to avoid duplication?
   template<typename T = double>
@@ -881,7 +882,7 @@ namespace math
     //   result = schroeder_update(w, y);
     //where
     // w is estimate of Lambert W (from bisection or series).
-    // y is z * e^-w. 
+    // y is z * e^-w.
 
     BOOST_MATH_STD_USING // Aid argument dependent lookup of abs.
     #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
@@ -919,7 +920,7 @@ namespace math
   } // template<typename T = double> T schroeder_update(const T w, const T y)
 
   /////////////  namespace detail implementations of Lambert W for W0 and W-1 branches.
- 
+
   //! Compute Lambert W for W0 (or W+) branch.
   template<typename T, class Policy>
   T lambert_w0_imp(const T z, const Policy& pol)
@@ -931,7 +932,7 @@ namespace math
     // Integral types should been promoted to double by user Lambert w functions.
     BOOST_STATIC_ASSERT_MSG(!std::is_integral<T>::value,
       "Must be floating-point or fixed type (not integer type), for example: lambert_w0(1.), not lambert_w0(1)!");
-     
+
     const char* function = "boost::math::lambert_w0<RealType>(<RealType>)"; // Used for error messages.
 
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0
@@ -1002,7 +1003,7 @@ namespace math
         T w_series = lambert_w_singularity_series(T(sqrt(p2)));
         // Neither Halley nor Schroeder do not improve result for builtin,
         // differences about 5e-15, so do NOT use refinement step below unless multiprecision.
-        // 
+        //
         //int d2 = policies::digits<T, Policy>(); // Precision as digits base 2 from policy.
         //if (d2 > (std::numeric_limits<T>::digits - 6))
         //{ // If more (fullest) accuracy required, then use refinement.
@@ -1022,11 +1023,14 @@ namespace math
       }
     } //  z < -0.35
  // z < -1/e
-    else 
+    else
     { //! Check if z so big that cannot use lookup table, so approximate and Halley iterate.
      // std::cout << " lambert_w_lookup::w0zs[63] "  << lambert_w_lookup::w0zs[63] << ' ' << lambert_w_lookup::w0zs[64]  << std::endl;
-      // lambert_w_lookup::w0zs[63] = 1.4450833904658542e+29,  lambert_w_lookup::w0zs[64]=  3.9904954117194348e+29, 
-      if (z >= lambert_w_lookup::w0zs[lambert_w_lookup::noof_w0zs - 1]) // F[64] =  3.9904954117194348e+29
+
+      using namespace boost::math::detail::lambert_w_lookup;
+
+      // lambert_w_lookup::w0zs[63] = 1.4450833904658542e+29,  lambert_w_lookup::w0zs[64]=  3.9904954117194348e+29,
+      if (z >= w0zs[noof_w0zs - 1]) // F[64] =  3.9904954117194348e+29
       { //! z so big that cannot use lookup table, so approximate and Halley iterate.
         T guess;
          // R.M.Corless, G.H.Gonnet, D.E.G.Hare, D.J.Jeffrey, and D.E.Knuth, “On the Lambert W function, ” Adv.Comput.Math., vol. 5, pp. 329–359, 1996.
@@ -1252,7 +1256,7 @@ namespace math
     } // normal range and precision.
     throw std::logic_error("No result from lambert_w0_imp!  (Please report!)");  // Should never get here.
   } //  T lambert_w0_imp(const T z, const Policy& pol)
- 
+
 
   //! Lambert W for W-1 branch, -max(z) < z <= -1/e.
   // TODO is -max(z) allowed?
@@ -1296,7 +1300,7 @@ namespace math
         return -std::numeric_limits<T>::infinity();
       }
       else
-      { 
+      {
         return -tools::max_value<T>();
       }
     }
@@ -1336,7 +1340,7 @@ namespace math
         z, pol);
     }
     if (z < static_cast<T>(-0.35))
-    { // Close to singularity/branch point z = -0.3678794411714423215955237701614608727 but on W-1 branch. 
+    { // Close to singularity/branch point z = -0.3678794411714423215955237701614608727 but on W-1 branch.
       const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
       if (p2 == 0)
       { // At the singularity at branch point.
@@ -1366,12 +1370,12 @@ namespace math
       //  z, pol);
     } // if (z < -0.35)
 
-    using lambert_w_lookup::wm1es;
-    using lambert_w_lookup::wm1zs;
-    using lambert_w_lookup::noof_wm1zs; // size == 64 
+    using boost::math::detail::lambert_w_lookup::wm1es;
+    using boost::math::detail::lambert_w_lookup::wm1zs;
+    using boost::math::detail::lambert_w_lookup::noof_wm1zs; // size == 64
 
     // std::cout <<" Wm1zs[63] (== G[64]) = " << " " << wm1zs[63] << std::endl; // Wm1zs[63] (== G[64]) =  -1.0264389699511283e-26
-    // Check that z argument value is not smaller than lookup_table G[64] 
+    // Check that z argument value is not smaller than lookup_table G[64]
     // std::cout << "(z > wm1zs[63]) = " << std::boolalpha << (z > wm1zs[63]) << std::endl;
 
     if (z >= wm1zs[63]) // wm1zs[63]  = -1.0264389699511282259046957018510946438e-26L  W = 64.00000000000000000
@@ -1452,7 +1456,7 @@ namespace math
     else // T is double or less precision.
     {
       // Use a lookup table to find the nearest integer part of Lambert W as starting point for Bisection.
-      using namespace boost::math::detail::lambert_w_lookup;
+      using boost::math::detail::lambert_w_lookup::wm1zs;
       // Bracketing sequence  n = (2, 4, 8, 16, 32, 64) for W-1 branch. (0 is -infinity)
       // Since z is probably quite small, start with lowest n (=2).
       int n = 2;
@@ -1552,8 +1556,8 @@ namespace math
       // (Avoiding using exponential function for speed).
       // Only use @c lookup_t precision, default double, for bisection (again for speed),
       // and use later Halley refinement for higher precisions.
-      using lambert_w_lookup::halves;
-      using lambert_w_lookup::sqrtwm1s;
+      using detail::lambert_w_lookup::halves;
+      using detail::lambert_w_lookup::sqrtwm1s;
       lookup_t w = -static_cast<lookup_t>(n); // Equation 25,
       lookup_t y = static_cast<lookup_t>(z * wm1es[n - 1]); // Equation 26,
       // Perform the bisections fractional bisections for necessary precision.
@@ -1604,6 +1608,9 @@ namespace math
   }
 } // namespace detail ////////////////////////////////////////////////////////////
 
+// Put user functions in a separate namespace.
+
+namespace FKDVPB {
   // User Lambert W0 and Lambert W-1 functions.
 
   //! W0 branch, -1/e <= z < max(z)
@@ -1656,7 +1663,9 @@ namespace math
     return detail::lambert_wm1_imp(result_type(z), policies::policy<>());
   } // lambert_wm1(T z)
 
+  } // namespace FKDVPB {
+
   } // namespace math
 } // namespace boost
 
-#endif //  #ifndef BOOST_MATH_SF_LAMBERT_W_HPP
+#endif //  #ifndef BOOST_MATH_FKDVPB_LAMBERT_W_HPP

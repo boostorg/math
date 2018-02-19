@@ -40,9 +40,6 @@ using boost::math::float_prior;
 #include <boost/math/policies/policy.hpp>
 using boost::math::policies::digits2;
 #include <boost/math/special_functions/lambert_w.hpp> // For Lambert W lambert_w function.
-
-// #include "C:\Users\Paul\Desktop\lambert_w0 - Copy before amalgamation.hpp"  // JM latest providing jm_lambert_w0 and lambert_wm1
-//#include "C:\Users\Paul\Desktop\lambert_w0.hpp"  // JM latest providing jm_lambert_w0 and lambert_wm1
 using boost::math::lambert_wm1;
 using boost::math::lambert_w0; // Use jm version instead.
 
@@ -109,7 +106,7 @@ std::cout << "MINGW64 " << __MINGW32_MAJOR_VERSION << __MINGW32_MINOR_VERSION <<
   message << "\n  STL " << BOOST_STDLIB;
   message << "\n  Boost version " << BOOST_VERSION / 100000 << "." << BOOST_VERSION / 100 % 1000 << "." << BOOST_VERSION % 100;
 
-#ifdef BOOST_HAS_FLOAT
+#ifdef BOOST_HAS_FLOAT128
   message << ",  BOOST_HAS_FLOAT128" << std::endl;
 #endif
   message << std::endl;
@@ -129,6 +126,7 @@ void test_spots(RealType)
   using boost::math::policies::policy;
 
   /*  Example of an exception-free 'ignore_all' policy (possibly ill-advised?).
+  */
   typedef policy <
     boost::math::policies::domain_error<boost::math::policies::ignore_error>,
     boost::math::policies::overflow_error<boost::math::policies::ignore_error>,
@@ -137,19 +135,24 @@ void test_spots(RealType)
     boost::math::policies::pole_error<boost::math::policies::ignore_error>,
     boost::math::policies::evaluation_error<boost::math::policies::ignore_error>
   > ignore_all_policy;
-  */
 
-//  Test some bad parameters to the function, with default policy and with ignore_all policy.
+//  Test some bad parameters to the function, with default policy and also with ignore_all policy.
 #ifndef BOOST_NO_EXCEPTIONS
   BOOST_CHECK_THROW(lambert_w0<RealType>(-1.), std::domain_error);
   BOOST_CHECK_THROW(lambert_wm1<RealType>(-1.), std::domain_error);
   BOOST_CHECK_THROW(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // Would be NaN.
+  //BOOST_CHECK_EQUAL(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN(), ignore_all_policy()), std::numeric_limits<RealType>::quiet_NaN()); // Should be NaN.
+  // Fails as NaN != NaN by definition.
+  BOOST_CHECK(boost::math::isnan(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN(), ignore_all_policy())));
+  //BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::infinity(), ignore_all_policy()), std::numeric_limits<RealType::infinity()); // infinity.
+
   // BOOST_CHECK_THROW(lambert_w0<RealType>(std::numeric_limits<RealType>::infinity()), std::domain_error); // Was if infinity should throw, now infinity.
   BOOST_CHECK_THROW(lambert_w0<RealType>(-static_cast<RealType>(0.4)), std::domain_error); // Would be complex.
-#else // No exceptions so set policy to ignore and check result is NaN
-  BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN(), ignore_all_policy), std::numeric_limits<RealType::quiet_NaN()); // NaN.
-  BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::infinity(), ignore_all_policy), std::numeric_limits<RealType::infinity()); // infinity.
-  BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::infinity(), ignore_all_policy), std::numeric_limits<RealType::infinity()); // infinity.
+
+#else // No exceptions so set policy to ignore and check result is NaN.
+  BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN(), ignore_all_policy()), std::numeric_limits<RealType::quiet_NaN()); // NaN.
+  BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::infinity(), ignore_all_policy()), std::numeric_limits<RealType::infinity()); // infinity.
+  BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::infinity(), ignore_all_policy()), std::numeric_limits<RealType::infinity()); // infinity.
 #endif
 
   std::cout << "\nTesting type " << typeid(RealType).name() << std::endl;
@@ -408,8 +411,6 @@ void test_spots(RealType)
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.051)),
     BOOST_MATH_TEST_VALUE(RealType, 0.04858156174600359264950777241723801201748517590507517888),
     tolerance);
-
-
 
   // 2st polynomal if 0.5 < z < 2
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.51)),
@@ -771,7 +772,7 @@ BOOST_AUTO_TEST_CASE(test_range_of_double_values)
    BOOST_CHECK_CLOSE_FRACTION(  // Check  float_next(float_next(-exp(-1) ))
     lambert_w0(BOOST_MATH_TEST_VALUE(double, -0.36787944117144222)),
     BOOST_MATH_TEST_VALUE(RealType, -0.99999997649828679),
-    2e7 * tolerance);// diff 2.30785e-09 v 2.2204460492503131e-16
+    5e7 * tolerance);// diff 2.30785e-09 v 2.2204460492503131e-16
 
   // Compare with previous PB/FK computations at double precision.
   BOOST_CHECK_CLOSE_FRACTION(  // Check float_next(-exp(-1) )

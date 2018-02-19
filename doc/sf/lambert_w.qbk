@@ -127,7 +127,7 @@ at least to thousands of decimal digits, but not shown here for brevity.
 See [@../../example/lambert_w_simple_examples.cpp lambert_w_simple_examples.cpp]
 ).
 
-Policies can be used to control precision (a tiny less precision gives a significant speedup):
+Policies can be used to control precision (a tiny bit less precision gives a significant speed-up):
 
 [lambert_w_simple_examples_precision_policies]
 
@@ -139,8 +139,8 @@ and to control what action to take on errors:
 
 [lambert_w_simple_examples_error_message_1]
 
-Show error reporting if passing a value to `lambert_w0` that is out of range,
-and probably was meant to be passed to `lambert_wm1` instead.
+Show error reporting if a value is passed to `lambert_w0` that is out of range,
+and was probably meant to be passed to `lambert_wm1` instead.
 
 [lambert_w_simple_examples_out_of_range]
 
@@ -208,7 +208,7 @@ The symbolic algebra program __Maple also computes Lambert W to an arbitrary pre
 
 [h4:precision Controlling the compromise between Precision and Speed]
 
-The compromise between precision and speed can be controlled using __precision_policy.
+This implementation allows the compromise between precision and speed to be controlled using __precision_policy.
 
 Using the default policy, all the functions usually return values within a few __ulp
 for the floating-point type, except for very small arguments very near zero,
@@ -216,10 +216,10 @@ and for arguments very close to the singularity at the branch point.
 
 By default, this implementation provides the best possible precision
 (adding a __halley refinement, but without using __multiprecision higher precision types)
-making it nearly twice as slow as Fukushima's algorithm,
+making it slower than Fukushima's or other algorithms,
 (Boost.Math generally prefers accuracy over speed).
 However, it will return at intermediate stages if the precision specified in the policy has been met,
-usually at least halving the execution time.
+usually at least halving the execution time, and so is, we believe, the fastest algorithm now available.
 
 It is convenient to define some `using` statements when using __policy_section to control precision.
 
@@ -229,7 +229,7 @@ It is convenient to define some `using` statements when using __policy_section t
     using boost::math::policies::digits10; // Precision as decimal digits.
 
 [tip Because some macros and metaprogramming are used by the implementation of policies,
-some ways of expressing these items may confuse the compiler and Visual Studio Intellisense.]
+some ways of naming these items may confuse Visual Studio Intellisense and the compiler.]
 
 Precision targets can be specified in bits using `digits2` or decimal using `digits10`.
 These are related by `digits10 = log10(2) * digits2 where log10(2) = 0.30103`.
@@ -271,10 +271,10 @@ The final Schroeder refinement is skipped by this implementation if
 `(digits2 <= (std::numeric_limits<T>::digits - 3))`
 3 bits less than the maximum for the type `std::numeric_limits<T>::digits`.
 
-For type `double`, the switch is at `policy<digits2<50> `,
+For type `double`, the switch is at `policy<digits2<50>`,
 so this is recommended for general use when speed is important.
 
-[tip Use `lambert_w0(z, policy<digits2<50> >())` if speed is more important than the ultimate precision,
+[tip Use `lambert_w0<double>(z, policy<digits2<50> >())` or `lambert_w0<float>(z, policy<digits2<20> >())`  if speed is more important than the ultimate precision,
 for example, Monte Carlo applications.]
 
 If speed is [*very] important then `digits2<10>` only using Bisection alone might suffice:
@@ -293,7 +293,7 @@ the precision gain from the Schroeder and Halley is small.
 
 For floating-point types with precision greater than __fundamental_types,
 a `double` evaluation is used as a first approximation followed by Halley refinement,
-so that there is is little to gain trying to control precision.
+so that there is is little to gain in trying to control precision.
 Higher precision types are always going to be [*very, very much slower].
 
 For more examples of controlling precision, see
@@ -341,7 +341,7 @@ and anyway it only covers a tiny fraction of the range of possible z arguments v
 
 [h4:compilers Compilers]
 
-The code has been tested on VS 15.5.2, Clang 5.0.0 and GCC 7.1.0 but it is expected to work on all C++ compilers.
+The code has been tested on VS 15.5.5, Clang 5.0.0 and GCC 7.2.0 but it is expected to work on all C++ compilers.
 
 [h5:diagnostics Diagnostics Macros]
 
@@ -366,20 +366,21 @@ or defined in a jamfile.v2:  `<define>BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS`
 
 ['First be right, then be fast.]
 
-There are many previous implementations with increasing accuracy and speed. See references below.
+There are many previous implementations, each with increasing accuracy and speed.
+See __lambert_w_references below.
 
 For most of the range of ['z] arguments, some initial approximation is followed by a single refinement,
-often using Halley or similar method, and gives a useful precision.
-To get a better precision, additional refinements, probably iterative, may be needed
-for example, using __halley or __schroder methods.
-For speed, several implementations avoid evaluation of a test
-using the exponential function calculating that a single refinement step will suffice,
+often using Halley or similar method, gives a useful precision.
+For speed, several implementations avoid evaluation of a test using the exponential function,
+estimating that a single refinement step will suffice,
 but these rarely get to the best result possible.
+To get a better precision, additional refinements, probably iterative, are needed
+for example, using __halley or __schroder methods.
 
-For the most precise results possible, for C++, closest to the nearest representation for the type,
+For C++, the most precise results possible, closest to the nearest __representable for the C++ type being used,
 it is usually necessary to use a higher precision type for intermediate computation,
 finally casting back to the smaller desired result type.
-This strategy is used by Maple and Wolfram, for example, using arbitrary precision arithmetic,
+This strategy is used by __Maple and WolframAlpha, for example, using arbitrary precision arithmetic,
 and some of their high-precision values are used for testing this library.
 This method is also used to provide __boost_test values using __multiprecision,
 typically, a 50 decimal digit type like `cpp_dec_float_50`
@@ -391,27 +392,26 @@ At extreme arguments near to zero or the singularity at the branch point,
 even this fails and the only method to achieve a really close result is to cast from a higher precision type.
 
 In practical applications, the increased computation required
-(often towards a thousand fold slower and requiring the additional code for multiprecision)
+(often towards a thousand-fold slower and requiring the additional code for multiprecision)
 is not justified and the algorithms here do not implement this.
 But because the Boost.Lambert_W algorithm has been tested using __multiprecision,
 users who require this can always easily achieve the nearest representation for the __fundamental_types
 if the application justifies the very large extra computation cost.
 
-One real-only implementation was based on an algorithm by __Luu_thesis,
+One compact real-only implementation was based on an algorithm by __Luu_thesis,
 (see routine 11 on page 98 for his Lambert W algorithm)
-and his Halley refinement is used iteratively in this implementation when required.
-
-This implementation is based on Thomas Luu's code posted at
+and his Halley refinement is used iteratively when required.
+A first implementation was based on Thomas Luu's code posted at
 [@https://svn.boost.org/trac/boost/ticket/11027 Boost Trac \#11027].
-
 It has been implemented from Luu's algorithm but templated on `RealType` parameter and result
 and handles both __fundamental_types (`float, double, long double`), __multiprecision,
-and also has been tested with a proposed fixed_point type.
+and also has been tested successfully with a proposed fixed_point type.
 
 A first approximation was computed using the method of Barry et al (see references 5 & 6 below).
-(For users only requiring an accuracy of relative accuracy of 0.02%, this function might suffice).
 This was extended to the widely used [@https://people.sc.fsu.edu/~jburkardt/f_src/toms443/toms443.html TOMS443]
 FORTRAN and C++ versions by John Burkardt using Schroeder refinement(s).
+(For users only requiring an accuracy of relative accuracy of 0.02%, Barry's function alone might suffice,
+but a better __rational_function approximation method has since been developed for this implementation).
 
 We also considered using __newton method.
 ``
@@ -422,11 +422,17 @@ We also considered using __newton method.
 ``
 but concluded that since the Newton-Raphson method takes typically 6 iterations to converge within tolerance,
 whereas Halley usually takes only 1 to 3 iterations to achieve an result within 1 __ulp,
+<<<<<<< HEAD
 so the Newton-Raphson method is unlikely to be quicker
 than the additional cost of computing the 2nd derivative for Halley's method,
 in this case requiring an expensive exponential function evaluation on each step.
 
 
+=======
+so Newton/Raphson's method unlikely to be quicker
+than the additional cost of computating the 2nd derivative for Halley's method,
+each iteration step requiring an expensive exponential function evaluation.
+>>>>>>> before trying to switch to develop to add test_value.hpp
 
 [h4:compact_implementation Implementing Compact Algorithms]
 
@@ -438,16 +444,16 @@ followed by Halley iteration (but is also slowest and least precise near zero an
 More recently, the Tosio Fukushima has developed an even faster algorithm,
 avoiding any transcendental function calls as these are necessarily expensive.
 The current implementation is based on his algorithm
-starting with a translation from FORTRAN into C++ by Darko Veberic.
+starting with a translation from Fukushima's FORTRAN into C++ by Darko Veberic.
 
 Many applications of the Lambert W function make many repeated evaluations for Monte Carlo methods;
 for these applications speed is very important.
-Luu and Chapeau-Blondeau and Monir provide typical usage examples.
+Luu, and Chapeau-Blondeau and Monir provide typical usage examples.
 
 Fukushima improves the important observation that much of the execution time of all
-previous iterative algorithms was spent evaluating transcendental functions, mainly `exp`.
+previous iterative algorithms was spent evaluating transcendental functions, usually `exp`.
 He has put a lot of work into avoiding any slow transcendental functions by using lookup tables and
-bisection, and finally by a single Schroeder refinement,
+bisection, finishing with a single Schroeder refinement,
 without any check on the precision of the result (necessarily evaluating an expensive exponential).
 
 Theoretical and practical tests confirm that this gives Lambert W estimates
@@ -457,22 +463,41 @@ However, though these give results within several __epsilon of the nearest repre
 they do not get as close as is very often possible with further refinement,
 usually to within one or two __epsilon.
 A mean difference was computed to express the typical error and is often about 0.5 epsilon,
-the theoretical minimum.
+the theoretical minimum.  Using the __float_distance, we can also express this as the number of
+bits that are different from the nearest representable or 'exact' value.
 
-A disadvantage is that the distribution of differences from the references value is reasonably random and unbiased,
-whereas the Schroeder stage is significantly biased.
+For this implementation of Lambert W-1, John Maddock used the Boost.Math `minimax.exe` __remez method program
+to devise a __rational_function for several ranges of argument z for the W0 branch of Lambert W0 function.
+These minimax rational approximations are combined for an algorithm that is both smaller and faster.
+Sadly it has not proved __remez_practical to use the same method for Lambert W-1 branch
+and so the Fukushima algorithm is retained for this branch.
 
+[h5:bias Bias]
 
-For speed during the bisection, Fukushima produces lookup tables of powers of e and z for integral Lambert W.
+An advantage of both minimax rational approximations and Halley iterated estimates
+is that the [*distribution] from the references value is reasonably random and unbiased,
+whereas any using the Schroeder refinement is significantly biased.
+Bias might have bad effects on statistical computations.
+For example, a test of 5000 values of argument z covering the main range of possible values,
+computed using the Fukushima method with Schroeder refinement gave about 1/3 lambert_w0 values that are
+one bit different from the best representation, and about 1% that are a few bits 'wrong'.
+If a Halley refinement step is added, only 1 in 30 are even one bit different, and none more than one bit 'wrong'.
+Starting with the rational approximation method, there is insignificant bias.
+Adding a Halley step (or iteration) reduces the number that are one bit different from about a third down to one in 30.
+This is unavoidable 'computational noise'.
+
+[h5:lookup_tables.
+
+For speed during the bisection, Fukushima computes lookup tables of powers of e and z for integral Lambert W.
 There are 64 elements in these tables. The FORTRAN version (and the C++ translation by Veberic)
 computed these (once) as `static` data. This is slower, may cause trouble with multithreading, and
 is slightly inaccurate because of rounding errors from repeated(64) multiplications. In this implementation
-the values have been computed using __multiprecision 50 decimal digit
-and output as C++ arrays 37 decimal digit long literals using
+the array values have been computed using __multiprecision 50 decimal digit
+and output as C++ arrays 37 decimal digit `long double` literals using `max_digits10` precision
 
   std::cout.precision(std::numeric_limits<cpp_bin_float_quad>::max_digits10);
 
-The arrays are as const and static as possible (for the compiler version),
+The arrays are as const and constexpr and static as possible (for the compiler version),
 using BOOST_STATIC_CONSTEXPR macro.
 (See [@../../test/lambert_w_lookup_table_generator.cpp  lambert_w_lookup_table_generator.cpp]
 The precision was chosen to ensure that if used as `long double` arrays,
@@ -484,16 +509,16 @@ will be the nearest representable value for the type chose by a `typedef` in
   typedef double lookup_t; // Type for lookup table (`double` or `float`, or even `long double`?)
 
 This is to allow for future use at higher precision, up to platforms that use 128-bit
-(hardware or software) for `long double`.
+(hardware or software) for their `long double` type.
 
 The accuracy of the tables was confirmed using __WolframAlpha and agrees at the 37th decimal place,
-so ensuring that the value is read into even 128-bit `long double` to the nearest representation.
+so ensuring that the value is exactly read into even 128-bit `long double` to the nearest representation.
 
 [h5:higher_precision Higher precision]
 
 For types more precise than `double`, Fukushima showed that it is best to use the `double` estimate
-as a starting point followed by refinement using __halley iterations or other methods
-and our experience confirms this.
+as a starting point, followed by refinement using __halley iterations or other methods;
+our experience confirms this.
 
 Using __multiprecision it is simple to compute very high precision values of Lambert
 W at least to thousands of decimal digits over most of the range of z arguments.
@@ -632,7 +657,7 @@ only provides the precision of the built-in type, like `double`, only 17 decimal
 
 [tip Be exceeding careful not to silently lose precision by constructing multiprecision types from literal decimal types, usually [^double].  See examples.]
 
-Fukushima implmentation used 20 series terms and it was confirmed that using more terms does not usefully increase accuracy.
+Fukushima's implementation used 20 series terms; it was confirmed that using more terms does not usefully increase accuracy.
 
 [h5:wm1_near_zero Lambert W-1 arguments values very near zero.]
 
@@ -671,7 +696,7 @@ the computational cost of the log functions was easily paid by far fewer iterati
    double r = lambert_wm1(z, policy<digits2<11> >());
    // lambert_wm1(-1.0000000000000000e-26) = -64.026509628385895
 
-[h5:halley]
+[h5:halley Halley refinement]
 
 After obtaining a double approximation, for `double` and quad 128-bit precision,
 a single iteration should suffice because
@@ -679,8 +704,6 @@ Halley iteration should triple the precision with each step
 (as long as the function is well behaved - and it is),
 and since we have at least half of the bits correct already,
 one Halley step is ample to get to 128-bit precision.
-
-
 
 [h4:testing Testing]
 

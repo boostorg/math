@@ -27,13 +27,6 @@
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
 #include <boost/math/policies/policy.hpp>
 
-// Built-in/fundamental GCC float128 or Intel Quad 128-bit type, if available.
-#ifdef __GNUC__
-#include <boost/multiprecision/float128.hpp> // Not available for MSVC.
-// sets BOOST_MP_USE_FLOAT128 for GCC
-using boost::multiprecision::float128;
-#endif //# __GNUC__ and NOT _MSC_VER
-
 #include <boost/multiprecision/cpp_dec_float.hpp> // boost::multiprecision::cpp_dec_float_50
 using boost::multiprecision::cpp_dec_float_50; // 50 decimal digits type.
 using boost::multiprecision::cpp_dec_float_100; // 100 decimal digits type.

@@ -5,12 +5,8 @@
 // (See accompanying file LICENSE_1_0.txt or
 //  copy at http ://www.boost.org/LICENSE_1_0.txt).
 
-#ifndef BOOST_MATH_LAMBERTW0_HPP
-#define BOOST_MATH_LAMBERTW0_HPP
-
-// TODO change name of include file after PB/TF/DV version replaced fully.
-//#ifndef BOOST_MATH_SF_LAMBERT_W_HPP
-//#define BOOST_MATH_SF_LAMBERT_W_HPP
+#ifndef BOOST_MATH_SF_LAMBERT_W_HPP
+#define BOOST_MATH_SF_LAMBERT_W_HPP
 
 #ifdef _MSC_VER
 #  pragma warning (disable: 4127) // warning C4127: conditional expression is constant.
@@ -38,7 +34,7 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W0 // W1 branch diagnostics.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY // Halley refinement diagnostics.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_PRECISION // Precision.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY_W0 // Halley refinement diagnostics only for W0 branch.
-BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY_WM1 // Halley refinement diagnostics only for W-1 branch.
+BOOST_MATH_INSTRUMENT_LAMBERT_WM1_HALLEY // Halley refinement diagnostics only for W-1 branch.
 BOOST_MATH_INSTRUMENT_LAMBERT_WM1_TINY // K > 64, z > -1.0264389699511303e-26
 BOOST_MATH_INSTRUMENT_LAMBERT_W0_HUGE // K > 64, z > 3.9904954117194348e+29
 BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER // Schroeder refinement diagnostics.
@@ -1054,7 +1050,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
 template <class T, class Policy>
 inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
 {
-   static const char* function = "boost::math::lamber_w0<%1%>";
+   static const char* function = "boost::math::lambert_w0<%1%>";
    BOOST_MATH_STD_USING // Aid ADL of std functions.
 
    // Unusual case of 32-bit double with a wider/64-bit long double
@@ -1064,10 +1060,10 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
    "- or possibly edit the coefficients to have "
    "an appropriate size-suffix for 64-bit floats on your platform - L?");
 
-     if ((boost::math::isnan)(z))
-     {
-       return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%", z, pol);
-     }
+    if ((boost::math::isnan)(z))
+    {
+      return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%", z, pol);
+    }
 
    if (z >= 0.05)
    {
@@ -1207,7 +1203,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
             1.36363515125489502e-06,
             3.44200749053237945e-09,
          };
-         T log_w= log(z);
+         T log_w = log(z);
          return log_w+ Y + boost::math::tools::evaluate_rational(P, Q, log_w);
       }
       else if (z < 7.896296e+13)  // 9.2 < log(z) <= 32
@@ -1236,7 +1232,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
             4.97253225968548872e-09,
             3.39460723731970550e-12,
          };
-         T log_w= log(z);
+         T log_w = log(z);
          return log_w+ Y + boost::math::tools::evaluate_rational(P, Q, log_w);
       }
       else if (z < 2.6881171e+43) // 32 < log(z) < 100
@@ -1265,7 +1261,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
             -9.35271498075378319e-11,
             -2.60648331090076845e-14,
          };
-         T log_w= log(z);
+         T log_w = log(z);
          return log_w+ Y + boost::math::tools::evaluate_rational(P, Q, log_w);
       }
       else // 100 < log(z) < 710
@@ -1298,7 +1294,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
             1.11775518708172009e-20,
             3.78250395617836059e-25,
          };
-         T log_w= log(z);
+         T log_w = log(z);
          return log_w+ Y + boost::math::tools::evaluate_rational(P, Q, log_w);
       }
    }
@@ -1419,7 +1415,6 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
             -1.72845216404874299e+10,
          };
          T d = z + 0.36787944117144232159552377016146086744581113103176804;
-         // bad!
          return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
       }
       else if (z <= -0.36787944117144232159552377016146086744581113103176804) // Precision is max_digits10(cpp_bin_float_50).
@@ -1491,11 +1486,11 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)
       return lambert_w_detail::lambert_w_singularity_series(p);
    }
 
-   // Whew!
+   // Phew!
    // If we get here we are in the normal range of the function, so
    // get a double precision approximation first, then iterate to full precision of T.
    // We define a type that is:
-   // mpl::true_  if there are so many digits required that iteration is required.
+   // mpl::true_  if there are so many digits precision wanted that iteration is necessary.
    // mpl::false_ if a single Halley step is sufficient.
    // For speed, we also cast z to type double when that is possible
    //   (boost::is_constructible<double, T>() == true).
@@ -1507,12 +1502,12 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)
       : false
    > tag_type;
 
-  // JM reused name z but Clang complains that it is hiding parameter z.
-  // T z = lambert_w0_imp(maybe_reduce_to_double(z, boost::is_constructible<double, T>()), pol, mpl::int_<2>());
-  // return lambert_w_maybe_halley_iterate(z, z, tag_type());
    T w = lambert_w0_imp(maybe_reduce_to_double(z, boost::is_constructible<double, T>()), pol, mpl::int_<2>());
 
    return lambert_w_maybe_halley_iterate(w, z, tag_type());
+
+ //  result = lambert_w_halley_iterate(result, z);
+
 } // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)  extended precision.
 
 
@@ -1843,20 +1838,20 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
       { // Only enough digits2 required, so just return the Schroeder refined value.
         // For example, for float, if (d2 <= 22) then
         // digits-3 returns Schroeder result up to 3 bits might be wrong.
-#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
         std::cout << "Schroeder refinement estimate = " << result << std::endl;
-#endif // BOOST_MATH_INSTRUMENT_LAMBERT_WM1
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER
         return result; // Schroeder only.
       }
       else // Perform additional Halley refinement(s) to ensure that
            // get a near as possible to correct result (usually +/- epsilon).
       {
         result = lambert_w_halley_iterate(result, z);
-#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W0_HALLEY
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_HALLEY
         std::cout.precision(std::numeric_limits<T>::max_digits10);
         std::cout << "Halley refinement estimate =    " << result << std::endl;
         std::cout.precision(saved_precision);
-#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W0_HALLEY
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W1_HALLEY
         return result; // Halley
       } // schroeder or Schroeder and Halley.
     } // more than 10 digits2
@@ -1867,76 +1862,106 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 /////////////////////  User Lambert w functions. //////////////////////////
 
 //! Lambert W0 using User-defined policy.
-template <class T, class Policy>
-inline
-typename tools::promote_args<T>::type
-lambert_w0(T z, const Policy& pol)
-{
-   // Promote integer or expression template arguments to double,
-   // without doing any other internal promotion like float to double.
-   typedef typename tools::promote_args<T>::type result_type;
-   //
-   // Work out what precision has been selected, based on the Policy and the
-   // number type,
-   typedef typename policies::precision<result_type, Policy>::type precision_type;
-   // and then select the correct implementation based on that (not the type T):
-   typedef mpl::int_<
+  template <class T, class Policy>
+  inline
+    typename tools::promote_args<T>::type
+    lambert_w0(T z, const Policy& pol)
+  {
+     // Promote integer or expression template arguments to double,
+     // without doing any other internal promotion like float to double.
+    typedef typename tools::promote_args<T>::type result_type;
+    
+    // Work out what precision has been selected, 
+    // based on the Policy and the number type.
+    typedef typename policies::precision<result_type, Policy>::type precision_type;
+    // and then select the correct implementation based on that (not the type T):
+    typedef mpl::int_<
       (precision_type::value == 0) || (precision_type::value > 53) ?
       0  // either variable precision (0), or greater than 64-bit precision.
       : (precision_type::value <= 24) ? 1 // 32-bit (probably float) precision.
       : 2  // 64-bit (probably double) precision.
-   > tag_type;
+      > tag_type;
 
-   return lambert_w_detail::lambert_w0_imp(result_type(z), pol, tag_type());
-} // lambert_w0(T z, const Policy& pol)
+    // Optionally, if policy is all T's digits (default), return after a extra Halley step.
+    // (Might be better with mpl?)
+    int p = precision_type::value;
+    int d = std::numeric_limits<T>::digits;
 
-  //! Lambert W0 using default policy.
-template <class T, class Policy = boost::math::policies::policy<> >
-inline
-typename tools::promote_args<T>::type
-lambert_w0(T z)
-{
-  // Promote integer or expression template arguments to double,
-  // without doing any other internal promotion like float to double.
-   typedef typename tools::promote_args<T>::type result_type;
+    T result = lambert_w_detail::lambert_w0_imp(result_type(z), pol, tag_type()); // Pre-Halley.
 
-   // Work out what precision has been selected, based on the Policy and the number type.
-   // For the default policy version, we want the *default policy* precision for T.
-   typedef typename policies::precision<result_type, Policy>::type precision_type;
-   // and then select the correct implementation based on that (not the type T):
-   typedef mpl::int_<
-     (precision_type::value == 0) || (precision_type::value > 53) ?
-     0  // either variable precision (0), or greater than 64-bit precision.
-     : (precision_type::value <= 24) ? 1 // 32-bit (probably float) precision.
-     : 2  // 64-bit (probably double) precision.
-   > tag_type;
+    bool quick = (precision_type::value < std::numeric_limits<T>::digits);
 
-   return lambert_w_detail::lambert_w0_imp(result_type(z), policies::policy<>(), tag_type()); //
-} // lambert_w0(T z)
+    if (quick || (result == -1) || (result == 0) || (!boost::math::isnormal(result)) || (z < -0.3578))
+    {
+      return result;
+    }
+    else
+    {
+      result = lambert_w_detail::lambert_w_halley_step(result, z);
+    }
+    return result;
+    // return lambert_w_detail::lambert_w0_imp(result_type(z), pol, tag_type());
+  } // lambert_w0(T z, const Policy& pol)
 
-  //! W-1 branch (-max(z) < z <= -1/e).
+    //! Lambert W0 using default policy.
+  template <class T, class Policy = boost::math::policies::policy<> >
+  inline
+    typename tools::promote_args<T>::type
+    lambert_w0(T z)
+  {
+    // Promote integer or expression template arguments to double,
+    // without doing any other internal promotion like float to double.
+    typedef typename tools::promote_args<T>::type result_type;
 
-  //! Lambert W-1 using User-defined policy.
-template <class T, class Policy>
-inline
-typename tools::promote_args<T>::type
-lambert_wm1(T z, const Policy& pol)
-{
-  // Promote integer or expression template arguments to double,
-  // without doing any other internal promotion like float to double.
-  typedef typename tools::promote_args<T>::type result_type;
-  return lambert_w_detail::lambert_wm1_imp(result_type(z), pol); //
-}
+    // Work out what precision has been selected, based on the Policy and the number type.
+    // For the default policy version, we want the *default policy* precision for T.
+    typedef typename policies::precision<result_type, Policy>::type precision_type;
+    // and then select the correct implementation based on that (not the type T):
+    typedef mpl::int_<
+      (precision_type::value == 0) || (precision_type::value > 53) ?
+      0  // either variable precision (0), or greater than 64-bit precision.
+      : (precision_type::value <= 24) ? 1 // 32-bit (probably float) precision.
+      : 2  // 64-bit (probably double) precision.
+    > tag_type;
+    // Always add Halley step for default policy.
+    T result = lambert_w_detail::lambert_w0_imp(result_type(z),  policies::policy<>(), tag_type()); // Pre-Halley.
+    if ((z < -0.3578) // Using singularity series.
+      || (!boost::math::isnormal(result))  // NaN, infinity or denormal.
+      || (result == -1) || (result == 0)) // exact
+    {
+      return result;
+    }
+    result = lambert_w_detail::lambert_w_halley_step(result, z);
+    return result;
+    // TODO this ugliness is because JM rationals return rather than result = ...
+    // and should use existing checks for -1, 0, singularity series and small_z series inside _imp
+    // to avoid repeating here.
+//    return lambert_w_detail::lambert_w0_imp(result_type(z), policies::policy<>(), tag_type()); //
+  } // lambert_w0(T z)
 
-//! Lambert W-1 using default policy.
-template <class T>
-inline
-typename tools::promote_args<T>::type
-lambert_wm1(T z)
-{
-  typedef typename tools::promote_args<T>::type result_type;
-  return lambert_w_detail::lambert_wm1_imp(result_type(z), policies::policy<>());
-} // lambert_wm1(T z)
+    //! W-1 branch (-max(z) < z <= -1/e).
+
+    //! Lambert W-1 using User-defined policy.
+  template <class T, class Policy>
+  inline
+    typename tools::promote_args<T>::type
+    lambert_wm1(T z, const Policy& pol)
+  {
+    // Promote integer or expression template arguments to double,
+    // without doing any other internal promotion like float to double.
+    typedef typename tools::promote_args<T>::type result_type;
+    return lambert_w_detail::lambert_wm1_imp(result_type(z), pol); //
+  }
+
+  //! Lambert W-1 using default policy.
+  template <class T>
+  inline
+    typename tools::promote_args<T>::type
+    lambert_wm1(T z)
+  {
+    typedef typename tools::promote_args<T>::type result_type;
+    return lambert_w_detail::lambert_wm1_imp(result_type(z), policies::policy<>());
+  } // lambert_wm1(T z)
 
 
 template <class T>
@@ -1982,4 +2007,4 @@ lambert_wm1_prime(T z)
 
 }} //boost::math namespaces
 
-#endif // #ifdef BOOST_MATH_LAMBERTW_HPP
+#endif // #ifdef BOOST_MATH_SF_LAMBERT_W_HPP

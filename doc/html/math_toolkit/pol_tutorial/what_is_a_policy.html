@@ -62,13 +62,13 @@
         of user-selected policies (sometimes called a type-list).
       </p>
 <p>
-        Many <a class="link" href="policy_tut_defaults.html" title="Policies Have Sensible Defaults">policy
+        Over a dozen <a class="link" href="policy_tut_defaults.html" title="Policies Have Sensible Defaults">policy
         defaults</a> are provided, so most of the time you can ignore the policy
-        framework, but you can overwrite with your own policies to give detailed
-        control, for example:
+        framework, but you can overwrite the defaults with your own policies to give
+        detailed control, for example:
       </p>
 <pre class="programlisting"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">policies</span><span class="special">;</span>
-<span class="comment">//</span>
+
 <span class="comment">// Define a policy that sets ::errno on overflow,</span>
 <span class="comment">// and does not promote double to long double internally,</span>
 <span class="comment">// and only aims for precision of only 3 decimal digits,</span>

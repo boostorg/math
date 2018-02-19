@@ -113,7 +113,7 @@ and use the function's name as the link text.]
 [def __brent_minima_example [link math_toolkit.roots.brent_minima.example Brent's method example]]
 [def __newton [link math_toolkit.roots.roots_deriv.newton Newton-Raphson iteration]]
 [def __halley [link math_toolkit.roots.roots_deriv.halley Halley]]
-[def __schroder [link math_toolkit.roots.roots_deriv.schroder Schr'''&#xf6;'''der]]
+[def __schroder [link math_toolkit.roots.roots_deriv.schroder Schr'''&#xf6;'''der]] [/ link should really be __schroeder]
 [def __brent_minima_example [link math_toolkit.roots.brent_minima.example Brent minima finding example]]
 [def __bisection [link math_toolkit.roots.roots_noderiv.bisect bisection]]
 [def __bisect [link math_toolkit.roots.roots_noderiv.bisect bisect]]
@@ -222,7 +222,7 @@ and use the function's name as the link text.]
 [def __lambert_w_precision[link math_toolkit.lambert_w.precision precision]]
 [def __lambert_w_examples [link math_toolkit.lambert_w.examples examples]]
 [def __lambert_w_wm1_near_zero [link math_toolkit.lambert_w.wm1_near_zero wm1_near_zero]]
-
+[def __lambert_w_references [link math_toolkit.lambert_w.references references]]
 
 
 [/Airy Functions]
@@ -388,6 +388,8 @@ and use the function's name as the link text.]
 
 [def __real_concept [link math_toolkit.real_concepts  real concept]]
 [def __next_float [link math_toolkit.next_float Adjacent Floating-Point Values]]
+[def __remez_practical [link math_toolkit.remez.practical remez_practical]]
+
 
 [/ External links]
 [def __gsl [@http://www.gnu.org/software/gsl/ GSL-1.9]]
@@ -443,7 +445,8 @@ and use the function's name as the link text.]
 [def __Lambert_W [@http://en.wikipedia.org/wiki/Lambert_W_function Lambert W function]]
 [def __CUDA [@https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#c-cplusplus-language-support CUDA NVidia GPU C/C++ language support]]
 [def __Luu_thesis [@http://discovery.ucl.ac.uk/1482128/1/Luu_thesis.pdf Thomas Luu, Thesis, University College London (2015)]]
-
+[def __rational_function [@https://en.wikipedia.org/wiki/Rational_function rational function]]
+[def __remez [@http://en.wikipedia.org/wiki/Remez_algorithm Remez algorithm]]
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
