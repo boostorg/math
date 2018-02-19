@@ -803,6 +803,19 @@ inline T lambert_w0_small_z(T z, const Policy& pol, boost::mpl::int_<4> const&)
   return result;
 } // template <class T, class Policy> inline T lambert_w0_small_z_series(T z, const Policy& pol)
 
+// Approximate lambert_w0 (used for z values that are outside range of lookup table or rational functions)
+// Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
+template <typename T>
+inline
+T lambert_w0_approx(T z)
+{
+  T lz = log(z);
+  T llz = log(lz);
+  T w = lz - llz + (llz / lz); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
+  return w;
+  // std::cout << "w max " << max_w << std::endl; // double 703.227
+}
+
   //////////////////////////////////////////////////////////////////////////////////////////
 
 //! \brief Lambert_w0 implementations for float, double and higher precisions.
@@ -839,6 +852,10 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
 	 {
 		 return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%", z, pol);
 	 }
+   if ((boost::math::isinf)(z))
+   {
+     return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%", z, pol);
+   }
 
    if (z >= 0.05)
    { // Normal ranges using several rational polynomials.
@@ -1062,8 +1079,9 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
 
     if ((boost::math::isnan)(z))
     {
-      return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%", z, pol);
+      return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
     }
+
 
    if (z >= 0.05)
    {
@@ -1464,9 +1482,11 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)
       }
       // z is larger than the largest double, so cannot use the polynomial to get an approximation,
       // so use the asymptotic approximation and Halley iterate:
-      T lz = log(z);
-      T llz = log(lz);
-      T w = lz - llz + (llz / lz); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
+
+     T w = lambert_w0_approx(z);  // Make an inline function as also used elsewhere.
+      //T lz = log(z);
+      //T llz = log(lz);
+      //T w = lz - llz + (llz / lz); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
       return lambert_w_halley_iterate(w, z);
    }
    if (z < -0.3578794411714423215955237701)
@@ -1642,7 +1662,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // N[productlog(-1, -1.4325445274604020119111357113179868158* 10^-27), 37] = -65.99999999999999999999999999999999955
 
     // R.M.Corless, G.H.Gonnet, D.E.G.Hare, D.J.Jeffrey, and D.E.Knuth,
-    // On the Lambert W function, Adv.Comput.Math., vol. 5, pp. 329-359, 1996.
+    // “On the Lambert W function, ” Adv.Comput.Math., vol. 5, pp. 329–359, 1996.
     // Francois Chapeau-Blondeau and Abdelilah Monir
     // Numerical Evaluation of the Lambert W Function
     // IEEE Transactions On Signal Processing, VOL. 50, NO. 9, Sep 2002
@@ -1855,7 +1875,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
         return result; // Halley
       } // schroeder or Schroeder and Halley.
     } // more than 10 digits2
-  }
+  } 
 } // template<typename T = double> T lambert_wm1_imp(const T z)
 } // namespace lambert_w_detail
 
@@ -1884,15 +1904,13 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 
     // Optionally, if policy is all T's digits (default), return after a extra Halley step.
     // (Might be better with mpl?)
-    int p = precision_type::value;
-    int d = std::numeric_limits<T>::digits;
 
     T result = lambert_w_detail::lambert_w0_imp(result_type(z), pol, tag_type()); // Pre-Halley.
 
     bool quick = (precision_type::value < std::numeric_limits<T>::digits);
 
     if (quick || (result == -1) || (result == 0) || (!boost::math::isnormal(result)) || (z < -0.3578))
-    {
+    { // Don't try to refine using a Halley step.
       return result;
     }
     else
@@ -1903,7 +1921,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // return lambert_w_detail::lambert_w0_imp(result_type(z), pol, tag_type());
   } // lambert_w0(T z, const Policy& pol)
 
-    //! Lambert W0 using default policy.
+  //! Lambert W0 using default policy.
   template <class T, class Policy = boost::math::policies::policy<> >
   inline
     typename tools::promote_args<T>::type
@@ -1912,6 +1930,17 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // Promote integer or expression template arguments to double,
     // without doing any other internal promotion like float to double.
     typedef typename tools::promote_args<T>::type result_type;
+
+    // Perhaps Deal with other special cases here??????????????
+    // (TODO NaN, zero? 
+    if ((boost::math::isinf)(z))
+    {
+      //return std::numeric_limits<T>::infinity();  
+      //return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
+      // return boost::math::tools::max_value<T>(); // far too big! 1.7e+308
+      // for double max possible is 703.227...
+      return boost::math::lambert_w_detail::lambert_w0_approx(lambert_w0(boost::math::tools::max_value<T>()));
+    }
 
     // Work out what precision has been selected, based on the Policy and the number type.
     // For the default policy version, we want the *default policy* precision for T.
@@ -1923,11 +1952,12 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
       : (precision_type::value <= 24) ? 1 // 32-bit (probably float) precision.
       : 2  // 64-bit (probably double) precision.
     > tag_type;
-    // Always add Halley step for default policy.
     T result = lambert_w_detail::lambert_w0_imp(result_type(z),  policies::policy<>(), tag_type()); // Pre-Halley.
+    // Always add Halley step for default policy, 
+    // unless these special cases where unlikely to improve.
     if ((z < -0.3578) // Using singularity series.
       || (!boost::math::isnormal(result))  // NaN, infinity or denormal.
-      || (result == -1) || (result == 0)) // exact
+      || (result == -1) || (result == 0)) // exact.
     {
       return result;
     }
@@ -1964,47 +1994,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   } // lambert_wm1(T z)
 
 
-template <class T>
-typename tools::promote_args<T>::type
-lambert_w0_prime(T z)
-{
-    typedef typename tools::promote_args<T>::type result_type;
-    using std::numeric_limits;
-    if (z == 0)
-    {
-        return static_cast<result_type>(1);
-    }
-
-    // This is the sensible choice if we regard the Lambert-W function as complex analytic.
-    // Of course on the real line, it's just undefined.
-    if (z == - boost::math::constants::exp_minus_one<result_type>())
-    {
-        return numeric_limits<result_type>::infinity();
-    }
-    // if z < -1/e, we'll let lambert_w0 do the error handling:
-    result_type w = lambert_w0(result_type(z));
-    // If w ~ -1, then presumably this can get inaccurate.
-    // Is there an accurate way to evaluate 1 + W(-1/e + eps)? Yes: This is discussed in the Princeton Companion to Applied Mathmatics, 'The Lambert-W function', Section 1.3: Series and Generating Functions.
-    // 1 + W(-1/e + x) ~ sqrt(2ex). I am not convinced this formula is more accurate than the naive one.
-    // However, for z != -1/e, we never get rounded to w = -1 in any precision I've tested (up to cpp_bin_float_100).
-    return w/(z*(1+w));
-}
-
-template <class T>
-typename tools::promote_args<T>::type
-lambert_wm1_prime(T z)
-{
-    using std::numeric_limits;
-    typedef typename tools::promote_args<T>::type result_type;
-    if (z == 0 || z == - boost::math::constants::exp_minus_one<result_type>())
-    {
-        return -numeric_limits<result_type>::infinity();
-    }
-    result_type w = lambert_wm1(z);
-    return w/(z*(1+w));
-}
-
-
 }} //boost::math namespaces
 
 #endif // #ifdef BOOST_MATH_SF_LAMBERT_W_HPP
+

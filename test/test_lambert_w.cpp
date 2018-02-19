@@ -13,9 +13,7 @@
 #include <boost/config.hpp>   // for BOOST_MSVC definition.
 #include <boost/version.hpp>   // for BOOST_MSVC versions.
 #include <boost/math/concepts/real_concept.hpp> // for real_concept
-#include <boost/math/constants/constants.hpp> // for integral tests
-#include <boost/math/quadrature/tanh_sinh.hpp> // for integral tests
-#include <boost/math/quadrature/exp_sinh.hpp> // for integral tests
+
 // Boost macros
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
@@ -30,6 +28,7 @@
 using boost::multiprecision::cpp_dec_float_50;
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
+using boost::multiprecision::cpp_bin_float_quad;
 //#include <boost/fixed_point/fixed_point.hpp> // If available.
 #include <boost/math/special_functions/fpclassify.hpp> // isnan, ifinite.
 #include <boost/math/special_functions/next.hpp> // float_next, float_prior
@@ -42,6 +41,63 @@ using boost::math::policies::digits2;
 #include <boost/math/special_functions/lambert_w.hpp> // For Lambert W lambert_w function.
 using boost::math::lambert_wm1;
 using boost::math::lambert_w0; // Use jm version instead.
+
+#define BOOST_MATH_LAMBERT_W_INTEGRALS
+
+#ifdef BOOST_MATH_LAMBERT_W_INTEGRALS
+
+// Added code and test for Integral of the Lambert W function: by Nick Thompson.
+// https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals
+
+#include <boost/math/constants/constants.hpp> // for integral tests
+#include <boost/math/quadrature/tanh_sinh.hpp> // for integral tests
+#include <boost/math/quadrature/exp_sinh.hpp> // for integral tests
+
+template<class Real>
+void test_integrals()
+{
+  // Integral of the Lambert W function:
+  // https://en.wikipedia.org/wiki/Lambert_W_function
+  using boost::math::quadrature::tanh_sinh;
+  using boost::math::quadrature::exp_sinh;
+  // file:///I:/modular-boost/libs/math/doc/html/math_toolkit/quadrature/double_exponential/de_tanh_sinh.html
+  using std::sqrt;
+
+  Real tol = std::numeric_limits<Real>::epsilon();
+  { //  // Integrate for function lambert_W0(z);
+    tanh_sinh<Real> ts;
+    Real a = 0;
+    Real b = boost::math::constants::e<Real>();
+    auto f = [](Real z)->Real
+    {
+      return lambert_w0<Real>(z);
+    };
+    Real z = ts.integrate(f, a, b); // OK without any decltype(f)
+    BOOST_CHECK_CLOSE_FRACTION(z, boost::math::constants::e<Real>() - 1, tol);
+  }
+  {
+    // Integrate for function lambert_W0(z/(z sqrt(z)).
+    exp_sinh<Real> es;
+    auto f = [](Real z)->Real
+    {
+      return lambert_w0<Real>(z)/(z * sqrt(z));
+    };
+    Real z = es.integrate(f); // OK
+    BOOST_CHECK_CLOSE_FRACTION(z, 2 * boost::math::constants::root_two_pi<Real>(), tol);
+  }
+  {
+    // Integrate for function lambert_W0(1/z^2).
+    exp_sinh<Real> es;
+    auto f = [](Real z)->Real
+    {
+      return lambert_w0<Real>(1 / (z * z));
+    };
+    Real z = es.integrate(f);
+    BOOST_CHECK_CLOSE_FRACTION(z, boost::math::constants::root_two_pi<Real>(), tol);
+  }
+} // template<class Real> void test_integrals()
+
+#endif // BOOST_MATH_LAMBERT_W_INTEGRALS
 
 #include <limits>
 #include <cmath>
@@ -149,7 +205,7 @@ void test_spots(RealType)
   // BOOST_CHECK_THROW(lambert_w0<RealType>(std::numeric_limits<RealType>::infinity()), std::domain_error); // Was if infinity should throw, now infinity.
   BOOST_CHECK_THROW(lambert_w0<RealType>(-static_cast<RealType>(0.4)), std::domain_error); // Would be complex.
 
-#else // No exceptions so set policy to ignore and check result is NaN.
+#else // No exceptions, so set policy to ignore and check result is NaN.
   BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN(), ignore_all_policy()), std::numeric_limits<RealType::quiet_NaN()); // NaN.
   BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::infinity(), ignore_all_policy()), std::numeric_limits<RealType::infinity()); // infinity.
   BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::infinity(), ignore_all_policy()), std::numeric_limits<RealType::infinity()); // infinity.
@@ -178,7 +234,7 @@ void test_spots(RealType)
   RealType minus_one_value = BOOST_MATH_TEST_VALUE(RealType, -1.);
   //std::cout << "singular_value " << singular_value << ", expected Lambert W = " << minus_one_value << std::endl;
 
-  BOOST_CHECK_CLOSE_FRACTION( // Check -exp(-1) = -0.367879450 = -1
+  BOOST_CHECK_CLOSE_FRACTION( // Check -exp(-1) = -0.367879450 = -1max
     lambert_w0(singular_value),
     minus_one_value,
     tolerance);  // OK
@@ -252,9 +308,9 @@ void test_spots(RealType)
 
   if (std::numeric_limits<RealType>::has_infinity)
   {
-    // BOOST_CHECK_THROW(lambert_w0(std::numeric_limits<RealType>::infinity()), std::domain_error); // If should throw exception.
+    BOOST_CHECK_THROW(lambert_w0(std::numeric_limits<RealType>::infinity()), std::overflow_error); // If should throw exception.
     //BOOST_CHECK_EQUAL(lambert_w0(std::numeric_limits<RealType>::infinity()), +std::numeric_limits<RealType>::infinity()); // message is:
-    // Error in "test_types": class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class std::domain_error> > :
+    // Error in "test_types": class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class std::overflow_error> > :
     // Error in function boost::math::lambert_w0<RealType>(<RealType>) : Argument z is infinite!
     //BOOST_CHECK_EQUAL(lambert_w0(std::numeric_limits<RealType>::infinity()), +std::numeric_limits<RealType>::infinity()); // If infinity allowed.
     BOOST_CHECK_THROW(lambert_wm1(std::numeric_limits<RealType>::infinity()), std::domain_error); // Infinity NOT allowed.
@@ -503,11 +559,7 @@ void test_spots(RealType)
     BOOST_MATH_TEST_VALUE(RealType, -1.000000000000000000000000000000000000010000000000000000e-38),
     tolerance);
 
-
-
-
-
-  // Similar too near zero tests for W-1 branch
+  // Similar 'too near zero' tests for W-1 branch.
   // lambert_wm1(-1.0264389699511283e-26) = -64.000000000000000
   // Exactly z for W=-64
   BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -1.026438969951128225904695701851094643838952857740385870e-26)),
@@ -710,9 +762,8 @@ BOOST_AUTO_TEST_CASE(test_range_of_double_values)
     tolerance); //
 
   // Tests for double only near the max and the singularity where Lambert_w estimates are less precise.
-  //
   if (std::numeric_limits<RealType>::is_specialized)
-  {
+  { // is_specialized means that can use numeric_limits for tests.
     // Check near std::numeric_limits<>::max() for type.
     //std::cout << std::setprecision(std::numeric_limits<RealType>::max_digits10)
     //  << (std::numeric_limits<double>::max)()          // == 1.7976931348623157e+308
@@ -722,6 +773,11 @@ BOOST_AUTO_TEST_CASE(test_range_of_double_values)
     // All these result in faulty error message
     // unknown location : fatal error : in "test_range_of_values": class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class std::domain_error> >: Error in function boost::math::lambert_w0<RealType>(<RealType>): Argument z = %1 too large.
     // I:\modular - boost\libs\math\test\test_lambert_w.cpp(456) : last checkpoint
+
+    BOOST_CHECK_CLOSE_FRACTION(lambert_w0(1.7976931348623157e+308 ), // max_value for IEEE 64-bit double.
+      static_cast<double>(703.2270331047701868711791887193075929608934699575820028L),
+      // N[productlog[0, 1.7976931348623157*10^308 /2],50] == 702.53487067487671916110655783739076368512998658347
+      tolerance);
 
     BOOST_CHECK_CLOSE_FRACTION(lambert_w0(1.7976931348623157e+308 / 2), // max_value/2 for IEEE 64-bit double.
       static_cast<double>(702.53487067487671916110655783739076368512998658347L),
@@ -749,7 +805,7 @@ BOOST_AUTO_TEST_CASE(test_range_of_double_values)
       tolerance * 2e8); // OK but much less accurate near max.
 
   // Compare precisions very close to the singularity.
-    // This test value is one epsilon close to the singularity at -exp(-1) * x
+    // This test value is one epsilon close to the singularity at -exp(-1) * z
     // (below which the result has a non-zero imaginary part).
     RealType test_value = -exp_minus_one<RealType>();
     test_value += (std::numeric_limits<RealType>::epsilon() * 1);
@@ -883,8 +939,92 @@ BOOST_AUTO_TEST_CASE(test_range_of_double_values)
       BOOST_CHECK_EQUAL(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, 0.)),
         -std::numeric_limits<RealType>::infinity());
     }
+} // BOOST_AUTO_TEST_CASE(test_range_of_double_values)
 
-} // BOOST_AUTO_TEST_CASE( test_main )
+#ifdef BOOST_MATH_LAMBERT_W_INTEGRALS
+
+BOOST_AUTO_TEST_CASE( integrals )
+{
+  BOOST_TEST_MESSAGE("\nTest Lambert W integrals.");
+  try
+  {
+  // using statements needed to change precision policy.
+  using boost::math::policies::policy;
+  using boost::math::policies::make_policy;
+  using boost::math::policies::precision;
+  using boost::math::policies::digits2;
+  using boost::math::policies::digits10;
+
+  // using statements needed for changing error handling policy.
+  using boost::math::policies::evaluation_error;
+  using boost::math::policies::domain_error;
+  using boost::math::policies::overflow_error;
+  using boost::math::policies::ignore_error;
+  using boost::math::policies::throw_on_error;
+
+  typedef policy<
+    domain_error<throw_on_error>,
+    overflow_error<ignore_error>
+  > throw_policy;
+
+  double inf = std::numeric_limits<double>::infinity();
+  double max = (std::numeric_limits<double>::max)();
+  // With check in 
+  std::cout << "lambert_w0(inf) = " << lambert_w0(inf) << std::endl; // lambert_w0(inf) = 1.79769e+308
+  std::cout << "lambert_w0(inf, throw_policy()) = " << lambert_w0(inf, throw_policy()) << std::endl; // inf
+  std::cout << "lambert_w0(max) = " << lambert_w0(max) << std::endl; // lambert_w0(max) = 703.227
+  //std::cout << lambert_w0(inf) << std::endl; // inf - will throw.
+  std::cout << "lambert_w0(0) = " << lambert_w0(0.) << std::endl; // 0
+  std::cout << "lambert_w0(std::numeric_limits<double>::denorm_min()) = " << lambert_w0(std::numeric_limits<double>::denorm_min()) << std::endl; // 4.94066e-324
+  std::cout << "lambert_w0(std::numeric_limits<double>::min()) = " << lambert_w0((std::numeric_limits<double>::min)()) << std::endl; // 2.22507e-308
+
+  // Approximate the largest lambert_w you can get for type T?
+  float max_w_f = boost::math::lambert_w_detail::lambert_w0_approx((std::numeric_limits<float>::max)()); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
+  std::cout << "w max_f " << max_w_f << std::endl; // 84.2879
+  double max_w = boost::math::lambert_w_detail::lambert_w0_approx((std::numeric_limits<double>::max)()); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
+  std::cout << "w max " << max_w << std::endl; // 703.227
+
+  std::cout << "test integral 1/z^2" << std::endl;
+
+
+typedef double Real;
+Real tol = std::numeric_limits<Real>::epsilon();
+Real x;
+{
+    using boost::math::quadrature::exp_sinh;
+    exp_sinh<Real> es;
+    auto f = [](Real z)->Real
+    {
+      Real zz = 1 / (z * z);
+      //if (zz >= boost::math::tools::max_value<Real>())
+      //{
+      //  zz = boost::math::tools::max_value<Real>();
+      //}
+
+      return lambert_w0<Real>(zz); // 
+      //return lambert_w0<Real>(zz,  throw_policy()); // still fails because returns inf.
+
+
+    };
+    x = es.integrate(f);
+    std::cout << x << std::endl;
+    BOOST_CHECK_CLOSE_FRACTION(x, boost::math::constants::root_two_pi<Real>(), tol);
+    // root_two_pi<double = 2.506628274631000502
+  }
+
+  test_integrals<float>();
+  test_integrals<double>();
+  //test_integrals<long double>();
+  test_integrals<cpp_bin_float_quad>();
+  }
+  catch (std::exception& ex)
+  {
+    std::cout << ex.what() << std::endl;
+  }
+
+}
+
+#endif //  BOOST_MATH_LAMBERT_W_INTEGRALS
 
   /*
 
@@ -894,35 +1034,5 @@ BOOST_AUTO_TEST_CASE(test_range_of_double_values)
   */
 
 
-template<class Real>
-void test_integrals()
-{
-    // Integral of the Lambert W function:
-    // https://en.wikipedia.org/wiki/Lambert_W_function
-    using boost::math::quadrature::tanh_sinh;
-    using boost::math::quadrature::exp_sinh;
-    using std::sqrt;
-    Real tol = std::numeric_limits<Real>::epsilon();
-    tanh_sinh<Real> ts;
-    Real a = 0;
-    Real b = boost::math::constants::e<Real>();
-    Real x = ts.integrate<decltype(lambert_w0<Real>)>(lambert_w0, a, b);
-    BOOST_CHECK_CLOSE_FRACTION(x, boost::math::constants::e<Real>() -1, tol);
-
-    exp_sinh<Real> es;
-    auto f = [](Real x)->Real { return lambert_w0<Real>(x)/(x*sqrt(x)); };
-    x = es.integrate(f);
-    BOOST_CHECK_CLOSE_FRACTION(x, 2*boost::math::constants::root_two_pi<Real>(), tol);
 
 
-    f = [](Real x)->Real { return lambert_w0<Real>(1/(x*x)); };
-    x = es.integrate(f);
-    BOOST_CHECK_CLOSE_FRACTION(x, boost::math::constants::root_two_pi<Real>(), tol);
-}
-
-BOOST_AUTO_TEST_CASE(test_integrals)
-{
-    test_integrals<float>();
-    test_integrals<double>();
-    test_integrals<long double>();
-}
