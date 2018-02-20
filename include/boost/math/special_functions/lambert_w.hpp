@@ -428,7 +428,7 @@ T lambert_w_singularity_series(const T p)
 
   //! Decimal values of specifications for built-in floating-point types below
   //! are 21 digits precision == max_digits10 for long double.
-  //! Care Some coefficients might overflow some fixed_point types.
+  //! Care! Some coefficients might overflow some fixed_point types.
 
   //! This version is intended to allow use by user-defined types
   //! like Boost.Multiprecision quad and cpp_dec_float types.
@@ -1081,7 +1081,10 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
     {
       return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
     }
-
+    if ((boost::math::isinf)(z))
+    {
+      return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%", z, pol);
+    }
 
    if (z >= 0.05)
    {
@@ -1222,7 +1225,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
             3.44200749053237945e-09,
          };
          T log_w = log(z);
-         return log_w+ Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+         return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
       }
       else if (z < 7.896296e+13)  // 9.2 < log(z) <= 32
       {
@@ -1251,7 +1254,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
             3.39460723731970550e-12,
          };
          T log_w = log(z);
-         return log_w+ Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+         return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
       }
       else if (z < 2.6881171e+43) // 32 < log(z) < 100
       {
@@ -1280,7 +1283,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
             -2.60648331090076845e-14,
          };
          T log_w = log(z);
-         return log_w+ Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+         return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
       }
       else // 100 < log(z) < 710
       {
@@ -1313,7 +1316,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
             3.78250395617836059e-25,
          };
          T log_w = log(z);
-         return log_w+ Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+         return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
       }
    }
    else
@@ -1933,14 +1936,14 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 
     // Perhaps Deal with other special cases here??????????????
     // (TODO NaN, zero? 
-    if ((boost::math::isinf)(z))
-    {
-      //return std::numeric_limits<T>::infinity();  
-      //return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
-      // return boost::math::tools::max_value<T>(); // far too big! 1.7e+308
-      // for double max possible is 703.227...
-      return boost::math::lambert_w_detail::lambert_w0_approx(lambert_w0(boost::math::tools::max_value<T>()));
-    }
+    //if ((boost::math::isinf)(z))
+    //{
+    // // return std::numeric_limits<T>::infinity();  
+    //  static const char* function = "boost::math::lambert_w0<%1%>";
+    //  return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, policies::policy<>());
+    //  // for double max possible is 703.227... so this would return this value.
+    //  // return boost::math::lambert_w_detail::lambert_w0_approx(lambert_w0(boost::math::tools::max_value<T>()));
+    //}
 
     // Work out what precision has been selected, based on the Policy and the number type.
     // For the default policy version, we want the *default policy* precision for T.
