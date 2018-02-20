@@ -90,7 +90,12 @@ void test_integrals()
     exp_sinh<Real> es;
     auto f = [](Real z)->Real
     {
-      return lambert_w0<Real>(1 / (z * z));
+      Real zz = 1 / (z * z);
+      if (zz >= boost::math::tools::max_value<Real>())
+      {
+        zz = boost::math::tools::max_value<Real>();
+      }
+      return lambert_w0<Real>(zz);
     };
     Real z = es.integrate(f);
     BOOST_CHECK_CLOSE_FRACTION(z, boost::math::constants::root_two_pi<Real>(), tol);
@@ -308,12 +313,12 @@ void test_spots(RealType)
 
   if (std::numeric_limits<RealType>::has_infinity)
   {
-    BOOST_CHECK_THROW(lambert_w0(std::numeric_limits<RealType>::infinity()), std::overflow_error); // If should throw exception.
+    BOOST_CHECK_THROW(lambert_w0(std::numeric_limits<RealType>::infinity()), std::overflow_error); // If should throw exception for infinity.
     //BOOST_CHECK_EQUAL(lambert_w0(std::numeric_limits<RealType>::infinity()), +std::numeric_limits<RealType>::infinity()); // message is:
     // Error in "test_types": class boost::exception_detail::clone_impl<struct boost::exception_detail::error_info_injector<class std::overflow_error> > :
     // Error in function boost::math::lambert_w0<RealType>(<RealType>) : Argument z is infinite!
     //BOOST_CHECK_EQUAL(lambert_w0(std::numeric_limits<RealType>::infinity()), +std::numeric_limits<RealType>::infinity()); // If infinity allowed.
-    BOOST_CHECK_THROW(lambert_wm1(std::numeric_limits<RealType>::infinity()), std::domain_error); // Infinity NOT allowed.
+    BOOST_CHECK_THROW(lambert_wm1(std::numeric_limits<RealType>::infinity()), std::domain_error); // Infinity NOT allowed at all (not an edge case).
   }
   if (std::numeric_limits<RealType>::has_quiet_NaN)
   { // Argument Z == NaN is always an throwable error for both branches.
@@ -965,13 +970,13 @@ BOOST_AUTO_TEST_CASE( integrals )
   typedef policy<
     domain_error<throw_on_error>,
     overflow_error<ignore_error>
-  > throw_policy;
+  > no_throw_policy;
 
   double inf = std::numeric_limits<double>::infinity();
   double max = (std::numeric_limits<double>::max)();
-  // With check in 
-  std::cout << "lambert_w0(inf) = " << lambert_w0(inf) << std::endl; // lambert_w0(inf) = 1.79769e+308
-  std::cout << "lambert_w0(inf, throw_policy()) = " << lambert_w0(inf, throw_policy()) << std::endl; // inf
+  std::cout.precision(std::numeric_limits<double>::max_digits10);
+  //std::cout << "lambert_w0(inf) = " << lambert_w0(inf) << std::endl; // lambert_w0(inf) = 1.79769e+308
+  std::cout << "lambert_w0(inf, throw_policy()) = " << lambert_w0(inf, no_throw_policy()) << std::endl; // inf
   std::cout << "lambert_w0(max) = " << lambert_w0(max) << std::endl; // lambert_w0(max) = 703.227
   //std::cout << lambert_w0(inf) << std::endl; // inf - will throw.
   std::cout << "lambert_w0(0) = " << lambert_w0(0.) << std::endl; // 0
@@ -984,8 +989,8 @@ BOOST_AUTO_TEST_CASE( integrals )
   double max_w = boost::math::lambert_w_detail::lambert_w0_approx((std::numeric_limits<double>::max)()); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
   std::cout << "w max " << max_w << std::endl; // 703.227
 
+  std::cout << "lambert_w0(7.2416706213544837e-163) = " << lambert_w0(7.2416706213544837e-163) << std::endl; // 
   std::cout << "test integral 1/z^2" << std::endl;
-
 
 typedef double Real;
 Real tol = std::numeric_limits<Real>::epsilon();
@@ -993,18 +998,15 @@ Real x;
 {
     using boost::math::quadrature::exp_sinh;
     exp_sinh<Real> es;
+
+    // Function to be integrated, lambert_w0(1/z^2).
     auto f = [](Real z)->Real
-    {
-      Real zz = 1 / (z * z);
-      //if (zz >= boost::math::tools::max_value<Real>())
-      //{
-      //  zz = boost::math::tools::max_value<Real>();
-      //}
-
-      return lambert_w0<Real>(zz); // 
-      //return lambert_w0<Real>(zz,  throw_policy()); // still fails because returns inf.
-
-
+    { 
+      Real zz = z * z;
+      // Avoid divide unity by zero giving infinity.
+      //Real one_div_zz = (zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz;
+      //return lambert_w0<Real>(one_div_zz); // 
+      return lambert_w0<Real>((zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz); // 
     };
     x = es.integrate(f);
     std::cout << x << std::endl;
