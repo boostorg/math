@@ -12,7 +12,7 @@
    ``__sf_result`` lambert_w0(T z); // W0 branch, default precision.
 
    template <class T>
-   ``__sf_result`` lambert_w0_prime(T z); // W0 branch derivative
+   ``__sf_result`` lambert_w0_prime(T z); // W0 branch 1st derivative.
 
    template <class T, class ``__Policy``>
    ``__sf_result`` lambert_w0(T z, const ``__Policy``&); // W0 with policy controlled precision.
@@ -21,7 +21,7 @@
    ``__sf_result`` lambert_wm1(T z); // W-1 branch.
 
    template <class T>
-   ``__sf_result`` lambert_wm1_prime(T z); //W -1 branch derivative
+   ``__sf_result`` lambert_wm1_prime(T z); //W -1 branch 1st derivative.
 
    template <class T, class ``__Policy``>
    ``__sf_result`` lambert_wm1(T z, const ``__Policy``&); // W-1 with policy controlled precision.
@@ -422,17 +422,8 @@ We also considered using __newton method.
 ``
 but concluded that since the Newton-Raphson method takes typically 6 iterations to converge within tolerance,
 whereas Halley usually takes only 1 to 3 iterations to achieve an result within 1 __ulp,
-<<<<<<< HEAD
 so the Newton-Raphson method is unlikely to be quicker
 than the additional cost of computing the 2nd derivative for Halley's method,
-in this case requiring an expensive exponential function evaluation on each step.
-
-
-=======
-so Newton/Raphson's method unlikely to be quicker
-than the additional cost of computating the 2nd derivative for Halley's method,
-each iteration step requiring an expensive exponential function evaluation.
->>>>>>> before trying to switch to develop to add test_value.hpp
 
 [h4:compact_implementation Implementing Compact Algorithms]
 
@@ -647,7 +638,8 @@ Some integer constants overflow, so use largest size available, suffixed by `uLL
 Above the 14th term, the rationals exceed the range of `unsigned long long` and are replaced
 by pre-computed decimal values at least 21 digits precision == `max_digits10` for `long double`.
 
-A macro `BOOST_MATH_TEST_VALUE` taking a decimal floating-point literal was used
+A macro `BOOST_MATH_TEST_VALUE` (defined in [@../../test/test_value.hpp  test_value.hpp])
+taking a decimal floating-point literal was used
 to allow testing with both built-in floating-point types like `double`
 which have contructors taking literal decimal values like `3.14`,
 [*and] also multiprecision and other User-defined Types that only provide full-precision construction
@@ -692,7 +684,7 @@ the computational cost of the log functions was easily paid by far fewer iterati
 
    using boost::math::policies::digits2;
    // Very close to z = -1.0264389699511303e-26 when W = 64, when effect of ln(ln(-z) term and ratio L1/L2 is greatest.
-   double z = z = -1e-26;
+   double z = -1e-26;
    double r = lambert_wm1(z, policy<digits2<11> >());
    // lambert_wm1(-1.0000000000000000e-26) = -64.026509628385895
 
@@ -799,10 +791,13 @@ Mathematics, 244 (2013) 77-89.
 Exact analytical solution for current flow through diode with series resistance.
 [@http://dx.doi.org/10.1049/el:20000301]
 
+# Princeton Companion to Applied Mathmatics,
+'The Lambert-W function', Section 1.3: Series and Generating Functions.
+
 [endsect] [/section:lambert_w Lambert W function]
 
 [/
-  Copyright 2016 John Maddock, Paul A. Bristow, Thomas Luu.
+  Copyright 2016 John Maddock, Paul A. Bristow, Thomas Luu, Nicholas Thompson.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt
   or copy at http://www.boost.org/LICENSE_1_0.txt).
