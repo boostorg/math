@@ -330,11 +330,19 @@ void test_radovic()
     {
         bounds[i] = std::make_pair<Real, Real>(0, 1);
     }
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, false, 1, 1982);
+    Real error_goal = 0.001;
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, error_goal, false, 1, 1982);
 
     auto task = mc.integrate();
     Real y = task.get();
-    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    if (abs(y - 1) > 0.01)
+    {
+        std::cout << "Error in estimation of Radovic integral too high, function calls: " << mc.calls() << "\n";
+        std::cout << "Final error estimate: " << mc.current_error_estimate() << std::endl;
+        std::cout << "Error goal          : " << error_goal << std::endl;
+        std::cout << "Variance estimate   : " << mc.variance() << std::endl;
+        BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+    }
 }
 
 
