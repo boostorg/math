@@ -1,5 +1,6 @@
 // Copyright John Maddock 2017.
 // Copyright Paul A. Bristow 2016, 2017.
+// Copyright Nicholas Thompson 2018
 
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or
@@ -21,6 +22,9 @@ Toshio Fukushima,
 J.Comp.Appl.Math. 244 (2013) 77-89,
 and on a C/C++ version by Darko Veberic, darko.veberic@ijs.si
 based on the algorithm and a FORTRAN version of Toshio Fukushima's algorithm.
+
+First derivative of Lambert_w is derived from
+Princeton Companion to Applied Mathmatics, 'The Lambert-W function', Section 1.3: Series and Generating Functions.
 */
 
 /*
@@ -850,11 +854,11 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
 
 	 if ((boost::math::isnan)(z))
 	 {
-		 return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%", z, pol);
+		 return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
 	 }
    if ((boost::math::isinf)(z))
    {
-     return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%", z, pol);
+     return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
    }
 
    if (z >= 0.05)
@@ -1050,7 +1054,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
       else if (z <= -0.3678794411714423215955237701614608674458111310f)
       {
          if (z < -0.3678794411714423215955237701614608674458111310f)
-            return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%", z, pol);
+            return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
          return -1;
       }
       else
@@ -1083,7 +1087,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
     }
     if ((boost::math::isinf)(z))
     {
-      return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%", z, pol);
+      return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
     }
 
    if (z >= 0.05)
@@ -1442,7 +1446,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
       {
         if (z < -0.36787944117144232159552377016146086744581113103176804)
         {
-          return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%", z, pol);
+          return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
         }
         return -1;
       }
@@ -1468,7 +1472,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)
    // Filter out special cases first:
    if ((boost::math::isnan)(z))
    {
-      return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%", z, pol);
+      return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
    }
    if (fabs(z) <= 0.05f)
    {
@@ -1500,7 +1504,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)
          { // Exactly at the branch point singularity.
             return -1;
          }
-         return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%", z, pol);
+         return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
       }
       // z is very close (within 0.01) of the branch singularity at -e^-1
       // so use a series approximation proposed by Corless et al.
@@ -1532,7 +1536,6 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)
  //  result = lambert_w_halley_iterate(result, z);
 
 } // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)  extended precision.
-
 
   // Lambert w-1 implementation
 
@@ -1996,6 +1999,54 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     return lambert_w_detail::lambert_wm1_imp(result_type(z), policies::policy<>());
   } // lambert_wm1(T z)
 
+  // First derivative of Lambert W0 and W-1.
+  template <class T>
+  typename tools::promote_args<T>::type
+  lambert_w0_prime(T z)
+  {
+    typedef typename tools::promote_args<T>::type result_type;
+    using std::numeric_limits;
+    if (z == 0)
+    {
+        return static_cast<result_type>(1);
+    }
+    // This is the sensible choice if we regard the Lambert-W function as complex analytic.
+    // Of course on the real line, it's just undefined.
+    if (z == - boost::math::constants::exp_minus_one<result_type>())
+    {
+        return numeric_limits<result_type>::infinity();
+    }
+    // if z < -1/e, we'll let lambert_w0 do the error handling:
+    result_type w = lambert_w0(result_type(z));
+    // If w ~ -1, then presumably this can get inaccurate.
+    // Is there an accurate way to evaluate 1 + W(-1/e + eps)?
+    //  Yes: This is discussed in the Princeton Companion to Applied Mathematics,
+    // 'The Lambert-W function', Section 1.3: Series and Generating Functions.
+    // 1 + W(-1/e + x) ~ sqrt(2ex).
+    // Nick is not convinced this formula is more accurate than the naive one.
+    // However, for z != -1/e, we never get rounded to w = -1 in any precision I've tested (up to cpp_bin_float_100).
+    return w / (z * (1 + w));
+  } // lambert_w0_prime(T z)
+
+  template <class T>
+  typename tools::promote_args<T>::type
+  lambert_wm1_prime(T z)
+  {
+    using std::numeric_limits;
+    typedef typename tools::promote_args<T>::type result_type;
+    //if (z == 0)
+    //{
+    //      return static_cast<result_type>(1);
+    //}
+    //if (z == - boost::math::constants::exp_minus_one<result_type>())
+    if (z == 0 || z == - boost::math::constants::exp_minus_one<result_type>())
+    {
+        return -numeric_limits<result_type>::infinity();
+    }
+
+    result_type w = lambert_wm1(z);
+    return w/(z*(1+w));
+  } // lambert_wm1_prime(T z)
 
 }} //boost::math namespaces
 
