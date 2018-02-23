@@ -23,6 +23,29 @@ using boost::math::quadrature::naive_monte_carlo;
 
 
 template<class Real>
+void test_pi_multithreaded()
+{
+    std::cout << "Testing pi is calculated correctly (multithreaded) using Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    auto g = [](std::vector<Real> const & x)->Real {
+        Real r = x[0]*x[0]+x[1]*x[1];
+        if (r <= 1) {
+          return 4;
+        }
+        return 0;
+    };
+
+    std::vector<std::pair<Real, Real>> bounds{{Real(0), Real(1)}, {Real(0), Real(1)}};
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0005,
+                                          /*singular =*/ false,/* threads = */ 2, /* seed = */ 17);
+    auto task = mc.integrate();
+    Real pi_estimated = task.get();
+    if (abs(pi_estimated - pi<Real>())/pi<Real>() > 0.005) {
+        std::cout << "Error in estimation of pi too high, function calls: " << mc.calls() << "\n";
+        BOOST_CHECK_CLOSE_FRACTION(pi_estimated, pi<Real>(), 0.005);
+    }
+}
+
+template<class Real>
 void test_pi()
 {
     std::cout << "Testing pi is calculated correctly using Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
@@ -355,6 +378,7 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #if !defined(TEST) || TEST == 2
     test_pi<float>();
     test_pi<double>();
+    test_pi_multithreaded<float>();
     //test_pi<long double>();
 #endif
 #if !defined(TEST) || TEST == 3
