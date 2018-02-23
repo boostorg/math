@@ -173,6 +173,24 @@ void test_finite_singular_boundary()
 }
 
 template<class Real>
+void test_multithreaded_variance()
+{
+    std::cout << "Testing that variance computed by naive Monte-Carlo integration converges to integral formula on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    Real exact_variance = (Real) 1/(Real) 12;
+    auto g = [&](std::vector<Real> const & x)->Real
+    {
+        return x[0];
+    };
+    vector<pair<Real, Real>> bounds{{ Real(0), Real(1)}};
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, false, 2, 12341);
+
+    auto task = mc.integrate();
+    Real y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 0.5, 0.01);
+    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.05);
+}
+
+template<class Real>
 void test_variance()
 {
     std::cout << "Testing that variance computed by naive Monte-Carlo integration converges to integral formula on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
@@ -393,6 +411,7 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #endif
 #if !defined(TEST) || TEST == 5
     test_variance<double>();
+    test_multithreaded_variance<double>();
     test_product<float, 1>();
     test_product<float, 2>();
 #endif
