@@ -925,6 +925,10 @@ test-suite misc :
    [ run  compile_test/sf_ulp_incl_test.cpp compile_test_main  ]
    [ run  compile_test/sf_zeta_incl_test.cpp compile_test_main  ]
    [ run  compile_test/std_real_concept_check.cpp  ]
+   [ compile compile_test/std_real_concept_check.cpp  : <define>EMULATE32 : std_real_concept_check_32 ]
+   [ compile compile_test/std_real_concept_check.cpp  : <define>EMULATE64 : std_real_concept_check_64 ]
+   [ compile compile_test/std_real_concept_check.cpp  : <define>EMULATE80 : std_real_concept_check_80 ]
+   [ compile compile_test/std_real_concept_check.cpp  : <define>EMULATE128 : std_real_concept_check_128 ]
    [ run  compile_test/cstdfloat_concept_check_1.cpp
       : : : [ check-target-builds ../config//has_intel_quad "Intel _Quad datatype support" : <cxxflags>-Qoption,cpp,--extended_float_type ]
             [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]

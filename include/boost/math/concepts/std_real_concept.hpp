@@ -402,6 +402,13 @@ inline BOOST_MATH_CONSTEXPR int digits<concepts::std_real_concept>(BOOST_MATH_EX
    return digits<concepts::std_real_concept_base_type>();
 }
 
+template <>
+inline double real_cast<double, concepts::std_real_concept>(concepts::std_real_concept r)
+{
+   return static_cast<double>(r.value());
+}
+
+
 } // namespace tools
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
