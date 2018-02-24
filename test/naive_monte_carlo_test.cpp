@@ -23,6 +23,29 @@ using boost::math::quadrature::naive_monte_carlo;
 
 
 template<class Real>
+void test_pi_multithreaded()
+{
+    std::cout << "Testing pi is calculated correctly (multithreaded) using Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    auto g = [](std::vector<Real> const & x)->Real {
+        Real r = x[0]*x[0]+x[1]*x[1];
+        if (r <= 1) {
+          return 4;
+        }
+        return 0;
+    };
+
+    std::vector<std::pair<Real, Real>> bounds{{Real(0), Real(1)}, {Real(0), Real(1)}};
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0005,
+                                          /*singular =*/ false,/* threads = */ 2, /* seed = */ 17);
+    auto task = mc.integrate();
+    Real pi_estimated = task.get();
+    if (abs(pi_estimated - pi<Real>())/pi<Real>() > 0.005) {
+        std::cout << "Error in estimation of pi too high, function calls: " << mc.calls() << "\n";
+        BOOST_CHECK_CLOSE_FRACTION(pi_estimated, pi<Real>(), 0.005);
+    }
+}
+
+template<class Real>
 void test_pi()
 {
     std::cout << "Testing pi is calculated correctly using Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
@@ -147,6 +170,24 @@ void test_finite_singular_boundary()
 
     double y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, 1.0, 0.1);
+}
+
+template<class Real>
+void test_multithreaded_variance()
+{
+    std::cout << "Testing that variance computed by naive Monte-Carlo integration converges to integral formula on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    Real exact_variance = (Real) 1/(Real) 12;
+    auto g = [&](std::vector<Real> const & x)->Real
+    {
+        return x[0];
+    };
+    vector<pair<Real, Real>> bounds{{ Real(0), Real(1)}};
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.001, false, 2, 12341);
+
+    auto task = mc.integrate();
+    Real y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 0.5, 0.01);
+    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.05);
 }
 
 template<class Real>
@@ -355,6 +396,7 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #if !defined(TEST) || TEST == 2
     test_pi<float>();
     test_pi<double>();
+    test_pi_multithreaded<float>();
     //test_pi<long double>();
 #endif
 #if !defined(TEST) || TEST == 3
@@ -369,6 +411,7 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #endif
 #if !defined(TEST) || TEST == 5
     test_variance<double>();
+    test_multithreaded_variance<double>();
     test_product<float, 1>();
     test_product<float, 2>();
 #endif

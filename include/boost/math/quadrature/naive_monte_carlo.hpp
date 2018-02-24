@@ -280,12 +280,16 @@ private:
         do {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             size_t total_calls = 0;
+            for (size_t i = 0; i < m_num_threads; ++i)
+            {
+                 size_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
+                 total_calls += t_calls;
+            }
             Real variance = 0;
             Real avg = 0;
             for (size_t i = 0; i < m_num_threads; ++i)
             {
-               size_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
-               total_calls += t_calls;
+                size_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
                 // Will this overflow? Not hard to remove . . .
                 avg += m_thread_averages[i].load(boost::memory_order::relaxed)*( (Real) t_calls/ (Real) total_calls);
                 variance += m_thread_Ss[i].load(boost::memory_order::relaxed);
@@ -309,12 +313,17 @@ private:
         }
         // Incorporate their work into the final estimate:
         size_t total_calls = 0;
-        Real variance = 0;
-        Real avg = 0;
         for (size_t i = 0; i < m_num_threads; ++i)
         {
-           size_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
-           total_calls += t_calls;
+             size_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
+             total_calls += t_calls;
+        }
+        Real variance = 0;
+        Real avg = 0;
+
+        for (size_t i = 0; i < m_num_threads; ++i)
+        {
+            size_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
             // Averages weighted by the number of calls the thread made:
             avg += m_thread_averages[i].load(boost::memory_order::relaxed)*( (Real) t_calls/ (Real) total_calls);
             variance += m_thread_Ss[i].load(boost::memory_order::relaxed);
