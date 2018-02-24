@@ -5,6 +5,7 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#include <boost/math/quadrature/naive_monte_carlo.hpp>
 #include <iostream>
 #include <iomanip>
 #include <limits>
@@ -13,7 +14,8 @@
 #include <future>
 #include <string>
 #include <chrono>
-#include <boost/math/quadrature/naive_monte_carlo.hpp>
+#include <boost/math/special_functions/pow.hpp>
+#include <boost/math/constants/constants.hpp>
 
 using std::vector;
 using std::pair;
@@ -51,12 +53,12 @@ void display_progress(double progress,
 int main()
 {
     double exact = 1.3932039296856768591842462603255;
-    double A = 1.0 / (M_PI * M_PI * M_PI);
+    double A = 1.0 / boost::math::pow<3>(boost::math::constants::pi<double>());
     auto g = [&](std::vector<double> const & x)
     {
       return A / (1.0 - cos(x[0])*cos(x[1])*cos(x[2]));
     };
-    vector<pair<double, double>> bounds{{0, M_PI}, {0, M_PI}, {0, M_PI}};
+    vector<pair<double, double>> bounds{{0, boost::math::constants::pi<double>() }, {0, boost::math::constants::pi<double>() }, {0, boost::math::constants::pi<double>() }};
     naive_monte_carlo<double, decltype(g)> mc(g, bounds, 0.001);
 
     auto task = mc.integrate();
