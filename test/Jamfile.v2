@@ -1145,15 +1145,8 @@ test-suite misc :
    [ run test_numerical_differentiation.cpp ../../test/build//boost_unit_test_framework  : : : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ run  compile_test/numerical_differentiation_incl_test.cpp compile_test_main  : : : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ compile  compile_test/numerical_differentiation_concept_test.cpp  : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
-
+   [ run __temporary_test.cpp : : : <test-info>always_show_run_output ]
 ;
-
-
-
-# Temporary tests for support of max_digits10
-# run ztest_max_digits10.cpp ;
-# run zztest_max_digits10.cpp ;
-#  Removed as inexplicably failing for VS12 on teeks99 but OK locally.
 
 build-project ../example ;
 
