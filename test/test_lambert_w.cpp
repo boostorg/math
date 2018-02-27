@@ -10,9 +10,12 @@
 //! \brief Basic sanity tests for Lambert W function plog productlog
 //! or lambert_w using algorithm informed by Thomas Luu, Veberic and Tosio Fukushima.
 
-#include <boost/config.hpp>   // for BOOST_MSVC definition.
+
+
+#include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
+// Needs gnu++17 for BOOST_HAS_FLOAT128
+#include <boost/config.hpp>   // for BOOST_MSVC definition etc.
 #include <boost/version.hpp>   // for BOOST_MSVC versions.
-#include <boost/math/concepts/real_concept.hpp> // for real_concept
 
 // Boost macros
 #define BOOST_TEST_MAIN
@@ -29,7 +32,19 @@ using boost::multiprecision::cpp_dec_float_50;
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
 using boost::multiprecision::cpp_bin_float_quad;
+
+#include <boost/multiprecision/float128.hpp>
+
+#ifdef BOOST_HAS_FLOAT128
+// Including this header without float128 triggers:
+// fatal error C1189: #error:  "Sorry compiler is neither GCC, not Intel, don't know how to configure this header."
+#include <boost/multiprecision/float128.hpp>
+using boost::multiprecision::float128;
+#endif
+
 //#include <boost/fixed_point/fixed_point.hpp> // If available.
+
+#include <boost/math/concepts/real_concept.hpp> // for real_concept tests.
 #include <boost/math/special_functions/fpclassify.hpp> // isnan, ifinite.
 #include <boost/math/special_functions/next.hpp> // float_next, float_prior
 using boost::math::float_next;
@@ -40,7 +55,14 @@ using boost::math::float_prior;
 using boost::math::policies::digits2;
 #include <boost/math/special_functions/lambert_w.hpp> // For Lambert W lambert_w function.
 using boost::math::lambert_wm1;
-using boost::math::lambert_w0; // Use jm version instead.
+using boost::math::lambert_w0;
+
+#include <limits>
+#include <cmath>
+#include <typeinfo>
+#include <iostream>
+#include <type_traits>
+#include <exception>
 
 #define BOOST_MATH_LAMBERT_W_INTEGRALS
 
@@ -49,9 +71,9 @@ using boost::math::lambert_w0; // Use jm version instead.
 // Added code and test for Integral of the Lambert W function: by Nick Thompson.
 // https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals
 
-#include <boost/math/constants/constants.hpp> // for integral tests
-#include <boost/math/quadrature/tanh_sinh.hpp> // for integral tests
-#include <boost/math/quadrature/exp_sinh.hpp> // for integral tests
+#include <boost/math/constants/constants.hpp> // for integral tests.
+#include <boost/math/quadrature/tanh_sinh.hpp> // for integral tests.
+#include <boost/math/quadrature/exp_sinh.hpp> // for integral tests.
 
   using boost::math::policies::policy;
   using boost::math::policies::make_policy;
@@ -68,9 +90,8 @@ typedef policy<
   overflow_error<ignore_error>
 > no_throw_policy;
 
-
 // Assumes that function has a throw policy, for example NOT lambert_w0<T>(1 / (x * x), no_throw_policy());
-// Error in function boost::math::quadrature::exp_sinh<double>::integrate: 
+// Error in function boost::math::quadrature::exp_sinh<double>::integrate:
 // The exp_sinh quadrature evaluated your function at a singular point and resulted in inf.
 // Please ensure your function evaluates to a finite number of its entire domain.
 template <typename T>
@@ -81,9 +102,9 @@ T debug_integration_proc(T x)
   try
   {
    // Assign function call to result in here...
-    result = lambert_w0<T>(1 / (x * x)); 
+    result = lambert_w0<T>(1 / (x * x));
    // result = lambert_w0<T>(1 / (x * x), no_throw_policy());  // Bad idea, less helpful diagnostic message is
-    // Error in function boost::math::quadrature::exp_sinh<double>::integrate: 
+    // Error in function boost::math::quadrature::exp_sinh<double>::integrate:
     // The exp_sinh quadrature evaluated your function at a singular point and resulted in inf.
     // Please ensure your function evaluates to a finite number of its entire domain.
 
@@ -106,8 +127,6 @@ T debug_integration_proc(T x)
   } // catch
   return result;
 } // T debug_integration_proc(T x)
-
-
 
 template<class Real>
 void test_integrals()
@@ -155,13 +174,6 @@ void test_integrals()
 } // template<class Real> void test_integrals()
 
 #endif // BOOST_MATH_LAMBERT_W_INTEGRALS
-
-#include <limits>
-#include <cmath>
-#include <typeinfo>
-#include <iostream>
-#include <type_traits>
-#include <exception>
 
 //! Build a message of information about build, architecture, address model, platform, ...
 std::string show_versions()
@@ -220,7 +232,7 @@ std::cout << "MINGW64 " << __MINGW32_MAJOR_VERSION << __MINGW32_MINOR_VERSION <<
   message << "\n  Boost version " << BOOST_VERSION / 100000 << "." << BOOST_VERSION / 100 % 1000 << "." << BOOST_VERSION % 100;
 
 #ifdef BOOST_HAS_FLOAT128
-  message << ",  BOOST_HAS_FLOAT128" << std::endl;
+  message << ",  BOOST_HAS_FLOAT128." << std::endl;
 #endif
   message << std::endl;
   return message.str();
@@ -681,7 +693,7 @@ void test_spots(RealType)
 
  } //template <class RealType>void test_spots(RealType)
 
-BOOST_AUTO_TEST_CASE(test_types)
+BOOST_AUTO_TEST_CASE( test_types )
 {
   BOOST_MATH_CONTROL_FP;
   // BOOST_TEST_MESSAGE output only appears if command line has --log_level="message"
@@ -702,8 +714,20 @@ BOOST_AUTO_TEST_CASE(test_types)
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_double_extended>(0));
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0));
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_50>(0));
-  //test_spots(static_cast<boost::multiprecision::cpp_dec_float_50>(0));
 
+#ifdef BOOST_HAS_FLOAT128
+  // Requires link to libquadmath library,
+  // http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/float128.html
+  //  for example:
+  // C:\Program Files\mingw-w64\x86_64-7.2.0-win32-seh-rt_v5-rev1\mingw64\lib\gcc\x86_64-w64-mingw32\7.2.0\libquadmath.a
+
+  using boost::multiprecision::float128;
+  std::cout << "BOOST_HAS_FLOAT128" << std::endl;
+
+  std::cout.precision(std::numeric_limits<float128>::max_digits10);
+
+  test_spots(static_cast<float128>(0));
+#endif // BOOST_HAS_FLOAT128
 
   // Fixed-point types:
   // Some fail 0.1 to 1.0 ???
@@ -712,9 +736,9 @@ BOOST_AUTO_TEST_CASE(test_types)
 
   //test_spots(boost::math::concepts::real_concept(0.1));  // "real_concept" - was OK.
 
-} // BOOST_AUTO_TEST_CASE( test_types)
+} // BOOST_AUTO_TEST_CASE( test_types )
 
-BOOST_AUTO_TEST_CASE(test_range_of_double_values)
+BOOST_AUTO_TEST_CASE( test_range_of_double_values )
 {
   using boost::math::constants::exp_minus_one;
   using boost::math::lambert_w0;
@@ -998,7 +1022,7 @@ BOOST_AUTO_TEST_CASE(test_range_of_double_values)
     }
 } // BOOST_AUTO_TEST_CASE(test_range_of_double_values)
 
-BOOST_AUTO_TEST_CASE(derivatives_of_lambert_w)
+BOOST_AUTO_TEST_CASE( derivatives_of_lambert_w )
 {
 
   BOOST_TEST_MESSAGE("\nTest Lambert W function 1st differentials.");
@@ -1088,7 +1112,7 @@ BOOST_AUTO_TEST_CASE( integrals )
   double max_w = boost::math::lambert_w_detail::lambert_w0_approx((std::numeric_limits<double>::max)()); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
   std::cout << "w max " << max_w << std::endl; // 703.227
 
-  std::cout << "lambert_w0(7.2416706213544837e-163) = " << lambert_w0(7.2416706213544837e-163) << std::endl; // 
+  std::cout << "lambert_w0(7.2416706213544837e-163) = " << lambert_w0(7.2416706213544837e-163) << std::endl; //
   std::cout << "test integral 1/z^2" << std::endl;
 
 
@@ -1105,11 +1129,11 @@ Real x;
     //  // Avoid divide unity by zero giving infinity.
     // Commented out for test of try'n'catch diagnostics against this.
     //auto f = [](Real z)->Real
-    //{ 
+    //{
     //  Real zz = z * z;
     //  //Real one_div_zz = (zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz;
-    //  //return lambert_w0<Real>(one_div_zz); // 
-    //  return lambert_w0<Real>((zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz); // 
+    //  //return lambert_w0<Real>(one_div_zz); //
+    //  return lambert_w0<Real>((zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz); //
     //};
 
     //auto f = [](Real z)->Real
@@ -1142,7 +1166,6 @@ Real x;
   {
     std::cout << ex.what() << std::endl;
   }
-
 }
 
 #endif //  BOOST_MATH_LAMBERT_W_INTEGRALS

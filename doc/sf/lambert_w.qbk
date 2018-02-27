@@ -794,6 +794,9 @@ Exact analytical solution for current flow through diode with series resistance.
 # Princeton Companion to Applied Mathmatics,
 'The Lambert-W function', Section 1.3: Series and Generating Functions.
 
+# Cleve Moler, Mathworks blog [@https://blogs.mathworks.com/cleve/2013/09/02/the-lambert-w-function/#bfba4e2d-e049-45a6-8285-fe8b51d69ce7 The Lambert W Function]
+
+# Digital Library of Mathematical Function, [@https://dlmf.nist.gov/4.13 Lambert W function].
 [endsect] [/section:lambert_w Lambert W function]
 
 [/

@@ -15,6 +15,9 @@
 #include <boost/math/tools/atomic.hpp>
 #include <boost/detail/lightweight_mutex.hpp>
 
+// #define BOOST_MATH_INSTRUMENT_QUADRATURE_EXP_SINH
+// to get some diagnostic info.
+
 namespace boost{ namespace math{ namespace quadrature { namespace detail{
 
 
@@ -158,20 +161,33 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     {
        return policies::raise_domain_error(function, "The function you are trying to integrate does not go to zero at infinity, and instead evaluates to %1%", y_max, Policy());
     }
-
-    //std::cout << std::setprecision(5*std::numeric_limits<Real>::digits10);
-
+#ifdef BOOST_MATH_INSTRUMENT_QUADRATURE_EXP_SINH
+    std::streamsize saved_precision = std::cout.precision(std::numeric_limits<Real>::max_digits10);
+#endif 
     // Get the party started with two estimates of the integral:
     Real I0 = 0;
     Real L1_I0 = 0;
     for(size_t i = 0; i < m_abscissas[0].size(); ++i)
     {
+      // TODO tidy this up?
+#ifdef BOOST_MATH_INSTRUMENT_QUADRATURE_EXP_SINH
+        Real z = m_abscissas[0][i];
+        std::cout << "m_abscissas[0][" << i << "] = " << z << std::endl;
+        Real w = f(z);
+        std::cout << "w = " << w << std::endl;
+#endif
+
         Real y = f(m_abscissas[0][i]);
         I0 += y*m_weights[0][i];
         L1_I0 += abs(y)*m_weights[0][i];
+#ifdef BOOST_MATH_INSTRUMENT_QUADRATURE_EXP_SINH
+        std::cout << "I0 = " << I0 << ", L1_I0 = " << L1_I0 << std::endl;
+#endif
     }
 
-    //std::cout << "First estimate : " << I0 << std::endl;
+#ifdef BOOST_MATH_INSTRUMENT_QUADRATURE_EXP_SINH
+    std::cout << "First estimate : " << I0 << std::endl;
+#endif
     Real I1 = I0;
     Real L1_I1 = L1_I0;
     for (size_t i = 0; i < m_abscissas[1].size(); ++i)
@@ -184,7 +200,9 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     I1 *= half<Real>();
     L1_I1 *= half<Real>();
     Real err = abs(I0 - I1);
-    //std::cout << "Second estimate: " << I1 << " Error estimate at level " << 1 << " = " << err << std::endl;
+#ifdef BOOST_MATH_INSTRUMENT_QUADRATURE_EXP_SINH
+    std::cout << "Second estimate: " << I1 << " Error estimate at level " << 1 << " = " << err << std::endl;
+#endif
 
     size_t i = 2;
     for(; i < m_abscissas.size(); ++i)
@@ -225,10 +243,12 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         I1 += sum*h;
         L1_I1 += absum*h;
         err = abs(I0 - I1);
-        //std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
+#ifdef BOOST_MATH_INSTRUMENT_QUADRATURE_EXP_SINH
+        std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
+#endif
         if (!isfinite(I1))
         {
-            return policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and resulted in %1%. Please ensure your function evaluates to a finite number of its entire domain.", I1, Policy());
+            return policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and resulted in %1%. Please ensure your function evaluates to a finite number over its entire domain.", I1, Policy());
         }
         if (err <= tolerance*L1_I1)
         {
@@ -251,9 +271,12 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
        *levels = i;
     }
 
+#ifdef BOOST_MATH_INSTRUMENT_QUADRATURE_EXP_SINH
+    std::cout << "Exp_sinh Quadrature " << function << " returns " << I1 << std::endl;
+    std::cout.precision(saved_precision); // Restore.
+#endif
     return I1;
-}
-
+} // Real exp_sinh_detail<Real, Policy>::integrate
 
 template<class Real, class Policy>
 void exp_sinh_detail<Real, Policy>::init(const mpl::int_<0>&)
@@ -466,10 +489,10 @@ void exp_sinh_detail<Real, Policy>::init(const mpl::int_<4>&)
       m_max_refinements = m_abscissas.size() - 1;
    }
 }
-#endif
+#endif // BOOST_HAS_FLOAT128
 
 }
 }
 }
 }
-#endif
+#endif // BOOST_MATH_QUADRATURE_DETAIL_EXP_SINH_DETAIL_HPP
