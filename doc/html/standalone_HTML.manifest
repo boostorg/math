@@ -296,6 +296,8 @@ math_toolkit/double_exponential/de_levels.html
 math_toolkit/double_exponential/de_thread.html
 math_toolkit/double_exponential/de_caveats.html
 math_toolkit/double_exponential/de_refes.html
+math_toolkit/naive_monte_carlo.html
+math_toolkit/diff.html
 inverse_complex.html
 math_toolkit/complex_implementation.html
 math_toolkit/asin.html

@@ -36,7 +36,7 @@ project
       <include>../include_private
       <exception-handling>off:<source>../test//no_eh
     ;
-    
+
 test-suite examples :
    [ run bessel_zeros_example_1.cpp : : : <exception-handling>off:<build>no  ]
    [ run bessel_zeros_interator_example.cpp : : : <exception-handling>off:<build>no  ]
@@ -122,12 +122,12 @@ test-suite examples :
    [ run root_finding_algorithms.cpp /boost/timer : : : release <link>static  [ requires cxx11_hdr_tuple cxx11_unified_initialization_syntax ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ]
    [ run root_n_finding_algorithms.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ]
 
-   [ explicit root_elliptic_finding  ] 
+   [ explicit root_elliptic_finding  ]
    [ explicit root_finding_algorithms  ]
    [ explicit root_n_finding_algorithms  ]
 
    [ run barycentric_interpolation_example.cpp : : : [ requires cxx11_smart_ptr ]  ]
    [ run barycentric_interpolation_example_2.cpp : : : [ requires cxx11_smart_ptr cxx11_function_template_default_args ]  ]
    [ run cubic_b_spline_example.cpp : : : [ requires cxx11_smart_ptr cxx11_hdr_random cxx11_defaulted_functions ]  ]
+   [ compile naive_monte_carlo_example.cpp : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ] ]  # requires user input, can't run it, take a long time too!
 ;
-

@@ -499,11 +499,13 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_nr_examples<double>();
     test_crc<double>();
 #endif
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST3
     test_left_limit_infinite<long double>();
     test_right_limit_infinite<long double>();
     test_nr_examples<long double>();
     test_crc<long double>();
+#endif
 #endif
 #ifdef TEST4
     test_left_limit_infinite<cpp_bin_float_quad>();
@@ -512,13 +514,14 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_crc<cpp_bin_float_quad>();
 #endif
 
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST5
     test_left_limit_infinite<boost::math::concepts::real_concept>();
     test_right_limit_infinite<boost::math::concepts::real_concept>();
     test_nr_examples<boost::math::concepts::real_concept>();
     test_crc<boost::math::concepts::real_concept>();
 #endif
-
+#endif
 #ifdef TEST6
     test_left_limit_infinite<boost::multiprecision::cpp_bin_float_50>();
     test_right_limit_infinite<boost::multiprecision::cpp_bin_float_50>();

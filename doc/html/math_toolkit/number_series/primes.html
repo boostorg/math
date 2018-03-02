@@ -35,9 +35,9 @@
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">math</span> <span class="special">{</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Policy</span><span class="special">&gt;</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">uint32_t</span> <span class="identifier">prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
+<span class="keyword">constexpr</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uint32_t</span> <span class="identifier">prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Policy</span><span class="special">&amp;</span> <span class="identifier">pol</span><span class="special">);</span>
 
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">uint32_t</span> <span class="identifier">prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">);</span>
+<span class="keyword">constexpr</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">uint32_t</span> <span class="identifier">prime</span><span class="special">(</span><span class="keyword">unsigned</span> <span class="identifier">n</span><span class="special">);</span>
 
 <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="identifier">max_prime</span> <span class="special">=</span> <span class="number">10000</span><span class="special">;</span>
 
@@ -63,6 +63,10 @@
         Passing a value greater than <code class="computeroutput"><span class="identifier">max_prime</span></code>
         results in a <a class="link" href="../error_handling.html#math_toolkit.error_handling.domain_error">domain_error</a>
         being raised.
+      </p>
+<p>
+        This function is <code class="computeroutput"><span class="keyword">constexpr</span></code> only
+        if the compiler supports C++14 constexpr functions.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

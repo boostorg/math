@@ -245,18 +245,26 @@ BOOST_AUTO_TEST_CASE(sinh_sinh_quadrature_test)
     */
     test_nr_examples<float>();
     test_nr_examples<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_nr_examples<long double>();
+#endif
     test_nr_examples<cpp_bin_float_quad>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_nr_examples<boost::math::concepts::real_concept>();
+#endif
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
     test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
 #endif
 
     test_crc<float>();
     test_crc<double>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_crc<long double>();
+#endif
     test_crc<cpp_bin_float_quad>();
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_crc<boost::math::concepts::real_concept>();
+#endif
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
     test_crc<boost::multiprecision::cpp_dec_float_50>();
 #endif
