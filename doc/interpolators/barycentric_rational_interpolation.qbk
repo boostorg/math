@@ -18,7 +18,7 @@ namespace boost{ namespace math{
     class barycentric_rational
     {
     public:
-	    template <class InputIterator1, class InputIterator2>
+        template <class InputIterator1, class InputIterator2>
         barycentric_rational(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order = 3);
         barycentric_rational(const Real* const x, const Real* const y, size_t n, size_t approximation_order = 3);
 
@@ -44,7 +44,7 @@ The call is trivial:
 
 This implicitly calls the constructor with approximation order 3, and hence the accuracy is [bigo](h[super 4]).
 In general, if you require an approximation order /d/, then the error is [bigo](h[super d+1]).
-A call to the constructor with an explicit approximation order could be
+A call to the constructor with an explicit approximation order is demonstrated below
 
     boost::math::barycentric_rational<double> interpolant(x.data(), y.data(), y.size(), 5);
 
