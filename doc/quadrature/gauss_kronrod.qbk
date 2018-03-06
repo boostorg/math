@@ -14,7 +14,7 @@ Gauss-Kronrod quadrature is an extension of Gaussian quadrature which provides a
 The idea behind Gaussian quadrature is to choose /n/ nodes and weights in such a way that polynomials of order /2n-1/ are integrated exactly.
 However, integration of polynomials is trivial, so it is rarely done via numerical methods.
 Instead, transcendental and numerically defined functions are integrated via Gaussian quadrature, and the defining problem becomes how to estimate the remainder.
-Gaussian quadrature alone (without some form on interval splitting) cannot answer this question.
+Gaussian quadrature alone (without some form of interval splitting) cannot answer this question.
 
 It is possible to compute a Gaussian quadrature of order /n/ and another of order (say) /2n+1/, and use the difference as an error estimate.
 However, this is not optimal, as the zeros of the Legendre polynomials (nodes of the Gaussian quadrature) are never the same for different orders, so /3n+1/ function evaluations must be performed.
@@ -25,7 +25,7 @@ Kronrod discovered that by adding /n+1/ nodes (computed from the zeros of the Le
 The integration routines provided here will perform either adaptive or non-adaptive quadrature, they should be chosen for the integration of smooth functions
 with no end point singularities.  For difficult functions, or those with end point singularities, please refer to the [link math_toolkit.double_exponential double-exponential integration schemes].
 
-`#include <boost/math/quadrature/gauss_kronrod.hpp>`
+   #include <boost/math/quadrature/gauss_kronrod.hpp>
 
    template <class Real, unsigned N, class ``__Policy`` = boost::math::policies::policy<> >
    class gauss_kronrod
