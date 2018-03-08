@@ -8,64 +8,64 @@
 
 #define ERROR_REPORTING_MODE
 
-#if TEST_LIBSTDCXX
+#if TEST_CXX17_CMATH
 
-#include <tr1/cmath>
+#include <cmath>
 #include <stdexcept>
 
-#define TEST_LIBRARY_NAME "<tr1/cmath>"
+#define TEST_LIBRARY_NAME "<cmath>"
 
-#define LOG1P_FUNCTION_TO_TEST std::tr1::log1p
-#define EXPM1_FUNCTION_TO_TEST std::tr1::log1p
+#define LOG1P_FUNCTION_TO_TEST std::log1p
+#define EXPM1_FUNCTION_TO_TEST std::expm1
 
-#define CBRT_FUNCTION_TO_TEST std::tr1::cbrt
-#define ERF_FUNCTION_TO_TEST std::tr1::erf
-#define ERFC_FUNCTION_TO_TEST std::tr1::erfc
+#define CBRT_FUNCTION_TO_TEST std::cbrt
+#define ERF_FUNCTION_TO_TEST std::erf
+#define ERFC_FUNCTION_TO_TEST std::erfc
 
-#define LGAMMA_FUNCTION_TO_TEST std::tr1::lgamma
-#define TGAMMA_FUNCTION_TO_TEST std::tr1::tgamma
+#define LGAMMA_FUNCTION_TO_TEST std::lgamma
+#define TGAMMA_FUNCTION_TO_TEST std::tgamma
 
-#define BESSEL_I_FUNCTION_TO_TEST std::tr1::cyl_bessel_i
-#define BESSEL_IN_FUNCTION_TO_TEST std::tr1::cyl_bessel_i
-#define BESSEL_J_FUNCTION_TO_TEST std::tr1::cyl_bessel_j
-#define BESSEL_JN_FUNCTION_TO_TEST std::tr1::cyl_bessel_j
-#define BESSEL_JS_FUNCTION_TO_TEST std::tr1::sph_bessel
-#define BESSEL_K_FUNCTION_TO_TEST std::tr1::cyl_bessel_k
-#define BESSEL_KN_FUNCTION_TO_TEST std::tr1::cyl_bessel_k
-#define BESSEL_Y_FUNCTION_TO_TEST std::tr1::cyl_neumann
-#define BESSEL_YN_FUNCTION_TO_TEST std::tr1::cyl_neumann
-#define BESSEL_YS_FUNCTION_TO_TEST std::tr1::sph_neumann
+#define BESSEL_I_FUNCTION_TO_TEST std::cyl_bessel_i
+#define BESSEL_IN_FUNCTION_TO_TEST std::cyl_bessel_i
+#define BESSEL_J_FUNCTION_TO_TEST std::cyl_bessel_j
+#define BESSEL_JN_FUNCTION_TO_TEST std::cyl_bessel_j
+#define BESSEL_JS_FUNCTION_TO_TEST std::sph_bessel
+#define BESSEL_K_FUNCTION_TO_TEST std::cyl_bessel_k
+#define BESSEL_KN_FUNCTION_TO_TEST std::cyl_bessel_k
+#define BESSEL_Y_FUNCTION_TO_TEST std::cyl_neumann
+#define BESSEL_YN_FUNCTION_TO_TEST std::cyl_neumann
+#define BESSEL_YS_FUNCTION_TO_TEST std::sph_neumann
 
-#define BETA_FUNCTION_TO_TEST std::tr1::beta
+#define BETA_FUNCTION_TO_TEST std::beta
 
-#define ELLINT_1_FUNCTION_TO_TEST std::tr1::ellint_1
-#define ELLINT_1C_FUNCTION_TO_TEST std::tr1::comp_ellint_1
-#define ELLINT_2_FUNCTION_TO_TEST std::tr1::ellint_2
-#define ELLINT_2C_FUNCTION_TO_TEST std::tr1::comp_ellint_2
-#define ELLINT_3_FUNCTION_TO_TEST std::tr1::ellint_3
-#define ELLINT_3C_FUNCTION_TO_TEST std::tr1::comp_ellint_3
+#define ELLINT_1_FUNCTION_TO_TEST std::ellint_1
+#define ELLINT_1C_FUNCTION_TO_TEST std::comp_ellint_1
+#define ELLINT_2_FUNCTION_TO_TEST std::ellint_2
+#define ELLINT_2C_FUNCTION_TO_TEST std::comp_ellint_2
+#define ELLINT_3_FUNCTION_TO_TEST std::ellint_3
+#define ELLINT_3C_FUNCTION_TO_TEST std::comp_ellint_3
 
-#define EI_FUNCTION_TO_TEST std::tr1::expint
+#define EI_FUNCTION_TO_TEST std::expint
 
-#define LAGUERRE_FUNCTION_TO_TEST std::tr1::laguerre
-#define ASSOC_LAGUERRE_FUNCTION_TO_TEST std::tr1::assoc_laguerre
+#define LAGUERRE_FUNCTION_TO_TEST std::laguerre
+#define ASSOC_LAGUERRE_FUNCTION_TO_TEST std::assoc_laguerre
 
 inline long double legendre_p_binder(int i, long double d)
 {
    if(i < 0)
       throw std::domain_error("order parameters less than 0 not supported in TR1");
-   return std::tr1::legendre(i, d);
+   return std::legendre(i, d);
 }
 inline long double assoc_legendre_p_binder(int i, int j, long double d)
 {
    if((i < 0) || (j < 0))
       throw std::domain_error("order parameters less than 0 not supported in TR1");
-   return std::tr1::assoc_legendre(i, j, d);
+   return std::assoc_legendre(i, j, d);
 }
 
 #define LEGENDRE_P_FUNCTION_TO_TEST legendre_p_binder
 #define LEGENDRE_PA_FUNCTION_TO_TEST assoc_legendre_p_binder
-#define ZETA_FUNCTION_TO_TEST std::tr1::riemann_zeta
+#define ZETA_FUNCTION_TO_TEST std::riemann_zeta
 
 #define TYPE_TO_TEST long double
 
@@ -321,9 +321,19 @@ inline double legendre_q(unsigned n, double x) { return gsl_sf_legendre_Ql(n, x)
 #define TGAMMA_FUNCTION_TO_TEST gammafn
 //#define TGAMMA1PM1_FUNCTION_TO_TEST boost::math::tgamma1pm1
 
-inline double I(double n, double x) { return bessel_i(x, n, 1); }
+inline double I(double n, double x) 
+{
+   if (x < 0)
+      throw std::domain_error("Unsupported domain");
+   return bessel_i(x, n, 1); 
+}
 inline double K(double n, double x) { return bessel_k(x, n, 1); }
-inline double J(double n, double x) { return bessel_j(x, n); }
+inline double J(double n, double x) 
+{ 
+   if (x < 0)
+      throw std::domain_error("Unsupported domain");
+   return bessel_j(x, n);
+}
 inline double Y(double n, double x) { return bessel_y(x, n); }
 
 #define BESSEL_I_FUNCTION_TO_TEST I
@@ -415,7 +425,12 @@ inline double gamma_q_inv(double a, double x) { return qgamma(x, a, 1.0, 0, 0); 
 //#define LEGENDRE_Q_FUNCTION_TO_TEST boost::math::legendre_q
 //#define LEGENDRE_PA_FUNCTION_TO_TEST boost::math::legendre_p
 
-inline double polygamma(int n, double x) { return psigamma(x, n); }
+inline double polygamma(int n, double x) 
+{
+   if (x < 0)
+      throw std::domain_error("Outside supported domain");
+   return psigamma(x, n); 
+}
 
 #define POLYGAMMA_FUNCTION_TO_TEST polygamma
 //#define TGAMMA_RATIO_FUNCTION_TO_TEST boost::math::tgamma_ratio
