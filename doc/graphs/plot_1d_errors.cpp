@@ -381,7 +381,7 @@ int main()
    plot_errors_1d(tgamma_func(), boost::multiprecision::float128(1e-200), boost::multiprecision::float128(150.0), 10000, "tgamma, __float128");
    plot_errors_1d(lgamma_func(), boost::multiprecision::float128(1e-200), boost::multiprecision::float128(1000.0), 10000, "lgamma, __float128");
    plot_errors_1d(trigamma_func(), boost::multiprecision::float128(1e-200), boost::multiprecision::float128(10.0), 10000, "trigamma, __float128");
-   plot_errors_1d(erf_func(), -boost::multiprecision::float128(5.0), boost::multiprecision::float128(5.0), 10000, "erf, 80-bit __float128");
+   plot_errors_1d(erf_func(), -boost::multiprecision::float128(5.0), boost::multiprecision::float128(5.0), 10000, "erf, __float128");
    plot_errors_1d(erfc_func(), -boost::multiprecision::float128(5.0), boost::multiprecision::float128(120.0), 10000, "erfc, __float128");
    plot_errors_1d(j0_func(), boost::multiprecision::float128(0.0), boost::multiprecision::float128(50.0), 10000, "j0, __float128", boost::multiprecision::float128(50.0));
    plot_errors_1d(j1_func(), boost::multiprecision::float128(0.0), boost::multiprecision::float128(50.0), 10000, "j1, __float128", boost::multiprecision::float128(50.0));
