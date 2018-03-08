@@ -216,7 +216,7 @@ inline double ellintP(double a, double b) { return gsl_sf_ellint_Pcomp(a, -b, GS
 inline double ellintF(double a, double b) { return gsl_sf_ellint_F(b, a, GSL_PREC_DOUBLE); }
 inline double ellintE2(double a, double b) { return gsl_sf_ellint_E(b, a, GSL_PREC_DOUBLE); }
 inline double ellintP3(double a, double b, double c) { return gsl_sf_ellint_P(c, a, -b, GSL_PREC_DOUBLE); }
-inline double ellintD2(double a, double b) { return gsl_sf_ellint_D(b, a, 0.0, GSL_PREC_DOUBLE); }
+inline double ellintD2(double a, double b) { return gsl_sf_ellint_D(b, a, GSL_PREC_DOUBLE); }
 
 #define ELLINT_1_FUNCTION_TO_TEST ellintF
 #define ELLINT_1C_FUNCTION_TO_TEST ellintK
