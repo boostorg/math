@@ -18,12 +18,15 @@ Real interval_from_range(Real x)
    return l;
 }
 
+
 std::string normalise_filename(std::string name)
 {
    for(std::string::size_type i = 0; i < name.size(); ++i)
    {
-      if(!std::isalnum(name[i]))
+      if (!std::isalnum(name[i]))
          name[i] = '_';
+      else
+         name[i] = std::tolower(name[i]);
    }
    return name;
 }
