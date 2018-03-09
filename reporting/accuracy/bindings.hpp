@@ -7,11 +7,11 @@
 #define BOOST_MATH_BINDINGS
 
 #define ERROR_REPORTING_MODE
+#include <stdexcept>
 
 #if TEST_CXX17_CMATH
 
 #include <cmath>
-#include <stdexcept>
 
 #define TEST_LIBRARY_NAME "<cmath>"
 
