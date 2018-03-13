@@ -449,8 +449,12 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #if !defined(TEST) || TEST == 12
     test_radovic<double, 2>();
     test_radovic<double, 3>();
+#endif
+#if !defined(TEST) || TEST == 13
     test_radovic<double, 4>();
     test_radovic<double, 5>();
+#endif
+#if !defined(TEST) || TEST == 14
     test_alternative_rng<float, 3>();
     test_alternative_rng<double, 3>();
 #endif
