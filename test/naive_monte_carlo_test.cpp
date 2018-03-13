@@ -256,14 +256,40 @@ void test_alternative_rng()
     {
         bounds[i] = std::make_pair<Real, Real>(0, 1);
     }
-    naive_monte_carlo<Real, decltype(g), std::mt19937> mc(g, bounds, (Real) 0.001, false, 1, 1882);
+    naive_monte_carlo<Real, decltype(g), std::mt19937> mc1(g, bounds, (Real) 0.001, false, 1, 1882);
 
-    auto task = mc.integrate();
+    auto task = mc1.integrate();
     Real y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
     using std::pow;
     Real exact_variance = pow(4.0/3.0, dimension) - 1;
-    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.05);
+    BOOST_CHECK_CLOSE_FRACTION(mc1.variance(), exact_variance, 0.05);
+
+    naive_monte_carlo<Real, decltype(g), std::knuth_b> mc2(g, bounds, (Real) 0.001, false, 1, 1883);
+    task = mc2.integrate();
+    y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+
+    naive_monte_carlo<Real, decltype(g), std::ranlux48> mc3(g, bounds, (Real) 0.001, false, 1, 1884);
+    task = mc3.integrate();
+    y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+
+    naive_monte_carlo<Real, decltype(g), std::default_random_engine> mc4(g, bounds, (Real) 0.001, false, 1, 1884);
+    task = mc4.integrate();
+    y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+
+    naive_monte_carlo<Real, decltype(g), std::minstd_rand> mc5(g, bounds, (Real) 0.001, false, 1, 1887);
+    task = mc5.integrate();
+    y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+
+    naive_monte_carlo<Real, decltype(g), std::minstd_rand0> mc6(g, bounds, (Real) 0.001, false, 1, 1889);
+    task = mc6.integrate();
+    y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+
 }
 
 template<class Real>
