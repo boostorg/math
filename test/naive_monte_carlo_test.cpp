@@ -244,7 +244,7 @@ void test_product()
 }
 
 template<class Real, uint64_t dimension>
-void test_alternative_rng()
+void test_alternative_rng_1()
 {
     std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
@@ -262,6 +262,8 @@ void test_alternative_rng()
     {
         bounds[i] = std::make_pair<Real, Real>(0, 1);
     }
+    std::cout << "Testing std::mt19937" << std::endl;
+
     naive_monte_carlo<Real, decltype(g), std::mt19937> mc1(g, bounds, (Real) 0.001, false, 1, 1882);
 
     auto task = mc1.integrate();
@@ -271,26 +273,52 @@ void test_alternative_rng()
     Real exact_variance = pow(4.0/3.0, dimension) - 1;
     BOOST_CHECK_CLOSE_FRACTION(mc1.variance(), exact_variance, 0.05);
 
+    std::cout << "Testing std::knuth_b" << std::endl;
     naive_monte_carlo<Real, decltype(g), std::knuth_b> mc2(g, bounds, (Real) 0.001, false, 1, 1883);
     task = mc2.integrate();
     y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
 
+    std::cout << "Testing std::ranlux48" << std::endl;
     naive_monte_carlo<Real, decltype(g), std::ranlux48> mc3(g, bounds, (Real) 0.001, false, 1, 1884);
     task = mc3.integrate();
     y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+}
 
+template<class Real, uint64_t dimension>
+void test_alternative_rng_2()
+{
+    std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    auto g = [&](std::vector<Real> const & x)->Real
+    {
+        double y = 1;
+        for (uint64_t i = 0; i < x.size(); ++i)
+        {
+            y *= 2*x[i];
+        }
+        return y;
+    };
+
+    vector<pair<Real, Real>> bounds(dimension);
+    for (uint64_t i = 0; i < dimension; ++i)
+    {
+        bounds[i] = std::make_pair<Real, Real>(0, 1);
+    }
+
+    std::cout << "Testing std::default_random_engine" << std::endl;
     naive_monte_carlo<Real, decltype(g), std::default_random_engine> mc4(g, bounds, (Real) 0.001, false, 1, 1884);
-    task = mc4.integrate();
-    y = task.get();
+    auto task = mc4.integrate();
+    Real y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
 
+    std::cout << "Testing std::minstd_rand" << std::endl;
     naive_monte_carlo<Real, decltype(g), std::minstd_rand> mc5(g, bounds, (Real) 0.001, false, 1, 1887);
     task = mc5.integrate();
     y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
 
+    std::cout << "Testing std::minstd_rand0" << std::endl;
     naive_monte_carlo<Real, decltype(g), std::minstd_rand0> mc6(g, bounds, (Real) 0.001, false, 1, 1889);
     task = mc6.integrate();
     y = task.get();
@@ -428,67 +456,87 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #if !defined(TEST) || TEST == 2
     test_pi<float>();
     test_pi<double>();
+#if !defined(TEST) || TEST == 3
     test_pi_multithreaded<float>();
+#endif
     //test_pi<long double>();
 #endif
-#if !defined(TEST) || TEST == 3
+#if !defined(TEST) || TEST == 4
     test_constant<float>();
     test_constant<double>();
     //test_constant<long double>();
 #endif
-#if !defined(TEST) || TEST == 4
+#if !defined(TEST) || TEST == 5
     test_cancel_and_restart<float>();
     test_exception_from_integrand<float>();
     test_variance<float>();
 #endif
-#if !defined(TEST) || TEST == 5
+#if !defined(TEST) || TEST == 6
     test_variance<double>();
     test_multithreaded_variance<double>();
+#endif
+#if !defined(TEST) || TEST == 7
     test_product<float, 1>();
     test_product<float, 2>();
 #endif
-#if !defined(TEST) || TEST == 6
+#if !defined(TEST) || TEST == 8
     test_product<float, 3>();
     test_product<float, 4>();
     test_product<float, 5>();
 #endif
-#if !defined(TEST) || TEST == 7
+#if !defined(TEST) || TEST == 9
     test_product<float, 6>();
     test_product<double, 1>();
+#endif
+#if !defined(TEST) || TEST == 10
     test_product<double, 2>();
 #endif
-#if !defined(TEST) || TEST == 8
+#if !defined(TEST) || TEST == 11
     test_product<double, 3>();
     test_product<double, 4>();
 #endif
-#if !defined(TEST) || TEST == 9
+#if !defined(TEST) || TEST == 12
     test_upper_bound_infinite<float>();
     test_upper_bound_infinite<double>();
+#endif
+#if !defined(TEST) || TEST == 13
     test_lower_bound_infinite<float>();
     test_lower_bound_infinite<double>();
+#endif
+#if !defined(TEST) || TEST == 14
     test_lower_bound_infinite2<float>();
 #endif
-#if !defined(TEST) || TEST == 10
+#if !defined(TEST) || TEST == 15
     test_double_infinite<float>();
     test_double_infinite<double>();
-    test_radovic<float, 1>();
 #endif
-#if !defined(TEST) || TEST == 11
+#if !defined(TEST) || TEST == 16
+    test_radovic<float, 1>();
     test_radovic<float, 2>();
+#endif
+#if !defined(TEST) || TEST == 17
     test_radovic<float, 3>();
     test_radovic<double, 1>();
 #endif
-#if !defined(TEST) || TEST == 12
+#if !defined(TEST) || TEST == 18
     test_radovic<double, 2>();
     test_radovic<double, 3>();
 #endif
-#if !defined(TEST) || TEST == 13
+#if !defined(TEST) || TEST == 19
     test_radovic<double, 4>();
     test_radovic<double, 5>();
 #endif
-#if !defined(TEST) || TEST == 14
-    test_alternative_rng<float, 3>();
-    test_alternative_rng<double, 3>();
+#if !defined(TEST) || TEST == 20
+    test_alternative_rng_1<float, 3>();
+#endif
+#if !defined(TEST) || TEST == 21
+    test_alternative_rng_1<double, 3>();
+#endif
+#if !defined(TEST) || TEST == 22
+    test_alternative_rng_2<float, 3>();
+#endif
+#if !defined(TEST) || TEST == 23
+    test_alternative_rng_2<double, 3>();
 #endif
 
 }
