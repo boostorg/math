@@ -260,89 +260,88 @@ public:
 
 private:
 
-    Real m_integrate()
-    {
-        std::vector<std::thread> threads(m_num_threads);
-        uint64_t seed;
-        // If the user tells us to pick a seed, pick a seed:
-        if (m_seed == 0)
-        {
+   Real m_integrate()
+   {
+      do{
+         std::vector<std::thread> threads(m_num_threads);
+         uint64_t seed;
+         // If the user tells us to pick a seed, pick a seed:
+         if (m_seed == 0)
+         {
             std::random_device rd;
             seed = rd();
-        }
-        else // use the seed we are given:
-        {
+         }
+         else // use the seed we are given:
+         {
             seed = m_seed;
-        }
-        RandomNumberGenerator gen(seed);
-        for (uint64_t i = 0; i < threads.size(); ++i)
-        {
+         }
+         RandomNumberGenerator gen(seed);
+         for (uint64_t i = 0; i < threads.size(); ++i)
+         {
             threads[i] = std::thread(&naive_monte_carlo::m_thread_monte, this, i, gen());
-        }
-        do {
+         }
+         do {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             uint64_t total_calls = 0;
             for (uint64_t i = 0; i < m_num_threads; ++i)
             {
-                 uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
-                 total_calls += t_calls;
+               uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
+               total_calls += t_calls;
             }
             Real variance = 0;
             Real avg = 0;
             for (uint64_t i = 0; i < m_num_threads; ++i)
             {
-                uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
-                // Will this overflow? Not hard to remove . . .
-                avg += m_thread_averages[i].load(boost::memory_order::relaxed)*( (Real) t_calls/ (Real) total_calls);
-                variance += m_thread_Ss[i].load(boost::memory_order::relaxed);
+               uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
+               // Will this overflow? Not hard to remove . . .
+               avg += m_thread_averages[i].load(boost::memory_order::relaxed)*((Real)t_calls / (Real)total_calls);
+               variance += m_thread_Ss[i].load(boost::memory_order::relaxed);
             }
             m_avg.store(avg, boost::memory_order::release);
-            m_variance.store(variance/(total_calls - 1), boost::memory_order::release);
+            m_variance.store(variance / (total_calls - 1), boost::memory_order::release);
             m_total_calls = total_calls; // relaxed store, it's just for user feedback
             // Allow cancellation:
             if (m_done) // relaxed load
             {
-                break;
+               break;
             }
-        } while (this->current_error_estimate() > m_error_goal.load(boost::memory_order::consume));
-        // Error bound met; signal the threads:
-        m_done = true; // relaxed store, threads will get the message in the end
-        std::for_each(threads.begin(), threads.end(),
-                      std::mem_fn(&std::thread::join));
-        if (m_exception)
-        {
+         } while (this->current_error_estimate() > m_error_goal.load(boost::memory_order::consume));
+         // Error bound met; signal the threads:
+         m_done = true; // relaxed store, threads will get the message in the end
+         std::for_each(threads.begin(), threads.end(),
+            std::mem_fn(&std::thread::join));
+         if (m_exception)
+         {
             std::rethrow_exception(m_exception);
-        }
-        // Incorporate their work into the final estimate:
-        uint64_t total_calls = 0;
-        for (uint64_t i = 0; i < m_num_threads; ++i)
-        {
-             uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
-             total_calls += t_calls;
-        }
-        Real variance = 0;
-        Real avg = 0;
+         }
+         // Incorporate their work into the final estimate:
+         uint64_t total_calls = 0;
+         for (uint64_t i = 0; i < m_num_threads; ++i)
+         {
+            uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
+            total_calls += t_calls;
+         }
+         Real variance = 0;
+         Real avg = 0;
 
-        for (uint64_t i = 0; i < m_num_threads; ++i)
-        {
+         for (uint64_t i = 0; i < m_num_threads; ++i)
+         {
             uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
             // Averages weighted by the number of calls the thread made:
-            avg += m_thread_averages[i].load(boost::memory_order::relaxed)*( (Real) t_calls/ (Real) total_calls);
+            avg += m_thread_averages[i].load(boost::memory_order::relaxed)*((Real)t_calls / (Real)total_calls);
             variance += m_thread_Ss[i].load(boost::memory_order::relaxed);
-        }
-        m_avg.store(avg, boost::memory_order::release);
-        m_variance.store(variance/(total_calls - 1), boost::memory_order::release);
-        m_total_calls = total_calls; // relaxed store, this is just user feedback
+         }
+         m_avg.store(avg, boost::memory_order::release);
+         m_variance.store(variance / (total_calls - 1), boost::memory_order::release);
+         m_total_calls = total_calls; // relaxed store, this is just user feedback
 
-        // Sometimes, the master will observe the variance at a very "good" (or bad?) moment,
-        // Then the threads proceed to find the variance is much greater by the time they hear the message to stop.
-        // This *WOULD* make sure that the final error estimate is within the error bounds.
-        if (this->current_error_estimate() > m_error_goal)
-        {
-            return this->m_integrate();
-        }
+         // Sometimes, the master will observe the variance at a very "good" (or bad?) moment,
+         // Then the threads proceed to find the variance is much greater by the time they hear the message to stop.
+         // This *WOULD* make sure that the final error estimate is within the error bounds.
+      }
+      while (this->current_error_estimate() > m_error_goal);
 
-        return m_avg.load(boost::memory_order::consume);
+      return m_avg.load(boost::memory_order::consume);
     }
 
     void m_thread_monte(uint64_t thread_index, uint64_t seed)
