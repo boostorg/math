@@ -63,7 +63,7 @@ void test_pi()
     };
 
     std::vector<std::pair<Real, Real>> bounds{{Real(0), Real(1)}, {Real(0), Real(1)}};
-    Real error_goal = 0.0002;
+    Real error_goal = (Real) 0.0002;
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, error_goal,
                                             /*singular =*/ false,/* threads = */ 1, /* seed = */ 128402);
     auto task = mc.integrate();
@@ -431,7 +431,7 @@ void test_radovic()
     {
         bounds[i] = std::make_pair<Real, Real>(0, 1);
     }
-    Real error_goal = 0.001;
+    Real error_goal = (Real) 0.001;
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, error_goal, false, 1, 1982);
 
     auto task = mc.integrate();
