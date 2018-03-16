@@ -262,20 +262,20 @@ private:
 
    Real m_integrate()
    {
+      uint64_t seed;
+      // If the user tells us to pick a seed, pick a seed:
+      if (m_seed == 0)
+      {
+         std::random_device rd;
+         seed = rd();
+      }
+      else // use the seed we are given:
+      {
+         seed = m_seed;
+      }
+      RandomNumberGenerator gen(seed);
       do{
          std::vector<std::thread> threads(m_num_threads);
-         uint64_t seed;
-         // If the user tells us to pick a seed, pick a seed:
-         if (m_seed == 0)
-         {
-            std::random_device rd;
-            seed = rd();
-         }
-         else // use the seed we are given:
-         {
-            seed = m_seed;
-         }
-         RandomNumberGenerator gen(seed);
          for (uint64_t i = 0; i < threads.size(); ++i)
          {
             threads[i] = std::thread(&naive_monte_carlo::m_thread_monte, this, i, gen());
