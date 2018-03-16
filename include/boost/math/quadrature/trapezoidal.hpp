@@ -25,7 +25,7 @@
 namespace boost{ namespace math{ namespace quadrature {
 
 template<class F, class Real, class Policy>
-Real trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Real* error_estimate, Real* L1, const Policy& pol)
+typename std::result_of<F(Real)>::type trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Real* error_estimate, Real* L1, const Policy& pol)
 {
     static const char* function = "boost::math::quadrature::trapezoidal<%1%>(F, %1%, %1%, %1%)";
     using std::abs;
@@ -43,14 +43,14 @@ Real trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
        return boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapedzoidal integration but got b = %1%.\n", b, pol);
     }
 
-    Real ya = f(a);
-    Real yb = f(b);
+    auto ya = f(a);
+    auto yb = f(b);
     Real h = (b - a)*half<Real>();
-    Real I0 = (ya + yb)*h;
+    auto I0 = (ya + yb)*h;
     Real IL0 = (abs(ya) + abs(yb))*h;
 
-    Real yh = f(a + h);
-    Real I1 = half<Real>()*I0 + yh*h;
+    auto yh = f(a + h);
+    auto I1 = half<Real>()*I0 + yh*h;
     Real IL1 = half<Real>()*IL0 + abs(yh)*h;
 
     // The recursion is:
@@ -69,12 +69,12 @@ Real trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
         IL1 = half<Real>()*IL0;
         std::size_t p = static_cast<std::size_t>(1u) << k;
         h *= half<Real>();
-        Real sum = 0;
+        decltype(yb) sum = 0;
         Real absum = 0;
 
         for(std::size_t j = 1; j < p; j += 2)
         {
-            Real y = f(a + j*h);
+            auto y = f(a + j*h);
             sum += y;
             absum += abs(y);
         }
@@ -100,13 +100,13 @@ Real trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
 // Template argument dedcution failure otherwise:
 template<class F, class Real>
-Real trapezoidal(F f, Real a, Real b, Real tol = 0, std::size_t max_refinements = 10, Real* error_estimate = 0, Real* L1 = 0)
+typename std::result_of<F(Real)>::type trapezoidal(F f, Real a, Real b, Real tol = 0, std::size_t max_refinements = 10, Real* error_estimate = 0, Real* L1 = 0)
 #elif !defined(BOOST_NO_CXX11_NULLPTR)
 template<class F, class Real>
-Real trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 10, Real* error_estimate = nullptr, Real* L1 = nullptr)
+typename std::result_of<F(Real)>::type trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 10, Real* error_estimate = nullptr, Real* L1 = nullptr)
 #else
 template<class F, class Real>
-Real trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 10, Real* error_estimate = 0, Real* L1 = 0)
+typename std::result_of<F(Real)>::type trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 10, Real* error_estimate = 0, Real* L1 = 0)
 #endif
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1600)

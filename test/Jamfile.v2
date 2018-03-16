@@ -772,7 +772,7 @@ test-suite distribution_tests :
    [ run test_rayleigh.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_students_t.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_skew_normal.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_lambdas ]  ]
+   [ run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_lambdas cxx11_auto_declarations ]  ]
    [ run test_triangular.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_uniform.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_weibull.cpp ../../test/build//boost_unit_test_framework  ]

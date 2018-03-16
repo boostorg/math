@@ -6,7 +6,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ]
 
 
-[section:trapezoidal Adaptive Trapezoidal Quadrature]
+[section:trapezoidal Trapezoidal Quadrature]
 
 [heading Synopsis]
 
@@ -14,15 +14,15 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     namespace boost{ namespace math{ namespace quadrature {
 
     template<class F, class Real>
-    Real trapezoidal(F f, Real a, Real b,
-                     Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
-                     size_t max_refinements = 10,
-                     Real* error_estimate = nullptr,
-                     Real* L1 = nullptr);
-    
-	template<class F, class Real, class ``__Policy``>
-    Real trapezoidal(F f, Real a, Real b, Real tol, size_t max_refinements, 
-	                 Real* error_estimate, Real* L1, const ``__Policy``& pol);
+    typename std::result_of<F(Real)>::type trapezoidal(F f, Real a, Real b,
+                                                       Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
+                                                       size_t max_refinements = 10,
+                                                       Real* error_estimate = nullptr,
+                                                       Real* L1 = nullptr);
+
+    template<class F, class Real, class ``__Policy``>
+    typename std::result_of<F(Real)>::type trapezoidal(F f, Real a, Real b, Real tol, size_t max_refinements,
+                                                       Real* error_estimate, Real* L1, const ``__Policy``& pol);
 
     }}} // namespaces
 
@@ -53,10 +53,27 @@ In its simplest form, an integration can be performed by the following code
     auto f = [](double x) { return 1/(5 - 4*cos(x)); };
     double I = trapezoidal(f, 0.0, boost::math::constants::two_pi<double>());
 
+The integrand must accept a real number argument, but can return a complex number.
+This is useful for contour integrals (which are manifestly periodic) and high-order numerical differentiation of analytic functions.
+An example using the integral definition of the complex Bessel function is shown here:
+
+    auto bessel_integrand = [&n, &z](double theta)->Complex
+    {
+        std::complex<double> z{2, 3};
+        using std::cos;
+        using std::sin;
+        return cos(z*sin(theta) - 2*theta)/M_PI;
+    };
+
+    using boost::math::quadrature::trapezoidal;
+    std::complex<double> Jnz = trapezoidal(bessel_integrand, 0.0, M_PI);
+
+For general contour integrals, the user must choose a contour to exploit
+
 Since the routine is adaptive, step sizes are halved continuously until a tolerance is reached.
 In order to control this tolerance, simply call the routine with an additional argument
 
-    double I = trapezoidal(f, 0.0, two_pi<double>(), 1e-6);
+    double I = trapezoidal(f, 0.0, 2*M_PI, 1e-6);
 
 The routine stops when successive estimates of the integral `I1` and `I0` differ by less than the tolerance multiplied by the estimated L[sub 1] norm of the function.
 A good choice for the tolerance is [radic][epsilon], which is the default.
@@ -128,5 +145,6 @@ Stoer, Josef, and Roland Bulirsch. ['Introduction to numerical analysis. Vol. 12
 
 Higham, Nicholas J. ['Accuracy and stability of numerical algorithms.] Society for industrial and applied mathematics, 2002.
 
+Lyness, James N., and Cleve B. Moler. ['Numerical differentiation of analytic functions.] SIAM Journal on Numerical Analysis 4.2 (1967): 202-210.
 
 [endsect]
