@@ -5,6 +5,7 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 #define BOOST_TEST_MODULE naive_monte_carlo_test
+#define BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
 #include <cmath>
 #include <ostream>
 #include <boost/lexical_cast.hpp>
@@ -449,6 +450,7 @@ void test_radovic()
 
 BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 {
+   std::cout << "Default hardware concurrency = " << std::thread::hardware_concurrency() << std::endl;
 #if !defined(TEST) || TEST == 1
     test_finite_singular_boundary<double>();
     test_finite_singular_boundary<float>();
