@@ -52,7 +52,10 @@ template <class T1, class T2>
 inline void check_result_imp(T1, T2)
 {
    // This is a static assertion that should always fail to compile...
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-local-typedef"
    typedef BOOST_MATH_ASSERT_UNUSED_ATTRIBUTE int static_assertion[local_is_same<T1, T2>::value ? 1 : 0];
+#pragma GCC diagnostic pop
 }
 
 template <class T1, class T2>
