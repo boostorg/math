@@ -28,25 +28,27 @@ void test_complex_bessel()
     Complex z{2, 3};
     int n = 2;
     using boost::math::constants::pi;
-    auto bessel_integrand = [&n, &z](typename Complex::value_type theta)->Complex
+    auto bessel_integrand = [&n, &z](Real theta)->Complex
     {
         using std::cos;
         using std::sin;
-        auto arg = z*sin(theta) - n*theta;
-        return cos(arg)/pi<typename Complex::value_type>();
+        Real t1 = sin(theta);
+        Real t2 = - n*theta;
+        Complex arg = z*t1 + t2;
+        return cos(arg)/pi<Real>();
     };
 
     using boost::math::quadrature::trapezoidal;
 
-    typename Complex::value_type a = 0;
-    typename Complex::value_type b = pi<typename Complex::value_type>();
-    Complex Jnz = trapezoidal<decltype(bessel_integrand), typename Complex::value_type>(bessel_integrand, a, b);
+    Real a = 0;
+    Real b = pi<Real>();
+    Complex Jnz = trapezoidal<decltype(bessel_integrand), Real>(bessel_integrand, a, b);
     // N[BesselJ[2, 2 + 3 I], 143]
     // 1.257674591970511077630764085052638490387449039392695959943027966195657681586539389134094087028482099931927725892... +
     // 2.318771368505683055818032722011594415038779144567369903204833213112457210243098545874099591376455981793627257060... i
-    typename Complex::value_type Jnzx = boost::lexical_cast<typename Complex::value_type>("1.257674591970511077630764085052638490387449039392695959943027966195657681586539389134094087028482099931927725892");
-    typename Complex::value_type Jnzy = boost::lexical_cast<typename Complex::value_type>("2.318771368505683055818032722011594415038779144567369903204833213112457210243098545874099591376455981793627257060");
-    typename Complex::value_type tol = 2*std::numeric_limits<Real>::epsilon();
+    Real Jnzx = boost::lexical_cast<Real>("1.257674591970511077630764085052638490387449039392695959943027966195657681586539389134094087028482099931927725892");
+    Real Jnzy = boost::lexical_cast<Real>("2.318771368505683055818032722011594415038779144567369903204833213112457210243098545874099591376455981793627257060");
+    Real tol = 10*std::numeric_limits<Real>::epsilon();
     BOOST_CHECK_CLOSE_FRACTION(Jnz.real(), Jnzx, tol);
     BOOST_CHECK_CLOSE_FRACTION(Jnz.imag(), Jnzy, tol);
 }
@@ -197,7 +199,6 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
     test_complex_bessel<std::complex<float>>();
     test_complex_bessel<std::complex<double>>();
     test_complex_bessel<std::complex<long double>>();
-    // This will work once we figure out how to do the "value_type" on the MPC backend:
-    //test_complex_bessel<boost::multiprecision::mpc_complex_100>();
+    test_complex_bessel<boost::multiprecision::mpc_complex_100>();
 
 }
