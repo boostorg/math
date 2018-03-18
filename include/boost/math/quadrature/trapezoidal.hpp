@@ -43,14 +43,14 @@ typename std::result_of<F(Real)>::type trapezoidal(F f, Real a, Real b, Real tol
        return boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapedzoidal integration but got b = %1%.\n", b, pol);
     }
 
-    auto ya = f(a);
-    auto yb = f(b);
+    typename std::result_of<F(Real)>::type ya = f(a);
+    typename std::result_of<F(Real)>::type yb = f(b);
     Real h = (b - a)*half<Real>();
-    auto I0 = (ya + yb)*h;
+    typename std::result_of<F(Real)>::type I0 = (ya + yb)*h;
     Real IL0 = (abs(ya) + abs(yb))*h;
 
-    auto yh = f(a + h);
-    auto I1 = half<Real>()*I0 + yh*h;
+    typename std::result_of<F(Real)>::type yh = f(a + h);
+    typename std::result_of<F(Real)>::type I1 = half<Real>()*I0 + yh*h;
     Real IL1 = half<Real>()*IL0 + abs(yh)*h;
 
     // The recursion is:
@@ -74,7 +74,7 @@ typename std::result_of<F(Real)>::type trapezoidal(F f, Real a, Real b, Real tol
 
         for(std::size_t j = 1; j < p; j += 2)
         {
-            auto y = f(a + j*h);
+            typename std::result_of<F(Real)>::type y = f(a + j*h);
             sum += y;
             absum += abs(y);
         }
