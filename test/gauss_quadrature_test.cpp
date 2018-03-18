@@ -6,6 +6,8 @@
 
 #define BOOST_TEST_MODULE tanh_sinh_quadrature_test
 
+#include <complex>
+#include <boost/multiprecision/mpc.hpp>
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
@@ -237,7 +239,7 @@ double expected_error<30>(unsigned id)
    return 0;  // placeholder, all tests will fail
 }
 
-
+/*
 template<class Real, unsigned Points>
 void test_linear()
 {
@@ -392,12 +394,42 @@ void test_left_limit_infinite()
     Q = gauss<Real, Points>::integrate(f1, -boost::math::tools::max_value<Real>(), Real(0));
     Q_expected = half_pi<Real>();
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
+}*/
+
+template<class Complex>
+void test_complex_lambert_w()
+{
+    std::cout << "Testing that complex-valued integrands are integrated correctly by Gaussian quadrature on type " << boost::typeindex::type_id<Complex>().pretty_name() << "\n";
+    typedef typename Complex::value_type Real;
+    Real tol = 10e-9;
+    using boost::math::constants::pi;
+    Complex z = {2, 3};
+    auto lw = [&z](Real v)->Complex {
+      using std::cos;
+      using std::sin;
+      using std::exp;
+      Real sinv = sin(v);
+      Real cosv = cos(v);
+
+      Real cotv = cosv/sinv;
+      Real cscv = 1/sinv;
+      Real t = (1-v*cotv)*(1-v*cotv) + v*v;
+      Complex den = z + v*cscv*exp(-v*cotv);
+      Complex num = t*(z/pi<Real>());
+      return num/den;
+    };
+
+    //N[ProductLog[2+3*I], 150]
+    boost::math::quadrature::gauss<Real, 30> integrator;
+    Complex Q = integrator.integrate(lw, (Real) 0, pi<Real>());
+    BOOST_CHECK_CLOSE_FRACTION(Q.real(), boost::lexical_cast<Real>("1.09007653448579084630177782678166964987102108635357778056449870727913321296238687023915522935120701763447787503167111962008709116746523970476893277703"), tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q.imag(), boost::lexical_cast<Real>("0.530139720774838801426860213574121741928705631382703178297940568794784362495390544411799468140433404536019992695815009036975117285537382995180319280835"), tol);
 }
 
 BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 {
 #ifdef TEST1
-    test_linear<double, 7>();
+    /*test_linear<double, 7>();
     test_quadratic<double, 7>();
     test_ca<double, 7>();
     test_three_quadrature_schemes_examples<double, 7>();
@@ -419,10 +451,10 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_three_quadrature_schemes_examples<cpp_bin_float_quad, 10>();
     test_integration_over_real_line<cpp_bin_float_quad, 10>();
     test_right_limit_infinite<cpp_bin_float_quad, 10>();
-    test_left_limit_infinite<cpp_bin_float_quad, 10>();
+    test_left_limit_infinite<cpp_bin_float_quad, 10>();*/
 #endif
 #ifdef TEST2
-    test_linear<cpp_bin_float_quad, 15>();
+    /*test_linear<cpp_bin_float_quad, 15>();
     test_quadratic<cpp_bin_float_quad, 15>();
     test_ca<cpp_bin_float_quad, 15>();
     test_three_quadrature_schemes_examples<cpp_bin_float_quad, 15>();
@@ -452,8 +484,13 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_three_quadrature_schemes_examples<cpp_bin_float_quad, 30>();
     test_integration_over_real_line<cpp_bin_float_quad, 30>();
     test_right_limit_infinite<cpp_bin_float_quad, 30>();
-    test_left_limit_infinite<cpp_bin_float_quad, 30>();
+    test_left_limit_infinite<cpp_bin_float_quad, 30>();*/
+
+
 #endif
+    test_complex_lambert_w<std::complex<double>>();
+    test_complex_lambert_w<std::complex<long double>>();
+    test_complex_lambert_w<std::complex<boost::multiprecision::mpc_complex_100>>();
 }
 
 #else

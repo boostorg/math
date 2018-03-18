@@ -1171,23 +1171,25 @@ class gauss : public detail::gauss_detail<Real, N, detail::gauss_constant_catego
 {
    typedef detail::gauss_detail<Real, N, detail::gauss_constant_category<Real>::value> base;
 public:
-   typedef Real value_type;
 
    template <class F>
-   static value_type integrate(F f, Real* pL1 = nullptr)
+   typename std::invoke_result_t<F,Real> integrate(F f, Real* pL1 = nullptr)
    {
       using std::fabs;
       unsigned non_zero_start = 1;
-      value_type result = 0;
-      if (N & 1)
-         result = f(value_type(0)) * base::weights()[0];
-      else
+      typename std::invoke_result_t<F,Real> result;
+      if (N & 1) {
+         result = f(Real(0)) * base::weights()[0];
+      }
+      else {
+         result = 0;
          non_zero_start = 0;
-      value_type L1 = fabs(result);
+      }
+      Real L1 = fabs(result);
       for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
       {
-         value_type fp = f(base::abscissa()[i]);
-         value_type fm = f(-base::abscissa()[i]);
+         typename std::invoke_result_t<F,Real> fp = f(base::abscissa()[i]);
+         typename std::invoke_result_t<F,Real> fm = f(-base::abscissa()[i]);
          result += (fp + fm) * base::weights()[i];
          L1 += (fabs(fp) + fabs(fm)) *  base::weights()[i];
       }
@@ -1196,7 +1198,7 @@ public:
       return result;
    }
    template <class F>
-   static value_type integrate(F f, Real a, Real b, Real* pL1 = nullptr)
+   typename std::invoke_result_t<F,Real> integrate(F f, Real a, Real b, Real* pL1 = nullptr)
    {
       static const char* function = "boost::math::quadrature::gauss<%1%>::integrate(f, %1%, %1%)";
       if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
@@ -1204,7 +1206,7 @@ public:
          // Infinite limits:
          if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
          {
-            auto u = [&](const Real& t)->Real
+            auto u = [&](const Real& t)
             {
                Real t_sq = t*t;
                Real inv = 1 / (1 - t_sq);
@@ -1216,13 +1218,13 @@ public:
          // Right limit is infinite:
          if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
          {
-            auto u = [&](const Real& t)->Real
+            auto u = [&](const Real& t)
             {
                Real z = 1 / (t + 1);
                Real arg = 2 * z + a - 1;
                return f(arg)*z*z;
             };
-            Real Q = 2 * integrate(u, pL1);
+            typename std::invoke_result_t<F,Real> Q = Real(2) * integrate(u, pL1);
             if (pL1)
             {
                *pL1 *= 2;
@@ -1232,13 +1234,13 @@ public:
 
          if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
          {
-            auto v = [&](const Real& t)->Real
+            auto v = [&](const Real& t)
             {
                Real z = 1 / (t + 1);
                Real arg = 2 * z - 1;
                return f(b - arg) * z * z;
             };
-            Real Q = 2 * integrate(v, pL1);
+            typename std::invoke_result_t<F,Real> Q = Real(2) * integrate(v, pL1);
             if (pL1)
             {
                *pL1 *= 2;
@@ -1255,11 +1257,11 @@ public:
             Real avg = (a + b)*constants::half<Real>();
             Real scale = (b - a)*constants::half<Real>();
 
-            auto u = [&](Real z)->Real
+            auto u = [&](Real z)
             {
                return f(avg + scale*z);
             };
-            Real Q = scale*integrate(u, pL1);
+            typename std::invoke_result_t<F,Real> Q = scale*integrate(u, pL1);
 
             if (pL1)
             {
@@ -1281,4 +1283,3 @@ public:
 #endif
 
 #endif // BOOST_MATH_QUADRATURE_GAUSS_HPP
-
