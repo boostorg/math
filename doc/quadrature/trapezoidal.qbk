@@ -62,18 +62,18 @@ An example using the integral definition of the complex Bessel function is shown
         std::complex<double> z{2, 3};
         using std::cos;
         using std::sin;
-        return cos(z*sin(theta) - 2*theta)/M_PI;
+        return cos(z*sin(theta) - 2*theta)/pi<double>();
     };
 
     using boost::math::quadrature::trapezoidal;
-    std::complex<double> Jnz = trapezoidal(bessel_integrand, 0.0, M_PI);
+    std::complex<double> Jnz = trapezoidal(bessel_integrand, 0.0, pi<Real>());
 
 For general contour integrals, the user must choose a contour to exploit
 
 Since the routine is adaptive, step sizes are halved continuously until a tolerance is reached.
 In order to control this tolerance, simply call the routine with an additional argument
 
-    double I = trapezoidal(f, 0.0, 2*M_PI, 1e-6);
+    double I = trapezoidal(f, 0.0, two_pi<double>(), 1e-6);
 
 The routine stops when successive estimates of the integral `I1` and `I0` differ by less than the tolerance multiplied by the estimated L[sub 1] norm of the function.
 A good choice for the tolerance is [radic][epsilon], which is the default.
