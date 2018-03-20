@@ -414,7 +414,8 @@ void test_complex_lambert_w()
       Real cotv = cosv/sinv;
       Real cscv = 1/sinv;
       Real t = (1-v*cotv)*(1-v*cotv) + v*v;
-      Complex den = z + v*cscv*exp(-v*cotv);
+      Real x = v*cscv*exp(-v*cotv);
+      Complex den = z + x;
       Complex num = t*(z/pi<Real>());
       return num/den;
     };
