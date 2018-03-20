@@ -53,6 +53,37 @@ void test_complex_bessel()
     BOOST_CHECK_CLOSE_FRACTION(Jnz.imag(), Jnzy, tol);
 }
 
+template<class Complex>
+void test_I0_complex()
+{
+    std::cout << "Testing that complex-argument I0 is calculated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Complex>().pretty_name()  << "\n";
+    typedef typename Complex::value_type Real;
+    Complex z{2, 3};
+    int n = 2;
+    using boost::math::constants::pi;
+    auto I0 = [&n, &z](Real theta)->Complex
+    {
+        using std::cos;
+        using std::exp;
+        return exp(z*cos(theta))/pi<Real>();
+    };
+
+    using boost::math::quadrature::trapezoidal;
+
+    Real a = 0;
+    Real b = pi<Real>();
+    Complex I0z = trapezoidal<decltype(I0), Real>(I0, a, b);
+    // N[BesselI[0, 2 + 3 I], 143]
+    // -1.24923487960742219637619681391438589436703710701063561548156438052154090067526565701278826317992172207565649925713468090525951417141982808439560899101
+    // 0.947983792057734776114060623981442199525094227418764823692296622398838765371662384207319492908490909109393495109183270208372778907692930675595924819922 i
+    Real I0zx = boost::lexical_cast<Real>("-1.24923487960742219637619681391438589436703710701063561548156438052154090067526565701278826317992172207565649925713468090525951417141982808439560899101");
+    Real I0zy = boost::lexical_cast<Real>("0.947983792057734776114060623981442199525094227418764823692296622398838765371662384207319492908490909109393495109183270208372778907692930675595924819922");
+    Real tol = 10*std::numeric_limits<Real>::epsilon();
+    BOOST_CHECK_CLOSE_FRACTION(I0z.real(), I0zx, tol);
+    BOOST_CHECK_CLOSE_FRACTION(I0z.imag(), I0zy, tol);
+}
+
+
 template<class Real>
 void test_constant()
 {
@@ -199,6 +230,9 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
     test_complex_bessel<std::complex<float>>();
     test_complex_bessel<std::complex<double>>();
     test_complex_bessel<std::complex<long double>>();
-    test_complex_bessel<boost::multiprecision::mpc_complex_100>();
+    //test_complex_bessel<boost::multiprecision::mpc_complex_100>();
+    test_I0_complex<std::complex<float>>();
+    test_I0_complex<std::complex<double>>();
+    test_I0_complex<std::complex<long double>>();
 
 }
