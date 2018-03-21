@@ -417,7 +417,8 @@ void test_complex_lambert_w()
       Real x = v*cscv*exp(-v*cotv);
       Complex den = z + x;
       Complex num = t*(z/pi<Real>());
-      return num/den;
+      Complex res = num/den;
+      return res;
     };
 
     //N[ProductLog[2+3*I], 150]

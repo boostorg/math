@@ -1173,11 +1173,11 @@ class gauss : public detail::gauss_detail<Real, N, detail::gauss_constant_catego
 public:
 
    template <class F>
-   typename std::invoke_result_t<F,Real> integrate(F f, Real* pL1 = nullptr)
+   typename std::result_of_t<F(Real)> integrate(F f, Real* pL1 = nullptr)
    {
       using std::fabs;
       unsigned non_zero_start = 1;
-      typename std::invoke_result_t<F,Real> result;
+      typename std::result_of_t<F(Real)> result;
       if (N & 1) {
          result = f(Real(0)) * base::weights()[0];
       }
@@ -1188,8 +1188,8 @@ public:
       Real L1 = fabs(result);
       for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
       {
-         typename std::invoke_result_t<F,Real> fp = f(base::abscissa()[i]);
-         typename std::invoke_result_t<F,Real> fm = f(-base::abscissa()[i]);
+         typename std::result_of_t<F(Real)> fp = f(base::abscissa()[i]);
+         typename std::result_of_t<F(Real)> fm = f(-base::abscissa()[i]);
          result += (fp + fm) * base::weights()[i];
          L1 += (fabs(fp) + fabs(fm)) *  base::weights()[i];
       }
@@ -1198,13 +1198,14 @@ public:
       return result;
    }
    template <class F>
-   typename std::invoke_result_t<F,Real> integrate(F f, Real a, Real b, Real* pL1 = nullptr)
+   typename std::result_of_t<F(Real)> integrate(F f, Real a, Real b, Real* pL1 = nullptr)
    {
       static const char* function = "boost::math::quadrature::gauss<%1%>::integrate(f, %1%, %1%)";
       if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
       {
          // Infinite limits:
-         if ((a <= -tools::max_value<Real>()) && (b >= tools::max_value<Real>()))
+         Real min_inf = -tools::max_value<Real>();
+         if ((a <= min_inf) && (b >= tools::max_value<Real>()))
          {
             auto u = [&](const Real& t)
             {
@@ -1224,7 +1225,7 @@ public:
                Real arg = 2 * z + a - 1;
                return f(arg)*z*z;
             };
-            typename std::invoke_result_t<F,Real> Q = Real(2) * integrate(u, pL1);
+            typename std::result_of_t<F(Real)> Q = Real(2) * integrate(u, pL1);
             if (pL1)
             {
                *pL1 *= 2;
@@ -1240,7 +1241,7 @@ public:
                Real arg = 2 * z - 1;
                return f(b - arg) * z * z;
             };
-            typename std::invoke_result_t<F,Real> Q = Real(2) * integrate(v, pL1);
+            typename std::result_of_t<F(Real)> Q = Real(2) * integrate(v, pL1);
             if (pL1)
             {
                *pL1 *= 2;
@@ -1261,7 +1262,7 @@ public:
             {
                return f(avg + scale*z);
             };
-            typename std::invoke_result_t<F,Real> Q = scale*integrate(u, pL1);
+            typename std::result_of_t<F(Real)> Q = scale*integrate(u, pL1);
 
             if (pL1)
             {
