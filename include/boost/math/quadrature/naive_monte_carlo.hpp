@@ -326,7 +326,7 @@ private:
             {
                break;
             }
-         } while (this->current_error_estimate() > m_error_goal.load(boost::memory_order::consume));
+         } while (m_total_calls < 2048 || this->current_error_estimate() > m_error_goal.load(boost::memory_order::consume));
          // Error bound met; signal the threads:
          m_done = true; // relaxed store, threads will get the message in the end
          std::for_each(threads.begin(), threads.end(),
