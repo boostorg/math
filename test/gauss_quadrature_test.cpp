@@ -379,7 +379,7 @@ void test_right_limit_infinite()
     Q = gauss<Real, Points>::integrate(f4, 1, boost::math::tools::max_value<Real>(), &L1);
     Q_expected = pi<Real>()/4;
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-}
+}*/
 
 template<class Real, unsigned Points>
 void test_left_limit_infinite()
@@ -391,10 +391,11 @@ void test_left_limit_infinite()
 
     // Example 11:
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
-    Q = gauss<Real, Points>::integrate(f1, -boost::math::tools::max_value<Real>(), Real(0));
+    boost::math::quadrature::gauss<Real, Points> integrator;
+    Q = integrator.integrate(f1, -boost::math::tools::max_value<Real>(), Real(0));
     Q_expected = half_pi<Real>();
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-}*/
+}
 
 template<class Complex>
 void test_complex_lambert_w()
@@ -490,9 +491,10 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 
 
 #endif
+    test_left_limit_infinite<cpp_bin_float_quad, 30>();
     test_complex_lambert_w<std::complex<double>>();
     test_complex_lambert_w<std::complex<long double>>();
-    test_complex_lambert_w<std::complex<boost::multiprecision::mpc_complex_100>>();
+    test_complex_lambert_w<boost::multiprecision::mpc_complex_100>();
 }
 
 #else

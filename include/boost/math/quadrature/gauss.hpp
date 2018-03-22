@@ -1175,9 +1175,9 @@ public:
    template <class F>
    typename std::result_of_t<F(Real)> integrate(F f, Real* pL1 = nullptr)
    {
-      using std::fabs;
+      using std::abs;
       unsigned non_zero_start = 1;
-      typename std::result_of_t<F(Real)> result;
+      typename std::result_of_t<F(Real)> result = Real(0);
       if (N & 1) {
          result = f(Real(0)) * base::weights()[0];
       }
@@ -1185,13 +1185,13 @@ public:
          result = 0;
          non_zero_start = 0;
       }
-      Real L1 = fabs(result);
+      Real L1 = abs(result);
       for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
       {
          typename std::result_of_t<F(Real)> fp = f(base::abscissa()[i]);
          typename std::result_of_t<F(Real)> fm = f(-base::abscissa()[i]);
          result += (fp + fm) * base::weights()[i];
-         L1 += (fabs(fp) + fabs(fm)) *  base::weights()[i];
+         L1 += (abs(fp) + abs(fm)) *  base::weights()[i];
       }
       if (pL1)
          *pL1 = L1;
@@ -1211,7 +1211,8 @@ public:
             {
                Real t_sq = t*t;
                Real inv = 1 / (1 - t_sq);
-               return f(t*inv)*(1 + t_sq)*inv*inv;
+               typename std::result_of_t<F(Real)> res = f(t*inv)*(1 + t_sq)*inv*inv;
+               return res;
             };
             return integrate(u, pL1);
          }
@@ -1223,7 +1224,8 @@ public:
             {
                Real z = 1 / (t + 1);
                Real arg = 2 * z + a - 1;
-               return f(arg)*z*z;
+               typename std::result_of_t<F(Real)> res = f(arg)*z*z;
+               return res;
             };
             typename std::result_of_t<F(Real)> Q = Real(2) * integrate(u, pL1);
             if (pL1)
@@ -1239,7 +1241,8 @@ public:
             {
                Real z = 1 / (t + 1);
                Real arg = 2 * z - 1;
-               return f(b - arg) * z * z;
+               typename std::result_of_t<F(Real)> res = f(b - arg) * z * z;
+               return res;
             };
             typename std::result_of_t<F(Real)> Q = Real(2) * integrate(v, pL1);
             if (pL1)
