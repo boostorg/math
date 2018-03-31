@@ -404,7 +404,7 @@ void test_complex_lambert_w()
     typedef typename Complex::value_type Real;
     Real tol = 10e-9;
     using boost::math::constants::pi;
-    Complex z = {2, 3};
+    Complex z{2, 3};
     auto lw = [&z](Real v)->Complex {
       using std::cos;
       using std::sin;
