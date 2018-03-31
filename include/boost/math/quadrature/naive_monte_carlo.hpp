@@ -262,20 +262,41 @@ private:
 
    Real m_integrate()
    {
+      uint64_t seed;
+      // If the user tells us to pick a seed, pick a seed:
+      if (m_seed == 0)
+      {
+         std::random_device rd;
+         seed = rd();
+      }
+      else // use the seed we are given:
+      {
+         seed = m_seed;
+      }
+      RandomNumberGenerator gen(seed);
+      int max_repeat_tries = 5;
       do{
+
+         if (max_repeat_tries < 5)
+         {
+            m_done = false;
+
+#ifdef BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
+            std::cout << "Failed to achieve required tolerance first time through..\n";
+            std::cout << "  variance =    " << m_variance << std::endl;
+            std::cout << "  average =     " << m_avg << std::endl;
+            std::cout << "  total calls = " << m_total_calls << std::endl;
+
+            for (std::size_t i = 0; i < m_num_threads; ++i)
+               std::cout << "  thread_calls[" << i << "] = " << m_thread_calls[i] << std::endl;
+            for (std::size_t i = 0; i < m_num_threads; ++i)
+               std::cout << "  thread_averages[" << i << "] = " << m_thread_averages[i] << std::endl;
+            for (std::size_t i = 0; i < m_num_threads; ++i)
+               std::cout << "  thread_Ss[" << i << "] = " << m_thread_Ss[i] << std::endl;
+#endif
+         }
+
          std::vector<std::thread> threads(m_num_threads);
-         uint64_t seed;
-         // If the user tells us to pick a seed, pick a seed:
-         if (m_seed == 0)
-         {
-            std::random_device rd;
-            seed = rd();
-         }
-         else // use the seed we are given:
-         {
-            seed = m_seed;
-         }
-         RandomNumberGenerator gen(seed);
          for (uint64_t i = 0; i < threads.size(); ++i)
          {
             threads[i] = std::thread(&naive_monte_carlo::m_thread_monte, this, i, gen());
@@ -305,7 +326,7 @@ private:
             {
                break;
             }
-         } while (this->current_error_estimate() > m_error_goal.load(boost::memory_order::consume));
+         } while (m_total_calls < 2048 || this->current_error_estimate() > m_error_goal.load(boost::memory_order::consume));
          // Error bound met; signal the threads:
          m_done = true; // relaxed store, threads will get the message in the end
          std::for_each(threads.begin(), threads.end(),
@@ -339,7 +360,7 @@ private:
          // Then the threads proceed to find the variance is much greater by the time they hear the message to stop.
          // This *WOULD* make sure that the final error estimate is within the error bounds.
       }
-      while (this->current_error_estimate() > m_error_goal);
+      while ((--max_repeat_tries >= 0) && (this->current_error_estimate() > m_error_goal));
 
       return m_avg.load(boost::memory_order::consume);
     }
