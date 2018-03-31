@@ -20,6 +20,9 @@ using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_bin_float_100;
 using boost::math::quadrature::trapezoidal;
 
+// These tests come from:
+// https://doi.org/10.1023/A:1025524324969
+// "Computing special functions by using quadrature rules",  Gil, Segura, and Temme.
 template<class Complex>
 void test_complex_bessel()
 {
@@ -59,9 +62,8 @@ void test_I0_complex()
     std::cout << "Testing that complex-argument I0 is calculated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Complex>().pretty_name()  << "\n";
     typedef typename Complex::value_type Real;
     Complex z{2, 3};
-    int n = 2;
     using boost::math::constants::pi;
-    auto I0 = [&n, &z](Real theta)->Complex
+    auto I0 = [&z](Real theta)->Complex
     {
         using std::cos;
         using std::exp;
@@ -81,6 +83,39 @@ void test_I0_complex()
     Real tol = 10*std::numeric_limits<Real>::epsilon();
     BOOST_CHECK_CLOSE_FRACTION(I0z.real(), I0zx, tol);
     BOOST_CHECK_CLOSE_FRACTION(I0z.imag(), I0zy, tol);
+}
+
+
+template<class Complex>
+void test_erfc()
+{
+    std::cout << "Testing that complex-argument erfc is calculated correctly by the adaptive trapezoidal routine on type " << boost::typeindex::type_id<Complex>().pretty_name()  << "\n";
+    typedef typename Complex::value_type Real;
+    Complex z{2, -1};
+    using boost::math::constants::pi;
+    using boost::math::constants::two_pi;
+    auto erfc = [&z](Real theta)->Complex
+    {
+        using std::exp;
+        using std::tan;
+        Real t = tan(theta/2);
+        Complex arg = -z*z*(1+t*t);
+        return exp(arg)/two_pi<Real>();
+    };
+
+    using boost::math::quadrature::trapezoidal;
+
+    Real a = -pi<Real>();
+    Real b = pi<Real>();
+    Complex erfcz = trapezoidal<decltype(erfc), Real>(erfc, a, b);
+    // N[Erfc[2-i], 150]
+    //-0.00360634272565175091291182820541914235532928536595056623793472801084629874817202107825472707423984408881473019087931573313969503235634965264302640170177
+    // - 0.0112590060288150250764009156316482248536651598819882163212627394923365188251633729432967232423246312345152595958230197778555210858871376231770868078020 i
+    Real erfczx = boost::lexical_cast<Real>("-0.00360634272565175091291182820541914235532928536595056623793472801084629874817202107825472707423984408881473019087931573313969503235634965264302640170177");
+    Real erfczy = boost::lexical_cast<Real>("-0.0112590060288150250764009156316482248536651598819882163212627394923365188251633729432967232423246312345152595958230197778555210858871376231770868078020");
+    Real tol = 50*std::numeric_limits<Real>::epsilon();
+    BOOST_CHECK_CLOSE_FRACTION(erfcz.real(), erfczx, tol);
+    BOOST_CHECK_CLOSE_FRACTION(erfcz.imag(), erfczy, tol);
 }
 
 
@@ -234,5 +269,12 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
     test_I0_complex<std::complex<float>>();
     test_I0_complex<std::complex<double>>();
     test_I0_complex<std::complex<long double>>();
-
+    //test_I0_complex<boost::multiprecision::mpc_complex_100>();
+    test_erfc<std::complex<float>>();
+    test_erfc<std::complex<double>>();
+    test_erfc<std::complex<long double>>();
+    //test_erfc<boost::multiprecision::number<boost::multiprecision::mpc_complex_backend<20>>>();
+    //test_erfc<boost::multiprecision::number<boost::multiprecision::mpc_complex_backend<30>>>();
+    //test_erfc<boost::multiprecision::mpc_complex_50>();
+    //test_erfc<boost::multiprecision::mpc_complex_100>();
 }
