@@ -26,7 +26,7 @@
 namespace boost{ namespace math{ namespace quadrature {
 
 template<class F, class Real, class Policy>
-auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Real* error_estimate, Real* L1, const Policy& pol)
+auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Real* error_estimate, Real* L1, const Policy& pol)->decltype(std::declval<F>()(std::declval<Real>()))
 {
     static const char* function = "boost::math::quadrature::trapezoidal<%1%>(F, %1%, %1%, %1%)";
     using std::abs;
@@ -114,13 +114,13 @@ auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1800)
 // Template argument dedcution failure otherwise:
 template<class F, class Real>
-auto trapezoidal(F f, Real a, Real b, Real tol = 0, std::size_t max_refinements = 12, Real* error_estimate = 0, Real* L1 = 0)
+auto trapezoidal(F f, Real a, Real b, Real tol = 0, std::size_t max_refinements = 12, Real* error_estimate = 0, Real* L1 = 0)->decltype(std::declval<F>()(std::declval<Real>()))
 #elif !defined(BOOST_NO_CXX11_NULLPTR)
 template<class F, class Real>
-auto trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = nullptr, Real* L1 = nullptr)
+auto trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = nullptr, Real* L1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
 #else
 template<class F, class Real>
-auto trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = 0, Real* L1 = 0)
+auto trapezoidal(F f, Real a, Real b, Real tol = boost::math::tools::root_epsilon<Real>(), std::size_t max_refinements = 12, Real* error_estimate = 0, Real* L1 = 0)->decltype(std::declval<F>()(std::declval<Real>()))
 #endif
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1600)
