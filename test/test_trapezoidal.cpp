@@ -160,7 +160,7 @@ void test_bump_function()
     Real Q = trapezoidal(f, (Real) -1, (Real) 1, tol);
     // 2*NIntegrate[Exp[-(1/(1 - x^2))], {x, 0, 1}, WorkingPrecision -> 210]
     Real Q_exp = boost::lexical_cast<Real>("0.44399381616807943782304892117055266376120178904569749730748455394704");
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_exp, 15*tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_exp, 30*tol);
 }
 
 template<class Real>
