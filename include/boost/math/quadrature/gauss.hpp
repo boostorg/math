@@ -1173,11 +1173,18 @@ class gauss : public detail::gauss_detail<Real, N, detail::gauss_constant_catego
 public:
 
    template <class F>
-   typename std::result_of_t<F(Real)> integrate(F f, Real* pL1 = nullptr)
+   auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
+   // In many math texts, K represents the field of real or complex numbers.
+   // Too bad we can't put blackboard bold into C++ source!
+#ifdef BOOST_NO_CXX17_STD_INVOKE
+   typedef typename std::result_of<F(Real)>::type K;
+#else
+   typedef typename std::invoke_result<F, Real>::type K;
+#endif
       using std::abs;
       unsigned non_zero_start = 1;
-      typename std::result_of_t<F(Real)> result = Real(0);
+      K result = Real(0);
       if (N & 1) {
          result = f(Real(0)) * base::weights()[0];
       }
@@ -1188,8 +1195,8 @@ public:
       Real L1 = abs(result);
       for (unsigned i = non_zero_start; i < base::abscissa().size(); ++i)
       {
-         typename std::result_of_t<F(Real)> fp = f(base::abscissa()[i]);
-         typename std::result_of_t<F(Real)> fm = f(-base::abscissa()[i]);
+         K fp = f(base::abscissa()[i]);
+         K fm = f(-base::abscissa()[i]);
          result += (fp + fm) * base::weights()[i];
          L1 += (abs(fp) + abs(fm)) *  base::weights()[i];
       }
@@ -1198,8 +1205,14 @@ public:
       return result;
    }
    template <class F>
-   typename std::result_of_t<F(Real)> integrate(F f, Real a, Real b, Real* pL1 = nullptr)
+   auto integrate(F f, Real a, Real b, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
+#ifdef BOOST_NO_CXX17_STD_INVOKE
+   typedef typename std::result_of<F(Real)>::type K;
+#else
+   typedef typename std::invoke_result<F, Real>::type K;
+#endif
+
       static const char* function = "boost::math::quadrature::gauss<%1%>::integrate(f, %1%, %1%)";
       if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
       {
@@ -1207,11 +1220,11 @@ public:
          Real min_inf = -tools::max_value<Real>();
          if ((a <= min_inf) && (b >= tools::max_value<Real>()))
          {
-            auto u = [&](const Real& t)
+            auto u = [&](const Real& t)->K
             {
                Real t_sq = t*t;
                Real inv = 1 / (1 - t_sq);
-               typename std::result_of_t<F(Real)> res = f(t*inv)*(1 + t_sq)*inv*inv;
+               K res = f(t*inv)*(1 + t_sq)*inv*inv;
                return res;
             };
             return integrate(u, pL1);
@@ -1220,14 +1233,14 @@ public:
          // Right limit is infinite:
          if ((boost::math::isfinite)(a) && (b >= tools::max_value<Real>()))
          {
-            auto u = [&](const Real& t)
+            auto u = [&](const Real& t)->K
             {
                Real z = 1 / (t + 1);
                Real arg = 2 * z + a - 1;
-               typename std::result_of_t<F(Real)> res = f(arg)*z*z;
+               K res = f(arg)*z*z;
                return res;
             };
-            typename std::result_of_t<F(Real)> Q = Real(2) * integrate(u, pL1);
+            K Q = Real(2) * integrate(u, pL1);
             if (pL1)
             {
                *pL1 *= 2;
@@ -1237,14 +1250,14 @@ public:
 
          if ((boost::math::isfinite)(b) && (a <= -tools::max_value<Real>()))
          {
-            auto v = [&](const Real& t)
+            auto v = [&](const Real& t)->K
             {
                Real z = 1 / (t + 1);
                Real arg = 2 * z - 1;
-               typename std::result_of_t<F(Real)> res = f(b - arg) * z * z;
+               K res = f(b - arg) * z * z;
                return res;
             };
-            typename std::result_of_t<F(Real)> Q = Real(2) * integrate(v, pL1);
+            K Q = Real(2) * integrate(v, pL1);
             if (pL1)
             {
                *pL1 *= 2;
@@ -1261,11 +1274,11 @@ public:
             Real avg = (a + b)*constants::half<Real>();
             Real scale = (b - a)*constants::half<Real>();
 
-            auto u = [&](Real z)
+            auto u = [&](Real z)->K
             {
                return f(avg + scale*z);
             };
-            typename std::result_of_t<F(Real)> Q = scale*integrate(u, pL1);
+            K Q = scale*integrate(u, pL1);
 
             if (pL1)
             {
@@ -1274,7 +1287,9 @@ public:
             return Q;
          }
       }
-      return policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
+      policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
+      using std::numeric_limits;
+      return static_cast<K>(numeric_limits<Real>::quiet_NaN());
    }
 };
 

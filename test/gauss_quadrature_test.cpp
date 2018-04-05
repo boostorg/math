@@ -258,7 +258,7 @@ void test_linear()
 template<class Real, unsigned Points>
 void test_quadratic()
 {
-    std::cout << "Testing quadratic functions are integrated properly by tanh_sinh on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing quadratic functions are integrated properly by Gaussian quadrature on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = boost::math::tools::epsilon<Real>() * 10;
 
     auto f = [](const Real& x) { return 5*x*x + 7*x + 12; };
@@ -363,7 +363,7 @@ void test_integration_over_real_line()
 template<class Real, unsigned Points>
 void test_right_limit_infinite()
 {
-    std::cout << "Testing right limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing right limit infinite for Gaussian quadrature in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = expected_error<Points>(test_right_limit_infinite_error_id);
     Real Q;
     Real Q_expected;
@@ -384,7 +384,7 @@ void test_right_limit_infinite()
 template<class Real, unsigned Points>
 void test_left_limit_infinite()
 {
-    std::cout << "Testing left limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing left limit infinite for Gaussian quadrature in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = expected_error<Points>(test_left_limit_infinite_error_id);
     Real Q;
     Real Q_expected;
@@ -431,8 +431,9 @@ void test_complex_lambert_w()
 
 BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 {
+  /*
 #ifdef TEST1
-    /*test_linear<double, 7>();
+    test_linear<double, 7>();
     test_quadratic<double, 7>();
     test_ca<double, 7>();
     test_three_quadrature_schemes_examples<double, 7>();
@@ -454,10 +455,10 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_three_quadrature_schemes_examples<cpp_bin_float_quad, 10>();
     test_integration_over_real_line<cpp_bin_float_quad, 10>();
     test_right_limit_infinite<cpp_bin_float_quad, 10>();
-    test_left_limit_infinite<cpp_bin_float_quad, 10>();*/
+    test_left_limit_infinite<cpp_bin_float_quad, 10>();
 #endif
 #ifdef TEST2
-    /*test_linear<cpp_bin_float_quad, 15>();
+    test_linear<cpp_bin_float_quad, 15>();
     test_quadratic<cpp_bin_float_quad, 15>();
     test_ca<cpp_bin_float_quad, 15>();
     test_three_quadrature_schemes_examples<cpp_bin_float_quad, 15>();
@@ -487,10 +488,11 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_three_quadrature_schemes_examples<cpp_bin_float_quad, 30>();
     test_integration_over_real_line<cpp_bin_float_quad, 30>();
     test_right_limit_infinite<cpp_bin_float_quad, 30>();
-    test_left_limit_infinite<cpp_bin_float_quad, 30>();*/
+    test_left_limit_infinite<cpp_bin_float_quad, 30>();
 
 
 #endif
+  */
     test_left_limit_infinite<cpp_bin_float_quad, 30>();
     test_complex_lambert_w<std::complex<double>>();
     test_complex_lambert_w<std::complex<long double>>();
