@@ -1175,13 +1175,9 @@ public:
    template <class F>
    auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
-   // In many math texts, K represents the field of real or complex numbers.
-   // Too bad we can't put blackboard bold into C++ source!
-#ifdef BOOST_NO_CXX17_STD_INVOKE
-   typedef typename std::result_of<F(Real)>::type K;
-#else
-   typedef typename std::invoke_result<F, Real>::type K;
-#endif
+     // In many math texts, K represents the field of real or complex numbers.
+     // Too bad we can't put blackboard bold into C++ source!
+      typedef decltype(f(Real(0))) K;
       using std::abs;
       unsigned non_zero_start = 1;
       K result = Real(0);
@@ -1207,12 +1203,7 @@ public:
    template <class F>
    auto integrate(F f, Real a, Real b, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
-#ifdef BOOST_NO_CXX17_STD_INVOKE
-   typedef typename std::result_of<F(Real)>::type K;
-#else
-   typedef typename std::invoke_result<F, Real>::type K;
-#endif
-
+      typedef decltype(f(a)) K;
       static const char* function = "boost::math::quadrature::gauss<%1%>::integrate(f, %1%, %1%)";
       if (!(boost::math::isnan)(a) && !(boost::math::isnan)(b))
       {
@@ -1289,7 +1280,7 @@ public:
       }
       policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
       using std::numeric_limits;
-      return static_cast<K>(numeric_limits<Real>::quiet_NaN());
+      return static_cast<K>(numeric_limits<Real>::signaling_NaN());
    }
 };
 
