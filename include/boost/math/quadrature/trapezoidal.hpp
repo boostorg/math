@@ -18,7 +18,6 @@
 #include <cmath>
 #include <limits>
 #include <stdexcept>
-#include <type_traits> // for std::result_of, std::invoke_result
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -34,11 +33,7 @@ auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
     using std::numeric_limits;
     // In many math texts, K represents the field of real or complex numbers.
     // Too bad we can't put blackboard bold into C++ source!
-#ifdef BOOST_NO_CXX17_STD_INVOKE
-    typedef typename std::result_of<F(Real)>::type K;
-#else
-    typedef typename std::invoke_result<F, Real>::type K;
-#endif
+    typedef decltype(f(a)) K;
     if(a >= b)
     {
         boost::math::policies::raise_domain_error(function, "a < b for integration over the region [a, b] is required, but got a = %1%.\n", a, pol);
