@@ -7,7 +7,7 @@
 #define BOOST_TEST_MODULE tanh_sinh_quadrature_test
 
 #include <complex>
-#include <boost/multiprecision/mpc.hpp>
+//#include <boost/multiprecision/mpc.hpp>
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
@@ -496,7 +496,7 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_left_limit_infinite<cpp_bin_float_quad, 30>();
     test_complex_lambert_w<std::complex<double>>();
     test_complex_lambert_w<std::complex<long double>>();
-    test_complex_lambert_w<boost::multiprecision::mpc_complex_100>();
+    //test_complex_lambert_w<boost::multiprecision::mpc_complex_100>();
 }
 
 #else
