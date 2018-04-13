@@ -6,6 +6,7 @@
 
 #define BOOST_TEST_MODULE barycentric_rational
 
+#include <cmath>
 #include <random>
 #include <boost/random/uniform_real_distribution.hpp>
 #include <boost/type_index.hpp>
@@ -18,6 +19,8 @@
 #include <boost/multiprecision/float128.hpp>
 #endif
 
+using std::sqrt;
+using std::numeric_limits;
 using boost::multiprecision::cpp_bin_float_50;
 
 template<class Real>
@@ -40,8 +43,8 @@ void test_interpolation_condition()
 
     for (size_t i = 0; i < x.size(); ++i)
     {
-        auto z = interpolator(x[i]);
-        BOOST_CHECK_CLOSE(z, y[i], 100*std::numeric_limits<Real>::epsilon());
+        Real z = interpolator(x[i]);
+        BOOST_CHECK_CLOSE(z, y[i], 100*numeric_limits<Real>::epsilon());
     }
 }
 
@@ -66,8 +69,8 @@ void test_interpolation_condition_high_order()
 
     for (size_t i = 0; i < x.size(); ++i)
     {
-        auto z = interpolator(x[i]);
-        BOOST_CHECK_CLOSE(z, y[i], 100*std::numeric_limits<Real>::epsilon());
+        Real z = interpolator(x[i]);
+        BOOST_CHECK_CLOSE(z, y[i], 100*numeric_limits<Real>::epsilon());
     }
 }
 
@@ -96,9 +99,9 @@ void test_constant()
     {
         // Don't evaluate the constant at x[i]; that's already tested in the interpolation condition test.
         Real t = x[i] + dis(gen);
-        auto z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, constant, 100*sqrt(std::numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_SMALL(interpolator.prime(t), sqrt(std::numeric_limits<Real>::epsilon()));
+        Real z = interpolator(t);
+        BOOST_CHECK_CLOSE(z, constant, 100*sqrt(numeric_limits<Real>::epsilon()));
+        BOOST_CHECK_SMALL(interpolator.prime(t), sqrt(numeric_limits<Real>::epsilon()));
     }
 }
 
@@ -126,9 +129,9 @@ void test_constant_high_order()
     for (size_t i = 0; i < x.size(); ++i)
     {
         Real t = x[i] + dis(gen);
-        auto z = interpolator(t);
-        BOOST_CHECK_CLOSE(z, constant, 1000*sqrt(std::numeric_limits<Real>::epsilon()));
-        BOOST_CHECK_SMALL(interpolator.prime(t), 100*sqrt(std::numeric_limits<Real>::epsilon()));
+        Real z = interpolator(t);
+        BOOST_CHECK_CLOSE(z, constant, 1000*sqrt(numeric_limits<Real>::epsilon()));
+        BOOST_CHECK_SMALL(interpolator.prime(t), 100*sqrt(numeric_limits<Real>::epsilon()));
     }
 }
 
@@ -155,9 +158,9 @@ void test_runge()
     for (size_t i = 0; i < x.size(); ++i)
     {
         Real t = x[i];
-        auto z = interpolator(t);
+        Real z = interpolator(t);
         BOOST_CHECK_CLOSE(z, y[i], 0.03);
-        auto z_prime = interpolator.prime(t);
+        Real z_prime = interpolator.prime(t);
         Real num = -50*t;
         Real denom = (1+25*t*t)*(1+25*t*t);
         BOOST_CHECK_CLOSE_FRACTION(z_prime, num/denom, 0.03);
@@ -167,10 +170,10 @@ void test_runge()
     Real tol = 0.0001;
     for (size_t i = 0; i < x.size(); ++i)
     {
-        auto t = x[i] + dis(gen);
-        auto z = interpolator(t);
+        Real t = x[i] + dis(gen);
+        Real z = interpolator(t);
         BOOST_CHECK_CLOSE(z, 1/(1+25*t*t), tol);
-        auto z_prime = interpolator.prime(t);
+        Real z_prime = interpolator.prime(t);
         Real num = -50*t;
         Real denom = (1+25*t*t)*(1+25*t*t);
         Real runge_prime = num/denom;
@@ -204,7 +207,7 @@ void test_weights()
 
     for (size_t i = 0; i < x.size(); ++i)
     {
-        auto w = interpolator.weight(i);
+        Real w = interpolator.weight(i);
         if (i % 2 == 0)
         {
             BOOST_CHECK_CLOSE(w, 1, 0.00001);
@@ -220,8 +223,8 @@ void test_weights()
 
     for (size_t i = 1; i < x.size() -1; ++i)
     {
-        auto w = interpolator.weight(i);
-        auto w_expect = 1/(x[i] - x[i - 1]) + 1/(x[i+1] - x[i]);
+        Real w = interpolator.weight(i);
+        Real w_expect = 1/(x[i] - x[i - 1]) + 1/(x[i+1] - x[i]);
         if (i % 2 == 0)
         {
             BOOST_CHECK_CLOSE(w, -w_expect, 0.00001);
