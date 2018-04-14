@@ -20,6 +20,7 @@
 #endif
 
 using std::sqrt;
+using std::abs;
 using std::numeric_limits;
 using boost::multiprecision::cpp_bin_float_50;
 
@@ -163,7 +164,10 @@ void test_runge()
         Real z_prime = interpolator.prime(t);
         Real num = -50*t;
         Real denom = (1+25*t*t)*(1+25*t*t);
-        BOOST_CHECK_CLOSE_FRACTION(z_prime, num/denom, 0.03);
+        if (abs(num/denom) > 0.00001)
+        {
+            BOOST_CHECK_CLOSE_FRACTION(z_prime, num/denom, 0.03);
+        }
     }
 
 
@@ -178,7 +182,7 @@ void test_runge()
         Real denom = (1+25*t*t)*(1+25*t*t);
         Real runge_prime = num/denom;
 
-        if (abs(z_prime - runge_prime)/abs(runge_prime) > tol)
+        if (abs(runge_prime) > 0 && abs(z_prime - runge_prime)/abs(runge_prime) > tol)
         {
             std::cout << "Error too high for t = " << t << " which is a distance " << t - x[i] << " from node " << i << "/" << x.size() << " associated with data (" << x[i] << ", " << y[i] << ")\n";
             BOOST_CHECK_CLOSE_FRACTION(z_prime, runge_prime, tol);

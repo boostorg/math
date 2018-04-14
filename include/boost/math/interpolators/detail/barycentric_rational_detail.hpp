@@ -149,6 +149,8 @@ Real barycentric_rational_imp<Real>::operator()(Real x) const
  * and reviewed in
  * Recent developments in barycentric rational interpolation
  * Jean–Paul Berrut, Richard Baltensperger and Hans D. Mittelmann
+ *
+ * Is it possible to complete this in one pass through the data?
  */
 
 template<class Real>
