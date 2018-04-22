@@ -159,13 +159,28 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
           Real right_min_complement = avg_over_diff_p1 - float_prior(avg_over_diff_p1);
           if (right_min_complement < tools::min_value<Real>())
              right_min_complement = tools::min_value<Real>();
+          //std::cout << std::setprecision(std::numeric_limits<Real>::max_digits10) << avg << std::endl;
+          //std::cout << diff << std::endl;
           auto u = [&](Real z, Real zc)->Real
           { 
-             if (have_small_left && (z < -0.5))
-                return f(diff * (avg_over_diff_m1 - zc));
-             if (have_small_right && (z > 0.5))
-                return f(diff * (avg_over_diff_p1 - zc));
-             Real position = avg + diff*z;
+             //std::cout << z << std::endl;
+             //std::cout << zc << std::endl;
+             Real position;
+             if (z < -0.5)
+             {
+                if(have_small_left)
+                  return f(diff * (avg_over_diff_m1 - zc));
+                position = a - diff * zc;
+             }
+             if (z > 0.5)
+             {
+                if(have_small_right)
+                  return f(diff * (avg_over_diff_p1 - zc));
+                position = b - diff * zc;
+             }
+             else
+              position = avg + diff*z;
+             //std::cout << position << std::endl;
              BOOST_ASSERT(position != a);
              BOOST_ASSERT(position != b);
              return f(position);
