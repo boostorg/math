@@ -159,12 +159,18 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
           Real right_min_complement = avg_over_diff_p1 - float_prior(avg_over_diff_p1);
           if (right_min_complement < tools::min_value<Real>())
              right_min_complement = tools::min_value<Real>();
-          //std::cout << std::setprecision(std::numeric_limits<Real>::max_digits10) << avg << std::endl;
-          //std::cout << diff << std::endl;
+          //
+          // These asserts will fail only if rounding errors on
+          // type Real have accumulated so much error that it's
+          // broken our internal logic.  Should that prove to be
+          // a persistent issue, we might need to add a bit of fudge
+          // factor to move left_min_complement and right_min_complement
+          // further from the end points of the range.
+          //
+          BOOST_ASSERT((left_min_complement * diff + a) > a);
+          BOOST_ASSERT((b - right_min_complement * diff) < b);
           auto u = [&](Real z, Real zc)->Real
           { 
-             //std::cout << z << std::endl;
-             //std::cout << zc << std::endl;
              Real position;
              if (z < -0.5)
              {
@@ -179,8 +185,7 @@ auto tanh_sinh<Real, Policy>::integrate(const F f, Real a, Real b, Real toleranc
                 position = b - diff * zc;
              }
              else
-              position = avg + diff*z;
-             //std::cout << position << std::endl;
+                position = avg + diff*z;
              BOOST_ASSERT(position != a);
              BOOST_ASSERT(position != b);
              return f(position);
