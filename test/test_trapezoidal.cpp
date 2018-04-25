@@ -7,6 +7,7 @@
 #define BOOST_TEST_MODULE trapezoidal_quadrature
 
 #include <complex>
+#include <boost/config.hpp>
 //#include <boost/multiprecision/mpc.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -15,7 +16,9 @@
 #include <boost/math/quadrature/trapezoidal.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
-
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/complex128.hpp>
+#endif
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_bin_float_100;
 using boost::math::quadrature::trapezoidal;
@@ -259,7 +262,7 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
     test_rational_sin<float>();
     test_rational_sin<double>();
     test_rational_sin<long double>();
-    test_rational_sin<boost::math::concepts::real_concept>();
+    //test_rational_sin<boost::math::concepts::real_concept>();
     test_rational_sin<cpp_bin_float_50>();
 
     test_complex_bessel<std::complex<float>>();
@@ -277,4 +280,11 @@ BOOST_AUTO_TEST_CASE(trapezoidal_quadrature)
     //test_erfc<boost::multiprecision::number<boost::multiprecision::mpc_complex_backend<30>>>();
     //test_erfc<boost::multiprecision::mpc_complex_50>();
     //test_erfc<boost::multiprecision::mpc_complex_100>();
+
+#ifdef BOOST_HAS_FLOAT128
+    test_complex_bessel<boost::multiprecision::complex128>();
+    test_I0_complex<boost::multiprecision::complex128>();
+    test_erfc<boost::multiprecision::complex128>();
+#endif
+
 }
