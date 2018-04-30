@@ -19,14 +19,20 @@
 #include <boost/math/quadrature/gauss.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_complex.hpp>
+
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/complex128.hpp>
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(disable:4127)  // Conditional expression is constant
 #endif
 
-#if !defined(TEST1) && !defined(TEST2)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3)
 #  define TEST1
 #  define TEST2
+#  define TEST3
 #endif
 
 using std::expm1;
@@ -239,7 +245,7 @@ double expected_error<30>(unsigned id)
    return 0;  // placeholder, all tests will fail
 }
 
-/*
+
 template<class Real, unsigned Points>
 void test_linear()
 {
@@ -379,7 +385,7 @@ void test_right_limit_infinite()
     Q = gauss<Real, Points>::integrate(f4, 1, boost::math::tools::max_value<Real>(), &L1);
     Q_expected = pi<Real>()/4;
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
-}*/
+}
 
 template<class Real, unsigned Points>
 void test_left_limit_infinite()
@@ -391,8 +397,7 @@ void test_left_limit_infinite()
 
     // Example 11:
     auto f1 = [](const Real& t) { return 1/(1+t*t);};
-    boost::math::quadrature::gauss<Real, Points> integrator;
-    Q = integrator.integrate(f1, -boost::math::tools::max_value<Real>(), Real(0));
+    Q = gauss<Real, Points>::integrate(f1, -boost::math::tools::max_value<Real>(), Real(0));
     Q_expected = half_pi<Real>();
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
 }
@@ -431,7 +436,7 @@ void test_complex_lambert_w()
 
 BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 {
-  /*
+  
 #ifdef TEST1
     test_linear<double, 7>();
     test_quadratic<double, 7>();
@@ -492,11 +497,16 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 
 
 #endif
-  */
+#ifdef TEST3
     test_left_limit_infinite<cpp_bin_float_quad, 30>();
     test_complex_lambert_w<std::complex<double>>();
     test_complex_lambert_w<std::complex<long double>>();
-    //test_complex_lambert_w<boost::multiprecision::mpc_complex_100>();
+#ifdef BOOST_HAS_FLOAT128
+    test_left_limit_infinite<boost::multiprecision::float128, 30>();
+    test_complex_lambert_w<boost::multiprecision::complex128>();
+#endif
+    test_complex_lambert_w<boost::multiprecision::cpp_complex_quad>();
+#endif
 }
 
 #else

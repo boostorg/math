@@ -1173,7 +1173,7 @@ class gauss : public detail::gauss_detail<Real, N, detail::gauss_constant_catego
 public:
 
    template <class F>
-   auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   static auto integrate(F f, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
      // In many math texts, K represents the field of real or complex numbers.
      // Too bad we can't put blackboard bold into C++ source!
@@ -1201,7 +1201,7 @@ public:
       return result;
    }
    template <class F>
-   auto integrate(F f, Real a, Real b, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
+   static auto integrate(F f, Real a, Real b, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
       typedef decltype(f(a)) K;
       static const char* function = "boost::math::quadrature::gauss<%1%>::integrate(f, %1%, %1%)";
@@ -1278,9 +1278,7 @@ public:
             return Q;
          }
       }
-      policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy());
-      using std::numeric_limits;
-      return static_cast<K>(numeric_limits<Real>::signaling_NaN());
+      static_cast<K>(policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy()));
    }
 };
 
