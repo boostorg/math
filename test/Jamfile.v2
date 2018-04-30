@@ -772,7 +772,9 @@ test-suite distribution_tests :
    [ run test_rayleigh.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_students_t.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_skew_normal.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_lambdas cxx11_auto_declarations cxx11_decltype cxx11_unified_initialization_syntax cxx11_variadic_templates ]  ]
+   [ run test_trapezoidal.cpp ../../test/build//boost_unit_test_framework : : : 
+         [ requires cxx11_lambdas cxx11_auto_declarations cxx11_decltype cxx11_unified_initialization_syntax cxx11_variadic_templates ] 
+         [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
    [ run test_triangular.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_uniform.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_weibull.cpp ../../test/build//boost_unit_test_framework  ]
@@ -825,7 +827,7 @@ test-suite misc :
    [ run test_classify.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_cubic_b_spline.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx11_smart_ptr cxx11_defaulted_functions ]  ]
    [ run test_error_handling.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
+   [ run legendre_stieltjes_test.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]  ]
    [ run test_minima.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_rationals.cpp ../../test/build//boost_unit_test_framework
       test_rational_instances/test_rational_double1.cpp
@@ -966,7 +968,7 @@ test-suite misc :
        ../../test/build//boost_unit_test_framework ]
    [ run quaternion_constexpr_test.cpp ]
    [ run quaternion_test.cpp
-       ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
+       ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ] ]
    [ run quaternion_mult_incl_test.cpp
        quaternion_mi1.cpp
        quaternion_mi2.cpp
@@ -1210,7 +1212,7 @@ rule get_float128_tests
            : # input files
            : # requirements
             [ check-target-builds ../config//has_intel_quad "Intel _Quad datatype support" : <cxxflags>-Qoption,cpp,--extended_float_type <define>BOOST_MATH_USE_FLOAT128 ]
-            [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]
+            [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>-lquadmath ]
             [ check-target-builds ../config//has_128bit_floatmax_t "128-bit floatmax_t" : : <build>no ]
             <define>BOOST_ALL_NO_LIB
            : $(source:B)_floatmax_t ] ;
