@@ -1278,7 +1278,7 @@ public:
             return Q;
          }
       }
-      static_cast<K>(policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy()));
+      return static_cast<K>(policies::raise_domain_error(function, "The domain of integration is not sensible; please check the bounds.", a, Policy()));
    }
 };
 
