@@ -1878,7 +1878,9 @@ public:
             {
                Real t_sq = t*t;
                Real inv = 1 / (1 - t_sq);
-               K res = f(t*inv)*(1 + t_sq)*inv*inv;
+               Real w = (1 + t_sq)*inv*inv;
+               Real arg = t*inv;
+               K res = f(arg)*w;
                return res;
             };
             recursive_info<decltype(u)> info = { u, tol };

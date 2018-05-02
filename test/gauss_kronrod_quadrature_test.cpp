@@ -256,7 +256,7 @@ void test_linear()
     std::cout << "Testing linear functions are integrated properly by gauss_kronrod on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real error;
-    auto f = [](const Real& x)
+    auto f = [](const Real& x)->Real
     {
        return 5*x + 7;
     };
@@ -273,7 +273,7 @@ void test_quadratic()
     Real tol = boost::math::tools::epsilon<Real>() * 10;
     Real error;
 
-    auto f = [](const Real& x) { return 5*x*x + 7*x + 12; };
+    auto f = [](const Real& x)->Real { return 5*x*x + 7*x + 12; };
     Real L1;
     Real Q = gauss_kronrod<Real, Points>::integrate(f, 0, 1, 0, 0, &error, &L1);
     BOOST_CHECK_CLOSE_FRACTION(Q, (Real) 17 + half<Real>()*third<Real>(), tol);
@@ -290,7 +290,7 @@ void test_ca()
     Real L1;
     Real error;
 
-    auto f1 = [](const Real& x) { return atan(x)/(x*(x*x + 1)) ; };
+    auto f1 = [](const Real& x)->Real { return atan(x)/(x*(x*x + 1)) ; };
     Real Q = gauss_kronrod<Real, Points>::integrate(f1, 0, 1, 0, 0, &error, &L1);
     Real Q_expected = pi<Real>()*ln_two<Real>()/8 + catalan<Real>()*half<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -367,7 +367,7 @@ void test_integration_over_real_line()
     Real L1;
     Real error;
 
-    auto f1 = [](const Real& t) { return 1/(1+t*t);};
+    auto f1 = [](const Real& t)->Real { return 1/(1+t*t);};
     Q = gauss_kronrod<Real, Points>::integrate(f1, -boost::math::tools::max_value<Real>(), boost::math::tools::max_value<Real>(), 0, 0, &error, &L1);
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -385,12 +385,12 @@ void test_right_limit_infinite()
     Real error;
 
     // Example 11:
-    auto f1 = [](const Real& t) { return 1/(1+t*t);};
+    auto f1 = [](const Real& t)->Real { return 1/(1+t*t);};
     Q = gauss_kronrod<Real, Points>::integrate(f1, 0, boost::math::tools::max_value<Real>(), 0, 0, &error, &L1);
     Q_expected = half_pi<Real>();
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
 
-    auto f4 = [](const Real& t) { return 1/(1+t*t); };
+    auto f4 = [](const Real& t)->Real { return 1/(1+t*t); };
     Q = gauss_kronrod<Real, Points>::integrate(f4, 1, boost::math::tools::max_value<Real>(), 0, 0, &error, &L1);
     Q_expected = pi<Real>()/4;
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
@@ -405,7 +405,7 @@ void test_left_limit_infinite()
     Real Q_expected;
 
     // Example 11:
-    auto f1 = [](const Real& t) { return 1/(1+t*t);};
+    auto f1 = [](const Real& t)->Real { return 1/(1+t*t);};
     Q = gauss_kronrod<Real, Points>::integrate(f1, -boost::math::tools::max_value<Real>(), Real(0), 0);
     Q_expected = half_pi<Real>();
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
@@ -507,14 +507,14 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 #endif
 #ifdef TEST3
     // Need at least one set of tests with expression templates turned on:
-    /*std::cout << "Testing 61 point approximation:\n";
+    std::cout << "Testing 61 point approximation:\n";
     test_linear<cpp_dec_float_50, 61>();
     test_quadratic<cpp_dec_float_50, 61>();
     test_ca<cpp_dec_float_50, 61>();
     test_three_quadrature_schemes_examples<cpp_dec_float_50, 61>();
     test_integration_over_real_line<cpp_dec_float_50, 61>();
     test_right_limit_infinite<cpp_dec_float_50, 61>();
-    test_left_limit_infinite<cpp_dec_float_50, 61>();*/
+    test_left_limit_infinite<cpp_dec_float_50, 61>();
 #ifdef BOOST_HAS_FLOAT128
     test_complex_lambert_w<boost::multiprecision::complex128>();
 #endif
