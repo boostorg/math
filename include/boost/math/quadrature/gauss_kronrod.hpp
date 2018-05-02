@@ -1775,7 +1775,7 @@ private:
    static auto integrate_non_adaptive_m1_1(F f, Real* error = nullptr, Real* pL1 = nullptr)->decltype(std::declval<F>()(std::declval<Real>()))
    {
       typedef decltype(f(Real(0))) K;
-      using std::fabs;
+      using std::abs;
       unsigned gauss_start = 2;
       unsigned kronrod_start = 1;
       unsigned gauss_order = (N - 1) / 2;
@@ -1795,13 +1795,13 @@ private:
          gauss_start = 1;
          kronrod_start = 2;
       }
-      Real L1 = fabs(kronrod_result);
+      Real L1 = abs(kronrod_result);
       for (unsigned i = gauss_start; i < base::abscissa().size(); i += 2)
       {
          fp = f(base::abscissa()[i]);
          fm = f(-base::abscissa()[i]);
          kronrod_result += (fp + fm) * base::weights()[i];
-         L1 += (fabs(fp) + fabs(fm)) *  base::weights()[i];
+         L1 += (abs(fp) + abs(fm)) *  base::weights()[i];
          gauss_result += (fp + fm) * gauss<Real, (N - 1) / 2>::weights()[i / 2];
       }
       for (unsigned i = kronrod_start; i < base::abscissa().size(); i += 2)
@@ -1809,12 +1809,12 @@ private:
          fp = f(base::abscissa()[i]);
          fm = f(-base::abscissa()[i]);
          kronrod_result += (fp + fm) * base::weights()[i];
-         L1 += (fabs(fp) + fabs(fm)) *  base::weights()[i];
+         L1 += (abs(fp) + abs(fm)) *  base::weights()[i];
       }
       if (pL1)
          *pL1 = L1;
       if (error)
-         *error = (std::max)(static_cast<Real>(fabs(kronrod_result - gauss_result)), static_cast<Real>(fabs(kronrod_result * tools::epsilon<Real>() * Real(2))));
+         *error = (std::max)(static_cast<Real>(abs(kronrod_result - gauss_result)), static_cast<Real>(abs(kronrod_result * tools::epsilon<Real>() * Real(2))));
       return kronrod_result;
    }
 
@@ -1829,7 +1829,7 @@ private:
    static auto recursive_adaptive_integrate(const recursive_info<F>* info, Real a, Real b, unsigned max_levels, Real abs_tol, Real* error, Real* L1)->decltype(std::declval<F>()(std::declval<Real>()))
    {
       typedef decltype(info->f(Real(a))) K;
-      using std::fabs;
+      using std::abs;
       Real error_local;
       Real mean = (b + a) / 2;
       Real scale = (b - a) / 2;
@@ -1840,7 +1840,8 @@ private:
       K r1 = integrate_non_adaptive_m1_1(ff, &error_local, L1);
       K estimate = scale * r1;
 
-      Real abs_tol1 = fabs(estimate * info->tol);
+      K tmp = estimate * info->tol;
+      Real abs_tol1 = abs(tmp);
       if (abs_tol == 0)
          abs_tol = abs_tol1;
 
