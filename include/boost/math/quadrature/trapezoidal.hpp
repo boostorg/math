@@ -30,24 +30,20 @@ auto trapezoidal(F f, Real a, Real b, Real tol, std::size_t max_refinements, Rea
     static const char* function = "boost::math::quadrature::trapezoidal<%1%>(F, %1%, %1%, %1%)";
     using std::abs;
     using boost::math::constants::half;
-    using std::numeric_limits;
     // In many math texts, K represents the field of real or complex numbers.
     // Too bad we can't put blackboard bold into C++ source!
     typedef decltype(f(a)) K;
     if(a >= b)
     {
-        boost::math::policies::raise_domain_error(function, "a < b for integration over the region [a, b] is required, but got a = %1%.\n", a, pol);
-        return static_cast<K>(numeric_limits<Real>::quiet_NaN());
+       return static_cast<K>(boost::math::policies::raise_domain_error(function, "a < b for integration over the region [a, b] is required, but got a = %1%.\n", a, pol));
     }
     if (!(boost::math::isfinite)(a))
     {
-       boost::math::policies::raise_domain_error(function, "Left endpoint of integration must be finite for adaptive trapezoidal integration but got a = %1%.\n", a, pol);
-       return static_cast<K>(numeric_limits<Real>::quiet_NaN());
+       return static_cast<K>(boost::math::policies::raise_domain_error(function, "Left endpoint of integration must be finite for adaptive trapezoidal integration but got a = %1%.\n", a, pol));
     }
     if (!(boost::math::isfinite)(b))
     {
-       boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapedzoidal integration but got b = %1%.\n", b, pol);
-       return static_cast<K>(numeric_limits<Real>::quiet_NaN());
+       return static_cast<K>(boost::math::policies::raise_domain_error(function, "Right endpoint of integration must be finite for adaptive trapedzoidal integration but got b = %1%.\n", b, pol));
     }
 
 
