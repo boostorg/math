@@ -41,7 +41,7 @@ public:
     exp_sinh_detail(size_t max_refinements);
 
     template<class F>
-    Real integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const;
+    auto integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels)->decltype(std::declval<F>()(std::declval<Real>())) const;
 
 private:
    const std::vector<Real>& get_abscissa_row(std::size_t n)const
@@ -135,7 +135,7 @@ private:
 };
 
 template<class Real, class Policy>
-exp_sinh_detail<Real, Policy>::exp_sinh_detail(size_t max_refinements) 
+exp_sinh_detail<Real, Policy>::exp_sinh_detail(size_t max_refinements)
    : m_abscissas(max_refinements), m_weights(max_refinements),
    m_max_refinements(max_refinements)
 {
@@ -143,8 +143,9 @@ exp_sinh_detail<Real, Policy>::exp_sinh_detail(size_t max_refinements)
 }
 template<class Real, class Policy>
 template<class F>
-Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels) const
+auto exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1, const char* function, Real tolerance, std::size_t* levels)->decltype(std::declval<F>()(std::declval<Real>())) const
 {
+    typedef decltype(f(Real(0))) K;
     using std::abs;
     using std::floor;
     using std::tanh;
@@ -153,30 +154,32 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
     using boost::math::constants::half;
     using boost::math::constants::half_pi;
 
-    Real y_max = f(tools::max_value<Real>());
+    // This provided a nice error message for real valued integrals, but it's super awkward for complex-valued integrals:
+    /*K y_max = f(tools::max_value<Real>());
     if(abs(y_max) > tools::epsilon<Real>() || !(boost::math::isfinite)(y_max))
     {
-       return policies::raise_domain_error(function, "The function you are trying to integrate does not go to zero at infinity, and instead evaluates to %1%", y_max, Policy());
-    }
+        K val = abs(y_max);
+        return static_cast<K>(policies::raise_domain_error(function, "The function you are trying to integrate does not go to zero at infinity, and instead evaluates to %1%", val, Policy()));
+    }*/
 
     //std::cout << std::setprecision(5*std::numeric_limits<Real>::digits10);
 
     // Get the party started with two estimates of the integral:
-    Real I0 = 0;
+    K I0 = 0;
     Real L1_I0 = 0;
     for(size_t i = 0; i < m_abscissas[0].size(); ++i)
     {
-        Real y = f(m_abscissas[0][i]);
+        K y = f(m_abscissas[0][i]);
         I0 += y*m_weights[0][i];
         L1_I0 += abs(y)*m_weights[0][i];
     }
 
     //std::cout << "First estimate : " << I0 << std::endl;
-    Real I1 = I0;
+    K I1 = I0;
     Real L1_I1 = L1_I0;
     for (size_t i = 0; i < m_abscissas[1].size(); ++i)
     {
-        Real y = f(m_abscissas[1][i]);
+        K y = f(m_abscissas[1][i]);
         I1 += y*m_weights[1][i];
         L1_I1 += abs(y)*m_weights[1][i];
     }
@@ -195,7 +198,7 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         I1 = half<Real>()*I0;
         L1_I1 = half<Real>()*L1_I0;
         Real h = (Real) 1/ (Real) (1 << i);
-        Real sum = 0;
+        K sum = 0;
         Real absum = 0;
 
         auto abscissas_row = get_abscissa_row(i);
@@ -206,7 +209,7 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         for(size_t j = 0; j < m_weights[i].size(); ++j)
         {
             Real x = abscissas_row[j];
-            Real y = f(x);
+            K y = f(x);
             sum += y*weight_row[j];
             Real abterm0 = abs(y)*weight_row[j];
             absum += abterm0;
@@ -226,9 +229,10 @@ Real exp_sinh_detail<Real, Policy>::integrate(const F& f, Real* error, Real* L1,
         L1_I1 += absum*h;
         err = abs(I0 - I1);
         //std::cout << "Estimate:        " << I1 << " Error estimate at level " << i  << " = " << err << std::endl;
-        if (!isfinite(I1))
+        // Use L1_I1 here to make it work with both complex and real valued integrands:
+        if (!isfinite(L1_I1))
         {
-            return policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and returned %1%. Please ensure your function evaluates to a finite number over its entire domain.", I1, Policy());
+            return static_cast<K>(policies::raise_evaluation_error(function, "The exp_sinh quadrature evaluated your function at a singular point and returned %1%. Please ensure your function evaluates to a finite number over its entire domain.", I1, Policy()));
         }
         if (err <= tolerance*L1_I1)
         {
