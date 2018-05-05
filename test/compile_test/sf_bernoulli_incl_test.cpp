@@ -6,6 +6,7 @@
 // Basic sanity check that header <boost/math/special_functions/bernoulli.hpp>
 // #includes all the files that it needs to.
 //
+#include <ostream>
 #include <boost/math/special_functions/bernoulli.hpp>
 //
 // Note this header includes no other headers, this is
@@ -30,5 +31,7 @@ void compile_and_link_test()
    constexpr float ce_f = boost::math::unchecked_bernoulli_b2n<float>(2);
    constexpr float ce_d = boost::math::unchecked_bernoulli_b2n<double>(2);
    constexpr float ce_l = boost::math::unchecked_bernoulli_b2n<long double>(2);
+   std::ostream cnull(0);
+   cnull << ce_f << ce_d << ce_l << std::endl;
 #endif
 }
