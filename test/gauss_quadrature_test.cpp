@@ -6,6 +6,8 @@
 
 #define BOOST_TEST_MODULE tanh_sinh_quadrature_test
 
+#include <complex>
+//#include <boost/multiprecision/mpc.hpp>
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
@@ -17,14 +19,20 @@
 #include <boost/math/quadrature/gauss.hpp>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/multiprecision/cpp_complex.hpp>
+
+#ifdef BOOST_HAS_FLOAT128
+#include <boost/multiprecision/complex128.hpp>
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(disable:4127)  // Conditional expression is constant
 #endif
 
-#if !defined(TEST1) && !defined(TEST2)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3)
 #  define TEST1
 #  define TEST2
+#  define TEST3
 #endif
 
 using std::expm1;
@@ -256,7 +264,7 @@ void test_linear()
 template<class Real, unsigned Points>
 void test_quadratic()
 {
-    std::cout << "Testing quadratic functions are integrated properly by tanh_sinh on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing quadratic functions are integrated properly by Gaussian quadrature on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = boost::math::tools::epsilon<Real>() * 10;
 
     auto f = [](const Real& x) { return 5*x*x + 7*x + 12; };
@@ -361,7 +369,7 @@ void test_integration_over_real_line()
 template<class Real, unsigned Points>
 void test_right_limit_infinite()
 {
-    std::cout << "Testing right limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing right limit infinite for Gaussian quadrature in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = expected_error<Points>(test_right_limit_infinite_error_id);
     Real Q;
     Real Q_expected;
@@ -382,7 +390,7 @@ void test_right_limit_infinite()
 template<class Real, unsigned Points>
 void test_left_limit_infinite()
 {
-    std::cout << "Testing left limit infinite for tanh_sinh in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    std::cout << "Testing left limit infinite for Gaussian quadrature in 'A Comparison of Three High Precision Quadrature Schemes' on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     Real tol = expected_error<Points>(test_left_limit_infinite_error_id);
     Real Q;
     Real Q_expected;
@@ -394,8 +402,40 @@ void test_left_limit_infinite()
     BOOST_CHECK_CLOSE(Q, Q_expected, 100*tol);
 }
 
+template<class Complex>
+void test_complex_lambert_w()
+{
+    std::cout << "Testing that complex-valued integrands are integrated correctly by Gaussian quadrature on type " << boost::typeindex::type_id<Complex>().pretty_name() << "\n";
+    typedef typename Complex::value_type Real;
+    Real tol = 10e-9;
+    using boost::math::constants::pi;
+    Complex z{2, 3};
+    auto lw = [&z](Real v)->Complex {
+      using std::cos;
+      using std::sin;
+      using std::exp;
+      Real sinv = sin(v);
+      Real cosv = cos(v);
+
+      Real cotv = cosv/sinv;
+      Real cscv = 1/sinv;
+      Real t = (1-v*cotv)*(1-v*cotv) + v*v;
+      Real x = v*cscv*exp(-v*cotv);
+      Complex den = z + x;
+      Complex num = t*(z/pi<Real>());
+      Complex res = num/den;
+      return res;
+    };
+
+    //N[ProductLog[2+3*I], 150]
+    Complex Q = gauss<Real, 30>::integrate(lw, (Real) 0, pi<Real>());
+    BOOST_CHECK_CLOSE_FRACTION(Q.real(), boost::lexical_cast<Real>("1.09007653448579084630177782678166964987102108635357778056449870727913321296238687023915522935120701763447787503167111962008709116746523970476893277703"), tol);
+    BOOST_CHECK_CLOSE_FRACTION(Q.imag(), boost::lexical_cast<Real>("0.530139720774838801426860213574121741928705631382703178297940568794784362495390544411799468140433404536019992695815009036975117285537382995180319280835"), tol);
+}
+
 BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
 {
+  
 #ifdef TEST1
     test_linear<double, 7>();
     test_quadratic<double, 7>();
@@ -453,6 +493,18 @@ BOOST_AUTO_TEST_CASE(gauss_quadrature_test)
     test_integration_over_real_line<cpp_bin_float_quad, 30>();
     test_right_limit_infinite<cpp_bin_float_quad, 30>();
     test_left_limit_infinite<cpp_bin_float_quad, 30>();
+
+
+#endif
+#ifdef TEST3
+    test_left_limit_infinite<cpp_bin_float_quad, 30>();
+    test_complex_lambert_w<std::complex<double>>();
+    test_complex_lambert_w<std::complex<long double>>();
+#ifdef BOOST_HAS_FLOAT128
+    test_left_limit_infinite<boost::multiprecision::float128, 30>();
+    test_complex_lambert_w<boost::multiprecision::complex128>();
+#endif
+    test_complex_lambert_w<boost::multiprecision::cpp_complex_quad>();
 #endif
 }
 
