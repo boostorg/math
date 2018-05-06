@@ -301,7 +301,7 @@ void test_nr_examples()
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
     tol_mul = 1;
     if (std::numeric_limits<Real>::is_specialized == false)
-       tol_mul = 3;
+       tol_mul = 6;
     if (std::numeric_limits<Real>::digits10 > 40)
        tol_mul = 100;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mul * tol);
