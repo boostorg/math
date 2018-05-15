@@ -10,9 +10,13 @@
 //! \brief Basic sanity tests for Lambert W function plog productlog
 //! or lambert_w using algorithm informed by Thomas Luu, Veberic and Tosio Fukushima.
 
+// #define BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES // Diagnostics for z near zero.
+// #define BOOST_MATH_TEST_MULTIPRECISION  // Add tests for several multiprecision types (not just built-in).
+// #defin BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17  and quadmath library).
 
-
+#ifdef BOOST_MATH_TEST_FLOAT128
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
+#endif // #ifdef #ifdef BOOST_MATH_TEST_FLOAT128
 // Needs gnu++17 for BOOST_HAS_FLOAT128
 #include <boost/config.hpp>   // for BOOST_MSVC definition etc.
 #include <boost/version.hpp>   // for BOOST_MSVC versions.
@@ -20,27 +24,32 @@
 // Boost macros
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
-#include <boost/test/unit_test.hpp> // Boost.Test
+#include <boost/test/included/unit_test.hpp> // Boost.Test
+// #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/array.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/type_traits/is_constructible.hpp>
 
+#ifdef BOOST_MATH_TEST_MULTIPRECISION
 #include <boost/multiprecision/cpp_dec_float.hpp> // boost::multiprecision::cpp_dec_float_50
 using boost::multiprecision::cpp_dec_float_50;
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
 using boost::multiprecision::cpp_bin_float_quad;
 
-#include <boost/multiprecision/float128.hpp>
+#ifdef BOOST_MATH_TEST_FLOAT128
 
 #ifdef BOOST_HAS_FLOAT128
-// Including this header without float128 triggers:
+// Including this header below without float128 triggers:
 // fatal error C1189: #error:  "Sorry compiler is neither GCC, not Intel, don't know how to configure this header."
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
-#endif
+#endif // ifdef BOOST_HAS_FLOAT128
+#endif // #ifdef #ifdef BOOST_MATH_TEST_FLOAT128
+
+#endif //   #ifdef BOOST_MATH_TEST_MULTIPRECISION
 
 //#include <boost/fixed_point/fixed_point.hpp> // If available.
 
@@ -49,10 +58,12 @@ using boost::multiprecision::float128;
 #include <boost/math/special_functions/next.hpp> // float_next, float_prior
 using boost::math::float_next;
 using boost::math::float_prior;
+#include <boost/math/special_functions/ulp.hpp>  // ulp
 
 #include <boost/math/tools/test_value.hpp>  // for create_test_value and macro BOOST_MATH_TEST_VALUE.
 #include <boost/math/policies/policy.hpp>
 using boost::math::policies::digits2;
+using boost::math::policies::digits10;
 #include <boost/math/special_functions/lambert_w.hpp> // For Lambert W lambert_w function.
 using boost::math::lambert_wm1;
 using boost::math::lambert_w0;
@@ -64,7 +75,9 @@ using boost::math::lambert_w0;
 #include <type_traits>
 #include <exception>
 
-#define BOOST_MATH_LAMBERT_W_INTEGRALS
+std::string show_versions(void);
+
+//#define BOOST_MATH_LAMBERT_W_INTEGRALS
 
 #ifdef BOOST_MATH_LAMBERT_W_INTEGRALS
 
@@ -176,7 +189,7 @@ void test_integrals()
 #endif // BOOST_MATH_LAMBERT_W_INTEGRALS
 
 //! Build a message of information about build, architecture, address model, platform, ...
-std::string show_versions()
+std::string show_versions(void)
 {
   // Some of this information can also be obtained from running with a Custom Post-build step
   // adding the option --build_info=yes
@@ -191,10 +204,8 @@ std::string show_versions()
   message << "\nBuildInfo:\n" "  Platform " << BOOST_PLATFORM;
   // http://stackoverflow.com/questions/1505582/determining-32-vs-64-bit-in-c
 #if defined(__LP64__) || defined(_WIN64) || (defined(__x86_64__) && !defined(__ILP32__) ) || defined(_M_X64) || defined(__ia64) || defined (_M_IA64) || defined(__aarch64__) || defined(__powerpc64__)
-#define IS64BIT 1
   message << ", 64-bit.";
 #else
-#define IS32BIT 1
   message << ", 32-bit.";
 #endif
 
@@ -231,12 +242,19 @@ std::cout << "MINGW64 " << __MINGW32_MAJOR_VERSION << __MINGW32_MINOR_VERSION <<
   message << "\n  STL " << BOOST_STDLIB;
   message << "\n  Boost version " << BOOST_VERSION / 100000 << "." << BOOST_VERSION / 100 % 1000 << "." << BOOST_VERSION % 100;
 
+#ifdef BOOST_MATH_TEST_MULTIPRECISION
+  message << "\nBOOST_MATH_TEST_MULTIPRECISION defined for multiprecision tests. " << std::endl;
+#else
+ message << "\nBOOST_MATH_TEST_MULTIPRECISION not defined so NO multiprecision tests. " << std::endl;
+#endif // BOOST_MATH_TEST_MULTIPRECISION
+
 #ifdef BOOST_HAS_FLOAT128
-  message << ",  BOOST_HAS_FLOAT128." << std::endl;
-#endif
+  message << "BOOST_HAS_FLOAT128 is defined." << std::endl;
+#endif // ifdef BOOST_HAS_FLOAT128
+
   message << std::endl;
   return message.str();
-} // std::string versions()
+} // std::string show_versions()
 
 template <class RealType>
 void test_spots(RealType)
@@ -288,14 +306,14 @@ void test_spots(RealType)
   }
   RealType tolerance = boost::math::tools::epsilon<RealType>() * epsilons; // 2 eps as a fraction.
   std::cout << "Tolerance " << epsilons << " * epsilon == " << tolerance << std::endl;
-  std::cout << "Precision " << std::numeric_limits<RealType>::digits10 << " decimal digits." << std::endl;
+  std::cout << "Precision " << std::numeric_limits<RealType>::digits10 << " decimal digits, max_digits10 = " << std::numeric_limits <RealType>::max_digits10<< std::endl;
   // std::cout.precision(std::numeric_limits<RealType>::digits10);
   std::cout.precision(std::numeric_limits <RealType>::max_digits10);
   std::cout.setf(std::ios_base::showpoint);  // show trailing significant zeros.
   std::cout << "-exp(-1) = " << -exp_minus_one<RealType>() << std::endl;
 
   // Test at singularity.
-  //RealType test_value = BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527);
+  // RealType test_value = BOOST_MATH_TEST_VALUE(RealType, -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527);
   RealType singular_value = -exp_minus_one<RealType>();
   // -exp(-1) = -0.36787944117144232159552377016146086744581113103176783450783680169746149574489980335714727434591964374662732527
   // lambert_w0[-0.367879441171442321595523770161460867445811131031767834] == -1
@@ -592,19 +610,38 @@ void test_spots(RealType)
     BOOST_MATH_TEST_VALUE(RealType, 83.07844821316409592720410446942538465411465113447713574),
     tolerance);
 
-  // Small z < 0.05  if (z < -0.051)  -0.27 < z < -0.051
+  // Using z small series function if z < 0.05  if (z < -0.051)  -0.27 < z < -0.051
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.28)),
     BOOST_MATH_TEST_VALUE(RealType, -0.4307588745271127579165306568413721388196459822705155385),
+    tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.25)),
+    BOOST_MATH_TEST_VALUE(RealType, -0.3574029561813889030688111040559047533165905550760120436),
+    tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, +0.25)),
+    BOOST_MATH_TEST_VALUE(RealType, 0.2038883547022401644431818313271398701493524772101596350),
+    tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.051)), // just above 0.05 cutoff
+    BOOST_MATH_TEST_VALUE(RealType, -0.05382002772543396036830469500362485089791914689728115249),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.05)),
     BOOST_MATH_TEST_VALUE(RealType, -0.05270598355154634795995650617915721289427674396592395160),
     tolerance);
 
-  // Using z small series function < 0.05
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.049)),
     BOOST_MATH_TEST_VALUE(RealType, 0.04676143671340832342497289393737051868103596756298863555),
+    tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.01)),
+    BOOST_MATH_TEST_VALUE(RealType, 0.009901473843595011885336326816570107953627746494917415483),
+    tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.01)),
+    BOOST_MATH_TEST_VALUE(RealType, -0.01010152719853875327292018767138623973670903993475235877),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.049)),
@@ -691,7 +728,7 @@ void test_spots(RealType)
   // : no appropriate default constructor available
   // TODO ???????????
 
- } //template <class RealType>void test_spots(RealType)
+ } // template <class RealType>void test_spots(RealType)
 
 BOOST_AUTO_TEST_CASE( test_types )
 {
@@ -710,15 +747,21 @@ BOOST_AUTO_TEST_CASE( test_types )
     test_spots(0.0L); // long double
   }
 
+  #ifdef BOOST_MATH_TEST_MULTIPRECISION
   // Multiprecision types:
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_double_extended>(0));
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0));
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_50>(0));
+  #endif // ifdef BOOST_MATH_TEST_MULTIPRECISION
+
+  #ifdef BOOST_MATH_TEST_FLOAT128
+   std::cout << "\nBOOST_MATH_TEST_FLOAT128 defined for float128 tests." << std::endl;
 
 #ifdef BOOST_HAS_FLOAT128
-  // Requires link to libquadmath library,
+  //  GCC and Intel only.
+  // Requires link to libquadmath library, see
   // http://www.boost.org/doc/libs/release/libs/multiprecision/doc/html/boost_multiprecision/tut/floats/float128.html
-  //  for example:
+  // for example:
   // C:\Program Files\mingw-w64\x86_64-7.2.0-win32-seh-rt_v5-rev1\mingw64\lib\gcc\x86_64-w64-mingw32\7.2.0\libquadmath.a
 
   using boost::multiprecision::float128;
@@ -728,6 +771,9 @@ BOOST_AUTO_TEST_CASE( test_types )
 
   test_spots(static_cast<float128>(0));
 #endif // BOOST_HAS_FLOAT128
+#else
+  std::cout << "\nBOOST_MATH_TEST_FLOAT128 NOT defined so NO float128 tests." << std::endl;
+#endif // #ifdef BOOST_MATH_TEST_FLOAT128
 
   // Fixed-point types:
   // Some fail 0.1 to 1.0 ???
@@ -738,6 +784,7 @@ BOOST_AUTO_TEST_CASE( test_types )
 
 } // BOOST_AUTO_TEST_CASE( test_types )
 
+/*
 BOOST_AUTO_TEST_CASE( test_range_of_double_values )
 {
   using boost::math::constants::exp_minus_one;
@@ -1064,7 +1111,7 @@ BOOST_AUTO_TEST_CASE( derivatives_of_lambert_w )
 
 
 }; // BOOST_AUTO_TEST_CASE("derivatives of lambert_w")
-
+*/
 
 #ifdef BOOST_MATH_LAMBERT_W_INTEGRALS
 
@@ -1114,7 +1161,10 @@ BOOST_AUTO_TEST_CASE( integrals )
 
   std::cout << "lambert_w0(7.2416706213544837e-163) = " << lambert_w0(7.2416706213544837e-163) << std::endl; //
   std::cout << "test integral 1/z^2" << std::endl;
-
+  std::cout << "ULP = " << boost::math::ulp(1., policy<digits2<> >()) << std::endl; // ULP = 2.2204460492503131e-16
+  std::cout << "ULP = " << boost::math::ulp(1e-10, policy<digits2<> >()) << std::endl; // ULP = 2.2204460492503131e-16
+  std::cout << "ULP = " << boost::math::ulp(1., policy<digits2<11> >()) << std::endl; // ULP = 2.2204460492503131e-16
+  std::cout << "epsilon =  " << std::numeric_limits<double>::epsilon() << std::endl; //
 
   // Experiment with better diagnostics.
 typedef double Real;

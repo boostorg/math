@@ -463,7 +463,7 @@ T lambert_w_singularity_series(const T p)
   //! causing very small differences in computing lambert_w that would be very difficult to detect and diagnose.
   //! Cannot switch on @c std::numeric_limits<>::max() because comparison values may overflow the compiler limit.
   //! Cannot switch on @c std::numeric_limits<long double>::max_exponent10()
-  //! because both 80 and 128 bit floating-point implmentations use 11 bits for the exponent.
+  //! because both 80 and 128 bit floating-point implementations use 11 bits for the exponent.
   //! So must rely on @c std::numeric_limits<long double>::max_digits10.
 
   //! Specialization of float zero series expansion used for small z (abs(z) < 0.05).
@@ -484,24 +484,26 @@ template <class T, class Policy>
 T lambert_w0_small_z(T x, const Policy&, boost::mpl::int_<2> const&);   //  for long double (double extended 80-bit) type.
 
 template <class T, class Policy>
-T lambert_w0_small_z(T x, const Policy&, boost::mpl::int_<3> const&);   //  for float128
+T lambert_w0_small_z(T x, const Policy&, boost::mpl::int_<3> const&);   //  for long double (128-bit) type.
 
 template <class T, class Policy>
-T lambert_w0_small_z(T x, const Policy&, boost::mpl::int_<4> const&);   //  Generic multiprecision T.
+T lambert_w0_small_z(T x, const Policy&, boost::mpl::int_<4> const&);   //  for float128 quadmath Q type.
 
+template <class T, class Policy>
+T lambert_w0_small_z(T x, const Policy&, boost::mpl::int_<5> const&);   //  Generic multiprecision T.
                                                                         // Set tag_type depending on max_digits10.
 template <class T, class Policy>
 T lambert_w0_small_z(T x, const Policy& pol)
-{
+{ //std::numeric_limits<T>::max_digits10 == 36 ? 3 : // 128-bit long double.
   typedef boost::mpl::int_
     <
-    std::numeric_limits<T>::max_digits10 <= 9 ? 0 :  //  for float
-    std::numeric_limits<T>::max_digits10 <= 17 ? 1 : //  for double 64-bit
-    std::numeric_limits<T>::max_digits10 <= 22 ? 2 :  //  for  80-bit double extended
-    std::numeric_limits<T>::max_digits10 < 37 ? 3 : //  for float128  128-bit quad
-    4 // Generic multiprecision types.
+    std::numeric_limits<T>::max_digits10 <=  9 ? 0 : // for float 32-bit.
+    std::numeric_limits<T>::max_digits10 <= 17 ? 1 : // for double 64-bit.
+    std::numeric_limits<T>::max_digits10 <= 22 ? 2 : // for 80-bit double extended.
+    std::numeric_limits<T>::max_digits10 <  37 ? 4  // for both 128-bit long double (3) and 128-bit quad suffix Q type (4).
+      :  5                                            // All Generic multiprecision types.
     > tag_type;
-  // std::cout << "tag type = " << tag_type << std::endl; // error C2275: 'tag_type': illegal use of this type as an expression
+  // std::cout << "\ntag type = " << tag_type << std::endl; // error C2275: 'tag_type': illegal use of this type as an expression.
   return lambert_w0_small_z(x, pol, tag_type());
 } // template <class T> T lambert_w0_small_z(T x)
 
@@ -515,10 +517,11 @@ template <class T, class Policy>
 T lambert_w0_small_z(T z, const Policy&, boost::mpl::int_<0> const&)
 {
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
-  std::cout << "float lambert_w0_small_z called with z = " << z << " using " << 9 << " terms of precision "
+  std::streamsize prec = std::cout.precision(std::numeric_limits<T>::max_digits10); // Save.
+  std::cout << "\ntag_type 0 float lambert_w0_small_z called with z = " << z << " using " << 9 << " terms of precision "
     << std::numeric_limits<float>::max_digits10 << " decimal digits. " << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
-  return
+  T result =
     z * (1 - // j1 z^1 term = 1
       z * (1 -  // j2 z^2 term = -1
         z * (static_cast<float>(3uLL) / 2uLL - // 3/2 // j3 z^3 term = 1.5.
@@ -528,9 +531,16 @@ T lambert_w0_small_z(T z, const Policy&, boost::mpl::int_<0> const&)
                 z * (23.343055555555555556F - // j7
                   z * (52.012698412698412698F - // j8
                     z * 118.62522321428571429F)))))))); // j9
+
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+  std::cout << "return w = " << result << std::endl;
+  std::cout.precision(prec); // Restore.
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+
+  return result;
 } // template <class T>   T lambert_w0_small_z(T x, mpl::int_<0> const&)
 
-  //! Specialization of long double (80-bit double extended) series expansion used for small z (abs(z) < 0.05).
+  //! Specialization of double (64-bit double) series expansion used for small z (abs(z) < 0.05).
   // 17 Coefficients are computed to 21 decimal digits precision suitable for 64-bit double used by most platforms.
   // Taylor series coefficients used are computed by Wolfram to 50 decimal digits using instruction
   // N[InverseSeries[Series[z Exp[z],{z,0,34}]],50], as proposed by Tosio Fukushima and implemented by Veberic.
@@ -539,10 +549,11 @@ template <class T, class Policy>
 T lambert_w0_small_z(const T z, const Policy&, boost::mpl::int_<1> const&)
 {
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
-  std::cout << "double lambert_w0_small_z called with z = " << z << " using " << 17 << " terms of precision, "
+  std::streamsize prec = std::cout.precision(std::numeric_limits<T>::max_digits10); // Save.
+  std::cout << "\ntag_type 1 double lambert_w0_small_z called with z = " << z << " using " << 17 << " terms of precision, "
     << std::numeric_limits<double>::max_digits10 << " decimal digits. " << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
-  T  result =
+  T result =
     z * (1. - // j1 z^1
       z * (1. -  // j2 z^2
         z * (1.5 - // 3/2 // j3 z^3
@@ -560,60 +571,97 @@ T lambert_w0_small_z(const T z, const Policy&, boost::mpl::int_<1> const&)
                                 z * (22324.308512706601434 - // j15
                                   z * (55103.621972903835338 - // j16
                                     z * 136808.86090394293563)))))))))))))))); // j17 z^17
-  return result;
-}  // T lambert_w0_small_z(const T z, boost::mpl::int_<1> const&)
 
-   //! Specialization of long double (80-bit double extended) series expansion used for small z (abs(z) < 0.05).
-   // 21 Coefficients are computed to 21 decimal digits precision suitable for 80-bit long double used by some
-   // platforms including GCC and Clang when generating for Intel X86 floating-point processors with 80-bit operations enabled (the default).
-   // (This is NOT used by Microsoft Visual Studio where double and long always both use only 64-bit type.)
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+  std::cout << "return w = " << result << std::endl;
+  std::cout.precision(prec); // Restore.
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+
+  return result;
+} // T lambert_w0_small_z(const T z, boost::mpl::int_<1> const&)
+
+  //! Specialization of long double (80-bit double extended) series expansion used for small z (abs(z) < 0.05).
+  // 21 Coefficients are computed to 21 decimal digits precision suitable for 80-bit long double used by some
+  // platforms including GCC and Clang when generating for Intel X86 floating-point processors with 80-bit operations enabled (the default).
+  // (This is NOT used by Microsoft Visual Studio where double and long always both use only 64-bit type.
+  // Nor used for 128-bit float128.)
 template <class T, class Policy>
 T lambert_w0_small_z(const T z, const Policy&, boost::mpl::int_<2> const&)
 {
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
-  std::cout << "long double (80-bit double extended) lambert_w0_small_z called with z = " << z << " using " << 21 << " terms of precision "
+  std::streamsize precision = std::cout.precision(std::numeric_limits<T>::max_digits10); // Save.
+  std::cout << "\ntag_type 2 long double (80-bit double extended) lambert_w0_small_z called with z = " << z << " using " << 21 << " terms of precision, "
     << std::numeric_limits<long double>::max_digits10 << " decimal digits. " << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
-  T  result =
-    z * (1.L - // j1 z^1
-      z * (1.L -  // j2 z^2
-        z * (1.5L - // 3/2 // j3
-          z * (2.6666666666666666667L -  // 8/3 // j4
-            z * (5.2083333333333333333L - // -125/24 // j5
-              z * (10.800000000000000000L - // j6
-                z * (23.343055555555555556L - // j7
-                  z * (52.012698412698412698L - // j8
-                    z * (118.62522321428571429L - // j9
-                      z * (275.57319223985890653L - // j10
-                        z * (649.78717234347442681L - // j11
-                          z * (1551.1605194805194805L - // j12
-                            z * (3741.4497029592385495L - // j13
-                              z * (9104.5002411580189358L - // j14
-                                z * (22324.308512706601434L - // j15
-                                  z * (55103.621972903835338L - // j16
-                                    z * (136808.86090394293563L - // j17 z^17  last term used by Fukushima double.
-                                      z * (341422.050665838363317L - // z^18
-                                        z * (855992.9659966075514633L - // z^19
-                                          z * (2.154990206091088289321e6L - // z^20
-                                            z * 5.4455529223144624316423e6L   // z^21
-                                            ))))))))))))))))))));
+//  T  result =
+//    z * (1.L - // j1 z^1
+//      z * (1.L -  // j2 z^2
+//        z * (1.5L - // 3/2 // j3
+//          z * (2.6666666666666666667L -  // 8/3 // j4
+//            z * (5.2083333333333333333L - // -125/24 // j5
+//              z * (10.800000000000000000L - // j6
+//                z * (23.343055555555555556L - // j7
+//                  z * (52.012698412698412698L - // j8
+//                    z * (118.62522321428571429L - // j9
+//                      z * (275.57319223985890653L - // j10
+//                        z * (649.78717234347442681L - // j11
+//                          z * (1551.1605194805194805L - // j12
+//                            z * (3741.4497029592385495L - // j13
+//                              z * (9104.5002411580189358L - // j14
+//                                z * (22324.308512706601434L - // j15
+//                                  z * (55103.621972903835338L - // j16
+//                                    z * (136808.86090394293563L - // j17 z^17  last term used by Fukushima double.
+//                                      z * (341422.050665838363317L - // z^18
+//                                        z * (855992.9659966075514633L - // z^19
+//                                          z * (2.154990206091088289321e6L - // z^20
+//                                            z * 5.4455529223144624316423e6L   // z^21
+//                                              ))))))))))))))))))));
+//
 
+  T result =
+z * (1.L - // z j1
+z * (1.L - // z^2
+z * (1.500000000000000000000000000000000L - // z^3
+z * (2.666666666666666666666666666666666L - // z ^ 4
+z * (5.208333333333333333333333333333333L - // z ^ 5
+z * (10.80000000000000000000000000000000L - // z ^ 6
+z * (23.34305555555555555555555555555555L - //  z ^ 7
+z * (52.01269841269841269841269841269841L - // z ^ 8
+z * (118.6252232142857142857142857142857L - // z ^ 9
+z * (275.5731922398589065255731922398589L - // z ^ 10
+z * (649.7871723434744268077601410934744L - // z ^ 11
+z * (1551.160519480519480519480519480519L - // z ^ 12
+z * (3741.449702959238549516327294105071L - //z ^ 13
+z * (9104.500241158018935796713574491352L - //  z ^ 14
+z * (22324.308512706601434280005708577137L - //  z ^ 15
+z * (55103.621972903835337697771560205422L - //  z ^ 16
+z * (136808.86090394293563342215789305736L - // z ^ 17
+z * (341422.05066583836331735491399356945L - //  z^18
+z * (855992.9659966075514633630250633224L - // z^19
+z * (2.154990206091088289321708745358647e6L // z^20 distance -5 without term 20
+))))))))))))))))))));
+
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+  std::cout << "return w = " << result << std::endl;
+  std::cout.precision(precision); // Restore.
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
   return result;
-}  // T lambert_w0_small_z(const T z, boost::mpl::int_<1> const&)
+}  // long double lambert_w0_small_z(const T z, boost::mpl::int_<1> const&)
 
-   //! Specialization of long double (128-bit quad) series expansion used for small z (abs(z) < 0.05).
-   // 34 Taylor series coefficients used are computed by Wolfram to 50 decimal digits using instruction
-   // N[InverseSeries[Series[z Exp[z],{z,0,34}]],50],
-   // and are suffixed by L as they are assumed of type long double.
-   // (This is NOT used for 128-bit quad which required a suffix Q
-   // nor multiprecision type cpp_bin_float_quad that can only be initialised at full precision of the type
-   // using a decimal digit string like "2.6666666666666666666666666666666666666666666666667".)
+//! Specialization of 128-bit long double series expansion used for small z (abs(z) < 0.05).
+// 34 Taylor series coefficients used are computed by Wolfram to 50 decimal digits using instruction
+// N[InverseSeries[Series[z Exp[z],{z,0,34}]],50],
+// and are suffixed by L as they are assumed of type long double.
+// (This is NOT used for 128-bit quad boost::multiprecision::float128 type which required a suffix Q
+// nor multiprecision type cpp_bin_float_quad that can only be initialised at full precision of the type
+// constructed with a decimal digit string like "2.6666666666666666666666666666666666666666666666667".)
 
 template <class T, class Policy>
 T lambert_w0_small_z(const T z, const Policy&, boost::mpl::int_<3> const&)
 {
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
-  std::cout << "long double (128-bit quad) lambert_w0_small_z called with z = " << z << " using " << 34 << " terms of precision "
+  std::streamsize precision = std::cout.precision(std::numeric_limits<T>::max_digits10); // Save.
+  std::cout << "\ntag_type 3 long double (128-bit) lambert_w0_small_z called with z = " << z << " using " << 17 << " terms of precision,  "
     << std::numeric_limits<double>::max_digits10 << " decimal digits. " << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
   T  result =
@@ -622,7 +670,7 @@ T lambert_w0_small_z(const T z, const Policy&, boost::mpl::int_<3> const&)
         z * (1.5L - // 3/2 // j3
           z * (2.6666666666666666666666666666666666L -  // 8/3 // j4
             z * (5.2052083333333333333333333333333333L - // -125/24 // j5
-              z * (-10.800000000000000000000000000000000L - // j6
+              z * (10.800000000000000000000000000000000L - // j6
                 z * (23.343055555555555555555555555555555L - // j7
                   z * (52.0126984126984126984126984126984126L - // j8
                     z * (118.625223214285714285714285714285714L - // j9
@@ -633,12 +681,84 @@ T lambert_w0_small_z(const T z, const Policy&, boost::mpl::int_<3> const&)
                               z * (9104.5002411580189357967135744913522691300469078247L - // j14
                                 z * (22324.308512706601434280005708577137148565719994291L - // j15
                                   z * (55103.621972903835337697771560205422639285073147507L - // j16
-                                    z * 136808.86090394293563342215789305736395683485630576L)))))))))))))))); // j17
-  return result;
-}  // T lambert_w0_small_z(const T z, boost::mpl::int_<1> const&)
+                                    z * 136808.86090394293563342215789305736395683485630576L    // j17
+                                      ))))))))))))))));
 
-   //! Series functor to compute series term using pow and factorial.
-   //! \details Functor is called after evaluating polynomial with the coefficients as rationals below.
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+  std::cout << "return w = " << result << std::endl;
+  std::cout.precision(precision); // Restore.
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+  return result;
+}  // T lambert_w0_small_z(const T z, boost::mpl::int_<3> const&)
+
+//! Specialization of 128-bit quad series expansion used for small z (abs(z) < 0.05).
+// 34 Taylor series coefficients used were computed by Wolfram to 50 decimal digits using instruction
+//   N[InverseSeries[Series[z Exp[z],{z,0,34}]],50],
+// and are suffixed by Q as they are assumed of type quad.
+// This could be used for 128-bit quad (which requires a suffix Q for full precision).
+// But experiments with GCC 7.2.0 show that while this gives full 128-bit precision
+// when the -f-ext-numeric-literals option is in force and the libquadmath library available,
+// over the range -0.049 to +0.049, 
+// it is slightly slower than getting a double approximation followed by a single Halley step.
+
+#ifdef BOOST_HAS_FLOAT128
+template <class T, class Policy>
+T lambert_w0_small_z(const T z, const Policy&, boost::mpl::int_<4> const&)
+{
+#ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+  std::streamsize precision = std::cout.precision(std::numeric_limits<T>::max_digits10); // Save.
+  std::cout << "\ntag_type 4 128-bit quad float128 lambert_w0_small_z called with z = " << z << " using " << 34 << " terms of precision, "
+    << std::numeric_limits<float128>::max_digits10 << " max decimal digits." << std::endl;
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+  T  result =
+    z * (1.Q - // z j1
+      z * (1.Q - // z^2
+        z * (1.500000000000000000000000000000000Q - // z^3
+          z * (2.666666666666666666666666666666666Q - // z ^ 4
+            z * (5.208333333333333333333333333333333Q - // z ^ 5
+              z * (10.80000000000000000000000000000000Q - // z ^ 6
+                z * (23.34305555555555555555555555555555Q - //  z ^ 7
+                  z * (52.01269841269841269841269841269841Q - // z ^ 8
+                    z * (118.6252232142857142857142857142857Q - // z ^ 9
+                      z * (275.5731922398589065255731922398589Q - // z ^ 10
+                        z * (649.7871723434744268077601410934744Q - // z ^ 11
+                          z * (1551.160519480519480519480519480519Q - // z ^ 12
+                            z * (3741.449702959238549516327294105071Q - //z ^ 13
+                              z * (9104.500241158018935796713574491352Q - //  z ^ 14
+                                z * (22324.308512706601434280005708577137Q - //  z ^ 15
+                                  z * (55103.621972903835337697771560205422Q - //  z ^ 16
+                                    z * (136808.86090394293563342215789305736Q - // z ^ 17
+                                      z * (341422.05066583836331735491399356945Q - //  z^18
+                                        z * (855992.9659966075514633630250633224Q - // z^19
+                                          z * (2.154990206091088289321708745358647e6Q - //  20
+                                            z * (5.445552922314462431642316420035073e6Q - // 21
+                                              z * (1.380733000216662949061923813184508e7Q - // 22
+                                                z * (3.511704498513923292853869855945334e7Q - // 23
+                                                  z * (8.956800256102797693072819557780090e7Q - // 24
+                                                    z * (2.290416846187949813964782641734774e8Q - // 25
+                                                      z * (5.871035041171798492020292225245235e8Q - // 26
+                                                        z * (1.508256053857792919641317138812957e9Q - // 27
+                                                          z * (3.882630161293188940385873468413841e9Q - // 28
+                                                            z * (1.001394313665482968013913601565723e10Q - // 29
+                                                              z * (2.587356736265760638992878359024929e10Q - // 30
+                                                                z * (6.696209709358073856946120522333454e10Q - // 31
+                                                                  z * (1.735711659599198077777078238043644e11Q - // 32
+                                                                    z * (4.505680465642353886756098108484670e11Q - // 33
+                                                                      z * (1.171223178256487391904047636564823e12Q  //z^34
+                                                                        ))))))))))))))))))))))))))))))))));
+
+
+ #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+  std::cout << "return w = " << result << std::endl;
+  std::cout.precision(precision); // Restore.
+#endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+
+  return result;
+}  // T lambert_w0_small_z(const T z, boost::mpl::int_<4> const&) float128
+#endif // BOOST_HAS_FLOAT128
+
+//! Series functor to compute series term using pow and factorial.
+//! \details Functor is called after evaluating polynomial with the coefficients as rationals below.
 template <class T>
 struct lambert_w0_small_z_series_term
 {
@@ -670,9 +790,10 @@ private:
 
    //! Generic variant for T a User-defined types like Boost.Multiprecision.
 template <class T, class Policy>
-inline T lambert_w0_small_z(T z, const Policy& pol, boost::mpl::int_<4> const&)
+inline T lambert_w0_small_z(T z, const Policy& pol, boost::mpl::int_<5> const&)
 {
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
+  std::streamsize precision = std::cout.precision(std::numeric_limits<T>::max_digits10); // Save.
   std::cout << "Generic lambert_w0_small_z called with z = " << z << " using as many terms needed for precision." << std::endl;
   std::cout << "Argument z is of type " << typeid(T).name() << std::endl;
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
@@ -740,9 +861,9 @@ inline T lambert_w0_small_z(T z, const Policy& pol, boost::mpl::int_<4> const&)
      #15 22324.308512706601434280005708577137322392070452582
      #16 -55103.621972903835337697771560205423203318720697224
      #17 136808.86090394293563342215789305735851647769682393
-     136808.86090394293563342215789305735851647769682393   == Exactly same as Wolfram computed value.
+         136808.86090394293563342215789305735851647769682393   == Exactly same as Wolfram computed value.
      #18 -341422.05066583836331735491399356947486381600607416
-     341422.05066583836331735491399356945575432970390954  z^19  Wolfram value differs at 36 decimal digit, as expected.
+          341422.05066583836331735491399356945575432970390954  z^19  Wolfram value differs at 36 decimal digit, as expected.
      */
 
   using boost::math::policies::get_epsilon; // for type T.
@@ -802,8 +923,8 @@ inline T lambert_w0_small_z(T z, const Policy& pol, boost::mpl::int_<4> const&)
   policies::check_series_iterations<T>("boost::math::lambert_w0_small_z<%1%>(%1%)", max_iter, pol);
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS
   std::cout << "z = " << z << " needed  " << max_iter << " iterations." << std::endl;
+  std::cout.precision(prec); // Restore.
 #endif // BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS
-  //std::cout.precision(prec); // Restore.
   return result;
 } // template <class T, class Policy> inline T lambert_w0_small_z_series(T z, const Policy& pol)
 
@@ -839,30 +960,33 @@ T lambert_w0_approx(T z)
 //template <class T, class Policy> T lambert_w0_small_z(T z, const Policy& pol);
 //
 //template <class T, class Policy>
-//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<0>&);
+//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<0>&); // 32 bit usually float
 //template <class T, class Policy>
-//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<1>&);
+//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<1>&); //  64 bit usually double
 //template <class T, class Policy>
-//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<2>&);
+//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<2>&); // 80-bit long double
+
+
 
 //! Lambert_w0 @b 'float' implementation, selected when T is 32-bit precision.
 template <class T, class Policy>
 inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
 {
-   static const char* function = "boost::math::lambert_w0<%1%>"; // For error messages.
-   BOOST_MATH_STD_USING // Aid ADL of std functions.
+  static const char* function = "boost::math::lambert_w0<%1%>"; // For error messages.
+  BOOST_MATH_STD_USING // Aid ADL of std functions.
 
-	 if ((boost::math::isnan)(z))
-	 {
-		 return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
-	 }
-   if ((boost::math::isinf)(z))
-   {
-     return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
-   }
+	if ((boost::math::isnan)(z))
+	{
+	  return boost::math::policies::raise_domain_error<T>(function, "Expected a value > -e^-1 (-0.367879...) but got %1%.", z, pol);
+	}
+  if ((boost::math::isinf)(z))
+  {
+    return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
+  }
 
-   if (z >= 0.05)
-   { // Normal ranges using several rational polynomials.
+   //if (z >= 0.05)
+   if (z >= 0.045) // 34 terms makes 128-bit 'exact' below 0.045.
+    { // Normal ranges using several rational polynomials.
       if (z < 2)
       {
          if (z < 0.5)
@@ -1074,7 +1198,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
    static const char* function = "boost::math::lambert_w0<%1%>";
    BOOST_MATH_STD_USING // Aid ADL of std functions.
 
-   // Unusual case of 32-bit double with a wider/64-bit long double
+   // Detect unusual case of 32-bit double with a wider/64-bit long double
    BOOST_STATIC_ASSERT_MSG(std::numeric_limits<double>::digits >= 53,
    "Our double precision coefficients will be truncated, "
 	 "please file a bug report with details of your platform's floating point types "
@@ -1354,7 +1478,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
          }
          else
          {
-            // Very small z:
+            // Very small z > 0.051:
             return lambert_w0_small_z(z, pol);
          }
       }
@@ -1461,7 +1585,8 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
 } // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
 
 //! lambert_W0 implementation for extended precision types including
-//! long double, Boost.Multiprecision types like cpp_bin_float_quad, cpp_bin_float_50...
+//! long double (80-bit and 128-bit), ???
+//! quad float128, Boost.Multiprecision types like cpp_bin_float_quad, cpp_bin_float_50...
 
 template <class T, class Policy>
 inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)
@@ -1513,22 +1638,22 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)
       return lambert_w_detail::lambert_w_singularity_series(p);
    }
 
-   // Phew!
-   // If we get here we are in the normal range of the function, so
-   // get a double precision approximation first, then iterate to full precision of T.
-   // We define a type that is:
+   // Phew!  If we get here we are in the normal range of the function,
+   // so get a double precision approximation first, then iterate to full precision of T.
+   // We define a tag_type that is:
    // mpl::true_  if there are so many digits precision wanted that iteration is necessary.
    // mpl::false_ if a single Halley step is sufficient.
-   // For speed, we also cast z to type double when that is possible
-   //   (boost::is_constructible<double, T>() == true).
+
 
    typedef typename policies::precision<T, Policy>::type precision_type;
    typedef mpl::bool_<
       (precision_type::value == 0) || (precision_type::value > 113) ?
-      true // Unknown at compile-time, variable/arbitrary, or more than quad 128-bit precision.
-      : false
+      true // Unknown at compile-time, variable/arbitrary, or more than float128 or cpp_bin_quad 128-bit precision.
+      : false // float, double, float128, cpp_bin_quad 128-bit, so single Halley step.
    > tag_type;
 
+   // For speed, we also cast z to type double when that is possible
+   //   if (boost::is_constructible<double, T>() == true).
    T w = lambert_w0_imp(maybe_reduce_to_double(z, boost::is_constructible<double, T>()), pol, mpl::int_<2>());
 
    return lambert_w_maybe_halley_iterate(w, z, tag_type());
@@ -1881,7 +2006,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
         return result; // Halley
       } // schroeder or Schroeder and Halley.
     } // more than 10 digits2
-  } 
+  }
 } // template<typename T = double> T lambert_wm1_imp(const T z)
 } // namespace lambert_w_detail
 
@@ -1896,14 +2021,14 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
      // Promote integer or expression template arguments to double,
      // without doing any other internal promotion like float to double.
     typedef typename tools::promote_args<T>::type result_type;
-    
-    // Work out what precision has been selected, 
+
+    // Work out what precision has been selected,
     // based on the Policy and the number type.
     typedef typename policies::precision<result_type, Policy>::type precision_type;
-    // and then select the correct implementation based on that (not the type T):
+    // and then select the correct implementation based on that precision (not the type T):
     typedef mpl::int_<
       (precision_type::value == 0) || (precision_type::value > 53) ?
-      0  // either variable precision (0), or greater than 64-bit precision.
+        0  // either variable precision (0), or greater than 64-bit precision.
       : (precision_type::value <= 24) ? 1 // 32-bit (probably float) precision.
       : 2  // 64-bit (probably double) precision.
       > tag_type;
@@ -1938,10 +2063,10 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     typedef typename tools::promote_args<T>::type result_type;
 
     // Perhaps Deal with other special cases here??????????????
-    // (TODO NaN, zero? 
+    // (TODO NaN, zero?
     //if ((boost::math::isinf)(z))
     //{
-    // // return std::numeric_limits<T>::infinity();  
+    // // return std::numeric_limits<T>::infinity();
     //  static const char* function = "boost::math::lambert_w0<%1%>";
     //  return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, policies::policy<>());
     //  // for double max possible is 703.227... so this would return this value.
@@ -1959,7 +2084,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
       : 2  // 64-bit (probably double) precision.
     > tag_type;
     T result = lambert_w_detail::lambert_w0_imp(result_type(z),  policies::policy<>(), tag_type()); // Pre-Halley.
-    // Always add Halley step for default policy, 
+    // Always add Halley step for default policy,
     // unless these special cases where unlikely to improve.
     if ((z < -0.3578) // Using singularity series.
       || (!boost::math::isnormal(result))  // NaN, infinity or denormal.

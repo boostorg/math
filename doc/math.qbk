@@ -447,6 +447,7 @@ and use the function's name as the link text.]
 [def __Luu_thesis [@http://discovery.ucl.ac.uk/1482128/1/Luu_thesis.pdf Thomas Luu, Thesis, University College London (2015)]]
 [def __rational_function [@https://en.wikipedia.org/wiki/Rational_function rational function]]
 [def __remez [@http://en.wikipedia.org/wiki/Remez_algorithm Remez algorithm]]
+[def __ULP [@https://en.wikipedia.org/wiki/Unit_in_the_last_place Unit in the Last Place]]
 
 [/ Some composite templates]
 [template super[x]'''<superscript>'''[x]'''</superscript>''']
