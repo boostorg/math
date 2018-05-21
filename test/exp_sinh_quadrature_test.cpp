@@ -52,7 +52,7 @@ using boost::math::constants::root_two_pi;
 using boost::math::constants::root_pi;
 using boost::math::quadrature::exp_sinh;
 
-#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7)
+#if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7) && !defined(TEST8)
 #  define TEST1
 #  define TEST2
 #  define TEST3
@@ -60,6 +60,7 @@ using boost::math::quadrature::exp_sinh;
 #  define TEST5
 #  define TEST6
 #  define TEST7
+#  define TEST8
 #endif
 
 #ifdef BOOST_MSVC
@@ -494,11 +495,11 @@ void test_complex_modified_bessel()
         using std::cosh;
         using std::exp;
         Real cosht = cosh(t);
-        if (cosht > 1000000000)
+        if (cosht > boost::math::tools::log_max_value<Real>())
         {
             return Complex{0, 0};
         }
-        Complex arg = -z*cosh(t);
+        Complex arg = -z*cosht;
         Complex res = exp(arg);
         return res;
     };
@@ -574,7 +575,8 @@ BOOST_AUTO_TEST_CASE(exp_sinh_quadrature_test)
     test_right_limit_infinite<boost::multiprecision::cpp_dec_float_50>();
     test_nr_examples<boost::multiprecision::cpp_dec_float_50>();
     test_crc<boost::multiprecision::cpp_dec_float_50>();
-
+#endif
+#ifdef TEST8
     test_complex_modified_bessel<std::complex<float>>();
     test_complex_modified_bessel<std::complex<double>>();
     test_complex_modified_bessel<std::complex<long double>>();
