@@ -490,7 +490,7 @@ void test_nr_examples()
     auto f2 = [](Real x)->Real { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>());
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 3);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 6);
 
 }
 
