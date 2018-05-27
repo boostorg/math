@@ -4,7 +4,7 @@
 <title>Barycentric Rational Interpolation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
+<link rel="home" href="../index.html" title="Math Toolkit 2.6.1">
 <link rel="up" href="../interpolation.html" title="Chapter&#160;10.&#160;Interpolation">
 <link rel="prev" href="cubic_b.html" title="Cubic B-spline interpolation">
 <link rel="next" href="../quadrature.html" title="Chapter&#160;11.&#160;Quadrature and Differentiation">
@@ -37,7 +37,7 @@
     <span class="keyword">class</span> <span class="identifier">barycentric_rational</span>
     <span class="special">{</span>
     <span class="keyword">public</span><span class="special">:</span>
-	    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">InputIterator1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">InputIterator2</span><span class="special">&gt;</span>
+        <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">InputIterator1</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">InputIterator2</span><span class="special">&gt;</span>
         <span class="identifier">barycentric_rational</span><span class="special">(</span><span class="identifier">InputIterator1</span> <span class="identifier">start_x</span><span class="special">,</span> <span class="identifier">InputIterator1</span> <span class="identifier">end_x</span><span class="special">,</span> <span class="identifier">InputIterator2</span> <span class="identifier">start_y</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">approximation_order</span> <span class="special">=</span> <span class="number">3</span><span class="special">);</span>
         <span class="identifier">barycentric_rational</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">Real</span><span class="special">*</span> <span class="keyword">const</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Real</span><span class="special">*</span> <span class="keyword">const</span> <span class="identifier">y</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">n</span><span class="special">,</span> <span class="identifier">size_t</span> <span class="identifier">approximation_order</span> <span class="special">=</span> <span class="number">3</span><span class="special">);</span>
 
@@ -68,7 +68,7 @@
       This implicitly calls the constructor with approximation order 3, and hence
       the accuracy is &#119926;(h<sup>4</sup>). In general, if you require an approximation order <span class="emphasis"><em>d</em></span>,
       then the error is &#119926;(h<sup>d+1</sup>). A call to the constructor with an explicit approximation
-      order could be
+      order is demonstrated below
     </p>
 <pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">barycentric_rational</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">interpolant</span><span class="special">(</span><span class="identifier">x</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">y</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">y</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="number">5</span><span class="special">);</span>
 </pre>

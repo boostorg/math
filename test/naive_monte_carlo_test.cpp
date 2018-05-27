@@ -5,6 +5,7 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 #define BOOST_TEST_MODULE naive_monte_carlo_test
+#define BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
 #include <cmath>
 #include <ostream>
 #include <boost/lexical_cast.hpp>
@@ -35,12 +36,15 @@ void test_pi_multithreaded()
     };
 
     std::vector<std::pair<Real, Real>> bounds{{Real(0), Real(1)}, {Real(0), Real(1)}};
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0005,
-                                          /*singular =*/ false,/* threads = */ 2, /* seed = */ 17);
+    Real error_goal = 0.0002;
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, error_goal,
+                                          /*singular =*/ false,/* threads = */ 2, /* seed = */ 18012);
     auto task = mc.integrate();
     Real pi_estimated = task.get();
     if (abs(pi_estimated - pi<Real>())/pi<Real>() > 0.005) {
         std::cout << "Error in estimation of pi too high, function calls: " << mc.calls() << "\n";
+        std::cout << "Final error estimate : " << mc.current_error_estimate() << "\n";
+        std::cout << "Error goal           : " << error_goal << "\n";
         BOOST_CHECK_CLOSE_FRACTION(pi_estimated, pi<Real>(), 0.005);
     }
 }
@@ -60,13 +64,16 @@ void test_pi()
     };
 
     std::vector<std::pair<Real, Real>> bounds{{Real(0), Real(1)}, {Real(0), Real(1)}};
-    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, (Real) 0.0005,
-                                            /*singular =*/ false,/* threads = */ 1, /* seed = */ 17);
+    Real error_goal = (Real) 0.0002;
+    naive_monte_carlo<Real, decltype(g)> mc(g, bounds, error_goal,
+                                            /*singular =*/ false,/* threads = */ 1, /* seed = */ 128402);
     auto task = mc.integrate();
     Real pi_estimated = task.get();
     if (abs(pi_estimated - pi<Real>())/pi<Real>() > 0.005)
     {
         std::cout << "Error in estimation of pi too high, function calls: " << mc.calls() << "\n";
+        std::cout << "Final error estimate : " << mc.current_error_estimate() << "\n";
+        std::cout << "Error goal           : " << error_goal << "\n";
         BOOST_CHECK_CLOSE_FRACTION(pi_estimated, pi<Real>(), 0.005);
     }
 
@@ -208,14 +215,14 @@ void test_variance()
     BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.05);
 }
 
-template<class Real, size_t dimension>
+template<class Real, uint64_t dimension>
 void test_product()
 {
     std::cout << "Testing that product functions are integrated correctly by naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
         double y = 1;
-        for (size_t i = 0; i < x.size(); ++i)
+        for (uint64_t i = 0; i < x.size(); ++i)
         {
             y *= 2*x[i];
         }
@@ -223,7 +230,7 @@ void test_product()
     };
 
     vector<pair<Real, Real>> bounds(dimension);
-    for (size_t i = 0; i < dimension; ++i)
+    for (uint64_t i = 0; i < dimension; ++i)
     {
         bounds[i] = std::make_pair<Real, Real>(0, 1);
     }
@@ -237,14 +244,14 @@ void test_product()
     BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.1);
 }
 
-template<class Real, size_t dimension>
-void test_alternative_rng()
+template<class Real, uint64_t dimension>
+void test_alternative_rng_1()
 {
     std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     auto g = [&](std::vector<Real> const & x)->Real
     {
         double y = 1;
-        for (size_t i = 0; i < x.size(); ++i)
+        for (uint64_t i = 0; i < x.size(); ++i)
         {
             y *= 2*x[i];
         }
@@ -252,18 +259,72 @@ void test_alternative_rng()
     };
 
     vector<pair<Real, Real>> bounds(dimension);
-    for (size_t i = 0; i < dimension; ++i)
+    for (uint64_t i = 0; i < dimension; ++i)
     {
         bounds[i] = std::make_pair<Real, Real>(0, 1);
     }
-    naive_monte_carlo<Real, decltype(g), std::mt19937> mc(g, bounds, (Real) 0.001, false, 1, 1882);
+    std::cout << "Testing std::mt19937" << std::endl;
 
-    auto task = mc.integrate();
+    naive_monte_carlo<Real, decltype(g), std::mt19937> mc1(g, bounds, (Real) 0.001, false, 1, 1882);
+
+    auto task = mc1.integrate();
     Real y = task.get();
     BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
     using std::pow;
     Real exact_variance = pow(4.0/3.0, dimension) - 1;
-    BOOST_CHECK_CLOSE_FRACTION(mc.variance(), exact_variance, 0.05);
+    BOOST_CHECK_CLOSE_FRACTION(mc1.variance(), exact_variance, 0.05);
+
+    std::cout << "Testing std::knuth_b" << std::endl;
+    naive_monte_carlo<Real, decltype(g), std::knuth_b> mc2(g, bounds, (Real) 0.001, false, 1, 1883);
+    task = mc2.integrate();
+    y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+
+    std::cout << "Testing std::ranlux48" << std::endl;
+    naive_monte_carlo<Real, decltype(g), std::ranlux48> mc3(g, bounds, (Real) 0.001, false, 1, 1884);
+    task = mc3.integrate();
+    y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+}
+
+template<class Real, uint64_t dimension>
+void test_alternative_rng_2()
+{
+    std::cout << "Testing that alternative RNGs work correctly using naive Monte-Carlo on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    auto g = [&](std::vector<Real> const & x)->Real
+    {
+        double y = 1;
+        for (uint64_t i = 0; i < x.size(); ++i)
+        {
+            y *= 2*x[i];
+        }
+        return y;
+    };
+
+    vector<pair<Real, Real>> bounds(dimension);
+    for (uint64_t i = 0; i < dimension; ++i)
+    {
+        bounds[i] = std::make_pair<Real, Real>(0, 1);
+    }
+
+    std::cout << "Testing std::default_random_engine" << std::endl;
+    naive_monte_carlo<Real, decltype(g), std::default_random_engine> mc4(g, bounds, (Real) 0.001, false, 1, 1884);
+    auto task = mc4.integrate();
+    Real y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+
+    std::cout << "Testing std::minstd_rand" << std::endl;
+    naive_monte_carlo<Real, decltype(g), std::minstd_rand> mc5(g, bounds, (Real) 0.001, false, 1, 1887);
+    task = mc5.integrate();
+    y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+
+    std::cout << "Testing std::minstd_rand0" << std::endl;
+    naive_monte_carlo<Real, decltype(g), std::minstd_rand0> mc6(g, bounds, (Real) 0.001, false, 1, 1889);
+    task = mc6.integrate();
+    y = task.get();
+    BOOST_CHECK_CLOSE_FRACTION(y, 1, 0.01);
+
 }
 
 template<class Real>
@@ -276,7 +337,7 @@ void test_upper_bound_infinite()
     };
 
     vector<pair<Real, Real>> bounds(1);
-    for (size_t i = 0; i < bounds.size(); ++i)
+    for (uint64_t i = 0; i < bounds.size(); ++i)
     {
         bounds[i] = std::make_pair<Real, Real>(0, std::numeric_limits<Real>::infinity());
     }
@@ -296,7 +357,7 @@ void test_lower_bound_infinite()
     };
 
     vector<pair<Real, Real>> bounds(1);
-    for (size_t i = 0; i < bounds.size(); ++i)
+    for (uint64_t i = 0; i < bounds.size(); ++i)
     {
         bounds[i] = std::make_pair<Real, Real>(-std::numeric_limits<Real>::infinity(), 0);
     }
@@ -318,7 +379,7 @@ void test_lower_bound_infinite2()
     };
 
     vector<pair<Real, Real>> bounds(1);
-    for (size_t i = 0; i < bounds.size(); ++i)
+    for (uint64_t i = 0; i < bounds.size(); ++i)
     {
         bounds[i] = std::make_pair<Real, Real>(-std::numeric_limits<Real>::infinity(), 0);
     }
@@ -338,7 +399,7 @@ void test_double_infinite()
     };
 
     vector<pair<Real, Real>> bounds(1);
-    for (size_t i = 0; i < bounds.size(); ++i)
+    for (uint64_t i = 0; i < bounds.size(); ++i)
     {
         bounds[i] = std::make_pair<Real, Real>(-std::numeric_limits<Real>::infinity(), std::numeric_limits<Real>::infinity());
     }
@@ -349,7 +410,7 @@ void test_double_infinite()
     BOOST_CHECK_CLOSE_FRACTION(y, boost::math::constants::pi<Real>(), 0.01);
 }
 
-template<class Real, size_t dimension>
+template<class Real, uint64_t dimension>
 void test_radovic()
 {
     // See: Generalized Halton Sequences in 2008: A Comparative Study, function g1:
@@ -359,7 +420,7 @@ void test_radovic()
         using std::abs;
         Real alpha = (Real)0.01;
         Real z = 1;
-        for (size_t i = 0; i < dimension; ++i)
+        for (uint64_t i = 0; i < dimension; ++i)
         {
             z *= (abs(4*x[i]-2) + alpha)/(1+alpha);
         }
@@ -367,11 +428,11 @@ void test_radovic()
     };
 
     vector<pair<Real, Real>> bounds(dimension);
-    for (size_t i = 0; i < bounds.size(); ++i)
+    for (uint64_t i = 0; i < bounds.size(); ++i)
     {
         bounds[i] = std::make_pair<Real, Real>(0, 1);
     }
-    Real error_goal = 0.001;
+    Real error_goal = (Real) 0.001;
     naive_monte_carlo<Real, decltype(g)> mc(g, bounds, error_goal, false, 1, 1982);
 
     auto task = mc.integrate();
@@ -389,6 +450,7 @@ void test_radovic()
 
 BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 {
+   std::cout << "Default hardware concurrency = " << std::thread::hardware_concurrency() << std::endl;
 #if !defined(TEST) || TEST == 1
     test_finite_singular_boundary<double>();
     test_finite_singular_boundary<float>();
@@ -396,63 +458,87 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #if !defined(TEST) || TEST == 2
     test_pi<float>();
     test_pi<double>();
+#if !defined(TEST) || TEST == 3
     test_pi_multithreaded<float>();
+    test_constant<float>();
+#endif
     //test_pi<long double>();
 #endif
-#if !defined(TEST) || TEST == 3
-    test_constant<float>();
+#if !defined(TEST) || TEST == 4
     test_constant<double>();
     //test_constant<long double>();
-#endif
-#if !defined(TEST) || TEST == 4
     test_cancel_and_restart<float>();
+#endif
+#if !defined(TEST) || TEST == 5
     test_exception_from_integrand<float>();
     test_variance<float>();
 #endif
-#if !defined(TEST) || TEST == 5
+#if !defined(TEST) || TEST == 6
     test_variance<double>();
     test_multithreaded_variance<double>();
+#endif
+#if !defined(TEST) || TEST == 7
     test_product<float, 1>();
     test_product<float, 2>();
 #endif
-#if !defined(TEST) || TEST == 6
+#if !defined(TEST) || TEST == 8
     test_product<float, 3>();
     test_product<float, 4>();
     test_product<float, 5>();
 #endif
-#if !defined(TEST) || TEST == 7
+#if !defined(TEST) || TEST == 9
     test_product<float, 6>();
     test_product<double, 1>();
+#endif
+#if !defined(TEST) || TEST == 10
     test_product<double, 2>();
 #endif
-#if !defined(TEST) || TEST == 8
+#if !defined(TEST) || TEST == 11
     test_product<double, 3>();
     test_product<double, 4>();
 #endif
-#if !defined(TEST) || TEST == 9
+#if !defined(TEST) || TEST == 12
     test_upper_bound_infinite<float>();
     test_upper_bound_infinite<double>();
+#endif
+#if !defined(TEST) || TEST == 13
     test_lower_bound_infinite<float>();
     test_lower_bound_infinite<double>();
+#endif
+#if !defined(TEST) || TEST == 14
     test_lower_bound_infinite2<float>();
 #endif
-#if !defined(TEST) || TEST == 10
+#if !defined(TEST) || TEST == 15
     test_double_infinite<float>();
     test_double_infinite<double>();
-    test_radovic<float, 1>();
 #endif
-#if !defined(TEST) || TEST == 11
+#if !defined(TEST) || TEST == 16
+    test_radovic<float, 1>();
     test_radovic<float, 2>();
+#endif
+#if !defined(TEST) || TEST == 17
     test_radovic<float, 3>();
     test_radovic<double, 1>();
 #endif
-#if !defined(TEST) || TEST == 12
+#if !defined(TEST) || TEST == 18
     test_radovic<double, 2>();
     test_radovic<double, 3>();
+#endif
+#if !defined(TEST) || TEST == 19
     test_radovic<double, 4>();
     test_radovic<double, 5>();
-    test_alternative_rng<float, 3>();
-    test_alternative_rng<double, 3>();
+#endif
+#if !defined(TEST) || TEST == 20
+    test_alternative_rng_1<float, 3>();
+#endif
+#if !defined(TEST) || TEST == 21
+    test_alternative_rng_1<double, 3>();
+#endif
+#if !defined(TEST) || TEST == 22
+    test_alternative_rng_2<float, 3>();
+#endif
+#if !defined(TEST) || TEST == 23
+    test_alternative_rng_2<double, 3>();
 #endif
 
 }

@@ -4,7 +4,7 @@
 <title>Cubic B-spline interpolation</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
+<link rel="home" href="../index.html" title="Math Toolkit 2.6.1">
 <link rel="up" href="../interpolation.html" title="Chapter&#160;10.&#160;Interpolation">
 <link rel="prev" href="../interpolation.html" title="Chapter&#160;10.&#160;Interpolation">
 <link rel="next" href="barycentric.html" title="Barycentric Rational Interpolation">
@@ -64,13 +64,13 @@
       of a function which is known at equally spaced points. The cubic B-spline interpolation
       is numerically stable as it uses compactly supported basis functions constructed
       via iterative convolution. This is to be contrasted to traditional cubic spline
-      interpolation is ill-conditioned as the global support of cubic polynomials
-      causes small changes far from the evaluation point exert a large influence
+      interpolation which is ill-conditioned as the global support of cubic polynomials
+      causes small changes far from the evaluation point to exert a large influence
       on the calculated value.
     </p>
 <p>
       There are many use cases for interpolating a function at equally spaced points.
-      One particularly important example is solving ODE's whose coefficients depend
+      One particularly important example is solving ODEs whose coefficients depend
       on data determined from experiment or numerical simulation. Since most ODE
       steppers are adaptive, they must be able to sample the coefficients at arbitrary
       points; not just at the points we know the values of our function.
@@ -231,7 +231,7 @@
 
     <span class="comment">// An eyeball estimate indicates that the population crossed 100 million around 1915.</span>
     <span class="comment">// Let's see what interpolation says:</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cubic_b_spline</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">p</span><span class="special">(</span><span class="identifier">population</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">population</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">t0</span><span class="special">,</span> <span class="number">10</span><span class="special">);</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">cubic_b_spline</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">p</span><span class="special">(</span><span class="identifier">population</span><span class="special">.</span><span class="identifier">data</span><span class="special">(),</span> <span class="identifier">population</span><span class="special">.</span><span class="identifier">size</span><span class="special">(),</span> <span class="identifier">t0</span><span class="special">,</span> <span class="identifier">time_step</span><span class="special">);</span>
 
     <span class="comment">// Now create a function which has a zero at p = 100,000,000:</span>
     <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[=](</span><span class="keyword">double</span> <span class="identifier">t</span><span class="special">){</span> <span class="keyword">return</span> <span class="identifier">p</span><span class="special">(</span><span class="identifier">t</span><span class="special">)</span> <span class="special">-</span> <span class="number">100000000</span><span class="special">;</span> <span class="special">};</span>

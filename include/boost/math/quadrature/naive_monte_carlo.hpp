@@ -37,18 +37,18 @@ public:
                       std::vector<std::pair<Real, Real>> const & bounds,
                       Real error_goal,
                       bool singular = true,
-                      size_t threads = std::thread::hardware_concurrency(),
-                      size_t seed = 0): m_num_threads{threads}, m_seed{seed}
+                      uint64_t threads = std::thread::hardware_concurrency(),
+                      uint64_t seed = 0): m_num_threads{threads}, m_seed{seed}
     {
         using std::numeric_limits;
         using std::sqrt;
-        size_t n = bounds.size();
+        uint64_t n = bounds.size();
         m_lbs.resize(n);
         m_dxs.resize(n);
         m_limit_types.resize(n);
         m_volume = 1;
         static const char* function = "boost::math::quadrature::naive_monte_carlo<%1%>";
-        for (size_t i = 0; i < n; ++i)
+        for (uint64_t i = 0; i < n; ++i)
         {
             if (bounds[i].second <= bounds[i].first)
             {
@@ -112,7 +112,7 @@ public:
         m_integrand = [this, &integrand](std::vector<Real> & x)->Real
         {
             Real coeff = m_volume;
-            for (size_t i = 0; i < x.size(); ++i)
+            for (uint64_t i = 0; i < x.size(); ++i)
             {
                 // Variable transformation are listed at:
                 // https://en.wikipedia.org/wiki/Numerical_integration
@@ -160,15 +160,15 @@ public:
         RandomNumberGenerator gen(seed);
         Real inv_denom = 1/static_cast<Real>(((gen.max)()-(gen.min)()));
 
-        m_num_threads = (std::max)(m_num_threads, (size_t) 1);
-        m_thread_calls.reset(new boost::atomic<size_t>[threads]);
+        m_num_threads = (std::max)(m_num_threads, (uint64_t) 1);
+        m_thread_calls.reset(new boost::atomic<uint64_t>[threads]);
         m_thread_Ss.reset(new boost::atomic<Real>[threads]);
         m_thread_averages.reset(new boost::atomic<Real>[threads]);
 
         Real avg = 0;
-        for (size_t i = 0; i < m_num_threads; ++i)
+        for (uint64_t i = 0; i < m_num_threads; ++i)
         {
-            for (size_t j = 0; j < m_lbs.size(); ++j)
+            for (uint64_t j = 0; j < m_lbs.size(); ++j)
             {
                 x[j] = (gen()-(gen.min)())*inv_denom;
             }
@@ -192,6 +192,7 @@ public:
     {
         // Set done to false in case we wish to restart:
         m_done.store(false); // relaxed store, no worker threads yet
+        m_start = std::chrono::system_clock::now();
         return std::async(std::launch::async,
                           &naive_monte_carlo::m_integrate, this);
     }
@@ -202,6 +203,8 @@ public:
         // If seed != 0, then the seed is changed, so a restart doesn't do the exact same thing.
         m_seed = m_seed*m_seed;
         m_done = true; // relaxed store, worker threads will get the message eventually
+        // Make sure the error goal is infinite, because otherwise we'll loop when we do the final error goal check:
+        m_error_goal = (std::numeric_limits<Real>::max)();
     }
 
     Real variance() const
@@ -250,92 +253,119 @@ public:
         return m_avg.load();
     }
 
-    size_t calls() const
+    uint64_t calls() const
     {
         return m_total_calls.load();  // relaxed load
     }
 
 private:
 
-    Real m_integrate()
-    {
-        m_start = std::chrono::system_clock::now();
-        std::vector<std::thread> threads(m_num_threads);
-        size_t seed;
-        // If the user tells us to pick a seed, pick a seed:
-        if (m_seed == 0)
-        {
-            std::random_device rd;
-            seed = rd();
-        }
-        else // use the seed we are given:
-        {
-            seed = m_seed;
-        }
-        RandomNumberGenerator gen(seed);
-        for (size_t i = 0; i < threads.size(); ++i)
-        {
+   Real m_integrate()
+   {
+      uint64_t seed;
+      // If the user tells us to pick a seed, pick a seed:
+      if (m_seed == 0)
+      {
+         std::random_device rd;
+         seed = rd();
+      }
+      else // use the seed we are given:
+      {
+         seed = m_seed;
+      }
+      RandomNumberGenerator gen(seed);
+      int max_repeat_tries = 5;
+      do{
+
+         if (max_repeat_tries < 5)
+         {
+            m_done = false;
+
+#ifdef BOOST_NAIVE_MONTE_CARLO_DEBUG_FAILURES
+            std::cout << "Failed to achieve required tolerance first time through..\n";
+            std::cout << "  variance =    " << m_variance << std::endl;
+            std::cout << "  average =     " << m_avg << std::endl;
+            std::cout << "  total calls = " << m_total_calls << std::endl;
+
+            for (std::size_t i = 0; i < m_num_threads; ++i)
+               std::cout << "  thread_calls[" << i << "] = " << m_thread_calls[i] << std::endl;
+            for (std::size_t i = 0; i < m_num_threads; ++i)
+               std::cout << "  thread_averages[" << i << "] = " << m_thread_averages[i] << std::endl;
+            for (std::size_t i = 0; i < m_num_threads; ++i)
+               std::cout << "  thread_Ss[" << i << "] = " << m_thread_Ss[i] << std::endl;
+#endif
+         }
+
+         std::vector<std::thread> threads(m_num_threads);
+         for (uint64_t i = 0; i < threads.size(); ++i)
+         {
             threads[i] = std::thread(&naive_monte_carlo::m_thread_monte, this, i, gen());
-        }
-        do {
+         }
+         do {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            size_t total_calls = 0;
-            for (size_t i = 0; i < m_num_threads; ++i)
+            uint64_t total_calls = 0;
+            for (uint64_t i = 0; i < m_num_threads; ++i)
             {
-                 size_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
-                 total_calls += t_calls;
+               uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
+               total_calls += t_calls;
             }
             Real variance = 0;
             Real avg = 0;
-            for (size_t i = 0; i < m_num_threads; ++i)
+            for (uint64_t i = 0; i < m_num_threads; ++i)
             {
-                size_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
-                // Will this overflow? Not hard to remove . . .
-                avg += m_thread_averages[i].load(boost::memory_order::relaxed)*( (Real) t_calls/ (Real) total_calls);
-                variance += m_thread_Ss[i].load(boost::memory_order::relaxed);
+               uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
+               // Will this overflow? Not hard to remove . . .
+               avg += m_thread_averages[i].load(boost::memory_order::relaxed)*((Real)t_calls / (Real)total_calls);
+               variance += m_thread_Ss[i].load(boost::memory_order::relaxed);
             }
             m_avg.store(avg, boost::memory_order::release);
-            m_variance.store(variance/(total_calls - 1), boost::memory_order::release);
+            m_variance.store(variance / (total_calls - 1), boost::memory_order::release);
             m_total_calls = total_calls; // relaxed store, it's just for user feedback
             // Allow cancellation:
             if (m_done) // relaxed load
             {
-                break;
+               break;
             }
-        } while (this->current_error_estimate() > m_error_goal.load(boost::memory_order::consume));
-        // Error bound met; signal the threads:
-        m_done = true; // relaxed store, threads will get the message in the end
-        std::for_each(threads.begin(), threads.end(),
-                      std::mem_fn(&std::thread::join));
-        if (m_exception)
-        {
+         } while (m_total_calls < 2048 || this->current_error_estimate() > m_error_goal.load(boost::memory_order::consume));
+         // Error bound met; signal the threads:
+         m_done = true; // relaxed store, threads will get the message in the end
+         std::for_each(threads.begin(), threads.end(),
+            std::mem_fn(&std::thread::join));
+         if (m_exception)
+         {
             std::rethrow_exception(m_exception);
-        }
-        // Incorporate their work into the final estimate:
-        size_t total_calls = 0;
-        for (size_t i = 0; i < m_num_threads; ++i)
-        {
-             size_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
-             total_calls += t_calls;
-        }
-        Real variance = 0;
-        Real avg = 0;
+         }
+         // Incorporate their work into the final estimate:
+         uint64_t total_calls = 0;
+         for (uint64_t i = 0; i < m_num_threads; ++i)
+         {
+            uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
+            total_calls += t_calls;
+         }
+         Real variance = 0;
+         Real avg = 0;
 
-        for (size_t i = 0; i < m_num_threads; ++i)
-        {
-            size_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
+         for (uint64_t i = 0; i < m_num_threads; ++i)
+         {
+            uint64_t t_calls = m_thread_calls[i].load(boost::memory_order::consume);
             // Averages weighted by the number of calls the thread made:
-            avg += m_thread_averages[i].load(boost::memory_order::relaxed)*( (Real) t_calls/ (Real) total_calls);
+            avg += m_thread_averages[i].load(boost::memory_order::relaxed)*((Real)t_calls / (Real)total_calls);
             variance += m_thread_Ss[i].load(boost::memory_order::relaxed);
-        }
-        m_avg.store(avg, boost::memory_order::release);
-        m_variance.store(variance/(total_calls - 1), boost::memory_order::release);
-        m_total_calls = total_calls; // relaxed store, this is just user feedback
+         }
+         m_avg.store(avg, boost::memory_order::release);
+         m_variance.store(variance / (total_calls - 1), boost::memory_order::release);
+         m_total_calls = total_calls; // relaxed store, this is just user feedback
 
-        return m_avg.load(boost::memory_order::consume);
+         // Sometimes, the master will observe the variance at a very "good" (or bad?) moment,
+         // Then the threads proceed to find the variance is much greater by the time they hear the message to stop.
+         // This *WOULD* make sure that the final error estimate is within the error bounds.
+      }
+      while ((--max_repeat_tries >= 0) && (this->current_error_estimate() > m_error_goal));
+
+      return m_avg.load(boost::memory_order::consume);
     }
 
-    void m_thread_monte(size_t thread_index, size_t seed)
+    void m_thread_monte(uint64_t thread_index, uint64_t seed)
     {
         using std::numeric_limits;
         try
@@ -350,7 +380,7 @@ private:
             // The idea is that the unstabilized additions have error sigma(f)/sqrt(N) + epsilon*N, which diverges faster than it converges!
             // Kahan summation turns this to sigma(f)/sqrt(N) + epsilon^2*N, and the random walk occurs on a timescale of 10^14 years (on current hardware)
             Real compensator = 0;
-            size_t k = m_thread_calls[thread_index].load(boost::memory_order::consume);
+            uint64_t k = m_thread_calls[thread_index].load(boost::memory_order::consume);
             while (!m_done) // relaxed load
             {
                 int j = 0;
@@ -361,7 +391,7 @@ private:
                 int magic_calls_before_update = 2048;
                 while (j++ < magic_calls_before_update)
                 {
-                    for (size_t i = 0; i < m_lbs.size(); ++i)
+                    for (uint64_t i = 0; i < m_lbs.size(); ++i)
                     {
                         x[i] = (gen() - (gen.min)())*inv_denom;
                     }
@@ -372,7 +402,7 @@ private:
                         // The call to m_integrand transform x, so this error message states the correct node.
                         std::stringstream os;
                         os << "Your integrand was evaluated at {";
-                        for (size_t i = 0; i < x.size() -1; ++i)
+                        for (uint64_t i = 0; i < x.size() -1; ++i)
                         {
                              os << x[i] << ", ";
                         }
@@ -402,18 +432,18 @@ private:
     }
 
     std::function<Real(std::vector<Real> &)> m_integrand;
-    size_t m_num_threads;
-    size_t m_seed;
+    uint64_t m_num_threads;
+    uint64_t m_seed;
     boost::atomic<Real> m_error_goal;
     boost::atomic<bool> m_done;
     std::vector<Real> m_lbs;
     std::vector<Real> m_dxs;
     std::vector<detail::limit_classification> m_limit_types;
     Real m_volume;
-    boost::atomic<size_t> m_total_calls;
+    boost::atomic<uint64_t> m_total_calls;
     // I wanted these to be vectors rather than maps,
     // but you can't resize a vector of atomics.
-    std::unique_ptr<boost::atomic<size_t>[]> m_thread_calls;
+    std::unique_ptr<boost::atomic<uint64_t>[]> m_thread_calls;
     boost::atomic<Real> m_variance;
     std::unique_ptr<boost::atomic<Real>[]> m_thread_Ss;
     boost::atomic<Real> m_avg;

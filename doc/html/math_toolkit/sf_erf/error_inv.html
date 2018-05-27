@@ -4,7 +4,7 @@
 <title>Error Function Inverses</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.6.1">
 <link rel="up" href="../sf_erf.html" title="Error Functions">
 <link rel="prev" href="error_function.html" title="Error Functions">
 <link rel="next" href="../sf_poly.html" title="Polynomials">
@@ -117,22 +117,22 @@
               </th>
 <th>
                 <p>
-                  Microsoft Visual C++ version 12.0<br> Win32<br> double
+                  GNU C++ version 7.1.0<br> linux<br> double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> double
+                  GNU C++ version 7.1.0<br> linux<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> long double
+                  Sun compiler version 0x5150<br> Sun Solaris<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  Sun compiler version 0x5130<br> Sun Solaris<br> long double
+                  Microsoft Visual C++ version 14.1<br> Win32<br> double
                 </p>
               </th>
 </tr></thead>
@@ -140,11 +140,6 @@
 <td>
                 <p>
                   Inverse Erf Function
-                </p>
-              </td>
-<td>
-                <p>
-                  <span class="blue">Max = 1.09&#949; (Mean = 0.502&#949;)</span>
                 </p>
               </td>
 <td>
@@ -159,7 +154,12 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.996&#949; (Mean = 0.385&#949;)</span>
+                  <span class="blue">Max = 1.08&#949; (Mean = 0.395&#949;)</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  <span class="blue">Max = 1.09&#949; (Mean = 0.502&#949;)</span>
                 </p>
               </td>
 </tr></tbody>
@@ -180,22 +180,22 @@
               </th>
 <th>
                 <p>
-                  Microsoft Visual C++ version 12.0<br> Win32<br> double
+                  GNU C++ version 7.1.0<br> linux<br> double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> double
+                  GNU C++ version 7.1.0<br> linux<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> long double
+                  Sun compiler version 0x5150<br> Sun Solaris<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  Sun compiler version 0x5130<br> Sun Solaris<br> long double
+                  Microsoft Visual C++ version 14.1<br> Win32<br> double
                 </p>
               </th>
 </tr></thead>
@@ -204,11 +204,6 @@
 <td>
                 <p>
                   Inverse Erfc Function
-                </p>
-              </td>
-<td>
-                <p>
-                  <span class="blue">Max = 1&#949; (Mean = 0.491&#949;)</span>
                 </p>
               </td>
 <td>
@@ -223,7 +218,12 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 0.996&#949; (Mean = 0.397&#949;)</span>
+                  <span class="blue">Max = 1.08&#949; (Mean = 0.403&#949;)</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  <span class="blue">Max = 1&#949; (Mean = 0.491&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -236,6 +236,9 @@
 <td>
               </td>
 <td>
+                <p>
+                  <span class="blue">Max = 1.62&#949; (Mean = 0.383&#949;)</span>
+                </p>
               </td>
 <td>
                 <p>
@@ -243,15 +246,27 @@
                 </p>
               </td>
 <td>
-                <p>
-                  <span class="blue">Max = 1.62&#949; (Mean = 0.385&#949;)</span>
-                </p>
               </td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<br class="table-break"><h5>
+<br class="table-break"><p>
+        The following error plot are based on an exhaustive search of the functions
+        domain, MSVC-15.5 at <code class="computeroutput"><span class="keyword">double</span></code>
+        precision, and GCC-7.1/Ubuntu for <code class="computeroutput"><span class="keyword">long</span>
+        <span class="keyword">double</span></code> and <code class="computeroutput"><span class="identifier">__float128</span></code>.
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../graphs/erfc__double.svg" align="middle"></span>
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../graphs/erfc__80_bit_long_double.svg" align="middle"></span>
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../graphs/erfc____float128.svg" align="middle"></span>
+      </p>
+<h5>
 <a name="math_toolkit.sf_erf.error_inv.h3"></a>
         <span class="phrase"><a name="math_toolkit.sf_erf.error_inv.testing"></a></span><a class="link" href="error_inv.html#math_toolkit.sf_erf.error_inv.testing">Testing</a>
       </h5>
