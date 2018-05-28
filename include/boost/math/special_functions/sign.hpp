@@ -27,7 +27,7 @@ namespace detail {
     template<class T> 
     inline BOOST_GPU_ENABLED int signbit_impl(T x, native_tag const&)
     {
-        return (std::signbit)(x);
+        return (std::signbit)(x) ? 1 : 0;
     }
 #endif
 

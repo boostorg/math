@@ -10,8 +10,6 @@
 import modules ;
 import path ;
 
-local ntl-path = [ modules.peek : NTL_PATH ] ;
-
 project  
     : requirements 
       <toolset>gcc:<cxxflags>-Wno-missing-braces
@@ -33,20 +31,16 @@ project
       <define>BOOST_ALL_NO_LIB=1
       <define>BOOST_UBLAS_UNSUPPORTED_COMPILER=0
       <include>.
+      <include>../include_private
       <include>$(ntl-path)/include
     ;
 
 
-if $(ntl-path)
-{
-   lib ntl : [ GLOB $(ntl-path)/src : *.cpp ] ;
-}
-else
-{
-   lib ntl ;
-}
+lib mpfr : gmp : <name>mpfr ;
 
-exe minimax : f.cpp main.cpp ntl ;
+lib gmp : : <name>gmp ;
+
+exe minimax : f.cpp main.cpp gmp mpfr ;
 
 install bin : minimax ;
 

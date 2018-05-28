@@ -4,6 +4,9 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "pch_light.hpp"
+#ifndef BOOST_MATH_OVERFLOW_ERROR_POLICY
+#  define BOOST_MATH_OVERFLOW_ERROR_POLICY ignore_error
+#endif
 #include "test_zeta.hpp"
 
 //

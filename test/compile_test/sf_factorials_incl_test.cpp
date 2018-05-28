@@ -38,5 +38,17 @@ void compile_and_link_test()
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    check_result<long double>(boost::math::falling_factorial<long double>(l, u));
 #endif
+
+   //
+   // Add constexpr tests here:
+   //
+#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
+   constexpr float ce_f = boost::math::unchecked_factorial<float>(2);
+   constexpr float ce_d = boost::math::unchecked_factorial<double>(2);
+   constexpr float ce_l = boost::math::unchecked_factorial<long double>(2);
+#ifdef BOOST_MATH_USE_FLOAT128
+   constexpr __float128 ce_q = boost::math::unchecked_factorial<__float128>(2);
+#endif
+#endif
 }
 

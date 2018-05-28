@@ -1,4 +1,4 @@
-[/./../../../libs/math/doc/roots/elliptic_table_100_msvc_X86_SSE2.qbk
+[/..\example/../../../libs/math/doc/roots/elliptic_table_100_msvc_X86_SSE2.qbk
 Copyright 2015 Paul A. Bristow.
 Copyright 2015 John Maddock.
 Distributed under the Boost Software License, Version 1.0.
@@ -8,13 +8,13 @@ http://www.boost.org/LICENSE_1_0.txt).
 
 
 [h6 Program [@../../example/root_elliptic_finding.cpp root_elliptic_finding.cpp],
- Microsoft Visual C++ version 12.0, Dinkumware standard library version 610, Win32
+ Microsoft Visual C++ version 14.1, Dinkumware standard library version 650, Win32
 Compiled in optimise mode., _X86_SSE2]
 [table:elliptic root with radius 28 and arc length 300) for float, double, long double and cpp_bin_float_50 types, using _X86_SSE2
 [[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]
 [[Algo     ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ]]
-[[TOMS748  ][  5][  515][1.43][ -1][ ][  9][  968][1.82][  1][ ][  9][  968][1.82][  1][ ][ 11][871875][1.53][ -3][ ]]
-[[Newton   ][  3][  453][1.26][ -1][ ][  4][  640][1.21][  1][ ][  4][  640][1.21][  1][ ][  5][685937][1.20][  0][ ]]
-[[Halley   ][  2][  359][[role blue 1.00]][  0][ ][  3][  531][[role blue 1.00]][  3][ ][  3][  531][[role blue 1.00]][  3][ ][  4][570312][[role blue 1.00]][  0][ ]]
-[[Schr'''&#xf6;'''der][  3][  484][1.35][ -1][ ][  6][ 1000][1.88][  1][ ][  6][  984][1.85][  1][ ][  5][742187][1.30][ -2][ ]]
+[[TOMS748  ][  5][  656][1.36][ -1][ ][  9][ 1125][2.12][  1][ ][  9][ 1000][1.83][  1][ ][ 11][881250][1.52][ -3][ ]]
+[[Newton   ][  3][  656][1.36][ -1][ ][  4][  625][1.18][  1][ ][  4][  640][1.17][  1][ ][  5][717187][1.24][  0][ ]]
+[[Halley   ][  2][  484][[role blue 1.00]][  0][ ][  3][  531][[role blue 1.00]][  3][ ][  3][  546][[role blue 1.00]][  3][ ][  4][579687][[role blue 1.00]][  0][ ]]
+[[Schr'''&#xf6;'''der][  3][  703][1.45][ -1][ ][  6][ 1031][1.94][  1][ ][  6][ 1015][1.86][  1][ ][  5][740625][1.28][ -2][ ]]
 ] [/end of table root]

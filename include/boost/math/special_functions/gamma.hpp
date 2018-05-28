@@ -399,8 +399,8 @@ BOOST_GPU_ENABLED T gamma_imp(T z, const Policy& pol, const lanczos::undefined_l
    // Check if the argument of tgamma is identically zero.
    const bool is_at_zero = (z == 0);
 
-   if(is_at_zero)
-      return policies::raise_domain_error<T>(function, "Evaluation of tgamma at zero %1%.", z, pol);
+   if((is_at_zero) || ((boost::math::isinf)(z) && (z < 0)))
+      return policies::raise_domain_error<T>(function, "Evaluation of tgamma at %1%.", z, pol);
 
    const bool b_neg = (z < 0);
 
@@ -546,6 +546,10 @@ BOOST_GPU_ENABLED T lgamma_imp(T z, const Policy& pol, const lanczos::undefined_
 
    if(is_at_zero)
       return policies::raise_domain_error<T>(function, "Evaluation of lgamma at zero %1%.", z, pol);
+   if((boost::math::isnan)(z))
+      return policies::raise_domain_error<T>(function, "Evaluation of lgamma at %1%.", z, pol);
+   if((boost::math::isinf)(z))
+      return policies::raise_overflow_error<T>(function, 0, pol);
 
    const bool b_neg = (z < 0);
 

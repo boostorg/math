@@ -308,6 +308,56 @@ mp_type f(const mp_type& x, int variant)
       mp_type y = (x == 0) ? (std::numeric_limits<double>::max)() / 2 : mp_type(1/x);
       return boost::math::trigamma(y) * y;
    }
+   case 32:
+   {
+      // I0 over [N, INF]
+      // Don't need to go past x = 1/1000 = 1e-3 for double, or
+      // 1/15000 = 0.0006 for long double, start at 1/7.75=0.13
+      mp_type arg = 1 / x;
+      return sqrt(arg) * exp(-arg) * boost::math::cyl_bessel_i(0, arg);
+   }
+   case 33:
+   {
+      // I0 over [0, N]
+      mp_type xx = sqrt(x) * 2;
+      return (boost::math::cyl_bessel_i(0, xx) - 1) / x;
+   }
+   case 34:
+   {
+      // I1 over [0, N]
+      mp_type xx = sqrt(x) * 2;
+      return (boost::math::cyl_bessel_i(1, xx) * 2 / xx - 1 - x / 2) / (x * x);
+   }
+   case 35:
+   {
+      // I1 over [N, INF]
+      mp_type xx = 1 / x;
+      return boost::math::cyl_bessel_i(1, xx) * sqrt(xx) * exp(-xx);
+   }
+   case 36:
+   {
+      // K0 over [0, 1]
+      mp_type xx = sqrt(x);
+      return boost::math::cyl_bessel_k(0, xx) + log(xx) * boost::math::cyl_bessel_i(0, xx);
+   }
+   case 37:
+   {
+      // K0 over [1, INF]
+      mp_type xx = 1 / x;
+      return boost::math::cyl_bessel_k(0, xx) * exp(xx) * sqrt(xx);
+   }
+   case 38:
+   {
+      // K1 over [0, 1]
+      mp_type xx = sqrt(x);
+      return (boost::math::cyl_bessel_k(1, xx) - log(xx) * boost::math::cyl_bessel_i(1, xx) - 1 / xx) / xx;
+   }
+   case 39:
+   {
+      // K1 over [1, INF]
+      mp_type xx = 1 / x;
+      return boost::math::cyl_bessel_k(1, xx) * sqrt(xx) * exp(xx);
+   }
    }
    return 0;
 }
