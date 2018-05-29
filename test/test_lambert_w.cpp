@@ -12,7 +12,8 @@
 
 // #define BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES // Diagnostics for z near zero.
 // #define BOOST_MATH_TEST_MULTIPRECISION  // Add tests for several multiprecision types (not just built-in).
-// #defin BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17  and quadmath library).
+// #define BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17  and quadmath library).
+// #define BOOST_MATH_LAMBERT_W_INTEGRALS // Add test using quadrature.
 
 #ifdef BOOST_MATH_TEST_FLOAT128
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
@@ -25,7 +26,7 @@
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
 #include <boost/test/included/unit_test.hpp> // Boost.Test
-// #include <boost/test/unit_test.hpp> // Boost.Test
+ //#include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/array.hpp>
@@ -40,14 +41,13 @@ using boost::multiprecision::cpp_dec_float_50;
 using boost::multiprecision::cpp_bin_float_quad;
 
 #ifdef BOOST_MATH_TEST_FLOAT128
-
 #ifdef BOOST_HAS_FLOAT128
 // Including this header below without float128 triggers:
 // fatal error C1189: #error:  "Sorry compiler is neither GCC, not Intel, don't know how to configure this header."
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
 #endif // ifdef BOOST_HAS_FLOAT128
-#endif // #ifdef #ifdef BOOST_MATH_TEST_FLOAT128
+#endif // #ifdef BOOST_MATH_TEST_FLOAT128
 
 #endif //   #ifdef BOOST_MATH_TEST_MULTIPRECISION
 
@@ -349,7 +349,7 @@ void test_spots(RealType)
 
     BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.1)),
     BOOST_MATH_TEST_VALUE(RealType, 0.091276527160862264299895721423179568653119224051472),
-    // Output from https://www.wolframalpha.com/input/?i=lambert_w0(0.2)
+    // Output from https://www.wolframalpha.com/input/?i=lambert_w0(0.1)
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.2)),
@@ -729,7 +729,6 @@ void test_spots(RealType)
   // TODO ???????????
 
  } // template <class RealType>void test_spots(RealType)
-
 BOOST_AUTO_TEST_CASE( test_types )
 {
   BOOST_MATH_CONTROL_FP;
