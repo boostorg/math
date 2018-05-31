@@ -95,7 +95,11 @@ namespace lambert_w_detail {
 //! \tparam T floating-point (or fixed-point) type.
 //! \param w_est Lambert W estimate.
 //! \param z Argument z for Lambert_w function.
-//! \returns New estimate of Lambert W, hopefully improved.
+//! \returns New estimate of Lambert W, hopefully improved, but
+  //! \note A Halley step may make less accurate by one bit from float_distance from
+  //! closest representation from a higher precision typestatic_casted to a lower precision type,
+  //! say double wd = static_cast<float>(lambert_w0(z));
+  //! 
 //!
 template <class T>
 inline T lambert_w_halley_step(T w_est, const T z)
@@ -140,6 +144,7 @@ template <class T>
 inline
 T lambert_w_maybe_improve(T w, T z, mpl::false_ const&)
 {
+  std::cout << "No Halley step result " << w << std::endl;
   return w; // No refinement - just return current estimate of w; 
 }
 
@@ -147,7 +152,12 @@ template <class T>
 inline
 T lambert_w_maybe_improve(T w, T z, mpl::true_ const&)
 {
-  return lambert_w_halley_step(w, z); // Improve with a single Halley step.
+  T result;
+  std::cout << "Halley step from " << w << std::endl;
+  result = lambert_w_halley_step(w, z); // Try to improve with a single Halley step.
+  // This may make less accurate by one bit.
+  std::cout << "Halley step result " << result << std::endl;
+  return result;
 }
 
 // Two Halley function versions that either
@@ -1059,8 +1069,15 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
             };
             //return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
             result = z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
-            return lambert_w_maybe_improve(result, z, digits_tag_type() );
-         }
+            std::cout << "Pre-Halley Rational Polynomial = "  << result << std::endl;
+
+ //           return lambert_w_maybe_improve(result, z, digits_tag_type() );
+            result = lambert_w_maybe_improve(result, z, digits_tag_type() );
+            std::cout << "Post may step = " << result << std::endl;
+
+
+             return result;
+        }
       }
       else if (z < 6)
       {
