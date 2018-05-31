@@ -521,7 +521,7 @@ BOOST_GPU_ENABLED T float_distance_imp(const T& a, const T& b, const mpl::true_&
       //
       T a2 = ldexp(a, tools::digits<T>());
       T b2 = ldexp(b, tools::digits<T>());
-      mb = -(std::min)(T(ldexp(upper, tools::digits<T>())), b2);
+      mb = -BOOST_MATH_CUDA_SAFE_MIN(T(ldexp(upper, tools::digits<T>())), b2);
       x = a2 + mb;
       z = x - a2;
       y = (a2 - (x - z)) + (mb - z);
@@ -530,7 +530,7 @@ BOOST_GPU_ENABLED T float_distance_imp(const T& a, const T& b, const mpl::true_&
    }
    else
    {
-      mb = -(std::min)(upper, b);
+      mb = -BOOST_MATH_CUDA_SAFE_MIN(upper, b);
       x = a + mb;
       z = x - a;
       y = (a - (x - z)) + (mb - z);
@@ -628,7 +628,7 @@ BOOST_GPU_ENABLED T float_distance_imp(const T& a, const T& b, const mpl::false_
       //
       T a2 = scalbn(a, std::numeric_limits<T>::digits);
       T b2 = scalbn(b, std::numeric_limits<T>::digits);
-      mb = -(std::min)(T(scalbn(upper, std::numeric_limits<T>::digits)), b2);
+      mb = -BOOST_MATH_CUDA_SAFE_MIN(T(scalbn(upper, std::numeric_limits<T>::digits)), b2);
       x = a2 + mb;
       z = x - a2;
       y = (a2 - (x - z)) + (mb - z);
@@ -637,7 +637,7 @@ BOOST_GPU_ENABLED T float_distance_imp(const T& a, const T& b, const mpl::false_
    }
    else
    {
-      mb = -(std::min)(upper, b);
+      mb = -BOOST_MATH_CUDA_SAFE_MIN(upper, b);
       x = a + mb;
       z = x - a;
       y = (a - (x - z)) + (mb - z);

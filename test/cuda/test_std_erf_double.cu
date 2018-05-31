@@ -62,6 +62,7 @@ int main(void)
     
     watch w;
     cuda_test<<<blocksPerGrid, threadsPerBlock>>>(h_A.get(), h_C.get(), numElements);
+    cudaDeviceSynchronize();
     double t = w.elapsed();
     std::cout << "CUDA kernal done in " << t << "s" << std::endl;
     

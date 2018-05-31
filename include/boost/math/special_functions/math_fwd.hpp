@@ -607,10 +607,10 @@ namespace boost
 
    // sinus cardinals:
    template <class T>
-   typename tools::promote_args<T>::type sinc_pi(T x);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type sinc_pi(T x);
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type sinc_pi(T x, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type sinc_pi(T x, const Policy&);
 
    template <class T>
    typename tools::promote_args<T>::type sinhc_pi(T x);
@@ -620,22 +620,22 @@ namespace boost
 
    // inverse hyperbolics:
    template<typename T>
-   typename tools::promote_args<T>::type asinh(T x);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type asinh(T x);
 
    template<typename T, class Policy>
-   typename tools::promote_args<T>::type asinh(T x, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type asinh(T x, const Policy&);
 
    template<typename T>
-   typename tools::promote_args<T>::type acosh(T x);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type acosh(T x);
 
    template<typename T, class Policy>
-   typename tools::promote_args<T>::type acosh(T x, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type acosh(T x, const Policy&);
 
    template<typename T>
-   typename tools::promote_args<T>::type atanh(T x);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type atanh(T x);
 
    template<typename T, class Policy>
-   typename tools::promote_args<T>::type atanh(T x, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type atanh(T x, const Policy&);
 
    namespace detail{
 
@@ -861,13 +861,13 @@ namespace boost
                      const Policy&);
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type sin_pi(T x, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type sin_pi(T x, const Policy&);
 
    template <class T>
-   typename tools::promote_args<T>::type sin_pi(T x);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type sin_pi(T x);
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type cos_pi(T x, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type cos_pi(T x, const Policy&);
 
    template <class T>
    BOOST_GPU_ENABLED typename tools::promote_args<T>::type cos_pi(T x);
@@ -1026,25 +1026,25 @@ namespace boost
 
    // next:
    template <class T, class U, class Policy>
-   typename tools::promote_args<T, U>::type nextafter(const T&, const U&, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type nextafter(const T&, const U&, const Policy&);
    template <class T, class U>
-   typename tools::promote_args<T, U>::type nextafter(const T&, const U&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type nextafter(const T&, const U&);
    template <class T, class Policy>
-   typename tools::promote_args<T>::type float_next(const T&, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_next(const T&, const Policy&);
    template <class T>
-   typename tools::promote_args<T>::type float_next(const T&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_next(const T&);
    template <class T, class Policy>
-   typename tools::promote_args<T>::type float_prior(const T&, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_prior(const T&, const Policy&);
    template <class T>
-   typename tools::promote_args<T>::type float_prior(const T&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_prior(const T&);
    template <class T, class U, class Policy>
-   typename tools::promote_args<T, U>::type float_distance(const T&, const U&, const Policy&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type float_distance(const T&, const U&, const Policy&);
    template <class T, class U>
-   typename tools::promote_args<T, U>::type float_distance(const T&, const U&);
+   BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type float_distance(const T&, const U&);
    template <class T, class Policy>
-   typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol);
    template <class T>
-   typename tools::promote_args<T>::type float_advance(const T& val, int distance);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_advance(const T& val, int distance);
 
    template <class T, class Policy>
    typename tools::promote_args<T>::type ulp(const T& val, const Policy& pol);

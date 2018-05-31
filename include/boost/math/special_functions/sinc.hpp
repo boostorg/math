@@ -39,7 +39,7 @@ namespace boost
         // This is the "Sinus Cardinal" of index Pi.
 
         template<typename T>
-        inline T    sinc_pi_imp(const T x)
+        inline BOOST_GPU_ENABLED T    sinc_pi_imp(const T x)
         {
             BOOST_MATH_STD_USING
 
@@ -77,14 +77,14 @@ namespace boost
        } // namespace detail
 
        template <class T>
-       inline typename tools::promote_args<T>::type sinc_pi(T x)
+       inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type sinc_pi(T x)
        {
           typedef typename tools::promote_args<T>::type result_type;
           return detail::sinc_pi_imp(static_cast<result_type>(x));
        }
 
        template <class T, class Policy>
-       inline typename tools::promote_args<T>::type sinc_pi(T x, const Policy&)
+       inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type sinc_pi(T x, const Policy&)
        {
           typedef typename tools::promote_args<T>::type result_type;
           return detail::sinc_pi_imp(static_cast<result_type>(x));
@@ -92,7 +92,7 @@ namespace boost
 
 #ifndef    BOOST_NO_TEMPLATE_TEMPLATES
         template<typename T, template<typename> class U>
-        inline U<T>    sinc_pi(const U<T> x)
+        inline BOOST_GPU_ENABLED U<T>    sinc_pi(const U<T> x)
         {
             BOOST_MATH_STD_USING
             using    ::std::numeric_limits;
@@ -133,7 +133,7 @@ namespace boost
         }
 
         template<typename T, template<typename> class U, class Policy>
-        inline U<T>    sinc_pi(const U<T> x, const Policy&)
+        inline BOOST_GPU_ENABLED U<T>    sinc_pi(const U<T> x, const Policy&)
         {
            return sinc_pi(x);
         }

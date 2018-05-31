@@ -97,9 +97,9 @@ namespace boost { namespace math { namespace detail{
             return ellint_rc_imp(x, y, pol);
       }
       if(x == 0)
-         swap(x, z);
+         BOOST_MATH_CUDA_SAFE_SWAP(x, z);
       else if(y == 0)
-         swap(y, z);
+         BOOST_MATH_CUDA_SAFE_SWAP(y, z);
       if(z == 0)
       {
          //
@@ -122,7 +122,7 @@ namespace boost { namespace math { namespace detail{
       T zn = z;
       T An = (x + y + z) / 3;
       T A0 = An;
-      T Q = pow(3 * boost::math::tools::epsilon<T>(), T(-1) / 8) * (std::max)((std::max)(fabs(An - xn), fabs(An - yn)), fabs(An - zn));
+      T Q = pow(3 * boost::math::tools::epsilon<T>(), T(-1) / 8) * BOOST_MATH_CUDA_SAFE_MAX(BOOST_MATH_CUDA_SAFE_MAX(fabs(An - xn), fabs(An - yn)), fabs(An - zn));
       T fn = 1;
 
 

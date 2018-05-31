@@ -83,9 +83,10 @@ BOOST_GPU_ENABLED T beta_imp(T a, T b, const Lanczos&, const Policy& pol)
       b += 1;
    }
    */
+   using std::swap;
 
    if(a < b)
-      std::swap(a, b);
+      BOOST_MATH_CUDA_SAFE_SWAP(a, b);
 
    // Lanczos calculation:
    T agh = static_cast<T>(a + Lanczos::g() - 0.5f);
@@ -234,11 +235,11 @@ BOOST_GPU_ENABLED T ibeta_power_terms(T a,
    // l1 and l2 are the base of the exponents minus one:
    T l1 = (x * b - y * agh) / agh;
    T l2 = (y * a - x * bgh) / bgh;
-   if(((std::min)(fabs(l1), fabs(l2)) < 0.2))
+   if((BOOST_MATH_CUDA_SAFE_MIN(fabs(l1), fabs(l2)) < 0.2))
    {
       // when the base of the exponent is very near 1 we get really
       // gross errors unless extra care is taken:
-      if((l1 * l2 > 0) || ((std::min)(a, b) < 1))
+      if((l1 * l2 > 0) || (BOOST_MATH_CUDA_SAFE_MIN(a, b) < 1))
       {
          //
          // This first branch handles the simple cases where either: 
@@ -274,7 +275,7 @@ BOOST_GPU_ENABLED T ibeta_power_terms(T a,
             BOOST_MATH_INSTRUMENT_VARIABLE(result);
          }
       }
-      else if((std::max)(fabs(l1), fabs(l2)) < 0.5)
+      else if(BOOST_MATH_CUDA_SAFE_MAX(fabs(l1), fabs(l2)) < 0.5)
       {
          //
          // Both exponents are near one and both the exponents are 
@@ -1102,19 +1103,19 @@ BOOST_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool n
       return p;
    }
 
-   if((std::min)(a, b) <= 1)
+   if(BOOST_MATH_CUDA_SAFE_MIN(a, b) <= 1)
    {
       if(x > 0.5)
       {
-         std::swap(a, b);
-         std::swap(x, y);
+         BOOST_MATH_CUDA_SAFE_SWAP(a, b);
+         BOOST_MATH_CUDA_SAFE_SWAP(x, y);
          invert = !invert;
          BOOST_MATH_INSTRUMENT_VARIABLE(invert);
       }
-      if((std::max)(a, b) <= 1)
+      if(BOOST_MATH_CUDA_SAFE_MAX(a, b) <= 1)
       {
          // Both a,b < 1:
-         if((a >= (std::min)(T(0.2), b)) || (pow(x, a) <= 0.9))
+         if((a >= BOOST_MATH_CUDA_SAFE_MIN(T(0.2), b)) || (pow(x, a) <= 0.9))
          {
             if(!invert)
             {
@@ -1131,8 +1132,8 @@ BOOST_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool n
          }
          else
          {
-            std::swap(a, b);
-            std::swap(x, y);
+            BOOST_MATH_CUDA_SAFE_SWAP(a, b);
+            BOOST_MATH_CUDA_SAFE_SWAP(x, y);
             invert = !invert;
             if(y >= 0.3)
             {
@@ -1197,8 +1198,8 @@ BOOST_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool n
          }
          else
          {
-            std::swap(a, b);
-            std::swap(x, y);
+            BOOST_MATH_CUDA_SAFE_SWAP(a, b);
+            BOOST_MATH_CUDA_SAFE_SWAP(x, y);
             invert = !invert;
 
             if(y >= 0.3)
@@ -1275,8 +1276,8 @@ BOOST_GPU_ENABLED T ibeta_imp(T a, T b, T x, const Policy& pol, bool inv, bool n
       }
       if(lambda < 0)
       {
-         std::swap(a, b);
-         std::swap(x, y);
+         BOOST_MATH_CUDA_SAFE_SWAP(a, b);
+         BOOST_MATH_CUDA_SAFE_SWAP(x, y);
          invert = !invert;
          BOOST_MATH_INSTRUMENT_VARIABLE(invert);
       }

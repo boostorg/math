@@ -874,16 +874,16 @@ BOOST_GPU_ENABLED T regularised_gamma_prefix(T a, T z, const Policy& pol, const 
       //
       T alz = a * log(z / agh);
       T amz = a - z;
-      if(((std::min)(alz, amz) <= tools::log_min_value<T>()) || ((std::max)(alz, amz) >= tools::log_max_value<T>()))
+      if((BOOST_MATH_CUDA_SAFE_MIN(alz, amz) <= tools::log_min_value<T>()) || (BOOST_MATH_CUDA_SAFE_MAX(alz, amz) >= tools::log_max_value<T>()))
       {
          T amza = amz / a;
-         if(((std::min)(alz, amz)/2 > tools::log_min_value<T>()) && ((std::max)(alz, amz)/2 < tools::log_max_value<T>()))
+         if((BOOST_MATH_CUDA_SAFE_MIN(alz, amz)/2 > tools::log_min_value<T>()) && (BOOST_MATH_CUDA_SAFE_MAX(alz, amz)/2 < tools::log_max_value<T>()))
          {
             // compute square root of the result and then square it:
             T sq = pow(z / agh, a / 2) * exp(amz / 2);
             prefix = sq * sq;
          }
-         else if(((std::min)(alz, amz)/4 > tools::log_min_value<T>()) && ((std::max)(alz, amz)/4 < tools::log_max_value<T>()) && (z > a))
+         else if((BOOST_MATH_CUDA_SAFE_MIN(alz, amz)/4 > tools::log_min_value<T>()) && (BOOST_MATH_CUDA_SAFE_MAX(alz, amz)/4 < tools::log_max_value<T>()) && (z > a))
          {
             // compute the 4th root of the result then square it twice:
             T sq = pow(z / agh, a / 4) * exp(amz / 4);
@@ -915,7 +915,7 @@ BOOST_GPU_ENABLED T regularised_gamma_prefix(T a, T z, const Policy& pol, const 
 {
    BOOST_MATH_STD_USING
 
-   T limit = (std::max)(T(10), a);
+   T limit = BOOST_MATH_CUDA_SAFE_MAX(T(10), a);
    T sum = detail::lower_gamma_series(a, limit, pol) / a;
    sum += detail::upper_gamma_fraction(a, limit, ::boost::math::policies::get_epsilon<T, Policy>());
 
@@ -936,7 +936,7 @@ BOOST_GPU_ENABLED T regularised_gamma_prefix(T a, T z, const Policy& pol, const 
    T amz = a - z;
    T alzoa = a * log(zoa);
    T prefix;
-   if(((std::min)(alzoa, amz) <= tools::log_min_value<T>()) || ((std::max)(alzoa, amz) >= tools::log_max_value<T>()))
+   if((BOOST_MATH_CUDA_SAFE_MIN(alzoa, amz) <= tools::log_min_value<T>()) || (BOOST_MATH_CUDA_SAFE_MAX(alzoa, amz) >= tools::log_max_value<T>()))
    {
       T amza = amz / a;
       if((amza <= tools::log_min_value<T>()) || (amza >= tools::log_max_value<T>()))

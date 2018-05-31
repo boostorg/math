@@ -126,12 +126,13 @@ BOOST_GPU_ENABLED T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
       // Since the integral is symmetrical in x, y and z
       // we can just permute the values:
       //
+      using std::swap;
       if(x > y)
-         std::swap(x, y);
+         BOOST_MATH_CUDA_SAFE_SWAP(x, y);
       if(y > z)
-         std::swap(y, z);
+         BOOST_MATH_CUDA_SAFE_SWAP(y, z);
       if(x > y)
-         std::swap(x, y);
+         BOOST_MATH_CUDA_SAFE_SWAP(x, y);
 
       BOOST_MATH_ASSERT(x <= y);
       BOOST_MATH_ASSERT(y <= z);
@@ -170,12 +171,12 @@ BOOST_GPU_ENABLED T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
       {
          // x = y only, permute so y = z:
          using std::swap;
-         swap(x, z);
+         BOOST_MATH_CUDA_SAFE_SWAP(x, z);
          if(y == p)
          {
             return ellint_rd_imp(x, y, y, pol);
          }
-         else if((std::max)(y, p) / (std::min)(y, p) > 1.2)
+         else if(BOOST_MATH_CUDA_SAFE_MAX(y, p) / BOOST_MATH_CUDA_SAFE_MIN(y, p) > 1.2)
          {
             return 3 * (ellint_rc_imp(x, y, pol) - ellint_rc_imp(x, p, pol)) / (p - y);
          }
@@ -189,7 +190,7 @@ BOOST_GPU_ENABLED T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
          // y = z = p:
          return ellint_rd_imp(x, y, y, pol);
       }
-      else if((std::max)(y, p) / (std::min)(y, p) > 1.2)
+      else if(BOOST_MATH_CUDA_SAFE_MAX(y, p) / BOOST_MATH_CUDA_SAFE_MIN(y, p) > 1.2)
       {
          // y = z:
          return 3 * (ellint_rc_imp(x, y, pol) - ellint_rc_imp(x, p, pol)) / (p - y);
@@ -208,7 +209,7 @@ BOOST_GPU_ENABLED T ellint_rj_imp(T x, T y, T z, T p, const Policy& pol)
    T An = (x + y + z + 2 * p) / 5;
    T A0 = An;
    T delta = (p - x) * (p - y) * (p - z);
-   T Q = pow(tools::epsilon<T>() / 5, -T(1) / 8) * (std::max)((std::max)(fabs(An - x), fabs(An - y)), (std::max)(fabs(An - z), fabs(An - p)));
+   T Q = pow(tools::epsilon<T>() / 5, -T(1) / 8) * BOOST_MATH_CUDA_SAFE_MAX(BOOST_MATH_CUDA_SAFE_MAX(fabs(An - x), fabs(An - y)), BOOST_MATH_CUDA_SAFE_MAX(fabs(An - z), fabs(An - p)));
 
    unsigned n;
    T lambda;

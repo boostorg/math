@@ -34,7 +34,7 @@ namespace boost
         // This is the main fare
         
         template<typename T, typename Policy>
-        inline T    atanh_imp(const T x, const Policy& pol)
+        inline BOOST_GPU_ENABLED T    atanh_imp(const T x, const Policy& pol)
         {
             BOOST_MATH_STD_USING
             static const char* function = "boost::math::atanh<%1%>(%1%)";
@@ -94,7 +94,7 @@ namespace boost
        }
 
         template<typename T, typename Policy>
-        inline typename tools::promote_args<T>::type atanh(T x, const Policy&)
+        inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type atanh(T x, const Policy&)
         {
             typedef typename tools::promote_args<T>::type result_type;
             typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -109,7 +109,7 @@ namespace boost
               "boost::math::atanh<%1%>(%1%)");
         }
         template<typename T>
-        inline typename tools::promote_args<T>::type atanh(T x)
+        inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type atanh(T x)
         {
            return boost::math::atanh(x, policies::policy<>());
         }
