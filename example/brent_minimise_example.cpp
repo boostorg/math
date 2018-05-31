@@ -99,7 +99,7 @@ is_close_to(FPT left, FPT right, FPT tolerance)
 //! (to avoid divide by zero during comparison)
 //! before comparing expect with value got.
 
-template <class T = double>
+template <class T>
 bool is_close(T expect, T got, T tolerance)
 {
   using boost::math::fpc::close_at_tolerance;
