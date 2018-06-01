@@ -1,7 +1,7 @@
 //! \file
 //! \brief Brent_minimise_example.cpp
 
-// Copyright Paul A. Bristow 2015.
+// Copyright Paul A. Bristow 2015, 2018.
 
 // Use, modification and distribution are subject to the
 // Boost Software License, Version 1.0.
@@ -25,7 +25,7 @@
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/math/special_functions/pow.hpp>
 #include <boost/math/constants/constants.hpp>
-#include <boost/test/floating_point_comparison.hpp> // For is_close_to and is_small
+#include <boost/test/tools/floating_point_comparison.hpp> // For is_close_at)tolerance and is_small
 
 //[brent_minimise_mp_include_0
 #include <boost/multiprecision/cpp_dec_float.hpp> // For decimal boost::multiprecision::cpp_dec_float_50.
@@ -58,6 +58,7 @@ using std::numeric_limits;
 
 // http://en.wikipedia.org/wiki/Brent%27s_method Brent's method
 
+// An example of a function for which we want to find a minimum. 
 double f(double x)
 {
   return (x + 3) * (x - 1) * (x - 1);
@@ -85,22 +86,33 @@ struct func
 //] [/brent_minimise_T_functor]
 
 //[brent_minimise_close
-//
-template <class T = double>
-bool close(T expect, T got, T tolerance)
+
+template<typename FPT>
+inline bool
+is_close_to(FPT left, FPT right, FPT tolerance)
 {
-  using boost::math::fpc::is_close_to;
+  return boost::math::fpc::close_at_tolerance<FPT>(tolerance) (left, right);
+}
+
+//! Compare if value got is close to expected,
+//! checking first if expected is very small 
+//! (to avoid divide by zero during comparison)
+//! before comparing expect with value got.
+
+template <class T>
+bool is_close(T expect, T got, T tolerance)
+{
+  using boost::math::fpc::close_at_tolerance;
   using boost::math::fpc::is_small;
+  using boost::math::fpc::FPC_STRONG;
 
   if (is_small<T>(expect, tolerance))
   {
     return is_small<T>(got, tolerance);
   }
-  else
-  {
-    return is_close_to<T>(expect, got, tolerance);
-  }
-}
+
+  return close_at_tolerance<T>(tolerance, FPC_STRONG) (expect, got);
+} // bool is_close(T expect, T got, T tolerance)
 
 //] [/brent_minimise_close]
 
@@ -111,7 +123,7 @@ void show_minima()
 {
   using boost::math::tools::brent_find_minima;
   try
-  { // Always use try'n'catch blocks with Boost.Math to get any error messages.
+  { // Always use try'n'catch blocks with Boost.Math to ensure you get any error messages.
 
     int bits = std::numeric_limits<T>::digits/2; // Maximum is digits/2;
     std::streamsize prec = static_cast<int>(2 + sqrt(bits));  // Number of significant decimal digits.
@@ -130,7 +142,7 @@ void show_minima()
     //T bracket_min = static_cast<T>("-4");
     //T bracket_max = static_cast<T>("1.3333333333333333333333333333333333333333333333333");
 
-    //  Construction from double may cause loss of precision for multiprecision types like cpp_bin_float.
+    // Construction from double may cause loss of precision for multiprecision types like cpp_bin_float,
     // but brackets values are good enough for using Brent minimization.
     T bracket_min = static_cast<T>(-4);
     T bracket_max = static_cast<T>(1.3333333333333333333333333333333333333333333333333);
@@ -148,8 +160,8 @@ void show_minima()
     }
     // Check that result is that expected (compared to theoretical uncertainty).
     T uncertainty = sqrt(std::numeric_limits<T>::epsilon());
-    //std::cout << std::boolalpha << "x == 1 (compared to uncertainty " << uncertainty << ") is " << close(static_cast<T>(1), r.first, uncertainty) << std::endl;
-    //std::cout << std::boolalpha << "f(x) == (0 compared to uncertainty " << uncertainty << ") is " << close(static_cast<T>(0), r.second, uncertainty) << std::endl;
+    std::cout << std::boolalpha << "x == 1 (compared to uncertainty " << uncertainty << ") is " << is_close(static_cast<T>(1), r.first, uncertainty) << std::endl;
+    std::cout << std::boolalpha << "f(x) == (0 compared to uncertainty " << uncertainty << ") is " << is_close(static_cast<T>(0), r.second, uncertainty) << std::endl;
     // Problems with this using multiprecision with expression template on?
     std::cout.precision(precision);  // Restore.
   }
@@ -169,14 +181,15 @@ int main()
 {
   std::cout << "Brent's minimisation example." << std::endl;
   std::cout << std::boolalpha << std::endl;
+  using boost::math::tools::brent_find_minima;
 
   // Tip - using
   // std::cout.precision(std::numeric_limits<T>::digits10);
-  // during debugging is wise because it shows if construction of multiprecision involves conversion from double
-  // by finding random or zero digits after 17.
+  // during debugging is wise because it warns 
+  // if construction of multiprecision involves conversion from double
+  // by finding random or zero digits after 17th decimal digit.
 
-  // Specific type double - unlimited iterations.
-  using boost::math::tools::brent_find_minima;
+  // Specific type double - unlimited iterations (unwise?).
 
   //[brent_minimise_double_1
   int bits = std::numeric_limits<double>::digits;
@@ -195,14 +208,12 @@ int main()
   // sqrt(epsilon) =  1.49011611938477e-008
   // (epsilon is always > 0, so no need to take abs value).
 
-  using boost::math::fpc::is_close_to;
-  using boost::math::fpc::is_small;
+ using boost::math::fpc::close_at_tolerance;
+ using boost::math::fpc::is_small;
 
-  std::cout << is_close_to(1., r.first, uncertainty) << std::endl;
-  std::cout << is_small(r.second, uncertainty) << std::endl;
-
-  std::cout << std::boolalpha << "x == 1 (compared to uncertainty " << uncertainty << ") is " << close(1., r.first, uncertainty) << std::endl;
-  std::cout << std::boolalpha << "f(x) == (0 compared to uncertainty " << uncertainty << ") is " << close(0., r.second, uncertainty) << std::endl;
+  std::cout << "x = " << r.first << ", f(x) = " << r.second << std::endl;
+  std::cout << std::boolalpha << "x == 1 (compared to uncertainty " << uncertainty << ") is " << is_close(1., r.first, uncertainty) << std::endl; // true
+  std::cout << std::boolalpha << "f(x) == 0 (compared to uncertainty " << uncertainty << ") is " << is_close(0., r.second, uncertainty) << std::endl; // true
 
   // Specific type double - limit maxit to 20 iterations.
   std::cout << "Precision bits = " << bits << std::endl;
@@ -357,7 +368,7 @@ int main()
     // x at minimum = 1, f(1) = 5.04853e-018
       << ", after " << it << " iterations. " << std::endl;
 
-    close(static_cast<cpp_bin_float_50>(1), r.first, sqrt(std::numeric_limits<cpp_bin_float_50>::epsilon()));
+    is_close_to(static_cast<cpp_bin_float_50>(1), r.first, sqrt(std::numeric_limits<cpp_bin_float_50>::epsilon()));
 
 //] [/brent_minimise_mp_1]
 
