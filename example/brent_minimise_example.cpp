@@ -32,7 +32,7 @@
 #include <boost/multiprecision/cpp_bin_float.hpp> // For binary boost::multiprecision::cpp_bin_float_50;
 //] [/brent_minimise_mp_include_0]
 
-//#ifndef _MSC_VER  // float128 is not yet supported by Microsoft compiler at 2013.
+//#ifndef _MSC_VER  // float128 is not yet supported by Microsoft compiler at 2018.
 #ifdef BOOST_HAVE_QUADMATH  // Define only if GCC or Intel, and have quadmath.lib or .dll library available.
 #  include <boost/multiprecision/float128.hpp>
 #endif
@@ -68,7 +68,7 @@ double f(double x)
 struct funcdouble
 {
   double operator()(double const& x)
-  { //
+  { 
     return (x + 3) * (x - 1) * (x - 1); // (x + 3)(x - 1)^2
   }
 };
@@ -79,14 +79,13 @@ struct func
 {
   template <class T>
   T operator()(T const& x)
-  { //
-    return (x + 3) * (x - 1) * (x - 1); //
+  { 
+    return (x + 3) * (x - 1) * (x - 1); // (x + 3)(x - 1)^2
   }
 };
 //] [/brent_minimise_T_functor]
 
-//[brent_minimise_close
-
+//! Test if two values are close within a given tolerance.
 template<typename FPT>
 inline bool
 is_close_to(FPT left, FPT right, FPT tolerance)
@@ -94,9 +93,11 @@ is_close_to(FPT left, FPT right, FPT tolerance)
   return boost::math::fpc::close_at_tolerance<FPT>(tolerance) (left, right);
 }
 
+//[brent_minimise_close
+
 //! Compare if value got is close to expected,
 //! checking first if expected is very small 
-//! (to avoid divide by zero during comparison)
+//! (to avoid divide by tiny or zero during comparison)
 //! before comparing expect with value got.
 
 template <class T>
@@ -127,12 +128,13 @@ void show_minima()
 
     int bits = std::numeric_limits<T>::digits/2; // Maximum is digits/2;
     std::streamsize prec = static_cast<int>(2 + sqrt(bits));  // Number of significant decimal digits.
-    std::streamsize precision = std::cout.precision(prec); // Save.
+    std::streamsize precision = std::cout.precision(prec); // Save and set.
 
-    std::cout << "\n\nFor type  " << typeid(T).name()
+    std::cout << "\n\nFor type: " << typeid(T).name()
       << ",\n  epsilon = " << std::numeric_limits<T>::epsilon()
       // << ", precision of " << bits << " bits"
-      << ",\n  the maximum theoretical precision from Brent minimization is " << sqrt(std::numeric_limits<T>::epsilon())
+      << ",\n  the maximum theoretical precision from Brent minimization is " 
+      << sqrt(std::numeric_limits<T>::epsilon())
       << "\n  Displaying to std::numeric_limits<T>::digits10 " << prec << " significant decimal digits."
       << std::endl;
 
@@ -160,8 +162,10 @@ void show_minima()
     }
     // Check that result is that expected (compared to theoretical uncertainty).
     T uncertainty = sqrt(std::numeric_limits<T>::epsilon());
-    std::cout << std::boolalpha << "x == 1 (compared to uncertainty " << uncertainty << ") is " << is_close(static_cast<T>(1), r.first, uncertainty) << std::endl;
-    std::cout << std::boolalpha << "f(x) == (0 compared to uncertainty " << uncertainty << ") is " << is_close(static_cast<T>(0), r.second, uncertainty) << std::endl;
+    std::cout << std::boolalpha << "x == 1 (compared to uncertainty " << uncertainty << ") is " 
+      << is_close(static_cast<T>(1), r.first, uncertainty) << std::endl;
+    std::cout << std::boolalpha << "f(x) == (0 compared to uncertainty " << uncertainty << ") is "
+      << is_close(static_cast<T>(0), r.second, uncertainty) << std::endl;
     // Problems with this using multiprecision with expression template on?
     std::cout.precision(precision);  // Restore.
   }
@@ -196,10 +200,11 @@ int main()
 
   std::pair<double, double> r = brent_find_minima(funcdouble(), -4., 4. / 3, bits);
 
-  std::cout.precision(std::numeric_limits<double>::digits10);
-  std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second << std::endl;
-  // x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-018
+  std::cout.precision(std::numeric_limits<double>::digits10); // Show all double precision decimal digits.
+  std::cout << "x at minimum = " << r.first 
+    << ", f(" << r.first << ") = " << r.second << std::endl;
   //] [/brent_minimise_double_1]
+  // x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-018
 
   std::cout << "x at minimum = " << (r.first - 1.) /r.first << std::endl;
 
@@ -208,12 +213,17 @@ int main()
   // sqrt(epsilon) =  1.49011611938477e-008
   // (epsilon is always > 0, so no need to take abs value).
 
- using boost::math::fpc::close_at_tolerance;
- using boost::math::fpc::is_small;
+  //[brent_minimise_double_1a
+
+  using boost::math::fpc::close_at_tolerance;
+  using boost::math::fpc::is_small;
 
   std::cout << "x = " << r.first << ", f(x) = " << r.second << std::endl;
-  std::cout << std::boolalpha << "x == 1 (compared to uncertainty " << uncertainty << ") is " << is_close(1., r.first, uncertainty) << std::endl; // true
-  std::cout << std::boolalpha << "f(x) == 0 (compared to uncertainty " << uncertainty << ") is " << is_close(0., r.second, uncertainty) << std::endl; // true
+  std::cout << std::boolalpha << "x == 1 (compared to uncertainty " 
+    << uncertainty << ") is " << is_close(1., r.first, uncertainty) << std::endl; // true
+  std::cout << std::boolalpha << "f(x) == 0 (compared to uncertainty " 
+    << uncertainty << ") is " << is_close(0., r.second, uncertainty) << std::endl; // true
+//] [/brent_minimise_double_1a]
 
   // Specific type double - limit maxit to 20 iterations.
   std::cout << "Precision bits = " << bits << std::endl;
@@ -229,13 +239,17 @@ int main()
 //[brent_minimise_double_3
 
   std::streamsize prec = static_cast<int>(2 + sqrt(bits));  // Number of significant decimal digits.
-  std::cout << "Showing " << bits << " bits precision with " << prec
+  std::streamsize precision = std::cout.precision(prec); // Save and set new precision.
+  std::cout << "Showing " << bits << " bits"
+    "precision with " << prec 
     << " decimal digits from tolerance " << sqrt(std::numeric_limits<double>::epsilon())
     << std::endl;
-  std::streamsize precision = std::cout.precision(prec); // Save.
 
-  std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second
+  std::cout << "x at minimum = " << r.first 
+    << ", f(" << r.first << ") = " << r.second
     << " after " << it << " iterations. " << std::endl;
+
+  std::cout.precision(precision); // Restore.
 
 //] [/brent_minimise_double_3]
   // Showing 53 bits precision with 9 decimal digits from tolerance 1.49011611938477e-008
@@ -255,6 +269,8 @@ int main()
   r = brent_find_minima(funcdouble(), -4., 4. / 3, bits, it);
   std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second << std::endl;
   std::cout << it << " iterations. " << std::endl;
+  std::cout.precision(precision); // Restore.
+
 //] [/brent_minimise_double_4]
   }
   // x at minimum = 1, f(1) = 5.04852568e-018
@@ -267,12 +283,14 @@ int main()
     std::cout << "Showing " << bits << " bits precision with " << prec
       << " decimal digits from tolerance " << sqrt(epsilon_4)
       << std::endl;
-    std::streamsize precision = std::cout.precision(prec); // Save.
+    std::streamsize precision = std::cout.precision(prec); // Save & set.
 
     boost::uintmax_t it = maxit;
     r = brent_find_minima(funcdouble(), -4., 4. / 3, bits, it);
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second
     << ", after " << it << " iterations. " << std::endl;
+    std::cout.precision(precision); // Restore.
+
   //] [/brent_minimise_double_5]
   }
 
@@ -282,7 +300,7 @@ int main()
 
   {
 //[brent_minimise_template_1
-    std::cout.precision(std::numeric_limits<long double>::digits10);
+    std::streamsize precision = std::cout.precision(std::numeric_limits<long double>::digits10);
     long double bracket_min = -4.;
     long double bracket_max = 4. / 3;
     int bits = std::numeric_limits<long double>::digits;
@@ -292,6 +310,7 @@ int main()
     std::pair<long double, long double> r = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second
       << ", after " << it << " iterations. " << std::endl;
+    std::cout.precision(precision);  // Restore.
 //] [/brent_minimise_template_1]
   }
 
@@ -302,19 +321,17 @@ int main()
   show_minima<float>();
   show_minima<double>();
   show_minima<long double>();
-//] [/brent_minimise_template_fd]
 
-  using boost::multiprecision::cpp_bin_float_50; // binary.
+ //] [/brent_minimise_template_fd]
 
 //[brent_minimise_mp_include_1
-#ifdef BOOST_HAVE_QUADMATH  // Define only if GCC or Intel and have quadmath.lib or .dll library available.
+#ifdef BOOST_HAVE_QUADMATH  // Defined only if GCC or Intel and have quadmath.lib or .dll library available.
   using boost::multiprecision::float128;
 #endif
 //] [/brent_minimise_mp_include_1]
 
 //[brent_minimise_template_quad
-// #ifndef _MSC_VER
-#ifdef BOOST_HAVE_QUADMATH  // Define only if GCC or Intel and have quadmath.lib or .dll library available.
+#ifdef BOOST_HAVE_QUADMATH  // Defined only if GCC or Intel and have quadmath.lib or .dll library available.
   show_minima<float128>(); // Needs quadmath_snprintf, sqrtQ, fabsq that are in in quadmath library.
 #endif
 //] [/brent_minimise_template_quad
@@ -322,8 +339,10 @@ int main()
   // User-defined floating-point template.
 
 //[brent_minimise_mp_typedefs
-  using boost::multiprecision::cpp_bin_float_50; // binary.
+  using boost::multiprecision::cpp_bin_float_50; // binary multiprecision typedef.
+  using boost::multiprecision::cpp_dec_float_50; // decimal multiprecision typedef.
 
+  // One might also need typedefs like these to switch expression templates off and on (default is on).
   typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<50>,
     boost::multiprecision::et_on>
     cpp_bin_float_50_et_on;  // et_on is default so is same as cpp_bin_float_50.
@@ -331,9 +350,7 @@ int main()
   typedef boost::multiprecision::number<boost::multiprecision::cpp_bin_float<50>,
     boost::multiprecision::et_off>
     cpp_bin_float_50_et_off;
-
-  using boost::multiprecision::cpp_dec_float_50; // decimal.
-
+  
   typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<50>,
     boost::multiprecision::et_on> // et_on is default so is same as cpp_dec_float_50.
     cpp_dec_float_50_et_on;
@@ -346,40 +363,40 @@ int main()
   { // binary ET on by default.
 //[brent_minimise_mp_1
     std::cout.precision(std::numeric_limits<cpp_bin_float_50>::digits10);
-
-    cpp_bin_float_50 fpv("-1.2345");
-    cpp_bin_float_50 absv;
-
-    absv = fpv < static_cast<cpp_bin_float_50>(0) ? -fpv : fpv;
-    std::cout << fpv << ' ' << absv << std::endl;
-
-
     int bits = std::numeric_limits<cpp_bin_float_50>::digits / 2 - 2;
-
     cpp_bin_float_50 bracket_min = static_cast<cpp_bin_float_50>("-4");
     cpp_bin_float_50 bracket_max = static_cast<cpp_bin_float_50>("1.3333333333333333333333333333333333333333333333333");
 
-    std::cout << bracket_min << " " << bracket_max << std::endl;
+    std::cout << "Bracketing " << bracket_min << " to " << bracket_max << std::endl;
     const boost::uintmax_t maxit = 20;
-    boost::uintmax_t it = maxit;
-    std::pair<cpp_bin_float_50, cpp_bin_float_50> r = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
+    boost::uintmax_t it = maxit; // Will be updated with actual iteration count.
+    std::pair<cpp_bin_float_50, cpp_bin_float_50> r 
+      = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
 
-    std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second
+    std::cout << "x at minimum = " << r.first << ",\n f(" << r.first << ") = " << r.second
     // x at minimum = 1, f(1) = 5.04853e-018
       << ", after " << it << " iterations. " << std::endl;
 
-    is_close_to(static_cast<cpp_bin_float_50>(1), r.first, sqrt(std::numeric_limits<cpp_bin_float_50>::epsilon()));
+    is_close_to(static_cast<cpp_bin_float_50>("1"), r.first, sqrt(std::numeric_limits<cpp_bin_float_50>::epsilon()));
+    is_close_to(static_cast<cpp_bin_float_50>("0"), r.second, sqrt(std::numeric_limits<cpp_bin_float_50>::epsilon()));
 
 //] [/brent_minimise_mp_1]
 
 /*
 //[brent_minimise_mp_output_1
-    For type  class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<50, 10, void, int, 0, 0>, 1>,
-      epsilon = 5.3455294202e-51,
-      the maximum theoretical precision from Brent minimization is 7.311312755e-26
-      Displaying to std::numeric_limits<T>::digits10 11 significant decimal digits.
-      x at minimum = 1, f(1) = 5.6273022713e-58,
-      met 84 bits precision, after 14 iterations.
+For type  class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<50,10,void,int,0,0>,1>,
+epsilon = 5.3455294202e-51,
+the maximum theoretical precision from Brent minimization is 7.311312755e-26
+Displaying to std::numeric_limits<T>::digits10 11 significant decimal digits.
+x at minimum = 1, f(1) = 5.6273022713e-58,
+met 84 bits precision, after 14 iterations.
+x == 1 (compared to uncertainty 7.311312755e-26) is true
+f(x) == (0 compared to uncertainty 7.311312755e-26) is true
+-4 1.3333333333333333333333333333333333333333333333333
+x at minimum = 0.99999999999999999999999999998813903221565569205253,
+f(0.99999999999999999999999999998813903221565569205253) = 
+  5.6273022712501408640665300316078046703496236636624e-58
+14 iterations
 //] [/brent_minimise_mp_output_1]
 */
 //[brent_minimise_mp_2
@@ -415,6 +432,8 @@ int main()
 
   }
   return 0;
+
+  // Some examples of switching expression templates on and off follow.
 
   { // binary ET off
     std::cout.precision(std::numeric_limits<cpp_bin_float_50_et_off>::digits10);
