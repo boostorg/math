@@ -123,11 +123,12 @@ template <class T>
 void show_minima()
 {
   using boost::math::tools::brent_find_minima;
+  using std::sqrt;
   try
   { // Always use try'n'catch blocks with Boost.Math to ensure you get any error messages.
 
     int bits = std::numeric_limits<T>::digits/2; // Maximum is digits/2;
-    std::streamsize prec = static_cast<int>(2 + sqrt(bits));  // Number of significant decimal digits.
+    std::streamsize prec = static_cast<int>(2 + sqrt((double)bits));  // Number of significant decimal digits.
     std::streamsize precision = std::cout.precision(prec); // Save and set.
 
     std::cout << "\n\nFor type: " << typeid(T).name()
@@ -186,6 +187,7 @@ int main()
   std::cout << "Brent's minimisation example." << std::endl;
   std::cout << std::boolalpha << std::endl;
   using boost::math::tools::brent_find_minima;
+  using std::sqrt;
 
   // Tip - using
   // std::cout.precision(std::numeric_limits<T>::digits10);
@@ -238,7 +240,7 @@ int main()
 
 //[brent_minimise_double_3
 
-  std::streamsize prec = static_cast<int>(2 + sqrt(bits));  // Number of significant decimal digits.
+  std::streamsize prec = static_cast<int>(2 + sqrt((double)bits));  // Number of significant decimal digits.
   std::streamsize precision = std::cout.precision(prec); // Save and set new precision.
   std::cout << "Showing " << bits << " bits"
     "precision with " << prec 

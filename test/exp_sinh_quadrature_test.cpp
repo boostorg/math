@@ -311,6 +311,8 @@ void test_nr_examples()
        tol_mul = 3;
     if (std::numeric_limits<Real>::digits10 > 40)
        tol_mul = 100;
+    else
+       tol_mul = 3;
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mul * tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol_mul * tol);
 
