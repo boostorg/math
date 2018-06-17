@@ -43,9 +43,9 @@ namespace boost
         {
             BOOST_MATH_STD_USING
 
-            T const    taylor_0_bound = tools::epsilon<T>();
-            T const    taylor_2_bound = tools::root_epsilon<T>();
-            T const    taylor_n_bound = tools::forth_root_epsilon<T>();
+            T const    taylor_0_bound = 2.449 * tools::epsilon<T>();
+            T const    taylor_2_bound = 3.30 * tools::root_epsilon<T>();
+            T const    taylor_n_bound = 4.14 * tools::forth_root_epsilon<T>();
 
             if    (abs(x) >= taylor_n_bound)
             {
@@ -60,14 +60,17 @@ namespace boost
                 {
                     T    x2 = x*x;
 
-                    // approximation by taylor series in x at 0 up to order 2
-                    result -= x2/static_cast<T>(6);
-
                     if    (abs(x) >= taylor_2_bound)
                     {
                         // approximation by taylor series in x at 0 up to order 4
-                        result += (x2*x2)/static_cast<T>(120);
+                       result = 1.0 + x2 * (-1.0 + x2 / 20.0) / 6.0;
                     }
+                    else
+                    {
+                       // approximation by taylor series in x at 0 up to order 2
+                       result -= x2 / static_cast<T>(6);
+                    }
+
                 }
 
                 return(result);
