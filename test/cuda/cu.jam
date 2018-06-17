@@ -10,6 +10,6 @@ generators.register-standard cu.inline-file : CU : OBJ ;
 
 actions inline-file 
 {
-    nvcc -c -I../../../.. -DBOOST_ALL_NO_LIB -o $(<) $(>)
+    nvcc -c -O3 -I../../../.. -DBOOST_ALL_NO_LIB -o $(<) $(>)
 }
 

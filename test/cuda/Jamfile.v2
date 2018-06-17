@@ -13,5 +13,7 @@ explicit verify_cuda ;
 
 for local source in [ glob test*.cu ]
 {
-   run $(source) cuda cudart ../../../chrono/build//boost_chrono ../../../system/build//boost_system : : : <define>BOOST_ALL_NO_LIB release <address-model>64 <toolset>msvc:<runtime-link>static [ check-target-builds .//verify_cuda "CUDA compiler support" : : <build>no ] ;
+   run $(source) cuda cudart ../../../chrono/build//boost_chrono ../../../system/build//boost_system : : : release <define>BOOST_ALL_NO_LIB <address-model>64 <toolset>msvc:<runtime-link>static [ check-target-builds .//verify_cuda "CUDA compiler support" : : <build>no ] ;
 }
+
+run misc/test_naive_monte_carlo.cu misc/test_naive_monte_carlo_host.cpp cuda cudart ../../../chrono/build//boost_chrono ../../../system/build//boost_system : : : release <define>BOOST_ALL_NO_LIB <address-model>64 <toolset>msvc:<runtime-link>static [ check-target-builds .//verify_cuda "CUDA compiler support" : : <build>no ] ;
