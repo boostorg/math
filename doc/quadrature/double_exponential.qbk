@@ -258,11 +258,11 @@ Not only is this form accurate to full machine precision, but it converges to th
         sinh_sinh(size_t max_refinements = 9);
 
         template<class F>
-        Real integrate(const F f,
+        auto integrate(const F f,
                        Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
                        Real* error = nullptr,
                        Real* L1 = nullptr,
-                       size_t* levels = nullptr) const;
+                       size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;;
     };
 
 The sinh-sinh quadrature allows computation over the entire real line, and is called as follows:
@@ -273,7 +273,7 @@ The sinh-sinh quadrature allows computation over the entire real line, and is ca
     double L1;
     double Q = integrator.integrate(f, &error, &L1);
 
-Note that the limits of integration are understood to be (-\u221E, \u221E).
+Note that the limits of integration are understood to be (-\u221E, \u221E). Complex valued integrands are supported.
 
 [endsect]
 
@@ -286,17 +286,17 @@ Note that the limits of integration are understood to be (-\u221E, \u221E).
         exp_sinh(size_t max_refinements = 9);
 
         template<class F>
-        Real integrate(const F f, Real a, Real b,
+        auto integrate(const F f, Real a, Real b,
                        Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
                        Real* error = nullptr,
                        Real* L1 = nullptr,
-                       size_t* levels = nullptr) const;
+                       size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
         template<class F>
-        Real integrate(const F f,
+        auto integrate(const F f,
                        Real tol = sqrt(std::numeric_limits<Real>::epsilon()),
                        Real* error = nullptr,
                        Real* L1 = nullptr,
-                       size_t* levels = nullptr) const;
+                       size_t* levels = nullptr)->decltype(std::declval<F>()(std::declval<Real>())) const;
     };
 
 For half-infinite intervals, the exp-sinh quadrature is provided:
@@ -311,7 +311,7 @@ For half-infinite intervals, the exp-sinh quadrature is provided:
 
 The native integration range of this integrator is (0, [infin]), but we also support (a, [infin]), (-[infin], 0) and (-[infin], b) via argument transformations.
 
-Endpoint singularities are supported by exp-sinh.
+Endpoint singularities and complex-valued integrands are supported by exp-sinh.
 
 [endsect]
 

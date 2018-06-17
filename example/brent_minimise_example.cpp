@@ -119,6 +119,8 @@ bool is_close(T expect, T got, T tolerance)
 
 //[brent_minimise_T_show
 
+//! Example template function to find and show minima.
+//! \tparam T floating-point or fixed_point type.
 template <class T>
 void show_minima()
 {
@@ -134,9 +136,9 @@ void show_minima()
     std::cout << "\n\nFor type: " << typeid(T).name()
       << ",\n  epsilon = " << std::numeric_limits<T>::epsilon()
       // << ", precision of " << bits << " bits"
-      << ",\n  the maximum theoretical precision from Brent minimization is " 
+      << ",\n  the maximum theoretical precision from Brent's minimization is " 
       << sqrt(std::numeric_limits<T>::epsilon())
-      << "\n  Displaying to std::numeric_limits<T>::digits10 " << prec << " significant decimal digits."
+      << "\n  Displaying to std::numeric_limits<T>::digits10 " << prec << ", significant decimal digits."
       << std::endl;
 
     const boost::uintmax_t maxit = 20;
@@ -184,10 +186,11 @@ void show_minima()
 
 int main()
 {
-  std::cout << "Brent's minimisation example." << std::endl;
-  std::cout << std::boolalpha << std::endl;
   using boost::math::tools::brent_find_minima;
   using std::sqrt;
+  std::cout << "Brent's minimisation examples." << std::endl;
+  std::cout << std::boolalpha << std::endl;
+  std::cout << std::showpoint << std::endl; // Show trailing zeros.
 
   // Tip - using
   // std::cout.precision(std::numeric_limits<T>::digits10);
@@ -196,25 +199,25 @@ int main()
   // by finding random or zero digits after 17th decimal digit.
 
   // Specific type double - unlimited iterations (unwise?).
-
+  {
+    std::cout << "\nType double - unlimited iterations (unwise?)" << std::endl;
   //[brent_minimise_double_1
-  int bits = std::numeric_limits<double>::digits;
+    const int double_bits = std::numeric_limits<double>::digits;
+    std::pair<double, double> r = brent_find_minima(funcdouble(), -4., 4. / 3, double_bits);
 
-  std::pair<double, double> r = brent_find_minima(funcdouble(), -4., 4. / 3, bits);
+    std::streamsize precision_1 = std::cout.precision(std::numeric_limits<double>::digits10);
+    // Show all double precision decimal digits and trailing zeros.
+    std::cout << "x at minimum = " << r.first
+      << ", f(" << r.first << ") = " << r.second << std::endl;
+    //] [/brent_minimise_double_1]
+    std::cout << "x at minimum = " << (r.first - 1.) / r.first << std::endl;
+    // x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-018
+    double uncertainty = sqrt(std::numeric_limits<double>::epsilon());
+    std::cout << "Uncertainty sqrt(epsilon) =  " << uncertainty << std::endl;
+    // sqrt(epsilon) =  1.49011611938477e-008
+    // (epsilon is always > 0, so no need to take abs value).
 
-  std::cout.precision(std::numeric_limits<double>::digits10); // Show all double precision decimal digits.
-  std::cout << "x at minimum = " << r.first 
-    << ", f(" << r.first << ") = " << r.second << std::endl;
-  //] [/brent_minimise_double_1]
-  // x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-018
-
-  std::cout << "x at minimum = " << (r.first - 1.) /r.first << std::endl;
-
-  double uncertainty = sqrt(std::numeric_limits<double>::epsilon());
-  std::cout << "Uncertainty sqrt(epsilon) =  " << uncertainty << std::endl;
-  // sqrt(epsilon) =  1.49011611938477e-008
-  // (epsilon is always > 0, so no need to take abs value).
-
+    std::cout.precision(precision_1); // Restore.
   //[brent_minimise_double_1a
 
   using boost::math::fpc::close_at_tolerance;
@@ -227,22 +230,24 @@ int main()
     << uncertainty << ") is " << is_close(0., r.second, uncertainty) << std::endl; // true
 //] [/brent_minimise_double_1a]
 
-  // Specific type double - limit maxit to 20 iterations.
-  std::cout << "Precision bits = " << bits << std::endl;
-//[brent_minimise_double_2
-  const boost::uintmax_t maxit = 20;
-  boost::uintmax_t it = maxit;
-  r = brent_find_minima(funcdouble(), -4., 4. / 3, bits, it);
-  std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second
-  << " after " << it << " iterations. " << std::endl;
-//] [/brent_minimise_double_2]
-  // x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-018
-
+  }
+  std::cout << "\nType double with limited iterations." << std::endl;
+  {
+    const int bits = std::numeric_limits<double>::digits;
+    // Specific type double - limit maxit to 20 iterations.
+    std::cout << "Precision bits = " << bits << std::endl;
+  //[brent_minimise_double_2
+    const boost::uintmax_t maxit = 20;
+    boost::uintmax_t it = maxit;
+    std::pair<double, double> r = brent_find_minima(funcdouble(), -4., 4. / 3, bits, it);
+    std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second
+      << " after " << it << " iterations. " << std::endl;
+    //] [/brent_minimise_double_2]
+      // x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-018
 //[brent_minimise_double_3
-
   std::streamsize prec = static_cast<int>(2 + sqrt((double)bits));  // Number of significant decimal digits.
-  std::streamsize precision = std::cout.precision(prec); // Save and set new precision.
-  std::cout << "Showing " << bits << " bits"
+  std::streamsize precision_3 = std::cout.precision(prec); // Save and set new precision.
+  std::cout << "Showing " << bits << " bits "
     "precision with " << prec 
     << " decimal digits from tolerance " << sqrt(std::numeric_limits<double>::epsilon())
     << std::endl;
@@ -250,48 +255,52 @@ int main()
   std::cout << "x at minimum = " << r.first 
     << ", f(" << r.first << ") = " << r.second
     << " after " << it << " iterations. " << std::endl;
-
-  std::cout.precision(precision); // Restore.
-
+  std::cout.precision(precision_3); // Restore.
 //] [/brent_minimise_double_3]
   // Showing 53 bits precision with 9 decimal digits from tolerance 1.49011611938477e-008
   //  x at minimum = 1, f(1) = 5.04852568e-018
+  }
 
+  std::cout << "\nType double with limited iterations and half double bits." << std::endl;
   {
-//[brent_minimise_double_4
-  bits /= 2; // Half digits precision (effective maximum).
-  double epsilon_2 = boost::math::pow<-(std::numeric_limits<double>::digits/2 - 1), double>(2);
 
-  std::cout << "Showing " << bits << " bits precision with " << prec
+//[brent_minimise_double_4
+  const int bits_div_2 = std::numeric_limits<double>::digits / 2; // Half digits precision (effective maximum).
+  double epsilon_2 = boost::math::pow<-(std::numeric_limits<double>::digits/2 - 1), double>(2);
+  std::streamsize prec = static_cast<int>(2 + sqrt((double)bits_div_2));  // Number of significant decimal digits.
+
+  std::cout << "Showing " << bits_div_2 << " bits precision with " << prec
     << " decimal digits from tolerance " << sqrt(epsilon_2)
     << std::endl;
-  std::streamsize precision = std::cout.precision(prec); // Save.
-
-  boost::uintmax_t it = maxit;
-  r = brent_find_minima(funcdouble(), -4., 4. / 3, bits, it);
+  std::streamsize precision_4 = std::cout.precision(prec); // Save.
+  const boost::uintmax_t maxit = 20;
+  boost::uintmax_t it_4 = maxit;
+  std::pair<double, double> r = brent_find_minima(funcdouble(), -4., 4. / 3, bits_div_2, it_4);
   std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second << std::endl;
-  std::cout << it << " iterations. " << std::endl;
-  std::cout.precision(precision); // Restore.
+  std::cout << it_4 << " iterations. " << std::endl;
+  std::cout.precision(precision_4); // Restore.
 
 //] [/brent_minimise_double_4]
   }
   // x at minimum = 1, f(1) = 5.04852568e-018
 
   {
+    std::cout << "\nType double with limited iterations and quarter double bits." << std::endl;
   //[brent_minimise_double_5
-    bits /= 2; // Quarter precision.
+    const int bits_div_4 = std::numeric_limits<double>::digits / 4; // Quarter precision.
     double epsilon_4 = boost::math::pow<-(std::numeric_limits<double>::digits / 4 - 1), double>(2);
-
-    std::cout << "Showing " << bits << " bits precision with " << prec
+    std::streamsize prec = static_cast<int>(2 + sqrt((double)bits_div_4));  // Number of significant decimal digits.
+    std::cout << "Showing " << bits_div_4 << " bits precision with " << prec
       << " decimal digits from tolerance " << sqrt(epsilon_4)
       << std::endl;
-    std::streamsize precision = std::cout.precision(prec); // Save & set.
+    std::streamsize precision_5 = std::cout.precision(prec); // Save & set.
+    const boost::uintmax_t maxit = 20;
 
-    boost::uintmax_t it = maxit;
-    r = brent_find_minima(funcdouble(), -4., 4. / 3, bits, it);
+    boost::uintmax_t it_5 = maxit;
+    std::pair<double, double> r = brent_find_minima(funcdouble(), -4., 4. / 3, bits_div_4, it_5);
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second
-    << ", after " << it << " iterations. " << std::endl;
-    std::cout.precision(precision); // Restore.
+    << ", after " << it_5 << " iterations. " << std::endl;
+    std::cout.precision(precision_5); // Restore.
 
   //] [/brent_minimise_double_5]
   }
@@ -301,18 +310,19 @@ int main()
   //  7 iterations.
 
   {
+    std::cout << "\nType long double with limited iterations and all long double bits." << std::endl;
 //[brent_minimise_template_1
-    std::streamsize precision = std::cout.precision(std::numeric_limits<long double>::digits10);
+    std::streamsize precision_t1 = std::cout.precision(std::numeric_limits<long double>::digits10); // Save & set.
     long double bracket_min = -4.;
     long double bracket_max = 4. / 3;
-    int bits = std::numeric_limits<long double>::digits;
+    const int bits = std::numeric_limits<long double>::digits;
     const boost::uintmax_t maxit = 20;
     boost::uintmax_t it = maxit;
 
     std::pair<long double, long double> r = brent_find_minima(func(), bracket_min, bracket_max, bits, it);
     std::cout << "x at minimum = " << r.first << ", f(" << r.first << ") = " << r.second
       << ", after " << it << " iterations. " << std::endl;
-    std::cout.precision(precision);  // Restore.
+    std::cout.precision(precision_t1);  // Restore.
 //] [/brent_minimise_template_1]
   }
 
@@ -522,93 +532,199 @@ f(0.99999999999999999999999999998813903221565569205253) =
 
 /*
 
+Typical output MSVC 15.7.3
+
+brent_minimise_example.cpp
+Generating code
+7 of 2746 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+0 functions were new in current compilation
+1 functions had inline decision re-evaluated but remain unchanged
+Finished generating code
+brent_minimise_example.vcxproj -> J:\Cpp\MathToolkit\test\Math_test\Release\brent_minimise_example.exe
+Autorun "J:\Cpp\MathToolkit\test\Math_test\Release\brent_minimise_example.exe"
+Brent's minimisation examples.
 
 
- // GCC 4.9.1 with quadmath
 
- Brent's minimisation example.
-x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-018
-x at minimum = 1.12344622367552e-009
-Uncertainty sqrt(epsilon) =  1.49011611938477e-008
-x == 1 (compared to uncertainty 1.49011611938477e-008) is true
-f(x) == (0 compared to uncertainty 1.49011611938477e-008) is true
+Type double - unlimited iterations (unwise?)
+x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-18
+x at minimum = 1.12344622367552e-09
+Uncertainty sqrt(epsilon) =  1.49011611938477e-08
+x = 1.00000, f(x) = 5.04853e-18
+x == 1 (compared to uncertainty 1.49012e-08) is true
+f(x) == 0 (compared to uncertainty 1.49012e-08) is true
+
+Type double with limited iterations.
 Precision bits = 53
-x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-018 after 10 iterations.
-Showing 53 bits precision with 9 decimal digits from tolerance 1.49011611938477e-008
-x at minimum = 1, f(1) = 5.04852568e-018 after 10 iterations.
-Showing 26 bits precision with 9 decimal digits from tolerance 0.000172633492
-x at minimum = 1, f(1) = 5.04852568e-018
-10 iterations.
-Showing 13 bits precision with 9 decimal digits from tolerance 0.015625
-x at minimum = 0.9999776, f(0.9999776) = 2.0069572e-009, after 7 iterations.
-x at minimum = 1.00000000000137302, f(1.00000000000137302) = 7.5407901369731193e-024, after 10 iterations.
+x at minimum = 1.00000, f(1.00000) = 5.04853e-18 after 10 iterations. 
+Showing 53 bits precision with 9 decimal digits from tolerance 1.49011612e-08
+x at minimum = 1.00000000, f(1.00000000) = 5.04852568e-18 after 10 iterations. 
+
+Type double with limited iterations and half double bits.
+Showing 26 bits precision with 7 decimal digits from tolerance 0.000172633
+x at minimum = 1.000000, f(1.000000) = 5.048526e-18
+10 iterations. 
+
+Type double with limited iterations and quarter double bits.
+Showing 13 bits precision with 5 decimal digits from tolerance 0.0156250
+x at minimum = 0.99998, f(0.99998) = 2.0070e-09, after 7 iterations. 
+
+Type long double with limited iterations and all long double bits.
+x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-18, after 10 iterations. 
 
 
-For type  f,
-  epsilon = 1.1921e-007,
-  the maximum theoretical precision from Brent minimization is 0.00034527
-  Displaying to std::numeric_limits<T>::digits10 5 significant decimal digits.
-  x at minimum = 1.0002, f(1.0002) = 1.9017e-007,
-  met 12 bits precision, after 7 iterations.
+For type: float,
+epsilon = 1.1921e-07,
+the maximum theoretical precision from Brent's minimization is 0.00034527
+Displaying to std::numeric_limits<T>::digits10 5, significant decimal digits.
+x at minimum = 1.0002, f(1.0002) = 1.9017e-07,
+met 12 bits precision, after 7 iterations.
 x == 1 (compared to uncertainty 0.00034527) is true
 f(x) == (0 compared to uncertainty 0.00034527) is true
 
 
-For type  d,
-  epsilon = 2.220446e-016,
-  the maximum theoretical precision from Brent minimization is 1.490116e-008
-  Displaying to std::numeric_limits<T>::digits10 7 significant decimal digits.
-  x at minimum = 1, f(1) = 5.048526e-018,
-  met 26 bits precision, after 10 iterations.
+For type: double,
+epsilon = 2.220446e-16,
+the maximum theoretical precision from Brent's minimization is 1.490116e-08
+Displaying to std::numeric_limits<T>::digits10 7, significant decimal digits.
+x at minimum = 1.000000, f(1.000000) = 5.048526e-18,
+met 26 bits precision, after 10 iterations.
+x == 1 (compared to uncertainty 1.490116e-08) is true
+f(x) == (0 compared to uncertainty 1.490116e-08) is true
+
+
+For type: long double,
+epsilon = 2.220446e-16,
+the maximum theoretical precision from Brent's minimization is 1.490116e-08
+Displaying to std::numeric_limits<T>::digits10 7, significant decimal digits.
+x at minimum = 1.000000, f(1.000000) = 5.048526e-18,
+met 26 bits precision, after 10 iterations.
+x == 1 (compared to uncertainty 1.490116e-08) is true
+f(x) == (0 compared to uncertainty 1.490116e-08) is true
+Bracketing -4.0000000000000000000000000000000000000000000000000 to 1.3333333333333333333333333333333333333333333333333
+x at minimum = 0.99999999999999999999999999998813903221565569205253,
+f(0.99999999999999999999999999998813903221565569205253) = 5.6273022712501408640665300316078046703496236636624e-58, after 14 iterations. 
+
+
+For type: class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<50,10,void,int,0,0>,1>,
+epsilon = 5.3455294202e-51,
+the maximum theoretical precision from Brent's minimization is 7.3113127550e-26
+Displaying to std::numeric_limits<T>::digits10 11, significant decimal digits.
+x at minimum = 1.0000000000, f(1.0000000000) = 5.6273022713e-58,
+met 84 bits precision, after 14 iterations.
+x == 1 (compared to uncertainty 7.3113127550e-26) is true
+f(x) == (0 compared to uncertainty 7.3113127550e-26) is true
+-4.0000000000000000000000000000000000000000000000000 1.3333333333333333333333333333333333333333333333333
+x at minimum = 0.99999999999999999999999999998813903221565569205253, f(0.99999999999999999999999999998813903221565569205253) = 5.6273022712501408640665300316078046703496236636624e-58
+14 iterations. 
+
+
+For type: class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<50,10,void,int,0,0>,1>,
+epsilon = 5.3455294202e-51,
+the maximum theoretical precision from Brent's minimization is 7.3113127550e-26
+Displaying to std::numeric_limits<T>::digits10 11, significant decimal digits.
+x at minimum = 1.0000000000, f(1.0000000000) = 5.6273022713e-58,
+met 84 bits precision, after 14 iterations.
+x == 1 (compared to uncertainty 7.3113127550e-26) is true
+f(x) == (0 compared to uncertainty 7.3113127550e-26) is true
+
+
+============================================================================================================
+
+ // GCC 7.2.0 with quadmath
+
+Brent's minimisation examples.
+
+Type double - unlimited iterations (unwise?)
+x at minimum = 1.00000000112345, f(1.00000000112345) = 5.04852568272458e-018
+x at minimum = 1.12344622367552e-009
+Uncertainty sqrt(epsilon) =  1.49011611938477e-008
+x = 1.00000, f(x) = 5.04853e-018
+x == 1 (compared to uncertainty 1.49012e-008) is true
+f(x) == 0 (compared to uncertainty 1.49012e-008) is true
+
+Type double with limited iterations.
+Precision bits = 53
+x at minimum = 1.00000, f(1.00000) = 5.04853e-018 after 10 iterations.
+Showing 53 bits precision with 9 decimal digits from tolerance 1.49011612e-008
+x at minimum = 1.00000000, f(1.00000000) = 5.04852568e-018 after 10 iterations.
+
+Type double with limited iterations and half double bits.
+Showing 26 bits precision with 7 decimal digits from tolerance 0.000172633
+x at minimum = 1.000000, f(1.000000) = 5.048526e-018
+10 iterations.
+
+Type double with limited iterations and quarter double bits.
+Showing 13 bits precision with 5 decimal digits from tolerance 0.0156250
+x at minimum = 0.99998, f(0.99998) = 2.0070e-009, after 7 iterations.
+
+Type long double with limited iterations and all long double bits.
+x at minimum = 1.00000000000137302, f(1.00000000000137302) = 7.54079013697311930e-024, after 10 iterations.
+
+
+For type: f,
+epsilon = 1.1921e-007,
+the maximum theoretical precision from Brent's minimization is 0.00034527
+Displaying to std::numeric_limits<T>::digits10 5, significant decimal digits.
+x at minimum = 1.0002, f(1.0002) = 1.9017e-007,
+met 12 bits precision, after 7 iterations.
+x == 1 (compared to uncertainty 0.00034527) is true
+f(x) == (0 compared to uncertainty 0.00034527) is true
+
+
+For type: d,
+epsilon = 2.220446e-016,
+the maximum theoretical precision from Brent's minimization is 1.490116e-008
+Displaying to std::numeric_limits<T>::digits10 7, significant decimal digits.
+x at minimum = 1.000000, f(1.000000) = 5.048526e-018,
+met 26 bits precision, after 10 iterations.
 x == 1 (compared to uncertainty 1.490116e-008) is true
 f(x) == (0 compared to uncertainty 1.490116e-008) is true
 
 
-For type  e,
-  epsilon = 1.084202e-019,
-  the maximum theoretical precision from Brent minimization is 3.292723e-010
-  Displaying to std::numeric_limits<T>::digits10 7 significant decimal digits.
-  x at minimum = 1, f(1) = 7.54079e-024,
-  met 32 bits precision, after 10 iterations.
+For type: e,
+epsilon = 1.084202e-019,
+the maximum theoretical precision from Brent's minimization is 3.292723e-010
+Displaying to std::numeric_limits<T>::digits10 7, significant decimal digits.
+x at minimum = 1.000000, f(1.000000) = 7.540790e-024,
+met 32 bits precision, after 10 iterations.
 x == 1 (compared to uncertainty 3.292723e-010) is true
 f(x) == (0 compared to uncertainty 3.292723e-010) is true
 
 
-For type  N5boost14multiprecision6numberINS0_8backends16float128_backendELNS0_26expression_template_optionE0EEE,
-  epsilon = 1.92592994e-34,
-  the maximum theoretical precision from Brent minimization is 1.38777878e-17
-  Displaying to std::numeric_limits<T>::digits10 9 significant decimal digits.
-  x at minimum = 1, f(1) = 1.48695468e-43,
-  met 56 bits precision, after 12 iterations.
+For type: N5boost14multiprecision6numberINS0_8backends16float128_backendELNS0_26expression_template_optionE0EEE,
+epsilon = 1.92592994e-34,
+the maximum theoretical precision from Brent's minimization is 1.38777878e-17
+Displaying to std::numeric_limits<T>::digits10 9, significant decimal digits.
+x at minimum = 1.00000000, f(1.00000000) = 1.48695468e-43,
+met 56 bits precision, after 12 iterations.
 x == 1 (compared to uncertainty 1.38777878e-17) is true
 f(x) == (0 compared to uncertainty 1.38777878e-17) is true
--4 1.3333333333333333333333333333333333333333333333333
-x at minimum = 0.99999999999999999999999999998813903221565569205253, f(0.99999999999999999999999999998813903221565569205253) = 5.6273022712501408640665300316078046703496236636624e-58, after 14 iterations.
+Bracketing -4.0000000000000000000000000000000000000000000000000 to 1.3333333333333333333333333333333333333333333333333
+x at minimum = 0.99999999999999999999999999998813903221565569205253,
+f(0.99999999999999999999999999998813903221565569205253) = 5.6273022712501408640665300316078046703496236636624e-58, after 14 iterations.
 
 
-For type  N5boost14multiprecision6numberINS0_8backends13cpp_bin_floatILj50ELNS2_15digit_base_typeE10EviLi0ELi0EEELNS0_26expression_template_optionE1EEE,
-  epsilon = 5.3455294202e-51,
-  the maximum theoretical precision from Brent minimization is 7.311312755e-26
-  Displaying to std::numeric_limits<T>::digits10 11 significant decimal digits.
-  x at minimum = 1, f(1) = 5.6273022713e-58,
-  met 84 bits precision, after 14 iterations.
-x == 1 (compared to uncertainty 7.311312755e-26) is true
-f(x) == (0 compared to uncertainty 7.311312755e-26) is true
--4 1.3333333333333333333333333333333333333333333333333
+For type: N5boost14multiprecision6numberINS0_8backends13cpp_bin_floatILj50ELNS2_15digit_base_typeE10EviLi0ELi0EEELNS0_26expression_template_optionE1EEE,
+epsilon = 5.3455294202e-51,
+the maximum theoretical precision from Brent's minimization is 7.3113127550e-26
+Displaying to std::numeric_limits<T>::digits10 11, significant decimal digits.
+x at minimum = 1.0000000000, f(1.0000000000) = 5.6273022713e-58,
+met 84 bits precision, after 14 iterations.
+x == 1 (compared to uncertainty 7.3113127550e-26) is true
+f(x) == (0 compared to uncertainty 7.3113127550e-26) is true
+-4.0000000000000000000000000000000000000000000000000 1.3333333333333333333333333333333333333333333333333
 x at minimum = 0.99999999999999999999999999998813903221565569205253, f(0.99999999999999999999999999998813903221565569205253) = 5.6273022712501408640665300316078046703496236636624e-58
 14 iterations.
 
 
-For type  N5boost14multiprecision6numberINS0_8backends13cpp_bin_floatILj50ELNS2_15digit_base_typeE10EviLi0ELi0EEELNS0_26expression_template_optionE1EEE,
-  epsilon = 5.3455294202e-51,
-  the maximum theoretical precision from Brent minimization is 7.311312755e-26
-  Displaying to std::numeric_limits<T>::digits10 11 significant decimal digits.
-  x at minimum = 1, f(1) = 5.6273022713e-58,
-  met 84 bits precision, after 14 iterations.
-x == 1 (compared to uncertainty 7.311312755e-26) is true
-f(x) == (0 compared to uncertainty 7.311312755e-26) is true
-
-RUN SUCCESSFUL (total time: 90ms)
-
+For type: N5boost14multiprecision6numberINS0_8backends13cpp_bin_floatILj50ELNS2_15digit_base_typeE10EviLi0ELi0EEELNS0_26expression_template_optionE1EEE,
+epsilon = 5.3455294202e-51,
+the maximum theoretical precision from Brent's minimization is 7.3113127550e-26
+Displaying to std::numeric_limits<T>::digits10 11, significant decimal digits.
+x at minimum = 1.0000000000, f(1.0000000000) = 5.6273022713e-58,
+met 84 bits precision, after 14 iterations.
+x == 1 (compared to uncertainty 7.3113127550e-26) is true
+f(x) == (0 compared to uncertainty 7.3113127550e-26) is true
 
 */
