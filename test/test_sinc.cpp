@@ -5,6 +5,8 @@
 
 #include <pch_light.hpp>
 #include "test_sinc.hpp"
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/math/special_functions/next.hpp>
 
 //
 // DESCRIPTION:
@@ -50,6 +52,36 @@ void expected_results()
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
+template <class T>
+void test_close_to_transition()
+{
+   T transition = 3.3f * boost::math::tools::forth_root_epsilon<T>();
+   T val = transition;
+
+   for (unsigned i = 0; i < 100; ++i)
+   {
+      boost::multiprecision::cpp_bin_float_50 extended = val;
+      extended = sin(extended) / extended;
+      T expected = extended.template convert_to<T>();
+      T result = boost::math::sinc_pi(val);
+      BOOST_CHECK_LE(boost::math::epsilon_difference(result, expected), 3);
+      result = boost::math::sinc_pi(-val);
+      BOOST_CHECK_LE(boost::math::epsilon_difference(result, expected), 3);
+      val = boost::math::float_prior(val);
+   }
+   for (unsigned i = 0; i < 100; ++i)
+   {
+      boost::multiprecision::cpp_bin_float_50 extended = val;
+      extended = sin(extended) / extended;
+      T expected = extended.template convert_to<T>();
+      T result = boost::math::sinc_pi(val);
+      BOOST_CHECK_LE(boost::math::epsilon_difference(result, expected), 3);
+      result = boost::math::sinc_pi(-val);
+      BOOST_CHECK_LE(boost::math::epsilon_difference(result, expected), 3);
+      val = boost::math::float_next(val);
+   }
+}
+
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
@@ -58,9 +90,12 @@ BOOST_AUTO_TEST_CASE( test_main )
    expected_results();
 
    test_sinc(0.1F, "float");
+   test_close_to_transition<float>();
    test_sinc(0.1, "double");
+   test_close_to_transition<double>();
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
    test_sinc(0.1L, "long double");
+   test_close_to_transition<long double>();
 #ifndef BOOST_MATH_NO_REAL_CONCEPT_TESTS
    test_sinc(boost::math::concepts::real_concept(0.1), "real_concept");
 #endif
