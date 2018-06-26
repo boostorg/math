@@ -91,7 +91,7 @@ test-suite examples :
    [ run normal_misc_examples.cpp : : : <exception-handling>off:<build>no  ]
    [ run owens_t_example.cpp  ]
    [ run policy_eg_1.cpp  ]
-   [ run policy_eg_10.cpp  ]
+   [ run policy_eg_10.cpp : : : <target-os>vxworks:<build>no ] # VxWorks' complex.h has conflicting declaration of real
    [ run policy_eg_2.cpp  ]
    [ run policy_eg_3.cpp  ]
    [ run policy_eg_4.cpp  ]
@@ -108,7 +108,7 @@ test-suite examples :
    [ run policy_ref_snip2.cpp  ]
    [ run policy_ref_snip3.cpp : : : <exception-handling>off:<build>no  ]
    [ run policy_ref_snip4.cpp  ]
-   [ run policy_ref_snip5.cpp  ]
+   [ run policy_ref_snip5.cpp  : : : <target-os>vxworks:<build>no ]
    [ run policy_ref_snip6.cpp  ]
    [ run policy_ref_snip7.cpp  ]
    [ run policy_ref_snip8.cpp  ]

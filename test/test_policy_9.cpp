@@ -53,7 +53,7 @@ void test()
    static_assert(noexcept(make_policy(promote_double<false>())), "This expression should be noexcept");
    static_assert(noexcept(make_policy(domain_error<user_error>(), pole_error<user_error>(), overflow_error<user_error>(), underflow_error<user_error>(),
       denorm_error<user_error>(), evaluation_error<user_error>(), rounding_error<user_error>(), indeterminate_result_error<user_error>())), "This expression should be noexcept");
-   static_assert(noexcept(make_policy(promote_float<false>(), promote_double<false>(), assert_undefined<true>(), discrete_quantile<real>(),
+   static_assert(noexcept(make_policy(promote_float<false>(), promote_double<false>(), assert_undefined<true>(), discrete_quantile<boost::math::policies::real>(),
       digits10<10>(), max_series_iterations<100>(), max_root_iterations<20>())), "This expression should be noexcept");
 
    static_assert(noexcept(digits<double, policy<> >() + digits_base10<double, policy<> >()), "This expression should be noexcept");
