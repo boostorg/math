@@ -16,7 +16,7 @@ using namespace boost::math::policies;
 
 typedef negative_binomial_distribution<
       double, 
-      policy<discrete_quantile<boost::math::policies::real> > 
+      policy<discrete_quantile<real> > 
    > dist_type;
    
 // Lower 5% quantile:

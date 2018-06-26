@@ -50,6 +50,7 @@ using boost::math::policies::integer_round_down;
 using boost::math::policies::integer_round_up;
 using boost::math::policies::integer_round_nearest;
 using boost::math::policies::integer_round_inwards;
+using boost::math::policies::real;
 
 using boost::math::binomial_distribution; // Not std::binomial_distribution.
 
@@ -80,7 +81,7 @@ typedef binomial_distribution<
 
 typedef binomial_distribution<
             double, 
-            policy<discrete_quantile<boost::math::policies::real> > > 
+            policy<discrete_quantile<real> > > 
         binom_real_quantile;
 
 /*`
