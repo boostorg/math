@@ -1,3 +1,5 @@
+
+
 #include <iostream>
 #include <iomanip>
 #include <random>
@@ -10,7 +12,7 @@
 
 
 
-void test_host_pi()
+void test_host_pi(double error_goal)
 {
    using boost::math::quadrature::naive_monte_carlo;
 
@@ -29,7 +31,7 @@ void test_host_pi()
    std::cout << "Regular host code:\n";
 
    std::vector<std::pair<double, double>> bounds2{ { -1.0, 1.0 },{ -1., 1. } };
-   double error_goal = 0.0002;
+
    for (unsigned threads = 1; threads < 9; ++threads)
    {
       w.reset();
@@ -39,10 +41,15 @@ void test_host_pi()
       double val = task.get();
       double elapsed = w.elapsed();
       boost::uintmax_t points = mc.calls();
-      double err = boost::math::relative_difference(val, boost::math::constants::pi<double>());
-      std::cout << std::right << std::setw(15) << threads << std::right << std::setw(15)
-         << points << std::right << std::setw(15)
-         << std::fixed << elapsed << std::right << std::setw(15) << val << std::right << std::setw(15) << std::scientific << err << std::endl;
+      double err = fabs(val - boost::math::constants::pi<double>());
+      std::cout << std::right << std::setw(15) << threads 
+         << std::right << std::setw(15) << "-" 
+         << std::right << std::setw(15) << points 
+         << std::right << std::setw(15) << std::fixed << elapsed 
+         << std::right << std::setw(15) << std::scientific << error_goal 
+         << std::right << std::setw(15) << std::scientific << mc.variance()
+         << std::right << std::setw(15) << std::scientific << mc.current_error_estimate()
+         << std::right << std::setw(15) << std::scientific << err << std::endl;
    }
 }
 
@@ -78,9 +85,14 @@ void test_host_hypersphere_10()
       double val = task.get();
       double elapsed = w.elapsed();
       boost::uintmax_t points = mc.calls();
-      double err = boost::math::relative_difference(val, hypersphere10);
-      std::cout << std::right << std::setw(15) << threads << std::right << std::setw(15)
-         << points << std::right << std::setw(15)
-         << std::fixed << elapsed << std::right << std::setw(15) << val << std::right << std::setw(15) << std::scientific << err << std::endl;
+      double err = fabs(val - hypersphere10);
+      std::cout << std::right << std::setw(15) << threads
+         << std::right << std::setw(15) << "-"
+         << std::right << std::setw(15) << points
+         << std::right << std::setw(15) << std::fixed << elapsed
+         << std::right << std::setw(15) << std::scientific << error_goal
+         << std::right << std::setw(15) << std::scientific << mc.variance()
+         << std::right << std::setw(15) << std::scientific << mc.current_error_estimate()
+         << std::right << std::setw(15) << std::scientific << err << std::endl;
    }
 }
