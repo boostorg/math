@@ -78,12 +78,12 @@ int main(void)
    //
    do {
       std::vector<std::pair<double, double> > bounds = { { -1, 1 },{ -1, 1 } };
-      cuda_naive_monte_carlo<double, pi_calculator<double>, thrust::random::taus88> init(pi_calculator<double>(), bounds, 128402);
+      cuda_naive_monte_carlo<double, pi_calculator<double>, thrust::random::taus88> init(pi_calculator<double>(), bounds);
       init.integrate(0.01);
    } while (0);
 
 
-   for (double error_goal = 1e-3; error_goal > 1e-4; error_goal /= 2)
+   for (double error_goal = 1e-3; error_goal > 1e-5; error_goal /= 2)
    {
       for (boost::uintmax_t calls_per_thread = 128; calls_per_thread < 2048; calls_per_thread *= 2)
       {
@@ -91,7 +91,7 @@ int main(void)
             std::vector<std::pair<double, double> > bounds = { {-1, 1}, {-1, 1} };
 
             watch w;
-            cuda_naive_monte_carlo<double, pi_calculator<double>, thrust::random::taus88> integrator(pi_calculator<double>(), bounds, 128402);
+            cuda_naive_monte_carlo<double, pi_calculator<double>, thrust::random::taus88> integrator(pi_calculator<double>(), bounds);
             double val = integrator.integrate(error_goal, calls_per_thread);
             double elapsed = w.elapsed();
             double err = fabs(val - boost::math::constants::pi<double>());
@@ -111,7 +111,7 @@ int main(void)
       }
    }
 
-   for (double error_goal = 1e-3; error_goal > 1e-4; error_goal /= 2)
+   for (double error_goal = 1e-3; error_goal > 1e-5; error_goal /= 2)
    {
       test_host_pi(error_goal);
    }
@@ -128,6 +128,17 @@ int main(void)
 
    double hypersphere10 = std::pow(boost::math::constants::pi<double>(), 5) / boost::math::tgamma(6.0);
 
+   // initialized CUDA device code:
+   {
+      std::vector<std::pair<double, double> > bounds;
+      std::pair<double, double> point = { -1.0, 1.0 };
+      for (unsigned i = 0; i < 10; ++i)
+         bounds.push_back(point);
+
+      cuda_naive_monte_carlo<double, hypersphere<double, 10>, thrust::random::taus88> integrator(hypersphere<double, 10>(), bounds);
+      double val = integrator.integrate(1e-2);
+   }
+
    for (boost::uintmax_t calls_per_thread = 64; calls_per_thread < 4086; calls_per_thread *= 2)
    {
       try {
@@ -139,7 +150,7 @@ int main(void)
             bounds.push_back(point);
 
          watch w;
-         cuda_naive_monte_carlo<double, hypersphere<double, 10>, thrust::random::taus88> integrator(hypersphere<double, 10>(), bounds, 128402);
+         cuda_naive_monte_carlo<double, hypersphere<double, 10>, thrust::random::taus88> integrator(hypersphere<double, 10>(), bounds);
          double val = integrator.integrate(error_goal, calls_per_thread);
          double elapsed = w.elapsed();
          double err = fabs(val - hypersphere10);

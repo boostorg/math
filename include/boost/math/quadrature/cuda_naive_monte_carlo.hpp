@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <vector>
 #include <utility>
+#include <random>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/cstdint.hpp>
  // For the CUDA runtime routines (prefixed with "cuda_")
@@ -60,14 +61,55 @@ namespace boost { namespace math { namespace quadrature { namespace detail{
       }
    }
 
-   } // namespace detail
+   template <class F, class Gen, class Real>
+   void __global__ cuda_naive_monte_carlo_fast_device_proc(const F* f, Gen* seeds, thrust::pair<Real, Real>* sums, const Real* p_start_locations, const Real* p_scales, unsigned n_calls, Real* p_storage, unsigned n_dimentions, bool is_first)
+   {
+      int id = blockIdx.x * blockDim.x + threadIdx.x;
 
-   template <class Real, class F, class Gen = thrust::random::taus88>
+      Gen gen(seeds[id]);
+      Real* storage_base = p_storage + id * n_dimentions;
+      thrust::uniform_real_distribution<Real> dist(0, 1);
+      Real sum(0);
+      Real sigma_squared(0);
+      for (unsigned i = 0; i < n_calls; ++i)
+      {
+         for (unsigned j = 0; j < n_dimentions; ++j)
+            storage_base[j] = p_start_locations[j] + p_scales[j] * dist(gen);
+         Real fv = (*f)(storage_base);
+         sum += fv;
+         sigma_squared += fv * fv;
+      }
+      seeds[id] = gen;
+      if (is_first)
+         sums[id] = thrust::pair<Real, Real>(sum, sigma_squared);
+      else
+      {
+         sums[id].first += sum;
+         sums[id].second += sigma_squared;
+      }
+   }
+
+} // namespace detail
+
+   template <class Real, class F, class ThreadGen = thrust::random::taus88, class MasterGen = std::random_device>
    struct cuda_naive_monte_carlo
    {
       cuda_naive_monte_carlo(const F& integrand,
          std::vector<std::pair<Real, Real>> const & bounds,
-         uint64_t seed = 115974199 /* from random.org */) : m_gen(seed), m_volume(1), m_sigma(0), m_sigma_squares(0), m_calls(0)
+         const MasterGen& seed) : m_gen(seed), m_volume(1), m_sigma(0), m_sigma_squares(0), m_calls(0)
+      {
+         auto it = bounds.begin();
+         while (it != bounds.end())
+         {
+            m_start_locations.push_back(it->first);
+            m_scale_factors.push_back(it->second - it->first);
+            m_volume *= (it->second - it->first);
+            ++it;
+         }
+      }
+      cuda_naive_monte_carlo(const F& integrand,
+         std::vector<std::pair<Real, Real>> const & bounds) 
+         : m_volume(1), m_sigma(0), m_sigma_squares(0), m_calls(0)
       {
          auto it = bounds.begin();
          while (it != bounds.end())
@@ -84,7 +126,7 @@ namespace boost { namespace math { namespace quadrature { namespace detail{
       template <class T>
       static T* to_pointer(thrust::device_ptr<T> p) { return p.get(); }
 
-      Real integrate(Real error_request, boost::uintmax_t calls_per_thread = 1024)
+      Real integrate(Real error_request, boost::uintmax_t calls_per_thread = 1024, boost::uintmax_t max_calls_per_thread = 250000, bool is_compensated = true)
       {
          boost::uintmax_t threads;
          cudaDeviceProp deviceProp;
@@ -96,10 +138,12 @@ namespace boost { namespace math { namespace quadrature { namespace detail{
          thrust::device_vector<Real> scales = m_scale_factors;
          thrust::device_vector<Real> storage(threads * m_start_locations.size());
          thrust::device_vector<thrust::pair<Real, Real> > sums(threads);
-         thrust::device_vector<Gen> seeds(threads);
-         thrust::host_vector<Gen> host_seeds(threads);
+         thrust::device_vector<ThreadGen> seeds(threads);
+         thrust::host_vector<ThreadGen> host_seeds(threads);
+         typedef typename ThreadGen::result_type seed_type;
+         std::uniform_int_distribution<seed_type> ui_dist((std::numeric_limits<seed_type>::min)(), (std::numeric_limits<seed_type>::max)());
          for (unsigned i = 0; i < host_seeds.size(); ++i)
-            host_seeds[i].seed(m_gen());
+            host_seeds[i].seed(ui_dist(m_gen));
          seeds = host_seeds;
          thrust::device_vector<F> proc(1);
          proc[0] = m_f;
@@ -129,8 +173,13 @@ namespace boost { namespace math { namespace quadrature { namespace detail{
                      target_total = 2 * m_calls;
                   calls_per_thread = 1 + target_total / threads;
                }
+               if (calls_per_thread > max_calls_per_thread)
+                  calls_per_thread = max_calls_per_thread;
                // std::cout << "Executing with calls_per_thread = " << calls_per_thread << std::endl;
-               detail::cuda_naive_monte_carlo_device_proc << <threads / 256, 256 >> > (to_pointer(proc.data()), to_pointer(seeds.data()), to_pointer(sums.data()), to_pointer(starts.data()), to_pointer(scales.data()), calls_per_thread, to_pointer(storage.data()), scales.size(), first_call);
+               if(is_compensated)
+                  detail::cuda_naive_monte_carlo_device_proc << <threads / 256, 256 >> > (to_pointer(proc.data()), to_pointer(seeds.data()), to_pointer(sums.data()), to_pointer(starts.data()), to_pointer(scales.data()), calls_per_thread, to_pointer(storage.data()), scales.size(), first_call);
+               else
+                  detail::cuda_naive_monte_carlo_fast_device_proc << <threads / 256, 256 >> > (to_pointer(proc.data()), to_pointer(seeds.data()), to_pointer(sums.data()), to_pointer(starts.data()), to_pointer(scales.data()), calls_per_thread, to_pointer(storage.data()), scales.size(), first_call);
                first_call = false;
                m_calls += threads * calls_per_thread;
                // If we haven't been called before then get an estimate of the sample 
@@ -180,7 +229,7 @@ namespace boost { namespace math { namespace quadrature { namespace detail{
       }
 
    private:
-      Gen m_gen;
+      MasterGen m_gen;
       Real m_volume, m_sigma, m_sigma_squares;
       boost::uintmax_t m_calls;
       F m_f;
