@@ -171,6 +171,28 @@ int main(void)
    
    test_host_hypersphere_10();
 
+   /* Example code from docs */
+
+   {
+
+      // Define a function to integrate:
+      auto g = [] __device__ (const double* x)
+      {
+         constexpr const double pi = boost::math::constants::pi<double>();
+         constexpr const double A = 1.0 / (pi * pi * pi);
+         return A / (1.0 - cos(x[0])*cos(x[1])*cos(x[2]));
+      };
+      std::vector<std::pair<double, double>> bounds{ { 0, boost::math::constants::pi<double>() },{ 0, boost::math::constants::pi<double>() },{ 0, boost::math::constants::pi<double>() } };
+      double error_goal = 0.001;
+      cuda_naive_monte_carlo<double, decltype(g)> mc(g, bounds);
+
+      double result = mc.integrate(error_goal);
+
+      std::cout << "Integration result is: " << result << std::endl;
+
+
+   }
+
    return 0;
 }
 

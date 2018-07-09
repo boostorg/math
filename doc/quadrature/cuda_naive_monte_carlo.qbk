@@ -56,7 +56,7 @@ usable on the CUDA device.  These per-thread generators are initialized via rand
 of type `MasterGen`: this defaults to `std::random_device` but could equally be a psuedo-random number generator.
 It is important though to ensure that the per-thread random generators do not become correlated, or generate
 overlapping sequences.  For this reason type `ThreadGen` should have a long repeat period, and at the very least 
-be a differnet type from `MasterGen`.
+be a different type from `MasterGen`.
 
 A call to member function `integrate` performs the actual integration, and also controls how the CUDA device is used:
 
@@ -74,32 +74,46 @@ this first pass is used to get an estimate of the variance and calculate how man
 be required by the second pass to reach the desired error bound.
 * `max_calls_per_thread`: the maximum number of calls of the integrand by each thread in any single CUDA
 invocation.  This parameter is used to prevent operating system timeouts from terminating the application.
-For example on Windows if the CUDA accellerated display driver is unresponsive for more than 2 seconds, then
+For example on Windows if the CUDA accelerated display driver is unresponsive for more than 2 seconds, then
 the application using it will simply be terminated.
 * `is_compensated`: when `true` each thread will use Kahan-style compensated addition to ensure accuracy.  When
 `false` then regular addition will be used for improved performance.
 
 For example:
 
-    // Define a function to integrate:
-    auto g = [](std::vector<double> const & x)
-    {
-      constexpr const double A = 1.0 / (M_PI * M_PI * M_PI);
-      return A / (1.0 - cos(x[0])*cos(x[1])*cos(x[2]));
-    };
-    std::vector<std::pair<double, double>> bounds{{0, M_PI}, {0, M_PI}, {0, M_PI}};
-    double error_goal = 0.001
-    naive_monte_carlo<double, decltype(g)> mc(g, bounds);
+      // Define a function to integrate:
+      auto g = [] __device__ (const double* x)
+      {
+         constexpr const double pi = boost::math::constants::pi<double>();
+         constexpr const double A = 1.0 / (pi * pi * pi);
+         return A / (1.0 - cos(x[0])*cos(x[1])*cos(x[2]));
+      };
+      std::vector<std::pair<double, double>> bounds{ { 0, boost::math::constants::pi<double>() },{ 0, boost::math::constants::pi<double>() },{ 0, boost::math::constants::pi<double>() } };
+      double error_goal = 0.001;
+      cuda_naive_monte_carlo<double, decltype(g)> mc(g, bounds);
 
-    double result = mc.integrate(error_goal);
+      double result = mc.integrate(error_goal);
+
+      std::cout << "Integration result is: " << result << std::endl;
 
 First off, we define the function we wish to integrate.
-This function must accept a `std::vector<Real> const &`, and return a `Real`.
-Next, we define the domain of integration.
+This function must accept a `const Real*`, and return a `Real`.
+In comparison to the regular non-CUDA code we loose a good deal of type safety
+as CUDA deals in raw pointers, not vectors - so it's up to the client to
+ensure that the number of elements accessed matches the number of dimensions passed
+to the integrators constructor.
+Also note that we've used a lambda expression for the integrand: this currently requires
+compilation with `-expt-extended-lambda`.
+
+Next, we define the domain of integration as a vector of pairs - in this case
+the domain is [0, PI] over 3 dimensions.
+
+   std::vector<std::pair<double, double>> bounds{ { 0, boost::math::constants::pi<double>() },{ 0, boost::math::constants::pi<double>() },{ 0, boost::math::constants::pi<double>() } };
+
 The call
 
     naive_monte_carlo<double, decltype(g)> mc(g, bounds);
 
-creates an instance of the monte carlo integrator, and the call to `integrate` then returns the result.
+creates an instance of the Monte-Carlo integrator, and the call to `integrate` then returns the result.
 
 [endsect]
