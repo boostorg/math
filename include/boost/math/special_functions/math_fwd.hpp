@@ -1019,10 +1019,10 @@ namespace boost
 
    // pow:
    template <int N, typename T, class Policy>
-   BOOST_GPU_ENABLED typename tools::promote_args<T>::type pow(T base, const Policy& policy);
+   BOOST_GPU_ENABLED BOOST_CONSTEXPR typename tools::promote_args<T>::type pow(T base, const Policy& policy);
 
    template <int N, typename T>
-   BOOST_GPU_ENABLED typename tools::promote_args<T>::type pow(T base);
+   BOOST_GPU_ENABLED BOOST_CONSTEXPR typename tools::promote_args<T>::type pow(T base);
 
    // next:
    template <class T, class U, class Policy>
