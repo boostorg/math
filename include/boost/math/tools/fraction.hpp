@@ -15,6 +15,7 @@
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/tools/tuple.hpp>
 
 namespace boost{ namespace math{ namespace tools{
 
@@ -26,6 +27,11 @@ namespace detail
 
    template <class T, class U>
    struct is_pair<std::pair<T,U> > : public boost::true_type{};
+
+#ifdef __CUDA_ARCH__
+   template <class T, class U>
+   struct is_pair<thrust::pair<T, U> > : public boost::true_type {};
+#endif
 
    template <class Gen>
    struct fraction_traits_simple

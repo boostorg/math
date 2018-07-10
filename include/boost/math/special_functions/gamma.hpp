@@ -19,6 +19,7 @@
 #include <boost/math/tools/series.hpp>
 #include <boost/math/tools/fraction.hpp>
 #include <boost/math/tools/precision.hpp>
+#include <boost/math/tools/tuple.hpp>
 #include <boost/math/tools/promotion.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/constants/constants.hpp>
@@ -303,7 +304,7 @@ private:
    T z, a;
    int k;
 public:
-   typedef std::pair<T,T> result_type;
+   typedef boost::math::pair<T,T> result_type;
 
    BOOST_GPU_ENABLED upper_incomplete_gamma_fract(T a1, T z1)
       : z(z1-a1+1), a(a1), k(0)
