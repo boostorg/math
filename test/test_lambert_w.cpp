@@ -186,25 +186,17 @@ void test_integrals()
   {
     // Integrate for function lambert_W0(1/z^2).
     exp_sinh<Real> es;
+    //const Real sqrt_min = sqrt(boost::math::tools::min_value<Real>()); // 1.08420217e-19 fo 32-bit float.
+    // error C3493: 'sqrt_min' cannot be implicitly captured because no default capture mode has been specified
     auto f = [](Real z)->Real
     {
-
-      //if (!boost::math::isfinite<Real>(z)) // sqrt max_value so z^2 would overflow.
-      //{
-      //  return Real(0);
-      //  // Error in function boost::math::quadrature::exp_sinh<float>::integrate: 
-      //  // The function you are trying to integrate does not go to zero at infinity, and instead evaluates to 3.40282347e+38
-      //}
-      //Real zz = z * z;
-      //Real one_div_zz = (zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz;
-      // return lambert_w0<Real>(one_div_zz); //
       if (z <= sqrt(boost::math::tools::min_value<Real>()) )
-      { // would underflow z * z and divide by zero to overflow 1/z^2 for lambert_w0
+      { // Too small would underflow z * z and divide by zero to overflow 1/z^2 for lambert_w0 z parameter.
         return static_cast<Real>(0);
       }
       else
       {
-        return lambert_w0<Real>(1 / (z * z));
+        return lambert_w0<Real>(1 / (z * z)); // warning C4756: overflow in constant arithmetic, even though cannot happen.
       }
     };
     Real z = es.integrate(f);
@@ -650,17 +642,17 @@ void test_spots(RealType)
     BOOST_MATH_TEST_VALUE(RealType, 0.2038883547022401644431818313271398701493524772101596350),
     tolerance);
 
-  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.051)), // just above 0.05 cutoff
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.051)), // just above 0.05 cutoff.
     BOOST_MATH_TEST_VALUE(RealType, -0.05382002772543396036830469500362485089791914689728115249),
-    tolerance);
+    tolerance * 4);
 
-  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.05)),
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.05)), // at cutoff.
     BOOST_MATH_TEST_VALUE(RealType, -0.05270598355154634795995650617915721289427674396592395160),
-    tolerance);
+    tolerance * 8);
 
-  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.049)),
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.049)), // Just below cutoff.
     BOOST_MATH_TEST_VALUE(RealType, 0.04676143671340832342497289393737051868103596756298863555),
-    tolerance);
+    tolerance * 4);
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.01)),
     BOOST_MATH_TEST_VALUE(RealType, 0.009901473843595011885336326816570107953627746494917415483),
@@ -672,7 +664,7 @@ void test_spots(RealType)
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.049)),
     BOOST_MATH_TEST_VALUE(RealType, -0.05159448479219405354564920228913331280713177046648170658),
-    tolerance);
+    tolerance * 8);
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 1e-6)),
     BOOST_MATH_TEST_VALUE(RealType, 9.999990000014999973333385416558666900096702096424344715e-7),
@@ -810,7 +802,7 @@ BOOST_AUTO_TEST_CASE( test_types )
 
 } // BOOST_AUTO_TEST_CASE( test_types )
 
-/*
+
 BOOST_AUTO_TEST_CASE( test_range_of_double_values )
 {
   using boost::math::constants::exp_minus_one;
@@ -1095,9 +1087,10 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
     }
 } // BOOST_AUTO_TEST_CASE(test_range_of_double_values)
 
-BOOST_AUTO_TEST_CASE( derivatives_of_lambert_w )
+#ifdef BOOST_MATH_LAMBERT_W_DERIVATIVES
+BOOST_AUTO_TEST_CASE( Derivatives_of_lambert_w )
 {
-
+  std::cout << "Macro BOOST_MATH_LAMBERT_W_DERIVATIVES to test 1st derivatives is defined." << std::endl;
   BOOST_TEST_MESSAGE("\nTest Lambert W function 1st differentials.");
 
   using boost::math::constants::exp_minus_one;
@@ -1128,19 +1121,20 @@ BOOST_AUTO_TEST_CASE( derivatives_of_lambert_w )
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, -0.2)),
-    BOOST_MATH_TEST_VALUE(RealType, 1.7491967609218362),
+    BOOST_MATH_TEST_VALUE(RealType, 1.7491967609218355),
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, 10.)),
     BOOST_MATH_TEST_VALUE(RealType, 0.063577133469345098),
     tolerance);
-}; // BOOST_AUTO_TEST_CASE("derivatives of lambert_w")
-*/
+}; // BOOST_AUTO_TEST_CASE("Derivatives of lambert_w")
+
+#endif // BOOST_MATH_LAMBERT_W_DERIVATIVES
 
 #ifdef BOOST_MATH_LAMBERT_W_INTEGRALS
-
 BOOST_AUTO_TEST_CASE( integrals )
 {
+  std::cout << "Macro BOOST_MATH_LAMBERT_W_INTEGRALS is defined." << std::endl;
   BOOST_TEST_MESSAGE("\nTest Lambert W integrals.");
   try
   {
@@ -1164,7 +1158,6 @@ BOOST_AUTO_TEST_CASE( integrals )
   > no_throw_policy;
 
   /*
-  */
   // Experiment with better diagnostics.
   typedef float Real;
 
@@ -1196,23 +1189,13 @@ BOOST_AUTO_TEST_CASE( integrals )
 
 
 
-
+// Demo debug version.
 Real tol = std::numeric_limits<Real>::epsilon();
 Real x;
 {
   using boost::math::quadrature::exp_sinh;
   exp_sinh<Real> es;
   // Function to be integrated, lambert_w0(1/z^2).
-
-  // Avoid divide unity by zero giving infinity.
-  // (Was commented out for test of try'n'catch diagnostics against this - see below).
-    //auto f = [](Real z)->Real
-    //{
-    //  Real zz = z * z;
-    //  Real one_div_zz = (zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz;
-    //  return lambert_w0<Real>(one_div_zz); //
-    //  //return lambert_w0<Real>((zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz); //
-    //};
 
     //auto f = [](Real z)->Real
     //{ // Naive - no protection against underflow and subsequent divide by zero.
@@ -1234,12 +1217,12 @@ Real x;
     BOOST_CHECK_CLOSE_FRACTION(x, boost::math::constants::root_two_pi<Real>(), tol);
     // root_two_pi<double = 2.506628274631000502
   }
-  
+    */
 
+  test_integrals<float>();
   test_integrals<double>();
-  //test_integrals<long double>();
+  test_integrals<long double>();
   test_integrals<cpp_bin_float_quad>();
-  test_integrals<float>(); // Error in function boost::math::lambert_w0<float>: Expected a finite value but got inf
   }
   catch (std::exception& ex)
   {
@@ -1253,11 +1236,63 @@ Real x;
 
   Output:
 
+  Running 4 test cases...
+
+  Test Lambert W function for several types.
+  Program: i:\modular-boost\libs\math\test\test_lambert_w.cpp
+  Wed Jul 11 17:57:07 2018
+  BuildInfo:
+  Platform Win32, 64-bit.
+  Compiler Microsoft Visual C++ version 14.1
+  STL Dinkumware standard library version 650
+  Boost version 1.68.0
+  BOOST_MATH_TEST_MULTIPRECISION defined for multiprecision tests.
+
+
+
+  Testing type float
+  Tolerance 2 * epsilon == 2.38419e-07
+  Precision 6 decimal digits, max_digits10 = 9
+  -exp(-1) = -0.367879450
+
+  Testing type double
+  Tolerance 2 * epsilon == 4.44089e-16
+  Precision 15 decimal digits, max_digits10 = 17
+  -exp(-1) = -0.36787944117144233
+
+  Testing type class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<64,2,void,short,-16382,16383>,0>
+  Tolerance 16 * epsilon == 1.73472e-18
+  Precision 18 decimal digits, max_digits10 = 22
+  -exp(-1) = -0.3678794411714423215831
+
+  Testing type class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<113,2,void,short,-16382,16383>,0>
+  Tolerance 16 * epsilon == 3.08149e-33
+  Precision 33 decimal digits, max_digits10 = 37
+  -exp(-1) = -0.3678794411714423215955237701614608727
+
+  Testing type class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<50,10,void,int,0,0>,0>
+  Tolerance 16 * epsilon == 8.55285e-50
+  Precision 50 decimal digits, max_digits10 = 53
+  -exp(-1) = -0.36787944117144232159552377016146086744581113103176804
+
+  BOOST_MATH_TEST_FLOAT128 NOT defined so NO float128 tests.
+
+  Test Lambert W function type double for range of values.
+  Tolerance 1 * epsilon == 2.22045e-16
+  (std::numeric_limits<RealType>::min)() 2.2250738585072014e-308
+  Macro BOOST_MATH_LAMBERT_W_DERIVATIVES to test 1st derivatives is defined.
+
+  Test Lambert W function 1st differentials.
+  Macro BOOST_MATH_LAMBERT_W_INTEGRALS is defined.
 
   Test Lambert W integrals.
-  Error in function boost::math::quadrature::exp_sinh<float>::integrate: 
-  The function you are trying to integrate does not go to zero at infinity, 
-  and instead evaluates to 84.2885895
+  Integration of type float
+  Integration of type double
+  Integration of type long double
+  Integration of type class boost::multiprecision::number<class boost::multiprecision::backends::cpp_bin_float<113,2,void,short,-16382,16383>,0>
+
+  *** No errors detected
+  Press any key to continue . . .
 
   */
 
