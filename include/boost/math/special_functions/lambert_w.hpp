@@ -1,5 +1,5 @@
 // Copyright John Maddock 2017.
-// Copyright Paul A. Bristow 2016, 2017.
+// Copyright Paul A. Bristow 2016, 2017, 2018.
 // Copyright Nicholas Thompson 2018
 
 // Distributed under the Boost Software License, Version 1.0.
@@ -8,10 +8,6 @@
 
 #ifndef BOOST_MATH_SF_LAMBERT_W_HPP
 #define BOOST_MATH_SF_LAMBERT_W_HPP
-
-#ifdef _MSC_VER
-#  pragma warning (disable: 4127) // warning C4127: conditional expression is constant.
-#endif // _MSC_VER
 
 /*
 Implementation of an algorithm for the Lambert W0 and W-1 real-only functions.
@@ -24,10 +20,12 @@ and on a C/C++ version by Darko Veberic, darko.veberic@ijs.si
 based on the algorithm and a FORTRAN version of Toshio Fukushima's algorithm.
 
 First derivative of Lambert_w is derived from
-Princeton Companion to Applied Mathmatics, 'The Lambert-W function', Section 1.3: Series and Generating Functions.
+Princeton Companion to Applied Mathematics, 'The Lambert-W function', Section 1.3: Series and Generating Functions.
+
 */
 
 /*
+TODO revise this list of macros.
 Some macros that will show some (or much) diagnostic values if #defined.
 //[boost_math_instrument_lambert_w_macros
 
@@ -958,15 +956,12 @@ T lambert_w0_approx(T z)
 // Forward declarations:
 
 //template <class T, class Policy> T lambert_w0_small_z(T z, const Policy& pol);
-//
 //template <class T, class Policy>
-//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<0>&); // 32 bit usually float
+//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<0>&); // 32 bit usually float.
 //template <class T, class Policy>
-//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<1>&); //  64 bit usually double
+//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<1>&); //  64 bit usually double.
 //template <class T, class Policy>
-//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<2>&); // 80-bit long double
-
-
+//T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<2>&); // 80-bit long double.
 
 //! Lambert_w0 @b 'float' implementation, selected when T is 32-bit precision.
 template <class T, class Policy>
@@ -984,8 +979,8 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
     return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, pol);
   }
 
-   //if (z >= 0.05)
-   if (z >= 0.045) // 34 terms makes 128-bit 'exact' below 0.045.
+   if (z >= 0.05) // Fukushima switch point.
+  // if (z >= 0.045) // 34 terms makes 128-bit 'exact' below 0.045.
     { // Normal ranges using several rational polynomials.
       if (z < 2)
       {
@@ -1189,9 +1184,9 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
          return lambert_w_singularity_series(p);
       }
    }
-} // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&) for 32-bit float.
+} // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&) for 32-bit usually float.
 
-//! Lambert_w0 @b double implementation, selected when T is 64-bit precision.
+//! Lambert_w0 @b 'double' implementation, selected when T is 64-bit precision.
 template <class T, class Policy>
 inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
 {
@@ -1582,7 +1577,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
          return lambert_w_detail::lambert_w_singularity_series(p);
       }
    }
-} // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
+} // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&) 64-bit precision, usually double.
 
 //! lambert_W0 implementation for extended precision types including
 //! long double (80-bit and 128-bit), ???
@@ -1644,7 +1639,6 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)
    // mpl::true_  if there are so many digits precision wanted that iteration is necessary.
    // mpl::false_ if a single Halley step is sufficient.
 
-
    typedef typename policies::precision<T, Policy>::type precision_type;
    typedef mpl::bool_<
       (precision_type::value == 0) || (precision_type::value > 113) ?
@@ -1658,11 +1652,10 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)
 
    return lambert_w_maybe_halley_iterate(w, z, tag_type());
 
- //  result = lambert_w_halley_iterate(result, z);
-
-} // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)  extended precision.
+} // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<0>&)  all extended precision types.
 
   // Lambert w-1 implementation
+// ==============================================================================================
 
   //! Lambert W for W-1 branch, -max(z) < z <= -1/e.
   // TODO is -max(z) allowed?
@@ -2010,7 +2003,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 } // template<typename T = double> T lambert_wm1_imp(const T z)
 } // namespace lambert_w_detail
 
-/////////////////////  User Lambert w functions. //////////////////////////
+/////////////////////////////  User Lambert w functions. //////////////////////////////
 
 //! Lambert W0 using User-defined policy.
   template <class T, class Policy>
@@ -2033,22 +2026,8 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
       : 2  // 64-bit (probably double) precision.
       > tag_type;
 
-    // Optionally, if policy is all T's digits (default), return after a extra Halley step.
-    // (Might be better with mpl?)
+    return lambert_w_detail::lambert_w0_imp(result_type(z), pol, tag_type()); // 
 
-    T result = lambert_w_detail::lambert_w0_imp(result_type(z), pol, tag_type()); // Pre-Halley.
-
-    bool quick = (precision_type::value < std::numeric_limits<T>::digits);
-
-    if (quick || (result == -1) || (result == 0) || (!boost::math::isnormal(result)) || (z < -0.3578))
-    { // Don't try to refine using a Halley step.
-      return result;
-    }
-    else
-    {
-      result = lambert_w_detail::lambert_w_halley_step(result, z);
-    }
-    return result;
     // return lambert_w_detail::lambert_w0_imp(result_type(z), pol, tag_type());
   } // lambert_w0(T z, const Policy& pol)
 
@@ -2062,17 +2041,6 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // without doing any other internal promotion like float to double.
     typedef typename tools::promote_args<T>::type result_type;
 
-    // Perhaps Deal with other special cases here??????????????
-    // (TODO NaN, zero?
-    //if ((boost::math::isinf)(z))
-    //{
-    // // return std::numeric_limits<T>::infinity();
-    //  static const char* function = "boost::math::lambert_w0<%1%>";
-    //  return boost::math::policies::raise_overflow_error<T>(function, "Expected a finite value but got %1%.", z, policies::policy<>());
-    //  // for double max possible is 703.227... so this would return this value.
-    //  // return boost::math::lambert_w_detail::lambert_w0_approx(lambert_w0(boost::math::tools::max_value<T>()));
-    //}
-
     // Work out what precision has been selected, based on the Policy and the number type.
     // For the default policy version, we want the *default policy* precision for T.
     typedef typename policies::precision<result_type, Policy>::type precision_type;
@@ -2083,22 +2051,8 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
       : (precision_type::value <= 24) ? 1 // 32-bit (probably float) precision.
       : 2  // 64-bit (probably double) precision.
     > tag_type;
-    T result = lambert_w_detail::lambert_w0_imp(result_type(z),  policies::policy<>(), tag_type()); // Pre-Halley.
-    // Always add Halley step for default policy,
-    // unless these special cases where unlikely to improve.
-    if ((z < -0.3578) // Using singularity series.
-      || (!boost::math::isnormal(result))  // NaN, infinity or denormal.
-      || (result == -1) || (result == 0)) // exact.
-    {
-      return result;
-    }
-    result = lambert_w_detail::lambert_w_halley_step(result, z);
-    return result;
-    // TODO this ugliness is because JM rationals return rather than result = ...
-    // and should use existing checks for -1, 0, singularity series and small_z series inside _imp
-    // to avoid repeating here.
-//    return lambert_w_detail::lambert_w0_imp(result_type(z), policies::policy<>(), tag_type()); //
-  } // lambert_w0(T z)
+    return lambert_w_detail::lambert_w0_imp(result_type(z),  policies::policy<>(), tag_type());
+  } // lambert_w0(T z) using default policy.
 
     //! W-1 branch (-max(z) < z <= -1/e).
 
