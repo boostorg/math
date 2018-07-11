@@ -142,9 +142,9 @@ inline
 // TODO might also decide if more than one step is needed?
 template <class T>
 inline
-T lambert_w_maybe_improve(T w, T z, mpl::false_ const&)
+T lambert_w_maybe_improve(T w, T /* z */, mpl::false_ const&)
 {
-  std::cout << "No Halley step result " << w << std::endl;
+ // std::cout << "No Halley step result " << w << std::endl;
   return w; // No refinement - just return current estimate of w; 
 }
 
@@ -153,10 +153,10 @@ inline
 T lambert_w_maybe_improve(T w, T z, mpl::true_ const&)
 {
   T result;
-  std::cout << "Halley step from " << w << std::endl;
+ // std::cout << "Halley step from " << w << std::endl;
   result = lambert_w_halley_step(w, z); // Try to improve with a single Halley step.
   // This may make less accurate by one bit.
-  std::cout << "Halley step result " << result << std::endl;
+//  std::cout << "Halley step result " << result << std::endl;
   return result;
 }
 
@@ -1026,7 +1026,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
 
    //if (z >= 0.05)
    if (z >= 0.045) // 34 terms makes 128-bit 'exact' below 0.045.
-    { // Normal ranges using several rational polynomials.
+   { // Normal ranges using several rational polynomials.
       if (z < 2)
       {
          if (z < 0.5)
@@ -1049,7 +1049,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
             //return z * (Y + boost::math::tools::evaluate_polynomial(P, z) / boost::math::tools::evaluate_polynomial(Q, z));
             result = z * (Y + boost::math::tools::evaluate_polynomial(P, z) / boost::math::tools::evaluate_polynomial(Q, z));
             // return result; // No Halley step.
-            return lambert_w_maybe_improve(result, z, digits_tag_type() );
+           // return lambert_w_maybe_improve(result, z, digits_tag_type() );
          }
          else
          { // 0.5 < z < 2
@@ -1069,11 +1069,11 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
             };
             //return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
             result = z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
-            std::cout << "Pre-Halley Rational Polynomial = "  << result << std::endl;
+            //std::cout << "Pre-Halley Rational Polynomial = "  << result << std::endl;
 
  //           return lambert_w_maybe_improve(result, z, digits_tag_type() );
-            result = lambert_w_maybe_improve(result, z, digits_tag_type() );
-            std::cout << "Post may step = " << result << std::endl;
+           // result = lambert_w_maybe_improve(result, z, digits_tag_type() );
+            // std::cout << "Post may step = " << result << std::endl;
 
 
              return result;
@@ -1098,7 +1098,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
          };
         // return Y + boost::math::tools::evaluate_rational(P, Q, z);
          result =  Y + boost::math::tools::evaluate_rational(P, Q, z);
-         return lambert_w_maybe_improve(result, z, digits_tag_type() );
+       //  return lambert_w_maybe_improve(result, z, digits_tag_type() );
       }
       else if (z < 18)
       {
@@ -1119,7 +1119,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
          };
        //  return Y + boost::math::tools::evaluate_rational(P, Q, z);
          result = Y + boost::math::tools::evaluate_rational(P, Q, z);
-         return lambert_w_maybe_improve(result, z, digits_tag_type() );
+       //  return lambert_w_maybe_improve(result, z, digits_tag_type() );
       }
       else if (z < 9897.12905874)  // 2.8 < log(z) < 9.2
       {
@@ -1141,7 +1141,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
          T log_w = log(z);
        //  return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
          result = log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
-         return lambert_w_maybe_improve(result, z, digits_tag_type() );
+       //  return lambert_w_maybe_improve(result, z, digits_tag_type() );
 
       }
       else if (z < 7.896296e+13)  // 9.2 < log(z) <= 32
@@ -1164,7 +1164,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
          T log_w = log(z);
    //      return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
          result = log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
-         return lambert_w_maybe_improve(result, z, digits_tag_type() );
+        // return lambert_w_maybe_improve(result, z, digits_tag_type() );
       }
       else // 32 < log(z) < 100
       {
@@ -1186,8 +1186,8 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
          T log_w = log(z);
          //return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
          result =  log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
-         return lambert_w_maybe_improve(result, z, digits_tag_type() );
       }
+      return lambert_w_maybe_improve(result, z, digits_tag_type() );
    }
    else // z < 0.05
    {
@@ -1711,7 +1711,7 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<3>&)
    // Phew!  If we get here we are in the normal range of the function,
    // so get a double precision approximation first, then iterate to full precision of T.
    // We define a tag_type that is:
-   // mpl::true_  if there are so many digits precision wanted that Halley iteration is necessary.
+   // mpl::true_ if there are so many digits precision wanted that Halley iteration is necessary.
    // mpl::false_ if a single Halley step is sufficient.
 
    typedef typename policies::precision<T, Policy>::type precision_type;
@@ -1745,8 +1745,8 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   // Need to ensure it is a floating-point type (of the desired type, float 1.F, double 1., or long double 1.L),
   // or static_casted integer, for example:  static_cast<float>(1) or static_cast<cpp_dec_float_50>(1).
   // Want to allow fixed_point types too, so do not just test for floating-point.
-  // Integral types should be promoted to double by user Lambert w functions.
-  // If integral type provided to user function lambert_w0 or lambert_wm1,
+  // Integral types should be promoted to double by user Lambert  functions.
+  // If an integral type provided to user function lambert_w0 or lambert_wm1,
   // then should already have been promoted to double.
   BOOST_STATIC_ASSERT_MSG(!std::is_integral<T>::value,
     "Must be floating-point or fixed type (not integer type), for example: lambert_wm1(1.), not lambert_wm1(1)!");
@@ -2110,8 +2110,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 
     T result = lambert_w_detail::lambert_w0_imp(result_type(z), pol, tag_type()); // Pre-Halley.
 
-    bool quick = (precision_type::value < std::numeric_limits<T>::digits);
-
+    const bool quick = (precision_type::value < std::numeric_limits<T>::digits);
     if (quick || (result == -1) || (result == 0) || (!boost::math::isnormal(result)) || (z < -0.3578))
     { // Don't try to refine using a Halley step.
       return result;
