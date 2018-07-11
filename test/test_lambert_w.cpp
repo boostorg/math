@@ -12,10 +12,7 @@
 
 // #define BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES // Diagnostics for z near zero.
 // #define BOOST_MATH_TEST_MULTIPRECISION  // Add tests for several multiprecision types (not just built-in).
-// #define BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17  and quadmath library).
-// #define BOOST_MATH_LAMBERT_W_INTEGRALS // Add test using quadrature.
-
-//#define BOOST_MATH_LAMBERT_W_INTEGRALS
+// #defin BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17  and quadmath library).
 
 #ifdef BOOST_MATH_TEST_FLOAT128
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
@@ -28,7 +25,7 @@
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
 #include <boost/test/included/unit_test.hpp> // Boost.Test
- //#include <boost/test/unit_test.hpp> // Boost.Test
+// #include <boost/test/unit_test.hpp> // Boost.Test
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/array.hpp>
@@ -43,13 +40,14 @@ using boost::multiprecision::cpp_dec_float_50;
 using boost::multiprecision::cpp_bin_float_quad;
 
 #ifdef BOOST_MATH_TEST_FLOAT128
+
 #ifdef BOOST_HAS_FLOAT128
 // Including this header below without float128 triggers:
 // fatal error C1189: #error:  "Sorry compiler is neither GCC, not Intel, don't know how to configure this header."
 #include <boost/multiprecision/float128.hpp>
 using boost::multiprecision::float128;
 #endif // ifdef BOOST_HAS_FLOAT128
-#endif // #ifdef BOOST_MATH_TEST_FLOAT128
+#endif // #ifdef #ifdef BOOST_MATH_TEST_FLOAT128
 
 #endif //   #ifdef BOOST_MATH_TEST_MULTIPRECISION
 
@@ -86,16 +84,9 @@ std::string show_versions(void);
 // Added code and test for Integral of the Lambert W function: by Nick Thompson.
 // https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals
 
-#ifdef BOOST_MATH_NO_ATOMIC_INT
-#error "Ooops"
-#endif
-
-#undef BOOST_MATH_NO_ATOMIC_INT
-
 #include <boost/math/constants/constants.hpp> // for integral tests.
 #include <boost/math/quadrature/tanh_sinh.hpp> // for integral tests.
 #include <boost/math/quadrature/exp_sinh.hpp> // for integral tests.
-
 
   using boost::math::policies::policy;
   using boost::math::policies::make_policy;
@@ -112,7 +103,8 @@ typedef policy<
   overflow_error<ignore_error>
 > no_throw_policy;
 
-// Assumes that function has a throw policy, for example NOT lambert_w0<T>(1 / (x * x), no_throw_policy());
+// Assumes that function has a throw policy, for example:
+//    NOT lambert_w0<T>(1 / (x * x), no_throw_policy());
 // Error in function boost::math::quadrature::exp_sinh<double>::integrate:
 // The exp_sinh quadrature evaluated your function at a singular point and resulted in inf.
 // Please ensure your function evaluates to a finite number of its entire domain.
@@ -124,8 +116,15 @@ T debug_integration_proc(T x)
   try
   {
    // Assign function call to result in here...
-    result = lambert_w0<T>(1 / (x * x));
-   // result = lambert_w0<T>(1 / (x * x), no_throw_policy());  // Bad idea, less helpful diagnostic message is
+    if (x <= sqrt(boost::math::tools::min_value<T>()) )
+    {
+      result = 0;
+    }
+    else
+    {
+      result = lambert_w0<T>(1 / (x * x));
+    }
+   // result = lambert_w0<T>(1 / (x * x), no_throw_policy());  // Bad idea, less helpful diagnostic message is:
     // Error in function boost::math::quadrature::exp_sinh<double>::integrate:
     // The exp_sinh quadrature evaluated your function at a singular point and resulted in inf.
     // Please ensure your function evaluates to a finite number of its entire domain.
@@ -135,16 +134,16 @@ T debug_integration_proc(T x)
   {
     std::cout << "Exception " << e.what() << std::endl;
     // set breakpoint here:
-    std::cout << "Unexpected exception thrown in integration code at abscissa: " << x << "." << std::endl;
+    std::cout << "Unexpected exception thrown in integration code at abscissa (x): " << x << "." << std::endl;
     if (!std::isfinite(result))
     {
       // set breakpoint here:
-      std::cout << "Unexpected non-finite result in integration code at abscissa: " << x << "." << std::endl;
+      std::cout << "Unexpected non-finite result in integration code at abscissa (x): " << x << "." << std::endl;
     }
     if (std::isnan(result))
     {
       // set breakpoint here:
-      std::cout << "Unexpected non-finite result in integration code at abscissa: " << x << "." << std::endl;
+      std::cout << "Unexpected non-finite result in integration code at abscissa (x): " << x << "." << std::endl;
     }
   } // catch
   return result;
@@ -159,6 +158,8 @@ void test_integrals()
   using boost::math::quadrature::exp_sinh;
   // file:///I:/modular-boost/libs/math/doc/html/math_toolkit/quadrature/double_exponential/de_tanh_sinh.html
   using std::sqrt;
+
+  std::cout << "Integration of type " << typeid(Real).name()  << std::endl;
 
   Real tol = std::numeric_limits<Real>::epsilon();
   { //  // Integrate for function lambert_W0(z);
@@ -187,8 +188,24 @@ void test_integrals()
     exp_sinh<Real> es;
     auto f = [](Real z)->Real
     {
-      Real zz = z * z; //  warning C4756: overflow in constant arithmetic.
-      return lambert_w0<Real>((zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz);
+
+      //if (!boost::math::isfinite<Real>(z)) // sqrt max_value so z^2 would overflow.
+      //{
+      //  return Real(0);
+      //  // Error in function boost::math::quadrature::exp_sinh<float>::integrate: 
+      //  // The function you are trying to integrate does not go to zero at infinity, and instead evaluates to 3.40282347e+38
+      //}
+      //Real zz = z * z;
+      //Real one_div_zz = (zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz;
+      // return lambert_w0<Real>(one_div_zz); //
+      if (z <= sqrt(boost::math::tools::min_value<Real>()) )
+      { // would underflow z * z and divide by zero to overflow 1/z^2 for lambert_w0
+        return static_cast<Real>(0);
+      }
+      else
+      {
+        return lambert_w0<Real>(1 / (z * z));
+      }
     };
     Real z = es.integrate(f);
     BOOST_CHECK_CLOSE_FRACTION(z, boost::math::constants::root_two_pi<Real>(), tol);
@@ -308,7 +325,7 @@ void test_spots(RealType)
 #endif
 
   std::cout << "\nTesting type " << typeid(RealType).name() << std::endl;
-  int epsilons = 1;
+  int epsilons = 2;
   if (std::numeric_limits<RealType>::digits > 53)
   { // Multiprecision types.
     epsilons *= 8; // (Perhaps needed because need slightly longer (55) reference values?).
@@ -358,7 +375,7 @@ void test_spots(RealType)
 
     BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.1)),
     BOOST_MATH_TEST_VALUE(RealType, 0.091276527160862264299895721423179568653119224051472),
-    // Output from https://www.wolframalpha.com/input/?i=lambert_w0(0.1)
+    // Output from https://www.wolframalpha.com/input/?i=lambert_w0(0.2)
     tolerance);
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 0.2)),
@@ -738,6 +755,7 @@ void test_spots(RealType)
   // TODO ???????????
 
  } // template <class RealType>void test_spots(RealType)
+
 BOOST_AUTO_TEST_CASE( test_types )
 {
   BOOST_MATH_CONTROL_FP;
@@ -1116,8 +1134,6 @@ BOOST_AUTO_TEST_CASE( derivatives_of_lambert_w )
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, 10.)),
     BOOST_MATH_TEST_VALUE(RealType, 0.063577133469345098),
     tolerance);
-
-
 }; // BOOST_AUTO_TEST_CASE("derivatives of lambert_w")
 */
 
@@ -1147,21 +1163,26 @@ BOOST_AUTO_TEST_CASE( integrals )
     overflow_error<ignore_error>
   > no_throw_policy;
 
-  double inf = std::numeric_limits<double>::infinity();
-  double max = (std::numeric_limits<double>::max)();
-  std::cout.precision(std::numeric_limits<double>::max_digits10);
+  /*
+  */
+  // Experiment with better diagnostics.
+  typedef float Real;
+
+  Real inf = std::numeric_limits<Real>::infinity();
+  Real max = (std::numeric_limits<Real>::max)();
+  std::cout.precision(std::numeric_limits<Real>::max_digits10);
   //std::cout << "lambert_w0(inf) = " << lambert_w0(inf) << std::endl; // lambert_w0(inf) = 1.79769e+308
   std::cout << "lambert_w0(inf, throw_policy()) = " << lambert_w0(inf, no_throw_policy()) << std::endl; // inf
   std::cout << "lambert_w0(max) = " << lambert_w0(max) << std::endl; // lambert_w0(max) = 703.227
   //std::cout << lambert_w0(inf) << std::endl; // inf - will throw.
   std::cout << "lambert_w0(0) = " << lambert_w0(0.) << std::endl; // 0
-  std::cout << "lambert_w0(std::numeric_limits<double>::denorm_min()) = " << lambert_w0(std::numeric_limits<double>::denorm_min()) << std::endl; // 4.94066e-324
-  std::cout << "lambert_w0(std::numeric_limits<double>::min()) = " << lambert_w0((std::numeric_limits<double>::min)()) << std::endl; // 2.22507e-308
+  std::cout << "lambert_w0(std::numeric_limits<Real>::denorm_min()) = " << lambert_w0(std::numeric_limits<Real>::denorm_min()) << std::endl; // 4.94066e-324
+  std::cout << "lambert_w0(std::numeric_limits<Real>::min()) = " << lambert_w0((std::numeric_limits<Real>::min)()) << std::endl; // 2.22507e-308
 
   // Approximate the largest lambert_w you can get for type T?
   float max_w_f = boost::math::lambert_w_detail::lambert_w0_approx((std::numeric_limits<float>::max)()); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
   std::cout << "w max_f " << max_w_f << std::endl; // 84.2879
-  double max_w = boost::math::lambert_w_detail::lambert_w0_approx((std::numeric_limits<double>::max)()); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
+  Real max_w = boost::math::lambert_w_detail::lambert_w0_approx((std::numeric_limits<Real>::max)()); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
   std::cout << "w max " << max_w << std::endl; // 703.227
 
   std::cout << "lambert_w0(7.2416706213544837e-163) = " << lambert_w0(7.2416706213544837e-163) << std::endl; //
@@ -1169,27 +1190,28 @@ BOOST_AUTO_TEST_CASE( integrals )
   std::cout << "ULP = " << boost::math::ulp(1., policy<digits2<> >()) << std::endl; // ULP = 2.2204460492503131e-16
   std::cout << "ULP = " << boost::math::ulp(1e-10, policy<digits2<> >()) << std::endl; // ULP = 2.2204460492503131e-16
   std::cout << "ULP = " << boost::math::ulp(1., policy<digits2<11> >()) << std::endl; // ULP = 2.2204460492503131e-16
-  std::cout << "epsilon =  " << std::numeric_limits<double>::epsilon() << std::endl; //
-  std::cout << "End of info on limits.\n" << std::endl;
+  std::cout << "epsilon =  " << std::numeric_limits<Real>::epsilon() << std::endl; //
+  std::cout << "sqrt(max) =  " << sqrt(boost::math::tools::max_value<float>() ) << std::endl; // sqrt(max) =  1.8446742974197924e+19
+  std::cout << "sqrt(min) =  " << sqrt(boost::math::tools::min_value<float>() ) << std::endl; // sqrt(min) =  1.0842021724855044e-19
 
-  // Experiment with better diagnostics.
-typedef double Real;
+
+
+
 Real tol = std::numeric_limits<Real>::epsilon();
 Real x;
 {
-    using boost::math::quadrature::exp_sinh;
-    exp_sinh<Real> es;
+  using boost::math::quadrature::exp_sinh;
+  exp_sinh<Real> es;
+  // Function to be integrated, lambert_w0(1/z^2).
 
-    // Function to be integrated, lambert_w0(1/z^2).
-
-    //  // Avoid divide unity by zero giving infinity.
-    // Commented out for test of try'n'catch diagnostics against this.
+  // Avoid divide unity by zero giving infinity.
+  // (Was commented out for test of try'n'catch diagnostics against this - see below).
     //auto f = [](Real z)->Real
     //{
     //  Real zz = z * z;
-    //  //Real one_div_zz = (zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz;
-    //  //return lambert_w0<Real>(one_div_zz); //
-    //  return lambert_w0<Real>((zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz); //
+    //  Real one_div_zz = (zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz;
+    //  return lambert_w0<Real>(one_div_zz); //
+    //  //return lambert_w0<Real>((zz == Real(0)) ? boost::math::tools::max_value<Real>() : 1 / zz); //
     //};
 
     //auto f = [](Real z)->Real
@@ -1197,26 +1219,27 @@ Real x;
     //  return lambert_w0<Real>(1 / (z * z));
     //};
     // Diagnostic is:
-    // Error in function boost::math::lambert_w0<double>: Expected a finite value but got inf
-
+    // Error in function boost::math::lambert_w0<Real>: Expected a finite value but got inf
 
     auto f = [](Real z)->Real
     { // Debug with diagnostics for underflow and subsequent divide by zero and other bad things.
       return debug_integration_proc(z);
     };
     // Exception Error in function boost::math::lambert_w0<double>: Expected a finite value but got inf.
-    // Unexpected exception thrown in integration code at abscissa: 7.2416706213544837e-163.
 
+    // Unexpected exception thrown in integration code at abscissa: 7.2416706213544837e-163.
+    // Unexpected exception thrown in integration code at abscissa (x): 3.478765835953569e-23.
     x = es.integrate(f);
     std::cout << "es.integrate(f) = " << x << std::endl;
     BOOST_CHECK_CLOSE_FRACTION(x, boost::math::constants::root_two_pi<Real>(), tol);
-    // root_two_pi<double> = 2.506628274631000502
+    // root_two_pi<double = 2.506628274631000502
   }
+  
 
-  //test_integrals<float>(); // Error in function boost::math::lambert_w0<float>: Expected a finite value but got inf.
   test_integrals<double>();
   //test_integrals<long double>();
   test_integrals<cpp_bin_float_quad>();
+  test_integrals<float>(); // Error in function boost::math::lambert_w0<float>: Expected a finite value but got inf
   }
   catch (std::exception& ex)
   {
@@ -1230,6 +1253,11 @@ Real x;
 
   Output:
 
+
+  Test Lambert W integrals.
+  Error in function boost::math::quadrature::exp_sinh<float>::integrate: 
+  The function you are trying to integrate does not go to zero at infinity, 
+  and instead evaluates to 84.2885895
 
   */
 
