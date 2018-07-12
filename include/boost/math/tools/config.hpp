@@ -267,8 +267,10 @@
 //
 // function scope static variables aren't allowed on CUDA device code:
 //
-#ifdef __CUDA_ARCH__
+#if defined(__CUDA_ARCH__) && defined(BOOST_NO_CXX11_CONSTEXPR)
 #define BOOST_MATH_GPU_STATIC
+#elif defined(__CUDA_ARCH__)
+#define BOOST_MATH_GPU_STATIC constexpr
 #else
 #define BOOST_MATH_GPU_STATIC static
 #endif
