@@ -5,7 +5,8 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_TEST_MODULE sinh_sinh_quadrature_test
-
+#include <complex>
+#include <boost/multiprecision/cpp_complex.hpp>
 #include <boost/math/concepts/real_concept.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -153,22 +154,22 @@ void test_nr_examples()
     BOOST_CHECK_SMALL(L1, tol);
 
     // In spite of the poles at \pm i, we still get a doubling of the correct digits at each level of refinement.
-    auto f1 = [](const Real& t) { return 1/(1+t*t); };
+    auto f1 = [](const Real& t)->Real { return 1/(1+t*t); };
     Q = integrator.integrate(f1, integration_limit, &error, &L1);
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 #if defined(BOOST_MSVC) && (BOOST_MSVC < 1900)
-    auto f2 = [](const Real& x) { return fabs(x) > boost::math::tools::log_max_value<Real>() ? 0 : exp(-x*x); };
+    auto f2 = [](const Real& x)->Real { return fabs(x) > boost::math::tools::log_max_value<Real>() ? 0 : exp(-x*x); };
 #else
-    auto f2 = [](const Real& x) { return exp(-x*x); };
+    auto f2 = [](const Real& x)->Real { return exp(-x*x); };
 #endif
     Q = integrator.integrate(f2, integration_limit, &error, &L1);
     Q_expected = root_pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
     BOOST_CHECK_CLOSE_FRACTION(L1, Q_expected, tol);
 
-    auto f5 = [](const Real& t) { return 1/cosh(t);};
+    auto f5 = [](const Real& t)->Real { return 1/cosh(t);};
     Q = integrator.integrate(f5, integration_limit, &error, &L1);
     Q_expected = pi<Real>();
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -177,7 +178,7 @@ void test_nr_examples()
     // This oscillatory integral has rapid convergence because the oscillations get swamped by the exponential growth of the denominator,
     // none the less the error is slightly higher than for the other cases:
     tol *= 10;
-    auto f8 = [](const Real& t) { return cos(t)/cosh(t);};
+    auto f8 = [](const Real& t)->Real { return cos(t)/cosh(t);};
     Q = integrator.integrate(f8, integration_limit, &error, &L1);
     Q_expected = pi<Real>()/cosh(half_pi<Real>());
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
@@ -229,6 +230,36 @@ void test_crc()
     BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol);
 }
 
+template<class Complex>
+void test_dirichlet_eta()
+{
+  typedef typename Complex::value_type Real;
+  std::cout << "Testing Dirichlet eta function on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+  Real tol = 10 * boost::math::tools::epsilon<Real>();
+  Complex Q;
+  sinh_sinh<Real> integrator(10);
+
+  //https://en.wikipedia.org/wiki/Dirichlet_eta_function, integral representations:
+  Complex z = {1,1};
+  auto eta = [&z](Real t)->Complex {
+    using std::exp;
+    using std::pow;
+    using boost::math::constants::pi;
+    Complex i = {0,1};
+    Complex num = pow((Real)1/ (Real)2  + i*t, -z);
+    Real denom = exp(pi<Real>()*t) + exp(-pi<Real>()*t);
+    Complex res = num/denom;
+    return res;
+  };
+  Q = integrator.integrate(eta);
+  // N[DirichletEta[1 + I], 150]
+  Complex Q_expected = {boost::lexical_cast<Real>("0.726559775062463263201495728547241386311129502735725787103568290594808442332084045617744978600192784188182345866652233650512117834307254514480657408096"),
+                        boost::lexical_cast<Real>("0.158095863901207324355426285544321998253687969756843115763682522207208309489794631247865357375538028170751576870244296106203144195376645765556607038775")};
+
+  BOOST_CHECK_CLOSE_FRACTION(Q.real(), Q_expected.real(), tol);
+  BOOST_CHECK_CLOSE_FRACTION(Q.imag(), Q_expected.imag(), tol);
+}
+
 
 BOOST_AUTO_TEST_CASE(sinh_sinh_quadrature_test)
 {
@@ -258,14 +289,19 @@ BOOST_AUTO_TEST_CASE(sinh_sinh_quadrature_test)
 
     test_crc<float>();
     test_crc<double>();
+    test_dirichlet_eta<std::complex<double>>();
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_crc<long double>();
+    test_dirichlet_eta<std::complex<long double>>();
 #endif
     test_crc<cpp_bin_float_quad>();
+    test_dirichlet_eta<boost::multiprecision::cpp_complex_quad>();
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_crc<boost::math::concepts::real_concept>();
 #endif
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
     test_crc<boost::multiprecision::cpp_dec_float_50>();
 #endif
+
+
 }

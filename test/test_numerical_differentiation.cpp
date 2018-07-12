@@ -37,7 +37,7 @@ void test_order(size_t points_to_test)
     std::cout << "Testing order " <<  order  << " derivative error estimate on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
     std::cout << std::setprecision(std::numeric_limits<Real>::digits10);
     //std::cout << std::fixed << std::scientific;
-    auto f = [](Real t) { return cyl_bessel_j<Real>(1, t); };
+    auto f = [](Real t) { return boost::math::cyl_bessel_j<Real>(1, t); };
     Real min = -100000.0;
     Real max = -min;
     Real x = min;
@@ -98,7 +98,7 @@ void test_bessel()
 
     Real eps = std::numeric_limits<Real>::epsilon();
     Real x = static_cast<Real>(25.1);
-    auto f = [](Real t) { return cyl_bessel_j(12, t); };
+    auto f = [](Real t) { return boost::math::cyl_bessel_j(12, t); };
 
     Real computed = finite_difference_derivative<decltype(f), Real, 1>(f, x);
     Real expected = cyl_bessel_j_prime(12, x);
