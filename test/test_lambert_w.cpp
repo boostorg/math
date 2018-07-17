@@ -1,4 +1,4 @@
-// Copyright Paul A. Bristow 2016, 2017.
+// Copyright Paul A. Bristow 2016, 2017, 2018.
 // Copyright John Maddock 2016.
 
 // Use, modification and distribution are subject to the
@@ -7,12 +7,12 @@
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 // test_lambert_w.cpp
-//! \brief Basic sanity tests for Lambert W function plog productlog
-//! or lambert_w using algorithm informed by Thomas Luu, Veberic and Tosio Fukushima.
+//! \brief Basic sanity tests for Lambert W function using algorithms
+// informed by Thomas Luu, Darko Veberic and Tosio Fukushima.
 
-// #define BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES // Diagnostics for z near zero.
 // #define BOOST_MATH_TEST_MULTIPRECISION  // Add tests for several multiprecision types (not just built-in).
-// #defin BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17  and quadmath library).
+// #define BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17 and quadmath library).
+// #define BOOST_MATH_LAMBERT_W_INTEGRALS // Add quadrature tests that cover the whole range of the Lambert W0 function.
 
 #ifdef BOOST_MATH_TEST_FLOAT128
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
