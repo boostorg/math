@@ -1103,30 +1103,39 @@ BOOST_AUTO_TEST_CASE( Derivatives_of_lambert_w )
   // https://www.wolframalpha.com/input/?i=derivative+of+productlog(-1,+x)
   // d/dx(W_(-1)(x)) = (W_(-1)(x))/(x W_(-1)(x) + x)
 
+  // 55 decimal digit values added to allow future testing using multiprecision.
+
   typedef double RealType;
 
   int epsilons = 1;
   RealType tolerance = boost::math::tools::epsilon<RealType>() * epsilons; // 2 eps as a fraction.
 
-  //derivative of productlog(-1, x)   at x = -0.1 == -13.8803
+  // derivative of productlog(-1, x)   at x = -0.1 == -13.8803
   // (derivative of productlog(-1, x) ) at x = N[-0.1, 55] - but the result disappears!
   // (derivative of N[productlog(-1, x), 55] ) at x = N[-0.1, 55]
 
-  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1_prime(BOOST_MATH_TEST_VALUE(RealType, -0.1)),
-    BOOST_MATH_TEST_VALUE(RealType, -13.880252213229781),
+  // W0 branch
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, -0.2)),
+   // BOOST_MATH_TEST_VALUE(RealType, 1.7491967609218355),
+    BOOST_MATH_TEST_VALUE(RealType, 1.7491967609218358355273514903396335693828167746571404),
+    tolerance); //                  1.7491967609218358355273514903396335693828167746571404
+
+    BOOST_CHECK_CLOSE_FRACTION(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, 10.)),
+    BOOST_MATH_TEST_VALUE(RealType, 0.063577133469345105142021311010780887641928338458371618),
     tolerance);
+
+// W-1 branch
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1_prime(BOOST_MATH_TEST_VALUE(RealType, -0.1)),
+    BOOST_MATH_TEST_VALUE(RealType, -13.880252213229780748699361486619519025203815492277715),
+    tolerance);
+  // Lambert W_prime -13.880252213229780748699361486619519025203815492277715, double -13.880252213229781
 
   BOOST_CHECK_CLOSE_FRACTION(lambert_wm1_prime(BOOST_MATH_TEST_VALUE(RealType, -0.2)),
-    BOOST_MATH_TEST_VALUE(RealType, -8.2411940564179051),
+    BOOST_MATH_TEST_VALUE(RealType, -8.2411940564179044961885598641955579728547896392013239),
     tolerance);
+  // Lambert W_prime -8.2411940564179044961885598641955579728547896392013239, double -8.2411940564179051
 
-  BOOST_CHECK_CLOSE_FRACTION(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, -0.2)),
-    BOOST_MATH_TEST_VALUE(RealType, 1.7491967609218355),
-    tolerance);
-
-  BOOST_CHECK_CLOSE_FRACTION(lambert_w0_prime(BOOST_MATH_TEST_VALUE(RealType, 10.)),
-    BOOST_MATH_TEST_VALUE(RealType, 0.063577133469345098),
-    tolerance);
+  // Lambert W_prime 0.063577133469345105142021311010780887641928338458371618, double 0.063577133469345098
 }; // BOOST_AUTO_TEST_CASE("Derivatives of lambert_w")
 
 #endif // BOOST_MATH_LAMBERT_W_DERIVATIVES
@@ -1221,8 +1230,13 @@ Real x;
 
   test_integrals<float>();
   test_integrals<double>();
+#ifdef BOOST_MATH_TEST_MULTIPRECISION
   test_integrals<long double>();
+#ifdef BOOST_MATH_TEST_FLOAT128
+  test_integrals<float128>();
+#endif
   test_integrals<cpp_bin_float_quad>();
+#endif // BOOST_MATH_TEST_MULTIPRECISION
   }
   catch (std::exception& ex)
   {

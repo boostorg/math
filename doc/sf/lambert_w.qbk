@@ -45,13 +45,16 @@ In the graphs below, the red line is the W0 branch, and the blue line the W-1 br
 [import ../../example/lambert_w_graph.cpp]
 
 [graph lambert_w_graph]
-
 [graph lambert_w_graph_big_w]
+[graph lambert_w0_prime_graph]
+[graph lambert_wm1_prime_graph]
 
 There is a singularity where the branches meet at argument [^z = -1/e] [cong] [^ -0.367879...] and [^W = -1].
 
 This implementation computes the two real (not complex) branches W0 and W-1
-with the functions `lambert_w0` and `lambert_wm1` from the first [^z] argument.
+with the functions `lambert_w0` and `lambert_wm1`,
+and their 1st derivatives, `lambert_w0_prime` and  `lambert_wm1_prime`,
+from the first [^z] argument.
 
 For C++ types `float` the maximum z argument `(std::numeric_limits<>::max)()`
 Lambert_w0(3.2e+38) = 84.29,
@@ -67,7 +70,7 @@ Refer to __policy_section for more details and see examples below.
 The Lambert W function has a myriad of applications.
 Corless et al. provide a comprehensive description of the range of applications,
 from the mathematical, like iterated exponentiation and asymptotic roots of trinomials,
-to the real-world such as the range of a jet plane, enzyme kinetics, water movement in soil,
+to the real-world, such as the range of a jet plane, enzyme kinetics, water movement in soil,
 epidemics, and diode current (an example replicated [@../../example/lambert_w_diode.cpp here]).
 Since the publication of their landmark paper, there have been many more applications, and
 also many new implementations of the function, upon which this implementation builds.
@@ -701,6 +704,11 @@ Halley iteration should triple the precision with each step
 and since we have at least half of the bits correct already,
 one Halley step is ample to get to 128-bit precision.
 
+
+[h5:lambert_w_derivatives Lambert W Derivatives]
+
+The derivatives are computed using the formulae in [@https://en.wikipedia.org/wiki/Lambert_W_function#Derivative Wikipedia].
+
 [h4:testing Testing]
 
 Initial testing of the algorithm was done using a small number of spot tests.
@@ -740,19 +748,23 @@ A further method of testing over a wide range of argument z values was devised b
 These are definite integral formulas involving the W function that are exactly known constants,
 for example, LambertW0(1/(z[sup2]) == [sqrt](2[pi]),
 see [@https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals Definite Integrals].
-Some care was needed to avoid overflow and underflow as the function must evaluate to a finite result over the entire range.
-
+Some care was needed to avoid overflow and underflow as the integral function must evaluate to a finite result over the entire range.
 
 These are not routinely evaluated by the Boost testers,
 but can be run by defining a macro BOOST_MATH_LAMBERT_W_INTEGRALS.
+If BOOST_MATH_TEST_MULTIPRECISION is also defined,
+then __multiprecision types like `cpp_bin_float_quad` are also used to test quadrature.
+If BOOST_MATH_TEST_FLOAT128 is defined, then `float128` is also tested.
 
+[h5:test_macros Testing Macros]
 
-
-Three macros provide optional tests if #defined before BOOST_TEST_MAIN.
+A few macros provide optional tests if #defined before BOOST_TEST_MAIN.
 
 * BOOST_MATH_TEST_MULTIPRECISION Adds test for __multiprecision types.
 
 * BOOST_MATH_TEST_FLOAT128 Adds test using __float128 type (GCC only, needing gnu++17 and quadmath library).
+
+* BOOST_MATH_LAMBERT_W_DERIVATIVES to test 1st derivatives is defined.
 
 * BOOST_MATH_LAMBERT_W_INTEGRALS Adds quadrature tests that cover the whole range of the Lambert W0 function.
 
