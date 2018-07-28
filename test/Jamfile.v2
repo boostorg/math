@@ -208,6 +208,7 @@ test-suite special_fun :
         : # requirements
           <define>TEST_FLOAT
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_float  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -215,6 +216,7 @@ test-suite special_fun :
         : # requirements
           <define>TEST_DOUBLE
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_double  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -222,6 +224,7 @@ test-suite special_fun :
         : # requirements
           <define>TEST_LDOUBLE
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_long_double  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -230,6 +233,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=1
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_real_concept1  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -238,6 +242,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=2
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_real_concept2  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -246,6 +251,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=3
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_real_concept3  ]
    [ run test_ibeta_derivative.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework
         : # command line
@@ -254,6 +260,7 @@ test-suite special_fun :
           <define>TEST_REAL_CONCEPT
           <define>TEST_DATA=4
           <toolset>intel:<pch>off
+          <toolset>gcc:<cxxflags>-Wno-overflow
         : test_ibeta_derivative_real_concept4  ]
 
    [ run test_ibeta_inv.cpp  test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework

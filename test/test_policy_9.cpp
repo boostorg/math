@@ -10,6 +10,10 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/tools/precision.hpp>
 
+template <class T>
+BOOST_CONSTEXPR int consume_constexpr(const T&)
+{  return 0;  }
+
 void test()
 {
    using namespace boost::math::policies;
@@ -44,6 +48,27 @@ void test()
    constexpr double r7 = raise_evaluation_error("func", "msg", 0.0, p6);
    constexpr float r8 = raise_rounding_error("func", "msg", 0.0, 0.0f, p6);
    constexpr float r9 = raise_indeterminate_result_error("func", "msg", 0.0, 0.0f, p6);
+
+   consume_constexpr(p1);
+   consume_constexpr(p2);
+   consume_constexpr(p3);
+   consume_constexpr(p4);
+   consume_constexpr(p5);
+   consume_constexpr(p6);
+   consume_constexpr(d);
+   consume_constexpr(s);
+   consume_constexpr(r);
+   consume_constexpr(ep);
+   consume_constexpr(ep2);
+   consume_constexpr(r1);
+   consume_constexpr(r2);
+   consume_constexpr(r3);
+   consume_constexpr(r4);
+   consume_constexpr(r5);
+   consume_constexpr(r6);
+   consume_constexpr(r7);
+   consume_constexpr(r8);
+   consume_constexpr(r9);
 
 #endif
 
