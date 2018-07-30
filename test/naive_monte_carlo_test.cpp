@@ -458,12 +458,12 @@ BOOST_AUTO_TEST_CASE(naive_monte_carlo_test)
 #if !defined(TEST) || TEST == 2
     test_pi<float>();
     test_pi<double>();
+#endif
 #if !defined(TEST) || TEST == 3
     test_pi_multithreaded<float>();
     test_constant<float>();
 #endif
     //test_pi<long double>();
-#endif
 #if !defined(TEST) || TEST == 4
     test_constant<double>();
     //test_constant<long double>();

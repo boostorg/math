@@ -1170,7 +1170,7 @@ test-suite misc :
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_17
    ]
    [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
-     <toolset>msvc:<cxxflags>/bigobj<define>TEST=18  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
+     <toolset>msvc:<cxxflags>/bigobj <define>TEST=18  [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_hdr_thread cxx11_hdr_atomic cxx11_decltype cxx11_hdr_future cxx11_hdr_chrono cxx11_hdr_random cxx11_allocator ]
      <target-os>linux:<linkflags>"-pthread" : naive_monte_carlo_test_18
    ]
    [ run naive_monte_carlo_test.cpp ../../atomic/build//boost_atomic : : :
