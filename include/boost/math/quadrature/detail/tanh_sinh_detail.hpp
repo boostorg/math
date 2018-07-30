@@ -506,8 +506,11 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    m_first_complements = {
       1, 0, 1, 1, 3, 5, 11, 22,
    };
-
+#ifndef BOOST_MATH_NO_ATOMIC_INT
    m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
+#else
+   m_committed_refinements = m_abscissas.size() - 1;
+#endif
 
    if (m_max_refinements >= m_abscissas.size())
    {
@@ -556,8 +559,11 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    m_first_complements = {
       1, 0, 1, 1, 3, 5, 11, 22,
    };
-
+#ifndef BOOST_MATH_NO_ATOMIC_INT
    m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
+#else
+   m_committed_refinements = m_abscissas.size() - 1;
+#endif
 
    if (m_max_refinements >= m_abscissas.size())
    {
@@ -605,8 +611,11 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    m_first_complements = {
       1, 0, 1, 1, 3, 5, 11, 22,
    };
-
+#ifndef BOOST_MATH_NO_ATOMIC_INT
    m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
+#else
+   m_committed_refinements = m_abscissas.size() - 1;
+#endif
 
    if (m_max_refinements >= m_abscissas.size())
    {
@@ -656,8 +665,11 @@ void tanh_sinh_detail<Real, Policy>::init(const Real& min_complement, const mpl:
    m_first_complements = {
       1, 0, 1, 1, 3, 5, 11, 22,
    };
-
+#ifndef BOOST_MATH_NO_ATOMIC_INT
    m_committed_refinements = static_cast<boost::math::detail::atomic_unsigned_integer_type>(m_abscissas.size() - 1);
+#else
+   m_committed_refinements = m_abscissas.size() - 1;
+#endif
 
    if (m_max_refinements >= m_abscissas.size())
    {
