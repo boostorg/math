@@ -83,7 +83,7 @@ You will usually need the following `#include` and `using` statements:
 
 [lambert_w_simple_examples_includes]
 
-Some examples follow:
+Some examples follow, starting with the trivial:
 
 [lambert_w_simple_examples_0]
 
@@ -91,12 +91,12 @@ Other floating-point types can be used too, here `float`,
 including user defined types like __multiprecision.
 It is convenient to use a function like `show_value`
 to display all (and only) potentially significant decimal digits, including any significant trailing zeros,
-(`std::numeric_limits<>::max_digits10`) for the type `T`.
+(`std::numeric_limits<T>::max_digits10`) for the type `T`.
 
 [lambert_w_simple_examples_1]
 
-Example of an integer argument to lambert_w,
-showing that an 'int' literal is correctly promoted to a `double`.
+Example of an integer argument to `lambert_w0`,
+showing that an `int` literal is correctly promoted to a `double`.
 
 [lambert_w_simple_examples_2]
 
@@ -237,7 +237,7 @@ this has been used here to provide our reference values for testing.
 
 For example, we get a reference value using a high precision type, for example;
 
-  `using boost::multiprecision::cpp_bin_float_50;`
+  using boost::multiprecision::cpp_bin_float_50;
 
 that uses Halley iteration to refine until it is as precise as possible for this `cpp_bin_float_50` type.
 
@@ -296,7 +296,7 @@ Provided that there is a `catch` clause, an error message (similar to that below
 * `z == (std::numeric_limits<T>::max)()` returns W for the floating_point type T, (for example, for `double`, 703.22703310477018L)
 * `z == std::numeric_limits<T>::infinity()`  throws a `overflow_error`.
 
-(An argument z passed as infinity probably indicates an error has already occurred,
+(An argument z passed as infinity probably indicates that something has already gone wrong,
 but if it is desired to return infinity,
 this case should be handled before calling `lambert_w0`).
 
@@ -305,13 +305,13 @@ this case should be handled before calling `lambert_w0`).
 The range mathematically is -1/e <= z <= 0, but numerically,
 
 * `z == -1/e` (for the type T) returns exactly -1.
-* `z == 0` returns -[infin] (or the nearest equivalent if `std::has_infinity == false`).
+* `z == 0`  returns -[infin] (or the nearest equivalent if `std::has_infinity == false`).
 * `z == std::numeric_limits<T>::min()` returns the maximum (most negative) possible value of Lambert W for the type T. [br]
 For example, for `double`: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634 [br]
 and for `float`: lambert_wm1(-1.17549435e-38) = -91.8567734 [br]
 
 * `z < std::numeric_limits<T>::min()`, means that z is zero or denormalized (if `std::numeric_limits<T>::has_denorm_min == true`),
-for example: `r = lambert_wm1(std::numeric_limits<double>::denorm_min());` and an overflow_error exception is thrown.
+for example: `r = lambert_wm1(std::numeric_limits<double>::denorm_min());` and an overflow_error exception is thrown,
 and will give a message like:
 
   Error in function boost::math::lambert_wm1<RealType>(<RealType>):
@@ -364,7 +364,7 @@ finally static-casting back to the smaller desired result type.
 This strategy is used by __Maple and WolframAlpha, for example, using arbitrary precision arithmetic,
 and some of their high-precision values are used for testing this library.
 This method is also used to provide __boost_test values using __multiprecision,
-typically, a 50 decimal digit type like `cpp_dec_float_50`
+typically, a 50 decimal digit type like `cpp_bin_float_50`
 `static_cast` to a `float`, `double` or `long double` type.
 
 For ['z] argument values near the singularity and near zero, other approximations may be used,
@@ -377,7 +377,7 @@ In practical applications, the increased computation required
 is not justified and the algorithms here do not implement this.
 But because the Boost.Lambert_W algorithms has been tested using __multiprecision,
 users who require this can always easily achieve the nearest representation for the __fundamental_types
-if the application justifies the very large extra computation cost.
+- if the application justifies the very large extra computation cost.
 
 [h5 Evolution of this implementation]
 
@@ -422,7 +422,7 @@ followed by Halley iteration (but is also slowest and least precise near zero an
 
 More recently, the Tosio Fukushima has developed an even faster algorithm,
 avoiding any transcendental function calls as these are necessarily expensive.
-The current implementation is based on his algorithm
+The current implementation of Lambert W-1 is based on his algorithm
 starting with a translation from Fukushima's FORTRAN into C++ by Darko Veberic.
 
 Many applications of the Lambert W function make many repeated evaluations for Monte Carlo methods;
@@ -433,7 +433,7 @@ Fukushima improves the important observation that much of the execution time of 
 previous iterative algorithms was spent evaluating transcendental functions, usually `exp`.
 He has put a lot of work into avoiding any slow transcendental functions by using lookup tables and
 bisection, finishing with a single Schroeder refinement,
-without any check on the precision of the result (necessarily evaluating an expensive exponential).
+without any check on the final precision of the result (necessarily evaluating an expensive exponential).
 
 Theoretical and practical tests confirm that Fukushima's algorithm gives Lambert W estimates
 with a known small error bound (several __ulp) over nearly all the range of ['z] argument.
@@ -458,7 +458,7 @@ For this implementation of Lambert W0, John Maddock used the Boost.Math `minimax
 to devise a __rational_function for several ranges of argument z for the W0 branch of Lambert W0 function.
 These minimax rational approximations are combined for an algorithm that is both smaller and faster.
 
-Sadly it has not proved __remez practical to use the same method for Lambert W-1 branch
+Sadly it has not proved practical to use the same __remez method for Lambert W-1 branch
 and so the Fukushima algorithm is retained for this branch.
 
 An advantage of both minimax rational __remez approximations
@@ -511,7 +511,7 @@ and output as C++ arrays 37 decimal digit `long double` literals using `max_digi
 
   std::cout.precision(std::numeric_limits<cpp_bin_float_quad>::max_digits10);
 
-The arrays are as const and constexpr and static as possible (for the compiler version),
+The arrays are as `const` and `constexpr` and `static` as possible (for the compiler version),
 using BOOST_STATIC_CONSTEXPR macro.
 (See [@../../test/lambert_w_lookup_table_generator.cpp  lambert_w_lookup_table_generator.cpp]
 The precision was chosen to ensure that if used as `long double` arrays,
@@ -530,7 +530,7 @@ so ensuring that the value is exactly read into even 128-bit `long double` to th
 
 [h5:higher_precision Higher precision]
 
-For types more precise than `double`, Fukushima showed that it is best to use the `double` estimate
+For types more precise than `double`, Fukushima reported that it was best to use the `double` estimate
 as a starting point, followed by refinement using __halley iterations or other methods;
 our experience confirms this.
 
@@ -571,7 +571,7 @@ and near the branch singularity at ['-1/e], some series functions are used.
 When argument ['z] is small and near zero, cancellation errors mean that precision is lost,
 so other series function variants of `lambert_w0_small_z` are used.
 (There is no equivalent for the W-1 branch as this only covers argument `z < -1/e`).
-The cutoff used is as found by trial and error by Fukushima `abs(z) < 0.05`.
+The cutoff used `abs(z) < 0.05` is as found by trial and error by Fukushima.
 
 Coefficients of the inverted series expansion of the Lambert W function around `z = 0`
 are computed following Fukushima using 17 terms of a Taylor series
@@ -594,7 +594,7 @@ are 21 digits precision == `std::numeric_limits<T>::max_digits10` for `long doub
 Specializations for `lambert_w0_small_z` are provided for
 `float`, `double`, `long double`, `float128` and for __multiprecision types.
 
-The tag_type selection is based on the value `std::numeric_limits<T>::max_digits10`
+The `tag_type` selection is based on the value `std::numeric_limits<T>::max_digits10`
 (and [*not] on the floating-point type T).
 This distinguishes between `long double` types that commonly vary between 64 and 80-bits,
 and also compilers that have a `float` type using 64 bits and/or `long double` using 128-bits.
@@ -608,7 +608,7 @@ So must rely on `std::numeric_limits<long double>::max_digits10`.]
 [warning It is assumes that `max_digits10` is defined correctly or this might fail to make the correct selection.
 causing very small differences in computing lambert_w that would be very difficult to detect and diagnose.]
 
-[warning The use of `doubledouble` types is untested and may give unexpected precision.]
+[warning The use of `doubledouble` higher-than-long-double precision types is untested and may give unexpected precisions.]
 
 As noted in the __lambert_w_implementation section above,
 it is only possible to ensure the nearest representable value by casting from a higher precision type,
@@ -619,8 +619,8 @@ For multiprecision types, first several terms of the series are tabulated and ev
 Then our series functor is initialized "as if" it had already reached term 18,
 enough evaluation of built-in 64-bit double and float (and 80-bit `long double`) types.
 Finally the functor is called repeatedly to compute as many additional series terms
-as necessary to achive the desired precision, set from `get_epsilon`.
-Or terminated by `evaluation_error` on reaching the set iteration limit `max_series_iterations`.
+as necessary to achive the desired precision, set from `get_epsilon`
+(or terminated by `evaluation_error` on reaching the set iteration limit `max_series_iterations`).
 
 A little more than one decimal digit of precision is gained by each additional series term.
 This allows computation of Lambert W near zero to at least 1000 decimal digit precision,
@@ -631,12 +631,12 @@ given sufficient compute time.
 Variants of Function `lambert_w_singularity_series` are used to handle ['z] arguments
 which are near to the singularity at `z = -exp(-1) = -3.6787944` where the branches W0 and W-1 join.
 
-T. Fukushima / Journal of Computational and Applied Mathematics 244 (2013) Page 85, Table 3
-described using __Mathematica
+T. Fukushima / Journal of Computational and Applied Mathematics 244 (2013) 77-89
+describes using __Mathematica
 
   InverseSeries\[Series\[sqrt\[2(p Exp\[1 + p\] + 1)\], {p,-1, 20}\]\]
 
-to provide Table 3.
+to provide his Table 3, page 85.
 
 This implementation used __Mathematica to obtain 40 series terms at 50 decimal digit precision
 ``
@@ -648,7 +648,7 @@ These constants are computed at compile time for the full precision for any `Rea
 using the original rationals from Fukushima Table 3.
 
 Longer decimal digits strings are rationals pre-evaluated using __Mathematica.
-Some integer constants overflow, so use largest size available, suffixed by `uLL`.
+Some integer constants overflow, so largest size available is used, suffixed by `uLL`.
 
 Above the 14th term, the rationals exceed the range of `unsigned long long` and are replaced
 by pre-computed decimal values at least 21 digits precision == `max_digits10` for `long double`.
@@ -727,31 +727,36 @@ whereas __multiprecision types may lose precision unless constructed from decima
 The 100-decimal digits precision pairs were then used to assess the precision of less-precise types, including
 __multiprecision `cpp_bin_float_quad` and `cpp_bin_float_50`.  `static_cast`ing from the high precision types should
 give the closest representable value of the less-precise type; this is then be used to assess the precision of
-the Lambert W algorithm.  For __fundamental_types, the precision requirement set by the __Policy mean that the algorithm
-may stop refinement after bisection, or Schroeder or Halley refinements.
+the Lambert W algorithm.
 
-With the default __Policy, that includes iterative Halley refinement, tests confirm that over nearly all the range of z arguments,
+Tests using
+confirm that over nearly all the range of z arguments,
 nearly all estimates are the nearest __representable value, a minority are within 1 __ulp and only a very few 2 ULP.
+
+[graph lambert_w0_errors_graph]
+[graph lambert_wm1_errors_graph]
 
 For the range of z arguments over the range -0.35 to 0.5, a different algorithm is used, but the same
 technique of evaluating reference values using a __multiprecision `cpp_dec_float_100` was used.
 For extremely small z arguments, near zero, and those extremely near the singularity at the branch point,
 precision can be much lower, as might be expected.
 
+See source at:
 [@../../example/lambert_w_simple_examples.cpp lambert_w_simple_examples.cpp]
 [@../../test/test_lambert_w.cpp test_lambert_w.cpp] contains routine tests using __boost_test.
+[@../sf/lambert_w_errors_graph.cpp lambert_w_errors_graph.cpp] generating error graphs.
 
 [h5:quadrature_testing  Testing with quadrature]
 
 A further method of testing over a wide range of argument z values was devised by Nick Thompson
-(partly to test the recently added quadrature routines).
+(cunningly also to test the recently written quadrature routines!).
 These are definite integral formulas involving the W function that are exactly known constants,
 for example, LambertW0(1/(z[sup2]) == [sqrt](2[pi]),
 see [@https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals Definite Integrals].
 Some care was needed to avoid overflow and underflow as the integral function must evaluate to a finite result over the entire range.
 
 These are not routinely evaluated by the Boost testers,
-but can be run by defining a macro BOOST_MATH_LAMBERT_W_INTEGRALS.
+but can be run by defining a macro BOOST_MATH_LAMBERT_W0_INTEGRALS.
 If BOOST_MATH_TEST_MULTIPRECISION is also defined,
 then __multiprecision types like `cpp_bin_float_quad` are also used to test quadrature.
 If BOOST_MATH_TEST_FLOAT128 is defined, then `float128` is also tested.
@@ -762,7 +767,7 @@ A few macros provide optional tests if #defined before BOOST_TEST_MAIN.
 
 * BOOST_MATH_TEST_MULTIPRECISION Adds test for __multiprecision types.
 
-* BOOST_MATH_TEST_FLOAT128 Adds test using __float128 type (GCC only, needing gnu++17 and quadmath library).
+* BOOST_MATH_TEST_FLOAT128 Adds test using `__float128` type (GCC only, needing -std=gnu++17 and the quadmath library libquadmath.dll).
 
 * BOOST_MATH_LAMBERT_W_DERIVATIVES to test 1st derivatives is defined.
 
@@ -832,7 +837,7 @@ Mathematics, 244 (2013) 77-89.
 Exact analytical solution for current flow through diode with series resistance.
 [@http://dx.doi.org/10.1049/el:20000301]
 
-# Princeton Companion to Applied Mathmatics,
+# Princeton Companion to Applied Mathematics,
 'The Lambert-W function', Section 1.3: Series and Generating Functions.
 
 # Cleve Moler, Mathworks blog [@https://blogs.mathworks.com/cleve/2013/09/02/the-lambert-w-function/#bfba4e2d-e049-45a6-8285-fe8b51d69ce7 The Lambert W Function]

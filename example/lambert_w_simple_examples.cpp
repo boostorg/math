@@ -229,9 +229,9 @@ int main()
       double z = +1.;
       double r = lambert_wm1(z);
       std::cout << "lambert_wm1(+1.) = " << r << std::endl;
-      // Error in function boost::math::lambert_wm1<RealType>(<RealType>): 
+ //] [/lambert_w_simple_examples_out_of_range]
+     // Error in function boost::math::lambert_wm1<RealType>(<RealType>): 
       // Argument z = 1 is out of range (z <= 0) for Lambert W-1 branch! (Try Lambert W0 branch?)
-//] [/lambert_w_simple_examples_out_of_range]
     }
   }
   catch (std::exception& ex)

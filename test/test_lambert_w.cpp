@@ -8,11 +8,12 @@
 
 // test_lambert_w.cpp
 //! \brief Basic sanity tests for Lambert W function using algorithms
-// informed by Thomas Luu, Darko Veberic and Tosio Fukushima.
+// informed by Thomas Luu, Darko Veberic and Tosio Fukushima for W0
+// and rational polynomials by John Maddock.
 
 // #define BOOST_MATH_TEST_MULTIPRECISION  // Add tests for several multiprecision types (not just built-in).
 // #define BOOST_MATH_TEST_FLOAT128 // Add test using float128 type (GCC only, needing gnu++17 and quadmath library).
-// #define BOOST_MATH_LAMBERT_W_INTEGRALS // Add quadrature tests that cover the whole range of the Lambert W0 function.
+// #define BOOST_MATH_LAMBERT_W0_INTEGRALS // Add quadrature tests that cover the whole range of the Lambert W0 function.
 
 #ifdef BOOST_MATH_TEST_FLOAT128
 #include <boost/cstdfloat.hpp> // For float_64_t, float128_t. Must be first include!
@@ -77,9 +78,9 @@ using boost::math::lambert_w0;
 
 std::string show_versions(void);
 
-//#define BOOST_MATH_LAMBERT_W_INTEGRALS
+//#define BOOST_MATH_LAMBERT_W0_INTEGRALS
 
-#ifdef BOOST_MATH_LAMBERT_W_INTEGRALS
+#ifdef BOOST_MATH_LAMBERT_W0_INTEGRALS
 
 // Added code and test for Integral of the Lambert W function: by Nick Thompson.
 // https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals
@@ -204,7 +205,7 @@ void test_integrals()
   }
 } // template<class Real> void test_integrals()
 
-#endif // BOOST_MATH_LAMBERT_W_INTEGRALS
+#endif // BOOST_MATH_LAMBERT_W0_INTEGRALS
 
 //! Build a message of information about build, architecture, address model, platform, ...
 std::string show_versions(void)
@@ -1140,11 +1141,11 @@ BOOST_AUTO_TEST_CASE( Derivatives_of_lambert_w )
 
 #endif // BOOST_MATH_LAMBERT_W_DERIVATIVES
 
-#ifdef BOOST_MATH_LAMBERT_W_INTEGRALS
+#ifdef BOOST_MATH_LAMBERT_W0_INTEGRALS
 BOOST_AUTO_TEST_CASE( integrals )
 {
-  std::cout << "Macro BOOST_MATH_LAMBERT_W_INTEGRALS is defined." << std::endl;
-  BOOST_TEST_MESSAGE("\nTest Lambert W integrals.");
+  std::cout << "Macro BOOST_MATH_LAMBERT_W0_INTEGRALS is defined." << std::endl;
+  BOOST_TEST_MESSAGE("\nTest Lambert W0 integrals.");
   try
   {
   // using statements needed to change precision policy.
@@ -1244,7 +1245,7 @@ Real x;
   }
 }
 
-#endif //  BOOST_MATH_LAMBERT_W_INTEGRALS
+#endif //  BOOST_MATH_LAMBERT_W0_INTEGRALS
 
   /*
 
@@ -1297,7 +1298,7 @@ Real x;
   Macro BOOST_MATH_LAMBERT_W_DERIVATIVES to test 1st derivatives is defined.
 
   Test Lambert W function 1st differentials.
-  Macro BOOST_MATH_LAMBERT_W_INTEGRALS is defined.
+  Macro BOOST_MATH_LAMBERT_W0_INTEGRALS is defined.
 
   Test Lambert W integrals.
   Integration of type float
