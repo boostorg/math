@@ -34,6 +34,10 @@
 #endif
 #include <sstream>
 
+#ifdef __CUDACC__
+#include <math_constants.h>
+#endif
+
 namespace boost{ namespace math{
 
 class evaluation_error : public std::runtime_error
@@ -183,7 +187,7 @@ inline T raise_domain_error(
 }
 
 template <class T>
-inline BOOST_MATH_CONSTEXPR T raise_domain_error(
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_domain_error(
            const char* ,
            const char* ,
            const T& ,
@@ -191,11 +195,15 @@ inline BOOST_MATH_CONSTEXPR T raise_domain_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
+#ifdef __CUDA_ARCH__
+   return CUDART_INF_F;
+#else
    return std::numeric_limits<T>::quiet_NaN();
+#endif
 }
 
 template <class T>
-inline T raise_domain_error(
+inline BOOST_GPU_ENABLED T raise_domain_error(
            const char* ,
            const char* ,
            const T& ,
@@ -228,7 +236,7 @@ inline T raise_pole_error(
 }
 
 template <class T>
-inline BOOST_MATH_CONSTEXPR T raise_pole_error(
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_pole_error(
            const char* function,
            const char* message,
            const T& val,
@@ -282,18 +290,22 @@ inline T raise_overflow_error(
 }
 
 template <class T>
-inline BOOST_MATH_CONSTEXPR T raise_overflow_error(
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_overflow_error(
            const char* ,
            const char* ,
            const  ::boost::math::policies::overflow_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
+#ifdef __CUDA_ARCH__
+   return CUDART_INF;
+#else
    return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+#endif
 }
 
 template <class T>
-inline BOOST_MATH_CONSTEXPR T raise_overflow_error(
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_overflow_error(
            const char* ,
            const char* ,
            const T&,
@@ -301,7 +313,11 @@ inline BOOST_MATH_CONSTEXPR T raise_overflow_error(
 {
    // This may or may not do the right thing, but the user asked for the error
    // to be ignored so here we go anyway:
+#ifdef __CUDA_ARCH__
+   return CUDART_INF;
+#else
    return std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>();
+#endif
 }
 
 template <class T>
@@ -364,7 +380,7 @@ inline T raise_underflow_error(
 }
 
 template <class T>
-inline BOOST_MATH_CONSTEXPR T raise_underflow_error(
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_underflow_error(
            const char* ,
            const char* ,
            const  ::boost::math::policies::underflow_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
@@ -408,7 +424,7 @@ inline T raise_denorm_error(
 }
 
 template <class T>
-inline BOOST_MATH_CONSTEXPR T raise_denorm_error(
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_denorm_error(
            const char* ,
            const char* ,
            const T&  val,
@@ -455,7 +471,7 @@ inline T raise_evaluation_error(
 }
 
 template <class T>
-inline BOOST_MATH_CONSTEXPR T raise_evaluation_error(
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_evaluation_error(
            const char* ,
            const char* ,
            const T& val,
@@ -503,7 +519,7 @@ inline TargetType raise_rounding_error(
 }
 
 template <class T, class TargetType>
-inline BOOST_MATH_CONSTEXPR TargetType raise_rounding_error(
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR TargetType raise_rounding_error(
            const char* ,
            const char* ,
            const T& val,
@@ -515,6 +531,59 @@ inline BOOST_MATH_CONSTEXPR TargetType raise_rounding_error(
    BOOST_STATIC_ASSERT(std::numeric_limits<TargetType>::is_specialized);
    return  val > 0 ? (std::numeric_limits<TargetType>::max)() : (std::numeric_limits<TargetType>::is_integer ? (std::numeric_limits<TargetType>::min)() : -(std::numeric_limits<TargetType>::max)());
 }
+
+#ifdef __CUDA_ARCH__
+template <class T>
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR float raise_rounding_error(
+   const char*,
+   const char*,
+   const T& val,
+   const float&,
+   const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   return  val > 0 ? FLT_MAX : -FLT_MAX;
+}
+template <class T>
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR double raise_rounding_error(
+   const char*,
+   const char*,
+   const T& val,
+   const double&,
+   const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   return  val > 0 ? DBL_MAX : -DBL_MAX;
+}
+template <class T>
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR int raise_rounding_error(
+   const char*,
+   const char*,
+   const T& val,
+   const int&,
+   const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   return  val > 0 ? INT_MAX : INT_MIN;
+}
+template <class T>
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR long raise_rounding_error(
+   const char*,
+   const char*,
+   const T& val,
+   const long&,
+   const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   return  val > 0 ? LONG_MAX : LONG_MIN;
+}
+template <class T>
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR long long raise_rounding_error(
+   const char*,
+   const char*,
+   const T& val,
+   const long long&,
+   const  ::boost::math::policies::rounding_error< ::boost::math::policies::ignore_error>&) BOOST_MATH_NOEXCEPT(T)
+{
+   return  val > 0 ? LLONG_MAX : LLONG_MIN;
+}
+#endif
 
 template <class T, class TargetType>
 inline TargetType raise_rounding_error(
@@ -570,7 +639,7 @@ inline T raise_indeterminate_result_error(
 }
 
 template <class T, class R>
-inline BOOST_MATH_CONSTEXPR T raise_indeterminate_result_error(
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_indeterminate_result_error(
            const char* ,
            const char* ,
            const T& ,
@@ -610,7 +679,7 @@ inline T raise_indeterminate_result_error(
 }  // namespace detail
 
 template <class T, class Policy>
-inline BOOST_MATH_CONSTEXPR T raise_domain_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_domain_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::domain_error_type policy_type;
    return detail::raise_domain_error(
@@ -619,7 +688,7 @@ inline BOOST_MATH_CONSTEXPR T raise_domain_error(const char* function, const cha
 }
 
 template <class T, class Policy>
-inline BOOST_MATH_CONSTEXPR T raise_pole_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_pole_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::pole_error_type policy_type;
    return detail::raise_pole_error(
@@ -628,7 +697,7 @@ inline BOOST_MATH_CONSTEXPR T raise_pole_error(const char* function, const char*
 }
 
 template <class T, class Policy>
-inline BOOST_MATH_CONSTEXPR T raise_overflow_error(const char* function, const char* message, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_overflow_error(const char* function, const char* message, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::overflow_error_type policy_type;
    return detail::raise_overflow_error<T>(
@@ -637,7 +706,7 @@ inline BOOST_MATH_CONSTEXPR T raise_overflow_error(const char* function, const c
 }
 
 template <class T, class Policy>
-inline BOOST_MATH_CONSTEXPR T raise_overflow_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_overflow_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::overflow_error_type policy_type;
    return detail::raise_overflow_error(
@@ -646,7 +715,7 @@ inline BOOST_MATH_CONSTEXPR T raise_overflow_error(const char* function, const c
 }
 
 template <class T, class Policy>
-inline BOOST_MATH_CONSTEXPR T raise_underflow_error(const char* function, const char* message, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_underflow_error(const char* function, const char* message, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::underflow_error_type policy_type;
    return detail::raise_underflow_error<T>(
@@ -655,7 +724,7 @@ inline BOOST_MATH_CONSTEXPR T raise_underflow_error(const char* function, const 
 }
 
 template <class T, class Policy>
-inline BOOST_MATH_CONSTEXPR T raise_denorm_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_denorm_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::denorm_error_type policy_type;
    return detail::raise_denorm_error<T>(
@@ -665,7 +734,7 @@ inline BOOST_MATH_CONSTEXPR T raise_denorm_error(const char* function, const cha
 }
 
 template <class T, class Policy>
-inline BOOST_MATH_CONSTEXPR T raise_evaluation_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_evaluation_error(const char* function, const char* message, const T& val, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::evaluation_error_type policy_type;
    return detail::raise_evaluation_error(
@@ -674,7 +743,7 @@ inline BOOST_MATH_CONSTEXPR T raise_evaluation_error(const char* function, const
 }
 
 template <class T, class TargetType, class Policy>
-inline BOOST_MATH_CONSTEXPR TargetType raise_rounding_error(const char* function, const char* message, const T& val, const TargetType& t, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR TargetType raise_rounding_error(const char* function, const char* message, const T& val, const TargetType& t, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::rounding_error_type policy_type;
    return detail::raise_rounding_error(
@@ -683,7 +752,7 @@ inline BOOST_MATH_CONSTEXPR TargetType raise_rounding_error(const char* function
 }
 
 template <class T, class R, class Policy>
-inline BOOST_MATH_CONSTEXPR T raise_indeterminate_result_error(const char* function, const char* message, const T& val, const R& result, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR T raise_indeterminate_result_error(const char* function, const char* message, const T& val, const R& result, const Policy&) BOOST_NOEXCEPT_IF(is_noexcept_error_policy<Policy>::value && BOOST_MATH_IS_FLOAT(T))
 {
    typedef typename Policy::indeterminate_result_error_type policy_type;
    return detail::raise_indeterminate_result_error(
@@ -763,28 +832,28 @@ inline bool check_denorm(std::complex<T> val, R* result, const char* function, c
 
 // Default instantiations with ignore_error policy.
 template <class R, class T>
-inline BOOST_MATH_CONSTEXPR bool check_overflow(T /* val */, R* /* result */, const char* /* function */, const overflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR bool check_overflow(T /* val */, R* /* result */, const char* /* function */, const overflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T))
 { return false; }
 template <class R, class T>
-inline BOOST_MATH_CONSTEXPR bool check_overflow(std::complex<T> /* val */, R* /* result */, const char* /* function */, const overflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR bool check_overflow(std::complex<T> /* val */, R* /* result */, const char* /* function */, const overflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T))
 { return false; }
 template <class R, class T>
-inline BOOST_MATH_CONSTEXPR bool check_underflow(T /* val */, R* /* result */, const char* /* function */, const underflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR bool check_underflow(T /* val */, R* /* result */, const char* /* function */, const underflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T))
 { return false; }
 template <class R, class T>
-inline BOOST_MATH_CONSTEXPR bool check_underflow(std::complex<T> /* val */, R* /* result */, const char* /* function */, const underflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR bool check_underflow(std::complex<T> /* val */, R* /* result */, const char* /* function */, const underflow_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T))
 { return false; }
 template <class R, class T>
-inline BOOST_MATH_CONSTEXPR bool check_denorm(T /* val */, R* /* result*/, const char* /* function */, const denorm_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR bool check_denorm(T /* val */, R* /* result*/, const char* /* function */, const denorm_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T))
 { return false; }
 template <class R, class T>
-inline BOOST_MATH_CONSTEXPR bool check_denorm(std::complex<T> /* val */, R* /* result*/, const char* /* function */, const denorm_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T)) 
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR bool check_denorm(std::complex<T> /* val */, R* /* result*/, const char* /* function */, const denorm_error<ignore_error>&) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T))
 { return false; }
 
 } // namespace detail
 
 template <class R, class Policy, class T>
-inline R checked_narrowing_cast(T val, const char* function) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
+inline BOOST_GPU_ENABLED R checked_narrowing_cast(T val, const char* function) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(R) && BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    typedef typename Policy::overflow_error_type overflow_type;
    typedef typename Policy::underflow_error_type underflow_type;
@@ -804,7 +873,7 @@ inline R checked_narrowing_cast(T val, const char* function) BOOST_NOEXCEPT_IF(B
 }
 
 template <class T, class Policy>
-inline void check_series_iterations(const char* function, boost::uintmax_t max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
+inline BOOST_GPU_ENABLED void check_series_iterations(const char* function, boost::uintmax_t max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    if(max_iter >= policies::get_max_series_iterations<Policy>())
       raise_evaluation_error<T>(
@@ -813,7 +882,7 @@ inline void check_series_iterations(const char* function, boost::uintmax_t max_i
 }
 
 template <class T, class Policy>
-inline void check_root_iterations(const char* function, boost::uintmax_t max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
+inline BOOST_GPU_ENABLED void check_root_iterations(const char* function, boost::uintmax_t max_iter, const Policy& pol) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T) && is_noexcept_error_policy<Policy>::value)
 {
    if(max_iter >= policies::get_max_root_iterations<Policy>())
       raise_evaluation_error<T>(

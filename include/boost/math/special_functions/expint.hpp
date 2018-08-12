@@ -34,7 +34,7 @@ template <class T>
 inline T expint_1_rational(const T& z, const mpl::int_<0>&)
 {
    // this function is never actually called
-   BOOST_ASSERT(0);
+   BOOST_MATH_ASSERT(0);
    return z;
 }
 

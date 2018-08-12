@@ -265,6 +265,43 @@
 #  define BOOST_MATH_INT_VALUE_SUFFIX(RV, SUF) RV##SUF
 #endif
 //
+// function scope static variables aren't allowed on CUDA device code:
+//
+#if defined(__CUDA_ARCH__) && defined(BOOST_NO_CXX11_CONSTEXPR)
+#define BOOST_MATH_GPU_STATIC
+#elif defined(__CUDA_ARCH__)
+#define BOOST_MATH_GPU_STATIC constexpr
+#else
+#define BOOST_MATH_GPU_STATIC static
+#endif
+//
+// Asserts don't work on CUDA either:
+//
+#ifdef __CUDA_ARCH__
+#define BOOST_MATH_ASSERT(x)
+#else
+#define BOOST_MATH_ASSERT(x) BOOST_ASSERT(x)
+#endif
+//
+// And std lib functions swap/min/max aren't marked up as device safe:
+//
+#ifdef __CUDA_ARCH__
+template <class T>
+inline BOOST_GPU_ENABLED void cuda_safe_swap(T& a, T& b) { T t(a); a = b; b = t; }
+template <class T>
+inline BOOST_GPU_ENABLED T cuda_safe_min(const T& a, const T& b) { return a < b ? a : b; }
+template <class T>
+inline BOOST_GPU_ENABLED T cuda_safe_max(const T& a, const T& b) { return a > b ? a : b; }
+
+# define BOOST_MATH_CUDA_SAFE_SWAP(a, b) cuda_safe_swap(a, b)
+# define BOOST_MATH_CUDA_SAFE_MIN(a, b) cuda_safe_min(a, b)
+# define BOOST_MATH_CUDA_SAFE_MAX(a, b) cuda_safe_max(a, b)
+#else
+# define BOOST_MATH_CUDA_SAFE_SWAP(a, b) swap(a, b)
+# define BOOST_MATH_CUDA_SAFE_MIN(a, b) (std::min)(a, b)
+# define BOOST_MATH_CUDA_SAFE_MAX(a, b) (std::max)(a, b)
+#endif
+//
 // And then the actual configuration:
 //
 #if defined(_GLIBCXX_USE_FLOAT128) && defined(BOOST_GCC) && !defined(__STRICT_ANSI__) \

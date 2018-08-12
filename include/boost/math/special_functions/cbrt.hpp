@@ -40,7 +40,7 @@ struct largest_cbrt_int_type
 };
 
 template <class T, class Policy>
-T cbrt_imp(T z, const Policy& pol)
+BOOST_GPU_ENABLED T cbrt_imp(T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
@@ -53,7 +53,7 @@ T cbrt_imp(T z, const Policy& pol)
    // Expected Error Term:                         -1.231e-006
    // Maximum Relative Change in Control Points:   5.982e-004
    //
-   static const T P[] = { 
+      BOOST_MATH_GPU_STATIC const T P[] = {
       static_cast<T>(0.37568269008611818),
       static_cast<T>(1.3304968705558024),
       static_cast<T>(-1.4897101632445036),
@@ -61,7 +61,7 @@ T cbrt_imp(T z, const Policy& pol)
       static_cast<T>(-0.6398703759826468),
       static_cast<T>(0.13584489959258635),
    };
-   static const T correction[] = {
+   BOOST_MATH_GPU_STATIC const T correction[] = {
       static_cast<T>(0.62996052494743658238360530363911),  // 2^-2/3
       static_cast<T>(0.79370052598409973737585281963615),  // 2^-1/3
       static_cast<T>(1),
@@ -156,7 +156,7 @@ T cbrt_imp(T z, const Policy& pol)
 } // namespace detail
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type cbrt(T z, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type cbrt(T z, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -164,7 +164,7 @@ inline typename tools::promote_args<T>::type cbrt(T z, const Policy& pol)
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type cbrt(T z)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type cbrt(T z)
 {
    return cbrt(z, policies::policy<>());
 }

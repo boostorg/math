@@ -1,0 +1,15 @@
+
+
+import os ;
+import type ;
+type.register CU : cu ;
+import generators ;
+generators.register-standard cu.inline-file : CU : OBJ ;
+
+#rule cuda { }
+
+actions inline-file 
+{
+    nvcc -c -O3 -DBOOST_PP_VARIADICS=0 -expt-extended-lambda -I../../../.. -DBOOST_ALL_NO_LIB -o $(<) $(>)
+}
+

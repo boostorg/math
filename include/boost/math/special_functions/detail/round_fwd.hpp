@@ -21,58 +21,58 @@ namespace boost
    { 
 
    template <class T, class Policy>
-   typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol);
    template <class T>
-   typename tools::promote_args<T>::type trunc(const T& v);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v);
    template <class T, class Policy>
-   int itrunc(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED int itrunc(const T& v, const Policy& pol);
    template <class T>
-   int itrunc(const T& v);
+   BOOST_GPU_ENABLED int itrunc(const T& v);
    template <class T, class Policy>
-   long ltrunc(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED long ltrunc(const T& v, const Policy& pol);
    template <class T>
-   long ltrunc(const T& v);
+   BOOST_GPU_ENABLED long ltrunc(const T& v);
 #ifdef BOOST_HAS_LONG_LONG
    template <class T, class Policy>
-   boost::long_long_type lltrunc(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED boost::long_long_type lltrunc(const T& v, const Policy& pol);
    template <class T>
-   boost::long_long_type lltrunc(const T& v);
+   BOOST_GPU_ENABLED boost::long_long_type lltrunc(const T& v);
 #endif
    template <class T, class Policy>
-   typename tools::promote_args<T>::type round(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type round(const T& v, const Policy& pol);
    template <class T>
-   typename tools::promote_args<T>::type round(const T& v);
+   BOOST_GPU_ENABLED typename tools::promote_args<T>::type round(const T& v);
    template <class T, class Policy>
-   int iround(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED int iround(const T& v, const Policy& pol);
    template <class T>
-   int iround(const T& v);
+   BOOST_GPU_ENABLED int iround(const T& v);
    template <class T, class Policy>
-   long lround(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED long lround(const T& v, const Policy& pol);
    template <class T>
-   long lround(const T& v);
+   BOOST_GPU_ENABLED long lround(const T& v);
 #ifdef BOOST_HAS_LONG_LONG
    template <class T, class Policy>
-   boost::long_long_type llround(const T& v, const Policy& pol);
+   BOOST_GPU_ENABLED boost::long_long_type llround(const T& v, const Policy& pol);
    template <class T>
-   boost::long_long_type llround(const T& v);
+   BOOST_GPU_ENABLED boost::long_long_type llround(const T& v);
 #endif
    template <class T, class Policy>
-   T modf(const T& v, T* ipart, const Policy& pol);
+   BOOST_GPU_ENABLED T modf(const T& v, T* ipart, const Policy& pol);
    template <class T>
-   T modf(const T& v, T* ipart);
+   BOOST_GPU_ENABLED T modf(const T& v, T* ipart);
    template <class T, class Policy>
-   T modf(const T& v, int* ipart, const Policy& pol);
+   BOOST_GPU_ENABLED T modf(const T& v, int* ipart, const Policy& pol);
    template <class T>
-   T modf(const T& v, int* ipart);
+   BOOST_GPU_ENABLED T modf(const T& v, int* ipart);
    template <class T, class Policy>
-   T modf(const T& v, long* ipart, const Policy& pol);
+   BOOST_GPU_ENABLED T modf(const T& v, long* ipart, const Policy& pol);
    template <class T>
-   T modf(const T& v, long* ipart);
+   BOOST_GPU_ENABLED T modf(const T& v, long* ipart);
 #ifdef BOOST_HAS_LONG_LONG
    template <class T, class Policy>
-   T modf(const T& v, boost::long_long_type* ipart, const Policy& pol);
+   BOOST_GPU_ENABLED T modf(const T& v, boost::long_long_type* ipart, const Policy& pol);
    template <class T>
-   T modf(const T& v, boost::long_long_type* ipart);
+   BOOST_GPU_ENABLED T modf(const T& v, boost::long_long_type* ipart);
 #endif
 
    }

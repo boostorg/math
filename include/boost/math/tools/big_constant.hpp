@@ -62,6 +62,10 @@ inline BOOST_MATH_CONSTEXPR T make_big_value(largest_float, const char* s, mpl::
 //
 // For constants which might fit in a long double (if it's big enough):
 //
+#ifdef __CUDA_ARCH__
+// We don't support anything except float and double:
+#define BOOST_MATH_BIG_CONSTANT(T, D, x) static_cast<T>(x)
+#else
 #define BOOST_MATH_BIG_CONSTANT(T, D, x)\
    boost::math::tools::make_big_value<T>(\
       BOOST_MATH_LARGEST_FLOAT_C(x), \
@@ -72,6 +76,7 @@ inline BOOST_MATH_CONSTEXPR T make_big_value(largest_float, const char* s, mpl::
           || (boost::math::tools::numeric_traits<T>::is_specialized && \
           (boost::math::tools::numeric_traits<T>::digits10 <= boost::math::tools::numeric_traits<boost::math::tools::largest_float>::digits10))) >(), \
       boost::is_convertible<const char*, T>())
+#endif
 //
 // For constants too huge for any conceivable long double (and which generate compiler errors if we try and declare them as such):
 //

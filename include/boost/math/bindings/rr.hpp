@@ -395,8 +395,8 @@ inline RR tanh(RR a)
          *exp -= 1;
          r.value().e += 1;
       }
-      BOOST_ASSERT(r < 1);
-      BOOST_ASSERT(r >= 0.5);
+      BOOST_MATH_ASSERT(r < 1);
+      BOOST_MATH_ASSERT(r >= 0.5);
       return r;
    }
    inline RR ldexp(RR r, int exp)

@@ -32,7 +32,7 @@ namespace boost
        namespace detail
        {
         template<typename T, typename Policy>
-        inline T    acosh_imp(const T x, const Policy& pol)
+        inline BOOST_GPU_ENABLED T    acosh_imp(const T x, const Policy& pol)
         {
             BOOST_MATH_STD_USING
             
@@ -76,7 +76,7 @@ namespace boost
        }
 
         template<typename T, typename Policy>
-        inline typename tools::promote_args<T>::type acosh(T x, const Policy&)
+        inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type acosh(T x, const Policy&)
         {
             typedef typename tools::promote_args<T>::type result_type;
             typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -91,7 +91,7 @@ namespace boost
               "boost::math::acosh<%1%>(%1%)");
         }
         template<typename T>
-        inline typename tools::promote_args<T>::type acosh(T x)
+        inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type acosh(T x)
         {
            return boost::math::acosh(x, policies::policy<>());
         }

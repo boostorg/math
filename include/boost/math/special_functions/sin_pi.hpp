@@ -20,7 +20,7 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T, class Policy>
-T sin_pi_imp(T x, const Policy& pol)
+BOOST_GPU_ENABLED T sin_pi_imp(T x, const Policy& pol)
 {
    BOOST_MATH_STD_USING // ADL of std names
    if(x < 0)
@@ -53,7 +53,7 @@ T sin_pi_imp(T x, const Policy& pol)
 } // namespace detail
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type sin_pi(T x, const Policy&)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type sin_pi(T x, const Policy&)
 {
    typedef typename tools::promote_args<T>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -67,7 +67,7 @@ inline typename tools::promote_args<T>::type sin_pi(T x, const Policy&)
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type sin_pi(T x)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type sin_pi(T x)
 {
    return boost::math::sin_pi(x, policies::policy<>());
 }

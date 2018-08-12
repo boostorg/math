@@ -17,50 +17,50 @@
 namespace boost{ namespace math{
 
 template <class T, class Policy>
-inline T modf(const T& v, T* ipart, const Policy& pol)
+inline BOOST_GPU_ENABLED T modf(const T& v, T* ipart, const Policy& pol)
 {
    *ipart = trunc(v, pol);
    return v - *ipart;
 }
 template <class T>
-inline T modf(const T& v, T* ipart)
+inline BOOST_GPU_ENABLED T modf(const T& v, T* ipart)
 {
    return modf(v, ipart, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline T modf(const T& v, int* ipart, const Policy& pol)
+inline BOOST_GPU_ENABLED T modf(const T& v, int* ipart, const Policy& pol)
 {
    *ipart = itrunc(v, pol);
    return v - *ipart;
 }
 template <class T>
-inline T modf(const T& v, int* ipart)
+inline BOOST_GPU_ENABLED T modf(const T& v, int* ipart)
 {
    return modf(v, ipart, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline T modf(const T& v, long* ipart, const Policy& pol)
+inline BOOST_GPU_ENABLED T modf(const T& v, long* ipart, const Policy& pol)
 {
    *ipart = ltrunc(v, pol);
    return v - *ipart;
 }
 template <class T>
-inline T modf(const T& v, long* ipart)
+inline BOOST_GPU_ENABLED T modf(const T& v, long* ipart)
 {
    return modf(v, ipart, policies::policy<>());
 }
 
 #ifdef BOOST_HAS_LONG_LONG
 template <class T, class Policy>
-inline T modf(const T& v, boost::long_long_type* ipart, const Policy& pol)
+inline BOOST_GPU_ENABLED T modf(const T& v, boost::long_long_type* ipart, const Policy& pol)
 {
    *ipart = lltrunc(v, pol);
    return v - *ipart;
 }
 template <class T>
-inline T modf(const T& v, boost::long_long_type* ipart)
+inline BOOST_GPU_ENABLED T modf(const T& v, boost::long_long_type* ipart)
 {
    return modf(v, ipart, policies::policy<>());
 }

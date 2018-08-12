@@ -27,13 +27,13 @@ namespace detail{
 
 // Elliptic integral - Jacobi Zeta
 template <typename T, typename Policy>
-T heuman_lambda_imp(T phi, T k, const Policy& pol)
+BOOST_GPU_ENABLED T heuman_lambda_imp(T phi, T k, const Policy& pol)
 {
     BOOST_MATH_STD_USING
     using namespace boost::math::tools;
     using namespace boost::math::constants;
 
-    const char* function = "boost::math::heuman_lambda<%1%>(%1%, %1%)";
+    BOOST_MATH_GPU_STATIC const char* function = "boost::math::heuman_lambda<%1%>(%1%, %1%)";
 
     if(fabs(k) > 1)
        return policies::raise_domain_error<T>(function, "We require |k| <= 1 but got k = %1%", k, pol);
@@ -68,7 +68,7 @@ T heuman_lambda_imp(T phi, T k, const Policy& pol)
 } // detail
 
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -76,7 +76,7 @@ inline typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi, co
 }
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type heuman_lambda(T1 k, T2 phi)
 {
    return boost::math::heuman_lambda(k, phi, policies::policy<>());
 }

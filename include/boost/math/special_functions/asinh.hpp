@@ -32,7 +32,7 @@ namespace boost
     {
        namespace detail{
         template<typename T, class Policy>
-        inline T    asinh_imp(const T x, const Policy& pol)
+        inline BOOST_GPU_ENABLED T    asinh_imp(const T x, const Policy& pol)
         {
             BOOST_MATH_STD_USING
             
@@ -85,12 +85,12 @@ namespace boost
        }
 
         template<typename T>
-        inline typename tools::promote_args<T>::type asinh(T x)
+        inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type asinh(T x)
         {
            return boost::math::asinh(x, policies::policy<>());
         }
         template<typename T, typename Policy>
-        inline typename tools::promote_args<T>::type asinh(T x, const Policy&)
+        inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type asinh(T x, const Policy&)
         {
             typedef typename tools::promote_args<T>::type result_type;
             typedef typename policies::evaluation<result_type, Policy>::type value_type;

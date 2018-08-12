@@ -18,7 +18,7 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol, const mpl::false_&)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol, const mpl::false_&)
 {
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
@@ -28,7 +28,7 @@ inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type trunc(const T& v, const Policy&, const mpl::true_&)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v, const Policy&, const mpl::true_&)
 {
    return v;
 }
@@ -36,12 +36,12 @@ inline typename tools::promote_args<T>::type trunc(const T& v, const Policy&, co
 }
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v, const Policy& pol)
 {
    return detail::trunc(v, pol, mpl::bool_<detail::is_integer_for_rounding<T>::value>());
 }
 template <class T>
-inline typename tools::promote_args<T>::type trunc(const T& v)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type trunc(const T& v)
 {
    return trunc(v, policies::policy<>());
 }
@@ -55,33 +55,41 @@ inline typename tools::promote_args<T>::type trunc(const T& v)
 // dependent lookup.  See our concept archetypes for examples.
 //
 template <class T, class Policy>
-inline int itrunc(const T& v, const Policy& pol)
+inline BOOST_GPU_ENABLED int itrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
    result_type r = boost::math::trunc(v, pol);
+#ifdef __CUDA_ARCH__
+   if((r > INT_MAX) || (r < INT_MIN))
+#else
    if((r > (std::numeric_limits<int>::max)()) || (r < (std::numeric_limits<int>::min)()))
+#endif
       return static_cast<int>(policies::raise_rounding_error("boost::math::itrunc<%1%>(%1%)", 0, static_cast<result_type>(v), 0, pol));
    return static_cast<int>(r);
 }
 template <class T>
-inline int itrunc(const T& v)
+inline BOOST_GPU_ENABLED int itrunc(const T& v)
 {
    return itrunc(v, policies::policy<>());
 }
 
 template <class T, class Policy>
-inline long ltrunc(const T& v, const Policy& pol)
+inline BOOST_GPU_ENABLED long ltrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
    result_type r = boost::math::trunc(v, pol);
+#ifdef __CUDA_ARCH__
+   if((r > LONG_MAX) || (r < LONG_MIN))
+#else
    if((r > (std::numeric_limits<long>::max)()) || (r < (std::numeric_limits<long>::min)()))
+#endif
       return static_cast<long>(policies::raise_rounding_error("boost::math::ltrunc<%1%>(%1%)", 0, static_cast<result_type>(v), 0L, pol));
    return static_cast<long>(r);
 }
 template <class T>
-inline long ltrunc(const T& v)
+inline BOOST_GPU_ENABLED long ltrunc(const T& v)
 {
    return ltrunc(v, policies::policy<>());
 }
@@ -89,17 +97,21 @@ inline long ltrunc(const T& v)
 #ifdef BOOST_HAS_LONG_LONG
 
 template <class T, class Policy>
-inline boost::long_long_type lltrunc(const T& v, const Policy& pol)
+inline BOOST_GPU_ENABLED boost::long_long_type lltrunc(const T& v, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    typedef typename tools::promote_args<T>::type result_type;
    result_type r = boost::math::trunc(v, pol);
+#ifdef __CUDA_ARCH__
+   if((r > LLONG_MAX) || (r < LLONG_MIN))
+#else
    if((r > (std::numeric_limits<boost::long_long_type>::max)()) || (r < (std::numeric_limits<boost::long_long_type>::min)()))
+#endif
       return static_cast<boost::long_long_type>(policies::raise_rounding_error("boost::math::lltrunc<%1%>(%1%)", 0, v, static_cast<boost::long_long_type>(0), pol));
    return static_cast<boost::long_long_type>(r);
 }
 template <class T>
-inline boost::long_long_type lltrunc(const T& v)
+inline BOOST_GPU_ENABLED boost::long_long_type lltrunc(const T& v)
 {
    return lltrunc(v, policies::policy<>());
 }

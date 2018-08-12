@@ -209,7 +209,7 @@ inline std::complex<T> asin(const std::complex<T>& z)
             // but we have no way to test that here, so for now just assert
             // on the assumption:
             //
-            BOOST_ASSERT(x == 1);
+            BOOST_MATH_ASSERT(x == 1);
             real = half_pi - std::sqrt(y);
             imag = std::sqrt(y);
          }

@@ -21,10 +21,10 @@
 namespace boost{ namespace math{ namespace detail{
 
 template <class T, class Policy>
-inline T powm1_imp(const T x, const T y, const Policy& pol)
+inline BOOST_GPU_ENABLED T powm1_imp(const T x, const T y, const Policy& pol)
 {
    BOOST_MATH_STD_USING
-   static const char* function = "boost::math::powm1<%1%>(%1%, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::powm1<%1%>(%1%, %1%)";
 
    if (x > 0)
    {
@@ -54,7 +54,7 @@ inline T powm1_imp(const T x, const T y, const Policy& pol)
 } // detail
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    powm1(const T1 a, const T2 z)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
@@ -62,7 +62,7 @@ inline typename tools::promote_args<T1, T2>::type
 }
 
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type
    powm1(const T1 a, const T2 z, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;

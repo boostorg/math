@@ -30,15 +30,17 @@ namespace math {
 
 namespace detail {
 
+   template <class T>
+   inline BOOST_GPU_ENABLED BOOST_CONSTEXPR T square(const T& val) { return val * val; }
+
 
 template <int N, int M = N%2>
 struct positive_power
 {
     template <typename T>
-    static T result(T base)
+    static BOOST_GPU_ENABLED BOOST_CXX14_CONSTEXPR T result(T base)
     {
-        T power = positive_power<N/2>::result(base);
-        return power * power;
+        return square(positive_power<N / 2>::result(base));
     }
 };
 
@@ -46,10 +48,9 @@ template <int N>
 struct positive_power<N, 1>
 {
     template <typename T>
-    static T result(T base)
+    static BOOST_GPU_ENABLED BOOST_CONSTEXPR T result(T base)
     {
-        T power = positive_power<N/2>::result(base);
-        return base * power * power;
+        return base * square(positive_power<N / 2>::result(base));
     }
 };
 
@@ -57,7 +58,7 @@ template <>
 struct positive_power<1, 1>
 {
     template <typename T>
-    static T result(T base){ return base; }
+    static BOOST_GPU_ENABLED BOOST_CONSTEXPR T result(T base){ return base; }
 };
 
 
@@ -65,7 +66,7 @@ template <int N, bool>
 struct power_if_positive
 {
     template <typename T, class Policy>
-    static T result(T base, const Policy&)
+    static BOOST_GPU_ENABLED BOOST_CONSTEXPR T result(T base, const Policy&)
     { return positive_power<N>::result(base); }
 };
 
@@ -73,18 +74,13 @@ template <int N>
 struct power_if_positive<N, false>
 {
     template <typename T, class Policy>
-    static T result(T base, const Policy& policy)
+    static BOOST_GPU_ENABLED BOOST_CONSTEXPR T result(T base, const Policy& policy)
     {
-        if (base == 0)
-        {
-            return policies::raise_overflow_error<T>(
+        return base == 0 ? policies::raise_overflow_error<T>(
                        "boost::math::pow(%1%)",
                        "Attempted to compute a negative power of 0",
                        policy
-                   );
-        }
-
-        return T(1) / positive_power<-N>::result(base);
+                   ) : T(1) / positive_power<-N>::result(base);
     }
 };
 
@@ -92,20 +88,15 @@ template <>
 struct power_if_positive<0, true>
 {
     template <typename T, class Policy>
-    static T result(T base, const Policy& policy)
+    static BOOST_GPU_ENABLED BOOST_CONSTEXPR T result(T base, const Policy& policy)
     {
-        if (base == 0)
-        {
-            return policies::raise_indeterminate_result_error<T>(
+        return base == 0 ? policies::raise_indeterminate_result_error<T>(
                        "boost::math::pow(%1%)",
                        "The result of pow<0>(%1%) is undetermined",
                        base,
                        T(1),
                        policy
-                   );
-        }
-
-        return T(1);
+                   ) : T(1);
     }
 };
 
@@ -126,15 +117,14 @@ struct select_power_if_positive
 
 
 template <int N, typename T, class Policy>
-inline typename tools::promote_args<T>::type pow(T base, const Policy& policy)
+inline BOOST_GPU_ENABLED BOOST_CONSTEXPR typename tools::promote_args<T>::type pow(T base, const Policy& policy)
 { 
-   typedef typename tools::promote_args<T>::type result_type;
-   return detail::select_power_if_positive<N>::type::result(static_cast<result_type>(base), policy); 
+   return detail::select_power_if_positive<N>::type::result(static_cast<typename tools::promote_args<T>::type>(base), policy);
 }
 
 
 template <int N, typename T>
-inline typename tools::promote_args<T>::type pow(T base)
+inline BOOST_GPU_ENABLED BOOST_CONSTEXPR typename tools::promote_args<T>::type pow(T base)
 { return pow<N>(base, policies::policy<>()); }
 
 #ifdef BOOST_MSVC

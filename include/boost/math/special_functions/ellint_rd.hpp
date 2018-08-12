@@ -29,12 +29,12 @@
 namespace boost { namespace math { namespace detail{
 
 template <typename T, typename Policy>
-T ellint_rd_imp(T x, T y, T z, const Policy& pol)
+BOOST_GPU_ENABLED T ellint_rd_imp(T x, T y, T z, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    using std::swap;
 
-   static const char* function = "boost::math::ellint_rd<%1%>(%1%,%1%,%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::ellint_rd<%1%>(%1%,%1%,%1%)";
 
    if(x < 0)
    {
@@ -61,7 +61,7 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
    //
    using std::swap;
    if(x == z)
-      swap(x, y);
+      BOOST_MATH_CUDA_SAFE_SWAP(x, y);
    if(y == z)
    {
       if(x == y)
@@ -74,19 +74,19 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
       }
       else
       {
-         if((std::min)(x, y) / (std::max)(x, y) > 1.3)
+         if(BOOST_MATH_CUDA_SAFE_MIN(x, y) / BOOST_MATH_CUDA_SAFE_MAX(x, y) > 1.3)
             return 3 * (ellint_rc_imp(x, y, pol) - sqrt(x) / y) / (2 * (y - x));
          // Otherwise fall through to avoid cancellation in the above (RC(x,y) -> 1/x^0.5 as x -> y)
       }
    }
    if(x == y)
    {
-      if((std::min)(x, z) / (std::max)(x, z) > 1.3)
+      if(BOOST_MATH_CUDA_SAFE_MIN(x, z) / BOOST_MATH_CUDA_SAFE_MAX(x, z) > 1.3)
          return 3 * (ellint_rc_imp(z, x, pol) - 1 / sqrt(z)) / (z - x);
       // Otherwise fall through to avoid cancellation in the above (RC(x,y) -> 1/x^0.5 as x -> y)
    }
    if(y == 0)
-      swap(x, y);
+      BOOST_MATH_CUDA_SAFE_SWAP(x, y);
    if(x == 0)
    {
       //
@@ -132,7 +132,7 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
    T An = (x + y + 3 * z) / 5;
    T A0 = An;
    // This has an extra 1.2 fudge factor which is really only needed when x, y and z are close in magnitude:
-   T Q = pow(tools::epsilon<T>() / 4, -T(1) / 8) * (std::max)((std::max)(An - x, An - y), An - z) * 1.2f;
+   T Q = pow(tools::epsilon<T>() / 4, -T(1) / 8) * BOOST_MATH_CUDA_SAFE_MAX(BOOST_MATH_CUDA_SAFE_MAX(An - x, An - y), An - z) * 1.2f;
    BOOST_MATH_INSTRUMENT_VARIABLE(Q);
    T lambda, rx, ry, rz;
    unsigned k = 0;
@@ -181,7 +181,7 @@ T ellint_rd_imp(T x, T y, T z, const Policy& pol)
 } // namespace detail
 
 template <class T1, class T2, class T3, class Policy>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
    ellint_rd(T1 x, T2 y, T3 z, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -194,7 +194,7 @@ inline typename tools::promote_args<T1, T2, T3>::type
 }
 
 template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
    ellint_rd(T1 x, T2 y, T3 z)
 {
    return ellint_rd(x, y, z, policies::policy<>());

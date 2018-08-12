@@ -26,7 +26,7 @@ namespace boost{ namespace math
   namespace detail
   {
     template <class RealType, class Policy>
-    inline bool check_uniform_lower(
+    inline BOOST_GPU_ENABLED bool check_uniform_lower(
       const char* function,
       RealType lower,
       RealType* result, const Policy& pol)
@@ -45,7 +45,7 @@ namespace boost{ namespace math
     } // bool check_uniform_lower(
 
     template <class RealType, class Policy>
-    inline bool check_uniform_upper(
+    inline BOOST_GPU_ENABLED bool check_uniform_upper(
       const char* function,
       RealType upper,
       RealType* result, const Policy& pol)
@@ -64,7 +64,7 @@ namespace boost{ namespace math
     } // bool check_uniform_upper(
 
     template <class RealType, class Policy>
-    inline bool check_uniform_x(
+    inline BOOST_GPU_ENABLED bool check_uniform_x(
       const char* function,
       RealType const& x,
       RealType* result, const Policy& pol)
@@ -83,7 +83,7 @@ namespace boost{ namespace math
     } // bool check_uniform_x
 
     template <class RealType, class Policy>
-    inline bool check_uniform(
+    inline BOOST_GPU_ENABLED bool check_uniform(
       const char* function,
       RealType lower,
       RealType upper,
@@ -116,19 +116,19 @@ namespace boost{ namespace math
     typedef RealType value_type;
     typedef Policy policy_type;
 
-    uniform_distribution(RealType l_lower = 0, RealType l_upper = 1) // Constructor.
+    BOOST_GPU_ENABLED uniform_distribution(RealType l_lower = 0, RealType l_upper = 1) // Constructor.
       : m_lower(l_lower), m_upper(l_upper) // Default is standard uniform distribution.
     {
       RealType result;
       detail::check_uniform("boost::math::uniform_distribution<%1%>::uniform_distribution", l_lower, l_upper, &result, Policy());
     }
     // Accessor functions.
-    RealType lower()const
+    BOOST_GPU_ENABLED RealType lower()const
     {
       return m_lower;
     }
 
-    RealType upper()const
+    BOOST_GPU_ENABLED RealType upper()const
     {
       return m_upper;
     }
@@ -157,7 +157,7 @@ namespace boost{ namespace math
   }
 
   template <class RealType, class Policy>
-  inline RealType pdf(const uniform_distribution<RealType, Policy>& dist, const RealType& x)
+  inline BOOST_GPU_ENABLED RealType pdf(const uniform_distribution<RealType, Policy>& dist, const RealType& x)
   {
     RealType lower = dist.lower();
     RealType upper = dist.upper();
@@ -182,7 +182,7 @@ namespace boost{ namespace math
   } // RealType pdf(const uniform_distribution<RealType, Policy>& dist, const RealType& x)
 
   template <class RealType, class Policy>
-  inline RealType cdf(const uniform_distribution<RealType, Policy>& dist, const RealType& x)
+  inline BOOST_GPU_ENABLED RealType cdf(const uniform_distribution<RealType, Policy>& dist, const RealType& x)
   {
     RealType lower = dist.lower();
     RealType upper = dist.upper();
@@ -207,7 +207,7 @@ namespace boost{ namespace math
   } // RealType cdf(const uniform_distribution<RealType, Policy>& dist, const RealType& x)
 
   template <class RealType, class Policy>
-  inline RealType quantile(const uniform_distribution<RealType, Policy>& dist, const RealType& p)
+  inline BOOST_GPU_ENABLED RealType quantile(const uniform_distribution<RealType, Policy>& dist, const RealType& p)
   {
     RealType lower = dist.lower();
     RealType upper = dist.upper();
@@ -232,7 +232,7 @@ namespace boost{ namespace math
   } // RealType quantile(const uniform_distribution<RealType, Policy>& dist, const RealType& p)
 
   template <class RealType, class Policy>
-  inline RealType cdf(const complemented2_type<uniform_distribution<RealType, Policy>, RealType>& c)
+  inline BOOST_GPU_ENABLED RealType cdf(const complemented2_type<uniform_distribution<RealType, Policy>, RealType>& c)
   {
     RealType lower = c.dist.lower();
     RealType upper = c.dist.upper();
@@ -258,7 +258,7 @@ namespace boost{ namespace math
   } // RealType cdf(const complemented2_type<uniform_distribution<RealType, Policy>, RealType>& c)
 
   template <class RealType, class Policy>
-  inline RealType quantile(const complemented2_type<uniform_distribution<RealType, Policy>, RealType>& c)
+  inline BOOST_GPU_ENABLED RealType quantile(const complemented2_type<uniform_distribution<RealType, Policy>, RealType>& c)
   {
     RealType lower = c.dist.lower();
     RealType upper = c.dist.upper();
@@ -284,7 +284,7 @@ namespace boost{ namespace math
   } // RealType quantile(const complemented2_type<uniform_distribution<RealType, Policy>, RealType>& c)
 
   template <class RealType, class Policy>
-  inline RealType mean(const uniform_distribution<RealType, Policy>& dist)
+  inline BOOST_GPU_ENABLED RealType mean(const uniform_distribution<RealType, Policy>& dist)
   {
     RealType lower = dist.lower();
     RealType upper = dist.upper();
@@ -297,7 +297,7 @@ namespace boost{ namespace math
   } // RealType mean(const uniform_distribution<RealType, Policy>& dist)
 
   template <class RealType, class Policy>
-  inline RealType variance(const uniform_distribution<RealType, Policy>& dist)
+  inline BOOST_GPU_ENABLED RealType variance(const uniform_distribution<RealType, Policy>& dist)
   {
     RealType lower = dist.lower();
     RealType upper = dist.upper();
@@ -311,7 +311,7 @@ namespace boost{ namespace math
   } // RealType variance(const uniform_distribution<RealType, Policy>& dist)
 
   template <class RealType, class Policy>
-  inline RealType mode(const uniform_distribution<RealType, Policy>& dist)
+  inline BOOST_GPU_ENABLED RealType mode(const uniform_distribution<RealType, Policy>& dist)
   {
     RealType lower = dist.lower();
     RealType upper = dist.upper();
@@ -325,7 +325,7 @@ namespace boost{ namespace math
   }
 
   template <class RealType, class Policy>
-  inline RealType median(const uniform_distribution<RealType, Policy>& dist)
+  inline BOOST_GPU_ENABLED RealType median(const uniform_distribution<RealType, Policy>& dist)
   {
     RealType lower = dist.lower();
     RealType upper = dist.upper();
@@ -337,7 +337,7 @@ namespace boost{ namespace math
     return (lower + upper) / 2; //
   }
   template <class RealType, class Policy>
-  inline RealType skewness(const uniform_distribution<RealType, Policy>& dist)
+  inline BOOST_GPU_ENABLED RealType skewness(const uniform_distribution<RealType, Policy>& dist)
   {
     RealType lower = dist.lower();
     RealType upper = dist.upper();
@@ -350,7 +350,7 @@ namespace boost{ namespace math
   } // RealType skewness(const uniform_distribution<RealType, Policy>& dist)
 
   template <class RealType, class Policy>
-  inline RealType kurtosis_excess(const uniform_distribution<RealType, Policy>& dist)
+  inline BOOST_GPU_ENABLED RealType kurtosis_excess(const uniform_distribution<RealType, Policy>& dist)
   {
     RealType lower = dist.lower();
     RealType upper = dist.upper();
@@ -363,7 +363,7 @@ namespace boost{ namespace math
   } // RealType kurtosis_excess(const uniform_distribution<RealType, Policy>& dist)
 
   template <class RealType, class Policy>
-  inline RealType kurtosis(const uniform_distribution<RealType, Policy>& dist)
+  inline BOOST_GPU_ENABLED RealType kurtosis(const uniform_distribution<RealType, Policy>& dist)
   {
     return kurtosis_excess(dist) + 3;
   }

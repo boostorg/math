@@ -8,6 +8,29 @@
 #  include <boost/config.hpp>
 #  include <boost/detail/workaround.hpp>
 
+#ifdef __CUDA_ARCH__
+#include <thrust/pair.h>
+
+namespace boost {
+   namespace math {
+
+      using thrust::pair;
+
+   }
+}
+
+#else
+
+#include <utility>
+
+namespace boost {
+   namespace math {
+      using std::pair;
+} }
+
+#endif
+
+
 #if !defined(BOOST_NO_CXX11_HDR_TUPLE) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
 
 #include <tuple>

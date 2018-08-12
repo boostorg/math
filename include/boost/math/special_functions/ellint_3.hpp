@@ -38,16 +38,16 @@ namespace boost { namespace math {
 namespace detail{
 
 template <typename T, typename Policy>
-T ellint_pi_imp(T v, T k, T vc, const Policy& pol);
+BOOST_GPU_ENABLED T ellint_pi_imp(T v, T k, T vc, const Policy& pol);
 
 // Elliptic integral (Legendre form) of the third kind
 template <typename T, typename Policy>
-T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
+BOOST_GPU_ENABLED T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
 {
    // Note vc = 1-v presumably without cancellation error.
    BOOST_MATH_STD_USING
 
-   static const char* function = "boost::math::ellint_3<%1%>(%1%,%1%,%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "boost::math::ellint_3<%1%>(%1%,%1%,%1%)";
 
    if(abs(k) > 1)
    {
@@ -254,8 +254,8 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
    // by the time we get here phi should already have been
    // normalised above.
    //
-   BOOST_ASSERT(fabs(phi) < constants::half_pi<T>());
-   BOOST_ASSERT(phi >= 0);
+   BOOST_MATH_ASSERT(fabs(phi) < constants::half_pi<T>());
+   BOOST_MATH_ASSERT(phi >= 0);
    T x, y, z, p, t;
    T cosp = cos(phi);
    x = cosp * cosp;
@@ -273,13 +273,13 @@ T ellint_pi_imp(T v, T phi, T k, T vc, const Policy& pol)
 
 // Complete elliptic integral (Legendre form) of the third kind
 template <typename T, typename Policy>
-T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
+BOOST_GPU_ENABLED T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 {
     // Note arg vc = 1-v, possibly without cancellation errors
     BOOST_MATH_STD_USING
     using namespace boost::math::tools;
 
-    static const char* function = "boost::math::ellint_pi<%1%>(%1%,%1%)";
+    BOOST_MATH_GPU_STATIC const char* function = "boost::math::ellint_pi<%1%>(%1%,%1%)";
 
     if (abs(k) >= 1)
     {
@@ -323,13 +323,13 @@ T ellint_pi_imp(T v, T k, T vc, const Policy& pol)
 }
 
 template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const mpl::false_&)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const mpl::false_&)
 {
    return boost::math::ellint_3(k, v, phi, policies::policy<>());
 }
 
 template <class T1, class T2, class Policy>
-inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v, const Policy& pol, const mpl::true_&)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v, const Policy& pol, const mpl::true_&)
 {
    typedef typename tools::promote_args<T1, T2>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -344,7 +344,7 @@ inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v, const Pol
 } // namespace detail
 
 template <class T1, class T2, class T3, class Policy>
-inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
    typedef typename policies::evaluation<result_type, Policy>::type value_type;
@@ -358,14 +358,14 @@ inline typename tools::promote_args<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 ph
 }
 
 template <class T1, class T2, class T3>
-typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
+inline BOOST_GPU_ENABLED typename detail::ellint_3_result<T1, T2, T3>::type ellint_3(T1 k, T2 v, T3 phi)
 {
    typedef typename policies::is_policy<T3>::type tag_type;
    return detail::ellint_3(k, v, phi, tag_type());
 }
 
 template <class T1, class T2>
-inline typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2>::type ellint_3(T1 k, T2 v)
 {
    return ellint_3(k, v, policies::policy<>());
 }

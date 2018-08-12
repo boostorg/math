@@ -23,6 +23,10 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/ellint_rc.hpp>
 
+#ifdef __CUDA_ARCH__
+#include <math_constants.h>
+#endif
+
 // Carlson's elliptic integral of the first kind
 // R_F(x, y, z) = 0.5 * \int_{0}^{\infty} [(t+x)(t+y)(t+z)]^{-1/2} dt
 // Carlson, Numerische Mathematik, vol 33, 1 (1979)
@@ -30,27 +34,34 @@
 namespace boost { namespace math { namespace detail{
 
    template <typename T, typename Policy>
-   T ellint_rf_imp(T x, T y, T z, const Policy& pol)
+   BOOST_GPU_ENABLED T ellint_rf_imp(T x, T y, T z, const Policy& pol)
    {
       BOOST_MATH_STD_USING
-      using namespace boost::math;
       using std::swap;
 
-      static const char* function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
 
       if(x < 0 || y < 0 || z < 0)
       {
          return policies::raise_domain_error<T>(function,
             "domain error, all arguments must be non-negative, "
             "only sensible result is %1%.",
+#ifdef __CUDA_ARCH__
+            static_cast<T>(CUDART_NAN), pol);
+#else
             std::numeric_limits<T>::quiet_NaN(), pol);
+#endif
       }
       if(x + y == 0 || y + z == 0 || z + x == 0)
       {
          return policies::raise_domain_error<T>(function,
             "domain error, at most one argument can be zero, "
             "only sensible result is %1%.",
+#ifdef __CUDA_ARCH__
+            static_cast<T>(CUDART_NAN), pol);
+#else
             std::numeric_limits<T>::quiet_NaN(), pol);
+#endif
       }
       //
       // Special cases from http://dlmf.nist.gov/19.20#i
@@ -86,9 +97,9 @@ namespace boost { namespace math { namespace detail{
             return ellint_rc_imp(x, y, pol);
       }
       if(x == 0)
-         swap(x, z);
+         BOOST_MATH_CUDA_SAFE_SWAP(x, z);
       else if(y == 0)
-         swap(y, z);
+         BOOST_MATH_CUDA_SAFE_SWAP(y, z);
       if(z == 0)
       {
          //
@@ -111,7 +122,7 @@ namespace boost { namespace math { namespace detail{
       T zn = z;
       T An = (x + y + z) / 3;
       T A0 = An;
-      T Q = pow(3 * boost::math::tools::epsilon<T>(), T(-1) / 8) * (std::max)((std::max)(fabs(An - xn), fabs(An - yn)), fabs(An - zn));
+      T Q = pow(3 * boost::math::tools::epsilon<T>(), T(-1) / 8) * BOOST_MATH_CUDA_SAFE_MAX(BOOST_MATH_CUDA_SAFE_MAX(fabs(An - xn), fabs(An - yn)), fabs(An - zn));
       T fn = 1;
 
 
@@ -149,7 +160,7 @@ namespace boost { namespace math { namespace detail{
 } // namespace detail
 
 template <class T1, class T2, class T3, class Policy>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
    ellint_rf(T1 x, T2 y, T3 z, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -162,7 +173,7 @@ inline typename tools::promote_args<T1, T2, T3>::type
 }
 
 template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
    ellint_rf(T1 x, T2 y, T3 z)
 {
    return ellint_rf(x, y, z, policies::policy<>());

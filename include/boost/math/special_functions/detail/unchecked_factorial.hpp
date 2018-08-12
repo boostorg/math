@@ -35,6 +35,8 @@ namespace boost { namespace math
 template <class T>
 struct max_factorial;
 
+#ifndef __CUDA_ARCH__
+
 // Definitions:
 template <>
 inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
@@ -42,7 +44,7 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsi
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr std::array<float, 35> factorials = { {
 #else
-   static const boost::array<float, 35> factorials = {{
+   BOOST_MATH_GPU_STATIC const boost::array<float, 35> factorials = {{
 #endif
       1.0F,
       1.0F,
@@ -84,6 +86,52 @@ inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION float unchecked_factorial<float>(unsi
    return factorials[i];
 }
 
+#else
+template <>
+inline BOOST_GPU_ENABLED float unchecked_factorial<float>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(float))
+{
+   BOOST_MATH_GPU_STATIC const float factorials[] = {
+         1.0F,
+         1.0F,
+      2.0F,
+      6.0F,
+      24.0F,
+      120.0F,
+      720.0F,
+      5040.0F,
+      40320.0F,
+      362880.0F,
+      3628800.0F,
+      39916800.0F,
+      479001600.0F,
+      6227020800.0F,
+      87178291200.0F,
+      1307674368000.0F,
+      20922789888000.0F,
+      355687428096000.0F,
+      6402373705728000.0F,
+      121645100408832000.0F,
+      0.243290200817664e19F,
+      0.5109094217170944e20F,
+      0.112400072777760768e22F,
+      0.2585201673888497664e23F,
+      0.62044840173323943936e24F,
+      0.15511210043330985984e26F,
+      0.403291461126605635584e27F,
+      0.10888869450418352160768e29F,
+      0.304888344611713860501504e30F,
+      0.8841761993739701954543616e31F,
+      0.26525285981219105863630848e33F,
+      0.822283865417792281772556288e34F,
+      0.26313083693369353016721801216e36F,
+      0.868331761881188649551819440128e37F,
+      0.29523279903960414084761860964352e39F,
+      };
+
+   return factorials[i];
+}
+#endif
+
 template <>
 struct max_factorial<float>
 {
@@ -91,13 +139,15 @@ struct max_factorial<float>
 };
 
 
+#ifndef __CUDA_ARCH__
+
 template <>
-inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION long double unchecked_factorial<long double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(long double))
+inline BOOST_GPU_ENABLED BOOST_MATH_CONSTEXPR_TABLE_FUNCTION long double unchecked_factorial<long double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(long double))
 {
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr std::array<long double, 171> factorials = { {
 #else
-   static const boost::array<long double, 171> factorials = {{
+   BOOST_MATH_GPU_STATIC const boost::array<long double, 171> factorials = {{
 #endif
       1L,
       1L,
@@ -281,6 +331,7 @@ struct max_factorial<long double>
    BOOST_STATIC_CONSTANT(unsigned, value = 170);
 };
 
+#endif
 #ifdef BOOST_MATH_USE_FLOAT128
 
 template <>
@@ -475,6 +526,8 @@ struct max_factorial<BOOST_MATH_FLOAT128_TYPE>
 
 #endif
 
+#ifndef __CUDA_ARCH__
+
 template <>
 inline BOOST_MATH_CONSTEXPR_TABLE_FUNCTION double unchecked_factorial<double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
 {
@@ -487,6 +540,65 @@ struct max_factorial<double>
    BOOST_STATIC_CONSTANT(unsigned,
       value = ::boost::math::max_factorial<long double>::value);
 };
+
+#else
+
+template <>
+inline BOOST_GPU_ENABLED double unchecked_factorial<double>(unsigned i BOOST_MATH_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(double))
+{
+#ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
+   constexpr const double factorials[] = {
+#else
+   BOOST_MATH_GPU_STATIC const double factorials[] = {
+#endif
+      1,
+      1,
+      2,
+      6,
+      24,
+      120,
+      720,
+      5040,
+      40320,
+      362880.0,
+      3628800.0,
+      39916800.0,
+      479001600.0,
+      6227020800.0,
+      87178291200.0,
+      1307674368000.0,
+      20922789888000.0,
+      355687428096000.0,
+      6402373705728000.0,
+      121645100408832000.0,
+      0.243290200817664e19,
+      0.5109094217170944e20,
+      0.112400072777760768e22,
+      0.2585201673888497664e23,
+      0.62044840173323943936e24,
+      0.15511210043330985984e26,
+      0.403291461126605635584e27,
+      0.10888869450418352160768e29,
+      0.304888344611713860501504e30,
+      0.8841761993739701954543616e31,
+      0.26525285981219105863630848e33,
+      0.822283865417792281772556288e34,
+      0.26313083693369353016721801216e36,
+      0.868331761881188649551819440128e37,
+      0.29523279903960414084761860964352e39,
+      };
+
+   return factorials[i];
+}
+
+template <>
+struct max_factorial<double>
+{
+   BOOST_STATIC_CONSTANT(unsigned,
+      value = 34);
+};
+
+#endif
 
 #ifndef BOOST_MATH_NO_LEXICAL_CAST
 

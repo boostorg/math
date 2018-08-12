@@ -25,7 +25,7 @@ namespace detail {
 
 #ifdef BOOST_MATH_USE_STD_FPCLASSIFY
     template<class T> 
-    inline int signbit_impl(T x, native_tag const&)
+    inline BOOST_GPU_ENABLED int signbit_impl(T x, native_tag const&)
     {
         return (std::signbit)(x) ? 1 : 0;
     }
@@ -35,13 +35,13 @@ namespace detail {
     // signed zero or NaN.
 
     template<class T>
-    inline int signbit_impl(T x, generic_tag<true> const&)
+    inline BOOST_GPU_ENABLED int signbit_impl(T x, generic_tag<true> const&)
     {
         return x < 0;
     }
 
     template<class T> 
-    inline int signbit_impl(T x, generic_tag<false> const&)
+    inline BOOST_GPU_ENABLED int signbit_impl(T x, generic_tag<false> const&)
     {
         return x < 0;
     }
@@ -54,18 +54,18 @@ namespace detail {
     // can occur since the exponents are the same magnitude
     // for the two types:
     //
-    inline int signbit_impl(long double x, generic_tag<true> const&)
+    inline BOOST_GPU_ENABLED int signbit_impl(long double x, generic_tag<true> const&)
     {
        return (boost::math::signbit)(static_cast<double>(x));
     }
-    inline int signbit_impl(long double x, generic_tag<false> const&)
+    inline BOOST_GPU_ENABLED int signbit_impl(long double x, generic_tag<false> const&)
     {
        return (boost::math::signbit)(static_cast<double>(x));
     }
 #endif
 
     template<class T>
-    inline int signbit_impl(T x, ieee_copy_all_bits_tag const&)
+    inline BOOST_GPU_ENABLED int signbit_impl(T x, ieee_copy_all_bits_tag const&)
     {
         typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
 
@@ -75,7 +75,7 @@ namespace detail {
     }
 
     template<class T> 
-    inline int signbit_impl(T x, ieee_copy_leading_bits_tag const&)
+    inline BOOST_GPU_ENABLED int signbit_impl(T x, ieee_copy_leading_bits_tag const&)
     {
         typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::type traits;
 
@@ -91,13 +91,13 @@ namespace detail {
     // signed zero or NaN.
 
     template<class T>
-    inline T (changesign_impl)(T x, generic_tag<true> const&)
+    inline BOOST_GPU_ENABLED T (changesign_impl)(T x, generic_tag<true> const&)
     {
         return -x;
     }
 
     template<class T>
-    inline T (changesign_impl)(T x, generic_tag<false> const&)
+    inline BOOST_GPU_ENABLED T (changesign_impl)(T x, generic_tag<false> const&)
     {
         return -x;
     }
@@ -107,14 +107,14 @@ namespace detail {
     // in this case we need to change the sign of both
     // components of the "double double":
     //
-    inline long double (changesign_impl)(long double x, generic_tag<true> const&)
+    inline BOOST_GPU_ENABLED long double (changesign_impl)(long double x, generic_tag<true> const&)
     {
        double* pd = reinterpret_cast<double*>(&x);
        pd[0] = boost::math::changesign(pd[0]);
        pd[1] = boost::math::changesign(pd[1]);
        return x;
     }
-    inline long double (changesign_impl)(long double x, generic_tag<false> const&)
+    inline BOOST_GPU_ENABLED long double (changesign_impl)(long double x, generic_tag<false> const&)
     {
        double* pd = reinterpret_cast<double*>(&x);
        pd[0] = boost::math::changesign(pd[0]);
@@ -124,7 +124,7 @@ namespace detail {
 #endif
 
     template<class T>
-    inline T changesign_impl(T x, ieee_copy_all_bits_tag const&)
+    inline BOOST_GPU_ENABLED T changesign_impl(T x, ieee_copy_all_bits_tag const&)
     {
         typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::sign_change_type traits;
 
@@ -136,7 +136,7 @@ namespace detail {
     }
 
     template<class T>
-    inline T (changesign_impl)(T x, ieee_copy_leading_bits_tag const&)
+    inline BOOST_GPU_ENABLED T (changesign_impl)(T x, ieee_copy_leading_bits_tag const&)
     {
         typedef BOOST_DEDUCED_TYPENAME fp_traits<T>::sign_change_type traits;
 
@@ -150,7 +150,7 @@ namespace detail {
 
 }   // namespace detail
 
-template<class T> int (signbit)(T x)
+template<class T> BOOST_GPU_ENABLED int (signbit)(T x)
 { 
    typedef typename detail::fp_traits<T>::type traits;
    typedef typename traits::method method;
@@ -160,12 +160,12 @@ template<class T> int (signbit)(T x)
 }
 
 template <class T>
-inline int sign BOOST_NO_MACRO_EXPAND(const T& z)
+inline BOOST_GPU_ENABLED int sign BOOST_NO_MACRO_EXPAND(const T& z)
 {
    return (z == 0) ? 0 : (boost::math::signbit)(z) ? -1 : 1;
 }
 
-template <class T> typename tools::promote_args_permissive<T>::type (changesign)(const T& x)
+template <class T> BOOST_GPU_ENABLED typename tools::promote_args_permissive<T>::type (changesign)(const T& x)
 { //!< \brief return unchanged binary pattern of x, except for change of sign bit. 
    typedef typename detail::fp_traits<T>::sign_change_type traits;
    typedef typename traits::method method;
@@ -176,7 +176,7 @@ template <class T> typename tools::promote_args_permissive<T>::type (changesign)
 }
 
 template <class T, class U>
-inline typename tools::promote_args_permissive<T, U>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args_permissive<T, U>::type
    copysign BOOST_NO_MACRO_EXPAND(const T& x, const U& y)
 {
    BOOST_MATH_STD_USING

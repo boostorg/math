@@ -1,0 +1,58 @@
+[section:cuda CUDA support]
+
+This library does not (yet) use CUDA internally, however there are a number of functions which are
+marked up for use on CUDA devices.
+
+Currently nearly all of our internal helper functions, plus the mathematical __constants and the __boost_math_fp
+are marked as safe for use on CUDA devices.
+
+In addition the following special functions are all safe to use in CUDA device code:
+
+__beta, __ibeta_derivative, __binomial_coefficient, __erf, __erfc, __erf_inv, __erfc_inv,
+__ellint_rf, __ellint_rd, __ellint_rc, __ellint_rj, __ellint_rg, __ellint_1, __ellint_2, __ellint_3,
+__ellint_rf, __ellint_rd, __ellint_rc, __ellint_rj, __ellint_rg, __ellint_1, __ellint_2, __ellint_3,
+__ellint_d, __jacobi_zeta, __heuman_lambda, __factorial, __unchecked_factorial, __double_factorial,
+__falling_factorial, __rising_factorial, __tgamma, __tgamma1pm1, __lgamma, __tgamma_lower,
+__gamma_q, __gamma_p, __tgamma_delta_ratio, __tgamma_ratio, __gamma_p_derivative, __cbrt, __log1p,
+__expm1, __powm1, __sinc_pi, __sinhc_pi, __asinh, __acosh, __atanh, __sin_pi, __cos_pi,
+__fpclassify, __isnan, __isinf, __isnormal, __isfinite, __signbit, __sign, __changesign, __pow,
+__nextafter, __float_next, __float_prior, __float_distance, __float_advance.
+
+The following distribution functions are also supported:
+
+[table
+[[Distribution][pdf][cdf][qualtile]]
+[[__arcsine_distrib][Yes][Yes][Yes]]
+[[__cauchy_distrib][Yes][Yes][Yes]]
+[[__chi_squared_distrib][Yes][Yes][No]]
+[[__extreme_distrib][Yes][Yes][Yes]]
+[[__exp_distrib][Yes][Yes][Yes]]
+[[__gamma_distrib][Yes][Yes][No]]
+[[__geometric_distrib][Yes][Yes][No]]
+[[__inverse_chi_squared_distrib][Yes][Yes][No]]
+[[__inverse_gamma_distrib][Yes][Yes][No]]
+[[__inverse_gaussian_distrib][Yes][Yes][No]]
+[[__laplace_distrib][Yes][Yes][Yes]]
+[[__logistic_distrib][Yes][Yes][Yes]]
+[[__lognormal_distrib][Yes][Yes][Yes]]
+[[__normal_distrib][Yes][Yes][Yes]]
+[[__pareto_distrib][Yes][Yes][Yes]]
+[[__poisson_distrib][Yes][Yes][No]]
+[[__rayleigh_distrib][Yes][Yes][Yes]]
+[[__triangular_distrib][Yes][Yes][Yes]]
+[[__uniform_distrib][Yes][Yes][Yes]]
+[[__weibull_distrib][Yes][Yes][Yes]]
+]
+
+If you see something that's not listed, then either we haven't got round to it yet, or else
+the function is too large for a CUDA device (the incomplete beta for example) or depends on
+non-CUDA usable standard library code such as <tuple> etc.  Pull requests or issues are welcome.
+
+[endsect]
+
+[/ cuda.qbk
+  Copyright 2018 John Maddock.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

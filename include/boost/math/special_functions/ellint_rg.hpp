@@ -18,20 +18,28 @@
 #include <boost/math/special_functions/ellint_rf.hpp>
 #include <boost/math/special_functions/pow.hpp>
 
+#ifdef __CUDA_ARCH__
+#include <math_constants.h>
+#endif
+
 namespace boost { namespace math { namespace detail{
 
    template <typename T, typename Policy>
-   T ellint_rg_imp(T x, T y, T z, const Policy& pol)
+   BOOST_GPU_ENABLED T ellint_rg_imp(T x, T y, T z, const Policy& pol)
    {
       BOOST_MATH_STD_USING
-      static const char* function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
+      BOOST_MATH_GPU_STATIC const char* function = "boost::math::ellint_rf<%1%>(%1%,%1%,%1%)";
 
       if(x < 0 || y < 0 || z < 0)
       {
          return policies::raise_domain_error<T>(function,
             "domain error, all arguments must be non-negative, "
             "only sensible result is %1%.",
+#ifdef __CUDA_ARCH__
+            static_cast<T>(CUDART_NAN), pol);
+#else
             std::numeric_limits<T>::quiet_NaN(), pol);
+#endif
       }
       //
       // Function is symmetric in x, y and z, but we require
@@ -40,14 +48,14 @@ namespace boost { namespace math { namespace detail{
       //
       using std::swap;
       if(x < y)
-         swap(x, y);
+         BOOST_MATH_CUDA_SAFE_SWAP(x, y);
       if(x < z)
-         swap(x, z);
+         BOOST_MATH_CUDA_SAFE_SWAP(x, z);
       if(y > z)
-         swap(y, z);
+         BOOST_MATH_CUDA_SAFE_SWAP(y, z);
       
-      BOOST_ASSERT(x >= z);
-      BOOST_ASSERT(z >= y);
+      BOOST_MATH_ASSERT(x >= z);
+      BOOST_MATH_ASSERT(z >= y);
       //
       // Special cases from http://dlmf.nist.gov/19.20#ii
       //
@@ -67,7 +75,7 @@ namespace boost { namespace math { namespace detail{
          else
          {
             // x = z, y != 0
-            swap(x, y);
+            BOOST_MATH_CUDA_SAFE_SWAP(x, y);
             return (x == 0) ? T(sqrt(z) / 2) : T((z * ellint_rc_imp(x, z, pol) + sqrt(x)) / 2);
          }
       }
@@ -80,7 +88,7 @@ namespace boost { namespace math { namespace detail{
       }
       else if(y == 0)
       {
-         swap(y, z);
+         BOOST_MATH_CUDA_SAFE_SWAP(y, z);
          //
          // Special handling for common case, from
          // Numerical Computation of Real or Complex Elliptic Integrals, eq.46
@@ -111,7 +119,7 @@ namespace boost { namespace math { namespace detail{
 } // namespace detail
 
 template <class T1, class T2, class T3, class Policy>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
    ellint_rg(T1 x, T2 y, T3 z, const Policy& pol)
 {
    typedef typename tools::promote_args<T1, T2, T3>::type result_type;
@@ -124,7 +132,7 @@ inline typename tools::promote_args<T1, T2, T3>::type
 }
 
 template <class T1, class T2, class T3>
-inline typename tools::promote_args<T1, T2, T3>::type 
+inline BOOST_GPU_ENABLED typename tools::promote_args<T1, T2, T3>::type
    ellint_rg(T1 x, T2 y, T3 z)
 {
    return ellint_rg(x, y, z, policies::policy<>());

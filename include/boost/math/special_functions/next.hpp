@@ -80,14 +80,14 @@ inline T normalize_value(const T& val, const mpl::true_&)
 }
 
 template <class T>
-inline T get_smallest_value(mpl::true_ const&)
+inline BOOST_GPU_ENABLED T get_smallest_value(mpl::true_ const&)
 {
    //
    // numeric_limits lies about denorms being present - particularly
    // when this can be turned on or off at runtime, as is the case
    // when using the SSE2 registers in DAZ or FTZ mode.
    //
-   static const T m = std::numeric_limits<T>::denorm_min();
+   BOOST_MATH_GPU_STATIC const T m = std::numeric_limits<T>::denorm_min();
 #ifdef BOOST_MATH_CHECK_SSE2
    return (_mm_getcsr() & (_MM_FLUSH_ZERO_ON | 0x40)) ? tools::min_value<T>() : m;;
 #else
@@ -96,15 +96,17 @@ inline T get_smallest_value(mpl::true_ const&)
 }
 
 template <class T>
-inline T get_smallest_value(mpl::false_ const&)
+inline BOOST_GPU_ENABLED T get_smallest_value(mpl::false_ const&)
 {
    return tools::min_value<T>();
 }
 
 template <class T>
-inline T get_smallest_value()
+inline BOOST_GPU_ENABLED T get_smallest_value()
 {
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1310)
+#ifdef __CUDA_ARCH__
+   return get_smallest_value<T>(mpl::bool_<false>());
+#elif defined(BOOST_MSVC) && (BOOST_MSVC <= 1310)
    return get_smallest_value<T>(mpl::bool_<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == 1)>());
 #else
    return get_smallest_value<T>(mpl::bool_<std::numeric_limits<T>::is_specialized && (std::numeric_limits<T>::has_denorm == std::denorm_present)>());
@@ -116,25 +118,25 @@ inline T get_smallest_value()
 // we calculate the value of the least-significant-bit:
 //
 template <class T>
-T get_min_shift_value();
+BOOST_GPU_ENABLED T get_min_shift_value();
 
 template <class T>
 struct min_shift_initializer
 {
    struct init
    {
-      init()
+      BOOST_GPU_ENABLED init()
       {
          do_init();
       }
-      static void do_init()
+      static BOOST_GPU_ENABLED void do_init()
       {
          get_min_shift_value<T>();
       }
-      void force_instantiate()const{}
+      BOOST_GPU_ENABLED void force_instantiate()const{}
    };
    static const init initializer;
-   static void force_instantiate()
+   static BOOST_GPU_ENABLED void force_instantiate()
    {
       initializer.force_instantiate();
    }
@@ -144,13 +146,13 @@ template <class T>
 const typename min_shift_initializer<T>::init min_shift_initializer<T>::initializer;
 
 template <class T>
-inline T calc_min_shifted(const mpl::true_&)
+inline BOOST_GPU_ENABLED T calc_min_shifted(const mpl::true_&)
 {
    BOOST_MATH_STD_USING
    return ldexp(tools::min_value<T>(), tools::digits<T>() + 1);
 }
 template <class T>
-inline T calc_min_shifted(const mpl::false_&)
+inline BOOST_GPU_ENABLED T calc_min_shifted(const mpl::false_&)
 {
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
@@ -160,7 +162,7 @@ inline T calc_min_shifted(const mpl::false_&)
 
 
 template <class T>
-inline T get_min_shift_value()
+inline BOOST_GPU_ENABLED T get_min_shift_value()
 {
    static const T val = calc_min_shifted<T>(mpl::bool_<!std::numeric_limits<T>::is_specialized || std::numeric_limits<T>::radix == 2>());
    min_shift_initializer<T>::force_instantiate();
@@ -169,11 +171,11 @@ inline T get_min_shift_value()
 }
 
 template <class T, class Policy>
-T float_next_imp(const T& val, const mpl::true_&, const Policy& pol)
+BOOST_GPU_ENABLED T float_next_imp(const T& val, const mpl::true_&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    int expon;
-   static const char* function = "float_next<%1%>(%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_next<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
 
@@ -213,7 +215,7 @@ T float_next_imp(const T& val, const mpl::true_&, const Policy& pol)
 // Special version for some base other than 2:
 //
 template <class T, class Policy>
-T float_next_imp(const T& val, const mpl::false_&, const Policy& pol)
+BOOST_GPU_ENABLED T float_next_imp(const T& val, const mpl::false_&, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
@@ -231,7 +233,7 @@ T float_next_imp(const T& val, const mpl::false_&, const Policy& pol)
       return policies::raise_domain_error<T>(
          function,
          "Argument must be finite, but got %1%", val, pol);
-   }
+}
 
    if(val >= tools::max_value<T>())
       return policies::raise_overflow_error<T>(function, 0, pol);
@@ -247,7 +249,7 @@ T float_next_imp(const T& val, const mpl::false_&, const Policy& pol)
       // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
       //
       return scalbn(float_next(T(scalbn(val, 2 * std::numeric_limits<T>::digits)), pol), -2 * std::numeric_limits<T>::digits);
-   }
+}
 
    expon = 1 + ilogb(val);
    if(-1 == scalbn(val, -expon) * std::numeric_limits<T>::radix)
@@ -261,7 +263,7 @@ T float_next_imp(const T& val, const mpl::false_&, const Policy& pol)
 } // namespace detail
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type float_next(const T& val, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_next(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    return detail::float_next_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
@@ -276,7 +278,7 @@ inline typename tools::promote_args<T>::type float_next(const T& val, const Poli
 template <class Policy>
 inline double float_next(const double& val, const Policy& pol)
 {
-   static const char* function = "float_next<%1%>(%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_next<%1%>(%1%)";
 
    if(!(boost::math::isfinite)(val) && (val > 0))
       return policies::raise_domain_error<double>(
@@ -291,7 +293,7 @@ inline double float_next(const double& val, const Policy& pol)
 #endif
 
 template <class T>
-inline typename tools::promote_args<T>::type float_next(const T& val)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_next(const T& val)
 {
    return float_next(val, policies::policy<>());
 }
@@ -299,11 +301,11 @@ inline typename tools::promote_args<T>::type float_next(const T& val)
 namespace detail{
 
 template <class T, class Policy>
-T float_prior_imp(const T& val, const mpl::true_&, const Policy& pol)
+BOOST_GPU_ENABLED T float_prior_imp(const T& val, const mpl::true_&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    int expon;
-   static const char* function = "float_prior<%1%>(%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_prior<%1%>(%1%)";
 
    int fpclass = (boost::math::fpclassify)(val);
 
@@ -344,7 +346,7 @@ T float_prior_imp(const T& val, const mpl::true_&, const Policy& pol)
 // Special version for bases other than 2:
 //
 template <class T, class Policy>
-T float_prior_imp(const T& val, const mpl::false_&, const Policy& pol)
+BOOST_GPU_ENABLED T float_prior_imp(const T& val, const mpl::false_&, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
@@ -362,7 +364,7 @@ T float_prior_imp(const T& val, const mpl::false_&, const Policy& pol)
       return policies::raise_domain_error<T>(
          function,
          "Argument must be finite, but got %1%", val, pol);
-   }
+}
 
    if(val <= -tools::max_value<T>())
       return -policies::raise_overflow_error<T>(function, 0, pol);
@@ -378,7 +380,7 @@ T float_prior_imp(const T& val, const mpl::false_&, const Policy& pol)
       // This avoids issues with the Intel SSE2 registers when the FTZ or DAZ flags are set.
       //
       return scalbn(float_prior(T(scalbn(val, 2 * std::numeric_limits<T>::digits)), pol), -2 * std::numeric_limits<T>::digits);
-   }
+}
 
    expon = 1 + ilogb(val);
    T remain = scalbn(val, -expon);
@@ -393,7 +395,7 @@ T float_prior_imp(const T& val, const mpl::false_&, const Policy& pol)
 } // namespace detail
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type float_prior(const T& val, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_prior(const T& val, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    return detail::float_prior_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
@@ -408,7 +410,7 @@ inline typename tools::promote_args<T>::type float_prior(const T& val, const Pol
 template <class Policy>
 inline double float_prior(const double& val, const Policy& pol)
 {
-   static const char* function = "float_prior<%1%>(%1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_prior<%1%>(%1%)";
 
    if(!(boost::math::isfinite)(val) && (val < 0))
       return policies::raise_domain_error<double>(
@@ -423,20 +425,20 @@ inline double float_prior(const double& val, const Policy& pol)
 #endif
 
 template <class T>
-inline typename tools::promote_args<T>::type float_prior(const T& val)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_prior(const T& val)
 {
    return float_prior(val, policies::policy<>());
 }
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
    return val < direction ? boost::math::float_next<result_type>(val, pol) : val == direction ? val : boost::math::float_prior<result_type>(val, pol);
 }
 
 template <class T, class U>
-inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type nextafter(const T& val, const U& direction)
 {
    return nextafter(val, direction, policies::policy<>());
 }
@@ -444,13 +446,13 @@ inline typename tools::promote_args<T, U>::type nextafter(const T& val, const U&
 namespace detail{
 
 template <class T, class Policy>
-T float_distance_imp(const T& a, const T& b, const mpl::true_&, const Policy& pol)
+BOOST_GPU_ENABLED T float_distance_imp(const T& a, const T& b, const mpl::true_&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
    // Error handling:
    //
-   static const char* function = "float_distance<%1%>(%1%, %1%)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_distance<%1%>(%1%, %1%)";
    if(!(boost::math::isfinite)(a))
       return policies::raise_domain_error<T>(
          function,
@@ -480,8 +482,8 @@ T float_distance_imp(const T& a, const T& b, const mpl::true_&, const Policy& po
    if(a < 0)
       return float_distance(static_cast<T>(-b), static_cast<T>(-a), pol);
 
-   BOOST_ASSERT(a >= 0);
-   BOOST_ASSERT(b >= a);
+   BOOST_MATH_ASSERT(a >= 0);
+   BOOST_MATH_ASSERT(b >= a);
 
    int expon;
    //
@@ -519,7 +521,7 @@ T float_distance_imp(const T& a, const T& b, const mpl::true_&, const Policy& po
       //
       T a2 = ldexp(a, tools::digits<T>());
       T b2 = ldexp(b, tools::digits<T>());
-      mb = -(std::min)(T(ldexp(upper, tools::digits<T>())), b2);
+      mb = -BOOST_MATH_CUDA_SAFE_MIN(T(ldexp(upper, tools::digits<T>())), b2);
       x = a2 + mb;
       z = x - a2;
       y = (a2 - (x - z)) + (mb - z);
@@ -528,7 +530,7 @@ T float_distance_imp(const T& a, const T& b, const mpl::true_&, const Policy& po
    }
    else
    {
-      mb = -(std::min)(upper, b);
+      mb = -BOOST_MATH_CUDA_SAFE_MIN(upper, b);
       x = a + mb;
       z = x - a;
       y = (a - (x - z)) + (mb - z);
@@ -542,14 +544,14 @@ T float_distance_imp(const T& a, const T& b, const mpl::true_&, const Policy& po
    //
    // Result must be an integer:
    //
-   BOOST_ASSERT(result == floor(result));
+   BOOST_MATH_ASSERT(result == floor(result));
    return result;
 } // float_distance_imp
 //
 // Special versions for bases other than 2:
 //
 template <class T, class Policy>
-T float_distance_imp(const T& a, const T& b, const mpl::false_&, const Policy& pol)
+BOOST_GPU_ENABLED T float_distance_imp(const T& a, const T& b, const mpl::false_&, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
@@ -610,7 +612,7 @@ T float_distance_imp(const T& a, const T& b, const mpl::false_&, const Policy& p
       T upper2 = scalbn(T(1), expon2 - 1);
       result = float_distance(upper2, b);
       result += (expon2 - expon - 1) * scalbn(T(1), std::numeric_limits<T>::digits - 1);
-   }
+}
    //
    // Use compensated double-double addition to avoid rounding
    // errors in the subtraction:
@@ -626,7 +628,7 @@ T float_distance_imp(const T& a, const T& b, const mpl::false_&, const Policy& p
       //
       T a2 = scalbn(a, std::numeric_limits<T>::digits);
       T b2 = scalbn(b, std::numeric_limits<T>::digits);
-      mb = -(std::min)(T(scalbn(upper, std::numeric_limits<T>::digits)), b2);
+      mb = -BOOST_MATH_CUDA_SAFE_MIN(T(scalbn(upper, std::numeric_limits<T>::digits)), b2);
       x = a2 + mb;
       z = x - a2;
       y = (a2 - (x - z)) + (mb - z);
@@ -635,7 +637,7 @@ T float_distance_imp(const T& a, const T& b, const mpl::false_&, const Policy& p
    }
    else
    {
-      mb = -(std::min)(upper, b);
+      mb = -BOOST_MATH_CUDA_SAFE_MIN(upper, b);
       x = a + mb;
       z = x - a;
       y = (a - (x - z)) + (mb - z);
@@ -656,14 +658,14 @@ T float_distance_imp(const T& a, const T& b, const mpl::false_&, const Policy& p
 } // namespace detail
 
 template <class T, class U, class Policy>
-inline typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b, const Policy& pol)
 {
    typedef typename tools::promote_args<T, U>::type result_type;
    return detail::float_distance_imp(detail::normalize_value(static_cast<result_type>(a), typename detail::has_hidden_guard_digits<result_type>::type()), detail::normalize_value(static_cast<result_type>(b), typename detail::has_hidden_guard_digits<result_type>::type()), mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
 template <class T, class U>
-typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 {
    return boost::math::float_distance(a, b, policies::policy<>());
 }
@@ -671,13 +673,13 @@ typename tools::promote_args<T, U>::type float_distance(const T& a, const U& b)
 namespace detail{
 
 template <class T, class Policy>
-T float_advance_imp(T val, int distance, const mpl::true_&, const Policy& pol)
+BOOST_GPU_ENABLED T float_advance_imp(T val, int distance, const mpl::true_&, const Policy& pol)
 {
    BOOST_MATH_STD_USING
    //
    // Error handling:
    //
-   static const char* function = "float_advance<%1%>(%1%, int)";
+   BOOST_MATH_GPU_STATIC const char* function = "float_advance<%1%>(%1%, int)";
 
    int fpclass = (boost::math::fpclassify)(val);
 
@@ -754,7 +756,7 @@ T float_advance_imp(T val, int distance, const mpl::true_&, const Policy& pol)
 // Special version for bases other than 2:
 //
 template <class T, class Policy>
-T float_advance_imp(T val, int distance, const mpl::false_&, const Policy& pol)
+BOOST_GPU_ENABLED T float_advance_imp(T val, int distance, const mpl::false_&, const Policy& pol)
 {
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_specialized);
    BOOST_STATIC_ASSERT(std::numeric_limits<T>::radix != 2);
@@ -791,7 +793,7 @@ T float_advance_imp(T val, int distance, const mpl::false_&, const Policy& pol)
       if(distance > 0)
       {
          do{ val = float_next(val, pol); } while(--distance);
-      }
+}
       else
       {
          do{ val = float_prior(val, pol); } while(++distance);
@@ -804,7 +806,7 @@ T float_advance_imp(T val, int distance, const mpl::false_&, const Policy& pol)
    if(val <= tools::min_value<T>())
    {
       limit = sign(T(distance)) * tools::min_value<T>();
-   }
+}
    T limit_distance = float_distance(val, limit);
    while(fabs(limit_distance) < abs(distance))
    {
@@ -840,14 +842,14 @@ T float_advance_imp(T val, int distance, const mpl::false_&, const Policy& pol)
 } // namespace detail
 
 template <class T, class Policy>
-inline typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_advance(T val, int distance, const Policy& pol)
 {
    typedef typename tools::promote_args<T>::type result_type;
    return detail::float_advance_imp(detail::normalize_value(static_cast<result_type>(val), typename detail::has_hidden_guard_digits<result_type>::type()), distance, mpl::bool_<!std::numeric_limits<result_type>::is_specialized || (std::numeric_limits<result_type>::radix == 2)>(), pol);
 }
 
 template <class T>
-inline typename tools::promote_args<T>::type float_advance(const T& val, int distance)
+inline BOOST_GPU_ENABLED typename tools::promote_args<T>::type float_advance(const T& val, int distance)
 {
    return boost::math::float_advance(val, distance, policies::policy<>());
 }

@@ -59,7 +59,7 @@ namespace boost
       // checks are always performed, even if exceptions are not enabled.
 
       template <class RealType, class Policy>
-      inline bool check_mean(const char* function, const RealType& mean, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_mean(const char* function, const RealType& mean, RealType* result, const Policy& pol)
       {
         if(!(boost::math::isfinite)(mean) || (mean < 0))
         {
@@ -72,7 +72,7 @@ namespace boost
       } // bool check_mean
 
       template <class RealType, class Policy>
-      inline bool check_mean_NZ(const char* function, const RealType& mean, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_mean_NZ(const char* function, const RealType& mean, RealType* result, const Policy& pol)
       { // mean == 0 is considered an error.
         if( !(boost::math::isfinite)(mean) || (mean <= 0))
         {
@@ -85,13 +85,13 @@ namespace boost
       } // bool check_mean_NZ
 
       template <class RealType, class Policy>
-      inline bool check_dist(const char* function, const RealType& mean, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_dist(const char* function, const RealType& mean, RealType* result, const Policy& pol)
       { // Only one check, so this is redundant really but should be optimized away.
         return check_mean_NZ(function, mean, result, pol);
       } // bool check_dist
 
       template <class RealType, class Policy>
-      inline bool check_k(const char* function, const RealType& k, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_k(const char* function, const RealType& k, RealType* result, const Policy& pol)
       {
         if((k < 0) || !(boost::math::isfinite)(k))
         {
@@ -104,7 +104,7 @@ namespace boost
       } // bool check_k
 
       template <class RealType, class Policy>
-      inline bool check_dist_and_k(const char* function, RealType mean, RealType k, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_dist_and_k(const char* function, RealType mean, RealType k, RealType* result, const Policy& pol)
       {
         if((check_dist(function, mean, result, pol) == false) ||
           (check_k(function, k, result, pol) == false))
@@ -115,7 +115,7 @@ namespace boost
       } // bool check_dist_and_k
 
       template <class RealType, class Policy>
-      inline bool check_prob(const char* function, const RealType& p, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_prob(const char* function, const RealType& p, RealType* result, const Policy& pol)
       { // Check 0 <= p <= 1
         if(!(boost::math::isfinite)(p) || (p < 0) || (p > 1))
         {
@@ -128,7 +128,7 @@ namespace boost
       } // bool check_prob
 
       template <class RealType, class Policy>
-      inline bool check_dist_and_prob(const char* function, RealType mean,  RealType p, RealType* result, const Policy& pol)
+      inline BOOST_GPU_ENABLED bool check_dist_and_prob(const char* function, RealType mean,  RealType p, RealType* result, const Policy& pol)
       {
         if((check_dist(function, mean, result, pol) == false) ||
           (check_prob(function, p, result, pol) == false))
@@ -147,7 +147,7 @@ namespace boost
       typedef RealType value_type;
       typedef Policy policy_type;
 
-      poisson_distribution(RealType l_mean = 1) : m_l(l_mean) // mean (lambda).
+      BOOST_GPU_ENABLED poisson_distribution(RealType l_mean = 1) : m_l(l_mean) // mean (lambda).
       { // Expected mean number of events that occur during the given interval.
         RealType r;
         poisson_detail::check_dist(
@@ -156,7 +156,7 @@ namespace boost
           &r, Policy());
       } // poisson_distribution constructor.
 
-      RealType mean() const
+      BOOST_GPU_ENABLED RealType mean() const
       { // Private data getter function.
         return m_l;
       }
@@ -185,13 +185,13 @@ namespace boost
     }
 
     template <class RealType, class Policy>
-    inline RealType mean(const poisson_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType mean(const poisson_distribution<RealType, Policy>& dist)
     { // Mean of poisson distribution = lambda.
       return dist.mean();
     } // mean
 
     template <class RealType, class Policy>
-    inline RealType mode(const poisson_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType mode(const poisson_distribution<RealType, Policy>& dist)
     { // mode.
       BOOST_MATH_STD_USING // ADL of std functions.
       return floor(dist.mean());
@@ -208,7 +208,7 @@ namespace boost
     // Now implemented via quantile(half) in derived accessors.
 
     template <class RealType, class Policy>
-    inline RealType variance(const poisson_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType variance(const poisson_distribution<RealType, Policy>& dist)
     { // variance.
       return dist.mean();
     }
@@ -217,14 +217,14 @@ namespace boost
     // standard_deviation provided by derived accessors.
 
     template <class RealType, class Policy>
-    inline RealType skewness(const poisson_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType skewness(const poisson_distribution<RealType, Policy>& dist)
     { // skewness = sqrt(l).
       BOOST_MATH_STD_USING // ADL of std functions.
       return 1 / sqrt(dist.mean());
     }
 
     template <class RealType, class Policy>
-    inline RealType kurtosis_excess(const poisson_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType kurtosis_excess(const poisson_distribution<RealType, Policy>& dist)
     { // skewness = sqrt(l).
       return 1 / dist.mean(); // kurtosis_excess 1/mean from Wiki & MathWorld eq 31.
       // http://mathworld.wolfram.com/Kurtosis.html explains that the kurtosis excess
@@ -233,7 +233,7 @@ namespace boost
     } // RealType kurtosis_excess
 
     template <class RealType, class Policy>
-    inline RealType kurtosis(const poisson_distribution<RealType, Policy>& dist)
+    inline BOOST_GPU_ENABLED RealType kurtosis(const poisson_distribution<RealType, Policy>& dist)
     { // kurtosis is 4th moment about the mean = u4 / sd ^ 4
       // http://en.wikipedia.org/wiki/Curtosis
       // kurtosis can range from -2 (flat top) to +infinity (sharp peak & heavy tails).
@@ -245,7 +245,7 @@ namespace boost
     } // RealType kurtosis
 
     template <class RealType, class Policy>
-    RealType pdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
+    BOOST_GPU_ENABLED RealType pdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
     { // Probability Density/Mass Function.
       // Probability that there are EXACTLY k occurrences (or arrivals).
       BOOST_FPU_EXCEPTION_GUARD
@@ -277,7 +277,7 @@ namespace boost
     } // pdf
 
     template <class RealType, class Policy>
-    RealType cdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
+    BOOST_GPU_ENABLED RealType cdf(const poisson_distribution<RealType, Policy>& dist, const RealType& k)
     { // Cumulative Distribution Function Poisson.
       // The random variate k is the number of occurrences(or arrivals)
       // k argument may be integral, signed, or unsigned, or floating point.
@@ -328,7 +328,7 @@ namespace boost
     } // binomial cdf
 
     template <class RealType, class Policy>
-    RealType cdf(const complemented2_type<poisson_distribution<RealType, Policy>, RealType>& c)
+    BOOST_GPU_ENABLED RealType cdf(const complemented2_type<poisson_distribution<RealType, Policy>, RealType>& c)
     { // Complemented Cumulative Distribution Function Poisson
       // The random variate k is the number of events, occurrences or arrivals.
       // k argument may be integral, signed, or unsigned, or floating point.
