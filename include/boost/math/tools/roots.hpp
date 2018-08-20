@@ -239,7 +239,6 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
    T delta = tools::max_value<T>();
    T delta1 = tools::max_value<T>();
    T delta2 = tools::max_value<T>();
-   T kick_factor = 16;
 
    boost::uintmax_t count(max_iter);
 
@@ -270,7 +269,7 @@ T newton_raphson_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_
       {
          // last two steps haven't converged.
          delta = (delta > 0) ? (result - min) / 2 : (result - max) / 2;
-         if (fabs(delta) > result)
+         if (fabs(delta) > fabs(result))
             delta = sign(delta) * result; // protect against huge jumps!
          // reset delta2 so we don't take this branch next time round:
          delta1 = delta;
