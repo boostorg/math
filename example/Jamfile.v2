@@ -120,6 +120,8 @@ test-suite examples :
    [ run students_t_single_sample.cpp  ]
    [ run students_t_two_samples.cpp  ]
    [ run HSO3SO4.cpp  ]
+   [ run series.cpp  ]
+   [ run continued_fractions.cpp  ]
 
    [ run root_elliptic_finding.cpp /boost/timer : : : release <link>static  [ requires cxx11_unified_initialization_syntax cxx11_defaulted_functions ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ]
    [ run root_finding_algorithms.cpp /boost/timer : : : release <link>static  [ requires cxx11_hdr_tuple cxx11_unified_initialization_syntax ] <target-os>freebsd:<linkflags>"-lrt" <target-os>linux:<linkflags>"-lrt -lpthread" ]
