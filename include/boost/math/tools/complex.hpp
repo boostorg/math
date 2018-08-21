@@ -7,7 +7,7 @@
 // Tools for operator on complex as well as scalar types.
 //
 
-#include <Boost/type_traits/is_complex.hpp>
+#include <boost/type_traits/is_complex.hpp>
 
 namespace boost {
    namespace math {
