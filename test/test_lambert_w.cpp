@@ -988,6 +988,7 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
     BOOST_MATH_TEST_VALUE(RealType, -0.99999997419043196),
     tolerance);// diff 2.30785e-09 v 2.2204460492503131e-16
 
+#ifdef BOOST_MATH_TEST_MULTIPRECISION
   // Comparison with Wolfram N[productlog(0,-0.36787944117144228 ), 17]
   // Using conversion from double to higher precision cpp_bin_float_quad
   using boost::multiprecision::cpp_bin_float_quad;
@@ -1000,7 +1001,7 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
     lambert_w0(BOOST_MATH_TEST_VALUE(cpp_bin_float_quad, -0.36787944117144222)),
     BOOST_MATH_TEST_VALUE(RealType, -0.99999997649828679),
     tolerance);// OK
-
+#endif
   // z increasingly close to singularity.
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36)),
     BOOST_MATH_TEST_VALUE(RealType, -0.8060843159708177782855213616209920019974599683466713016),
@@ -1231,8 +1232,10 @@ Real x;
 
   test_integrals<float>();
   test_integrals<double>();
-#ifdef BOOST_MATH_TEST_MULTIPRECISION
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   test_integrals<long double>();
+#endif
+#ifdef BOOST_MATH_TEST_MULTIPRECISION
 #ifdef BOOST_MATH_TEST_FLOAT128
   test_integrals<float128>();
 #endif
