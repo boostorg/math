@@ -54,9 +54,9 @@ BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/math/special_functions/log1p.hpp> // for log (1 + x)
 #include <boost/math/constants/constants.hpp> // For exp_minus_one == 3.67879441171442321595523770161460867e-01.
-#include <boost/math/special_functions/pow.hpp> // Link fails for pow without this, even though uses std::pow.
+#include <boost/math/special_functions/pow.hpp> // powers with compile time exponent, used in arbitrary precision code.
 #include <boost/math/tools/series.hpp> // series functor.
-#include <boost/math/tools/polynomial.hpp>  // polynomial.
+//#include <boost/math/tools/polynomial.hpp>  // polynomial.
 #include <boost/math/tools/rational.hpp>  // evaluate_polynomial.
 #include <boost/mpl/int.hpp>
 #include <boost/type_traits/is_integral.hpp>
