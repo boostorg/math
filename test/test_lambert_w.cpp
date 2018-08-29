@@ -79,7 +79,6 @@ using boost::math::lambert_w0;
 #include <cmath>
 #include <typeinfo>
 #include <iostream>
-#include <type_traits>
 #include <exception>
 
 std::string show_versions(void);
@@ -298,6 +297,8 @@ void wolfram_test_near_singularity<double>()
    double tolerance = boost::math::tools::epsilon<double>() * 5;
    if (std::numeric_limits<double>::digits >= std::numeric_limits<long double>::digits)
       tolerance *= 1e5;
+   else if (std::numeric_limits<double>::digits * 2 >= std::numeric_limits<long double>::digits)
+      tolerance *= 5e4;
    double endpoint = -boost::math::constants::exp_minus_one<double>();
    for (unsigned i = 0; i < wolfram_test_near_singularity_data.size(); ++i)
    {
@@ -358,9 +359,11 @@ void test_spots(RealType)
   }
   RealType tolerance = boost::math::tools::epsilon<RealType>() * epsilons; // 2 eps as a fraction.
   std::cout << "Tolerance " << epsilons << " * epsilon == " << tolerance << std::endl;
+#ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
   std::cout << "Precision " << std::numeric_limits<RealType>::digits10 << " decimal digits, max_digits10 = " << std::numeric_limits <RealType>::max_digits10<< std::endl;
   // std::cout.precision(std::numeric_limits<RealType>::digits10);
   std::cout.precision(std::numeric_limits <RealType>::max_digits10);
+#endif
   std::cout.setf(std::ios_base::showpoint);  // show trailing significant zeros.
   std::cout << "-exp(-1) = " << -exp_minus_one<RealType>() << std::endl;
 
@@ -765,7 +768,7 @@ void test_spots(RealType)
   BOOST_CHECK_THROW(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -1e30)), std::domain_error);
 
   // Too negative
-  BOOST_CHECK_THROW(lambert_wm1(-0.5), std::domain_error);
+  BOOST_CHECK_THROW(lambert_wm1(RealType(-0.5)), std::domain_error);
 
   // This fails for fixed_point type used for other tests because out of range?
     //BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 1.0e6)),
@@ -796,7 +799,7 @@ BOOST_AUTO_TEST_CASE( test_types )
   boost::unit_test_framework::unit_test_log.set_threshold_level(boost::unit_test_framework::log_messages);
   BOOST_TEST_MESSAGE("\nTest Lambert W function for several types.");
   BOOST_TEST_MESSAGE(show_versions());  // Full version of Boost, STL and compiler info.
-
+#ifndef BOOST_MATH_TEST_MULTIPRECISION
   // Fundamental built-in types:
   test_spots(0.0F); // float
   test_spots(0.0); // double
@@ -805,12 +808,18 @@ BOOST_AUTO_TEST_CASE( test_types )
     test_spots(0.0L); // long double
   }
 
-  #ifdef BOOST_MATH_TEST_MULTIPRECISION
+  #else // BOOST_MATH_TEST_MULTIPRECISION
   // Multiprecision types:
+#if BOOST_MATH_TEST_MULTIPRECISION == 1
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_double_extended>(0));
+#endif
+#if BOOST_MATH_TEST_MULTIPRECISION == 2
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_quad>(0));
+#endif
+#if BOOST_MATH_TEST_MULTIPRECISION == 3
   test_spots(static_cast<boost::multiprecision::cpp_bin_float_50>(0));
-  #endif // ifdef BOOST_MATH_TEST_MULTIPRECISION
+#endif
+#endif // ifdef BOOST_MATH_TEST_MULTIPRECISION
 
   #ifdef BOOST_MATH_TEST_FLOAT128
    std::cout << "\nBOOST_MATH_TEST_FLOAT128 defined for float128 tests." << std::endl;
@@ -857,8 +866,9 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
 
   int epsilons = 1;
   RealType tolerance = boost::math::tools::epsilon<RealType>() * epsilons; // 2 eps as a fraction.
-  std::cout << "Tolerance " << epsilons  << " * epsilon == " << tolerance << std::endl;
+  std::cout << "Tolerance " << epsilons << " * epsilon == " << tolerance << std::endl;
 
+#ifndef BOOST_MATH_TEST_MULTIPRECISION
   BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, 1.0e-6)),
     BOOST_MATH_TEST_VALUE(RealType, 9.9999900000149999733333854165586669000967020964243e-7),
     // Output from https://www.wolframalpha.com/input/ N[lambert_w[1e-6],50])
@@ -1020,104 +1030,108 @@ BOOST_AUTO_TEST_CASE( test_range_of_double_values )
     BOOST_MATH_TEST_VALUE(RealType, -0.99999997419043196),
     tolerance);// diff 2.30785e-09 v 2.2204460492503131e-16
 
-#ifdef BOOST_MATH_TEST_MULTIPRECISION
+               // z increasingly close to singularity.
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36)),
+     BOOST_MATH_TEST_VALUE(RealType, -0.8060843159708177782855213616209920019974599683466713016),
+     2 * tolerance); // -0.806084335
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.365)),
+     BOOST_MATH_TEST_VALUE(RealType, -0.8798200914159538111724840007674053239388642469453350954),
+     5 * tolerance); // Note 5 * tolerance
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.3678)),
+     BOOST_MATH_TEST_VALUE(RealType, -0.9793607149578284774761844434886481686055949229547379368),
+     15 * tolerance); // Note 15 * tolerance when this close to singularity.
+
+                      // Just using series approximation (Fukushima switch at -0.35, but JM at 0.01 of singularity < -0.3679).
+                      // N[productlog(-0.351), 50] = -0.72398644140937651483634596143951001600417138085814
+                      // N[productlog(-0.351), 55] = -0.7239864414093765148363459614395100160041713808581379727
+  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.351)),
+     BOOST_MATH_TEST_VALUE(RealType, -0.72398644140937651483634596143951001600417138085814),
+     10 * tolerance); // Note was 2 * tolerance
+
+                      // Check value just not using near_singularity series approximation (and using rational polynomial instead).
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.3)),
+     BOOST_MATH_TEST_VALUE(RealType, -1.7813370234216276119741702815127452608215583564545),
+     // Output from https://www.wolframalpha.com/input/
+     //N[productlog(-1, -0.3), 50] = -1.7813370234216276119741702815127452608215583564545
+     tolerance);
+
+  // Using table lookup and schroeder with decreasing z to zero.
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.2)),
+     BOOST_MATH_TEST_VALUE(RealType, -2.5426413577735264242938061566618482901614749075294),
+     // N[productlog[-1, -0.2],50] -2.5426413577735264242938061566618482901614749075294
+     tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.1)),
+     BOOST_MATH_TEST_VALUE(RealType, -3.5771520639572972184093919635119948804017962577931),
+     //N[productlog(-1, -0.1), 50] = -3.5771520639572972184093919635119948804017962577931
+     tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.001)),
+     BOOST_MATH_TEST_VALUE(RealType, -9.1180064704027401212583371820468142742704349737639),
+     //  N[productlog(-1, -0.001), 50] = -9.1180064704027401212583371820468142742704349737639
+     tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.000001)),
+     BOOST_MATH_TEST_VALUE(RealType, -16.626508901372473387706432163984684996461726803805),
+     //  N[productlog(-1, -0.000001), 50] = -16.626508901372473387706432163984684996461726803805
+     tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -1e-6)),
+     BOOST_MATH_TEST_VALUE(RealType, -16.626508901372473387706432163984684996461726803805),
+     //  N[productlog(-1, -10 ^ -6), 50] = -16.626508901372473387706432163984684996461726803805
+     tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -1.0e-26)),
+     BOOST_MATH_TEST_VALUE(RealType, -64.026509628385889681156090340691637712441162092868),
+     // Output from https://www.wolframalpha.com/input/
+     // N[productlog(-1, -1 * 10^-26 ), 50] = -64.026509628385889681156090340691637712441162092868
+     tolerance);
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -2e-26)),
+     BOOST_MATH_TEST_VALUE(RealType, -63.322302839923597803393585145387854867226970485197),
+     // N[productlog[-1, -2*10^-26],50] = -63.322302839923597803393585145387854867226970485197
+     tolerance * 2);
+
+  // Smaller than lookup table, so must use approx and Halley refinements.
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -1e-30)),
+     BOOST_MATH_TEST_VALUE(RealType, -73.373110313822976797067478758120874529181611813766),
+     //  N[productlog(-1, -10 ^ -30), 50]    = -73.373110313822976797067478758120874529181611813766
+     tolerance);
+
+  // std::numeric_limits<RealType>::min
+#ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
+  std::cout.precision(std::numeric_limits<RealType>::max_digits10);
+#endif
+  std::cout << "(std::numeric_limits<RealType>::min)() " << (std::numeric_limits<RealType>::min)() << std::endl;
+
+  BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -2.2250738585072014e-308)),
+     BOOST_MATH_TEST_VALUE(RealType, -714.96865723796647086868547560654825435542227693935),
+     // N[productlog[-1, -2.2250738585072014e-308],50] =  -714.96865723796647086868547560654825435542227693935
+     tolerance);
+
+  // For z = 0, W = -infinity
+  if (std::numeric_limits<RealType>::has_infinity)
+  {
+     BOOST_CHECK_EQUAL(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, 0.)),
+        -std::numeric_limits<RealType>::infinity());
+  }
+
+#elif BOOST_MATH_TEST_MULTIPRECISION == 2
+  
   // Comparison with Wolfram N[productlog(0,-0.36787944117144228 ), 17]
   // Using conversion from double to higher precision cpp_bin_float_quad
   using boost::multiprecision::cpp_bin_float_quad;
   BOOST_CHECK_CLOSE_FRACTION(  // Check float_next(-exp(-1) )
     lambert_w0(BOOST_MATH_TEST_VALUE(cpp_bin_float_quad, -0.36787944117144228)),
-    BOOST_MATH_TEST_VALUE(RealType, -0.99999998496215738),
+    BOOST_MATH_TEST_VALUE(cpp_bin_float_quad, -0.99999998496215738),
     tolerance); // OK
 
   BOOST_CHECK_CLOSE_FRACTION(  // Check  float_next(float_next(-exp(-1) ))
     lambert_w0(BOOST_MATH_TEST_VALUE(cpp_bin_float_quad, -0.36787944117144222)),
-    BOOST_MATH_TEST_VALUE(RealType, -0.99999997649828679),
+    BOOST_MATH_TEST_VALUE(cpp_bin_float_quad, -0.99999997649828679),
     tolerance);// OK
 #endif
-  // z increasingly close to singularity.
-  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.36)),
-    BOOST_MATH_TEST_VALUE(RealType, -0.8060843159708177782855213616209920019974599683466713016),
-    2 * tolerance); // -0.806084335
-
-  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.365)),
-    BOOST_MATH_TEST_VALUE(RealType, -0.8798200914159538111724840007674053239388642469453350954),
-    5 * tolerance); // Note 5 * tolerance
-
-  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.3678)),
-    BOOST_MATH_TEST_VALUE(RealType, -0.9793607149578284774761844434886481686055949229547379368),
-   15 * tolerance); // Note 15 * tolerance when this close to singularity.
-
-  // Just using series approximation (Fukushima switch at -0.35, but JM at 0.01 of singularity < -0.3679).
-  // N[productlog(-0.351), 50] = -0.72398644140937651483634596143951001600417138085814
-  // N[productlog(-0.351), 55] = -0.7239864414093765148363459614395100160041713808581379727
-  BOOST_CHECK_CLOSE_FRACTION(lambert_w0(BOOST_MATH_TEST_VALUE(RealType, -0.351)),
-    BOOST_MATH_TEST_VALUE(RealType, -0.72398644140937651483634596143951001600417138085814),
-    10 * tolerance); // Note was 2 * tolerance
-
-   // Check value just not using near_singularity series approximation (and using rational polynomial instead).
-    BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.3)),
-      BOOST_MATH_TEST_VALUE(RealType, -1.7813370234216276119741702815127452608215583564545),
-      // Output from https://www.wolframalpha.com/input/
-     //N[productlog(-1, -0.3), 50] = -1.7813370234216276119741702815127452608215583564545
-     tolerance);
-
-    // Using table lookup and schroeder with decreasing z to zero.
-    BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.2)),
-      BOOST_MATH_TEST_VALUE(RealType, -2.5426413577735264242938061566618482901614749075294),
-    // N[productlog[-1, -0.2],50] -2.5426413577735264242938061566618482901614749075294
-      tolerance);
-
-    BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.1)),
-      BOOST_MATH_TEST_VALUE(RealType, -3.5771520639572972184093919635119948804017962577931),
-    //N[productlog(-1, -0.1), 50] = -3.5771520639572972184093919635119948804017962577931
-      tolerance);
-
-    BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.001)),
-      BOOST_MATH_TEST_VALUE(RealType, -9.1180064704027401212583371820468142742704349737639),
-    //  N[productlog(-1, -0.001), 50] = -9.1180064704027401212583371820468142742704349737639
-      tolerance);
-
-    BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -0.000001)),
-      BOOST_MATH_TEST_VALUE(RealType, -16.626508901372473387706432163984684996461726803805),
-    //  N[productlog(-1, -0.000001), 50] = -16.626508901372473387706432163984684996461726803805
-      tolerance);
-
-    BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -1e-6)),
-      BOOST_MATH_TEST_VALUE(RealType, -16.626508901372473387706432163984684996461726803805),
-    //  N[productlog(-1, -10 ^ -6), 50] = -16.626508901372473387706432163984684996461726803805
-      tolerance);
-
-    BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -1.0e-26)),
-      BOOST_MATH_TEST_VALUE(RealType, -64.026509628385889681156090340691637712441162092868),
-      // Output from https://www.wolframalpha.com/input/
-      // N[productlog(-1, -1 * 10^-26 ), 50] = -64.026509628385889681156090340691637712441162092868
-      tolerance);
-
-    BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -2e-26)),
-      BOOST_MATH_TEST_VALUE(RealType, -63.322302839923597803393585145387854867226970485197),
-      // N[productlog[-1, -2*10^-26],50] = -63.322302839923597803393585145387854867226970485197
-      tolerance *2);
-
-    // Smaller than lookup table, so must use approx and Halley refinements.
-    BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -1e-30)),
-      BOOST_MATH_TEST_VALUE(RealType, -73.373110313822976797067478758120874529181611813766),
-    //  N[productlog(-1, -10 ^ -30), 50]    = -73.373110313822976797067478758120874529181611813766
-      tolerance);
-
-    // std::numeric_limits<RealType>::min
-    std::cout.precision(std::numeric_limits<RealType>::max_digits10);
-    std::cout << "(std::numeric_limits<RealType>::min)() " << (std::numeric_limits<RealType>::min)() << std::endl;
-
-    BOOST_CHECK_CLOSE_FRACTION(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, -2.2250738585072014e-308)),
-      BOOST_MATH_TEST_VALUE(RealType, -714.96865723796647086868547560654825435542227693935),
-    // N[productlog[-1, -2.2250738585072014e-308],50] =  -714.96865723796647086868547560654825435542227693935
-      tolerance);
-
-    // For z = 0, W = -infinity
-    if (std::numeric_limits<RealType>::has_infinity)
-    {
-      BOOST_CHECK_EQUAL(lambert_wm1(BOOST_MATH_TEST_VALUE(RealType, 0.)),
-        -std::numeric_limits<RealType>::infinity());
-    }
 } // BOOST_AUTO_TEST_CASE(test_range_of_double_values)
 

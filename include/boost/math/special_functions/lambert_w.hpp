@@ -162,6 +162,20 @@ T maybe_reduce_to_double(const T& z, const mpl::false_&)
   return z;
 }
 
+template <class T>
+inline
+double must_reduce_to_double(const T& z, const mpl::true_&)
+{
+   return static_cast<double>(z); // Reduce to double precision.
+}
+
+template <class T>
+inline
+double must_reduce_to_double(const T& z, const mpl::false_&)
+{ // try a lexical_cast and hope for the best:
+   return boost::lexical_cast<double>(z);
+}
+
 //! \brief Schroeder method, fifth-order update formula,
 //! \details See T. Fukushima page 80-81, and
 //! A. Householder, The Numerical Treatment of a Single Nonlinear Equation,
@@ -173,7 +187,7 @@ T maybe_reduce_to_double(const T& z, const mpl::false_&)
 //! \returns Refined estimate of Lambert w.
 
 // Schroeder refinement, called unless NOT required by precision policy.
-template<typename T = double>
+template<typename T>
 inline
 T schroeder_update(const T w, const T y)
 {
@@ -229,7 +243,7 @@ T schroeder_update(const T w, const T y)
   //! are at least 21 digits precision == max_digits10 for long double.
   //! Longer decimal digits strings are rationals evaluated using Wolfram.
 
-template<typename T = double>
+template<typename T>
 T lambert_w_singularity_series(const T p)
 {
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES
@@ -492,10 +506,17 @@ T lambert_w0_small_z(T x, const Policy& pol)
 { //std::numeric_limits<T>::max_digits10 == 36 ? 3 : // 128-bit long double.
   typedef boost::mpl::int_
     <
+#ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
     std::numeric_limits<T>::max_digits10 <=  9 ? 0 : // for float 32-bit.
     std::numeric_limits<T>::max_digits10 <= 17 ? 1 : // for double 64-bit.
     std::numeric_limits<T>::max_digits10 <= 22 ? 2 : // for 80-bit double extended.
     std::numeric_limits<T>::max_digits10 <  37 ? 4  // for both 128-bit long double (3) and 128-bit quad suffix Q type (4).
+#else
+     ((std::numeric_limits<T>::radix == 2) && (std::numeric_limits<T>::digits <= 24)) ? 0 : // for float 32-bit.
+     ((std::numeric_limits<T>::radix == 2) && (std::numeric_limits<T>::digits <= 53)) ? 1 : // for double 64-bit.
+     ((std::numeric_limits<T>::radix == 2) && (std::numeric_limits<T>::digits <= 64)) ? 2 : // for 80-bit double extended.
+     ((std::numeric_limits<T>::radix == 2) && (std::numeric_limits<T>::digits <= 113)) ? 4  // for both 128-bit long double (3) and 128-bit quad suffix Q type (4).
+#endif
       :  5                                            // All Generic multiprecision types.
     > tag_type;
   // std::cout << "\ntag type = " << tag_type << std::endl; // error C2275: 'tag_type': illegal use of this type as an expression.
@@ -953,6 +974,7 @@ T lambert_w0_approx(T z)
 template <class T>
 inline T get_near_singularity_param(T z)
 {
+   BOOST_MATH_STD_USING
    const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
    const T p = sqrt(p2);
    return p;
@@ -963,7 +985,7 @@ inline float get_near_singularity_param(float z)
 }
 inline double get_near_singularity_param(double z)
 {
-   return static_cast<float>(get_near_singularity_param((long double)z));
+   return static_cast<double>(get_near_singularity_param((long double)z));
 }
 
 // Forward declarations:
@@ -1681,7 +1703,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   // Integral types should be promoted to double by user Lambert w functions.
   // If integral type provided to user function lambert_w0 or lambert_wm1,
   // then should already have been promoted to double.
-  BOOST_STATIC_ASSERT_MSG(!std::is_integral<T>::value,
+  BOOST_STATIC_ASSERT_MSG(!boost::is_integral<T>::value,
     "Must be floating-point or fixed type (not integer type), for example: lambert_wm1(1.), not lambert_wm1(1)!");
 
   BOOST_MATH_STD_USING // Aid argument dependent lookup (ADL) of abs.
@@ -1847,7 +1869,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     using boost::math::policies::digits2;
     using boost::math::policies::policy;
     // Compute a 50-bit precision approximate W0 in a double (no Halley refinement).
-    T double_approx = static_cast<T>(lambert_wm1_imp<double>(static_cast<double>(z), policy<digits2<50> >()));
+    T double_approx(lambert_wm1_imp(must_reduce_to_double(z, boost::is_constructible<double, T>()), policy<digits2<50> >()));
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
     std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
     std::cout << "Lambert_wm1 Argument Type " << typeid(T).name() << " approximation double = " << double_approx << std::endl;
@@ -1936,13 +1958,16 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // and use later Halley refinement for higher precisions.
     using lambert_w_lookup::halves;
     using lambert_w_lookup::sqrtwm1s;
-    lookup_t w = -static_cast<lookup_t>(n); // Equation 25,
-    lookup_t y = static_cast<lookup_t>(z * wm1es[n - 1]); // Equation 26,
+
+    typedef typename mpl::if_c<boost::is_constructible<lookup_t, T>::value, lookup_t, T>::type calc_type;
+
+    calc_type w = -static_cast<calc_type>(n); // Equation 25,
+    calc_type y = static_cast<calc_type>(z * wm1es[n - 1]); // Equation 26,
                                                           // Perform the bisections fractional bisections for necessary precision.
     for (int j = 0; j < bisections; ++j)
     { // Equation 27.
-      lookup_t wj = w - halves[j]; // Subtract 1/2, 1/4, 1/8 ...
-      lookup_t yj = y * sqrtwm1s[j]; // Multiply by sqrt(1/e), ...
+      calc_type wj = w - halves[j]; // Subtract 1/2, 1/4, 1/8 ...
+      calc_type yj = y * sqrtwm1s[j]; // Multiply by sqrt(1/e), ...
       if (wj < yj)
       {
         w = wj;
@@ -1994,7 +2019,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   } // lambert_w0(T z, const Policy& pol)
 
   //! Lambert W0 using default policy.
-  template <class T, class Policy = boost::math::policies::policy<> >
+  template <class T>
   inline
     typename tools::promote_args<T>::type
     lambert_w0(T z)
@@ -2005,7 +2030,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
 
     // Work out what precision has been selected, based on the Policy and the number type.
     // For the default policy version, we want the *default policy* precision for T.
-    typedef typename policies::precision<result_type, Policy>::type precision_type;
+    typedef typename policies::precision<result_type, policies::policy<> >::type precision_type;
     // and then select the correct implementation based on that (not the type T):
     typedef mpl::int_<
       (precision_type::value == 0) || (precision_type::value > 53) ?
