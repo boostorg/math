@@ -12,6 +12,8 @@
 #include <boost/config.hpp>   // for BOOST_MSVC definition etc.
 #include <boost/version.hpp>   // for BOOST_MSVC versions.
 
+#ifdef BOOST_HAS_FLOAT128
+
 // Boost macros
 #define BOOST_TEST_MAIN
 #define BOOST_LIB_DIAGNOSTIC "on" // Report library file details.
@@ -267,3 +269,8 @@ Real x;
   }
 }
 
+#else
+
+int main() { return 0; }
+
+#endif
