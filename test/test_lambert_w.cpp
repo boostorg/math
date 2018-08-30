@@ -39,6 +39,8 @@ using boost::multiprecision::cpp_dec_float_50;
 #include <boost/multiprecision/cpp_bin_float.hpp>
 using boost::multiprecision::cpp_bin_float_quad;
 
+#include <boost/math/concepts/real_concept.hpp>
+
 #ifdef BOOST_MATH_TEST_FLOAT128
 
 #ifdef BOOST_HAS_FLOAT128
@@ -167,7 +169,7 @@ void wolfram_test_moderate_values()
       tolerance *= 4;  // arbitrary precision types have lower accuracy on exp(z).
    for (unsigned i = 0; i < wolfram_test_small_neg.size(); ++i)
    {
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::lambert_w0(wolfram_test_small_neg[i][0]), wolfram_test_small_neg[i][1], tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::lambert_w0(T(wolfram_test_small_neg[i][0])), T(wolfram_test_small_neg[i][1]), tolerance);
    }
 }
 
@@ -186,7 +188,7 @@ void wolfram_test_small_pos()
       tolerance *= 3;  // arbitrary precision types have lower accuracy on exp(z).
    for (unsigned i = 0; i < wolfram_test_small_neg.size(); ++i)
    {
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::lambert_w0(wolfram_test_small_neg[i][0]), wolfram_test_small_neg[i][1], tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::lambert_w0(T(wolfram_test_small_neg[i][0])), T(wolfram_test_small_neg[i][1]), tolerance);
    }
 }
 
@@ -206,7 +208,7 @@ void wolfram_test_small_neg()
       tolerance *= 3;  // arbitrary precision types have lower accuracy on exp(z).
    for (unsigned i = 0; i < wolfram_test_small_neg.size(); ++i)
    {
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::lambert_w0(wolfram_test_small_neg[i][0]), wolfram_test_small_neg[i][1], tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::lambert_w0(T(wolfram_test_small_neg[i][0])), T(wolfram_test_small_neg[i][1]), tolerance);
    }
 }
 
@@ -225,7 +227,7 @@ void wolfram_test_large(const boost::mpl::true_&)
       tolerance *= 3;  // arbitrary precision types have lower accuracy on exp(z).
    for (unsigned i = 0; i < wolfram_test_large_data.size(); ++i)
    {
-      BOOST_CHECK_CLOSE_FRACTION(boost::math::lambert_w0(wolfram_test_large_data[i][0]), wolfram_test_large_data[i][1], tolerance);
+      BOOST_CHECK_CLOSE_FRACTION(boost::math::lambert_w0(T(wolfram_test_large_data[i][0])), T(wolfram_test_large_data[i][1]), tolerance);
    }
 }
 template <class T>
@@ -249,7 +251,7 @@ void wolfram_test_near_singularity()
       { { SC_(-0.11787944117144233402427744294982403516769409179688), SC_(-0.13490446826612137099065142885543349308605449591189) } },{ { SC_(-0.24287944117144233402427744294982403516769409179688), SC_(-0.34187241316000575559631565516533717918703951393828) } },{ { SC_(-0.30537944117144233402427744294982403516769409179688), SC_(-0.50704532478540670242736394530166187052909039079642) } },{ { SC_(-0.33662944117144233402427744294982403516769409179688), SC_(-0.63562321628494791544895212508757067989859372121549) } },{ { SC_(-0.35225444117144233402427744294982403516769409179688), SC_(-0.73357201771558852140844624841371893543359405991894) } },{ { SC_(-0.36006694117144233402427744294982403516769409179688), SC_(-0.80685912552602238275976720505076149562188136941981) } },{ { SC_(-0.36397319117144233402427744294982403516769409179688), SC_(-0.86091151614390373770305184939107560322835214525382) } },{ { SC_(-0.36592631617144233402427744294982403516769409179688), SC_(-0.90033567669608907987528169545609510444951296636737) } },{ { SC_(-0.36690287867144233402427744294982403516769409179688), SC_(-0.92884889586304130900291705545970353898661233095513) } },{ { SC_(-0.36739115992144233402427744294982403516769409179688), SC_(-0.94934196763921122756108351994184213101752011076782) } },{ { SC_(-0.36763530054644233402427744294982403516769409179688), SC_(-0.96400324129495105632485735566132352543383271582526) } },{ { SC_(-0.36775737085894233402427744294982403516769409179688), SC_(-0.97445736712728703357755243595334553847237474201138) } },{ { SC_(-0.36781840601519233402427744294982403516769409179688), SC_(-0.98189372378619472154195350108189165241865132390473) } },{ { SC_(-0.36784892359331733402427744294982403516769409179688), SC_(-0.98717434434269671591894280580432721487757138768109) } },{ { SC_(-0.36786418238237983402427744294982403516769409179688), SC_(-0.99091955260257317141206161906086819616043312707614) } },{ { SC_(-0.36787181177691108402427744294982403516769409179688), SC_(-0.99357346775773151586057357459040504547191256911173) } },{ { SC_(-0.36787562647417670902427744294982403516769409179688), SC_(-0.99545290640175819861266174073519228782773422561472) } },{ { SC_(-0.36787753382280952152427744294982403516769409179688), SC_(-0.99678329264937600678258333756796350065436689760936) } },{ { SC_(-0.36787848749712592777427744294982403516769409179688), SC_(-0.99772473035978895659981485126201758865515569761514) } },{ { SC_(-0.36787896433428413089927744294982403516769409179688), SC_(-0.99839078411548014765525278348680286544429555739338) } },{ { SC_(-0.36787920275286323246177744294982403516769409179688), SC_(-0.99886193379608135520603487963907992157933985302350) } },{ { SC_(-0.36787932196215278324302744294982403516769409179688), SC_(-0.99919517626703684624524893082905669989578841060892) } },{ { SC_(-0.36787938156679755863365244294982403516769409179688), SC_(-0.99943085896775657378245957087668418410735469441835) } },{ { SC_(-0.36787941136911994632896494294982403516769409179688), SC_(-0.99959753415605033951327478977234592072050509074480) } },{ { SC_(-0.36787942627028114017662119294982403516769409179688), SC_(-0.99971540249082798050505534900918173321899800190957) } },{ { SC_(-0.36787943372086173710044931794982403516769409179688), SC_(-0.99979875358003464529770521637722571161846456343102) } },{ { SC_(-0.36787943744615203556236338044982403516769409179688), SC_(-0.99985769449598686744630754715710430111838645655608) } },{ { SC_(-0.36787943930879718479332041169982403516769409179688), SC_(-0.99989937341527312969776294577792175610005161268265) } },{ { SC_(-0.36787944024011975940879892732482403516769409179688), SC_(-0.99992884556078314715423832743355922518662235135757) } },{ { SC_(-0.36787944070578104671653818513732403516769409179688), SC_(-0.99994968586433278794146581248117772412549843583586) } },{ { SC_(-0.36787944093861169037040781404357403516769409179688), SC_(-0.99996442235919152892644019456912452486892832990114) } },{ { SC_(-0.36787944105502701219734262849669903516769409179688), SC_(-0.99997484272221444495021480907850566954322542216868) } },{ { SC_(-0.36787944111323467311081003572326153516769409179688), SC_(-0.99998221107553951227244139186618591264285119372063) } },{ { SC_(-0.36787944114233850356754373933654278516769409179688), SC_(-0.99998742131038091608107093454795869661238860012568) } },{ { SC_(-0.36787944115689041879591059114318341016769409179688), SC_(-0.99999110551424805741455916942650424910940130482916) } },{ { SC_(-0.36787944116416637641009401704650372266769409179688), SC_(-0.99999371064603396347995131962984747427523504609782) } },{ { SC_(-0.36787944116780435521718572999816387891769409179688), SC_(-0.99999555275622895023796382943893319302015254415029) } },{ { SC_(-0.36787944116962334462073158647399395704269409179688), SC_(-0.99999685532777825691586263781552103878671869687024) } },{ { SC_(-0.36787944117053283932250451471190899610519409179688), SC_(-0.99999777638786151731498560321162974199505119200634) } }
    }};
    T tolerance = boost::math::tools::epsilon<T>() * 3;
-   if (std::numeric_limits<T>::digits >= std::numeric_limits<long double>::digits)
+   if (boost::math::tools::epsilon<T>() <= boost::math::tools::epsilon<long double>())
       tolerance *= 5e5;
    T endpoint = -boost::math::constants::exp_minus_one<T>();
    for (unsigned i = 0; i < wolfram_test_near_singularity_data.size(); ++i)
@@ -257,7 +259,7 @@ void wolfram_test_near_singularity()
       if (wolfram_test_near_singularity_data[i][0] <= endpoint)
          break;
       else
-         BOOST_CHECK_CLOSE_FRACTION(boost::math::lambert_w0(wolfram_test_near_singularity_data[i][0]), wolfram_test_near_singularity_data[i][1], tolerance);
+         BOOST_CHECK_CLOSE_FRACTION(boost::math::lambert_w0(T(wolfram_test_near_singularity_data[i][0])), T(wolfram_test_near_singularity_data[i][1]), tolerance);
    }
 }
 
@@ -336,11 +338,14 @@ void test_spots(RealType)
 #ifndef BOOST_NO_EXCEPTIONS
   BOOST_CHECK_THROW(lambert_w0<RealType>(-1.), std::domain_error);
   BOOST_CHECK_THROW(lambert_wm1<RealType>(-1.), std::domain_error);
-  BOOST_CHECK_THROW(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // Would be NaN.
-  //BOOST_CHECK_EQUAL(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN(), ignore_all_policy()), std::numeric_limits<RealType>::quiet_NaN()); // Should be NaN.
-  // Fails as NaN != NaN by definition.
-  BOOST_CHECK(boost::math::isnan(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN(), ignore_all_policy())));
-  //BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::infinity(), ignore_all_policy()), std::numeric_limits<RealType::infinity()); // infinity.
+  if (std::numeric_limits<RealType>::has_quiet_NaN)
+  {
+     BOOST_CHECK_THROW(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN()), std::domain_error); // Would be NaN.
+     //BOOST_CHECK_EQUAL(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN(), ignore_all_policy()), std::numeric_limits<RealType>::quiet_NaN()); // Should be NaN.
+     // Fails as NaN != NaN by definition.
+     BOOST_CHECK(boost::math::isnan(lambert_w0<RealType>(std::numeric_limits<RealType>::quiet_NaN(), ignore_all_policy())));
+     //BOOST_MATH_CHECK_EQUAL(boost::math::lambert_w0<RealType>(std::numeric_limits<RealType>::infinity(), ignore_all_policy()), std::numeric_limits<RealType::infinity()); // infinity.
+  }
 
   // BOOST_CHECK_THROW(lambert_w0<RealType>(std::numeric_limits<RealType>::infinity()), std::domain_error); // Was if infinity should throw, now infinity.
   BOOST_CHECK_THROW(lambert_w0<RealType>(-static_cast<RealType>(0.4)), std::domain_error); // Would be complex.
@@ -803,10 +808,14 @@ BOOST_AUTO_TEST_CASE( test_types )
   // Fundamental built-in types:
   test_spots(0.0F); // float
   test_spots(0.0); // double
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
   if (sizeof(long double) > sizeof(double))
   { // Avoid pointless re-testing if double and long double are identical (for example, MSVC).
     test_spots(0.0L); // long double
   }
+
+  test_spots(boost::math::concepts::real_concept(0));
+#endif
 
   #else // BOOST_MATH_TEST_MULTIPRECISION
   // Multiprecision types:

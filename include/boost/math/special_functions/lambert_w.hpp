@@ -1757,7 +1757,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
       "Argument z = %1% is out of range (z <= 0) for Lambert W-1 branch! (Try Lambert W0 branch?)",
       z, pol);
   }
-  if (z > -(std::numeric_limits<T>::min)())
+  if (z > -boost::math::tools::min_value<T>())
   { // z is denormalized, so cannot be computed.
     // -std::numeric_limits<T>::min() is smallest for type T,
     // for example, for double: lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634
@@ -1786,7 +1786,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     if (p2 > 0)
     {
       T w_series = lambert_w_singularity_series(T(-sqrt(p2)));
-      if (std::numeric_limits<T>::digits > 53)
+      if (boost::math::tools::digits<T>() > 53)
       { // Multiprecision, so try a Halley refinement.
         w_series = lambert_w_detail::lambert_w_halley_iterate(w_series, z);
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
@@ -1864,7 +1864,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   } // Z too small so use approximation and Halley.
     // Else Use a lookup table to find the nearest integer part of Lambert W-1 as starting point for Bisection.
 
-  if (std::numeric_limits<T>::digits > 53)
+  if (boost::math::tools::digits<T>() > 53)
   { // T is more precise than 64-bit double (or long double, or ?),
     // so compute an approximate value using only one Schroeder refinement,
     // (avoiding any double-precision Halley refinement from policy double_digits2<50> 53 - 3 = 50
@@ -1874,7 +1874,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     using boost::math::policies::digits2;
     using boost::math::policies::policy;
     // Compute a 50-bit precision approximate W0 in a double (no Halley refinement).
-    T double_approx(lambert_wm1_imp(must_reduce_to_double(z, boost::is_constructible<double, T>()), policy<digits2<50> >()));
+    T double_approx(static_cast<T>(lambert_wm1_imp(must_reduce_to_double(z, boost::is_constructible<double, T>()), policy<digits2<50> >())));
 #ifdef BOOST_MATH_INSTRUMENT_LAMBERT_WM1_NOT_BUILTIN
     std::streamsize saved_precision = std::cout.precision(std::numeric_limits<T>::max_digits10);
     std::cout << "Lambert_wm1 Argument Type " << typeid(T).name() << " approximation double = " << double_approx << std::endl;
@@ -2085,7 +2085,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     // Of course on the real line, it's just undefined.
     if (z == - boost::math::constants::exp_minus_one<result_type>())
     {
-        return numeric_limits<result_type>::infinity();
+        return numeric_limits<result_type>::has_infinity ? numeric_limits<result_type>::infinity() : boost::math::tools::max_value<result_type>();
     }
     // if z < -1/e, we'll let lambert_w0 do the error handling:
     result_type w = lambert_w0(result_type(z), pol);
@@ -2119,7 +2119,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
     //if (z == - boost::math::constants::exp_minus_one<result_type>())
     if (z == 0 || z == - boost::math::constants::exp_minus_one<result_type>())
     {
-        return -numeric_limits<result_type>::infinity();
+        return numeric_limits<result_type>::has_infinity ? -numeric_limits<result_type>::infinity() : -boost::math::tools::max_value<result_type>();
     }
 
     result_type w = lambert_wm1(z, pol);
