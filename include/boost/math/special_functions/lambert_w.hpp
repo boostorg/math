@@ -34,15 +34,15 @@ Some macros that will show some (or much) diagnostic values if #defined.
 //[boost_math_instrument_lambert_w_macros
 
 // #define-able macros
-BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY // Halley refinement diagnostics.
-BOOST_MATH_INSTRUMENT_LAMBERT_W_PRECISION // Precision.
-BOOST_MATH_INSTRUMENT_LAMBERT_WM1 // W1 branch diagnostics.
-BOOST_MATH_INSTRUMENT_LAMBERT_WM1_HALLEY // Halley refinement diagnostics only for W-1 branch.
-BOOST_MATH_INSTRUMENT_LAMBERT_WM1_TINY // K > 64, z > -1.0264389699511303e-26
-BOOST_MATH_INSTRUMENT_LAMBERT_WM1_LOOKUP // Show results from W-1 lookup table.
-BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER // Schroeder refinement diagnostics.
-BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS // Number of terms used for near-singularity series.
-BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES // Show evaluation of series near branch singularity.
+BOOST_MATH_INSTRUMENT_LAMBERT_W_HALLEY                     // Halley refinement diagnostics.
+BOOST_MATH_INSTRUMENT_LAMBERT_W_PRECISION                  // Precision.
+BOOST_MATH_INSTRUMENT_LAMBERT_WM1                          // W1 branch diagnostics.
+BOOST_MATH_INSTRUMENT_LAMBERT_WM1_HALLEY                   // Halley refinement diagnostics only for W-1 branch.
+BOOST_MATH_INSTRUMENT_LAMBERT_WM1_TINY                     // K > 64, z > -1.0264389699511303e-26
+BOOST_MATH_INSTRUMENT_LAMBERT_WM1_LOOKUP                   // Show results from W-1 lookup table.
+BOOST_MATH_INSTRUMENT_LAMBERT_W_SCHROEDER                  // Schroeder refinement diagnostics.
+BOOST_MATH_INSTRUMENT_LAMBERT_W_TERMS                      // Number of terms used for near-singularity series.
+BOOST_MATH_INSTRUMENT_LAMBERT_W_SINGULARITY_SERIES         // Show evaluation of series near branch singularity.
 BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES
 BOOST_MATH_INSTRUMENT_LAMBERT_W_SMALL_Z_SERIES_ITERATIONS  // Show evaluation of series for small z.
 //] [/boost_math_instrument_lambert_w_macros]

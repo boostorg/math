@@ -9,22 +9,22 @@
  namespace boost { namespace math {
 
    template <class T>
-   ``__sf_result`` lambert_w0(T z); // W0 branch, default policy.
-
+   ``__sf_result`` lambert_w0(T z);                        // W0 branch, default policy.
    template <class T>
-   ``__sf_result`` lambert_w0_prime(T z); // W0 branch 1st derivative.
+   ``__sf_result`` lambert_wm1(T z);                       // W-1 branch, default policy.
+   template <class T>
+   ``__sf_result`` lambert_w0_prime(T z);                  // W0 branch 1st derivative.
+   template <class T>
+   ``__sf_result`` lambert_wm1_prime(T z);                 // W-1 branch 1st derivative.
 
    template <class T, class ``__Policy``>
-   ``__sf_result`` lambert_w0(T z, const ``__Policy``&); // W0 with policy.
-
-   template <class T>
-   ``__sf_result`` lambert_wm1(T z); // W-1 branch, default policy.
-
-   template <class T>
-   ``__sf_result`` lambert_wm1_prime(T z); // W-1 branch 1st derivative.
-
+   ``__sf_result`` lambert_w0(T z, const ``__Policy``&);         // W0 with policy.
    template <class T, class ``__Policy``>
-   ``__sf_result`` lambert_wm1(T z, const ``__Policy``&); // W-1 with policy.
+   ``__sf_result`` lambert_wm1(T z, const ``__Policy``&);        // W-1 with policy.
+   template <class T, class ``__Policy``>
+   ``__sf_result`` lambert_w0_prime(T z, const ``__Policy``&);   // W0 derivative with policy.
+   template <class T, class ``__Policy``>
+   ``__sf_result`` lambert_wm1_prime(T z, const ``__Policy``&);  // W-1 derivative with policy.
 
   } // namespace boost
   } // namespace math
@@ -274,7 +274,7 @@ with this output:
 The distribution of differences from 'best' are shown in these graphs comparing `double` precision evaluations
 with reference 'best' z50 evaluations using `cpp_bin_float_50` type reduced to `double` with `static_cast<double(z50)` :
 
-[graph lambert_w_errors_graph]
+[graph lambert_w0_errors_graph]
 
 [graph lambert_wm1_errors_graph]
 
@@ -376,7 +376,7 @@ In practical applications, the increased computation required
 (often towards a thousand-fold slower and requiring much additional code for __multiprecision)
 is not justified and the algorithms here do not implement this.
 But because the Boost.Lambert_W algorithms has been tested using __multiprecision,
-users who require this can always easily achieve the nearest representation for the __fundamental_types
+users who require this can always easily achieve the nearest representation for the fundamental_types
 - if the application justifies the very large extra computation cost.
 
 [h5 Evolution of this implementation]
@@ -462,7 +462,7 @@ Sadly it has not proved practical to use the same __remez method for Lambert W-1
 and so the Fukushima algorithm is retained for this branch.
 
 An advantage of both minimax rational __remez approximations
-is that the [*distribution] from the references value is reasonably random and insignificantly biased.
+is that the [*distribution] from the reference values is reasonably random and insignificantly biased.
 
 For example, table below a test of Lambert W0 10000 values of argument z covering the main range of possible values,
 10000 comparisons from z = 0.0501 to 703, in 0.001 step factor 1.05 when module 7 == 0
@@ -568,9 +568,9 @@ and near the branch singularity at ['-1/e], some series functions are used.
 
 [h5:small_z Small values of argument z near zero]
 
-When argument ['z] is small and near zero, cancellation errors mean that precision is lost,
-so other series function variants of `lambert_w0_small_z` are used.
-(There is no equivalent for the W-1 branch as this only covers argument `z < -1/e`).
+When argument ['z] is small and near zero, there is an efficient and accurate series evaluation method available
+(implemented in `lambert_w0_small_z`).
+There is no equivalent for the W-1 branch as this only covers argument `z < -1/e`.
 The cutoff used `abs(z) < 0.05` is as found by trial and error by Fukushima.
 
 Coefficients of the inverted series expansion of the Lambert W function around `z = 0`
@@ -598,17 +598,6 @@ The `tag_type` selection is based on the value `std::numeric_limits<T>::max_digi
 (and [*not] on the floating-point type T).
 This distinguishes between `long double` types that commonly vary between 64 and 80-bits,
 and also compilers that have a `float` type using 64 bits and/or `long double` using 128-bits.
-
-[note One cannot switch tag_type on `std::numeric_limits<>::max()`
-because comparison values may overflow the compiler limit.
-Nor can we switch on `std::numeric_limits<long double>::max_exponent10()`
-because both 80-bit and 128-bit floating-point types use 11 bits for exponent.
-So must rely on `std::numeric_limits<long double>::max_digits10`.]
-
-[warning It is assumes that `max_digits10` is defined correctly or this might fail to make the correct selection.
-causing very small differences in computing lambert_w that would be very difficult to detect and diagnose.]
-
-[warning The use of `doubledouble` higher-than-long-double precision types is untested and may give unexpected precisions.]
 
 As noted in the __lambert_w_implementation section above,
 it is only possible to ensure the nearest representable value by casting from a higher precision type,
@@ -754,24 +743,6 @@ These are definite integral formulas involving the W function that are exactly k
 for example, LambertW0(1/(z[sup2]) == [sqrt](2[pi]),
 see [@https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals Definite Integrals].
 Some care was needed to avoid overflow and underflow as the integral function must evaluate to a finite result over the entire range.
-
-These are not routinely evaluated by the Boost testers,
-but can be run by defining a macro BOOST_MATH_LAMBERT_W0_INTEGRALS.
-If BOOST_MATH_TEST_MULTIPRECISION is also defined,
-then __multiprecision types like `cpp_bin_float_quad` are also used to test quadrature.
-If BOOST_MATH_TEST_FLOAT128 is defined, then `float128` is also tested.
-
-[h5:test_macros Testing Macros]
-
-A few macros provide optional tests if #defined before BOOST_TEST_MAIN.
-
-* BOOST_MATH_TEST_MULTIPRECISION Adds test for __multiprecision types.
-
-* BOOST_MATH_TEST_FLOAT128 Adds test using `__float128` type (GCC only, needing -std=gnu++17 and the quadmath library libquadmath.dll).
-
-* BOOST_MATH_LAMBERT_W_DERIVATIVES to test 1st derivatives is defined.
-
-* BOOST_MATH_LAMBERT_W_INTEGRALS Adds quadrature tests that cover the whole range of the Lambert W0 function.
 
 [h5 Other implementations]
 

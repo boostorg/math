@@ -121,15 +121,16 @@ int main()
     double x = 0.01;
     //std::cout << "Lambert W (" << x << ") = " << lambert_w(x) << std::endl; // 0.00990147
 
-    double nu = 1.0; // Assumed ideal.
-    double vt = v_thermal(25); // v thermal, Shockley equation, expect about 25 mV at room temperature.
-    double boltzmann_k = 1.38e-23; // joules/kelvin
+    double nu = 1.0;                  // Assumed ideal.
+    double vt = v_thermal(25);        // v thermal, Shockley equation, expect about 25 mV at room temperature.
+    double boltzmann_k = 1.38e-23;    // joules/kelvin
     double temp = 273 + 25;
-    double charge_q = 1.6e-19; // column
+    double charge_q = 1.6e-19;        // column
     vt = boltzmann_k * temp / charge_q;
-    std::cout << "V thermal " << vt << std::endl; // V thermal 0.0257025 = 25 mV
+    std::cout << "V thermal " 
+       << vt << std::endl;            // V thermal 0.0257025 = 25 mV
     double rsat = 0.;
-    double isat = 25.e-15; //  25 fA;
+    double isat = 25.e-15;            //  25 fA;
     std::cout << "Isat = " << isat << std::endl;
 
     double re = 0.3;  // Estimated from slope of straight section of graph (equation 6).

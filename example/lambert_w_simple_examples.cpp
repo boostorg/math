@@ -104,12 +104,12 @@ int main()
     //[lambert_w_simple_examples_1
     float z = 10.F;
     float r;
-    r = lambert_w0(z); // Default policy digits10 = 7, digits2 = 24
+    r = lambert_w0(z);        // Default policy digits10 = 7, digits2 = 24
     std::cout << "lambert_w0(";
     show_value(z);
     std::cout << ") = "; 
     show_value(r);
-    std::cout << std::endl; // lambert_w0(10.0000000) = 1.74552798
+    std::cout << std::endl;   // lambert_w0(10.0000000) = 1.74552798
    //] //[/lambert_w_simple_examples_1]
   }
    { 
@@ -117,12 +117,12 @@ int main()
      // showing that an integer is correctly promoted to a double.
 //[lambert_w_simple_examples_2
      std::cout.precision(std::numeric_limits<double>::max_digits10);
-     double r = lambert_w0(10); // Pass an int argument "10" that should be promoted to double argument.
-     std::cout << "lambert_w0(10) = " << r << std::endl; // lambert_w0(10) = 1.7455280027406994
+     double r = lambert_w0(10);                           // Pass an int argument "10" that should be promoted to double argument.
+     std::cout << "lambert_w0(10) = " << r << std::endl;  // lambert_w0(10) = 1.7455280027406994
      double rp = lambert_w0(10); 
      std::cout << "lambert_w0(10) = " << rp << std::endl;
      // lambert_w0(10) = 1.7455280027406994
-     auto rr = lambert_w0(10); // C++11 needed.
+     auto rr = lambert_w0(10);                            // C++11 needed.
      std::cout << "lambert_w0(10) = " << rr << std::endl;
      // lambert_w0(10) = 1.7455280027406994 too, showing that rr has been promoted to double.
 //] //[/lambert_w_simple_examples_2]
@@ -180,7 +180,7 @@ int main()
    {
      // Using multiprecision types to get multiprecision precision right!
      //[lambert_w_simple_examples_4b
-     cpp_dec_float_50 z("0.9"); // Construct from decimal digit string.
+     cpp_dec_float_50 z("0.9");     // Construct from decimal digit string.
      cpp_dec_float_50 r;
      r = lambert_w0(z);
      std::cout << "lambert_w0(";
