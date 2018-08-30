@@ -96,6 +96,7 @@ namespace lambert_w_detail {
 template <class T>
 inline T lambert_w_halley_step(T w_est, const T z)
 {
+  BOOST_MATH_STD_USING
   T e = exp(w_est);
   w_est -= 2 * (w_est + 1) * (e * w_est - z) / (z * (w_est + 2) + e * (w_est * (w_est + 2) + 2));
   return w_est;
@@ -113,6 +114,7 @@ template <class T>
 inline
   T lambert_w_halley_iterate(T w_est, const T z)
 {
+  BOOST_MATH_STD_USING
   static const T max_diff = boost::math::tools::root_epsilon<T>() * fabs(w_est);
 
   T w_new = lambert_w_halley_step(w_est, z);
@@ -950,6 +952,7 @@ template <typename T>
 inline
 T lambert_w0_approx(T z)
 {
+  BOOST_MATH_STD_USING
   T lz = log(z);
   T llz = log(lz);
   T w = lz - llz + (llz / lz); // Corless equation 4.19, page 349, and Chapeau-Blondeau equation 20, page 2162.
@@ -1711,14 +1714,14 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   const char* function = "boost::math::lambert_wm1<RealType>(<RealType>)"; // Used for error messages.
 
   // Check for edge and corner cases first:
-  if (boost::math::isnan(z))
+  if ((boost::math::isnan)(z))
   {
     return policies::raise_domain_error(function,
       "Argument z is NaN!",
       z, pol);
   } // isnan
 
-  if (boost::math::isinf(z))
+  if ((boost::math::isinf)(z))
   {
     return policies::raise_domain_error(function,
       "Argument z is infinite!",
@@ -1738,7 +1741,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   }
   if (std::numeric_limits<T>::has_denorm)
   { // All real types except arbitrary precision.
-    if (!boost::math::isnormal(z))
+    if (!(boost::math::isnormal)(z))
     { // Almost zero - might also just return infinity like z == 0 or max_value?
       return policies::raise_overflow_error(function,
         "Argument z =  %1% is denormalized! (must be z > (std::numeric_limits<RealType>::min)() or z == 0)",
@@ -2066,9 +2069,9 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   } // lambert_wm1(T z)
 
   // First derivative of Lambert W0 and W-1.
-  template <class T>
-  typename tools::promote_args<T>::type
-  lambert_w0_prime(T z)
+  template <class T, class Policy>
+  inline typename tools::promote_args<T>::type
+  lambert_w0_prime(T z, const Policy& pol)
   {
     typedef typename tools::promote_args<T>::type result_type;
     using std::numeric_limits;
@@ -2083,7 +2086,7 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
         return numeric_limits<result_type>::infinity();
     }
     // if z < -1/e, we'll let lambert_w0 do the error handling:
-    result_type w = lambert_w0(result_type(z));
+    result_type w = lambert_w0(result_type(z), pol);
     // If w ~ -1, then presumably this can get inaccurate.
     // Is there an accurate way to evaluate 1 + W(-1/e + eps)?
     //  Yes: This is discussed in the Princeton Companion to Applied Mathematics,
@@ -2095,8 +2098,15 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
   } // lambert_w0_prime(T z)
 
   template <class T>
-  typename tools::promote_args<T>::type
-  lambert_wm1_prime(T z)
+  inline typename tools::promote_args<T>::type
+     lambert_w0_prime(T z)
+  {
+     return lambert_w0_prime(z, policies::policy<>());
+  }
+  
+  template <class T, class Policy>
+  inline typename tools::promote_args<T>::type
+  lambert_wm1_prime(T z, const Policy& pol)
   {
     using std::numeric_limits;
     typedef typename tools::promote_args<T>::type result_type;
@@ -2110,9 +2120,16 @@ T lambert_wm1_imp(const T z, const Policy&  pol)
         return -numeric_limits<result_type>::infinity();
     }
 
-    result_type w = lambert_wm1(z);
+    result_type w = lambert_wm1(z, pol);
     return w/(z*(1+w));
   } // lambert_wm1_prime(T z)
+
+  template <class T>
+  inline typename tools::promote_args<T>::type
+     lambert_wm1_prime(T z)
+  {
+     return lambert_wm1_prime(z, policies::policy<>());
+  }
 
 }} //boost::math namespaces
 

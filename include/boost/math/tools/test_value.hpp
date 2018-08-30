@@ -31,13 +31,6 @@
 #include <boost/type_traits/is_constructible.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
-// Built-in/fundamental GCC float128 or Intel Quad 128-bit type, if available.
-#ifdef BOOST_HAS_FLOAT128
-#include <boost/multiprecision/float128.hpp> // Not available for MSVC.
-// sets BOOST_MP_USE_FLOAT128 for GCC
-using boost::multiprecision::float128;
-#endif //# __GNUC__ and NOT _MSC_VER
-
 #ifdef BOOST_MATH_INSTRUMENT_CREATE_TEST_VALUE
 // global int create_type(0); must be defined before including this file.
 #endif
@@ -45,7 +38,7 @@ using boost::multiprecision::float128;
 #ifdef BOOST_HAS_FLOAT128
 typedef __float128 largest_float;
 #define BOOST_MATH_TEST_LARGEST_FLOAT_SUFFIX(x) x##Q
-#define BOOST_MATH_TEST_LARGEST_FLOAT_DIGITS std::numeric_limits<boost::multiprecision::float128>::digits
+#define BOOST_MATH_TEST_LARGEST_FLOAT_DIGITS 113
 #else
 typedef long double largest_float;
 #define BOOST_MATH_TEST_LARGEST_FLOAT_SUFFIX(x) x##L

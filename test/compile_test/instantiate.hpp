@@ -300,6 +300,9 @@ void instantiate(RealType)
    boost::math::cyl_bessel_j_zero(v1, i, i, oi);
    boost::math::cyl_neumann_zero(v1, i);
    boost::math::cyl_neumann_zero(v1, i, i, oi);
+   boost::math::lambert_w0(v1);
+   boost::math::lambert_wm1(v1);
+   boost::math::lambert_w0_prime(v1);
 #ifdef TEST_COMPLEX
    boost::math::cyl_hankel_1(v1, v2);
    boost::math::cyl_hankel_1(i, v2);
@@ -496,6 +499,9 @@ void instantiate(RealType)
    boost::math::cyl_bessel_j_zero(v1 * 1, i, i, oi);
    boost::math::cyl_neumann_zero(v1 * 1, i);
    boost::math::cyl_neumann_zero(v1 * 1, i, i, oi);
+   boost::math::lambert_w0(v1 * 1);
+   boost::math::lambert_wm1(v1 * 1);
+   boost::math::lambert_w0_prime(v1 * 1);
 #ifdef TEST_COMPLEX
    boost::math::cyl_hankel_1(v1, v2);
    boost::math::cyl_hankel_1(i, v2);
@@ -672,6 +678,9 @@ void instantiate(RealType)
    boost::math::cyl_bessel_j_zero(v1, i, i, oi, pol);
    boost::math::cyl_neumann_zero(v1, i, pol);
    boost::math::cyl_neumann_zero(v1, i, i, oi, pol);
+   boost::math::lambert_w0(v1, pol);
+   boost::math::lambert_wm1(v1, pol);
+   boost::math::lambert_w0_prime(v1, pol);
 #ifdef TEST_COMPLEX
    boost::math::cyl_hankel_1(v1, v2, pol);
    boost::math::cyl_hankel_1(i, v2, pol);
@@ -868,6 +877,9 @@ void instantiate(RealType)
    test::cyl_bessel_j_zero(v1, i, i, oi);
    test::cyl_neumann_zero(v1, i);
    test::cyl_neumann_zero(v1, i, i, oi);
+   test::lambert_w0(v1);
+   test::lambert_wm1(v1);
+   test::lambert_w0_prime(v1);
 #ifdef TEST_COMPLEX
    test::cyl_hankel_1(v1, v2);
    test::cyl_hankel_1(i, v2);
@@ -1240,6 +1252,9 @@ void instantiate_mixed(RealType)
    boost::math::sph_neumann_prime(i, i, pol);
    boost::math::owens_t(fr, dr, pol);
    boost::math::owens_t(i, s, pol);
+   boost::math::lambert_w0(i, pol);
+   boost::math::lambert_wm1(i, pol);
+   boost::math::lambert_w0_prime(i, pol);
 #endif
 #ifdef TEST_GROUP_8
    test::tgamma(i);
@@ -1383,6 +1398,9 @@ void instantiate_mixed(RealType)
    test::airy_bi_prime(i);
    test::owens_t(fr, dr);
    test::owens_t(i, s);
+   boost::math::lambert_w0(i);
+   boost::math::lambert_wm1(i);
+   boost::math::lambert_w0_prime(i);
 #endif
 #endif
 }
