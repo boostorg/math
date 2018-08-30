@@ -118,7 +118,7 @@ and his paper
 
 Luu, Thomas; (2015), Efficient and Accurate Parallel Inversion of the Gamma Distribution,
 SIAM Journal on Scientific Computing , 37 (1) C122 - C141,
-[@http://dx.doi.org/10.1137/14095875X].
+[@https://doi.org/10.1137/14095875X].
 
 These also promise to help improve algorithms for computation of  quantile of several disitributions,
 especially for parallel computation using GPUs.

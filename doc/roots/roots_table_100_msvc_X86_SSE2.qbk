@@ -8,30 +8,30 @@ http://www.boost.org/LICENSE_1_0.txt).
 
 
 [h6 Program ..\example\root_n_finding_algorithms.cpp,
- Microsoft Visual C++ version 14.0, Dinkumware standard library version 650, Win32
+ Microsoft Visual C++ version 14.1, Dinkumware standard library version 650, Win32
 Compiled in optimise mode., _X86_SSE2]
 Fraction of full accuracy 1
 [table:root_5 5th root(28) for float, double, long double and cpp_bin_float_50 types, using _X86_SSE2
 [[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]
 [[Algo     ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ]]
-[[TOMS748  ][  7][  795][[role blue 1.00]][  0][ ][ 11][ 1106][1.26][  1][ ][ 11][ 1135][1.43][  1][ ][ 12][148750][[role red 7.50]][  0][ ]]
-[[Newton   ][  3][  839][1.06][  0][ ][  4][  879][[role blue 1.00]][ -1][ ][  4][  871][1.09][ -1][ ][  6][19843][[role blue 1.00]][  0][ ]]
-[[Halley   ][  2][  843][1.06][  0][ ][  3][  903][[role blue 1.03]][  0][ ][  3][  859][1.08][  0][ ][  4][37968][1.91][  0][ ]]
-[[Schr'''&#xf6;'''der][  2][  867][1.09][  0][ ][  3][  920][[role blue 1.05]][ -1][ ][  3][  796][[role blue 1.00]][ -1][ ][  4][47187][2.38][  0][ ]]
+[[TOMS748  ][  7][  457][2.00][  0][ ][ 11][  860][3.54][  1][ ][ 11][  806][3.02][  1][ ][ 12][226875][[role red 8.11]][  0][ ]]
+[[Newton   ][  3][  228][[role blue 1.00]][  0][ ][  4][  243][[role blue 1.00]][ -1][ ][  4][  298][1.12][ -1][ ][  6][27968][[role blue 1.00]][  0][ ]]
+[[Halley   ][  2][  250][1.10][  0][ ][  3][  268][1.10][  0][ ][  3][  267][[role blue 1.00]][  0][ ][  4][52812][1.89][  0][ ]]
+[[Schr'''&#xf6;'''der][  2][  256][1.12][  0][ ][  3][  271][1.12][ -1][ ][  3][  270][[role blue 1.01]][ -1][ ][  4][61406][2.20][  0][ ]]
 ] [/end of table root]
 [table:root_7 7th root(28) for float, double, long double and cpp_bin_float_50 types, using _X86_SSE2
 [[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]
 [[Algo     ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ]]
-[[TOMS748  ][ 12][  959][1.26][  1][ ][ 15][ 1214][1.56][  2][ ][ 15][ 1209][1.52][  2][ ][ 14][184531][[role red 6.79]][  0][ ]]
-[[Newton   ][  5][  764][[role blue 1.00]][  0][ ][  6][  776][[role blue 1.00]][  0][ ][  6][  796][[role blue 1.00]][  0][ ][  8][27187][[role blue 1.00]][  0][ ]]
-[[Halley   ][  4][  795][[role blue 1.04]][  0][ ][  5][  826][1.06][  0][ ][  5][  865][1.09][  0][ ][  6][55625][2.05][  0][ ]]
-[[Schr'''&#xf6;'''der][  5][  826][1.08][  0][ ][  6][  831][1.07][  0][ ][  6][  832][[role blue 1.05]][  0][ ][  7][78750][2.90][  0][ ]]
+[[TOMS748  ][ 12][  825][3.06][  1][ ][ 15][ 1145][[role red 4.06]][  2][ ][ 15][ 1159][[role red 4.17]][  2][ ][ 14][295781][[role red 8.12]][  0][ ]]
+[[Newton   ][  5][  270][[role blue 1.00]][  0][ ][  6][  282][[role blue 1.00]][  0][ ][  6][  278][[role blue 1.00]][  0][ ][  8][36406][[role blue 1.00]][  0][ ]]
+[[Halley   ][  4][  303][1.12][  0][ ][  5][  329][1.17][  0][ ][  5][  335][1.21][  0][ ][  6][78281][2.15][  0][ ]]
+[[Schr'''&#xf6;'''der][  5][  340][1.26][  0][ ][  6][  432][1.53][  0][ ][  6][  367][1.32][  0][ ][  7][85156][2.34][  0][ ]]
 ] [/end of table root]
 [table:root_11 11th root(28) for float, double, long double and cpp_bin_float_50 types, using _X86_SSE2
 [[][float][][][] [][double][][][] [][long d][][][] [][cpp50][][]]
 [[Algo     ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ][Its][Times][Norm][Dis][ ]]
-[[TOMS748  ][ 12][ 1059][1.37][ -2][ ][ 14][ 1253][1.60][  2][ ][ 14][ 1251][1.60][  2][ ][ 17][275468][[role red 8.81]][  2][ ]]
-[[Newton   ][  6][  771][[role blue 1.00]][  0][ ][  7][  784][[role blue 1.00]][  0][ ][  7][  784][[role blue 1.00]][  0][ ][  9][31250][[role blue 1.00]][  0][ ]]
-[[Halley   ][  4][  828][1.07][ -1][ ][  5][  831][1.06][  0][ ][  5][  826][1.05][  0][ ][  6][56718][1.81][  0][ ]]
-[[Schr'''&#xf6;'''der][  6][  875][1.13][  0][ ][  7][  881][1.12][  0][ ][  7][  881][1.12][  0][ ][  8][97031][3.10][  0][ ]]
+[[TOMS748  ][ 12][  714][3.16][ -2][ ][ 14][  909][[role red 4.19]][  2][ ][ 14][  793][3.69][  2][ ][ 17][211718][[role red 9.28]][  2][ ]]
+[[Newton   ][  6][  226][[role blue 1.00]][  0][ ][  7][  217][[role blue 1.00]][  0][ ][  7][  215][[role blue 1.00]][  0][ ][  9][22812][[role blue 1.00]][  0][ ]]
+[[Halley   ][  4][  262][1.16][ -1][ ][  5][  260][1.20][  0][ ][  5][  260][1.21][  0][ ][  6][40781][1.79][  0][ ]]
+[[Schr'''&#xf6;'''der][  6][  332][1.47][  0][ ][  7][  314][1.45][  0][ ][  7][  310][1.44][  0][ ][  8][67187][2.95][  0][ ]]
 ] [/end of table root]

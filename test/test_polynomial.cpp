@@ -7,7 +7,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/array.hpp>
 #include <boost/math/tools/polynomial.hpp>
-#include <boost/math/common_factor_rt.hpp>
+#include <boost/integer/common_factor_rt.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/joint_view.hpp>
 #include <boost/test/test_case_template.hpp>
@@ -24,6 +24,7 @@
 #endif
 
 using namespace boost::math;
+using boost::integer::gcd;
 using namespace boost::math::tools;
 using namespace std;
 using boost::integer::gcd_detail::Euclid_gcd;
@@ -34,7 +35,7 @@ struct answer
 {
     answer(std::pair< polynomial<T>, polynomial<T> > const &x) :
     quotient(x.first), remainder(x.second) {}
-    
+
     polynomial<T> quotient;
     polynomial<T> remainder;
 };
@@ -124,12 +125,12 @@ BOOST_AUTO_TEST_CASE( test_division_over_field )
     BOOST_CHECK_EQUAL(result.quotient, q);
     BOOST_CHECK_EQUAL(result.remainder, r);
     BOOST_CHECK_EQUAL(a, q * b + r); // Sanity check.
-    
+
     result = quotient_remainder(a, c);
     BOOST_CHECK_EQUAL(result.quotient, f);
     BOOST_CHECK_EQUAL(result.remainder, e);
     BOOST_CHECK_EQUAL(a, f * c + e); // Sanity check.
-    
+
     result = quotient_remainder(a, f);
     BOOST_CHECK_EQUAL(result.quotient, g);
     BOOST_CHECK_EQUAL(result.remainder, zero);
@@ -152,7 +153,7 @@ BOOST_AUTO_TEST_CASE( test_division_over_ufd )
     polynomial<int> const bb(d6.begin(), d6.end());
     polynomial<int> const q(d2.begin(), d2.end());
     polynomial<int> const r(d5.begin(), d5.end());
-    
+
     answer<int> result = quotient_remainder(aa, bb);
     BOOST_CHECK_EQUAL(result.quotient, q);
     BOOST_CHECK_EQUAL(result.remainder, r);
@@ -170,7 +171,7 @@ struct FM2GP_Ex_8_3__1
     polynomial<T> x;
     polynomial<T> y;
     polynomial<T> z;
-    
+
     FM2GP_Ex_8_3__1()
     {
         boost::array<T, 5> const x_data = {{105, 278, -88, -56, 16}};
@@ -188,7 +189,7 @@ struct FM2GP_Ex_8_3__2
     polynomial<T> x;
     polynomial<T> y;
     polynomial<T> z;
-    
+
     FM2GP_Ex_8_3__2()
     {
         boost::array<T, 5> const x_data = {{1, -6, -8, 6, 7}};
@@ -207,7 +208,7 @@ struct FM2GP_mixed
     polynomial<T> x;
     polynomial<T> y;
     polynomial<T> z;
-    
+
     FM2GP_mixed()
     {
         boost::array<T, 4> const x_data = {{-2.2, -3.3, 0, 1}};
@@ -226,7 +227,7 @@ struct FM2GP_trivial
     polynomial<T> x;
     polynomial<T> y;
     polynomial<T> z;
-    
+
     FM2GP_trivial()
     {
         boost::array<T, 4> const x_data = {{-2, -3, 0, 1}};
@@ -362,7 +363,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_addition, T, all_test_types )
     polynomial<T> const a(d3a.begin(), d3a.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
     polynomial<T> const zero;
-    
+
     polynomial<T> result = a + b; // different degree
     boost::array<T, 4> tmp = {{8, -5, -4, 3}};
     polynomial<T> expected(tmp.begin(), tmp.end());
@@ -390,7 +391,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( test_multiplication, T, all_test_types )
     polynomial<T> const zero;
     boost::array<T, 7> const d3a_sq = {{100, -120, -44, 108, -20, -24, 9}};
     polynomial<T> const a_sq(d3a_sq.begin(), d3a_sq.end());
-    
+
     BOOST_CHECK_EQUAL(a * T(0), zero);
     BOOST_CHECK_EQUAL(a * zero, zero);
     BOOST_CHECK_EQUAL(zero * T(0), zero);
@@ -418,14 +419,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_non_integral_arithmetic_relations, T, non_int
 {
     polynomial<T> const a(d8b.begin(), d8b.end());
     polynomial<T> const b(d1a.begin(), d1a.end());
-    
+
     BOOST_CHECK_EQUAL(a * T(0.5), a / T(2));
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_cont_and_pp, T, integral_test_types)
 {
     boost::array<polynomial<T>, 4> const q={{
-        polynomial<T>(d8.begin(), d8.end()), 
+        polynomial<T>(d8.begin(), d8.end()),
         polynomial<T>(d8b.begin(), d8b.end()),
         polynomial<T>(d3a.begin(), d3a.end()),
         polynomial<T>(d3b.begin(), d3b.end())
@@ -481,7 +482,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_left_shift, T, all_test_types )
     polynomial<T> const b(d0a1.begin(), d0a1.end());
     polynomial<T> const c(d0a5.begin(), d0a5.end());
     a <<= 0u;
-    BOOST_CHECK_EQUAL(a, aa);    
+    BOOST_CHECK_EQUAL(a, aa);
     a <<= 1u;
     BOOST_CHECK_EQUAL(a, b);
     a = a << 4u;

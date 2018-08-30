@@ -490,7 +490,7 @@ void test_nr_examples()
     auto f2 = [](Real x)->Real { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>());
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 3);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 6);
 
 }
 
@@ -837,8 +837,9 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_crc<double>();
 #endif
 
-#ifdef TEST3
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 
+#ifdef TEST3
     test_right_limit_infinite<long double>();
     test_left_limit_infinite<long double>();
     test_linear<long double>();
@@ -856,6 +857,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #ifdef TEST3A
     test_crc<long double>();
 
+#endif
 #endif
 
 #ifdef TEST4
@@ -882,6 +884,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_sf<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<150> > >();
 
 #endif
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST6
 
     test_right_limit_infinite<boost::math::concepts::real_concept>();
@@ -901,6 +904,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #ifdef TEST6A
     test_crc<boost::math::concepts::real_concept>();
 
+#endif
 #endif
 #ifdef TEST7
     test_sf<cpp_dec_float_50>();

@@ -103,7 +103,7 @@ T get_prime_products()
 template <class T>
 T get_uniform_random()
 {
-   static boost::random::uniform_int_distribution<T> minmax(std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
+   static boost::random::uniform_int_distribution<T> minmax((std::numeric_limits<T>::min)(), (std::numeric_limits<T>::max)());
    return minmax(rng);
 }
 
@@ -139,7 +139,7 @@ T binary_textbook(T u, T v)
 {
    if(u && v)
    {
-      unsigned shifts = std::min(boost::multiprecision::lsb(u), boost::multiprecision::lsb(v));
+      unsigned shifts = (std::min)(boost::multiprecision::lsb(u), boost::multiprecision::lsb(v));
       if(shifts)
       {
          u >>= shifts;
@@ -289,7 +289,7 @@ N gcd_stein(N m, N n)
       do m >>= 1; while(even(m));
                   // m == n
    }
-   return m << std::min(d_m, d_n);
+   return m << (std::min)(d_m, d_n);
 }
 
 

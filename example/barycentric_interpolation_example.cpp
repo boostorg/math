@@ -19,7 +19,7 @@ which is only known at non-equally samples data.
 
 If he'd only had the barycentric rational interpolant of boost::math!
 
-References: Kohn, W., and N. Rostoker. "Solution of the Schrödinger equation in periodic lattices with an application to metallic lithium." Physical Review 94.5 (1954): 1111.
+References: Kohn, W., and N. Rostoker. "Solution of the Schrodinger equation in periodic lattices with an application to metallic lithium." Physical Review 94.5 (1954): 1111.
 */
 
 #include <boost/math/interpolators/barycentric_rational.hpp>

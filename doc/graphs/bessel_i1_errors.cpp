@@ -94,7 +94,7 @@ void test_type(const char* name)
       mp_type err = boost::math::relative_difference(result2, mp_type(result)) / mp_type(std::numeric_limits<T>::epsilon());
       if(boost::math::isinf(result))
       {
-         if(result2 > mp_type(std::numeric_limits<T>::max()))
+         if(result2 > mp_type((std::numeric_limits<T>::max)()))
             err = 0;
          else
             std::cout << "Bad result at x = " << input << " result = " << result << " true result = " << result2 << std::endl;

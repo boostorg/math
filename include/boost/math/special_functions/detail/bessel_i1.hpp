@@ -1,6 +1,11 @@
+//  Copyright (c) 2017 John Maddock
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 // Modified Bessel function of the first kind of order zero
 // we use the approximating forms derived in:
-// "Rational Approximations for the Modified Bessel Function of the First Kind – I1(x) for Computations with Double Precision"
+// "Rational Approximations for the Modified Bessel Function of the First Kind - I1(x) for Computations with Double Precision"
 // by Pavel Holoborodko, 
 // see http://www.advanpix.com/2015/11/12/rational-approximations-for-the-modified-bessel-function-of-the-first-kind-i1-for-computations-with-double-precision/
 // The actual coefficients used are our own, and extend Pavel's work to precision's other than double.
