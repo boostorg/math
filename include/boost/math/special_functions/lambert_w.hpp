@@ -775,6 +775,15 @@ T lambert_w0_small_z(const T z, const Policy&, boost::mpl::int_<4> const&)
 
   return result;
 }  // T lambert_w0_small_z(const T z, boost::mpl::int_<4> const&) float128
+
+#else
+
+template <class T>
+inline T lambert_w0_small_z(const T z, boost::mpl::int_<4> const&)
+{
+   return lambert_w0_small_z(z, boost::mpl::int_<5>());
+}
+
 #endif // BOOST_HAS_FLOAT128
 
 //! Series functor to compute series term using pow and factorial.
