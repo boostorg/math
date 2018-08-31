@@ -261,7 +261,7 @@ Real x;
   }
     */
 
-  test_integrals<float128>();
+  test_integrals<boost::multiprecision::float128>();
   }
   catch (std::exception& ex)
   {
