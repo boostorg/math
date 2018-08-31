@@ -813,10 +813,7 @@ BOOST_AUTO_TEST_CASE( test_types )
   { // Avoid pointless re-testing if double and long double are identical (for example, MSVC).
     test_spots(0.0L); // long double
   }
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1900)
-  // msvc-12 and earlier can't cope with all the function scope statics, disable for now.
   test_spots(boost::math::concepts::real_concept(0));
-#endif
 #endif
 
   #else // BOOST_MATH_TEST_MULTIPRECISION

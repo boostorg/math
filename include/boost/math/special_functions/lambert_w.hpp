@@ -778,10 +778,10 @@ T lambert_w0_small_z(const T z, const Policy&, boost::mpl::int_<4> const&)
 
 #else
 
-template <class T>
-inline T lambert_w0_small_z(const T z, boost::mpl::int_<4> const&)
+template <class T, class Policy>
+inline T lambert_w0_small_z(const T z, const Policy& pol, boost::mpl::int_<4> const&)
 {
-   return lambert_w0_small_z(z, boost::mpl::int_<5>());
+   return lambert_w0_small_z(z, pol, boost::mpl::int_<5>());
 }
 
 #endif // BOOST_HAS_FLOAT128
@@ -1012,6 +1012,208 @@ inline double get_near_singularity_param(double z)
 //template <class T, class Policy>
 //T lambert_w0_imp(T w, const Policy& pol, const mpl::int_<2>&); // 80-bit long double.
 
+template <class T>
+T lambert_w_positive_rational_float(T z)
+{
+   BOOST_MATH_STD_USING
+   if (z < 2)
+   {
+      if (z < 0.5)
+      { // 0.05 < z < 0.5
+        // Maximum Deviation Found:                     2.993e-08
+        // Expected Error Term : 2.993e-08
+        // Maximum Relative Change in Control Points : 7.555e-04 Y offset : -8.196592331e-01
+         static const T Y = 8.196592331e-01f;
+         static const T P[] = {
+            1.803388345e-01f,
+            -4.820256838e-01f,
+            -1.068349741e+00f,
+            -3.506624319e-02f,
+         };
+         static const T Q[] = {
+            1.000000000e+00f,
+            2.871703469e+00f,
+            1.690949264e+00f,
+         };
+         return z * (Y + boost::math::tools::evaluate_polynomial(P, z) / boost::math::tools::evaluate_polynomial(Q, z));
+      }
+      else
+      { // 0.5 < z < 2
+        // Max error in interpolated form: 1.018e-08
+         static const T Y = 5.503368378e-01f;
+         static const T P[] = {
+            4.493332766e-01f,
+            2.543432707e-01f,
+            -4.808788799e-01f,
+            -1.244425316e-01f,
+         };
+         static const T Q[] = {
+            1.000000000e+00f,
+            2.780661241e+00f,
+            1.830840318e+00f,
+            2.407221031e-01f,
+         };
+         return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
+      }
+   }
+   else if (z < 6)
+   {
+      // 2 < z < 6
+      // Max error in interpolated form: 2.944e-08
+      static const T Y = 1.162393570e+00f;
+      static const T P[] = {
+         -1.144183394e+00f,
+         -4.712732855e-01f,
+         1.563162512e-01f,
+         1.434010911e-02f,
+      };
+      static const T Q[] = {
+         1.000000000e+00f,
+         1.192626340e+00f,
+         2.295580708e-01f,
+         5.477869455e-03f,
+      };
+      return Y + boost::math::tools::evaluate_rational(P, Q, z);
+   }
+   else if (z < 18)
+   {
+      // 6 < z < 18
+      // Max error in interpolated form: 5.893e-08
+      static const T Y = 1.809371948e+00f;
+      static const T P[] = {
+         -1.689291769e+00f,
+         -3.337812742e-01f,
+         3.151434873e-02f,
+         1.134178734e-03f,
+      };
+      static const T Q[] = {
+         1.000000000e+00f,
+         5.716915685e-01f,
+         4.489521292e-02f,
+         4.076716763e-04f,
+      };
+      return Y + boost::math::tools::evaluate_rational(P, Q, z);
+   }
+   else if (z < 9897.12905874)  // 2.8 < log(z) < 9.2
+   {
+      // Max error in interpolated form: 1.771e-08
+      static const T Y = -1.402973175e+00f;
+      static const T P[] = {
+         1.966174312e+00f,
+         2.350864728e-01f,
+         -5.098074353e-02f,
+         -1.054818339e-02f,
+      };
+      static const T Q[] = {
+         1.000000000e+00f,
+         4.388208264e-01f,
+         8.316639634e-02f,
+         3.397187918e-03f,
+         -1.321489743e-05f,
+      };
+      T log_w = log(z);
+      return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
+   }
+   else if (z < 7.896296e+13)  // 9.2 < log(z) <= 32
+   {
+      // Max error in interpolated form: 5.821e-08
+      static const T Y = -2.735729218e+00f;
+      static const T P[] = {
+         3.424903470e+00f,
+         7.525631787e-02f,
+         -1.427309584e-02f,
+         -1.435974178e-05f,
+      };
+      static const T Q[] = {
+         1.000000000e+00f,
+         2.514005579e-01f,
+         6.118994652e-03f,
+         -1.357889535e-05f,
+         7.312865624e-08f,
+      };
+      T log_w = log(z);
+      return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
+   }
+   else // 32 < log(z) < 100
+   {
+      // Max error in interpolated form: 1.491e-08
+      static const T Y = -4.012863159e+00f;
+      static const T P[] = {
+         4.431629226e+00f,
+         2.756690487e-01f,
+         -2.992956930e-03f,
+         -4.912259384e-05f,
+      };
+      static const T Q[] = {
+         1.000000000e+00f,
+         2.015434591e-01f,
+         4.949426142e-03f,
+         1.609659944e-05f,
+         -5.111523436e-09f,
+      };
+      T log_w = log(z);
+      return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
+   }
+}
+
+template <class T, class Policy>
+T lambert_w_negative_rational_float(T z, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+   if (z > -0.27)
+   {
+      if (z < -0.051)
+      {
+         // -0.27 < z < -0.051
+         // Max error in interpolated form: 5.080e-08
+         static const T Y = 1.255809784e+00f;
+         static const T P[] = {
+            -2.558083412e-01f,
+            -2.306524098e+00f,
+            -5.630887033e+00f,
+            -3.803974556e+00f,
+         };
+         static const T Q[] = {
+            1.000000000e+00f,
+            5.107680783e+00f,
+            7.914062868e+00f,
+            3.501498501e+00f,
+         };
+         return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
+      }
+      else
+      {
+         // Very small z so use a series function.
+         return lambert_w0_small_z(z, pol);
+      }
+   }
+   else if (z > -0.3578794411714423215955237701)
+   { // Very close to branch singularity.
+     // Max error in interpolated form: 5.269e-08
+      static const T Y = 1.220928431e-01f;
+      static const T P[] = {
+         -1.221787446e-01f,
+         -6.816155875e+00f,
+         7.144582035e+01f,
+         1.128444390e+03f,
+      };
+      static const T Q[] = {
+         1.000000000e+00f,
+         6.480326790e+01f,
+         1.869145243e+02f,
+         -1.361804274e+03f,
+         1.117826726e+03f,
+      };
+      T d = z + 0.367879441171442321595523770161460867445811f;
+      return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
+   }
+   else
+   {
+      // z is very close (within 0.01) of the singularity at e^-1.
+      return lambert_w_singularity_series(get_near_singularity_param(z));
+   }
+}
+
 //! Lambert_w0 @b 'float' implementation, selected when T is 32-bit precision.
 template <class T, class Policy>
 inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
@@ -1029,209 +1231,387 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&)
   }
 
    if (z >= 0.05) // Fukushima switch point.
-  // if (z >= 0.045) // 34 terms makes 128-bit 'exact' below 0.045.
-    { // Normal ranges using several rational polynomials.
-      if (z < 2)
-      {
-         if (z < 0.5)
-         { // 0.05 < z < 0.5
-            // Maximum Deviation Found:                     2.993e-08
-            // Expected Error Term : 2.993e-08
-            // Maximum Relative Change in Control Points : 7.555e-04 Y offset : -8.196592331e-01
-            static const T Y = 8.196592331e-01f;
-            static const T P[] = {
-               1.803388345e-01f,
-               -4.820256838e-01f,
-               -1.068349741e+00f,
-               -3.506624319e-02f,
-            };
-            static const T Q[] = {
-               1.000000000e+00f,
-               2.871703469e+00f,
-               1.690949264e+00f,
-            };
-            return z * (Y + boost::math::tools::evaluate_polynomial(P, z) / boost::math::tools::evaluate_polynomial(Q, z));
-         }
-         else
-         { // 0.5 < z < 2
-            // Max error in interpolated form: 1.018e-08
-            static const T Y = 5.503368378e-01f;
-            static const T P[] = {
-               4.493332766e-01f,
-               2.543432707e-01f,
-               -4.808788799e-01f,
-               -1.244425316e-01f,
-            };
-            static const T Q[] = {
-               1.000000000e+00f,
-               2.780661241e+00f,
-               1.830840318e+00f,
-               2.407221031e-01f,
-            };
-            return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
-         }
-      }
-      else if (z < 6)
-      {
-         // 2 < z < 6
-         // Max error in interpolated form: 2.944e-08
-         static const T Y = 1.162393570e+00f;
-         static const T P[] = {
-            -1.144183394e+00f,
-            -4.712732855e-01f,
-            1.563162512e-01f,
-            1.434010911e-02f,
-         };
-         static const T Q[] = {
-            1.000000000e+00f,
-            1.192626340e+00f,
-            2.295580708e-01f,
-            5.477869455e-03f,
-         };
-         return Y + boost::math::tools::evaluate_rational(P, Q, z);
-      }
-      else if (z < 18)
-      {
-         // 6 < z < 18
-         // Max error in interpolated form: 5.893e-08
-         static const T Y = 1.809371948e+00f;
-         static const T P[] = {
-            -1.689291769e+00f,
-            -3.337812742e-01f,
-            3.151434873e-02f,
-            1.134178734e-03f,
-         };
-         static const T Q[] = {
-            1.000000000e+00f,
-            5.716915685e-01f,
-            4.489521292e-02f,
-            4.076716763e-04f,
-         };
-         return Y + boost::math::tools::evaluate_rational(P, Q, z);
-      }
-      else if (z < 9897.12905874)  // 2.8 < log(z) < 9.2
-      {
-         // Max error in interpolated form: 1.771e-08
-         static const T Y = -1.402973175e+00f;
-         static const T P[] = {
-            1.966174312e+00f,
-            2.350864728e-01f,
-            -5.098074353e-02f,
-            -1.054818339e-02f,
-         };
-         static const T Q[] = {
-            1.000000000e+00f,
-            4.388208264e-01f,
-            8.316639634e-02f,
-            3.397187918e-03f,
-            -1.321489743e-05f,
-         };
-         T log_w = log(z);
-         return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
-      }
-      else if (z < 7.896296e+13)  // 9.2 < log(z) <= 32
-      {
-         // Max error in interpolated form: 5.821e-08
-         static const T Y = -2.735729218e+00f;
-         static const T P[] = {
-            3.424903470e+00f,
-            7.525631787e-02f,
-            -1.427309584e-02f,
-            -1.435974178e-05f,
-         };
-         static const T Q[] = {
-            1.000000000e+00f,
-            2.514005579e-01f,
-            6.118994652e-03f,
-            -1.357889535e-05f,
-            7.312865624e-08f,
-         };
-         T log_w = log(z);
-         return log_w + Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
-      }
-      else // 32 < log(z) < 100
-      {
-         // Max error in interpolated form: 1.491e-08
-         static const T Y = -4.012863159e+00f;
-         static const T P[] = {
-            4.431629226e+00f,
-            2.756690487e-01f,
-            -2.992956930e-03f,
-            -4.912259384e-05f,
-         };
-         static const T Q[] = {
-            1.000000000e+00f,
-            2.015434591e-01f,
-            4.949426142e-03f,
-            1.609659944e-05f,
-            -5.111523436e-09f,
-         };
-         T log_w = log(z);
-         return log_w+ Y + boost::math::tools::evaluate_polynomial(P, log_w) / boost::math::tools::evaluate_polynomial(Q, log_w);
-      }
+   // if (z >= 0.045) // 34 terms makes 128-bit 'exact' below 0.045.
+   { // Normal ranges using several rational polynomials.
+      return lambert_w_positive_rational_float(z);
+   }
+   else if (z <= -0.3678794411714423215955237701614608674458111310f)
+   {
+      if (z < -0.3678794411714423215955237701614608674458111310f)
+         return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
+      return -1;
    }
    else // z < 0.05
    {
-      if (z > -0.27)
+      return lambert_w_negative_rational_float(z, pol);
+   }
+} // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&) for 32-bit usually float.
+
+template <class T>
+T lambert_w_positive_rational_double(T z)
+{
+   BOOST_MATH_STD_USING
+   if (z < 2)
+   {
+      if (z < 0.5)
       {
-         if (z < -0.051)
-         {
-            // -0.27 < z < -0.051
-            // Max error in interpolated form: 5.080e-08
-            static const T Y = 1.255809784e+00f;
-            static const T P[] = {
-               -2.558083412e-01f,
-               -2.306524098e+00f,
-               -5.630887033e+00f,
-               -3.803974556e+00f,
-            };
-            static const T Q[] = {
-               1.000000000e+00f,
-               5.107680783e+00f,
-               7.914062868e+00f,
-               3.501498501e+00f,
-            };
-            return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
-         }
-         else
-         {
-            // Very small z so use a series function.
-            return lambert_w0_small_z(z, pol);
-         }
-      }
-      else if (z > -0.3578794411714423215955237701)
-      { // Very close to branch singularity.
-         // Max error in interpolated form: 5.269e-08
-         static const T Y = 1.220928431e-01f;
+         // Max error in interpolated form: 2.255e-17
+         static const T offset = 8.19659233093261719e-01;
          static const T P[] = {
-            -1.221787446e-01f,
-            -6.816155875e+00f,
-            7.144582035e+01f,
-            1.128444390e+03f,
+            1.80340766906685177e-01,
+            3.28178241493119307e-01,
+            -2.19153620687139706e+00,
+            -7.24750929074563990e+00,
+            -7.28395876262524204e+00,
+            -2.57417169492512916e+00,
+            -2.31606948888704503e-01
          };
          static const T Q[] = {
-            1.000000000e+00f,
-            6.480326790e+01f,
-            1.869145243e+02f,
-            -1.361804274e+03f,
-            1.117826726e+03f,
+            1.00000000000000000e+00,
+            7.36482529307436604e+00,
+            2.03686007856430677e+01,
+            2.62864592096657307e+01,
+            1.59742041380858333e+01,
+            4.03760534788374589e+00,
+            2.91327346750475362e-01
          };
-         T d = z + 0.367879441171442321595523770161460867445811f;
-         return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
-      }
-      else if (z <= -0.3678794411714423215955237701614608674458111310f)
-      {
-         if (z < -0.3678794411714423215955237701614608674458111310f)
-            return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
-         return -1;
+         return z * (offset + boost::math::tools::evaluate_polynomial(P, z) / boost::math::tools::evaluate_polynomial(Q, z));
       }
       else
       {
-         // z is very close (within 0.01) of the singularity at e^-1.
-         return lambert_w_singularity_series(get_near_singularity_param(z));
+         // Max error in interpolated form: 3.806e-18
+         static const T offset = 5.50335884094238281e-01;
+         static const T P[] = {
+            4.49664083944098322e-01,
+            1.90417666196776909e+00,
+            1.99951368798255994e+00,
+            -6.91217310299270265e-01,
+            -1.88533935998617058e+00,
+            -7.96743968047750836e-01,
+            -1.02891726031055254e-01,
+            -3.09156013592636568e-03
+         };
+         static const T Q[] = {
+            1.00000000000000000e+00,
+            6.45854489419584014e+00,
+            1.54739232422116048e+01,
+            1.72606164253337843e+01,
+            9.29427055609544096e+00,
+            2.29040824649748117e+00,
+            2.21610620995418981e-01,
+            5.70597669908194213e-03
+         };
+         return z * (offset + boost::math::tools::evaluate_rational(P, Q, z));
       }
    }
-} // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<1>&) for 32-bit usually float.
+   else if (z < 6)
+   {
+      // 2 < z < 6
+      // Max error in interpolated form: 1.216e-17
+      static const T Y = 1.16239356994628906e+00;
+      static const T P[] = {
+         -1.16230494982099475e+00,
+         -3.38528144432561136e+00,
+         -2.55653717293161565e+00,
+         -3.06755172989214189e-01,
+         1.73149743765268289e-01,
+         3.76906042860014206e-02,
+         1.84552217624706666e-03,
+         1.69434126904822116e-05,
+      };
+      static const T Q[] = {
+         1.00000000000000000e+00,
+         3.77187616711220819e+00,
+         4.58799960260143701e+00,
+         2.24101228462292447e+00,
+         4.54794195426212385e-01,
+         3.60761772095963982e-02,
+         9.25176499518388571e-04,
+         4.43611344705509378e-06,
+      };
+      return Y + boost::math::tools::evaluate_rational(P, Q, z);
+   }
+   else if (z < 18)
+   {
+      // 6 < z < 18
+      // Max error in interpolated form: 1.985e-19
+      static const T offset = 1.80937194824218750e+00;
+      static const T P[] =
+      {
+         -1.80690935424793635e+00,
+         -3.66995929380314602e+00,
+         -1.93842957940149781e+00,
+         -2.94269984375794040e-01,
+         1.81224710627677778e-03,
+         2.48166798603547447e-03,
+         1.15806592415397245e-04,
+         1.43105573216815533e-06,
+         3.47281483428369604e-09
+      };
+      static const T Q[] = {
+         1.00000000000000000e+00,
+         2.57319080723908597e+00,
+         1.96724528442680658e+00,
+         5.84501352882650722e-01,
+         7.37152837939206240e-02,
+         3.97368430940416778e-03,
+         8.54941838187085088e-05,
+         6.05713225608426678e-07,
+         8.17517283816615732e-10
+      };
+      return offset + boost::math::tools::evaluate_rational(P, Q, z);
+   }
+   else if (z < 9897.12905874)  // 2.8 < log(z) < 9.2
+   {
+      // Max error in interpolated form: 1.195e-18
+      static const T Y = -1.40297317504882812e+00;
+      static const T P[] = {
+         1.97011826279311924e+00,
+         1.05639945701546704e+00,
+         3.33434529073196304e-01,
+         3.34619153200386816e-02,
+         -5.36238353781326675e-03,
+         -2.43901294871308604e-03,
+         -2.13762095619085404e-04,
+         -4.85531936495542274e-06,
+         -2.02473518491905386e-08,
+      };
+      static const T Q[] = {
+         1.00000000000000000e+00,
+         8.60107275833921618e-01,
+         4.10420467985504373e-01,
+         1.18444884081994841e-01,
+         2.16966505556021046e-02,
+         2.24529766630769097e-03,
+         9.82045090226437614e-05,
+         1.36363515125489502e-06,
+         3.44200749053237945e-09,
+      };
+      T log_w = log(z);
+      return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+   }
+   else if (z < 7.896296e+13)  // 9.2 < log(z) <= 32
+   {
+      // Max error in interpolated form: 6.529e-18
+      static const T Y = -2.73572921752929688e+00;
+      static const T P[] = {
+         3.30547638424076217e+00,
+         1.64050071277550167e+00,
+         4.57149576470736039e-01,
+         4.03821227745424840e-02,
+         -4.99664976882514362e-04,
+         -1.28527893803052956e-04,
+         -2.95470325373338738e-06,
+         -1.76662025550202762e-08,
+         -1.98721972463709290e-11,
+      };
+      static const T Q[] = {
+         1.00000000000000000e+00,
+         6.91472559412458759e-01,
+         2.48154578891676774e-01,
+         4.60893578284335263e-02,
+         3.60207838982301946e-03,
+         1.13001153242430471e-04,
+         1.33690948263488455e-06,
+         4.97253225968548872e-09,
+         3.39460723731970550e-12,
+      };
+      T log_w = log(z);
+      return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+   }
+   else if (z < 2.6881171e+43) // 32 < log(z) < 100
+   {
+      // Max error in interpolated form: 2.015e-18
+      static const T Y = -4.01286315917968750e+00;
+      static const T P[] = {
+         5.07714858354309672e+00,
+         -3.32994414518701458e+00,
+         -8.61170416909864451e-01,
+         -4.01139705309486142e-02,
+         -1.85374201771834585e-04,
+         1.08824145844270666e-05,
+         1.17216905810452396e-07,
+         2.97998248101385990e-10,
+         1.42294856434176682e-13,
+      };
+      static const T Q[] = {
+         1.00000000000000000e+00,
+         -4.85840770639861485e-01,
+         -3.18714850604827580e-01,
+         -3.20966129264610534e-02,
+         -1.06276178044267895e-03,
+         -1.33597828642644955e-05,
+         -6.27900905346219472e-08,
+         -9.35271498075378319e-11,
+         -2.60648331090076845e-14,
+      };
+      T log_w = log(z);
+      return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+   }
+   else // 100 < log(z) < 710
+   {
+      // Max error in interpolated form: 5.277e-18
+      static const T Y = -5.70115661621093750e+00;
+      static const T P[] = {
+         6.42275660145116698e+00,
+         1.33047964073367945e+00,
+         6.72008923401652816e-02,
+         1.16444069958125895e-03,
+         7.06966760237470501e-06,
+         5.48974896149039165e-09,
+         -7.00379652018853621e-11,
+         -1.89247635913659556e-13,
+         -1.55898770790170598e-16,
+         -4.06109208815303157e-20,
+         -2.21552699006496737e-24,
+      };
+      static const T Q[] = {
+         1.00000000000000000e+00,
+         3.34498588416632854e-01,
+         2.51519862456384983e-02,
+         6.81223810622416254e-04,
+         7.94450897106903537e-06,
+         4.30675039872881342e-08,
+         1.10667669458467617e-10,
+         1.31012240694192289e-13,
+         6.53282047177727125e-17,
+         1.11775518708172009e-20,
+         3.78250395617836059e-25,
+      };
+      T log_w = log(z);
+      return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
+   }
+}
+
+template <class T, class Policy>
+T lambert_w_negative_rational_double(T z, const Policy& pol)
+{
+   BOOST_MATH_STD_USING
+   if (z > -0.1)
+   {
+      if (z < -0.051)
+      {
+         // -0.1 < z < -0.051
+         // Maximum Deviation Found:                     4.402e-22
+         // Expected Error Term : 4.240e-22
+         // Maximum Relative Change in Control Points : 4.115e-03
+         static const T Y = 1.08633995056152344e+00;
+         static const T P[] = {
+            -8.63399505615014331e-02,
+            -1.64303871814816464e+00,
+            -7.71247913918273738e+00,
+            -1.41014495545382454e+01,
+            -1.02269079949257616e+01,
+            -2.17236002836306691e+00,
+         };
+         static const T Q[] = {
+            1.00000000000000000e+00,
+            7.44775406945739243e+00,
+            2.04392643087266541e+01,
+            2.51001961077774193e+01,
+            1.31256080849023319e+01,
+            2.11640324843601588e+00,
+         };
+         return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
+      }
+      else
+      {
+         // Very small z > 0.051:
+         return lambert_w0_small_z(z, pol);
+      }
+   }
+   else if (z > -0.2)
+   {
+      // -0.2 < z < -0.1
+      // Maximum Deviation Found:                     2.898e-20
+      // Expected Error Term : 2.873e-20
+      // Maximum Relative Change in Control Points : 3.779e-04
+      static const T Y = 1.20359611511230469e+00;
+      static const T P[] = {
+         -2.03596115108465635e-01,
+         -2.95029082937201859e+00,
+         -1.54287922188671648e+01,
+         -3.81185809571116965e+01,
+         -4.66384358235575985e+01,
+         -2.59282069989642468e+01,
+         -4.70140451266553279e+00,
+      };
+      static const T Q[] = {
+         1.00000000000000000e+00,
+         9.57921436074599929e+00,
+         3.60988119290234377e+01,
+         6.73977699505546007e+01,
+         6.41104992068148823e+01,
+         2.82060127225153607e+01,
+         4.10677610657724330e+00,
+      };
+      return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
+   }
+   else if (z > -0.3178794411714423215955237)
+   {
+      // Max error in interpolated form: 6.996e-18
+      static const T Y = 3.49680423736572266e-01;
+      static const T P[] = {
+         -3.49729841718749014e-01,
+         -6.28207407760709028e+01,
+         -2.57226178029669171e+03,
+         -2.50271008623093747e+04,
+         1.11949239154711388e+05,
+         1.85684566607844318e+06,
+         4.80802490427638643e+06,
+         2.76624752134636406e+06,
+      };
+      static const T Q[] = {
+         1.00000000000000000e+00,
+         1.82717661215113000e+02,
+         8.00121119810280100e+03,
+         1.06073266717010129e+05,
+         3.22848993926057721e+05,
+         -8.05684814514171256e+05,
+         -2.59223192927265737e+06,
+         -5.61719645211570871e+05,
+         6.27765369292636844e+04,
+      };
+      T d = z + 0.367879441171442321595523770161460867445811;
+      return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
+   }
+   else if (z > -0.3578794411714423215955237701)
+   {
+      // Max error in interpolated form: 1.404e-17
+      static const T Y = 5.00126481056213379e-02;
+      static const T  P[] = {
+         -5.00173570682372162e-02,
+         -4.44242461870072044e+01,
+         -9.51185533619946042e+03,
+         -5.88605699015429386e+05,
+         -1.90760843597427751e+06,
+         5.79797663818311404e+08,
+         1.11383352508459134e+10,
+         5.67791253678716467e+10,
+         6.32694500716584572e+10,
+      };
+      static const T Q[] = {
+         1.00000000000000000e+00,
+         9.08910517489981551e+02,
+         2.10170163753340133e+05,
+         1.67858612416470327e+07,
+         4.90435561733227953e+08,
+         4.54978142622939917e+09,
+         2.87716585708739168e+09,
+         -4.59414247951143131e+10,
+         -1.72845216404874299e+10,
+      };
+      T d = z + 0.36787944117144232159552377016146086744581113103176804;
+      return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
+   }
+   else
+   {  // z is very close (within 0.01) of the singularity at -e^-1,
+      // so use a series expansion from R. M. Corless et al.
+      const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
+      const T p = sqrt(p2);
+      return lambert_w_detail::lambert_w_singularity_series(p);
+   }
+}
 
 //! Lambert_w0 @b 'double' implementation, selected when T is 64-bit precision.
 template <class T, class Policy>
@@ -1258,371 +1638,19 @@ inline T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&)
 
    if (z >= 0.05)
    {
-      if (z < 2)
+      return lambert_w_positive_rational_double(z);
+   }
+   else if (z <= -0.36787944117144232159552377016146086744581113103176804) // Precision is max_digits10(cpp_bin_float_50).
+   {
+      if (z < -0.36787944117144232159552377016146086744581113103176804)
       {
-         if (z < 0.5)
-         {
-            // Max error in interpolated form: 2.255e-17
-            static const T offset = 8.19659233093261719e-01;
-            static const T P[] = {
-               1.80340766906685177e-01,
-               3.28178241493119307e-01,
-               -2.19153620687139706e+00,
-               -7.24750929074563990e+00,
-               -7.28395876262524204e+00,
-               -2.57417169492512916e+00,
-               -2.31606948888704503e-01
-            };
-            static const T Q[] = {
-               1.00000000000000000e+00,
-               7.36482529307436604e+00,
-               2.03686007856430677e+01,
-               2.62864592096657307e+01,
-               1.59742041380858333e+01,
-               4.03760534788374589e+00,
-               2.91327346750475362e-01
-            };
-            return z * (offset + boost::math::tools::evaluate_polynomial(P, z) / boost::math::tools::evaluate_polynomial(Q, z));
-         }
-         else
-         {
-            // Max error in interpolated form: 3.806e-18
-            static const T offset = 5.50335884094238281e-01;
-            static const T P[] = {
-               4.49664083944098322e-01,
-               1.90417666196776909e+00,
-               1.99951368798255994e+00,
-               -6.91217310299270265e-01,
-               -1.88533935998617058e+00,
-               -7.96743968047750836e-01,
-               -1.02891726031055254e-01,
-               -3.09156013592636568e-03
-            };
-            static const T Q[] = {
-               1.00000000000000000e+00,
-               6.45854489419584014e+00,
-               1.54739232422116048e+01,
-               1.72606164253337843e+01,
-               9.29427055609544096e+00,
-               2.29040824649748117e+00,
-               2.21610620995418981e-01,
-               5.70597669908194213e-03
-            };
-            return z * (offset + boost::math::tools::evaluate_rational(P, Q, z));
-         }
+         return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
       }
-      else if (z < 6)
-      {
-         // 2 < z < 6
-         // Max error in interpolated form: 1.216e-17
-         static const T Y = 1.16239356994628906e+00;
-         static const T P[] = {
-            -1.16230494982099475e+00,
-            -3.38528144432561136e+00,
-            -2.55653717293161565e+00,
-            -3.06755172989214189e-01,
-            1.73149743765268289e-01,
-            3.76906042860014206e-02,
-            1.84552217624706666e-03,
-            1.69434126904822116e-05,
-         };
-         static const T Q[] = {
-            1.00000000000000000e+00,
-            3.77187616711220819e+00,
-            4.58799960260143701e+00,
-            2.24101228462292447e+00,
-            4.54794195426212385e-01,
-            3.60761772095963982e-02,
-            9.25176499518388571e-04,
-            4.43611344705509378e-06,
-         };
-         return Y + boost::math::tools::evaluate_rational(P, Q, z);
-      }
-      else if (z < 18)
-      {
-         // 6 < z < 18
-         // Max error in interpolated form: 1.985e-19
-         static const T offset = 1.80937194824218750e+00;
-         static const T P[] =
-         {
-            -1.80690935424793635e+00,
-            -3.66995929380314602e+00,
-            -1.93842957940149781e+00,
-            -2.94269984375794040e-01,
-            1.81224710627677778e-03,
-            2.48166798603547447e-03,
-            1.15806592415397245e-04,
-            1.43105573216815533e-06,
-            3.47281483428369604e-09
-         };
-         static const T Q[] = {
-            1.00000000000000000e+00,
-            2.57319080723908597e+00,
-            1.96724528442680658e+00,
-            5.84501352882650722e-01,
-            7.37152837939206240e-02,
-            3.97368430940416778e-03,
-            8.54941838187085088e-05,
-            6.05713225608426678e-07,
-            8.17517283816615732e-10
-         };
-         return offset + boost::math::tools::evaluate_rational(P, Q, z);
-      }
-      else if (z < 9897.12905874)  // 2.8 < log(z) < 9.2
-      {
-         // Max error in interpolated form: 1.195e-18
-         static const T Y = -1.40297317504882812e+00;
-         static const T P[] = {
-            1.97011826279311924e+00,
-            1.05639945701546704e+00,
-            3.33434529073196304e-01,
-            3.34619153200386816e-02,
-            -5.36238353781326675e-03,
-            -2.43901294871308604e-03,
-            -2.13762095619085404e-04,
-            -4.85531936495542274e-06,
-            -2.02473518491905386e-08,
-         };
-         static const T Q[] = {
-            1.00000000000000000e+00,
-            8.60107275833921618e-01,
-            4.10420467985504373e-01,
-            1.18444884081994841e-01,
-            2.16966505556021046e-02,
-            2.24529766630769097e-03,
-            9.82045090226437614e-05,
-            1.36363515125489502e-06,
-            3.44200749053237945e-09,
-         };
-         T log_w = log(z);
-         return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
-      }
-      else if (z < 7.896296e+13)  // 9.2 < log(z) <= 32
-      {
-         // Max error in interpolated form: 6.529e-18
-         static const T Y = -2.73572921752929688e+00;
-         static const T P[] = {
-            3.30547638424076217e+00,
-            1.64050071277550167e+00,
-            4.57149576470736039e-01,
-            4.03821227745424840e-02,
-            -4.99664976882514362e-04,
-            -1.28527893803052956e-04,
-            -2.95470325373338738e-06,
-            -1.76662025550202762e-08,
-            -1.98721972463709290e-11,
-         };
-         static const T Q[] = {
-            1.00000000000000000e+00,
-            6.91472559412458759e-01,
-            2.48154578891676774e-01,
-            4.60893578284335263e-02,
-            3.60207838982301946e-03,
-            1.13001153242430471e-04,
-            1.33690948263488455e-06,
-            4.97253225968548872e-09,
-            3.39460723731970550e-12,
-         };
-         T log_w = log(z);
-         return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
-      }
-      else if (z < 2.6881171e+43) // 32 < log(z) < 100
-      {
-         // Max error in interpolated form: 2.015e-18
-         static const T Y = -4.01286315917968750e+00;
-         static const T P[] = {
-            5.07714858354309672e+00,
-            -3.32994414518701458e+00,
-            -8.61170416909864451e-01,
-            -4.01139705309486142e-02,
-            -1.85374201771834585e-04,
-            1.08824145844270666e-05,
-            1.17216905810452396e-07,
-            2.97998248101385990e-10,
-            1.42294856434176682e-13,
-         };
-         static const T Q[] = {
-            1.00000000000000000e+00,
-            -4.85840770639861485e-01,
-            -3.18714850604827580e-01,
-            -3.20966129264610534e-02,
-            -1.06276178044267895e-03,
-            -1.33597828642644955e-05,
-            -6.27900905346219472e-08,
-            -9.35271498075378319e-11,
-            -2.60648331090076845e-14,
-         };
-         T log_w = log(z);
-         return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
-      }
-      else // 100 < log(z) < 710
-      {
-         // Max error in interpolated form: 5.277e-18
-         static const T Y = -5.70115661621093750e+00;
-         static const T P[] = {
-            6.42275660145116698e+00,
-            1.33047964073367945e+00,
-            6.72008923401652816e-02,
-            1.16444069958125895e-03,
-            7.06966760237470501e-06,
-            5.48974896149039165e-09,
-            -7.00379652018853621e-11,
-            -1.89247635913659556e-13,
-            -1.55898770790170598e-16,
-            -4.06109208815303157e-20,
-            -2.21552699006496737e-24,
-         };
-         static const T Q[] = {
-            1.00000000000000000e+00,
-            3.34498588416632854e-01,
-            2.51519862456384983e-02,
-            6.81223810622416254e-04,
-            7.94450897106903537e-06,
-            4.30675039872881342e-08,
-            1.10667669458467617e-10,
-            1.31012240694192289e-13,
-            6.53282047177727125e-17,
-            1.11775518708172009e-20,
-            3.78250395617836059e-25,
-         };
-         T log_w = log(z);
-         return log_w + Y + boost::math::tools::evaluate_rational(P, Q, log_w);
-      }
+      return -1;
    }
    else
    {
-      if (z > -0.1)
-      {
-         if (z < -0.051)
-         {
-            // -0.1 < z < -0.051
-            // Maximum Deviation Found:                     4.402e-22
-            // Expected Error Term : 4.240e-22
-            // Maximum Relative Change in Control Points : 4.115e-03
-            static const T Y = 1.08633995056152344e+00;
-            static const T P[] = {
-               -8.63399505615014331e-02,
-               -1.64303871814816464e+00,
-               -7.71247913918273738e+00,
-               -1.41014495545382454e+01,
-               -1.02269079949257616e+01,
-               -2.17236002836306691e+00,
-            };
-            static const T Q[] = {
-               1.00000000000000000e+00,
-               7.44775406945739243e+00,
-               2.04392643087266541e+01,
-               2.51001961077774193e+01,
-               1.31256080849023319e+01,
-               2.11640324843601588e+00,
-            };
-            return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
-         }
-         else
-         {
-            // Very small z > 0.051:
-            return lambert_w0_small_z(z, pol);
-         }
-      }
-      else if (z > -0.2)
-      {
-         // -0.2 < z < -0.1
-         // Maximum Deviation Found:                     2.898e-20
-         // Expected Error Term : 2.873e-20
-         // Maximum Relative Change in Control Points : 3.779e-04
-         static const T Y = 1.20359611511230469e+00;
-         static const T P[] = {
-            -2.03596115108465635e-01,
-            -2.95029082937201859e+00,
-            -1.54287922188671648e+01,
-            -3.81185809571116965e+01,
-            -4.66384358235575985e+01,
-            -2.59282069989642468e+01,
-            -4.70140451266553279e+00,
-         };
-         static const T Q[] = {
-            1.00000000000000000e+00,
-            9.57921436074599929e+00,
-            3.60988119290234377e+01,
-            6.73977699505546007e+01,
-            6.41104992068148823e+01,
-            2.82060127225153607e+01,
-            4.10677610657724330e+00,
-         };
-         return z * (Y + boost::math::tools::evaluate_rational(P, Q, z));
-      }
-      else if (z > -0.3178794411714423215955237)
-      {
-         // Max error in interpolated form: 6.996e-18
-         static const T Y = 3.49680423736572266e-01;
-         static const T P[] = {
-            -3.49729841718749014e-01,
-            -6.28207407760709028e+01,
-            -2.57226178029669171e+03,
-            -2.50271008623093747e+04,
-            1.11949239154711388e+05,
-            1.85684566607844318e+06,
-            4.80802490427638643e+06,
-            2.76624752134636406e+06,
-         };
-         static const T Q[] = {
-            1.00000000000000000e+00,
-            1.82717661215113000e+02,
-            8.00121119810280100e+03,
-            1.06073266717010129e+05,
-            3.22848993926057721e+05,
-            -8.05684814514171256e+05,
-            -2.59223192927265737e+06,
-            -5.61719645211570871e+05,
-            6.27765369292636844e+04,
-         };
-         T d = z + 0.367879441171442321595523770161460867445811;
-         return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
-      }
-      else if (z > -0.3578794411714423215955237701)
-      {
-         // Max error in interpolated form: 1.404e-17
-         static const T Y = 5.00126481056213379e-02;
-         static const T  P[] = {
-            -5.00173570682372162e-02,
-            -4.44242461870072044e+01,
-            -9.51185533619946042e+03,
-            -5.88605699015429386e+05,
-            -1.90760843597427751e+06,
-            5.79797663818311404e+08,
-            1.11383352508459134e+10,
-            5.67791253678716467e+10,
-            6.32694500716584572e+10,
-         };
-         static const T Q[] = {
-            1.00000000000000000e+00,
-            9.08910517489981551e+02,
-            2.10170163753340133e+05,
-            1.67858612416470327e+07,
-            4.90435561733227953e+08,
-            4.54978142622939917e+09,
-            2.87716585708739168e+09,
-            -4.59414247951143131e+10,
-            -1.72845216404874299e+10,
-         };
-         T d = z + 0.36787944117144232159552377016146086744581113103176804;
-         return -d / (Y + boost::math::tools::evaluate_polynomial(P, d) / boost::math::tools::evaluate_polynomial(Q, d));
-      }
-      else if (z <= -0.36787944117144232159552377016146086744581113103176804) // Precision is max_digits10(cpp_bin_float_50).
-      {
-        if (z < -0.36787944117144232159552377016146086744581113103176804)
-        {
-          return boost::math::policies::raise_domain_error<T>(function, "Expected z >= -e^-1 (-0.367879...) but got %1%.", z, pol);
-        }
-        return -1;
-      }
-      else
-      {  // z is very close (within 0.01) of the singularity at -e^-1,
-         // so use a series expansion from R. M. Corless et al.
-         const T p2 = 2 * (boost::math::constants::e<T>() * z + 1);
-         const T p = sqrt(p2);
-         return lambert_w_detail::lambert_w_singularity_series(p);
-      }
+      return lambert_w_negative_rational_double(z, pol);
    }
 } // T lambert_w0_imp(T z, const Policy& pol, const mpl::int_<2>&) 64-bit precision, usually double.
 
