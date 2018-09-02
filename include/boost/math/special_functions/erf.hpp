@@ -182,6 +182,9 @@ T erf_imp(T z, bool invert, const Policy& pol, const mpl::int_<53>& t)
 
    BOOST_MATH_INSTRUMENT_CODE("53-bit precision erf_imp called");
 
+   if ((boost::math::isnan)(z))
+      return policies::raise_denorm_error("boost::math::erf<%1%>(%1%)", "Expected a finite argument but got %1%", z, pol);
+
    if(z < 0)
    {
       if(!invert)

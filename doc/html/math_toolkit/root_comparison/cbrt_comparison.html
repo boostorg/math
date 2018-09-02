@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Comparison of Cube Root Finding Algorithms</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.6.2">
 <link rel="up" href="../root_comparison.html" title="Comparison of Root Finding Algorithms">
 <link rel="prev" href="../root_comparison.html" title="Comparison of Root Finding Algorithms">
 <link rel="next" href="root_n_comparison.html" title="Comparison of Nth-root Finding Algorithms">
@@ -29,7 +29,7 @@
 </h3></div></div></div>
 <p>
         In the table below, the cube root of 28 was computed for three <a href="http://en.cppreference.com/w/cpp/language/types" target="_top">fundamental
-        types</a> floating-point types, and one <a href="../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
+        (built-in) types</a> floating-point types, and one <a href="../../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
         type <a href="../../../../../../libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html" target="_top">cpp_bin_float</a>
         using 50 decimal digit precision, using four algorithms.
       </p>
@@ -202,8 +202,8 @@
           </li>
 <li class="listitem">
             For <a href="http://en.cppreference.com/w/cpp/language/types" target="_top">fundamental
-            types</a>, there was little to choose between the three derivative
-            methods, but for <a href="../../../../../../libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html" target="_top">cpp_bin_float</a>,
+            (built-in) types</a>, there was little to choose between the three
+            derivative methods, but for <a href="../../../../../../libs/multiprecision/doc/html/boost_multiprecision/tut/floats/cpp_bin_float.html" target="_top">cpp_bin_float</a>,
             <a class="link" href="../roots_deriv.html#math_toolkit.roots_deriv.newton">Newton-Raphson iteration</a>
             was twice as fast. Note that the cube-root is an extreme test case as
             the cost of calling the functor is so cheap that the runtimes are largely

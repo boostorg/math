@@ -99,7 +99,7 @@ The rest of the zeros are returned in increasing order.
 Note that the argument to the routine is an integer, and the output is a floating-point type.
 Hence the template argument is mandatory.
 The time to extract a single root is linear in `l` (this is scaling to evaluate the Legendre polynomials), so recovering all roots is [bigo](`l`[super 2]).
-Algorithms with linear scaling [@ http://dx.doi.org/10.1137/06067016X exist] for recovering all roots, but requires tooling not currently built into boost.math.
+Algorithms with linear scaling [@ https://doi.org/10.1137/06067016X exist] for recovering all roots, but requires tooling not currently built into boost.math.
 This implementation proceeds under the assumption that calculating zeros of these functions will not be a bottleneck for any workflow.
 
    template <class T>

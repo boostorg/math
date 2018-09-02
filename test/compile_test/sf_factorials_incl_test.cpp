@@ -44,10 +44,14 @@ void compile_and_link_test()
    //
 #ifdef BOOST_MATH_HAVE_CONSTEXPR_TABLES
    constexpr float ce_f = boost::math::unchecked_factorial<float>(2);
-   constexpr float ce_d = boost::math::unchecked_factorial<double>(2);
-   constexpr float ce_l = boost::math::unchecked_factorial<long double>(2);
+   constexpr double ce_d = boost::math::unchecked_factorial<double>(2);
+   constexpr long double ce_l = boost::math::unchecked_factorial<long double>(2);
+   check_result<float>(ce_f);
+   check_result<double>(ce_d);
+   check_result<long double>(ce_l);
 #ifdef BOOST_MATH_USE_FLOAT128
    constexpr __float128 ce_q = boost::math::unchecked_factorial<__float128>(2);
+   check_result<__float128>(ce_q);
 #endif
 #endif
 }
