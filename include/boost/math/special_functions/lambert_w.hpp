@@ -77,7 +77,7 @@ typedef double lookup_t; // Type for lookup table (double or float, or even long
 
 //#include "J:\Cpp\Misc\lambert_w_lookup_table_generator\lambert_w_lookup_table.ipp"
 // #include "lambert_w_lookup_table.ipp" // Boost.Math version.
-#include <boost/math/special_functions/lambert_w_lookup_table.ipp>
+#include <boost/math/special_functions/detail/lambert_w_lookup_table.ipp>
 
 namespace boost {
 namespace math {
