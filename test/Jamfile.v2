@@ -53,6 +53,7 @@ project
       <toolset>msvc:<cxxflags>/wd4189 # local variable is initialized but not referenced
       <toolset>msvc-7.1:<source>../vc71_fix//vc_fix
       <toolset>msvc-7.1:<pch>off
+      <toolset>clang-6.0.0:<pch>off  # added to see effect.
       <toolset>gcc,<target-os>windows:<pch>off
       <toolset>borland:<runtime-link>static
       # <toolset>msvc:<cxxflags>/wd4506 has no effect?
@@ -421,6 +422,19 @@ test-suite special_fun :
    [ run test_instantiate1.cpp test_instantiate2.cpp  ]
    [ run test_jacobi.cpp pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
+
+   [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION=1  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  : test_lambert_w_multiprecision_1 ]
+   [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION=2  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  : test_lambert_w_multiprecision_2 ]
+   [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION=3  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  : test_lambert_w_multiprecision_3 ]
+   [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION=4 <define>BOOST_MATH_TEST_FLOAT128 [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  : test_lambert_w_multiprecision_4 ]
+   [ run test_lambert_w_integrals_float128.cpp ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" : <build>no ] [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
+   [ run test_lambert_w_integrals_quad.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ] ]
+   [ run test_lambert_w_integrals_long_double.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
+   [ run test_lambert_w_integrals_double.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
+   [ run test_lambert_w_integrals_float.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_smart_ptr cxx11_unified_initialization_syntax sfinae_expr ] ]
+   [ run test_lambert_w_derivative.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
+
    [ run test_legendre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
    [ run chebyshev_test.cpp  : : : [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  ]
    [ run chebyshev_transform_test.cpp ../config//fftw3f : : : <define>TEST1 [ requires cxx11_auto_declarations cxx11_range_based_for ] [ check-target-builds ../config//has_fftw3 "libfftw3" : : <build>no ] : chebyshev_transform_test_1 ]

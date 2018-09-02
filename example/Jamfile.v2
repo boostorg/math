@@ -33,6 +33,9 @@ project
       <toolset>msvc:<cxxflags>/wd4456 # declaration of hides previous local declaration.
       #-<toolset>msvc:<cxxflags>/Za # nonfinite Serialization examples fail link if disable MS extensions,
       #  because serialization library is built with MS extensions enabled (default).
+      <toolset>clang:<cxxflags>-Wno-unknown-pragmas
+      <toolset>clang:<cxxflags>-Wno-language-extension-token
+
       <include>../../..
       <include>../include_private
       <exception-handling>off:<source>../test//no_eh
