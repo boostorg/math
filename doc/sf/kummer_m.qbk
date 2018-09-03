@@ -1,0 +1,58 @@
+[section:kummer_m The Kummer-M function]
+
+[h4 Synopsis]
+
+``
+#include <boost/math/special_functions/kummer_m.hpp>
+``
+
+   namespace boost{ namespace math{
+
+   template <class T1, class T2, class T3>
+   ``__sf_result`` kummer_m(T1 a, T2 b, T3 x);
+
+   }} // namespaces
+
+The return type of these functions is computed using the __arg_promotion_rules:
+the return type is `double` if T is an integer type, and T otherwise.
+
+
+Returns the [@https://en.wikipedia.org/wiki/Confluent_hypergeometric_function Kummer-M] of /x/.
+
+[h4 Discussion]
+
+The Kummer /M/ function `M(a,b,x)` denotes the non-singular solution of Kummer's confluent hypergeometric equation
+
+   xy'' + (b-x)y' - ay = 0
+
+This equation has solution
+
+   M(a,b, x) = \u2211[sub n=0][super infin] /a/[super (n)] / /b/[super (n)] /x/[super n]/n!
+
+where `a[super (n)]` denotes the rising factorial.
+This expression shows that the Kummer-M function is a hypergeometric function, namely, `M(a,b,x) = [sub 1]F[sub 1](a; b; x)`.
+
+The Kummer-M function will arise from solution of any ordinary differential equation with linear coefficients, to wit, by appropriate change of variable, we can solve
+
+   (Ax+b)y'' + (Cx+d)y' + (ex+d)y = 0
+
+in terms of it. For this reason, it tends to show up in many toy models in physics.
+
+[h4 Implementation]
+
+
+
+[endsect]
+
+[section:kummer_m_refs References]
+
+* Beals, Richard, and Roderick Wong. ['Special functions: a graduate text.] Vol. 126. Cambridge University Press, 2010.
+
+[endsect]
+
+[/
+  Copyright 2018 John Maddock, Nick Thompson, and Paul A. Bristow.
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]

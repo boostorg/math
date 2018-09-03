@@ -423,6 +423,7 @@ test-suite special_fun :
    [ run test_jacobi.cpp pch_light ../../test/build//boost_unit_test_framework  ]
    [ run test_laguerre.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
 
+   [ run kummer_m_test.cpp ../../test/build//boost_unit_test_framework ]
    [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION=1  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  : test_lambert_w_multiprecision_1 ]
    [ run test_lambert_w.cpp ../../test/build//boost_unit_test_framework : : : <define>BOOST_MATH_TEST_MULTIPRECISION=2  [ check-target-builds ../config//has_float128 "GCC libquadmath and __float128 support" : <define>BOOST_MATH_TEST_FLOAT128 <linkflags>"-Bstatic -lquadmath -Bdynamic" ]  : test_lambert_w_multiprecision_2 ]
