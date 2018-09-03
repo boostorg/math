@@ -50,6 +50,12 @@ inline typename tools::promote_args<T1, T2, T3>::type kummer_m(T1 const & a, T2 
     return result;
 }
 
+template<class T1, class T2, class T3>
+inline typename tools::promote_args<T1, T2, T3>::type kummer_m_prime(T1 const & a, T2 const & b, T3 const & x)
+{
+    return a*kummer_m(a+1, b+1, x)/b;
+}
+
 
 }}
 

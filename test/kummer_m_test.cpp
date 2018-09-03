@@ -26,6 +26,7 @@ using boost::multiprecision::cpp_bin_float_quad;
  * M(1, 1/2, x) = 1+e^x\sqrt(pi x)erf(\sqrt(x))
  * M(0, b, x) = 1
  * M(-1, b,x) = 1 - x/b
+ * M(1, 2, 2z) = (e^z/z) sinh(z),
  * Kummer's transformation: M(a,b,x) = e^x M(b-a, b, -z)
  */
 
