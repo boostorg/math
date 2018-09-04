@@ -9,6 +9,7 @@
    template <class T1, class T2, class ``__Policy``>
    ``__sf_result`` hypergeometric_1f0(T1 a, T2 z, const ``__Policy``&);
 
+
 [h4 Description]
 
 The function hypergeometric_1f0 returns the result of:
@@ -25,7 +26,7 @@ undefined or complex.  This occurs for `z == 1` or `1 - z < 0` and `a` not an in
 
 [h4 Implementation]
 
-Implementation is trivially via:
+The implementation is trivial:
 
 [sub 1]F[sub 0](a, z) = (1-z)[super -a]
 
@@ -56,13 +57,13 @@ undefined or complex.  This occurs only when `b` is an integer <= 0.
 
 [h4 Implementation]
 
-The function is implemented via it's defining series whenever that series is non-divergent.
+The function is implemented via its defining series whereever convergent.
 
 For a divergent series we use the continued fraction as long as the result is not too small:
 
 [equation hyper_0f1_cf]
 
-Otherwise one of the Bessel function relations:
+and one of the Bessel function relations otherwise:
 
 [equation hyper_0f1_bessel_j]
 
@@ -80,7 +81,7 @@ Otherwise one of the Bessel function relations:
 
 [h4 Description]
 
-The function hypergeometric_2f0 returns the result of:
+The function hypergeometric_2f0 returns the result of
 
 [equation hyper_2f0]
 
@@ -90,7 +91,7 @@ when T1 and T2 are different types.
 [optional_policy]
 
 The functions return the result of __domain_error whenever the result is
-undefined or complex.  The valid domain for this function occurs only when one of `a1` or 
+undefined or complex.  The valid domain for this function occurs only when one of `a1` or
 `a2` is a negative integer: ie the polynomial case.
 
 [h4 Implementation]
@@ -111,10 +112,51 @@ Otherwise we use the defining series.
 
 [endsect]
 
+[section:hyper_geometric_1f1 Hypergeometric 1F1]
+
+
+   #include <boost/math/special_functions/hyper_geometric_1f1.hpp>
+
+   template <class T1, class T2, class T3>
+   ``__sf_result`` hypergeometric_1f1(T1 a, T2 b, T3 z);
+
+   template <class T1, class T2, class T3, class ``__Policy``>
+   ``__sf_result`` hypergeometric_1f0(T1 a, T2 b, T3 z, const ``__Policy``&);
+
+
+[h4 Description]
+
+The function `hypergeometric_1f1(a, b, x)` returns the non-singular solution to Kummer's equation
+
+   xw'' + (b-x)w' - aw = 0
+
+which for |x| < 1 has the hypergeometric series expansion
+
+   sum[sub n=0]^[super [infin]] a[super (n)]/b[super (n)] x[super n]/n!
+
+where /a/[super (/n/)] denotes rising factorial.
+This function has the same definition as Mathematica's `Hypergeometric1F1[a, b, x]` and Maple's `KummerM(a, b, x)`.
+
+[h4 Implementation]
+
+The implementation combines naive series, asymptotics, Pade approximations, and recurrence relations as necessary to obtain optimal performance.
+
+
+
+[endsect]
+[sect:hypergeometric_refs Hypergeometric References]
+
+* Beals, Richard, and Roderick Wong. ['Special functions: a graduate text.] Vol. 126. Cambridge University Press, 2010.
+
+* Pearson, John W., Sheehan Olver, and Mason A. Porter. ['Numerical methods for the computation of the confluent and Gauss hypergeometric functions.] Numerical Algorithms 74.3 (2017): 821-866.
+
+* Luke, Yudell L. ['Algorithms for Rational Approximations for a Confluent Hypergeometric Function] II. MISSOURI UNIV KANSAS CITY DEPT OF MATHEMATICS, 1976.
+
+* Dereziński, Jan. ['Hypergeometric type functions and their symmetries.] Annales Henri Poincaré. Vol. 15. No. 8. Springer Basel, 2014.
 
 [endsect]
 
-[/ 
+[/
   Copyright 2017 John Maddock.
   Distributed under the Boost Software License, Version 1.0.
   (See accompanying file LICENSE_1_0.txt or copy at
