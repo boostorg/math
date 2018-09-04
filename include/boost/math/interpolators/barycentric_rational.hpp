@@ -41,6 +41,8 @@ public:
 
     Real operator()(Real x) const;
 
+    Real prime(Real x) const;
+
 private:
     std::shared_ptr<detail::barycentric_rational_imp<Real>> m_imp;
 };
@@ -63,6 +65,12 @@ template<class Real>
 Real barycentric_rational<Real>::operator()(Real x) const
 {
     return m_imp->operator()(x);
+}
+
+template<class Real>
+Real barycentric_rational<Real>::prime(Real x) const
+{
+    return m_imp->prime(x);
 }
 
 

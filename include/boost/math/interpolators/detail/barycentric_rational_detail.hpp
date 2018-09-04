@@ -24,6 +24,8 @@ public:
 
     Real operator()(Real x) const;
 
+    Real prime(Real x) const;
+
     // The barycentric weights are not really that interesting; except to the unit tests!
     Real weight(size_t i) const { return m_w[i]; }
 
@@ -144,8 +146,41 @@ Real barycentric_rational_imp<Real>::operator()(Real x) const
  * "Some New Aspects of Rational Interpolation", by Claus Schneider and Wilhelm Werner,
  * Mathematics of Computation, v47, number 175, 1986.
  * http://www.ams.org/journals/mcom/1986-47-175/S0025-5718-1986-0842136-8/S0025-5718-1986-0842136-8.pdf
- * However, this requires a lot of machinery which is not built into the library at present.
- * So we wait until there is a requirement to interpolate the derivative.
+ * and reviewed in
+ * Recent developments in barycentric rational interpolation
+ * Jean–Paul Berrut, Richard Baltensperger and Hans D. Mittelmann
+ *
+ * Is it possible to complete this in one pass through the data?
  */
+
+template<class Real>
+Real barycentric_rational_imp<Real>::prime(Real x) const
+{
+    Real rx = this->operator()(x);
+    Real numerator = 0;
+    Real denominator = 0;
+    for(size_t i = 0; i < m_x.size(); ++i)
+    {
+        if (x == m_x[i])
+        {
+            Real sum = 0;
+            for (size_t j = 0; j < m_x.size(); ++j)
+            {
+                if (j == i)
+                {
+                    continue;
+                }
+                sum += m_w[j]*(m_y[i] - m_y[j])/(m_x[i] - m_x[j]);
+            }
+            return -sum/m_w[i];
+        }
+        Real t = m_w[i]/(x - m_x[i]);
+        Real diff = (rx - m_y[i])/(x-m_x[i]);
+        numerator += t*diff;
+        denominator += t;
+    }
+
+    return numerator/denominator;
+}
 }}}
 #endif
