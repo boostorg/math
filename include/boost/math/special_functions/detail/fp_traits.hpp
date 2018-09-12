@@ -216,9 +216,9 @@ template<> struct fp_traits_non_native<double, double_precision>
 
 private:
 
-#if defined(BOOST_ENDIAN_BIG_BYTE)
+#if BOOST_ENDIAN_BIG_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 0);
-#elif defined(BOOST_ENDIAN_LITTLE_BYTE)
+#elif BOOST_ENDIAN_LITTLE_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 4);
 #else
     BOOST_STATIC_ASSERT(false);
@@ -276,9 +276,9 @@ template<> struct fp_traits_non_native<long double, double_precision>
 
 private:
 
-#if defined(BOOST_ENDIAN_BIG_BYTE)
+#if BOOST_ENDIAN_BIG_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 0);
-#elif defined(BOOST_ENDIAN_LITTLE_BYTE)
+#elif BOOST_ENDIAN_LITTLE_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 4);
 #else
     BOOST_STATIC_ASSERT(false);
@@ -390,9 +390,9 @@ struct fp_traits_non_native<long double, extended_double_precision>
 
 private:
 
-#if defined(BOOST_ENDIAN_BIG_BYTE)
+#if BOOST_ENDIAN_BIG_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 0);
-#elif defined(BOOST_ENDIAN_LITTLE_BYTE)
+#elif BOOST_ENDIAN_LITTLE_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 12);
 #else
     BOOST_STATIC_ASSERT(false);
@@ -471,9 +471,9 @@ struct fp_traits_non_native<long double, extended_double_precision>
 
 private:
 
-#if defined(BOOST_ENDIAN_BIG_BYTE)
+#if BOOST_ENDIAN_BIG_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 0);
-#elif defined(BOOST_ENDIAN_LITTLE_BYTE)
+#elif BOOST_ENDIAN_LITTLE_BYTE
     BOOST_STATIC_CONSTANT(int, offset_ = 12);
 #else
     BOOST_STATIC_ASSERT(false);
