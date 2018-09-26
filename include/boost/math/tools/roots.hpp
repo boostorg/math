@@ -355,7 +355,7 @@ namespace detail{
          T f0(0), f1, f2;
       T result = guess;
 
-      T factor = static_cast<T>(ldexp(1.0, 1 - digits));
+      T factor = ldexp(static_cast<T>(1.0), 1 - digits);
       T delta = (std::max)(T(10000000 * guess), T(10000000));  // arbitarily large delta
       T last_f0 = 0;
       T delta1 = delta;
