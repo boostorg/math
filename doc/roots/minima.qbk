@@ -25,7 +25,7 @@ a [@http://en.wikipedia.org/wiki/Golden_section_search golden-section search].
 [*Parameters]
 
 [variablelist
-[[f] [The function to minimise: a function object (functor) that should be smooth over the
+[[f] [The function to minimise: a function object (or C++ lambda) that should be smooth over the
           range ['\[min, max\]], with no maxima occurring in that interval.]]
 [[min] [The lower endpoint of the range in which to search  for the minima.]]
 [[max] [The upper endpoint of the range in which to search  for the minima.]]
