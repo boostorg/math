@@ -71,6 +71,8 @@ test-suite examples :
    [ run inverse_chi_squared_example.cpp  ]
    [ run legendre_stieltjes_example.cpp : : : [ requires cxx11_auto_declarations cxx11_defaulted_functions cxx11_lambdas ]  ]
    #[ # run inverse_chi_squared_find_df_example.cpp  ]
+   [ run lambert_w_basic_example.cpp ]
+
    [ run inverse_gamma_example.cpp  ]
    [ run inverse_gamma_distribution_example.cpp : : : <exception-handling>off:<build>no  ]
    [ run laplace_example.cpp : : : <exception-handling>off:<build>no  ]
