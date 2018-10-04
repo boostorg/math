@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Lambert W function</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Math Toolkit 2.6.2">
 <link rel="up" href="../special.html" title="Chapter&#160;6.&#160;Special Functions">
 <link rel="prev" href="jacobi/jacobi_sn.html" title="Jacobi Elliptic Function sn">
@@ -70,7 +70,9 @@
       0) there are two real solutions on two branches called variously W0, W+, W-1,
       Wp, Wm, W-. Two principal branches functions called <code class="computeroutput"><span class="identifier">lambert_w0</span></code>
       and <code class="computeroutput"><span class="identifier">lambert_wm1</span></code>, and their
-      1st derivative, are provided by Boost's real-only implementation.
+      1st derivatives, <code class="computeroutput"><span class="identifier">lambert_w0_prime</span></code>
+      and <code class="computeroutput"><span class="identifier">lambert_wm1_prime</span></code> are provided
+      by Boost's real-only implementation.
     </p>
 <p>
       In the graphs below, the red line is the W0 branch, and the blue line the W-1
@@ -95,8 +97,11 @@
       the first <code class="literal">z</code> argument.
     </p>
 <p>
-      For C++ types <code class="computeroutput"><span class="keyword">float</span></code> the maximum
-      z argument <code class="computeroutput"><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;::</span><span class="identifier">max</span><span class="special">)()</span></code> Lambert_w0(3.2e+38) = 84.29, and for <code class="computeroutput"><span class="keyword">double</span></code>, lambert_w0(1.797e+308) = 703.3.
+      For C++ <a href="http://en.cppreference.com/w/cpp/language/types" target="_top">fundamental
+      (built-in) types</a>, the maximum z argument <code class="computeroutput"><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">max</span><span class="special">)()</span></code> for
+      <code class="computeroutput"><span class="keyword">float</span></code> is Lambert_w0(3.2e+38) =
+      84.29, and for <code class="computeroutput"><span class="keyword">double</span></code> is lambert_w0(1.797e+308)
+      = 703.3.
     </p>
 <p>
       The final <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
@@ -149,7 +154,7 @@
 </pre>
 <p>
       Other floating-point types can be used too, here <code class="computeroutput"><span class="keyword">float</span></code>,
-      including user defined types like <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
+      including user-defined types like <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>.
       It is convenient to use a function like <code class="computeroutput"><span class="identifier">show_value</span></code>
       to display all (and only) potentially significant decimal digits, including
       any significant trailing zeros, (<code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span></code>) for the type <code class="computeroutput"><span class="identifier">T</span></code>.
@@ -314,7 +319,7 @@
 <span class="identifier">Argument</span> <span class="identifier">z</span> <span class="special">=</span> <span class="number">1</span> <span class="identifier">is</span> <span class="identifier">out</span> <span class="identifier">of</span> <span class="identifier">range</span> <span class="special">(</span><span class="identifier">z</span> <span class="special">&lt;=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">for</span> <span class="identifier">Lambert</span> <span class="identifier">W</span><span class="special">-</span><span class="number">1</span> <span class="identifier">branch</span><span class="special">!</span> <span class="special">(</span><span class="identifier">Try</span> <span class="identifier">Lambert</span> <span class="identifier">W0</span> <span class="identifier">branch</span><span class="special">?)</span>
 </pre>
 <p>
-      Show error reporting if a value is passed to <code class="computeroutput"><span class="identifier">lambert_w0</span></code>
+      Showing an error reported if a value is passed to <code class="computeroutput"><span class="identifier">lambert_w0</span></code>
       that is out of range, (and was probably meant to be passed to <code class="computeroutput"><span class="identifier">lambert_wm1</span></code> instead).
     </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">z</span> <span class="special">=</span> <span class="special">+</span><span class="number">1.</span><span class="special">;</span>
@@ -371,7 +376,7 @@
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"voltage = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">v</span> <span class="special">&lt;&lt;</span> <span class="string">", current = "</span> <span class="special">&lt;&lt;</span> <span class="identifier">icalc</span> <span class="special">&lt;&lt;</span> <span class="string">", "</span> <span class="special">&lt;&lt;</span> <span class="identifier">log</span><span class="special">(</span><span class="identifier">icalc</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// voltage = 0.9, current = 0.00108485, -6.82631</span>
 </pre>
 <p>
-      the formula can be rendered in C++
+      the formulas can be rendered in C++
     </p>
 <pre class="programlisting"><span class="keyword">double</span> <span class="identifier">iv</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">v</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">vt</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">rsat</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">re</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">isat</span><span class="special">,</span> <span class="keyword">double</span> <span class="identifier">nu</span> <span class="special">=</span> <span class="number">1.</span><span class="special">)</span>
 <span class="special">{</span>
@@ -405,8 +410,9 @@
 <p>
       The plotted points for no external series resistance (derived from their published
       plot as the raw data are not publicly available) are used to extrapolate back
-      to estimate the intrinsic emitter resistance as 0.3 ohm. Its effect is visible
-      when the straight line from low voltages starts to curve.
+      to estimate the intrinsic emitter resistance as 0.3 ohm. The effect of external
+      series resistance is visible when the colored lines start to curve away from
+      the straight line as voltage increases.
     </p>
 <p>
       See <a href="../../../example/lambert_w_diode.cpp" target="_top">lambert_w_diode.cpp</a>
@@ -453,7 +459,7 @@
     </h6>
 <p>
       This implementation provides good precision and excellent speed for __fundamental
-      types <code class="computeroutput"><span class="keyword">float</span></code> and <code class="computeroutput"><span class="keyword">double</span></code>.
+      <code class="computeroutput"><span class="keyword">float</span></code> and <code class="computeroutput"><span class="keyword">double</span></code>.
     </p>
 <p>
       All the functions usually return values within a few <a href="http://en.wikipedia.org/wiki/Unit_in_the_last_place" target="_top">Unit
@@ -464,7 +470,7 @@
 <p>
       By default, this implementation provides the best possible speed. Very slightly
       average higher precision and less bias might be obtained by adding a <a class="link" href="roots_deriv.html#math_toolkit.roots_deriv.halley">Halley</a> step refinement, but
-      at the cost of more than doubling the run time.
+      at the cost of more than doubling the runtime.
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h8"></a>
@@ -486,7 +492,7 @@
       from a higher precision type, typically a <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
       type like <code class="computeroutput"><span class="identifier">cpp_bin_float_50</span></code>,
       but at the cost of increasing run-time &gt;100-fold; this has been used here
-      to provide our reference values for testing.
+      to provide some of our reference values for testing.
     </p>
 <p>
       For example, we get a reference value using a high precision type, for example;
@@ -649,7 +655,7 @@
 <p>
       As noted in the implementation section, the distribution of these differences
       is somewhat biased for Lambert W-1 and this might be reduced using a <code class="computeroutput"><span class="keyword">double</span></code> Halley step at small runtime cost. But
-      if you are serisouly concerned to get really precise computations, the only
+      if you are seriously concerned to get really precise computations, the only
       way is using a higher precision type and then reduce to the desired type. Fortunately,
       <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
       makes this very easy to program, if much slower.
@@ -755,9 +761,16 @@
       <span class="phrase"><a name="math_toolkit.lambert_w.compilers"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.compilers">Compilers</a>
     </h5>
 <p>
-      The code has been tested on VS 15.7.5, Clang 6.0.0 and GCC 8.1.0; it is expected
-      to work on all C++ compilers. As expected, debug mode is very much slower.
-      The release version optimisation also varied.
+      The code has been tested on VS 15.8.5, Clang 7.0.0 and GCC 8.1.0; it is expected
+      to work on all C++11 compilers. For details of which compilers are expected
+      to work see lambert_w tests and examples in:<br> <a href="https://www.boost.org/development/tests/master/developer/math.html" target="_top">Boost
+      Test Summary report for master branch (used for latest release)</a><br>
+      <a href="https://www.boost.org/development/tests/develop/developer/math.html" target="_top">Boost
+      Test Summary report for latest developer branch</a>.
+    </p>
+<p>
+      As expected, debug mode is very much slower. The release version optimisation
+      also varied.
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h14"></a>
@@ -824,7 +837,7 @@
       desired result type. This strategy is used by <a href="https://www.maplesoft.com" target="_top">Maple</a>
       and WolframAlpha, for example, using arbitrary precision arithmetic, and some
       of their high-precision values are used for testing this library. This method
-      is also used to provide <a href="../../../../../libs/test/doc/html/index.html" target="_top">Boost.Test</a>
+      is also used to provide some <a href="../../../../../libs/test/doc/html/index.html" target="_top">Boost.Test</a>
       values using <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>,
       typically, a 50 decimal digit type like <code class="computeroutput"><span class="identifier">cpp_bin_float_50</span></code>
       <code class="computeroutput"><span class="keyword">static_cast</span></code> to a <code class="computeroutput"><span class="keyword">float</span></code>, <code class="computeroutput"><span class="keyword">double</span></code>
@@ -845,8 +858,8 @@
       is not justified and the algorithms here do not implement this. But because
       the Boost.Lambert_W algorithms has been tested using <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>,
       users who require this can always easily achieve the nearest representation
-      for the fundamental_types - if the application justifies the very large extra
-      computation cost.
+      for __fundamental - if the application justifies the very large extra computation
+      cost.
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h16"></a>
@@ -1115,7 +1128,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       Lambert W0 values computed using the Fukushima method with Schroeder refinement
       gave about 1/6 lambert_w0 values that are one bit different from the 'best',
       and &lt; 1% that are a few bits 'wrong'. If a Halley refinement step is added,
-      only 1 in 30 are even one bit different, and only 2 two bits 'wrong'.
+      only 1 in 30 are even one bit different, and only 2 two-bits 'wrong'.
     </p>
 <div class="table">
 <a name="math_toolkit.lambert_w.lambert_w0_plus_halley"></a><p class="title"><b>Table&#160;6.74.&#160;Rational polynomial Lambert W0 and typical improvement from a single
@@ -1247,9 +1260,9 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 </table></div>
 </div>
 <br class="table-break"><p>
-      With the rational polynomial approximation method, there are a third one bit
-      from the best and none more than two bits. Adding a Halley step (or iteration)
-      reduces the number that are one bit different from about a third down to one
+      With the rational polynomial approximation method, there are a third one-bit
+      from the best and none more than two-bits. Adding a Halley step (or iteration)
+      reduces the number that are one-bit different from about a third down to one
       in 30; this is unavoidable 'computational noise'. An extra Halley step would
       double the runtime for a tiny gain and so is not chosen for this implementation,
       but remains a option, as detailed above.
@@ -1407,10 +1420,10 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 <p>
       The arrays are as <code class="computeroutput"><span class="keyword">const</span></code> and <code class="computeroutput"><span class="keyword">constexpr</span></code> and <code class="computeroutput"><span class="keyword">static</span></code>
       as possible (for the compiler version), using BOOST_STATIC_CONSTEXPR macro.
-      (See <a href="../../../test/lambert_w_lookup_table_generator.cpp" target="_top">lambert_w_lookup_table_generator.cpp</a>
+      (See <a href="../../../tools/lambert_w_lookup_table_generator.cpp" target="_top">lambert_w_lookup_table_generator.cpp</a>
       The precision was chosen to ensure that if used as <code class="computeroutput"><span class="keyword">long</span>
       <span class="keyword">double</span></code> arrays, then the values output
-      to <a href="../../../include/boost/math/special_functions/lambert_w_lookup_table.ipp" target="_top">lambert_w_lookup_table.ipp</a>
+      to <a href="../../../include/boost/math/special_functions/detail/lambert_w_lookup_table.ipp" target="_top">lambert_w_lookup_table.ipp</a>
       will be the nearest representable value for the type chose by a <code class="computeroutput"><span class="keyword">typedef</span></code> in <a href="../../../include/boost/math/special_functions/lambert_w.hpp" target="_top">lambert_w.hpp</a>.
     </p>
 <pre class="programlisting"><span class="keyword">typedef</span> <span class="keyword">double</span> <span class="identifier">lookup_t</span><span class="special">;</span> <span class="comment">// Type for lookup table (`double` or `float`, or even `long double`?)</span>
@@ -1777,9 +1790,10 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
     </h6>
 <p>
       A further method of testing over a wide range of argument z values was devised
-      by Nick Thompson (cunningly also to test the recently written quadrature routines!).
-      These are definite integral formulas involving the W function that are exactly
-      known constants, for example, LambertW0(1/(z&#178;) == &#8730;(2&#960;), see <a href="https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals" target="_top">Definite
+      by Nick Thompson (cunningly also to test the recently written quadrature routines
+      including <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
+      !). These are definite integral formulas involving the W function that are
+      exactly known constants, for example, LambertW0(1/(z&#178;) == &#8730;(2&#960;), see <a href="https://en.wikipedia.org/wiki/Lambert_W_function#Definite_integrals" target="_top">Definite
       Integrals</a>. Some care was needed to avoid overflow and underflow as
       the integral function must evaluate to a finite result over the entire range.
     </p>
