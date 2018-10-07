@@ -19,7 +19,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
     {
     public:
 
-	    template <class BidiIterator>
+      template <class BidiIterator>
         cubic_b_spline(BidiIterator a, BidiIterator b, Real left_endpoint, Real step_size,
                        Real left_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN(),
                        Real right_endpoint_derivative = std::numeric_limits<Real>::quiet_NaN());
@@ -113,4 +113,4 @@ In addition, constant, linear, and quadratic functions are interpolated to ensur
 
 [cubic_b_spline_example_out]
 
-[endsect]
+[endsect] [/section:cubic_b Cubic B-spline interpolation]
