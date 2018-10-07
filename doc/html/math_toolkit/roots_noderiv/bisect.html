@@ -65,8 +65,8 @@
 <dl class="variablelist">
 <dt><span class="term">f</span></dt>
 <dd><p>
-              A unary functor which is the function <span class="emphasis"><em>f(x)</em></span> whose
-              root is to be found.
+              A unary functor (or C++ lambda) which is the function <span class="emphasis"><em>f(x)</em></span>
+              whose root is to be found.
             </p></dd>
 <dt><span class="term">min</span></dt>
 <dd><p>
@@ -85,9 +85,9 @@
             </p></dd>
 <dt><span class="term">tol</span></dt>
 <dd><p>
-              A binary functor that specifies the termination condition: the function
-              will return the current brackets enclosing the root when <span class="emphasis"><em>tol(min,
-              max)</em></span> becomes true. See also <a class="link" href="root_termination.html" title="Termination Condition Functors">predefined
+              A binary functor (or C++ lambda) that specifies the termination condition:
+              the function will return the current brackets enclosing the root when
+              <span class="emphasis"><em>tol(min, max)</em></span> becomes true. See also <a class="link" href="root_termination.html" title="Termination Condition Functors">predefined
               termination functors</a>.
             </p></dd>
 <dt><span class="term">max_iter</span></dt>

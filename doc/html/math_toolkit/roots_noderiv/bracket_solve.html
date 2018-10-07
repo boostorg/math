@@ -89,8 +89,9 @@
 <dl class="variablelist">
 <dt><span class="term">f</span></dt>
 <dd><p>
-              A unary functor that is the function whose root is to be solved. <span class="emphasis"><em>f(x)</em></span>
-              must be uniformly increasing or decreasing on <span class="emphasis"><em>x</em></span>.
+              A unary functor (or C++ lambda) that is the function whose root is
+              to be solved. <span class="emphasis"><em>f(x)</em></span> must be uniformly increasing
+              or decreasing on <span class="emphasis"><em>x</em></span>.
             </p></dd>
 <dt><span class="term">guess</span></dt>
 <dd><p>
@@ -116,10 +117,10 @@
             </p></dd>
 <dt><span class="term">tol</span></dt>
 <dd><p>
-              A binary functor that determines the termination condition for the
-              search for the root. <span class="emphasis"><em>tol</em></span> is passed the current
-              brackets at each step, when it returns true then the current brackets
-              are returned as the pair result. See also <a class="link" href="root_termination.html" title="Termination Condition Functors">predefined
+              A binary functor (or C++ lambda) that determines the termination condition
+              for the search for the root. <span class="emphasis"><em>tol</em></span> is passed the
+              current brackets at each step, when it returns true then the current
+              brackets are returned as the pair result. See also <a class="link" href="root_termination.html" title="Termination Condition Functors">predefined
               termination functors</a>.
             </p></dd>
 <dt><span class="term">max_iter</span></dt>
