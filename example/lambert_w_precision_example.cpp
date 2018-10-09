@@ -4,7 +4,7 @@
 // (See accompanying file LICENSE_1_0.txt or
 //  copy at http ://www.boost.org/LICENSE_1_0.txt).
 
-//! Lambert W examples of controlling precision 
+//! Lambert W examples of controlling precision
 
 // #define BOOST_MATH_INSTRUMENT_LAMBERT_W  // #define only for (much) diagnostic output.
 
@@ -76,16 +76,16 @@ int main()
     std::cout.precision(std::numeric_limits<cpp_bin_float_50>::digits10);
 
     r = lambert_w0(z); // Default policy.
-    std::cout << "lambert_w0(z) cpp_bin_float_50  = " << r << std::endl; 
+    std::cout << "lambert_w0(z) cpp_bin_float_50  = " << r << std::endl;
     //lambert_w0(z) cpp_bin_float_50  = 1.7455280027406993830743012648753899115352881290809
     //       [N[productlog[10], 50]] == 1.7455280027406993830743012648753899115352881290809
     std::cout.precision(std::numeric_limits<double>::max_digits10);
     std::cout << "lambert_w0(z) static_cast from cpp_bin_float_50  = "
-      << static_cast<double>(r) << std::endl; 
+      << static_cast<double>(r) << std::endl;
     // double lambert_w0(z) static_cast from cpp_bin_float_50  = 1.7455280027406994
     // [N[productlog[10], 17]]                                == 1.7455280027406994
-   std::cout << "bits different from Wolfram = " 
-     << static_cast<int>(float_distance(static_cast<double>(r), 1.7455280027406994)) 
+   std::cout << "bits different from Wolfram = "
+     << static_cast<int>(float_distance(static_cast<double>(r), 1.7455280027406994))
      << std::endl; // 0
 
 
@@ -96,7 +96,7 @@ int main()
     std::cout << std::showpoint << std::endl; // and show any significant trailing zeros too.
 
     float x = 10.;
-    std::cout << "Lambert W (" << x << ") = " << lambert_w0(x) << std::endl; 
+    std::cout << "Lambert W (" << x << ") = " << lambert_w0(x) << std::endl;
 //] [/lambert_w_precision_0]
 
 /*
@@ -118,7 +118,7 @@ Lambert W (10.0000000) = 1.74552800
     cpp_bin_float_50 w50;
     w50 = lambert_w0(z50);
     std::cout.precision(std::numeric_limits<cpp_bin_float_50>::max_digits10); // 50 decimal digits.
-    std::cout << "Reference Lambert W (" << z << ") =\n                                              " 
+    std::cout << "Reference Lambert W (" << z << ") =\n                                              "
       << w50 << std::endl;
     std::cout.precision(std::numeric_limits<double>::max_digits10); // 17 decimal digits for double.
     double wr = static_cast<double>(w50);
@@ -136,7 +136,7 @@ Lambert W (10.0000000) = 1.74552800
     std::cout << "epsilon for float =                    " << std::numeric_limits<double>::epsilon() << std::endl;
     std::cout << "bits different from Halley step  =     " << static_cast<int>(float_distance(w, ww)) << std::endl;
 //] [/lambert_w_precision_1]
- 
+
 
 /*
 //[lambert_w_precision_output_1
@@ -169,7 +169,7 @@ Lambert W (10.0000000) = 1.74552800
     cpp_bin_float_50 wm1_50;
     wm1_50 = lambert_wm1(z50);
     std::cout.precision(std::numeric_limits<cpp_bin_float_50>::max_digits10); // 50 decimal digits.
-    std::cout << "Reference Lambert W-1 (" << z << ") =\n                                                  " 
+    std::cout << "Reference Lambert W-1 (" << z << ") =\n                                                  "
       << wm1_50 << std::endl;
     std::cout.precision(std::numeric_limits<double>::max_digits10); // 17 decimal digits for double.
     double wr = static_cast<double>(wm1_50);
@@ -204,7 +204,7 @@ Lambert W (10.0000000) = 1.74552800
   */
 
 
-  
+
   // Similar example using cpp_bin_float_quad (128-bit floating-point types).
 
   cpp_bin_float_quad zq = 10.;
@@ -235,7 +235,7 @@ Lambert W (10.0000000) = 1.74552800
     std::cout.precision(std::numeric_limits<cpp_bin_float_quad>::digits10); // 1.745528002740699383074301264875389837
     std::cout << "lambert_w0(z) cpp_dec_float_50 cast to quad (digits10(" << std::numeric_limits<cpp_bin_float_quad>::digits10 <<
       " )       = " << static_cast<cpp_bin_float_quad>(r) << std::endl;    // 1.74552800274069938307430126487539
-    std::cout.precision(std::numeric_limits<cpp_bin_float_quad>::digits10 + 1); // 
+    std::cout.precision(std::numeric_limits<cpp_bin_float_quad>::digits10 + 1); //
 
     std::cout << "lambert_w0(z) cpp_dec_float_50 cast to quad (digits10(" << std::numeric_limits<cpp_bin_float_quad>::digits10 <<
       " )       = " << static_cast<cpp_bin_float_quad>(r) << std::endl;    // 1.74552800274069938307430126487539
@@ -259,11 +259,6 @@ Lambert W (10.0000000) = 1.74552800
   }
 }  // int main()
 
-   /*
-  
 
-  
-
-   */
 
 
