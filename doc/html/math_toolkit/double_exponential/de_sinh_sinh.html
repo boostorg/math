@@ -52,8 +52,29 @@
 </pre>
 <p>
         Note that the limits of integration are understood to be (-&#8734;, &#8734;).
-        Complex valued integrands are supported.
       </p>
+<p>
+        Complex valued integrands are supported as well, for example the <a href="https://en.wikipedia.org/wiki/Dirichlet_eta_function" target="_top">Dirichlet
+        Eta function</a> can be represented via:
+      </p>
+<p>
+        <span class="inlinemediaobject"><img src="../../../equations/complex_eta_integral.svg"></span>
+      </p>
+<p>
+        which we can directly code up as:
+      </p>
+<pre class="programlisting"><span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Complex</span><span class="special">&gt;</span>
+<span class="identifier">Complex</span> <span class="identifier">eta</span><span class="special">(</span><span class="identifier">Complex</span> <span class="identifier">s</span><span class="special">)</span>
+<span class="special">{</span>
+   <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">Complex</span><span class="special">::</span><span class="identifier">value_type</span> <span class="identifier">value_type</span><span class="special">;</span>
+   <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">pow</span><span class="special">;</span>  <span class="keyword">using</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exp</span><span class="special">;</span>
+   <span class="identifier">Complex</span> <span class="identifier">i</span><span class="special">(</span><span class="number">0</span><span class="special">,</span> <span class="number">1</span><span class="special">);</span>
+   <span class="identifier">value_type</span> <span class="identifier">pi</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">constants</span><span class="special">::</span><span class="identifier">pi</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;();</span>
+   <span class="keyword">auto</span> <span class="identifier">f</span> <span class="special">=</span> <span class="special">[&amp;,</span> <span class="identifier">s</span><span class="special">,</span> <span class="identifier">i</span><span class="special">](</span><span class="identifier">value_type</span> <span class="identifier">t</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">pow</span><span class="special">(</span><span class="number">0.5</span> <span class="special">+</span> <span class="identifier">i</span> <span class="special">*</span> <span class="identifier">t</span><span class="special">,</span> <span class="special">-</span><span class="identifier">s</span><span class="special">)</span> <span class="special">/</span> <span class="special">(</span><span class="identifier">exp</span><span class="special">(</span><span class="identifier">pi</span> <span class="special">*</span> <span class="identifier">t</span><span class="special">)</span> <span class="special">+</span> <span class="identifier">exp</span><span class="special">(-</span><span class="identifier">pi</span> <span class="special">*</span> <span class="identifier">t</span><span class="special">));</span> <span class="special">};</span>
+   <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">quadrature</span><span class="special">::</span><span class="identifier">sinh_sinh</span><span class="special">&lt;</span><span class="identifier">value_type</span><span class="special">&gt;</span> <span class="identifier">integrator</span><span class="special">;</span>
+   <span class="keyword">return</span> <span class="identifier">integrator</span><span class="special">.</span><span class="identifier">integrate</span><span class="special">(</span><span class="identifier">f</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
