@@ -18,7 +18,7 @@
 #include <boost/math/special_functions/relative_difference.hpp> // for relative and epsilon difference.
 
 // Built-in/fundamental GCC float128 or Intel Quad 128-bit type, if available.
-#ifdef __GNUC__
+#ifdef BOOST_HAS_FLOAT128
 #include <boost/multiprecision/float128.hpp> // Not available for MSVC.
 // sets BOOST_MP_USE_FLOAT128 for GCC
 using boost::multiprecision::float128;
