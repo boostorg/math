@@ -213,6 +213,24 @@ to the square root of epsilon, and all tests were conducted in double precision:
 Although the tanh-sinh quadrature can compute integral over infinite domains by variable transformations, these transformations can create a very poorly behaved integrand.
 For this reason, double-exponential variable transformations have been provided that allow stable computation over infinite domains; these being the exp-sinh and sinh-sinh quadrature.
 
+[h4 Complex integrals]
+
+The tanh_sinh integrator supports integration of functions which return complex results, for example the sine-integral `Si(z)` has the integral representation:
+
+[equation sine_integral]
+
+Which we can code up directly as:
+   
+   template <class Complex>
+   Complex Si(Complex z)
+   {
+      typedef typename Complex::value_type value_type;
+      using std::sin;  using std::cos; using std::exp;
+      auto f = [&z](value_type t) { return -exp(-z * cos(t)) * cos(z * sin(t)); };
+      boost::math::quadrature::tanh_sinh<value_type> integrator;
+      return integrator.integrate(f, 0, boost::math::constants::half_pi<value_type>()) + boost::math::constants::half_pi<value_type>();
+   }
+
 [endsect]
 
 [section:de_tanh_sinh_2_arg Handling functions with large features near an endpoint with tanh-sinh quadrature]
@@ -273,7 +291,27 @@ The sinh-sinh quadrature allows computation over the entire real line, and is ca
     double L1;
     double Q = integrator.integrate(f, &error, &L1);
 
-Note that the limits of integration are understood to be (-\u221E, \u221E). Complex valued integrands are supported.
+Note that the limits of integration are understood to be (-\u221E, \u221E). 
+
+Complex valued integrands are supported as well, for example the [@https://en.wikipedia.org/wiki/Dirichlet_eta_function Dirichlet Eta function]
+can be represented via:
+
+[equation complex_eta_integral]
+
+which we can directly code up as:
+
+   template <class Complex>
+   Complex eta(Complex s)
+   {
+      typedef typename Complex::value_type value_type;
+      using std::pow;  using std::exp;
+      Complex i(0, 1);
+      value_type pi = boost::math::constants::pi<value_type>();
+      auto f = [&, s, i](value_type t) { return pow(0.5 + i * t, -s) / (exp(pi * t) + exp(-pi * t)); };
+      boost::math::quadrature::sinh_sinh<value_type> integrator;
+      return integrator.integrate(f);
+   }
+
 
 [endsect]
 
@@ -312,6 +350,32 @@ For half-infinite intervals, the exp-sinh quadrature is provided:
 The native integration range of this integrator is (0, [infin]), but we also support (a, [infin]), (-[infin], 0) and (-[infin], b) via argument transformations.
 
 Endpoint singularities and complex-valued integrands are supported by exp-sinh.
+
+For example, the modified Bessel function K can be represented via:
+
+[equation complex_bessel_k_integral]
+
+Which we can code up as:
+
+   template <class Complex>
+   Complex bessel_K(Complex alpha, Complex z)
+   {
+      typedef typename Complex::value_type value_type;
+      using std::cosh;  using std::exp;
+      auto f = [&, alpha, z](value_type t) 
+      {
+         value_type ct = cosh(t);
+         if (ct > log(std::numeric_limits<value_type>::max()))
+            return Complex(0);
+         return exp(-z * ct) * cosh(alpha * t); 
+      };
+      boost::math::quadrature::exp_sinh<value_type> integrator;
+      return integrator.integrate(f);
+   }
+
+The only wrinkle in the above code is the need to check for large `cosh(t)` in which case we assume that
+`exp(-x cosh(t))` tends to zero faster than `cosh(alpha x)` tends to infinity and return `0`.  Without that
+check we end up with `0 * Infinity` as the result (a NaN).
 
 [endsect]
 

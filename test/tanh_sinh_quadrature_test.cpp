@@ -815,6 +815,22 @@ void test_complex()
 
    value_type error = abs(expected - Q);
    BOOST_CHECK_LE(error, tol);
+
+   //
+   // Sin Integral https://dlmf.nist.gov/6.2#E9
+   //
+   auto f2 = [z](value_type t)
+   {
+      return -exp(-z * cos(t)) * cos(z * sin(t));
+   };
+   Q = integrator.integrate(f2, value_type(0), boost::math::constants::half_pi<value_type>(), get_convergence_tolerance<value_type>());
+
+   expected = Complex(boost::lexical_cast<value_type>("0.8893822921008980697856313681734926564752476188106405688951257340480164694708337246829840859633322683740376134733"),
+      -boost::lexical_cast<value_type>("2.381380802906111364088958767973164614925936185337231718483495612539455538280372745733208000514737758457795502168"));
+   expected -= boost::math::constants::half_pi<value_type>();
+
+   error = abs(expected - Q);
+   BOOST_CHECK_LE(error, tol);
 }
 
 
