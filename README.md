@@ -3,21 +3,21 @@ Boost Math Library
 
 This library is divided into several interconnected parts:
 
-###Floating Point Utilities###
+### Floating Point Utilities
 
 Utility functions for dealing with floating point arithmetic, includes functions for floating point classification (fpclassify, isnan, isinf etc), sign manipulation, rounding, comparison, and computing the distance between floating point numbers.
 
-###Specific Width Floating Point Types###
+### Specific Width Floating Point Types
 
 A set of typedefs similar to those provided by <cstdint> but for floating point types.
 
-###Mathematical Constants###
+### Mathematical Constants
 
 A wide range of constants ranging from various multiples of pi, fractions, through to euler's constant etc.
 
 These are of course usable from template code, or as non-templates with a simplified interface if that is more appropriate.
 
-###Statistical Distributions###
+### Statistical Distributions
 
 Provides a reasonably comprehensive set of statistical distributions, upon which higher level statistical tests can be built.
 
@@ -25,7 +25,7 @@ The initial focus is on the central univariate distributions. Both continuous (l
 
 A comprehensive tutorial is provided, along with a series of worked examples illustrating how the library is used to conduct statistical tests.
 
-###Mathematical Special Functions###
+### Mathematical Special Functions
 
 Provides a small number of high quality special functions, initially these were concentrated on functions used in statistical applications along with those in the Technical Report on C++ Library Extensions.
 
@@ -35,27 +35,27 @@ All the implementations are fully generic and support the use of arbitrary "real
 
 These functions also provide the basis of support for the TR1 special functions.
 
-###Root Finding and Function Minimisation###
+### Root Finding and Function Minimisation
 
 A comprehensive set of root finding algorithms over the real-line, both with and without derivative support.
 
 Also function minimisation via Brent's Method.
 
-###Polynomials and Rational Functions###
+### Polynomials and Rational Functions
 
 Tools for manipulating polynomials and for efficient evaluation of rationals or polynomials.
 
-###Interpolation###
+### Interpolation
 
 Function interpolation via Barycentic or cubic B_spline approximations.
 
-###Numerical Integration and Differentiation###
+### Numerical Integration and Differentiation
 
 A reasonably comprehensive set of routines for integration (trapezoidal, Gaus-Legendre, Gaus-Kronrod and double-exponential) and differentiation.
 
 The integration routines are all usable for functions returning complex results - and as a result for contour integrals as well.
 
-###Quaternions and Octonions###
+### Quaternions and Octonions
 
 Quaternion and Octonians as class templates similar to std::complex. 
 
