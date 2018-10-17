@@ -37,7 +37,7 @@ These functions also provide the basis of support for the TR1 special functions.
 
 ### Root Finding and Function Minimisation
 
-A comprehensive set of root finding algorithms over the real-line, both with and without derivative support.
+A comprehensive set of root finding algorithms over the real-line, both with derivatives and derivative free.
 
 Also function minimisation via Brent's Method.
 
@@ -47,13 +47,13 @@ Tools for manipulating polynomials and for efficient evaluation of rationals or 
 
 ### Interpolation
 
-Function interpolation via Barycentic or cubic B_spline approximations.
+Function interpolation via barycentric rational interpolation, compactly supported cubic B-splines, and the Chebyshev transform.
 
 ### Numerical Integration and Differentiation
 
-A reasonably comprehensive set of routines for integration (trapezoidal, Gaus-Legendre, Gaus-Kronrod and double-exponential) and differentiation.
+A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod and double-exponential) and differentiation.
 
-The integration routines are all usable for functions returning complex results - and as a result for contour integrals as well.
+The integration routines are usable for functions returning complex results - and as a result can be used for computation of  contour integrals.
 
 ### Quaternions and Octonions
 
