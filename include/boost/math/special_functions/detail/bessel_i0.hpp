@@ -17,7 +17,7 @@
 
 // Modified Bessel function of the first kind of order zero
 // we use the approximating forms derived in:
-// "Rational Approximations for the Modified Bessel Function of the First Kind – I0(x) for Computations with Double Precision"
+// "Rational Approximations for the Modified Bessel Function of the First Kind - I0(x) for Computations with Double Precision"
 // by Pavel Holoborodko, 
 // see http://www.advanpix.com/2015/11/11/rational-approximations-for-the-modified-bessel-function-of-the-first-kind-i0-computations-double-precision
 // The actual coefficients used are our own, and extend Pavel's work to precision's other than double.

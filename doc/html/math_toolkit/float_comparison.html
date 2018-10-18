@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Floating-point Comparison</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.6.2">
 <link rel="up" href="../utils.html" title="Chapter&#160;2.&#160;Floating Point Utilities">
 <link rel="prev" href="next_float/ulp.html" title="Obtaining the Size of a Unit In the Last Place - ULP">
 <link rel="next" href="../cstdfloat.html" title="Chapter&#160;3.&#160;Specified-width floating-point typedefs">
@@ -191,10 +191,9 @@
 </pre>
 <p>
       The following examples display values with all possibly significant digits.
-      Newer compilers should provide <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limitsFPT</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span></code>
-      for this purpose, and here we use <code class="computeroutput"><span class="keyword">float</span></code>
-      precision where <code class="computeroutput"><span class="identifier">max_digits10</span></code>
-      = 9 to avoid displaying a distracting number of decimal digits.
+      Newer compilers should provide <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">FPT</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span></code> for this purpose, and here we
+      use <code class="computeroutput"><span class="keyword">float</span></code> precision where <code class="computeroutput"><span class="identifier">max_digits10</span></code> = 9 to avoid displaying a distracting
+      number of decimal digits.
     </p>
 <div class="note"><table border="0" summary="Note">
 <tr>

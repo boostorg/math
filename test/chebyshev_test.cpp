@@ -29,7 +29,7 @@ void test_polynomials()
     std::cout << "Testing explicit polynomial representations of the Chebyshev polynomials on type " << boost::typeindex::type_id<Real>().pretty_name()  << "\n";
 
     Real x = -2;
-    Real tol = 100*std::numeric_limits<Real>::epsilon();
+    Real tol = 400*std::numeric_limits<Real>::epsilon();
     if (tol > std::numeric_limits<float>::epsilon())
        tol *= 10;   // float results have much larger error rates.
     while (x < 2)

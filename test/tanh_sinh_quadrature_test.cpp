@@ -33,7 +33,7 @@
 #endif
 
 #if !defined(TEST1) && !defined(TEST2) && !defined(TEST3) && !defined(TEST4) && !defined(TEST5) && !defined(TEST6) && !defined(TEST7) && !defined(TEST8)\
-    && !defined(TEST1A) && !defined(TEST2A) && !defined(TEST3A) && !defined(TEST6A)
+    && !defined(TEST1A) && !defined(TEST2A) && !defined(TEST3A) && !defined(TEST6A) && !defined(TEST9)
 #  define TEST1
 #  define TEST2
 #  define TEST3
@@ -46,6 +46,7 @@
 #  define TEST2A
 #  define TEST3A
 #  define TEST6A
+#  define TEST9
 #endif
 
 using std::expm1;
@@ -490,7 +491,7 @@ void test_nr_examples()
     auto f2 = [](Real x)->Real { return pow(x, -(Real) 2/(Real) 7)*exp(-x*x); };
     Q = integrator.integrate(f2, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>());
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
-    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 3);
+    BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol * 6);
 
 }
 
@@ -563,7 +564,7 @@ void test_crc()
     // We also use a 2 argument functor so that 1-x is evaluated accurately:
     if (std::numeric_limits<Real>::max_exponent > std::numeric_limits<double>::max_exponent)
     {
-       for (Real p = -0.99; p < 1; p += 0.1) {
+       for (Real p = Real (-0.99); p < 1; p += Real(0.1)) {
           auto f = [&](Real x, Real cx)->Real
           {
              //return pow(x, p) / pow(1 - x, p);
@@ -579,7 +580,7 @@ void test_crc()
     // domain (0, INF).  Internally we need to expand out the terms and evaluate using logs to avoid spurous overflow, 
     // this gives us
     // for p > 0:
-    for (Real p = 0.99; p > 0; p -= 0.1) {
+    for (Real p = Real(0.99); p > 0; p -= Real(0.1)) {
        auto f = [&](Real x)->Real
        {
           return exp(-x * (1 - p) + p * log(-boost::math::expm1(-x)));
@@ -589,7 +590,7 @@ void test_crc()
        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, 10 * tol);
     }
     // and for p < 1:
-    for (Real p = -0.99; p < 0; p += 0.1) {
+    for (Real p = Real (-0.99); p < 0; p += Real(0.1)) {
        auto f = [&](Real x)->Real
        {
           return exp(-p * log(-boost::math::expm1(-x)) - (1 + p) * x);
@@ -616,7 +617,7 @@ void test_crc()
     //
     Real limit = std::numeric_limits<Real>::max_exponent > std::numeric_limits<double>::max_exponent
        ? .95f : .85f;
-    for (Real h = 0.01; h < limit; h += 0.1) {
+    for (Real h = Real(0.01); h < limit; h += Real(0.1)) {
         auto f = [&](Real x, Real xc)->Real { return xc > 0 ? pow(1/tan(xc), h) : pow(tan(x), h); };
         Q = integrator.integrate(f, (Real) 0, half_pi<Real>(), get_convergence_tolerance<Real>(), &error, &L1);
         Q_expected = half_pi<Real>()/cos(h*half_pi<Real>());
@@ -706,7 +707,7 @@ void test_sf()
 
    Real x = 2, y = 3, z = 0.5, p = 0.25;
    // Elliptic integral RC:
-   Real Q = integrator.integrate([&](const Real& t) { return 1 / (sqrt(t + x) * (t + y)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()) / 2;
+   Real Q = integrator.integrate([&](const Real& t)->Real { return 1 / (sqrt(t + x) * (t + y)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()) / 2;
    BOOST_CHECK_CLOSE_FRACTION(Q, boost::math::ellint_rc(x, y), tol);
    // Elliptic Integral RJ:
    BOOST_CHECK_CLOSE_FRACTION(Real((Real(3) / 2) * integrator.integrate([&](Real t)->Real { return 1 / (sqrt((t + x) * (t + y) * (t + z)) * (t + p)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>())), boost::math::ellint_rj(x, y, z, p), tol);
@@ -719,7 +720,7 @@ void test_sf()
    // tgamma expressed as an integral:
    BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([&](Real t)->Real { using std::pow; using std::exp; return t > 10000 ? Real(0) : Real(pow(t, z - 1) * exp(-t)); }, 0, std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()),
       boost::math::tgamma(z), tol);
-   BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([](const Real& t) {  using std::exp; return exp(-t*t); }, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()),
+   BOOST_CHECK_CLOSE_FRACTION(integrator.integrate([](const Real& t)->Real {  using std::exp; return exp(-t*t); }, std::numeric_limits<Real>::has_infinity ? -std::numeric_limits<Real>::infinity() : -boost::math::tools::max_value<Real>(), std::numeric_limits<Real>::has_infinity ? std::numeric_limits<Real>::infinity() : boost::math::tools::max_value<Real>()),
       boost::math::constants::root_pi<Real>(), tol);
 }
 
@@ -788,6 +789,50 @@ void test_2_arg()
    BOOST_CHECK_CLOSE_FRACTION(L1, -Q_expected, tol);
 }
 
+template <class Complex>
+void test_complex()
+{
+   typedef typename Complex::value_type value_type;
+   //
+   // Integral version of the confluent hypergeometric function:
+   // https://dlmf.nist.gov/13.4#E1
+   //
+   value_type tol = 10 * boost::math::tools::epsilon<value_type>();
+   Complex a(2, 3), b(3, 4), z(0.5, -2);
+
+   auto f = [&](value_type t)
+   {
+      return exp(z * t) * pow(t, a - value_type(1)) * pow(value_type(1) - t, b - a - value_type(1));
+   };
+
+   auto integrator = get_integrator<value_type>();
+   auto Q = integrator.integrate(f, value_type(0), value_type(1), get_convergence_tolerance<value_type>());
+   //
+   // Expected result computed from http://www.wolframalpha.com/input/?i=1F1%5B(2%2B3i),+(3%2B4i);+(0.5-2i)%5D+*+gamma(2%2B3i)+*+gamma(1%2Bi)+%2F+gamma(3%2B4i)
+   //
+   Complex expected(boost::lexical_cast<value_type>("-0.2911081612888249710582867318081776512805281815037891183828405999609246645054069649838607112484426042883371996"),
+      boost::lexical_cast<value_type>("0.4507983563969959578849120188097153649211346293694903758252662015991543519595834937475296809912196906074655385"));
+
+   value_type error = abs(expected - Q);
+   BOOST_CHECK_LE(error, tol);
+
+   //
+   // Sin Integral https://dlmf.nist.gov/6.2#E9
+   //
+   auto f2 = [z](value_type t)
+   {
+      return -exp(-z * cos(t)) * cos(z * sin(t));
+   };
+   Q = integrator.integrate(f2, value_type(0), boost::math::constants::half_pi<value_type>(), get_convergence_tolerance<value_type>());
+
+   expected = Complex(boost::lexical_cast<value_type>("0.8893822921008980697856313681734926564752476188106405688951257340480164694708337246829840859633322683740376134733"),
+      -boost::lexical_cast<value_type>("2.381380802906111364088958767973164614925936185337231718483495612539455538280372745733208000514737758457795502168"));
+   expected -= boost::math::constants::half_pi<value_type>();
+
+   error = abs(expected - Q);
+   BOOST_CHECK_LE(error, tol);
+}
+
 
 BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 {
@@ -837,8 +882,9 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_crc<double>();
 #endif
 
-#ifdef TEST3
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 
+#ifdef TEST3
     test_right_limit_infinite<long double>();
     test_left_limit_infinite<long double>();
     test_linear<long double>();
@@ -856,6 +902,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #ifdef TEST3A
     test_crc<long double>();
 
+#endif
 #endif
 
 #ifdef TEST4
@@ -882,6 +929,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_sf<boost::multiprecision::number<boost::multiprecision::cpp_bin_float<150> > >();
 
 #endif
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
 #ifdef TEST6
 
     test_right_limit_infinite<boost::math::concepts::real_concept>();
@@ -901,6 +949,7 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
 #ifdef TEST6A
     test_crc<boost::math::concepts::real_concept>();
 
+#endif
 #endif
 #ifdef TEST7
     test_sf<cpp_dec_float_50>();
@@ -923,6 +972,12 @@ BOOST_AUTO_TEST_CASE(tanh_sinh_quadrature_test)
     test_2_arg<boost::multiprecision::float128>();
 
 #endif
+#ifdef TEST9
+    test_complex<std::complex<double> >();
+    test_complex<std::complex<float> >();
+#endif
+
+
 #endif
 }
 

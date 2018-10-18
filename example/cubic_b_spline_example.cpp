@@ -71,7 +71,7 @@ int main()
 
     // An eyeball estimate indicates that the population crossed 100 million around 1915.
     // Let's see what interpolation says:
-    boost::math::cubic_b_spline<double> p(population.data(), population.size(), t0, 10);
+    boost::math::cubic_b_spline<double> p(population.data(), population.size(), t0, time_step);
 
     // Now create a function which has a zero at p = 100,000,000:
     auto f = [=](double t){ return p(t) - 100000000; };
