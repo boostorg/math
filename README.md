@@ -13,7 +13,7 @@ A set of typedefs similar to those provided by <cstdint> but for floating point 
 
 ### Mathematical Constants
 
-A wide range of constants ranging from various multiples of pi, fractions, through to euler's constant etc.
+A wide range of constants ranging from various multiples of π, fractions, through to euler's constant etc.
 
 These are of course usable from template code, or as non-templates with a simplified interface if that is more appropriate.
 
@@ -25,11 +25,11 @@ The initial focus is on the central univariate distributions. Both continuous (l
 
 A comprehensive tutorial is provided, along with a series of worked examples illustrating how the library is used to conduct statistical tests.
 
-### Mathematical Special Functions
+### Special Functions
 
 Provides a small number of high quality special functions, initially these were concentrated on functions used in statistical applications along with those in the Technical Report on C++ Library Extensions.
 
-The function families currently implemented are the gamma, beta & erf functions along with the incomplete gamma and beta functions (four variants of each) and all the possible inverses of these, plus digamma, various factorial functions, Bessel functions, elliptic integrals, sinus cardinals (along with their hyperbolic variants), inverse hyperbolic functions, Legrendre/Laguerre/Hermite polynomials and various special power and logarithmic functions.
+The function families currently implemented are the gamma, beta & erf functions along with the incomplete gamma and beta functions (four variants of each) and all the possible inverses of these, plus digamma, various factorial functions, Bessel functions, elliptic integrals, sinus cardinals (along with their hyperbolic variants), inverse hyperbolic functions, Legrendre/Laguerre/Hermite/Chebyshev polynomials and various special power and logarithmic functions.
 
 All the implementations are fully generic and support the use of arbitrary "real-number" types, including Boost.Multiprecision, although they are optimised for use with types with known-about significand (or mantissa) sizes: typically float, double or long double.
 
@@ -53,7 +53,7 @@ Function interpolation via barycentric rational interpolation, compactly support
 
 A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod and double-exponential) and differentiation.
 
-The integration routines are usable for functions returning complex results - and as a result can be used for computation of  contour integrals.
+The integration routines are usable for functions returning complex results - and hence can be used for computation of  contour integrals.
 
 ### Quaternions and Octonions
 
