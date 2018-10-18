@@ -324,13 +324,20 @@ and anyway it only covers a tiny fraction of the range of possible z arguments v
 
 [h4:compilers Compilers]
 
-The code has been tested on VS 15.8.5, Clang 7.0.0 and GCC 8.1.0; it is expected to work on all C++11 compilers.
+The `lambert_w.hpp` code has been shown to work on most C++98 compilers.
+(Apart from requiring C++11 extensions for using of `std::numeric_limits<>::max_digits10` in some diagnostics.
+Many old pre-c++11 compilers provide this extension but may require enabling to use,
+for example using b2/bjam the lambert_w examples use this command:
+
+   [ run lambert_w_basic_example.cpp  : : : [ requires cxx11_numeric_limits ] ]
+
+See [@../../example/Jamfile.v2 jamfile.v2].)
+
 For details of which compilers are expected to work see lambert_w tests and examples in:[br]
 [@https://www.boost.org/development/tests/master/developer/math.html  Boost Test Summary report for master branch (used for latest release)][br]
 [@https://www.boost.org/development/tests/develop/developer/math.html Boost Test Summary report for latest developer branch].
 
-As expected, debug mode is very much slower.  The release version optimisation also varied.
-
+As expected, debug mode is very much slower than release.
 
 [h5:diagnostics Diagnostics Macros]
 
