@@ -13,7 +13,7 @@
   namespace boost{ namespace math{ namespace detail{
 
      template <class T, class Policy>
-     T hypergeometric_1f1_scaled_series(const T& a, const T& b, const T& z, const Policy& pol, const char* function)
+     T hypergeometric_1f1_scaled_series(const T& a, const T& b, T z, const Policy& pol, const char* function)
      {
         BOOST_MATH_STD_USING_CORE
         //
@@ -24,7 +24,7 @@
         //
         T sum(0), term(1), upper_limit(sqrt(boost::math::tools::max_value<T>())), diff;
         unsigned n = 0;
-        boost::intmax_t log_scaling_factor = -boost::math::itrunc(boost::math::tools::log_max_value<T>());
+        boost::intmax_t log_scaling_factor = 1 - boost::math::itrunc(boost::math::tools::log_max_value<T>());
         T scaling_factor = exp(log_scaling_factor);
         boost::intmax_t current_scaling = 0;
 
@@ -44,7 +44,13 @@
            diff = fabs(term / sum);
         } while (diff > boost::math::policies::get_epsilon<T, Policy>());
 
-        return sum * exp(-z - current_scaling);
+        z = -z - current_scaling;
+        while (z < log_scaling_factor)
+        {
+           z -= log_scaling_factor;
+           sum *= scaling_factor;
+        }
+        return sum * exp(z);
      }
 
 

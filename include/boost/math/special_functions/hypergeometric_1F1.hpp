@@ -20,6 +20,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_pade.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1f1_bessel.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1f1_scaled_series.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_pfq_checked_series.hpp>
 
 namespace boost { namespace math { namespace detail {
 
@@ -102,6 +103,19 @@ namespace boost { namespace math { namespace detail {
       {
          if (a == 1)
             return detail::hypergeometric_1f1_pade(b, z, pol);
+         if ((fabs(z * a / b) < 2) && (fabs(z * (a + 10) / ((b + 10) * 3628800)) < 1))  // TODO check crossover for most accurate location
+         {
+            if ((boost::math::sign(b - a) == boost::math::sign(b)) && ((b > 0) || (b < -200)))
+            {
+               // Series is close enough to convergent that we should be OK:
+               return hypergeometric_1f1_generic_series(a, b, z, pol);
+            }
+         }
+         if ((b < 4 * a) && (a < 0) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
+         {
+            // Without this we get into an area where the series don't converge if b - a ~ b
+            return hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+         }
 
          // Let's otherwise make z positive (almost always)
          // by Kummer's transformation
@@ -134,8 +148,8 @@ namespace boost { namespace math { namespace detail {
          // in the series terms (ie series has already converged by the time
          // b crosses the origin:
          //
-         T fa = fabs(a);
-         T fb = fabs(b);
+         //T fa = fabs(a);
+         //T fb = fabs(b);
          T convergence_point = sqrt((a - 1) * (a - b)) - a;
          if (-b < convergence_point)
          {
@@ -162,11 +176,14 @@ namespace boost { namespace math { namespace detail {
             const bool b_is_negative_and_greater_than_z = b < 0 ? (fabs(b) > fabs(z) ? 1 : 0) : 0;
             if ((a == ceil(a)) && !b_is_negative_and_greater_than_z)
                return detail::hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol, function);
-            else if ((z > 0) && (2 * (z  * (b - (2 * a)))) > 0) // TODO: see when this methd is bad in opposite to usual taylor
+            else if ((z > 0) && (2 * (z  * (b - (2 * a))) && (b > -100)) > 0) // TODO: see when this methd is bad in opposite to usual taylor
                return detail::hypergeometric_1f1_13_3_7_series(a, b, z, pol, function);
             else if (b < a)
                return detail::hypergeometric_1f1_backward_recurrence_for_negative_b(a, b, z, pol);
          }
+         // If we get here, then we've run out of methods to try, use the checked series which will
+         // raise an error if the result is garbage:
+         return hypergeometric_1F1_checked_series_impl(a, b, z, pol);
       }
 
       return detail::hypergeometric_1f1_generic_series(a, b, z, pol);

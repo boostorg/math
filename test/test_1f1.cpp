@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    BOOST_MATH_CONTROL_FP;
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
-   test_spots(0.0F, "float");
+   //test_spots(0.0F, "float");
 #endif
    test_spots(0.0, "double");
 #ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS

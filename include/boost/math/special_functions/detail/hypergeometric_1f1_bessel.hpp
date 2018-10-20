@@ -14,6 +14,8 @@
   #include <boost/math/tools/series.hpp>
   #include <boost/math/special_functions/bessel.hpp>
   #include <boost/math/special_functions/laguerre.hpp>
+  #include <boost/math/special_functions/detail/hypergeometric_pfq_checked_series.hpp>
+
 
   namespace boost { namespace math { namespace detail {
 
@@ -119,18 +121,18 @@
     if(z / 2 > tools::log_max_value<T>())
        use_logs = true;
     
-    T prefix;
+    T prefix(0);
     int sign = 1;
     try
     {
        prefix = boost::math::tgamma(b, pol);
+       if (!(boost::math::isfinite)(prefix))
+          use_logs = true;
     }
     catch (std::overflow_error const&)
     {
        use_logs = true;
     }
-    if(!use_logs && !(boost::math::isfinite)(prefix))
-       use_logs = true;
 
     if (!use_logs)
     {
@@ -141,19 +143,36 @@
        prefix = boost::math::lgamma(b, &sign, pol) + (b - 1) * log(sqrt_bz_div_2_minus_az);
        prefix += z / 2;
     }
-
-    detail::hypergeometric_1f1_13_3_7_series_term<T> s(a, b, z);
+    T result(0);
     boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+    try {
+       detail::hypergeometric_1f1_13_3_7_series_term<T> s(a, b, z);
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
-    T zero = 0;
-    T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
+       T zero = 0;
+       result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
 #else
-    T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+       result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
 #endif
+    }
+    catch (const std::exception&)
+    {
+       // The bessel functions can overflow, use a chacked series in that case:
+       return hypergeometric_1F1_checked_series_impl(a, b, z, pol);
+    }
+    if (!(boost::math::isfinite)(result))
+    {
+       // as above:
+       return hypergeometric_1F1_checked_series_impl(a, b, z, pol);
+    }
     boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_13_3_7_series<%1%>(%1%,%1%,%1%)", max_iter, pol);
 
     if (use_logs)
     {
+       if (result < 0)
+       {
+          result = -result;
+          sign = -sign;
+       }
        result = log(result) + prefix;
        if (result > tools::log_max_value<T>())
           return sign * policies::raise_overflow_error<T>(function, 0, pol);
