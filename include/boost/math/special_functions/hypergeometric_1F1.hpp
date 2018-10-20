@@ -79,6 +79,11 @@ namespace boost { namespace math { namespace detail {
       if ((a == 1) && (b == 2))
          return (exp(z) - 1) / z;
 
+      if (a == b)
+         return exp(z);
+      if (b - a == b)
+         return 1;
+
       // asymptotic expansion
       // check region
       if (detail::hypergeometric_1f1_asym_region(a, b, z))
@@ -107,7 +112,11 @@ namespace boost { namespace math { namespace detail {
          {
             if ((boost::math::sign(b - a) == boost::math::sign(b)) && ((b > 0) || (b < -200)))
             {
-               // Series is close enough to convergent that we should be OK:
+               // Series is close enough to convergent that we should be OK,
+               // In this domain b - a ~ b and since 1F1[a, a, z] = e^z 1F1[b-a, b, -z]
+               // and 1F1[a, a, -z] = e^-z the result must necessarily be somewhere near unity.
+               // We have to rule out b small and negative becuase if b crosses the origin early
+               // in the series (before we're pretty much converged) then all bets are off:
                return hypergeometric_1f1_generic_series(a, b, z, pol);
             }
          }
