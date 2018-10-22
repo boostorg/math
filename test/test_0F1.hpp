@@ -62,8 +62,6 @@ void test_spots(T, const char* type_name)
    //
    // basic sanity checks, tolerance is 10 epsilon expressed as a percentage:
    //
-   T tolerance = boost::math::tools::epsilon<T>() * 1000;
-
    BOOST_CHECK_EQUAL(boost::math::hypergeometric_0F1(T(3), T(0)), 1);
    BOOST_CHECK_EQUAL(boost::math::hypergeometric_0F1(T(-3), T(0)), 1);
    BOOST_CHECK_EQUAL(boost::math::hypergeometric_0F1(T(0), T(0)), 1);

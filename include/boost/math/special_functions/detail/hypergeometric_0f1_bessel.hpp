@@ -11,6 +11,9 @@
 #ifndef BOOST_MATH_HYPERGEOMETRIC_0F1_BESSEL_HPP
   #define BOOST_MATH_HYPERGEOMETRIC_0F1_BESSEL_HPP
 
+#include <boost/math/special_functions/bessel.hpp>
+#include <boost/math/special_functions/gamma.hpp>
+
   namespace boost { namespace math { namespace detail {
 
   template <class T, class Policy>

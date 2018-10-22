@@ -92,6 +92,10 @@ cpp-pch pch_light : pch_light.hpp : <use>../../test/build//boost_unit_test_frame
 lib compile_test_main : compile_test/main.cpp ;
 
 test-suite special_fun :
+   [ run test_1f0.cpp ../../test/build//boost_unit_test_framework ]
+   [ run test_2f0.cpp ../../test/build//boost_unit_test_framework ]
+   [ run test_1f1.cpp ../../test/build//boost_unit_test_framework ]
+   [ run test_0f1.cpp ../../test/build//boost_unit_test_framework ]
    [ run hypot_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ]
    [ run pow_test.cpp ../../test/build//boost_unit_test_framework ]
    [ run log1p_expm1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
