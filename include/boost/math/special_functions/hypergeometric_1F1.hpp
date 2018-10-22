@@ -76,8 +76,9 @@ namespace boost { namespace math { namespace detail {
          return (1 + (z / b)) * exp(z);
       }
 
+      using std::expm1;
       if ((a == 1) && (b == 2))
-         return (exp(z) - 1) / z;
+         return expm1(z) / z;
 
       if (a == b)
          return exp(z);
@@ -168,9 +169,9 @@ namespace boost { namespace math { namespace detail {
       }
       if (series_is_divergent && (b < -1) && (b > -5))
          series_is_divergent = false;  // don't bother with divergence, series will be OK
-      
+
       //
-      // Test for alternating series due to negative a, 
+      // Test for alternating series due to negative a,
       // in particular, see if the series is initially divergent
       // If so use the recurrence relation on a:
       //
