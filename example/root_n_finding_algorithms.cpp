@@ -587,14 +587,13 @@ void table_root_info(cpp_bin_float_100 full_value)
   // Compute the 'right' answer for root N at 100 decimal digits.
   cpp_bin_float_100 full_answer = nth_root_noderiv<N, cpp_bin_float_100>(full_value);
 
-  int type_count = 0;
   root_infos.clear(); // Erase any previous data.
   // Fill the elements of the array for each floating-point type.
 
-  type_count = test_root<N, float>(full_value, full_answer, "float", 0);
-  type_count = test_root<N, double>(full_value, full_answer, "double", 1);
-  type_count = test_root<N, long double>(full_value, full_answer, "long double", 2);
-  type_count = test_root<N, cpp_bin_float_50>(full_value, full_answer, "cpp_bin_float_50", 3);
+  test_root<N, float>(full_value, full_answer, "float", 0);
+  test_root<N, double>(full_value, full_answer, "double", 1);
+  test_root<N, long double>(full_value, full_answer, "long double", 2);
+  test_root<N, cpp_bin_float_50>(full_value, full_answer, "cpp_bin_float_50", 3);
 
   // Use info from 4 floating point types to
 
@@ -860,7 +859,7 @@ int main()
 
     return boost::exit_success;
   }
-  catch (std::exception ex)
+  catch (std::exception const& ex)
   {
     std::cout << "exception thrown: " << ex.what() << std::endl;
     return boost::exit_failure;

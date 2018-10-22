@@ -308,7 +308,7 @@ void test_nr_examples()
     Q_expected = half<Real>()*boost::math::tgamma((Real) 5/ (Real) 14);
     tol_mul = 1;
     if (std::numeric_limits<Real>::is_specialized == false)
-       tol_mul = 5;
+       tol_mul = 6;
     else if (std::numeric_limits<Real>::digits10 > 40)
        tol_mul = 100;
     else
@@ -401,14 +401,14 @@ void test_crc()
         return cos(a * t) * exp(-x);
     };
 
-    // For high oscillation frequency, the quadrature sum is ill-conditioned.
-    Q = integrator.integrate(f3, get_convergence_tolerance<Real>(), &error, &L1);
-    Q_expected = s/(a*a+s*s);
     // Since the integrand is oscillatory, we increase the tolerance:
     Real tol_mult = 10;
     // Multiprecision type have higher error rates, probably evaluation of f() is less accurate:
     if (!boost::is_class<Real>::value)
     {
+       // For high oscillation frequency, the quadrature sum is ill-conditioned.
+       Q = integrator.integrate(f3, get_convergence_tolerance<Real>(), &error, &L1);
+       Q_expected = s/(a*a+s*s);
        if (std::numeric_limits<Real>::digits10 > std::numeric_limits<double>::digits10)
           tol_mult = 5000; // we should really investigate this more??
        BOOST_CHECK_CLOSE_FRACTION(Q, Q_expected, tol_mult*tol);

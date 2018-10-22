@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Algorithm TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.6.2">
 <link rel="up" href="../roots_noderiv.html" title="Root Finding Without Derivatives">
 <link rel="prev" href="bracket_solve.html" title="Bracket and Solve Root">
 <link rel="next" href="brent.html" title="Brent-Decker Algorithm">
@@ -101,10 +101,10 @@
 <dl class="variablelist">
 <dt><span class="term">f</span></dt>
 <dd><p>
-              A unary functor that is the function whose root is to be solved. f(x)
-              need not be uniformly increasing or decreasing on <span class="emphasis"><em>x</em></span>
-              and may have multiple roots. However, the bounds given must bracket
-              a single root.
+              A unary functor (or C++ lambda) that is the function whose root is
+              to be solved. f(x) need not be uniformly increasing or decreasing on
+              <span class="emphasis"><em>x</em></span> and may have multiple roots. However, the bounds
+              given must bracket a single root.
             </p></dd>
 <dt><span class="term">a</span></dt>
 <dd><p>
@@ -127,10 +127,10 @@
             </p></dd>
 <dt><span class="term">tol</span></dt>
 <dd><p>
-              A binary functor that determines the termination condition for the
-              search for the root. <span class="emphasis"><em>tol</em></span> is passed the current
-              brackets at each step, when it returns true, then the current brackets
-              are returned as the result. See also <a class="link" href="root_termination.html" title="Termination Condition Functors">predefined
+              A binary functor (or C++ lambda) that determines the termination condition
+              for the search for the root. <span class="emphasis"><em>tol</em></span> is passed the
+              current brackets at each step, when it returns true, then the current
+              brackets are returned as the result. See also <a class="link" href="root_termination.html" title="Termination Condition Functors">predefined
               termination functors</a>.
             </p></dd>
 <dt><span class="term">max_iter</span></dt>
