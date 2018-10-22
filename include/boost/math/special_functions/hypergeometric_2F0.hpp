@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////
 //  Copyright 2014 Anton Bikineev
 //  Copyright 2014 Christopher Kormanyos
@@ -8,8 +7,8 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _BOOST_HYPERGEOMETRIC_2F0_HPP_
-  #define _BOOST_HYPERGEOMETRIC_2F0_HPP_
+#ifndef BOOST_MATH_HYPERGEOMETRIC_2F0_HPP
+#define BOOST_MATH_HYPERGEOMETRIC_2F0_HPP
 
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
@@ -23,7 +22,7 @@ namespace boost { namespace math { namespace detail {
    struct hypergeometric_2F0_cf
    {
       //
-      // We start this continued fraction at b on index -1 
+      // We start this continued fraction at b on index -1
       // and treat the -1 and 0 cases as special cases.
       // We do this to avoid adding the continued fraction result
       // to 1 so that we can accurately evaluate for small results
@@ -56,7 +55,7 @@ namespace boost { namespace math { namespace detail {
 
 
    template <class T, class Policy>
-   inline T hypergeometric_2f0_imp(T a1, T a2, const T& z, const Policy& pol)
+   inline T hypergeometric_2F0_imp(T a1, T a2, const T& z, const Policy& pol)
    {
       //
       // The terms in this series go to infinity unless one of a1 and a2 is a negative integer.
@@ -64,7 +63,7 @@ namespace boost { namespace math { namespace detail {
       using std::swap;
       BOOST_MATH_STD_USING
 
-      static const char* const function = "boost::math::hypergeometric_2f0<%1%,%1%,%1%>(%1%,%1%,%1%)";
+      static const char* const function = "boost::math::hypergeometric_2F0<%1%,%1%,%1%>(%1%,%1%,%1%)";
 
       if (z == 0)
          return 1;
@@ -125,7 +124,7 @@ namespace boost { namespace math { namespace detail {
          return hypergeometric_2F0_cf_imp(a1, a2, z, pol, function);
       }
 
-      return detail::hypergeometric_2f0_generic_series(a1, a2, z, pol);
+      return detail::hypergeometric_2F0_generic_series(a1, a2, z, pol);
    }
 
 } // namespace detail
@@ -143,12 +142,12 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_2F0(T1 a1, 
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
    return policies::checked_narrowing_cast<result_type, Policy>(
-      detail::hypergeometric_2f0_imp<value_type>(
+      detail::hypergeometric_2F0_imp<value_type>(
          static_cast<value_type>(a1),
          static_cast<value_type>(a2),
          static_cast<value_type>(z),
          forwarding_policy()),
-      "boost::math::hypergeometric_2f0<%1%>(%1%,%1%,%1%)");
+      "boost::math::hypergeometric_2F0<%1%>(%1%,%1%,%1%)");
 }
 
 template <class T1, class T2, class T3>
@@ -160,4 +159,4 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_2F0(T1 a1, 
 
   } } // namespace boost::math
 
-#endif // _BOOST_HYPERGEOMETRIC_2014_04_07_HPP_
+#endif // BOOST_MATH_HYPERGEOMETRIC_HPP

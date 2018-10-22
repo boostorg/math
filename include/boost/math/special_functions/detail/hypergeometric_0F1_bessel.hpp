@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////
 //  Copyright 2014 Anton Bikineev
 //  Copyright 2014 Christopher Kormanyos
@@ -9,7 +8,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #ifndef BOOST_MATH_HYPERGEOMETRIC_0F1_BESSEL_HPP
-  #define BOOST_MATH_HYPERGEOMETRIC_0F1_BESSEL_HPP
+#define BOOST_MATH_HYPERGEOMETRIC_0F1_BESSEL_HPP
 
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/gamma.hpp>
@@ -17,7 +16,7 @@
   namespace boost { namespace math { namespace detail {
 
   template <class T, class Policy>
-  inline T hypergeometric_0f1_bessel(const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_0F1_bessel(const T& b, const T& z, const Policy& pol)
   {
     BOOST_MATH_STD_USING
 

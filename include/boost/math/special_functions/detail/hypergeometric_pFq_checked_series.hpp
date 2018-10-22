@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////
 //  Copyright 2018 John Maddock
 //  Distributed under the Boost
@@ -6,7 +5,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_HYPERGEOMETRIC_PFQ_SERIES_HPP_
-  #define BOOST_HYPERGEOMETRIC_PFQ_SERIES_HPP_
+#define BOOST_HYPERGEOMETRIC_PFQ_SERIES_HPP_
 
 #include <boost/array.hpp>
 

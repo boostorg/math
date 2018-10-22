@@ -9,12 +9,12 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #ifndef BOOST_MATH_HYPERGEOMETRIC_1F1_BESSEL_HPP
-  #define BOOST_MATH_HYPERGEOMETRIC_1F1_BESSEL_HPP
+#define BOOST_MATH_HYPERGEOMETRIC_1F1_BESSEL_HPP
 
-  #include <boost/math/tools/series.hpp>
-  #include <boost/math/special_functions/bessel.hpp>
-  #include <boost/math/special_functions/laguerre.hpp>
-  #include <boost/math/special_functions/detail/hypergeometric_pfq_checked_series.hpp>
+#include <boost/math/tools/series.hpp>
+#include <boost/math/special_functions/bessel.hpp>
+#include <boost/math/special_functions/laguerre.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
 
 
   namespace boost { namespace math { namespace detail {
@@ -48,11 +48,11 @@
 
   // term class of Abramowitz & Stegun 13_3_7 formula
   template <class T>
-  struct hypergeometric_1f1_13_3_7_series_term
+  struct hypergeometric_1F1_13_3_7_series_term
   {
     typedef T result_type;
 
-    hypergeometric_1f1_13_3_7_series_term(const T& a, const T& b, const T& z):
+    hypergeometric_1F1_13_3_7_series_term(const T& a, const T& b, const T& z):
       a(a), b(b), z(z), n(0u)
     {
       BOOST_MATH_STD_USING
@@ -109,7 +109,7 @@
 
   // function for 13_3_7 evaluation
   template <class T, class Policy>
-  inline T hypergeometric_1f1_13_3_7_series(const T& a, const T& b, const T& z, const Policy& pol, const char* function)
+  inline T hypergeometric_1F1_13_3_7_series(const T& a, const T& b, const T& z, const Policy& pol, const char* function)
   {
     BOOST_MATH_STD_USING
 
@@ -120,7 +120,7 @@
        use_logs = true;
     if(z / 2 > tools::log_max_value<T>())
        use_logs = true;
-    
+
     T prefix(0);
     int sign = 1;
     try
@@ -146,7 +146,7 @@
     T result(0);
     boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
     try {
-       detail::hypergeometric_1f1_13_3_7_series_term<T> s(a, b, z);
+       detail::hypergeometric_1F1_13_3_7_series_term<T> s(a, b, z);
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
        T zero = 0;
        result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter, zero);
@@ -164,7 +164,7 @@
        // as above:
        return hypergeometric_1F1_checked_series_impl(a, b, z, pol);
     }
-    boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_13_3_7_series<%1%>(%1%,%1%,%1%)", max_iter, pol);
+    boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_13_3_7_series<%1%>(%1%,%1%,%1%)", max_iter, pol);
 
     if (use_logs)
     {
@@ -186,13 +186,13 @@
 
   // term class of Abramowitz & Stegun 13_3_8 formula
   template <class T>
-  struct hypergeometric_1f1_13_3_8_series_term
+  struct hypergeometric_1F1_13_3_8_series_term
   {
     typedef T result_type;
 
     static const T h;
 
-    hypergeometric_1f1_13_3_8_series_term(const T& a, const T& b, const T& z):
+    hypergeometric_1F1_13_3_8_series_term(const T& a, const T& b, const T& z):
       a(a), b(b), z(z), n(0u)
     {
       BOOST_MATH_STD_USING
@@ -246,19 +246,19 @@
   };
 
   template <class T>
-  const T hypergeometric_1f1_13_3_8_series_term<T>::h = -boost::math::constants::pi<T>() / T(10.);
+  const T hypergeometric_1F1_13_3_8_series_term<T>::h = -boost::math::constants::pi<T>() / T(10.);
 
   // function for 13_3_8 evaluation
   template <class T, class Policy>
-  inline T hypergeometric_1f1_13_3_8_series(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1F1_13_3_8_series(const T& a, const T& b, const T& z, const Policy& pol)
   {
     BOOST_MATH_STD_USING
 
     const T sqrt_minus_az_pow_b_minus_one = pow(sqrt(-a * z), b - 1);
     const T prefix = (boost::math::tgamma(b, pol) / sqrt_minus_az_pow_b_minus_one) *
-                      exp(detail::hypergeometric_1f1_13_3_8_series_term<T>::h * z);
+                      exp(detail::hypergeometric_1F1_13_3_8_series_term<T>::h * z);
 
-    detail::hypergeometric_1f1_13_3_8_series_term<T> s(a, b, z);
+    detail::hypergeometric_1F1_13_3_8_series_term<T> s(a, b, z);
     boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
     T zero = 0;
@@ -266,7 +266,7 @@
 #else
     T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
 #endif
-    boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_13_3_8_series<%1%>(%1%,%1%,%1%)", max_iter, pol);
+    boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_13_3_8_series<%1%>(%1%,%1%,%1%)", max_iter, pol);
     return prefix * result;
   }
 
@@ -331,7 +331,7 @@
   template <class T>
   inline T hypergeometric_13_3_8_coefficient_next(const T& cnm3, const T& cnm2, const T& cnm1, const T& a, const T& b, const unsigned n)
   {
-    static const T& h = detail::hypergeometric_1f1_13_3_8_series_term<T>::h;
+    static const T& h = detail::hypergeometric_1F1_13_3_8_series_term<T>::h;
     const T one_minus_two_h = 1 - (2 * h);
     const T h_minus_one = h - 1;
 

@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////
 //  Copyright 2014 Anton Bikineev
 //  Copyright 2014 Christopher Kormanyos
@@ -9,7 +8,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #ifndef BOOST_MATH_HYPERGEOMETRIC_RATIONAL_HPP
-  #define BOOST_MATH_HYPERGEOMETRIC_RATIONAL_HPP
+#define BOOST_MATH_HYPERGEOMETRIC_RATIONAL_HPP
 
   #include <boost/array.hpp>
 
@@ -18,7 +17,7 @@
   // Luke: C ------- SUBROUTINE R1F1P(AP, CP, Z, A, B, N) ---------
   // Luke: C --- RATIONAL APPROXIMATION OF 1F1( AP ; CP ; -Z ) ----
   template <class T, class Policy>
-  inline T hypergeometric_1f1_rational(const T& ap, const T& cp, const T& zp, const Policy& )
+  inline T hypergeometric_1F1_rational(const T& ap, const T& cp, const T& zp, const Policy& )
   {
     BOOST_MATH_STD_USING
 
@@ -83,7 +82,7 @@
   // Luke: C ----- SUBROUTINE R2F1P(AB, BP, CP, Z, A, B, N) -------
   // Luke: C -- RATIONAL APPROXIMATION OF 2F1( AB , BP; CP ; -Z ) -
   template <class T, class Policy>
-  inline T hypergeometric_2f1_rational(const T& ap, const T& bp, const T& cp, const T& zp, const unsigned n, const Policy& )
+  inline T hypergeometric_2F1_rational(const T& ap, const T& bp, const T& cp, const T& zp, const unsigned n, const Policy& )
   {
     BOOST_MATH_STD_USING
 

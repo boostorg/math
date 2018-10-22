@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////
 //  Copyright 2014 Anton Bikineev
 //  Copyright 2014 Christopher Kormanyos
@@ -9,12 +8,12 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #ifndef BOOST_MATH_HYPERGEOMETRIC_SEPARATED_SERIES_HPP
-  #define BOOST_MATH_HYPERGEOMETRIC_SEPARATED_SERIES_HPP
+#define BOOST_MATH_HYPERGEOMETRIC_SEPARATED_SERIES_HPP
 
   namespace boost { namespace math { namespace detail {
 
   template <class T, class Policy>
-  inline T hypergeometric_1f1_separated_series(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1F1_separated_series(const T& a, const T& b, const T& z, const Policy& pol)
   {
     BOOST_MATH_STD_USING
 

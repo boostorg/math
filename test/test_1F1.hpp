@@ -22,7 +22,7 @@
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
-#include <boost/math/special_functions/hypergeometric_1f1.hpp>
+#include <boost/math/special_functions/hypergeometric_1F1.hpp>
 
 template <class Real, class T>
 void do_test_2F0(const T& data, const char* type_name, const char* test_name)
@@ -59,21 +59,21 @@ void do_test_2F0(const T& data, const char* type_name, const char* test_name)
 template <class T>
 void test_spots1(T, const char* type_name)
 {
-#include "hypergeometric_1f1.ipp"
+#include "hypergeometric_1F1.ipp"
 
-   do_test_2F0<T>(hypergeometric_1f1, type_name, "Integer a values");
+   do_test_2F0<T>(hypergeometric_1F1, type_name, "Integer a values");
 
-#include "hypergeometric_1f1_small_random.ipp"
+#include "hypergeometric_1F1_small_random.ipp"
 
-   do_test_2F0<T>(hypergeometric_1f1_small_random, type_name, "Small random values");
+   do_test_2F0<T>(hypergeometric_1F1_small_random, type_name, "Small random values");
 }
 
 template <class T>
 void test_spots2(T, const char* type_name)
 {
-#include "hypergeometric_1f1_big.ipp"
+#include "hypergeometric_1F1_big.ipp"
 
-   do_test_2F0<T>(hypergeometric_1f1_big, type_name, "Large random values");
+   do_test_2F0<T>(hypergeometric_1F1_big, type_name, "Large random values");
 }
 
 template <class T>
@@ -82,4 +82,3 @@ void test_spots(T z, const char* type_name)
    test_spots1(z, type_name);
    test_spots2(z, type_name);
 }
-

@@ -9,14 +9,14 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #ifndef BOOST_MATH_HYPERGEOMETRIC_PADE_HPP
-  #define BOOST_MATH_HYPERGEOMETRIC_PADE_HPP
+#define BOOST_MATH_HYPERGEOMETRIC_PADE_HPP
 
   namespace boost{ namespace math{ namespace detail{
 
   // Luke: C ---------- SUBROUTINE R1F1P(CP, Z, A, B, N) ----------
   // Luke: C ----- PADE APPROXIMATION OF 1F1( 1 ; CP ; -Z ) -------
   template <class T, class Policy>
-  inline T hypergeometric_1f1_pade(const T& cp, const T& zp, const Policy& )
+  inline T hypergeometric_1F1_pade(const T& cp, const T& zp, const Policy& )
   {
     BOOST_MATH_STD_USING
 
@@ -72,7 +72,7 @@
   // Luke: C -------- SUBROUTINE R2F1P(BP, CP, Z, A, B, N) --------
   // Luke: C ---- PADE APPROXIMATION OF 2F1( 1 , BP; CP ; -Z ) ----
   template <class T, class Policy>
-  inline T hypergeometric_2f1_pade(const T& bp, const T& cp, const T& zp, const Policy& pol)
+  inline T hypergeometric_2F1_pade(const T& bp, const T& cp, const T& zp, const Policy& pol)
   {
     BOOST_MATH_STD_USING
 

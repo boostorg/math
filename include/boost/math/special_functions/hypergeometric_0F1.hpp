@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////
 //  Copyright 2014 Anton Bikineev
 //  Copyright 2014 Christopher Kormanyos
@@ -8,13 +7,13 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _BOOST_HYPERGEOMETRIC_0F1_HPP_
-  #define _BOOST_HYPERGEOMETRIC_0F1_HPP_
+#ifndef BOOST_MATH_HYPERGEOMETRIC_0F1_HPP
+#define BOOST_MATH_HYPERGEOMETRIC_0F1_HPP
 
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
-#include <boost/math/special_functions/detail/hypergeometric_0f1_bessel.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_0F1_bessel.hpp>
 
 namespace boost { namespace math { namespace detail {
 
@@ -23,7 +22,7 @@ namespace boost { namespace math { namespace detail {
    struct hypergeometric_0F1_cf
    {
       //
-      // We start this continued fraction at b on index -1 
+      // We start this continued fraction at b on index -1
       // and treat the -1 and 0 cases as special cases.
       // We do this to avoid adding the continued fraction result
       // to 1 so that we can accurately evaluate for small results
@@ -55,7 +54,7 @@ namespace boost { namespace math { namespace detail {
 
 
    template <class T, class Policy>
-   inline T hypergeometric_0f1_imp(const T& b, const T& z, const Policy& pol)
+   inline T hypergeometric_0F1_imp(const T& b, const T& z, const Policy& pol)
    {
       const char* function = "boost::math::hypergeometric_0f1<%1%,%1%>(%1%, %1%)";
       BOOST_MATH_STD_USING
@@ -73,16 +72,16 @@ namespace boost { namespace math { namespace detail {
       {
          // Series is alternating and divergent, need to do something else here,
          // Bessel function relation is much more accurate, unless |b| is similarly
-         // large to |z|, otherwise the CF formula suffers from cancellation when 
+         // large to |z|, otherwise the CF formula suffers from cancellation when
          // the result would be very small.
          if (fabs(z / b) > 4)
-            return hypergeometric_0f1_bessel(b, z, pol);
+            return hypergeometric_0F1_bessel(b, z, pol);
          return hypergeometric_0F1_cf_imp(b, z, pol, function);
       }
       // evaluation through Taylor series looks
       // more precisious than Bessel relation:
       // detail::hypergeometric_0f1_bessel(b, z, pol);
-      return detail::hypergeometric_0f1_generic_series(b, z, pol);
+      return detail::hypergeometric_0F1_generic_series(b, z, pol);
    }
 
 } // namespace detail
@@ -100,11 +99,11 @@ inline typename tools::promote_args<T1, T2>::type hypergeometric_0F1(T1 b, T2 z,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
    return policies::checked_narrowing_cast<result_type, Policy>(
-      detail::hypergeometric_0f1_imp<value_type>(
+      detail::hypergeometric_0F1_imp<value_type>(
          static_cast<value_type>(b),
          static_cast<value_type>(z),
          forwarding_policy()),
-      "boost::math::hypergeometric_0f1<%1%>(%1%,%1%)");
+      "boost::math::hypergeometric_0F1<%1%>(%1%,%1%)");
 }
 
 template <class T1, class T2>
@@ -116,4 +115,4 @@ inline typename tools::promote_args<T1, T2>::type hypergeometric_0F1(T1 b, T2 z)
 
 } } // namespace boost::math
 
-#endif // _BOOST_HYPERGEOMETRIC_2014_04_07_HPP_
+#endif // BOOST_MATH_HYPERGEOMETRIC_HPP
