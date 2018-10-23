@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include "test_1f1.hpp"
+#include "test_1F1.hpp"
 
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
@@ -48,15 +48,18 @@ void expected_results()
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
    //
-   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+   std::cout << "Tests run with " << BOOST_COMPILER << ", "
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
-   typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<40> > dec_40;
+   //typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<40> > dec_40;
    expected_results();
    BOOST_MATH_CONTROL_FP;
+
+   test_hypergeometric_mellin_transform<double>();
+   test_hypergeometric_laplace_transform<double>();
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
    //test_spots(0.0F, "float");
@@ -71,6 +74,3 @@ BOOST_AUTO_TEST_CASE( test_main )
    //test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
    //test_spots(dec_40(), "dec_40");
 }
-
-
-

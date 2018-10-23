@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////
 //  Copyright 2014 Anton Bikineev
 //  Copyright 2014 Christopher Kormanyos
@@ -8,25 +7,25 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef _BOOST_HYPERGEOMETRIC_1F1_HPP_
-  #define _BOOST_HYPERGEOMETRIC_1F1_HPP_
+#ifndef BOOST_MATH_HYPERGEOMETRIC_1F1_HPP
+#define BOOST_MATH_HYPERGEOMETRIC_1F1_HPP
 
 #include <boost/math/policies/policy.hpp>
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_asym.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_rational.hpp>
-#include <boost/math/special_functions/detail/hypergeometric_1f1_recurrence.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1F1_recurrence.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_pade.hpp>
-#include <boost/math/special_functions/detail/hypergeometric_1f1_bessel.hpp>
-#include <boost/math/special_functions/detail/hypergeometric_1f1_scaled_series.hpp>
-#include <boost/math/special_functions/detail/hypergeometric_pfq_checked_series.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1F1_bessel.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1F1_scaled_series.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
 
 namespace boost { namespace math { namespace detail {
 
-   // check when 1f1 series can't decay to polynom
+   // check when 1F1 series can't decay to polynom
    template <class T>
-   inline bool check_hypergeometric_1f1_parameters(const T& a, const T& b)
+   inline bool check_hypergeometric_1F1_parameters(const T& a, const T& b)
    {
       BOOST_MATH_STD_USING
 
@@ -40,17 +39,17 @@ namespace boost { namespace math { namespace detail {
    }
 
    template <class T, class Policy>
-   inline T hypergeometric_1f1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
+   inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
    {
       BOOST_MATH_STD_USING // exp, fabs, sqrt
 
-      static const char* const function = "boost::math::hypergeometric_1f1<%1%,%1%,%1%>(%1%,%1%,%1%)";
+         static const char* const function = "boost::math::hypergeometric_1F1<%1%,%1%,%1%>(%1%,%1%,%1%)";
 
       if ((z == 0) || (a == 0))
          return T(1);
 
       // undefined result:
-      if (!detail::check_hypergeometric_1f1_parameters(a, b))
+      if (!detail::check_hypergeometric_1F1_parameters(a, b))
          return policies::raise_domain_error<T>(
             function,
             "Function is indeterminate for negative integer b = %1%.",
@@ -71,7 +70,7 @@ namespace boost { namespace math { namespace detail {
       {
          // for negative integer a and b is reasonable to use truncated series - polynomial
          if ((a < 0) && (a == ceil(a)))
-            return detail::hypergeometric_1f1_generic_series(a, b, z, pol, log_scaling, function);
+            return detail::hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
 
          return (1 + (z / b)) * exp(z);
       }
@@ -87,28 +86,28 @@ namespace boost { namespace math { namespace detail {
 
       // asymptotic expansion
       // check region
-      if (detail::hypergeometric_1f1_asym_region(a, b, z))
+      if (detail::hypergeometric_1F1_asym_region(a, b, z))
       {
          // check for poles in gamma for b
          if ((b > 0) || (b != floor(b)))
          {
             //check for poles in gamma for a
             if (((a > 0) || (a != floor(a))) && (z > 0))
-               return detail::hypergeometric_1f1_asym_positive_series(a, b, z, pol);
+               return detail::hypergeometric_1F1_asym_positive_series(a, b, z, pol);
 
             //check for poles in gamma for b
             if (((b_minus_a > 0) || (b_minus_a != floor(b_minus_a))) && (z < 0))
-               return detail::hypergeometric_1f1_asym_negative_series(a, b, z, pol);
+               return detail::hypergeometric_1F1_asym_negative_series(a, b, z, pol);
          }
       }
 
       if ((fabs(a * z / b) < 3.5) && (fabs(z * 100) < fabs(b)))
-         return detail::hypergeometric_1f1_rational(a, b, z, pol);
+         return detail::hypergeometric_1F1_rational(a, b, z, pol);
 
       if (z < -1)
       {
          if (a == 1)
-            return detail::hypergeometric_1f1_pade(b, z, pol);
+            return detail::hypergeometric_1F1_pade(b, z, pol);
          if ((fabs(z * a / b) < 2) && (fabs(z * (a + 10) / ((b + 10) * 3628800)) < 1))  // TODO check crossover for most accurate location
          {
             if ((boost::math::sign(b - a) == boost::math::sign(b)) && ((b > 0) || (b < -200)))
@@ -118,13 +117,13 @@ namespace boost { namespace math { namespace detail {
                // and 1F1[a, a, -z] = e^-z the result must necessarily be somewhere near unity.
                // We have to rule out b small and negative becuase if b crosses the origin early
                // in the series (before we're pretty much converged) then all bets are off:
-               return hypergeometric_1f1_generic_series(a, b, z, pol, log_scaling, function);
+               return hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
             }
          }
          if ((b < 4 * a) && (a < 0) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
          {
             // Without this we get into an area where the series don't converge if b - a ~ b
-            return hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
          }
 
          // Let's otherwise make z positive (almost always)
@@ -132,7 +131,7 @@ namespace boost { namespace math { namespace detail {
          // (we also don't transform if z belongs to [-1,0])
          int scaling = itrunc(z);
          log_scaling += scaling;
-         return exp(z - scaling) * detail::hypergeometric_1f1_imp<T>(b_minus_a, b, -z, pol, log_scaling);
+         return exp(z - scaling) * detail::hypergeometric_1F1_imp<T>(b_minus_a, b, -z, pol, log_scaling);
       }
       //
       // Check for initial divergence:
@@ -170,33 +169,33 @@ namespace boost { namespace math { namespace detail {
       if (series_is_divergent)
       {
          if((a < 0) && (b > -1))
-            return detail::hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+            return detail::hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
 
-         if (detail::hypergeometric_1f1_is_a_small_enough(a))
+         if (detail::hypergeometric_1F1_is_a_small_enough(a))
          {
             // TODO: this part has to be researched deeper
             const bool b_is_negative_and_greater_than_z = b < 0 ? (fabs(b) > fabs(z) ? 1 : 0) : 0;
             if ((a == ceil(a)) && !b_is_negative_and_greater_than_z)
-               return detail::hypergeometric_1f1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+               return detail::hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
             else if ((z > 0) && (2 * (z  * (b - (2 * a))) > 0) && (b > -100)) // TODO: see when this methd is bad in opposite to usual taylor
-               return detail::hypergeometric_1f1_13_3_7_series(a, b, z, pol, function);
+               return detail::hypergeometric_1F1_13_3_7_series(a, b, z, pol, function);
             else if (b < a)
-               return detail::hypergeometric_1f1_backward_recurrence_for_negative_b(a, b, z, pol);
+               return detail::hypergeometric_1F1_backward_recurrence_for_negative_b(a, b, z, pol);
          }
          // If we get here, then we've run out of methods to try, use the checked series which will
          // raise an error if the result is garbage:
          return hypergeometric_1F1_checked_series_impl(a, b, z, pol);
       }
 
-      return detail::hypergeometric_1f1_generic_series(a, b, z, pol, log_scaling, function);
+      return detail::hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
    }
 
    template <class T, class Policy>
-   inline T hypergeometric_1f1_imp(const T& a, const T& b, const T& z, const Policy& pol)
+   inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol)
    {
       BOOST_MATH_STD_USING // exp, fabs, sqrt
       int log_scaling = 0;
-      T result = hypergeometric_1f1_imp(a, b, z, pol, log_scaling);
+      T result = hypergeometric_1F1_imp(a, b, z, pol, log_scaling);
       //
       // Actual result will be result * e^log_scaling.
       //
@@ -233,12 +232,12 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1(T1 a, T
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
    return policies::checked_narrowing_cast<result_type, Policy>(
-      detail::hypergeometric_1f1_imp<value_type>(
+      detail::hypergeometric_1F1_imp<value_type>(
          static_cast<value_type>(a),
          static_cast<value_type>(b),
          static_cast<value_type>(z),
          forwarding_policy()),
-      "boost::math::hypergeometric_1f1<%1%>(%1%,%1%,%1%)");
+      "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)");
 }
 
 template <class T1, class T2, class T3>
@@ -250,4 +249,4 @@ inline typename tools::promote_args<T1, T2, T3>::type hypergeometric_1F1(T1 a, T
 
   } } // namespace boost::math
 
-#endif // _BOOST_HYPERGEOMETRIC_2014_04_07_HPP_
+#endif // BOOST_MATH_HYPERGEOMETRIC_HPP

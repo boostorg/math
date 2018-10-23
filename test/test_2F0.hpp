@@ -22,7 +22,7 @@
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
-#include <boost/math/special_functions/hypergeometric_2f0.hpp>
+#include <boost/math/special_functions/hypergeometric_2F0.hpp>
 
 template <class Real, class T>
 void do_test_2F0(const T& data, const char* type_name, const char* test_name)
@@ -59,25 +59,25 @@ void do_test_2F0(const T& data, const char* type_name, const char* test_name)
 template <class T>
 void test_spots1(T, const char* type_name)
 {
-#include "hypergeometric_2f0.ipp"
+#include "hypergeometric_2F0.ipp"
 
-   do_test_2F0<T>(hypergeometric_2f0, type_name, "Random non-integer a2, |z| < 1");
+   do_test_2F0<T>(hypergeometric_2F0, type_name, "Random non-integer a2, |z| < 1");
 
-#include "hypergeometric_2f0_large_z.ipp"
+#include "hypergeometric_2F0_large_z.ipp"
 
-   do_test_2F0<T>(hypergeometric_2f0_large_z, type_name, "Random non-integer a2, |z| > 1");
+   do_test_2F0<T>(hypergeometric_2F0_large_z, type_name, "Random non-integer a2, |z| > 1");
 }
 
 template <class T>
 void test_spots2(T, const char* type_name)
 {
-#include "hypergeometric_2f0_integer_a2.ipp"
+#include "hypergeometric_2F0_integer_a2.ipp"
 
-   do_test_2F0<T>(hypergeometric_2f0_integer_a2, type_name, "Integer a2, |z| > 1");
+   do_test_2F0<T>(hypergeometric_2F0_integer_a2, type_name, "Integer a2, |z| > 1");
 
-#include "hypergeometric_2f0_half.ipp"
+#include "hypergeometric_2F0_half.ipp"
 
-   do_test_2F0<T>(hypergeometric_2f0_half, type_name, "a1 = a2 + 0.5");
+   do_test_2F0<T>(hypergeometric_2F0_half, type_name, "a1 = a2 + 0.5");
 }
 
 template <class T>
@@ -100,4 +100,3 @@ void test_spots(T z, const char* type_name)
       BOOST_CHECK((boost::math::isinf)(boost::math::hypergeometric_2F0(a1, a2, z)));
    }
 }
-

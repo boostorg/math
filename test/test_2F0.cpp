@@ -54,7 +54,7 @@ void expected_results()
    // Finish off by printing out the compiler/stdlib/platform names,
    // we do this to make it easier to mark up expected error rates.
    //
-   std::cout << "Tests run with " << BOOST_COMPILER << ", " 
+   std::cout << "Tests run with " << BOOST_COMPILER << ", "
       << BOOST_STDLIB << ", " << BOOST_PLATFORM << std::endl;
 }
 
@@ -77,6 +77,3 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_spots(boost::multiprecision::cpp_bin_float_quad(), "cpp_bin_float_quad");
    test_spots(dec_40(), "dec_40");
 }
-
-
-

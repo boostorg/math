@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////
 //  Copyright 2017 John Maddock
 //  Distributed under the Boost
@@ -6,14 +5,14 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 #ifndef BOOST_MATH_HYPERGEOMETRIC_1F1_SCALED_SERIES_HPP
-  #define BOOST_MATH_HYPERGEOMETRIC_1F1_SCALED_SERIES_HPP
+#define BOOST_MATH_HYPERGEOMETRIC_1F1_SCALED_SERIES_HPP
 
-  #include <boost/array.hpp>
+#include <boost/array.hpp>
 
   namespace boost{ namespace math{ namespace detail{
 
      template <class T, class Policy>
-     T hypergeometric_1f1_scaled_series(const T& a, const T& b, T z, const Policy& pol, const char* function)
+     T hypergeometric_1F1_scaled_series(const T& a, const T& b, T z, const Policy& pol, const char* function)
      {
         BOOST_MATH_STD_USING_CORE
         //

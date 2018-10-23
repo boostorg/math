@@ -22,7 +22,8 @@
 #include "handle_test_result.hpp"
 #include "table_type.hpp"
 
-#include <boost/math/special_functions/hypergeometric_1f1.hpp>
+#include <boost/math/special_functions/hypergeometric_1F1.hpp>
+#include <boost/math/quadrature/exp_sinh.hpp>
 
 template <class Real, class T>
 void do_test_2F0(const T& data, const char* type_name, const char* test_name)
@@ -59,21 +60,21 @@ void do_test_2F0(const T& data, const char* type_name, const char* test_name)
 template <class T>
 void test_spots1(T, const char* type_name)
 {
-#include "hypergeometric_1f1.ipp"
+#include "hypergeometric_1F1.ipp"
 
-   do_test_2F0<T>(hypergeometric_1f1, type_name, "Integer a values");
+   do_test_2F0<T>(hypergeometric_1F1, type_name, "Integer a values");
 
-#include "hypergeometric_1f1_small_random.ipp"
+#include "hypergeometric_1F1_small_random.ipp"
 
-   do_test_2F0<T>(hypergeometric_1f1_small_random, type_name, "Small random values");
+   do_test_2F0<T>(hypergeometric_1F1_small_random, type_name, "Small random values");
 }
 
 template <class T>
 void test_spots2(T, const char* type_name)
 {
-#include "hypergeometric_1f1_big.ipp"
+#include "hypergeometric_1F1_big.ipp"
 
-   do_test_2F0<T>(hypergeometric_1f1_big, type_name, "Large random values");
+   do_test_2F0<T>(hypergeometric_1F1_big, type_name, "Large random values");
 }
 
 template <class T>
@@ -83,3 +84,51 @@ void test_spots(T z, const char* type_name)
    test_spots2(z, type_name);
 }
 
+
+// Tests the Mellin transform formula given here: https://dlmf.nist.gov/13.10, Equation 13.10.10
+template <class Real>
+void test_hypergeometric_mellin_transform()
+{
+    using boost::math::hypergeometric_1F1;
+    using boost::math::quadrature::exp_sinh;
+    using boost::math::tgamma;
+    using std::pow;
+
+    // Constraint: 0 < lambda < a.
+    Real lambda = 0.5;
+    Real a = 1;
+    Real b = 3;
+    auto f = [&](Real t)->Real { return pow(t, lambda - 1)*hypergeometric_1F1(a, b, -t); };
+
+    auto integrator = exp_sinh<double>();
+    Real computed = integrator.integrate(f, boost::math::tools::epsilon<Real>());
+    Real expected = tgamma(b)*tgamma(lambda)*tgamma(a-lambda)/(tgamma(a)*tgamma(b-lambda));
+
+    Real tol = boost::math::tools::epsilon<Real>() * 10;
+    BOOST_CHECK_CLOSE(computed, expected, tol);
+}
+
+
+// Tests the Laplace transform formula given here: https://dlmf.nist.gov/13.10, Equation 13.10.4
+template <class Real>
+void test_hypergeometric_laplace_transform()
+{
+    using boost::math::hypergeometric_1F1;
+    using boost::math::quadrature::exp_sinh;
+    using boost::math::tgamma;
+    using std::pow;
+    using std::exp;
+
+    // Set a = 1 blows up for some reason . . .
+    Real a = -1;
+    Real b = 3;
+    Real z = 1.5;
+    auto f = [&](Real t)->Real { return exp(-z*t)*pow(t, b - 1)*hypergeometric_1F1(a, b, t); };
+
+    auto integrator = exp_sinh<double>();
+    Real computed = integrator.integrate(f, boost::math::tools::epsilon<Real>());
+    Real expected = tgamma(b)/(pow(z,b)*pow(1-1/z, a));
+
+    Real tol = boost::math::tools::epsilon<Real>() * 200;
+    BOOST_CHECK_CLOSE(computed, expected, tol);
+}

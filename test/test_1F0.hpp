@@ -37,24 +37,24 @@ void test_spots(T)
    //
    T tolerance = boost::math::tools::epsilon<T>() * 1000;
 
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(-3), T(2)), T(-1), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(-3), T(4)), T(-27), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(-3), T(0.5)), T(0.125), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(3), T(0.5)), T(8), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(3), T(2)), T(-1), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(3), T(4)), T(T(-1) / 27), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(3), T(-0.5)), pow(T(1.5), -3), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(3), T(-2)), T(1 / T(27)), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(3), T(-4)), T(T(1) / 125), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(-3), T(-0.5)), pow(T(1.5), 3), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(-3), T(-2)), T(27), tolerance);
-   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1f0(T(-3), T(-4)), T(125), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(-3), T(2)), T(-1), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(-3), T(4)), T(-27), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(-3), T(0.5)), T(0.125), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(3), T(0.5)), T(8), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(3), T(2)), T(-1), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(3), T(4)), T(T(-1) / 27), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(3), T(-0.5)), pow(T(1.5), -3), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(3), T(-2)), T(1 / T(27)), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(3), T(-4)), T(T(1) / 125), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(-3), T(-0.5)), pow(T(1.5), 3), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(-3), T(-2)), T(27), tolerance);
+   BOOST_CHECK_CLOSE(boost::math::hypergeometric_1F0(T(-3), T(-4)), T(125), tolerance);
 
-   BOOST_CHECK_THROW(boost::math::hypergeometric_1f0(T(3), T(1)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::hypergeometric_1f0(T(-3), T(1)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::hypergeometric_1f0(T(3.25), T(1)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::hypergeometric_1f0(T(-3.25), T(1)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::hypergeometric_1f0(T(3.25), T(2)), std::domain_error);
-   BOOST_CHECK_THROW(boost::math::hypergeometric_1f0(T(-3.25), T(2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::hypergeometric_1F0(T(3), T(1)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::hypergeometric_1F0(T(-3), T(1)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::hypergeometric_1F0(T(3.25), T(1)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::hypergeometric_1F0(T(-3.25), T(1)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::hypergeometric_1F0(T(3.25), T(2)), std::domain_error);
+   BOOST_CHECK_THROW(boost::math::hypergeometric_1F0(T(-3.25), T(2)), std::domain_error);
 }
 

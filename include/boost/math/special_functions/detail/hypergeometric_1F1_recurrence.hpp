@@ -9,21 +9,21 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_HYPERGEOMETRIC_1F1_RECURRENCE_HPP_
-  #define BOOST_HYPERGEOMETRIC_1F1_RECURRENCE_HPP_
+#define BOOST_HYPERGEOMETRIC_1F1_RECURRENCE_HPP_
 
-  #include <boost/math/special_functions/modf.hpp>
-  #include <boost/math/special_functions/next.hpp>
+#include <boost/math/special_functions/modf.hpp>
+#include <boost/math/special_functions/next.hpp>
 
-  #include <boost/math/tools/recurrence.hpp>
+#include <boost/math/tools/recurrence.hpp>
 
   namespace boost { namespace math { namespace detail {
 
   template <class T>
-  struct hypergeometric_1f1_recurrence_a_coefficients
+  struct hypergeometric_1F1_recurrence_a_coefficients
   {
     typedef boost::math::tuple<T, T, T> result_type;
 
-    hypergeometric_1f1_recurrence_a_coefficients(const T& a, const T& b, const T& z):
+    hypergeometric_1F1_recurrence_a_coefficients(const T& a, const T& b, const T& z):
     a(a), b(b), z(z)
     {
     }
@@ -44,11 +44,11 @@
   };
 
   template <class T>
-  struct hypergeometric_1f1_recurrence_b_coefficients
+  struct hypergeometric_1F1_recurrence_b_coefficients
   {
     typedef boost::math::tuple<T, T, T> result_type;
 
-    hypergeometric_1f1_recurrence_b_coefficients(const T& a, const T& b, const T& z):
+    hypergeometric_1F1_recurrence_b_coefficients(const T& a, const T& b, const T& z):
     a(a), b(b), z(z)
     {
     }
@@ -69,11 +69,11 @@
   };
 
   template <class T>
-  struct hypergeometric_1f1_recurrence_a_and_b_coefficients
+  struct hypergeometric_1F1_recurrence_a_and_b_coefficients
   {
     typedef boost::math::tuple<T, T, T> result_type;
 
-    hypergeometric_1f1_recurrence_a_and_b_coefficients(const T& a, const T& b, const T& z):
+    hypergeometric_1F1_recurrence_a_and_b_coefficients(const T& a, const T& b, const T& z):
     a(a), b(b), z(z)
     {
     }
@@ -96,10 +96,10 @@
 
   // forward declaration for initial values
   template <class T, class Policy>
-  inline T hypergeometric_1f1_imp(const T& a, const T& b, const T& z, const Policy& pol);
+  inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol);
 
   template <class T, class Policy>
-  inline T hypergeometric_1f1_backward_recurrence_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function)
+  inline T hypergeometric_1F1_backward_recurrence_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function)
   {
     BOOST_MATH_STD_USING // modf, frexp, fabs, pow
 
@@ -130,11 +130,11 @@
     if (-integer_part > policies::get_max_series_iterations<Policy>())
        return policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", std::numeric_limits<T>::quiet_NaN(), pol);
 
-    T first = detail::hypergeometric_1f1_imp(ak, b, z, pol);
+    T first = detail::hypergeometric_1F1_imp(ak, b, z, pol);
     --ak;
-    T second = detail::hypergeometric_1f1_imp(ak, b, z, pol);
+    T second = detail::hypergeometric_1F1_imp(ak, b, z, pol);
 
-    detail::hypergeometric_1f1_recurrence_a_coefficients<T> s(ak, b, z);
+    detail::hypergeometric_1F1_recurrence_a_coefficients<T> s(ak, b, z);
 
     return tools::solve_recurrence_relation_backward(s,
                                                      static_cast<unsigned int>(std::abs(integer_part)),
@@ -143,35 +143,35 @@
   }
 
   template <class T, class Policy>
-  inline T hypergeometric_1f1_forward_recurrence_for_positive_a(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1F1_forward_recurrence_for_positive_a(const T& a, const T& b, const T& z, const Policy& pol)
   {
     BOOST_MATH_STD_USING // modf, fabs
 
     boost::intmax_t integer_part = 0;
     T ak = modf(a, &integer_part);
 
-    T first = detail::hypergeometric_1f1_imp(ak, b, z, pol);
+    T first = detail::hypergeometric_1F1_imp(ak, b, z, pol);
     ++ak;
-    T second = detail::hypergeometric_1f1_imp(ak, b, z, pol);
+    T second = detail::hypergeometric_1F1_imp(ak, b, z, pol);
 
-    detail::hypergeometric_1f1_recurrence_a_coefficients<T> s(ak, b, z);
+    detail::hypergeometric_1F1_recurrence_a_coefficients<T> s(ak, b, z);
 
     return tools::solve_recurrence_relation_forward(s, integer_part, first, second);
   }
 
   template <class T, class Policy>
-  inline T hypergeometric_1f1_backward_recurrence_for_negative_b(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1F1_backward_recurrence_for_negative_b(const T& a, const T& b, const T& z, const Policy& pol)
   {
     BOOST_MATH_STD_USING // modf, fabs
 
     boost::intmax_t integer_part = 0;
     T bk = modf(b, &integer_part);
 
-    T first = detail::hypergeometric_1f1_imp(a, bk, z, pol);
+    T first = detail::hypergeometric_1F1_imp(a, bk, z, pol);
     --bk;
-    T second = detail::hypergeometric_1f1_imp(a, bk, z, pol);
+    T second = detail::hypergeometric_1F1_imp(a, bk, z, pol);
 
-    detail::hypergeometric_1f1_recurrence_b_coefficients<T> s(a, bk, z);
+    detail::hypergeometric_1F1_recurrence_b_coefficients<T> s(a, bk, z);
 
     return tools::solve_recurrence_relation_backward(s,
                                                      static_cast<unsigned int>(std::abs(integer_part)),
@@ -182,7 +182,7 @@
   // this method works provided that integer part of a is the same as integer part of b
   // we don't make this check inside it.
   template <class T, class Policy>
-  inline T hypergeometric_1f1_backward_recurrence_for_negative_a_and_b(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1F1_backward_recurrence_for_negative_a_and_b(const T& a, const T& b, const T& z, const Policy& pol)
   {
     BOOST_MATH_STD_USING // modf, fabs
 
@@ -190,18 +190,18 @@
     T ak = modf(a, &integer_part);
     T bk = modf(b, &integer_part);
 
-    T first = detail::hypergeometric_1f1_imp(ak, bk, z, pol);
+    T first = detail::hypergeometric_1F1_imp(ak, bk, z, pol);
     --ak; --bk;
-    T second = detail::hypergeometric_1f1_imp(ak, bk, z, pol);
+    T second = detail::hypergeometric_1F1_imp(ak, bk, z, pol);
 
-    detail::hypergeometric_1f1_recurrence_a_and_b_coefficients<T> s(ak, bk, z);
+    detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> s(ak, bk, z);
 
     return tools::solve_recurrence_relation_backward(s, fabs(integer_part), first, second);
   }
 
   // ranges
   template <class T>
-  inline bool hypergeometric_1f1_is_a_small_enough(const T& a)
+  inline bool hypergeometric_1F1_is_a_small_enough(const T& a)
   {
     return a < -10; // TODO: make dependent on precision
   }
