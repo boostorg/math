@@ -210,10 +210,38 @@
   }
 
   template <class T, class Policy>
-  inline T hypergeometric_1f1_generic_series(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1f1_generic_series(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling, const char* function)
   {
-    detail::hypergeometric_pfq_generic_series_term<T, 1u, 1u> s(a, b, z);
-    return detail::sum_pfq_series(s, pol);
+     BOOST_MATH_STD_USING_CORE
+     T sum(0), term(1), upper_limit(sqrt(boost::math::tools::max_value<T>())), diff;
+     T lower_limit(1 / upper_limit);
+     unsigned n = 0;
+     int log_scaling_factor = boost::math::itrunc(boost::math::tools::log_max_value<T>()) - 2;
+     T scaling_factor = exp(log_scaling_factor);
+
+     do
+     {
+        sum += term;
+        if (fabs(sum) >= upper_limit)
+        {
+           sum /= scaling_factor;
+           term /= scaling_factor;
+           log_scaling += log_scaling_factor;
+        }
+        if (fabs(sum) < lower_limit)
+        {
+           sum *= scaling_factor;
+           term *= scaling_factor;
+           log_scaling -= log_scaling_factor;
+        }
+        term *= (((a + n) / ((b + n) * (n + 1))) * z);
+        if (n > boost::math::policies::get_max_series_iterations<Policy>())
+           return boost::math::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
+        ++n;
+        diff = fabs(term / sum);
+     } while (diff > boost::math::policies::get_epsilon<T, Policy>());
+
+     return sum;
   }
 
   template <class T, class Policy>
