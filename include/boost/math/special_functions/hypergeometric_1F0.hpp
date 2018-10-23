@@ -54,7 +54,7 @@ inline typename tools::promote_args<T1, T2>::type hypergeometric_1F0(T1 a, T2 z,
       policies::discrete_quantile<>,
       policies::assert_undefined<> >::type forwarding_policy;
    return policies::checked_narrowing_cast<result_type, Policy>(
-      detail::hypergeometric_1f0_imp<value_type>(
+      detail::hypergeometric_1F0_imp<value_type>(
          static_cast<value_type>(a),
          static_cast<value_type>(z),
          forwarding_policy()),

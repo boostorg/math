@@ -46,7 +46,7 @@
     result_type term;
   };
 
-  // partial specialization for 1f0
+  // partial specialization for 1F0
   template <class T>
   struct hypergeometric_pFq_cf_term<T, 1u, 0u>
   {
