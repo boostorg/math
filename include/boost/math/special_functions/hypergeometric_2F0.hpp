@@ -15,6 +15,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_series.hpp>
 #include <boost/math/special_functions/laguerre.hpp>
 #include <boost/math/special_functions/hermite.hpp>
+#include <boost/math/tools/fraction.hpp>
 
 namespace boost { namespace math { namespace detail {
 
