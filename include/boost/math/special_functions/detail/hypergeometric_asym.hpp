@@ -22,7 +22,7 @@
   inline T hypergeometric_1F1_asym_positive_series(const T& a, const T& b, const T& z, const Policy& pol)
   {
     BOOST_MATH_STD_USING
-    static const char* const function = "boost::math::hypergeometric_1F1_asym_positive_series<%1%>(%1%,%1%,%1%)";
+    //static const char* const function = "boost::math::hypergeometric_1F1_asym_positive_series<%1%>(%1%,%1%,%1%)";
 
     const bool is_a_integer = (a == floor(a));
     const bool is_b_integer = (b == floor(b));
@@ -42,7 +42,7 @@
   inline T hypergeometric_1F1_asym_negative_series(const T& a, const T& b, const T& z, const Policy& pol)
   {
     BOOST_MATH_STD_USING
-    static const char* const function = "boost::math::hypergeometric_1F1_asym_negative_series<%1%>(%1%,%1%,%1%)";
+    //static const char* const function = "boost::math::hypergeometric_1F1_asym_negative_series<%1%>(%1%,%1%,%1%)";
 
     const T b_minus_a = b - a;
 

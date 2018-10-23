@@ -54,9 +54,12 @@ void expected_results()
 
 BOOST_AUTO_TEST_CASE( test_main )
 {
-   typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<40> > dec_40;
+   //typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<40> > dec_40;
    expected_results();
    BOOST_MATH_CONTROL_FP;
+
+   test_hypergeometric_mellin_transform<double>();
+   test_hypergeometric_laplace_transform<double>();
 
 #ifndef BOOST_MATH_BUGGY_LARGE_FLOAT_CONSTANTS
    //test_spots(0.0F, "float");
