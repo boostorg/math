@@ -17,65 +17,107 @@
 
   namespace detail {
 
-  // assumes a and b are not non-positive integers
-  template <class T, class Policy>
-  inline T hypergeometric_1F1_asym_positive_series(const T& a, const T& b, const T& z, const Policy& pol)
-  {
-    BOOST_MATH_STD_USING
-    //static const char* const function = "boost::math::hypergeometric_1F1_asym_positive_series<%1%>(%1%,%1%,%1%)";
+     //
+     // Asymptotic series based on https://dlmf.nist.gov/13.7#E1
+     //
+     // Note that a and b must not be negative integers, in addition
+     // we require z > 0 and so apply Kummer's relation for z < 0.
+     //
+     template <class T, class Policy>
+     inline T hypergeometric_1F1_asym_large_z_series(T a, const T& b, T z, const Policy& pol, int& log_scaling)
+     {
+        BOOST_MATH_STD_USING
+           T prefix;
+        int e, s;
+        if (z < 0)
+        {
+           a = b - a;
+           z = -z;
+           prefix = 1;
+        }
+        else
+        {
+           e = boost::math::itrunc(z, pol);
+           log_scaling += e;
+           prefix = exp(z - e);
+        }
+        T t = log(z) * (a - b);
+        e = boost::math::itrunc(t, pol);
+        log_scaling += e;
+        prefix *= exp(t - e);
 
-    const bool is_a_integer = (a == floor(a));
-    const bool is_b_integer = (b == floor(b));
+        t = boost::math::lgamma(b, &s, pol);
+        e = boost::math::itrunc(t, pol);
+        log_scaling += e;
+        prefix *= s * exp(t - e);
 
-    BOOST_ASSERT(!(is_a_integer && a <= 0) && !(is_b_integer && b <= 0));
+        t = boost::math::lgamma(a, &s, pol);
+        e = boost::math::itrunc(t, pol);
+        log_scaling -= e;
+        prefix /= s * exp(t - e);
 
-    const T gamma_ratio = (b > 0 && a > 0) ?
-      boost::math::tgamma_ratio(b, a, pol) :
-      T(boost::math::tgamma(b, pol) / boost::math::tgamma(a, pol));
-    const T prefix_a = (exp(z) * gamma_ratio) * pow(z, (a - b));
+        return prefix * boost::math::detail::hypergeometric_2F0_imp(1 - a, b - a, 1 / z, pol, true);
+     }
 
-    return prefix_a * boost::math::hypergeometric_2F0(b - a, 1 - a, 1 / z, pol);
-  }
-
-  // assumes b and (b - a) are not non-positive integers
-  template <class T, class Policy>
-  inline T hypergeometric_1F1_asym_negative_series(const T& a, const T& b, const T& z, const Policy& pol)
-  {
-    BOOST_MATH_STD_USING
-    //static const char* const function = "boost::math::hypergeometric_1F1_asym_negative_series<%1%>(%1%,%1%,%1%)";
-
-    const T b_minus_a = b - a;
-
-    const bool is_a_integer = (a == floor(a));
-    const bool is_b_minus_a_integer = (b_minus_a == floor(b_minus_a));
-
-    BOOST_ASSERT(!(is_a_integer && a <= 0) && !(is_b_minus_a_integer && b_minus_a <= 0));
-
-    const T gamma_ratio = (b > 0 && b_minus_a > 0) ?
-      boost::math::tgamma_ratio(b, b_minus_a, pol) :
-      boost::math::tgamma(b) / boost::math::tgamma((b_minus_a), pol);
-    const T prefix_b = gamma_ratio / pow(-z, a);
-
-    return prefix_b * boost::math::hypergeometric_2F0(a, 1 - b_minus_a, -1 / z, pol);
-  }
 
   // experimental range
-  template <class T>
-  inline bool hypergeometric_1F1_asym_region(const T& a, const T& b, const T& z)
+  template <class T, class Policy>
+  inline bool hypergeometric_1F1_asym_region(const T& a, const T& b, const T& z, const Policy&)
   {
     BOOST_MATH_STD_USING
+    int half_digits = policies::digits<T, Policy>() / 2;
+    bool in_region = false;
 
-    const T the_max_of_one_and_b_minus_a  ((std::max)(T(1), T(fabs(b - a))));
-    const T the_max_of_one_and_one_minus_a((std::max)(T(1), T(fabs(1 - a))));
-
-    const T the_product_of_these_maxima(the_max_of_one_and_b_minus_a * the_max_of_one_and_one_minus_a);
-
-    const T abs_of_z(fabs(z));
-
-    if ((abs_of_z > 100) && (the_product_of_these_maxima < (abs_of_z / 2))) // TODO: not a good way
-      return true;
-
-    return false;
+    //
+    // We use the following heuristic, if after we have had half_digits terms
+    // of the 2F0 series, we require terms to be decreasing in size by a factor
+    // of at least 0.7.  Assuming the earlier terms were converging much faster
+    // than this, then this should be enough to achieve convergence before the
+    // series shoots off to infinity.
+    //
+    if (z > 0)
+    {
+       T one_minus_a = 1 - a;
+       T b_minus_a = b - a;
+       if (fabs((one_minus_a + half_digits) * (b_minus_a + half_digits) / (half_digits * z)) < 0.7)
+       {
+          in_region = true;
+          //
+          // double check that we are not divergent at the start if a,b < 0:
+          //
+          if ((one_minus_a < 0) || (b_minus_a < 0))
+          {
+             if (fabs(one_minus_a * b_minus_a / z) > 0.5)
+                in_region = false;
+          }
+       }
+    }
+    else if (fabs((1 - (b - a) + half_digits) * (a + half_digits) / (half_digits * z)) < 0.7)
+    {
+       in_region = true;
+       //
+       // double check that we are not divergent at the start if a,b < 0:
+       //
+       T a1 = 1 - (b - a);
+       if ((a1 < 0) || (a < 0))
+       {
+          if (fabs(a1 * a / z) > 0.5)
+             in_region = false;
+       }
+    }
+    //
+    // Check for a and b negative integers as these aren't supported by the approximation:
+    //
+    if (in_region)
+    {
+       if ((a < 0) && (floor(a) == a))
+          in_region = false;
+       if ((b < 0) && (floor(b) == b))
+          in_region = false;
+       if (fabs(z) < 40)
+          in_region = false;
+    }
+    return in_region;
   }
 
   } } } // namespaces

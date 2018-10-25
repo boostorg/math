@@ -86,19 +86,9 @@ namespace boost { namespace math { namespace detail {
 
       // asymptotic expansion
       // check region
-      if (detail::hypergeometric_1F1_asym_region(a, b, z))
+      if (detail::hypergeometric_1F1_asym_region(a, b, z, pol))
       {
-         // check for poles in gamma for b
-         if ((b > 0) || (b != floor(b)))
-         {
-            //check for poles in gamma for a
-            if (((a > 0) || (a != floor(a))) && (z > 0))
-               return detail::hypergeometric_1F1_asym_positive_series(a, b, z, pol);
-
-            //check for poles in gamma for b
-            if (((b_minus_a > 0) || (b_minus_a != floor(b_minus_a))) && (z < 0))
-               return detail::hypergeometric_1F1_asym_negative_series(a, b, z, pol);
-         }
+         return hypergeometric_1F1_asym_large_z_series(a, b, z, pol, log_scaling);
       }
 
       if ((fabs(a * z / b) < 3.5) && (fabs(z * 100) < fabs(b)))

@@ -56,7 +56,7 @@ namespace boost { namespace math { namespace detail {
 
 
    template <class T, class Policy>
-   inline T hypergeometric_2F0_imp(T a1, T a2, const T& z, const Policy& pol)
+   inline T hypergeometric_2F0_imp(T a1, T a2, const T& z, const Policy& pol, bool asymptotic = false)
    {
       //
       // The terms in this series go to infinity unless one of a1 and a2 is a negative integer.
@@ -72,7 +72,7 @@ namespace boost { namespace math { namespace detail {
       bool is_a1_integer = (a1 == floor(a1));
       bool is_a2_integer = (a2 == floor(a2));
 
-      if (!is_a1_integer && !is_a2_integer)
+      if (!asymptotic && !is_a1_integer && !is_a2_integer)
          return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
       if (!is_a1_integer || (a1 > 0))
       {
@@ -82,7 +82,7 @@ namespace boost { namespace math { namespace detail {
       //
       // At this point a1 must be a negative integer:
       //
-      if(!is_a1_integer || (a1 > 0))
+      if(!asymptotic && (!is_a1_integer || (a1 > 0)))
          return boost::math::policies::raise_overflow_error<T>(function, 0, pol);
       //
       // Special cases first:
@@ -118,7 +118,7 @@ namespace boost { namespace math { namespace detail {
          }
       }
 
-      if ((a1 * a2 * z < 0) && (a2 < -5))
+      if ((a1 * a2 * z < 0) && (a2 < -5) && (fabs(a1 * a2 * z) > 0.5))
       {
          // Series is alternating and maybe divergent at least for the first few terms
          // (until a2 goes positive), try the continued fraction:
