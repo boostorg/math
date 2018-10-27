@@ -23,11 +23,22 @@ using namespace std;
 using namespace boost::multiprecision;
 
 typedef mpfi_float_1000 mpfi_type;
-
 mp_t hypergeometric_1f1_generic_series(mp_t a_, mp_t b_, mp_t z_)
 {
+   using namespace boost::math::tools;
+   using namespace boost::math;
+   using namespace std;
+   using namespace boost::multiprecision;
+
    mpfi_type a(a_), b(b_), z(z_), sum(0), term(1), diff;
    unsigned n = 0;
+   bool cont = true;
+
+   unsigned max_n;
+   if (b < 0)
+      max_n = itrunc(-b) + 10000;
+   else
+      max_n = 10000000;
 
    do
    {
@@ -35,7 +46,7 @@ mp_t hypergeometric_1f1_generic_series(mp_t a_, mp_t b_, mp_t z_)
       term *= (((a + n) / ((b + n) * (n + 1))) * z);
       ++n;
       diff = fabs(term / sum);
-      if (n > 10000000)
+      if (n > max_n)
       {
          std::cout << "Aborting series evaluation due to too many iterations...\n";
          throw evaluation_error("");
@@ -45,13 +56,15 @@ mp_t hypergeometric_1f1_generic_series(mp_t a_, mp_t b_, mp_t z_)
          std::cout << "Aborting series evaluation due to over large sum...\n";
          throw evaluation_error("");
       }
-   } while (upper(diff) > 1e-40);
+      cont = (fabs(upper(diff)) > 1e-40) || (b + n < 200);
+      //std::cout << upper(term) << " " << upper(sum) << " " << upper(diff) << " " << cont << std::endl;
+   } while (cont);
 
    mp_t r = mp_t(width(sum) / median(sum));
    if (fabs(r) > 1e-40)
    {
       std::cout << "Aborting to to error in result of " << r << std::endl;
-         throw evaluation_error("");
+      throw evaluation_error("");
    }
    std::cout << "Found error in sum was " << r << std::endl;
 
@@ -91,7 +104,7 @@ int main(int, char* [])
       "This program will generate spot tests for 1F1 (Yeh!!):\n";
 
    std::string line;
-   bool cont;
+   //bool cont;
 
    std::vector<mp_t> v;
    random_ns::mt19937 rnd;
@@ -136,9 +149,11 @@ int main(int, char* [])
       {
          for (unsigned k = 0; k < v.size(); ++k)
          {
+            std::cout << i << " " << j << " " << k << std::endl;
+            std::cout << v[i] << " " << (v[j] * 3) / 2 << " " << (v[j] * 5) / 4 << std::endl;
             arg1 = make_single_param(v[i]);
-            arg2 = make_single_param(mp_t(v[j] * 3 / 2));
-            arg3 = make_single_param(mp_t(v[k] * 5 / 4));
+            arg2 = make_single_param(mp_t((v[j] * 3) / 2));
+            arg3 = make_single_param(mp_t((v[k] * 5) / 4));
             data.insert(hypergeometric_1f1_gen(), arg1, arg2, arg3);
          }
       }
