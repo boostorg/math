@@ -70,7 +70,7 @@ The spline can be either open or *closed*, closed meaning that there is some /t/
 The default is open, but this can be easily changed:
 
     // closed = true
-    catmull_rom<Real, std::array<Real, 3>, 3> cr(points.data(), points.size(), true);
+    catmull_rom<std::array<Real, 3>> cr(points.data(), points.size(), true);
 
 Inside `catmull_rom`, the Catmull-Rom curve is represented as closed.
 This is because an open Catmull-Rom curve is *implicitly closed*, but the closing point is the zero vector.
@@ -207,6 +207,5 @@ These conditions are satisfied by both `std::array` and `std::vector`, but it ma
 * Cem Yuksel, Scott Schaefer, and John Keyser, ['Parameterization and applications of Catmull–Rom curves], Computer-Aided Design 43 (2011) 747–755.
 * Phillip J. Barry and Ronald N. Goldman, ['A Recursive Evaluation Algorithm for a Class of Catmull-Rom Splines], Computer Graphics, Volume 22, Number 4, August 1988
 
-[endsect]
 [endsect]
 [/section:catmull_rom Catmull-Rom Splines]
