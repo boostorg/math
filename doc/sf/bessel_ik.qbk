@@ -78,6 +78,35 @@ problem cases in other libraries:
 
 [table_cyl_bessel_k]
 
+The following error plot are based on an exhaustive search of the functions domain for I0, I1, K0, and K1, 
+MSVC-15.5 at `double` precision, and GCC-7.1/Ubuntu for `long double` and `__float128`.
+
+
+[graph i0__double]
+
+[graph i0__80_bit_long_double]
+
+[graph i0____float128]
+
+[graph i1__double]
+
+[graph i1__80_bit_long_double]
+
+[graph i1____float128]
+
+[graph k0__double]
+
+[graph k0__80_bit_long_double]
+
+[graph k0____float128]
+
+[graph k1__double]
+
+[graph k1__80_bit_long_double]
+
+[graph k1____float128]
+
+
 [h4 Implementation]
 
 The following are handled as special cases first:

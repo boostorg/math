@@ -10,6 +10,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/results_collector.hpp>
 #include <boost/math/special_functions/beta.hpp>
+#include <boost/math/distributions/skew_normal.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
@@ -319,5 +320,10 @@ void test_beta(T, const char* /* name */)
 BOOST_AUTO_TEST_CASE( test_main )
 {
    test_beta(0.1, "double");
+
+   // bug reports:
+   boost::math::skew_normal_distribution<> dist(2.0, 1.0, -2.5);
+   BOOST_CHECK(boost::math::isfinite(quantile(dist, 0.075)));
+
 
 }

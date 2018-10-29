@@ -18,11 +18,13 @@ namespace boost{ namespace math{
     class barycentric_rational
     {
     public:
-	    template <class InputIterator1, class InputIterator2>
+        template <class InputIterator1, class InputIterator2>
         barycentric_rational(InputIterator1 start_x, InputIterator1 end_x, InputIterator2 start_y, size_t approximation_order = 3);
         barycentric_rational(const Real* const x, const Real* const y, size_t n, size_t approximation_order = 3);
 
         Real operator()(Real x) const;
+
+        Real prime(Real x) const;
     };
 
 }}
@@ -44,7 +46,7 @@ The call is trivial:
 
 This implicitly calls the constructor with approximation order 3, and hence the accuracy is [bigo](h[super 4]).
 In general, if you require an approximation order /d/, then the error is [bigo](h[super d+1]).
-A call to the constructor with an explicit approximation order could be
+A call to the constructor with an explicit approximation order is demonstrated below
 
     boost::math::barycentric_rational<double> interpolant(x.data(), y.data(), y.size(), 5);
 
@@ -53,12 +55,16 @@ To evaluate the interpolant, simply use
     double x = 2.3;
     double y = interpolant(x);
 
+and to evaluate its derivative use
+
+    double y = interpolant.prime(x);
+
 Although this algorithm is robust, it can surprise you.
 The main way this occurs is if the sample spacing at the endpoints is much larger than the spacing in the center.
 This is to be expected; all interpolants perform better in the opposite regime, where samples are clustered at the endpoints and somewhat uniformly spaced throughout the center.
 
 
-The reference used for implementation of this algorithm is [@https://web.archive.org/save/_embed/http://www.mn.uio.no/math/english/people/aca/michaelf/papers/rational.pdf Barycentric rational interpolation with no poles and a high rate of interpolation].
+The reference used for implementation of this algorithm is [@https://web.archive.org/save/_embed/http://www.mn.uio.no/math/english/people/aca/michaelf/papers/rational.pdf Barycentric rational interpolation with no poles and a high rate of interpolation], and the evaluation of the derivative is given by [@http://www.ams.org/journals/mcom/1986-47-175/S0025-5718-1986-0842136-8/S0025-5718-1986-0842136-8.pdf Some New Aspects of Rational Interpolation].
 
 [heading Examples]
 

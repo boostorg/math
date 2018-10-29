@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Legendre (and Associated) Polynomials</title>
 <link rel="stylesheet" href="../../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../../index.html" title="Math Toolkit 2.6.2">
 <link rel="up" href="../sf_poly.html" title="Polynomials">
 <link rel="prev" href="../sf_poly.html" title="Polynomials">
 <link rel="next" href="legendre_stieltjes.html" title="Legendre-Stieltjes Polynomials">
@@ -147,7 +147,7 @@
         extract a single root is linear in <code class="computeroutput"><span class="identifier">l</span></code>
         (this is scaling to evaluate the Legendre polynomials), so recovering all
         roots is &#119926;(<code class="computeroutput"><span class="identifier">l</span></code><sup>2</sup>). Algorithms
-        with linear scaling <a href="http://dx.doi.org/10.1137/06067016X" target="_top">exist</a>
+        with linear scaling <a href="https://doi.org/10.1137/06067016X" target="_top">exist</a>
         for recovering all roots, but requires tooling not currently built into boost.math.
         This implementation proceeds under the assumption that calculating zeros
         of these functions will not be a bottleneck for any workflow.
@@ -360,22 +360,22 @@
               </th>
 <th>
                 <p>
-                  Microsoft Visual C++ version 12.0<br> Win32<br> double
+                  GNU C++ version 7.1.0<br> linux<br> double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> double
+                  GNU C++ version 7.1.0<br> linux<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> long double
+                  Sun compiler version 0x5150<br> Sun Solaris<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  Sun compiler version 0x5130<br> Sun Solaris<br> long double
+                  Microsoft Visual C++ version 14.1<br> Win32<br> double
                 </p>
               </th>
 </tr></thead>
@@ -388,24 +388,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 211&#949; (Mean = 20.4&#949;)</span>
-                </p>
-              </td>
-<td>
-                <p>
                   <span class="blue">Max = 0.732&#949; (Mean = 0.0619&#949;)</span><br>
-                  <br> (<span class="emphasis"><em>GSL 1.16:</em></span> Max = 211&#949; (Mean = 20.4&#949;))
+                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 211&#949; (Mean = 20.4&#949;))
                 </p>
               </td>
 <td>
                 <p>
                   <span class="blue">Max = 69.2&#949; (Mean = 9.58&#949;)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;tr1/cmath&gt;:</em></span> Max = 124&#949; (Mean = 13.2&#949;))
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 124&#949; (Mean = 13.2&#949;))
                 </p>
               </td>
 <td>
                 <p>
                   <span class="blue">Max = 69.2&#949; (Mean = 9.58&#949;)</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  <span class="blue">Max = 211&#949; (Mean = 20.4&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -417,24 +417,24 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 300&#949; (Mean = 33.2&#949;)</span>
-                </p>
-              </td>
-<td>
-                <p>
                   <span class="blue">Max = 0.632&#949; (Mean = 0.0693&#949;)</span><br>
-                  <br> (<span class="emphasis"><em>GSL 1.16:</em></span> Max = 300&#949; (Mean = 33.2&#949;))
+                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 300&#949; (Mean = 33.2&#949;))
                 </p>
               </td>
 <td>
                 <p>
                   <span class="blue">Max = 699&#949; (Mean = 59.6&#949;)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;tr1/cmath&gt;:</em></span> Max = 343&#949; (Mean = 32.1&#949;))
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 343&#949; (Mean = 32.1&#949;))
                 </p>
               </td>
 <td>
                 <p>
                   <span class="blue">Max = 699&#949; (Mean = 59.6&#949;)</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  <span class="blue">Max = 300&#949; (Mean = 33.2&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -456,22 +456,22 @@
               </th>
 <th>
                 <p>
-                  Microsoft Visual C++ version 12.0<br> Win32<br> double
+                  GNU C++ version 7.1.0<br> linux<br> double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> double
+                  GNU C++ version 7.1.0<br> linux<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> long double
+                  Sun compiler version 0x5150<br> Sun Solaris<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  Sun compiler version 0x5130<br> Sun Solaris<br> long double
+                  Microsoft Visual C++ version 14.1<br> Win32<br> double
                 </p>
               </th>
 </tr></thead>
@@ -484,13 +484,8 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 46.4&#949; (Mean = 7.32&#949;)</span>
-                </p>
-              </td>
-<td>
-                <p>
                   <span class="blue">Max = 0.612&#949; (Mean = 0.0517&#949;)</span><br>
-                  <br> (<span class="emphasis"><em>GSL 1.16:</em></span> Max = 46.4&#949; (Mean = 7.46&#949;))
+                  <br> (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 46.4&#949; (Mean = 7.46&#949;))
                 </p>
               </td>
 <td>
@@ -503,6 +498,11 @@
                   <span class="blue">Max = 50.9&#949; (Mean = 8.98&#949;)</span>
                 </p>
               </td>
+<td>
+                <p>
+                  <span class="blue">Max = 46.4&#949; (Mean = 7.32&#949;)</span>
+                </p>
+              </td>
 </tr>
 <tr>
 <td>
@@ -512,13 +512,8 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 4.6e+003&#949; (Mean = 366&#949;)</span>
-                </p>
-              </td>
-<td>
-                <p>
                   <span class="blue">Max = 2.49&#949; (Mean = 0.202&#949;)</span><br> <br>
-                  (<span class="emphasis"><em>GSL 1.16:</em></span> Max = 4.6e+03&#949; (Mean = 366&#949;))
+                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 4.6e+03&#949; (Mean = 366&#949;))
                 </p>
               </td>
 <td>
@@ -529,6 +524,11 @@
 <td>
                 <p>
                   <span class="blue">Max = 5.98e+03&#949; (Mean = 478&#949;)</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  <span class="blue">Max = 4.6e+03&#949; (Mean = 366&#949;)</span>
                 </p>
               </td>
 </tr>
@@ -550,22 +550,22 @@
               </th>
 <th>
                 <p>
-                  Microsoft Visual C++ version 12.0<br> Win32<br> double
+                  GNU C++ version 7.1.0<br> linux<br> double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> double
+                  GNU C++ version 7.1.0<br> linux<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  GNU C++ version 5.1.0<br> linux<br> long double
+                  Sun compiler version 0x5150<br> Sun Solaris<br> long double
                 </p>
               </th>
 <th>
                 <p>
-                  Sun compiler version 0x5130<br> Sun Solaris<br> long double
+                  Microsoft Visual C++ version 14.1<br> Win32<br> double
                 </p>
               </th>
 </tr></thead>
@@ -577,27 +577,26 @@
               </td>
 <td>
                 <p>
-                  <span class="blue">Max = 121&#949; (Mean = 7.14&#949;)</span>
-                </p>
-              </td>
-<td>
-                <p>
                   <span class="blue">Max = 0.999&#949; (Mean = 0.05&#949;)</span><br> <br>
-                  (<span class="emphasis"><em>GSL 1.16:</em></span> Max = 121&#949; (Mean = 6.75&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_5_1_0_linux_double_legendre_p_associated__GSL_1_16_Associated_Legendre_Polynomials_Small_Values">And
+                  (<span class="emphasis"><em>GSL 2.1:</em></span> Max = 121&#949; (Mean = 6.75&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_double_legendre_p_associated__GSL_2_1_Associated_Legendre_Polynomials_Small_Values">And
                   other failures.</a>)
                 </p>
               </td>
 <td>
                 <p>
                   <span class="blue">Max = 175&#949; (Mean = 9.88&#949;)</span><br> <br>
-                  (<span class="emphasis"><em>&lt;tr1/cmath&gt;:</em></span> Max = 175&#949; (Mean = 9.36&#949;)
-                  <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_5_1_0_linux_long_double_legendre_p_associated___tr1_cmath__Associated_Legendre_Polynomials_Small_Values">And
+                  (<span class="emphasis"><em>&lt;cmath&gt;:</em></span> Max = 175&#949; (Mean = 9.36&#949;) <a class="link" href="../logs_and_tables/logs.html#errors_GNU_C_version_7_1_0_linux_long_double_legendre_p_associated___cmath__Associated_Legendre_Polynomials_Small_Values">And
                   other failures.</a>)
                 </p>
               </td>
 <td>
                 <p>
                   <span class="blue">Max = 77.7&#949; (Mean = 5.59&#949;)</span>
+                </p>
+              </td>
+<td>
+                <p>
+                  <span class="blue">Max = 121&#949; (Mean = 7.14&#949;)</span>
                 </p>
               </td>
 </tr></tbody>

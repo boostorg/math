@@ -281,7 +281,6 @@ void test_polynomial_error(T)
    //
    const char* func = "boost::math::test_function<%1%>(%1%, %1%, %1%)";
    const char* msg1 = "Error while handling value %1%";
-   const char* msg2 = "Error message goes here...";
 
    static const typename T::value_type data[] = { 1, 2, 3 };
    static const T val(data, 2);
@@ -293,12 +292,6 @@ void test_polynomial_error(T)
    TEST_EXCEPTION(boost::math::policies::raise_domain_error(func, 0, val, throw_policy), std::domain_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Domain Error evaluating function at { 1, 2, 3 }"));
    TEST_EXCEPTION(boost::math::policies::raise_pole_error(func, msg1, val, throw_policy), std::domain_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error while handling value { 1, 2, 3 }"));
    TEST_EXCEPTION(boost::math::policies::raise_pole_error(func, 0, val, throw_policy), std::domain_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Evaluation of function at pole { 1, 2, 3 }"));
-   //TEST_EXCEPTION(boost::math::policies::raise_overflow_error<T>(func, msg2, throw_policy), std::overflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error message goes here..."));
-   //TEST_EXCEPTION(boost::math::policies::raise_overflow_error<T>(func, 0, throw_policy), std::overflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Overflow Error"));
-   //TEST_EXCEPTION(boost::math::policies::raise_underflow_error<T>(func, msg2, throw_policy), std::underflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error message goes here..."));
-   //TEST_EXCEPTION(boost::math::policies::raise_underflow_error<T>(func, 0, throw_policy), std::underflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Underflow Error"));
-   //TEST_EXCEPTION(boost::math::policies::raise_denorm_error<T>(func, msg2, T(0), throw_policy), std::underflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error message goes here..."));
-   //TEST_EXCEPTION(boost::math::policies::raise_denorm_error<T>(func, 0, T(0), throw_policy), std::underflow_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Denorm Error"));
    TEST_EXCEPTION(boost::math::policies::raise_evaluation_error(func, msg1, val, throw_policy), boost::math::evaluation_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error while handling value { 1, 2, 3 }"));
    TEST_EXCEPTION(boost::math::policies::raise_evaluation_error(func, 0, val, throw_policy), boost::math::evaluation_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Internal Evaluation Error, best value so far was { 1, 2, 3 }"));
    TEST_EXCEPTION(boost::math::policies::raise_indeterminate_result_error(func, msg1, val, T(12.34), throw_policy), std::domain_error, format_message_string<T>("Error in function boost::math::test_function<float>(float, float, float): Error while handling value { 1, 2, 3 }"));
@@ -308,9 +301,6 @@ void test_polynomial_error(T)
    // - because by design these are undefined and must be defined by the user ;-)
    BOOST_MATH_CHECK_THROW(boost::math::policies::raise_domain_error(func, msg1, T(0.0), user_policy), user_defined_error);
    BOOST_MATH_CHECK_THROW(boost::math::policies::raise_pole_error(func, msg1, T(0.0), user_policy), user_defined_error);
-   //BOOST_MATH_CHECK_THROW(boost::math::policies::raise_overflow_error<T>(func, msg2, user_policy), user_defined_error);
-   //BOOST_MATH_CHECK_THROW(boost::math::policies::raise_underflow_error<T>(func, msg2, user_policy), user_defined_error);
-   //BOOST_MATH_CHECK_THROW(boost::math::policies::raise_denorm_error<T>(func, msg2, T(0), user_policy), user_defined_error);
    BOOST_MATH_CHECK_THROW(boost::math::policies::raise_evaluation_error(func, msg1, T(0.0), user_policy), user_defined_error);
    BOOST_MATH_CHECK_THROW(boost::math::policies::raise_indeterminate_result_error(func, msg1, T(0.0), T(0.0), user_policy), user_defined_error);
 #endif
@@ -318,9 +308,6 @@ void test_polynomial_error(T)
    // Test with ignore_error
    BOOST_CHECK((boost::math::isnan)(boost::math::policies::raise_domain_error(func, msg1, T(0.0), ignore_policy)) || !std::numeric_limits<T>::has_quiet_NaN);
    BOOST_CHECK((boost::math::isnan)(boost::math::policies::raise_pole_error(func, msg1, T(0.0), ignore_policy)) || !std::numeric_limits<T>::has_quiet_NaN);
-   //BOOST_CHECK_EQUAL(boost::math::policies::raise_overflow_error<T>(func, msg2, ignore_policy), std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>());
-   //BOOST_CHECK_EQUAL(boost::math::policies::raise_underflow_error<T>(func, msg2, ignore_policy), T(0));
-   //BOOST_CHECK_EQUAL(boost::math::policies::raise_denorm_error<T>(func, msg2, T(1.25), ignore_policy), T(1.25));
    BOOST_CHECK_EQUAL(boost::math::policies::raise_evaluation_error(func, msg1, T(1.25), ignore_policy), T(1.25));
    BOOST_CHECK_EQUAL(boost::math::policies::raise_indeterminate_result_error(func, 0, T(0.0), T(12.34), ignore_policy), T(12.34));
 
@@ -332,15 +319,6 @@ void test_polynomial_error(T)
    BOOST_CHECK((boost::math::isnan)(boost::math::policies::raise_pole_error(func, msg1, T(0.0), errno_policy)) || !std::numeric_limits<T>::has_quiet_NaN);
    BOOST_CHECK(errno == EDOM);
    errno = 0;
-   //BOOST_CHECK_EQUAL(boost::math::policies::raise_overflow_error<T>(func, msg2, errno_policy), std::numeric_limits<T>::has_infinity ? std::numeric_limits<T>::infinity() : boost::math::tools::max_value<T>());
-   //BOOST_CHECK_EQUAL(errno, ERANGE);
-   //errno = 0;
-   //BOOST_CHECK_EQUAL(boost::math::policies::raise_underflow_error<T>(func, msg2, errno_policy), T(0));
-   //BOOST_CHECK_EQUAL(errno, ERANGE);
-   //errno = 0;
-   //BOOST_CHECK_EQUAL(boost::math::policies::raise_denorm_error<T>(func, msg2, T(1.25), errno_policy), T(1.25));
-   //BOOST_CHECK_EQUAL(errno, ERANGE);
-   //errno = 0;
    BOOST_CHECK_EQUAL(boost::math::policies::raise_evaluation_error(func, msg1, T(1.25), errno_policy), T(1.25));
    BOOST_CHECK(errno == EDOM);
    errno = 0;

@@ -223,6 +223,7 @@ math_toolkit/jacobi/jacobi_ns.html
 math_toolkit/jacobi/jacobi_sc.html
 math_toolkit/jacobi/jacobi_sd.html
 math_toolkit/jacobi/jacobi_sn.html
+math_toolkit/lambert_w.html
 math_toolkit/zetas.html
 math_toolkit/zetas/zeta.html
 math_toolkit/expint.html
@@ -296,6 +297,8 @@ math_toolkit/double_exponential/de_levels.html
 math_toolkit/double_exponential/de_thread.html
 math_toolkit/double_exponential/de_caveats.html
 math_toolkit/double_exponential/de_refes.html
+math_toolkit/naive_monte_carlo.html
+math_toolkit/diff.html
 inverse_complex.html
 math_toolkit/complex_implementation.html
 math_toolkit/asin.html

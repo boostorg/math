@@ -3,8 +3,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Performance Tuning Macros</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="../index.html" title="Math Toolkit 2.6.2">
 <link rel="up" href="../perf.html" title="Chapter&#160;19.&#160;Performance">
 <link rel="prev" href="multiprecision.html" title="Cost of High-Precision Non-built-in Floating-point">
 <link rel="next" href="comp_compilers.html" title="Comparing Different Compilers">
@@ -109,15 +109,15 @@
                 be stored as tables of floating point values instead. If mixed arithmetic
                 is slow then add:
               </p>
-              <p>
-                #define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
-              </p>
+              <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+                    define BOOST_MATH_INT_TABLE_TYPE(RT, IT) RT
+                  </li></ol></div>
               <p>
                 to boost/math/tools/user.hpp, otherwise the default of:
               </p>
-              <p>
-                #define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
-              </p>
+              <div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+                    define BOOST_MATH_INT_TABLE_TYPE(RT, IT) IT
+                  </li></ol></div>
               <p>
                 Set in boost/math/config.hpp is fine, and may well result in smaller
                 code.

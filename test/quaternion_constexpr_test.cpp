@@ -120,11 +120,44 @@ int main()
    constexpr bool b9 = q2 == q1;
    constexpr bool b10 = q1 != q2;
 
+   (void)q9;
+   (void)d2;
+   (void)d3;
+   (void)d4;
+   (void)d6;
+   (void)d5;
+   (void)c3;
+   (void)q10;
+   (void)q11;
+   (void)q12;
+   (void)q13;
+   (void)q14;
+   (void)q15;
+   (void)q16;
+   (void)q17;
+   (void)q18;
+   (void)q19;
+   (void)q20;
+   (void)q21;
+   (void)q22;
+   (void)q23;
+   (void)b1;
+   (void)b2;
+   (void)b3;
+   (void)b4;
+   (void)b5;
+   (void)b6;
+   (void)b7;
+   (void)b8;
+   (void)b9;
+   (void)b10;
+
 #endif
 
 #ifndef BOOST_NO_CXX14_CONSTEXPR
 
    constexpr qt q24 = full_constexpr_test(q5, q5 + 1, 3.2, q5.C_component_1());
+   (void)q24;
 
 #endif
 

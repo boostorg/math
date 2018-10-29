@@ -546,83 +546,24 @@ matrix:
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=special_fun
-      osx_image: xcode8.1
+      osx_image: xcode9.3
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=distribution_tests
-      osx_image: xcode8.1
+      osx_image: xcode9.3
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
-      osx_image: xcode8.1
+      osx_image: xcode9.3
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=float128_tests
-      osx_image: xcode8.1
+      osx_image: xcode9.3
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../example//examples
-      osx_image: xcode8.1
+      osx_image: xcode9.3
 
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=special_fun
-      osx_image: xcode8.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=distribution_tests
-      osx_image: xcode8.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
-      osx_image: xcode8.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=float128_tests
-      osx_image: xcode8.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../example//examples
-      osx_image: xcode8.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=special_fun
-      osx_image: xcode7.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=distribution_tests
-      osx_image: xcode7.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
-      osx_image: xcode7.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=float128_tests
-      osx_image: xcode7.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../example//examples
-      osx_image: xcode7.3
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=special_fun
-      osx_image: xcode6.4
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=distribution_tests
-      osx_image: xcode6.4
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=misc
-      osx_image: xcode6.4
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=float128_tests
-      osx_image: xcode6.4
-
-    - os: osx
-      env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=../example//examples
-      osx_image: xcode6.4
 
 install:
   - cd ..
@@ -632,6 +573,7 @@ install:
   - git submodule update --init libs/config
   - git submodule update --init libs/format
   - git submodule update --init libs/numeric
+  - git submodule update --init libs/type_traits
   - git submodule update --init tools/boostdep
   - cp -r $TRAVIS_BUILD_DIR/* libs/math
   - python tools/boostdep/depinst/depinst.py math
@@ -642,7 +584,7 @@ script:
   - |-
     echo "using $TOOLSET : : $COMPILER : <cxxflags>-std=$CXXSTD ;" > ~/user-config.jam
   - (cd libs/config/test && ../../../b2 config_info_travis_install toolset=$TOOLSET && ./config_info_travis)
-  - (cd libs/math/test && ../../../b2 -j3 toolset=$TOOLSET $TEST_SUITE define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER)
+  - (cd libs/math/test && travis_wait 60 ../../../b2 -j3 -d+0 -q toolset=$TOOLSET $TEST_SUITE define=CI_SUPPRESS_KNOWN_ISSUES define=SLOW_COMPILER)
 
 notifications:
   email:
