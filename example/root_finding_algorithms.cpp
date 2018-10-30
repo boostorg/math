@@ -131,8 +131,6 @@ std::vector<std::string> names; // short name.
 
 uintmax_t iters; // Global as iterations is not returned by rooting function.
 
-const int convert = 1000; // convert nanoseconds to microseconds (assuming this is resolution).
-
 const int count = 1000000; // Number of iterations to average.
  
 struct root_info

@@ -764,7 +764,7 @@ void test_constexpr()
    (void)f3;
    (void) fval2;
    (void) dval2;
-   (voide) ldval2;
+   (void) ldval2;
 #ifdef BOOST_MATH_USE_FLOAT128
    constexpr __float128 f4 = boost::math::constants::pi<__float128>();
    (void)f4;
