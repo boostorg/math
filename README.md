@@ -13,7 +13,7 @@ A set of typedefs similar to those provided by <cstdint> but for floating point 
 
 ### Mathematical Constants
 
-A wide range of constants ranging from various multiples of π, fractions, through to euler's constant etc.
+A wide range of constants ranging from various multiples of π, fractions, Euler's constant, etc.
 
 These are of course usable from template code, or as non-templates with a simplified interface if that is more appropriate.
 
@@ -27,17 +27,17 @@ A comprehensive tutorial is provided, along with a series of worked examples ill
 
 ### Special Functions
 
-Provides a small number of high quality special functions, initially these were concentrated on functions used in statistical applications along with those in the Technical Report on C++ Library Extensions.
+Provides a small number of high quality special functions; initially these were concentrated on functions used in statistical applications along with those in the Technical Report on C++ Library Extensions.
 
-The function families currently implemented are the gamma, beta & erf functions along with the incomplete gamma and beta functions (four variants of each) and all the possible inverses of these, plus digamma, various factorial functions, Bessel functions, elliptic integrals, sinus cardinals (along with their hyperbolic variants), inverse hyperbolic functions, Legrendre/Laguerre/Hermite/Chebyshev polynomials and various special power and logarithmic functions.
+The function families currently implemented are the gamma, beta & error functions along with the incomplete gamma and beta functions (four variants of each) and all the possible inverses of these, plus the digamma, various factorial functions, Bessel functions, elliptic integrals, sinus cardinals (along with their hyperbolic variants), inverse hyperbolic functions, Legrendre/Laguerre/Hermite/Chebyshev polynomials and various special power and logarithmic functions.
 
-All the implementations are fully generic and support the use of arbitrary "real-number" types, including Boost.Multiprecision, although they are optimised for use with types with known-about significand (or mantissa) sizes: typically float, double or long double.
+All the implementations are fully generic and support the use of arbitrary "real-number" types, including Boost.Multiprecision, although they are optimised for use with types with known significand (or mantissa) sizes: typically float, double or long double.
 
 These functions also provide the basis of support for the TR1 special functions.
 
 ### Root Finding and Function Minimisation
 
-A comprehensive set of root finding algorithms over the real-line, both with derivatives and derivative free.
+A comprehensive set of root-finding algorithms over the real line, both with derivatives and derivative free.
 
 Also function minimisation via Brent's Method.
 
@@ -51,7 +51,7 @@ Function interpolation via barycentric rational interpolation, compactly support
 
 ### Numerical Integration and Differentiation
 
-A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod and double-exponential) and differentiation.
+A reasonably comprehensive set of routines for integration (trapezoidal, Gauss-Legendre, Gauss-Kronrod, Gauss-Chebyshev, double-exponential, and Monte-Carlo) and differentiation (Chebyshev transform, finite difference, and the complex step derivative).
 
 The integration routines are usable for functions returning complex results - and hence can be used for computation of  contour integrals.
 
@@ -76,9 +76,9 @@ There is no mailing-list specific to Boost Math, although you can use the genera
 
 Clone the whole boost project, which includes the individual Boost projects as submodules ([see boost+git doc](https://github.com/boostorg/boost/wiki/Getting-Started)):
 
-    git clone https://github.com/boostorg/boost
-    cd boost
-    git submodule update --init
+    $ git clone https://github.com/boostorg/boost
+    $ cd boost
+    $ git submodule update --init
 
 The Boost Math Library is located in `libs/math/`.
 
