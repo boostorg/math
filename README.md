@@ -1,4 +1,4 @@
-Boost Math Library
+Boost Math Library [![Build Status](https://travis-ci.org/boostorg/math.svg?branch=develop)](https://travis-ci.org/boostorg/math)
 ==================
 
 This library is divided into several interconnected parts:
@@ -57,7 +57,7 @@ The integration routines are usable for functions returning complex results - an
 
 ### Quaternions and Octonions
 
-Quaternion and Octonians as class templates similar to std::complex. 
+Quaternion and Octonians as class templates similar to std::complex.
 
 The full documentation is available on [boost.org](http://www.boost.org/doc/libs/release/libs/math).
 
@@ -74,18 +74,19 @@ There is no mailing-list specific to Boost Math, although you can use the genera
 
 ## Development ##
 
-Clone the whole boost project, which includes the individual Boost projects as submodules ([see boost+git doc](https://github.com/boostorg/boost/wiki/Getting-Started)): 
+Clone the whole boost project, which includes the individual Boost projects as submodules ([see boost+git doc](https://github.com/boostorg/boost/wiki/Getting-Started)):
 
     git clone https://github.com/boostorg/boost
     cd boost
     git submodule update --init
 
-The Boost Math Library is located in `libs/math/`. 
+The Boost Math Library is located in `libs/math/`.
 
 ### Running tests ###
-First, make sure you are in `libs/math/test`. 
+First, make sure you are in `libs/math/test`.
 You can either run all the tests listed in `Jamfile.v2` or run a single test:
 
-    ../../../b2                        <- run all tests
-    ../../../b2 static_assert_test     <- single test
-
+    test$ ../../../b2                        <- run all tests
+    test$ ../../../b2 static_assert_test     <- single test
+    test$ # A more advanced syntax, demoing various options for building the tests:
+    test$ ../../../b2 -a -j2 -q --reconfigure toolset=clang cxxflags="--std=c++14 -fsanitize=address -fsanitize=undefined" linkflags="-fsanitize=undefined -fsanitize=address"
