@@ -90,3 +90,25 @@ You can either run all the tests listed in `Jamfile.v2` or run a single test:
     test$ ../../../b2 static_assert_test     <- single test
     test$ # A more advanced syntax, demoing various options for building the tests:
     test$ ../../../b2 -a -j2 -q --reconfigure toolset=clang cxxflags="--std=c++14 -fsanitize=address -fsanitize=undefined" linkflags="-fsanitize=undefined -fsanitize=address"
+    
+### Building documentation ###
+
+Full instructions can be found [here](https://svn.boost.org/trac10/wiki/BoostDocs/GettingStarted), but to reiterate slightly:
+
+```bash
+libs/math/doc$ brew install docbook-xsl # on mac
+libs/math/doc$ touch ~/user-config.jam
+libs/math/doc$ # now edit so that:
+libs/math/doc$ cat ~/user-config.jam
+using darwin ;
+
+using xsltproc ;
+
+using boostbook
+    : /usr/local/opt/docbook-xsl/docbook-xsl
+    ;
+
+using doxygen ;
+using quickbook ;
+libs/math/doc$ ../../../b2
+```
