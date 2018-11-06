@@ -61,6 +61,13 @@ Quaternion and Octonians as class templates similar to std::complex.
 
 The full documentation is available on [boost.org](http://www.boost.org/doc/libs/release/libs/math).
 
+|                  |  Master  |   Develop   |
+|------------------|----------|-------------|
+| Travis           | [![Build Status](https://travis-ci.org/boostorg/math.svg?branch=master)](https://travis-ci.org/boostorg/math)  |  [![Build Status](https://travis-ci.org/boostorg/math.svg)](https://travis-ci.org/boostorg/math) |
+| Appveyor         | [![Build status](https://ci.appveyor.com/api/projects/status/cnugjx9dt7cou7nj/branch/master?svg=true)](https://ci.appveyor.com/project/jzmaddock/math/branch/master) | [![Build status](https://ci.appveyor.com/api/projects/status/cnugjx9dt7cou7nj/branch/develop?svg=true)](https://ci.appveyor.com/project/jzmaddock/math/branch/develop)  |
+
+
+
 ## Support, bugs and feature requests ##
 
 Bugs and feature requests can be reported through the [Gitub issue tracker](https://github.com/boostorg/math/issues)
