@@ -39,7 +39,7 @@ namespace boost { namespace math { namespace detail {
    }
 
    template <class T, class Policy>
-   inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
+   T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
    {
       BOOST_MATH_STD_USING // exp, fabs, sqrt
 
@@ -83,9 +83,11 @@ namespace boost { namespace math { namespace detail {
          return exp(z);
       if (b - a == b)
          return 1;
-
-      // asymptotic expansion
-      // check region
+      //
+      // Asymptotic expansion for large z
+      // TODO: check region for higher precision types.
+      // Use recurrence relations to move to this region when a and b are also large.
+      //
       if (detail::hypergeometric_1F1_asym_region(a, b, z, pol))
       {
          return hypergeometric_1F1_asym_large_z_series(a, b, z, pol, log_scaling);
@@ -115,13 +117,19 @@ namespace boost { namespace math { namespace detail {
             // Without this we get into an area where the series don't converge if b - a ~ b
             return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
          }
+         if ((a > 0) && (b + 1 < a))
+         {
+            // Moving to a larger b value will allow us to apply Jummer's relation below:
+            return hypergeometric_1F1_fwd_on_b_imp(a, b, z, pol, log_scaling);
+         }
 
          // Let's otherwise make z positive (almost always)
          // by Kummer's transformation
          // (we also don't transform if z belongs to [-1,0])
          int scaling = itrunc(z);
+         T r = exp(z - scaling) * detail::hypergeometric_1F1_imp<T>(b_minus_a, b, -z, pol, log_scaling);
          log_scaling += scaling;
-         return exp(z - scaling) * detail::hypergeometric_1F1_imp<T>(b_minus_a, b, -z, pol, log_scaling);
+         return r;
       }
       //
       // Check for initial divergence:
@@ -168,13 +176,13 @@ namespace boost { namespace math { namespace detail {
             if ((a == ceil(a)) && !b_is_negative_and_greater_than_z)
                return detail::hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
             else if ((z > 0) && (2 * (z  * (b - (2 * a))) > 0) && (b > -100)) // TODO: see when this methd is bad in opposite to usual taylor
-               return detail::hypergeometric_1F1_13_3_7_series(a, b, z, pol, function);
+               return detail::hypergeometric_1F1_13_3_7_series(a, b, z, pol, function, log_scaling);
             else if (b < a)
                return detail::hypergeometric_1F1_backward_recurrence_for_negative_b(a, b, z, pol);
          }
          // If we get here, then we've run out of methods to try, use the checked series which will
          // raise an error if the result is garbage:
-         return hypergeometric_1F1_checked_series_impl(a, b, z, pol);
+         return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
       }
 
       return detail::hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);

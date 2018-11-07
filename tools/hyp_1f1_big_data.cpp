@@ -23,6 +23,7 @@ using namespace std;
 using namespace boost::multiprecision;
 
 typedef mpfi_float_1000 mpfi_type;
+
 mp_t hypergeometric_1f1_generic_series(mp_t a_, mp_t b_, mp_t z_)
 {
    using namespace boost::math::tools;
@@ -30,7 +31,7 @@ mp_t hypergeometric_1f1_generic_series(mp_t a_, mp_t b_, mp_t z_)
    using namespace std;
    using namespace boost::multiprecision;
 
-   mpfi_type a(a_), b(b_), z(z_), sum(0), term(1), diff;
+   mpfi_type a(a_), b(b_), z(z_), sum(0), term(1), diff, term0(0);
    unsigned n = 0;
    bool cont = true;
 
@@ -39,6 +40,8 @@ mp_t hypergeometric_1f1_generic_series(mp_t a_, mp_t b_, mp_t z_)
       max_n = itrunc(-b) + 10000;
    else
       max_n = 10000000;
+
+   mpfi_type overflow_limit("1.189731495357231765e+4900");  // a bit less than LDBL_MAX for extended long doubles.
 
    do
    {
@@ -51,12 +54,13 @@ mp_t hypergeometric_1f1_generic_series(mp_t a_, mp_t b_, mp_t z_)
          std::cout << "Aborting series evaluation due to too many iterations...\n";
          throw evaluation_error("");
       }
-      if (fabs(upper(sum)) > std::numeric_limits<double>::max())
+      if (fabs(upper(sum)) > overflow_limit)
       {
          std::cout << "Aborting series evaluation due to over large sum...\n";
          throw evaluation_error("");
       }
-      cont = (fabs(upper(diff)) > 1e-40) || (b + n < 200);
+      cont = (fabs(upper(diff)) > 1e-40) || (b + n < 0) || (fabs(term0) < fabs(term));
+      term0 = term;
       //std::cout << upper(term) << " " << upper(sum) << " " << upper(diff) << " " << cont << std::endl;
    } while (cont);
 

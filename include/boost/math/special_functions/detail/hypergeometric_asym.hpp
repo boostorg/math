@@ -56,7 +56,7 @@
         log_scaling -= e;
         prefix /= s * exp(t - e);
 
-        return prefix * boost::math::detail::hypergeometric_2F0_imp(1 - a, b - a, 1 / z, pol, true);
+        return prefix * boost::math::detail::hypergeometric_2F0_imp(T(1 - a), T(b - a), T(1 / z), pol, true);
      }
 
 

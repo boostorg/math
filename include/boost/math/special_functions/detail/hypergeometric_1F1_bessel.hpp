@@ -109,7 +109,7 @@
 
   // function for 13_3_7 evaluation
   template <class T, class Policy>
-  inline T hypergeometric_1F1_13_3_7_series(const T& a, const T& b, const T& z, const Policy& pol, const char* function)
+  inline T hypergeometric_1F1_13_3_7_series(const T& a, const T& b, const T& z, const Policy& pol, const char* function, int& log_scaling)
   {
     BOOST_MATH_STD_USING
 
@@ -156,13 +156,13 @@
     }
     catch (const std::exception&)
     {
-       // The bessel functions can overflow, use a chacked series in that case:
-       return hypergeometric_1F1_checked_series_impl(a, b, z, pol);
+       // The bessel functions can overflow, use a checked series in that case:
+       return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
     }
     if (!(boost::math::isfinite)(result))
     {
        // as above:
-       return hypergeometric_1F1_checked_series_impl(a, b, z, pol);
+       return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
     }
     boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_13_3_7_series<%1%>(%1%,%1%,%1%)", max_iter, pol);
 

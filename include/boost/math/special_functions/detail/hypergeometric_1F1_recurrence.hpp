@@ -206,6 +206,50 @@
     return a < -10; // TODO: make dependent on precision
   }
 
+  template <class T, class Policy>
+  inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling);
+
+  template <class T, class Policy>
+  T hypergeometric_1F1_fwd_on_b_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
+  {
+     BOOST_MATH_STD_USING // modf, fabs
+
+     int integer_part = 1 + itrunc(ceil(fabs(a) - b));
+     T bk = b + integer_part;
+
+     T first = boost::math::detail::hypergeometric_1F1_imp(a, bk, z, pol, log_scaling);
+     --bk;
+     int log_scaling2 = 0;
+     T second = boost::math::detail::hypergeometric_1F1_imp(a, bk, z, pol, log_scaling2);
+
+     if (log_scaling2 != log_scaling)
+     {
+        second *= exp(log_scaling2 - log_scaling);
+     }
+
+     //std::cout << first * exp(boost::multiprecision::mpfr_float(log_scaling)) << std::endl;
+     //std::cout << second * exp(boost::multiprecision::mpfr_float(log_scaling)) << std::endl;
+
+     if ((fabs(first) > 1.0e3) || (fabs(first) < 1.0e-3))
+     {
+        int rescaling = itrunc(floor(log(fabs(first))));
+        T scale = exp(-rescaling);
+
+        first *= scale;
+        second *= scale;
+        log_scaling += rescaling;
+     }
+
+     //std::cout << first * exp(boost::multiprecision::mpfr_float(log_scaling)) << std::endl;
+     //std::cout << second * exp(boost::multiprecision::mpfr_float(log_scaling)) << std::endl;
+
+     boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> s(a, bk, z);
+
+     return boost::math::tools::solve_recurrence_relation_backward(s, static_cast<unsigned int>(integer_part), first, second);
+  }
+
+
+
   } } } // namespaces
 
 #endif // BOOST_HYPERGEOMETRIC_1F1_RECURRENCE_HPP_
