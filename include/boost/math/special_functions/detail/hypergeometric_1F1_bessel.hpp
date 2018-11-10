@@ -123,17 +123,19 @@
 
     T prefix(0);
     int sign = 1;
-    try
+    if (!use_logs)
     {
-       prefix = boost::math::tgamma(b, pol);
-       if (!(boost::math::isfinite)(prefix))
+       try
+       {
+          prefix = boost::math::tgamma(b, pol);
+          if (!(boost::math::isfinite)(prefix))
+             use_logs = true;
+       }
+       catch (std::overflow_error const&)
+       {
           use_logs = true;
+       }
     }
-    catch (std::overflow_error const&)
-    {
-       use_logs = true;
-    }
-
     if (!use_logs)
     {
        prefix *= (sqrt_bz_div_2_minus_az / pow(sqrt_bz_div_2_minus_az, b)) * exp(z / 2);

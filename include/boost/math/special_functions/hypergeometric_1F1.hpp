@@ -120,7 +120,7 @@ namespace boost { namespace math { namespace detail {
          if ((a > 0) && (b + 1 < a))
          {
             // Moving to a larger b value will allow us to apply Jummer's relation below:
-            return hypergeometric_1F1_fwd_on_b_imp(a, b, z, pol, log_scaling);
+            //return hypergeometric_1F1_fwd_on_b_imp(a, b, z, pol, log_scaling);
          }
 
          // Let's otherwise make z positive (almost always)
@@ -166,20 +166,22 @@ namespace boost { namespace math { namespace detail {
       //
       if (series_is_divergent)
       {
-         if((a < 0) && (b > -1))
-            return detail::hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+         //if((a < 0) && (b > -1))
+         //   return detail::hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
 
-         if (detail::hypergeometric_1F1_is_a_small_enough(a))
+         if (a < 0)
          {
-            // TODO: this part has to be researched deeper
-            const bool b_is_negative_and_greater_than_z = b < 0 ? (fabs(b) > fabs(z) ? 1 : 0) : 0;
-            if ((a == ceil(a)) && !b_is_negative_and_greater_than_z)
-               return detail::hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
-            else if ((z > 0) && (2 * (z  * (b - (2 * a))) > 0) && (b > -100)) // TODO: see when this methd is bad in opposite to usual taylor
-               return detail::hypergeometric_1F1_13_3_7_series(a, b, z, pol, function, log_scaling);
-            else if (b < a)
-               return detail::hypergeometric_1F1_backward_recurrence_for_negative_b(a, b, z, pol);
+            if (z > 0)
+            {
+               if ((a == ceil(a)))
+                  return detail::hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+               else if ((2 * (z  * (b - (2 * a))) > 0) && (b > -100)) // TODO: see when this methd is bad in opposite to usual taylor
+                  return detail::hypergeometric_1F1_13_3_7_series(a, b, z, pol, function, log_scaling);
+            }
          }
+         if (b < a)
+            return detail::hypergeometric_1F1_backward_recurrence_for_negative_b(a, b, z, pol);
+
          // If we get here, then we've run out of methods to try, use the checked series which will
          // raise an error if the result is garbage:
          return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
