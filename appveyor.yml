@@ -22,6 +22,9 @@ environment:
     - ARGS: --toolset=msvc-12.0 address-model=32
     - ARGS: --toolset=msvc-14.0 address-model=32
     - ARGS: --toolset=msvc-12.0 address-model=64
+      TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-12.0 address-model=64
+      TEST_SUITE: misc ../example//examples
     - ARGS: --toolset=msvc-14.0 address-model=64
       TEST_SUITE: special_fun distribution_tests
     - ARGS: --toolset=msvc-14.0 address-model=64
