@@ -92,10 +92,10 @@ cpp-pch pch_light : pch_light.hpp : <use>../../test/build//boost_unit_test_frame
 lib compile_test_main : compile_test/main.cpp ;
 
 test-suite special_fun :
-   [ run test_1F0.cpp ../../test/build//boost_unit_test_framework ]
-   [ run test_2F0.cpp ../../test/build//boost_unit_test_framework ]
-   [ run test_1F1.cpp ../../test/build//boost_unit_test_framework ]
-   [ run test_0F1.cpp ../../test/build//boost_unit_test_framework ]
+   [ run test_1F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] ] # hypergeometric_pFq_checked_series.hpp uses auto, the rest are from quadrature tests.
+   [ run test_2F0.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] ]
+   [ run test_1F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] ]
+   [ run test_0F1.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx11_auto_declarations cxx11_lambdas cxx11_unified_initialization_syntax cxx11_smart_ptr ] ]
    [ run hypot_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework ]
    [ run pow_test.cpp ../../test/build//boost_unit_test_framework ]
    [ run log1p_expm1_test.cpp test_instances//test_instances pch_light ../../test/build//boost_unit_test_framework  ]
@@ -631,7 +631,7 @@ test-suite distribution_tests :
    [ run test_fisher_f.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_gamma_dist.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_geometric.cpp ../../test/build//boost_unit_test_framework  ]
-   [ run test_hyperexponential_dist.cpp ../../test/build//boost_unit_test_framework  ]
+   [ run test_hyperexponential_dist.cpp ../../test/build//boost_unit_test_framework ]
    [ run test_hypergeometric_dist.cpp ../../test/build//boost_unit_test_framework
         : # command line
         : # input files

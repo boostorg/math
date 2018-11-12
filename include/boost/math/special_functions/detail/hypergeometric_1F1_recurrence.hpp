@@ -127,7 +127,7 @@
       integer_part -= (boost::math::lltrunc(ceil(b)) - 1);
     }
 
-    if (-integer_part > policies::get_max_series_iterations<Policy>())
+    if (-integer_part > static_cast<boost::intmax_t>(policies::get_max_series_iterations<Policy>()))
        return policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", std::numeric_limits<T>::quiet_NaN(), pol);
 
     T first = detail::hypergeometric_1F1_imp(ak, b, z, pol);

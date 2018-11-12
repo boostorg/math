@@ -11,6 +11,7 @@
 #define BOOST_MATH_DETAIL_HYPERGEOMETRIC_SERIES_HPP
 
 #include <boost/math/tools/series.hpp>
+#include <boost/math/special_functions/trunc.hpp>
 #include <boost/math/policies/error_handling.hpp>
 
   namespace boost { namespace math { namespace detail {
