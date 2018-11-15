@@ -42,21 +42,17 @@ struct answer
 
 boost::array<double, 4> const d3a = {{10, -6, -4, 3}};
 boost::array<double, 4> const d3b = {{-7, 5, 6, 1}};
-boost::array<double, 4> const d3c = {{10.0/3.0, -2.0, -4.0/3.0, 1.0}};
+
 boost::array<double, 2> const d1a = {{-2, 1}};
-boost::array<double, 3> const d2a = {{-2, 2, 3}};
-boost::array<double, 3> const d2b = {{-7, 5, 6}};
-boost::array<double, 3> const d2c = {{31, -21, -22}};
 boost::array<double, 1> const d0a = {{6}};
 boost::array<double, 2> const d0a1 = {{0, 6}};
 boost::array<double, 6> const d0a5 = {{0, 0, 0, 0, 0, 6}};
-boost::array<double, 1> const d0b = {{3}};
+
 
 boost::array<int, 9> const d8 = {{-5, 2, 8, -3, -3, 0, 1, 0, 1}};
 boost::array<int, 9> const d8b = {{0, 2, 8, -3, -3, 0, 1, 0, 1}};
-boost::array<int, 7> const d6 = {{21, -9, -4, 0, 5, 0, 3}};
-boost::array<int, 3> const d2 = {{-6, 0, 9}};
-boost::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
+
+
 
 BOOST_AUTO_TEST_CASE(trivial)
 {
@@ -65,6 +61,15 @@ BOOST_AUTO_TEST_CASE(trivial)
 
 
 #ifdef TEST1
+
+boost::array<double, 4> const d3c = {{10.0/3.0, -2.0, -4.0/3.0, 1.0}};
+boost::array<double, 3> const d2a = {{-2, 2, 3}};
+boost::array<double, 3> const d2b = {{-7, 5, 6}};
+boost::array<double, 3> const d2c = {{31, -21, -22}};
+boost::array<double, 1> const d0b = {{3}};
+boost::array<int, 7> const d6 = {{21, -9, -4, 0, 5, 0, 3}};
+boost::array<int, 3> const d2 = {{-6, 0, 9}};
+boost::array<int, 6> const d5 = {{-9, 0, 3, 0, -15}};
 
 
 BOOST_AUTO_TEST_CASE( test_construction )
@@ -560,4 +565,29 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_leading_coefficient, T, all_test_types)
     BOOST_CHECK_EQUAL(leading_coefficient(zero), T(0));
     polynomial<T> a(d0a.begin(), d0a.end());
     BOOST_CHECK_EQUAL(leading_coefficient(a), T(d0a.back()));
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(test_prime, T, all_test_types)
+{
+    std::vector<T> d{1,1,1,1,1};
+    polynomial<T> p(std::move(d));
+    polynomial<T> q = p.prime();
+    BOOST_CHECK_EQUAL(q(0), T(1));
+
+    for (size_t i = 0; i < q.size(); ++i)
+    {
+        BOOST_CHECK_EQUAL(q[i], i+1);
+    }
+
+    polynomial<T> P = p.integrate();
+    BOOST_CHECK_EQUAL(P(0), T(0));
+    for (size_t i = 1; i < P.size(); ++i)
+    {
+        BOOST_CHECK_EQUAL(P[i], 1/static_cast<T>(i));
+    }
+
+    polynomial<T> empty;
+    q = empty.prime();
+    BOOST_CHECK_EQUAL(q.size(), 0);
+
 }
