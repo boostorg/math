@@ -328,9 +328,10 @@ public:
    template <class U>
    polynomial(const polynomial<U>& p)
    {
+      m_data.resize(p.size());
       for(unsigned i = 0; i < p.size(); ++i)
       {
-         m_data.push_back(boost::math::tools::real_cast<T>(p[i]));
+         m_data[i] = boost::math::tools::real_cast<T>(p[i]);
       }
    }
 
@@ -400,7 +401,7 @@ public:
 
       std::vector<T> p_data(m_data.size() - 1);
       for (size_t i = 0; i < p_data.size(); ++i) {
-          p_data[i] = m_data[i+1]*(i+1);
+          p_data[i] = m_data[i+1]*static_cast<T>(i+1);
       }
       return polynomial<T>(std::move(p_data));
    }
@@ -412,7 +413,7 @@ public:
       i_data[0] = T(0);
       for (size_t i = 1; i < i_data.size(); ++i)
       {
-          i_data[i] = m_data[i-1]/i;
+          i_data[i] = m_data[i-1]/static_cast<T>(i);
       }
       return polynomial<T>(std::move(i_data));
    }
@@ -569,7 +570,7 @@ public:
    void normalize()
    {
 #ifndef BOOST_NO_CXX11_LAMBDAS
-      m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), [](const T& x)->bool { return x != 0; }).base(), m_data.end());
+      m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), [](const T& x)->bool { return x != T(0); }).base(), m_data.end());
 #else
        using namespace boost::lambda;
        m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
