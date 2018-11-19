@@ -8,15 +8,15 @@
 #include <vector>
 #include <string>
 #include <complex>
+#include <bitset>
 #include <boost/assert.hpp>
-#include <boost/multiprecision/float128.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#include <boost/multiprecision/complex128.hpp>
 #include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/polynomial.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
+#include <boost/math/quadrature/gauss_kronrod.hpp>
 
 using std::string;
 using boost::math::tools::polynomial;
@@ -26,44 +26,52 @@ using boost::math::tools::halley_iterate;
 using boost::math::tools::newton_raphson_iterate;
 using boost::math::constants::half;
 using boost::math::constants::root_two;
-using boost::multiprecision::float128;
+using boost::math::constants::pi;
+using boost::math::quadrature::gauss_kronrod;
 using boost::multiprecision::cpp_bin_float_100;
-using boost::multiprecision::complex128;
 using boost::multiprecision::cpp_complex_100;
 
-template<class Complex = std::complex<double>, class F>
+template<class Complex, class F>
 Complex complex_newton(F g, Complex guess, typename Complex::value_type search_radius=100, int iterations=30)
 {
+    typedef typename Complex::value_type Real;
+    Complex xn = guess;
 
-  Complex xn = guess;
+    Complex f;
+    Complex df;
+    do {
 
-  Complex f, df;
-  do {
+       auto pair = g(xn);
+       f = pair.first;
+       df = pair.second;
 
-     auto [f, df] = g(xn);
+       --iterations;
 
-     --iterations;
+       xn = xn  - (f/df);
+       if (abs(f) < sqrt(std::numeric_limits<Real>::epsilon()))
+       {
+          return xn;
+       }
 
-     xn = xn  - (f/df);
+    } while(iterations);
 
-  } while(iterations);
-
-  if (abs(f) > std::numeric_limits<typename Complex::value_type>::epsilon())
-  {
-      return {std::numeric_limits<typename Complex::value_type>::quiet_NaN(), std::numeric_limits<typename Complex::value_type>::quiet_NaN()};
-  }
-  return xn;
+    if (abs(f) > std::numeric_limits<typename Complex::value_type>::epsilon())
+    {
+        return {std::numeric_limits<typename Complex::value_type>::quiet_NaN(), std::numeric_limits<typename Complex::value_type>::quiet_NaN()};
+    }
+    return xn;
 }
 
 template<class Complex>
-void daubechies_coefficients(size_t p)
+std::vector<std::pair<Complex, Complex>> find_roots(size_t p)
 {
     // Initialize the polynomial; see Mallat, A Wavelet Tour of Signal Processing, equation 7.96
     BOOST_ASSERT(p>0);
     typedef typename Complex::value_type Real;
     std::vector<Complex> coeffs(p);
-    for (size_t k = 0; k < coeffs.size(); ++k) {
-      coeffs[k] = Complex(binomial_coefficient<Real>(p-1+k, k), 0);
+    for (size_t k = 0; k < coeffs.size(); ++k)
+    {
+        coeffs[k] = Complex(binomial_coefficient<Real>(p-1+k, k), 0);
     }
 
     polynomial<Complex> P(std::move(coeffs));
@@ -72,7 +80,8 @@ void daubechies_coefficients(size_t p)
     polynomial<Complex> P_prime = P.prime();
 
     // Polynomial is of degree p-1.
-    std::vector<Complex> roots(p-1);
+
+    std::vector<Complex> roots(p-1, {std::numeric_limits<Real>::quiet_NaN(),std::numeric_limits<Real>::quiet_NaN()});
     size_t i = 0;
     while(P.size() > 1)
     {
@@ -82,7 +91,7 @@ void daubechies_coefficients(size_t p)
 
         auto f = [&](Complex x)->std::pair<Complex, Complex>
         {
-         return std::make_pair<Complex, Complex>(P(x), P_prime(x));
+            return std::make_pair<Complex, Complex>(P(x), P_prime(x));
         };
 
         Complex r = complex_newton(f, guess, search_radius, 100);
@@ -97,7 +106,8 @@ void daubechies_coefficients(size_t p)
         }
 
         BOOST_ASSERT(i < roots.size());
-        roots[i++] = r;
+        roots[i] = r;
+        ++i;
         polynomial<Complex> q{-r, {1,0}};
         // This optimization breaks at p = 11. I have no clue why.
         // Unfortunate, because I expect it to be considerably more stable than
@@ -109,7 +119,8 @@ void daubechies_coefficients(size_t p)
             using std::conj;
             using std::norm;
             BOOST_ASSERT(i < roots.size());
-            roots[i++] = conj(r);
+            roots[i] = conj(r);
+            ++i;
             q = polynomial<Complex>({{norm(r), 0}, {-2*r.real(),0}, {1,0}});
         }
         else
@@ -129,32 +140,42 @@ void daubechies_coefficients(size_t p)
     }
 
     std::vector<std::pair<Complex, Complex>> Qroots(p-1);
-    for (size_t i = 0; i < Qroots.size(); ++i) {
+    for (size_t i = 0; i < Qroots.size(); ++i)
+    {
         Complex y = roots[i];
-        Complex z1 = 1 - 2*y + 2*sqrt(y*(y-1));
-        Complex z2 = 1 - 2*y - 2*sqrt(y*(y-1));
+        Complex z1 = static_cast<Complex>(1) - static_cast<Complex>(2)*y + static_cast<Complex>(2)*sqrt(y*(y-static_cast<Complex>(1)));
+        Complex z2 = static_cast<Complex>(1) - static_cast<Complex>(2)*y - static_cast<Complex>(2)*sqrt(y*(y-static_cast<Complex>(1)));
         Qroots[i] = {z1, z2};
     }
 
+    return Qroots;
+}
+
+template<class Complex>
+std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<std::pair<Complex, Complex>> const & Qroots)
+{
+    typedef typename Complex::value_type Real;
+    size_t p = Qroots.size() + 1;
     // Choose the minimum abs root; see Mallat, discussion just after equation 7.98
     std::vector<Complex> chosen_roots(p-1);
-    for (size_t i = 0; i < p-1; ++i)
+    for (size_t i = 0; i < p - 1; ++i)
     {
-      if(abs(Qroots[i].first) <= 1)
-      {
-        chosen_roots[i] = Qroots[i].first;
-      }
-      else
-      {
-          BOOST_ASSERT(abs(Qroots[i].second) <= 1);
-          chosen_roots[i] = Qroots[i].second;
-      }
+        if(abs(Qroots[i].first) <= 1)
+        {
+            chosen_roots[i] = Qroots[i].first;
+        }
+        else
+        {
+            BOOST_ASSERT(abs(Qroots[i].second) <= 1);
+            chosen_roots[i] = Qroots[i].second;
+        }
     }
 
     polynomial<Complex> R{1};
-    for (size_t i = 0; i < p-1; ++i) {
+    for (size_t i = 0; i < p-1; ++i)
+    {
         Complex ak = chosen_roots[i];
-        R *= polynomial<Complex>({-ak/(1-ak), 1/(1-ak)});
+        R *= polynomial<Complex>({-ak/(static_cast<Complex>(1)-ak), static_cast<Complex>(1)/(static_cast<Complex>(1)-ak)});
     }
     polynomial<Complex> a{{half<Real>(), 0}, {half<Real>(),0}};
     polynomial<Complex> poly = root_two<Real>()*pow(a, p)*R;
@@ -163,38 +184,41 @@ void daubechies_coefficients(size_t p)
     // If we don't reverse, we get the Pywavelets and Mallat convention.
     // I believe this is because of the sign convention on the DFT, which differs between Daubechies and Mallat.
     // You implement a dot product in Daubechies/NR convention, and a convolution in PyWavelets/Mallat convention.
-    std::reverse(result.begin(), result.end());
+    // I won't reverse so I can spot check against Pywavelets: http://wavelets.pybytes.com/wavelet/
+    //std::reverse(result.begin(), result.end());
     std::vector<Real> h(result.size());
-    // It's truly obscene to watch all these digits spewed onto the terminal.
-    //std::cout << std::setprecision(std::numeric_limits<Real>::digits10+3);
-    std::cout << std::setprecision(10);
-    std::cout << "h_" << p << "= {";
     for (size_t i = 0; i < result.size(); ++i)
     {
         Complex r = result[i];
-        std::cout << r.real() << ", ";
         BOOST_ASSERT(r.imag() < sqrt(std::numeric_limits<Real>::epsilon()));
         h[i] = r.real();
     }
-    std::cout << "}\n\n\n\n\n\n" << std::endl;
 
     // Quick sanity check: We could check all vanishing moments, but that sum is horribly ill-conditioned too!
     Real sum = 0;
     Real scale = 0;
-    for (size_t i = 0; i < h.size(); ++i) {
+    for (size_t i = 0; i < h.size(); ++i)
+    {
         sum += h[i];
         scale += h[i]*h[i];
     }
     BOOST_ASSERT(abs(scale -1) < sqrt(std::numeric_limits<Real>::epsilon()));
     BOOST_ASSERT(abs(sum - root_two<Real>()) < sqrt(std::numeric_limits<Real>::epsilon()));
-
+    return h;
 }
 
 int main()
 {
+    typedef cpp_complex_100 Complex;
     // This is probably the most ill-conditioned algorithm I've ever written.
-    for(size_t i = 1; i < 57; ++i)
+    for(size_t p = 1; p < 57; ++p)
     {
-        daubechies_coefficients<boost::multiprecision::cpp_complex<500>>(i);
+        auto roots = find_roots<Complex>(p);
+        auto h = daubechies_coefficients(roots);
+        std::cout << "h_" << p << "[] = {";
+        for (auto& x : h) {
+            std::cout << x << ", ";
+        }
+        std::cout << "}\n";
     }
 }
