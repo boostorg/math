@@ -10,10 +10,11 @@ and [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 [h4 Math-2.8.0 (Boost-1.69)]
 
 * Add LambertW functions.
-* Minor fixes to better support variable precision floating point types.
-* Removed use of deprecated Boost.Endian in favour of Predef.
+* Update integration routines to support complex valued integrands and contour integrals.
 * Added the derivative of the Barycentric rational approximation.
 * Updated continued fraction and series evaluation code to support complex types.
+* Minor fixes to better support variable precision floating point types.
+* Removed use of deprecated Boost.Endian in favour of Predef.
 * Prevent logic error leading to infinite loop in toms748_solve.  See [@https://github.com/boostorg/math/issues/138 #138].
 * Fix mean and standard_deviation for extreme_value_distribution.  See [@https://github.com/boostorg/math/issues/139 #139].
 * Improve heuristics used in newton_raphson_iterate.  See [@https://github.com/boostorg/math/issues/145 #145].
@@ -23,7 +24,6 @@ and [@https://github.com/boostorg/math/issues?utf8=%E2%9C%93&q=is%3Aissue here].
 * Fix for vxWorks having a `real` function in the global namespace. See [@https://github.com/boostorg/math/pull/131 PR131].
 * Improve `sinc` approximations and add better tests.
 * Fix typo in Student's T hypothesis testing documentation, see [@https://github.com/boostorg/math/issues/143 #143].
-* Update integration routines to support complex valued integrands and contour integrals.
 
 [h4 Math-2.7.1 (Boost-1.68)]
 
