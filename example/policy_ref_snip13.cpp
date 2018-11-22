@@ -55,6 +55,7 @@ void test_cauchy()
    try
    {
       double d = mean(myspace::cauchy());  // Cauchy does not have a mean!
+      (void) d;
    }
    catch(const std::domain_error& e)
    {
