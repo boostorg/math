@@ -169,18 +169,13 @@ namespace boost { namespace math { namespace detail {
          //if((a < 0) && (b > -1))
          //   return detail::hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
 
-         if (a < 0)
+         if (b > 0)
          {
-            if (z > 0)
-            {
-               if ((a == ceil(a)))
-                  return detail::hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
-               else if ((2 * (z  * (b - (2 * a))) > 0) && (b > -100)) // TODO: see when this methd is bad in opposite to usual taylor
-                  return detail::hypergeometric_1F1_13_3_7_series(a, b, z, pol, function, log_scaling);
-            }
+            if (z < fabs((2 * a - b) / (sqrt(fabs(a)))))
+               return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
          }
-         if (b < a)
-            return detail::hypergeometric_1F1_backward_recurrence_for_negative_b(a, b, z, pol);
+         else if(z < fabs((2 * a - b) / (sqrt(fabs(a * b)))))
+            return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
 
          // If we get here, then we've run out of methods to try, use the checked series which will
          // raise an error if the result is garbage:

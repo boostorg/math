@@ -19,6 +19,239 @@
 
   namespace boost { namespace math { namespace detail {
 
+#if 1
+
+     template <class T, class Policy>
+     T tricomi_Ev(const T& v, const T& z, const Policy& pol)
+     {
+        T result;
+        if (z == 0)
+           result = 1 / boost::math::tgamma(v + 1);
+        else if (z > 0)
+           result = boost::math::cyl_bessel_j(v, 2 * sqrt(z), pol);
+        else
+           result = boost::math::cyl_bessel_i(v, 2 * sqrt(-z), pol);
+        return result;
+     }
+
+     template <class T, class Policy>
+     struct hypergeometric_1F1_AS_13_3_7_tricomi_series
+     {
+        //
+        // TODO: store and cache Bessel function evaluations via backwards recurrence.
+        //
+        hypergeometric_1F1_AS_13_3_7_tricomi_series(const T& a, const T& b, const T& z, const Policy& pol_)
+           : A_minus_2(1), A_minus_1(0), A(b / 2), mult(z / 2), b_minus_1_plus_n(b - 1),
+           term(1), bessel_arg((b / 2 - a) * z),
+           two_a_minus_b(2 * a - b), pol(pol_), n(2)
+        {
+           BOOST_MATH_STD_USING
+           term /= pow(fabs(bessel_arg), b_minus_1_plus_n / 2);
+           mult /= sqrt(fabs(bessel_arg));
+           if (term == 0)
+           {
+              term = -log(fabs(bessel_arg)) * b_minus_1_plus_n / 2;
+              log_scale = boost::math::itrunc(term);
+              term -= log_scale;
+              term = exp(term);
+           }
+           else
+              log_scale = 0;
+        }
+        T operator()()
+        {
+           //
+           // We return the n-2 term, and do 2 terms at once as every other term can be
+           // very small (or zero) when b == 2a:
+           //
+           BOOST_MATH_STD_USING
+           T result = A_minus_2 * term * tricomi_Ev(b_minus_1_plus_n, bessel_arg, pol);
+           term *= mult;
+           ++n;
+           T A_next = ((b_minus_1_plus_n + 2) * A_minus_1 + two_a_minus_b * A_minus_2) / n;
+           ++b_minus_1_plus_n;
+           A_minus_2 = A_minus_1;
+           A_minus_1 = A;
+           A = A_next;
+
+           if (A_minus_2 != 0)
+           {
+              result += A_minus_2 * term * tricomi_Ev(b_minus_1_plus_n, bessel_arg, pol);
+           }
+           term *= mult;
+           ++n;
+           A_next = ((b_minus_1_plus_n + 2) * A_minus_1 + two_a_minus_b * A_minus_2) / n;
+           ++b_minus_1_plus_n;
+           A_minus_2 = A_minus_1;
+           A_minus_1 = A;
+           A = A_next;
+
+           return result;
+        }
+        T A_minus_2, A_minus_1, A, mult, term, b_minus_1_plus_n, bessel_arg, two_a_minus_b;
+        const Policy& pol;
+        int n, log_scale;
+
+        typedef T result_type;
+     };
+
+     template <class T, class Policy>
+     T hypergeometric_1F1_AS_13_3_7_tricomi(const T& a, const T& b, const T& z, const Policy& pol, int& log_scale)
+     {
+        BOOST_MATH_STD_USING
+        //
+        // Works for a < 0, b < 0, z > 0.
+        //
+        // For convergence we require A * term to be converging otherwise we get
+        // a divergent alternating series.  It's actually really hard to analyse this
+        // and the best purely heuristic policy we've found is 
+        // z < fabs((2 * a - b) / (sqrt(fabs(a)))) ; b > 0  or:
+        // z < fabs((2 * a - b) / (sqrt(fabs(ab)))) ; b < 0
+        // 
+        T prefix(0);
+        int prefix_sgn(0);
+        bool use_logs = false;
+        try
+        {
+           prefix = boost::math::tgamma(b, pol);
+           prefix *= exp(z / 2);
+        }
+        catch (const std::runtime_error&)
+        {
+           use_logs = true;
+        }
+        if (use_logs || (prefix == 0) || !boost::math::isfinite(prefix))
+        {
+           use_logs = true;
+           prefix = boost::math::lgamma(b, &prefix_sgn, pol) + z / 2;
+           int scale = boost::math::itrunc(prefix);
+           log_scale += scale;
+           prefix -= scale;
+        }
+        hypergeometric_1F1_AS_13_3_7_tricomi_series<T, Policy> s(a, b, z, pol);
+        log_scale += s.log_scale;
+        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_7<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        if (use_logs)
+        {
+           int sgn = boost::math::sign(result);
+           prefix += log(fabs(result));
+           prefix += log_scale;
+           log_scale = 0;
+           result = sgn * prefix_sgn * exp(prefix);
+        }
+        else
+        {
+           result *= prefix;
+        }
+        return result;
+     }
+
+
+     /****************************************************************************************************************/
+     //
+     // The following are not used at present:
+     //
+     /****************************************************************************************************************/
+
+     template <class T, class Policy>
+     struct hypergeometric_1F1_AS_13_3_6_series
+     {
+        //
+        // TODO: store and cache Bessel function evaluations via backwards recurrence.
+        //
+        // Only convergent for a ~ b ?
+        //
+        hypergeometric_1F1_AS_13_3_6_series(const T& a, const T& b, const T& z, const Policy& pol_)
+           : b_minus_a_minus_half(b - a - 0.5f), half_z(z / 2), poch_1(2 * b - 2 * a - 1), poch_2(b - 2 * a), b_poch(b), term(1), sign(1), n(0), pol(pol_)
+        {}
+        T operator()()
+        {
+           T result = term * (b_minus_a_minus_half + n) * sign * boost::math::cyl_bessel_i(b_minus_a_minus_half + n, half_z, pol);
+           ++n;
+           term *= poch_1++;
+           term *= poch_2++;
+           term /= n;
+           term /= b_poch++;
+           sign = -sign;
+           return result;
+        }
+        T b_minus_a_minus_half, half_z, poch_1, poch_2, b_poch, term;
+        int sign;
+        int n;
+        const Policy& pol;
+
+        typedef T result_type;
+     };
+
+     template <class T, class Policy>
+     T hypergeometric_1F1_AS_13_3_6(const T& a, const T& b, const T& z, const Policy& pol)
+     {
+        hypergeometric_1F1_AS_13_3_6_series<T, Policy> s(a, b, z, pol);
+        T result(0);
+        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_6<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        return result * exp(z / 2) * boost::math::tgamma(b - a - 0.5f) * pow(z / 4, a - b + 0.5f);
+     }
+      
+     template <class T, class Policy>
+     struct hypergeometric_1F1_AS_13_3_8_series
+     {
+        //
+        // TODO: store and cache Bessel function evaluations via backwards recurrence.
+        //
+        // The C term grows by at least an order of magnitude with each iteration, and
+        // rate of growth is largely independent of the arguments.  Free parameter h
+        // seems to give accurate results for small values (almost zero) or h=1.
+        // Convergence and accuracy, only when -a/z > 100, this appears to have no
+        // or little benefit over 13.3.7 as it generally requires more iterations?
+        //
+        hypergeometric_1F1_AS_13_3_8_series(const T& a, const T& b, const T& z, const T& h, const Policy& pol_)
+           : C_minus_2(1), C_minus_1(-b * h), C(b * (b + 1) * h * h / 2 - (2 * h - 1) * a / 2),
+           bessel_arg(2 * sqrt(-a * z)), bessel_order(b - 1), power_term(pow(-a * z, (1 - b) / 2)), mult(z / sqrt(-a * z)),
+           a_(a), b_(b), z_(z), h_(h), n(2), pol(pol_)
+        {
+        }
+        T operator()()
+        {
+           // we actually return the n-2 term:
+           T result = C_minus_2 * power_term * boost::math::cyl_bessel_j(bessel_order, bessel_arg, pol);
+           ++bessel_order;
+           power_term *= mult;
+           ++n;
+           T C_next = ((1 - 2 * h_) * (n - 1) - b_ * h_) * C
+              + ((1 - 2 * h_) * a_ - h_ * (h_ - 1) *(b_ + n - 2)) * C_minus_1
+              - h_ * (h_ - 1) * a_ * C_minus_2;
+           C_next /= n;
+           C_minus_2 = C_minus_1;
+           C_minus_1 = C;
+           C = C_next;
+           return result;
+        }
+        T C, C_minus_1, C_minus_2, bessel_arg, bessel_order, power_term, mult, a_, b_, z_, h_;
+        const Policy& pol;
+        int n;
+
+        typedef T result_type;
+     };
+
+     template <class T, class Policy>
+     T hypergeometric_1F1_AS_13_3_8(const T& a, const T& b, const T& z, const T& h, const Policy& pol)
+     {
+        T prefix = exp(h * z) * boost::math::tgamma(b);
+        hypergeometric_1F1_AS_13_3_8_series<T, Policy> s(a, b, z, h, pol);
+        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_8<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        result *= prefix;
+        return result;
+     }
+
+
+#else
+
   // declarations of helpers for 13_3_7 and 13_3_8:
   // bessel_j recurrence relation based on finite continued fractions;
   // it is stable forward recurrence algorithm, see William J. Lentz
@@ -365,6 +598,8 @@
     swap(cnm1, cn);
     cn = detail::hypergeometric_13_3_8_coefficient_next(cnm3, cnm2, cnm1, a, b, n);
   }
+
+#endif
 
   } } } // namespaces
 
