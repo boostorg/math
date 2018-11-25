@@ -567,6 +567,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_leading_coefficient, T, all_test_types)
     BOOST_CHECK_EQUAL(leading_coefficient(a), T(d0a.back()));
 }
 
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_prime, T, all_test_types)
 {
     std::vector<T> d{1,1,1,1,1};
@@ -591,3 +592,4 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_prime, T, all_test_types)
     BOOST_CHECK_EQUAL(q.size(), 0);
 
 }
+#endif
