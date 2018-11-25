@@ -41,8 +41,8 @@
         // TODO: store and cache Bessel function evaluations via backwards recurrence.
         //
         hypergeometric_1F1_AS_13_3_7_tricomi_series(const T& a, const T& b, const T& z, const Policy& pol_)
-           : A_minus_2(1), A_minus_1(0), A(b / 2), mult(z / 2), b_minus_1_plus_n(b - 1),
-           term(1), bessel_arg((b / 2 - a) * z),
+           : A_minus_2(1), A_minus_1(0), A(b / 2), mult(z / 2), term(1), b_minus_1_plus_n(b - 1),
+            bessel_arg((b / 2 - a) * z),
            two_a_minus_b(2 * a - b), pol(pol_), n(2)
         {
            BOOST_MATH_STD_USING
@@ -104,10 +104,10 @@
         //
         // For convergence we require A * term to be converging otherwise we get
         // a divergent alternating series.  It's actually really hard to analyse this
-        // and the best purely heuristic policy we've found is 
+        // and the best purely heuristic policy we've found is
         // z < fabs((2 * a - b) / (sqrt(fabs(a)))) ; b > 0  or:
         // z < fabs((2 * a - b) / (sqrt(fabs(ab)))) ; b < 0
-        // 
+        //
         T prefix(0);
         int prefix_sgn(0);
         bool use_logs = false;
@@ -195,7 +195,7 @@
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_6<%1%>(%1%,%1%,%1%)", max_iter, pol);
         return result * exp(z / 2) * boost::math::tgamma(b - a - 0.5f) * pow(z / 4, a - b + 0.5f);
      }
-      
+
      template <class T, class Policy>
      struct hypergeometric_1F1_AS_13_3_8_series
      {
