@@ -328,6 +328,8 @@ void test_complex_newton()
 {
     typedef typename Complex::value_type Real;
     std::cout << "Testing complex Newton's Method on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    using std::abs;
+    using std::sqrt;
     using boost::math::tools::complex_newton;
     using boost::math::tools::polynomial;
     using boost::math::constants::half;
@@ -385,7 +387,6 @@ BOOST_AUTO_TEST_CASE( test_main )
 #ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
    test_complex_newton<std::complex<float>>();
    test_complex_newton<std::complex<double>>();
-   test_complex_newton<std::complex<long double>>();
    test_complex_newton<boost::multiprecision::cpp_complex_100>();
 #endif
 
