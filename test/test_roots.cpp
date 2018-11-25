@@ -22,10 +22,6 @@
 #include <iostream>
 #include <iomanip>
 
-#if BOOST_HAS_FLOAT128
-#include <boost/multiprecision/complex128.hpp>
-#endif
-
 #include <boost/multiprecision/cpp_complex.hpp>
 
 #define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
@@ -391,9 +387,6 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_complex_newton<std::complex<double>>();
    test_complex_newton<std::complex<long double>>();
    test_complex_newton<boost::multiprecision::cpp_complex_100>();
-#if BOOST_HAS_FLOAT128
-   test_complex_newton<boost::multiprecision::complex128>();
-#endif
 #endif
 
 }
