@@ -9,7 +9,7 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
-
+#include <iostream>
 #include <utility>
 #include <boost/config/no_tr1/cmath.hpp>
 #include <stdexcept>
@@ -65,7 +65,7 @@ inline void unpack_0(const Tuple& t, T& val) BOOST_MATH_NOEXCEPT(T)
 {
    using dummy::get;
    // Rely on ADL to find the correct overload of get:
-   val = get<0>(t); 
+   val = get<0>(t);
 }
 
 template <class T, class U, class V>
@@ -559,10 +559,85 @@ inline T schroeder_iterate(F f, T guess, T min, T max, int digits) BOOST_NOEXCEP
    return schroder_iterate(f, guess, min, max, digits, m);
 }
 
+#ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
+/* Why do we set the default maximum number of iterations to the number of digits in the type?
+ * Because for double roots, the number of digits increases linearly with the number of iterations, so this default should recover full precision.
+ * For isolated roots, the problem is so rapidly convergent that this doesn't matter at all.
+ * For nonexistence, the problem is harder.
+ */
+template<class Complex, class F>
+Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limits<typename Complex::value_type>::digits)
+{
+    typedef typename Complex::value_type Real;
+    using std::norm;
+    Complex z0 = guess/static_cast<Complex>(4);
+    Complex z1 = guess/static_cast<Complex>(2);
+    Complex z2 = guess;
+    do {
+       auto pair = g(z2);
+       if (abs(pair.first) < 10*std::numeric_limits<Real>::epsilon())
+       {
+          // Computed it, might as well use it:
+          if (abs(pair.second) > sqrt(std::numeric_limits<Real>::epsilon()))
+          {
+              return z2 - pair.first/pair.second;
+          }
+          return z2;
+       }
+       if (norm(pair.second) == 0)
+       {
+           // Muller's method. Notation follows Numerical Recipes, 9.5.2:
+           Complex q = (z2 - z1)/(z1 - z0);
+           auto P0 = g(z0);
+           auto P1 = g(z1);
+           Complex qp1 = static_cast<Complex>(1)+q;
+           Complex A = q*(pair.first - qp1*P1.first + q*P0.first);
+
+           Complex B = (static_cast<Complex>(2)*q+static_cast<Complex>(1))*pair.first - qp1*qp1*P1.first +q*q*P0.first;
+           Complex C = qp1*pair.first;
+           Complex rad = sqrt(B*B - static_cast<Complex>(4)*A*C);
+           Complex denom1 = B + rad;
+           Complex denom2 = B - rad;
+           Complex correction = (z1-z2)*static_cast<Complex>(2)*C;
+           if (norm(denom1) > norm(denom2))
+           {
+               correction /= denom1;
+           } else {
+               correction /= denom2;
+           }
+
+           z0 = z1;
+           z1 = z2;
+           z2 = z2 + correction;
+       }
+       else
+       {
+           z0 = z1;
+           z1 = z2;
+           z2 = z2  - (pair.first/pair.second);
+       }
+
+   } while(max_iterations--);
+
+    // At this point, maybe we should use complex trapezoidal quadrature to see if there are any roots?
+    // https://www.ams.org/journals/mcom/1967-21-100/S0025-5718-1967-0228165-4/S0025-5718-1967-0228165-4.pdf
+    // Exposition of the above: http://www.chebfun.org/examples/roots/ComplexRoots.html
+
+    // The idea is that if we can get abs(f) < eps, we should, but if we go through all these iterations
+    // and abs(f) < sqrt(eps), then roundoff error simply does not allow that we can evaluate f to < esp
+    auto pair = g(z2);
+    if (abs(pair.first) < sqrt(std::numeric_limits<Real>::epsilon()))
+    {
+        return z2;
+    }
+
+    return {std::numeric_limits<Real>::quiet_NaN(),
+            std::numeric_limits<Real>::quiet_NaN()};
+}
+#endif
 
 } // namespace tools
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
-

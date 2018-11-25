@@ -29,6 +29,9 @@
    template <class F, class T>
    T schroder_iterate(F f, T guess, T min, T max, int digits, boost::uintmax_t& max_iter);
 
+   template <class F, class Complex>
+   Complex complex_newton(F f, Complex guess, int max_iterations = std::numeric_limits<typename Complex::value_type>::digits);
+
    }}} // namespaces boost::math::tools.
 
 [h4 Description]
@@ -40,9 +43,10 @@ These functions all perform iterative root-finding [*using derivatives]:
 * `halley_iterate` and `schroder_iterate` perform third-order
 __halley and __schroder iteration.
 
-The functions all take the same parameters:
+* `complex_newton` performs Newton's method on complex-analytic functions.
 
-[variablelist Parameters of the root finding functions
+
+[variablelist Parameters of the real-valued root finding functions
 [[F f] [Type F must be a callable function object (or C++ lambda) that accepts one parameter and
         returns a __tuple_type:
 
@@ -157,6 +161,15 @@ College Park, MD: University of Maryland, Institute for Advanced Computer Studie
 
 This method guarantees at least quadratic convergence (the same as Newton's method), and is known to work well in the presence of multiple roots:
 something that neither Newton nor Halley can do.
+
+The complex Newton method works slightly differently than the rest of the methods:
+Since there is no way to bracket roots in the complex plane,
+the `min` and `max` arguments are not accepted.
+Failure to reach a root is communicated by returning `nan`s.
+Remember that if a function has many roots,
+then which root the complex Newton's method converges to is essentially impossible to predict a priori; see the Newton's fractal for more information.
+
+An example usage of `complex_newton` is given in `examples/daubechies_coefficients.cpp`.
 
 [h4 Examples]
 
