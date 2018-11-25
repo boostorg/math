@@ -197,7 +197,7 @@ division(polynomial<T> u, const polynomial<T>& v)
     BOOST_ASSERT(u);
 
     typedef typename polynomial<T>::size_type N;
-    
+
     N const m = u.size() - 1, n = v.size() - 1;
     N k = m - n;
     polynomial<T> q;
@@ -301,6 +301,13 @@ public:
        normalize();
    }
 
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+   polynomial(std::vector<T>&& p) : m_data(std::move(p))
+   {
+      normalize();
+   }
+#endif
+
    template <class U>
    explicit polynomial(const U& point)
    {
@@ -321,17 +328,18 @@ public:
    template <class U>
    polynomial(const polynomial<U>& p)
    {
+      m_data.resize(p.size());
       for(unsigned i = 0; i < p.size(); ++i)
       {
-         m_data.push_back(boost::math::tools::real_cast<T>(p[i]));
+         m_data[i] = boost::math::tools::real_cast<T>(p[i]);
       }
    }
-   
+
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
     polynomial(std::initializer_list<T> l) : polynomial(std::begin(l), std::end(l))
     {
     }
-    
+
     polynomial&
     operator=(std::initializer_list<T> l)
     {
@@ -358,9 +366,15 @@ public:
    {
       return m_data[i];
    }
+
    T evaluate(T z) const
    {
-      return m_data.size() > 0 ? boost::math::tools::evaluate_polynomial(&m_data[0], z, m_data.size()) : 0;
+      return this->operator()(z);
+   }
+
+   T operator()(T z) const
+   {
+      return m_data.size() > 0 ? boost::math::tools::evaluate_polynomial(&m_data[0], z, m_data.size()) : T(0);
    }
    std::vector<T> chebyshev() const
    {
@@ -377,8 +391,34 @@ public:
        return m_data;
    }
 
-   // operators:
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+   polynomial<T> prime() const
+   {
+      if (m_data.size() == 0)
+      {
+        return polynomial<T>({});
+      }
+
+      std::vector<T> p_data(m_data.size() - 1);
+      for (size_t i = 0; i < p_data.size(); ++i) {
+          p_data[i] = m_data[i+1]*static_cast<T>(i+1);
+      }
+      return polynomial<T>(std::move(p_data));
+   }
+
+   polynomial<T> integrate() const
+   {
+      std::vector<T> i_data(m_data.size() + 1);
+      // Choose integration constant such that P(0) = 0.
+      i_data[0] = T(0);
+      for (size_t i = 1; i < i_data.size(); ++i)
+      {
+          i_data[i] = m_data[i-1]/static_cast<T>(i);
+      }
+      return polynomial<T>(std::move(i_data));
+   }
+
+   // operators:
    polynomial& operator =(polynomial&& p) BOOST_NOEXCEPT
    {
        m_data = std::move(p.m_data);
@@ -497,13 +537,13 @@ public:
        normalize();
        return *this;
    }
-   
+
    // Convenient and efficient query for zero.
    bool is_zero() const
    {
        return m_data.empty();
    }
-   
+
    // Conversion to bool.
 #ifdef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
    typedef bool (polynomial::*unmentionable_type)() const;
@@ -524,13 +564,13 @@ public:
    {
        m_data.clear();
    }
-    
+
     /** Remove zero coefficients 'from the top', that is for which there are no
     *        non-zero coefficients of higher degree. */
    void normalize()
    {
 #ifndef BOOST_NO_CXX11_LAMBDAS
-      m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), [](const T& x)->bool { return x != 0; }).base(), m_data.end());
+      m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), [](const T& x)->bool { return x != T(0); }).base(), m_data.end());
 #else
        using namespace boost::lambda;
        m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), _1 != T(0)).base(), m_data.end());
@@ -834,6 +874,3 @@ inline std::basic_ostream<charT, traits>& operator << (std::basic_ostream<charT,
 #include <boost/math/tools/polynomial_gcd.hpp>
 
 #endif // BOOST_MATH_TOOLS_POLYNOMIAL_HPP
-
-
-
