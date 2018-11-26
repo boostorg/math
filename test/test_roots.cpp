@@ -377,6 +377,29 @@ void test_complex_newton()
     BOOST_CHECK_CLOSE(expected_root2.imag(),root.imag(), tol);
     BOOST_CHECK(abs(root.real()) < tol);
 }
+
+// Polynomials which didn't factorize using Newton's method at first:
+void test_daubechies_fails()
+{
+    using std::abs;
+    using std::sqrt;
+    using boost::math::tools::complex_newton;
+    using boost::math::tools::polynomial;
+    using boost::math::constants::half;
+
+    std::cout.precision(std::numeric_limits<double>::digits10+3);
+    //std::cout << std::hexfloat;
+    double tol = std::numeric_limits<double>::epsilon();
+    polynomial<std::complex<double>> p{{-185961388.136908293,141732493.98435241}, {601080390,0}};
+    std::complex<double> guess{1,1};
+    polynomial<std::complex<double>> p_prime = p.prime();
+    auto f = [&](std::complex<double> z) { return std::make_pair<std::complex<double>, std::complex<double>>(p(z), p_prime(z)); };
+    std::complex<double> root = complex_newton(f, guess);
+
+    std::complex<double> expected_root = -p.data()[0]/p.data()[1];
+    BOOST_CHECK_CLOSE(expected_root.imag(),root.imag(), tol);
+    BOOST_CHECK_CLOSE(expected_root.real(),root.real(), tol);
+}
 #endif
 
 BOOST_AUTO_TEST_CASE( test_main )
@@ -388,6 +411,7 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_complex_newton<std::complex<float>>();
    test_complex_newton<std::complex<double>>();
    test_complex_newton<boost::multiprecision::cpp_complex_100>();
+   test_daubechies_fails();
 #endif
 
 }

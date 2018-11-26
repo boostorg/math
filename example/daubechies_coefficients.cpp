@@ -16,6 +16,7 @@
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
+#include <boost/multiprecision/complex128.hpp>
 #include <boost/math/quadrature/gauss_kronrod.hpp>
 
 using std::string;
@@ -67,10 +68,32 @@ std::vector<std::pair<Complex, Complex>> find_roots(size_t p)
         };
 
         Complex r = complex_newton(f, guess);
+        using std::isnan;
+        if(isnan(r.real()))
+        {
+            int i = 50;
+            do {
+                // Try a different guess
+                guess *= Complex(1.0,-1.0);
+                r = complex_newton(f, guess);
+                std::cout << "New guess: " << guess << ", result? " << r << std::endl;
+
+            } while (isnan(r.real()) && i-- > 0);
+
+            if (isnan(r.real()))
+            {
+                std::cout << "Polynomial that killed the process: " << P << std::endl;
+                throw std::logic_error("Newton iteration did not converge");
+            }
+        }
         // Refine r with the original function.
         // We only use the polynomial division to ensure we don't get the same root over and over.
         // However, the division induces error which can grow quickly-or slowly! See Numerical Recipes, section 9.5.1.
         r = complex_newton(orig, r);
+        if (isnan(r.real()))
+        {
+            throw std::logic_error("Found a root for the deflated polynomial which is not a root for the original. Indicative of catastrophic numerical error.");
+        }
         // Test the root:
         using std::sqrt;
         Real tol = sqrt(sqrt(std::numeric_limits<Real>::epsilon()));
@@ -136,13 +159,13 @@ std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<st
     std::vector<Complex> chosen_roots(p-1);
     for (size_t i = 0; i < p - 1; ++i)
     {
-        if(abs(Qroots[i].first) <= 1)
+        if(norm(Qroots[i].first) <= 1)
         {
             chosen_roots[i] = Qroots[i].first;
         }
         else
         {
-            BOOST_ASSERT(abs(Qroots[i].second) <= 1);
+            BOOST_ASSERT(norm(Qroots[i].second) <= 1);
             chosen_roots[i] = Qroots[i].second;
         }
     }
@@ -185,8 +208,8 @@ std::vector<typename Complex::value_type> daubechies_coefficients(std::vector<st
 
 int main()
 {
-    typedef cpp_complex_100 Complex;
-    for(size_t p = 1; p < 89; ++p)
+    typedef boost::multiprecision::cpp_complex<100> Complex;
+    for(size_t p = 1; p < 200; ++p)
     {
         auto roots = find_roots<Complex>(p);
         auto h = daubechies_coefficients(roots);
@@ -194,6 +217,6 @@ int main()
         for (auto& x : h) {
             std::cout << x << ", ";
         }
-        std::cout << "}\n\n\n\n";
+        std::cout << "} // = h_" << p << "\n\n\n\n";
     }
 }
