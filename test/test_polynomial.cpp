@@ -85,8 +85,8 @@ BOOST_AUTO_TEST_CASE( test_initializer_list_construction )
 {
     polynomial<double> a(begin(d3a), end(d3a));
     polynomial<double> b = {10, -6, -4, 3};
-    polynomial<double> c{{10, -6, -4, 3}};
-    polynomial<double> d{{10, -6, -4, 3, 0, 0}};
+    polynomial<double> c{10, -6, -4, 3};
+    polynomial<double> d{10, -6, -4, 3, 0, 0};
     BOOST_CHECK_EQUAL(a, b);
     BOOST_CHECK_EQUAL(b, c);
     BOOST_CHECK_EQUAL(d.degree(), 3u);
