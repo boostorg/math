@@ -573,8 +573,8 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
     using std::norm;
     using std::abs;
     using std::max;
-    Complex z0 = guess/static_cast<Complex>(4);
-    Complex z1 = guess/static_cast<Complex>(2);
+    Complex z0 = guess + Complex(1,0);
+    Complex z1 = guess + Complex(0,1);
     Complex z2 = guess;
 
     // See: https://scicomp.stackexchange.com/questions/30597/defining-a-condition-number-and-termination-criteria-for-newtons-method
@@ -587,15 +587,6 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
     Real scale = max(abs(g(z2).first), Real(1));
     do {
        auto pair = g(z2);
-       if (abs(pair.first) < scale*std::numeric_limits<Real>::epsilon())
-       {
-          // Computed it, might as well use it:
-          if (abs(pair.second) > sqrt(std::numeric_limits<Real>::epsilon()))
-          {
-              return z2 - pair.first/pair.second;
-          }
-          return z2;
-       }
        if (norm(pair.second) == 0)
        {
            // Muller's method. Notation follows Numerical Recipes, 9.5.2:
@@ -627,6 +618,18 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
            z0 = z1;
            z1 = z2;
            z2 = z2  - (pair.first/pair.second);
+       }
+
+       Real tol = max(abs(z2)*std::numeric_limits<Real>::epsilon(), std::numeric_limits<Real>::epsilon());
+       bool real_close = abs(z0.real() - z1.real()) < tol && abs(z0.real() - z2.real()) < tol && abs(z1.real() - z2.real()) < tol;
+       bool imag_close = abs(z0.imag() - z1.imag()) < tol && abs(z0.imag() - z2.imag()) < tol && abs(z1.imag() - z2.imag()) < tol;
+       if (real_close && imag_close)
+       {
+           if (abs(pair.first) > scale*std::numeric_limits<Real>::epsilon())
+           {
+               continue;
+           }
+           return z2;
        }
 
    } while(max_iterations--);
