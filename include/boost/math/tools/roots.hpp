@@ -560,7 +560,8 @@ inline T schroeder_iterate(F f, T guess, T min, T max, int digits) BOOST_NOEXCEP
 }
 
 #ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
-/* Why do we set the default maximum number of iterations to the number of digits in the type?
+/*
+ * Why do we set the default maximum number of iterations to the number of digits in the type?
  * Because for double roots, the number of digits increases linearly with the number of iterations, so this default should recover full precision.
  * For isolated roots, the problem is so rapidly convergent that this doesn't matter at all.
  * For nonexistence, the problem is harder.
@@ -570,12 +571,23 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
 {
     typedef typename Complex::value_type Real;
     using std::norm;
+    using std::abs;
+    using std::max;
     Complex z0 = guess/static_cast<Complex>(4);
     Complex z1 = guess/static_cast<Complex>(2);
     Complex z2 = guess;
+
+    // See: https://scicomp.stackexchange.com/questions/30597/defining-a-condition-number-and-termination-criteria-for-newtons-method
+    // This makes the termination condition scale invariant: If x is a root of f, then x should be a root of kf.
+    // The problem is that this assumes that f(z2) is representative of the typical scale of f; this is hopefully true if
+    // z2 is a random guess, but if (say) the user is trying to refine a root determined by a lower precision method,
+    // that isn't a safe assumption. Hence the call to max.
+    // Of course, if the scale of f is tiny, then this doesn't work.
+    // But this situation seems more rare than the other, where the scale of f is huge and |f(x)| < eps is never satisfied for any input.
+    Real scale = max(abs(g(z2).first), Real(1));
     do {
        auto pair = g(z2);
-       if (abs(pair.first) < 10*std::numeric_limits<Real>::epsilon())
+       if (abs(pair.first) < scale*std::numeric_limits<Real>::epsilon())
        {
           // Computed it, might as well use it:
           if (abs(pair.second) > sqrt(std::numeric_limits<Real>::epsilon()))

@@ -397,8 +397,8 @@ void test_daubechies_fails()
     std::complex<double> root = complex_newton(f, guess);
 
     std::complex<double> expected_root = -p.data()[0]/p.data()[1];
-    BOOST_CHECK_CLOSE(expected_root.imag(),root.imag(), tol);
-    BOOST_CHECK_CLOSE(expected_root.real(),root.real(), tol);
+    BOOST_CHECK_CLOSE(expected_root.imag(), root.imag(), tol);
+    BOOST_CHECK_CLOSE(expected_root.real(), root.real(), tol);
 }
 #endif
 
