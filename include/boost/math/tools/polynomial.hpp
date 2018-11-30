@@ -23,6 +23,8 @@
 #include <boost/math/policies/error_handling.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include <boost/core/enable_if.hpp>
+#include <boost/type_traits/is_convertible.hpp>
+#include <boost/math/tools/detail/is_const_iterable.hpp>
 
 #include <vector>
 #include <ostream>
@@ -309,7 +311,7 @@ public:
 #endif
 
    template <class U>
-   explicit polynomial(const U& point)
+   explicit polynomial(const U& point, typename boost::enable_if<boost::is_convertible<U, T> >::type* = 0)
    {
        if (point != U(0))
           m_data.push_back(point);
@@ -334,7 +336,13 @@ public:
          m_data[i] = boost::math::tools::real_cast<T>(p[i]);
       }
    }
-
+#ifdef BOOST_MATH_HAS_IS_CONST_ITERABLE
+    template <class Range>
+    explicit polynomial(const Range& r, typename boost::enable_if<boost::math::tools::detail::is_const_iterable<Range> >::type* = 0) 
+       : polynomial(r.begin(), r.end()) 
+    {
+    }
+#endif
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
     polynomial(std::initializer_list<T> l) : polynomial(std::begin(l), std::end(l))
     {

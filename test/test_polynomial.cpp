@@ -79,6 +79,25 @@ BOOST_AUTO_TEST_CASE( test_construction )
     BOOST_CHECK_EQUAL(a, b);
 }
 
+#ifdef BOOST_MATH_HAS_IS_CONST_ITERABLE
+
+#include <list>
+#include <array>
+
+BOOST_AUTO_TEST_CASE(test_range_construction)
+{
+   std::list<double> l{ 1, 2, 3, 4 };
+   std::array<double, 4> a{ 3, 4, 5, 6 };
+   polynomial<double> p1{ 1, 2, 3, 4 };
+   polynomial<double> p2{ 3, 4, 5, 6 };
+
+   polynomial<double> p3(l);
+   polynomial<double> p4(a);
+
+   BOOST_CHECK_EQUAL(p1, p3);
+   BOOST_CHECK_EQUAL(p2, p4);
+}
+#endif
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
 BOOST_AUTO_TEST_CASE( test_initializer_list_construction )
