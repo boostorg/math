@@ -514,9 +514,10 @@ namespace detail{
       template <class T>
       static T step(const T& x, const T& f0, const T& f1, const T& f2) BOOST_NOEXCEPT_IF(BOOST_MATH_IS_FLOAT(T))
       {
+         using std::fabs;
          T ratio = f0 / f1;
          T delta;
-         if(ratio / x < 0.1)
+         if((x != 0) && (fabs(ratio / x) < 0.1))
          {
             delta = ratio + (f2 / (2 * f1)) * ratio * ratio;
             // check second derivative doesn't over compensate:
