@@ -99,10 +99,10 @@ An example usage:
 
 References:
 
-Squire, William, and George Trapp. ['Using complex variables to estimate derivatives of real functions.] Siam Review 40.1 (1998): 110-112.
+* Squire, William, and George Trapp. ['Using complex variables to estimate derivatives of real functions.] Siam Review 40.1 (1998): 110-112.
 
-Fornberg, Bengt. ['Generation of finite difference formulas on arbitrarily spaced grids.] Mathematics of computation 51.184 (1988): 699-706.
+* Fornberg, Bengt. ['Generation of finite difference formulas on arbitrarily spaced grids.] Mathematics of computation 51.184 (1988): 699-706.
 
-Corless, Robert M., and Nicolas Fillion. ['A graduate introduction to numerical methods.] AMC 10 (2013): 12.
+* Corless, Robert M., and Nicolas Fillion. ['A graduate introduction to numerical methods.] AMC 10 (2013): 12.
 
 [endsect]

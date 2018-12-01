@@ -25,11 +25,12 @@ see [link math_toolkit.tutorial.templ use in template code].
   * If the value returned is a builtin type then it's returned by value as a `constexpr` (C++11 feature, if available).
   * If the value is computed and cached (or constructed from a string representation and cached), then it's returned by constant reference.
 
-This can be significant if:
-  * Functions pow, trig or log are used.
-  * Inside an inner loop.
-  * Using a high-precision UDT like __multiprecision.
-  * Compiler optimizations possible with built-in types, especially `double`, are not available.
+  This can be 
+significant if:
+    * Functions pow, trig or log are used.
+    * Inside an inner loop.
+    * Using a high-precision UDT like __multiprecision.
+    * Compiler optimizations possible with built-in types, especially `double`, are not available.
 
 [endsect] [/section:intro Introduction]
 

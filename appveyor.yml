@@ -17,11 +17,29 @@ platform:
 environment:
   matrix:
     - ARGS: --toolset=msvc-9.0  address-model=32
+      TEST_SUITE: special_fun distribution_tests
     - ARGS: --toolset=msvc-10.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
     - ARGS: --toolset=msvc-11.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
     - ARGS: --toolset=msvc-12.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
     - ARGS: --toolset=msvc-14.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-9.0  address-model=32
+      TEST_SUITE: misc ../example//examples
+    - ARGS: --toolset=msvc-10.0 address-model=32
+      TEST_SUITE: misc ../example//examples
+    - ARGS: --toolset=msvc-11.0 address-model=32
+      TEST_SUITE: misc ../example//examples
+    - ARGS: --toolset=msvc-12.0 address-model=32
+      TEST_SUITE: misc ../example//examples
+    - ARGS: --toolset=msvc-14.0 address-model=32
+      TEST_SUITE: misc ../example//examples
     - ARGS: --toolset=msvc-12.0 address-model=64
+      TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-12.0 address-model=64
+      TEST_SUITE: misc ../example//examples
     - ARGS: --toolset=msvc-14.0 address-model=64
       TEST_SUITE: special_fun distribution_tests
     - ARGS: --toolset=msvc-14.0 address-model=64

@@ -61,6 +61,13 @@ Quaternion and Octonians as class templates similar to std::complex.
 
 The full documentation is available on [boost.org](http://www.boost.org/doc/libs/release/libs/math).
 
+|                  |  Master  |   Develop   |
+|------------------|----------|-------------|
+| Travis           | [![Build Status](https://travis-ci.org/boostorg/math.svg?branch=master)](https://travis-ci.org/boostorg/math)  |  [![Build Status](https://travis-ci.org/boostorg/math.svg)](https://travis-ci.org/boostorg/math) |
+| Appveyor         | [![Build status](https://ci.appveyor.com/api/projects/status/cnugjx9dt7cou7nj/branch/master?svg=true)](https://ci.appveyor.com/project/jzmaddock/math/branch/master) | [![Build status](https://ci.appveyor.com/api/projects/status/cnugjx9dt7cou7nj/branch/develop?svg=true)](https://ci.appveyor.com/project/jzmaddock/math/branch/develop)  |
+
+
+
 ## Support, bugs and feature requests ##
 
 Bugs and feature requests can be reported through the [Gitub issue tracker](https://github.com/boostorg/math/issues)
@@ -90,3 +97,25 @@ You can either run all the tests listed in `Jamfile.v2` or run a single test:
     test$ ../../../b2 static_assert_test     <- single test
     test$ # A more advanced syntax, demoing various options for building the tests:
     test$ ../../../b2 -a -j2 -q --reconfigure toolset=clang cxxflags="--std=c++14 -fsanitize=address -fsanitize=undefined" linkflags="-fsanitize=undefined -fsanitize=address"
+    
+### Building documentation ###
+
+Full instructions can be found [here](https://svn.boost.org/trac10/wiki/BoostDocs/GettingStarted), but to reiterate slightly:
+
+```bash
+libs/math/doc$ brew install docbook-xsl # on mac
+libs/math/doc$ touch ~/user-config.jam
+libs/math/doc$ # now edit so that:
+libs/math/doc$ cat ~/user-config.jam
+using darwin ;
+
+using xsltproc ;
+
+using boostbook
+    : /usr/local/opt/docbook-xsl/docbook-xsl
+    ;
+
+using doxygen ;
+using quickbook ;
+libs/math/doc$ ../../../b2
+```
