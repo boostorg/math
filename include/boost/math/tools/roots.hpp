@@ -436,7 +436,10 @@ namespace detail{
          // check for out of bounds step:
          if(result < min)
          {
-            T diff = ((fabs(min) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(min))) ? T(1000) : T(result / min);
+            T diff = ((fabs(min) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(min))) 
+               ? T(1000) 
+               : (fabs(min) < 1) && (fabs(tools::max_value<T>() * min) < fabs(result)) 
+               ? ((min < 0) != (result < 0)) ? -tools::max_value<T>() : tools::max_value<T>() : T(result / min);
             if(fabs(diff) < 1)
                diff = 1 / diff;
             if(!out_of_bounds_sentry && (diff > 0) && (diff < 3))
