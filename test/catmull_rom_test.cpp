@@ -338,8 +338,7 @@ void test_data_representations()
     mypoint3d<Real> p3(0.4, 0.5, 0.6);
     mypoint3d<Real> p4(0.5, 0.6, 0.7);
     mypoint3d<Real> p5(0.6, 0.7, 0.8);
-    std::vector<mypoint3d<Real>> v{p0, p1, p2, p3, p4, p5};
-    catmull_rom<mypoint3d<Real>> cat(v.data(), v.size());
+    catmull_rom<mypoint3d<Real>> cat({p0, p1, p2, p3, p4, p5});
 
     Real tol = 0.001;
     auto p = cat(cat.parameter_at_point(0));
