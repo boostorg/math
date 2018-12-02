@@ -48,7 +48,7 @@
            BOOST_MATH_STD_USING
            term /= pow(fabs(bessel_arg), b_minus_1_plus_n / 2);
            mult /= sqrt(fabs(bessel_arg));
-           if (term == 0)
+           if ((term == 0) || !(boost::math::isfinite)(term))
            {
               term = -log(fabs(bessel_arg)) * b_minus_1_plus_n / 2;
               log_scale = boost::math::itrunc(term);
@@ -249,6 +249,84 @@
         return result;
      }
 
+     //
+     // This is the series from https://dlmf.nist.gov/13.11
+     // It appears to be unusable for a,z < 0, and for
+     // b < 0 appears to never be better than the defining series
+     // for 1F1.
+     //
+     template <class T, class Policy>
+     struct hypergeometric_1f1_13_11_1_series
+     {
+        typedef T result_type;
+
+        hypergeometric_1f1_13_11_1_series(const T& a, const T& b, const T& z, const Policy& pol_)
+           : term(1), two_a_minus_1_plus_s(2 * a - 1), two_a_minus_b_plus_s(2 * a - b), b_plus_s(b), a_minus_half_plus_s(a - 0.5f), half_z(z / 2), s(0), pol(pol_)
+        {
+        }
+        T operator()()
+        {
+           T result = term * a_minus_half_plus_s * boost::math::cyl_bessel_i(a_minus_half_plus_s, half_z, pol);
+
+           term *= two_a_minus_1_plus_s * two_a_minus_b_plus_s / (b_plus_s * ++s);
+           ++two_a_minus_1_plus_s;
+           ++a_minus_half_plus_s;
+           ++two_a_minus_b_plus_s;
+           ++b_plus_s;
+
+           return result;
+        }
+        T term, two_a_minus_1_plus_s, two_a_minus_b_plus_s, b_plus_s, a_minus_half_plus_s, half_z;
+        int s;
+        const Policy& pol;
+     };
+
+     template <class T, class Policy>
+     T hypergeometric_1f1_13_11_1(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
+     {
+        BOOST_MATH_STD_USING
+           bool use_logs = false;
+        T prefix;
+        int prefix_sgn = 1;
+        if (true/*(a < boost::math::max_factorial<T>::value) && (a > 0)*/)
+           prefix = boost::math::tgamma(a - 0.5f, pol);
+        else
+        {
+           prefix = boost::math::lgamma(a - 0.5f, &prefix_sgn, pol);
+           use_logs = true;
+        }
+        if (use_logs)
+        {
+           prefix += z / 2;
+           prefix += log(z / 4) * (0.5f - a);
+        }
+        else if (z > 0)
+        {
+           prefix *= pow(z / 4, 0.5f - a);
+           prefix *= exp(z / 2);
+        }
+        else
+        {
+           prefix *= exp(z / 2);
+           prefix *= pow(z / 4, 0.5f - a);
+        }
+
+        hypergeometric_1f1_13_11_1_series<T, Policy> s(a, b, z, pol);
+        boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
+        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+        boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1f1_13_11_1<%1%>(%1%,%1%,%1%)", max_iter, pol);
+        if (use_logs)
+        {
+           int scaling = itrunc(prefix);
+           log_scaling += scaling;
+           prefix -= scaling;
+           result *= exp(prefix) * prefix_sgn;
+        }
+        else
+           result *= prefix;
+
+        return result;
+     }
 
 #else
 

@@ -78,6 +78,7 @@
         }
         T operator()()
         {
+           BOOST_MATH_STD_USING
            T result = term * M;
            term *= b_pochhammer * x_k_power / ++n;
            T t2 = boost::math::rising_factorial(1 - b_, n) * pow(-k / z_, n) / boost::math::factorial<T>(n);

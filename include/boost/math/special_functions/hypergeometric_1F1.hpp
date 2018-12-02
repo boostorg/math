@@ -20,6 +20,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_1F1_bessel.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1F1_scaled_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1f1_addition_theorems_on_z.hpp>
 
 namespace boost { namespace math { namespace detail {
 
@@ -173,9 +174,23 @@ namespace boost { namespace math { namespace detail {
          {
             if (z < fabs((2 * a - b) / (sqrt(fabs(a)))))
                return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
+            //if ((a < -13) && (b > 50))
+            {
+               // Selection criteria abobe are completely arbitrary, but seem to more or less work...
+               T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
+               int k = 1 + boost::math::itrunc(z - z_limit);
+               // If k is too large we destroy all the digits in the result:
+               if (k < 50)
+               {
+                  return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, z - k, k, pol);
+               }
+            }
          }
-         else if(z < fabs((2 * a - b) / (sqrt(fabs(a * b)))))
-            return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
+         else
+         {
+            if((a < 0) || (z < fabs((2 * a - b) / (sqrt(fabs(a * b))))))
+               return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
+         }
 
          // If we get here, then we've run out of methods to try, use the checked series which will
          // raise an error if the result is garbage:
