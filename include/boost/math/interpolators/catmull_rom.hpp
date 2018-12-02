@@ -38,9 +38,7 @@ class catmull_rom
 {
 public:
 
-    catmull_rom(const Point* const points, size_t num_pnts, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2);
-
-    catmull_rom(std::vector<Point>&& points, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2) : catmull_rom(points.data(), points.size(), closed, alpha) {}
+    catmull_rom(std::vector<Point>&& points, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2);
 
     catmull_rom(std::initializer_list<Point> l, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2) : catmull_rom(std::vector<Point>(l), closed, alpha) {}
 
@@ -56,8 +54,12 @@ public:
 
     Point operator()(const typename Point::value_type s) const;
 
-
     Point prime(const typename Point::value_type s) const;
+
+    std::vector<Point>&& get_points()
+    {
+        return std::move(m_pnts);
+    }
 
 private:
     std::vector<Point> m_pnts;
@@ -66,8 +68,10 @@ private:
 };
 
 template<class Point>
-catmull_rom<Point>::catmull_rom(const Point* const points, size_t num_pnts, bool closed, typename Point::value_type alpha)
+catmull_rom<Point>::catmull_rom(std::vector<Point>&& points, bool closed, typename Point::value_type alpha) : m_pnts(std::move(points))
 {
+    size_t num_pnts = m_pnts.size();
+    //std::cout << "Number of points = " << num_pnts << "\n";
     if (num_pnts < 4)
     {
         throw std::domain_error("The Catmull-Rom curve requires at least 4 points.");
@@ -80,14 +84,18 @@ catmull_rom<Point>::catmull_rom(const Point* const points, size_t num_pnts, bool
     using std::abs;
     m_s.resize(num_pnts+3);
     m_pnts.resize(num_pnts+3);
+    //std::cout << "Number of points now = " << m_pnts.size() << "\n";
 
-    m_pnts[0] = points[num_pnts-1];
-    for (size_t i = 0; i < num_pnts; ++i)
+    m_pnts[num_pnts+1] = m_pnts[0];
+    m_pnts[num_pnts+2] = m_pnts[1];
+
+    auto tmp = m_pnts[num_pnts-1];
+    for (int64_t i = num_pnts-1; i >= 0; --i)
     {
-        m_pnts[i+1] = points[i];
+        m_pnts[i+1] = m_pnts[i];
     }
-    m_pnts[num_pnts+1] = points[0];
-    m_pnts[num_pnts+2] = points[1];
+    m_pnts[0] = tmp;
+
     m_s[0] = -detail::alpha_distance<Point>(m_pnts[0], m_pnts[1], alpha);
     if (abs(m_s[0]) < std::numeric_limits<typename Point::value_type>::epsilon())
     {

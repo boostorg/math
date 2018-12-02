@@ -19,9 +19,10 @@ namespace boost{ namespace math{
     class catmull_rom
     {
     public:
-        catmull_rom(const Point* const points, size_t num_points, bool closed = false, Real alpha = (Real) 1/ (Real) 2)
 
         catmull_rom(std::vector<Point>&& points, bool closed = false, Real alpha = (Real) 1/ (Real) 2)
+
+        catmull_rom(std::initializer_list<Point> l, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2);
 
         Real operator()(Real s) const;
 
@@ -42,7 +43,7 @@ Catmull-Rom splines enjoy the following properties:
 
 * Affine invariance: The interpolant commutes with affine transformations.
 * Local support of the basis functions: This gives stability and fast evaluation.
-* /C/[super 2] smoothness
+* /C/[super 2]-smoothness
 * Interpolation of control points-this means the curve passes through the control points.
 Many curves (such as Bezier) are /approximating/-they do not pass through their control points.
 This makes them more difficult to use than interpolating splines.
@@ -60,19 +61,15 @@ The basic usage is shown here:
     points[1] = {1,0,0};
     points[2] = {0,1,0};
     points[3] = {0,0,1};
-    catmull_rom<std::array<Real, 3>> cr(points.data(), points.size());
+    catmull_rom<std::array<Real, 3>> cr(std::move(points));
     // Interpolate at s = 0.1:
     auto point = cr(0.1);
-
-Memory conscious programmers may enjoy using the move constructor instead:
-
-    catmull_rom<std::array<Real, 3>> cr(std::move(points));
 
 The spline can be either open or /closed/, closed meaning that there is some /s > 0/ such that /P(s) = P(0)/.
 The default is open, but this can be easily changed:
 
     // closed = true
-    catmull_rom<std::array<Real, 3>> cr(points.data(), points.size(), true);
+    catmull_rom<std::array<Real, 3>> cr(std::move(points), true);
 
 In either case, evaluating the interpolator at /s=0/ returns the first point in the list.
 
@@ -107,7 +104,7 @@ This parameterization has been shown to be the only parameterization that does n
 However, for advanced users, other parameterizations can be chosen using the /alpha/ parameter:
 
    // alpha = 1 is the "chordal" parameterization.
-   catmull_rom<std::array<double, 3>> cr(points.data(), points.size(), false, 1.0);
+   catmull_rom<std::array<double, 3>> cr(std::move(points), false, 1.0);
 
 The alpha parameter must always be in the range `[0,1]`.
 
@@ -162,9 +159,8 @@ We see that evaluation of the interpolant is [bigo](/log/(/N/)).
     BM_CatmullRom<double>_BigO          2.97 lgN       2.97 lgN
     BM_CatmullRom<double>_RMS             19 %         19 %
 
-[endsect]
 
-[section:point_type Point types]
+[heading Point types]
 
 We have already discussed that certain conditions on the `Point` type template argument must be obeyed.
 The following shows a custom point type in 3D which can be used as a template argument to Catmull-Rom:
@@ -208,9 +204,15 @@ The following shows a custom point type in 3D which can be used as a template ar
 
 These conditions are satisfied by both `std::array` and `std::vector`, but it may nonetheless be useful to define your own point class so that (say) you can define geometric distance between them.
 
-[endsect]
 
-[section:catmull_rom_refs References]
+[heading Caveats]
+
+The Catmull-Rom interpolator requires memory for three more points than is provided by the user.
+This causes the class to call a `resize()` on the input vector.
+If `v.capacity() >= v.size() + 3`, then no problems arise; there are no reallocs, and in practice this condition is almost always satisfied.
+However, if `v.capacity() < v.size() + 3`, the realloc causes a performance penalty of roughly 20%.
+
+[heading References]
 
 * Cem Yuksel, Scott Schaefer, and John Keyser, ['Parameterization and applications of Catmull–Rom curves], Computer-Aided Design 43 (2011) 747–755.
 * Phillip J. Barry and Ronald N. Goldman, ['A Recursive Evaluation Algorithm for a Class of Catmull-Rom Splines], Computer Graphics, Volume 22, Number 4, August 1988

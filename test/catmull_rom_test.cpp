@@ -60,7 +60,7 @@ void test_linear()
     v[1] = {1,0,0};
     v[2] = {2,0,0};
     v[3] = {3,0,0};
-    catmull_rom<std::array<Real, 3>> cr(v.data(), v.size());
+    catmull_rom<std::array<Real, 3>> cr(std::move(v));
 
     // Test that the interpolation condition is obeyed:
     BOOST_CHECK_CLOSE_FRACTION(cr.max_parameter(), 3, tol);
@@ -120,12 +120,14 @@ void test_circle()
 
     Real tol = 10*std::numeric_limits<Real>::epsilon();
     std::vector<std::array<Real, 2>> v(20*sizeof(Real));
+    std::vector<std::array<Real, 2>> u(20*sizeof(Real));
     for (size_t i = 0; i < v.size(); ++i)
     {
         Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
         v[i] = {cos(theta), sin(theta)};
+        u[i] = v[i];
     }
-    catmull_rom<std::array<Real, 2>> circle(v.data(), v.size(), true);
+    catmull_rom<std::array<Real, 2>> circle(std::move(v), true);
 
     // Interpolation condition:
     for (size_t i = 0; i < v.size(); ++i)
@@ -136,16 +138,16 @@ void test_circle()
         Real y = p[1];
         if (abs(x) < std::numeric_limits<Real>::epsilon())
         {
-            BOOST_CHECK_SMALL(v[i][0], tol);
+            BOOST_CHECK_SMALL(u[i][0], tol);
         }
         if (abs(y) < std::numeric_limits<Real>::epsilon())
         {
-            BOOST_CHECK_SMALL(v[i][1], tol);
+            BOOST_CHECK_SMALL(u[i][1], tol);
         }
         else
         {
-            BOOST_CHECK_CLOSE_FRACTION(x, v[i][0], tol);
-            BOOST_CHECK_CLOSE_FRACTION(y, v[i][1], tol);
+            BOOST_CHECK_CLOSE_FRACTION(x, u[i][0], tol);
+            BOOST_CHECK_CLOSE_FRACTION(y, u[i][1], tol);
         }
     }
 
@@ -169,11 +171,13 @@ void test_affine_invariance()
 
     Real tol = 1000*std::numeric_limits<Real>::epsilon();
     std::vector<std::array<Real, dimension>> v(100);
+    std::vector<std::array<Real, dimension>> u(100);
     std::mt19937_64 gen(438232);
     Real inv_denom = (Real) 100/( (Real) gen.max() + (Real) 2);
     for(size_t j = 0; j < dimension; ++j)
     {
         v[0][j] = gen()*inv_denom;
+        u[0][j] = v[0][j];
     }
 
     for (size_t i = 1; i < v.size(); ++i)
@@ -181,6 +185,7 @@ void test_affine_invariance()
         for(size_t j = 0; j < dimension; ++j)
         {
             v[i][j] = v[i-1][j] + gen()*inv_denom;
+            u[i][j] = v[i][j];
         }
     }
     std::array<Real, dimension> affine_shift;
@@ -189,17 +194,17 @@ void test_affine_invariance()
         affine_shift[j] = gen()*inv_denom;
     }
 
-    catmull_rom<std::array<Real, dimension>> cr1(v.data(), v.size());
+    catmull_rom<std::array<Real, dimension>> cr1(std::move(v));
 
-    for(size_t i = 0; i< v.size(); ++i)
+    for(size_t i = 0; i< u.size(); ++i)
     {
         for(size_t j = 0; j < dimension; ++j)
         {
-            v[i][j] += affine_shift[j];
+            u[i][j] += affine_shift[j];
         }
     }
 
-    catmull_rom<std::array<Real, dimension>> cr2(v.data(), v.size());
+    catmull_rom<std::array<Real, dimension>> cr2(std::move(u));
 
     BOOST_CHECK_CLOSE_FRACTION(cr1.max_parameter(), cr2.max_parameter(), tol);
 
@@ -234,7 +239,7 @@ void test_helix()
         Real theta = ((Real) i/ (Real) v.size())*2*M_PI;
         v[i] = {cos(theta), sin(theta), theta};
     }
-    catmull_rom<std::array<Real, 3>> helix(v.data(), v.size());
+    catmull_rom<std::array<Real, 3>> helix(std::move(v));
 
     // Interpolation condition:
     for (size_t i = 0; i < v.size(); ++i)
@@ -338,6 +343,7 @@ void test_data_representations()
     mypoint3d<Real> p3(0.4, 0.5, 0.6);
     mypoint3d<Real> p4(0.5, 0.6, 0.7);
     mypoint3d<Real> p5(0.6, 0.7, 0.8);
+    // Tests initializer_list:
     catmull_rom<mypoint3d<Real>> cat({p0, p1, p2, p3, p4, p5});
 
     Real tol = 0.001;
