@@ -42,6 +42,8 @@ public:
 
     catmull_rom(std::vector<Point>&& points, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2) : catmull_rom(points.data(), points.size(), closed, alpha) {}
 
+    catmull_rom(std::initializer_list<Point> l, bool closed = false, typename Point::value_type alpha = (typename Point::value_type) 1/ (typename Point::value_type) 2) : catmull_rom(std::vector<Point>(l), closed, alpha) {}
+
     typename Point::value_type max_parameter() const
     {
         return m_max_s;
@@ -68,8 +70,13 @@ catmull_rom<Point>::catmull_rom(const Point* const points, size_t num_pnts, bool
 {
     if (num_pnts < 4)
     {
-        throw std::domain_error("The Catmull-Rom curve requires at least 4 points.\n");
+        throw std::domain_error("The Catmull-Rom curve requires at least 4 points.");
     }
+    if (alpha < 0 || alpha > 1)
+    {
+        throw std::domain_error("The parametrization alpha must be in the range [0,1].");
+    }
+
     using std::abs;
     m_s.resize(num_pnts+3);
     m_pnts.resize(num_pnts+3);
@@ -113,7 +120,7 @@ Point catmull_rom<Point>::operator()(const typename Point::value_type s) const
     using std::size;
     if (s < 0 || s > m_max_s)
     {
-        throw std::domain_error("Parameter outside bounds.\n");
+        throw std::domain_error("Parameter outside bounds.");
     }
     auto it = std::upper_bound(m_s.begin(), m_s.end(), s);
     //Now *it >= s. We want the index such that m_s[i] <= s < m_s[i+1]:
