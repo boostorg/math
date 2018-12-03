@@ -73,6 +73,11 @@ The default is open, but this can be easily changed:
 
 In either case, evaluating the interpolator at /s=0/ returns the first point in the list.
 
+If the curve is open, then the first and last segments may have strange behavior.
+The traditional solution is to prepend a carefully selected control point to the data so that the first data segment (second interpolator segment) has reasonable tangent vectors, and simply ignore the first interpolator segment.
+A control point is appended to the data using similar criteria.
+However, we recommend not going through this effort until it proves to be necessary: For most use-cases, the curve is good enough without prepending and appending control points, and responsible selection of non-data control points is difficult.
+
 Inside `catmull_rom`, the curve is represented as closed.
 This is because an open Catmull-Rom curve is /implicitly closed/, but the closing point is the zero vector.
 There is no reason to suppose that the zero vector is a better closing point than the endpoint (or any other point, for that matter),
