@@ -375,7 +375,6 @@ BOOST_AUTO_TEST_CASE(catmull_rom_test)
     test_circle<long double>();
     test_circle<cpp_bin_float_50>();
 
-
     test_helix<float>();
     test_helix<double>();
 
