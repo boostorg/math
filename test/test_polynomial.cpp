@@ -79,14 +79,33 @@ BOOST_AUTO_TEST_CASE( test_construction )
     BOOST_CHECK_EQUAL(a, b);
 }
 
+#ifdef BOOST_MATH_HAS_IS_CONST_ITERABLE
+
+#include <list>
+#include <array>
+
+BOOST_AUTO_TEST_CASE(test_range_construction)
+{
+   std::list<double> l{ 1, 2, 3, 4 };
+   std::array<double, 4> a{ 3, 4, 5, 6 };
+   polynomial<double> p1{ 1, 2, 3, 4 };
+   polynomial<double> p2{ 3, 4, 5, 6 };
+
+   polynomial<double> p3(l);
+   polynomial<double> p4(a);
+
+   BOOST_CHECK_EQUAL(p1, p3);
+   BOOST_CHECK_EQUAL(p2, p4);
+}
+#endif
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
 BOOST_AUTO_TEST_CASE( test_initializer_list_construction )
 {
     polynomial<double> a(begin(d3a), end(d3a));
     polynomial<double> b = {10, -6, -4, 3};
-    polynomial<double> c{{10, -6, -4, 3}};
-    polynomial<double> d{{10, -6, -4, 3, 0, 0}};
+    polynomial<double> c{10, -6, -4, 3};
+    polynomial<double> d{10, -6, -4, 3, 0, 0};
     BOOST_CHECK_EQUAL(a, b);
     BOOST_CHECK_EQUAL(b, c);
     BOOST_CHECK_EQUAL(d.degree(), 3u);
@@ -567,7 +586,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(test_leading_coefficient, T, all_test_types)
     BOOST_CHECK_EQUAL(leading_coefficient(a), T(d0a.back()));
 }
 
-#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
 BOOST_AUTO_TEST_CASE_TEMPLATE(test_prime, T, all_test_types)
 {
     std::vector<T> d{1,1,1,1,1};
