@@ -32,9 +32,9 @@
     {
       const T ai = a + i;
 
-      const T an = -ai;
-      const T bn = (b - (2 * ai)) - z;
-      const T cn = b - ai;
+      const T an = b - ai;
+      const T bn = (2 * ai - b + z);
+      const T cn = -ai;
 
       return boost::math::make_tuple(an, bn, cn);
     }
@@ -57,9 +57,9 @@
     {
       const T bi = b + i;
 
-      const T an = z * (bi - a);
-      const T bn = bi * ((z + bi) - 1);
-      const T cn = bi * (bi - 1);
+      const T an = bi * (bi - 1);
+      const T bn = bi * (1 - bi - z);
+      const T cn = z * (bi - a);
 
       return boost::math::make_tuple(an, bn, cn);
     }
@@ -83,9 +83,9 @@
       const T ai = a + i;
       const T bi = b + i;
 
-      const T an = ai * z;
+      const T an = bi * (bi - 1);
       const T bn = bi * ((1 - bi) + z);
-      const T cn = bi * (1 - bi);
+      const T cn = -ai * z;
 
       return boost::math::make_tuple(an, bn, cn);
     }
@@ -130,9 +130,20 @@
     if (-integer_part > static_cast<boost::intmax_t>(policies::get_max_series_iterations<Policy>()))
        return policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", std::numeric_limits<T>::quiet_NaN(), pol);
 
-    T first = detail::hypergeometric_1F1_imp(ak, b, z, pol);
-    --ak;
-    T second = detail::hypergeometric_1F1_imp(ak, b, z, pol);
+    T first, second;
+    if(ak == 0)
+    { 
+       first = 1;
+       --ak;
+       second = 1 - z / b;
+    }
+    else
+    {
+       first = detail::hypergeometric_1F1_imp(ak, b, z, pol);
+       --ak;
+       second = detail::hypergeometric_1F1_imp(ak, b, z, pol);
+    }
+    ++integer_part;
 
     detail::hypergeometric_1F1_recurrence_a_coefficients<T> s(ak, b, z);
 
@@ -153,6 +164,7 @@
     T first = detail::hypergeometric_1F1_imp(ak, b, z, pol);
     ++ak;
     T second = detail::hypergeometric_1F1_imp(ak, b, z, pol);
+    --integer_part;
 
     detail::hypergeometric_1F1_recurrence_a_coefficients<T> s(ak, b, z);
 
@@ -170,6 +182,7 @@
     T first = detail::hypergeometric_1F1_imp(a, bk, z, pol);
     --bk;
     T second = detail::hypergeometric_1F1_imp(a, bk, z, pol);
+    ++integer_part;
 
     detail::hypergeometric_1F1_recurrence_b_coefficients<T> s(a, bk, z);
 
@@ -179,8 +192,7 @@
                                                      second);
   }
 
-  // this method works provided that integer part of a is the same as integer part of b
-  // we don't make this check inside it.
+  // This method accumulates errors at an alarming rate:.
   template <class T, class Policy>
   inline T hypergeometric_1F1_backward_recurrence_for_negative_a_and_b(const T& a, const T& b, const T& z, const Policy& pol)
   {
@@ -188,11 +200,12 @@
 
     boost::intmax_t integer_part = 0;
     T ak = modf(a, &integer_part);
-    T bk = modf(b, &integer_part);
+    T bk = b - integer_part;
 
     T first = detail::hypergeometric_1F1_imp(ak, bk, z, pol);
     --ak; --bk;
     T second = detail::hypergeometric_1F1_imp(ak, bk, z, pol);
+    ++integer_part;
 
     detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> s(ak, bk, z);
 

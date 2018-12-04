@@ -200,14 +200,14 @@ namespace boost {
 
            // solves usual recurrence relation for homogeneous
            // difference equation in stable forward direction
-           // a(n)w(n+1) - b(n)w(n) + c(n)w(n-1) = 0
+           // a(n)w(n-1) + b(n)w(n) + c(n)w(n+1) = 0
            //
            // Params:
            // get_coefs: functor returning a tuple, where
            //            get<0>() is a(n); get<1>() is b(n); get<2>() is c(n);
            // last_index: index N to be found;
-           // first: w(0);
-           // second: w(1);
+           // first: w(-1);
+           // second: w(0);
            //
          template <class T, class NextCoefs>
          inline T solve_recurrence_relation_forward(NextCoefs& get_coefs, unsigned last_index, T first, T second)
@@ -217,30 +217,31 @@ namespace boost {
             using boost::math::get;
 
             T third = 0;
+            T a, b, c;
 
             for (unsigned k = 0; k < last_index; ++k)
             {
-               tuple<T, T, T> next = get_coefs(k);
+               tie(a, b, c) = get_coefs(k);
 
-               third = ((get<1>(next) * second) - (get<2>(next) * first)) / get<0>(next);
+               third = (a * first + b * second) / -c;
 
                swap(first, second);
                swap(second, third);
             }
-
-            return first;
+            
+            return second;
          }
 
          // solves usual recurrence relation for homogeneous
          // difference equation in stable backward direction
-         // a(n)w(n+1) - b(n)w(n) + c(n)w(n-1) = 0
+         // a(n)w(n-1) + b(n)w(n) + c(n)w(n+1) = 0
          //
          // Params:
          // get_coefs: functor returning a tuple, where
          //            get<0>() is a(n); get<1>() is b(n); get<2>() is c(n);
          // last_index: index N to be found;
-         // first: w(0);
-         // second: w(1);
+         // first: w(1);
+         // second: w(0);
          //
          template <class T, class NextCoefs>
          inline T solve_recurrence_relation_backward(NextCoefs& get_coefs, unsigned last_index, T first, T second)
@@ -249,19 +250,20 @@ namespace boost {
             using boost::math::tuple;
             using boost::math::get;
 
-            T third = 0;
+            T next = 0;
+            T a, b, c;
 
             for (unsigned k = 0; k < last_index; ++k)
             {
-               tuple<T, T, T> next = get_coefs(-static_cast<int>(k));
+               tie(a, b, c) = get_coefs(-static_cast<int>(k));
 
-               third = ((get<1>(next) * second) - (get<0>(next) * first)) / get<2>(next);
+               next = (b * second + c * first) / -a;
 
                swap(first, second);
-               swap(second, third);
+               swap(second, next);
             }
-
-            return first;
+            
+            return second;
          }
 
          // solves difference equations of the following form in unstable directions:

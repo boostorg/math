@@ -91,7 +91,15 @@ namespace boost { namespace math { namespace detail {
       //
       if (detail::hypergeometric_1F1_asym_region(a, b, z, pol))
       {
-         return hypergeometric_1F1_asym_large_z_series(a, b, z, pol, log_scaling);
+         int saved_scale = log_scaling;
+         T r = hypergeometric_1F1_asym_large_z_series(a, b, z, pol, log_scaling);
+         //
+         // Very occationally our convergence criteria don't quite go to full precision
+         // and we end up with infinity:
+         //
+         if (boost::math::isfinite(r))
+            return r;
+         log_scaling = saved_scale;
       }
 
       if ((fabs(a * z / b) < 3.5) && (fabs(z * 100) < fabs(b)))
@@ -115,12 +123,12 @@ namespace boost { namespace math { namespace detail {
          }
          if ((b < 4 * a) && (a < 0) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
          {
-            // Without this we get into an area where the series don't converge if b - a ~ b
+            // Without this we get into an area where the series doesn't converge if b - a ~ b
             return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
          }
          if ((a > 0) && (b + 1 < a))
          {
-            // Moving to a larger b value will allow us to apply Jummer's relation below:
+            // Moving to a larger b value will allow us to apply Kummer's relation below:
             //return hypergeometric_1F1_fwd_on_b_imp(a, b, z, pol, log_scaling);
          }
 
@@ -167,23 +175,20 @@ namespace boost { namespace math { namespace detail {
       //
       if (series_is_divergent)
       {
-         //if((a < 0) && (b > -1))
-         //   return detail::hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
-
+         if((a < 0) && (floor(a) == a))
+            // This works amazingly well for negative integer a:
+            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
          if (b > 0)
          {
-            if (z < fabs((2 * a - b) / (sqrt(fabs(a)))))
+            T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
+            if (z < z_limit)
                return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
-            //if ((a < -13) && (b > 50))
+
+            int k = 1 + boost::math::itrunc(z - z_limit);
+            // If k is too large we destroy all the digits in the result:
+            if (k < 50)
             {
-               // Selection criteria abobe are completely arbitrary, but seem to more or less work...
-               T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
-               int k = 1 + boost::math::itrunc(z - z_limit);
-               // If k is too large we destroy all the digits in the result:
-               if (k < 50)
-               {
-                  return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, z - k, k, pol);
-               }
+               return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, z - k, k, pol);
             }
          }
          else
@@ -196,7 +201,7 @@ namespace boost { namespace math { namespace detail {
          // raise an error if the result is garbage:
          return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
       }
-
+      
       return detail::hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
    }
 
