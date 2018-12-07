@@ -169,6 +169,8 @@ Failure to reach a root is communicated by returning `nan`s.
 Remember that if a function has many roots,
 then which root the complex Newton's method converges to is essentially impossible to predict a priori; see the Newton's fractal for more information.
 
+Finally, the derivative of /f/ must be continuous at the root or else non-roots can be found; see [@https://math.stackexchange.com/questions/3017766/constructing-newton-iteration-converging-to-non-root here] for an example.
+
 An example usage of `complex_newton` is given in `examples/daubechies_coefficients.cpp`.
 
 [h4 Examples]

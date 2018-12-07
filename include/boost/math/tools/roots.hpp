@@ -436,9 +436,9 @@ namespace detail{
          // check for out of bounds step:
          if(result < min)
          {
-            T diff = ((fabs(min) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(min))) 
-               ? T(1000) 
-               : (fabs(min) < 1) && (fabs(tools::max_value<T>() * min) < fabs(result)) 
+            T diff = ((fabs(min) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(min)))
+               ? T(1000)
+               : (fabs(min) < 1) && (fabs(tools::max_value<T>() * min) < fabs(result))
                ? ((min < 0) != (result < 0)) ? -tools::max_value<T>() : tools::max_value<T>() : T(result / min);
             if(fabs(diff) < 1)
                diff = 1 / diff;
@@ -566,9 +566,9 @@ inline T schroeder_iterate(F f, T guess, T min, T max, int digits) BOOST_NOEXCEP
 #ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
 /*
  * Why do we set the default maximum number of iterations to the number of digits in the type?
- * Because for double roots, the number of digits increases linearly with the number of iterations, so this default should recover full precision.
+ * Because for double roots, the number of digits increases linearly with the number of iterations,
+ * so this default should recover full precision even in this somewhat pathological case.
  * For isolated roots, the problem is so rapidly convergent that this doesn't matter at all.
- * For nonexistence, the problem is harder.
  */
 template<class Complex, class F>
 Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limits<typename Complex::value_type>::digits)
@@ -577,18 +577,11 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
     using std::norm;
     using std::abs;
     using std::max;
+    // z0, z1, and z2 cannot be the same, in case we immediately need to resort to Muller's Method:
     Complex z0 = guess + Complex(1,0);
     Complex z1 = guess + Complex(0,1);
     Complex z2 = guess;
 
-    // See: https://scicomp.stackexchange.com/questions/30597/defining-a-condition-number-and-termination-criteria-for-newtons-method
-    // This makes the termination condition scale invariant: If x is a root of f, then x should be a root of kf.
-    // The problem is that this assumes that f(z2) is representative of the typical scale of f; this is hopefully true if
-    // z2 is a random guess, but if (say) the user is trying to refine a root determined by a lower precision method,
-    // that isn't a safe assumption. Hence the call to max.
-    // Of course, if the scale of f is tiny, then this doesn't work.
-    // But this situation seems more rare than the other, where the scale of f is huge and |f(x)| < eps is never satisfied for any input.
-    Real scale = max(abs(g(z2).first), Real(1));
     do {
        auto pair = g(z2);
        if (norm(pair.second) == 0)
@@ -609,7 +602,9 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
            if (norm(denom1) > norm(denom2))
            {
                correction /= denom1;
-           } else {
+           }
+           else
+           {
                correction /= denom2;
            }
 
@@ -624,26 +619,25 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
            z2 = z2  - (pair.first/pair.second);
        }
 
+       // See: https://math.stackexchange.com/questions/3017766/constructing-newton-iteration-converging-to-non-root
+       // If f' is continuous, then convergence of x_n -> x* implies f(x*) = 0.
+       // This condition approximates this convergence condition by requiring three consecutive iterates to be clustered.
        Real tol = max(abs(z2)*std::numeric_limits<Real>::epsilon(), std::numeric_limits<Real>::epsilon());
        bool real_close = abs(z0.real() - z1.real()) < tol && abs(z0.real() - z2.real()) < tol && abs(z1.real() - z2.real()) < tol;
        bool imag_close = abs(z0.imag() - z1.imag()) < tol && abs(z0.imag() - z2.imag()) < tol && abs(z1.imag() - z2.imag()) < tol;
        if (real_close && imag_close)
        {
-           if (abs(pair.first) > scale*std::numeric_limits<Real>::epsilon())
-           {
-               continue;
-           }
            return z2;
        }
 
    } while(max_iterations--);
 
-    // At this point, maybe we should use complex trapezoidal quadrature to see if there are any roots?
-    // https://www.ams.org/journals/mcom/1967-21-100/S0025-5718-1967-0228165-4/S0025-5718-1967-0228165-4.pdf
-    // Exposition of the above: http://www.chebfun.org/examples/roots/ComplexRoots.html
-
     // The idea is that if we can get abs(f) < eps, we should, but if we go through all these iterations
-    // and abs(f) < sqrt(eps), then roundoff error simply does not allow that we can evaluate f to < esp
+    // and abs(f) < sqrt(eps), then roundoff error simply does not allow that we can evaluate f to < eps
+    // This is somewhat awkward as it isn't scale invariant, but using the Daubechies coefficient example code,
+    // I found this condition generates correct roots, whereas the scale invariant condition discussed here:
+    // https://scicomp.stackexchange.com/questions/30597/defining-a-condition-number-and-termination-criteria-for-newtons-method
+    // allows nonroots to be passed off as roots.
     auto pair = g(z2);
     if (abs(pair.first) < sqrt(std::numeric_limits<Real>::epsilon()))
     {
