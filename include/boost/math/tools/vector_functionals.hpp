@@ -211,6 +211,13 @@ auto gini_coefficient(ForwardIterator first, ForwardIterator last)
         denom += *it;
         ++i;
     }
+
+    // If the l1 norm is zero, all elements are zero, so every element is the same.
+    if (denom == 0)
+    {
+        return Real(0);
+    }
+
     return ((2*num)/denom - i)/(i-2);
 }
 
@@ -227,19 +234,46 @@ auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
     decltype(abs(*first)) i = 1;
     decltype(abs(*first)) num = 0;
     decltype(abs(*first)) denom = 0;
-    std::cout <<  "{";
-    for (auto it = first; it != last; ++it) {
-        std::cout << abs(*it) << ", ";
+    for (auto it = first; it != last; ++it)
+    {
         decltype(abs(*first)) tmp = abs(*it);
         num += tmp*i;
         denom += tmp;
         ++i;
     }
-    std::cout << "}\n";
+
+    // If the l1 norm is zero, all elements are zero, so every element is the same.
+    if (denom == 0)
+    {
+        decltype(abs(*first)) zero = 0;
+        return zero;
+    }
     return ((2*num)/denom - i)/(i-2);
 }
 
+// The Hoyer sparsity measure is defined in:
+// https://arxiv.org/pdf/0811.4706.pdf
+template<class ForwardIterator>
+auto hoyer_sparsity(ForwardIterator first, ForwardIterator last)
+{
+    using std::abs;
+    using std::sqrt;
+    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
+    BOOST_ASSERT_MSG(first != last, "Computation of the Hoyer sparsity requires at least one sample.");
 
+    decltype(abs(*first)) l1 = 0;
+    decltype(abs(*first)) l2 = 0;
+    decltype(abs(*first)) n = 0;
+    for (auto it = first; it != last; ++it)
+    {
+        decltype(abs(*first)) tmp = abs(*it);
+        l1 += tmp;
+        l2 += tmp*tmp;
+        n += 1;
+    }
+    decltype(abs(*first)) rootn = sqrt(n);
+    return (rootn - l1/sqrt(l2) )/ (rootn - 1);
+}
 
 }}}
 #endif

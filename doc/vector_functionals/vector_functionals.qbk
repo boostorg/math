@@ -116,6 +116,8 @@ As a reminder, remember that to actually /get/ vectorization, compile with `-mar
 
 We now describe each functional in detail.
 
+[heading Mean]
+
 Compute the mean of a container:
 
     std::vector<double> v{1,2,3,4,5};
@@ -125,6 +127,8 @@ The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6a
 The only requirement on the input is that it must be forward iterable, so you can use Eigen vectors, ublas vectors, Armadillo vectors, or a `std::forward_list` to hold your data.
 
 
+[heading Mean and Sample variance]
+
 Compute the mean and sample variance:
 
     std::vector<double> v{1,2,3,4,5};
@@ -132,9 +136,11 @@ Compute the mean and sample variance:
 
 The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6b].
 Note that we do not provide computation of sample variance alone;
-we are unaware of any one-pass, numerically stable computation of sample variance which does not require simultaneous computation of the mean.
+we are unaware of any one-pass, numerically stable computation of sample variance which does not simultaneously generate the mean.
 If the mean is not required, simply ignore it.
 The input datatype must be forward iterable and the range `[first, last)` must contain at least two elements.
+
+[heading Median]
 
 Compute the median of a dataset:
 
@@ -145,7 +151,7 @@ Compute the median of a dataset:
 The calculation of the median is a thin wrapper around the C++11 [@https://en.cppreference.com/w/cpp/algorithm/nth_element nth-element].
 Therefore, all requirements of `nth_element` are inherited by the median calculation.
 
-
+[heading Sup norm]
 Compute the sup norm of a dataset:
 
     std::vector<double> v{-3, 2, 1};
@@ -157,6 +163,8 @@ Compute the sup norm of a dataset:
     // sup = 8
 
 Note how the calculation of \u2113[super p] norms can be performed in both real and complex arithmetic.
+
+[heading Gini Coefficient]
 
 Compute the Gini coefficient of a dataset:
 
@@ -170,8 +178,13 @@ Compute the Gini coefficient of a dataset:
 /Nota bene: The input data is altered-in particular, it is sorted./
 
 /Nota bene:/ Different authors use different conventions regarding the overall scale of the Gini coefficient.
-We have chosen to follow [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard's definition], which [@https://en.wikipedia.org/wiki/Gini_coefficient Wikipedia] calls a "consistent estimator" of the population Gini coefficient.
+We have chosen to follow [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard's definition], which [@https://en.wikipedia.org/wiki/Gini_coefficient Wikipedia] calls a "sample Gini coefficient".
 Hurley and Rickard's definition places the Gini coefficient in the range [0,1]; Wikipedia's population Gini coefficient is in the range [0, 1 - 1/N].
+If you wish to convert the Boost Gini coefficient to the population Gini coefficient, multiply by (/n/-1)/ /n/.
+
+/Nota bene:/ There is essentially no reason to pass negative values to the Gini coefficient function.
+However, since a single use case (measuring wealth inequality when some people have negative wealth) exists, we do not throw an exception when negative values are encountered.
+You should have /very/ good cause to pass negative values to the Gini coefficient calculator.
 
 The Gini coefficient, first used to measure wealth inequality, is also one of the best measures of the sparsity of an expansion in a basis.
 A sparse expansion has most of its norm concentrated in just a few coefficients, making the connection with wealth inequality obvious.
@@ -179,18 +192,42 @@ However, for measuring sparsity, the phase of the numbers is irrelevant, so `abs
 
     std::vector<std::complex<double>> v{{0,1}, {0,0}, {0,0}, {0,0}};
     double abs_gini = absolute_gini_coefficient(v.begin(), v.end());
-    // abs_gini = 1
+    // now abs_gini = 1
+
     std::vector<std::complex<double>> w{{0,1}, {1,0}, {0,-1}, {-1,0}};
     double abs_gini = absolute_gini_coefficient(w.begin(), w.end());
-    // abs_gini = 0
+    // now abs_gini = 0
+
+    std::vector<double> u{-1, 1, -1};
+    double abs_gini = absolute_gini_coefficient(u.begin(), u.end());
+    // now abs_gini = 0
+
+Again, Wikipedia denotes our scaling as a "sample Gini coefficient".
+We chose this scaling because it always returns unity for a vector which has only one nonzero coefficient.
+
+If sorting the input data is to much expense for a sparsity measure (is it going to be perfect anyway?),
+consider using `hoyer_sparsity`.
+
+[heading Hoyer Sparsity]
+
+The Hoyer sparsity measure uses a normalized ratio of the \u2113[super 1] and \u2113[super 2] norms.
+As the name suggests, it is used to measure sparsity in an expansion in some basis.
+
+The Hoyer sparsity computes ([radic]/N/ - \u2113[super 1](v)/\u2113[super 2](v))/([radic]N -1).
+
+Usage:
+
+    std::vector<Real> v{1,0,0};
+    Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
+    // hs = 1
+
+
+[heading \u2113[super /p/] norm]
 
 
 
-[heading Examples]
+[heading \u2113[super 0] norm]
 
-[heading Performance]
-
-[heading Caveats]
 
 [heading References]
 

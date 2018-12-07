@@ -141,6 +141,33 @@ void test_gini_coefficient()
     v[2] = 1;
     gini = boost::math::tools::gini_coefficient(v.begin(), v.end());
     BOOST_TEST(abs(gini) < tol);
+
+    v[0] = 0;
+    v[1] = 0;
+    v[2] = 0;
+    gini = boost::math::tools::gini_coefficient(v.begin(), v.end());
+    BOOST_TEST(abs(gini) < tol);
+}
+
+template<class Real>
+void test_hoyer_sparsity()
+{
+    using std::sqrt;
+    Real tol = 5*std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v{1,0,0};
+    Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
+    BOOST_TEST(abs(hs - 1) < tol);
+
+    // Does it work with constant iterators?
+    hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
+    BOOST_TEST(abs(hs - 1) < tol);
+
+    v[0] = 1;
+    v[1] = 1;
+    v[2] = 1;
+    hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
+    BOOST_TEST(abs(hs) < tol);
+
 }
 
 template<class Real>
@@ -166,6 +193,7 @@ void test_absolute_gini_coefficient()
     gini = boost::math::tools::absolute_gini_coefficient(w.begin(), w.end());
     BOOST_TEST(abs(gini) < tol);
 
+    // The Gini index is invariant under "cloning": If w = v \oplus v, then G(w) = G(v).
 }
 
 template<class Real>
@@ -174,6 +202,11 @@ void test_l0_norm()
     std::vector<Real> v{0,0,1};
     size_t count = boost::math::tools::l0_norm(v.begin(), v.end());
     BOOST_TEST_EQ(count, 1);
+
+    // Compiles with cbegin()/cend()?
+    count = boost::math::tools::l0_norm(v.cbegin(), v.cend());
+    BOOST_TEST_EQ(count, 1);
+
 }
 
 int main()
@@ -208,6 +241,10 @@ int main()
     test_absolute_gini_coefficient<float>();
     test_absolute_gini_coefficient<double>();
     test_absolute_gini_coefficient<long double>();
+
+    test_hoyer_sparsity<float>();
+    test_hoyer_sparsity<double>();
+    test_hoyer_sparsity<long double>();
 
     test_l0_norm<float>();
     test_l0_norm<double>();
