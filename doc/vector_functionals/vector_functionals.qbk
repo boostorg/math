@@ -31,22 +31,19 @@ namespace boost{ namespace math{ namespace tools {
     auto shannon_entropy(ForwardIterator first, ForwardIterator last);
 
     template<class ForwardIterator>
-    auto normalized_shannon_entropy(ForwardIterator first, ForwardIterator last);
-
-    template<class ForwardIterator>
     auto gini_coefficient(ForwardIterator first, ForwardIterator last);
 
     template<class ForwardIterator>
     auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last);
 
     template<class ForwardIterator>
-    auto pq_mean(ForwardIterator first, ForwardIterator last, p, q);
+    auto hoyer_sparsity(ForwardIterator first, ForwardIterator last);
 
     template<class ForwardIterator>
     auto lp_norm(ForwardIterator first, ForwardIterator last, p);
 
     template<class ForwardIterator>
-    auto l0_norm(ForwardIterator first, ForwardIterator last);
+    auto l0_pseudo_norm(ForwardIterator first, ForwardIterator last);
 
     template<class ForwardIterator>
     auto l1_norm(ForwardIterator first, ForwardIterator last);
@@ -57,45 +54,8 @@ namespace boost{ namespace math{ namespace tools {
     template<class ForwardIterator>
     auto sup_norm(ForwardIterator first, ForwardIterator last);
 
-    template<class RandomAccessContainer>
-    auto lp_distance(RandomAccessContainer const & u, RandomAccessContainer const & v, p);
-
-    template<class RandomAccessContainer>
-    auto l1_distance(RandomAccessContainer const & u, RandomAccessContainer const & v);
-
-    template<class RandomAccessContainer>
-    auto l2_distance(RandomAccessContainer const & u, RandomAccessContainer const & v);
-
-    template<class RandomAccessContainer>
-    auto sup_distance(RandomAccessContainer const & u, RandomAccessContainer const & v);
-
     template<class ForwardIterator>
     auto total_variation(ForwardIterator first, ForwardIterator last);
-
-    template<class RandomAccessContainer>
-    auto lanczos_noisy_derivative(RandomAccessContainer const & v, time_step, time);
-
-    template<class ForwardIterator>
-    auto kurtosis(ForwardIterator first, ForwardIterator last);
-
-    template<class ForwardIterator>
-    auto skewness(ForwardIterator first, ForwardIterator last);
-
-    template<class RandomAccessContainer>
-    auto covariance(RandomAccessContainer const & u, RandomAccessContainer const & v);
-
-    template<class ForwardIterator>
-    auto simpsons_rule_quadrature(ForwardIterator first, ForwardIterator last);
-
-    template<class ForwardIterator>
-    auto simpsons_three_eighths_quadrature(ForwardIterator first, ForwardIterator last);
-
-    template<class ForwardIterator>
-    auto booles_rule_quadrature(ForwardIterator first, ForwardIterator last);
-
-    template<class RandomAccessContainer>
-    auto inner_product(RandomAccessContainer const & u, RandomAccessContainer const & v);
-
 
 }}}
 ``
@@ -115,30 +75,30 @@ These accumulators should be used in real-time applications; `vector_functionals
 As a reminder, remember that to actually /get/ vectorization, compile with `-march=native -O3` flags.
 
 We now describe each functional in detail.
+Our examples use `std::vector<double>` to hold the data, but this not required.
+In general, you can store your data in an Eigen array, and Armadillo vector, `std::array`, and for many of the routines, a `std::forward_list`.
+These routines are usable float, double, long double, and Boost.Multiprecision precision, as well as their complex extensions whenever the computation is well-defined.
 
 [heading Mean]
 
-Compute the mean of a container:
-
     std::vector<double> v{1,2,3,4,5};
-    double mu = mean(v.begin(), v.end());
+    double mu = boost::math::tools::mean(v.cbegin(), v.cend());
 
 The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6a].
-The only requirement on the input is that it must be forward iterable, so you can use Eigen vectors, ublas vectors, Armadillo vectors, or a `std::forward_list` to hold your data.
+The data is not modified and must be forward iterable.
+Works with complex data.
 
-
-[heading Mean and Sample variance]
-
-Compute the mean and sample variance:
+[heading Mean and Population Variance]
 
     std::vector<double> v{1,2,3,4,5};
-    auto [mu, s] = mean_and_sample_variance(v.begin(), v.end());
+    auto [mu, s] = boost::math::tools::mean_and_population_variance(v.cbegin(), v.cend());
 
 The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6b].
-Note that we do not provide computation of sample variance alone;
-we are unaware of any one-pass, numerically stable computation of sample variance which does not simultaneously generate the mean.
+Note that we do not provide computation of population variance alone;
+we are unaware of any one-pass, numerically stable computation of population variance which does not simultaneously generate the mean.
 If the mean is not required, simply ignore it.
 The input datatype must be forward iterable and the range `[first, last)` must contain at least two elements.
+It is /not/ in general sensible to pass complex numbers to this routine.
 
 [heading Median]
 
@@ -151,28 +111,15 @@ Compute the median of a dataset:
 The calculation of the median is a thin wrapper around the C++11 [@https://en.cppreference.com/w/cpp/algorithm/nth_element nth-element].
 Therefore, all requirements of `nth_element` are inherited by the median calculation.
 
-[heading Sup norm]
-Compute the sup norm of a dataset:
-
-    std::vector<double> v{-3, 2, 1};
-    double sup = boost::math::tools::sup_norm(v.begin(), v.end());
-    // sup = 3
-
-    std::vector<std::complex<double>> v{{0, -8}, {1,1}, {-3,2}};
-    double sup = boost::math::tools::sup_norm(v.begin(), v.end());
-    // sup = 8
-
-Note how the calculation of \u2113[super p] norms can be performed in both real and complex arithmetic.
-
 [heading Gini Coefficient]
 
 Compute the Gini coefficient of a dataset:
 
     std::vector<double> v{1,0,0,0};
-    double gini = gini_coefficient(v.begin(), v.end());
+    double gini = boost::math::tools::gini_coefficient(v.begin(), v.end());
     // gini = 1, as v[0] holds all the "wealth"
     std::vector<double> w{1,1,1,1};
-    gini = gini_coefficient(w.begin(), w.end());
+    gini = boost::math::tools::gini_coefficient(w.begin(), w.end());
     // gini = 0, as all elements are now equal.
 
 /Nota bene: The input data is altered-in particular, it is sorted./
@@ -183,7 +130,7 @@ Hurley and Rickard's definition places the Gini coefficient in the range [0,1]; 
 If you wish to convert the Boost Gini coefficient to the population Gini coefficient, multiply by (/n/-1)/ /n/.
 
 /Nota bene:/ There is essentially no reason to pass negative values to the Gini coefficient function.
-However, since a single use case (measuring wealth inequality when some people have negative wealth) exists, we do not throw an exception when negative values are encountered.
+However, a single use case (measuring wealth inequality when some people have negative wealth) exists, so we do not throw an exception when negative values are encountered.
 You should have /very/ good cause to pass negative values to the Gini coefficient calculator.
 
 The Gini coefficient, first used to measure wealth inequality, is also one of the best measures of the sparsity of an expansion in a basis.
@@ -191,26 +138,26 @@ A sparse expansion has most of its norm concentrated in just a few coefficients,
 However, for measuring sparsity, the phase of the numbers is irrelevant, so `absolute_gini_coefficient` should be used instead:
 
     std::vector<std::complex<double>> v{{0,1}, {0,0}, {0,0}, {0,0}};
-    double abs_gini = absolute_gini_coefficient(v.begin(), v.end());
+    double abs_gini = boost::math::tools::absolute_gini_coefficient(v.begin(), v.end());
     // now abs_gini = 1
 
     std::vector<std::complex<double>> w{{0,1}, {1,0}, {0,-1}, {-1,0}};
-    double abs_gini = absolute_gini_coefficient(w.begin(), w.end());
+    double abs_gini = boost::math::tools::absolute_gini_coefficient(w.begin(), w.end());
     // now abs_gini = 0
 
     std::vector<double> u{-1, 1, -1};
-    double abs_gini = absolute_gini_coefficient(u.begin(), u.end());
+    double abs_gini = boost::math::tools::absolute_gini_coefficient(u.begin(), u.end());
     // now abs_gini = 0
 
 Again, Wikipedia denotes our scaling as a "sample Gini coefficient".
 We chose this scaling because it always returns unity for a vector which has only one nonzero coefficient.
 
-If sorting the input data is to much expense for a sparsity measure (is it going to be perfect anyway?),
-consider using `hoyer_sparsity`.
+If sorting the input data is too much expense for a sparsity measure (is it going to be perfect anyway?),
+consider calculating the Hoyer sparsity instead.
 
 [heading Hoyer Sparsity]
 
-The Hoyer sparsity measure uses a normalized ratio of the \u2113[super 1] and \u2113[super 2] norms.
+The Hoyer sparsity measures a normalized ratio of the \u2113[super 1] and \u2113[super 2] norms.
 As the name suggests, it is used to measure sparsity in an expansion in some basis.
 
 The Hoyer sparsity computes ([radic]/N/ - \u2113[super 1](v)/\u2113[super 2](v))/([radic]N -1).
@@ -222,11 +169,79 @@ Usage:
     // hs = 1
 
 
+[heading \u2113[super \u221E] norm]
+
+Computes the supremum norm of a dataset:
+
+    std::vector<double> v{-3, 2, 1};
+    double sup = boost::math::tools::sup_norm(v.cbegin(), v.cend());
+    // sup = 3
+
+    std::vector<std::complex<double>> v{{0, -8}, {1,1}, {-3,2}};
+    double sup = boost::math::tools::sup_norm(v.cbegin(), v.cend());
+    // sup = 8
+
+Supports both real and complex arithmetic.
+Container must be forward iterable and is not modified.
+
 [heading \u2113[super /p/] norm]
 
+    std::vector<double> v{-8, 0, 0};
+    double sup = boost::math::tools::lp_norm(v.cbegin(), v.cend(), 7);
+    // sup = 8
 
+    std::vector<std::complex<double>> v{{1, 0}, {0,1}, {0,-1}};
+    double sup = boost::math::tools::sup_norm(v.cbegin(), v.cend(), 3);
+    // sup = cbrt(3)
 
-[heading \u2113[super 0] norm]
+Supports both real and complex arithmetic.
+Container must be forward iterable and is not modified.
+
+[heading \u2113[super 0] pseudo-norm]
+
+Counts the number of non-zero elements in a container.
+
+    std::vector<double> v{0,0,1};
+    size_t count = boost::math::tools::l0_pseudo_norm(v.begin(), v.end());
+    // count = 1
+
+Supports real and complex numbers.
+Container must be forward iterable and the contents are not modified.
+Note that this measure is not robust against numerical noise.
+
+[heading \u2113[super 1] norm]
+
+The \u2113[super 1] norm is a special case of the \u2113[super /p/] norm, but is much faster:
+
+    std::vector<double> v{1,1,1};
+    double l1 = boost::math::tools::l1_norm(v.begin(), v.end());
+    // l1 = 3
+
+Requires a forward iterable input, does not modify input data, and works with complex numbers.
+
+[heading \u2113[super 2] norm]
+
+The \u2113[super 2] norm is again a special case of the \u2113[super /p/] norm, but is much faster:
+
+    std::vector<double> v{1,1,1};
+    double l1 = boost::math::tools::l2_norm(v.begin(), v.end());
+    // l1 = sqrt(3)
+
+Requires a forward iterable input, does not modify input data, and works with complex numbers.
+
+[heading Total Variation]
+
+    std::vector<double> v{1,1,1};
+    double tv = boost::math::tools::total_variation(v.begin(), v.end());
+    // no variation in v, so tv = 0.
+    v = {0,1};
+    double tv = boost::math::tools::total_variation(v.begin(), v.end());
+    // variation is 1, so tv = 1.
+
+The total variation only supports real numbers.
+All the constituent operations to compute the total variation are well-defined for complex numbers,
+but the computed result is not meaningful.
+The input must be forward iterable, and is not modified.
 
 
 [heading References]

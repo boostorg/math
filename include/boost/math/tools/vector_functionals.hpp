@@ -11,6 +11,8 @@
 #include <iostream>
 #include <boost/type_traits.hpp>
 #include <boost/assert.hpp>
+#include <boost/multiprecision/detail/number_base.hpp>
+
 /*
  * A set of tools for computing scalar quantities associated with lists of numbers.
  */
@@ -54,11 +56,37 @@ mean_and_population_variance(ForwardIterator first, ForwardIterator last)
     return std::make_pair(M, Q/(k-1));
 }
 
-template<class ForwardIterator>
-auto median(ForwardIterator first, ForwardIterator last)
+template<class RandomAccessIterator>
+auto median(RandomAccessIterator first, RandomAccessIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
-    Real m = 0;
+    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<RandomAccessIterator>())>::type>::type Real;
+    Real m = std::numeric_limits<Real>::quiet_NaN();
+    size_t num_elems = std::distance(first, last);
+    if (num_elems & 1)
+    {
+        nth_element(first, first+num_elems, last);
+    }
+    else
+    {
+        nth_element(first, first+num_elems, last);
+    }
+    return m;
+}
+
+template<class RandomAccessIterator, class Compare>
+auto median(RandomAccessIterator first, RandomAccessIterator last, Compare comp)
+{
+    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<RandomAccessIterator>())>::type>::type Real;
+    Real m = std::numeric_limits<Real>::quiet_NaN();
+    size_t num_elems = std::distance(first, last);
+    if (num_elems & 1)
+    {
+        nth_element(first, first+num_elems, last);
+    }
+    else
+    {
+        nth_element(first, first+num_elems, last);
+    }
     return m;
 }
 
@@ -66,17 +94,18 @@ auto median(ForwardIterator first, ForwardIterator last)
 template<class ForwardIterator>
 auto total_variation(ForwardIterator first, ForwardIterator last)
 {
+    using std::abs;
     typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
     BOOST_ASSERT_MSG(first != last && std::next(first) != last, "At least two samples are required to compute the total variation.");
-    Real tot = 0;
+    Real tv = 0;
     auto it = first;
     Real tmp = *it;
     while (++it != last)
     {
-        tot += abs(*it - tmp);
+        tv += abs(*it - tmp);
         tmp = *it;
     }
-    return tot;
+    return tv;
 }
 
 // Mallat, equation 10.4 uses the base-2 logarithm.
@@ -103,14 +132,15 @@ auto sup_norm(ForwardIterator first, ForwardIterator last)
     BOOST_ASSERT_MSG(first != last, "At least one value is required to compute the sup norm.");
     typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
     using std::abs;
-    if constexpr (boost::is_complex<RealOrComplex>::value)
+    if constexpr (boost::is_complex<RealOrComplex>::value ||
+                  boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_complex)
     {
-        auto it = max_element(first, last, [](RealOrComplex a, RealOrComplex b) { return abs(b) > abs(a); });
+        auto it = std::max_element(first, last, [](RealOrComplex a, RealOrComplex b) { return abs(b) > abs(a); });
         return abs(*it);
     }
     else
     {
-        auto pair = minmax_element(first, last);
+        auto pair = std::minmax_element(first, last);
         if (abs(*pair.first) > abs(*pair.second))
         {
             return abs(*pair.first);
@@ -123,7 +153,75 @@ auto sup_norm(ForwardIterator first, ForwardIterator last)
 }
 
 template<class ForwardIterator>
-size_t l0_norm(ForwardIterator first, ForwardIterator last)
+auto l1_norm(ForwardIterator first, ForwardIterator last)
+{
+    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
+    using std::abs;
+    decltype(abs(*first)) l1 = 0;
+    for (auto it = first; it != last; ++it)
+    {
+        l1 += abs(*first);
+    }
+    return l1;
+}
+
+template<class ForwardIterator>
+auto l2_norm(ForwardIterator first, ForwardIterator last)
+{
+    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
+    using std::abs;
+    using std::norm;
+    using std::sqrt;
+    using std::is_floating_point;
+    if constexpr (boost::is_complex<RealOrComplex>::value ||
+                  boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_complex)
+    {
+        typedef typename RealOrComplex::value_type Real;
+        Real l2 = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            l2 += norm(*it);
+        }
+        Real result = sqrt(l2);
+        if (!isfinite(result))
+        {
+            Real a = sup_norm(first, last);
+            l2 = 0;
+            for (auto it = first; it != last; ++it)
+            {
+                l2 += norm(*it/a);
+            }
+            return a*sqrt(l2);
+        }
+        return result;
+    }
+    else if constexpr (is_floating_point<RealOrComplex>::value ||
+                       boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_floating_point)
+    {
+        RealOrComplex l2 = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            l2 += (*it)*(*it);
+        }
+        RealOrComplex result = sqrt(l2);
+        if (!isfinite(result))
+        {
+            RealOrComplex a = sup_norm(first, last);
+            l2 = 0;
+            for (auto it = first; it != last; ++it)
+            {
+                RealOrComplex tmp = *it/a;
+                l2 += tmp*tmp;
+            }
+            return a*sqrt(l2);
+        }
+        return result;
+    }
+}
+
+
+template<class ForwardIterator>
+size_t l0_pseudo_norm(ForwardIterator first, ForwardIterator last)
 {
     typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
     size_t count = 0;
@@ -144,7 +242,8 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, typename std::remove_c
     using std::is_floating_point;
     using std::isfinite;
     typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
-    if constexpr (boost::is_complex<RealOrComplex>::value)
+    if constexpr (boost::is_complex<RealOrComplex>::value ||
+                  boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_complex)
     {
         BOOST_ASSERT_MSG(p.real() >= 0, "For p < 0, the lp norm is not a norm.");
         BOOST_ASSERT_MSG(p.imag() == 0, "For imaginary p, the lp norm is not a norm.");
@@ -168,14 +267,17 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, typename std::remove_c
         }
         return result;
     }
-    else if constexpr (is_floating_point<RealOrComplex>::value)
+    else if constexpr (is_floating_point<RealOrComplex>::value ||
+                       boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_floating_point)
     {
         BOOST_ASSERT_MSG(p >= 0, "For p < 0, the lp norm is not a norm");
         RealOrComplex lp = 0;
+
         for (auto it = first; it != last; ++it)
         {
             lp += pow(abs(*it), p);
         }
+
         RealOrComplex result = pow(lp, 1/p);
         if (!isfinite(result))
         {
@@ -254,7 +356,7 @@ auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
 // The Hoyer sparsity measure is defined in:
 // https://arxiv.org/pdf/0811.4706.pdf
 template<class ForwardIterator>
-auto hoyer_sparsity(ForwardIterator first, ForwardIterator last)
+auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
 {
     using std::abs;
     using std::sqrt;

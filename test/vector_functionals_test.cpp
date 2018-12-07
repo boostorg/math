@@ -17,6 +17,15 @@
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_complex_50;
 
+/*
+ * Test checklist:
+ * 1) Does it work with multiprecision?
+ * 2) Does it work with .cbegin()/.cend() if the data is not altered?
+ * 3) Does it work with ublas and std::array? (Checking Eigen and Armadillo will make the CI system really unhappy.)
+ * 4) Does it work with std::forward_list if a forward iterator is all that is required?
+ * 5) Does it work with complex data if complex data is sensible?
+ */
+
 template<class Real>
 void test_mean()
 {
@@ -44,7 +53,7 @@ void test_mean()
     BOOST_TEST(abs(mu - 4) < tol);
 
     // Does it work with ublas vectors?
-    boost::numeric::ublas::vector<double> w(7);
+    boost::numeric::ublas::vector<Real> w(7);
     for (size_t i = 0; i < w.size(); ++i)
     {
         w[i] = i+1;
@@ -52,6 +61,17 @@ void test_mean()
     mu = boost::math::tools::mean(w.cbegin(), w.cend());
     BOOST_TEST(abs(mu - 4) < tol);
 
+}
+
+template<class Complex>
+void test_complex_mean()
+{
+    typedef typename Complex::value_type Real;
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Complex> v{{0,1},{0,2},{0,3},{0,4},{0,5}};
+    auto mu = boost::math::tools::mean(v.begin(), v.end());
+    BOOST_TEST(abs(mu.imag() - 3) < tol);
+    BOOST_TEST(abs(mu.real()) < tol);
 }
 
 template<class Real>
@@ -64,28 +84,63 @@ void test_mean_and_population_variance()
     BOOST_TEST(abs(sigma_sq) < tol);
 
     std::vector<Real> u{1};
-    auto [mu1, sigma1_sq] = boost::math::tools::mean_and_population_variance(u.begin(), u.end());
+    auto [mu1, sigma1_sq] = boost::math::tools::mean_and_population_variance(u.cbegin(), u.cend());
     BOOST_TEST(abs(mu1 - 1) < tol);
     BOOST_TEST(abs(sigma1_sq) < tol);
 
-    std::vector<Real> w{0,1,0,1,0,1,0,1};
+    std::array<Real, 8> w{0,1,0,1,0,1,0,1};
     auto [mu2, sigma2_sq] = boost::math::tools::mean_and_population_variance(w.begin(), w.end());
     BOOST_TEST(abs(mu2 - 1.0/2.0) < tol);
     BOOST_TEST(abs(sigma2_sq - 1.0/4.0) < tol);
+
 }
 
 template<class Real>
 void test_lp()
 {
-    Real tol = std::numeric_limits<Real>::epsilon();
-    std::vector<std::complex<Real>> v{{1,0}, {0,0}, {0,0}};
-    Real l3 = boost::math::tools::lp_norm(v.begin(), v.end(), 3);
+    Real tol = 50*std::numeric_limits<Real>::epsilon();
+
+    std::array<Real, 3> u{1,0,0};
+    Real l3 = boost::math::tools::lp_norm(u.begin(), u.end(), 3);
     BOOST_TEST(abs(l3 - 1) < tol);
 
-    std::vector<Real> u{1,0,0};
-    l3 = boost::math::tools::lp_norm(u.begin(), u.end(), 3);
-    BOOST_TEST(abs(l3 - 1) < tol);
+    u[0] = -8;
+    l3 = boost::math::tools::lp_norm(u.cbegin(), u.cend(), 3);
+    BOOST_TEST(abs(l3 - 8) < tol);
+
+    std::vector<Real> v(500);
+    for (size_t i = 0; i < v.size(); ++i) {
+        v[i] = 7;
+    }
+    Real l8 = boost::math::tools::lp_norm(v.cbegin(), v.cend(), 8);
+    Real expected = 7*pow(v.size(), static_cast<Real>(1)/static_cast<Real>(8));
+    BOOST_TEST(abs(l8 - expected) < tol*abs(expected));
+
+    // Does it work with ublas vectors?
+    // Does it handle the overflow of intermediates?
+    boost::numeric::ublas::vector<Real> w(4);
+    Real bignum = sqrt(std::numeric_limits<Real>::max())/256;
+    for (size_t i = 0; i < w.size(); ++i)
+    {
+        w[i] = bignum;
+    }
+    Real l20 = boost::math::tools::lp_norm(w.cbegin(), w.cend(), 4);
+    expected = bignum*pow(w.size(), static_cast<Real>(1)/static_cast<Real>(4));
+    BOOST_TEST(abs(l20 - expected) < tol*expected);
 }
+
+
+template<class Complex>
+void test_complex_lp()
+{
+    typedef typename Complex::value_type Real;
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Complex> v{{1,0}, {0,0}, {0,0}};
+    Real l3 = boost::math::tools::lp_norm(v.cbegin(), v.cend(), 3);
+    BOOST_TEST(abs(l3 - 1) < tol);
+
+}
+
 
 template<class Real>
 void test_total_variation()
@@ -123,10 +178,18 @@ void test_sup_norm()
     Real s = boost::math::tools::sup_norm(v.begin(), v.end());
     BOOST_TEST(abs(s - 2) < tol);
 
-    std::vector<std::complex<Real>> w{{0,-8}, {1,1}, {3,2}};
-    s = boost::math::tools::sup_norm(w.begin(), w.end());
+}
+
+template<class Complex>
+void test_complex_sup_norm()
+{
+    typedef typename Complex::value_type Real;
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Complex> w{{0,-8}, {1,1}, {3,2}};
+    Real s = boost::math::tools::sup_norm(w.cbegin(), w.cend());
     BOOST_TEST(abs(s-8) < tol);
 }
+
 
 template<class Real>
 void test_gini_coefficient()
@@ -167,8 +230,30 @@ void test_hoyer_sparsity()
     v[2] = 1;
     hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
     BOOST_TEST(abs(hs) < tol);
-
 }
+
+template<class Complex>
+void test_complex_hoyer_sparsity()
+{
+    typedef typename Complex::value_type Real;
+    using std::sqrt;
+    Real tol = 5*std::numeric_limits<Real>::epsilon();
+    std::vector<Complex> v{{0,1}, {0, 0}, {0,0}};
+    Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
+    BOOST_TEST(abs(hs - 1) < tol);
+
+    // Does it work with constant iterators?
+    hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
+    BOOST_TEST(abs(hs - 1) < tol);
+
+    // All are the same magnitude:
+    v[0] = {0, 1};
+    v[1] = {1, 0};
+    v[2] = {0,-1};
+    hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
+    BOOST_TEST(abs(hs) < tol);
+}
+
 
 template<class Real>
 void test_absolute_gini_coefficient()
@@ -197,17 +282,74 @@ void test_absolute_gini_coefficient()
 }
 
 template<class Real>
-void test_l0_norm()
+void test_l0_pseudo_norm()
 {
     std::vector<Real> v{0,0,1};
-    size_t count = boost::math::tools::l0_norm(v.begin(), v.end());
+    size_t count = boost::math::tools::l0_pseudo_norm(v.begin(), v.end());
     BOOST_TEST_EQ(count, 1);
 
     // Compiles with cbegin()/cend()?
-    count = boost::math::tools::l0_norm(v.cbegin(), v.cend());
+    count = boost::math::tools::l0_pseudo_norm(v.cbegin(), v.cend());
     BOOST_TEST_EQ(count, 1);
 
 }
+
+template<class Complex>
+void test_complex_l0_pseudo_norm()
+{
+    std::vector<Complex> v{{0,0}, {0,0}, {1,0}};
+    size_t count = boost::math::tools::l0_pseudo_norm(v.begin(), v.end());
+    BOOST_TEST_EQ(count, 1);
+}
+
+template<class Real>
+void test_l1_norm()
+{
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v{1,1,1};
+    Real l1 = boost::math::tools::l1_norm(v.begin(), v.end());
+    BOOST_TEST(abs(l1 - 3) < tol);
+}
+
+template<class Complex>
+void test_complex_l1_norm()
+{
+    typedef typename Complex::value_type Real;
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Complex> v{{1,0}, {0,1},{0,-1}};
+    Real l1 = boost::math::tools::l1_norm(v.begin(), v.end());
+    BOOST_TEST(abs(l1 - 3) < tol);
+}
+
+template<class Real>
+void test_l2_norm()
+{
+    using std::sqrt;
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v{1,1,1,1};
+    Real l2 = boost::math::tools::l2_norm(v.begin(), v.end());
+    BOOST_TEST(abs(l2 - 2) < tol);
+
+    Real bignum = 4*sqrt(std::numeric_limits<Real>::max());
+    v[0] = bignum;
+    v[1] = 0;
+    v[2] = 0;
+    v[3] = 0;
+    l2 = boost::math::tools::l2_norm(v.begin(), v.end());    
+    BOOST_TEST(abs(l2 - bignum) < tol*l2);
+}
+
+template<class Complex>
+void test_complex_l2_norm()
+{
+    using std::sqrt;
+    typedef typename Complex::value_type Real;
+    Real tol = 100*std::numeric_limits<Real>::epsilon();
+    std::vector<Complex> v{{1,0}, {0,1},{0,-1}, {1,0}};
+    Real l2 = boost::math::tools::l2_norm(v.begin(), v.end());
+    BOOST_TEST(abs(l2 - 2) < tol);
+}
+
 
 int main()
 {
@@ -215,6 +357,9 @@ int main()
     test_mean<double>();
     test_mean<long double>();
     test_mean<cpp_bin_float_50>();
+
+    test_complex_mean<std::complex<float>>();
+    test_complex_mean<cpp_complex_50>();
 
     test_mean_and_population_variance<float>();
     test_mean_and_population_variance<double>();
@@ -224,31 +369,77 @@ int main()
     test_lp<float>();
     test_lp<double>();
     test_lp<long double>();
+    test_lp<cpp_bin_float_50>();
+
+    test_complex_lp<std::complex<float>>();
+    test_complex_lp<std::complex<double>>();
+    test_complex_lp<std::complex<long double>>();
+    test_complex_lp<cpp_complex_50>();
+
+    test_sup_norm<float>();
+    test_sup_norm<double>();
+    test_sup_norm<long double>();
+    test_sup_norm<cpp_bin_float_50>();
+
+    test_complex_sup_norm<std::complex<float>>();
+    test_complex_sup_norm<std::complex<double>>();
+    test_complex_sup_norm<std::complex<long double>>();
+    test_complex_sup_norm<cpp_complex_50>();
+
+    test_l0_pseudo_norm<float>();
+    test_l0_pseudo_norm<double>();
+    test_l0_pseudo_norm<long double>();
+    test_l0_pseudo_norm<cpp_bin_float_50>();
+
+    test_complex_l0_pseudo_norm<std::complex<float>>();
+    test_complex_l0_pseudo_norm<std::complex<double>>();
+    test_complex_l0_pseudo_norm<std::complex<long double>>();
+    test_complex_l0_pseudo_norm<cpp_complex_50>();
+
+    test_l1_norm<float>();
+    test_l1_norm<double>();
+    test_l1_norm<long double>();
+    test_l1_norm<cpp_bin_float_50>();
+
+    test_complex_l2_norm<std::complex<float>>();
+    test_complex_l2_norm<std::complex<double>>();
+    test_complex_l2_norm<std::complex<long double>>();
+    test_complex_l2_norm<cpp_complex_50>();
+
+    test_l2_norm<float>();
+    test_l2_norm<double>();
+    test_l2_norm<long double>();
+    test_l2_norm<cpp_bin_float_50>();
+
+    test_complex_l1_norm<std::complex<float>>();
+    test_complex_l1_norm<std::complex<double>>();
+    test_complex_l1_norm<std::complex<long double>>();
+    test_complex_l1_norm<cpp_complex_50>();
 
     test_total_variation<float>();
     test_total_variation<double>();
     test_total_variation<long double>();
     test_total_variation<cpp_bin_float_50>();
 
-    test_sup_norm<float>();
-    test_sup_norm<double>();
-    test_sup_norm<long double>();
-
     test_gini_coefficient<float>();
     test_gini_coefficient<double>();
     test_gini_coefficient<long double>();
+    test_gini_coefficient<cpp_bin_float_50>();
 
     test_absolute_gini_coefficient<float>();
     test_absolute_gini_coefficient<double>();
     test_absolute_gini_coefficient<long double>();
+    test_absolute_gini_coefficient<cpp_bin_float_50>();
 
     test_hoyer_sparsity<float>();
     test_hoyer_sparsity<double>();
     test_hoyer_sparsity<long double>();
+    test_hoyer_sparsity<cpp_bin_float_50>();
 
-    test_l0_norm<float>();
-    test_l0_norm<double>();
-    test_l0_norm<long double>();
+    test_complex_hoyer_sparsity<std::complex<float>>();
+    test_complex_hoyer_sparsity<std::complex<double>>();
+    test_complex_hoyer_sparsity<std::complex<long double>>();
+    test_complex_hoyer_sparsity<cpp_complex_50>();
 
     return boost::report_errors();
 }
