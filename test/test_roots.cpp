@@ -376,6 +376,25 @@ void test_complex_newton()
 
     BOOST_CHECK_CLOSE(expected_root2.imag(),root.imag(), tol);
     BOOST_CHECK(abs(root.real()) < tol);
+
+    // Does a zero root pass the termination criteria?
+    p = polynomial<Complex>({{0,0}, {0,0}, {1,0}});
+    p_prime = p.prime();
+    guess = Complex(0, -boost::math::constants::half<Real>());
+    auto g3 = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    root = complex_newton(g3, guess);
+    BOOST_CHECK(abs(root.real()) < tol);
+
+    // Does a monstrous root pass?
+    Real x = -pow(static_cast<Real>(10), 20);
+    p = polynomial<Complex>({{x, x}, {1,0}});
+    p_prime = p.prime();
+    guess = Complex(0, -boost::math::constants::half<Real>());
+    auto g4 = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    root = complex_newton(g4, guess);
+    BOOST_CHECK(abs(root.real() + x) < tol);
+    BOOST_CHECK(abs(root.imag() + x) < tol);
+
 }
 
 // Polynomials which didn't factorize using Newton's method at first:
