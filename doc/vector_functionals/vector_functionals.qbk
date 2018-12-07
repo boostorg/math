@@ -1,0 +1,203 @@
+[/
+  Copyright 2017 Nick Thompson
+
+  Distributed under the Boost Software License, Version 1.0.
+  (See accompanying file LICENSE_1_0.txt or copy at
+  http://www.boost.org/LICENSE_1_0.txt).
+]
+
+[section:vector_functionals Vector Functionals]
+
+[heading Synopsis]
+
+``
+#include <boost/math/tools/vector_functionals.hpp>
+
+namespace boost{ namespace math{ namespace tools {
+
+    template<class ForwardIterator>
+    auto mean(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto mean_and_variance(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto median(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto absolute_median(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto shannon_entropy(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto normalized_shannon_entropy(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto gini_coefficient(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto pq_mean(ForwardIterator first, ForwardIterator last, p, q);
+
+    template<class ForwardIterator>
+    auto lp_norm(ForwardIterator first, ForwardIterator last, p);
+
+    template<class ForwardIterator>
+    auto l0_norm(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto l1_norm(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto l2_norm(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto sup_norm(ForwardIterator first, ForwardIterator last);
+
+    template<class RandomAccessContainer>
+    auto lp_distance(RandomAccessContainer const & u, RandomAccessContainer const & v, p);
+
+    template<class RandomAccessContainer>
+    auto l1_distance(RandomAccessContainer const & u, RandomAccessContainer const & v);
+
+    template<class RandomAccessContainer>
+    auto l2_distance(RandomAccessContainer const & u, RandomAccessContainer const & v);
+
+    template<class RandomAccessContainer>
+    auto sup_distance(RandomAccessContainer const & u, RandomAccessContainer const & v);
+
+    template<class ForwardIterator>
+    auto total_variation(ForwardIterator first, ForwardIterator last);
+
+    template<class RandomAccessContainer>
+    auto lanczos_noisy_derivative(RandomAccessContainer const & v, time_step, time);
+
+    template<class ForwardIterator>
+    auto kurtosis(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto skewness(ForwardIterator first, ForwardIterator last);
+
+    template<class RandomAccessContainer>
+    auto covariance(RandomAccessContainer const & u, RandomAccessContainer const & v);
+
+    template<class ForwardIterator>
+    auto simpsons_rule_quadrature(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto simpsons_three_eighths_quadrature(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto booles_rule_quadrature(ForwardIterator first, ForwardIterator last);
+
+    template<class RandomAccessContainer>
+    auto inner_product(RandomAccessContainer const & u, RandomAccessContainer const & v);
+
+
+}}}
+``
+
+[heading Description]
+
+The file `boost/math/tools/vector_functionals.hpp` is a set of facilities for computing scalar values from vectors.
+We use the word "vector functional" in the [@https://ncatlab.org/nlab/show/nonlinear+functional mathematical sense], indicating a map \u2113:\u211D[super n] \u2192 \u211D,
+and occasionally maps from \u2102[super n] \u2192 \u211D and \u2102[super n] \u2192 \u2102.
+The set of maps provided herein attempt to cover the most commonly encountered functionals from statistics, numerical analysis, and signal processing.
+
+Many of these functionals have trivial naive implementations, but experienced programmers will recognize that even trivial algorithms are easy to screw up, and that numerical instabilities often lurk in corner cases.
+We have attempted to do our "due diligence" to root out these problems-scouring the literature for numerically stable algorithms for even the simplest of functionals.
+
+/Nota bene/: Some similar functionality is provided in [@https://www.boost.org/doc/libs/1_68_0/doc/html/accumulators/user_s_guide.html Boost Accumulators Framework].
+These accumulators should be used in real-time applications; `vector_functionals.hpp` should be used when CPU vectorization is needed.
+As a reminder, remember that to actually /get/ vectorization, compile with `-march=native -O3` flags.
+
+We now describe each functional in detail.
+
+Compute the mean of a container:
+
+    std::vector<double> v{1,2,3,4,5};
+    double mu = mean(v.begin(), v.end());
+
+The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6a].
+The only requirement on the input is that it must be forward iterable, so you can use Eigen vectors, ublas vectors, Armadillo vectors, or a `std::forward_list` to hold your data.
+
+
+Compute the mean and sample variance:
+
+    std::vector<double> v{1,2,3,4,5};
+    auto [mu, s] = mean_and_sample_variance(v.begin(), v.end());
+
+The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6b].
+Note that we do not provide computation of sample variance alone;
+we are unaware of any one-pass, numerically stable computation of sample variance which does not require simultaneous computation of the mean.
+If the mean is not required, simply ignore it.
+The input datatype must be forward iterable and the range `[first, last)` must contain at least two elements.
+
+Compute the median of a dataset:
+
+    std::vector<double> v{1,2,3,4,5};
+    double m = boost::math::tools::median(v.begin(), v.end());
+
+/Nota bene: The input vector is modified./
+The calculation of the median is a thin wrapper around the C++11 [@https://en.cppreference.com/w/cpp/algorithm/nth_element nth-element].
+Therefore, all requirements of `nth_element` are inherited by the median calculation.
+
+
+Compute the sup norm of a dataset:
+
+    std::vector<double> v{-3, 2, 1};
+    double sup = boost::math::tools::sup_norm(v.begin(), v.end());
+    // sup = 3
+
+    std::vector<std::complex<double>> v{{0, -8}, {1,1}, {-3,2}};
+    double sup = boost::math::tools::sup_norm(v.begin(), v.end());
+    // sup = 8
+
+Note how the calculation of \u2113[super p] norms can be performed in both real and complex arithmetic.
+
+Compute the Gini coefficient of a dataset:
+
+    std::vector<double> v{1,0,0,0};
+    double gini = gini_coefficient(v.begin(), v.end());
+    // gini = 1, as v[0] holds all the "wealth"
+    std::vector<double> w{1,1,1,1};
+    gini = gini_coefficient(w.begin(), w.end());
+    // gini = 0, as all elements are now equal.
+
+/Nota bene: The input data is altered-in particular, it is sorted./
+
+/Nota bene:/ Different authors use different conventions regarding the overall scale of the Gini coefficient.
+We have chosen to follow [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard's definition], which [@https://en.wikipedia.org/wiki/Gini_coefficient Wikipedia] calls a "consistent estimator" of the population Gini coefficient.
+Hurley and Rickard's definition places the Gini coefficient in the range [0,1]; Wikipedia's population Gini coefficient is in the range [0, 1 - 1/N].
+
+The Gini coefficient, first used to measure wealth inequality, is also one of the best measures of the sparsity of an expansion in a basis.
+A sparse expansion has most of its norm concentrated in just a few coefficients, making the connection with wealth inequality obvious.
+However, for measuring sparsity, the phase of the numbers is irrelevant, so `absolute_gini_coefficient` should be used instead:
+
+    std::vector<std::complex<double>> v{{0,1}, {0,0}, {0,0}, {0,0}};
+    double abs_gini = absolute_gini_coefficient(v.begin(), v.end());
+    // abs_gini = 1
+    std::vector<std::complex<double>> w{{0,1}, {1,0}, {0,-1}, {-1,0}};
+    double abs_gini = absolute_gini_coefficient(w.begin(), w.end());
+    // abs_gini = 0
+
+
+
+[heading Examples]
+
+[heading Performance]
+
+[heading Caveats]
+
+[heading References]
+
+* Higham, Nicholas J. ['Accuracy and stability of numerical algorithms.] Vol. 80. Siam, 2002.
+* Mallat, Stephane. ['A wavelet tour of signal processing: the sparse way.] Academic press, 2008.
+* Hurley, Niall, and Scott Rickard. ['Comparing measures of sparsity.] IEEE Transactions on Information Theory 55.10 (2009): 4723-4741.
+
+
+[endsect]
+[/section:vector_functionals Vector Functionals]
