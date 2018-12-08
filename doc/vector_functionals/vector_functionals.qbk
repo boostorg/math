@@ -125,7 +125,7 @@ As a reminder, remember that to actually /get/ vectorization, compile with `-mar
 We now describe each functional in detail.
 Our examples use `std::vector<double>` to hold the data, but this not required.
 In general, you can store your data in an Eigen array, and Armadillo vector, `std::array`, and for many of the routines, a `std::forward_list`.
-These routines are usable float, double, long double, and Boost.Multiprecision precision, as well as their complex extensions whenever the computation is well-defined.
+These routines are usable in float, double, long double, and Boost.Multiprecision precision, as well as their complex extensions whenever the computation is well-defined.
 For certain operations (total variation, for example) integer inputs are supported.
 
 [heading Mean]
@@ -218,7 +218,8 @@ However, for measuring sparsity, the phase of the numbers is irrelevant, so `abs
     // now abs_gini = 0
 
 Again, Wikipedia denotes our scaling as a "sample Gini coefficient".
-We chose this scaling because it always returns unity for a vector which has only one nonzero coefficient.
+We chose this scaling because it always returns unity for a vector which has only one nonzero coefficient,
+whereas the value of the population Gini coefficient of a vector with one non-zero element is dependent on the length of the input.
 
 If sorting the input data is too much expense for a sparsity measure (is it going to be perfect anyway?),
 consider calculating the Hoyer sparsity instead.
@@ -337,7 +338,7 @@ The natural logarithm is used to compute the Shannon entropy; all other "Shannon
     // Ks = 0; concentration of the vector is minimized.
 
 The Shannon cost is a modified version of the Shannon entropy used in signal processing and data compression.
-The useful properties of the Shannon cost are /K/[sub /s/](0) = 0 and /K/[sup /s/](/v/\u2295 /w/) = /K/[sub /s/](v) + /K/[sub /s/](w).
+The useful properties of the Shannon cost are /K/[sub /s/](0) = 0 and /K/[sub /s/](/v/\u2295 /w/) = /K/[sub /s/](v) + /K/[sub /s/](w).
 See [@https://doi.org/10.1007/978-3-642-56702-5 Ripples in Mathematics] for details.
 
 

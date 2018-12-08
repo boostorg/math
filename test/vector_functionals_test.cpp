@@ -36,6 +36,11 @@ void test_integer_mean()
     std::vector<Z> v{1,2,3,4,5};
     double mu = boost::math::tools::mean(v);
     BOOST_TEST(abs(mu - 3) < tol);
+
+    // Work with std::array?
+    std::array<Z, 5> w{1,2,3,4,5};
+    mu = boost::math::tools::mean(v);
+    BOOST_TEST(abs(mu - 3) < tol);
 }
 
 template<class Real>
@@ -49,7 +54,6 @@ void test_mean()
     // Does range call work?
     mu = boost::math::tools::mean(v);
     BOOST_TEST(abs(mu - 3) < tol);
-
 
     // Can we successfully average only part of the vector?
     mu = boost::math::tools::mean(v.begin(), v.begin() + 3);
@@ -174,6 +178,11 @@ void test_median()
     std::shuffle(v.begin(), v.end(), g);
     m = boost::math::tools::median(v.begin(), v.end());
     BOOST_TEST_EQ(m, 2);
+
+    // Does it work with std::array?
+    std::array<Real, 3> w{1,2,3};
+    m = boost::math::tools::median(w);
+    BOOST_TEST_EQ(m, 2);
 }
 
 template<class Real>
@@ -217,6 +226,10 @@ void test_absolute_median()
     BOOST_TEST_EQ(m, 2);
     std::shuffle(v.begin(), v.end(), g);
     m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 2);
+
+    std::array<Real, 3> w{1, 2, -3};
+    m = boost::math::tools::absolute_median(w);
     BOOST_TEST_EQ(m, 2);
 }
 
@@ -322,6 +335,11 @@ void test_integer_total_variation()
 
     tv = boost::math::tools::total_variation(v);
     BOOST_TEST_EQ(tv, (v.size() -1)*(v.size()-1));
+
+    // Work with std::array?
+    std::array<Z, 2> w{1,1};
+    tv = boost::math::tools::total_variation(w);
+    BOOST_TEST_EQ(tv,0);
 }
 
 template<class Real>
@@ -365,6 +383,12 @@ void test_sup_norm()
 
     s = boost::math::tools::sup_norm(v);
     BOOST_TEST(abs(s - 2) < tol);
+
+    // Work with std::array?
+    std::array<Real, 3> w{-2,1,0};
+    s = boost::math::tools::sup_norm(w);
+    BOOST_TEST(abs(s - 2) < tol);
+
 }
 
 template<class Z>
@@ -414,6 +438,10 @@ void test_gini_coefficient()
     v[2] = 0;
     gini = boost::math::tools::gini_coefficient(v.begin(), v.end());
     BOOST_TEST(abs(gini) < tol);
+
+    std::array<Real, 3> w{0,0,0};
+    gini = boost::math::tools::gini_coefficient(w);
+    BOOST_TEST(abs(gini) < tol);
 }
 
 template<class Real>
@@ -436,6 +464,10 @@ void test_hoyer_sparsity()
     v[1] = 1;
     v[2] = 1;
     hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
+    BOOST_TEST(abs(hs) < tol);
+
+    std::array<Real, 3> w{1,1,1};
+    hs = boost::math::tools::hoyer_sparsity(w);
     BOOST_TEST(abs(hs) < tol);
 }
 
@@ -525,6 +557,9 @@ void test_l0_pseudo_norm()
     count = boost::math::tools::l0_pseudo_norm(v);
     BOOST_TEST_EQ(count, 1);
 
+    std::array<Real, 3> w{0,0,1};
+    count = boost::math::tools::l0_pseudo_norm(w);
+    BOOST_TEST_EQ(count, 1);
 }
 
 template<class Complex>
@@ -548,6 +583,10 @@ void test_l1_norm()
     BOOST_TEST(abs(l1 - 3) < tol);
 
     l1 = boost::math::tools::l1_norm(v);
+    BOOST_TEST(abs(l1 - 3) < tol);
+
+    std::array<Real, 3> w{1,1,1};
+    l1 = boost::math::tools::l1_norm(w);
     BOOST_TEST(abs(l1 - 3) < tol);
 }
 
@@ -583,6 +622,10 @@ void test_l2_norm()
     BOOST_TEST(abs(l2 - 2) < tol);
 
     l2 = boost::math::tools::l2_norm(v);
+    BOOST_TEST(abs(l2 - 2) < tol);
+
+    std::array<Real, 4> w{1,1,1,1};
+    l2 = boost::math::tools::l2_norm(w);
     BOOST_TEST(abs(l2 - 2) < tol);
 
     Real bignum = 4*sqrt(std::numeric_limits<Real>::max());
@@ -621,6 +664,11 @@ void test_shannon_entropy()
     BOOST_TEST(abs(Hs - expected) < tol*expected);
 
     Hs = boost::math::tools::shannon_entropy(v);
+    BOOST_TEST(abs(Hs - expected) < tol*expected);
+
+    std::array<Real, 3> w{half<Real>(), half<Real>(), half<Real>()};
+    Hs = boost::math::tools::shannon_entropy(w);
+    expected = 3*ln_two<Real>()/2;
     BOOST_TEST(abs(Hs - expected) < tol*expected);
 }
 

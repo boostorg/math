@@ -106,14 +106,14 @@ auto median(RandomAccessIterator first, RandomAccessIterator last)
     if (num_elems & 1)
     {
         auto middle = first + (num_elems - 1)/2;
-        nth_element(first, middle, last);
+        std::nth_element(first, middle, last);
         return *middle;
     }
     else
     {
         auto middle = first + num_elems/2 - 1;
-        nth_element(first, middle, last);
-        nth_element(middle, middle+1, last);
+        std::nth_element(first, middle, last);
+        std::nth_element(middle, middle+1, last);
         return (*middle + *(middle+1))/2;
     }
 }
@@ -137,14 +137,14 @@ auto absolute_median(RandomAccessIterator first, RandomAccessIterator last)
     if (num_elems & 1)
     {
         auto middle = first + (num_elems - 1)/2;
-        nth_element(first, middle, last, comparator);
+        std::nth_element(first, middle, last, comparator);
         return abs(*middle);
     }
     else
     {
         auto middle = first + num_elems/2 - 1;
-        nth_element(first, middle, last, comparator);
-        nth_element(middle, middle+1, last, comparator);
+        std::nth_element(first, middle, last, comparator);
+        std::nth_element(middle, middle+1, last, comparator);
         return (abs(*middle) + abs(*(middle+1)))/abs(static_cast<RealOrComplex>(2));
     }
 }
