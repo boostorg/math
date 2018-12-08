@@ -9,7 +9,7 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
-
+#include <iostream>
 #include <utility>
 #include <boost/config/no_tr1/cmath.hpp>
 #include <stdexcept>
@@ -65,7 +65,7 @@ inline void unpack_0(const Tuple& t, T& val) BOOST_MATH_NOEXCEPT(T)
 {
    using dummy::get;
    // Rely on ADL to find the correct overload of get:
-   val = get<0>(t); 
+   val = get<0>(t);
 }
 
 template <class T, class U, class V>
@@ -436,9 +436,9 @@ namespace detail{
          // check for out of bounds step:
          if(result < min)
          {
-            T diff = ((fabs(min) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(min))) 
-               ? T(1000) 
-               : (fabs(min) < 1) && (fabs(tools::max_value<T>() * min) < fabs(result)) 
+            T diff = ((fabs(min) < 1) && (fabs(result) > 1) && (tools::max_value<T>() / fabs(result) < fabs(min)))
+               ? T(1000)
+               : (fabs(min) < 1) && (fabs(tools::max_value<T>() * min) < fabs(result))
                ? ((min < 0) != (result < 0)) ? -tools::max_value<T>() : tools::max_value<T>() : T(result / min);
             if(fabs(diff) < 1)
                diff = 1 / diff;
@@ -563,10 +563,94 @@ inline T schroeder_iterate(F f, T guess, T min, T max, int digits) BOOST_NOEXCEP
    return schroder_iterate(f, guess, min, max, digits, m);
 }
 
+#ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
+/*
+ * Why do we set the default maximum number of iterations to the number of digits in the type?
+ * Because for double roots, the number of digits increases linearly with the number of iterations,
+ * so this default should recover full precision even in this somewhat pathological case.
+ * For isolated roots, the problem is so rapidly convergent that this doesn't matter at all.
+ */
+template<class Complex, class F>
+Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limits<typename Complex::value_type>::digits)
+{
+    typedef typename Complex::value_type Real;
+    using std::norm;
+    using std::abs;
+    using std::max;
+    // z0, z1, and z2 cannot be the same, in case we immediately need to resort to Muller's Method:
+    Complex z0 = guess + Complex(1,0);
+    Complex z1 = guess + Complex(0,1);
+    Complex z2 = guess;
+
+    do {
+       auto pair = g(z2);
+       if (norm(pair.second) == 0)
+       {
+           // Muller's method. Notation follows Numerical Recipes, 9.5.2:
+           Complex q = (z2 - z1)/(z1 - z0);
+           auto P0 = g(z0);
+           auto P1 = g(z1);
+           Complex qp1 = static_cast<Complex>(1)+q;
+           Complex A = q*(pair.first - qp1*P1.first + q*P0.first);
+
+           Complex B = (static_cast<Complex>(2)*q+static_cast<Complex>(1))*pair.first - qp1*qp1*P1.first +q*q*P0.first;
+           Complex C = qp1*pair.first;
+           Complex rad = sqrt(B*B - static_cast<Complex>(4)*A*C);
+           Complex denom1 = B + rad;
+           Complex denom2 = B - rad;
+           Complex correction = (z1-z2)*static_cast<Complex>(2)*C;
+           if (norm(denom1) > norm(denom2))
+           {
+               correction /= denom1;
+           }
+           else
+           {
+               correction /= denom2;
+           }
+
+           z0 = z1;
+           z1 = z2;
+           z2 = z2 + correction;
+       }
+       else
+       {
+           z0 = z1;
+           z1 = z2;
+           z2 = z2  - (pair.first/pair.second);
+       }
+
+       // See: https://math.stackexchange.com/questions/3017766/constructing-newton-iteration-converging-to-non-root
+       // If f' is continuous, then convergence of x_n -> x* implies f(x*) = 0.
+       // This condition approximates this convergence condition by requiring three consecutive iterates to be clustered.
+       Real tol = max(abs(z2)*std::numeric_limits<Real>::epsilon(), std::numeric_limits<Real>::epsilon());
+       bool real_close = abs(z0.real() - z1.real()) < tol && abs(z0.real() - z2.real()) < tol && abs(z1.real() - z2.real()) < tol;
+       bool imag_close = abs(z0.imag() - z1.imag()) < tol && abs(z0.imag() - z2.imag()) < tol && abs(z1.imag() - z2.imag()) < tol;
+       if (real_close && imag_close)
+       {
+           return z2;
+       }
+
+   } while(max_iterations--);
+
+    // The idea is that if we can get abs(f) < eps, we should, but if we go through all these iterations
+    // and abs(f) < sqrt(eps), then roundoff error simply does not allow that we can evaluate f to < eps
+    // This is somewhat awkward as it isn't scale invariant, but using the Daubechies coefficient example code,
+    // I found this condition generates correct roots, whereas the scale invariant condition discussed here:
+    // https://scicomp.stackexchange.com/questions/30597/defining-a-condition-number-and-termination-criteria-for-newtons-method
+    // allows nonroots to be passed off as roots.
+    auto pair = g(z2);
+    if (abs(pair.first) < sqrt(std::numeric_limits<Real>::epsilon()))
+    {
+        return z2;
+    }
+
+    return {std::numeric_limits<Real>::quiet_NaN(),
+            std::numeric_limits<Real>::quiet_NaN()};
+}
+#endif
 
 } // namespace tools
 } // namespace math
 } // namespace boost
 
 #endif // BOOST_MATH_TOOLS_NEWTON_SOLVER_HPP
-
