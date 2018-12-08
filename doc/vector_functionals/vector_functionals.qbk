@@ -15,44 +15,92 @@
 
 namespace boost{ namespace math{ namespace tools {
 
+    template<class Container>
+    auto mean(Container const & c);
+
     template<class ForwardIterator>
     auto mean(ForwardIterator first, ForwardIterator last);
 
+    template<class Container>
+    auto mean_and_population_variance(Container const & c);
+
     template<class ForwardIterator>
-    auto mean_and_variance(ForwardIterator first, ForwardIterator last);
+    auto mean_and_population_variance(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto median(Container & c);
 
     template<class ForwardIterator>
     auto median(ForwardIterator first, ForwardIterator last);
 
+    template<class Container>
+    auto absolute_median(Container & c);
+
     template<class ForwardIterator>
     auto absolute_median(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto gini_coefficient(Container & c);
 
     template<class ForwardIterator>
     auto gini_coefficient(ForwardIterator first, ForwardIterator last);
 
+    template<class Container>
+    auto absolute_gini_coefficient(Container & c);
+
     template<class ForwardIterator>
     auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto hoyer_sparsity(Container const & c);
 
     template<class ForwardIterator>
     auto hoyer_sparsity(ForwardIterator first, ForwardIterator last);
 
+    template<class Container>
+    auto shannon_entropy(Container const & c);
+
     template<class ForwardIterator>
     auto shannon_entropy(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto shannon_cost(Container const & c);
+
+    template<class ForwardIterator>
+    auto shannon_cost(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto l0_pseudo_norm(Container const & c);
 
     template<class ForwardIterator>
     auto l0_pseudo_norm(ForwardIterator first, ForwardIterator last);
 
+    template<class Container>
+    auto l1_norm(Container const & c);
+
     template<class ForwardIterator>
     auto l1_norm(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto l2_norm(Container const & c);
 
     template<class ForwardIterator>
     auto l2_norm(ForwardIterator first, ForwardIterator last);
 
+    template<class Container>
+    auto sup_norm(Container const & c);
+
     template<class ForwardIterator>
     auto sup_norm(ForwardIterator first, ForwardIterator last);
 
+    template<class Container>
+    auto lp_norm(Container const & c);
+
     template<class ForwardIterator>
     auto lp_norm(ForwardIterator first, ForwardIterator last, p);
+
+    template<class Container>
+    auto total_variation(Container const & c);
 
     template<class ForwardIterator>
     auto total_variation(ForwardIterator first, ForwardIterator last);
@@ -83,6 +131,8 @@ These routines are usable float, double, long double, and Boost.Multiprecision p
 
     std::vector<double> v{1,2,3,4,5};
     double mu = boost::math::tools::mean(v.cbegin(), v.cend());
+    // Alternative syntax if you want to use entire container:
+    double mu = boost::math::tools::mean(v);
 
 The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6a].
 The data is not modified and must be forward iterable.
@@ -92,6 +142,11 @@ Works with complex data.
 
     std::vector<double> v{1,2,3,4,5};
     auto [mu, s] = boost::math::tools::mean_and_population_variance(v.cbegin(), v.cend());
+
+If you don't need to calculate on a subset of the input, then the range call is more terse:
+
+    std::vector<double> v{1,2,3,4,5};
+    auto [mu, s] = boost::math::tools::mean_and_population_variance(v);
 
 The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6b].
 Note that we do not provide computation of population variance alone;
@@ -266,6 +321,14 @@ The container must be forward iterable, and the contents are not modified.
 
 The Shannon entropy only supports non-negative real-valued inputs, presumably for interpretational purposes in the range [0,1]-though this is not enforced.
 The natural logarithm is used to compute the Shannon entropy; all other "Shannon entropies" are readily obtained by change of log base.
+
+
+[heading Shannon Cost]
+
+    std::vector<double> v{-1, 1,-1};
+    double Ks = boost::math::tools::shannon_cost(v.begin(), v.end());
+    // Ks = 0; concentration of the vector is minimized.
+
 
 
 [heading References]

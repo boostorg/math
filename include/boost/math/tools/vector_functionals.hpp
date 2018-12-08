@@ -35,6 +35,12 @@ mean(ForwardIterator first, ForwardIterator last)
     return mu;
 }
 
+template<class Container>
+inline auto mean(Container const & v)
+{
+    return mean(v.cbegin(), v.cend());
+}
+
 template<class ForwardIterator>
 auto
 mean_and_population_variance(ForwardIterator first, ForwardIterator last)
@@ -56,6 +62,12 @@ mean_and_population_variance(ForwardIterator first, ForwardIterator last)
     return std::make_pair(M, Q/(k-1));
 }
 
+template<class Container>
+inline auto mean_and_population_variance(Container const & v)
+{
+    return mean_and_population_variance(v.cbegin(), v.cend());
+}
+
 template<class RandomAccessIterator>
 auto median(RandomAccessIterator first, RandomAccessIterator last)
 {
@@ -75,6 +87,14 @@ auto median(RandomAccessIterator first, RandomAccessIterator last)
         return (*middle + *(middle+1))/2;
     }
 }
+
+
+template<class RandomAccessContainer>
+inline auto median(RandomAccessContainer & v)
+{
+    return median(v.begin(), v.end());
+}
+
 
 template<class RandomAccessIterator>
 auto absolute_median(RandomAccessIterator first, RandomAccessIterator last)
@@ -99,6 +119,12 @@ auto absolute_median(RandomAccessIterator first, RandomAccessIterator last)
     }
 }
 
+template<class RandomAccessContainer>
+inline auto absolute_median(RandomAccessContainer & v)
+{
+    return absolute_median(v.begin(), v.end());
+}
+
 // Mallat, "A Wavelet Tour of Signal Processing", equation 2.60:
 template<class ForwardIterator>
 auto total_variation(ForwardIterator first, ForwardIterator last)
@@ -117,7 +143,13 @@ auto total_variation(ForwardIterator first, ForwardIterator last)
     return tv;
 }
 
-// Mallat, equation 10.4 uses the base-2 logarithm.
+template<class Container>
+inline auto total_variation(Container const & v)
+{
+    return total_variation(v.cbegin(), v.cend());
+}
+
+
 template<class ForwardIterator>
 auto shannon_entropy(ForwardIterator first, ForwardIterator last)
 {
@@ -133,6 +165,36 @@ auto shannon_entropy(ForwardIterator first, ForwardIterator last)
     }
     return -entropy;
 }
+
+template<class Container>
+inline auto shannon_entropy(Container const & v)
+{
+    return shannon_entropy(v.cbegin(), v.cend());
+}
+
+template<class ForwardIterator>
+auto shannon_cost(ForwardIterator first, ForwardIterator last)
+{
+    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
+    using std::log;
+    Real cost = 0;
+    for (auto it = first; it != last; ++it)
+    {
+        if (*it != 0)
+        {
+            Real tmp = abs(*it);
+            cost += tmp*tmp*log(tmp*tmp);
+        }
+    }
+    return -cost;
+}
+
+template<class Container>
+inline auto shannon_cost(Container const & v)
+{
+    return shannon_cost(v.cbegin(), v.cend());
+}
+
 
 template<class ForwardIterator>
 auto sup_norm(ForwardIterator first, ForwardIterator last)
@@ -160,6 +222,12 @@ auto sup_norm(ForwardIterator first, ForwardIterator last)
     }
 }
 
+template<class Container>
+inline auto sup_norm(Container const & v)
+{
+    return sup_norm(v.cbegin(), v.cend());
+}
+
 template<class ForwardIterator>
 auto l1_norm(ForwardIterator first, ForwardIterator last)
 {
@@ -171,6 +239,13 @@ auto l1_norm(ForwardIterator first, ForwardIterator last)
     }
     return l1;
 }
+
+template<class Container>
+inline auto l1_norm(Container const & v)
+{
+    return l1_norm(v.cbegin(), v.cend());
+}
+
 
 template<class ForwardIterator>
 auto l2_norm(ForwardIterator first, ForwardIterator last)
@@ -226,6 +301,11 @@ auto l2_norm(ForwardIterator first, ForwardIterator last)
     }
 }
 
+template<class Container>
+inline auto l2_norm(Container const & v)
+{
+    return l2_norm(v.cbegin(), v.cend());
+}
 
 template<class ForwardIterator>
 size_t l0_pseudo_norm(ForwardIterator first, ForwardIterator last)
@@ -240,6 +320,12 @@ size_t l0_pseudo_norm(ForwardIterator first, ForwardIterator last)
         }
     }
     return count;
+}
+
+template<class Container>
+inline size_t l0_pseudo_norm(Container const & v)
+{
+    return l0_pseudo_norm(v.cbegin(), v.cend());
 }
 
 template<class ForwardIterator>
@@ -304,6 +390,13 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, typename std::remove_c
     }
 }
 
+template<class Container>
+inline auto lp_norm(Container const & v, typename Container::value_type p)
+{
+    return lp_norm(v.cbegin(), v.cend(), p);
+}
+
+
 template<class ForwardIterator>
 auto gini_coefficient(ForwardIterator first, ForwardIterator last)
 {
@@ -328,6 +421,12 @@ auto gini_coefficient(ForwardIterator first, ForwardIterator last)
     }
 
     return ((2*num)/denom - i)/(i-2);
+}
+
+template<class RandomAccessContainer>
+inline auto gini_coefficient(RandomAccessContainer & v)
+{
+    return gini_coefficient(v.begin(), v.end());
 }
 
 
@@ -360,6 +459,12 @@ auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
     return ((2*num)/denom - i)/(i-2);
 }
 
+template<class RandomAccessContainer>
+inline auto absolute_gini_coefficient(RandomAccessContainer & v)
+{
+    return absolute_gini_coefficient(v.begin(), v.end());
+}
+
 // The Hoyer sparsity measure is defined in:
 // https://arxiv.org/pdf/0811.4706.pdf
 template<class ForwardIterator>
@@ -382,6 +487,13 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
     decltype(abs(*first)) rootn = sqrt(n);
     return (rootn - l1/sqrt(l2) )/ (rootn - 1);
 }
+
+template<class Container>
+inline auto hoyer_sparsity(Container const & v)
+{
+    return hoyer_sparsity(v.cbegin(), v.cend());
+}
+
 
 }}}
 #endif

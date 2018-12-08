@@ -37,6 +37,11 @@ void test_mean()
     Real mu = boost::math::tools::mean(v.begin(), v.end());
     BOOST_TEST(abs(mu - 3) < tol);
 
+    // Does range call work?
+    mu = boost::math::tools::mean(v);
+    BOOST_TEST(abs(mu - 3) < tol);
+
+
     // Can we successfully average only part of the vector?
     mu = boost::math::tools::mean(v.begin(), v.begin() + 3);
     BOOST_TEST(abs(mu - 2) < tol);
@@ -75,6 +80,11 @@ void test_complex_mean()
     auto mu = boost::math::tools::mean(v.begin(), v.end());
     BOOST_TEST(abs(mu.imag() - 3) < tol);
     BOOST_TEST(abs(mu.real()) < tol);
+
+    // Does range work?
+    mu = boost::math::tools::mean(v);
+    BOOST_TEST(abs(mu.imag() - 3) < tol);
+    BOOST_TEST(abs(mu.real()) < tol);
 }
 
 template<class Real>
@@ -95,6 +105,11 @@ void test_mean_and_population_variance()
     auto [mu2, sigma2_sq] = boost::math::tools::mean_and_population_variance(w.begin(), w.end());
     BOOST_TEST(abs(mu2 - 1.0/2.0) < tol);
     BOOST_TEST(abs(sigma2_sq - 1.0/4.0) < tol);
+
+    auto [mu3, sigma3_sq] = boost::math::tools::mean_and_population_variance(w);
+    BOOST_TEST(abs(mu3 - 1.0/2.0) < tol);
+    BOOST_TEST(abs(sigma3_sq - 1.0/4.0) < tol);
+
 }
 
 template<class Real>
@@ -107,7 +122,8 @@ void test_median()
     BOOST_TEST_EQ(m, 4);
 
     std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::tools::median(v.begin(), v.end());
+    // Does range call work?
+    m = boost::math::tools::median(v);
     BOOST_TEST_EQ(m, 4);
 
     v = {1,2,3,3,4,5};
@@ -151,7 +167,7 @@ void test_absolute_median()
     BOOST_TEST_EQ(m, 4);
 
     std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    m = boost::math::tools::absolute_median(v);
     BOOST_TEST_EQ(m, 4);
 
     v = {1, -2, -3, 3, -4, -5};
@@ -197,7 +213,7 @@ void test_complex_absolute_median()
     BOOST_TEST_EQ(m, 4);
 
     std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    m = boost::math::tools::absolute_median(v);
     BOOST_TEST_EQ(m, 4);
 
     v = {{0,1}, {0,-2}, {0,-3}, {0,3}, {0,4}, {0,-5}};
@@ -230,7 +246,7 @@ void test_lp()
     for (size_t i = 0; i < v.size(); ++i) {
         v[i] = 7;
     }
-    Real l8 = boost::math::tools::lp_norm(v.cbegin(), v.cend(), 8);
+    Real l8 = boost::math::tools::lp_norm(v, 8);
     Real expected = 7*pow(v.size(), static_cast<Real>(1)/static_cast<Real>(8));
     BOOST_TEST(abs(l8 - expected) < tol*abs(expected));
 
@@ -257,6 +273,9 @@ void test_complex_lp()
     Real l3 = boost::math::tools::lp_norm(v.cbegin(), v.cend(), 3);
     BOOST_TEST(abs(l3 - 1) < tol);
 
+    l3 = boost::math::tools::lp_norm(v, 3);
+    BOOST_TEST(abs(l3 - 1) < tol);
+
 }
 
 
@@ -266,6 +285,9 @@ void test_total_variation()
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,1};
     Real tv = boost::math::tools::total_variation(v.begin(), v.end());
+    BOOST_TEST(tv >= 0 && abs(tv) < tol);
+
+    tv = boost::math::tools::total_variation(v);
     BOOST_TEST(tv >= 0 && abs(tv) < tol);
 
     v[1] = 2;
@@ -296,6 +318,9 @@ void test_sup_norm()
     Real s = boost::math::tools::sup_norm(v.begin(), v.end());
     BOOST_TEST(abs(s - 2) < tol);
 
+    s = boost::math::tools::sup_norm(v);
+    BOOST_TEST(abs(s - 2) < tol);
+
 }
 
 template<class Complex>
@@ -306,6 +331,9 @@ void test_complex_sup_norm()
     std::vector<Complex> w{{0,-8}, {1,1}, {3,2}};
     Real s = boost::math::tools::sup_norm(w.cbegin(), w.cend());
     BOOST_TEST(abs(s-8) < tol);
+
+    s = boost::math::tools::sup_norm(w);
+    BOOST_TEST(abs(s-8) < tol);
 }
 
 
@@ -315,6 +343,9 @@ void test_gini_coefficient()
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,0,0};
     Real gini = boost::math::tools::gini_coefficient(v.begin(), v.end());
+    BOOST_TEST(abs(gini - 1) < tol);
+
+    gini = boost::math::tools::gini_coefficient(v);
     BOOST_TEST(abs(gini - 1) < tol);
 
     v[0] = 1;
@@ -339,6 +370,9 @@ void test_hoyer_sparsity()
     Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
     BOOST_TEST(abs(hs - 1) < tol);
 
+    hs = boost::math::tools::hoyer_sparsity(v);
+    BOOST_TEST(abs(hs - 1) < tol);
+
     // Does it work with constant iterators?
     hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
     BOOST_TEST(abs(hs - 1) < tol);
@@ -360,6 +394,9 @@ void test_complex_hoyer_sparsity()
     Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
     BOOST_TEST(abs(hs - 1) < tol);
 
+    hs = boost::math::tools::hoyer_sparsity(v);
+    BOOST_TEST(abs(hs - 1) < tol);
+
     // Does it work with constant iterators?
     hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
     BOOST_TEST(abs(hs - 1) < tol);
@@ -379,6 +416,9 @@ void test_absolute_gini_coefficient()
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{-1,0,0};
     Real gini = boost::math::tools::absolute_gini_coefficient(v.begin(), v.end());
+    BOOST_TEST(abs(gini - 1) < tol);
+
+    gini = boost::math::tools::absolute_gini_coefficient(v);
     BOOST_TEST(abs(gini - 1) < tol);
 
     v[0] = 1;
@@ -410,6 +450,9 @@ void test_l0_pseudo_norm()
     count = boost::math::tools::l0_pseudo_norm(v.cbegin(), v.cend());
     BOOST_TEST_EQ(count, 1);
 
+    count = boost::math::tools::l0_pseudo_norm(v);
+    BOOST_TEST_EQ(count, 1);
+
 }
 
 template<class Complex>
@@ -418,6 +461,10 @@ void test_complex_l0_pseudo_norm()
     std::vector<Complex> v{{0,0}, {0,0}, {1,0}};
     size_t count = boost::math::tools::l0_pseudo_norm(v.begin(), v.end());
     BOOST_TEST_EQ(count, 1);
+
+    count = boost::math::tools::l0_pseudo_norm(v);
+    BOOST_TEST_EQ(count, 1);
+
 }
 
 template<class Real>
@@ -427,6 +474,10 @@ void test_l1_norm()
     std::vector<Real> v{1,1,1};
     Real l1 = boost::math::tools::l1_norm(v.begin(), v.end());
     BOOST_TEST(abs(l1 - 3) < tol);
+
+    l1 = boost::math::tools::l1_norm(v);
+    BOOST_TEST(abs(l1 - 3) < tol);
+
 }
 
 template<class Complex>
@@ -437,6 +488,10 @@ void test_complex_l1_norm()
     std::vector<Complex> v{{1,0}, {0,1},{0,-1}};
     Real l1 = boost::math::tools::l1_norm(v.begin(), v.end());
     BOOST_TEST(abs(l1 - 3) < tol);
+
+    l1 = boost::math::tools::l1_norm(v);
+    BOOST_TEST(abs(l1 - 3) < tol);
+
 }
 
 template<class Real>
@@ -446,6 +501,9 @@ void test_l2_norm()
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{1,1,1,1};
     Real l2 = boost::math::tools::l2_norm(v.begin(), v.end());
+    BOOST_TEST(abs(l2 - 2) < tol);
+
+    l2 = boost::math::tools::l2_norm(v);
     BOOST_TEST(abs(l2 - 2) < tol);
 
     Real bignum = 4*sqrt(std::numeric_limits<Real>::max());
@@ -466,6 +524,10 @@ void test_complex_l2_norm()
     std::vector<Complex> v{{1,0}, {0,1},{0,-1}, {1,0}};
     Real l2 = boost::math::tools::l2_norm(v.begin(), v.end());
     BOOST_TEST(abs(l2 - 2) < tol);
+
+    l2 = boost::math::tools::l2_norm(v);
+    BOOST_TEST(abs(l2 - 2) < tol);
+
 }
 
 template<class Real>
@@ -477,6 +539,9 @@ void test_shannon_entropy()
     std::vector<Real> v(30, half<Real>());
     Real Hs = boost::math::tools::shannon_entropy(v.begin(), v.end());
     Real expected = v.size()*ln_two<Real>()/2;
+    BOOST_TEST(abs(Hs - expected) < tol*expected);
+
+    Hs = boost::math::tools::shannon_entropy(v);
     BOOST_TEST(abs(Hs - expected) < tol*expected);
 }
 
