@@ -126,6 +126,7 @@ We now describe each functional in detail.
 Our examples use `std::vector<double>` to hold the data, but this not required.
 In general, you can store your data in an Eigen array, and Armadillo vector, `std::array`, and for many of the routines, a `std::forward_list`.
 These routines are usable float, double, long double, and Boost.Multiprecision precision, as well as their complex extensions whenever the computation is well-defined.
+For certain operations (total variation, for example) integer inputs are supported.
 
 [heading Mean]
 
@@ -136,7 +137,8 @@ These routines are usable float, double, long double, and Boost.Multiprecision p
 
 The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6a].
 The data is not modified and must be forward iterable.
-Works with complex data.
+Works with real, complex and integer data.
+If the input is an integer type, the output is a double precision float.
 
 [heading Mean and Population Variance]
 
@@ -154,6 +156,7 @@ we are unaware of any one-pass, numerically stable computation of population var
 If the mean is not required, simply ignore it.
 The input datatype must be forward iterable and the range `[first, last)` must contain at least two elements.
 It is /not/ in general sensible to pass complex numbers to this routine.
+If integers are passed as input, then the output is a double precision float.
 
 [heading Median]
 
@@ -163,8 +166,8 @@ Compute the median of a dataset:
     double m = boost::math::tools::median(v.begin(), v.end());
 
 /Nota bene: The input vector is modified./
-The calculation of the median is a thin wrapper around the C++11 [@https://en.cppreference.com/w/cpp/algorithm/nth_element nth-element].
-Therefore, all requirements of `nth_element` are inherited by the median calculation.
+The calculation of the median is a thin wrapper around the C++11 [@https://en.cppreference.com/w/cpp/algorithm/nth_element `nth_element`].
+Therefore, all requirements of `std::nth_element` are inherited by the median calculation.
 
 [heading Absolute Median]
 
@@ -191,8 +194,8 @@ Compute the Gini coefficient of a dataset:
 
 /Nota bene:/ Different authors use different conventions regarding the overall scale of the Gini coefficient.
 We have chosen to follow [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard's definition], which [@https://en.wikipedia.org/wiki/Gini_coefficient Wikipedia] calls a "sample Gini coefficient".
-Hurley and Rickard's definition places the Gini coefficient in the range [0,1]; Wikipedia's population Gini coefficient is in the range [0, 1 - 1//n/].
-If you wish to convert the Boost Gini coefficient to the population Gini coefficient, multiply by (/n/-1)//n/.
+Hurley and Rickard's definition places the Gini coefficient in the range [0,1]; Wikipedia's population Gini coefficient is in the range [0, 1 - 1/ /n/].
+If you wish to convert the Boost Gini coefficient to the population Gini coefficient, multiply by (/n/-1)/ /n/.
 
 /Nota bene:/ There is essentially no reason to pass negative values to the Gini coefficient function.
 However, a single use case (measuring wealth inequality when some people have negative wealth) exists, so we do not throw an exception when negative values are encountered.
@@ -231,13 +234,14 @@ For details, see [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard].
 Usage:
 
     std::vector<Real> v{1,0,0};
-    Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
+    Real hs = boost::math::tools::hoyer_sparsity(v);
     // hs = 1
     std::vector<Real> v{1,-1,1};
     Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
     // hs = 0
 
 The container must be forward iterable and the contents are not modified.
+Accepts real, complex, and integer inputs. If the input is an integral type, the output is a double precision float.
 
 [heading \u2113[super \u221E] norm]
 
@@ -251,7 +255,7 @@ Computes the supremum norm of a dataset:
     double sup = boost::math::tools::sup_norm(v.cbegin(), v.cend());
     // sup = 8
 
-Supports both real and complex arithmetic.
+Supports real, integral, and complex arithmetic.
 Container must be forward iterable and is not modified.
 
 [heading \u2113[super /p/] norm]
@@ -275,9 +279,10 @@ Counts the number of non-zero elements in a container.
     size_t count = boost::math::tools::l0_pseudo_norm(v.begin(), v.end());
     // count = 1
 
-Supports real and complex numbers.
+Supports real, integral, and complex numbers.
 The container must be forward iterable and the contents are not modified.
-Note that this measure is not robust against numerical noise.
+Note that this measure is not robust against numerical noise and is therefore not as useful as (say) the Hoyer sparsity in numerical applications.
+Works will real, complex, and integral inputs.
 
 [heading \u2113[super 1] norm]
 
@@ -287,7 +292,7 @@ The \u2113[super 1] norm is a special case of the \u2113[super /p/] norm, but is
     double l1 = boost::math::tools::l1_norm(v.begin(), v.end());
     // l1 = 3
 
-Requires a forward iterable input, does not modify input data, and works with complex numbers.
+Requires a forward iterable input, does not modify input data, and works with real, integral, and complex numbers.
 
 [heading \u2113[super 2] norm]
 
@@ -307,10 +312,12 @@ Requires a forward iterable input, does not modify input data, and works with co
     v = {0,1};
     double tv = boost::math::tools::total_variation(v.begin(), v.end());
     // variation is 1, so tv = 1.
+    std::vector<int> v{1,1,1};
+    int tv = boost::math::tools::total_variation(v);
 
-The total variation only supports real numbers.
+The total variation only supports real numbers and /signed/ integers.
 All the constituent operations to compute the total variation are well-defined for complex numbers,
-but the computed result is not meaningful.
+but the computed result is not meaningful; a 2D total variation is more appropriate.
 The container must be forward iterable, and the contents are not modified.
 
 [heading Shannon Entropy]
@@ -329,6 +336,9 @@ The natural logarithm is used to compute the Shannon entropy; all other "Shannon
     double Ks = boost::math::tools::shannon_cost(v.begin(), v.end());
     // Ks = 0; concentration of the vector is minimized.
 
+The Shannon cost is a modified version of the Shannon entropy used in signal processing and data compression.
+The useful properties of the Shannon cost are /K/[sub /s/](0) = 0 and /K/[sup /s/](/v/\u2295 /w/) = /K/[sub /s/](v) + /K/[sub /s/](w).
+See [@https://doi.org/10.1007/978-3-642-56702-5 Ripples in Mathematics] for details.
 
 
 [heading References]
@@ -336,7 +346,7 @@ The natural logarithm is used to compute the Shannon entropy; all other "Shannon
 * Higham, Nicholas J. ['Accuracy and stability of numerical algorithms.] Vol. 80. Siam, 2002.
 * Mallat, Stephane. ['A wavelet tour of signal processing: the sparse way.] Academic press, 2008.
 * Hurley, Niall, and Scott Rickard. ['Comparing measures of sparsity.] IEEE Transactions on Information Theory 55.10 (2009): 4723-4741.
-
+* Jensen, Arne, and Anders la Cour-Harbo. ['Ripples in mathematics: the discrete wavelet transform.] Springer Science & Business Media, 2001.
 
 [endsect]
 [/section:vector_functionals Vector Functionals]

@@ -29,6 +29,15 @@ using boost::multiprecision::cpp_complex_50;
  * 5) Does it work with complex data if complex data is sensible?
  */
 
+template<class Z>
+void test_integer_mean()
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,2,3,4,5};
+    double mu = boost::math::tools::mean(v);
+    BOOST_TEST(abs(mu - 3) < tol);
+}
+
 template<class Real>
 void test_mean()
 {
@@ -110,6 +119,16 @@ void test_mean_and_population_variance()
     BOOST_TEST(abs(mu3 - 1.0/2.0) < tol);
     BOOST_TEST(abs(sigma3_sq - 1.0/4.0) < tol);
 
+}
+
+template<class Z>
+void test_integer_mean_and_population_variance()
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,1,1,1,1,1};
+    auto [mu, sigma_sq] = boost::math::tools::mean_and_population_variance(v);
+    BOOST_TEST(abs(mu - 1) < tol);
+    BOOST_TEST(abs(sigma_sq) < tol);
 }
 
 template<class Real>
@@ -278,6 +297,32 @@ void test_complex_lp()
 
 }
 
+template<class Z>
+void test_integer_total_variation()
+{
+    std::vector<Z> v{1,1};
+    Z tv = boost::math::tools::total_variation(v);
+    BOOST_TEST_EQ(tv,0);
+
+    v[1] = 2;
+    tv = boost::math::tools::total_variation(v.begin(), v.end());
+    BOOST_TEST_EQ(tv,1);
+
+    v.resize(50);
+    for (size_t i = 0; i < v.size(); ++i) {
+        v[i] = i;
+    }
+
+    tv = boost::math::tools::total_variation(v);
+    BOOST_TEST_EQ(tv, v.size() -1);
+
+    for (size_t i = 0; i < v.size(); ++i) {
+        v[i] = i*i;
+    }
+
+    tv = boost::math::tools::total_variation(v);
+    BOOST_TEST_EQ(tv, (v.size() -1)*(v.size()-1));
+}
 
 template<class Real>
 void test_total_variation()
@@ -320,7 +365,17 @@ void test_sup_norm()
 
     s = boost::math::tools::sup_norm(v);
     BOOST_TEST(abs(s - 2) < tol);
+}
 
+template<class Z>
+void test_integer_sup_norm()
+{
+    std::vector<Z> v{-2,1,0};
+    Z s = boost::math::tools::sup_norm(v.begin(), v.end());
+    BOOST_TEST_EQ(s, 2);
+
+    s = boost::math::tools::sup_norm(v);
+    BOOST_TEST_EQ(s,2);
 }
 
 template<class Complex>
@@ -383,6 +438,23 @@ void test_hoyer_sparsity()
     hs = boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
     BOOST_TEST(abs(hs) < tol);
 }
+
+template<class Z>
+void test_integer_hoyer_sparsity()
+{
+    using std::sqrt;
+    double tol = 5*std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,0,0};
+    double hs = boost::math::tools::hoyer_sparsity(v);
+    BOOST_TEST(abs(hs - 1) < tol);
+
+    v[0] = 1;
+    v[1] = 1;
+    v[2] = 1;
+    hs = boost::math::tools::hoyer_sparsity(v);
+    BOOST_TEST(abs(hs) < tol);
+}
+
 
 template<class Complex>
 void test_complex_hoyer_sparsity()
@@ -477,7 +549,14 @@ void test_l1_norm()
 
     l1 = boost::math::tools::l1_norm(v);
     BOOST_TEST(abs(l1 - 3) < tol);
+}
 
+template<class Z>
+void test_integer_l1_norm()
+{
+    std::vector<Z> v{1,1,1};
+    Z l1 = boost::math::tools::l1_norm(v.begin(), v.end());
+    BOOST_TEST_EQ(l1, 3);
 }
 
 template<class Complex>
@@ -548,6 +627,10 @@ void test_shannon_entropy()
 
 int main()
 {
+    test_integer_mean<uint8_t>();
+    test_integer_mean<int8_t>();
+    test_integer_mean<int>();
+
     test_mean<float>();
     test_mean<double>();
     test_mean<long double>();
@@ -560,6 +643,8 @@ int main()
     test_mean_and_population_variance<double>();
     test_mean_and_population_variance<long double>();
     test_mean_and_population_variance<cpp_bin_float_50>();
+
+    test_integer_mean_and_population_variance<int>();
 
     test_median<float>();
     test_median<double>();
@@ -591,11 +676,14 @@ int main()
     test_sup_norm<long double>();
     test_sup_norm<cpp_bin_float_50>();
 
+    test_integer_sup_norm<int>();
+
     test_complex_sup_norm<std::complex<float>>();
     test_complex_sup_norm<std::complex<double>>();
     test_complex_sup_norm<std::complex<long double>>();
     test_complex_sup_norm<cpp_complex_50>();
 
+    test_l0_pseudo_norm<int>();
     test_l0_pseudo_norm<float>();
     test_l0_pseudo_norm<double>();
     test_l0_pseudo_norm<long double>();
@@ -610,6 +698,8 @@ int main()
     test_l1_norm<double>();
     test_l1_norm<long double>();
     test_l1_norm<cpp_bin_float_50>();
+
+    test_integer_l1_norm<int>();
 
     test_complex_l2_norm<std::complex<float>>();
     test_complex_l2_norm<std::complex<double>>();
@@ -631,6 +721,8 @@ int main()
     test_total_variation<long double>();
     test_total_variation<cpp_bin_float_50>();
 
+    test_integer_total_variation<int>();
+
     test_gini_coefficient<float>();
     test_gini_coefficient<double>();
     test_gini_coefficient<long double>();
@@ -645,6 +737,8 @@ int main()
     test_hoyer_sparsity<double>();
     test_hoyer_sparsity<long double>();
     test_hoyer_sparsity<cpp_bin_float_50>();
+
+    test_integer_hoyer_sparsity<int>();
 
     test_shannon_entropy<float>();
     test_shannon_entropy<double>();

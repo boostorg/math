@@ -26,13 +26,26 @@ mean(ForwardIterator first, ForwardIterator last)
 {
     typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute the mean.");
-    Real mu = 0;
-    Real i = 1;
-    for(auto it = first; it != last; ++it) {
-        mu = mu + (*it - mu)/i;
-        i += 1;
+    if constexpr (std::is_integral<Real>::value)
+    {
+        double mu = 0;
+        double i = 1;
+        for(auto it = first; it != last; ++it) {
+            mu = mu + (*it - mu)/i;
+            i += 1;
+        }
+        return mu;
     }
-    return mu;
+    else
+    {
+        Real mu = 0;
+        Real i = 1;
+        for(auto it = first; it != last; ++it) {
+            mu = mu + (*it - mu)/i;
+            i += 1;
+        }
+        return mu;
+    }
 }
 
 template<class Container>
@@ -48,18 +61,35 @@ mean_and_population_variance(ForwardIterator first, ForwardIterator last)
     typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute mean and variance.");
     // Higham, Accuracy and Stability, equation 1.6a and 1.6b:
-    Real M = *first;
-    Real Q = 0;
-    Real k = 2;
-    for (auto it = first + 1; it != last; ++it)
+    if constexpr (std::is_integral<Real>::value)
     {
-        Real tmp = *it - M;
-        Q = Q + ((k-1)*tmp*tmp)/k;
-        M = M + tmp/k;
-        k += 1;
+        double M = *first;
+        double Q = 0;
+        double k = 2;
+        for (auto it = first + 1; it != last; ++it)
+        {
+            double tmp = *it - M;
+            Q = Q + ((k-1)*tmp*tmp)/k;
+            M = M + tmp/k;
+            k += 1;
+        }
+        return std::make_pair(M, Q/(k-1));
     }
+    else
+    {
+        Real M = *first;
+        Real Q = 0;
+        Real k = 2;
+        for (auto it = first + 1; it != last; ++it)
+        {
+            Real tmp = *it - M;
+            Q = Q + ((k-1)*tmp*tmp)/k;
+            M = M + tmp/k;
+            k += 1;
+        }
 
-    return std::make_pair(M, Q/(k-1));
+        return std::make_pair(M, Q/(k-1));
+    }
 }
 
 template<class Container>
@@ -470,6 +500,7 @@ inline auto absolute_gini_coefficient(RandomAccessContainer & v)
 template<class ForwardIterator>
 auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
 {
+    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealIntOrComplex;
     using std::abs;
     using std::sqrt;
     BOOST_ASSERT_MSG(first != last, "Computation of the Hoyer sparsity requires at least one sample.");
@@ -484,8 +515,16 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
         l2 += tmp*tmp;
         n += 1;
     }
-    decltype(abs(*first)) rootn = sqrt(n);
-    return (rootn - l1/sqrt(l2) )/ (rootn - 1);
+    if constexpr (std::is_integral<RealIntOrComplex>::value)
+    {
+        double rootn = sqrt(n);
+        return (rootn - l1/sqrt(l2) )/ (rootn - 1);
+    }
+    else
+    {
+        decltype(abs(*first)) rootn = sqrt(n);
+        return (rootn - l1/sqrt(l2) )/ (rootn - 1);
+    }
 }
 
 template<class Container>
