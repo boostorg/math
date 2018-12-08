@@ -8,8 +8,11 @@
 #include <vector>
 #include <array>
 #include <forward_list>
+#include <algorithm>
+#include <random>
 #include <boost/core/lightweight_test.hpp>
 #include <boost/numeric/ublas/vector.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/math/tools/vector_functionals.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
@@ -92,8 +95,123 @@ void test_mean_and_population_variance()
     auto [mu2, sigma2_sq] = boost::math::tools::mean_and_population_variance(w.begin(), w.end());
     BOOST_TEST(abs(mu2 - 1.0/2.0) < tol);
     BOOST_TEST(abs(sigma2_sq - 1.0/4.0) < tol);
-
 }
+
+template<class Real>
+void test_median()
+{
+    std::mt19937 g(12);
+    std::vector<Real> v{1,2,3,4,5,6,7};
+
+    Real m = boost::math::tools::median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 4);
+
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 4);
+
+    v = {1,2,3,3,4,5};
+    m = boost::math::tools::median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 3);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 3);
+
+    v = {1};
+    m = boost::math::tools::median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+
+    v = {1,1};
+    m = boost::math::tools::median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+
+    v = {2,4};
+    m = boost::math::tools::median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 3);
+
+    v = {1,1,1};
+    m = boost::math::tools::median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+
+    v = {1,2,3};
+    m = boost::math::tools::median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 2);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 2);
+}
+
+template<class Real>
+void test_absolute_median()
+{
+    std::mt19937 g(12);
+    std::vector<Real> v{-1, 2, -3, 4, -5, 6, -7};
+
+    Real m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 4);
+
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 4);
+
+    v = {1, -2, -3, 3, -4, -5};
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 3);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 3);
+
+    v = {-1};
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+
+    v = {-1, 1};
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+
+    v = {2, -4};
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 3);
+
+    v = {1, -1, 1};
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+
+    v = {1, 2, -3};
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 2);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 2);
+}
+
+
+template<class Complex>
+void test_complex_absolute_median()
+{
+    typedef typename Complex::value_type Real;
+    std::mt19937 g(18);
+    std::vector<Complex> v{{0,1}, {0,-2},{0,3}, {0,-4}, {0,5}, {0,-6}, {0,7}};
+
+    Real m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 4);
+
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 4);
+
+    v = {{0,1}, {0,-2}, {0,-3}, {0,3}, {0,4}, {0,-5}};
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 3);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 3);
+
+    v = {{0, -1}};
+    m = boost::math::tools::absolute_median(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+}
+
 
 template<class Real>
 void test_lp()
@@ -335,7 +453,7 @@ void test_l2_norm()
     v[1] = 0;
     v[2] = 0;
     v[3] = 0;
-    l2 = boost::math::tools::l2_norm(v.begin(), v.end());    
+    l2 = boost::math::tools::l2_norm(v.begin(), v.end());
     BOOST_TEST(abs(l2 - bignum) < tol*l2);
 }
 
@@ -348,6 +466,18 @@ void test_complex_l2_norm()
     std::vector<Complex> v{{1,0}, {0,1},{0,-1}, {1,0}};
     Real l2 = boost::math::tools::l2_norm(v.begin(), v.end());
     BOOST_TEST(abs(l2 - 2) < tol);
+}
+
+template<class Real>
+void test_shannon_entropy()
+{
+    Real tol = 100*std::numeric_limits<Real>::epsilon();
+    using boost::math::constants::half;
+    using boost::math::constants::ln_two;
+    std::vector<Real> v(30, half<Real>());
+    Real Hs = boost::math::tools::shannon_entropy(v.begin(), v.end());
+    Real expected = v.size()*ln_two<Real>()/2;
+    BOOST_TEST(abs(Hs - expected) < tol*expected);
 }
 
 
@@ -365,6 +495,21 @@ int main()
     test_mean_and_population_variance<double>();
     test_mean_and_population_variance<long double>();
     test_mean_and_population_variance<cpp_bin_float_50>();
+
+    test_median<float>();
+    test_median<double>();
+    test_median<long double>();
+    test_median<cpp_bin_float_50>();
+
+    test_absolute_median<float>();
+    test_absolute_median<double>();
+    test_absolute_median<long double>();
+    test_absolute_median<cpp_bin_float_50>();
+
+    test_complex_absolute_median<std::complex<float>>();
+    test_complex_absolute_median<std::complex<double>>();
+    test_complex_absolute_median<std::complex<long double>>();
+    test_complex_absolute_median<cpp_complex_50>();
 
     test_lp<float>();
     test_lp<double>();
@@ -435,6 +580,10 @@ int main()
     test_hoyer_sparsity<double>();
     test_hoyer_sparsity<long double>();
     test_hoyer_sparsity<cpp_bin_float_50>();
+
+    test_shannon_entropy<float>();
+    test_shannon_entropy<double>();
+    test_shannon_entropy<long double>();
 
     test_complex_hoyer_sparsity<std::complex<float>>();
     test_complex_hoyer_sparsity<std::complex<double>>();

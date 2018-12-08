@@ -59,35 +59,44 @@ mean_and_population_variance(ForwardIterator first, ForwardIterator last)
 template<class RandomAccessIterator>
 auto median(RandomAccessIterator first, RandomAccessIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<RandomAccessIterator>())>::type>::type Real;
-    Real m = std::numeric_limits<Real>::quiet_NaN();
     size_t num_elems = std::distance(first, last);
+    BOOST_ASSERT_MSG(num_elems > 0, "The median of a zero length vector is undefined.");
     if (num_elems & 1)
     {
-        nth_element(first, first+num_elems, last);
+        auto middle = first + (num_elems - 1)/2;
+        nth_element(first, middle, last);
+        return *middle;
     }
     else
     {
-        nth_element(first, first+num_elems, last);
+        auto middle = first + num_elems/2 - 1;
+        nth_element(first, middle, last);
+        nth_element(middle, middle+1, last);
+        return (*middle + *(middle+1))/2;
     }
-    return m;
 }
 
-template<class RandomAccessIterator, class Compare>
-auto median(RandomAccessIterator first, RandomAccessIterator last, Compare comp)
+template<class RandomAccessIterator>
+auto absolute_median(RandomAccessIterator first, RandomAccessIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<RandomAccessIterator>())>::type>::type Real;
-    Real m = std::numeric_limits<Real>::quiet_NaN();
+    using std::abs;
+    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<RandomAccessIterator>())>::type>::type RealOrComplex;
     size_t num_elems = std::distance(first, last);
+    BOOST_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");
+    auto comparator = [](RealOrComplex a, RealOrComplex b) { return abs(a) < abs(b);};
     if (num_elems & 1)
     {
-        nth_element(first, first+num_elems, last);
+        auto middle = first + (num_elems - 1)/2;
+        nth_element(first, middle, last, comparator);
+        return abs(*middle);
     }
     else
     {
-        nth_element(first, first+num_elems, last);
+        auto middle = first + num_elems/2 - 1;
+        nth_element(first, middle, last, comparator);
+        nth_element(middle, middle+1, last, comparator);
+        return (abs(*middle) + abs(*(middle+1)))/abs(static_cast<RealOrComplex>(2));
     }
-    return m;
 }
 
 // Mallat, "A Wavelet Tour of Signal Processing", equation 2.60:
@@ -113,14 +122,13 @@ template<class ForwardIterator>
 auto shannon_entropy(ForwardIterator first, ForwardIterator last)
 {
     typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
-    using std::log2;
+    using std::log;
     Real entropy = 0;
     for (auto it = first; it != last; ++it)
     {
-        Real tmp = *it;
-        if (tmp != 0)
+        if (*it != 0)
         {
-            entropy += tmp*log2(tmp);
+            entropy += (*it)*log(*it);
         }
     }
     return -entropy;
@@ -155,7 +163,6 @@ auto sup_norm(ForwardIterator first, ForwardIterator last)
 template<class ForwardIterator>
 auto l1_norm(ForwardIterator first, ForwardIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
     using std::abs;
     decltype(abs(*first)) l1 = 0;
     for (auto it = first; it != last; ++it)
@@ -360,7 +367,6 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
 {
     using std::abs;
     using std::sqrt;
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
     BOOST_ASSERT_MSG(first != last, "Computation of the Hoyer sparsity requires at least one sample.");
 
     decltype(abs(*first)) l1 = 0;

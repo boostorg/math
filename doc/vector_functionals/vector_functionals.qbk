@@ -28,9 +28,6 @@ namespace boost{ namespace math{ namespace tools {
     auto absolute_median(ForwardIterator first, ForwardIterator last);
 
     template<class ForwardIterator>
-    auto shannon_entropy(ForwardIterator first, ForwardIterator last);
-
-    template<class ForwardIterator>
     auto gini_coefficient(ForwardIterator first, ForwardIterator last);
 
     template<class ForwardIterator>
@@ -40,7 +37,7 @@ namespace boost{ namespace math{ namespace tools {
     auto hoyer_sparsity(ForwardIterator first, ForwardIterator last);
 
     template<class ForwardIterator>
-    auto lp_norm(ForwardIterator first, ForwardIterator last, p);
+    auto shannon_entropy(ForwardIterator first, ForwardIterator last);
 
     template<class ForwardIterator>
     auto l0_pseudo_norm(ForwardIterator first, ForwardIterator last);
@@ -53,6 +50,9 @@ namespace boost{ namespace math{ namespace tools {
 
     template<class ForwardIterator>
     auto sup_norm(ForwardIterator first, ForwardIterator last);
+
+    template<class ForwardIterator>
+    auto lp_norm(ForwardIterator first, ForwardIterator last, p);
 
     template<class ForwardIterator>
     auto total_variation(ForwardIterator first, ForwardIterator last);
@@ -111,6 +111,16 @@ Compute the median of a dataset:
 The calculation of the median is a thin wrapper around the C++11 [@https://en.cppreference.com/w/cpp/algorithm/nth_element nth-element].
 Therefore, all requirements of `nth_element` are inherited by the median calculation.
 
+[heading Absolute Median]
+
+The absolute median is used in signal processing, where the median of the magnitude of the coefficients in some expansion are used to estimate noise variance.
+See [@https://wavelet-tour.github.io/ Mallat] for details.
+The absolute median supports both real and complex arithmetic, modifies its input, and requires random access iterators.
+
+    std::vector<double> v{-1, 1};
+    double m = boost::math::tools::absolute_median(v.begin(), v.end());
+    // m = 1
+
 [heading Gini Coefficient]
 
 Compute the Gini coefficient of a dataset:
@@ -126,8 +136,8 @@ Compute the Gini coefficient of a dataset:
 
 /Nota bene:/ Different authors use different conventions regarding the overall scale of the Gini coefficient.
 We have chosen to follow [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard's definition], which [@https://en.wikipedia.org/wiki/Gini_coefficient Wikipedia] calls a "sample Gini coefficient".
-Hurley and Rickard's definition places the Gini coefficient in the range [0,1]; Wikipedia's population Gini coefficient is in the range [0, 1 - 1/N].
-If you wish to convert the Boost Gini coefficient to the population Gini coefficient, multiply by (/n/-1)/ /n/.
+Hurley and Rickard's definition places the Gini coefficient in the range [0,1]; Wikipedia's population Gini coefficient is in the range [0, 1 - 1//n/].
+If you wish to convert the Boost Gini coefficient to the population Gini coefficient, multiply by (/n/-1)//n/.
 
 /Nota bene:/ There is essentially no reason to pass negative values to the Gini coefficient function.
 However, a single use case (measuring wealth inequality when some people have negative wealth) exists, so we do not throw an exception when negative values are encountered.
@@ -161,13 +171,18 @@ The Hoyer sparsity measures a normalized ratio of the \u2113[super 1] and \u2113
 As the name suggests, it is used to measure sparsity in an expansion in some basis.
 
 The Hoyer sparsity computes ([radic]/N/ - \u2113[super 1](v)/\u2113[super 2](v))/([radic]N -1).
+For details, see [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard].
 
 Usage:
 
     std::vector<Real> v{1,0,0};
     Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
     // hs = 1
+    std::vector<Real> v{1,-1,1};
+    Real hs = boost::math::tools::hoyer_sparsity(v.begin(), v.end());
+    // hs = 0
 
+The container must be forward iterable and the contents are not modified.
 
 [heading \u2113[super \u221E] norm]
 
@@ -195,7 +210,7 @@ Container must be forward iterable and is not modified.
     // sup = cbrt(3)
 
 Supports both real and complex arithmetic.
-Container must be forward iterable and is not modified.
+The container must be forward iterable and the contents are not modified.
 
 [heading \u2113[super 0] pseudo-norm]
 
@@ -206,7 +221,7 @@ Counts the number of non-zero elements in a container.
     // count = 1
 
 Supports real and complex numbers.
-Container must be forward iterable and the contents are not modified.
+The container must be forward iterable and the contents are not modified.
 Note that this measure is not robust against numerical noise.
 
 [heading \u2113[super 1] norm]
@@ -241,7 +256,16 @@ Requires a forward iterable input, does not modify input data, and works with co
 The total variation only supports real numbers.
 All the constituent operations to compute the total variation are well-defined for complex numbers,
 but the computed result is not meaningful.
-The input must be forward iterable, and is not modified.
+The container must be forward iterable, and the contents are not modified.
+
+[heading Shannon Entropy]
+
+    std::vector<double> v{1/2.0, 1/2.0};
+    double Hs = boost::math::tools::shannon_entropy(v.begin(), v.end());
+    // Hs = ln(2).
+
+The Shannon entropy only supports non-negative real-valued inputs, presumably for interpretational purposes in the range [0,1]-though this is not enforced.
+The natural logarithm is used to compute the Shannon entropy; all other "Shannon entropies" are readily obtained by change of log base.
 
 
 [heading References]
