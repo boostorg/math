@@ -322,7 +322,7 @@ void test_beta(T, const char* /* name */)
    test_inverses<T>(ibeta_large_data);
 }
 
-#ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
+#if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_LAMBDAS)
 template <class Complex>
 void test_complex_newton()
 {
