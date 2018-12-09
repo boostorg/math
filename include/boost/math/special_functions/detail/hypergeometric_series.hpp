@@ -245,6 +245,16 @@
      T scaling_factor = exp(log_scaling_factor);
      T term_m1 = 0;
      int local_scaling = 0;
+     //
+     // When a is very small, then (a+n)/n => 1 faster than
+     // z / (b+n) => 1, as a result the series starts off
+     // converging, then at some unspecified time very gradually
+     // starts to diverge, potentially resulting in some very large
+     // values being missed.  As a result we need a check for small
+     // a in the convergence critera.  Note that this issue occurs
+     // even when all the terms are positive.
+     //
+     bool small_a = fabs(a) < 0.25;
 
      do
      {
@@ -269,7 +279,7 @@
            return boost::math::policies::raise_evaluation_error(function, "Series did not converge, best value is %1%", sum, pol);
         ++n;
         diff = fabs(term / sum);
-     } while ((diff > boost::math::policies::get_epsilon<T, Policy>()) || (fabs(term_m1) < fabs(term)));
+     } while ((diff > boost::math::policies::get_epsilon<T, Policy>()) || (fabs(term_m1) < fabs(term)) || (small_a && b + n < fabs(z)));
 
      if (b + n < 0)
      {

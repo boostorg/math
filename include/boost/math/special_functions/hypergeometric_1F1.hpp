@@ -82,7 +82,7 @@ namespace boost { namespace math { namespace detail {
 
       if (a == b)
          return exp(z);
-      if (b - a == b)
+      if ((b - a == b) && (fabs(z / b) < policies::get_epsilon<T, Policy>()))
          return 1;
       //
       // Asymptotic expansion for large z
@@ -117,8 +117,14 @@ namespace boost { namespace math { namespace detail {
                // In this domain b - a ~ b and since 1F1[a, a, z] = e^z 1F1[b-a, b, -z]
                // and 1F1[a, a, -z] = e^-z the result must necessarily be somewhere near unity.
                // We have to rule out b small and negative becuase if b crosses the origin early
-               // in the series (before we're pretty much converged) then all bets are off:
-               return hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
+               // in the series (before we're pretty much converged) then all bets are off.
+               // Note that this can go badly wrong when b and z are both large and negative,
+               // in that situation the series goes in waves of large and small values which
+               // may or may not cancel out.  Likewise the initial part of the series may or may
+               // not converge, and even if it does may or may not give a correct answer!
+               // For example 1F1[-small, -1252.5, -1043.7] can loose up to ~800 digits due to
+               // cancellation and is basically incalculable via this method.
+               return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
             }
          }
          if ((b < 4 * a) && (a < 0) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
