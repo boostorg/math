@@ -24,7 +24,7 @@ template<class ForwardIterator>
 auto
 mean(ForwardIterator first, ForwardIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute the mean.");
     if constexpr (std::is_integral<Real>::value)
     {
@@ -58,7 +58,7 @@ template<class ForwardIterator>
 auto
 mean_and_population_variance(ForwardIterator first, ForwardIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute mean and variance.");
     // Higham, Accuracy and Stability, equation 1.6a and 1.6b:
     if constexpr (std::is_integral<Real>::value)
@@ -130,7 +130,7 @@ template<class RandomAccessIterator>
 auto absolute_median(RandomAccessIterator first, RandomAccessIterator last)
 {
     using std::abs;
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<RandomAccessIterator>())>::type>::type RealOrComplex;
+    using RealOrComplex = typename std::iterator_traits<RandomAccessIterator>::value_type;
     size_t num_elems = std::distance(first, last);
     BOOST_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");
     auto comparator = [](RealOrComplex a, RealOrComplex b) { return abs(a) < abs(b);};
@@ -159,8 +159,8 @@ inline auto absolute_median(RandomAccessContainer & v)
 template<class ForwardIterator>
 auto total_variation(ForwardIterator first, ForwardIterator last)
 {
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
     BOOST_ASSERT_MSG(first != last && std::next(first) != last, "At least two samples are required to compute the total variation.");
     Real tv = 0;
     auto it = first;
@@ -183,7 +183,7 @@ inline auto total_variation(Container const & v)
 template<class ForwardIterator>
 auto shannon_entropy(ForwardIterator first, ForwardIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::log;
     Real entropy = 0;
     for (auto it = first; it != last; ++it)
@@ -205,7 +205,7 @@ inline auto shannon_entropy(Container const & v)
 template<class ForwardIterator>
 auto shannon_cost(ForwardIterator first, ForwardIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::log;
     Real cost = 0;
     for (auto it = first; it != last; ++it)
@@ -230,7 +230,7 @@ template<class ForwardIterator>
 auto sup_norm(ForwardIterator first, ForwardIterator last)
 {
     BOOST_ASSERT_MSG(first != last, "At least one value is required to compute the sup norm.");
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
+    using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
     if constexpr (boost::is_complex<RealOrComplex>::value ||
                   boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_complex)
@@ -280,7 +280,7 @@ inline auto l1_norm(Container const & v)
 template<class ForwardIterator>
 auto l2_norm(ForwardIterator first, ForwardIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
+    using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
     using std::norm;
     using std::sqrt;
@@ -340,7 +340,7 @@ inline auto l2_norm(Container const & v)
 template<class ForwardIterator>
 size_t l0_pseudo_norm(ForwardIterator first, ForwardIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
+    using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
     size_t count = 0;
     for (auto it = first; it != last; ++it)
     {
@@ -364,7 +364,7 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, typename std::remove_c
     using std::pow;
     using std::is_floating_point;
     using std::isfinite;
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
+    using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
     if constexpr (boost::is_complex<RealOrComplex>::value ||
                   boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_complex)
     {
@@ -430,7 +430,7 @@ inline auto lp_norm(Container const & v, typename Container::value_type p)
 template<class ForwardIterator>
 auto gini_coefficient(ForwardIterator first, ForwardIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type Real;
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     BOOST_ASSERT_MSG(first != last && std::next(first) != last, "Computation of the Gini coefficient requires at least two samples.");
 
     std::sort(first, last);
@@ -438,7 +438,8 @@ auto gini_coefficient(ForwardIterator first, ForwardIterator last)
     Real i = 1;
     Real num = 0;
     Real denom = 0;
-    for (auto it = first; it != last; ++it) {
+    for (auto it = first; it != last; ++it)
+    {
         num += *it*i;
         denom += *it;
         ++i;
@@ -463,7 +464,7 @@ inline auto gini_coefficient(RandomAccessContainer & v)
 template<class ForwardIterator>
 auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealOrComplex;
+    using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
     BOOST_ASSERT_MSG(first != last && std::next(first) != last, "Computation of the Gini coefficient requires at least two samples.");
 
     std::sort(first, last,  [](RealOrComplex a, RealOrComplex b) { return abs(b) > abs(a); });
@@ -500,7 +501,7 @@ inline auto absolute_gini_coefficient(RandomAccessContainer & v)
 template<class ForwardIterator>
 auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
 {
-    typedef typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type RealIntOrComplex;
+    using RealIntOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
     using std::sqrt;
     BOOST_ASSERT_MSG(first != last, "Computation of the Hoyer sparsity requires at least one sample.");
