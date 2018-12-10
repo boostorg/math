@@ -425,7 +425,7 @@ BOOST_AUTO_TEST_CASE( test_main )
 
    test_beta(0.1, "double");
 
-#ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
+#if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_LAMBDAS)
    test_complex_newton<std::complex<float>>();
    test_complex_newton<std::complex<double>>();
    test_complex_newton<boost::multiprecision::cpp_complex_100>();
