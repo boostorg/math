@@ -905,6 +905,7 @@ test-suite misc :
    [ run univariate_statistics_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr ] ]
    [ run norms_test.cpp ../../test/build//boost_unit_test_framework : : :  [ requires cxx17_if_constexpr ] ]
    [ run signal_statistics_test.cpp : : : [ requires cxx17_if_constexpr ] ]
+   [ run bivariate_statistics_test.cpp : : : [ requires cxx17_if_constexpr ] ]
    [ run test_real_concept.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_remez.cpp pch ../../test/build//boost_unit_test_framework  ]
    [ run test_roots.cpp pch ../../test/build//boost_unit_test_framework  ]

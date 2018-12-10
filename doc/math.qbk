@@ -554,6 +554,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 
 [mathpart vector_functionals Vector Functionals]
 [include vector_functionals/univariate_statistics.qbk]
+[include vector_functionals/bivariate_statistics.qbk]
 [include vector_functionals/signal_statistics.qbk]
 [include vector_functionals/norms.qbk]
 [endmathpart] [/section:vector_functionals Vector Functionals]
