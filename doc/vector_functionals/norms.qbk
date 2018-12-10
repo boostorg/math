@@ -122,7 +122,7 @@ The \u2113[super 2] norm is again a special case of the \u2113[super /p/] norm, 
     double l1 = boost::math::tools::l2_norm(v.begin(), v.end());
     // l1 = sqrt(3)
 
-Requires a forward iterable input, does not modify input data, and works with complex numbers.
+Requires a forward iterable input, does not modify input data, and works with real and complex numbers.
 
 [heading Total Variation]
 
@@ -135,10 +135,13 @@ Requires a forward iterable input, does not modify input data, and works with co
     std::vector<int> v{1,1,1};
     int tv = boost::math::tools::total_variation(v);
 
-The total variation only supports real numbers and /signed/ integers.
+The total variation only supports real numbers and integers.
 All the constituent operations to compute the total variation are well-defined for complex numbers,
 but the computed result is not meaningful; a 2D total variation is more appropriate.
 The container must be forward iterable, and the contents are not modified.
+
+As an aside, the total variation is not technically a norm, since /TV(v) = 0/ does not imply /v = 0/.
+However, it satisfies the triangle inequality and is absolutely 1-homogeneous, so it is a seminorm, and hence is grouped with the other norms here.
 
 [heading References]
 

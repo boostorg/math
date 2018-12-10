@@ -109,6 +109,12 @@ void test_integer_total_variation()
     std::array<Z, 2> w{1,1};
     tv = boost::math::tools::total_variation(w);
     BOOST_TEST_EQ(tv,0);
+
+    // Work with both signed and unsigned integers?
+    std::array<Z, 4> u{1, 2, 1, 2};
+    tv = boost::math::tools::total_variation(u);
+    BOOST_TEST_EQ(tv, 3);
+
 }
 
 template<class Real>
@@ -335,6 +341,11 @@ int main()
 
     test_integer_l1_norm<int>();
 
+    test_complex_l1_norm<std::complex<float>>();
+    test_complex_l1_norm<std::complex<double>>();
+    test_complex_l1_norm<std::complex<long double>>();
+    test_complex_l1_norm<cpp_complex_50>();
+
     test_complex_l2_norm<std::complex<float>>();
     test_complex_l2_norm<std::complex<double>>();
     test_complex_l2_norm<std::complex<long double>>();
@@ -345,16 +356,12 @@ int main()
     test_l2_norm<long double>();
     test_l2_norm<cpp_bin_float_50>();
 
-    test_complex_l1_norm<std::complex<float>>();
-    test_complex_l1_norm<std::complex<double>>();
-    test_complex_l1_norm<std::complex<long double>>();
-    test_complex_l1_norm<cpp_complex_50>();
-
     test_total_variation<float>();
     test_total_variation<double>();
     test_total_variation<long double>();
     test_total_variation<cpp_bin_float_50>();
 
+    test_integer_total_variation<uint32_t>();
     test_integer_total_variation<int>();
 
     return boost::report_errors();

@@ -12,10 +12,6 @@
 #include <boost/assert.hpp>
 #include <boost/multiprecision/detail/number_base.hpp>
 
-/*
- * A set of tools for computing scalar quantities associated with lists of numbers.
- */
-
 
 namespace boost{ namespace math{ namespace tools {
 
@@ -29,12 +25,32 @@ auto total_variation(ForwardIterator first, ForwardIterator last)
     Real tv = 0;
     auto it = first;
     Real tmp = *it;
-    while (++it != last)
+
+    if constexpr (std::is_unsigned<Real>::value)
     {
-        tv += abs(*it - tmp);
-        tmp = *it;
+        while (++it != last)
+        {
+            if (*it > tmp)
+            {
+                tv += *it - tmp;
+            }
+            else
+            {
+                tv += tmp - *it;
+            }
+            tmp = *it;
+        }
+        return tv;
     }
-    return tv;
+    else
+    {
+        while (++it != last)
+        {
+            tv += abs(*it - tmp);
+            tmp = *it;
+        }
+        return tv;
+    }
 }
 
 template<class Container>
