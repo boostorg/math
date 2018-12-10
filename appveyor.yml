@@ -41,7 +41,9 @@ environment:
     - ARGS: --toolset=msvc-12.0 address-model=64
       TEST_SUITE: misc ../example//examples
     - ARGS: --toolset=msvc-14.0 address-model=64
-      TEST_SUITE: special_fun distribution_tests
+      TEST_SUITE: special_fun
+    - ARGS: --toolset=msvc-14.0 address-model=64
+      TEST_SUITE: distribution_tests
     - ARGS: --toolset=msvc-14.0 address-model=64
       TEST_SUITE: misc ../example//examples
 
@@ -55,7 +57,11 @@ environment:
     
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=32
-      TEST_SUITE: special_fun distribution_tests
+      TEST_SUITE: special_fun
+    
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      ARGS: --toolset=msvc-14.1 address-model=32
+      TEST_SUITE: distribution_tests
     
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=32
