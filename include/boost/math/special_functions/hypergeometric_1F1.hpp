@@ -171,7 +171,7 @@ namespace boost { namespace math { namespace detail {
             series_is_divergent = (a + n) * z / ((b + n) * n) < -1;
          }
       }
-      if (series_is_divergent && (b < -1) && (b > -5))
+      if (series_is_divergent && (b < -1) && (b > -5) && (a > b))
          series_is_divergent = false;  // don't bother with divergence, series will be OK
 
       //
@@ -184,6 +184,14 @@ namespace boost { namespace math { namespace detail {
          if((a < 0) && (floor(a) == a))
             // This works amazingly well for negative integer a:
             return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+         //
+         // In what follows we have to set limits on how large z can be otherwise
+         // the Bessel series become large and divergent and all the digits cancel out.
+         // The criteria are distinctly empiracle rather than based on a firm analysis
+         // of the terms in the series.  In some cases we can use recurrence on z to
+         // stretch out to larger z values, but these series tend to be subject to wild 
+         // cancellation too.
+         //
          if (b > 0)
          {
             T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
@@ -197,9 +205,15 @@ namespace boost { namespace math { namespace detail {
                return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, z - k, k, pol);
             }
          }
-         else
+         else  // b < 0
          {
-            if((a < 0) || (z < fabs((2 * a - b) / (sqrt(fabs(a * b))))))
+            if (a < 0)
+            {
+               T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
+               if (z < z_limit)
+                  return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
+            }
+            else if(z < fabs((2 * a - b) / (sqrt(fabs(a * b)))))
                return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
          }
 

@@ -104,8 +104,8 @@ void test_hypergeometric_mellin_transform()
     Real computed = integrator.integrate(f, boost::math::tools::epsilon<Real>());
     Real expected = tgamma(b)*tgamma(lambda)*tgamma(a-lambda)/(tgamma(a)*tgamma(b-lambda));
 
-    Real tol = boost::math::tools::epsilon<Real>() * 10;
-    BOOST_CHECK_CLOSE(computed, expected, tol);
+    Real tol = boost::math::tools::epsilon<Real>() * 5;
+    BOOST_CHECK_CLOSE_FRACTION(computed, expected, tol);
 }
 
 

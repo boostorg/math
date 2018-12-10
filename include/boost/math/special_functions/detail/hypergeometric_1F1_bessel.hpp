@@ -111,6 +111,7 @@
         T prefix(0);
         int prefix_sgn(0);
         bool use_logs = false;
+        int scale = 0;
         try
         {
            prefix = boost::math::tgamma(b, pol);
@@ -124,14 +125,29 @@
         {
            use_logs = true;
            prefix = boost::math::lgamma(b, &prefix_sgn, pol) + z / 2;
-           int scale = boost::math::itrunc(prefix);
+           scale = boost::math::itrunc(prefix);
            log_scale += scale;
            prefix -= scale;
         }
         hypergeometric_1F1_AS_13_3_7_tricomi_series<T, Policy> s(a, b, z, pol);
         log_scale += s.log_scale;
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
-        T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+        bool retry = false;
+        T result;
+        try
+        {
+           result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+        }
+        catch (const std::overflow_error&)
+        {
+           retry = true;
+        }
+        if (retry || !(boost::math::isfinite)(result) || (result == 0))
+        {
+           log_scale -= scale;
+           log_scale -= s.log_scale;
+           return (b > 0) ? hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)") : hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scale);
+        }
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_7<%1%>(%1%,%1%,%1%)", max_iter, pol);
         if (use_logs)
         {
