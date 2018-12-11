@@ -224,6 +224,55 @@ void test_shannon_entropy()
     BOOST_TEST(abs(Hs - expected) < tol*expected);
 }
 
+template<class Real>
+void test_oracle_snr()
+{
+    using std::abs;
+    Real tol = 100*std::numeric_limits<Real>::epsilon();
+    size_t length = 100;
+    std::vector<Real> signal(length, 1);
+    std::vector<Real> noise(length, 0);
+
+    noise[0] = 1;
+    Real snr = boost::math::tools::oracle_snr(signal, noise);
+    Real snr_db = boost::math::tools::oracle_snr_db(signal, noise);
+    BOOST_TEST(abs(snr - length) < tol);
+    BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
+}
+
+template<class Z>
+void test_integer_oracle_snr()
+{
+    using std::abs;
+    double tol = std::numeric_limits<double>::epsilon();
+    size_t length = 100;
+    std::vector<Z> signal(length, 1);
+    std::vector<Z> noise(length, 0);
+
+    noise[0] = 1;
+    double snr = boost::math::tools::oracle_snr(signal, noise);
+    double snr_db = boost::math::tools::oracle_snr_db(signal, noise);
+    BOOST_TEST(abs(snr - length) < tol);
+    BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
+}
+
+template<class Complex>
+void test_complex_oracle_snr()
+{
+    using Real = typename Complex::value_type;
+    using std::abs;
+    using std::log10;
+    Real tol = 100*std::numeric_limits<Real>::epsilon();
+    size_t length = 100;
+    std::vector<Complex> signal(length, {1,0});
+    std::vector<Complex> noise(length, {0,0});
+
+    noise[0] = {1,0};
+    Real snr = boost::math::tools::oracle_snr(signal, noise);
+    Real snr_db = boost::math::tools::oracle_snr_db(signal, noise);
+    BOOST_TEST(abs(snr - length) < tol);
+    BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
+}
 
 int main()
 {
@@ -257,6 +306,18 @@ int main()
     test_complex_hoyer_sparsity<std::complex<double>>();
     test_complex_hoyer_sparsity<std::complex<long double>>();
     test_complex_hoyer_sparsity<cpp_complex_50>();
+
+    test_oracle_snr<float>();
+    test_oracle_snr<double>();
+    test_oracle_snr<long double>();
+    test_oracle_snr<cpp_bin_float_50>();
+
+    test_integer_oracle_snr<int>();
+
+    test_complex_oracle_snr<std::complex<float>>();
+    test_complex_oracle_snr<std::complex<double>>();
+    test_complex_oracle_snr<std::complex<long double>>();
+    test_complex_oracle_snr<cpp_complex_50>();
 
     return boost::report_errors();
 }

@@ -45,6 +45,11 @@ namespace boost{ namespace math{ namespace tools {
     template<class ForwardIterator>
     auto shannon_cost(ForwardIterator first, ForwardIterator last);
 
+    template<class Container>
+    auto oracle_snr(Container const & signal, Container const & noise);
+
+    template<class Container>
+    auto oracle_snr_db(Container const & signal, Container const & noise);
 
 }}}
 ``
@@ -129,9 +134,40 @@ The natural logarithm is used to compute the Shannon entropy; all other "Shannon
     // Ks = 0; concentration of the vector is minimized.
 
 The Shannon cost is a modified version of the Shannon entropy used in signal processing and data compression.
-The useful properties of the Shannon cost are /K/[sub /s/](0) = 0 and /K/[sub /s/](/v/\u2295/w/) = /K/[sub /s/](v) + /K/[sub /s/](w).
+The useful properties of the Shannon cost are /K/[sub /s/](0) = 0 and /K/[sub /s/](/v/\u2295 /w/) = /K/[sub /s/](v) + /K/[sub /s/](w).
 See [@https://doi.org/10.1007/978-3-642-56702-5 Ripples in Mathematics] for details.
 
+[heading Oracle Signal-to-noise ratio]
+
+The function `oracle_snr` computes the ratio \u2016 /s/ \u2016[sub 2][super 2] / \u2016 /w/ \u2016[sub 2][super 2], where /s/ is signal and /w/ is noise.
+The function `oracle_snr_db` computes 10`log`[sub 10](\u2016 /s/ \u2016[super 2] / \u2016 /w/ \u2016[super 2]).
+In general, one does not know how to decompose a real signal /x/ into /s/ + /w/ and as such /s/ is regarded as oracle information.
+Hence this function is mainly useful for unit testing other SNR measurements.
+
+Usage:
+
+    std::vector<double> signal(500, 3.2);
+    std::vector<double> noise(500);
+    // fill 'noise' with Gaussian white noise...
+    double snr_db = boost::math::tools::oracle_snr_db(signal, noise);
+    double snr = boost::math::tools::oracle_snr(signal, noise);
+
+The call should return the same value as [@https://www.mathworks.com/help/signal/ref/snr.html Matlab's `snr`].
+
+The input can be real, complex, or integral.
+Integral inputs produce double precision floating point outputs.
+The input data is not modified and must satisfy the requirements of a `RandomAccessContainer`.
+
+[heading /M/[sub 2]/M/[sub 4] SNR Estimation]
+
+Estimates the SNR of a noisy signal via the /M/[sub 2]/M/[sub 4] method.
+See [@https://doi.org/10.1109/26.871393  Pauluzzi and N.C. Beaulieu] for details.
+
+
+[heading SVR SNR Estimation]
+
+Estimates the SNR of a noisy signal /x/ via the SVR method.
+See [@https://doi.org/10.1109/26.871393  Pauluzzi and N.C. Beaulieu] for details.
 
 [heading References]
 
@@ -139,6 +175,7 @@ See [@https://doi.org/10.1007/978-3-642-56702-5 Ripples in Mathematics] for deta
 * Mallat, Stephane. ['A wavelet tour of signal processing: the sparse way.] Academic press, 2008.
 * Hurley, Niall, and Scott Rickard. ['Comparing measures of sparsity.] IEEE Transactions on Information Theory 55.10 (2009): 4723-4741.
 * Jensen, Arne, and Anders la Cour-Harbo. ['Ripples in mathematics: the discrete wavelet transform.] Springer Science & Business Media, 2001.
+* D. R. Pauluzzi and N. C. Beaulieu, ['A comparison of SNR estimation techniques for the AWGN channel,] IEEE Trans. Communications, Vol. 48, No. 10, pp. 1681-1691, 2000.
 
 [endsect]
 [/section:signal_statistics Signal Statistics]

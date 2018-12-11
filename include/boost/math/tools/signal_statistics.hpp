@@ -166,5 +166,91 @@ inline auto hoyer_sparsity(Container const & v)
 }
 
 
+template<class Container>
+auto oracle_snr(Container const & signal, Container const & noise)
+{
+    using Real = typename Container::value_type;
+    BOOST_ASSERT_MSG(signal.size() == noise.size(), "Signal and noise must be have the same number of elements.");
+    if constexpr (std::is_integral<Real>::value)
+    {
+        double numerator = 0;
+        double denominator = 0;
+        for (size_t i = 0; i < signal.size(); ++i)
+        {
+            numerator += signal[i]*signal[i];
+            denominator += noise[i]*noise[i];
+        }
+        if (numerator == 0 && denominator == 0)
+        {
+            return std::numeric_limits<double>::quiet_NaN();
+        }
+        if (denominator == 0)
+        {
+            return std::numeric_limits<double>::infinity();
+        }
+        return numerator/denominator;
+    }
+    else if constexpr (boost::is_complex<Real>::value ||
+                       boost::multiprecision::number_category<Real>::value == boost::multiprecision::number_kind_complex)
+
+    {
+        using std::norm;
+        typename Real::value_type numerator = 0;
+        typename Real::value_type denominator = 0;
+        for (size_t i = 0; i < signal.size(); ++i)
+        {
+            numerator += norm(signal[i]);
+            denominator += norm(noise[i]);
+        }
+        if (numerator == 0 && denominator == 0)
+        {
+            return std::numeric_limits<typename Real::value_type>::quiet_NaN();
+        }
+        if (denominator == 0)
+        {
+            return std::numeric_limits<typename Real::value_type>::infinity();
+        }
+
+        return numerator/denominator;
+    }
+    else
+    {
+        Real numerator = 0;
+        Real denominator = 0;
+        for (size_t i = 0; i < signal.size(); ++i)
+        {
+            numerator += signal[i]*signal[i];
+            denominator += noise[i]*noise[i];
+        }
+        if (numerator == 0 && denominator == 0)
+        {
+            return std::numeric_limits<Real>::quiet_NaN();
+        }
+        if (denominator == 0)
+        {
+            return std::numeric_limits<Real>::infinity();
+        }
+
+        return numerator/denominator;
+    }
+}
+
+// Follows the definition of SNR given in Mallat, A Wavelet Tour of Signal Processing, equation 11.16.
+template<class Container>
+auto oracle_snr_db(Container const & signal, Container const & noise)
+{
+    using std::log10;
+    return 10*log10(oracle_snr(signal, noise));
+}
+
+// Of course since we have an oracle snr estimator, we should have an snr estimator not requiring oracle data.
+// The M2M4 estimator is reputed to be quite good, as is the SVR measure.
+// A good reference is:
+// D. R. Pauluzzi and N. C. Beaulieu, "A comparison of SNR estimation techniques for the AWGN channel," IEEE Trans. Communications, Vol. 48, No. 10, pp. 1681-1691, 2000.
+// A nice python implementation:
+// https://github.com/gnuradio/gnuradio/blob/master/gr-digital/examples/snr_estimators.py
+// However, we have not implemented kurtosis and kurtosis, which is required of the method.
+
+
 }}}
 #endif
