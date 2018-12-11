@@ -213,6 +213,85 @@ void test_gini_coefficient()
     BOOST_TEST(abs(gini) < tol);
 }
 
+template<class Z>
+void test_integer_skewness()
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,1,1};
+    double skew = boost::math::tools::population_skewness(v);
+    BOOST_TEST(abs(skew) < tol);
+
+    // Dataset is symmetric about the mean:
+    v = {1,2,3,4,5};
+    skew = boost::math::tools::population_skewness(v);
+    BOOST_TEST(abs(skew) < tol);
+
+    v = {0,0,0,0,5};
+    // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2
+    skew = boost::math::tools::population_skewness(v);
+    BOOST_TEST(abs(skew - 3.0/2.0) < tol);
+
+}
+
+template<class Real>
+void test_skewness()
+{
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v{1,1,1};
+    Real skew = boost::math::tools::population_skewness(v);
+    BOOST_TEST(abs(skew) < tol);
+
+    // Dataset is symmetric about the mean:
+    v = {1,2,3,4,5};
+    skew = boost::math::tools::population_skewness(v);
+    BOOST_TEST(abs(skew) < tol);
+
+    v = {0,0,0,0,5};
+    // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2
+    skew = boost::math::tools::population_skewness(v);
+    BOOST_TEST(abs(skew - Real(3)/Real(2)) < tol);
+
+}
+
+template<class Real>
+void test_kurtosis()
+{
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v{1,1,1};
+    Real kurtosis = boost::math::tools::population_kurtosis(v);
+    BOOST_TEST(abs(kurtosis) < tol);
+
+    v = {1,2,3,4,5};
+    // mu =1, sigma^2 = 2, kurtosis = 17/10
+    kurtosis = boost::math::tools::population_kurtosis(v);
+    BOOST_TEST(abs(kurtosis - Real(17)/Real(10)) < tol);
+
+    v = {0,0,0,0,5};
+    // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2, kurtosis = 13/4
+    kurtosis = boost::math::tools::population_kurtosis(v);
+    BOOST_TEST(abs(kurtosis- Real(13)/Real(4)) < tol);
+}
+
+template<class Z>
+void test_integer_kurtosis()
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,1,1};
+    double kurtosis = boost::math::tools::population_kurtosis(v);
+    BOOST_TEST(abs(kurtosis) < tol);
+
+    v = {1,2,3,4,5};
+    // mu =1, sigma^2 = 2, kurtosis = 17/10
+    kurtosis = boost::math::tools::population_kurtosis(v);
+    BOOST_TEST(abs(kurtosis - 17.0/10.0) < tol);
+
+    v = {0,0,0,0,5};
+    // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2, kurtosis = 13/4
+    kurtosis = boost::math::tools::population_kurtosis(v);
+    BOOST_TEST(abs(kurtosis- 13.0/4.0) < tol);
+}
+
+
 int main()
 {
     test_integer_mean<uint8_t>();
@@ -243,6 +322,20 @@ int main()
     test_gini_coefficient<double>();
     test_gini_coefficient<long double>();
     test_gini_coefficient<cpp_bin_float_50>();
+
+    test_skewness<float>();
+    test_skewness<double>();
+    test_skewness<long double>();
+    test_skewness<cpp_bin_float_50>();
+
+    test_integer_skewness<int>();
+
+    test_kurtosis<float>();
+    test_kurtosis<double>();
+    test_kurtosis<long double>();
+    test_kurtosis<cpp_bin_float_50>();
+
+    test_integer_kurtosis<int>();
 
     return boost::report_errors();
 }

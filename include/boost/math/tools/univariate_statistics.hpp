@@ -154,5 +154,145 @@ inline auto gini_coefficient(RandomAccessContainer & v)
     return gini_coefficient(v.begin(), v.end());
 }
 
+// Follows equation 1.5 of:
+// https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
+template<class ForwardIterator>
+auto
+population_skewness(ForwardIterator first, ForwardIterator last)
+{
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute skewness.");
+    if constexpr (std::is_integral<Real>::value)
+    {
+        double M1 = *first;
+        double M2 = 0;
+        double M3 = 0;
+        double n = 2;
+        for (auto it = first + 1; it != last; ++it)
+        {
+            double delta21 = *it - M1;
+            double tmp = delta21/n;
+            M3 = M3 + tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
+            M2 = M2 + tmp*(n-1)*delta21;
+            M1 = M1 + tmp;
+            n += 1;
+        }
+
+        double variance = M2/(n-1);
+        if (variance == 0)
+        {
+            // The limit is technically undefined, but the interpretation here is clear:
+            // A constant dataset has no skewness.
+            return double(0);
+        }
+        double skewness = M3/((n-1)*variance*sqrt(variance));
+        return skewness;
+    }
+    else
+    {
+        Real M1 = *first;
+        Real M2 = 0;
+        Real M3 = 0;
+        Real n = 2;
+        for (auto it = first + 1; it != last; ++it)
+        {
+            Real delta21 = *it - M1;
+            Real tmp = delta21/n;
+            M3 = M3 + tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
+            M2 = M2 + tmp*(n-1)*delta21;
+            M1 = M1 + tmp;
+            n += 1;
+        }
+
+        Real variance = M2/(n-1);
+        if (variance == 0)
+        {
+            // The limit is technically undefined, but the interpretation here is clear:
+            // A constant dataset has no skewness.
+            return Real(0);
+        }
+        Real skewness = M3/((n-1)*variance*sqrt(variance));
+        return skewness;
+    }
+}
+
+template<class Container>
+inline auto population_skewness(Container const & v)
+{
+    return population_skewness(v.cbegin(), v.cend());
+}
+
+// Follows equation 1.6 of:
+// https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
+template<class ForwardIterator>
+auto
+population_kurtosis(ForwardIterator first, ForwardIterator last)
+{
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute kurtosis.");
+    if constexpr (std::is_integral<Real>::value)
+    {
+        double M1 = *first;
+        double M2 = 0;
+        double M3 = 0;
+        double M4 = 0;
+        double n = 2;
+        for (auto it = first + 1; it != last; ++it)
+        {
+            double delta21 = *it - M1;
+            double tmp = delta21/n;
+            M4 = M4 + tmp*(tmp*tmp*delta21*((n-1)*(n*n-3*n+3)) + 6*tmp*M2 - 4*M3);
+            M3 = M3 + tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
+            M2 = M2 + tmp*(n-1)*delta21;
+            M1 = M1 + tmp;
+            n += 1;
+        }
+
+        double variance = M2/(n-1);
+        if (variance == 0)
+        {
+            return double(0);
+        }
+        double kurtosis = M4/((n-1)*variance*variance);
+        return kurtosis;
+    }
+    else
+    {
+        Real M1 = *first;
+        Real M2 = 0;
+        Real M3 = 0;
+        Real M4 = 0;
+        Real n = 2;
+        for (auto it = first + 1; it != last; ++it)
+        {
+            Real delta21 = *it - M1;
+            Real tmp = delta21/n;
+            M4 = M4 + tmp*(tmp*tmp*delta21*((n-1)*(n*n-3*n+3)) + 6*tmp*M2 - 4*M3);
+            M3 = M3 + tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
+            M2 = M2 + tmp*(n-1)*delta21;
+            M1 = M1 + tmp;
+            n += 1;
+        }
+
+        Real variance = M2/(n-1);
+        if (variance == 0)
+        {
+            // Again, the limit is technically undefined, but the interpretation here is clear:
+            // A constant dataset has no kurtosis.
+            return Real(0);
+        }
+        Real kurtosis = M4/((n-1)*variance*variance);
+        return kurtosis;
+    }
+}
+
+template<class Container>
+inline auto population_kurtosis(Container const & v)
+{
+    return population_kurtosis(v.cbegin(), v.cend());
+}
+
+
+
 }}}
 #endif

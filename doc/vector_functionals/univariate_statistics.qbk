@@ -34,6 +34,12 @@ namespace boost{ namespace math{ namespace tools {
     auto median(ForwardIterator first, ForwardIterator last);
 
     template<class Container>
+    auto population_skewness(Container const & c);
+
+    template<class ForwardIterator>
+    auto population_skewness(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
     auto gini_coefficient(Container & c);
 
     template<class ForwardIterator>
@@ -100,6 +106,34 @@ Compute the median of a dataset:
 The calculation of the median is a thin wrapper around the C++11 [@https://en.cppreference.com/w/cpp/algorithm/nth_element `nth_element`].
 Therefore, all requirements of `std::nth_element` are inherited by the median calculation.
 
+[heading Skewness]
+
+Computes the skewness of a dataset:
+
+    std::vector<double> v{1,2,3,4,5};
+    double skewness = boost::math::tools::population_skewness(v);
+    // skewness = 0.
+
+The input vector is not modified, works with integral and real data.
+If the input data is integral, the output is a double precision float.
+
+For a dataset consisting of a constant value, we return zero as the skewness.
+
+The implementation follows [@https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf Pebay].
+
+[heading Kurtosis]
+
+Computes the kurtosis of a dataset:
+
+    std::vector<double> v{1,2,3,4,5};
+    double kurtosis = boost::math::tools::population_kurtosis(v);
+    // kurtosis = 17/10
+
+The implementation follows [@https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf Pebay].
+The input data must be forward iterable and must consist of real or integral values.
+If the input data is integral, the output is a double precision float.
+Note that this is /not/ the excess kurtosis.
+If you require the excess kurtosis, subtract 3 from the kurtosis.
 
 [heading Gini Coefficient]
 
@@ -126,9 +160,7 @@ You should have /very/ good cause to pass negative values to the Gini coefficien
 [heading References]
 
 * Higham, Nicholas J. ['Accuracy and stability of numerical algorithms.] Vol. 80. Siam, 2002.
-* Mallat, Stephane. ['A wavelet tour of signal processing: the sparse way.] Academic press, 2008.
-* Hurley, Niall, and Scott Rickard. ['Comparing measures of sparsity.] IEEE Transactions on Information Theory 55.10 (2009): 4723-4741.
-* Jensen, Arne, and Anders la Cour-Harbo. ['Ripples in mathematics: the discrete wavelet transform.] Springer Science & Business Media, 2001.
+* Philippe P. Pébay: ["Formulas for Robust, One-Pass Parallel Computation of Covariances and Arbitrary-Order Statistical Moments.] Technical Report SAND2008-6212, Sandia National Laboratories, September 2008.
 
 [endsect]
 [/section:univariate_statistics Univariate Statistics]
