@@ -210,6 +210,11 @@ and hence it should really be compared to the mean-invariant SNR.
 There is no guarantee that a solution of this system exists for all value of these parameters, in fact nonexistence can easily be demonstrated for certain data.
 If there is no solution to the system, then failure is communicated by returning NaNs.
 
+The author has not managed to fully characterize the conditions under which a real solution with /S > 0/ and /N >0/ exists.
+However, a very intuitive example demonstrates why nonexistence can occur.
+One case is where both the signal and noise kurtosis are assumed to be equal to three.
+Then the method has no mechanism for distinguishing the signal from the noise, and the solution is non-unique.
+
 
 [heading References]
 

@@ -289,8 +289,8 @@ auto oracle_snr_db(Container const & signal, Container const & noise)
 template<class Container>
 auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimated_noise_kurtosis=3)
 {
-    BOOST_ASSERT_MSG(estimated_signal_kurtosis >= 0, "The estimated signal kurtosis must be >=0");
-    BOOST_ASSERT_MSG(estimated_noise_kurtosis >= 0, "The estimated noise kurtosis must be >=0");
+    BOOST_ASSERT_MSG(estimated_signal_kurtosis > 0, "The estimated signal kurtosis must be positive");
+    BOOST_ASSERT_MSG(estimated_noise_kurtosis > 0, "The estimated noise kurtosis must be positive.");
     using Real = typename Container::value_type;
     using std::sqrt;
     if constexpr (std::is_floating_point<Real>::value ||
@@ -302,6 +302,11 @@ auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::val
         // (ka+kw-6)N^2 + 2M2(3-ka)N + ka*M2^2 - M4 = 0 =: a*N^2 + bn*N + cn = 0
         // We see that if kw=3, we have a special case, and if ka+kw=6, we have a special case.
         auto [M1, M2, M3, M4] = boost::math::tools::first_four_moments(noisy_signal);
+        if (M4 == 0)
+        {
+            // The signal is constant. There is no noise:
+            return std::numeric_limits<Real>::infinity();
+        }
         // Change to notation in Pauluzzi, equation 41:
         auto kw = estimated_noise_kurtosis;
         auto ka = estimated_signal_kurtosis;
