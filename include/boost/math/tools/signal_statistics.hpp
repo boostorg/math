@@ -11,6 +11,7 @@
 #include <boost/type_traits.hpp>
 #include <boost/assert.hpp>
 #include <boost/multiprecision/detail/number_base.hpp>
+#include <boost/math/tools/univariate_statistics.hpp>
 
 
 namespace boost{ namespace math{ namespace tools {
@@ -235,6 +236,43 @@ auto oracle_snr(Container const & signal, Container const & noise)
     }
 }
 
+template<class Container>
+auto mean_invariant_oracle_snr(Container const & signal, Container const & noise)
+{
+    using Real = typename Container::value_type;
+    BOOST_ASSERT_MSG(signal.size() == noise.size(), "Signal and noise must be have the same number of elements.");
+
+    Real mean = boost::math::tools::mean(signal);
+    Real numerator = 0;
+    Real denominator = 0;
+    for (size_t i = 0; i < signal.size(); ++i)
+    {
+        Real tmp = signal[i] - mean;
+        numerator += tmp*tmp;
+        denominator += noise[i]*noise[i];
+    }
+    if (numerator == 0 && denominator == 0)
+    {
+        return std::numeric_limits<Real>::quiet_NaN();
+    }
+    if (denominator == 0)
+    {
+        return std::numeric_limits<Real>::infinity();
+    }
+
+    return numerator/denominator;
+
+}
+
+// Follows the definition of SNR given in Mallat, A Wavelet Tour of Signal Processing, equation 11.16.
+template<class Container>
+auto mean_invariant_oracle_snr_db(Container const & signal, Container const & noise)
+{
+    using std::log10;
+    return 10*log10(mean_invariant_oracle_snr(signal, noise));
+}
+
+
 // Follows the definition of SNR given in Mallat, A Wavelet Tour of Signal Processing, equation 11.16.
 template<class Container>
 auto oracle_snr_db(Container const & signal, Container const & noise)
@@ -243,14 +281,149 @@ auto oracle_snr_db(Container const & signal, Container const & noise)
     return 10*log10(oracle_snr(signal, noise));
 }
 
-// Of course since we have an oracle snr estimator, we should have an snr estimator not requiring oracle data.
-// The M2M4 estimator is reputed to be quite good, as is the SVR measure.
-// A good reference is:
+// A good reference on the M2M4 estimator:
 // D. R. Pauluzzi and N. C. Beaulieu, "A comparison of SNR estimation techniques for the AWGN channel," IEEE Trans. Communications, Vol. 48, No. 10, pp. 1681-1691, 2000.
 // A nice python implementation:
 // https://github.com/gnuradio/gnuradio/blob/master/gr-digital/examples/snr_estimators.py
-// However, we have not implemented kurtosis and kurtosis, which is required of the method.
 
+template<class Container>
+auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimated_noise_kurtosis=3)
+{
+    BOOST_ASSERT_MSG(estimated_signal_kurtosis >= 0, "The estimated signal kurtosis must be >=0");
+    BOOST_ASSERT_MSG(estimated_noise_kurtosis >= 0, "The estimated noise kurtosis must be >=0");
+    using Real = typename Container::value_type;
+    using std::sqrt;
+    if constexpr (std::is_floating_point<Real>::value ||
+       boost::multiprecision::number_category<Real>::value == boost::multiprecision::number_kind_floating_point)
+    {
+        // If we first eliminate N, we obtain the quadratic equation:
+        // (ka+kw-6)S^2 + 2M2(3-kw)S + kw*M2^2 - M4 = 0 =: a*S^2 + bs*N + cs = 0
+        // If we first eliminate S, we obtain the quadratic equation:
+        // (ka+kw-6)N^2 + 2M2(3-ka)N + ka*M2^2 - M4 = 0 =: a*N^2 + bn*N + cn = 0
+        // We see that if kw=3, we have a special case, and if ka+kw=6, we have a special case.
+        auto [M1, M2, M3, M4] = boost::math::tools::first_four_moments(noisy_signal);
+        // Change to notation in Pauluzzi, equation 41:
+        auto kw = estimated_noise_kurtosis;
+        auto ka = estimated_signal_kurtosis;
+        // A common case, since it's the default:
+        Real a = (ka+kw-6);
+        Real bs = 2*M2*(3-kw);
+        Real cs = kw*M2*M2 - M4;
+        Real bn = 2*M2*(3-ka);
+        Real cn = ka*M2*M2 - M4;
+        Real N, S;
+        if(kw == 3)
+        {
+            if (ka == 3)
+            {
+                // When ka = kw = 3, then either the system is inconsistent, or the system does not have a unique solution:
+                return std::numeric_limits<Real>::quiet_NaN();
+            }
+            Real Ssq = -cs/a;
+            if (Ssq < 0)
+            {
+                Real radicand = bn*bn - 4*a*cn;
+                if (radicand < 0)
+                {
+                    return std::numeric_limits<Real>::quiet_NaN();
+                }
+                N = (-bn + sqrt(radicand))/(2*a);
+                if (N < 0)
+                {
+                    N =  (-bn - sqrt(radicand))/(2*a);
+                    if (N < 0)
+                    {
+                        return std::numeric_limits<Real>::quiet_NaN();
+                    }
+                    S = M2 - N;
+                    if (S < 0)
+                    {
+                        return std::numeric_limits<Real>::quiet_NaN();
+                    }
+                    return S/N;
+                }
+
+            }
+            S = sqrt(Ssq);
+            N = M2 - S;
+            if (N < 0)
+            {
+                return std::numeric_limits<Real>::quiet_NaN();
+            }
+            return S/N;
+        }
+
+        // Maybe I should look for some very small distance from 6, but . . .
+        if (ka+kw == 6)
+        {
+            // In this case we don't need to solve a quadratic equation:
+            S = -cs/bs;
+            N = -cn/bn;
+            if (S/N < 0)
+            {
+                return std::numeric_limits<Real>::quiet_NaN();
+            }
+            return S/N;
+        }
+
+        // The special cases have been taken care of.
+        // Now we must resort to solving a full quadratic.
+        Real radicand = bs*bs - 4*a*cs;
+        if (radicand < 0)
+        {
+            // See if we have a solution for N:
+            radicand = bn*bn - 4*a*cn;
+            if (radicand < 0)
+            {
+                // Both S and N are complex:
+                return std::numeric_limits<Real>::quiet_NaN();
+            }
+            // N is real. Can it be made positive?
+            N = (-bn + sqrt(radicand))/(2*a);
+            if (N < 0)
+            {
+                N = (-bn - sqrt(radicand))/(2*a);
+                if (N < 0)
+                {
+                    return std::numeric_limits<Real>::quiet_NaN();
+                }
+            }
+            S = M2 - N;
+            if (S < 0)
+            {
+                return std::numeric_limits<Real>::quiet_NaN();
+            }
+            return S/N;
+        }
+
+        S = (-bs + sqrt(radicand))/(2*a);
+        if (S < 0)
+        {
+            S = (-bs - sqrt(radicand))/(2*a);
+            if (S < 0)
+            {
+                return std::numeric_limits<Real>::quiet_NaN();
+            }
+        }
+        N = M2 - S;
+        if (N < 0)
+        {
+            return std::numeric_limits<Real>::quiet_NaN();
+        }
+        return S/N;
+    }
+    else
+    {
+        BOOST_ASSERT_MSG(false, "The M2M4 estimator has not been implemented for this type.");
+    }
+}
+
+template<class Container>
+auto m2m4_snr_estimator_db(Container const & noisy_signal,  typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimated_noise_kurtosis=3)
+{
+    using std::log10;
+    return 10*log10(m2m4_snr_estimator(noisy_signal, estimated_signal_kurtosis, estimated_noise_kurtosis));
+}
 
 }}}
 #endif

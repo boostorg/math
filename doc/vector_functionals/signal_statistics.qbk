@@ -51,6 +51,12 @@ namespace boost{ namespace math{ namespace tools {
     template<class Container>
     auto oracle_snr_db(Container const & signal, Container const & noise);
 
+    template<class Container>
+    auto m2m4_snr_estimator(Container const & noisy_signal, typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimate_noise_kurtosis=3);
+
+    template<class Container>
+    auto m2m4_snr_estimator_db(Container const & noisy_signal,typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimate_noise_kurtosis=3);
+
 }}}
 ``
 
@@ -161,13 +167,49 @@ The input data is not modified and must satisfy the requirements of a `RandomAcc
 [heading /M/[sub 2]/M/[sub 4] SNR Estimation]
 
 Estimates the SNR of a noisy signal via the /M/[sub 2]/M/[sub 4] method.
-See [@https://doi.org/10.1109/26.871393  Pauluzzi and N.C. Beaulieu] for details.
+See [@https://doi.org/10.1109/26.871393  Pauluzzi and N.C. Beaulieu] and [@https://doi.org/10.1109/ISIT.1994.394869 Matzner and Englberger] for details.
+
+    std::vector<double> noisy_signal(512);
+    // fill noisy_signal with data contaminated by Gaussian white noise:
+    double est_snr = boost::math::tools::m2m4_snr_estimator_db(noisy_signal);
+
+The /M/[sub 2]/M/[sub 4] SNR estimator is an "in-service" estimator, meaning that the estimate is made using the noisy, data-bearing signal, and does not require a background estimate.
+This estimator has been found to be work best between roughly -3 and 15db, tending to overestimate the noise below -3db, and underestimate the noise above 15db.
+See [@https://www.mdpi.com/2078-2489/8/3/75/pdf Xue et al] for details.
+
+The /M/[sub 2]/M/[sub 4] SNR estimator, by default, assumes that the kurtosis of the signal is 1 and the kurtosis of the noise is 3, the latter corresponding to Gaussian noise.
+These parameters, however, can be overridden:
+
+    std::vector<double> noisy_signal(512);
+    // fill noisy_signal with the data:
+    double signal_kurtosis = 1.5;
+    // Noise is assumed to follow Laplace distribution, which has kurtosis of 6:
+    double noise_kurtosis = 6;
+    double est_snr = boost::math::tools::m2m4_snr_estimator_db(noisy_signal, signal_kurtosis, noise_kurtosis);
+
+Now, technically the method is a "blind SNR estimator", meaning that the no /a-priori/ information about the signal is required to use the method.
+However, the performance of the method is /vastly/ better if you can come up with a better estimate of the signal and noise kurtosis.
+How can we do this? Suppose we know that the SNR is much greater than 1.
+Then we can estimate the signal kurtosis simply by using the noisy signal kurtosis.
+If the SNR is much less than one, this method breaks down as the noisy signal kurtosis will tend to the noise kurtosis-though in this limit we have an excellent estimator of the noise kurtosis!
+In addition, if you have a model of what your signal should look like, you can precompute the signal kurtosis.
+For example, sinusoids have a kurtosis of 1.5.
+See [@http://www.jcomputers.us/vol8/jcp0808-21.pdf here] for a study which uses estimates of this sort to improve the performance of the /M/[sub 2]/M/[sub 4] estimator.
 
 
-[heading SVR SNR Estimation]
+/Nota bene/: The traditional definition of SNR is /not/ mean invariant.
+By this we mean that if a constant is added to every sample of a signal, the SNR is changed.
+For example, adding DC bias to a signal changes its SNR.
+For most use cases, this is really not what you intend; for example a signal consisting of zeros plus Gaussian noise has an SNR of zero,
+whereas a signal with a constant DC bias and random Gaussian noise might have a very large SNR.
 
-Estimates the SNR of a noisy signal /x/ via the SVR method.
-See [@https://doi.org/10.1109/26.871393  Pauluzzi and N.C. Beaulieu] for details.
+The /M/[sub 2]/M/[sub 4] SNR estimator is computed from mean-invariant quantities,
+and hence it should really be compared to the mean-invariant SNR.
+
+/Nota bene/: This computation requires the solution of a system of quadratic equations involving the noise kurtosis, the signal kurtosis, and the second and fourth moments of the data.
+There is no guarantee that a solution of this system exists for all value of these parameters, in fact nonexistence can easily be demonstrated for certain data.
+If there is no solution to the system, then failure is communicated by returning NaNs.
+
 
 [heading References]
 
@@ -176,6 +218,7 @@ See [@https://doi.org/10.1109/26.871393  Pauluzzi and N.C. Beaulieu] for details
 * Hurley, Niall, and Scott Rickard. ['Comparing measures of sparsity.] IEEE Transactions on Information Theory 55.10 (2009): 4723-4741.
 * Jensen, Arne, and Anders la Cour-Harbo. ['Ripples in mathematics: the discrete wavelet transform.] Springer Science & Business Media, 2001.
 * D. R. Pauluzzi and N. C. Beaulieu, ['A comparison of SNR estimation techniques for the AWGN channel,] IEEE Trans. Communications, Vol. 48, No. 10, pp. 1681-1691, 2000.
+
 
 [endsect]
 [/section:signal_statistics Signal Statistics]

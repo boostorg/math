@@ -13,12 +13,14 @@
 #include <boost/core/lightweight_test.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/math/constants/constants.hpp>
+#include <boost/math/tools/univariate_statistics.hpp>
 #include <boost/math/tools/signal_statistics.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_complex_50;
+using boost::math::constants::two_pi;
 
 /*
  * Test checklist:
@@ -274,6 +276,38 @@ void test_complex_oracle_snr()
     BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
 }
 
+template<class Real>
+void test_m2m4_snr_estimator()
+{
+    std::vector<Real> signal(5000, 1);
+    std::vector<Real> noise(signal.size());
+    std::vector<Real> x(signal.size());
+    std::mt19937 gen(18);
+    std::normal_distribution<Real> dis{0, 1.0};
+
+    for (size_t i = 0; i < noise.size(); ++i) {
+        signal[i] = 5*sin(100*6.28*i/noise.size());
+        noise[i] = dis(gen);
+        x[i] = signal[i] + noise[i];
+    }
+
+    auto m2m4_db = boost::math::tools::m2m4_snr_estimator_db(x, 1.5);
+    auto oracle_snr_db = boost::math::tools::mean_invariant_oracle_snr_db(signal, noise);
+    BOOST_TEST(abs(m2m4_db - oracle_snr_db) < 0.2);
+
+    std::uniform_real_distribution<Real> uni_dis{-1,1};
+    for (size_t i = 0; i < noise.size(); ++i)
+    {
+        noise[i] = uni_dis(gen);
+        x[i] = signal[i] + noise[i];
+    }
+
+    // Kurtosis of continuous uniform distribution over [-1,1] is 1.8:
+    m2m4_db = boost::math::tools::m2m4_snr_estimator_db(x, 1.5, 1.8);
+    oracle_snr_db = boost::math::tools::mean_invariant_oracle_snr_db(signal, noise);
+    BOOST_TEST(abs(m2m4_db - oracle_snr_db) < 0.2);
+}
+
 int main()
 {
     test_absolute_median<float>();
@@ -318,6 +352,10 @@ int main()
     test_complex_oracle_snr<std::complex<double>>();
     test_complex_oracle_snr<std::complex<long double>>();
     test_complex_oracle_snr<cpp_complex_50>();
+
+    test_m2m4_snr_estimator<float>();
+    test_m2m4_snr_estimator<double>();
+    test_m2m4_snr_estimator<long double>();
 
     return boost::report_errors();
 }
