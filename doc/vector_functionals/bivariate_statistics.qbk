@@ -21,6 +21,9 @@ namespace boost{ namespace math{ namespace tools {
     template<class Container>
     auto means_and_population_covariance(Container const & u, Container const & v);
 
+    template<class Container>
+    auto correlation_coefficient(Container const & u, Container const & v);
+
 }}}
 ``
 
@@ -45,6 +48,22 @@ As such, we provide `means_and_population_covariance`:
     std::vector<double> u{1,2,3,4,5};
     std::vector<double> v{1,2,3,4,5};
     auto [mu_u, mu_v, cov_uv] = boost::math::tools::means_and_population_covariance(u, v);
+
+[heading Correlation Coefficient]
+
+Computes the [@https://en.wikipedia.org/wiki/Pearson_correlation_coefficient Pearson correlation coefficient] of two datasets /u/ and /v/:
+
+    std::vector<double> u{1,2,3,4,5};
+    std::vector<double> v{1,2,3,4,5};
+    double rho_uv = boost::math::tools::correlation_coefficient(u, v);
+    // rho_uv = 1.
+
+The data must be forward iterable and cannot be complex.
+
+If one or both of the datasets is constant, the correlation coefficient is an indeterminant form (0/0) and definitions must be introduced to assign it a value.
+We use the following: If both datasets are constant, then the correlation coefficient is 1.
+If one dataset is constant, and the other is not, then the correlation coefficient is zero.
+
 
 [heading References]
 

@@ -110,12 +110,58 @@ void test_covariance()
 
 }
 
+template<class Real>
+void test_correlation_coefficient()
+{
+    using boost::math::tools::correlation_coefficient;
+
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> u{1};
+    std::vector<Real> v{1};
+    Real rho_uv = correlation_coefficient(u, v);
+    BOOST_TEST(abs(rho_uv - 1) < tol);
+
+    u = {1,1};
+    v = {1,1};
+    rho_uv = correlation_coefficient(u, v);
+    BOOST_TEST(abs(rho_uv - 1) < tol);
+
+    u = {1, 2, 3};
+    v = {1, 2, 3};
+    rho_uv = correlation_coefficient(u, v);
+    BOOST_TEST(abs(rho_uv - 1) < tol);
+
+    u = {1, 2, 3};
+    v = {-1, -2, -3};
+    rho_uv = correlation_coefficient(u, v);
+    BOOST_TEST(abs(rho_uv + 1) < tol);
+
+    rho_uv = correlation_coefficient(v, u);
+    BOOST_TEST(abs(rho_uv + 1) < tol);
+
+    u = {1, 2, 3};
+    v = {0, 0, 0};
+    rho_uv = correlation_coefficient(v, u);
+    BOOST_TEST(abs(rho_uv) < tol);
+
+    u = {1, 2, 3};
+    v = {0, 0, 3};
+    rho_uv = correlation_coefficient(v, u);
+    // mu_u = 2, sigma_u^2 = 2/3, mu_v = 1, sigma_v^2 = 2, cov(u,v) = 1.
+    BOOST_TEST(abs(rho_uv - sqrt(Real(3))/Real(2)) < tol);
+}
+
 int main()
 {
     test_covariance<float>();
     test_covariance<double>();
     test_covariance<long double>();
     test_covariance<cpp_bin_float_50>();
+
+    test_correlation_coefficient<float>();
+    test_correlation_coefficient<double>();
+    test_correlation_coefficient<long double>();
+    test_correlation_coefficient<cpp_bin_float_50>();
 
     return boost::report_errors();
 }
