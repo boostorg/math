@@ -301,6 +301,11 @@ auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::val
         // If we first eliminate S, we obtain the quadratic equation:
         // (ka+kw-6)N^2 + 2M2(3-ka)N + ka*M2^2 - M4 = 0 =: a*N^2 + bn*N + cn = 0
         // We see that if kw=3, we have a special case, and if ka+kw=6, we have a special case.
+        // I believe these equations are totally independent quadratics;
+        // if one has a complex solution it is not necessarily the case that the other must also.
+        // However, I can't prove that, so there is a chance that this does unnecessary work.
+        // Future improvements: There are algorithms which can solve quadratics much more effectively than the naive implementation found here.
+        // See: https://stackoverflow.com/questions/48979861/numerically-stable-method-for-solving-quadratic-equations/50065711#50065711
         auto [M1, M2, M3, M4] = boost::math::tools::first_four_moments(noisy_signal);
         if (M4 == 0)
         {
