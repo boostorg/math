@@ -92,13 +92,17 @@ namespace boost { namespace math { namespace detail {
       if (detail::hypergeometric_1F1_asym_region(a, b, z, pol))
       {
          int saved_scale = log_scaling;
-         T r = hypergeometric_1F1_asym_large_z_series(a, b, z, pol, log_scaling);
+         try
+         {
+            return hypergeometric_1F1_asym_large_z_series(a, b, z, pol, log_scaling);
+         }
+         catch (const evaluation_error&)
+         {
+         }
          //
          // Very occationally our convergence criteria don't quite go to full precision
-         // and we end up with infinity:
+         // and we have to try another method:
          //
-         if (boost::math::isfinite(r))
-            return r;
          log_scaling = saved_scale;
       }
 
@@ -127,15 +131,10 @@ namespace boost { namespace math { namespace detail {
                return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
             }
          }
-         if ((b < 4 * a) && (a < 0) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
+         if ((fabs(a) > 1) && (b < 4 * a) && (a < 0) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
          {
             // Without this we get into an area where the series doesn't converge if b - a ~ b
             return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
-         }
-         if ((a > 0) && (b + 1 < a))
-         {
-            // Moving to a larger b value will allow us to apply Kummer's relation below:
-            //return hypergeometric_1F1_fwd_on_b_imp(a, b, z, pol, log_scaling);
          }
 
          // Let's otherwise make z positive (almost always)
@@ -204,13 +203,15 @@ namespace boost { namespace math { namespace detail {
             {
                return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, z - k, k, pol);
             }
+            else if(z < b)
+               return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
          }
          else  // b < 0
          {
             if (a < 0)
             {
                T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
-               if (z < z_limit)
+               if ((z < z_limit) || (a > -500))
                   return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
             }
             else if(z < fabs((2 * a - b) / (sqrt(fabs(a * b)))))
