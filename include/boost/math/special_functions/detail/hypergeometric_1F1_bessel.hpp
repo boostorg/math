@@ -133,16 +133,18 @@
         log_scale += s.log_scale;
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         bool retry = false;
-        T result;
+        T result(0);
         try
         {
            result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
+           if (!(boost::math::isfinite)(result) || (result == 0))
+              retry = true;
         }
         catch (const std::overflow_error&)
         {
            retry = true;
         }
-        if (retry || !(boost::math::isfinite)(result) || (result == 0))
+        if (retry)
         {
            log_scale -= scale;
            log_scale -= s.log_scale;
