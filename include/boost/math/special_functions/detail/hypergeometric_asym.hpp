@@ -27,7 +27,8 @@
      inline T hypergeometric_1F1_asym_large_z_series(T a, const T& b, T z, const Policy& pol, int& log_scaling)
      {
         BOOST_MATH_STD_USING
-           T prefix;
+           static const char* function = "boost::math::hypergeometric_1F1_asym_large_z_series<%1%>(%1%, %1%, %1%)";
+        T prefix;
         int e, s;
         if (z < 0)
         {
@@ -37,7 +38,7 @@
         }
         else
         {
-           e = boost::math::itrunc(z, pol);
+           e = z > INT_MAX ? INT_MAX : boost::math::itrunc(z, pol);
            log_scaling += e;
            prefix = exp(z - e);
         }
@@ -55,8 +56,39 @@
         e = boost::math::itrunc(t, pol);
         log_scaling -= e;
         prefix /= s * exp(t - e);
+        //
+        // Checked 2F0:
+        //
+        unsigned k = 0;
+        T a1_poch(1 - a);
+        T a2_poch(b - a);
+        T z_mult(1 / z);
+        T sum = 0;
+        T abs_sum = 0;
+        T term = 1;
+        T last_term = 0;
+        do
+        {
+           sum += term;
+           last_term = term;
+           abs_sum += fabs(sum);
+           term *= a1_poch * a2_poch * z_mult;
+           term /= ++k;
+           ++a1_poch;
+           ++a2_poch;
+           if (fabs(sum) * boost::math::policies::get_epsilon<T, Policy>() > fabs(term))
+              break;
+           if(fabs(sum) / abs_sum < boost::math::policies::get_epsilon<T, Policy>())
+              return boost::math::policies::raise_evaluation_error<T>(function, "Large-z asymptotic approximation to 1F1 has destroyed all the digits in the result due to cancellation.  Current best guess is %1%", 
+                 prefix * sum, Policy());
+           if(k > boost::math::policies::get_max_series_iterations<Policy>())
+              return boost::math::policies::raise_evaluation_error<T>(function, "1F1: Unable to locate solution in a reasonable time:"
+                 " large-z asymptotic approximation.  Current best guess is %1%", prefix * sum, Policy());
+           if((k > 10) && (fabs(term) > fabs(last_term)))
+              return boost::math::policies::raise_evaluation_error<T>(function, "Large-z asymptotic approximation to 1F1 is divergent.  Current best guess is %1%", prefix * sum, Policy());
+        } while (true);
 
-        return prefix * boost::math::detail::hypergeometric_2F0_imp(T(1 - a), T(b - a), T(1 / z), pol, true);
+        return prefix * sum;
      }
 
 
