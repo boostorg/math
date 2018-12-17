@@ -286,25 +286,6 @@ void test_absolute_gini_coefficient()
     BOOST_TEST(abs(population_gini2 - 0.5) < 0.01);
 }
 
-template<class Real>
-void test_shannon_entropy()
-{
-    Real tol = 100*std::numeric_limits<Real>::epsilon();
-    using boost::math::constants::half;
-    using boost::math::constants::ln_two;
-    std::vector<Real> v(30, half<Real>());
-    Real Hs = boost::math::tools::shannon_entropy(v.begin(), v.end());
-    Real expected = v.size()*ln_two<Real>()/2;
-    BOOST_TEST(abs(Hs - expected) < tol*expected);
-
-    Hs = boost::math::tools::shannon_entropy(v);
-    BOOST_TEST(abs(Hs - expected) < tol*expected);
-
-    std::array<Real, 3> w{half<Real>(), half<Real>(), half<Real>()};
-    Hs = boost::math::tools::shannon_entropy(w);
-    expected = 3*ln_two<Real>()/2;
-    BOOST_TEST(abs(Hs - expected) < tol*expected);
-}
 
 template<class Real>
 void test_oracle_snr()
@@ -415,10 +396,6 @@ int main()
     test_complex_hoyer_sparsity<std::complex<double>>();
     test_complex_hoyer_sparsity<std::complex<long double>>();
     test_complex_hoyer_sparsity<cpp_complex_50>();
-
-    test_shannon_entropy<float>();
-    test_shannon_entropy<double>();
-    test_shannon_entropy<long double>();
 
     test_oracle_snr<float>();
     test_oracle_snr<double>();

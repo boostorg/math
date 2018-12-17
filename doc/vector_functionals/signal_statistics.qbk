@@ -34,18 +34,6 @@ namespace boost{ namespace math{ namespace tools {
     auto hoyer_sparsity(ForwardIterator first, ForwardIterator last);
 
     template<class Container>
-    auto shannon_entropy(Container const & c);
-
-    template<class ForwardIterator>
-    auto shannon_entropy(ForwardIterator first, ForwardIterator last);
-
-    template<class Container>
-    auto shannon_cost(Container const & c);
-
-    template<class ForwardIterator>
-    auto shannon_cost(ForwardIterator first, ForwardIterator last);
-
-    template<class Container>
     auto oracle_snr(Container const & signal, Container const & noisy_signal);
 
     template<class Container>
@@ -143,24 +131,6 @@ The container must be forward iterable and the contents are not modified.
 Accepts real, complex, and integer inputs.
 If the input is an integral type, the output is a double precision float.
 
-[heading Shannon Entropy]
-
-    std::vector<double> v{1/2.0, 1/2.0};
-    double Hs = boost::math::tools::shannon_entropy(v.begin(), v.end());
-    // Hs = ln(2).
-
-The Shannon entropy only supports non-negative real-valued inputs, presumably for interpretational purposes in the range [0,1]-though this is not enforced.
-The natural logarithm is used to compute the Shannon entropy; all other "Shannon entropies" are readily obtained by change of log base.
-
-[heading Shannon Cost]
-
-    std::vector<double> v{-1, 1,-1};
-    double Ks = boost::math::tools::shannon_cost(v.begin(), v.end());
-    // Ks = 0; concentration of the vector is minimized.
-
-The Shannon cost is a modified version of the Shannon entropy used in signal processing and data compression.
-The useful properties of the Shannon cost are /K/[sub /s/](0) = 0 and /K/[sub /s/](/v/\u2295 /w/) = /K/[sub /s/](v) + /K/[sub /s/](w).
-See [@https://doi.org/10.1007/978-3-642-56702-5 Ripples in Mathematics] for details.
 
 [heading Oracle Signal-to-noise ratio]
 

@@ -45,54 +45,6 @@ inline auto absolute_median(RandomAccessContainer & v)
     return absolute_median(v.begin(), v.end());
 }
 
-
-template<class ForwardIterator>
-auto shannon_entropy(ForwardIterator first, ForwardIterator last)
-{
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    using std::log;
-    Real entropy = 0;
-    for (auto it = first; it != last; ++it)
-    {
-        if (*it != 0)
-        {
-            entropy += (*it)*log(*it);
-        }
-    }
-    return -entropy;
-}
-
-template<class Container>
-inline auto shannon_entropy(Container const & v)
-{
-    return shannon_entropy(v.cbegin(), v.cend());
-}
-
-
-template<class ForwardIterator>
-auto shannon_cost(ForwardIterator first, ForwardIterator last)
-{
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    using std::log;
-    Real cost = 0;
-    for (auto it = first; it != last; ++it)
-    {
-        if (*it != 0)
-        {
-            Real tmp = abs(*it);
-            cost += tmp*tmp*log(tmp*tmp);
-        }
-    }
-    return -cost;
-}
-
-template<class Container>
-inline auto shannon_cost(Container const & v)
-{
-    return shannon_cost(v.cbegin(), v.cend());
-}
-
-
 template<class ForwardIterator>
 auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
 {
