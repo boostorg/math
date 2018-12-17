@@ -139,7 +139,7 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
     using RealIntOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
     using std::sqrt;
-    BOOST_ASSERT_MSG(first != last, "Computation of the Hoyer sparsity requires at least one sample.");
+    BOOST_ASSERT_MSG(first != last && std::next(first) != last, "Computation of the Hoyer sparsity requires at least two samples.");
 
     decltype(abs(*first)) l1 = 0;
     decltype(abs(*first)) l2 = 0;
@@ -244,7 +244,7 @@ template<class Container>
 auto mean_invariant_oracle_snr(Container const & signal, Container const & noisy_signal)
 {
     using Real = typename Container::value_type;
-    BOOST_ASSERT_MSG(signal.size() == noisy_signal.size(), "Signal and noise must be have the same number of elements.");
+    BOOST_ASSERT_MSG(signal.size() == noisy_signal.size(), "Signal and noisy signal must be have the same number of elements.");
 
     Real mean = boost::math::tools::mean(signal);
     Real numerator = 0;

@@ -122,7 +122,7 @@ The Hoyer sparsity measures a normalized ratio of the \u2113[super 1] and \u2113
 As the name suggests, it is used to measure the sparsity of an expansion in some basis.
 
 The Hoyer sparsity computes ([radic]/N/ - \u2113[super 1](v)/\u2113[super 2](v))/([radic]N -1).
-For details, see [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard].
+For details, see [@http://www.jmlr.org/papers/volume5/hoyer04a/hoyer04a.pdf Hoyer] as well as [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard].
 
 Usage:
 
@@ -134,7 +134,8 @@ Usage:
     // hs = 0
 
 The container must be forward iterable and the contents are not modified.
-Accepts real, complex, and integer inputs. If the input is an integral type, the output is a double precision float.
+Accepts real, complex, and integer inputs.
+If the input is an integral type, the output is a double precision float.
 
 [heading Shannon Entropy]
 
@@ -233,7 +234,7 @@ Then the method has no mechanism for distinguishing the signal from the noise, a
 * Hurley, Niall, and Scott Rickard. ['Comparing measures of sparsity.] IEEE Transactions on Information Theory 55.10 (2009): 4723-4741.
 * Jensen, Arne, and Anders la Cour-Harbo. ['Ripples in mathematics: the discrete wavelet transform.] Springer Science & Business Media, 2001.
 * D. R. Pauluzzi and N. C. Beaulieu, ['A comparison of SNR estimation techniques for the AWGN channel,] IEEE Trans. Communications, Vol. 48, No. 10, pp. 1681-1691, 2000.
-
+* Hoyer, Patrik O. ['Non-negative matrix factorization with sparseness constraints.], Journal of machine learning research 5.Nov (2004): 1457-1469.
 
 [endsect]
 [/section:signal_statistics Signal Statistics]
