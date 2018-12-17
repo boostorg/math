@@ -28,6 +28,12 @@ namespace boost{ namespace math{ namespace tools {
     auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last);
 
     template<class Container>
+    auto sample_absolute_gini_coefficient(Container & c);
+
+    template<class ForwardIterator>
+    auto sample_absolute_gini_coefficient(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
     auto hoyer_sparsity(Container const & c);
 
     template<class ForwardIterator>
@@ -73,12 +79,13 @@ The absolute median supports both real and complex arithmetic, modifies its inpu
 
 The Gini coefficient, first used to measure wealth inequality, is also one of the best measures of the sparsity of an expansion in a basis.
 A sparse expansion has most of its norm concentrated in just a few coefficients, making the connection with wealth inequality obvious.
-ee [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard] for details.
+See [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard] for details.
 However, for measuring sparsity, the phase of the numbers is irrelevant, so we provide the `absolute_gini_coefficient`:
 
+    using boost::math::tools::sample_absolute_gini_coefficient;
     using boost::math::tools::absolute_gini_coefficient;
     std::vector<std::complex<double>> v{{0,1}, {0,0}, {0,0}, {0,0}};
-    double abs_gini = absolute_gini_coefficient(v);
+    double abs_gini = sample_absolute_gini_coefficient(v);
     // now abs_gini = 1; maximally unequal
 
     std::vector<std::complex<double>> w{{0,1}, {1,0}, {0,-1}, {-1,0}};
@@ -91,15 +98,12 @@ However, for measuring sparsity, the phase of the numbers is irrelevant, so we p
     // Alternative call useful for computing over subset of the input:
     abs_gini = absolute_gini_coefficient(u.begin(), u.begin() + 1);
 
-    // If you need the population Gini coefficient:
-    double population_gini = (u.size() -1)*absolute_gini_coefficient(u)/u.size();
 
-Wikipedia calls our scaling a "sample Gini coefficient".
-We chose this scaling because it always returns unity for a vector which has only one nonzero coefficient,
-whereas the value of the population Gini coefficient of a vector with one non-zero element is dependent on the length of the input.
+The sample Gini coefficient returns unity for a vector which has only one nonzero coefficient.
+The population Gini coefficient of a vector with one non-zero element is dependent on the length of the input.
 
-Our scaling lacks one desirable property of the population Gini coefficient, namely that "cloning" a vector has the same Gini coefficient.
-If you wish to recover the cloning property, convert to the population Gini coefficient.
+The sample Gini coefficient lacks one desirable property of the population Gini coefficient,
+namely that "cloning" a vector has the same Gini coefficient; though cloning holds to very high accuracy with the sample Gini coefficient and can easily be recovered by a rescaling.
 
 If sorting the input data is too much expense for a sparsity measure (is it going to be perfect anyway?),
 consider calculating the Hoyer sparsity instead.
@@ -205,7 +209,6 @@ Then the method has no mechanism for distinguishing the signal from the noise, a
 
 [heading References]
 
-* Higham, Nicholas J. ['Accuracy and stability of numerical algorithms.] Vol. 80. Siam, 2002.
 * Mallat, Stephane. ['A wavelet tour of signal processing: the sparse way.] Academic press, 2008.
 * Hurley, Niall, and Scott Rickard. ['Comparing measures of sparsity.] IEEE Transactions on Information Theory 55.10 (2009): 4723-4741.
 * Jensen, Arne, and Anders la Cour-Harbo. ['Ripples in mathematics: the discrete wavelet transform.] Springer Science & Business Media, 2001.

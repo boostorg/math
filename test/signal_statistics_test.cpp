@@ -227,18 +227,21 @@ template<class Real>
 void test_absolute_gini_coefficient()
 {
     using boost::math::tools::absolute_gini_coefficient;
+    using boost::math::tools::sample_absolute_gini_coefficient;
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{-1,0,0};
-    Real gini = absolute_gini_coefficient(v.begin(), v.end());
+    Real gini = sample_absolute_gini_coefficient(v.begin(), v.end());
     BOOST_TEST(abs(gini - 1) < tol);
 
     gini = absolute_gini_coefficient(v);
-    BOOST_TEST(abs(gini - 1) < tol);
+    BOOST_TEST(abs(gini - Real(2)/Real(3)) < tol);
 
     v[0] = 1;
     v[1] = -1;
     v[2] = 1;
     gini = absolute_gini_coefficient(v.begin(), v.end());
+    BOOST_TEST(abs(gini) < tol);
+    gini = sample_absolute_gini_coefficient(v.begin(), v.end());
     BOOST_TEST(abs(gini) < tol);
 
     std::vector<std::complex<Real>> w(128);
@@ -248,6 +251,8 @@ void test_absolute_gini_coefficient()
         w[k] = exp(i*static_cast<Real>(k)/static_cast<Real>(w.size()));
     }
     gini = absolute_gini_coefficient(w.begin(), w.end());
+    BOOST_TEST(abs(gini) < tol);
+    gini = sample_absolute_gini_coefficient(w.begin(), w.end());
     BOOST_TEST(abs(gini) < tol);
 
     // The population Gini index is invariant under "cloning": If w = v \oplus v, then G(w) = G(v).
@@ -263,11 +268,8 @@ void test_absolute_gini_coefficient()
     {
         u[i + u.size()/2] = u[i];
     }
-    std::cout << std::setprecision(std::numeric_limits<Real>::digits10 + 1);
-    Real scale1 = (u.size() - 2)/static_cast<Real>(u.size());
-    Real scale2 =  (u.size() - 1)/static_cast<Real>(u.size());
-    Real population_gini1 = scale1*absolute_gini_coefficient(u.begin(), u.begin() + u.size()/2);
-    Real population_gini2 = scale2*absolute_gini_coefficient(u.begin(), u.end());
+    Real population_gini1 = absolute_gini_coefficient(u.begin(), u.begin() + u.size()/2);
+    Real population_gini2 = absolute_gini_coefficient(u.begin(), u.end());
 
     BOOST_TEST(abs(population_gini1 - population_gini2) < 10*tol);
 
@@ -281,7 +283,7 @@ void test_absolute_gini_coefficient()
     {
         u[i] = exp_dis(gen);
     }
-    population_gini2 = scale2*absolute_gini_coefficient(u);
+    population_gini2 = absolute_gini_coefficient(u);
 
     BOOST_TEST(abs(population_gini2 - 0.5) < 0.01);
 }

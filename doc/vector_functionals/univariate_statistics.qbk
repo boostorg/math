@@ -186,7 +186,7 @@ Compute the Gini coefficient of a dataset:
     gini = boost::math::tools::gini_coefficient(w.begin(), w.end());
     // gini = 0, as all elements are now equal.
 
-/Nota bene: The input data is altered-in particular, it is sorted. Makes a call to `std::sort`, and as such requires random access iterators./
+/Nota bene/: The input data is altered-in particular, it is sorted. Makes a call to `std::sort`, and as such requires random access iterators.
 
 The sample Gini coefficient lies in the range [0,1], whereas the population Gini coefficient is in the range [0, 1 - 1/ /n/].
 

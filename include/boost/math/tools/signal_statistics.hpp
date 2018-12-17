@@ -72,16 +72,28 @@ auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
         decltype(abs(*first)) zero = 0;
         return zero;
     }
-    return ((2*num)/denom - i)/(i-2);
-
-
+    return ((2*num)/denom - i)/(i-1);
 }
 
 template<class RandomAccessContainer>
 inline auto absolute_gini_coefficient(RandomAccessContainer & v)
 {
-    return absolute_gini_coefficient(v.begin(), v.end());
+    return boost::math::tools::absolute_gini_coefficient(v.begin(), v.end());
 }
+
+template<class ForwardIterator>
+auto sample_absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
+{
+    size_t n = std::distance(first, last);
+    return n*boost::math::tools::absolute_gini_coefficient(first, last)/(n-1);
+}
+
+template<class RandomAccessContainer>
+inline auto sample_absolute_gini_coefficient(RandomAccessContainer & v)
+{
+    return boost::math::tools::sample_absolute_gini_coefficient(v.begin(), v.end());
+}
+
 
 // The Hoyer sparsity measure is defined in:
 // https://arxiv.org/pdf/0811.4706.pdf
@@ -118,7 +130,7 @@ auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
 template<class Container>
 inline auto hoyer_sparsity(Container const & v)
 {
-    return hoyer_sparsity(v.cbegin(), v.cend());
+    return boost::math::tools::hoyer_sparsity(v.cbegin(), v.cend());
 }
 
 
@@ -224,7 +236,7 @@ template<class Container>
 auto mean_invariant_oracle_snr_db(Container const & signal, Container const & noisy_signal)
 {
     using std::log10;
-    return 10*log10(mean_invariant_oracle_snr(signal, noisy_signal));
+    return 10*log10(boost::math::tools::mean_invariant_oracle_snr(signal, noisy_signal));
 }
 
 
@@ -233,7 +245,7 @@ template<class Container>
 auto oracle_snr_db(Container const & signal, Container const & noisy_signal)
 {
     using std::log10;
-    return 10*log10(oracle_snr(signal, noisy_signal));
+    return 10*log10(boost::math::tools::oracle_snr(signal, noisy_signal));
 }
 
 // A good reference on the M2M4 estimator:
