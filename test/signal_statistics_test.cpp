@@ -154,7 +154,7 @@ void test_hoyer_sparsity()
     // Now some statistics:
     // If x_i ~ Unif(0,1), E[x_i] = 1/2, E[x_i^2] = 1/3.
     // Therefore, E[||x||_1] = N/2, E[||x||_2] = sqrt(N/3),
-    // and hoyer_sparsity(x) = (1-sqrt(3)/2)/(1-1/sqrt(N))
+    // and hoyer_sparsity(x) is close to (1-sqrt(3)/2)/(1-1/sqrt(N))
     std::mt19937 gen(82);
     std::uniform_real_distribution<long double> dis(0, 1);
     v.resize(5000);
@@ -164,6 +164,20 @@ void test_hoyer_sparsity()
     hs = boost::math::tools::hoyer_sparsity(v);
     Real expected = (1.0 - boost::math::constants::root_three<Real>()/2)/(1.0 - 1.0/sqrt(v.size()));
     BOOST_TEST(abs(expected - hs) < 0.01);
+
+    // Does it work with a forward list?
+    std::forward_list<Real> u1{1, 1, 1};
+    hs = boost::math::tools::hoyer_sparsity(u1);
+    BOOST_TEST(abs(hs) < tol);
+
+    // Does it work with a boost ublas vector?
+    boost::numeric::ublas::vector<Real> u2(3);
+    u2[0] = 1;
+    u2[1] = 1;
+    u2[2] = 1;
+    hs = boost::math::tools::hoyer_sparsity(u2);
+    BOOST_TEST(abs(hs) < tol);
+
 }
 
 template<class Z>

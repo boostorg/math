@@ -124,6 +124,12 @@ As the name suggests, it is used to measure the sparsity of an expansion in some
 The Hoyer sparsity computes ([radic]/N/ - \u2113[super 1](v)/\u2113[super 2](v))/([radic]N -1).
 For details, see [@http://www.jmlr.org/papers/volume5/hoyer04a/hoyer04a.pdf Hoyer] as well as [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard].
 
+A few special cases will serve to clarify the intended use:
+If /v/ has only one nonzero coefficient, the Hoyer sparsity attains its maxima of 1.
+If the coefficients of /v/ all have the same magnitude, then the Hoyer sparsity attains its minima of zero.
+If the elements of /v/ are uniformly distributed on an interval [0, /b/], then the Hoyer sparsity is approximately 0.133.
+
+
 Usage:
 
     std::vector<Real> v{1,0,0};
