@@ -16,8 +16,7 @@
 namespace boost{ namespace math{ namespace tools {
 
 template<class Container>
-auto
-means_and_population_covariance(Container const & u, Container const & v)
+auto means_and_covariance(Container const & u, Container const & v)
 {
     using Real = typename Container::value_type;
     using std::size;
@@ -42,10 +41,9 @@ means_and_population_covariance(Container const & u, Container const & v)
 }
 
 template<class Container>
-auto
-population_covariance(Container const & u, Container const & v)
+auto covariance(Container const & u, Container const & v)
 {
-    auto [mu_u, mu_v, cov] = boost::math::tools::means_and_population_covariance(u, v);
+    auto [mu_u, mu_v, cov] = boost::math::tools::means_and_covariance(u, v);
     return cov;
 }
 

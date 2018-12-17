@@ -32,8 +32,8 @@ using boost::multiprecision::cpp_complex_50;
  * 5) Does it work with complex data if complex data is sensible?
  */
 
-using  boost::math::tools::means_and_population_covariance;
-using  boost::math::tools::population_covariance;
+using  boost::math::tools::means_and_covariance;
+using  boost::math::tools::covariance;
 
 template<class Real>
 void test_covariance()
@@ -45,7 +45,7 @@ void test_covariance()
     // Covariance of a single thing is zero:
     std::array<Real, 1> u1{8};
     std::array<Real, 1> v1{17};
-    auto [mu_u1, mu_v1, cov1] = means_and_population_covariance(u1, v1);
+    auto [mu_u1, mu_v1, cov1] = means_and_covariance(u1, v1);
 
     BOOST_TEST(abs(cov1) < tol);
     BOOST_TEST(abs(mu_u1 - 8) < tol);
@@ -54,7 +54,7 @@ void test_covariance()
 
     std::array<Real, 2> u2{8, 4};
     std::array<Real, 2> v2{3, 7};
-    auto [mu_u2, mu_v2, cov2] = means_and_population_covariance(u2, v2);
+    auto [mu_u2, mu_v2, cov2] = means_and_covariance(u2, v2);
 
     BOOST_TEST(abs(cov2+4) < tol);
     BOOST_TEST(abs(mu_u2 - 6) < tol);
@@ -63,22 +63,22 @@ void test_covariance()
     std::vector<Real> u3{1,2,3};
     std::vector<Real> v3{1,1,1};
 
-    auto [mu_u3, mu_v3, cov3] = means_and_population_covariance(u3,v3);
+    auto [mu_u3, mu_v3, cov3] = means_and_covariance(u3, v3);
 
     // Since v is constant, covariance(u,v) = 0 against everything any u:
     BOOST_TEST(abs(cov3) < tol);
     BOOST_TEST(abs(mu_u3 - 2) < tol);
     BOOST_TEST(abs(mu_v3 - 1) < tol);
-    // Make sure we pull the correct symbol out of means_and_populaton_covariance:
-    cov3 = population_covariance(u3, v3);
+    // Make sure we pull the correct symbol out of means_and_covariance:
+    cov3 = covariance(u3, v3);
     BOOST_TEST(abs(cov3) < tol);
 
-    cov3 = population_covariance(v3, u3);
+    cov3 = covariance(v3, u3);
     // Covariance is symmetric: cov(u,v) = cov(v,u)
     BOOST_TEST(abs(cov3) < tol);
 
     // cov(u,u) = sigma(u)^2:
-    cov3 = population_covariance(u3, u3);
+    cov3 = covariance(u3, u3);
     Real expected = Real(2)/Real(3);
 
     BOOST_TEST(abs(cov3 - expected) < tol);
@@ -88,24 +88,27 @@ void test_covariance()
     std::uniform_real_distribution<double> dis(-1.0, 1.0);
     std::vector<Real> u(500);
     std::vector<Real> v(500);
-    for(size_t i = 0; i < u.size(); ++i) {
+    for(size_t i = 0; i < u.size(); ++i)
+    {
         u[i] = (Real) dis(gen);
         v[i] = (Real) dis(gen);
     }
 
-    auto [mu_u, sigma_u_sq] = boost::math::tools::mean_and_population_variance(u);
-    auto [mu_v, sigma_v_sq] = boost::math::tools::mean_and_population_variance(v);
+    Real mu_u = boost::math::tools::mean(u);
+    Real mu_v = boost::math::tools::mean(v);
+    Real sigma_u_sq = boost::math::tools::variance(u);
+    Real sigma_v_sq = boost::math::tools::variance(v);
 
-    auto [mu_u_, mu_v_, cov_uv] = means_and_population_covariance(u, v);
+    auto [mu_u_, mu_v_, cov_uv] = means_and_covariance(u, v);
     BOOST_TEST(abs(mu_u - mu_u_) < tol);
     BOOST_TEST(abs(mu_v - mu_v_) < tol);
 
     // Cauchy-Schwartz inequality:
     BOOST_TEST(cov_uv*cov_uv <= sigma_u_sq*sigma_v_sq);
     // cov(X, X) = sigma(X)^2:
-    Real cov_uu = population_covariance(u, u);
+    Real cov_uu = covariance(u, u);
     BOOST_TEST(abs(cov_uu - sigma_u_sq) < tol);
-    Real cov_vv = population_covariance(v, v);
+    Real cov_vv = covariance(v, v);
     BOOST_TEST(abs(cov_vv - sigma_v_sq) < tol);
 
 }

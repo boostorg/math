@@ -22,10 +22,34 @@ namespace boost{ namespace math{ namespace tools {
     auto mean(ForwardIterator first, ForwardIterator last);
 
     template<class Container>
-    auto mean_and_population_variance(Container const & c);
+    auto variance(Container const & c);
 
     template<class ForwardIterator>
-    auto mean_and_population_variance(ForwardIterator first, ForwardIterator last);
+    auto variance(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto sample_variance(Container const & c);
+
+    template<class ForwardIterator>
+    auto sample_variance(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto skewness(Container const & c);
+
+    template<class ForwardIterator>
+    auto skewness(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto kurtosis(Container const & c);
+
+    template<class ForwardIterator>
+    auto kurtosis(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto first_four_moments(Container const & c);
+
+    template<class ForwardIterator>
+    auto first_four_moments(ForwardIterator first, ForwardIterator last);
 
     template<class Container>
     auto median(Container & c);
@@ -34,16 +58,16 @@ namespace boost{ namespace math{ namespace tools {
     auto median(ForwardIterator first, ForwardIterator last);
 
     template<class Container>
-    auto population_skewness(Container const & c);
-
-    template<class ForwardIterator>
-    auto population_skewness(ForwardIterator first, ForwardIterator last);
-
-    template<class Container>
     auto gini_coefficient(Container & c);
 
     template<class ForwardIterator>
     auto gini_coefficient(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
+    auto sample_gini_coefficient(Container & c);
+
+    template<class ForwardIterator>
+    auto sample_gini_coefficient(ForwardIterator first, ForwardIterator last);
 
 }}}
 ``
@@ -70,30 +94,71 @@ For certain operations (total variation, for example) integer inputs are support
     std::vector<double> v{1,2,3,4,5};
     double mu = boost::math::tools::mean(v.cbegin(), v.cend());
     // Alternative syntax if you want to use entire container:
-    double mu = boost::math::tools::mean(v);
+    mu = boost::math::tools::mean(v);
 
 The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6a].
 The data is not modified and must be forward iterable.
-Works with real, complex and integer data.
+Works with real and integer data.
 If the input is an integer type, the output is a double precision float.
 
-[heading Mean and Population Variance]
+[heading Variance]
 
     std::vector<double> v{1,2,3,4,5};
-    auto [mu, s] = boost::math::tools::mean_and_population_variance(v.cbegin(), v.cend());
+    Real sigma_sq = boost::math::tools::variance(v.cbegin(), v.cend());
 
 If you don't need to calculate on a subset of the input, then the range call is more terse:
 
     std::vector<double> v{1,2,3,4,5};
-    auto [mu, s] = boost::math::tools::mean_and_population_variance(v);
+    Real sigma_sq = boost::math::tools::variance(v);
 
 The implementation follows [@https://doi.org/10.1137/1.9780898718027 Higham 1.6b].
-Note that we do not provide computation of population variance alone;
-we are unaware of any one-pass, numerically stable computation of population variance which does not simultaneously generate the mean.
-If the mean is not required, simply ignore it.
-The input datatype must be forward iterable and the range `[first, last)` must contain at least two elements.
+The input data must be forward iterable and the range `[first, last)` must contain at least two elements.
 It is /not/ in general sensible to pass complex numbers to this routine.
 If integers are passed as input, then the output is a double precision float.
+
+`boost::math::tools::variance` returns the population variance.
+If you want a sample variance, use
+
+    std::vector<double> v{1,2,3,4,5};
+    Real sn_sq = boost::math::tools::sample_variance(v);
+
+
+[heading Skewness]
+
+Computes the skewness of a dataset:
+
+    std::vector<double> v{1,2,3,4,5};
+    double skewness = boost::math::tools::skewness(v);
+    // skewness = 0.
+
+The input vector is not modified, works with integral and real data.
+If the input data is integral, the output is a double precision float.
+
+For a dataset consisting of a single constant value, we take the skewness to be zero by definition.
+
+The implementation follows [@https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf Pebay].
+
+[heading Kurtosis]
+
+Computes the kurtosis of a dataset:
+
+    std::vector<double> v{1,2,3,4,5};
+    double kurtosis = boost::math::tools::kurtosis(v);
+    // kurtosis = 17/10
+
+The implementation follows [@https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf Pebay].
+The input data must be forward iterable and must consist of real or integral values.
+If the input data is integral, the output is a double precision float.
+Note that this is /not/ the excess kurtosis.
+If you require the excess kurtosis, subtract 3 from the kurtosis.
+
+[heading First four moments]
+
+Simultaneously computes the first four [@https://en.wikipedia.org/wiki/Central_moment central moments] in a single pass through the data:
+
+    std::vector<double> v{1,2,3,4,5};
+    auto [M1, M2, M3, M4] = boost::math::tools::first_four_moments(v);
+
 
 [heading Median]
 
@@ -105,56 +170,28 @@ Compute the median of a dataset:
 /Nota bene: The input vector is modified./
 The calculation of the median is a thin wrapper around the C++11 [@https://en.cppreference.com/w/cpp/algorithm/nth_element `nth_element`].
 Therefore, all requirements of `std::nth_element` are inherited by the median calculation.
+In particular, the container must allow random access.
 
-[heading Skewness]
-
-Computes the skewness of a dataset:
-
-    std::vector<double> v{1,2,3,4,5};
-    double skewness = boost::math::tools::population_skewness(v);
-    // skewness = 0.
-
-The input vector is not modified, works with integral and real data.
-If the input data is integral, the output is a double precision float.
-
-For a dataset consisting of a constant value, we return zero as the skewness.
-
-The implementation follows [@https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf Pebay].
-
-[heading Kurtosis]
-
-Computes the kurtosis of a dataset:
-
-    std::vector<double> v{1,2,3,4,5};
-    double kurtosis = boost::math::tools::population_kurtosis(v);
-    // kurtosis = 17/10
-
-The implementation follows [@https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf Pebay].
-The input data must be forward iterable and must consist of real or integral values.
-If the input data is integral, the output is a double precision float.
-Note that this is /not/ the excess kurtosis.
-If you require the excess kurtosis, subtract 3 from the kurtosis.
 
 [heading Gini Coefficient]
 
 Compute the Gini coefficient of a dataset:
 
     std::vector<double> v{1,0,0,0};
-    double gini = boost::math::tools::gini_coefficient(v.begin(), v.end());
-    // gini = 1, as v[0] holds all the "wealth"
+    double gini = boost::math::tools::gini_coefficient(v);
+    // gini = 3/4
+    double s_gini = boost::math::tools::sample_gini_coefficient(v);
+    // s_gini = 1.
     std::vector<double> w{1,1,1,1};
     gini = boost::math::tools::gini_coefficient(w.begin(), w.end());
     // gini = 0, as all elements are now equal.
 
-/Nota bene: The input data is altered-in particular, it is sorted./
+/Nota bene: The input data is altered-in particular, it is sorted. Makes a call to `std::sort`, and as such requires random access iterators./
 
-/Nota bene:/ Different authors use different conventions regarding the overall scale of the Gini coefficient.
-We use  [@https://en.wikipedia.org/wiki/Gini_coefficient Wikipedia's] "sample Gini coefficient".
-The sample Gini coefficient lies in the range [0,1], whereas the  population Gini coefficient is in the range [0, 1 - 1/ /n/].
-If you wish to convert the sample Gini coefficient returned by Boost to the population Gini coefficient, multiply by (/n/-1)/ /n/.
+The sample Gini coefficient lies in the range [0,1], whereas the population Gini coefficient is in the range [0, 1 - 1/ /n/].
 
 /Nota bene:/ There is essentially no reason to pass negative values to the Gini coefficient function.
-However, a single use case (measuring wealth inequality when some people have negative wealth) exists, so we do not throw an exception when negative values are encountered.
+However, a use case (measuring wealth inequality when some people have negative wealth) exists, so we do not throw an exception when negative values are encountered.
 You should have /very/ good cause to pass negative values to the Gini coefficient calculator.
 Another use case is found in signal processing, but the sorting is by magnitude and hence has a different implementation.
 See `absolute_gini_coefficient` for details.
