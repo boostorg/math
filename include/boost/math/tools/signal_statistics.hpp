@@ -96,6 +96,7 @@ inline auto shannon_cost(Container const & v)
 template<class ForwardIterator>
 auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
 {
+    using std::abs;
     using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
     BOOST_ASSERT_MSG(first != last && std::next(first) != last, "Computation of the Gini coefficient requires at least two samples.");
 
@@ -120,6 +121,8 @@ auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
         return zero;
     }
     return ((2*num)/denom - i)/(i-2);
+
+
 }
 
 template<class RandomAccessContainer>
@@ -168,10 +171,11 @@ inline auto hoyer_sparsity(Container const & v)
 
 
 template<class Container>
-auto oracle_snr(Container const & signal, Container const & noise)
+auto oracle_snr(Container const & signal, Container const & noisy_signal)
 {
     using Real = typename Container::value_type;
-    BOOST_ASSERT_MSG(signal.size() == noise.size(), "Signal and noise must be have the same number of elements.");
+    BOOST_ASSERT_MSG(signal.size() == noisy_signal.size(),
+                     "Signal and noisy_signal must be have the same number of elements.");
     if constexpr (std::is_integral<Real>::value)
     {
         double numerator = 0;
@@ -179,7 +183,7 @@ auto oracle_snr(Container const & signal, Container const & noise)
         for (size_t i = 0; i < signal.size(); ++i)
         {
             numerator += signal[i]*signal[i];
-            denominator += noise[i]*noise[i];
+            denominator += (noisy_signal[i] - signal[i])*(noisy_signal[i] - signal[i]);
         }
         if (numerator == 0 && denominator == 0)
         {
@@ -201,7 +205,7 @@ auto oracle_snr(Container const & signal, Container const & noise)
         for (size_t i = 0; i < signal.size(); ++i)
         {
             numerator += norm(signal[i]);
-            denominator += norm(noise[i]);
+            denominator += norm(noisy_signal[i] - signal[i]);
         }
         if (numerator == 0 && denominator == 0)
         {
@@ -221,7 +225,7 @@ auto oracle_snr(Container const & signal, Container const & noise)
         for (size_t i = 0; i < signal.size(); ++i)
         {
             numerator += signal[i]*signal[i];
-            denominator += noise[i]*noise[i];
+            denominator += (signal[i] - noisy_signal[i])*(signal[i] - noisy_signal[i]);
         }
         if (numerator == 0 && denominator == 0)
         {
@@ -237,10 +241,10 @@ auto oracle_snr(Container const & signal, Container const & noise)
 }
 
 template<class Container>
-auto mean_invariant_oracle_snr(Container const & signal, Container const & noise)
+auto mean_invariant_oracle_snr(Container const & signal, Container const & noisy_signal)
 {
     using Real = typename Container::value_type;
-    BOOST_ASSERT_MSG(signal.size() == noise.size(), "Signal and noise must be have the same number of elements.");
+    BOOST_ASSERT_MSG(signal.size() == noisy_signal.size(), "Signal and noise must be have the same number of elements.");
 
     Real mean = boost::math::tools::mean(signal);
     Real numerator = 0;
@@ -249,7 +253,7 @@ auto mean_invariant_oracle_snr(Container const & signal, Container const & noise
     {
         Real tmp = signal[i] - mean;
         numerator += tmp*tmp;
-        denominator += noise[i]*noise[i];
+        denominator += (signal[i] - noisy_signal[i])*(signal[i] - noisy_signal[i]);
     }
     if (numerator == 0 && denominator == 0)
     {
@@ -264,21 +268,20 @@ auto mean_invariant_oracle_snr(Container const & signal, Container const & noise
 
 }
 
-// Follows the definition of SNR given in Mallat, A Wavelet Tour of Signal Processing, equation 11.16.
 template<class Container>
-auto mean_invariant_oracle_snr_db(Container const & signal, Container const & noise)
+auto mean_invariant_oracle_snr_db(Container const & signal, Container const & noisy_signal)
 {
     using std::log10;
-    return 10*log10(mean_invariant_oracle_snr(signal, noise));
+    return 10*log10(mean_invariant_oracle_snr(signal, noisy_signal));
 }
 
 
 // Follows the definition of SNR given in Mallat, A Wavelet Tour of Signal Processing, equation 11.16.
 template<class Container>
-auto oracle_snr_db(Container const & signal, Container const & noise)
+auto oracle_snr_db(Container const & signal, Container const & noisy_signal)
 {
     using std::log10;
-    return 10*log10(oracle_snr(signal, noise));
+    return 10*log10(oracle_snr(signal, noisy_signal));
 }
 
 // A good reference on the M2M4 estimator:
@@ -300,7 +303,6 @@ auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::val
         // (ka+kw-6)S^2 + 2M2(3-kw)S + kw*M2^2 - M4 = 0 =: a*S^2 + bs*N + cs = 0
         // If we first eliminate S, we obtain the quadratic equation:
         // (ka+kw-6)N^2 + 2M2(3-ka)N + ka*M2^2 - M4 = 0 =: a*N^2 + bn*N + cn = 0
-        // We see that if kw=3, we have a special case, and if ka+kw=6, we have a special case.
         // I believe these equations are totally independent quadratics;
         // if one has a complex solution it is not necessarily the case that the other must also.
         // However, I can't prove that, so there is a chance that this does unnecessary work.

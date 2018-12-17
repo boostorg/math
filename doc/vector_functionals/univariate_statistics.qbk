@@ -149,13 +149,15 @@ Compute the Gini coefficient of a dataset:
 /Nota bene: The input data is altered-in particular, it is sorted./
 
 /Nota bene:/ Different authors use different conventions regarding the overall scale of the Gini coefficient.
-We have chosen to follow [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard's definition], which [@https://en.wikipedia.org/wiki/Gini_coefficient Wikipedia] calls a "sample Gini coefficient".
-Hurley and Rickard's definition places the Gini coefficient in the range [0,1]; Wikipedia's population Gini coefficient is in the range [0, 1 - 1/ /n/].
-If you wish to convert the Boost Gini coefficient to the population Gini coefficient, multiply by (/n/-1)/ /n/.
+We use  [@https://en.wikipedia.org/wiki/Gini_coefficient Wikipedia's] "sample Gini coefficient".
+The sample Gini coefficient lies in the range [0,1], whereas the  population Gini coefficient is in the range [0, 1 - 1/ /n/].
+If you wish to convert the sample Gini coefficient returned by Boost to the population Gini coefficient, multiply by (/n/-1)/ /n/.
 
 /Nota bene:/ There is essentially no reason to pass negative values to the Gini coefficient function.
 However, a single use case (measuring wealth inequality when some people have negative wealth) exists, so we do not throw an exception when negative values are encountered.
 You should have /very/ good cause to pass negative values to the Gini coefficient calculator.
+Another use case is found in signal processing, but the sorting is by magnitude and hence has a different implementation.
+See `absolute_gini_coefficient` for details.
 
 [heading References]
 

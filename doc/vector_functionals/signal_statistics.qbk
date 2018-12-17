@@ -46,10 +46,10 @@ namespace boost{ namespace math{ namespace tools {
     auto shannon_cost(ForwardIterator first, ForwardIterator last);
 
     template<class Container>
-    auto oracle_snr(Container const & signal, Container const & noise);
+    auto oracle_snr(Container const & signal, Container const & noisy_signal);
 
     template<class Container>
-    auto oracle_snr_db(Container const & signal, Container const & noise);
+    auto oracle_snr_db(Container const & signal, Container const & noisy_signal);
 
     template<class Container>
     auto m2m4_snr_estimator(Container const & noisy_signal, typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimate_noise_kurtosis=3);
@@ -73,33 +73,45 @@ For certain operations (total variation, for example) integer inputs are support
 
 The absolute median is used in signal processing, where the median of the magnitude of the coefficients in some expansion are used to estimate noise variance.
 See [@https://wavelet-tour.github.io/ Mallat] for details.
-The absolute median supports both real and complex arithmetic, modifies its input, and requires random access iterators.
+The absolute median supports both real and complex arithmetic, modifies its input, and requires random access containers.
 
     std::vector<double> v{-1, 1};
-    double m = boost::math::tools::absolute_median(v.begin(), v.end());
+    double m = boost::math::tools::absolute_median(v);
     // m = 1
+    // Alternative syntax, using a subset of the container:
+    m = boost::math::tools::absolute_median(v.begin(), v.begin() + 1);
 
 [heading Absolute Gini Coefficient]
 
 The Gini coefficient, first used to measure wealth inequality, is also one of the best measures of the sparsity of an expansion in a basis.
 A sparse expansion has most of its norm concentrated in just a few coefficients, making the connection with wealth inequality obvious.
+ee [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard] for details.
 However, for measuring sparsity, the phase of the numbers is irrelevant, so we provide the `absolute_gini_coefficient`:
 
+    using boost::math::tools::absolute_gini_coefficient;
     std::vector<std::complex<double>> v{{0,1}, {0,0}, {0,0}, {0,0}};
-    double abs_gini = boost::math::tools::absolute_gini_coefficient(v.begin(), v.end());
-    // now abs_gini = 1
+    double abs_gini = absolute_gini_coefficient(v);
+    // now abs_gini = 1; maximally unequal
 
     std::vector<std::complex<double>> w{{0,1}, {1,0}, {0,-1}, {-1,0}};
-    double abs_gini = boost::math::tools::absolute_gini_coefficient(w.begin(), w.end());
-    // now abs_gini = 0
+    abs_gini = absolute_gini_coefficient(w);
+    // now abs_gini = 0; every element of the vector has equal magnitude
 
     std::vector<double> u{-1, 1, -1};
-    double abs_gini = boost::math::tools::absolute_gini_coefficient(u.begin(), u.end());
+    abs_gini = absolute_gini_coefficient(u);
     // now abs_gini = 0
+    // Alternative call useful for computing over subset of the input:
+    abs_gini = absolute_gini_coefficient(u.begin(), u.begin() + 1);
+
+    // If you need the population Gini coefficient:
+    double population_gini = (u.size() -1)*absolute_gini_coefficient(u)/u.size();
 
 Wikipedia calls our scaling a "sample Gini coefficient".
 We chose this scaling because it always returns unity for a vector which has only one nonzero coefficient,
 whereas the value of the population Gini coefficient of a vector with one non-zero element is dependent on the length of the input.
+
+Our scaling lacks one desirable property of the population Gini coefficient, namely that "cloning" a vector has the same Gini coefficient.
+If you wish to recover the cloning property, convert to the population Gini coefficient.
 
 If sorting the input data is too much expense for a sparsity measure (is it going to be perfect anyway?),
 consider calculating the Hoyer sparsity instead.
@@ -107,7 +119,7 @@ consider calculating the Hoyer sparsity instead.
 [heading Hoyer Sparsity]
 
 The Hoyer sparsity measures a normalized ratio of the \u2113[super 1] and \u2113[super 2] norms.
-As the name suggests, it is used to measure sparsity in an expansion in some basis.
+As the name suggests, it is used to measure the sparsity of an expansion in some basis.
 
 The Hoyer sparsity computes ([radic]/N/ - \u2113[super 1](v)/\u2113[super 2](v))/([radic]N -1).
 For details, see [@https://arxiv.org/pdf/0811.4706.pdf Hurley and Rickard].
@@ -145,20 +157,18 @@ See [@https://doi.org/10.1007/978-3-642-56702-5 Ripples in Mathematics] for deta
 
 [heading Oracle Signal-to-noise ratio]
 
-The function `oracle_snr` computes the ratio \u2016 /s/ \u2016[sub 2][super 2] / \u2016 /w/ \u2016[sub 2][super 2], where /s/ is signal and /w/ is noise.
-The function `oracle_snr_db` computes 10`log`[sub 10](\u2016 /s/ \u2016[super 2] / \u2016 /w/ \u2016[super 2]).
-In general, one does not know how to decompose a real signal /x/ into /s/ + /w/ and as such /s/ is regarded as oracle information.
-Hence this function is mainly useful for unit testing other SNR measurements.
+The function `oracle_snr` computes the ratio \u2016 /s/ \u2016[sub 2][super 2] / \u2016 /s/ - /x/ \u2016[sub 2][super 2], where /s/ is signal and /x/ is a noisy signal.
+The function `oracle_snr_db` computes 10`log`[sub 10](\u2016 /s/ \u2016[super 2] / \u2016 /s/ - /x/ \u2016[super 2]).
+The functions are so named because in general, one does not know how to decompose a real signal /x/ into /s/ + /w/ and as such /s/ is regarded as oracle information.
+Hence this function is mainly useful for unit testing other SNR estimators.
 
 Usage:
 
     std::vector<double> signal(500, 3.2);
-    std::vector<double> noise(500);
-    // fill 'noise' with Gaussian white noise...
-    double snr_db = boost::math::tools::oracle_snr_db(signal, noise);
-    double snr = boost::math::tools::oracle_snr(signal, noise);
-
-The call should return the same value as [@https://www.mathworks.com/help/signal/ref/snr.html Matlab's `snr`].
+    std::vector<double> noisy_signal(500);
+    // fill 'noisy_signal' signal + noise
+    double snr_db = boost::math::tools::oracle_snr_db(signal, noisy_signal);
+    double snr = boost::math::tools::oracle_snr(signal, noisy_signal);
 
 The input can be real, complex, or integral.
 Integral inputs produce double precision floating point outputs.

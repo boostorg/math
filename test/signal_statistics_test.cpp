@@ -29,17 +29,18 @@ using boost::math::constants::two_pi;
  * 3) Does it work with ublas and std::array? (Checking Eigen and Armadillo will make the CI system really unhappy.)
  * 4) Does it work with std::forward_list if a forward iterator is all that is required?
  * 5) Does it work with complex data if complex data is sensible?
+ * 6) Does it work with integer data if sensible?
  */
 
 template<class Real>
 void test_absolute_median()
 {
-    std::mt19937 g(12);
     std::vector<Real> v{-1, 2, -3, 4, -5, 6, -7};
 
     Real m = boost::math::tools::absolute_median(v.begin(), v.end());
     BOOST_TEST_EQ(m, 4);
 
+    std::mt19937 g(12);
     std::shuffle(v.begin(), v.end(), g);
     m = boost::math::tools::absolute_median(v);
     BOOST_TEST_EQ(m, 4);
@@ -77,6 +78,17 @@ void test_absolute_median()
     std::array<Real, 3> w{1, 2, -3};
     m = boost::math::tools::absolute_median(w);
     BOOST_TEST_EQ(m, 2);
+
+    // boost.ublas vector?
+    boost::numeric::ublas::vector<Real> u(6);
+    u[0] = 1;
+    u[1] = 2;
+    u[2] = -3;
+    u[3] = 1;
+    u[4] = 2;
+    u[5] = -3;
+    m = boost::math::tools::absolute_median(u);
+    BOOST_TEST_EQ(m, 2);
 }
 
 
@@ -104,6 +116,12 @@ void test_complex_absolute_median()
     v = {{0, -1}};
     m = boost::math::tools::absolute_median(v.begin(), v.end());
     BOOST_TEST_EQ(m, 1);
+
+    boost::numeric::ublas::vector<Complex> w(1);
+    w[0] = {0, -1};
+    m = boost::math::tools::absolute_median(w);
+    BOOST_TEST_EQ(m, 1);
+
 }
 
 
@@ -180,18 +198,19 @@ void test_complex_hoyer_sparsity()
 template<class Real>
 void test_absolute_gini_coefficient()
 {
+    using boost::math::tools::absolute_gini_coefficient;
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v{-1,0,0};
-    Real gini = boost::math::tools::absolute_gini_coefficient(v.begin(), v.end());
+    Real gini = absolute_gini_coefficient(v.begin(), v.end());
     BOOST_TEST(abs(gini - 1) < tol);
 
-    gini = boost::math::tools::absolute_gini_coefficient(v);
+    gini = absolute_gini_coefficient(v);
     BOOST_TEST(abs(gini - 1) < tol);
 
     v[0] = 1;
     v[1] = -1;
     v[2] = 1;
-    gini = boost::math::tools::absolute_gini_coefficient(v.begin(), v.end());
+    gini = absolute_gini_coefficient(v.begin(), v.end());
     BOOST_TEST(abs(gini) < tol);
 
     std::vector<std::complex<Real>> w(128);
@@ -200,10 +219,43 @@ void test_absolute_gini_coefficient()
     {
         w[k] = exp(i*static_cast<Real>(k)/static_cast<Real>(w.size()));
     }
-    gini = boost::math::tools::absolute_gini_coefficient(w.begin(), w.end());
+    gini = absolute_gini_coefficient(w.begin(), w.end());
     BOOST_TEST(abs(gini) < tol);
 
-    // The Gini index is invariant under "cloning": If w = v \oplus v, then G(w) = G(v).
+    // The population Gini index is invariant under "cloning": If w = v \oplus v, then G(w) = G(v).
+    // We use the sample Gini index, so we need to rescale
+    std::vector<Real> u(1000);
+    std::mt19937 gen(35);
+    std::uniform_real_distribution<long double> dis(0, 50);
+    for (size_t i = 0; i < u.size()/2; ++i)
+    {
+        u[i] = dis(gen);
+    }
+    for (size_t i = 0; i < u.size()/2; ++i)
+    {
+        u[i + u.size()/2] = u[i];
+    }
+    std::cout << std::setprecision(std::numeric_limits<Real>::digits10 + 1);
+    Real scale1 = (u.size() - 2)/static_cast<Real>(u.size());
+    Real scale2 =  (u.size() - 1)/static_cast<Real>(u.size());
+    Real population_gini1 = scale1*absolute_gini_coefficient(u.begin(), u.begin() + u.size()/2);
+    Real population_gini2 = scale2*absolute_gini_coefficient(u.begin(), u.end());
+
+    BOOST_TEST(abs(population_gini1 - population_gini2) < 10*tol);
+
+    // The Gini coefficient of a uniform distribution is (b-a)/(3*(b+a)), see https://en.wikipedia.org/wiki/Gini_coefficient
+    Real expected = (dis.b() - dis.a() )/(3*(dis.a() + dis.b()));
+
+    BOOST_TEST(abs(expected - population_gini1) < 0.01);
+
+    std::exponential_distribution<long double> exp_dis(1);
+    for (size_t i = 0; i < u.size(); ++i)
+    {
+        u[i] = exp_dis(gen);
+    }
+    population_gini2 = scale2*absolute_gini_coefficient(u);
+
+    BOOST_TEST(abs(population_gini2 - 0.5) < 0.01);
 }
 
 template<class Real>
@@ -233,11 +285,11 @@ void test_oracle_snr()
     Real tol = 100*std::numeric_limits<Real>::epsilon();
     size_t length = 100;
     std::vector<Real> signal(length, 1);
-    std::vector<Real> noise(length, 0);
+    std::vector<Real> noisy_signal = signal;
 
-    noise[0] = 1;
-    Real snr = boost::math::tools::oracle_snr(signal, noise);
-    Real snr_db = boost::math::tools::oracle_snr_db(signal, noise);
+    noisy_signal[0] += 1;
+    Real snr = boost::math::tools::oracle_snr(signal, noisy_signal);
+    Real snr_db = boost::math::tools::oracle_snr_db(signal, noisy_signal);
     BOOST_TEST(abs(snr - length) < tol);
     BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
 }
@@ -249,11 +301,11 @@ void test_integer_oracle_snr()
     double tol = std::numeric_limits<double>::epsilon();
     size_t length = 100;
     std::vector<Z> signal(length, 1);
-    std::vector<Z> noise(length, 0);
+    std::vector<Z> noisy_signal = signal;
 
-    noise[0] = 1;
-    double snr = boost::math::tools::oracle_snr(signal, noise);
-    double snr_db = boost::math::tools::oracle_snr_db(signal, noise);
+    noisy_signal[0] += 1;
+    double snr = boost::math::tools::oracle_snr(signal, noisy_signal);
+    double snr_db = boost::math::tools::oracle_snr_db(signal, noisy_signal);
     BOOST_TEST(abs(snr - length) < tol);
     BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
 }
@@ -267,11 +319,11 @@ void test_complex_oracle_snr()
     Real tol = 100*std::numeric_limits<Real>::epsilon();
     size_t length = 100;
     std::vector<Complex> signal(length, {1,0});
-    std::vector<Complex> noise(length, {0,0});
+    std::vector<Complex> noisy_signal = signal;
 
-    noise[0] = {1,0};
-    Real snr = boost::math::tools::oracle_snr(signal, noise);
-    Real snr_db = boost::math::tools::oracle_snr_db(signal, noise);
+    noisy_signal[0] += Complex(1,0);
+    Real snr = boost::math::tools::oracle_snr(signal, noisy_signal);
+    Real snr_db = boost::math::tools::oracle_snr_db(signal, noisy_signal);
     BOOST_TEST(abs(snr - length) < tol);
     BOOST_TEST(abs(snr_db - 10*log10(length)) < tol);
 }
@@ -280,31 +332,29 @@ template<class Real>
 void test_m2m4_snr_estimator()
 {
     std::vector<Real> signal(5000, 1);
-    std::vector<Real> noise(signal.size());
     std::vector<Real> x(signal.size());
     std::mt19937 gen(18);
     std::normal_distribution<Real> dis{0, 1.0};
 
-    for (size_t i = 0; i < noise.size(); ++i) {
-        signal[i] = 5*sin(100*6.28*i/noise.size());
-        noise[i] = dis(gen);
-        x[i] = signal[i] + noise[i];
+    for (size_t i = 0; i < x.size(); ++i) {
+        signal[i] = 5*sin(100*6.28*i/x.size());
+        x[i] = signal[i] + dis(gen);
     }
 
+    // Kurtosis of a sine wave is 1.5:
     auto m2m4_db = boost::math::tools::m2m4_snr_estimator_db(x, 1.5);
-    auto oracle_snr_db = boost::math::tools::mean_invariant_oracle_snr_db(signal, noise);
+    auto oracle_snr_db = boost::math::tools::mean_invariant_oracle_snr_db(signal, x);
     BOOST_TEST(abs(m2m4_db - oracle_snr_db) < 0.2);
 
     std::uniform_real_distribution<Real> uni_dis{-1,1};
-    for (size_t i = 0; i < noise.size(); ++i)
+    for (size_t i = 0; i < x.size(); ++i)
     {
-        noise[i] = uni_dis(gen);
-        x[i] = signal[i] + noise[i];
+        x[i] = signal[i] + uni_dis(gen);
     }
 
     // Kurtosis of continuous uniform distribution over [-1,1] is 1.8:
     m2m4_db = boost::math::tools::m2m4_snr_estimator_db(x, 1.5, 1.8);
-    oracle_snr_db = boost::math::tools::mean_invariant_oracle_snr_db(signal, noise);
+    oracle_snr_db = boost::math::tools::mean_invariant_oracle_snr_db(signal, x);
     BOOST_TEST(abs(m2m4_db - oracle_snr_db) < 0.2);
 }
 
