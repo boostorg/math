@@ -210,12 +210,12 @@ auto mean_invariant_oracle_snr(Container const & signal, Container const & noisy
     using Real = typename Container::value_type;
     BOOST_ASSERT_MSG(signal.size() == noisy_signal.size(), "Signal and noisy signal must be have the same number of elements.");
 
-    Real mean = boost::math::tools::mean(signal);
+    Real mu = boost::math::tools::mean(signal);
     Real numerator = 0;
     Real denominator = 0;
     for (size_t i = 0; i < signal.size(); ++i)
     {
-        Real tmp = signal[i] - mean;
+        Real tmp = signal[i] - mu;
         numerator += tmp*tmp;
         denominator += (signal[i] - noisy_signal[i])*(signal[i] - noisy_signal[i]);
     }
@@ -318,7 +318,12 @@ auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::val
                     }
                     return S/N;
                 }
-
+                S = M2 - N;
+                if (S < 0)
+                {
+                    return std::numeric_limits<Real>::quiet_NaN();
+                }
+                return S/N;
             }
             S = sqrt(Ssq);
             N = M2 - S;
