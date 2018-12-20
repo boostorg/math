@@ -131,7 +131,7 @@ namespace boost { namespace math { namespace detail {
                return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
             }
          }
-         if ((fabs(a) > 1) && (b < 4 * a) && (a < 0) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
+         if ((a < -1) && (b < 4 * a) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
          {
             // Without this we get into an area where the series doesn't converge if b - a ~ b
             return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
@@ -205,6 +205,8 @@ namespace boost { namespace math { namespace detail {
             }
             else if(z < b)
                return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+            else
+               return hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(a, b, z, pol, function);
          }
          else  // b < 0
          {

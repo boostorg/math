@@ -67,6 +67,35 @@
   private:
     const T a, b, z;
   };
+  //
+  // for use when we're recursing to a small b:
+  //
+  template <class T>
+  struct hypergeometric_1F1_recurrence_small_b_coefficients
+  {
+     typedef boost::math::tuple<T, T, T> result_type;
+
+     hypergeometric_1F1_recurrence_small_b_coefficients(const T& a, const T& b, const T& z, int N) :
+        a(a), b(b), z(z), N(N)
+     {
+     }
+
+     result_type operator()(boost::intmax_t i) const
+     {
+        const T bi = b + (i + N);
+        const T bi_minus_1 = b + (i + N - 1);
+
+        const T an = bi * bi_minus_1;
+        const T bn = bi * (-bi_minus_1 - z);
+        const T cn = z * (bi - a);
+
+        return boost::math::make_tuple(an, bn, cn);
+     }
+
+  private:
+     const T a, b, z;
+     int N;
+  };
 
   template <class T>
   struct hypergeometric_1F1_recurrence_a_and_b_coefficients
@@ -259,6 +288,34 @@
      boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> s(a, bk, z);
 
      return boost::math::tools::solve_recurrence_relation_backward(s, static_cast<unsigned int>(integer_part), first, second);
+  }
+
+  template <class T, class Policy>
+  T hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function = "")
+  {
+     BOOST_MATH_STD_USING // modf, frexp, fabs, pow
+     //
+     // Recursion from some b + N > z down to b:
+     //
+        boost::intmax_t integer_part = boost::math::itrunc(z - b) + 2;
+
+     if (integer_part > static_cast<boost::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
+        return boost::math::policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", std::numeric_limits<T>::quiet_NaN(), pol);
+     //
+     // TODO: these 1F1's will be calculated via recursion on a, we should really
+     // use a single recurrence on a and then "turn the corner" and recurse on b:
+     //
+     T first, second;
+     first = boost::math::detail::hypergeometric_1F1_imp(a, b + integer_part, z, pol);
+     --integer_part;
+     second = boost::math::detail::hypergeometric_1F1_imp(a, b + integer_part, z, pol);
+
+     boost::math::detail::hypergeometric_1F1_recurrence_small_b_coefficients<T> s(a, b, z, integer_part);
+
+     return boost::math::tools::solve_recurrence_relation_backward(s,
+        static_cast<unsigned int>(std::abs(integer_part)),
+        first,
+        second);
   }
 
 

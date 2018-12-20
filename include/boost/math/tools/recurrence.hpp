@@ -222,8 +222,8 @@ namespace boost {
             for (unsigned k = 0; k < last_index; ++k)
             {
                tie(a, b, c) = get_coefs(k);
-
-               third = (a * first + b * second) / -c;
+               // scale each part seperately to avoid spurious overflow:
+               third = (a / -c) * first + (b / -c) * second;
 
                swap(first, second);
                swap(second, third);
@@ -256,8 +256,8 @@ namespace boost {
             for (unsigned k = 0; k < last_index; ++k)
             {
                tie(a, b, c) = get_coefs(-static_cast<int>(k));
-
-               next = (b * second + c * first) / -a;
+               // scale each part seperately to avoid spurious overflow:
+               next = (b / -a) * second + (c / -a) * first;
 
                swap(first, second);
                swap(second, next);
