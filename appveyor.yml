@@ -17,13 +17,33 @@ platform:
 environment:
   matrix:
     - ARGS: --toolset=msvc-9.0  address-model=32
-    - ARGS: --toolset=msvc-10.0 address-model=32
-    - ARGS: --toolset=msvc-11.0 address-model=32
-    - ARGS: --toolset=msvc-12.0 address-model=32
-    - ARGS: --toolset=msvc-14.0 address-model=32
-    - ARGS: --toolset=msvc-12.0 address-model=64
-    - ARGS: --toolset=msvc-14.0 address-model=64
       TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-10.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-11.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-12.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-14.0 address-model=32
+      TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-9.0  address-model=32
+      TEST_SUITE: misc ../example//examples
+    - ARGS: --toolset=msvc-10.0 address-model=32
+      TEST_SUITE: misc ../example//examples
+    - ARGS: --toolset=msvc-11.0 address-model=32
+      TEST_SUITE: misc ../example//examples
+    - ARGS: --toolset=msvc-12.0 address-model=32
+      TEST_SUITE: misc ../example//examples
+    - ARGS: --toolset=msvc-14.0 address-model=32
+      TEST_SUITE: misc ../example//examples
+    - ARGS: --toolset=msvc-12.0 address-model=64
+      TEST_SUITE: special_fun distribution_tests
+    - ARGS: --toolset=msvc-12.0 address-model=64
+      TEST_SUITE: misc ../example//examples
+    - ARGS: --toolset=msvc-14.0 address-model=64
+      TEST_SUITE: special_fun
+    - ARGS: --toolset=msvc-14.0 address-model=64
+      TEST_SUITE: distribution_tests
     - ARGS: --toolset=msvc-14.0 address-model=64
       TEST_SUITE: misc ../example//examples
 
@@ -37,7 +57,11 @@ environment:
     
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=32
-      TEST_SUITE: special_fun distribution_tests
+      TEST_SUITE: special_fun
+    
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      ARGS: --toolset=msvc-14.1 address-model=32
+      TEST_SUITE: distribution_tests
     
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       ARGS: --toolset=msvc-14.1 address-model=32
@@ -89,6 +113,8 @@ install:
   - git clone -b %APPVEYOR_REPO_BRANCH% --depth 1 https://github.com/boostorg/boost.git boost-root
   - cd boost-root
   - git submodule update --init tools/build
+  - git submodule update --init tools/boost_install
+  - git submodule update --init libs/headers
   - git submodule update --init libs/config
   - git submodule update --init libs/format
   - git submodule update --init libs/numeric

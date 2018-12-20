@@ -108,7 +108,6 @@ const std::string full_roots_name(boost_root + "/libs/math/doc/roots/");
 
 const std::size_t nooftypes = 4;
 const std::size_t noofalgos = 4;
-const std::size_t noofroots = 3;
 
 double digits_accuracy = 1.0; // 1 == maximum possible accuracy.
 

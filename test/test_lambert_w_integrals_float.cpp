@@ -189,12 +189,13 @@ BOOST_AUTO_TEST_CASE( integrals )
   using boost::math::policies::ignore_error;
   using boost::math::policies::throw_on_error;
 
+
+  /*
   typedef policy<
     domain_error<throw_on_error>,
     overflow_error<ignore_error>
   > no_throw_policy;
 
-  /*
   // Experiment with better diagnostics.
   typedef float Real;
 

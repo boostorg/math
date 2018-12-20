@@ -4,7 +4,7 @@
 <title>Lambert W function</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.2">
+<link rel="home" href="../index.html" title="Math Toolkit 2.8.0">
 <link rel="up" href="../special.html" title="Chapter&#160;6.&#160;Special Functions">
 <link rel="prev" href="jacobi/jacobi_sn.html" title="Jacobi Elliptic Function sn">
 <link rel="next" href="zetas.html" title="Zeta Functions">
@@ -24,7 +24,8 @@
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="math_toolkit.lambert_w"></a><a class="link" href="lambert_w.html" title="Lambert W function">Lambert W function</a>
+<a name="math_toolkit.lambert_w"></a><a class="link" href="lambert_w.html" title="Lambert W function">Lambert <span class="emphasis"><em>W</em></span>
+    function</a>
 </h2></div></div></div>
 <h5>
 <a name="math_toolkit.lambert_w.h0"></a>
@@ -61,22 +62,18 @@
     </h5>
 <p>
       The <a href="http://en.wikipedia.org/wiki/Lambert_W_function" target="_top">Lambert W
-      function</a> is the solution of the equation <span class="emphasis"><em>W&#8228;e<sup>W</sup> = z</em></span>.
-      It is also called the Omega function, the inverse function of <span class="emphasis"><em>f(W)
-      = W e<sup>W</sup></em></span>.
+      function</a> is the solution of the equation <span class="emphasis"><em>W</em></span>(<span class="emphasis"><em>z</em></span>)<span class="emphasis"><em>e</em></span><sup><span class="emphasis"><em>W</em></span>(<span class="emphasis"><em>z</em></span>)</sup> =
+      <span class="emphasis"><em>z</em></span>. It is also called the Omega function, the inverse of
+      <span class="emphasis"><em>f</em></span>(<span class="emphasis"><em>W</em></span>) = <span class="emphasis"><em>We</em></span><sup><span class="emphasis"><em>W</em></span></sup>.
     </p>
 <p>
-      On the z-interval [0, &#8734;] there is just one real solution. On the interval (-1/e,
-      0) there are two real solutions on two branches called variously W0, W+, W-1,
-      Wp, Wm, W-. Two principal branches functions called <code class="computeroutput"><span class="identifier">lambert_w0</span></code>
-      and <code class="computeroutput"><span class="identifier">lambert_wm1</span></code>, and their
-      1st derivatives, <code class="computeroutput"><span class="identifier">lambert_w0_prime</span></code>
-      and <code class="computeroutput"><span class="identifier">lambert_wm1_prime</span></code> are provided
-      by Boost's real-only implementation.
-    </p>
-<p>
-      In the graphs below, the red line is the W0 branch, and the blue line the W-1
-      branch.
+      On the interval [0, &#8734;), there is just one real solution. On the interval (-<span class="emphasis"><em>e</em></span><sup>-1</sup>,
+      0), there are two real solutions, generating two branches which we will denote
+      by <span class="emphasis"><em>W</em></span><sub>0</sub> and <span class="emphasis"><em>W</em></span><sub>-1</sub>. In Boost.Math, we call
+      these principal branches <code class="computeroutput"><span class="identifier">lambert_w0</span></code>
+      and <code class="computeroutput"><span class="identifier">lambert_wm1</span></code>; their derivatives
+      are labelled <code class="computeroutput"><span class="identifier">lambert_w0_prime</span></code>
+      and <code class="computeroutput"><span class="identifier">lambert_wm1_prime</span></code>.
     </p>
 <p>
       <span class="inlinemediaobject"><img src="../../graphs/lambert_w_graph.svg" align="middle"></span>
@@ -85,41 +82,35 @@
   <span class="inlinemediaobject"><img src="../../graphs/lambert_wm1_prime_graph.svg" align="middle"></span>
     </p>
 <p>
-      There is a singularity where the branches meet at argument <code class="literal">z = -1/e</code>
-      &#8773; <code class="literal">-0.367879...</code> and <code class="literal">W = -1</code>.
+      There is a singularity where the branches meet at <span class="emphasis"><em>e</em></span><sup>-1</sup> &#8773; <code class="literal">-0.367879</code>.
+      Approaching this point, the condition number of function evaluation tends to
+      infinity, and the only method of recovering high accuracy is use of higher
+      precision.
     </p>
 <p>
-      This implementation computes the two real (not complex) branches W0 and W-1
-      with the functions <code class="computeroutput"><span class="identifier">lambert_w0</span></code>
+      This implementation computes the two real branches <span class="emphasis"><em>W</em></span><sub>0</sub> and
+      <span class="emphasis"><em>W</em></span><sub>-1</sub>
+with the functions <code class="computeroutput"><span class="identifier">lambert_w0</span></code>
       and <code class="computeroutput"><span class="identifier">lambert_wm1</span></code>, and their
-      1st derivatives, <code class="computeroutput"><span class="identifier">lambert_w0_prime</span></code>
-      and <code class="computeroutput"><span class="identifier">lambert_wm1_prime</span></code>, from
-      the first <code class="literal">z</code> argument.
-    </p>
-<p>
-      For C++ <a href="http://en.cppreference.com/w/cpp/language/types" target="_top">fundamental
-      (built-in) types</a>, the maximum z argument <code class="computeroutput"><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">max</span><span class="special">)()</span></code> for
-      <code class="computeroutput"><span class="keyword">float</span></code> is Lambert_w0(3.2e+38) =
-      84.29, and for <code class="computeroutput"><span class="keyword">double</span></code> is lambert_w0(1.797e+308)
-      = 703.3.
+      derivatives, <code class="computeroutput"><span class="identifier">lambert_w0_prime</span></code>
+      and <code class="computeroutput"><span class="identifier">lambert_wm1_prime</span></code>. Complex
+      arguments are not supported.
     </p>
 <p>
       The final <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policy</a> argument is optional and can
-      be used to control the behaviour of the function: how it handles errors.
-    </p>
-<p>
-      Refer to <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a> for more details and see examples
-      below.
+      be used to control how the function deals with errors. Refer to <a class="link" href="../policy.html" title="Chapter&#160;18.&#160;Policies: Controlling Precision, Error Handling etc">Policies</a>
+      for more details and see examples below.
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h2"></a>
       <span class="phrase"><a name="math_toolkit.lambert_w.applications"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.applications">Applications
-      of the Lambert W function</a>
+      of the Lambert <span class="emphasis"><em>W</em></span> function</a>
     </h6>
 <p>
-      The Lambert W function has a myriad of applications. Corless et al. provide
-      a comprehensive description of the range of applications, from the mathematical,
-      like iterated exponentiation and asymptotic roots of trinomials, to the real-world,
+      The Lambert <span class="emphasis"><em>W</em></span> function has a myriad of applications.
+      <a href="http://www.apmaths.uwo.ca/~djeffrey/Offprints/W-adv-cm.pdf" target="_top">Corless
+      et al.</a> provide a summary of applications, from the mathematical, like
+      iterated exponentiation and asymptotic roots of trinomials, to the real-world,
       such as the range of a jet plane, enzyme kinetics, water movement in soil,
       epidemics, and diode current (an example replicated <a href="../../../example/lambert_w_diode.cpp" target="_top">here</a>).
       Since the publication of their landmark paper, there have been many more applications,
@@ -131,17 +122,14 @@
       <span class="phrase"><a name="math_toolkit.lambert_w.examples"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.examples">Examples</a>
     </h5>
 <p>
-      You will usually need the following <code class="computeroutput"><span class="preprocessor">#include</span></code>
-      and <code class="computeroutput"><span class="keyword">using</span></code> statements:
+      The most basic usage of the Lambert-<span class="emphasis"><em>W</em></span> function is demonstrated
+      below:
     </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">math</span><span class="special">/</span><span class="identifier">special_functions</span><span class="special">/</span><span class="identifier">lambert_w</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// For lambert_w function.</span>
 
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">lambert_w0</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">lambert_wm1</span><span class="special">;</span>
 </pre>
-<p>
-      Some examples follow, starting with the trivial:
-    </p>
 <pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">.</span><span class="identifier">precision</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">max_digits10</span><span class="special">);</span>
 <span class="comment">// Show all potentially significant decimal digits,</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">showpoint</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
@@ -277,8 +265,8 @@
 <span class="comment">// = 0.52983296563343441213336643954546304857788132269804249284012528304239956413801252</span>
 </pre>
 <p>
-      Note the expected zeros for all places up to 50 - and the correct Lambert W
-      result!
+      Note the expected zeros for all places up to 50 - and the correct Lambert
+      <span class="emphasis"><em>W</em></span> result!
     </p>
 <p>
       (It is just as easy to compute even higher precisions, at least to thousands
@@ -305,16 +293,9 @@
   <span class="special">&lt;&lt;</span> <span class="identifier">lambert_w0</span><span class="special">(</span><span class="identifier">z</span><span class="special">,</span> <span class="identifier">my_throw_policy</span><span class="special">())</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 <span class="comment">// Lambert W (1.0000000000000000, my_throw_policy()) = 0.56714329040978384</span>
 </pre>
-<div class="tip"><table border="0" summary="Tip">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../../../../doc/src/images/tip.png"></td>
-<th align="left">Tip</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-        Always use <code class="literal">try'n'catch</code> blocks to ensure you get an error
-        message like this:
-      </p></td></tr>
-</table></div>
+<p>
+      An example error message:
+    </p>
 <pre class="programlisting"><span class="identifier">Error</span> <span class="identifier">in</span> <span class="identifier">function</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">lambert_wm1</span><span class="special">&lt;</span><span class="identifier">RealType</span><span class="special">&gt;(&lt;</span><span class="identifier">RealType</span><span class="special">&gt;):</span>
 <span class="identifier">Argument</span> <span class="identifier">z</span> <span class="special">=</span> <span class="number">1</span> <span class="identifier">is</span> <span class="identifier">out</span> <span class="identifier">of</span> <span class="identifier">range</span> <span class="special">(</span><span class="identifier">z</span> <span class="special">&lt;=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">for</span> <span class="identifier">Lambert</span> <span class="identifier">W</span><span class="special">-</span><span class="number">1</span> <span class="identifier">branch</span><span class="special">!</span> <span class="special">(</span><span class="identifier">Try</span> <span class="identifier">Lambert</span> <span class="identifier">W0</span> <span class="identifier">branch</span><span class="special">?)</span>
 </pre>
@@ -339,11 +320,11 @@
       through a diode with series resistance from a paper by Banwell and Jayakumar.
     </p>
 <p>
-      Having the Lambert W function available makes it simple to reproduce the plot
-      in their paper (Fig 2) comparing estimates using with Lambert W function and
-      some actual measurements. The colored curves show the effect of various series
-      resistance on the current compared to an extrapolated line in grey with no
-      internal (or external) resistance.
+      Having the Lambert <span class="emphasis"><em>W</em></span> function available makes it simple
+      to reproduce the plot in their paper (Fig 2) comparing estimates using with
+      Lambert <span class="emphasis"><em>W</em></span> function and some actual measurements. The colored
+      curves show the effect of various series resistance on the current compared
+      to an extrapolated line in grey with no internal (or external) resistance.
     </p>
 <p>
       Two formulae relating the diode current and effect of series resistance can
@@ -425,27 +406,15 @@
       implementations</a>
     </h6>
 <p>
-      The function is described in Wolfram Mathworld as <a href="http://mathworld.wolfram.com/LambertW-Function.html" target="_top"><code class="literal">Lambert
-      W function</code></a>. The principal value of the Lambert W function
-      is implemented in the Wolfram Language as <span class="emphasis"><em>ProductLog[k, z]</em></span>
-      where k is the branch, by default zero, but also the negative branch when k
-      = -1.
-    </p>
-<p>
-      <a href="http://www.wolframalpha.com/" target="_top">Wolfram Alpha</a> has provided
-      many reference values for testing. For example, the output from <a href="https://www.wolframalpha.com/input/?i=productlog(1)" target="_top">https://www.wolframalpha.com/input/?i=productlog(1)</a>
-      is 0.56714329040978387299996866221035554975381578718651...
-    </p>
-<p>
-      Also the <a href="https://www.wolframalpha.com" target="_top">Wolfram language</a>
-      command: <code class="literal">N[ProductLog[-1], 50]</code>
-    </p>
-<p>
-      produces the same output to the specified 50 decimal digit precision.
+      The principal value of the Lambert <span class="emphasis"><em>W</em></span> function is implemented
+      in the <a href="http://mathworld.wolfram.com/LambertW-Function.html" target="_top">Wolfram
+      Language</a> as <code class="computeroutput"><span class="identifier">ProductLog</span><span class="special">[</span><span class="identifier">k</span><span class="special">,</span>
+      <span class="identifier">z</span><span class="special">]</span></code>,
+      where <code class="computeroutput"><span class="identifier">k</span></code> is the branch.
     </p>
 <p>
       The symbolic algebra program <a href="https://www.maplesoft.com" target="_top">Maple</a>
-      also computes Lambert W to an arbitrary precision.
+      also computes Lambert <span class="emphasis"><em>W</em></span> to an arbitrary precision.
     </p>
 <h5>
 <a name="math_toolkit.lambert_w.h6"></a>
@@ -491,8 +460,8 @@
       can be achieved by <code class="computeroutput"><span class="keyword">static_cast</span></code>ing
       from a higher precision type, typically a <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
       type like <code class="computeroutput"><span class="identifier">cpp_bin_float_50</span></code>,
-      but at the cost of increasing run-time &gt;100-fold; this has been used here
-      to provide some of our reference values for testing.
+      but at the cost of increasing run-time 100-fold; this has been used here to
+      provide some of our reference values for testing.
     </p>
 <p>
       For example, we get a reference value using a high precision type, for example;
@@ -541,7 +510,7 @@
     </p>
 <p>
       This is shown with <a href="../../../example/lambert_w_precision_example.cpp" target="_top">lambert_w_precision_example.cpp</a>
-      for Lambert W0:
+      for Lambert <span class="emphasis"><em>W</em></span><sub>0</sub>:
     </p>
 <pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">lambert_w_detail</span><span class="special">::</span><span class="identifier">lambert_w_halley_step</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">epsilon_difference</span><span class="special">;</span>
@@ -588,7 +557,7 @@
 <span class="identifier">bits</span> <span class="identifier">different</span> <span class="identifier">from</span> <span class="identifier">Halley</span> <span class="identifier">step</span>  <span class="special">=</span>     <span class="number">1</span>
 </pre>
 <p>
-      and then for W-1:
+      and then for <span class="emphasis"><em>W</em></span><sub>-1</sub>:
     </p>
 <pre class="programlisting"><span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">lambert_w_detail</span><span class="special">::</span><span class="identifier">lambert_w_halley_step</span><span class="special">;</span>
 <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">math</span><span class="special">::</span><span class="identifier">epsilon_difference</span><span class="special">;</span>
@@ -654,10 +623,11 @@
     </p>
 <p>
       As noted in the implementation section, the distribution of these differences
-      is somewhat biased for Lambert W-1 and this might be reduced using a <code class="computeroutput"><span class="keyword">double</span></code> Halley step at small runtime cost. But
-      if you are seriously concerned to get really precise computations, the only
-      way is using a higher precision type and then reduce to the desired type. Fortunately,
-      <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
+      is somewhat biased for Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> and this might be reduced
+      using a <code class="computeroutput"><span class="keyword">double</span></code> Halley step at
+      small runtime cost. But if you are seriously concerned to get really precise
+      computations, the only way is using a higher precision type and then reduce
+      to the desired type. Fortunately, <a href="../../../../../libs/multiprecision/doc/html/index.html" target="_top">Boost.Multiprecision</a>
       makes this very easy to program, if much slower.
     </p>
 <h5>
@@ -667,69 +637,53 @@
     </h5>
 <h6>
 <a name="math_toolkit.lambert_w.h11"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.w0_edges"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.w0_edges">w0
-      Branch</a>
+      <span class="phrase"><a name="math_toolkit.lambert_w.w0_edges"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.w0_edges">The
+      <span class="emphasis"><em>W</em></span><sub>0</sub> Branch</a>
     </h6>
 <p>
-      The range mathematically is -1/e &lt;= z &lt;= +&#8734;, but numerically, (for the
-      floating-point type T)
+      The domain of <span class="emphasis"><em>W</em></span><sub>0</sub> is [-<span class="emphasis"><em>e</em></span><sup>-1</sup>, &#8734;). Numerically,
     </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-          <code class="computeroutput"><span class="identifier">z</span> <span class="special">==</span>
-          <span class="special">-</span><span class="number">1</span><span class="special">/</span><span class="identifier">e</span></code> returns
-          exactly -1.
+          <code class="computeroutput"><span class="identifier">lambert_w0</span><span class="special">(-</span><span class="number">1</span><span class="special">/</span><span class="identifier">e</span><span class="special">)</span></code> is exactly -1.
         </li>
 <li class="listitem">
+          <code class="computeroutput"><span class="identifier">lambert_w0</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span></code> for
           <code class="computeroutput"><span class="identifier">z</span> <span class="special">&lt;</span>
           <span class="special">-</span><span class="number">1</span><span class="special">/</span><span class="identifier">e</span></code> throws
-          a <code class="computeroutput"><span class="identifier">domain_error</span></code>, and/or
-          returns <code class="computeroutput"><span class="identifier">NaN</span></code> according to
-          the policy. Provided that there is a <code class="computeroutput"><span class="keyword">catch</span></code>
-          clause, an error message (similar to that below) will be reported.
+          a <code class="computeroutput"><span class="identifier">domain_error</span></code>, or returns
+          <code class="computeroutput"><span class="identifier">NaN</span></code> according to the policy.
         </li>
 <li class="listitem">
-          <code class="computeroutput"><span class="identifier">z</span> <span class="special">==</span>
-          <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">max</span><span class="special">)()</span></code> returns W for the floating_point type
-          T, (for example, for <code class="computeroutput"><span class="keyword">double</span></code>,
-          703.22703310477018L)
-        </li>
-<li class="listitem">
-          <code class="computeroutput"><span class="identifier">z</span> <span class="special">==</span>
-          <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">()</span></code>
-          throws a <code class="computeroutput"><span class="identifier">overflow_error</span></code>.
+          <code class="computeroutput"><span class="identifier">lambert_w0</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">infinity</span><span class="special">())</span></code>
+          throws an <code class="computeroutput"><span class="identifier">overflow_error</span></code>.
         </li>
 </ul></div>
 <p>
-      (An argument z passed as infinity probably indicates that something has already
-      gone wrong, but if it is desired to return infinity, this case should be handled
-      before calling <code class="computeroutput"><span class="identifier">lambert_w0</span></code>).
+      (An infinite argument probably indicates that something has already gone wrong,
+      but if it is desired to return infinity, this case should be handled before
+      calling <code class="computeroutput"><span class="identifier">lambert_w0</span></code>).
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h12"></a>
-      <span class="phrase"><a name="math_toolkit.lambert_w.wm1_edges"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.wm1_edges">w-1
-      Branch</a>
+      <span class="phrase"><a name="math_toolkit.lambert_w.wm1_edges"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.wm1_edges"><span class="emphasis"><em>W</em></span><sub>-1</sub> Branch</a>
     </h6>
 <p>
-      The range mathematically is -1/e &lt;= z &lt;= 0, but numerically,
+      The domain of <span class="emphasis"><em>W</em></span><sub>-1</sub> is [-<span class="emphasis"><em>e</em></span><sup>-1</sup>, 0). Numerically,
     </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-          <code class="computeroutput"><span class="identifier">z</span> <span class="special">==</span>
-          <span class="special">-</span><span class="number">1</span><span class="special">/</span><span class="identifier">e</span></code> (for
-          the type T) returns exactly -1.
+          <code class="computeroutput"><span class="identifier">lambert_wm1</span><span class="special">(-</span><span class="number">1</span><span class="special">/</span><span class="identifier">e</span><span class="special">)</span></code> is exactly -1.
         </li>
 <li class="listitem">
-          <code class="computeroutput"><span class="identifier">z</span> <span class="special">==</span>
-          <span class="number">0</span></code> returns -&#8734; (or the nearest equivalent
-          if <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">has_infinity</span> <span class="special">==</span>
-          <span class="keyword">false</span></code>).
+          <code class="computeroutput"><span class="identifier">lambert_wm1</span><span class="special">(</span><span class="number">0</span><span class="special">)</span></code> returns
+          -&#8734; (or the nearest equivalent if <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">has_infinity</span>
+          <span class="special">==</span> <span class="keyword">false</span></code>).
         </li>
 <li class="listitem">
-          <code class="computeroutput"><span class="identifier">z</span> <span class="special">==</span>
-          <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">min</span><span class="special">()</span></code>
-          returns the maximum (most negative) possible value of Lambert W for the
-          type T. <br> For example, for <code class="computeroutput"><span class="keyword">double</span></code>:
+          <code class="computeroutput"><span class="identifier">lambert_wm1</span><span class="special">(-</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">min</span><span class="special">())</span></code>
+          returns the maximum (most negative) possible value of Lambert <span class="emphasis"><em>W</em></span>
+          for the type T. <br> For example, for <code class="computeroutput"><span class="keyword">double</span></code>:
           lambert_wm1(-2.2250738585072014e-308) = -714.96865723796634 <br> and
           for <code class="computeroutput"><span class="keyword">float</span></code>: lambert_wm1(-1.17549435e-38)
           = -91.8567734 <br>
@@ -737,11 +691,9 @@
 <li class="listitem">
 <p class="simpara">
           <code class="computeroutput"><span class="identifier">z</span> <span class="special">&lt;</span>
-          <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">min</span><span class="special">()</span></code>,
-          means that z is zero or denormalized (if <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">has_denorm_min</span>
-          <span class="special">==</span> <span class="keyword">true</span></code>),
-          for example: <code class="computeroutput"><span class="identifier">r</span> <span class="special">=</span>
-          <span class="identifier">lambert_wm1</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">denorm_min</span><span class="special">());</span></code>
+          <span class="special">-</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">min</span><span class="special">()</span></code>, means that z is zero or denormalized
+          (if <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">has_denorm_min</span> <span class="special">==</span>
+          <span class="keyword">true</span></code>), for example: <code class="computeroutput"><span class="identifier">r</span> <span class="special">=</span> <span class="identifier">lambert_wm1</span><span class="special">(-</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">denorm_min</span><span class="special">());</span></code>
           and an overflow_error exception is thrown, and will give a message like:
         </p>
 <p class="simpara">
@@ -752,25 +704,35 @@
 </li>
 </ul></div>
 <p>
-      Denormalized values of z are not supported for Lambert W-1 (because not all
-      floating-point types denormalize), and anyway it only covers a tiny fraction
-      of the range of possible z arguments values.
+      Denormalized values are not supported for Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> (because
+      not all floating-point types denormalize), and anyway it only covers a tiny
+      fraction of the range of possible z arguments values.
     </p>
 <h5>
 <a name="math_toolkit.lambert_w.h13"></a>
       <span class="phrase"><a name="math_toolkit.lambert_w.compilers"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.compilers">Compilers</a>
     </h5>
 <p>
-      The code has been tested on VS 15.8.5, Clang 7.0.0 and GCC 8.1.0; it is expected
-      to work on all C++11 compilers. For details of which compilers are expected
-      to work see lambert_w tests and examples in:<br> <a href="https://www.boost.org/development/tests/master/developer/math.html" target="_top">Boost
+      The <code class="computeroutput"><span class="identifier">lambert_w</span><span class="special">.</span><span class="identifier">hpp</span></code> code has been shown to work on most C++98
+      compilers. (Apart from requiring C++11 extensions for using of <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;&gt;::</span><span class="identifier">max_digits10</span></code>
+      in some diagnostics. Many old pre-c++11 compilers provide this extension but
+      may require enabling to use, for example using b2/bjam the lambert_w examples
+      use this command:
+    </p>
+<pre class="programlisting"><span class="special">[</span> <span class="identifier">run</span> <span class="identifier">lambert_w_basic_example</span><span class="special">.</span><span class="identifier">cpp</span>  <span class="special">:</span> <span class="special">:</span> <span class="special">:</span> <span class="special">[</span> <span class="identifier">requires</span> <span class="identifier">cxx11_numeric_limits</span> <span class="special">]</span> <span class="special">]</span>
+</pre>
+<p>
+      See <a href="../../../example/Jamfile.v2" target="_top">jamfile.v2</a>.)
+    </p>
+<p>
+      For details of which compilers are expected to work see lambert_w tests and
+      examples in:<br> <a href="https://www.boost.org/development/tests/master/developer/math.html" target="_top">Boost
       Test Summary report for master branch (used for latest release)</a><br>
       <a href="https://www.boost.org/development/tests/develop/developer/math.html" target="_top">Boost
       Test Summary report for latest developer branch</a>.
     </p>
 <p>
-      As expected, debug mode is very much slower. The release version optimisation
-      also varied.
+      As expected, debug mode is very much slower than release.
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h14"></a>
@@ -928,8 +890,9 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 <p>
       More recently, the Tosio Fukushima has developed an even faster algorithm,
       avoiding any transcendental function calls as these are necessarily expensive.
-      The current implementation of Lambert W-1 is based on his algorithm starting
-      with a translation from Fukushima's FORTRAN into C++ by Darko Veberic.
+      The current implementation of Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> is based on his
+      algorithm starting with a translation from Fukushima's FORTRAN into C++ by
+      Darko Veberic.
     </p>
 <p>
       Many applications of the Lambert W function make many repeated evaluations
@@ -976,16 +939,17 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       precision and above.
     </p>
 <p>
-      For this implementation of Lambert W0, John Maddock used the Boost.Math <code class="computeroutput"><span class="identifier">minimax</span><span class="special">.</span><span class="identifier">exe</span></code> <a href="http://en.wikipedia.org/wiki/Remez_algorithm" target="_top">Remez
+      For this implementation of Lambert <span class="emphasis"><em>W</em></span><sub>0</sub>, John Maddock used
+      the Boost.Math <a href="http://en.wikipedia.org/wiki/Remez_algorithm" target="_top">Remez
       algorithm</a> method program to devise a <a href="https://en.wikipedia.org/wiki/Rational_function" target="_top">rational
-      function</a> for several ranges of argument z for the W0 branch of Lambert
-      W0 function. These minimax rational approximations are combined for an algorithm
-      that is both smaller and faster.
+      function</a> for several ranges of argument for the <span class="emphasis"><em>W</em></span><sub>0</sub> branch
+      of Lambert <span class="emphasis"><em>W</em></span> function. These minimax rational approximations
+      are combined for an algorithm that is both smaller and faster.
     </p>
 <p>
       Sadly it has not proved practical to use the same <a href="http://en.wikipedia.org/wiki/Remez_algorithm" target="_top">Remez
-      algorithm</a> method for Lambert W-1 branch and so the Fukushima algorithm
-      is retained for this branch.
+      algorithm</a> method for Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> branch and so
+      the Fukushima algorithm is retained for this branch.
     </p>
 <p>
       An advantage of both minimax rational <a href="http://en.wikipedia.org/wiki/Remez_algorithm" target="_top">Remez
@@ -993,13 +957,15 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       from the reference values is reasonably random and insignificantly biased.
     </p>
 <p>
-      For example, table below a test of Lambert W0 10000 values of argument z covering
-      the main range of possible values, 10000 comparisons from z = 0.0501 to 703,
-      in 0.001 step factor 1.05 when module 7 == 0
+      For example, table below a test of Lambert <span class="emphasis"><em>W</em></span><sub>0</sub> 10000 values
+      of argument covering the main range of possible values, 10000 comparisons from
+      z = 0.0501 to 703, in 0.001 step factor 1.05 when module 7 == 0
     </p>
 <div class="table">
-<a name="math_toolkit.lambert_w.lambert_w0_Fukushima"></a><p class="title"><b>Table&#160;6.73.&#160;Fukushima Lambert W0 and typical improvement from a single Halley step.</b></p>
-<div class="table-contents"><table class="table" summary="Fukushima Lambert W0 and typical improvement from a single Halley step.">
+<a name="math_toolkit.lambert_w.lambert_w0_Fukushima"></a><p class="title"><b>Table&#160;6.73.&#160;Fukushima Lambert <span class="emphasis"><em>W</em></span><sub>0</sub> and typical improvement from
+      a single Halley step.</b></p>
+<div class="table-contents"><table class="table" summary="Fukushima Lambert W0 and typical improvement from
+      a single Halley step.">
 <colgroup>
 <col>
 <col>
@@ -1050,7 +1016,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 <tr>
 <td>
               <p>
-                Schroeder W0
+                Schroeder <span class="emphasis"><em>W</em></span><sub>0</sub>
               </p>
             </td>
 <td>
@@ -1125,16 +1091,17 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 </table></div>
 </div>
 <br class="table-break"><p>
-      Lambert W0 values computed using the Fukushima method with Schroeder refinement
-      gave about 1/6 lambert_w0 values that are one bit different from the 'best',
-      and &lt; 1% that are a few bits 'wrong'. If a Halley refinement step is added,
-      only 1 in 30 are even one bit different, and only 2 two-bits 'wrong'.
+      Lambert <span class="emphasis"><em>W</em></span><sub>0</sub> values computed using the Fukushima method with
+      Schroeder refinement gave about 1/6 <code class="computeroutput"><span class="identifier">lambert_w0</span></code>
+      values that are one bit different from the 'best', and &lt; 1% that are a few
+      bits 'wrong'. If a Halley refinement step is added, only 1 in 30 are even one
+      bit different, and only 2 two-bits 'wrong'.
     </p>
 <div class="table">
-<a name="math_toolkit.lambert_w.lambert_w0_plus_halley"></a><p class="title"><b>Table&#160;6.74.&#160;Rational polynomial Lambert W0 and typical improvement from a single
-      Halley step.</b></p>
-<div class="table-contents"><table class="table" summary="Rational polynomial Lambert W0 and typical improvement from a single
-      Halley step.">
+<a name="math_toolkit.lambert_w.lambert_w0_plus_halley"></a><p class="title"><b>Table&#160;6.74.&#160;Rational polynomial Lambert <span class="emphasis"><em>W</em></span><sub>0</sub> and typical improvement
+      from a single Halley step.</b></p>
+<div class="table-contents"><table class="table" summary="Rational polynomial Lambert W0 and typical improvement
+      from a single Halley step.">
 <colgroup>
 <col>
 <col>
@@ -1268,10 +1235,11 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       but remains a option, as detailed above.
     </p>
 <p>
-      For the Lambert W-1 branch, the Fukushima algorithm is used.
+      For the Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> branch, the Fukushima algorithm is
+      used.
     </p>
 <div class="table">
-<a name="math_toolkit.lambert_w.lambert_wm1_fukushima"></a><p class="title"><b>Table&#160;6.75.&#160;Lambert W-1 using Fukushima algorithm.</b></p>
+<a name="math_toolkit.lambert_w.lambert_wm1_fukushima"></a><p class="title"><b>Table&#160;6.75.&#160;Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> using Fukushima algorithm.</b></p>
 <div class="table-contents"><table class="table" summary="Lambert W-1 using Fukushima algorithm.">
 <colgroup>
 <col>
@@ -1323,7 +1291,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 <tr>
 <td>
               <p>
-                Fukushima W-1
+                Fukushima <span class="emphasis"><em>W</em></span><sub>-1</sub>
               </p>
             </td>
 <td>
@@ -1489,14 +1457,14 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       This gives a useful precision suitable for Halley refinement.
     </p>
 <p>
-      Similarly, for Lambert W-1 branch, tiny values very near zero, W &gt; 64 cannot
-      be computed using the lookup table. For this region, an approximation followed
-      by a few (usually 3) Halley refinements. See <a class="link" href="lambert_w.html#math_toolkit.lambert_w.wm1_near_zero">wm1_near_zero</a>.
+      Similarly, for Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> branch, tiny values very near
+      zero, W &gt; 64 cannot be computed using the lookup table. For this region,
+      an approximation followed by a few (usually 3) Halley refinements. See <a class="link" href="lambert_w.html#math_toolkit.lambert_w.wm1_near_zero">wm1_near_zero</a>.
     </p>
 <p>
-      For the less well-behaved regions for Lambert W0 <span class="emphasis"><em>z</em></span> arguments
-      near zero, and near the branch singularity at <span class="emphasis"><em>-1/e</em></span>, some
-      series functions are used.
+      For the less well-behaved regions for Lambert <span class="emphasis"><em>W</em></span><sub>0</sub> <span class="emphasis"><em>z</em></span>
+      arguments near zero, and near the branch singularity at <span class="emphasis"><em>-1/e</em></span>,
+      some series functions are used.
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h21"></a>
@@ -1506,8 +1474,7 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 <p>
       When argument <span class="emphasis"><em>z</em></span> is small and near zero, there is an efficient
       and accurate series evaluation method available (implemented in <code class="computeroutput"><span class="identifier">lambert_w0_small_z</span></code>). There is no equivalent
-      for the W-1 branch as this only covers argument <code class="computeroutput"><span class="identifier">z</span>
-      <span class="special">&lt;</span> <span class="special">-</span><span class="number">1</span><span class="special">/</span><span class="identifier">e</span></code>.
+      for the <span class="emphasis"><em>W</em></span><sub>-1</sub> branch as this only covers argument <code class="computeroutput"><span class="identifier">z</span> <span class="special">&lt;</span> <span class="special">-</span><span class="number">1</span><span class="special">/</span><span class="identifier">e</span></code>.
       The cutoff used <code class="computeroutput"><span class="identifier">abs</span><span class="special">(</span><span class="identifier">z</span><span class="special">)</span> <span class="special">&lt;</span>
       <span class="number">0.05</span></code> is as found by trial and error by
       Fukushima.
@@ -1584,14 +1551,16 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 <h5>
 <a name="math_toolkit.lambert_w.h22"></a>
       <span class="phrase"><a name="math_toolkit.lambert_w.near_singularity"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.near_singularity">Argument
-      z near the singularity at -1/e between branches W0 and W-1</a>
+      z near the singularity at -1/e between branches <span class="emphasis"><em>W</em></span><sub>0</sub> and
+      <span class="emphasis"><em>W</em></span><sub>-1</sub> </a>
     </h5>
 <p>
       Variants of Function <code class="computeroutput"><span class="identifier">lambert_w_singularity_series</span></code>
       are used to handle <span class="emphasis"><em>z</em></span> arguments which are near to the singularity
       at <code class="computeroutput"><span class="identifier">z</span> <span class="special">=</span>
       <span class="special">-</span><span class="identifier">exp</span><span class="special">(-</span><span class="number">1</span><span class="special">)</span>
-      <span class="special">=</span> <span class="special">-</span><span class="number">3.6787944</span></code> where the branches W0 and W-1 join.
+      <span class="special">=</span> <span class="special">-</span><span class="number">3.6787944</span></code> where the branches <span class="emphasis"><em>W</em></span><sub>0</sub> and
+      <span class="emphasis"><em>W</em></span><sub>-1</sub> join.
     </p>
 <p>
       T. Fukushima / Journal of Computational and Applied Mathematics 244 (2013)
@@ -1658,14 +1627,14 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
 <h6>
 <a name="math_toolkit.lambert_w.h23"></a>
       <span class="phrase"><a name="math_toolkit.lambert_w.wm1_near_zero"></a></span><a class="link" href="lambert_w.html#math_toolkit.lambert_w.wm1_near_zero">Lambert
-      W-1 arguments values very near zero.</a>
+      <span class="emphasis"><em>W</em></span><sub>-1</sub> arguments values very near zero.</a>
     </h6>
 <p>
       The lookup tables of Fukushima have only 64 elements, so that the z argument
       nearest zero is -1.0264389699511303e-26, that corresponds to a maximum Lambert
-      W-1 value of 64.0. Fukushima's implementation did not cater for z argument
-      values that are smaller (nearer to zero), but this implementation adds code
-      to accept smaller (but not denormalised) values of z. A crude approximation
+      <span class="emphasis"><em>W</em></span><sub>-1</sub> value of 64.0. Fukushima's implementation did not cater
+      for z argument values that are smaller (nearer to zero), but this implementation
+      adds code to accept smaller (but not denormalised) values of z. A crude approximation
       for these very small values is to take the exponent and multiply by ln[10]
       ~= 2.3. We also tried the approximation first proposed by Corless et al. using
       ln(-z), (equation 4.19 page 349) and then tried improving by a 2nd term -ln(ln(-z)),
@@ -1691,11 +1660,12 @@ if (f(w) / f'</span><span class="special">(</span><span class="identifier">w</sp
       an order of magnitude faster.
     </p>
 <p>
-      Halley's method was then used to refine the estimate of Lambert W-1 from this
-      guess. Experiments showed that although all approximations reached with <a href="http://en.wikipedia.org/wiki/Unit_in_the_last_place" target="_top">Unit in the last
-      place (ULP)</a> of the closest representable value, the computational cost
-      of the log functions was easily paid by far fewer iterations (typically from
-      8 down to 4 iterations for double or float).
+      Halley's method was then used to refine the estimate of Lambert <span class="emphasis"><em>W</em></span><sub>-1</sub> from
+      this guess. Experiments showed that although all approximations reached with
+      <a href="http://en.wikipedia.org/wiki/Unit_in_the_last_place" target="_top">Unit in the
+      last place (ULP)</a> of the closest representable value, the computational
+      cost of the log functions was easily paid by far fewer iterations (typically
+      from 8 down to 4 iterations for double or float).
     </p>
 <h6>
 <a name="math_toolkit.lambert_w.h24"></a>

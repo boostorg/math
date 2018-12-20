@@ -11,13 +11,18 @@
 #include <boost/test/results_collector.hpp>
 #include <boost/math/special_functions/beta.hpp>
 #include <boost/math/distributions/skew_normal.hpp>
+#include <boost/math/tools/polynomial.hpp>
 #include <boost/math/tools/roots.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/test/results_collector.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/array.hpp>
+#include <boost/type_index.hpp>
 #include "table_type.hpp"
 #include <iostream>
 #include <iomanip>
+
+#include <boost/multiprecision/cpp_complex.hpp>
 
 #define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
    {\
@@ -317,13 +322,114 @@ void test_beta(T, const char* /* name */)
    test_inverses<T>(ibeta_large_data);
 }
 
+#if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_LAMBDAS)
+template <class Complex>
+void test_complex_newton()
+{
+    typedef typename Complex::value_type Real;
+    std::cout << "Testing complex Newton's Method on type " << boost::typeindex::type_id<Real>().pretty_name() << "\n";
+    using std::abs;
+    using std::sqrt;
+    using boost::math::tools::complex_newton;
+    using boost::math::tools::polynomial;
+    using boost::math::constants::half;
+
+    Real tol = std::numeric_limits<Real>::epsilon();
+    // p(z) = z^2 + 1, roots: \pm i.
+    polynomial<Complex> p{{1,0}, {0, 0}, {1,0}};
+    Complex guess{1,1};
+    polynomial<Complex> p_prime = p.prime();
+    auto f = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    Complex root = complex_newton(f, guess);
+
+    BOOST_CHECK(abs(root.real()) <= tol);
+    BOOST_CHECK_CLOSE(root.imag(), 1, tol);
+
+    guess = -guess;
+    root = complex_newton(f, guess);
+    BOOST_CHECK(abs(root.real()) <= tol);
+    BOOST_CHECK_CLOSE(root.imag(), -1, tol);
+
+    // Test that double roots are handled correctly-as correctly as possible.
+    // Convergence at a double root is not quadratic.
+    // This sets p = (z-i)^2:
+    p = polynomial<Complex>({{-1,0}, {0,-2}, {1,0}});
+    p_prime = p.prime();
+    guess = -guess;
+    auto g = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    root = complex_newton(g, guess);
+    BOOST_CHECK(abs(root.real()) < 10*sqrt(tol));
+    BOOST_CHECK_CLOSE(root.imag(), 1, tol);
+
+    // Test that zero derivatives are handled.
+    // p(z) = z^2 + iz + 1
+    p = polynomial<Complex>({{1,0}, {0,1}, {1,0}});
+    // p'(z) = 2z + i
+    p_prime = p.prime();
+    guess = Complex(0,-boost::math::constants::half<Real>());
+    auto g2 = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    root = complex_newton(g2, guess);
+
+    // Here's the other root, in case code changes cause it to be found:
+    //Complex expected_root1{0, half<Real>()*(sqrt(static_cast<Real>(5)) - static_cast<Real>(1))};
+    Complex expected_root2{0, -half<Real>()*(sqrt(static_cast<Real>(5)) + static_cast<Real>(1))};
+
+    BOOST_CHECK_CLOSE(expected_root2.imag(),root.imag(), tol);
+    BOOST_CHECK(abs(root.real()) < tol);
+
+    // Does a zero root pass the termination criteria?
+    p = polynomial<Complex>({{0,0}, {0,0}, {1,0}});
+    p_prime = p.prime();
+    guess = Complex(0, -boost::math::constants::half<Real>());
+    auto g3 = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    root = complex_newton(g3, guess);
+    BOOST_CHECK(abs(root.real()) < tol);
+
+    // Does a monstrous root pass?
+    Real x = -pow(static_cast<Real>(10), 20);
+    p = polynomial<Complex>({{x, x}, {1,0}});
+    p_prime = p.prime();
+    guess = Complex(0, -boost::math::constants::half<Real>());
+    auto g4 = [&](Complex z) { return std::make_pair<Complex, Complex>(p(z), p_prime(z)); };
+    root = complex_newton(g4, guess);
+    BOOST_CHECK(abs(root.real() + x) < tol);
+    BOOST_CHECK(abs(root.imag() + x) < tol);
+
+}
+
+// Polynomials which didn't factorize using Newton's method at first:
+void test_daubechies_fails()
+{
+    std::cout << "Testing failures from Daubechies filter computation.\n";
+    using std::abs;
+    using std::sqrt;
+    using boost::math::tools::complex_newton;
+    using boost::math::tools::polynomial;
+    using boost::math::constants::half;
+
+    double tol = 500*std::numeric_limits<double>::epsilon();
+    polynomial<std::complex<double>> p{{-185961388.136908293,141732493.98435241}, {601080390,0}};
+    std::complex<double> guess{1,1};
+    polynomial<std::complex<double>> p_prime = p.prime();
+    auto f = [&](std::complex<double> z) { return std::make_pair<std::complex<double>, std::complex<double>>(p(z), p_prime(z)); };
+    std::complex<double> root = complex_newton(f, guess);
+
+    std::complex<double> expected_root = -p.data()[0]/p.data()[1];
+    BOOST_CHECK_CLOSE(expected_root.imag(), root.imag(), tol);
+    BOOST_CHECK_CLOSE(expected_root.real(), root.real(), tol);
+}
+#endif
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
+
    test_beta(0.1, "double");
 
-   // bug reports:
-   boost::math::skew_normal_distribution<> dist(2.0, 1.0, -2.5);
-   BOOST_CHECK(boost::math::isfinite(quantile(dist, 0.075)));
-
+#if !defined(BOOST_NO_CXX11_AUTO_DECLARATIONS) && !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX) && !defined(BOOST_NO_CXX11_LAMBDAS)
+   test_complex_newton<std::complex<float>>();
+   test_complex_newton<std::complex<double>>();
+   test_complex_newton<boost::multiprecision::cpp_complex_100>();
+   test_daubechies_fails();
+#endif
 
 }

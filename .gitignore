@@ -6,3 +6,4 @@ inspect.html
 /example/float128_examples.cpp
 test/cuda
 *.DS_Store
+/**/*.dSYM/

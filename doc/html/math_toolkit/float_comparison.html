@@ -4,7 +4,7 @@
 <title>Floating-point Comparison</title>
 <link rel="stylesheet" href="../math.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
-<link rel="home" href="../index.html" title="Math Toolkit 2.6.2">
+<link rel="home" href="../index.html" title="Math Toolkit 2.8.0">
 <link rel="up" href="../utils.html" title="Chapter&#160;2.&#160;Floating Point Utilities">
 <link rel="prev" href="next_float/ulp.html" title="Obtaining the Size of a Unit In the Last Place - ULP">
 <link rel="next" href="../cstdfloat.html" title="Chapter&#160;3.&#160;Specified-width floating-point typedefs">
@@ -202,7 +202,7 @@
 </tr>
 <tr><td align="left" valign="top"><p>
         Older compilers can use this formula to calculate <code class="computeroutput"><span class="identifier">max_digits10</span></code>
-        from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">FPT</span><span class="special">&gt;::</span><span class="identifier">digits10</span></code>:<br> &#8192;&#8192; <code class="computeroutput"><span class="keyword">int</span>
+        from <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">FPT</span><span class="special">&gt;::</span><span class="identifier">digits10</span></code>: &#8192;&#8192; <code class="computeroutput"><span class="keyword">int</span>
         <span class="identifier">max_digits10</span> <span class="special">=</span>
         <span class="number">2</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">FPT</span><span class="special">&gt;::</span><span class="identifier">digits10</span>
         <span class="special">*</span> <span class="number">3010</span><span class="special">/</span><span class="number">10000</span><span class="special">;</span></code>

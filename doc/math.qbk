@@ -9,7 +9,7 @@
     ]
     [authors [Agrawal, Nikhar], [Bikineev, Anton], [Bristow, Paul A.], [Holin, Hubert], [Guazzone, Marco], [Kormanyos, Christopher], [Lalande, Bruno], [Maddock, John], [Murphy, Jeremy W.], [Råde, Johan], [Sobotta, Benjamin], [Sewani, Gautam], [Thompson, Nicholas], [van den Berg, Thijs], [Walker, Daryle], [Zhang, Xiaogang]]
     [/last-revision $Date$]
-    [version 2.6.2]
+    [version 2.8.0]
 ]
 
 [template mathpart[id title]
@@ -653,6 +653,7 @@ and as a CD ISBN 0-9504833-2-X  978-0-9504833-2-0, Classification 519.2-dc22.
 [mathpart interpolation Interpolation]
 [include interpolators/cubic_b_spline.qbk]
 [include interpolators/barycentric_rational_interpolation.qbk]
+[include interpolators/catmull_rom.qbk]
 [endmathpart]
 
 [mathpart quadrature Quadrature and Differentiation]
