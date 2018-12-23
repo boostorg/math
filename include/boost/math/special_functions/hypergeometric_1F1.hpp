@@ -16,6 +16,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_asym.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_rational.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1F1_recurrence.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1F1_by_ratios.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_pade.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1F1_bessel.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1F1_scaled_series.hpp>
@@ -216,8 +217,13 @@ namespace boost { namespace math { namespace detail {
                if ((z < z_limit) || (a > -500))
                   return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
             }
-            else if(z < fabs((2 * a - b) / (sqrt(fabs(a * b)))))
-               return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
+            else
+            {
+               if (z < fabs((2 * a - b) / (sqrt(fabs(a * b)))))
+                  return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
+               if (is_in_hypergeometric_1F1_from_function_ratio_negative_b_positive_a_region(a, b, z))
+                  return hypergeometric_1F1_from_function_ratio_negative_b_positive_a(a, b, z, pol, log_scaling);
+            }
          }
 
          // If we get here, then we've run out of methods to try, use the checked series which will

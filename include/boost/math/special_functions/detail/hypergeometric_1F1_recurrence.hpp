@@ -176,7 +176,7 @@
 
     detail::hypergeometric_1F1_recurrence_a_coefficients<T> s(ak, b, z);
 
-    return tools::solve_recurrence_relation_backward(s,
+    return tools::apply_recurrence_relation_backward(s,
                                                      static_cast<unsigned int>(std::abs(integer_part)),
                                                      first,
                                                      second);
@@ -197,7 +197,7 @@
 
     detail::hypergeometric_1F1_recurrence_a_coefficients<T> s(ak, b, z);
 
-    return tools::solve_recurrence_relation_forward(s, integer_part, first, second);
+    return tools::apply_recurrence_relation_forward(s, integer_part, first, second);
   }
 
   template <class T, class Policy>
@@ -215,7 +215,7 @@
 
     detail::hypergeometric_1F1_recurrence_b_coefficients<T> s(a, bk, z);
 
-    return tools::solve_recurrence_relation_backward(s,
+    return tools::apply_recurrence_relation_backward(s,
                                                      static_cast<unsigned int>(std::abs(integer_part)),
                                                      first,
                                                      second);
@@ -238,7 +238,7 @@
 
     detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> s(ak, bk, z);
 
-    return tools::solve_recurrence_relation_backward(s, fabs(integer_part), first, second);
+    return tools::apply_recurrence_relation_backward(s, fabs(integer_part), first, second);
   }
 
   // ranges
@@ -287,7 +287,7 @@
 
      boost::math::detail::hypergeometric_1F1_recurrence_b_coefficients<T> s(a, bk, z);
 
-     return boost::math::tools::solve_recurrence_relation_backward(s, static_cast<unsigned int>(integer_part), first, second);
+     return boost::math::tools::apply_recurrence_relation_backward(s, static_cast<unsigned int>(integer_part), first, second);
   }
 
   template <class T, class Policy>
@@ -312,7 +312,7 @@
 
      boost::math::detail::hypergeometric_1F1_recurrence_small_b_coefficients<T> s(a, b, z, integer_part);
 
-     return boost::math::tools::solve_recurrence_relation_backward(s,
+     return boost::math::tools::apply_recurrence_relation_backward(s,
         static_cast<unsigned int>(std::abs(integer_part)),
         first,
         second);
