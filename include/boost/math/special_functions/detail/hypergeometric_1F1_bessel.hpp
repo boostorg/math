@@ -22,6 +22,22 @@
 #if 1
 
      template <class T, class Policy>
+     T hypergeometric_1F1_divergent_fallback(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling);
+
+     template <class T>
+     bool hypergeometric_1F1_is_tricomi_viable_positive_b(const T& a, const T& b, const T& z)
+     {
+        if (b <= 100)
+           return true;
+        // Even though we're in a reasonable domain for Tricomi's approximation, 
+        // the arguments to the Bessel functions may be so large that we can't
+        // actually evaluate them:
+        T x = sqrt(fabs(2 * z * b - 4 * a * z));
+        T v = b - 1;
+        return log(boost::math::constants::e<T>() * x / (2 * v)) * v > tools::log_min_value<T>();
+     }
+
+     template <class T, class Policy>
      T tricomi_Ev(const T& v, const T& z, const Policy& pol)
      {
         T result;
@@ -144,11 +160,15 @@
         {
            retry = true;
         }
+        catch (const boost::math::evaluation_error&)
+        {
+           retry = true;
+        }
         if (retry)
         {
            log_scale -= scale;
            log_scale -= s.log_scale;
-           return (b > 0) ? hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, "boost::math::hypergeometric_1F1<%1%>(%1%,%1%,%1%)") : hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scale);
+           return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scale);
         }
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_7<%1%>(%1%,%1%,%1%)", max_iter, pol);
         if (use_logs)

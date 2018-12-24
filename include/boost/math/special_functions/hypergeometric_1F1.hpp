@@ -41,6 +41,62 @@ namespace boost { namespace math { namespace detail {
    }
 
    template <class T, class Policy>
+   T hypergeometric_1F1_divergent_fallback(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
+   {
+      const char* function = "hypergeometric_1F1_divergent_fallback<%1%>(%1%,%1%,%1%)";
+      //
+      // We get here if either:
+      // 1) We decide up front that Tricomi's method won't work, or:
+      // 2) We've called Tricomi's method and it's failed.
+      //
+      if (b > 0)
+      {
+         T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
+         int k = 1 + boost::math::itrunc(z - z_limit);
+         // If k is too large we destroy all the digits in the result:
+         if ((k > 0) && (k < 50))
+         {
+            return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, z - k, k, pol);
+         }
+         else if (z < b)
+            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+         else
+            return hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(a, b, z, pol, function, log_scaling);
+      }
+      else  // b < 0
+      {
+         if (a < 0)
+         {
+            if (a > 5 * b)
+               return hypergeometric_1F1_from_function_ratio_negative_ab(a, b, z, pol, log_scaling);
+            else
+            {
+               //
+               // Solve (a+n)z/((b+n)n) == 1 for n, the number of iterations till the series starts to converge.
+               // If this is well away from the origin then it's probably better to use the series to evaluate this.
+               // Note that if sqr is negative then we have no solution, so assign an arbitrarily large value to the
+               // number of iterations.
+               //
+               T sqr = 4 * a * z + b * b - 2 * b * z + z * z;
+               T iterations_to_convergence = sqr > 0 ? 0.5f * (-sqrt(sqr) - b + z) : -a - b;
+               if((std::max)(a, b) + iterations_to_convergence > -300)
+                  return hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(a, b, z, pol, function, log_scaling);
+            }
+         }
+         else
+         {
+            if (is_in_hypergeometric_1F1_from_function_ratio_negative_b_region(a, b, z))
+               return hypergeometric_1F1_from_function_ratio_negative_b(a, b, z, pol, log_scaling);
+         }
+      }
+
+      // If we get here, then we've run out of methods to try, use the checked series which will
+      // raise an error if the result is garbage:
+      return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
+   }
+      
+      
+   template <class T, class Policy>
    T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
    {
       BOOST_MATH_STD_USING // exp, fabs, sqrt
@@ -188,26 +244,13 @@ namespace boost { namespace math { namespace detail {
          // In what follows we have to set limits on how large z can be otherwise
          // the Bessel series become large and divergent and all the digits cancel out.
          // The criteria are distinctly empiracle rather than based on a firm analysis
-         // of the terms in the series.  In some cases we can use recurrence on z to
-         // stretch out to larger z values, but these series tend to be subject to wild 
-         // cancellation too.
+         // of the terms in the series.
          //
          if (b > 0)
          {
             T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
-            if (z < z_limit)
+            if ((z < z_limit) && hypergeometric_1F1_is_tricomi_viable_positive_b(a, b, z))
                return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
-
-            int k = 1 + boost::math::itrunc(z - z_limit);
-            // If k is too large we destroy all the digits in the result:
-            if (k < 50)
-            {
-               return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, z - k, k, pol);
-            }
-            else if(z < b)
-               return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
-            else
-               return hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(a, b, z, pol, function);
          }
          else  // b < 0
          {
@@ -216,21 +259,15 @@ namespace boost { namespace math { namespace detail {
                T z_limit = fabs((2 * a - b) / (sqrt(fabs(a))));
                if ((z < z_limit) || (a > -500))
                   return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
-               else if(a > 5 * b)
-                  return hypergeometric_1F1_from_function_ratio_negative_ab(a, b, z, pol, log_scaling);
             }
             else
             {
                if (z < fabs((2 * a - b) / (sqrt(fabs(a * b)))))
                   return detail::hypergeometric_1F1_AS_13_3_7_tricomi(a, b, z, pol, log_scaling);
-               if (is_in_hypergeometric_1F1_from_function_ratio_negative_b_region(a, b, z))
-                  return hypergeometric_1F1_from_function_ratio_negative_b(a, b, z, pol, log_scaling);
             }
          }
 
-         // If we get here, then we've run out of methods to try, use the checked series which will
-         // raise an error if the result is garbage:
-         return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
+         return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scaling);
       }
       
       return detail::hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
