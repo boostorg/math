@@ -79,9 +79,10 @@ namespace boost {
          // second: w(0);
          //
          template <class T, class NextCoefs>
-         inline T apply_recurrence_relation_forward(NextCoefs& get_coefs, unsigned last_index, T first, T second)
+         inline T apply_recurrence_relation_forward(NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
          {
             using std::swap;
+            using std::fabs;
             using boost::math::tuple;
             using boost::math::get;
 
@@ -94,10 +95,23 @@ namespace boost {
                // scale each part seperately to avoid spurious overflow:
                third = (a / -c) * first + (b / -c) * second;
 
+               if ((log_scaling) && ((fabs(next) > tools::max_value<T>() / 1000) || (fabs(next) < tools::min_value<T>() * 1000)))
+               {
+                  // Rescale everything:
+                  int log_scale = itrunc(third);
+                  T scale = exp(-log_scale);
+                  second *= scale;
+                  third *= scale;
+                  *log_scaling += log_scale;
+               }
+
                swap(first, second);
                swap(second, third);
             }
-            
+
+            if (previous)
+               *previous = first;
+
             return second;
          }
 
@@ -113,9 +127,10 @@ namespace boost {
          // second: w(0);
          //
          template <class T, class NextCoefs>
-         inline T apply_recurrence_relation_backward(NextCoefs& get_coefs, unsigned last_index, T first, T second)
+         inline T apply_recurrence_relation_backward(NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
          {
             using std::swap;
+            using std::fabs;
             using boost::math::tuple;
             using boost::math::get;
 
@@ -128,10 +143,23 @@ namespace boost {
                // scale each part seperately to avoid spurious overflow:
                next = (b / -a) * second + (c / -a) * first;
 
+               if ((log_scaling) && ((fabs(next) > tools::max_value<T>() / 1000) || (fabs(next) < tools::min_value<T>() * 1000)))
+               {
+                  // Rescale everything:
+                  int log_scale = itrunc(log(fabs(next)));
+                  T scale = exp(-log_scale);
+                  second *= scale;
+                  next *= scale;
+                  *log_scaling += log_scale;
+               }
+
                swap(first, second);
                swap(second, next);
             }
-            
+
+            if (previous)
+               *previous = first;
+
             return second;
          }
 
