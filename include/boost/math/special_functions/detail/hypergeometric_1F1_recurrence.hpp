@@ -18,6 +18,13 @@
 
   namespace boost { namespace math { namespace detail {
 
+  // forward declaration for initial values
+  template <class T, class Policy>
+  inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol);
+
+  template <class T, class Policy>
+  inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling);
+
   template <class T>
   struct hypergeometric_1F1_recurrence_a_coefficients
   {
@@ -123,12 +130,8 @@
     const T a, b, z;
   };
 
-  // forward declaration for initial values
   template <class T, class Policy>
-  inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol);
-
-  template <class T, class Policy>
-  inline T hypergeometric_1F1_backward_recurrence_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function)
+  inline T hypergeometric_1F1_backward_recurrence_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function, int& log_scaling)
   {
     BOOST_MATH_STD_USING // modf, frexp, fabs, pow
 
@@ -168,9 +171,15 @@
     }
     else
     {
-       first = detail::hypergeometric_1F1_imp(ak, b, z, pol);
+       int scaling1(0), scaling2(0);
+       first = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling1);
        --ak;
-       second = detail::hypergeometric_1F1_imp(ak, b, z, pol);
+       second = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling2);
+       if (scaling1 != scaling2)
+       {
+          second *= exp(scaling2 - scaling1);
+       }
+       log_scaling += scaling1;
     }
     ++integer_part;
 
@@ -179,51 +188,63 @@
     return tools::apply_recurrence_relation_backward(s,
                                                      static_cast<unsigned int>(std::abs(integer_part)),
                                                      first,
-                                                     second);
+                                                     second, &log_scaling);
   }
 
   template <class T, class Policy>
-  inline T hypergeometric_1F1_forward_recurrence_for_positive_a(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1F1_forward_recurrence_for_positive_a(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
   {
     BOOST_MATH_STD_USING // modf, fabs
 
     boost::intmax_t integer_part = 0;
     T ak = modf(a, &integer_part);
 
-    T first = detail::hypergeometric_1F1_imp(ak, b, z, pol);
+    int scaling1(0), scaling2(0);
+    T first = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling1);
     ++ak;
-    T second = detail::hypergeometric_1F1_imp(ak, b, z, pol);
+    T second = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling2);
     --integer_part;
+    if (scaling1 != scaling2)
+    {
+       second *= exp(scaling2 - scaling1);
+    }
+    log_scaling += scaling1;
 
     detail::hypergeometric_1F1_recurrence_a_coefficients<T> s(ak, b, z);
 
-    return tools::apply_recurrence_relation_forward(s, integer_part, first, second);
+    return tools::apply_recurrence_relation_forward(s, integer_part, first, second, &log_scaling);
   }
 
   template <class T, class Policy>
-  inline T hypergeometric_1F1_backward_recurrence_for_negative_b(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1F1_backward_recurrence_for_negative_b(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
   {
     BOOST_MATH_STD_USING // modf, fabs
 
     boost::intmax_t integer_part = 0;
     T bk = modf(b, &integer_part);
 
-    T first = detail::hypergeometric_1F1_imp(a, bk, z, pol);
+    int scaling1(0), scaling2(0);
+    T first = detail::hypergeometric_1F1_imp(a, bk, z, pol, scaling1);
     --bk;
-    T second = detail::hypergeometric_1F1_imp(a, bk, z, pol);
+    T second = detail::hypergeometric_1F1_imp(a, bk, z, pol, scaling2);
     ++integer_part;
+    if (scaling1 != scaling2)
+    {
+       second *= exp(scaling2 - scaling1);
+    }
+    log_scaling += scaling1;
 
     detail::hypergeometric_1F1_recurrence_b_coefficients<T> s(a, bk, z);
 
     return tools::apply_recurrence_relation_backward(s,
                                                      static_cast<unsigned int>(std::abs(integer_part)),
                                                      first,
-                                                     second);
+                                                     second, &log_scaling);
   }
 
   // This method accumulates errors at an alarming rate:.
   template <class T, class Policy>
-  inline T hypergeometric_1F1_backward_recurrence_for_negative_a_and_b(const T& a, const T& b, const T& z, const Policy& pol)
+  inline T hypergeometric_1F1_backward_recurrence_for_negative_a_and_b(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
   {
     BOOST_MATH_STD_USING // modf, fabs
 
@@ -231,14 +252,20 @@
     T ak = modf(a, &integer_part);
     T bk = b - integer_part;
 
-    T first = detail::hypergeometric_1F1_imp(ak, bk, z, pol);
+    int scaling1(0), scaling2(0);
+    T first = detail::hypergeometric_1F1_imp(ak, bk, z, pol, scaling1);
     --ak; --bk;
-    T second = detail::hypergeometric_1F1_imp(ak, bk, z, pol);
+    T second = detail::hypergeometric_1F1_imp(ak, bk, z, pol, scaling2);
     ++integer_part;
+    if (scaling1 != scaling2)
+    {
+       second *= exp(scaling2 - scaling1);
+    }
+    log_scaling += scaling1;
 
     detail::hypergeometric_1F1_recurrence_a_and_b_coefficients<T> s(ak, bk, z);
 
-    return tools::apply_recurrence_relation_backward(s, fabs(integer_part), first, second);
+    return tools::apply_recurrence_relation_backward(s, fabs(integer_part), first, second, &log_scaling);
   }
 
   // ranges
@@ -247,9 +274,6 @@
   {
     return a < -10; // TODO: make dependent on precision
   }
-
-  template <class T, class Policy>
-  inline T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling);
 
   template <class T, class Policy>
   T hypergeometric_1F1_fwd_on_b_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
@@ -305,10 +329,16 @@
      // TODO: these 1F1's will be calculated via recursion on a, we should really
      // use a single recurrence on a and then "turn the corner" and recurse on b:
      //
+     int scaling1(0), scaling2(0);
      T first, second;
-     first = boost::math::detail::hypergeometric_1F1_imp(a, b + integer_part, z, pol);
+     first = boost::math::detail::hypergeometric_1F1_imp(a, b + integer_part, z, pol, scaling1);
      --integer_part;
-     second = boost::math::detail::hypergeometric_1F1_imp(a, b + integer_part, z, pol);
+     second = boost::math::detail::hypergeometric_1F1_imp(a, b + integer_part, z, pol, scaling2);
+     if (scaling1 != scaling2)
+     {
+        second *= exp(scaling2 - scaling1);
+     }
+     log_scaling += scaling1;
 
      boost::math::detail::hypergeometric_1F1_recurrence_small_b_coefficients<T> s(a, b, z, integer_part);
 

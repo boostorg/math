@@ -59,7 +59,7 @@ namespace boost { namespace math { namespace detail {
             return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, z - k, k, pol);
          }
          else if (z < b)
-            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function, log_scaling);
          else
             return hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(a, b, z, pol, function, log_scaling);
       }
@@ -191,7 +191,7 @@ namespace boost { namespace math { namespace detail {
          if ((a < -1) && (b < 4 * a) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
          {
             // Without this we get into an area where the series doesn't converge if b - a ~ b
-            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function, log_scaling);
          }
 
          // Let's otherwise make z positive (almost always)
@@ -239,7 +239,7 @@ namespace boost { namespace math { namespace detail {
       {
          if((a < 0) && (floor(a) == a))
             // This works amazingly well for negative integer a:
-            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function);
+            return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function, log_scaling);
          //
          // In what follows we have to set limits on how large z can be otherwise
          // the Bessel series become large and divergent and all the digits cancel out.
