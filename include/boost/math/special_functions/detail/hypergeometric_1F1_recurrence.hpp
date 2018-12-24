@@ -291,13 +291,13 @@
   }
 
   template <class T, class Policy>
-  T hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function = "")
+  T hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(const T& a, const T& b, const T& z, const Policy& pol, const char* function, int& log_scaling)
   {
      BOOST_MATH_STD_USING // modf, frexp, fabs, pow
      //
      // Recursion from some b + N > z down to b:
      //
-        boost::intmax_t integer_part = boost::math::itrunc(z - b) + 2;
+     int integer_part = boost::math::itrunc(z - b) + 2;
 
      if (integer_part > static_cast<boost::intmax_t>(boost::math::policies::get_max_series_iterations<Policy>()))
         return boost::math::policies::raise_evaluation_error<T>(function, "1F1 arguments sit in a range with a so negative that we have no evaluation method, got a = %1%", std::numeric_limits<T>::quiet_NaN(), pol);
@@ -315,7 +315,8 @@
      return boost::math::tools::apply_recurrence_relation_backward(s,
         static_cast<unsigned int>(std::abs(integer_part)),
         first,
-        second);
+        second,
+        &log_scaling);
   }
 
 
