@@ -46,6 +46,12 @@ namespace boost{ namespace math{ namespace tools {
     auto kurtosis(ForwardIterator first, ForwardIterator last);
 
     template<class Container>
+    auto excess_kurtosis(Container const & c);
+
+    template<class ForwardIterator>
+    auto excess_kurtosis(ForwardIterator first, ForwardIterator last);
+
+    template<class Container>
     auto first_four_moments(Container const & c);
 
     template<class ForwardIterator>
@@ -150,7 +156,8 @@ The implementation follows [@https://prod.sandia.gov/techlib-noauth/access-contr
 The input data must be forward iterable and must consist of real or integral values.
 If the input data is integral, the output is a double precision float.
 Note that this is /not/ the excess kurtosis.
-If you require the excess kurtosis, subtract 3 from the kurtosis.
+If you require the excess kurtosis, use `boost::math::tools::excess_kurtosis`.
+This function simply subtracts 3 from the kurtosis, but it makes eminently clear our definition of kurtosis.
 
 [heading First four moments]
 

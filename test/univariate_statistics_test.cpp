@@ -220,6 +220,35 @@ void test_kurtosis()
     kurt = boost::math::tools::kurtosis(v2);
     BOOST_TEST(abs(kurt - Real(13)/Real(4)) < tol);
 
+    std::vector<Real> v3(10000);
+    std::mt19937 gen(42);
+    std::normal_distribution<long double> dis(0, 1);
+    for (size_t i = 0; i < v3.size(); ++i) {
+        v3[i] = dis(gen);
+    }
+    kurt = boost::math::tools::kurtosis(v3);
+    BOOST_TEST(abs(kurt - 3) < 0.1);
+
+    std::uniform_real_distribution<long double> udis(-1, 3);
+    for (size_t i = 0; i < v3.size(); ++i) {
+        v3[i] = udis(gen);
+    }
+    auto excess_kurtosis = boost::math::tools::excess_kurtosis(v3);
+    BOOST_TEST(abs(excess_kurtosis + 6.0/5.0) < 0.2);
+
+
+    // This test only passes when there are a large number of samples.
+    // Otherwise, the distribution doesn't generate enough outliers to give,
+    // or generates too many, giving pretty wildly different values of kurtosis on different runs.
+    // However, by kicking up the samples to 1,000,000, I got very close to 6 for the excess kurtosis on every run.
+    // The CI system, however, would die on a million long doubles.
+    //std::exponential_distribution<long double> edis(0.1);
+    //for (size_t i = 0; i < v3.size(); ++i) {
+    //    v3[i] = edis(gen);
+    //}
+    //excess_kurtosis = boost::math::tools::kurtosis(v3) - 3;
+    //BOOST_TEST(abs(excess_kurtosis - 6.0) < 0.2);
+
 }
 
 template<class Z>
@@ -427,7 +456,8 @@ int main()
     test_kurtosis<float>();
     test_kurtosis<double>();
     test_kurtosis<long double>();
-    test_kurtosis<cpp_bin_float_50>();
+    // Kinda expensive:
+    //test_kurtosis<cpp_bin_float_50>();
 
     test_first_four_moments<float>();
     test_first_four_moments<double>();

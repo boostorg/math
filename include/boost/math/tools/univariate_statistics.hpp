@@ -241,6 +241,18 @@ inline auto kurtosis(Container const & v)
     return kurtosis(v.cbegin(), v.cend());
 }
 
+template<class ForwardIterator>
+auto excess_kurtosis(ForwardIterator first, ForwardIterator last)
+{
+    return kurtosis(first, last) - 3;
+}
+
+template<class Container>
+inline auto excess_kurtosis(Container const & v)
+{
+    return excess_kurtosis(v.cbegin(), v.cend());
+}
+
 
 // Follows equation 1.5/1.6 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
