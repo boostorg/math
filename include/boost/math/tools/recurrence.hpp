@@ -78,7 +78,7 @@ namespace boost {
          // first: w(-1);
          // second: w(0);
          //
-         template <class T, class NextCoefs>
+         template <class NextCoefs, class T>
          inline T apply_recurrence_relation_forward(NextCoefs& get_coefs, unsigned last_index, T first, T second, int* log_scaling = 0, T* previous = 0)
          {
             using std::swap;
@@ -95,10 +95,10 @@ namespace boost {
                // scale each part seperately to avoid spurious overflow:
                third = (a / -c) * first + (b / -c) * second;
 
-               if ((log_scaling) && ((fabs(next) > tools::max_value<T>() / 1000) || (fabs(next) < tools::min_value<T>() * 1000)))
+               if ((log_scaling) && ((fabs(third) > tools::max_value<T>() / 1000) || (fabs(third) < tools::min_value<T>() * 1000)))
                {
                   // Rescale everything:
-                  int log_scale = itrunc(third);
+                  int log_scale = itrunc(log(fabs(third)));
                   T scale = exp(-log_scale);
                   second *= scale;
                   third *= scale;
