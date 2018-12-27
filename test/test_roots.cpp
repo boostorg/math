@@ -426,17 +426,17 @@ template<class Real>
 void test_solve_real_quadratic()
 {
     Real tol = std::numeric_limits<Real>::epsilon();
-    using boost::math::tools::solve_quadratic;
-    auto [x0, x1] = solve_quadratic<Real>(1, 0, -1);
+    using boost::math::tools::quadratic_roots;
+    auto [x0, x1] = quadratic_roots<Real>(1, 0, -1);
     BOOST_CHECK_CLOSE(x0, Real(-1), tol);
     BOOST_CHECK_CLOSE(x1, Real(1), tol);
 
-    auto p = solve_quadratic<Real>(7, 0, 0);
+    auto p = quadratic_roots<Real>(7, 0, 0);
     BOOST_CHECK_SMALL(p.first, tol);
     BOOST_CHECK_SMALL(p.second, tol);
 
     // (x-7)^2 = x^2 - 14*x + 49:
-    p = solve_quadratic<Real>(1, -14, 49);
+    p = quadratic_roots<Real>(1, -14, 49);
     BOOST_CHECK_CLOSE(p.first, Real(7), tol);
     BOOST_CHECK_CLOSE(p.second, Real(7), tol);
 
@@ -446,7 +446,7 @@ void test_solve_real_quadratic()
     {
         // (x-1)(x-1-eps) = x^2 + (-eps - 2)x + (1)(1+eps)
         Real eps = 2*std::numeric_limits<Real>::epsilon();
-        p = solve_quadratic<Real>(256, 256*(-2 - eps), 256*(1 + eps));
+        p = quadratic_roots<Real>(256, 256*(-2 - eps), 256*(1 + eps));
         BOOST_CHECK_CLOSE(p.first, Real(1), tol);
         BOOST_CHECK_CLOSE(p.second, Real(1) + eps, tol);
     }
@@ -455,7 +455,7 @@ void test_solve_real_quadratic()
     {
         // Kahan's example: This is the test that demonstrates the necessity of the fma instruction.
         // https://en.wikipedia.org/wiki/Loss_of_significance#Instability_of_the_quadratic_equation
-        p = solve_quadratic<Real>(94906265.625, -189812534, 94906268.375);
+        p = quadratic_roots<Real>(94906265.625, -189812534, 94906268.375);
         BOOST_CHECK_CLOSE_FRACTION(p.first, Real(1), tol);
         BOOST_CHECK_CLOSE_FRACTION(p.second, 1.000000028975958, 4*tol);
     }
@@ -465,17 +465,17 @@ template<class Z>
 void test_solve_int_quadratic()
 {
     double tol = std::numeric_limits<double>::epsilon();
-    using boost::math::tools::solve_quadratic;
-    auto [x0, x1] = solve_quadratic(1, 0, -1);
+    using boost::math::tools::quadratic_roots;
+    auto [x0, x1] = quadratic_roots(1, 0, -1);
     BOOST_CHECK_CLOSE(x0, double(-1), tol);
     BOOST_CHECK_CLOSE(x1, double(1), tol);
 
-    auto p = solve_quadratic(7, 0, 0);
+    auto p = quadratic_roots(7, 0, 0);
     BOOST_CHECK_SMALL(p.first, tol);
     BOOST_CHECK_SMALL(p.second, tol);
 
     // (x-7)^2 = x^2 - 14*x + 49:
-    p = solve_quadratic(1, -14, 49);
+    p = quadratic_roots(1, -14, 49);
     BOOST_CHECK_CLOSE(p.first, double(7), tol);
     BOOST_CHECK_CLOSE(p.second, double(7), tol);
 }
@@ -485,19 +485,19 @@ void test_solve_complex_quadratic()
 {
     using Real = typename Complex::value_type;
     Real tol = std::numeric_limits<Real>::epsilon();
-    using boost::math::tools::solve_quadratic;
-    auto [x0, x1] = solve_quadratic<Complex>({1,0}, {0,0}, {-1,0});
+    using boost::math::tools::quadratic_roots;
+    auto [x0, x1] = quadratic_roots<Complex>({1,0}, {0,0}, {-1,0});
     BOOST_CHECK_CLOSE(x0.real(), Real(-1), tol);
     BOOST_CHECK_CLOSE(x1.real(), Real(1), tol);
     BOOST_CHECK_SMALL(x0.imag(), tol);
     BOOST_CHECK_SMALL(x1.imag(), tol);
 
-    auto p = solve_quadratic<Complex>({7,0}, {0,0}, {0,0});
+    auto p = quadratic_roots<Complex>({7,0}, {0,0}, {0,0});
     BOOST_CHECK_SMALL(p.first.real(), tol);
     BOOST_CHECK_SMALL(p.second.real(), tol);
 
     // (x-7)^2 = x^2 - 14*x + 49:
-    p = solve_quadratic<Complex>({1,0}, {-14,0}, {49,0});
+    p = quadratic_roots<Complex>({1,0}, {-14,0}, {49,0});
     BOOST_CHECK_CLOSE(p.first.real(), Real(7), tol);
     BOOST_CHECK_CLOSE(p.second.real(), Real(7), tol);
 

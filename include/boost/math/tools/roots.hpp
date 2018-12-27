@@ -657,7 +657,7 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
 namespace detail
 {
     template<class T>
-    T diff_of_products (T a, T b, T c, T d)
+    inline T difference_of_products(T const & a, T const & b, T const & c, T const & d)
     {
         T w = d*c;
         T e = std::fma(-d, c, w);
@@ -667,12 +667,15 @@ namespace detail
 }
 
 template<class T>
-auto solve_quadratic(T const& a, T const& b, T const& c)
+auto quadratic_roots(T const& a, T const& b, T const& c)
 {
     using std::copysign;
     using std::sqrt;
     if constexpr (std::is_integral<T>::value)
     {
+        // What I want is to write:
+        // return quadratic_roots(double(a), double(b), double(c));
+        // but that doesn't compile.
         double nan = std::numeric_limits<double>::quiet_NaN();
         if(a==0)
         {
@@ -695,7 +698,7 @@ auto solve_quadratic(T const& a, T const& b, T const& c)
             double x0 = sqrt(x0_sq);
             return std::pair<double, double>(-x0,x0);
         }
-        double discriminant = detail::diff_of_products(double(b), double(b), 4.0*double(a), double(c));
+        double discriminant = detail::difference_of_products(double(b), double(b), 4.0*double(a), double(c));
         if (discriminant < 0)
         {
             return std::pair<double, double>(nan, nan);
@@ -732,12 +735,11 @@ auto solve_quadratic(T const& a, T const& b, T const& c)
             T x0 = sqrt(x0_sq);
             return std::pair<T, T>(-x0,x0);
         }
-        T discriminant = detail::diff_of_products(b, b, 4*a, c);
+        T discriminant = detail::difference_of_products(b, b, 4*a, c);
         // Is there a sane way to flush very small negative values to zero?
         // If there is I don't know of it.
         if (discriminant < 0)
         {
-            std::cout << "Discriminant = " << discriminant << "\n";
             return std::pair<T, T>(nan, nan);
         }
         T q = -(b + copysign(sqrt(discriminant), b))/T(2);

@@ -33,7 +33,7 @@
    Complex complex_newton(F f, Complex guess, int max_iterations = std::numeric_limits<typename Complex::value_type>::digits);
 
    template<class T>
-   auto solve_quadratic(T const & a, T const & b, T const & c);
+   auto quadratic_roots(T const & a, T const & b, T const & c);
 
    }}} // namespaces boost::math::tools.
 
@@ -182,7 +182,7 @@ An example usage of `complex_newton` is given in `examples/daubechies_coefficien
 
 To solve a quadratic /ax/[super 2] + /bx/ + /c/ = 0, we may use
 
-    auto [x0, x1] = boost::math::tools::solve_quadratic(a, b, c);
+    auto [x0, x1] = boost::math::tools::quadratic_roots(a, b, c);
 
 If the roots are real, they are arranged so that `x0` \u2264 `x1`.
 If the roots are complex and the inputs are real, `x0` and `x1` are both `std::numeric_limits<Real>::quiet_NaN()`.
