@@ -100,6 +100,16 @@
         T M2 = boost::math::detail::hypergeometric_1F1_imp(1 + a - b, 2 - b, z, pol, local_scaling);
         log_scaling -= local_scaling; // all the M2 terms are in the denominator
         //
+        // Since a, b and z are all likely to be large we need the Wronksian
+        // calculation below to not overflow, so scale everything right down:
+        //
+        if (fabs(M2) > 1)
+        {
+           int s = boost::math::itrunc(log(fabs(M2)));
+           log_scaling -= s;  // M2 will be in the denominator, so subtract the scaling!
+           M2 *= exp(T(-s));
+        }
+        //
         // Let M3 = M(1+a-b + 1, 2-b + 1, z)
         // we can get to this from the ratio which is cheaper to calculate:
         //
