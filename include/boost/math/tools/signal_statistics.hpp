@@ -11,6 +11,7 @@
 #include <boost/type_traits.hpp>
 #include <boost/assert.hpp>
 #include <boost/multiprecision/detail/number_base.hpp>
+#include <boost/math/tools/roots.hpp>
 #include <boost/math/tools/univariate_statistics.hpp>
 
 
@@ -252,13 +253,12 @@ auto oracle_snr_db(Container const & signal, Container const & noisy_signal)
 // D. R. Pauluzzi and N. C. Beaulieu, "A comparison of SNR estimation techniques for the AWGN channel," IEEE Trans. Communications, Vol. 48, No. 10, pp. 1681-1691, 2000.
 // A nice python implementation:
 // https://github.com/gnuradio/gnuradio/blob/master/gr-digital/examples/snr_estimators.py
-
-template<class Container>
-auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimated_noise_kurtosis=3)
+template<class ForwardIterator>
+auto m2m4_snr_estimator(ForwardIterator first, ForwardIterator last, decltype(*first) estimated_signal_kurtosis=1, decltype(*first) estimated_noise_kurtosis=3)
 {
     BOOST_ASSERT_MSG(estimated_signal_kurtosis > 0, "The estimated signal kurtosis must be positive");
     BOOST_ASSERT_MSG(estimated_noise_kurtosis > 0, "The estimated noise kurtosis must be positive.");
-    using Real = typename Container::value_type;
+    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::sqrt;
     if constexpr (std::is_floating_point<Real>::value ||
        boost::multiprecision::number_category<Real>::value == boost::multiprecision::number_kind_floating_point)
@@ -272,7 +272,7 @@ auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::val
         // However, I can't prove that, so there is a chance that this does unnecessary work.
         // Future improvements: There are algorithms which can solve quadratics much more effectively than the naive implementation found here.
         // See: https://stackoverflow.com/questions/48979861/numerically-stable-method-for-solving-quadratic-equations/50065711#50065711
-        auto [M1, M2, M3, M4] = boost::math::tools::first_four_moments(noisy_signal);
+        auto [M1, M2, M3, M4] = boost::math::tools::first_four_moments(first, last);
         if (M4 == 0)
         {
             // The signal is constant. There is no noise:
@@ -287,120 +287,66 @@ auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::val
         Real cs = kw*M2*M2 - M4;
         Real bn = 2*M2*(3-ka);
         Real cn = ka*M2*M2 - M4;
-        Real N, S;
-        if(kw == 3)
+        auto [S0, S1] = boost::math::tools::quadratic_roots(a, bs, cs);
+        if (S1 > 0)
         {
-            if (ka == 3)
+            auto N = M2 - S1;
+            if (N > 0)
             {
-                // When ka = kw = 3, then either the system is inconsistent, or the system does not have a unique solution:
-                return std::numeric_limits<Real>::quiet_NaN();
+                return S1/N;
             }
-            Real Ssq = -cs/a;
-            if (Ssq < 0)
+            if (S0 > 0)
             {
-                Real radicand = bn*bn - 4*a*cn;
-                if (radicand < 0)
+                N = M2 - S0;
+                if (N > 0)
                 {
-                    return std::numeric_limits<Real>::quiet_NaN();
-                }
-                N = (-bn + sqrt(radicand))/(2*a);
-                if (N < 0)
-                {
-                    N =  (-bn - sqrt(radicand))/(2*a);
-                    if (N < 0)
-                    {
-                        return std::numeric_limits<Real>::quiet_NaN();
-                    }
-                    S = M2 - N;
-                    if (S < 0)
-                    {
-                        return std::numeric_limits<Real>::quiet_NaN();
-                    }
-                    return S/N;
-                }
-                S = M2 - N;
-                if (S < 0)
-                {
-                    return std::numeric_limits<Real>::quiet_NaN();
-                }
-                return S/N;
-            }
-            S = sqrt(Ssq);
-            N = M2 - S;
-            if (N < 0)
-            {
-                return std::numeric_limits<Real>::quiet_NaN();
-            }
-            return S/N;
-        }
-
-        // Maybe I should look for some very small distance from 6, but . . .
-        if (ka+kw == 6)
-        {
-            // In this case we don't need to solve a quadratic equation:
-            S = -cs/bs;
-            N = -cn/bn;
-            if (S/N < 0)
-            {
-                return std::numeric_limits<Real>::quiet_NaN();
-            }
-            return S/N;
-        }
-
-        // The special cases have been taken care of.
-        // Now we must resort to solving a full quadratic.
-        Real radicand = bs*bs - 4*a*cs;
-        if (radicand < 0)
-        {
-            // See if we have a solution for N:
-            radicand = bn*bn - 4*a*cn;
-            if (radicand < 0)
-            {
-                // Both S and N are complex:
-                return std::numeric_limits<Real>::quiet_NaN();
-            }
-            // N is real. Can it be made positive?
-            N = (-bn + sqrt(radicand))/(2*a);
-            if (N < 0)
-            {
-                N = (-bn - sqrt(radicand))/(2*a);
-                if (N < 0)
-                {
-                    return std::numeric_limits<Real>::quiet_NaN();
+                    return S0/N;
                 }
             }
-            S = M2 - N;
-            if (S < 0)
-            {
-                return std::numeric_limits<Real>::quiet_NaN();
-            }
-            return S/N;
         }
-
-        S = (-bs + sqrt(radicand))/(2*a);
-        if (S < 0)
+        auto [N0, N1] = boost::math::tools::quadratic_roots(a, bn, cn);
+        if (N1 > 0)
         {
-            S = (-bs - sqrt(radicand))/(2*a);
-            if (S < 0)
+            auto S = M2 - N1;
+            if (S > 0)
             {
-                return std::numeric_limits<Real>::quiet_NaN();
+                return S/N1;
+            }
+            if (N0 > 0)
+            {
+                S = M2 - N0;
+                if (S > 0)
+                {
+                    return S/N0;
+                }
             }
         }
-        N = M2 - S;
-        if (N < 0)
-        {
-            return std::numeric_limits<Real>::quiet_NaN();
-        }
-        return S/N;
+        // This happens distressingly often. It's a limitation of the method.
+        return std::numeric_limits<Real>::quiet_NaN();
     }
     else
     {
         BOOST_ASSERT_MSG(false, "The M2M4 estimator has not been implemented for this type.");
+        return *first;
     }
 }
 
 template<class Container>
-auto m2m4_snr_estimator_db(Container const & noisy_signal,  typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimated_noise_kurtosis=3)
+inline auto m2m4_snr_estimator(Container const & noisy_signal,  typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimated_noise_kurtosis=3)
+{
+    return m2m4_snr_estimator(noisy_signal.cbegin(), noisy_signal.cend(), estimated_signal_kurtosis, estimated_noise_kurtosis);
+}
+
+template<class ForwardIterator>
+inline auto m2m4_snr_estimator_db(ForwardIterator first, ForwardIterator last, decltype(*first) estimated_signal_kurtosis=1, decltype(*first) estimated_noise_kurtosis=3)
+{
+    using std::log10;
+    return 10*log10(m2m4_snr_estimator(first, last, estimated_signal_kurtosis, estimated_noise_kurtosis));
+}
+
+
+template<class Container>
+inline auto m2m4_snr_estimator_db(Container const & noisy_signal,  typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimated_noise_kurtosis=3)
 {
     using std::log10;
     return 10*log10(m2m4_snr_estimator(noisy_signal, estimated_signal_kurtosis, estimated_noise_kurtosis));
