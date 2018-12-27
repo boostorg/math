@@ -32,6 +32,9 @@
    template <class F, class Complex>
    Complex complex_newton(F f, Complex guess, int max_iterations = std::numeric_limits<typename Complex::value_type>::digits);
 
+   template<class T>
+   auto solve_quadratic(T const & a, T const & b, T const & c);
+
    }}} // namespaces boost::math::tools.
 
 [h4 Description]
@@ -44,6 +47,8 @@ These functions all perform iterative root-finding [*using derivatives]:
 __halley and __schroder iteration.
 
 * `complex_newton` performs Newton's method on complex-analytic functions.
+
+* `solve_quadratic` solves quadratic equations using various tricks to keep catastrophic cancellation from occurring in computation of the discriminant.
 
 
 [variablelist Parameters of the real-valued root finding functions
@@ -172,6 +177,19 @@ then which root the complex Newton's method converges to is essentially impossib
 Finally, the derivative of /f/ must be continuous at the root or else non-roots can be found; see [@https://math.stackexchange.com/questions/3017766/constructing-newton-iteration-converging-to-non-root here] for an example.
 
 An example usage of `complex_newton` is given in `examples/daubechies_coefficients.cpp`.
+
+[h4 Quadratics]
+
+To solve a quadratic /ax[super 2] + bx + c = 0/, we may use
+
+    auto [x0, x1] = boost::math::tools::solve_quadratic(a, b, c);
+
+If the roots are complex and the inputs are real, /x0/ and /x1/ are /nans/.
+In this case we must cast /a/, /b/ and /c/ to a complex to extract the complex roots.
+If /a/, /b/ and /c/ are integral, then the roots are of type double.
+The routine is much faster if the fused-multiply-add instruction is available on your architecture;
+if it is not available, the routine resorts to emulation.
+
 
 [h4 Examples]
 

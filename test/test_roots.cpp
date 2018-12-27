@@ -22,6 +22,7 @@
 #include <iostream>
 #include <iomanip>
 
+#include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 
 #define BOOST_CHECK_CLOSE_EX(a, b, prec, i) \
@@ -420,6 +421,91 @@ void test_daubechies_fails()
 }
 #endif
 
+#if !defined(BOOST_NO_CXX17_IF_CONSTEXPR)
+template<class Real>
+void test_solve_real_quadratic()
+{
+    Real tol = std::numeric_limits<Real>::epsilon();
+    using boost::math::tools::solve_quadratic;
+    auto [x0, x1] = solve_quadratic<Real>(1, 0, -1);
+    BOOST_CHECK_CLOSE(x0, Real(-1), tol);
+    BOOST_CHECK_CLOSE(x1, Real(1), tol);
+
+    auto p = solve_quadratic<Real>(7, 0, 0);
+    BOOST_CHECK_SMALL(p.first, tol);
+    BOOST_CHECK_SMALL(p.second, tol);
+
+    // (x-7)^2 = x^2 - 14*x + 49:
+    p = solve_quadratic<Real>(1, -14, 49);
+    BOOST_CHECK_CLOSE(p.first, Real(7), tol);
+    BOOST_CHECK_CLOSE(p.second, Real(7), tol);
+
+    // This test does not pass in multiprecision,
+    // due to the fact it does not have an fma:
+    if (std::is_floating_point<Real>::value)
+    {
+        // (x-1)(x-1-eps) = x^2 + (-eps - 2)x + (1)(1+eps)
+        Real eps = 2*std::numeric_limits<Real>::epsilon();
+        p = solve_quadratic<Real>(256, 256*(-2 - eps), 256*(1 + eps));
+        BOOST_CHECK_CLOSE(p.first, Real(1), tol);
+        BOOST_CHECK_CLOSE(p.second, Real(1) + eps, tol);
+    }
+
+    if (std::is_same<Real, double>::value)
+    {
+        // Kahan's example: This is the test that demonstrates the necessity of the fma instruction.
+        // https://en.wikipedia.org/wiki/Loss_of_significance#Instability_of_the_quadratic_equation
+        p = solve_quadratic<Real>(94906265.625, -189812534, 94906268.375);
+        BOOST_CHECK_CLOSE_FRACTION(p.first, Real(1), tol);
+        BOOST_CHECK_CLOSE_FRACTION(p.second, 1.000000028975958, 4*tol);
+    }
+}
+
+template<class Z>
+void test_solve_int_quadratic()
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    using boost::math::tools::solve_quadratic;
+    auto [x0, x1] = solve_quadratic(1, 0, -1);
+    BOOST_CHECK_CLOSE(x0, double(-1), tol);
+    BOOST_CHECK_CLOSE(x1, double(1), tol);
+
+    auto p = solve_quadratic(7, 0, 0);
+    BOOST_CHECK_SMALL(p.first, tol);
+    BOOST_CHECK_SMALL(p.second, tol);
+
+    // (x-7)^2 = x^2 - 14*x + 49:
+    p = solve_quadratic(1, -14, 49);
+    BOOST_CHECK_CLOSE(p.first, double(7), tol);
+    BOOST_CHECK_CLOSE(p.second, double(7), tol);
+}
+
+template<class Complex>
+void test_solve_complex_quadratic()
+{
+    using Real = typename Complex::value_type;
+    Real tol = std::numeric_limits<Real>::epsilon();
+    using boost::math::tools::solve_quadratic;
+    auto [x0, x1] = solve_quadratic<Complex>({1,0}, {0,0}, {-1,0});
+    BOOST_CHECK_CLOSE(x0.real(), Real(-1), tol);
+    BOOST_CHECK_CLOSE(x1.real(), Real(1), tol);
+    BOOST_CHECK_SMALL(x0.imag(), tol);
+    BOOST_CHECK_SMALL(x1.imag(), tol);
+
+    auto p = solve_quadratic<Complex>({7,0}, {0,0}, {0,0});
+    BOOST_CHECK_SMALL(p.first.real(), tol);
+    BOOST_CHECK_SMALL(p.second.real(), tol);
+
+    // (x-7)^2 = x^2 - 14*x + 49:
+    p = solve_quadratic<Complex>({1,0}, {-14,0}, {49,0});
+    BOOST_CHECK_CLOSE(p.first.real(), Real(7), tol);
+    BOOST_CHECK_CLOSE(p.second.real(), Real(7), tol);
+
+}
+
+
+#endif
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
 
@@ -430,6 +516,16 @@ BOOST_AUTO_TEST_CASE( test_main )
    test_complex_newton<std::complex<double>>();
    test_complex_newton<boost::multiprecision::cpp_complex_100>();
    test_daubechies_fails();
+#endif
+
+#if !defined(BOOST_NO_CXX17_IF_CONSTEXPR)
+    test_solve_real_quadratic<float>();
+    test_solve_real_quadratic<double>();
+    test_solve_real_quadratic<long double>();
+    test_solve_real_quadratic<boost::multiprecision::cpp_bin_float_50>();
+
+    test_solve_int_quadratic<int>();
+    test_solve_complex_quadratic<std::complex<double>>();
 #endif
 
 }
