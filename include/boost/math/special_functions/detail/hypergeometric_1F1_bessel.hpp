@@ -202,7 +202,7 @@
         // Only convergent for a ~ b ?
         //
         hypergeometric_1F1_AS_13_3_6_series(const T& a, const T& b, const T& z, const T& b_minus_a, const Policy& pol_)
-           : b_minus_a_minus_half(b_minus_a - 0.5f), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b - 2 * a), b_poch(b), term(1), sign(1), n(0), pol(pol_)
+           : b_minus_a_minus_half(b_minus_a - 0.5f), half_z(z / 2), poch_1(2 * b_minus_a - 1), poch_2(b_minus_a - a), b_poch(b), term(1), sign(1), n(0), pol(pol_)
         {}
         T operator()()
         {
@@ -231,7 +231,7 @@
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
         boost::math::policies::check_series_iterations<T>("boost::math::hypergeometric_1F1_AS_13_3_6<%1%>(%1%,%1%,%1%)", max_iter, pol);
-        result *= boost::math::tgamma(b_minus_a - 0.5f) * pow(z / 4, b_minus_a + 0.5f);
+        result *= boost::math::tgamma(b_minus_a - 0.5f) * pow(z / 4, -b_minus_a + 0.5f);
         int scale = itrunc(z / 2);
         log_scaling += scale;
         result *= exp(z / 2 - scale);
