@@ -180,15 +180,21 @@ An example usage of `complex_newton` is given in `examples/daubechies_coefficien
 
 [h4 Quadratics]
 
-To solve a quadratic /ax[super 2] + bx + c = 0/, we may use
+To solve a quadratic /ax/[super 2] + /bx/ + /c/ = 0, we may use
 
     auto [x0, x1] = boost::math::tools::solve_quadratic(a, b, c);
 
-If the roots are complex and the inputs are real, /x0/ and /x1/ are /nans/.
-In this case we must cast /a/, /b/ and /c/ to a complex to extract the complex roots.
-If /a/, /b/ and /c/ are integral, then the roots are of type double.
-The routine is much faster if the fused-multiply-add instruction is available on your architecture;
-if it is not available, the routine resorts to emulation.
+If the roots are real, they are arranged so that `x0` \u2264 `x1`.
+If the roots are complex and the inputs are real, `x0` and `x1` are both `std::numeric_limits<Real>::quiet_NaN()`.
+In this case we must cast `a`, `b` and `c` to a complex type to extract the complex roots.
+If `a`, `b` and `c` are integral, then the roots are of type double.
+The routine is much faster if the fused-multiply-add instruction is available on your architecture.
+If the fma is not available, the function resorts to slow emulation.
+Finally, speed is improved if you compile for your particular architecture.
+For instance, if you compile without any architecture flags, then the `std::fma` call compiles down to `call _fma`,
+which dynamically chooses to emulate or execute the `vfmadd132sd` instruction based on the capabilities of the architecture.
+If instead, you compile with (say) `-march=native` then no dynamic choice is made:
+The `vfmadd132sd` instruction is always executed if available and emulation is used if not.
 
 
 [h4 Examples]
