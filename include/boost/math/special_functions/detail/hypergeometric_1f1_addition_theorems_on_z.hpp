@@ -46,7 +46,6 @@
            // The a_plus_n == 0 case below isn't actually correct, but doesn't matter as that term will be zero
            // anyway, we just need to not divde by zero and end up with a NaN in the result.
            T M2 = (a_plus_n == -1) ? 1 : (a_plus_n == 0) ? 0 : (M_next * b_plus_n * (1 - b_plus_n + z_) + b_plus_n * (b_plus_n - 1) * M) / (a_plus_n * z_);
-           T M3 = boost::math::detail::hypergeometric_1F1_imp(a_plus_n + 1, b_plus_n + 1, z_, boost::math::policies::policy<>());
            M = M_next;
            M_next = M2;
            return result;
@@ -245,7 +244,6 @@
            term *= one_minus_b_plus_n * k / (z_ * ++n);
            ++one_minus_b_plus_n;
            T M2 = -((b_ - n) * (1 - b_ + n + z_) * M_next - (a_ - n) * z_ * M) / ((b_ - n) * (b_ - n - 1));
-           //T M3 = boost::math::detail::hypergeometric_1F1_imp(a_ - n - 1, b_ - n - 1, z_, boost::math::policies::policy<>());
            M = M_next;
            M_next = M2;
 
