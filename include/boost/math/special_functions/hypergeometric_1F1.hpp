@@ -94,7 +94,89 @@ namespace boost { namespace math { namespace detail {
       // raise an error if the result is garbage:
       return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
    }
-      
+
+   template <class T>
+   bool is_convergent_negative_z_series(const T& a, const T& b, const T& z)
+   {
+      //
+      // Generic check: we have small initial divergence and are convergent after 10 terms:
+      //
+      if ((fabs(z * a / b) < 2) && (fabs(z * (a + 10) / ((b + 10) * 3628800)) < 1))
+      {
+         // Double check for divergence when we cross the origin on a and b:
+         if (a < 0)
+         {
+            T n = 300 - floor(a);
+            if (fabs((a + n) * z / ((b + n) * n)) < 1)
+            {
+               if (b < 0)
+               {
+                  T m = 3 - floor(b);
+                  if (fabs((a + m) * z / ((b + m) * m)) < 1)
+                     return true;
+               }
+               else
+                  return true;
+            }
+         }
+         else if (b < 0)
+         {
+            T n = 3 - floor(b);
+            if (fabs((a + n) * z / ((b + n) * n)) < 1)
+               return true;
+         }
+      }
+      if ((b > 0) && (a < 0))
+      {
+         //
+         // For a and z both negative, we're OK with some initial divergence as long as
+         // it occurs before we hit the origin, as to start with all the terms have the
+         // same sign.
+         //
+         // https://www.wolframalpha.com/input/?i=solve+(a%2Bn)z+%2F+((b%2Bn)n)+%3D%3D+1+for+n
+         //
+         T sqr = 4 * a * z + b * b - 2 * b * z + z * z;
+         T iterations_to_convergence = sqr > 0 ? 0.5f * (-sqrt(sqr) - b + z) : -a + b;
+         if (iterations_to_convergence < 0)
+            iterations_to_convergence = 0.5f * (sqrt(sqr) - b + z);
+         if (a + iterations_to_convergence < -50)
+         {
+            // Need to check for divergence when we cross the origin on a:
+            if (a > -1)
+               return true;
+            T n = 300 - floor(a);
+            if(fabs((a + n) * z / ((b + n) * n)) < 1)
+               return true;
+         }
+      }
+      return false;
+   }
+
+   template <class T>
+   bool hypergeometric_1F1_is_13_3_6_region(const T& a, const T& b, const T& z)
+   {
+      if ((z < 0) && (fabs(10 * a / b) < 1) && (fabs(a) < 50))
+      {
+         if (b > 0)
+         {
+            // We want the first term not too divergent, and convergence by term 10:
+            if ((fabs((2 * a - 1) * (2 * a - b) / b) < 2) && (fabs((2 * a + 9) * (2 * a - b + 10) / (10 * (b + 10))) < 2))
+               // Can't have z too large, or else bessel_i will overflow:
+               if (-z / 4 < tools::log_max_value<T>())
+                  return true;
+         }
+         else
+         {
+            // We want the first term not too divergent, and convergence by term 10:
+            if ((fabs((2 * a - 1) * (2 * a - b) / b) < 2) && (fabs((2 * a + 9) * (2 * a - b + 10) / (10 * (b + 10))) < 2))
+               // Can't have z too large, or else bessel_i will overflow:
+               if (-z / 4 < tools::log_max_value<T>())
+                  return true;
+         }
+      }
+      return false;
+   }
+
       
    template <class T, class Policy>
    T hypergeometric_1F1_imp(const T& a, const T& b, const T& z, const Policy& pol, int& log_scaling)
@@ -122,7 +204,11 @@ namespace boost { namespace math { namespace detail {
 
       // 0f0 (exp) case;
       if (b_minus_a == 0)
-         return exp(z);
+      {
+         int scale = itrunc(z, pol);
+         log_scaling += scale;
+         return exp(z - scale);
+      }
 
       if ((b_minus_a == -1))
       {
@@ -141,6 +227,18 @@ namespace boost { namespace math { namespace detail {
          return exp(z);
       if ((b - a == b) && (fabs(z / b) < policies::get_epsilon<T, Policy>()))
          return 1;
+      //
+      // Special case for A&S 13.3.6:
+      //
+      if (hypergeometric_1F1_is_13_3_6_region(a, b, z))
+      {
+         // a is tiny compared to b, and z < 0
+         // 13.3.6 appears to be the most efficient and often the most accurate method.
+         T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, -z, a, pol, log_scaling);
+         int scale = boost::math::itrunc(z, pol);
+         log_scaling += scale;
+         return r * exp(z - scale);
+      }
       //
       // Asymptotic expansion for large z
       // TODO: check region for higher precision types.
@@ -170,7 +268,7 @@ namespace boost { namespace math { namespace detail {
       {
          if (a == 1)
             return detail::hypergeometric_1F1_pade(b, z, pol);
-         if ((fabs(z * a / b) < 2) && (fabs(z * (a + 10) / ((b + 10) * 3628800)) < 1))  // TODO check crossover for most accurate location
+         if (is_convergent_negative_z_series(a, b, z))
          {
             if ((boost::math::sign(b - a) == boost::math::sign(b)) && ((b > 0) || (b < -200)))
             {
@@ -188,12 +286,14 @@ namespace boost { namespace math { namespace detail {
                return hypergeometric_1F1_checked_series_impl(a, b, z, pol, log_scaling);
             }
          }
+         // Appears to be no longer needed now we have method-of-ratios.
+         /*
          if ((a < -1) && (b < 4 * a) && (-a < policies::get_max_series_iterations<Policy>()))  // TODO check crosover for best location
          {
             // Without this we get into an area where the series doesn't converge if b - a ~ b
             return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function, log_scaling);
          }
-
+         */
          // Let's otherwise make z positive (almost always)
          // by Kummer's transformation
          // (we also don't transform if z belongs to [-1,0])
@@ -268,6 +368,29 @@ namespace boost { namespace math { namespace detail {
          }
 
          return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scaling);
+      }
+
+      if (hypergeometric_1F1_is_13_3_6_region(b_minus_a, b, -z))
+      {
+         // b_minus_a is tiny compared to b, and -z < 0
+         // 13.3.6 appears to be the most efficient and often the most accurate method.
+         return boost::math::detail::hypergeometric_1F1_AS_13_3_6(a, b, z, b_minus_a, pol, log_scaling);
+      }
+
+      if ((a > 0) && (b > 0) && (a * z / b > 2))
+      {
+         //
+         // Series is initially divergent and slow to converge, see if applying
+         // Kummer's relation can improve things:
+         //
+         if (is_convergent_negative_z_series(b_minus_a, b, -z))
+         {
+            int scaling = itrunc(z);
+            T r = exp(z - scaling) * detail::hypergeometric_1F1_checked_series_impl(b_minus_a, b, -z, pol, log_scaling);
+            log_scaling += scaling;
+            return r;
+         }
+
       }
       
       return detail::hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
