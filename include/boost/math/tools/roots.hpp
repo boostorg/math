@@ -657,11 +657,11 @@ Complex complex_newton(F g, Complex guess, int max_iterations=std::numeric_limit
 namespace detail
 {
     template<class T>
-    inline T difference_of_products(T const & a, T const & b, T const & c, T const & d)
+    inline T discriminant(T const & a, T const & b, T const & c)
     {
-        T w = d*c;
-        T e = std::fma(-d, c, w);
-        T f = std::fma(a, b, -w);
+        T w = 4*a*c;
+        T e = std::fma(-c, 4*a, w);
+        T f = std::fma(b, b, -w);
         return f + e;
     }
 }
@@ -698,7 +698,7 @@ auto quadratic_roots(T const& a, T const& b, T const& c)
             double x0 = sqrt(x0_sq);
             return std::pair<double, double>(-x0,x0);
         }
-        double discriminant = detail::difference_of_products(double(b), double(b), 4.0*double(a), double(c));
+        double discriminant = detail::discriminant(double(a), double(b), double(c));
         if (discriminant < 0)
         {
             return std::pair<double, double>(nan, nan);
@@ -735,7 +735,7 @@ auto quadratic_roots(T const& a, T const& b, T const& c)
             T x0 = sqrt(x0_sq);
             return std::pair<T, T>(-x0,x0);
         }
-        T discriminant = detail::difference_of_products(b, b, 4*a, c);
+        T discriminant = detail::discriminant(a, b, c);
         // Is there a sane way to flush very small negative values to zero?
         // If there is I don't know of it.
         if (discriminant < 0)
