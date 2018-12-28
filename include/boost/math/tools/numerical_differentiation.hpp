@@ -9,12 +9,4 @@
 
 BOOST_HEADER_DEPRECATED("<boost/math/differentiation/finite_difference.hpp>");
 
-namespace boost {
-   namespace math {
-       namespace differentiation {
-           using finite_difference_derivative;
-           using complex_step_derivative;
-       }
-   }
-}
 #endif
