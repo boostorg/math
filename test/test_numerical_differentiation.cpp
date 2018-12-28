@@ -16,12 +16,12 @@
 #include <boost/math/special_functions/bessel.hpp>
 #include <boost/math/special_functions/bessel_prime.hpp>
 #include <boost/math/special_functions/next.hpp>
-#include <boost/math/tools/numerical_differentiation.hpp>
+#include <boost/math/differentiation/finite_difference.hpp>
 
 using std::abs;
 using std::pow;
-using boost::math::tools::finite_difference_derivative;
-using boost::math::tools::complex_step_derivative;
+using boost::math::differentiation::finite_difference_derivative;
+using boost::math::differentiation::complex_step_derivative;
 using boost::math::cyl_bessel_j;
 using boost::math::cyl_bessel_j_prime;
 using boost::math::constants::half;
