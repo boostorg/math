@@ -6,7 +6,7 @@
 // Basic sanity check that header <boost/math/special_functions/gamma.hpp>
 // #includes all the files that it needs to.
 //
-#include <boost/math/differentiation/numerical_differentiation.hpp>
+#include <boost/math/differentiation/finite_difference.hpp>
 //
 // Note this header includes no other headers, this is
 // important if this test is to be meaningful:
