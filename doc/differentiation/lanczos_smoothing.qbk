@@ -1,0 +1,110 @@
+[/
+Copyright (c) 2019 Nick Thompson
+Use, modification and distribution are subject to the
+Boost Software License, Version 1.0. (See accompanying file
+LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section:diff Lanczos Smoothing Derivatives]
+
+[heading Synopsis]
+
+``
+#include <boost/math/differentiation/lanczos_smoothing.hpp>
+
+namespace boost { namespace math { namespace differentiation {
+
+    template <class RandomAccessContainer>
+    class lanczos_derivative {
+    public:
+        lanczos_smoothing_derivative(RandomAccessContainer const & v,
+                                     typename RandomAccessContainer::value_type spacing = 1,
+                                     size_t n = 18,
+                                     size_t approximation_order = 3);
+
+        typename RandomAccessContainer::value_type operator[](size_t i) const;
+
+        void reset_data(RandomAccessContainer const &v);
+
+        void reset_spacing(Real spacing);
+    }
+
+}}} // namespaces
+``
+
+[heading Description]
+
+The function `lanczos_derivative` calculates a finite-difference approximation to the derivative of a noisy sequence of equally-spaced values /v/ at an index /i/.
+A basic usage is
+
+    std::vector<double> v(500);
+    // fill v with noisy data.
+    double spacing = 0.001;
+    using boost::math::differentiation::lanczos_derivative;
+    auto lanczos = lanczos_derivative(v, spacing);
+    double dvdt = lanczos[30];
+
+If the data has variance \u03C3[super 2], then the variance of the computed derivative is roughly \u03C3[super 2]/p/[super 3] /n/[super -3] \u0394 /t/[super -2],
+i.e., it increases cubically with the approximation order /p/, linearly with the data variance, and decreases at the cube of the filter length /n/.
+In addition, we must not forget the discretization error which is /O/(\u0394 /t/[super /p/]).
+You can play around with the approximation order /p/ and the filter length /n/:
+
+    size_t n = 12;
+    size_t p = 2;
+    auto lanczos = lanczos_derivative(v, spacing, n, p);
+    double dvdt = lanczos[24];
+
+If /p=2n/, then the Lanczos smoothing derivative is not smoothing:
+It reduces to the standard /2n+1/-point finite-difference formula.
+For /p>2n/, an assertion is hit as the filter is undefined.
+
+In our tests with AWGN, we have found the error decreases monotonically with /n/, as is expected from the theory discussed above.
+So the choice of /n/ is simple:
+As high as possible given your speed requirements (larger /n/ implies a longer filter and hence more compute),
+balanced against the danger of overfitting and averaging over non-stationarity.
+
+The choice of approximation order /p/ for a given /n/ is more difficult.
+If your signal is believed to be a polynomial,
+it does not make sense to set /p/ to larger than the polynomial degree-
+though it may be sensible to take /p/ less than the polynomial degree.
+
+For a sinusoidal signal contaminated with AWGN, we ran a few tests showing that for SNR = 1, p = n/8 gave the best results,
+for SNR = 10, p = n/7 was the best, and for SNR = 100, p = n/6 was the most reasonable choice.
+For SNR = 0.1, the method appears to be useless.
+The user is urged to use these results with caution-they have no theoretical backing and are extrapolated from a single case.
+
+The filters are (regrettably) computed at runtime-the vast number of combinations of approximation order and filter length makes the number of filters that must be stored excessive for compile-time data.
+Hence the constructor call computes the filters.
+Since each filter has length /2n+1/ and there are /n/ filters, whose element each consist of /p/ summands,
+the complexity of the constructor call is O(/n/[super 2]/p/).e
+This is not cheap-though for most cases small /p/ and /n/ not too large (< 20) is desired.
+However, for concreteness, on the author's 2.7GHz Intel laptop CPU, the /n=16/, /p=3/ filter takes 9 microseconds to compute.
+This is far from negligible, and as such we provide API calls which allow the filters to be used with multiple data:
+
+
+    std::vector<double> v(500);
+    // fill v with noisy data.
+    auto lanczos = lanczos_derivative(v, spacing);
+    // use lanczos with v . . .
+    std::vector<double> w(500);
+    lanczos.reset_data(w);
+    // use lanczos with w . . .
+    // need to use a different spacing?
+    lanczos.reset_spacing(0.02);
+
+
+The implementation follows [@https://doi.org/10.1080/00207160.2012.666348 McDevitt, 2012],
+who vastly expanded the ideas of Lanczos to create a very general framework for numerically differentiating noisy equispaced data.
+
+
+
+[heading References]
+
+* Corless, Robert M., and Nicolas Fillion. ['A graduate introduction to numerical methods.] AMC 10 (2013): 12.
+
+* Lanczos, Cornelius. ['Applied analysis.] Courier Corporation, 1988.
+
+* Timothy J. McDevitt (2012): ['Discrete Lanczos derivatives of noisy data], International Journal of Computer Mathematics, 89:7, 916-931
+
+
+[endsect]
