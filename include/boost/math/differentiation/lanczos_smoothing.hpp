@@ -8,15 +8,18 @@
 #include <vector>
 #include <boost/assert.hpp>
 
-namespace boost {
-namespace math {
-namespace differentiation {
+namespace boost::math::differentiation {
 
 namespace detail {
 template <typename Real>
 class discrete_legendre {
   public:
-    explicit discrete_legendre(int n) : m_n{n}
+    explicit discrete_legendre(size_t n) : m_n{n}, m_r{2},
+                                           m_x{std::numeric_limits<Real>::quiet_NaN()},
+                                           m_qrm2{std::numeric_limits<Real>::quiet_NaN()},
+                                           m_qrm1{std::numeric_limits<Real>::quiet_NaN()},
+                                           m_qrm2p{std::numeric_limits<Real>::quiet_NaN()},
+                                           m_qrm1p{std::numeric_limits<Real>::quiet_NaN()}
     {
         // The integer n indexes a family of discrete Legendre polynomials indexed by k <= 2*n
     }
@@ -68,7 +71,7 @@ class discrete_legendre {
     }
 
 
-    Real operator()(Real x, int k)
+    Real operator()(Real x, size_t k)
     {
         BOOST_ASSERT_MSG(k <= 2 * m_n, "r <= 2n is required.");
         if (k == 0)
@@ -82,7 +85,7 @@ class discrete_legendre {
         Real qrm2 = 1;
         Real qrm1 = x;
         Real N = 2 * m_n + 1;
-        for (int r = 2; r <= k; ++r) {
+        for (size_t r = 2; r <= k; ++r) {
             Real num = (r - 1) * (N * N - (r - 1) * (r - 1)) * qrm2;
             Real tmp = (2 * r - 1) * x * qrm1 - num / Real(4 * m_n * m_n);
             qrm2 = qrm1;
@@ -91,7 +94,7 @@ class discrete_legendre {
         return qrm1;
     }
 
-    Real prime(Real x, int k) {
+    Real prime(Real x, size_t k) {
         BOOST_ASSERT_MSG(k <= 2 * m_n, "r <= 2n is required.");
         if (k == 0) {
             return 0;
@@ -104,7 +107,7 @@ class discrete_legendre {
         Real qrm2p = 0;
         Real qrm1p = 1;
         Real N = 2 * m_n + 1;
-        for (int r = 2; r <= k; ++r) {
+        for (size_t r = 2; r <= k; ++r) {
             Real s =
                 (r - 1) * (N * N - (r - 1) * (r - 1)) / Real(4 * m_n * m_n);
             Real tmp1 = ((2 * r - 1) * x * qrm1 - s * qrm2) / r;
@@ -118,13 +121,13 @@ class discrete_legendre {
     }
 
   private:
-    int m_n;
+    size_t m_n;
+    size_t m_r;
+    Real m_x;
     Real m_qrm2;
     Real m_qrm1;
     Real m_qrm2p;
     Real m_qrm1p;
-    int m_r;
-    Real m_x;
 };
 
 template <class Real>
@@ -291,8 +294,5 @@ private:
     Real dt;
 };
 
-
-} // namespace differentiation
-} // namespace math
-} // namespace boost
+} // namespaces
 #endif

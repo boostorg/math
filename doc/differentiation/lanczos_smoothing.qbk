@@ -12,24 +12,25 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ``
 #include <boost/math/differentiation/lanczos_smoothing.hpp>
 
-namespace boost { namespace math { namespace differentiation {
+namespace boost::math::differentiation {
 
     template <class RandomAccessContainer>
     class discrete_lanczos_derivative {
     public:
+        using Real = typename RandomAccessContainer::value_type;
         discrete_lanczos_derivative(RandomAccessContainer const & v,
-                           typename RandomAccessContainer::value_type spacing = 1,
-                           size_t n = 18,
-                           size_t approximation_order = 3);
+                                    Real spacing = 1,
+                                    size_t n = 18,
+                                    size_t approximation_order = 3);
 
-        typename RandomAccessContainer::value_type operator[](size_t i) const;
+        Real operator[](size_t i) const;
 
         void reset_data(RandomAccessContainer const &v);
 
         void reset_spacing(Real spacing);
     };
 
-}}} // namespaces
+} // namespaces
 ``
 
 [heading Description]
