@@ -17,7 +17,7 @@ namespace boost { namespace math { namespace differentiation {
     template <class RandomAccessContainer>
     class lanczos_derivative {
     public:
-        lanczos_smoothing_derivative(RandomAccessContainer const & v,
+        lanczos_derivative(RandomAccessContainer const & v,
                                      typename RandomAccessContainer::value_type spacing = 1,
                                      size_t n = 18,
                                      size_t approximation_order = 3);
@@ -96,6 +96,16 @@ This is far from negligible, and as such we provide API calls which allow the fi
 The implementation follows [@https://doi.org/10.1080/00207160.2012.666348 McDevitt, 2012],
 who vastly expanded the ideas of Lanczos to create a very general framework for numerically differentiating noisy equispaced data.
 
+[heading Example]
+
+We have extracted some data from the [@https://www.gw-openscience.org/data/ LIGO signal] and differentiated it
+using the (/n/, /p/) = (60, 4) Lanczos smoothing derivative, as well as using the (/n/, /p/) = (4, 8) (nonsmoothing) derivative.
+
+[graph ligo_derivative]
+
+The original data is in orange, the smoothing derivative in blue, and the non-smoothing standard finite difference formula is in gray.
+(Each time series has been rescaled to fit in the same graph.)
+We can see that the smoothing derivative tracking the increase and decrease in the trend well, whereas the standard finite difference formula produces nonsense.
 
 
 [heading References]
