@@ -16,7 +16,7 @@ namespace detail {
 template <typename Real>
 class discrete_legendre {
   public:
-    discrete_legendre(int n) : m_n{n}
+    explicit discrete_legendre(int n) : m_n{n}
     {
         // The integer n indexes a family of discrete Legendre polynomials indexed by k <= 2*n
     }
@@ -128,7 +128,7 @@ class discrete_legendre {
 };
 
 template <class Real>
-std::vector<Real> interior_filter(int n, int p) {
+std::vector<Real> interior_filter(size_t n, size_t p) {
     // We could make the filter length n, as f[0] = 0,
     // but that'd make the indexing awkward when applying the filter.
     std::vector<Real> f(n + 1, 0);
@@ -136,7 +136,7 @@ std::vector<Real> interior_filter(int n, int p) {
     std::vector<Real> coeffs(p+1, std::numeric_limits<Real>::quiet_NaN());
     dlp.initialize_recursion(0);
     coeffs[1] = 1/dlp.norm_sq(1);
-    for (int l = 3; l < p + 1; l += 2)
+    for (size_t l = 3; l < p + 1; l += 2)
     {
         dlp.next_prime();
         coeffs[l] = dlp.next_prime()/ dlp.norm_sq(l);
@@ -147,7 +147,7 @@ std::vector<Real> interior_filter(int n, int p) {
         Real arg = Real(j) / Real(n);
         dlp.initialize_recursion(arg);
         f[j] = coeffs[1]*arg;
-        for (int l = 3; l <= p; l += 2)
+        for (size_t l = 3; l <= p; l += 2)
         {
             dlp.next();
             f[j] += coeffs[l]*dlp.next();
@@ -158,7 +158,8 @@ std::vector<Real> interior_filter(int n, int p) {
 }
 
 template <class Real>
-std::vector<Real> boundary_filter(int n, int p, int s) {
+std::vector<Real> boundary_filter(size_t n, size_t p, int64_t s)
+{
     std::vector<Real> f(2 * n + 1, 0);
     auto dlp = discrete_legendre<Real>(n);
     Real sn = Real(s) / Real(n);
@@ -166,7 +167,7 @@ std::vector<Real> boundary_filter(int n, int p, int s) {
     dlp.initialize_recursion(sn);
     coeffs[0] = 0;
     coeffs[1] = 1/dlp.norm_sq(1);
-    for (int l = 2; l < p + 1; ++l)
+    for (size_t l = 2; l < p + 1; ++l)
     {
         // Calculation of the norms is common to all filters,
         // so it seems like an obvious optimization target.
@@ -176,14 +177,14 @@ std::vector<Real> boundary_filter(int n, int p, int s) {
         coeffs[l] = dlp.next_prime()/ dlp.norm_sq(l);
     }
 
-    for (int k = 0; k < f.size(); ++k)
+    for (size_t k = 0; k < f.size(); ++k)
     {
-        int j = k - n;
+        Real j = Real(k) - Real(n);
         f[k] = 0;
-        Real arg = Real(j) / Real(n);
+        Real arg = j/Real(n);
         dlp.initialize_recursion(arg);
         f[k] = coeffs[1]*arg;
-        for (int l = 2; l <= p; ++l)
+        for (size_t l = 2; l <= p; ++l)
         {
             f[k] += coeffs[l]*dlp.next();
         }
@@ -195,13 +196,13 @@ std::vector<Real> boundary_filter(int n, int p, int s) {
 } // namespace detail
 
 template <class RandomAccessContainer>
-class lanczos_derivative {
+class discrete_lanczos_derivative {
 public:
     using Real = typename RandomAccessContainer::value_type;
-    lanczos_derivative(RandomAccessContainer const &v,
-                       Real spacing = 1,
-                       int filter_length = 18,
-                       int approximation_order = 3)
+    discrete_lanczos_derivative(RandomAccessContainer const &v,
+                       Real const & spacing = 1,
+                       size_t filter_length = 18,
+                       size_t approximation_order = 3)
         : m_v{v}, dt{spacing}
     {
         BOOST_ASSERT_MSG(approximation_order <= 2 * filter_length,
@@ -218,8 +219,9 @@ public:
         for (size_t i = 0; i < filter_length; ++i)
         {
             // s = i - n;
+            int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(filter_length);
             boundary_filters[i] = detail::boundary_filter<Real>(
-                filter_length, approximation_order, i - filter_length);
+                filter_length, approximation_order, s);
         }
     }
 
@@ -230,7 +232,7 @@ public:
         m_v = v;
     }
 
-    void reset_spacing(Real spacing)
+    void reset_spacing(Real const & spacing)
     {
         BOOST_ASSERT_MSG(spacing > 0, "Spacing between samples must be > 0.");
         dt = spacing;
@@ -289,7 +291,6 @@ private:
     Real dt;
 };
 
-// We can also implement lanczos_acceleration, but let's get the API for lanczos_derivative nailed down before doing so.
 
 } // namespace differentiation
 } // namespace math

@@ -18,7 +18,7 @@ using std::pow;
 using std::sqrt;
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_bin_float_100;
-using boost::math::differentiation::lanczos_derivative;
+using boost::math::differentiation::discrete_lanczos_derivative;
 using boost::math::differentiation::detail::discrete_legendre;
 using boost::math::differentiation::detail::interior_filter;
 using boost::math::differentiation::detail::boundary_filter;
@@ -156,7 +156,7 @@ void test_interior_filter()
             // Since we only store half the filter coefficients,
             // we need to reindex the moment sums:
             Real sum = 0;
-            for (int j = 0; j < f.size(); ++j)
+            for (size_t j = 0; j < f.size(); ++j)
             {
                 sum += j*f[j];
             }
@@ -165,7 +165,7 @@ void test_interior_filter()
             for (int l = 3; l <= p; l += 2)
             {
                 sum = 0;
-                for (int j = 0; j < f.size(); ++j)
+                for (size_t j = 0; j < f.size(); ++j)
                 {
                     // The condition number of this sum is infinite!
                     // No need to get to worked up about the tolerance.
@@ -189,15 +189,13 @@ void test_interior_lanczos()
     std::cout << "Testing interior Lanczos on type " << typeid(Real).name() << "\n";
     Real tol = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v(500);
-    for (auto & x : v)
-    {
-        x = 7;
-    }
+    std::fill(v.begin(), v.end(), 7);
+
     for (size_t n = 1; n < 10; ++n)
     {
         for (size_t p = 2; p < 2*n; p += 2)
         {
-            auto lsd = lanczos_derivative(v, 0.1, n, p);
+            auto lsd = discrete_lanczos_derivative(v, 0.1, n, p);
             for (size_t m = n; m < v.size() - n; ++m)
             {
                 Real dvdt = lsd[m];
@@ -216,7 +214,7 @@ void test_interior_lanczos()
     {
         for (size_t p = 2; p < 2*n; p += 2)
         {
-            auto lsd = lanczos_derivative(v, Real(1), n, p);
+            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
             for (size_t m = n; m < v.size() - n; ++m)
             {
                 Real dvdt = lsd[m];
@@ -240,7 +238,7 @@ void test_interior_lanczos()
     {
         for (size_t p = 2; p < 2*n; p += 2)
         {
-            auto lsd = lanczos_derivative(v, Real(1), n, p);
+            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
             for (size_t m = n; m < v.size() - n; ++m)
             {
                 BOOST_CHECK_CLOSE_FRACTION(lsd[m], Real(7), Real(0.0042));
@@ -258,7 +256,7 @@ void test_interior_lanczos()
     {
         for (size_t p = 2; p < 2*n; p += 2)
         {
-            auto lsd = lanczos_derivative(v, Real(1), n, p);
+            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
             for (size_t m = n; m < v.size() - n; ++m)
             {
                 BOOST_CHECK_CLOSE_FRACTION(lsd[m], Real(30*m + 7), Real(0.00008));
@@ -277,7 +275,7 @@ void test_interior_lanczos()
     {
         for (size_t p = 3; p < 100 && p < n/2; p += 2)
         {
-            auto lsd = lanczos_derivative(v, Real(1), n, p);
+            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
 
             for (size_t m = n; m < v.size() - n && m < n + 10; ++m)
             {
@@ -313,9 +311,9 @@ void test_boundary_filters()
 
                 sum = 0;
                 c = 0;
-                for (int k = 0; k < f.size(); ++k)
+                for (size_t k = 0; k < f.size(); ++k)
                 {
-                    int j = k - n;
+                    Real j = Real(k) - Real(n);
                     // note the shifted index here:
                     Real x = (j-s)*f[k];
                     Real y = x - c;
@@ -330,12 +328,12 @@ void test_boundary_filters()
                 {
                     sum = 0;
                     c = 0;
-                    for (int k = 0; k < f.size(); ++k)
+                    for (size_t k = 0; k < f.size(); ++k)
                     {
-                        int j = k - n;
+                        Real j = Real(k) - Real(n);
                         // The condition number of this sum is infinite!
                         // No need to get to worked up about the tolerance.
-                        Real x = pow(Real(j-s), l)*f[k];
+                        Real x = pow(j-s, l)*f[k];
                         Real y = x - c;
                         Real t = sum + y;
                         c = (t-sum) -y;
@@ -360,16 +358,13 @@ void test_boundary_lanczos()
 {
     std::cout << "Testing Lanczos boundary on type " << typeid(Real).name() << "\n";
     Real tol = std::numeric_limits<Real>::epsilon();
-    std::vector<Real> v(500);
-    for (auto & x : v)
-    {
-        x = 7;
-    }
+    std::vector<Real> v(500, 7);
+
     for (size_t n = 1; n < 10; ++n)
     {
         for (size_t p = 2; p < 2*n; ++p)
         {
-            auto lsd = lanczos_derivative(v, 0.0125, n, p);
+            auto lsd = discrete_lanczos_derivative(v, 0.0125, n, p);
             for (size_t m = 0; m < n; ++m)
             {
                 Real dvdt = lsd[m];
@@ -392,7 +387,7 @@ void test_boundary_lanczos()
     {
         for (size_t p = 2; p < 2*n; ++p)
         {
-            auto lsd = lanczos_derivative(v, Real(1), n, p);
+            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
             for (size_t m = 0; m < n; ++m)
             {
                 Real dvdt = lsd[m];
@@ -416,7 +411,7 @@ void test_boundary_lanczos()
     {
         for (size_t p = 2; p < 2*n; ++p)
         {
-            auto lsd = lanczos_derivative(v, Real(1), n, p);
+            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
             for (size_t m = 0; m < v.size(); ++m)
             {
                 BOOST_CHECK_CLOSE_FRACTION(lsd[m], 30*m+7, 30*sqrt(tol));
@@ -439,7 +434,7 @@ void test_boundary_lanczos()
     {
         for (size_t p = 2; p < n; ++p)
         {
-            auto lsd = lanczos_derivative(v, Real(1), n, p);
+            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
             for (size_t m = 0; m < v.size(); ++m)
             {
                 BOOST_CHECK_CLOSE_FRACTION(lsd[m], 30*m+7, 0.005);
