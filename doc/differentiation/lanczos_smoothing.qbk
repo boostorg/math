@@ -105,7 +105,7 @@ using the (/n/, /p/) = (60, 4) Lanczos smoothing derivative, as well as using th
 
 The original data is in orange, the smoothing derivative in blue, and the non-smoothing standard finite difference formula is in gray.
 (Each time series has been rescaled to fit in the same graph.)
-We can see that the smoothing derivative tracking the increase and decrease in the trend well, whereas the standard finite difference formula produces nonsense.
+We can see that the smoothing derivative tracks the increase and decrease in the trend well, whereas the standard finite difference formula produces nonsense and amplifies noise.
 
 
 [heading References]
