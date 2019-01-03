@@ -22,6 +22,7 @@
 #include <boost/math/special_functions/detail/hypergeometric_1F1_scaled_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_pFq_checked_series.hpp>
 #include <boost/math/special_functions/detail/hypergeometric_1f1_addition_theorems_on_z.hpp>
+#include <boost/math/special_functions/detail/hypergeometric_1f1_large_abz.hpp>
 
 namespace boost { namespace math { namespace detail {
 
@@ -337,7 +338,7 @@ namespace boost { namespace math { namespace detail {
       //
       if (series_is_divergent)
       {
-         if((a < 0) && (floor(a) == a))
+         if((a < 0) && (floor(a) == a) && (-a < policies::get_max_series_iterations<Policy>()))
             // This works amazingly well for negative integer a:
             return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function, log_scaling);
          //
@@ -392,6 +393,8 @@ namespace boost { namespace math { namespace detail {
          }
 
       }
+      if ((a > 0) && (b > 0) && (a * z > 50))
+         return detail::hypergeometric_1F1_large_abz(a, b, z, pol, log_scaling);
       
       return detail::hypergeometric_1F1_generic_series(a, b, z, pol, log_scaling, function);
    }
