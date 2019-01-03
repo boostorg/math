@@ -144,6 +144,19 @@ void test_dlp_derivatives()
 }
 
 template<class Real>
+void test_dlp_second_derivative()
+{
+    std::cout << "Testing Discrete Legendre polynomial derivatives on type " << typeid(Real).name() << "\n";
+    int n = 25;
+    auto dlp = discrete_legendre<Real>(n);
+    Real x = Real(1)/Real(3);
+    dlp.initialize_recursion(x);
+    Real q2pp = dlp.next_dbl_prime();
+    BOOST_TEST(q2pp == 3);
+}
+
+
+template<class Real>
 void test_interior_filter()
 {
     std::cout << "Testing interior filter on type " << typeid(Real).name() << "\n";
@@ -444,8 +457,82 @@ void test_boundary_lanczos()
 
 }
 
+template<class Real>
+void test_acceleration_filters()
+{
+    Real eps = std::numeric_limits<Real>::epsilon();
+    for (size_t n = 1; n < 8; ++n)
+    {
+        for(size_t p = 3; p <= 2*n; ++p)
+        {
+            for(int64_t s = -int64_t(n); s <= 0 /*int64_t(n)*/; ++s)
+            {
+                auto f = boost::math::differentiation::detail::acceleration_boundary_filter<Real>(n,p,s);
+                Real sum = 0;
+                for (auto & x : f)
+                {
+                    sum += x;
+                }
+                BOOST_CHECK_SMALL(abs(sum), sqrt(eps));
+
+                sum = 0;
+                for (size_t k = 0; k < f.size(); ++k)
+                {
+                    Real j = Real(k) - Real(n);
+                    sum += (j-s)*f[k];
+                }
+                BOOST_CHECK_SMALL(sum, sqrt(eps));
+
+                sum = 0;
+                for (size_t k = 0; k < f.size(); ++k)
+                {
+                    Real j = Real(k) - Real(n);
+                    sum += (j-s)*(j-s)*f[k];
+                }
+                BOOST_CHECK_CLOSE_FRACTION(sum, 2, 4*sqrt(eps));
+                // More moments vanish, but the moment sums become increasingly poorly conditioned.
+                // We can check them later if we wish.
+            }
+        }
+    }
+}
+
+template<class Real>
+void test_lanczos_acceleration()
+{
+    Real eps = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v(100, 7);
+    auto lanczos = discrete_lanczos_derivative<decltype(v), 2>(v, Real(1), 4, 3);
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        BOOST_CHECK_SMALL(lanczos[i], eps);
+    }
+
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        v[i] = 7*i + 6;
+    }
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        BOOST_CHECK_SMALL(lanczos[i], 200*eps);
+    }
+
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        v[i] = 7*i*i + 9*i + 6;
+    }
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        BOOST_CHECK_CLOSE_FRACTION(lanczos[i], 14, 1000*eps);
+    }
+
+
+}
+
 BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
 {
+    test_acceleration_filters<double>();
+    test_dlp_second_derivative<double>();
     test_dlp_norms<double>();
     test_dlp_evaluation<double>();
     test_dlp_derivatives<double>();
@@ -461,4 +548,6 @@ BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
     test_interior_filter<double>();
     test_interior_filter<long double>();
     test_interior_lanczos<double>();
+
+    test_lanczos_acceleration<double>();
 }

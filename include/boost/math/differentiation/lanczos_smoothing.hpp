@@ -19,7 +19,9 @@ class discrete_legendre {
                                            m_qrm2{std::numeric_limits<Real>::quiet_NaN()},
                                            m_qrm1{std::numeric_limits<Real>::quiet_NaN()},
                                            m_qrm2p{std::numeric_limits<Real>::quiet_NaN()},
-                                           m_qrm1p{std::numeric_limits<Real>::quiet_NaN()}
+                                           m_qrm1p{std::numeric_limits<Real>::quiet_NaN()},
+                                           m_qrm2pp{std::numeric_limits<Real>::quiet_NaN()},
+                                           m_qrm1pp{std::numeric_limits<Real>::quiet_NaN()}
     {
         // The integer n indexes a family of discrete Legendre polynomials indexed by k <= 2*n
     }
@@ -35,10 +37,16 @@ class discrete_legendre {
 
     void initialize_recursion(Real x)
     {
+        using std::abs;
+        BOOST_ASSERT_MSG(abs(x) <= 1, "Three term recurrence is stable only for |x| <=1.");
         m_qrm2 = 1;
         m_qrm1 = x;
+        // Derivatives:
         m_qrm2p = 0;
         m_qrm1p = 1;
+        // Second derivatives:
+        m_qrm2pp = 0;
+        m_qrm1pp = 0;
 
         m_r = 2;
         m_x = x;
@@ -58,8 +66,7 @@ class discrete_legendre {
     Real next_prime()
     {
         Real N = 2 * m_n + 1;
-        Real s =
-            (m_r - 1) * (N * N - (m_r - 1) * (m_r - 1)) / Real(4 * m_n * m_n);
+        Real s = (m_r - 1) * (N * N - (m_r - 1) * (m_r - 1)) / Real(4 * m_n * m_n);
         Real tmp1 = ((2 * m_r - 1) * m_x * m_qrm1 - s * m_qrm2) / m_r;
         Real tmp2 = ((2 * m_r - 1) * (m_qrm1 + m_x * m_qrm1p) - s * m_qrm2p) / m_r;
         m_qrm2 = m_qrm1;
@@ -70,6 +77,23 @@ class discrete_legendre {
         return m_qrm1p;
     }
 
+    Real next_dbl_prime()
+    {
+        Real N = 2*m_n + 1;
+        Real trm1 = 2*m_r - 1;
+        Real s = (m_r - 1) * (N * N - (m_r - 1) * (m_r - 1)) / Real(4 * m_n * m_n);
+        Real rqrpp = 2*trm1*m_qrm1p + trm1*m_x*m_qrm1pp - s*m_qrm2pp;
+        Real tmp1 = ((2 * m_r - 1) * m_x * m_qrm1 - s * m_qrm2) / m_r;
+        Real tmp2 = ((2 * m_r - 1) * (m_qrm1 + m_x * m_qrm1p) - s * m_qrm2p) / m_r;
+        m_qrm2 = m_qrm1;
+        m_qrm1 = tmp1;
+        m_qrm2p = m_qrm1p;
+        m_qrm1p = tmp2;
+        m_qrm2pp = m_qrm1pp;
+        m_qrm1pp = rqrpp/m_r;
+        ++m_r;
+        return m_qrm1pp;
+    }
 
     Real operator()(Real x, size_t k)
     {
@@ -128,6 +152,8 @@ class discrete_legendre {
     Real m_qrm1;
     Real m_qrm2p;
     Real m_qrm1p;
+    Real m_qrm2pp;
+    Real m_qrm1pp;
 };
 
 template <class Real>
@@ -196,35 +222,91 @@ std::vector<Real> boundary_filter(size_t n, size_t p, int64_t s)
     return f;
 }
 
+template <class Real>
+std::vector<Real> acceleration_boundary_filter(size_t n, size_t p, int64_t s)
+{
+    BOOST_ASSERT_MSG(p <= 2*n, "Approximation order must be <= 2*n");
+    BOOST_ASSERT_MSG(p > 2, "Approximation order must be > 2");
+    std::vector<Real> f(2 * n + 1, 0);
+    auto dlp = discrete_legendre<Real>(n);
+    Real sn = Real(s) / Real(n);
+    std::vector<Real> coeffs(p+2, std::numeric_limits<Real>::quiet_NaN());
+    dlp.initialize_recursion(sn);
+    coeffs[0] = 0;
+    coeffs[1] = 0;
+    for (size_t l = 2; l < p + 2; ++l)
+    {
+        coeffs[l] = dlp.next_dbl_prime()/ dlp.norm_sq(l);
+    }
+
+    for (size_t k = 0; k < f.size(); ++k)
+    {
+        Real j = Real(k) - Real(n);
+        f[k] = 0;
+        Real arg = j/Real(n);
+        dlp.initialize_recursion(arg);
+        f[k] = coeffs[1]*arg;
+        for (size_t l = 2; l <= p; ++l)
+        {
+            f[k] += coeffs[l]*dlp.next();
+        }
+        f[k] /= (n * n * n);
+    }
+    return f;
+}
+
+
 } // namespace detail
 
-template <class RandomAccessContainer>
+template <class RandomAccessContainer, size_t order = 1>
 class discrete_lanczos_derivative {
 public:
     using Real = typename RandomAccessContainer::value_type;
     discrete_lanczos_derivative(RandomAccessContainer const &v,
                        Real const & spacing = 1,
-                       size_t filter_length = 18,
+                       size_t n = 18,
                        size_t approximation_order = 3)
         : m_v{v}, dt{spacing}
     {
-        BOOST_ASSERT_MSG(approximation_order <= 2 * filter_length,
-                         "The approximation order must be <= 2n");
-        BOOST_ASSERT_MSG(approximation_order >= 2,
-                         "The approximation order must be >= 2");
         BOOST_ASSERT_MSG(spacing > 0, "Spacing between samples must be > 0.");
         using std::size;
-        BOOST_ASSERT_MSG(size(v) >= filter_length,
+        BOOST_ASSERT_MSG(size(v) >= 2*n+1,
             "Vector must be at least as long as the filter length");
-        m_f = detail::interior_filter<Real>(filter_length, approximation_order);
 
-        boundary_filters.resize(filter_length);
-        for (size_t i = 0; i < filter_length; ++i)
+        if constexpr (order == 1)
         {
-            // s = i - n;
-            int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(filter_length);
-            boundary_filters[i] = detail::boundary_filter<Real>(
-                filter_length, approximation_order, s);
+            BOOST_ASSERT_MSG(approximation_order <= 2 * n,
+                             "The approximation order must be <= 2n");
+            BOOST_ASSERT_MSG(approximation_order >= 2,
+                             "The approximation order must be >= 2");
+            m_f = detail::interior_filter<Real>(n, approximation_order);
+
+            boundary_filters.resize(n);
+            for (size_t i = 0; i < n; ++i)
+            {
+                // s = i - n;
+                int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
+                boundary_filters[i] = detail::boundary_filter<Real>(n, approximation_order, s);
+            }
+        }
+        else if constexpr (order == 2)
+        {
+            auto f = detail::acceleration_boundary_filter<Real>(n, approximation_order, 0);
+            m_f.resize(n+1);
+            for (size_t i = 0; i < m_f.size(); ++i)
+            {
+                m_f[i] = f[i+n];
+            }
+            boundary_filters.resize(n);
+            for (size_t i = 0; i < n; ++i)
+            {
+                int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
+                boundary_filters[i] = detail::acceleration_boundary_filter<Real>(n, approximation_order, s);
+            }
+        }
+        else
+        {
+            BOOST_ASSERT_MSG(false, "Derivatives of order 3 and higher are not implemented.");
         }
     }
 
@@ -248,38 +330,77 @@ public:
 
     Real operator[](size_t i) const
     {
-        using std::size;
-        if (i >= m_f.size() - 1 && i <= size(m_v) - m_f.size())
+        if constexpr (order==1)
         {
-            Real dv = 0;
-            for (size_t j = 1; j < m_f.size(); ++j)
+            using std::size;
+            if (i >= m_f.size() - 1 && i <= size(m_v) - m_f.size())
             {
-                dv += m_f[j] * (m_v[i + j] - m_v[i - j]);
+                Real dv = 0;
+                for (size_t j = 1; j < m_f.size(); ++j)
+                {
+                    dv += m_f[j] * (m_v[i + j] - m_v[i - j]);
+                }
+                return dv / dt;
             }
-            return dv / dt;
-        }
 
-        // m_f.size() = N+1
-        if (i < m_f.size() - 1)
-        {
-            auto &f = boundary_filters[i];
-            Real dv = 0;
-            for (size_t j = 0; j < f.size(); ++j) {
-                dv += f[j] * m_v[j];
-            }
-            return dv / dt;
-        }
-
-        if (i > size(m_v) - m_f.size() && i < size(m_v))
-        {
-            int k = size(m_v) - 1 - i;
-            auto &f = boundary_filters[k];
-            Real dv = 0;
-            for (size_t j = 0; j < f.size(); ++j)
+            // m_f.size() = N+1
+            if (i < m_f.size() - 1)
             {
-                dv += f[j] * m_v[m_v.size() - 1 - j];
+                auto &f = boundary_filters[i];
+                Real dv = 0;
+                for (size_t j = 0; j < f.size(); ++j) {
+                    dv += f[j] * m_v[j];
+                }
+                return dv / dt;
             }
-            return -dv / dt;
+
+            if (i > size(m_v) - m_f.size() && i < size(m_v))
+            {
+                int k = size(m_v) - 1 - i;
+                auto &f = boundary_filters[k];
+                Real dv = 0;
+                for (size_t j = 0; j < f.size(); ++j)
+                {
+                    dv += f[j] * m_v[m_v.size() - 1 - j];
+                }
+                return -dv / dt;
+            }
+        }
+        else if constexpr (order==2)
+        {
+            using std::size;
+            if (i >= m_f.size() - 1 && i <= size(m_v) - m_f.size())
+            {
+                Real d2v = m_f[0]*m_v[i];
+                for (size_t j = 1; j < m_f.size(); ++j)
+                {
+                    d2v += m_f[j] * (m_v[i + j] + m_v[i - j]);
+                }
+                return d2v / (dt*dt);
+            }
+
+            // m_f.size() = N+1
+            if (i < m_f.size() - 1)
+            {
+                auto &f = boundary_filters[i];
+                Real d2v = 0;
+                for (size_t j = 0; j < f.size(); ++j) {
+                    d2v += f[j] * m_v[j];
+                }
+                return d2v / (dt*dt);
+            }
+
+            if (i > size(m_v) - m_f.size() && i < size(m_v))
+            {
+                int k = size(m_v) - 1 - i;
+                auto &f = boundary_filters[k];
+                Real d2v = 0;
+                for (size_t j = 0; j < f.size(); ++j)
+                {
+                    d2v += f[j] * m_v[m_v.size() - 1 - j];
+                }
+                return d2v / dt;
+            }
         }
 
         // OOB access:
