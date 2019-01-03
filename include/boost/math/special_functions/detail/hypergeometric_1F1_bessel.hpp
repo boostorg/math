@@ -187,12 +187,6 @@
      }
 
 
-     /****************************************************************************************************************/
-     //
-     // The following are not used at present:
-     //
-     /****************************************************************************************************************/
-
      template <class T, class Policy>
      struct hypergeometric_1F1_AS_13_3_6_series
      {
@@ -227,6 +221,13 @@
      T hypergeometric_1F1_AS_13_3_6(const T& a, const T& b, const T& z, const T& b_minus_a, const Policy& pol, int& log_scaling)
      {
         BOOST_MATH_STD_USING
+        if(b_minus_a == 0)
+        {
+           // special case: M(a,a,z) == exp(z)
+           int scale = itrunc(z, pol);
+           log_scaling += scale;
+           return exp(z - scale);
+        }
         hypergeometric_1F1_AS_13_3_6_series<T, Policy> s(a, b, z, b_minus_a, pol);
         boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<Policy>();
         T result = boost::math::tools::sum_series(s, boost::math::policies::get_epsilon<T, Policy>(), max_iter);
@@ -237,6 +238,12 @@
         result *= exp(z / 2 - scale);
         return result;
      }
+
+     /****************************************************************************************************************/
+     //
+     // The following are not used at present:
+     //
+     /****************************************************************************************************************/
 
      template <class T, class Policy>
      struct hypergeometric_1F1_AS_13_3_8_series
