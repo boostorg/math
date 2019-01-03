@@ -14,7 +14,7 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 namespace boost::math::differentiation {
 
-    template <class RandomAccessContainer>
+    template <class RandomAccessContainer, size_t order=1>
     class discrete_lanczos_derivative {
     public:
         using Real = typename RandomAccessContainer::value_type;
@@ -44,6 +44,15 @@ A basic usage is
     using boost::math::differentiation::discrete_lanczos_derivative;
     auto lanczos = discrete_lanczos_derivative(v, spacing);
     double dvdt = lanczos[30];
+
+Noise-suppressing second derivatives can also be computed.
+The syntax is as follows:
+
+    std::vector<double> v(500);
+    // fill v with noisy data.
+    auto lanczos = lanczos_derivative<decltype(v), 2>(v, spacing);
+    // evaluate:
+    double dvdt = lanczos[25];
 
 If the data has variance \u03C3[super 2],
 then the variance of the computed derivative is roughly \u03C3[super 2]/p/[super 3] /n/[super -3] \u0394 /t/[super -2],
