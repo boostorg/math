@@ -208,11 +208,16 @@ void test_interior_lanczos()
     {
         for (size_t p = 2; p < 2*n; p += 2)
         {
-            auto lsd = discrete_lanczos_derivative(v, 0.1, n, p);
+            auto dld = discrete_lanczos_derivative(Real(0.1), n, p);
             for (size_t m = n; m < v.size() - n; ++m)
             {
-                Real dvdt = lsd[m];
+                Real dvdt = dld(v, m);
                 BOOST_CHECK_SMALL(dvdt, tol);
+            }
+            auto dvdt = dld(v);
+            for (size_t m = n; m < v.size() - n; ++m)
+            {
+                BOOST_CHECK_SMALL(dvdt[m], tol);
             }
         }
     }
@@ -227,11 +232,16 @@ void test_interior_lanczos()
     {
         for (size_t p = 2; p < 2*n; p += 2)
         {
-            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
+            auto dld = discrete_lanczos_derivative(Real(1), n, p);
             for (size_t m = n; m < v.size() - n; ++m)
             {
-                Real dvdt = lsd[m];
+                Real dvdt = dld(v, m);
                 BOOST_CHECK_CLOSE_FRACTION(dvdt, 7, 2000*tol);
+            }
+            auto dvdt = dld(v);
+            for (size_t m = n; m < v.size() - n; ++m)
+            {
+                BOOST_CHECK_CLOSE_FRACTION(dvdt[m], 7, 2000*tol);
             }
         }
     }
@@ -241,7 +251,6 @@ void test_interior_lanczos()
     //std::cout << "Seed = " << seed << "\n";
     std::mt19937 gen(4172378669);
     std::normal_distribution<> dis{0, 0.01};
-    std::cout << std::fixed;
     for (size_t i = 0; i < v.size(); ++i)
     {
         v[i] = 7*i+8 + dis(gen);
@@ -251,10 +260,10 @@ void test_interior_lanczos()
     {
         for (size_t p = 2; p < 2*n; p += 2)
         {
-            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
+            auto dld = discrete_lanczos_derivative(Real(1), n, p);
             for (size_t m = n; m < v.size() - n; ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(lsd[m], Real(7), Real(0.0042));
+                BOOST_CHECK_CLOSE_FRACTION(dld(v, m), Real(7), Real(0.0042));
             }
         }
     }
@@ -269,10 +278,10 @@ void test_interior_lanczos()
     {
         for (size_t p = 2; p < 2*n; p += 2)
         {
-            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
+            auto dld = discrete_lanczos_derivative(Real(1), n, p);
             for (size_t m = n; m < v.size() - n; ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(lsd[m], Real(30*m + 7), Real(0.00008));
+                BOOST_CHECK_CLOSE_FRACTION(dld(v,m), Real(30*m + 7), Real(0.00008));
             }
         }
     }
@@ -288,11 +297,11 @@ void test_interior_lanczos()
     {
         for (size_t p = 3; p < 100 && p < n/2; p += 2)
         {
-            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
+            auto dld = discrete_lanczos_derivative(Real(1), n, p);
 
             for (size_t m = n; m < v.size() - n && m < n + 10; ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(lsd[m], omega*cos(omega*m), Real(0.03));
+                BOOST_CHECK_CLOSE_FRACTION(dld(v,m), omega*cos(omega*m), Real(0.03));
             }
         }
     }
@@ -377,15 +386,15 @@ void test_boundary_lanczos()
     {
         for (size_t p = 2; p < 2*n; ++p)
         {
-            auto lsd = discrete_lanczos_derivative(v, 0.0125, n, p);
+            auto lsd = discrete_lanczos_derivative(Real(0.0125), n, p);
             for (size_t m = 0; m < n; ++m)
             {
-                Real dvdt = lsd[m];
+                Real dvdt = lsd(v,m);
                 BOOST_CHECK_SMALL(dvdt, 4*sqrt(tol));
             }
             for (size_t m = v.size() - n; m < v.size(); ++m)
             {
-                Real dvdt = lsd[m];
+                Real dvdt = lsd(v,m);
                 BOOST_CHECK_SMALL(dvdt, 4*sqrt(tol));
             }
         }
@@ -400,16 +409,16 @@ void test_boundary_lanczos()
     {
         for (size_t p = 2; p < 2*n; ++p)
         {
-            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
+            auto lsd = discrete_lanczos_derivative(Real(1), n, p);
             for (size_t m = 0; m < n; ++m)
             {
-                Real dvdt = lsd[m];
+                Real dvdt = lsd(v,m);
                 BOOST_CHECK_CLOSE_FRACTION(dvdt, 7, sqrt(tol));
             }
 
             for (size_t m = v.size() - n; m < v.size(); ++m)
             {
-                Real dvdt = lsd[m];
+                Real dvdt = lsd(v,m);
                 BOOST_CHECK_CLOSE_FRACTION(dvdt, 7, 4*sqrt(tol));
             }
         }
@@ -424,10 +433,10 @@ void test_boundary_lanczos()
     {
         for (size_t p = 2; p < 2*n; ++p)
         {
-            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
+            auto lsd = discrete_lanczos_derivative(Real(1), n, p);
             for (size_t m = 0; m < v.size(); ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(lsd[m], 30*m+7, 30*sqrt(tol));
+                BOOST_CHECK_CLOSE_FRACTION(lsd(v,m), 30*m+7, 30*sqrt(tol));
             }
         }
     }
@@ -447,14 +456,18 @@ void test_boundary_lanczos()
     {
         for (size_t p = 2; p < n; ++p)
         {
-            auto lsd = discrete_lanczos_derivative(v, Real(1), n, p);
+            auto lsd = discrete_lanczos_derivative(Real(1), n, p);
             for (size_t m = 0; m < v.size(); ++m)
             {
-                BOOST_CHECK_CLOSE_FRACTION(lsd[m], 30*m+7, 0.005);
+                BOOST_CHECK_CLOSE_FRACTION(lsd(v,m), 30*m+7, 0.005);
+            }
+            auto dvdt = lsd(v);
+            for (size_t m = 0; m < v.size(); ++m)
+            {
+                BOOST_CHECK_CLOSE_FRACTION(dvdt[m], 30*m+7, 0.005);
             }
         }
     }
-
 }
 
 template<class Real>
@@ -502,10 +515,10 @@ void test_lanczos_acceleration()
 {
     Real eps = std::numeric_limits<Real>::epsilon();
     std::vector<Real> v(100, 7);
-    auto lanczos = discrete_lanczos_derivative<decltype(v), 2>(v, Real(1), 4, 3);
+    auto lanczos = discrete_lanczos_derivative<Real, 2>(Real(1), 4, 3);
     for (size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_SMALL(lanczos[i], eps);
+        BOOST_CHECK_SMALL(lanczos(v, i), eps);
     }
 
     for(size_t i = 0; i < v.size(); ++i)
@@ -514,7 +527,7 @@ void test_lanczos_acceleration()
     }
     for (size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_SMALL(lanczos[i], 200*eps);
+        BOOST_CHECK_SMALL(lanczos(v,i), 200*eps);
     }
 
     for(size_t i = 0; i < v.size(); ++i)
@@ -523,7 +536,7 @@ void test_lanczos_acceleration()
     }
     for (size_t i = 0; i < v.size(); ++i)
     {
-        BOOST_CHECK_CLOSE_FRACTION(lanczos[i], 14, 1000*eps);
+        BOOST_CHECK_CLOSE_FRACTION(lanczos(v, i), 14, 1000*eps);
     }
 
 
