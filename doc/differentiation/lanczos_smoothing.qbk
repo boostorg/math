@@ -14,18 +14,18 @@ LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 namespace boost::math::differentiation {
 
-    template <class RandomAccessContainer, size_t order=1>
+    template <class Real, size_t order=1>
     class discrete_lanczos_derivative {
     public:
-        using Real = typename RandomAccessContainer::value_type;
-        discrete_lanczos_derivative(RandomAccessContainer const & v,
-                                    Real spacing = 1,
+        discrete_lanczos_derivative(Real spacing,
                                     size_t n = 18,
                                     size_t approximation_order = 3);
 
-        Real operator[](size_t i) const;
+        template<class RandomAccessContainer>
+        Real operator()(RandomAccessContainer const & v, size_t i) const;
 
-        void reset_data(RandomAccessContainer const &v);
+        template<class RandomAccessContainer>
+        RandomAccessContainer operator()(RandomAccessContainer const & v) const;
 
         void reset_spacing(Real spacing);
     };
@@ -35,24 +35,29 @@ namespace boost::math::differentiation {
 
 [heading Description]
 
-The `discrete_lanczos_derivative` class calculates a finite-difference approximation to the derivative of a noisy sequence of equally-spaced values /v/ at an index /i/.
+The `discrete_lanczos_derivative` class calculates a finite-difference approximation to the derivative of a noisy sequence of equally-spaced values /v/.
 A basic usage is
 
     std::vector<double> v(500);
     // fill v with noisy data.
     double spacing = 0.001;
     using boost::math::differentiation::discrete_lanczos_derivative;
-    auto lanczos = discrete_lanczos_derivative(v, spacing);
-    double dvdt = lanczos[30];
+    auto lanczos = discrete_lanczos_derivative(spacing);
+    // Compute dvdt at index 30:
+    double dvdt30 = lanczos(v, 30);
+    // Compute derivative of entire vector:
+    std::vector<double> dvdt = lanczos(v);
 
 Noise-suppressing second derivatives can also be computed.
 The syntax is as follows:
 
     std::vector<double> v(500);
     // fill v with noisy data.
-    auto lanczos = lanczos_derivative<decltype(v), 2>(v, spacing);
-    // evaluate:
-    double dvdt = lanczos[25];
+    auto lanczos = lanczos_derivative<double, 2>(spacing);
+    // evaluate second derivative at a point:
+    double d2vdt2 = lanczos(v, 18);
+    // evaluate second derivative of entire vector:
+    std::vector<double> d2vdt2 = lanczos(v);
 
 If the data has variance \u03C3[super 2],
 then the variance of the computed derivative is roughly \u03C3[super 2]/p/[super 3] /n/[super -3] \u0394 /t/[super -2],
@@ -63,8 +68,8 @@ You can play around with the approximation order /p/ and the filter length /n/:
 
     size_t n = 12;
     size_t p = 2;
-    auto lanczos = lanczos_derivative(v, spacing, n, p);
-    double dvdt = lanczos[24];
+    auto lanczos = lanczos_derivative(spacing, n, p);
+    double dvdt = lanczos(v, i);
 
 If /p=2n/, then the discrete Lanczos derivative is not smoothing:
 It reduces to the standard /2n+1/-point finite-difference formula.
@@ -79,7 +84,7 @@ balanced against the danger of overfitting and averaging over non-stationarity.
 The choice of approximation order /p/ for a given /n/ is more difficult.
 If your signal is believed to be a polynomial,
 it does not make sense to set /p/ to larger than the polynomial degree-
-though it may be sensible to take /p/ less than the polynomial degree.
+though it may be sensible to take /p/ less than this.
 
 For a sinusoidal signal contaminated with AWGN, we ran a few tests showing that for SNR = 1,
 p = n/8 gave the best results,
@@ -93,18 +98,17 @@ Since each filter has length /2n+1/ and there are /n/ filters, whose element eac
 the complexity of the constructor call is O(/n/[super 2]/p/).
 This is not cheap-though for most cases small /p/ and /n/ not too large (< 20) is desired.
 However, for concreteness, on the author's 2.7GHz Intel laptop CPU, the /n=16/, /p=3/ filter takes 9 microseconds to compute.
-This is far from negligible, and as such we provide API calls which allow the filters to be used with multiple data:
+This is far from negligible, and as such the filters may be used with multiple data, and even shared between threads:
 
 
-    std::vector<double> v(500);
-    // fill v with noisy data.
-    auto lanczos = lanczos_derivative(v, spacing);
-    // use lanczos with v . . .
-    std::vector<double> w(500);
-    lanczos.reset_data(w);
-    // use lanczos with w . . .
+    std::vector<double> v1(500);
+    std::vector<double> v2(500);
+    // fill v1, v2 with noisy data.
+    auto lanczos = lanczos_derivative(spacing);
+    std::vector<double> dv1dt = lanczos(v1); // threadsafe
+    std::vector<double> dv2dt = lanczos(v2); // threadsafe
     // need to use a different spacing?
-    lanczos.reset_spacing(0.02);
+    lanczos.reset_spacing(0.02); // not threadsafe
 
 
 The implementation follows [@https://doi.org/10.1080/00207160.2012.666348 McDevitt, 2012],

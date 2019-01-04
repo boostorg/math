@@ -258,20 +258,16 @@ std::vector<Real> acceleration_boundary_filter(size_t n, size_t p, int64_t s)
 
 } // namespace detail
 
-template <class RandomAccessContainer, size_t order = 1>
+template <typename Real, size_t order = 1>
 class discrete_lanczos_derivative {
 public:
-    using Real = typename RandomAccessContainer::value_type;
-    discrete_lanczos_derivative(RandomAccessContainer const &v,
-                       Real const & spacing = 1,
-                       size_t n = 18,
-                       size_t approximation_order = 3)
-        : m_v{v}, dt{spacing}
+    discrete_lanczos_derivative(Real const & spacing,
+                                size_t n = 18,
+                                size_t approximation_order = 3)
+        : m_dt{spacing}
     {
+        static_assert(!std::is_integral_v<Real>, "Spacing must be a floating point type.");
         BOOST_ASSERT_MSG(spacing > 0, "Spacing between samples must be > 0.");
-        using std::size;
-        BOOST_ASSERT_MSG(size(v) >= 2*n+1,
-            "Vector must be at least as long as the filter length");
 
         if constexpr (order == 1)
         {
@@ -281,12 +277,12 @@ public:
                              "The approximation order must be >= 2");
             m_f = detail::interior_filter<Real>(n, approximation_order);
 
-            boundary_filters.resize(n);
+            m_boundary_filters.resize(n);
             for (size_t i = 0; i < n; ++i)
             {
                 // s = i - n;
                 int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
-                boundary_filters[i] = detail::boundary_filter<Real>(n, approximation_order, s);
+                m_boundary_filters[i] = detail::boundary_filter<Real>(n, approximation_order, s);
             }
         }
         else if constexpr (order == 2)
@@ -297,11 +293,11 @@ public:
             {
                 m_f[i] = f[i+n];
             }
-            boundary_filters.resize(n);
+            m_boundary_filters.resize(n);
             for (size_t i = 0; i < n; ++i)
             {
                 int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
-                boundary_filters[i] = detail::acceleration_boundary_filter<Real>(n, approximation_order, s);
+                m_boundary_filters[i] = detail::acceleration_boundary_filter<Real>(n, approximation_order, s);
             }
         }
         else
@@ -310,96 +306,96 @@ public:
         }
     }
 
-    void reset_data(RandomAccessContainer const &v)
-    {
-        using std::size;
-        BOOST_ASSERT_MSG(size(v) >= m_f.size(), "Vector must be at least as long as the filter length");
-        m_v = v;
-    }
-
     void reset_spacing(Real const & spacing)
     {
         BOOST_ASSERT_MSG(spacing > 0, "Spacing between samples must be > 0.");
-        dt = spacing;
+        m_dt = spacing;
     }
 
     Real spacing() const
     {
-        return dt;
+        return m_dt;
     }
 
-    Real operator[](size_t i) const
+    template<class RandomAccessContainer>
+    Real operator()(RandomAccessContainer const & v, size_t i) const
     {
+        static_assert(std::is_same_v<typename RandomAccessContainer::value_type, Real>,
+                      "The type of the values in the vector provided does not match the type in the filters.");
+        using std::size;
+        BOOST_ASSERT_MSG(size(v) >= m_boundary_filters[0].size(),
+            "Vector must be at least as long as the filter length");
+
         if constexpr (order==1)
         {
-            using std::size;
-            if (i >= m_f.size() - 1 && i <= size(m_v) - m_f.size())
+            if (i >= m_f.size() - 1 && i <= size(v) - m_f.size())
             {
                 Real dv = 0;
                 for (size_t j = 1; j < m_f.size(); ++j)
                 {
-                    dv += m_f[j] * (m_v[i + j] - m_v[i - j]);
+                    dv += m_f[j] * (v[i + j] - v[i - j]);
                 }
-                return dv / dt;
+                return dv / m_dt;
             }
 
             // m_f.size() = N+1
             if (i < m_f.size() - 1)
             {
-                auto &f = boundary_filters[i];
+                auto &bf = m_boundary_filters[i];
                 Real dv = 0;
-                for (size_t j = 0; j < f.size(); ++j) {
-                    dv += f[j] * m_v[j];
+                for (size_t j = 0; j < bf.size(); ++j)
+                {
+                    dv += bf[j] * v[j];
                 }
-                return dv / dt;
+                return dv / m_dt;
             }
 
-            if (i > size(m_v) - m_f.size() && i < size(m_v))
+            if (i > size(v) - m_f.size() && i < size(v))
             {
-                int k = size(m_v) - 1 - i;
-                auto &f = boundary_filters[k];
+                int k = size(v) - 1 - i;
+                auto &bf = m_boundary_filters[k];
                 Real dv = 0;
-                for (size_t j = 0; j < f.size(); ++j)
+                for (size_t j = 0; j < bf.size(); ++j)
                 {
-                    dv += f[j] * m_v[m_v.size() - 1 - j];
+                    dv += bf[j] * v[size(v) - 1 - j];
                 }
-                return -dv / dt;
+                return -dv / m_dt;
             }
         }
         else if constexpr (order==2)
         {
-            using std::size;
-            if (i >= m_f.size() - 1 && i <= size(m_v) - m_f.size())
+            if (i >= m_f.size() - 1 && i <= size(v) - m_f.size())
             {
-                Real d2v = m_f[0]*m_v[i];
+                Real d2v = m_f[0]*v[i];
                 for (size_t j = 1; j < m_f.size(); ++j)
                 {
-                    d2v += m_f[j] * (m_v[i + j] + m_v[i - j]);
+                    d2v += m_f[j] * (v[i + j] + v[i - j]);
                 }
-                return d2v / (dt*dt);
+                return d2v / (m_dt*m_dt);
             }
 
             // m_f.size() = N+1
             if (i < m_f.size() - 1)
             {
-                auto &f = boundary_filters[i];
+                auto &bf = m_boundary_filters[i];
                 Real d2v = 0;
-                for (size_t j = 0; j < f.size(); ++j) {
-                    d2v += f[j] * m_v[j];
+                for (size_t j = 0; j < bf.size(); ++j)
+                {
+                    d2v += bf[j] * v[j];
                 }
-                return d2v / (dt*dt);
+                return d2v / (m_dt*m_dt);
             }
 
-            if (i > size(m_v) - m_f.size() && i < size(m_v))
+            if (i > size(v) - m_f.size() && i < size(v))
             {
-                int k = size(m_v) - 1 - i;
-                auto &f = boundary_filters[k];
+                int k = size(v) - 1 - i;
+                auto &bf = m_boundary_filters[k];
                 Real d2v = 0;
-                for (size_t j = 0; j < f.size(); ++j)
+                for (size_t j = 0; j < bf.size(); ++j)
                 {
-                    d2v += f[j] * m_v[m_v.size() - 1 - j];
+                    d2v += bf[j] * v[size(v) - 1 - j];
                 }
-                return d2v / dt;
+                return d2v / (m_dt*m_dt);
             }
         }
 
@@ -408,11 +404,97 @@ public:
         return std::numeric_limits<Real>::quiet_NaN();
     }
 
+    template<class RandomAccessContainer>
+    RandomAccessContainer operator()(RandomAccessContainer const & v) const
+    {
+        static_assert(std::is_same_v<typename RandomAccessContainer::value_type, Real>,
+                      "The type of the values in the vector provided does not match the type in the filters.");
+        using std::size;
+        BOOST_ASSERT_MSG(size(v) >= m_boundary_filters[0].size(),
+            "Vector must be at least as long as the filter length");
+
+        RandomAccessContainer w(size(v));
+        if constexpr (order==1)
+        {
+            for (size_t i = 0; i < m_f.size() - 1; ++i)
+            {
+                auto &bf = m_boundary_filters[i];
+                Real dv = 0;
+                for (size_t j = 0; j < bf.size(); ++j)
+                {
+                    dv += bf[j] * v[j];
+                }
+                w[i] = dv / m_dt;
+            }
+
+            for(size_t i = m_f.size() - 1; i <= size(v) - m_f.size(); ++i)
+            {
+                Real dv = 0;
+                for (size_t j = 1; j < m_f.size(); ++j)
+                {
+                    dv += m_f[j] * (v[i + j] - v[i - j]);
+                }
+                w[i] = dv / m_dt;
+            }
+
+
+            for(size_t i = size(v) - m_f.size() + 1; i < size(v); ++i)
+            {
+                int k = size(v) - 1 - i;
+                auto &f = m_boundary_filters[k];
+                Real dv = 0;
+                for (size_t j = 0; j < f.size(); ++j)
+                {
+                    dv += f[j] * v[size(v) - 1 - j];
+                }
+                w[i] = -dv / m_dt;
+            }
+        }
+        else if constexpr (order==2)
+        {
+            // m_f.size() = N+1
+            for (size_t i = 0; i < m_f.size() - 1; ++i)
+            {
+                auto &bf = m_boundary_filters[i];
+                Real d2v = 0;
+                for (size_t j = 0; j < bf.size(); ++j)
+                {
+                    d2v += bf[j] * v[j];
+                }
+                w[i] = d2v / (m_dt*m_dt);
+            }
+
+            for (size_t i = m_f.size() - 1; i <= size(v) - m_f.size(); ++i)
+            {
+                Real d2v = m_f[0]*v[i];
+                for (size_t j = 1; j < m_f.size(); ++j)
+                {
+                    d2v += m_f[j] * (v[i + j] + v[i - j]);
+                }
+                w[i] = d2v / (m_dt*m_dt);
+            }
+
+
+            for (size_t i = size(v) - m_f.size() + 1; i < size(v); ++i)
+            {
+                int k = size(v) - 1 - i;
+                auto &bf = m_boundary_filters[k];
+                Real d2v = 0;
+                for (size_t j = 0; j < bf.size(); ++j)
+                {
+                    d2v += bf[j] * v[size(v) - 1 - j];
+                }
+                w[i] = d2v / (m_dt*m_dt);
+            }
+        }
+
+        return w;
+    }
+
 private:
-    const RandomAccessContainer &m_v;
     std::vector<Real> m_f;
-    std::vector<std::vector<Real>> boundary_filters;
-    Real dt;
+    std::vector<std::vector<Real>> m_boundary_filters;
+    Real m_dt;
 };
 
 } // namespaces
