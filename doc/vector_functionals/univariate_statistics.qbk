@@ -63,6 +63,12 @@ namespace boost{ namespace math{ namespace tools {
     template<class ForwardIterator>
     auto median(ForwardIterator first, ForwardIterator last);
 
+    template<class RandomAccessIterator>
+    auto median_absolute_deviation(ForwardIterator first, ForwardIterator last, typename std::iterator_traits<RandomAccessIterator>::value_type center=std::numeric_limits<Real>::quiet_NaN());
+
+    template<class RandomAccessContainer>
+    auto median_absolute_deviation(RandomAccessContainer v, typename RandomAccessContainer::value_type center=std::numeric_limits<Real>::quiet_NaN());
+
     template<class Container>
     auto gini_coefficient(Container & c);
 
@@ -169,7 +175,7 @@ Simultaneously computes the first four [@https://en.wikipedia.org/wiki/Central_m
 
 [heading Median]
 
-Compute the median of a dataset:
+Computes the median of a dataset:
 
     std::vector<double> v{1,2,3,4,5};
     double m = boost::math::tools::median(v.begin(), v.end());
@@ -179,6 +185,27 @@ The calculation of the median is a thin wrapper around the C++11 [@https://en.cp
 Therefore, all requirements of `std::nth_element` are inherited by the median calculation.
 In particular, the container must allow random access.
 
+[heading Median Absolute Deviation]
+
+Computes the [@https://en.wikipedia.org/wiki/Median_absolute_deviation median absolute deviation] of a dataset:
+
+    std::vector<double> v{1,2,3,4,5};
+    double mad = boost::math::tools::median_absolute_deviation(v);
+
+By default, the deviation from the median is used.
+If you have some prior that the median is zero, or wish to compute the median absolute deviation from the mean,
+use the following:
+
+    // prior is that center is zero:
+    double center = 0;
+    double mad = boost::math::tools::median_absolute_deviation(v, center);
+
+    // compute median absolute deviation from the mean:
+    double mu = boost::math::tools::mean(v);
+    double mad = boost::math::tools::median_absolute_deviation(v, mu);
+
+/Nota bene:/ The input vector is modified.
+Again the vector is passed into a call to [@https://en.cppreference.com/w/cpp/algorithm/nth_element `nth_element`].
 
 [heading Gini Coefficient]
 

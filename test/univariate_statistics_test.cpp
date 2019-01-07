@@ -348,6 +348,73 @@ void test_median()
 }
 
 template<class Real>
+void test_median_absolute_deviation()
+{
+    std::vector<Real> v{-1, 2, -3, 4, -5, 6, -7};
+
+    Real m = boost::math::tools::median_absolute_deviation(v.begin(), v.end(), 0);
+    BOOST_TEST_EQ(m, 4);
+
+    std::mt19937 g(12);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::median_absolute_deviation(v, 0);
+    BOOST_TEST_EQ(m, 4);
+
+    v = {1, -2, -3, 3, -4, -5};
+    m = boost::math::tools::median_absolute_deviation(v.begin(), v.end(), 0);
+    BOOST_TEST_EQ(m, 3);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::median_absolute_deviation(v.begin(), v.end(), 0);
+    BOOST_TEST_EQ(m, 3);
+
+    v = {-1};
+    m = boost::math::tools::median_absolute_deviation(v.begin(), v.end(), 0);
+    BOOST_TEST_EQ(m, 1);
+
+    v = {-1, 1};
+    m = boost::math::tools::median_absolute_deviation(v.begin(), v.end(), 0);
+    BOOST_TEST_EQ(m, 1);
+    // The median is zero, so coincides with the default:
+    m = boost::math::tools::median_absolute_deviation(v.begin(), v.end());
+    BOOST_TEST_EQ(m, 1);
+
+    m = boost::math::tools::median_absolute_deviation(v);
+    BOOST_TEST_EQ(m, 1);
+
+
+    v = {2, -4};
+    m = boost::math::tools::median_absolute_deviation(v.begin(), v.end(), 0);
+    BOOST_TEST_EQ(m, 3);
+
+    v = {1, -1, 1};
+    m = boost::math::tools::median_absolute_deviation(v.begin(), v.end(), 0);
+    BOOST_TEST_EQ(m, 1);
+
+    v = {1, 2, -3};
+    m = boost::math::tools::median_absolute_deviation(v.begin(), v.end(), 0);
+    BOOST_TEST_EQ(m, 2);
+    std::shuffle(v.begin(), v.end(), g);
+    m = boost::math::tools::median_absolute_deviation(v.begin(), v.end(), 0);
+    BOOST_TEST_EQ(m, 2);
+
+    std::array<Real, 3> w{1, 2, -3};
+    m = boost::math::tools::median_absolute_deviation(w, 0);
+    BOOST_TEST_EQ(m, 2);
+
+    // boost.ublas vector?
+    boost::numeric::ublas::vector<Real> u(6);
+    u[0] = 1;
+    u[1] = 2;
+    u[2] = -3;
+    u[3] = 1;
+    u[4] = 2;
+    u[5] = -3;
+    m = boost::math::tools::median_absolute_deviation(u, 0);
+    BOOST_TEST_EQ(m, 2);
+}
+
+
+template<class Real>
 void test_sample_gini_coefficient()
 {
     Real tol = std::numeric_limits<Real>::epsilon();
@@ -470,6 +537,11 @@ int main()
     test_median<double>();
     test_median<long double>();
     test_median<cpp_bin_float_50>();
+
+    test_median_absolute_deviation<float>();
+    test_median_absolute_deviation<double>();
+    test_median_absolute_deviation<long double>();
+    test_median_absolute_deviation<cpp_bin_float_50>();
 
     test_gini_coefficient<float>();
     test_gini_coefficient<double>();

@@ -13,13 +13,7 @@
 ``
 #include <boost/math/tools/signal_statistics.hpp>
 
-namespace boost{ namespace math{ namespace tools {
-
-    template<class Container>
-    auto absolute_median(Container & c);
-
-    template<class ForwardIterator>
-    auto absolute_median(ForwardIterator first, ForwardIterator last);
+namespace boost::math::tools {
 
     template<class Container>
     auto absolute_gini_coefficient(Container & c);
@@ -57,7 +51,7 @@ namespace boost{ namespace math{ namespace tools {
     template<class Container>
     auto m2m4_snr_estimator_db(Container const & noisy_signal,typename Container::value_type estimated_signal_kurtosis=1, typename Container::value_type estimate_noise_kurtosis=3);
 
-}}}
+}
 ``
 
 [heading Description]
@@ -68,18 +62,6 @@ Our examples use `std::vector<double>` to hold the data, but this not required.
 In general, you can store your data in an Eigen array, and Armadillo vector, `std::array`, and for many of the routines, a `std::forward_list`.
 These routines are usable in float, double, long double, and Boost.Multiprecision precision, as well as their complex extensions whenever the computation is well-defined.
 For certain operations (total variation, for example) integer inputs are supported.
-
-[heading Absolute Median]
-
-The absolute median is used in signal processing, where the median of the magnitude of the coefficients in some expansion are used to estimate noise variance.
-See [@https://wavelet-tour.github.io/ Mallat] for details.
-The absolute median supports both real and complex arithmetic, modifies its input, and requires random access containers.
-
-    std::vector<double> v{-1, 1};
-    double m = boost::math::tools::absolute_median(v);
-    // m = 1
-    // Alternative syntax, using a subset of the container:
-    m = boost::math::tools::absolute_median(v.begin(), v.begin() + 1);
 
 [heading Absolute Gini Coefficient]
 

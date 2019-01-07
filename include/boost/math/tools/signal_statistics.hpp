@@ -15,36 +15,7 @@
 #include <boost/math/tools/univariate_statistics.hpp>
 
 
-namespace boost{ namespace math{ namespace tools {
-
-template<class RandomAccessIterator>
-auto absolute_median(RandomAccessIterator first, RandomAccessIterator last)
-{
-    using std::abs;
-    using RealOrComplex = typename std::iterator_traits<RandomAccessIterator>::value_type;
-    size_t num_elems = std::distance(first, last);
-    BOOST_ASSERT_MSG(num_elems > 0, "The median of a zero-length vector is undefined.");
-    auto comparator = [](RealOrComplex a, RealOrComplex b) { return abs(a) < abs(b);};
-    if (num_elems & 1)
-    {
-        auto middle = first + (num_elems - 1)/2;
-        std::nth_element(first, middle, last, comparator);
-        return abs(*middle);
-    }
-    else
-    {
-        auto middle = first + num_elems/2 - 1;
-        std::nth_element(first, middle, last, comparator);
-        std::nth_element(middle, middle+1, last, comparator);
-        return (abs(*middle) + abs(*(middle+1)))/abs(static_cast<RealOrComplex>(2));
-    }
-}
-
-template<class RandomAccessContainer>
-inline auto absolute_median(RandomAccessContainer & v)
-{
-    return absolute_median(v.begin(), v.end());
-}
+namespace boost::math::tools {
 
 template<class ForwardIterator>
 auto absolute_gini_coefficient(ForwardIterator first, ForwardIterator last)
@@ -352,5 +323,5 @@ inline auto m2m4_snr_estimator_db(Container const & noisy_signal,  typename Cont
     return 10*log10(m2m4_snr_estimator(noisy_signal, estimated_signal_kurtosis, estimated_noise_kurtosis));
 }
 
-}}}
+}
 #endif

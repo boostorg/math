@@ -34,99 +34,6 @@ using boost::math::constants::two_pi;
  */
 
 template<class Real>
-void test_absolute_median()
-{
-    std::vector<Real> v{-1, 2, -3, 4, -5, 6, -7};
-
-    Real m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 4);
-
-    std::mt19937 g(12);
-    std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::tools::absolute_median(v);
-    BOOST_TEST_EQ(m, 4);
-
-    v = {1, -2, -3, 3, -4, -5};
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 3);
-    std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 3);
-
-    v = {-1};
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 1);
-
-    v = {-1, 1};
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 1);
-
-    v = {2, -4};
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 3);
-
-    v = {1, -1, 1};
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 1);
-
-    v = {1, 2, -3};
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 2);
-    std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 2);
-
-    std::array<Real, 3> w{1, 2, -3};
-    m = boost::math::tools::absolute_median(w);
-    BOOST_TEST_EQ(m, 2);
-
-    // boost.ublas vector?
-    boost::numeric::ublas::vector<Real> u(6);
-    u[0] = 1;
-    u[1] = 2;
-    u[2] = -3;
-    u[3] = 1;
-    u[4] = 2;
-    u[5] = -3;
-    m = boost::math::tools::absolute_median(u);
-    BOOST_TEST_EQ(m, 2);
-}
-
-
-template<class Complex>
-void test_complex_absolute_median()
-{
-    typedef typename Complex::value_type Real;
-    std::mt19937 g(18);
-    std::vector<Complex> v{{0,1}, {0,-2},{0,3}, {0,-4}, {0,5}, {0,-6}, {0,7}};
-
-    Real m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 4);
-
-    std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::tools::absolute_median(v);
-    BOOST_TEST_EQ(m, 4);
-
-    v = {{0,1}, {0,-2}, {0,-3}, {0,3}, {0,4}, {0,-5}};
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 3);
-    std::shuffle(v.begin(), v.end(), g);
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 3);
-
-    v = {{0, -1}};
-    m = boost::math::tools::absolute_median(v.begin(), v.end());
-    BOOST_TEST_EQ(m, 1);
-
-    boost::numeric::ublas::vector<Complex> w(1);
-    w[0] = {0, -1};
-    m = boost::math::tools::absolute_median(w);
-    BOOST_TEST_EQ(m, 1);
-
-}
-
-
-template<class Real>
 void test_hoyer_sparsity()
 {
     using std::sqrt;
@@ -386,16 +293,6 @@ void test_m2m4_snr_estimator()
 
 int main()
 {
-    test_absolute_median<float>();
-    test_absolute_median<double>();
-    test_absolute_median<long double>();
-    test_absolute_median<cpp_bin_float_50>();
-
-    test_complex_absolute_median<std::complex<float>>();
-    test_complex_absolute_median<std::complex<double>>();
-    test_complex_absolute_median<std::complex<long double>>();
-    test_complex_absolute_median<cpp_complex_50>();
-
     test_absolute_gini_coefficient<float>();
     test_absolute_gini_coefficient<double>();
     test_absolute_gini_coefficient<long double>();
