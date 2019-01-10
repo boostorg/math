@@ -1,0 +1,76 @@
+//  (C) Copyright Nick Thompson, 2019
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
+//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+#define BOOST_TEST_MODULE condition_number_test
+
+#include <cmath>
+#include <limits>
+#include <iostream>
+#include <boost/math/constants/constants.hpp>
+#include <boost/test/included/unit_test.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/math/tools/condition_numbers.hpp>
+
+using std::abs;
+using boost::math::constants::half;
+using boost::math::constants::ln_two;
+using boost::multiprecision::cpp_bin_float_50;
+using boost::math::tools::summation_condition_number;
+using boost::math::tools::condition_number;
+using boost::math::tools::mollified_condition_number;
+
+template<class Real>
+void test_summation_condition_number()
+{
+    Real tol = 1000*std::numeric_limits<float>::epsilon();
+    auto cond = summation_condition_number<Real>();
+    // I've checked that the condition number increases with max_n,
+    // and that the computed sum gets more accurate with increasing max_n.
+    // But the CI system would die with more terms.
+    Real max_n = 10000;
+    for (Real n = 1; n < max_n; n += 2)
+    {
+        cond += 1/n;
+        cond -= 1/(n+1);
+    }
+
+    BOOST_CHECK_CLOSE_FRACTION(cond.sum(), ln_two<Real>(), tol);
+    BOOST_TEST(cond() > 14);
+}
+
+template<class Real>
+void test_evaluation_condition_number()
+{
+    using std::log;
+    using std::sqrt;
+    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    auto f = [](Real x)->Real { return log(x); };
+    Real x = Real(1.125);
+    Real cond = condition_number(f, x);
+    BOOST_CHECK_CLOSE_FRACTION(cond, 1/log(x), tol);
+}
+
+template<class Real>
+void test_mollified_condition_number()
+{
+    using std::sin;
+    using std::sqrt;
+    Real tol = sqrt(std::numeric_limits<Real>::epsilon());
+    auto f = [](Real x)->Real { return sin(x); };
+    Real x = Real(0.5);
+    Real cond = mollified_condition_number(f, x);
+    BOOST_CHECK_CLOSE_FRACTION(cond, abs(cos(x)), tol);
+}
+
+
+BOOST_AUTO_TEST_CASE(numerical_differentiation_test)
+{
+    test_summation_condition_number<float>();
+    test_summation_condition_number<cpp_bin_float_50>();
+    test_evaluation_condition_number<float>();
+    test_evaluation_condition_number<cpp_bin_float_50>();
+    test_mollified_condition_number<float>();
+    test_mollified_condition_number<cpp_bin_float_50>();
+}
