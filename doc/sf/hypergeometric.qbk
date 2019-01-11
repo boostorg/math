@@ -1,23 +1,28 @@
 
 [section:hypergeometric Hypergeometric Functions]
 
-[section:hyper_geometric_1f0 Hypergeometric 1F0]
+[section:hyper_geometric_1f0 Hypergeometric [sub 1]/F/[sub 0] ]
+
+   #include <boost/math/special_functions/hypergeometric_1F0.hpp>
+
+   namespace boost { namespace math {
 
    template <class T1, class T2>
-   ``__sf_result`` hypergeometric_1f0(T1 a, T2 z);
+   ``__sf_result`` hypergeometric_1F0(T1 a, T2 z);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` hypergeometric_1f0(T1 a, T2 z, const ``__Policy``&);
+   ``__sf_result`` hypergeometric_1F0(T1 a, T2 z, const ``__Policy``&);
 
+   }} // namespaces
 
 [h4 Description]
 
-The function hypergeometric_1f0 returns the result of:
+The function `hypergeometric_1F0` returns the result of:
 
 [equation hyper_1f0]
 
 The return type of these functions is computed using the __arg_promotion_rules
-when T1 and T2 are different types.
+when `T1` and `T2` are different types.
 
 [optional_policy]
 
@@ -33,31 +38,38 @@ The implementation is trivial:
 
 [endsect]
 
-[section:hypergeometric_0f1 Hypergeometric 0F1]
+[section:hypergeometric_0f1 Hypergeometric [sub 0]/F/[sub 1] ]
+
+   #include <boost/math/special_functions/hypergeometric_0F1.hpp>
+
+   namespace boost { namespace math {
 
    template <class T1, class T2>
-   ``__sf_result`` hypergeometric_0f1(T1 b, T2 z);
+   ``__sf_result`` hypergeometric_0F1(T1 b, T2 z);
 
    template <class T1, class T2, class ``__Policy``>
-   ``__sf_result`` hypergeometric_0f1(T1 b, T2 z, const ``__Policy``&);
+   ``__sf_result`` hypergeometric_0F1(T1 b, T2 z, const ``__Policy``&);
+
+   }} // namespaces
 
 [h4 Description]
 
-The function hypergeometric_0f1 returns the result of:
+The function `hypergeometric_0F1` returns the result of
 
 [equation hyper_0f1]
 
 The return type of these functions is computed using the __arg_promotion_rules
-when T1 and T2 are different types.
+when `T1` and `T2` are different types.
 
 [optional_policy]
 
 The functions return the result of __domain_error whenever the result is
-undefined or complex.  This occurs only when `b` is an integer <= 0.
+undefined or complex.
+This occurs only when `b` is an integer <= 0.
 
 [h4 Implementation]
 
-The function is implemented via its defining series whereever convergent.
+The function is implemented via its defining series wherever convergent.
 
 For a divergent series we use the continued fraction as long as the result is not too small:
 
@@ -71,22 +83,28 @@ and one of the Bessel function relations otherwise:
 
 [endsect]
 
-[section:hyper_geometric_1f0 Hypergeometric 2F0]
+[section:hyper_geometric_1f0 Hypergeometric [sub 2]/F/[sub 0]]
+
+   #include <boost/math/special_functions/hypergeometric_2F0.hpp>
+
+   namespace boost { namespace math {
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` hypergeometric_2f0(T1 a1, T2 a2, T3 z);
+   ``__sf_result`` hypergeometric_2F0(T1 a1, T2 a2, T3 z);
 
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` hypergeometric_2f0(T1 a1, T2 a2, T3 z, const ``__Policy``&);
+   ``__sf_result`` hypergeometric_2F0(T1 a1, T2 a2, T3 z, const ``__Policy``&);
+
+   }}
 
 [h4 Description]
 
-The function hypergeometric_2f0 returns the result of
+The function `hypergeometric_2F0` returns the result of
 
 [equation hyper_2f0]
 
 The return type of these functions is computed using the __arg_promotion_rules
-when T1 and T2 are different types.
+when `T1` and `T2` are different types.
 
 [optional_policy]
 
@@ -96,11 +114,11 @@ undefined or complex.  The valid domain for this function occurs only when one o
 
 [h4 Implementation]
 
-When a1 == a2 - 0.5 then the function is implemented in terms of the Hermite polynomial:
+When `a1 == a2 - 0.5` then the function is implemented in terms of the Hermite polynomial:
 
 [equation hyper_2f0_hermite]
 
-When both a1 and a2 are integers then the function is implemented in terms of the associated-Laguerre polynomial:
+When both `a1` and `a2` are integers then the function is implemented in terms of the associated-Laguerre polynomial:
 
 [equation hyper_2f0_laguerre]
 
@@ -112,25 +130,24 @@ Otherwise we use the defining series.
 
 [endsect]
 
-[section:hyper_geometric_1f1 Hypergeometric 1F1]
+[section:hyper_geometric_1f1 Hypergeometric [sub 1]/F/[sub 1]]
 
 
-   #include <boost/math/special_functions/hyper_geometric_1f1.hpp>
+   #include <boost/math/special_functions/hypergeometric_1F1.hpp>
+
+   namespace boost { namespace math {
 
    template <class T1, class T2, class T3>
-   ``__sf_result`` hypergeometric_1f1(T1 a, T2 b, T3 z);
+   ``__sf_result`` hypergeometric_1F1(T1 a, T2 b, T3 z);
 
    template <class T1, class T2, class T3, class ``__Policy``>
-   ``__sf_result`` hypergeometric_1f0(T1 a, T2 b, T3 z, const ``__Policy``&);
+   ``__sf_result`` hypergeometric_1F0(T1 a, T2 b, T3 z, const ``__Policy``&);
 
+   }} // namespaces
 
 [h4 Description]
 
-The function `hypergeometric_1f1(a, b, x)` returns the non-singular solution to Kummer's equation
-
-   xw'' + (b-x)w' - aw = 0
-
-which for |x| < 1 has the hypergeometric series expansion
+The function `hypergeometric_1F1(a, b, x)` returns the non-singular solution to [@https://en.wikipedia.org/wiki/Confluent_hypergeometric_function Kummer's equation] which for |x| < 1 has the hypergeometric series expansion
 
    sum[sub n=0]^[super [infin]] a[super (n)]/b[super (n)] x[super n]/n!
 
@@ -144,7 +161,7 @@ The implementation combines naive series, asymptotics, Pade approximations, and 
 
 
 [endsect]
-[sect:hypergeometric_refs Hypergeometric References]
+[section:hypergeometric_refs Hypergeometric References]
 
 * Beals, Richard, and Roderick Wong. ['Special functions: a graduate text.] Vol. 126. Cambridge University Press, 2010.
 
@@ -154,6 +171,7 @@ The implementation combines naive series, asymptotics, Pade approximations, and 
 
 * Dereziński, Jan. ['Hypergeometric type functions and their symmetries.] Annales Henri Poincaré. Vol. 15. No. 8. Springer Basel, 2014.
 
+[endsect]
 [endsect]
 
 [/
