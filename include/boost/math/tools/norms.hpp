@@ -5,7 +5,6 @@
 
 #ifndef BOOST_MATH_TOOLS_NORMS_HPP
 #define BOOST_MATH_TOOLS_NORMS_HPP
-
 #include <algorithm>
 #include <iterator>
 #include <boost/type_traits.hpp>
@@ -13,7 +12,7 @@
 #include <boost/multiprecision/detail/number_base.hpp>
 
 
-namespace boost{ namespace math{ namespace tools {
+namespace boost::math::tools {
 
 // Mallat, "A Wavelet Tour of Signal Processing", equation 2.60:
 template<class ForwardIterator>
@@ -22,12 +21,12 @@ auto total_variation(ForwardIterator first, ForwardIterator last)
     using Real = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
     BOOST_ASSERT_MSG(first != last && std::next(first) != last, "At least two samples are required to compute the total variation.");
-    Real tv = 0;
     auto it = first;
     Real tmp = *it;
 
     if constexpr (std::is_unsigned<Real>::value)
     {
+        double tv = 0;
         while (++it != last)
         {
             if (*it > tmp)
@@ -44,6 +43,7 @@ auto total_variation(ForwardIterator first, ForwardIterator last)
     }
     else
     {
+        Real tv = 0;
         while (++it != last)
         {
             tv += abs(*it - tmp);
@@ -163,6 +163,16 @@ auto l2_norm(ForwardIterator first, ForwardIterator last)
         }
         return result;
     }
+    else
+    {
+        double l2 = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            double tmp = *it;
+            l2 += tmp*tmp;
+        }
+        return sqrt(l2);
+    }
 }
 
 template<class Container>
@@ -193,8 +203,31 @@ inline size_t l0_pseudo_norm(Container const & v)
 }
 
 template<class ForwardIterator>
-auto lp_norm(ForwardIterator first, ForwardIterator last, typename std::remove_const<typename std::remove_reference<decltype(*std::declval<ForwardIterator>())>::type>::type p)
+size_t hamming_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator first2)
 {
+    size_t count = 0;
+    auto it1 = first1;
+    auto it2 = first2;
+    while (it1 != last1)
+    {
+        if (*it1++ != *it2++)
+        {
+            ++count;
+        }
+    }
+    return count;
+}
+
+template<class Container>
+inline size_t hamming_distance(Container const & v, Container const & w)
+{
+    return hamming_distance(v.cbegin(), v.cend(), w.cbegin());
+}
+
+template<class ForwardIterator>
+auto lp_norm(ForwardIterator first, ForwardIterator last, unsigned p)
+{
+    using std::abs;
     using std::pow;
     using std::is_floating_point;
     using std::isfinite;
@@ -202,25 +235,24 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, typename std::remove_c
     if constexpr (boost::is_complex<RealOrComplex>::value ||
                   boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_complex)
     {
-        BOOST_ASSERT_MSG(p.real() >= 0, "For p < 0, the lp norm is not a norm.");
-        BOOST_ASSERT_MSG(p.imag() == 0, "For imaginary p, the lp norm is not a norm.");
         using std::norm;
-        decltype(p.real()) lp = 0;
+        using Real = typename RealOrComplex::value_type;
+        Real lp = 0;
         for (auto it = first; it != last; ++it)
         {
-            lp += pow(norm(*it), p.real()/2);
+            lp += pow(abs(*it), p);
         }
 
-        auto result = pow(lp, 1/p.real());
+        auto result = pow(lp, Real(1)/Real(p));
         if (!isfinite(result))
         {
             auto a = boost::math::tools::sup_norm(first, last);
-            decltype(p.real()) lp = 0;
+            Real lp = 0;
             for (auto it = first; it != last; ++it)
             {
-                lp += pow(abs(*it)/a, p.real());
+                lp += pow(abs(*it)/a, p);
             }
-            result = a*pow(lp, 1/p.real());
+            result = a*pow(lp, Real(1)/Real(p));
         }
         return result;
     }
@@ -235,7 +267,7 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, typename std::remove_c
             lp += pow(abs(*it), p);
         }
 
-        RealOrComplex result = pow(lp, 1/p);
+        RealOrComplex result = pow(lp, RealOrComplex(1)/RealOrComplex(p));
         if (!isfinite(result))
         {
             RealOrComplex a = boost::math::tools::sup_norm(first, last);
@@ -244,21 +276,296 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, typename std::remove_c
             {
                 lp += pow(abs(*it)/a, p);
             }
-            result = a*pow(lp, 1/p);
+            result = a*pow(lp, RealOrComplex(1)/RealOrComplex(p));
         }
         return result;
     }
     else
     {
-        BOOST_ASSERT_MSG(false, "Unable to determine if the input type is real or complex.");
+        double lp = 0;
+
+        for (auto it = first; it != last; ++it)
+        {
+            lp += pow(abs(*it), p);
+        }
+
+        double result = pow(lp, 1.0/double(p));
+        if (!isfinite(result))
+        {
+            double a = boost::math::tools::sup_norm(first, last);
+            lp = 0;
+            for (auto it = first; it != last; ++it)
+            {
+                lp += pow(abs(*it)/a, p);
+            }
+            result = a*pow(lp, double(1)/double(p));
+        }
+        return result;
     }
 }
 
 template<class Container>
-inline auto lp_norm(Container const & v, typename Container::value_type p)
+inline auto lp_norm(Container const & v, unsigned p)
 {
     return lp_norm(v.cbegin(), v.cend(), p);
 }
 
-}}}
+
+template<class ForwardIterator>
+auto lp_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator first2, unsigned p)
+{
+    using std::pow;
+    using std::abs;
+    using std::is_floating_point;
+    using std::isfinite;
+    using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
+    if constexpr (boost::is_complex<RealOrComplex>::value ||
+                  boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_complex)
+    {
+        using Real = typename RealOrComplex::value_type;
+        using std::norm;
+        Real dist = 0;
+        auto it1 = first1;
+        auto it2 = first2;
+        while(it1 != last1)
+        {
+            auto tmp = *it1++ - *it2++;
+            dist += pow(abs(tmp), p);
+        }
+        return pow(dist, Real(1)/Real(p));
+    }
+    else if constexpr (is_floating_point<RealOrComplex>::value ||
+                       boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_floating_point)
+    {
+        RealOrComplex dist = 0;
+        auto it1 = first1;
+        auto it2 = first2;
+        while(it1 != last1)
+        {
+            auto tmp = *it1++ - *it2++;
+            dist += pow(abs(tmp), p);
+        }
+
+        return pow(dist, RealOrComplex(1)/RealOrComplex(p));
+    }
+    else
+    {
+        BOOST_ASSERT_MSG(p >= 0, "For p < 0, the lp norm is not a norm");
+        double dist = 0;
+
+        auto it1 = first1;
+        auto it2 = first2;
+        while(it1 != last1)
+        {
+            double tmp = *it1++ - *it2++;
+            dist += pow(abs(tmp), p);
+        }
+        return pow(dist, 1.0/double(p));
+    }
+}
+
+template<class Container>
+inline auto lp_distance(Container const & v, Container const & w, unsigned p)
+{
+    return lp_distance(v.cbegin(), v.cend(), w.cbegin(), p);
+}
+
+
+template<class ForwardIterator>
+auto l1_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator first2)
+{
+    using std::abs;
+    using std::is_floating_point;
+    using std::isfinite;
+    using T = typename std::iterator_traits<ForwardIterator>::value_type;
+    auto it1 = first1;
+    auto it2 = first2;
+    if constexpr (boost::is_complex<T>::value ||
+                  boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_complex)
+    {
+        using Real = typename T::value_type;
+        Real sum = 0;
+        while (it1 != last1) {
+            sum += abs(*it1++ - *it2++);
+        }
+        return sum;
+    }
+    else if constexpr (is_floating_point<T>::value ||
+                       boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_floating_point)
+    {
+        T sum = 0;
+        while (it1 != last1)
+        {
+            sum += abs(*it1++ - *it2++);
+        }
+        return sum;
+    }
+    else
+    {
+        // Why choose double precision?
+        // First, consistency: l2 and lp distance cannot be returned as floating point types.
+        // Second, if the type is a small integer type (like uint8_t), then the result will overflow.
+        double sum = 0;
+        while(it1 != last1)
+        {
+            T x1 = *it1++;
+            T x2 = *it2++;
+            if (x1 > x2)
+            {
+                sum += (x1 - x2);
+            }
+            else
+            {
+                sum += (x2 - x1);
+            }
+        }
+        return sum;
+    }
+}
+
+template<class Container>
+auto l1_distance(Container const & v, Container const & w)
+{
+    using std::size;
+    BOOST_ASSERT_MSG(size(v) == size(w),
+                     "L1 distance requires both containers to have the same number of elements");
+    return l1_distance(v.cbegin(), v.cend(), w.begin());
+}
+
+template<class ForwardIterator>
+auto l2_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator first2)
+{
+    using std::abs;
+    using std::norm;
+    using std::sqrt;
+    using std::is_floating_point;
+    using std::isfinite;
+    using T = typename std::iterator_traits<ForwardIterator>::value_type;
+    auto it1 = first1;
+    auto it2 = first2;
+    if constexpr (boost::is_complex<T>::value ||
+                  boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_complex)
+    {
+        using Real = typename T::value_type;
+        Real sum = 0;
+        while (it1 != last1) {
+            sum += norm(*it1++ - *it2++);
+        }
+        return sqrt(sum);
+    }
+    else if constexpr (is_floating_point<T>::value ||
+                       boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_floating_point)
+    {
+        T sum = 0;
+        while (it1 != last1)
+        {
+            T tmp = *it1++ - *it2++;
+            sum += tmp*tmp;
+        }
+        return sqrt(sum);
+    }
+    else // integral values:
+    {
+        double sum = 0;
+        while(it1 != last1)
+        {
+            T x1 = *it1++;
+            T x2 = *it2++;
+            if (x1 > x2)
+            {
+                double tmp = x1-x2;
+                sum += tmp*tmp;
+            }
+            else
+            {
+                double tmp = x2 - x1;
+                sum += tmp*tmp;
+            }
+        }
+        return sqrt(sum);
+    }
+}
+
+template<class Container>
+auto l2_distance(Container const & v, Container const & w)
+{
+    using std::size;
+    BOOST_ASSERT_MSG(size(v) == size(w),
+                     "L2 distance requires both containers to have the same number of elements");
+    return l2_distance(v.cbegin(), v.cend(), w.begin());
+}
+
+template<class ForwardIterator>
+auto sup_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator first2)
+{
+    using std::abs;
+    using std::norm;
+    using std::sqrt;
+    using std::is_floating_point;
+    using std::isfinite;
+    using T = typename std::iterator_traits<ForwardIterator>::value_type;
+    auto it1 = first1;
+    auto it2 = first2;
+    if constexpr (boost::is_complex<T>::value ||
+                  boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_complex)
+    {
+        using Real = typename T::value_type;
+        Real sup_sq = 0;
+        while (it1 != last1) {
+            Real tmp = norm(*it1++ - *it2++);
+            if (tmp > sup_sq) {
+                sup_sq = tmp;
+            }
+        }
+        return sqrt(sup_sq);
+    }
+    else if constexpr (is_floating_point<T>::value ||
+                       boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_floating_point)
+    {
+        T sup = 0;
+        while (it1 != last1)
+        {
+            T tmp = *it1++ - *it2++;
+            if (sup < abs(tmp))
+            {
+                sup = abs(tmp);
+            }
+        }
+        return sup;
+    }
+    else // integral values:
+    {
+        double sup = 0;
+        while(it1 != last1)
+        {
+            T x1 = *it1++;
+            T x2 = *it2++;
+            double tmp;
+            if (x1 > x2)
+            {
+                tmp = x1-x2;
+            }
+            else
+            {
+                tmp = x2 - x1;
+            }
+            if (sup < tmp) {
+                sup = tmp;
+            }
+        }
+        return sup;
+    }
+}
+
+template<class Container>
+auto sup_distance(Container const & v, Container const & w)
+{
+    using std::size;
+    BOOST_ASSERT_MSG(size(v) == size(w),
+                     "sup distance requires both containers to have the same number of elements");
+    return sup_distance(v.cbegin(), v.cend(), w.begin());
+}
+
+
+}
 #endif

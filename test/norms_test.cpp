@@ -4,7 +4,7 @@
  *  Boost Software License, Version 1.0. (See accompanying file
  *  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  */
-
+#include <cmath>
 #include <vector>
 #include <array>
 #include <forward_list>
@@ -17,6 +17,9 @@
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #include <boost/multiprecision/cpp_complex.hpp>
 
+using std::abs;
+using std::pow;
+using std::sqrt;
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_complex_50;
 
@@ -76,14 +79,55 @@ void test_complex_lp()
 
     l3 = boost::math::tools::lp_norm(v, 3);
     BOOST_TEST(abs(l3 - 1) < tol);
-
 }
+
+template<class Z>
+void test_integer_lp()
+{
+    double tol = 50*std::numeric_limits<double>::epsilon();
+
+    std::array<Z, 3> u{1,0,0};
+    double l3 = boost::math::tools::lp_norm(u.begin(), u.end(), 3);
+    BOOST_TEST(abs(l3 - 1) < tol);
+}
+
+template<class Real>
+void test_lp_distance()
+{
+    Real tol = 50*std::numeric_limits<Real>::epsilon();
+
+    std::vector<Real> u{1,0,0};
+    std::vector<Real> v{0,0,0};
+
+    Real dist = boost::math::tools::lp_distance(u,u, 3);
+    BOOST_TEST(abs(dist) < tol);
+
+    dist = boost::math::tools::lp_distance(u,v, 3);
+    BOOST_TEST(abs(dist - 1) < tol);
+}
+
+template<class Complex>
+void test_complex_lp_distance()
+{
+    using Real = typename Complex::value_type;
+    Real tol = 50*std::numeric_limits<Real>::epsilon();
+
+    std::vector<Complex> u{{1,0},{0,0},{0,0}};
+    std::vector<Complex> v{{0,0},{0,0},{0,0}};
+
+    Real dist = boost::math::tools::lp_distance(u,u, 3);
+    BOOST_TEST(abs(dist) < tol);
+
+    dist = boost::math::tools::lp_distance(u,v, 3);
+    BOOST_TEST(abs(dist - 1) < tol);
+}
+
 
 template<class Z>
 void test_integer_total_variation()
 {
     std::vector<Z> v{1,1};
-    Z tv = boost::math::tools::total_variation(v);
+    double tv = boost::math::tools::total_variation(v);
     BOOST_TEST_EQ(tv,0);
 
     v[1] = 2;
@@ -163,7 +207,6 @@ void test_sup_norm()
     std::array<Real, 3> w{-2,1,0};
     s = boost::math::tools::sup_norm(w);
     BOOST_TEST(abs(s - 2) < tol);
-
 }
 
 template<class Z>
@@ -218,7 +261,18 @@ void test_complex_l0_pseudo_norm()
 
     count = boost::math::tools::l0_pseudo_norm(v);
     BOOST_TEST_EQ(count, 1);
+}
 
+template<class Z>
+void test_hamming_distance()
+{
+    std::vector<Z> v{1,2,3};
+    std::vector<Z> w{1,2,4};
+    size_t count = boost::math::tools::hamming_distance(v, w);
+    BOOST_TEST_EQ(count, 1);
+
+    count = boost::math::tools::hamming_distance(v, v);
+    BOOST_TEST_EQ(count, 0);
 }
 
 template<class Real>
@@ -256,8 +310,54 @@ void test_complex_l1_norm()
 
     l1 = boost::math::tools::l1_norm(v);
     BOOST_TEST(abs(l1 - 3) < tol);
-
 }
+
+template<class Real>
+void test_l1_distance()
+{
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v{1,2,3};
+    std::vector<Real> w{1,1,1};
+    Real l1 = boost::math::tools::l1_distance(v, v);
+    BOOST_TEST(abs(l1) < tol);
+
+    l1 = boost::math::tools::l1_distance(w, v);
+    BOOST_TEST(abs(l1 - 3) < tol);
+
+    l1 = boost::math::tools::l1_distance(v, w);
+    BOOST_TEST(abs(l1 - 3) < tol);
+}
+
+template<class Z>
+void test_integer_l1_distance()
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,2,3};
+    std::vector<Z> w{1,1,1};
+    double l1 = boost::math::tools::l1_distance(v, v);
+    BOOST_TEST(abs(l1) < tol);
+
+    l1 = boost::math::tools::l1_distance(w, v);
+    BOOST_TEST(abs(l1 - 3) < tol);
+
+    l1 = boost::math::tools::l1_distance(v, w);
+    BOOST_TEST(abs(l1 - 3) < tol);
+}
+
+template<class Complex>
+void test_complex_l1_distance()
+{
+    typedef typename Complex::value_type Real;
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Complex> v{{1,0}, {0,1},{0,-1}};
+    Real l1 = boost::math::tools::l1_distance(v, v);
+    BOOST_TEST(abs(l1) < tol);
+
+    std::vector<Complex> w{{2,0}, {0,1},{0,-1}};
+    l1 = boost::math::tools::l1_distance(v.cbegin(), v.cend(), w.cbegin());
+    BOOST_TEST(abs(l1 - 1) < tol);
+}
+
 
 template<class Real>
 void test_l2_norm()
@@ -284,10 +384,18 @@ void test_l2_norm()
     BOOST_TEST(abs(l2 - bignum) < tol*l2);
 }
 
+template<class Z>
+void test_integer_l2_norm()
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,1,1,1};
+    double l2 = boost::math::tools::l2_norm(v.begin(), v.end());
+    BOOST_TEST(abs(l2 - 2) < tol);
+}
+
 template<class Complex>
 void test_complex_l2_norm()
 {
-    using std::sqrt;
     typedef typename Complex::value_type Real;
     Real tol = 100*std::numeric_limits<Real>::epsilon();
     std::vector<Complex> v{{1,0}, {0,1},{0,-1}, {1,0}};
@@ -296,8 +404,73 @@ void test_complex_l2_norm()
 
     l2 = boost::math::tools::l2_norm(v);
     BOOST_TEST(abs(l2 - 2) < tol);
-
 }
+
+template<class Real>
+void test_l2_distance()
+{
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v{1,1,1,1};
+    Real l2 = boost::math::tools::l2_distance(v, v);
+    BOOST_TEST(abs(l2) < tol);
+}
+
+
+template<class Z>
+void test_integer_l2_distance()
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,1,1,1};
+    double l2 = boost::math::tools::l2_distance(v, v);
+    BOOST_TEST(abs(l2) < tol);
+}
+
+template<class Complex>
+void test_complex_l2_distance()
+{
+    typedef typename Complex::value_type Real;
+    Real tol = 100*std::numeric_limits<Real>::epsilon();
+    std::vector<Complex> v{{1,0}, {0,1},{0,-1}, {1,0}};
+    Real l2 = boost::math::tools::l2_distance(v, v);
+    BOOST_TEST(abs(l2) < tol);
+}
+
+template<class Real>
+void test_sup_distance()
+{
+    Real tol = std::numeric_limits<Real>::epsilon();
+    std::vector<Real> v{1,1,1,1};
+    std::vector<Real> w{0,0,0,0};
+    Real sup = boost::math::tools::sup_distance(v, v);
+    BOOST_TEST(abs(sup) < tol);
+    sup = boost::math::tools::sup_distance(v, w);
+    BOOST_TEST(abs(sup -1) < tol);
+}
+
+
+template<class Z>
+void test_integer_sup_distance()
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,1,1,1};
+    std::vector<Z> w{0,0,0,0};
+    double sup = boost::math::tools::sup_distance(v, v);
+    BOOST_TEST(abs(sup) < tol);
+
+    sup = boost::math::tools::sup_distance(v, w);
+    BOOST_TEST(abs(sup -1) < tol);
+}
+
+template<class Complex>
+void test_complex_sup_distance()
+{
+    typedef typename Complex::value_type Real;
+    Real tol = 100*std::numeric_limits<Real>::epsilon();
+    std::vector<Complex> v{{1,0}, {0,1},{0,-1}, {1,0}};
+    Real l2 = boost::math::tools::sup_distance(v, v);
+    BOOST_TEST(abs(l2) < tol);
+}
+
 
 int main()
 {
@@ -311,6 +484,14 @@ int main()
     test_complex_lp<std::complex<long double>>();
     test_complex_lp<cpp_complex_50>();
 
+    test_integer_lp<int>();
+
+    test_lp_distance<double>();
+    test_lp_distance<cpp_bin_float_50>();
+
+    test_complex_lp_distance<std::complex<double>>();
+    test_complex_lp_distance<cpp_complex_50>();
+
     test_sup_norm<float>();
     test_sup_norm<double>();
     test_sup_norm<long double>();
@@ -323,6 +504,14 @@ int main()
     test_complex_sup_norm<std::complex<long double>>();
     test_complex_sup_norm<cpp_complex_50>();
 
+    test_sup_distance<double>();
+    test_sup_distance<cpp_bin_float_50>();
+
+    test_integer_sup_distance<int>();
+
+    test_complex_sup_distance<std::complex<double>>();
+    test_complex_sup_distance<cpp_complex_50>();
+
     test_l0_pseudo_norm<int>();
     test_l0_pseudo_norm<float>();
     test_l0_pseudo_norm<double>();
@@ -333,6 +522,8 @@ int main()
     test_complex_l0_pseudo_norm<std::complex<double>>();
     test_complex_l0_pseudo_norm<std::complex<long double>>();
     test_complex_l0_pseudo_norm<cpp_complex_50>();
+
+    test_hamming_distance<int>();
 
     test_l1_norm<float>();
     test_l1_norm<double>();
@@ -346,6 +537,14 @@ int main()
     test_complex_l1_norm<std::complex<long double>>();
     test_complex_l1_norm<cpp_complex_50>();
 
+    test_l1_distance<float>();
+    test_l1_distance<cpp_bin_float_50>();
+
+    test_integer_l1_distance<int>();
+
+    test_complex_l1_distance<std::complex<float>>();
+    test_complex_l1_distance<cpp_complex_50>();
+
     test_complex_l2_norm<std::complex<float>>();
     test_complex_l2_norm<std::complex<double>>();
     test_complex_l2_norm<std::complex<long double>>();
@@ -355,6 +554,16 @@ int main()
     test_l2_norm<double>();
     test_l2_norm<long double>();
     test_l2_norm<cpp_bin_float_50>();
+
+    test_integer_l2_norm<int>();
+
+    test_l2_distance<double>();
+    test_l2_distance<cpp_bin_float_50>();
+
+    test_integer_l2_distance<int>();
+
+    test_complex_l2_distance<std::complex<double>>();
+    test_complex_l2_distance<cpp_complex_50>();
 
     test_total_variation<float>();
     test_total_variation<double>();
