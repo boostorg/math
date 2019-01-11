@@ -242,13 +242,13 @@ void test_kurtosis()
     // or generates too many, giving pretty wildly different values of kurtosis on different runs.
     // However, by kicking up the samples to 1,000,000, I got very close to 6 for the excess kurtosis on every run.
     // The CI system, however, would die on a million long doubles.
+    //v3.resize(1000000);
     //std::exponential_distribution<long double> edis(0.1);
     //for (size_t i = 0; i < v3.size(); ++i) {
     //    v3[i] = edis(gen);
     //}
     //excess_kurtosis = boost::math::tools::kurtosis(v3) - 3;
     //BOOST_TEST(abs(excess_kurtosis - 6.0) < 0.2);
-
 }
 
 template<class Z>

@@ -172,88 +172,6 @@ inline auto skewness(Container const & v)
     return skewness(v.cbegin(), v.cend());
 }
 
-// Follows equation 1.6 of:
-// https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
-template<class ForwardIterator>
-auto kurtosis(ForwardIterator first, ForwardIterator last)
-{
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
-    BOOST_ASSERT_MSG(first != last, "At least one sample is required to compute kurtosis.");
-    if constexpr (std::is_integral<Real>::value)
-    {
-        double M1 = *first;
-        double M2 = 0;
-        double M3 = 0;
-        double M4 = 0;
-        double n = 2;
-        for (auto it = std::next(first); it != last; ++it)
-        {
-            double delta21 = *it - M1;
-            double tmp = delta21/n;
-            M4 = M4 + tmp*(tmp*tmp*delta21*((n-1)*(n*n-3*n+3)) + 6*tmp*M2 - 4*M3);
-            M3 = M3 + tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
-            M2 = M2 + tmp*(n-1)*delta21;
-            M1 = M1 + tmp;
-            n += 1;
-        }
-
-        double var = M2/(n-1);
-        if (var == 0)
-        {
-            return double(0);
-        }
-        double kurt = M4/((n-1)*var*var);
-        return kurt;
-    }
-    else
-    {
-        Real M1 = *first;
-        Real M2 = 0;
-        Real M3 = 0;
-        Real M4 = 0;
-        Real n = 2;
-        for (auto it = std::next(first); it != last; ++it)
-        {
-            Real delta21 = *it - M1;
-            Real tmp = delta21/n;
-            M4 = M4 + tmp*(tmp*tmp*delta21*((n-1)*(n*n-3*n+3)) + 6*tmp*M2 - 4*M3);
-            M3 = M3 + tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
-            M2 = M2 + tmp*(n-1)*delta21;
-            M1 = M1 + tmp;
-            n += 1;
-        }
-
-        Real var = M2/(n-1);
-        if (var == 0)
-        {
-            // Again, the limit is technically undefined, but the interpretation here is clear:
-            // A constant dataset has no kurtosis.
-            return Real(0);
-        }
-        Real kurt = M4/((n-1)*var*var);
-        return kurt;
-    }
-}
-
-template<class Container>
-inline auto kurtosis(Container const & v)
-{
-    return kurtosis(v.cbegin(), v.cend());
-}
-
-template<class ForwardIterator>
-auto excess_kurtosis(ForwardIterator first, ForwardIterator last)
-{
-    return kurtosis(first, last) - 3;
-}
-
-template<class Container>
-inline auto excess_kurtosis(Container const & v)
-{
-    return excess_kurtosis(v.cbegin(), v.cend());
-}
-
-
 // Follows equation 1.5/1.6 of:
 // https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
 template<class ForwardIterator>
@@ -308,6 +226,39 @@ inline auto first_four_moments(Container const & v)
 {
     return first_four_moments(v.cbegin(), v.cend());
 }
+
+
+// Follows equation 1.6 of:
+// https://prod.sandia.gov/techlib-noauth/access-control.cgi/2008/086212.pdf
+template<class ForwardIterator>
+auto kurtosis(ForwardIterator first, ForwardIterator last)
+{
+    auto [M1, M2, M3, M4] = first_four_moments(first, last);
+    if (M2 == 0)
+    {
+        return M2;
+    }
+    return M4/(M2*M2);
+}
+
+template<class Container>
+inline auto kurtosis(Container const & v)
+{
+    return kurtosis(v.cbegin(), v.cend());
+}
+
+template<class ForwardIterator>
+auto excess_kurtosis(ForwardIterator first, ForwardIterator last)
+{
+    return kurtosis(first, last) - 3;
+}
+
+template<class Container>
+inline auto excess_kurtosis(Container const & v)
+{
+    return excess_kurtosis(v.cbegin(), v.cend());
+}
+
 
 template<class RandomAccessIterator>
 auto median(RandomAccessIterator first, RandomAccessIterator last)
@@ -415,7 +366,6 @@ inline auto median_absolute_deviation(RandomAccessContainer & v, typename Random
 {
     return median_absolute_deviation(v.begin(), v.end(), center);
 }
-
 
 }
 #endif
