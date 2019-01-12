@@ -7,7 +7,7 @@
 #define BOOST_TEST_MODULE lanczos_smoothing_test
 
 #include <random>
-#include <boost/accumulators/statistics/sum_kahan.hpp>
+#include <boost/math/constants/constants.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/differentiation/lanczos_smoothing.hpp>
@@ -16,6 +16,8 @@
 using std::abs;
 using std::pow;
 using std::sqrt;
+using std::sin;
+using boost::math::constants::two_pi;
 using boost::multiprecision::cpp_bin_float_50;
 using boost::multiprecision::cpp_bin_float_100;
 using boost::math::differentiation::discrete_lanczos_derivative;
@@ -539,6 +541,44 @@ void test_lanczos_acceleration()
         BOOST_CHECK_CLOSE_FRACTION(lanczos(v, i), 14, 1000*eps);
     }
 
+    v.resize(2048);
+    Real step = two_pi<Real>()/v.size();
+    for(size_t i = 0; i < v.size(); ++i)
+    {
+        Real x = i*step;
+        v[i] = sin(x);
+    }
+
+    std::random_device rd{};
+    auto seed = rd();
+    std::cout << "seed = " << seed << "\n";
+    std::mt19937 gen(seed);
+    std::normal_distribution<> dis{0, 0.00001};
+    for (size_t i = 0; i < v.size(); ++i)
+    {
+        v[i] += dis(gen);
+    }
+
+
+    size_t n = 100;
+    lanczos = discrete_lanczos_derivative<Real, 2>(step, n, 3);
+    auto w = lanczos(v);
+    BOOST_TEST(w.size() == v.size());
+    BOOST_CHECK_SMALL(w[0], 0.01);
+    for(size_t i = 1; i < n; ++i)
+    {
+        BOOST_CHECK_CLOSE_FRACTION(w[i], -v[i], 0.01);
+    }
+
+    for(size_t i = n; i < v.size() -n; ++i)
+    {
+        BOOST_CHECK_CLOSE_FRACTION(w[i], -v[i], 0.01);
+    }
+
+    for(size_t i = v.size() - n; i < v.size(); ++i)
+    {
+        BOOST_CHECK_CLOSE_FRACTION(w[i], -v[i], 0.01);
+    }
 
 }
 
@@ -556,7 +596,8 @@ BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
     test_boundary_filters<cpp_bin_float_50>();
     test_boundary_lanczos<double>();
     test_boundary_lanczos<long double>();
-    test_boundary_lanczos<cpp_bin_float_50>();
+    // Takes too long!
+    //test_boundary_lanczos<cpp_bin_float_50>();
 
     test_interior_filter<double>();
     test_interior_filter<long double>();
