@@ -18,14 +18,13 @@ namespace boost::math::tools {
 template<class ForwardIterator>
 auto total_variation(ForwardIterator first, ForwardIterator last)
 {
-    using Real = typename std::iterator_traits<ForwardIterator>::value_type;
+    using T = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
     BOOST_ASSERT_MSG(first != last && std::next(first) != last, "At least two samples are required to compute the total variation.");
     auto it = first;
-    Real tmp = *it;
-
-    if constexpr (std::is_unsigned<Real>::value)
+    if constexpr (std::is_unsigned<T>::value)
     {
+        T tmp = *it;
         double tv = 0;
         while (++it != last)
         {
@@ -41,9 +40,22 @@ auto total_variation(ForwardIterator first, ForwardIterator last)
         }
         return tv;
     }
+    else if constexpr (std::is_integral<T>::value)
+    {
+        double tv = 0;
+        double tmp = *it;
+        while(++it != last)
+        {
+            double tmp2 = *it;
+            tv += abs(tmp2 - tmp);
+            tmp = *it;
+        }
+        return tv;
+    }
     else
     {
-        Real tv = 0;
+        T tmp = *it;
+        T tv = 0;
         while (++it != last)
         {
             tv += abs(*it - tmp);
@@ -64,13 +76,17 @@ template<class ForwardIterator>
 auto sup_norm(ForwardIterator first, ForwardIterator last)
 {
     BOOST_ASSERT_MSG(first != last, "At least one value is required to compute the sup norm.");
-    using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
+    using T = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
-    if constexpr (boost::is_complex<RealOrComplex>::value ||
-                  boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_complex)
+    if constexpr (boost::is_complex<T>::value ||
+                  boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_complex)
     {
-        auto it = std::max_element(first, last, [](RealOrComplex a, RealOrComplex b) { return abs(b) > abs(a); });
+        auto it = std::max_element(first, last, [](T a, T b) { return abs(b) > abs(a); });
         return abs(*it);
+    }
+    else if constexpr (std::is_unsigned<T>::value)
+    {
+        return *std::max_element(first, last);
     }
     else
     {
@@ -95,13 +111,37 @@ inline auto sup_norm(Container const & v)
 template<class ForwardIterator>
 auto l1_norm(ForwardIterator first, ForwardIterator last)
 {
+    using T = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
-    decltype(abs(*first)) l1 = 0;
-    for (auto it = first; it != last; ++it)
+    if constexpr (std::is_unsigned<T>::value)
     {
-        l1 += abs(*first);
+        double l1 = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            l1 += *it;
+        }
+        return l1;
     }
-    return l1;
+    else if constexpr (std::is_integral<T>::value)
+    {
+        double l1 = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            double tmp = *it;
+            l1 += abs(tmp);
+        }
+        return l1;
+    }
+    else
+    {
+        decltype(abs(*first)) l1 = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            l1 += abs(*it);
+        }
+        return l1;
+    }
+
 }
 
 template<class Container>
@@ -114,15 +154,15 @@ inline auto l1_norm(Container const & v)
 template<class ForwardIterator>
 auto l2_norm(ForwardIterator first, ForwardIterator last)
 {
-    using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
+    using T = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
     using std::norm;
     using std::sqrt;
     using std::is_floating_point;
-    if constexpr (boost::is_complex<RealOrComplex>::value ||
-                  boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_complex)
+    if constexpr (boost::is_complex<T>::value ||
+                  boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_complex)
     {
-        typedef typename RealOrComplex::value_type Real;
+        typedef typename T::value_type Real;
         Real l2 = 0;
         for (auto it = first; it != last; ++it)
         {
@@ -141,22 +181,22 @@ auto l2_norm(ForwardIterator first, ForwardIterator last)
         }
         return result;
     }
-    else if constexpr (is_floating_point<RealOrComplex>::value ||
-                       boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_floating_point)
+    else if constexpr (is_floating_point<T>::value ||
+                       boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_floating_point)
     {
-        RealOrComplex l2 = 0;
+        T l2 = 0;
         for (auto it = first; it != last; ++it)
         {
             l2 += (*it)*(*it);
         }
-        RealOrComplex result = sqrt(l2);
+        T result = sqrt(l2);
         if (!isfinite(result))
         {
-            RealOrComplex a = sup_norm(first, last);
+            T a = sup_norm(first, last);
             l2 = 0;
             for (auto it = first; it != last; ++it)
             {
-                RealOrComplex tmp = *it/a;
+                T tmp = *it/a;
                 l2 += tmp*tmp;
             }
             return a*sqrt(l2);
@@ -286,9 +326,9 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, unsigned p)
 
         for (auto it = first; it != last; ++it)
         {
-            lp += pow(abs(*it), p);
+            double tmp = *it;
+            lp += pow(abs(tmp), p);
         }
-
         double result = pow(lp, 1.0/double(p));
         if (!isfinite(result))
         {
@@ -296,7 +336,8 @@ auto lp_norm(ForwardIterator first, ForwardIterator last, unsigned p)
             lp = 0;
             for (auto it = first; it != last; ++it)
             {
-                lp += pow(abs(*it)/a, p);
+                double tmp = *it;
+                lp += pow(abs(tmp)/a, p);
             }
             result = a*pow(lp, double(1)/double(p));
         }
@@ -319,14 +360,15 @@ auto lp_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator 
     using std::is_floating_point;
     using std::isfinite;
     using RealOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
+    auto it1 = first1;
+    auto it2 = first2;
+
     if constexpr (boost::is_complex<RealOrComplex>::value ||
                   boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_complex)
     {
         using Real = typename RealOrComplex::value_type;
         using std::norm;
         Real dist = 0;
-        auto it1 = first1;
-        auto it2 = first2;
         while(it1 != last1)
         {
             auto tmp = *it1++ - *it2++;
@@ -338,27 +380,24 @@ auto lp_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator 
                        boost::multiprecision::number_category<RealOrComplex>::value == boost::multiprecision::number_kind_floating_point)
     {
         RealOrComplex dist = 0;
-        auto it1 = first1;
-        auto it2 = first2;
         while(it1 != last1)
         {
             auto tmp = *it1++ - *it2++;
             dist += pow(abs(tmp), p);
         }
-
         return pow(dist, RealOrComplex(1)/RealOrComplex(p));
     }
     else
     {
-        BOOST_ASSERT_MSG(p >= 0, "For p < 0, the lp norm is not a norm");
         double dist = 0;
-
-        auto it1 = first1;
-        auto it2 = first2;
         while(it1 != last1)
         {
-            double tmp = *it1++ - *it2++;
-            dist += pow(abs(tmp), p);
+            double tmp1 = *it1++;
+            double tmp2 = *it2++;
+            // Naively you'd expect the integer subtraction to be faster,
+            // but this can overflow or wraparound:
+            //double tmp = *it1++ - *it2++;
+            dist += pow(abs(tmp1 - tmp2), p);
         }
         return pow(dist, 1.0/double(p));
     }
@@ -400,11 +439,8 @@ auto l1_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator 
         }
         return sum;
     }
-    else
+    else if constexpr (std::is_unsigned<T>::value)
     {
-        // Why choose double precision?
-        // First, consistency: l2 and lp distance cannot be returned as floating point types.
-        // Second, if the type is a small integer type (like uint8_t), then the result will overflow.
         double sum = 0;
         while(it1 != last1)
         {
@@ -421,6 +457,22 @@ auto l1_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator 
         }
         return sum;
     }
+    else if constexpr (std::is_integral<T>::value)
+    {
+        double sum = 0;
+        while(it1 != last1)
+        {
+            double x1 = *it1++;
+            double x2 = *it2++;
+            sum += abs(x1-x2);
+        }
+        return sum;
+    }
+    else
+    {
+        BOOST_ASSERT_MSG(false, "Could not recognize type.");
+    }
+
 }
 
 template<class Container>
@@ -464,7 +516,7 @@ auto l2_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator 
         }
         return sqrt(sum);
     }
-    else // integral values:
+    else if constexpr (std::is_unsigned<T>::value)
     {
         double sum = 0;
         while(it1 != last1)
@@ -481,6 +533,18 @@ auto l2_distance(ForwardIterator first1, ForwardIterator last1, ForwardIterator 
                 double tmp = x2 - x1;
                 sum += tmp*tmp;
             }
+        }
+        return sqrt(sum);
+    }
+    else
+    {
+        double sum = 0;
+        while(it1 != last1)
+        {
+            double x1 = *it1++;
+            double x2 = *it2++;
+            double tmp = x1-x2;
+            sum += tmp*tmp;
         }
         return sqrt(sum);
     }
