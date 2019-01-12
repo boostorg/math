@@ -29,10 +29,80 @@ using boost::multiprecision::cpp_complex_50;
  * 5) Does it work with complex data if complex data is sensible?
  */
 
+ // To stress test, set global_seed = 0, global_size = huge.
+ static const constexpr size_t global_seed = 0;
+ static const constexpr size_t global_size = 128;
+
+template<class T>
+std::vector<T> generate_random_vector(size_t size, size_t seed)
+{
+    if (seed == 0)
+    {
+        std::random_device rd;
+        seed = rd();
+    }
+    std::vector<T> v(size);
+
+    std::mt19937 gen(seed);
+
+    if constexpr (std::is_floating_point<T>::value)
+    {
+        std::normal_distribution<T> dis(0, 1);
+        for (size_t i = 0; i < v.size(); ++i)
+        {
+         v[i] = dis(gen);
+        }
+        return v;
+    }
+    else if constexpr (std::is_integral<T>::value)
+    {
+        // Rescaling by larger than 2 is UB!
+        std::uniform_int_distribution<T> dis(std::numeric_limits<T>::lowest()/2, std::numeric_limits<T>::max()/2);
+        for (size_t i = 0; i < v.size(); ++i)
+        {
+         v[i] = dis(gen);
+        }
+        return v;
+    }
+    else if constexpr (boost::is_complex<T>::value)
+    {
+        std::normal_distribution<typename T::value_type> dis(0, 1);
+        for (size_t i = 0; i < v.size(); ++i)
+        {
+            v[i] = {dis(gen), dis(gen)};
+        }
+        return v;
+    }
+    else if constexpr (boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_complex)
+    {
+        std::normal_distribution<long double> dis(0, 1);
+        for (size_t i = 0; i < v.size(); ++i)
+        {
+            v[i] = {dis(gen), dis(gen)};
+        }
+        return v;
+    }
+    else if constexpr (boost::multiprecision::number_category<T>::value == boost::multiprecision::number_kind_floating_point)
+    {
+        std::normal_distribution<long double> dis(0, 1);
+        for (size_t i = 0; i < v.size(); ++i)
+        {
+            v[i] = dis(gen);
+        }
+        return v;
+    }
+    else
+    {
+        BOOST_ASSERT_MSG(false, "Could not identify type for random vector generation.");
+        return v;
+    }
+}
+
+
 template<class Z>
 void test_integer_mean()
 {
-    double tol = std::numeric_limits<double>::epsilon();
+    double tol = 100*std::numeric_limits<double>::epsilon();
     std::vector<Z> v{1,2,3,4,5};
     double mu = boost::math::tools::mean(v);
     BOOST_TEST(abs(mu - 3) < tol);
@@ -41,6 +111,17 @@ void test_integer_mean()
     std::array<Z, 5> w{1,2,3,4,5};
     mu = boost::math::tools::mean(w);
     BOOST_TEST(abs(mu - 3) < tol);
+
+    v = generate_random_vector<Z>(global_size, global_seed);
+    Z scale = 2;
+
+    double m1 = scale*boost::math::tools::mean(v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    double m2 = boost::math::tools::mean(v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
 template<class Real>
@@ -82,6 +163,15 @@ void test_mean()
     mu = boost::math::tools::mean(w.cbegin(), w.cend());
     BOOST_TEST(abs(mu - 4) < tol);
 
+    v = generate_random_vector<Real>(global_size, global_seed);
+    Real scale = 2;
+    Real m1 = scale*boost::math::tools::mean(v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    Real m2 = boost::math::tools::mean(v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
 template<class Complex>
@@ -128,6 +218,16 @@ void test_variance()
     std::forward_list<Real> l{0,1,0,1,0,1,0,1};
     sigma_sq = boost::math::tools::variance(l.begin(), l.end());
     BOOST_TEST(abs(sigma_sq - 1.0/4.0) < tol);
+
+    v = generate_random_vector<Real>(global_size, global_seed);
+    Real scale = 2;
+    Real m1 = scale*scale*boost::math::tools::variance(v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    Real m2 = boost::math::tools::variance(v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
 template<class Z>
@@ -141,6 +241,16 @@ void test_integer_variance()
     std::forward_list<Z> l{0,1,0,1,0,1,0,1};
     sigma_sq = boost::math::tools::variance(l.begin(), l.end());
     BOOST_TEST(abs(sigma_sq - 1.0/4.0) < tol);
+
+    v = generate_random_vector<Z>(global_size, global_seed);
+    Z scale = 2;
+    double m1 = scale*scale*boost::math::tools::variance(v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    double m2 = boost::math::tools::variance(v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
 template<class Z>
@@ -164,6 +274,17 @@ void test_integer_skewness()
     std::forward_list<Z> v2{0,0,0,0,5};
     skew = boost::math::tools::skewness(v);
     BOOST_TEST(abs(skew - 3.0/2.0) < tol);
+
+
+    v = generate_random_vector<Z>(global_size, global_seed);
+    Z scale = 2;
+    double m1 = boost::math::tools::skewness(v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    double m2 = boost::math::tools::skewness(v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 
 }
 
@@ -192,6 +313,16 @@ void test_skewness()
     std::forward_list<Real> w2{0,0,0,0,5};
     skew = boost::math::tools::skewness(w2);
     BOOST_TEST(abs(skew - Real(3)/Real(2)) < tol);
+
+    v = generate_random_vector<Real>(global_size, global_seed);
+    Real scale = 2;
+    Real m1 = boost::math::tools::skewness(v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    Real m2 = boost::math::tools::skewness(v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
 template<class Real>
@@ -236,6 +367,15 @@ void test_kurtosis()
     auto excess_kurtosis = boost::math::tools::excess_kurtosis(v3);
     BOOST_TEST(abs(excess_kurtosis + 6.0/5.0) < 0.2);
 
+    v = generate_random_vector<Real>(global_size, global_seed);
+    Real scale = 2;
+    Real m1 = boost::math::tools::kurtosis(v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    Real m2 = boost::math::tools::kurtosis(v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 
     // This test only passes when there are a large number of samples.
     // Otherwise, the distribution doesn't generate enough outliers to give,
@@ -268,6 +408,16 @@ void test_integer_kurtosis()
     // mu = 1, sigma^2 = 4, sigma = 2, skew = 3/2, kurtosis = 13/4
     kurt = boost::math::tools::kurtosis(v);
     BOOST_TEST(abs(kurt - 13.0/4.0) < tol);
+
+    v = generate_random_vector<Z>(global_size, global_seed);
+    Z scale = 2;
+    double m1 = boost::math::tools::kurtosis(v);
+    for (auto & x : v)
+    {
+        x *= scale;
+    }
+    double m2 = boost::math::tools::kurtosis(v);
+    BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
 }
 
 template<class Real>
@@ -492,6 +642,42 @@ void test_gini_coefficient()
 
 }
 
+template<class Z>
+void test_integer_gini_coefficient()
+{
+    double tol = std::numeric_limits<double>::epsilon();
+    std::vector<Z> v{1,0,0};
+    double gini = boost::math::tools::gini_coefficient(v.begin(), v.end());
+    double expected = 2.0/3.0;
+    BOOST_TEST(abs(gini - expected) < tol);
+
+    gini = boost::math::tools::gini_coefficient(v);
+    BOOST_TEST(abs(gini - expected) < tol);
+
+    v[0] = 1;
+    v[1] = 1;
+    v[2] = 1;
+    gini = boost::math::tools::gini_coefficient(v.begin(), v.end());
+    BOOST_TEST(abs(gini) < tol);
+
+    v[0] = 0;
+    v[1] = 0;
+    v[2] = 0;
+    gini = boost::math::tools::gini_coefficient(v.begin(), v.end());
+    BOOST_TEST(abs(gini) < tol);
+
+    std::array<Z, 3> w{0,0,0};
+    gini = boost::math::tools::gini_coefficient(w);
+    BOOST_TEST(abs(gini) < tol);
+
+    boost::numeric::ublas::vector<Z> w1(3);
+    w1[0] = 1;
+    w1[1] = 1;
+    w1[2] = 1;
+    gini = boost::math::tools::gini_coefficient(w1);
+    BOOST_TEST(abs(gini) < tol);
+}
+
 int main()
 {
     test_mean<float>();
@@ -512,6 +698,7 @@ int main()
     test_variance<cpp_bin_float_50>();
 
     test_integer_variance<int>();
+    test_integer_variance<uint8_t>();
 
     test_skewness<float>();
     test_skewness<double>();
@@ -519,6 +706,12 @@ int main()
     test_skewness<cpp_bin_float_50>();
 
     test_integer_skewness<int>();
+    test_integer_skewness<uint8_t>();
+
+    test_first_four_moments<float>();
+    test_first_four_moments<double>();
+    test_first_four_moments<long double>();
+    test_first_four_moments<cpp_bin_float_50>();
 
     test_kurtosis<float>();
     test_kurtosis<double>();
@@ -526,27 +719,28 @@ int main()
     // Kinda expensive:
     //test_kurtosis<cpp_bin_float_50>();
 
-    test_first_four_moments<float>();
-    test_first_four_moments<double>();
-    test_first_four_moments<long double>();
-    test_first_four_moments<cpp_bin_float_50>();
-
     test_integer_kurtosis<int>();
+    test_integer_kurtosis<uint8_t>();
 
     test_median<float>();
     test_median<double>();
     test_median<long double>();
     test_median<cpp_bin_float_50>();
+    test_median<int>();
 
     test_median_absolute_deviation<float>();
     test_median_absolute_deviation<double>();
     test_median_absolute_deviation<long double>();
     test_median_absolute_deviation<cpp_bin_float_50>();
+    test_median_absolute_deviation<int>();
 
     test_gini_coefficient<float>();
     test_gini_coefficient<double>();
     test_gini_coefficient<long double>();
     test_gini_coefficient<cpp_bin_float_50>();
+
+    test_integer_gini_coefficient<unsigned>();
+    test_integer_gini_coefficient<int>();
 
     test_sample_gini_coefficient<float>();
     test_sample_gini_coefficient<double>();

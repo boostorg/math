@@ -294,24 +294,46 @@ auto gini_coefficient(RandomAccessIterator first, RandomAccessIterator last)
     BOOST_ASSERT_MSG(first != last && std::next(first) != last, "Computation of the Gini coefficient requires at least two samples.");
 
     std::sort(first, last);
-
-    Real i = 1;
-    Real num = 0;
-    Real denom = 0;
-    for (auto it = first; it != last; ++it)
+    if constexpr (std::is_integral<Real>::value)
     {
-        num += *it*i;
-        denom += *it;
-        ++i;
-    }
+        double i = 1;
+        double num = 0;
+        double denom = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            num += *it*i;
+            denom += *it;
+            ++i;
+        }
 
-    // If the l1 norm is zero, all elements are zero, so every element is the same.
-    if (denom == 0)
+        // If the l1 norm is zero, all elements are zero, so every element is the same.
+        if (denom == 0)
+        {
+            return double(0);
+        }
+
+        return ((2*num)/denom - i)/(i-1);
+    }
+    else
     {
-        return Real(0);
-    }
+        Real i = 1;
+        Real num = 0;
+        Real denom = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            num += *it*i;
+            denom += *it;
+            ++i;
+        }
 
-    return ((2*num)/denom - i)/(i-1);
+        // If the l1 norm is zero, all elements are zero, so every element is the same.
+        if (denom == 0)
+        {
+            return Real(0);
+        }
+
+        return ((2*num)/denom - i)/(i-1);
+    }
 }
 
 template<class RandomAccessContainer>
