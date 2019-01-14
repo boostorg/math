@@ -6,7 +6,7 @@
 #ifndef BOOST_MATH_TOOLS_CONDITION_NUMBERS_HPP
 #define BOOST_MATH_TOOLS_CONDITION_NUMBERS_HPP
 #include <cmath>
-#include <boost/math/differentiation/finite_difference.hpp>
+#include <boost/math/differentiation/autodiff.hpp>
 
 namespace boost::math::tools {
 
@@ -78,13 +78,15 @@ private:
 };
 
 template<class F, class Real>
-auto condition_number(F const & f, Real const & x)
+auto condition_number(F f, Real const & x)
 {
     using std::abs;
-    // Looking forward to using autodifferentiation here!
-    Real fp = boost::math::differentiation::finite_difference_derivative(f, x);
-    Real fx = f(x);
-    if (fx == 0) {
+    boost::math::differentiation::autodiff::variable<Real, 1> ax(x);
+    auto y = f(ax);
+    Real fx = y.derivative(0);
+    Real fp = y.derivative(1);
+    if (fx == 0)
+    {
         if (x==0 || fp==0)
         {
             return std::numeric_limits<Real>::quiet_NaN();
@@ -94,12 +96,16 @@ auto condition_number(F const & f, Real const & x)
     return abs(x*fp/fx);
 }
 
+
 template<class F, class Real>
 auto mollified_condition_number(F const & f, Real const & x)
 {
     using std::abs;
-    Real fp = boost::math::differentiation::finite_difference_derivative(f, x);
-    Real absfx = abs(f(x));
+    boost::math::differentiation::autodiff::variable<Real, 1> ax(x);
+    auto y = f(ax);
+    Real fx = y.derivative(0);
+    Real fp = y.derivative(1);
+    Real absfx = abs(fx);
 
     if (absfx < 1)
     {
@@ -115,7 +121,5 @@ auto mollified_condition_number(F const & f, Real const & x)
     return absx*abs(fp)/absfx;
 }
 
-
-
-}
+} // namespaces
 #endif

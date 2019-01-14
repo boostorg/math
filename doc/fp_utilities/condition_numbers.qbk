@@ -32,10 +32,10 @@ public:
 };
 
 template<class F, class Real>
-auto condition_number(F const & f, Real const & x);
+auto condition_number(F f, Real const & x);
 
 template<class F, class Real>
-auto mollified_condition_number(F const & f, Real const & x);
+auto mollified_condition_number(F f, Real const & x);
 
 } // namespaces
 ``
@@ -92,10 +92,14 @@ The [@https://en.wikipedia.org/wiki/Condition_number condition number] of functi
 It is computed as follows:
 
     using boost::math::tools::condition_number;
-    auto f = [](double x)->double { return std::log(x); };
+    auto f = [](auto x) { return std::log(x); };
     double x = 1.125;
     double cond = condition_number(f, 1.125);
     // cond = 1/log(x)
+
+/Nota bene/ The syntax `(auto x)`, rather than the more nature `(double x)`, as the argument to the lambda is mandatory.
+This is because the function is passed to Boost's automatic differentiation utilities, and as such is evaluated with a different argument type
+than the passed type.
 
 If /x/ is close to a root of /f/, the condition number of function evaluation is always large.
 This is annoying and uninteresting behavior.
@@ -105,7 +109,7 @@ defined [@https://math.stackexchange.com/a/2486241/24355 here].
 Computation of the mollified condition number is similar to computing the condition number:
 
     using boost::math::tools::mollified_condition_number;
-    auto f = [](double x)->double { return std::log(x); };
+    auto f = [](auto x) { return std::log(x); };
     double x = 1.125;
     double cond = mollified_condition_number(f, 1.125);
 
