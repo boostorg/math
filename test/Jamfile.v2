@@ -1233,6 +1233,7 @@ test-suite misc :
    [ run  compile_test/numerical_differentiation_incl_test.cpp compile_test_main  : : : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ compile  compile_test/numerical_differentiation_concept_test.cpp  : [ requires cxx11_auto_declarations cxx11_constexpr ] ]
    [ run __temporary_test.cpp test_instances//test_instances : : : <test-info>always_show_run_output <pch>off ]
+   [ run test_autodiff.cpp ../../test/build//boost_unit_test_framework : : : [ requires cxx17_if_constexpr ] ]
 ;
 
 build-project ../example ;
