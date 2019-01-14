@@ -29,7 +29,7 @@
         Real upper_limit(sqrt(boost::math::tools::max_value<Real>())), diff;
         Real lower_limit(1 / upper_limit);
         int log_scaling_factor = boost::math::itrunc(boost::math::tools::log_max_value<Real>()) - 2;
-        Real scaling_factor = exp(log_scaling_factor);
+        Real scaling_factor = exp(Real(log_scaling_factor));
         Real term_m1 = 0;
         int local_scaling = 0;
 
@@ -275,7 +275,7 @@
         //
         if (result.second * boost::math::policies::get_epsilon<Real, Policy>() > abs(result.first))
         {
-           return boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that fewer than half the bits in the result are correct, last result was %1%", result.first * exp(log_scale), pol);
+           return boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that fewer than half the bits in the result are correct, last result was %1%", Real(result.first * exp(T(log_scale))), pol);
         }
         return result.first;
      }

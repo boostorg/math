@@ -177,7 +177,7 @@
        second = detail::hypergeometric_1F1_imp(ak, b, z, pol, scaling2);
        if (scaling1 != scaling2)
        {
-          second *= exp(scaling2 - scaling1);
+          second *= exp(T(scaling2 - scaling1));
        }
        log_scaling += scaling1;
     }
@@ -206,7 +206,7 @@
     --integer_part;
     if (scaling1 != scaling2)
     {
-       second *= exp(scaling2 - scaling1);
+       second *= exp(T(scaling2 - scaling1));
     }
     log_scaling += scaling1;
 
@@ -230,7 +230,7 @@
     ++integer_part;
     if (scaling1 != scaling2)
     {
-       second *= exp(scaling2 - scaling1);
+       second *= exp(T(scaling2 - scaling1));
     }
     log_scaling += scaling1;
 
@@ -259,7 +259,7 @@
     ++integer_part;
     if (scaling1 != scaling2)
     {
-       second *= exp(scaling2 - scaling1);
+       second *= exp(T(scaling2 - scaling1));
     }
     log_scaling += scaling1;
 
@@ -290,7 +290,7 @@
 
      if (log_scaling2 != log_scaling)
      {
-        second *= exp(log_scaling2 - log_scaling);
+        second *= exp(T(log_scaling2 - log_scaling));
      }
 
      //std::cout << first * exp(boost::multiprecision::mpfr_float(log_scaling)) << std::endl;
@@ -299,7 +299,7 @@
      if ((fabs(first) > 1.0e3) || (fabs(first) < 1.0e-3))
      {
         int rescaling = itrunc(floor(log(fabs(first))));
-        T scale = exp(-rescaling);
+        T scale = exp(T(-rescaling));
 
         first *= scale;
         second *= scale;
@@ -331,12 +331,12 @@
      //
      int scaling1(0), scaling2(0);
      T first, second;
-     first = boost::math::detail::hypergeometric_1F1_imp(a, b + integer_part, z, pol, scaling1);
+     first = boost::math::detail::hypergeometric_1F1_imp(a, T(b + integer_part), z, pol, scaling1);
      --integer_part;
-     second = boost::math::detail::hypergeometric_1F1_imp(a, b + integer_part, z, pol, scaling2);
+     second = boost::math::detail::hypergeometric_1F1_imp(a, T(b + integer_part), z, pol, scaling2);
      if (scaling1 != scaling2)
      {
-        second *= exp(scaling2 - scaling1);
+        second *= exp(T(scaling2 - scaling1));
      }
      log_scaling += scaling1;
 

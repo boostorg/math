@@ -80,7 +80,6 @@
            BOOST_MATH_STD_USING
            T result = term * M;
            term *= b_pochhammer * x_k_power / ++n;
-           T t2 = boost::math::rising_factorial(1 - b_, n) * pow(-k / z_, n) / boost::math::factorial<T>(n);
            ++b_pochhammer;
            --b_minus_n;
            T M2 = (M_next * b_minus_n * (1 - b_minus_n - z_) + z_ * (b_minus_n - a_) * M) / (-b_minus_n * (b_minus_n - 1));
@@ -195,7 +194,7 @@
            : term(1), b_minus_a_plus_n(b - a), a_(a), b_(b), z_(z), n(0), k(k_)
         {
            M = boost::math::detail::hypergeometric_1F1_imp(a, b, z, pol);
-           M_next = boost::math::detail::hypergeometric_1F1_imp(a - 1, b, z, pol);
+           M_next = boost::math::detail::hypergeometric_1F1_imp(T(a - 1), b, z, pol);
         }
         T operator()()
         {

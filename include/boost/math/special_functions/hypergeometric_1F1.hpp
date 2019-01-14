@@ -57,7 +57,7 @@ namespace boost { namespace math { namespace detail {
          // If k is too large we destroy all the digits in the result:
          if ((k > 0) && (k < 50))
          {
-            return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, z - k, k, pol);
+            return boost::math::detail::hypergeometric_1f1_recurrence_on_z_minus_zero(a, b, T(z - k), k, pol);
          }
          else if (z < b)
             return hypergeometric_1F1_backward_recurrence_for_negative_a(a, b, z, pol, function, log_scaling);
@@ -79,7 +79,7 @@ namespace boost { namespace math { namespace detail {
                // number of iterations.
                //
                T sqr = 4 * a * z + b * b - 2 * b * z + z * z;
-               T iterations_to_convergence = sqr > 0 ? 0.5f * (-sqrt(sqr) - b + z) : -a - b;
+               T iterations_to_convergence = sqr > 0 ? T(0.5f * (-sqrt(sqr) - b + z)) : T(-a - b);
                if((std::max)(a, b) + iterations_to_convergence > -300)
                   return hypergeometric_1F1_backwards_recursion_on_b_for_negative_a(a, b, z, pol, function, log_scaling);
             }
@@ -137,7 +137,7 @@ namespace boost { namespace math { namespace detail {
          // https://www.wolframalpha.com/input/?i=solve+(a%2Bn)z+%2F+((b%2Bn)n)+%3D%3D+1+for+n
          //
          T sqr = 4 * a * z + b * b - 2 * b * z + z * z;
-         T iterations_to_convergence = sqr > 0 ? 0.5f * (-sqrt(sqr) - b + z) : -a + b;
+         T iterations_to_convergence = sqr > 0 ? T(0.5f * (-sqrt(sqr) - b + z)) : T(-a + b);
          if (iterations_to_convergence < 0)
             iterations_to_convergence = 0.5f * (sqrt(sqr) - b + z);
          if (a + iterations_to_convergence < -50)
@@ -235,7 +235,7 @@ namespace boost { namespace math { namespace detail {
       {
          // a is tiny compared to b, and z < 0
          // 13.3.6 appears to be the most efficient and often the most accurate method.
-         T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, -z, a, pol, log_scaling);
+         T r = boost::math::detail::hypergeometric_1F1_AS_13_3_6(b_minus_a, b, T(-z), a, pol, log_scaling);
          int scale = boost::math::itrunc(z, pol);
          log_scaling += scale;
          return r * exp(z - scale);
@@ -371,7 +371,7 @@ namespace boost { namespace math { namespace detail {
          return hypergeometric_1F1_divergent_fallback(a, b, z, pol, log_scaling);
       }
 
-      if (hypergeometric_1F1_is_13_3_6_region(b_minus_a, b, -z))
+      if (hypergeometric_1F1_is_13_3_6_region(b_minus_a, b, T(-z)))
       {
          // b_minus_a is tiny compared to b, and -z < 0
          // 13.3.6 appears to be the most efficient and often the most accurate method.
@@ -384,10 +384,10 @@ namespace boost { namespace math { namespace detail {
          // Series is initially divergent and slow to converge, see if applying
          // Kummer's relation can improve things:
          //
-         if (is_convergent_negative_z_series(b_minus_a, b, -z))
+         if (is_convergent_negative_z_series(b_minus_a, b, T(-z)))
          {
             int scaling = itrunc(z);
-            T r = exp(z - scaling) * detail::hypergeometric_1F1_checked_series_impl(b_minus_a, b, -z, pol, log_scaling);
+            T r = exp(z - scaling) * detail::hypergeometric_1F1_checked_series_impl(b_minus_a, b, T(-z), pol, log_scaling);
             log_scaling += scaling;
             return r;
          }

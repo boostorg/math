@@ -97,7 +97,7 @@
         // This is going to be a mighty big number:
         //
         int local_scaling = 0;
-        T M2 = boost::math::detail::hypergeometric_1F1_imp(1 + a - b, 2 - b, z, pol, local_scaling);
+        T M2 = boost::math::detail::hypergeometric_1F1_imp(T(1 + a - b), T(2 - b), z, pol, local_scaling);
         log_scaling -= local_scaling; // all the M2 terms are in the denominator
         //
         // Since a, b and z are all likely to be large we need the Wronksian
@@ -163,20 +163,20 @@
         // This is going to be a mighty big number:
         //
         int local_scaling = 0;
-        T M2 = boost::math::detail::hypergeometric_1F1_imp(1 + a - b, 2 - b, z, pol, local_scaling);
+        T M2 = boost::math::detail::hypergeometric_1F1_imp(T(1 + a - b), T(2 - b), z, pol, local_scaling);
         log_scaling -= local_scaling; // all the M2 terms are in the denominator
         //
         // Let M3 = M(1+a-b + 1, 2-b + 1, z)
         // We don't use the ratio to get this as it's not clear that it's reliable:
         //
         int local_scaling2 = 0;
-        T M3 = boost::math::detail::hypergeometric_1F1_imp(2 + a - b, 3 - b, z, pol, local_scaling2);
+        T M3 = boost::math::detail::hypergeometric_1F1_imp(T(2 + a - b), T(3 - b), z, pol, local_scaling2);
         //
         // M2 and M3 must be identically scaled:
         //
         if (local_scaling != local_scaling2)
         {
-           M3 *= exp(local_scaling2 - local_scaling);
+           M3 *= exp(T(local_scaling2 - local_scaling));
         }
         //
         // Get the RHS of the Wronksian:

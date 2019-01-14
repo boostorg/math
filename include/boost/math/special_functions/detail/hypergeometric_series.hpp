@@ -242,7 +242,7 @@
      T lower_limit(1 / upper_limit);
      unsigned n = 0;
      int log_scaling_factor = boost::math::itrunc(boost::math::tools::log_max_value<T>()) - 2;
-     T scaling_factor = exp(log_scaling_factor);
+     T scaling_factor = exp(T(log_scaling_factor));
      T term_m1 = 0;
      int local_scaling = 0;
      //

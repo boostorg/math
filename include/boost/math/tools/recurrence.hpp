@@ -49,6 +49,20 @@ namespace boost {
                int k;
             };
 
+            template <class R, class T>
+            struct recurrence_reverser
+            {
+               recurrence_reverser(const R& r) : r(r) {}
+               boost::math::tuple<T, T, T> operator()(int i)
+               {
+                  using std::swap;
+                  boost::math::tuple<T, T, T> t = r(-i);
+                  swap(boost::math::get<0>(t), boost::math::get<2>(t));
+                  return t;
+               }
+               R r;
+            };
+
          }  // namespace detail
 
          //
@@ -56,7 +70,7 @@ namespace boost {
          // a f_n-1 + b f_n + c f_n+1 = 0
          // returns the ratio f_n / f_n-1
          //
-         // Recurrence: a funtor that returns a tuple of the factors (a,b,c).
+         // Recurrence: a functor that returns a tuple of the factors (a,b,c).
          // factor:     Convergence criteria, should be no less than machine epsilon.
          // max_iter:   Maximum iterations to use solving the continued fraction.
          //
@@ -66,6 +80,29 @@ namespace boost {
             detail::function_ratio_from_backwards_recurrence_fraction<Recurrence> f(r);
             return boost::math::tools::continued_fraction_a(f, factor, max_iter);
          }
+
+         //
+         // Given a stable forwards recurrence relation:
+         // a f_n-1 + b f_n + c f_n+1 = 0
+         // returns the ratio f_n / f_n+1
+         //
+         // Note that in most situations where this would be used, we're relying on
+         // pseudo-convergence, as in most cases f_n will not be minimal as N -> -INF
+         // as long as we reach convergence on the continued-fraction before f_n
+         // switches behaviour, we should be fine.
+         //
+         // Recurrence: a functor that returns a tuple of the factors (a,b,c).
+         // factor:     Convergence criteria, should be no less than machine epsilon.
+         // max_iter:   Maximum iterations to use solving the continued fraction.
+         //
+         template <class Recurrence, class T>
+         T function_ratio_from_forwards_recurrence(const Recurrence& r, const T& factor, boost::uintmax_t& max_iter)
+         {
+            boost::math::tools::detail::function_ratio_from_backwards_recurrence_fraction<boost::math::tools::detail::recurrence_reverser<Recurrence, T> > f(r);
+            return boost::math::tools::continued_fraction_a(f, factor, max_iter);
+         }
+
+
 
          // solves usual recurrence relation for homogeneous
          // difference equation in stable forward direction
@@ -83,6 +120,7 @@ namespace boost {
          {
             using std::swap;
             using std::fabs;
+            using std::exp;
             using boost::math::tuple;
             using boost::math::get;
 
@@ -99,7 +137,7 @@ namespace boost {
                {
                   // Rescale everything:
                   int log_scale = itrunc(log(fabs(third)));
-                  T scale = exp(-log_scale);
+                  T scale = exp(T(-log_scale));
                   second *= scale;
                   third *= scale;
                   *log_scaling += log_scale;
@@ -147,7 +185,7 @@ namespace boost {
                {
                   // Rescale everything:
                   int log_scale = itrunc(log(fabs(next)));
-                  T scale = exp(-log_scale);
+                  T scale = exp(T(-log_scale));
                   second *= scale;
                   next *= scale;
                   *log_scaling += log_scale;

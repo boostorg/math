@@ -118,7 +118,7 @@
               {
                  // Need to rescale!
                  int scale = itrunc(log(h), pol) + 1;
-                 h *= exp(-scale);
+                 h *= exp(T(-scale));
                  log_scaling += scale;
               }
               comparitor /= h;
@@ -191,7 +191,7 @@
               {
                  // Ooops, need to rescale h:
                  int rescale = boost::math::itrunc(log(fabs(h)));
-                 T scale = exp(-rescale);
+                 T scale = exp(T(-rescale));
                  h *= scale;
                  log_scaling += rescale;
               }
@@ -336,10 +336,10 @@
            // calculate a second 1F1 for a == 1 and recurse as normal:
            //
            int scale = 0;
-           T h2 = boost::math::detail::hypergeometric_1F1_generic_series(a_local + 1, b_local, z, pol, scale, "hypergeometric_1F1_large_series<%1%>(a,b,z)");
+           T h2 = boost::math::detail::hypergeometric_1F1_generic_series(T(a_local + 1), b_local, z, pol, scale, "hypergeometric_1F1_large_series<%1%>(a,b,z)");
            if (scale != log_scaling)
            {
-              h2 *= exp(scale - log_scaling);
+              h2 *= exp(T(scale - log_scaling));
            }
            boost::math::detail::hypergeometric_1F1_recurrence_a_coefficients<T> coef(a_local + 1, b_local, z);
            h = boost::math::tools::apply_recurrence_relation_forward(coef, a_shift - 1, h, h2, &log_scaling);
@@ -362,7 +362,7 @@
         //
         int b_shift = boost::math::itrunc(b - a);
         T b_local = b - b_shift;
-        T h = boost::math::detail::hypergeometric_1F1_AS_13_3_6(a, b_local, z, b_local - a, pol, log_scaling);
+        T h = boost::math::detail::hypergeometric_1F1_AS_13_3_6(a, b_local, z, T(b_local - a), pol, log_scaling);
         return hypergeometric_1F1_shift_on_b(h, a, b_local, z, b_shift, pol, log_scaling);
      }
 
@@ -392,7 +392,7 @@
         // Note that recurrence relations fail for very small b, and too many recurrences on a
         // will completely destroy all our digits:
         //
-        T cost = a + ((b < z) ? (z - b) : 0);
+        T cost = a + ((b < z) ? T(z - b) : T(0));
         if((b > 1) && (cost < current_cost))
         {
            current_method = method_shifted_series;
@@ -402,7 +402,7 @@
         // Cost for gamma function method is the number of recurrences required to move it
         // into a convergent zone, note that recurrence relations fail for very small b:
         //
-        T b_shift = (b * 2 < z ? 0 : b - z / 2);
+        T b_shift = (b * 2 < z ? T(0) : T(b - z / 2));
         cost = fabs(b_shift) + fabs(b - b_shift - a);
         if((b > 1) && (cost <= current_cost))
         {
@@ -427,7 +427,7 @@
         case method_shifted_series:
            return detail::hypergeometric_1F1_large_series(a, b, z, pol, log_scaling);
         case method_gamma:
-           return detail::hypergeometric_1F1_large_igamma(a, b, z, b - a, pol, log_scaling);
+           return detail::hypergeometric_1F1_large_igamma(a, b, z, T(b - a), pol, log_scaling);
         case method_bessel:
            return detail::hypergeometric_1F1_large_13_3_6_series(a, b, z, pol, log_scaling);
         }
