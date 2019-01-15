@@ -538,6 +538,9 @@ test-suite special_fun :
    [ run test_policy_sf.cpp ../../test/build//boost_unit_test_framework  ]
    [ run test_long_double_support.cpp ../../test/build//boost_unit_test_framework
       : : : [ check-target-builds ../config//has_long_double_support "long double support" : : <build>no ] ]
+   [ run test_recurrence.cpp : : : <define>TEST=1 : test_recurrence_1 ]
+   [ run test_recurrence.cpp : : : <define>TEST=2 release : test_recurrence_2 ]
+   [ run test_recurrence.cpp : : : <define>TEST=3 release : test_recurrence_3 ]
 ;
 
 test-suite distribution_tests :

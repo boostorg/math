@@ -63,6 +63,22 @@ namespace boost {
                R r;
             };
 
+            template <class Recurrence>
+            struct recurrence_offsetter
+            {
+               typedef decltype(std::declval<Recurrence&>()(0)) result_type;
+               recurrence_offsetter(Recurrence const& rr, int offset) : r(rr), k(offset) {}
+               result_type operator()(int i)
+               {
+                  return r(i + k);
+               }
+            private:
+               Recurrence r;
+               int k;
+            };
+
+
+
          }  // namespace detail
 
          //
@@ -200,6 +216,90 @@ namespace boost {
 
             return second;
          }
+
+         template <class Recurrence>
+         struct forward_recurrence_iterator
+         {
+            typedef typename boost::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
+
+            forward_recurrence_iterator(const Recurrence& r, value_type f_n_minus_1, value_type f_n)
+               : f_n_minus_1(f_n_minus_1), f_n(f_n), coef(r), k(0) {}
+
+            forward_recurrence_iterator(const Recurrence& r, value_type f_n)
+               : f_n(f_n), coef(r), k(0)
+            {
+               boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<boost::math::policies::policy<> >();
+               f_n_minus_1 = f_n * boost::math::tools::function_ratio_from_forwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, -1), boost::math::tools::epsilon<value_type>() * 2, max_iter);
+               boost::math::policies::check_series_iterations<value_type>("forward_recurrence_iterator<>::forward_recurrence_iterator", max_iter, boost::math::policies::policy<>());
+            }
+
+            forward_recurrence_iterator& operator++()
+            {
+               using std::swap;
+               value_type a, b, c;
+               boost::math::tie(a, b, c) = coef(k);
+               value_type f_n_plus_1 = a * f_n_minus_1 / -c + b * f_n / -c;
+               swap(f_n_minus_1, f_n);
+               swap(f_n, f_n_plus_1);
+               ++k;
+               return *this;
+            }
+
+            forward_recurrence_iterator operator++(int)
+            {
+               forward_recurrence_iterator t(*this);
+               ++(*this);
+               return t;
+            }
+
+            value_type operator*() { return f_n; }
+
+            value_type f_n_minus_1, f_n;
+            Recurrence coef;
+            int k;
+         };
+
+         template <class Recurrence>
+         struct backward_recurrence_iterator
+         {
+            typedef typename boost::remove_reference<decltype(std::get<0>(std::declval<Recurrence&>()(0)))>::type value_type;
+
+            backward_recurrence_iterator(const Recurrence& r, value_type f_n_plus_1, value_type f_n)
+               : f_n_plus_1(f_n_plus_1), f_n(f_n), coef(r), k(0) {}
+
+            backward_recurrence_iterator(const Recurrence& r, value_type f_n)
+               : f_n(f_n), coef(r), k(0)
+            {
+               boost::uintmax_t max_iter = boost::math::policies::get_max_series_iterations<boost::math::policies::policy<> >();
+               f_n_plus_1 = f_n * boost::math::tools::function_ratio_from_backwards_recurrence(detail::recurrence_offsetter<Recurrence>(r, 1), boost::math::tools::epsilon<value_type>() * 2, max_iter);
+               boost::math::policies::check_series_iterations<value_type>("backward_recurrence_iterator<>::backward_recurrence_iterator", max_iter, boost::math::policies::policy<>());
+            }
+
+            backward_recurrence_iterator& operator++()
+            {
+               using std::swap;
+               value_type a, b, c;
+               boost::math::tie(a, b, c) = coef(k);
+               value_type f_n_minus_1 = c * f_n_plus_1 / -a + b * f_n / -a;
+               swap(f_n_plus_1, f_n);
+               swap(f_n, f_n_minus_1);
+               --k;
+               return *this;
+            }
+
+            backward_recurrence_iterator operator++(int)
+            {
+               backward_recurrence_iterator t(*this);
+               ++(*this);
+               return t;
+            }
+
+            value_type operator*() { return f_n; }
+
+            value_type f_n_plus_1, f_n;
+            Recurrence coef;
+            int k;
+         };
 
       }
    }
