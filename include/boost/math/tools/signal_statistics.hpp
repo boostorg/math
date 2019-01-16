@@ -72,30 +72,47 @@ inline auto sample_absolute_gini_coefficient(RandomAccessContainer & v)
 template<class ForwardIterator>
 auto hoyer_sparsity(const ForwardIterator first, const ForwardIterator last)
 {
-    using RealIntOrComplex = typename std::iterator_traits<ForwardIterator>::value_type;
+    using T = typename std::iterator_traits<ForwardIterator>::value_type;
     using std::abs;
     using std::sqrt;
     BOOST_ASSERT_MSG(first != last && std::next(first) != last, "Computation of the Hoyer sparsity requires at least two samples.");
 
-    decltype(abs(*first)) l1 = 0;
-    decltype(abs(*first)) l2 = 0;
-    decltype(abs(*first)) n = 0;
-    for (auto it = first; it != last; ++it)
+    if constexpr (std::is_unsigned<T>::value)
     {
-        decltype(abs(*first)) tmp = abs(*it);
-        l1 += tmp;
-        l2 += tmp*tmp;
-        n += 1;
-    }
-    if constexpr (std::is_integral<RealIntOrComplex>::value)
-    {
+        T l1 = 0;
+        T l2 = 0;
+        T n = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            l1 += *it;
+            l2 += (*it)*(*it);
+            n += 1;
+        }
+
         double rootn = sqrt(n);
         return (rootn - l1/sqrt(l2) )/ (rootn - 1);
     }
-    else
-    {
-        decltype(abs(*first)) rootn = sqrt(n);
-        return (rootn - l1/sqrt(l2) )/ (rootn - 1);
+    else {
+        decltype(abs(*first)) l1 = 0;
+        decltype(abs(*first)) l2 = 0;
+        decltype(abs(*first)) n = 0;
+        for (auto it = first; it != last; ++it)
+        {
+            decltype(abs(*first)) tmp = abs(*it);
+            l1 += tmp;
+            l2 += tmp*tmp;
+            n += 1;
+        }
+        if constexpr (std::is_integral<T>::value)
+        {
+            double rootn = sqrt(n);
+            return (rootn - l1/sqrt(l2) )/ (rootn - 1);
+        }
+        else
+        {
+            decltype(abs(*first)) rootn = sqrt(n);
+            return (rootn - l1/sqrt(l2) )/ (rootn - 1);
+        }
     }
 }
 
@@ -298,7 +315,7 @@ auto m2m4_snr_estimator(ForwardIterator first, ForwardIterator last, decltype(*f
     else
     {
         BOOST_ASSERT_MSG(false, "The M2M4 estimator has not been implemented for this type.");
-        return *first;
+        return std::numeric_limits<Real>::quiet_NaN();
     }
 }
 

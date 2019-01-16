@@ -304,6 +304,7 @@ int main()
     test_hoyer_sparsity<cpp_bin_float_50>();
 
     test_integer_hoyer_sparsity<int>();
+    test_integer_hoyer_sparsity<unsigned>();
 
     test_complex_hoyer_sparsity<std::complex<float>>();
     test_complex_hoyer_sparsity<std::complex<double>>();
@@ -316,6 +317,7 @@ int main()
     test_oracle_snr<cpp_bin_float_50>();
 
     test_integer_oracle_snr<int>();
+    test_integer_oracle_snr<unsigned>();
 
     test_complex_oracle_snr<std::complex<float>>();
     test_complex_oracle_snr<std::complex<double>>();

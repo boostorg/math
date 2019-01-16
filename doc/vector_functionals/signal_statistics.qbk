@@ -61,7 +61,7 @@ The file `boost/math/tools/signal_statistics.hpp` is a set of facilities for com
 Our examples use `std::vector<double>` to hold the data, but this not required.
 In general, you can store your data in an Eigen array, and Armadillo vector, `std::array`, and for many of the routines, a `std::forward_list`.
 These routines are usable in float, double, long double, and Boost.Multiprecision precision, as well as their complex extensions whenever the computation is well-defined.
-For certain operations (total variation, for example) integer inputs are supported.
+
 
 [heading Absolute Gini Coefficient]
 
