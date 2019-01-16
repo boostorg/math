@@ -6,6 +6,7 @@
 #include <boost/math/tools/series.hpp>
 #include <iostream>
 #include <complex>
+#include <cassert>
 
 //[series_log1p
 template <class T>
