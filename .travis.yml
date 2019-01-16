@@ -506,10 +506,10 @@ matrix:
       addons:
         apt:
           packages:
-            - clang-6
+            - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
+            - llvm-toolchain-trusty-6.0
 
     - os: linux
       compiler: clang++-6.0
@@ -517,10 +517,10 @@ matrix:
       addons:
         apt:
           packages:
-            - clang-6
+            - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
+            - llvm-toolchain-trusty-6.0
 
     - os: linux
       compiler: clang++-6.0
@@ -528,10 +528,10 @@ matrix:
       addons:
         apt:
           packages:
-            - clang-6
+            - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
+            - llvm-toolchain-trusty-6.0
 
     - os: linux
       compiler: clang++-6.0
@@ -539,10 +539,10 @@ matrix:
       addons:
         apt:
           packages:
-            - clang-6
+            - clang-6.0
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
+            - llvm-toolchain-trusty-6.0
 
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=c++14 TEST_SUITE=special_fun
