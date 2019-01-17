@@ -12,6 +12,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/math/differentiation/lanczos_smoothing.hpp>
 #include <boost/multiprecision/cpp_bin_float.hpp>
+#include <boost/math/special_functions/next.hpp> // for float_distance
 
 using std::abs;
 using std::pow;
@@ -24,6 +25,54 @@ using boost::math::differentiation::discrete_lanczos_derivative;
 using boost::math::differentiation::detail::discrete_legendre;
 using boost::math::differentiation::detail::interior_filter;
 using boost::math::differentiation::detail::boundary_filter;
+
+template<class RandomAccessContainer1, class RandomAccessContainer2>
+size_t l1_ulp_error(RandomAccessContainer1 const & v1, RandomAccessContainer2 const & v2)
+{
+    using std::abs;
+    using Real1 = typename RandomAccessContainer1::value_type;
+    using Real2 = typename RandomAccessContainer2::value_type;
+    BOOST_ASSERT_MSG(sizeof(Real1) <= sizeof(Real2),
+                     "Second container must contain more accurate value than the first container.");
+    BOOST_ASSERT_MSG(v1.size() == v2.size(),
+                     "Containers must have same size.");
+    size_t error = 0;
+    for (size_t i = 0; i < v1.size(); ++i)
+    {
+        auto err = abs(boost::math::float_distance<Real1>(v1[i], static_cast<Real1>(v2[i])));
+        if (abs(v2[i]) > std::numeric_limits<Real1>::epsilon())
+        {
+            error += static_cast<size_t>(err);
+        }
+    }
+    return error;
+}
+
+template<class RandomAccessContainer1, class RandomAccessContainer2>
+std::tuple<size_t, typename RandomAccessContainer1::value_type, typename RandomAccessContainer2::value_type> sup_ulp_error(RandomAccessContainer1 const & v1, RandomAccessContainer2 const & v2)
+{
+    using std::abs;
+    using Real1 = typename RandomAccessContainer1::value_type;
+    using Real2 = typename RandomAccessContainer2::value_type;
+    BOOST_ASSERT_MSG(sizeof(Real1) <= sizeof(Real2),
+                     "Second container must contain more accurate value than the first container.");
+    BOOST_ASSERT_MSG(v1.size() == v2.size(),
+                     "Containers must have same size.");
+    size_t error = 0;
+    Real1 worst_val1 = std::numeric_limits<Real1>::quiet_NaN();
+    Real2 worst_val2 = std::numeric_limits<Real2>::quiet_NaN();
+    for (size_t i = 0; i < v1.size(); ++i)
+    {
+        auto err = abs(boost::math::float_distance<Real1>(v1[i], static_cast<Real1>(v2[i])));
+        if (err > error)
+        {
+            error = err;
+            worst_val1 = v1[i];
+            worst_val2 = v2[i];
+        }
+    }
+    return {error, worst_val1, worst_val2};
+}
 
 template<class Real>
 void test_dlp_norms()
@@ -476,19 +525,52 @@ template<class Real>
 void test_acceleration_filters()
 {
     Real eps = std::numeric_limits<Real>::epsilon();
-    for (size_t n = 1; n < 8; ++n)
+    std::cout << std::setprecision(std::numeric_limits<double>::digits10);
+    std::cout << std::scientific;
+    for (size_t n = 1; n < 100; ++n)
     {
         for(size_t p = 3; p <= 2*n; ++p)
         {
             for(int64_t s = -int64_t(n); s <= 0 /*int64_t(n)*/; ++s)
             {
+                auto v1 = boost::math::differentiation::detail::acceleration_boundary_filter<double>(n,p,s);
+                auto v2 = boost::math::differentiation::detail::acceleration_boundary_filter<long double>(n,p,s);
+                size_t dist1 = l1_ulp_error(v1, v2);
+                auto [dist2, worst_val1, worst_val2] = sup_ulp_error(v1, v2);
+                std::cout << "(n,p,s) = (" << n << ", " << p << ", " << s << ") = "
+                          << dist1 << ", sup = " << dist2 << ", worst = " << worst_val1 << ", actual = " << worst_val2 << "\n";
+            }
+        }
+    }
+
+    /*Real eps = std::numeric_limits<Real>::epsilon();
+    for (size_t n = 1; n < 15; ++n)
+    {
+        for(size_t p = 3; p <= 2*n; ++p)
+        {
+            for(int64_t s = -int64_t(n); s <= 0; ++s)
+            {
                 auto f = boost::math::differentiation::detail::acceleration_boundary_filter<Real>(n,p,s);
+                if (std::is_same_v<Real, double>)
+                {
+                    //std::cout << "We're using high precision!\n";
+                    auto f1 = boost::math::differentiation::detail::acceleration_boundary_filter<cpp_bin_float_100>(n,p,s);
+                    for (size_t i = 0; i < f1.size(); ++i)
+                    {
+                        f[i] = static_cast<Real>(f1[i]);
+                    }
+                }
+
                 Real sum = 0;
+                Real c = 0;
                 for (auto & x : f)
                 {
-                    sum += x;
+                    Real y = x - c;
+                    Real t = sum + y;
+                    c = (t - sum) - y;
+                    sum = t;
                 }
-                BOOST_CHECK_SMALL(abs(sum), sqrt(eps));
+                BOOST_CHECK_SMALL(abs(sum), 1000*eps);
 
                 sum = 0;
                 for (size_t k = 0; k < f.size(); ++k)
@@ -505,11 +587,26 @@ void test_acceleration_filters()
                     sum += (j-s)*(j-s)*f[k];
                 }
                 BOOST_CHECK_CLOSE_FRACTION(sum, 2, 4*sqrt(eps));
-                // More moments vanish, but the moment sums become increasingly poorly conditioned.
-                // We can check them later if we wish.
+                // See unlabelled equation in McDevitt, 2012, just after equation 26:
+                // It appears that there is an off-by-one error in that equation, since p + 1 moments don't vanish, only p.
+                for (size_t l = 3; l <= p; ++l)
+                {
+                    sum = 0;
+                    Real c = 0;
+                    for (size_t k = 0; k < f.size(); ++k)
+                    {
+                        Real j = Real(k) - Real(n);
+                        Real term = pow((j-s), l)*f[k];
+                        Real y = term - c;
+                        Real t = sum + y;
+                        c = (t - sum) - y;
+                        sum = t;
+                    }
+                    BOOST_CHECK_SMALL(abs(sum), 500*l*sqrt(eps));
+                }
             }
         }
-    }
+    }*/
 }
 
 template<class Real>
@@ -575,17 +672,19 @@ void test_lanczos_acceleration()
         BOOST_CHECK_CLOSE_FRACTION(w[i], -v[i], 0.01);
     }
 
-    for(size_t i = v.size() - n; i < v.size(); ++i)
+    /*for(size_t i = v.size() - n; i < v.size(); ++i)
     {
         BOOST_CHECK_CLOSE_FRACTION(w[i], -v[i], 0.01);
-    }
+    }*/
 
 }
 
 BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
 {
-    test_acceleration_filters<double>();
-    test_dlp_second_derivative<double>();
+
+    //test_acceleration_filters<double>();
+    //test_acceleration_filters<cpp_bin_float_50>();
+    /*test_dlp_second_derivative<double>();
     test_dlp_norms<double>();
     test_dlp_evaluation<double>();
     test_dlp_derivatives<double>();
@@ -601,7 +700,7 @@ BOOST_AUTO_TEST_CASE(lanczos_smoothing_test)
 
     test_interior_filter<double>();
     test_interior_filter<long double>();
-    test_interior_lanczos<double>();
+    test_interior_lanczos<double>();*/
 
     test_lanczos_acceleration<double>();
 }

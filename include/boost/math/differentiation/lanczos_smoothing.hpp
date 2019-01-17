@@ -7,6 +7,7 @@
 #define BOOST_MATH_DIFFERENTIATION_LANCZOS_SMOOTHING_HPP
 #include <vector>
 #include <boost/assert.hpp>
+#include <boost/multiprecision/cpp_bin_float.hpp>
 
 namespace boost::math::differentiation {
 
@@ -287,17 +288,43 @@ public:
         }
         else if constexpr (order == 2)
         {
-            auto f = detail::acceleration_boundary_filter<Real>(n, approximation_order, 0);
-            m_f.resize(n+1);
-            for (size_t i = 0; i < m_f.size(); ++i)
+            if constexpr (std::is_same_v<Real, double> || std::is_same_v<Real, float>)
             {
-                m_f[i] = f[i+n];
+                std::cout << "We're using high precision!\n";
+                using boost::multiprecision::cpp_bin_float_50;
+                auto f = detail::acceleration_boundary_filter<cpp_bin_float_50>(n, approximation_order, 0);
+                m_f.resize(n+1);
+                for (size_t i = 0; i < m_f.size(); ++i)
+                {
+                    m_f[i] = static_cast<Real>(f[i+n]);
+                }
+                m_boundary_filters.resize(n);
+                for (size_t i = 0; i < n; ++i)
+                {
+                    int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
+                    auto bf = detail::acceleration_boundary_filter<cpp_bin_float_50>(n, approximation_order, s);
+                    m_boundary_filters[i].resize(bf.size());
+                    for (size_t j = 0; j < bf.size(); ++j)
+                    {
+                        m_boundary_filters[i][j] = static_cast<Real>(bf[j]);
+                    }
+                }
             }
-            m_boundary_filters.resize(n);
-            for (size_t i = 0; i < n; ++i)
+            else
             {
-                int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
-                m_boundary_filters[i] = detail::acceleration_boundary_filter<Real>(n, approximation_order, s);
+                std::cout << "No high precision.\n";
+                auto f = detail::acceleration_boundary_filter<Real>(n, approximation_order, 0);
+                m_f.resize(n+1);
+                for (size_t i = 0; i < m_f.size(); ++i)
+                {
+                    m_f[i] = f[i+n];
+                }
+                m_boundary_filters.resize(n);
+                for (size_t i = 0; i < n; ++i)
+                {
+                    int64_t s = static_cast<int64_t>(i) - static_cast<int64_t>(n);
+                    m_boundary_filters[i] = detail::acceleration_boundary_filter<Real>(n, approximation_order, s);
+                }
             }
         }
         else
