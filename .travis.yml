@@ -502,7 +502,7 @@ matrix:
 
     - os: linux
       compiler: clang++-6.0
-      env: TOOLSET=clang COMPILER=clang++-6.0 CXXSTD=c++17 TEST_SUITE=special_fun
+      env: TOOLSET=clang COMPILER=clang++-6.0 CXXSTD=c++14 TEST_SUITE=special_fun
       addons:
         apt:
           packages:
@@ -513,7 +513,7 @@ matrix:
 
     - os: linux
       compiler: clang++-6.0
-      env: TOOLSET=clang COMPILER=clang++-6.0 CXXSTD=c++17 TEST_SUITE=distribution_tests
+      env: TOOLSET=clang COMPILER=clang++-6.0 CXXSTD=c++14 TEST_SUITE=distribution_tests
       addons:
         apt:
           packages:
@@ -524,7 +524,7 @@ matrix:
 
     - os: linux
       compiler: clang++-6.0
-      env: TOOLSET=clang COMPILER=clang++-6.0 CXXSTD=c++17 TEST_SUITE=misc
+      env: TOOLSET=clang COMPILER=clang++-6.0 CXXSTD=c++14 TEST_SUITE=misc
       addons:
         apt:
           packages:
@@ -535,7 +535,7 @@ matrix:
 
     - os: linux
       compiler: clang++-6.0
-      env: TOOLSET=clang COMPILER=clang++-6.0 CXXSTD=c++17 TEST_SUITE=../example//examples
+      env: TOOLSET=clang COMPILER=clang++-6.0 CXXSTD=c++14 TEST_SUITE=../example//examples
       addons:
         apt:
           packages:
