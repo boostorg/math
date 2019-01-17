@@ -275,7 +275,7 @@
         //
         if (result.second * boost::math::policies::get_epsilon<Real, Policy>() > abs(result.first))
         {
-           return boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that fewer than half the bits in the result are correct, last result was %1%", Real(result.first * exp(T(log_scale))), pol);
+           return boost::math::policies::raise_evaluation_error("boost::math::hypergeometric_pFq<%1%>", "Cancellation is so severe that fewer than half the bits in the result are correct, last result was %1%", Real(result.first * exp(Real(log_scale))), pol);
         }
         return result.first;
      }
