@@ -75,9 +75,9 @@ auto variance(ForwardIterator first, ForwardIterator last)
         Real k = 2;
         for (auto it = std::next(first); it != last; ++it)
         {
-            Real tmp = *it - M;
-            Q = Q + ((k-1)*tmp*tmp)/k;
-            M = M + tmp/k;
+            Real tmp = (*it - M)/k;
+            Q += k*(k-1)*tmp*tmp;
+            M += tmp;
             k += 1;
         }
         return Q/(k-1);
