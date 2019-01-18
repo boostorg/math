@@ -228,6 +228,23 @@ void test_variance()
     }
     Real m2 = boost::math::tools::variance(v);
     BOOST_TEST(abs(m1 - m2) < tol*abs(m1));
+
+    // Wikipedia example for a variance of N sided die:
+    // https://en.wikipedia.org/wiki/Variance
+    for (size_t j = 16; j < 2048; j *= 2)
+    {
+        v.resize(1024);
+        Real n = v.size();
+        for (size_t i = 0; i < v.size(); ++i)
+        {
+            v[i] = i + 1;
+        }
+
+        sigma_sq = boost::math::tools::variance(v);
+
+        BOOST_TEST(abs(sigma_sq - (n*n-1)/Real(12)) <= tol*sigma_sq);
+    }
+
 }
 
 template<class Z>

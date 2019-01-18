@@ -148,9 +148,9 @@ auto skewness(ForwardIterator first, ForwardIterator last)
         {
             Real delta21 = *it - M1;
             Real tmp = delta21/n;
-            M3 = M3 + tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
-            M2 = M2 + tmp*(n-1)*delta21;
-            M1 = M1 + tmp;
+            M3 += tmp*((n-1)*(n-2)*delta21*tmp - 3*M2);
+            M2 += tmp*(n-1)*delta21;
+            M1 += tmp;
             n += 1;
         }
 
